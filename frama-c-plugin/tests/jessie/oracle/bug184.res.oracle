@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bug184.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bug184.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bug184.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bug184.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bug184.jessie
 [jessie] File bug184.jessie/bug184.jc written.
@@ -41,21 +41,23 @@ type voidP = [voidP]
 
 int32 main(int32 x, int32 y)
 behavior default:
-  ensures (C_15 : true);
+  ensures (_C_15 : true);
 {  
    (var int32 __retres);
    
-   {  (if (x >= 10) then (C_2 : (x = 10)) else (if (x <= 0) then (C_1 : (x = 0)) else ()));
-      (if ((C_13 : ((C_12 : ((C_11 : ((C_10 : (x * x)) :> int32)) - 10)) :> int32)) >
+   {  (if (x >= 10) then (_C_2 : (x = 10)) else (if (x <= 0) then (_C_1 : (x = 0)) else ()));
+      (if ((_C_13 : ((_C_12 : ((_C_11 : ((_C_10 : (x * x)) :> int32)) - 10)) :> int32)) >
             0) then 
-      {  (C_9 : (__retres = (C_8 : ((C_7 : (1 /
-                                             (C_6 : ((C_5 : ((C_4 : (
-                                                             (C_3 : (x * x)) :> int32)) -
-                                                              8)) :> int32)))) :> int32))));
+      {  (_C_9 : (__retres = (_C_8 : ((_C_7 : (1 /
+                                                (_C_6 : ((_C_5 : ((_C_4 : (
+                                                                  (_C_3 : 
+                                                                  (x *
+                                                                    x)) :> int32)) -
+                                                                   8)) :> int32)))) :> int32))));
          
          (goto return_label)
       } else ());
-      (C_14 : (__retres = 0));
+      (_C_14 : (__retres = 0));
       (return_label : 
       (return __retres))
    }
@@ -417,50 +419,37 @@ let main_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (C_14:
       begin
         (if ((ge_int_ (integer_of_int32 !mutable_x_0)) (10))
         then
-         (let jessie_<somenum> =
-         (C_2: (mutable_x_0 := (safe_int32_of_integer_ (10)))) in void)
+         (let _jessie_<somenum> = (mutable_x_0 := (safe_int32_of_integer_ (10))) in
+         void)
         else
          (if ((le_int_ (integer_of_int32 !mutable_x_0)) (0))
          then
-          (let jessie_<somenum> =
-          (C_1: (mutable_x_0 := (safe_int32_of_integer_ (0)))) in void)
-         else void));
-       (if ((gt_int_ (integer_of_int32 (C_13:
-                                       (safe_int32_of_integer_ (C_12:
-                                                               ((sub_int 
+          (let _jessie_<somenum> = (mutable_x_0 := (safe_int32_of_integer_ (0))) in
+          void) else void));
+       (if ((gt_int_ (integer_of_int32 (safe_int32_of_integer_ ((sub_int 
                                                                  (integer_of_int32 
-                                                                  (C_11:
                                                                   (safe_int32_of_integer_ 
-                                                                   (C_10:
                                                                    ((mul_int 
                                                                     (integer_of_int32 !mutable_x_0)) 
-                                                                    (integer_of_int32 !mutable_x_0))))))) (10))))))) (0))
+                                                                    (integer_of_int32 !mutable_x_0))))) (10))))) (0))
        then
-        (C_9:
         begin
-          (let jessie_<somenum> =
-          (__retres := (C_8:
-                       (safe_int32_of_integer_ (C_7:
-                                               (JC_<somenum>:
+          (let _jessie_<somenum> =
+          (__retres := (safe_int32_of_integer_ (JC_<somenum>:
                                                ((computer_div (1)) (integer_of_int32 
-                                                                    (C_6:
                                                                     (safe_int32_of_integer_ 
-                                                                    (C_5:
                                                                     ((sub_int 
                                                                     (integer_of_int32 
-                                                                    (C_4:
                                                                     (safe_int32_of_integer_ 
-                                                                    (C_3:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !mutable_x_0)) 
-                                                                    (integer_of_int32 !mutable_x_0))))))) (8)))))))))))) in
-          void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+                                                                    (integer_of_int32 !mutable_x_0))))) (8)))))))) in
+          void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))) { (JC_<somenum>: true) }
 
@@ -474,54 +463,41 @@ let main_safety =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (C_14:
       begin
         (if ((ge_int_ (integer_of_int32 !mutable_x_0)) (10))
         then
-         (let jessie_<somenum> =
-         (C_2: (mutable_x_0 := (safe_int32_of_integer_ (10)))) in void)
+         (let _jessie_<somenum> = (mutable_x_0 := (safe_int32_of_integer_ (10))) in
+         void)
         else
          (if ((le_int_ (integer_of_int32 !mutable_x_0)) (0))
          then
-          (let jessie_<somenum> =
-          (C_1: (mutable_x_0 := (safe_int32_of_integer_ (0)))) in void)
-         else void));
-       (if ((gt_int_ (integer_of_int32 (C_13:
-                                       (JC_<somenum>:
-                                       (int32_of_integer_ (C_12:
-                                                          ((sub_int (integer_of_int32 
-                                                                    (C_11:
+          (let _jessie_<somenum> = (mutable_x_0 := (safe_int32_of_integer_ (0))) in
+          void) else void));
+       (if ((gt_int_ (integer_of_int32 (JC_<somenum>:
+                                       (int32_of_integer_ ((sub_int (integer_of_int32 
                                                                     (JC_<somenum>:
                                                                     (int32_of_integer_ 
-                                                                    (C_10:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !mutable_x_0)) 
-                                                                    (integer_of_int32 !mutable_x_0)))))))) (10)))))))) (0))
+                                                                    (integer_of_int32 !mutable_x_0)))))) (10)))))) (0))
        then
-        (C_9:
         begin
-          (let jessie_<somenum> =
-          (__retres := (C_8:
-                       (JC_<somenum>:
-                       (int32_of_integer_ (C_7:
-                                          (JC_<somenum>:
+          (let _jessie_<somenum> =
+          (__retres := (JC_<somenum>:
+                       (int32_of_integer_ (JC_<somenum>:
                                           ((computer_div_ (1)) (integer_of_int32 
-                                                                (C_6:
                                                                 (JC_<somenum>:
                                                                 (int32_of_integer_ 
-                                                                 (C_5:
                                                                  ((sub_int 
                                                                    (integer_of_int32 
-                                                                    (C_4:
                                                                     (JC_<somenum>:
                                                                     (int32_of_integer_ 
-                                                                    (C_3:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !mutable_x_0)) 
-                                                                    (integer_of_int32 !mutable_x_0)))))))) (8)))))))))))))) in
-          void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+                                                                    (integer_of_int32 !mutable_x_0)))))) (8)))))))))) in
+          void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))) { true }
 

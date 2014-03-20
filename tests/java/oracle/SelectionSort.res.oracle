@@ -126,19 +126,19 @@ Parsing OK.
 Typing OK.
 Generating JC function SelectionSort_swap for method SelectionSort.swap
 Generating JC function SelectionSort_sort for method SelectionSort.sort
-Generating JC function cons_SelectionSort for constructor SelectionSort
-Generating JC function Object_registerNatives for method Object.registerNatives
+Generating JC function Object_clone for method Object.clone
+Generating JC function Object_notifyAll for method Object.notifyAll
 Generating JC function Object_hashCode for method Object.hashCode
 Generating JC function Object_equals for method Object.equals
-Generating JC function Object_clone for method Object.clone
-Generating JC function Object_toString for method Object.toString
-Generating JC function Object_notify for method Object.notify
-Generating JC function Object_notifyAll for method Object.notifyAll
-Generating JC function Object_wait_long for method Object.wait
-Generating JC function Object_wait_long_int for method Object.wait
 Generating JC function Object_wait for method Object.wait
-Generating JC function Object_finalize for method Object.finalize
+Generating JC function Object_notify for method Object.notify
+Generating JC function Object_wait_long for method Object.wait
+Generating JC function cons_SelectionSort for constructor SelectionSort
+Generating JC function Object_toString for method Object.toString
+Generating JC function Object_wait_long_int for method Object.wait
 Generating JC function cons_Object for constructor Object
+Generating JC function Object_finalize for method Object.finalize
+Generating JC function Object_registerNatives for method Object.registerNatives
 Done.
 ========== file tests/java/SelectionSort.jc ==========
 # InvariantPolicy = Arguments
@@ -166,19 +166,19 @@ predicate Non_null_Object{Here}(Object[0..] x) =
 String[0..] any_string()
 ;
 
-tag Object = {
+tag String = Object with {
 }
 
-tag String = Object with {
+tag SelectionSort = Object with {
 }
 
 tag Throwable = Object with {
 }
 
-tag Exception = Object with {
+tag Object = {
 }
 
-tag SelectionSort = Object with {
+tag Exception = Object with {
 }
 
 type Object = [Object]
@@ -260,9 +260,9 @@ case Permut_refl{L}: (\forall intM[0..] a_2;
   
 }
 
-exception Throwable of Throwable[0..]
-
 exception Exception of Exception[0..]
+
+exception Throwable of Throwable[0..]
 
 unit SelectionSort_swap(SelectionSort[0] this_2, intM[0..] t, int32 i_2,
                         int32 j_2)
@@ -374,42 +374,42 @@ behavior permutation:
    }
 }
 
-unit cons_SelectionSort(! SelectionSort[0] this_3){()}
-
-unit Object_registerNatives()
+Object[0..] Object_clone(Object[0] this_4)
 ;
 
-int32 Object_hashCode(Object[0] this_4)
+unit Object_notifyAll(Object[0] this_5)
 ;
 
-boolean Object_equals(Object[0] this_5, Object[0..] obj)
+int32 Object_hashCode(Object[0] this_6)
 ;
 
-Object[0..] Object_clone(Object[0] this_6)
+boolean Object_equals(Object[0] this_7, Object[0..] obj)
 ;
 
-String[0..] Object_toString(Object[0] this_7)
+unit Object_wait(Object[0] this_8)
 ;
 
-unit Object_notify(Object[0] this_8)
-;
-
-unit Object_notifyAll(Object[0] this_9)
+unit Object_notify(Object[0] this_9)
 ;
 
 unit Object_wait_long(Object[0] this_10, long timeout)
 ;
 
-unit Object_wait_long_int(Object[0] this_11, long timeout_0, int32 nanos)
+unit cons_SelectionSort(! SelectionSort[0] this_3){()}
+
+String[0..] Object_toString(Object[0] this_11)
 ;
 
-unit Object_wait(Object[0] this_12)
+unit Object_wait_long_int(Object[0] this_12, long timeout_0, int32 nanos)
 ;
+
+unit cons_Object(! Object[0] this_14){()}
 
 unit Object_finalize(Object[0] this_13)
 ;
 
-unit cons_Object(! Object[0] this_14){()}
+unit Object_registerNatives()
+;
 
 /*
 Local Variables:
@@ -418,83 +418,11 @@ compile-command: "jessie -why-opt -split-user-conj -locs tests/java/SelectionSor
 End:
 */
 ========== file tests/java/SelectionSort.jloc ==========
-[K_10]
+[K_30]
 file = "HOME/tests/java/SelectionSort.java"
-line = 61
-begin = 17
-end = 80
-
-[K_11]
-file = "HOME/tests/java/SelectionSort.java"
-line = 68
-begin = 8
-end = 12
-
-[K_12]
-file = "HOME/tests/java/SelectionSort.java"
-line = 68
-begin = 1
-end = 12
-
-[K_13]
-file = "HOME/tests/java/SelectionSort.java"
-line = 69
-begin = 1
-end = 11
-
-[K_14]
-file = "HOME/tests/java/SelectionSort.java"
-line = 67
-begin = 11
-end = 15
-
-[K_15]
-file = "HOME/tests/java/SelectionSort.java"
-line = 74
-begin = 18
-end = 38
-
-[K_16]
-file = "HOME/tests/java/SelectionSort.java"
-line = 76
-begin = 18
-end = 50
-
-[K_17]
-file = "HOME/tests/java/SelectionSort.java"
-line = 72
-begin = 17
-end = 26
-
-[K_18]
-file = "HOME/tests/java/SelectionSort.java"
-line = 81
-begin = 20
-end = 26
-
-[K_19]
-file = "HOME/tests/java/SelectionSort.java"
-line = 84
-begin = 8
-end = 90
-
-[K_20]
-file = "HOME/tests/java/SelectionSort.java"
-line = 83
-begin = 21
-end = 34
-
-[K_21]
-file = "HOME/tests/java/SelectionSort.java"
-line = 83
-begin = 21
-end = 130
-
-[K_22]
-file = "HOME/tests/java/SelectionSort.java"
-line = 87
-begin = 22
-end = 54
+line = 96
+begin = 12
+end = 56
 
 [K_23]
 file = "HOME/tests/java/SelectionSort.java"
@@ -502,17 +430,36 @@ line = 88
 begin = 18
 end = 30
 
-[K_24]
+[K_33]
 file = "HOME/tests/java/SelectionSort.java"
-line = 92
-begin = 10
-end = 14
+line = 99
+begin = 22
+end = 34
 
-[K_1]
+[K_17]
 file = "HOME/tests/java/SelectionSort.java"
-line = 64
-begin = 16
-end = 37
+line = 72
+begin = 17
+end = 26
+
+[Object_wait_long]
+name = "Method wait"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
+
+[K_11]
+file = "HOME/tests/java/SelectionSort.java"
+line = 68
+begin = 8
+end = 12
+
+[K_38]
+file = "HOME/tests/java/SelectionSort.java"
+line = 101
+begin = 21
+end = 29
 
 [K_25]
 file = "HOME/tests/java/SelectionSort.java"
@@ -520,84 +467,37 @@ line = 93
 begin = 38
 end = 51
 
-[K_2]
+[K_13]
 file = "HOME/tests/java/SelectionSort.java"
-line = 62
-begin = 37
-end = 49
+line = 69
+begin = 1
+end = 11
 
-[K_26]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 33
-end = 40
-
-[K_3]
-file = "HOME/tests/java/SelectionSort.java"
-line = 62
-begin = 32
-end = 38
-
-[Object_equals]
-name = "Method equals"
+[Object_finalize]
+name = "Method finalize"
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
+line = 481
 begin = 19
-end = 25
-
-[K_27]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 33
-end = 51
-
-[K_4]
-file = "HOME/tests/java/SelectionSort.java"
-line = 62
-begin = 32
-end = 49
-
-[K_28]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 24
-end = 29
-
-[K_5]
-file = "HOME/tests/java/SelectionSort.java"
-line = 62
-begin = 16
-end = 28
-
-[K_29]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 24
-end = 51
-
-[K_6]
-file = "HOME/tests/java/SelectionSort.java"
-line = 62
-begin = 11
-end = 17
-
-[K_7]
-file = "HOME/tests/java/SelectionSort.java"
-line = 62
-begin = 11
-end = 28
-
-[K_8]
-file = "HOME/tests/java/SelectionSort.java"
-line = 61
-begin = 17
-end = 26
+end = 27
 
 [K_9]
 file = "HOME/tests/java/SelectionSort.java"
 line = 61
 begin = 17
 end = 59
+
+[Object_wait]
+name = "Method wait"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[K_44]
+file = "HOME/tests/java/SelectionSort.java"
+line = 90
+begin = 25
+end = 28
 
 [Object_notify]
 name = "Method notify"
@@ -606,15 +506,78 @@ line = 243
 begin = 29
 end = 35
 
-[cons_SelectionSort]
-name = "Constructor of class SelectionSort"
+[Object_clone]
+name = "Method clone"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 184
+begin = 28
+end = 33
+
+[K_28]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 24
+end = 29
+
+[cons_Object]
+name = "Constructor of class Object"
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[cons_Object]
-name = "Constructor of class Object"
+[K_1]
+file = "HOME/tests/java/SelectionSort.java"
+line = 64
+begin = 16
+end = 37
+
+[K_15]
+file = "HOME/tests/java/SelectionSort.java"
+line = 74
+begin = 18
+end = 38
+
+[K_4]
+file = "HOME/tests/java/SelectionSort.java"
+line = 62
+begin = 32
+end = 49
+
+[K_12]
+file = "HOME/tests/java/SelectionSort.java"
+line = 68
+begin = 1
+end = 12
+
+[Object_wait_long_int]
+name = "Method wait"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
+
+[K_34]
+file = "HOME/tests/java/SelectionSort.java"
+line = 103
+begin = 20
+end = 24
+
+[Object_registerNatives]
+name = "Method registerNatives"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
+
+[K_20]
+file = "HOME/tests/java/SelectionSort.java"
+line = 83
+begin = 21
+end = 34
+
+[cons_SelectionSort]
+name = "Constructor of class SelectionSort"
 file = "HOME/"
 line = 0
 begin = -1
@@ -627,11 +590,59 @@ line = 66
 begin = 9
 end = 13
 
-[K_30]
+[K_2]
 file = "HOME/tests/java/SelectionSort.java"
-line = 96
-begin = 12
-end = 56
+line = 62
+begin = 37
+end = 49
+
+[K_41]
+file = "HOME/tests/java/SelectionSort.java"
+line = 107
+begin = 5
+end = 17
+
+[K_47]
+file = "HOME/tests/java/SelectionSort.java"
+line = 90
+begin = 11
+end = 23
+
+[K_29]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 24
+end = 51
+
+[K_10]
+file = "HOME/tests/java/SelectionSort.java"
+line = 61
+begin = 17
+end = 80
+
+[K_35]
+file = "HOME/tests/java/SelectionSort.java"
+line = 102
+begin = 6
+end = 10
+
+[K_6]
+file = "HOME/tests/java/SelectionSort.java"
+line = 62
+begin = 11
+end = 17
+
+[K_8]
+file = "HOME/tests/java/SelectionSort.java"
+line = 61
+begin = 17
+end = 26
+
+[K_3]
+file = "HOME/tests/java/SelectionSort.java"
+line = 62
+begin = 32
+end = 38
 
 [K_31]
 file = "HOME/tests/java/SelectionSort.java"
@@ -645,118 +656,11 @@ line = 95
 begin = 25
 end = 97
 
-[K_33]
+[K_27]
 file = "HOME/tests/java/SelectionSort.java"
-line = 99
-begin = 22
-end = 34
-
-[K_34]
-file = "HOME/tests/java/SelectionSort.java"
-line = 103
-begin = 20
-end = 24
-
-[K_35]
-file = "HOME/tests/java/SelectionSort.java"
-line = 102
-begin = 6
-end = 10
-
-[K_36]
-file = "HOME/tests/java/SelectionSort.java"
-line = 102
-begin = 6
-end = 15
-
-[K_37]
-file = "HOME/tests/java/SelectionSort.java"
-line = 101
-begin = 31
-end = 34
-
-[K_38]
-file = "HOME/tests/java/SelectionSort.java"
-line = 101
-begin = 21
-end = 29
-
-[Object_wait_long_int]
-name = "Method wait"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
-
-[K_39]
-file = "HOME/tests/java/SelectionSort.java"
-line = 101
-begin = 17
-end = 29
-
-[Object_wait_long]
-name = "Method wait"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
-
-[Object_hashCode]
-name = "Method hashCode"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
-
-[Object_notifyAll]
-name = "Method notifyAll"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
-
-[K_40]
-file = "HOME/tests/java/SelectionSort.java"
-line = 101
-begin = 12
-end = 15
-
-[K_41]
-file = "HOME/tests/java/SelectionSort.java"
-line = 107
-begin = 5
-end = 17
-
-[K_42]
-file = "HOME/tests/java/SelectionSort.java"
-line = 108
+line = 93
 begin = 33
-end = 68
-
-[K_43]
-file = "HOME/tests/java/SelectionSort.java"
-line = 108
-begin = 33
-end = 68
-
-[K_44]
-file = "HOME/tests/java/SelectionSort.java"
-line = 90
-begin = 25
-end = 28
-
-[Object_toString]
-name = "Method toString"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
-
-[K_45]
-file = "HOME/tests/java/SelectionSort.java"
-line = 90
-begin = 13
-end = 21
+end = 51
 
 [K_46]
 file = "HOME/tests/java/SelectionSort.java"
@@ -764,32 +668,35 @@ line = 90
 begin = 13
 end = 23
 
-[K_47]
+[K_21]
 file = "HOME/tests/java/SelectionSort.java"
-line = 90
+line = 83
+begin = 21
+end = 130
+
+[K_42]
+file = "HOME/tests/java/SelectionSort.java"
+line = 108
+begin = 33
+end = 68
+
+[K_24]
+file = "HOME/tests/java/SelectionSort.java"
+line = 92
+begin = 10
+end = 14
+
+[K_14]
+file = "HOME/tests/java/SelectionSort.java"
+line = 67
 begin = 11
-end = 23
+end = 15
 
-[Object_registerNatives]
-name = "Method registerNatives"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
-
-[Object_clone]
-name = "Method clone"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
-
-[Object_wait]
-name = "Method wait"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
+[K_39]
+file = "HOME/tests/java/SelectionSort.java"
+line = 101
+begin = 17
+end = 29
 
 [SelectionSort_sort]
 name = "Method sort"
@@ -798,12 +705,105 @@ line = 78
 begin = 9
 end = 13
 
-[Object_finalize]
-name = "Method finalize"
+[K_36]
+file = "HOME/tests/java/SelectionSort.java"
+line = 102
+begin = 6
+end = 15
+
+[Object_notifyAll]
+name = "Method notifyAll"
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
+line = 267
+begin = 29
+end = 38
+
+[K_37]
+file = "HOME/tests/java/SelectionSort.java"
+line = 101
+begin = 31
+end = 34
+
+[K_19]
+file = "HOME/tests/java/SelectionSort.java"
+line = 84
+begin = 8
+end = 90
+
+[K_5]
+file = "HOME/tests/java/SelectionSort.java"
+line = 62
+begin = 16
+end = 28
+
+[K_18]
+file = "HOME/tests/java/SelectionSort.java"
+line = 81
+begin = 20
+end = 26
+
+[Object_equals]
+name = "Method equals"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
 begin = 19
-end = 27
+end = 25
+
+[K_7]
+file = "HOME/tests/java/SelectionSort.java"
+line = 62
+begin = 11
+end = 28
+
+[K_40]
+file = "HOME/tests/java/SelectionSort.java"
+line = 101
+begin = 12
+end = 15
+
+[Object_hashCode]
+name = "Method hashCode"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 74
+begin = 22
+end = 30
+
+[K_26]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 33
+end = 40
+
+[Object_toString]
+name = "Method toString"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 207
+begin = 18
+end = 26
+
+[K_22]
+file = "HOME/tests/java/SelectionSort.java"
+line = 87
+begin = 22
+end = 54
+
+[K_45]
+file = "HOME/tests/java/SelectionSort.java"
+line = 90
+begin = 13
+end = 21
+
+[K_16]
+file = "HOME/tests/java/SelectionSort.java"
+line = 76
+begin = 18
+end = 50
+
+[K_43]
+file = "HOME/tests/java/SelectionSort.java"
+line = 108
+begin = 33
+end = 68
 
 ========== jessie execution ==========
 Generating Why function SelectionSort_swap
@@ -820,10 +820,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs SelectionSort.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs SelectionSort.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs SelectionSort.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs SelectionSort.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -968,13 +969,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: SelectionSort.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: SelectionSort.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: SelectionSort.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include SelectionSort.depend
 
@@ -985,17 +986,67 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/SelectionSort.loc ==========
-[JC_103]
-file = "HOME/tests/java/SelectionSort.java"
-line = 81
-begin = 20
-end = 26
-
-[JC_104]
+[JC_176]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_233]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[SelectionSort_sort_safety]
+name = "Method sort"
+behavior = "Safety"
+file = "HOME/tests/java/SelectionSort.java"
+line = 78
+begin = 9
+end = 13
+
+[JC_177]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_221]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 207
+begin = 18
+end = 26
+
+[JC_80]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 164
+begin = 15
+end = 3584
+
+[JC_51]
+file = "HOME/tests/java/SelectionSort.java"
+line = 61
+begin = 17
+end = 80
+
+[JC_147]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 38
+end = 51
+
+[JC_123]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 164
+begin = 15
+end = 3584
+
+[JC_143]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 164
+begin = 15
+end = 3584
 
 [SelectionSort_sort_ensures_sorted]
 name = "Method sort"
@@ -1005,30 +1056,213 @@ line = 78
 begin = 9
 end = 13
 
-[JC_105]
+[JC_113]
 file = "HOME/tests/java/SelectionSort.jc"
-line = 164
-begin = 15
-end = 3584
+line = 191
+begin = 21
+end = 1600
 
-[JC_106]
+[JC_248]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_116]
+kind = UserCall
 file = "HOME/tests/java/SelectionSort.jc"
-line = 164
-begin = 15
-end = 3584
+line = 218
+begin = 32
+end = 72
 
-[JC_40]
+[JC_64]
+kind = PointerDeref
+file = "HOME/tests/java/SelectionSort.jc"
+line = 140
+begin = 18
+end = 38
+
+[JC_133]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_188]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_180]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_SelectionSort_ensures_default]
+name = "Constructor of class SelectionSort"
+behavior = "default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_99]
+kind = UserCall
+file = "HOME/tests/java/SelectionSort.jc"
+line = 218
+begin = 32
+end = 72
+
+[JC_200]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_85]
+kind = ArithOverflow
 file = "HOME/tests/java/SelectionSort.java"
-line = 62
-begin = 11
-end = 17
+line = 101
+begin = 12
+end = 15
 
-[JC_107]
+[JC_250]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_201]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_31]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 65
+begin = 8
+end = 23
+
+[JC_17]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_194]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_122]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_205]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
+
+[JC_81]
 kind = UserCall
 file = "HOME/tests/java/SelectionSort.java"
 line = 90
 begin = 13
 end = 21
+
+[JC_55]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 131
+begin = 9
+end = 16
+
+[JC_134]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 191
+begin = 21
+end = 1600
+
+[SelectionSort_sort_ensures_permutation]
+name = "Method sort"
+behavior = "Behavior `permutation'"
+file = "HOME/tests/java/SelectionSort.java"
+line = 78
+begin = 9
+end = 13
+
+[JC_48]
+file = "HOME/tests/java/SelectionSort.java"
+line = 62
+begin = 16
+end = 28
+
+[JC_23]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 61
+begin = 11
+end = 103
+
+[JC_241]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_172]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_121]
+file = "HOME/tests/java/SelectionSort.java"
+line = 81
+begin = 20
+end = 26
+
+[JC_125]
+kind = UserCall
+file = "HOME/tests/java/SelectionSort.java"
+line = 90
+begin = 13
+end = 21
+
+[JC_67]
+file = "HOME/tests/java/SelectionSort.java"
+line = 72
+begin = 17
+end = 26
+
+[JC_9]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 52
+begin = 8
+end = 21
+
+[JC_25]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 61
+begin = 11
+end = 103
+
+[JC_189]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[JC_78]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_41]
 file = "HOME/tests/java/SelectionSort.java"
@@ -1036,47 +1270,81 @@ line = 62
 begin = 16
 end = 28
 
-[JC_108]
+[JC_74]
 file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 24
-end = 29
-
-[JC_42]
-file = "HOME/tests/java/SelectionSort.java"
-line = 62
-begin = 32
+line = 74
+begin = 18
 end = 38
 
-[JC_220]
+[JC_195]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 243
+begin = 29
+end = 35
+
+[JC_52]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_109]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 33
-end = 40
+[JC_26]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 60
+begin = 10
+end = 18
 
-[JC_43]
-file = "HOME/tests/java/SelectionSort.java"
-line = 62
-begin = 37
-end = 49
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_221]
+[SelectionSort_swap_ensures_default]
+name = "Method swap"
+behavior = "default behavior"
+file = "HOME/tests/java/SelectionSort.java"
+line = 66
+begin = 9
+end = 13
+
+[JC_256]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_13]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 55
+begin = 11
+end = 66
+
+[JC_240]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_82]
+kind = IndexBounds
+file = "HOME/tests/java/SelectionSort.java"
+line = 90
+begin = 13
+end = 21
+
+[JC_163]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
+line = 267
 begin = 29
-end = 33
+end = 38
 
-[JC_44]
-file = "HOME/tests/java/SelectionSort.java"
-line = 61
-begin = 17
-end = 80
+[JC_153]
+kind = UserCall
+file = "HOME/tests/java/SelectionSort.jc"
+line = 218
+begin = 32
+end = 72
 
 [JC_222]
 file = "HOME/"
@@ -1084,11 +1352,172 @@ line = 0
 begin = -1
 end = -1
 
-[JC_45]
+[JC_246]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_11]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 52
+begin = 8
+end = 21
+
+[JC_185]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_167]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_98]
+file = "HOME/tests/java/SelectionSort.java"
+line = 99
+begin = 22
+end = 34
+
+[JC_70]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_36]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_104]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_39]
+file = "HOME/tests/java/SelectionSort.java"
+line = 61
+begin = 17
+end = 26
+
+[JC_112]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_135]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 191
+begin = 21
+end = 1600
+
+[JC_169]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_132]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 24
+end = 51
+
+[cons_SelectionSort_safety]
+name = "Constructor of class SelectionSort"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_27]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_115]
+kind = UserCall
+file = "HOME/tests/java/SelectionSort.java"
+line = 101
+begin = 21
+end = 29
+
+[JC_109]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 33
+end = 40
+
+[JC_69]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_219]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 207
+begin = 18
+end = 26
+
+[JC_124]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 164
+begin = 15
+end = 3584
+
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_206]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_218]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_191]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_62]
+kind = PointerDeref
+file = "HOME/tests/java/SelectionSort.java"
+line = 68
+begin = 8
+end = 12
+
+[JC_101]
+kind = ArithOverflow
+file = "HOME/tests/java/SelectionSort.jc"
+line = 186
+begin = 24
+end = 30
 
 [JC_223]
 file = "HOME/"
@@ -1096,11 +1525,544 @@ line = 0
 begin = -1
 end = -1
 
+[JC_129]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 24
+end = 29
+
+[JC_190]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_110]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 38
+end = 51
+
+[JC_166]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_103]
+file = "HOME/tests/java/SelectionSort.java"
+line = 81
+begin = 20
+end = 26
+
 [JC_46]
 file = "HOME/tests/java/SelectionSort.java"
 line = 61
 begin = 17
 end = 26
+
+[JC_61]
+kind = PointerDeref
+file = "HOME/tests/java/SelectionSort.java"
+line = 67
+begin = 11
+end = 15
+
+[JC_254]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_199]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_56]
+file = "HOME/tests/java/SelectionSort.java"
+line = 64
+begin = 16
+end = 37
+
+[JC_243]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
+
+[JC_33]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_173]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 74
+begin = 22
+end = 30
+
+[JC_29]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 65
+begin = 8
+end = 23
+
+[JC_202]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_144]
+kind = UserCall
+file = "HOME/tests/java/SelectionSort.java"
+line = 90
+begin = 13
+end = 21
+
+[JC_16]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 54
+begin = 10
+end = 18
+
+[JC_43]
+file = "HOME/tests/java/SelectionSort.java"
+line = 62
+begin = 37
+end = 49
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_95]
+kind = PointerDeref
+file = "HOME/tests/java/SelectionSort.java"
+line = 102
+begin = 6
+end = 10
+
+[JC_235]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_97]
+kind = ArithOverflow
+file = "HOME/tests/java/SelectionSort.jc"
+line = 211
+begin = 30
+end = 36
+
+[JC_84]
+kind = PointerDeref
+file = "HOME/tests/java/SelectionSort.java"
+line = 92
+begin = 10
+end = 14
+
+[JC_160]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_128]
+file = "HOME/tests/java/SelectionSort.java"
+line = 95
+begin = 25
+end = 97
+
+[JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_14]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 54
+begin = 10
+end = 18
+
+[JC_90]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_225]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_149]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_216]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_131]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 38
+end = 51
+
+[JC_37]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 67
+begin = 11
+end = 65
+
+[JC_181]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_108]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 24
+end = 29
+
+[JC_57]
+file = "HOME/tests/java/SelectionSort.java"
+line = 66
+begin = 9
+end = 13
+
+[JC_257]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_161]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_89]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 24
+end = 51
+
+[JC_136]
+kind = UserCall
+file = "HOME/tests/java/SelectionSort.java"
+line = 101
+begin = 21
+end = 29
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_165]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 267
+begin = 29
+end = 38
+
+[JC_213]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_217]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_253]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
+
+[JC_229]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
+
+[JC_86]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 24
+end = 29
+
+[JC_72]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_19]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 58
+begin = 8
+end = 30
+
+[JC_187]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[JC_238]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_50]
+file = "HOME/tests/java/SelectionSort.java"
+line = 62
+begin = 37
+end = 49
+
+[JC_120]
+file = "HOME/tests/java/SelectionSort.java"
+line = 83
+begin = 21
+end = 130
+
+[JC_58]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 131
+begin = 9
+end = 16
+
+[JC_28]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_198]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_94]
+kind = IndexBounds
+file = "HOME/tests/java/SelectionSort.java"
+line = 101
+begin = 21
+end = 29
+
+[JC_73]
+file = "HOME/tests/java/SelectionSort.java"
+line = 74
+begin = 18
+end = 38
+
+[JC_158]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_63]
+kind = PointerDeref
+file = "HOME/tests/java/SelectionSort.jc"
+line = 139
+begin = 18
+end = 58
+
+[JC_196]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_71]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_197]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 243
+begin = 29
+end = 35
+
+[JC_207]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_151]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 191
+begin = 21
+end = 1600
+
+[JC_45]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_106]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 164
+begin = 15
+end = 3584
+
+[JC_251]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
+
+[JC_203]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
+
+[JC_227]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
+
+[cons_Object_ensures_default]
+name = "Constructor of class Object"
+behavior = "default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_126]
+file = "HOME/tests/java/SelectionSort.java"
+line = 95
+begin = 25
+end = 36
+
+[JC_170]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_236]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_138]
+file = "HOME/tests/java/SelectionSort.java"
+line = 108
+begin = 33
+end = 68
+
+[JC_247]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_148]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 24
+end = 51
+
+[JC_137]
+kind = UserCall
+file = "HOME/tests/java/SelectionSort.jc"
+line = 218
+begin = 32
+end = 72
+
+[JC_22]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_231]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_5]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_75]
+file = "HOME/tests/java/SelectionSort.java"
+line = 76
+begin = 18
+end = 50
+
+[JC_24]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 60
+begin = 10
+end = 18
+
+[JC_193]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_186]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_212]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_175]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_224]
 file = "HOME/"
@@ -1114,145 +2076,17 @@ line = 62
 begin = 11
 end = 17
 
-[JC_225]
+[JC_232]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_48]
-file = "HOME/tests/java/SelectionSort.java"
-line = 62
-begin = 16
-end = 28
-
-[JC_226]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_49]
-file = "HOME/tests/java/SelectionSort.java"
-line = 62
-begin = 32
-end = 38
-
-[JC_227]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
-
-[JC_228]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_229]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
-
-[JC_110]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 38
-end = 51
-
-[JC_111]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 24
-end = 51
-
-[JC_112]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_113]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 191
-begin = 21
-end = 1600
-
-[JC_114]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 191
-begin = 21
-end = 1600
-
-[JC_115]
-kind = UserCall
-file = "HOME/tests/java/SelectionSort.java"
-line = 101
-begin = 21
-end = 29
-
-[JC_116]
-kind = UserCall
-file = "HOME/tests/java/SelectionSort.jc"
-line = 218
-begin = 32
-end = 72
-
-[JC_50]
-file = "HOME/tests/java/SelectionSort.java"
-line = 62
-begin = 37
-end = 49
-
-[JC_117]
+[JC_154]
 file = "HOME/tests/java/SelectionSort.java"
 line = 108
 begin = 33
 end = 68
-
-[JC_51]
-file = "HOME/tests/java/SelectionSort.java"
-line = 61
-begin = 17
-end = 80
-
-[JC_118]
-file = "HOME/tests/java/SelectionSort.java"
-line = 83
-begin = 21
-end = 34
-
-[JC_52]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_230]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_119]
-file = "HOME/tests/java/SelectionSort.java"
-line = 84
-begin = 8
-end = 90
-
-[JC_53]
-file = "HOME/tests/java/SelectionSort.java"
-line = 64
-begin = 16
-end = 37
-
-[JC_231]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
 
 [JC_54]
 file = "HOME/tests/java/SelectionSort.java"
@@ -1260,430 +2094,13 @@ line = 66
 begin = 9
 end = 13
 
-[JC_232]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_55]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 131
-begin = 9
-end = 16
-
-[JC_233]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_56]
-file = "HOME/tests/java/SelectionSort.java"
-line = 64
-begin = 16
-end = 37
-
-[JC_234]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_57]
-file = "HOME/tests/java/SelectionSort.java"
-line = 66
-begin = 9
-end = 13
-
-[JC_235]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
-
-[JC_58]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 131
-begin = 9
-end = 16
-
-[JC_236]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_59]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_237]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
-
-[JC_238]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_239]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_120]
-file = "HOME/tests/java/SelectionSort.java"
-line = 83
-begin = 21
-end = 130
-
-[SelectionSort_sort_ensures_default]
-name = "Method sort"
-behavior = "default behavior"
-file = "HOME/tests/java/SelectionSort.java"
-line = 78
-begin = 9
-end = 13
-
-[JC_121]
-file = "HOME/tests/java/SelectionSort.java"
-line = 81
-begin = 20
-end = 26
-
-[JC_122]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_123]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 164
-begin = 15
-end = 3584
-
-[JC_124]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 164
-begin = 15
-end = 3584
-
-[JC_125]
-kind = UserCall
-file = "HOME/tests/java/SelectionSort.java"
-line = 90
-begin = 13
-end = 21
-
-[JC_126]
-file = "HOME/tests/java/SelectionSort.java"
-line = 95
-begin = 25
-end = 36
-
-[JC_60]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_127]
-file = "HOME/tests/java/SelectionSort.java"
-line = 96
-begin = 12
-end = 56
-
-[JC_61]
-kind = PointerDeref
-file = "HOME/tests/java/SelectionSort.java"
-line = 67
-begin = 11
-end = 15
-
-[JC_128]
-file = "HOME/tests/java/SelectionSort.java"
-line = 95
-begin = 25
-end = 97
-
-[JC_62]
-kind = PointerDeref
-file = "HOME/tests/java/SelectionSort.java"
-line = 68
-begin = 8
-end = 12
-
-[JC_240]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_129]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 24
-end = 29
-
-[JC_63]
-kind = PointerDeref
-file = "HOME/tests/java/SelectionSort.jc"
-line = 139
-begin = 18
-end = 58
-
-[JC_241]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_64]
-kind = PointerDeref
-file = "HOME/tests/java/SelectionSort.jc"
-line = 140
-begin = 18
-end = 38
-
-[JC_242]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_65]
-file = "HOME/tests/java/SelectionSort.java"
-line = 72
-begin = 17
-end = 26
-
-[JC_243]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
-
-[JC_66]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_244]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_67]
-file = "HOME/tests/java/SelectionSort.java"
-line = 72
-begin = 17
-end = 26
-
-[JC_245]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
-
-[JC_68]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_246]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_69]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_247]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_248]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_249]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_130]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 33
-end = 40
-
-[JC_131]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 38
-end = 51
-
-[JC_132]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 24
-end = 51
-
-[JC_133]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_134]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 191
-begin = 21
-end = 1600
-
-[JC_135]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 191
-begin = 21
-end = 1600
-
-[JC_136]
-kind = UserCall
-file = "HOME/tests/java/SelectionSort.java"
-line = 101
-begin = 21
-end = 29
-
-[JC_70]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_137]
-kind = UserCall
-file = "HOME/tests/java/SelectionSort.jc"
-line = 218
-begin = 32
-end = 72
-
-[JC_71]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_138]
-file = "HOME/tests/java/SelectionSort.java"
-line = 108
-begin = 33
-end = 68
-
-[JC_72]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_250]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_139]
-file = "HOME/tests/java/SelectionSort.java"
-line = 87
-begin = 22
-end = 54
-
-[JC_73]
-file = "HOME/tests/java/SelectionSort.java"
-line = 74
-begin = 18
-end = 38
-
-[JC_251]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_74]
-file = "HOME/tests/java/SelectionSort.java"
-line = 74
-begin = 18
-end = 38
-
-[JC_252]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_75]
-file = "HOME/tests/java/SelectionSort.java"
-line = 76
-begin = 18
-end = 50
-
-[JC_253]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_76]
-file = "HOME/tests/java/SelectionSort.java"
-line = 76
-begin = 18
-end = 50
-
-[JC_254]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_77]
-file = "HOME/tests/java/SelectionSort.java"
-line = 81
-begin = 20
-end = 26
-
-[JC_255]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_78]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_256]
+[JC_208]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1695,126 +2112,61 @@ line = 164
 begin = 15
 end = 3584
 
-[JC_257]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_258]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_140]
-file = "HOME/tests/java/SelectionSort.java"
-line = 81
-begin = 20
-end = 26
-
-[JC_141]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[SelectionSort_sort_ensures_permutation]
-name = "Method sort"
-behavior = "Behavior `permutation'"
-file = "HOME/tests/java/SelectionSort.java"
-line = 78
-begin = 9
-end = 13
-
-[JC_142]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 164
-begin = 15
-end = 3584
-
-[JC_143]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 164
-begin = 15
-end = 3584
-
-[JC_144]
-kind = UserCall
-file = "HOME/tests/java/SelectionSort.java"
-line = 90
-begin = 13
-end = 21
-
-[cons_SelectionSort_ensures_default]
-name = "Constructor of class SelectionSort"
-behavior = "default behavior"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_145]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 24
-end = 29
-
-[cons_Object_safety]
-name = "Constructor of class Object"
-behavior = "Safety"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_146]
+[JC_130]
 file = "HOME/tests/java/SelectionSort.java"
 line = 93
 begin = 33
 end = 40
 
-[JC_80]
+[JC_174]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_87]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 33
+end = 40
+
+[JC_184]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_15]
 file = "HOME/tests/java/SelectionSort.jc"
-line = 164
-begin = 15
-end = 3584
+line = 55
+begin = 11
+end = 66
 
-[JC_147]
+[JC_182]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_168]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_91]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 191
+begin = 21
+end = 1600
+
+[JC_40]
 file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 38
-end = 51
+line = 62
+begin = 11
+end = 17
 
-[JC_81]
-kind = UserCall
-file = "HOME/tests/java/SelectionSort.java"
-line = 90
-begin = 13
-end = 21
-
-[JC_148]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 24
-end = 51
-
-[SelectionSort_swap_ensures_default]
-name = "Method swap"
-behavior = "default behavior"
-file = "HOME/tests/java/SelectionSort.java"
-line = 66
-begin = 9
-end = 13
-
-[JC_82]
-kind = IndexBounds
-file = "HOME/tests/java/SelectionSort.java"
-line = 90
-begin = 13
-end = 21
-
-[JC_149]
+[JC_162]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1827,81 +2179,36 @@ line = 90
 begin = 13
 end = 23
 
-[JC_84]
-kind = PointerDeref
-file = "HOME/tests/java/SelectionSort.java"
-line = 92
-begin = 10
-end = 14
+[JC_35]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_85]
-kind = ArithOverflow
-file = "HOME/tests/java/SelectionSort.java"
-line = 101
-begin = 12
-end = 15
+[JC_215]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_86]
+[JC_107]
+kind = UserCall
 file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 24
-end = 29
+line = 90
+begin = 13
+end = 21
 
-[JC_87]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 33
-end = 40
+[JC_179]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
 
-[JC_88]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 38
-end = 51
-
-[JC_1]
+[JC_38]
 file = "HOME/tests/java/SelectionSort.jc"
-line = 23
-begin = 12
-end = 22
-
-[JC_89]
-file = "HOME/tests/java/SelectionSort.java"
-line = 93
-begin = 24
-end = 51
-
-[JC_2]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_3]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 23
-begin = 12
-end = 22
-
-[cons_SelectionSort_safety]
-name = "Constructor of class SelectionSort"
-behavior = "Safety"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_4]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_5]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+line = 67
+begin = 11
+end = 65
 
 [JC_6]
 file = "HOME/"
@@ -1909,57 +2216,7 @@ line = 0
 begin = -1
 end = -1
 
-[JC_150]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 191
-begin = 21
-end = 1600
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_151]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 191
-begin = 21
-end = 1600
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_152]
-kind = UserCall
-file = "HOME/tests/java/SelectionSort.java"
-line = 101
-begin = 21
-end = 29
-
-[JC_9]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 52
-begin = 8
-end = 21
-
-[JC_153]
-kind = UserCall
-file = "HOME/tests/java/SelectionSort.jc"
-line = 218
-begin = 32
-end = 72
-
-[JC_154]
-file = "HOME/tests/java/SelectionSort.java"
-line = 108
-begin = 33
-end = 68
-
-[JC_155]
+[JC_242]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1971,151 +2228,13 @@ line = 0
 begin = -1
 end = -1
 
-[JC_90]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_157]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_91]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 191
-begin = 21
-end = 1600
-
-[JC_158]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_92]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 191
-begin = 21
-end = 1600
-
-[JC_159]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_93]
-kind = UserCall
+[JC_127]
 file = "HOME/tests/java/SelectionSort.java"
-line = 101
-begin = 21
-end = 29
+line = 96
+begin = 12
+end = 56
 
-[JC_94]
-kind = IndexBounds
-file = "HOME/tests/java/SelectionSort.java"
-line = 101
-begin = 21
-end = 29
-
-[JC_95]
-kind = PointerDeref
-file = "HOME/tests/java/SelectionSort.java"
-line = 102
-begin = 6
-end = 10
-
-[JC_96]
-kind = PointerDeref
-file = "HOME/tests/java/SelectionSort.java"
-line = 103
-begin = 20
-end = 24
-
-[JC_97]
-kind = ArithOverflow
-file = "HOME/tests/java/SelectionSort.jc"
-line = 211
-begin = 30
-end = 36
-
-[JC_98]
-file = "HOME/tests/java/SelectionSort.java"
-line = 99
-begin = 22
-end = 34
-
-[JC_99]
-kind = UserCall
-file = "HOME/tests/java/SelectionSort.jc"
-line = 218
-begin = 32
-end = 72
-
-[JC_160]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_161]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_162]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_163]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
-
-[JC_164]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_165]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
-
-[JC_166]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_167]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_168]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_169]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_170]
+[JC_252]
 file = "HOME/"
 line = 0
 begin = -1
@@ -2127,41 +2246,35 @@ line = 74
 begin = 22
 end = 30
 
-[JC_172]
+[JC_164]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_173]
+[JC_44]
+file = "HOME/tests/java/SelectionSort.java"
+line = 61
+begin = 17
+end = 80
+
+[JC_155]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
+line = 184
+begin = 28
+end = 33
 
-[JC_174]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_88]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 38
+end = 51
 
-[JC_175]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_176]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_177]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_42]
+file = "HOME/tests/java/SelectionSort.java"
+line = 62
+begin = 32
+end = 38
 
 [JC_178]
 file = "HOME/"
@@ -2169,85 +2282,161 @@ line = 0
 begin = -1
 end = -1
 
-[JC_179]
+[JC_141]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_32]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_220]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_65]
+file = "HOME/tests/java/SelectionSort.java"
+line = 72
+begin = 17
+end = 26
+
+[JC_118]
+file = "HOME/tests/java/SelectionSort.java"
+line = 83
+begin = 21
+end = 34
+
+[JC_105]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 164
+begin = 15
+end = 3584
+
+[JC_245]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
+line = 481
 begin = 19
-end = 25
+end = 27
 
-[JC_10]
+[JC_140]
+file = "HOME/tests/java/SelectionSort.java"
+line = 81
+begin = 20
+end = 26
+
+[cons_Object_safety]
+name = "Constructor of class Object"
+behavior = "Safety"
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_11]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 52
-begin = 8
-end = 21
-
-[JC_12]
+[JC_159]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_13]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 55
-begin = 11
-end = 66
-
-[JC_14]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 54
-begin = 10
-end = 18
-
-[JC_15]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 55
-begin = 11
-end = 66
-
-[JC_16]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 54
-begin = 10
-end = 18
-
-[JC_17]
+[JC_68]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_180]
+[JC_7]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_18]
+[JC_96]
+kind = PointerDeref
+file = "HOME/tests/java/SelectionSort.java"
+line = 103
+begin = 20
+end = 24
+
+[JC_93]
+kind = UserCall
+file = "HOME/tests/java/SelectionSort.java"
+line = 101
+begin = 21
+end = 29
+
+[JC_255]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_181]
+[JC_214]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_258]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_114]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 191
+begin = 21
+end = 1600
+
+[JC_150]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 191
+begin = 21
+end = 1600
+
+[JC_117]
+file = "HOME/tests/java/SelectionSort.java"
+line = 108
+begin = 33
+end = 68
+
+[JC_53]
+file = "HOME/tests/java/SelectionSort.java"
+line = 64
+begin = 16
+end = 37
+
+[JC_204]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_157]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
+line = 184
+begin = 28
+end = 33
 
-[JC_19]
+[JC_145]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 24
+end = 29
+
+[JC_21]
 file = "HOME/tests/java/SelectionSort.jc"
 line = 58
 begin = 8
 end = 30
 
-[JC_182]
+[JC_209]
 file = "HOME/"
 line = 0
 begin = -1
@@ -2261,171 +2450,67 @@ line = 66
 begin = 9
 end = 13
 
-[JC_183]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_111]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 24
+end = 51
 
-[JC_184]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_77]
+file = "HOME/tests/java/SelectionSort.java"
+line = 81
+begin = 20
+end = 26
 
-[JC_185]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_49]
+file = "HOME/tests/java/SelectionSort.java"
+line = 62
+begin = 32
+end = 38
 
-[JC_186]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_187]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
-
-[JC_188]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_189]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
-
-[JC_20]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_21]
+[JC_1]
 file = "HOME/tests/java/SelectionSort.jc"
-line = 58
-begin = 8
+line = 23
+begin = 12
+end = 22
+
+[JC_102]
+file = "HOME/tests/java/SelectionSort.java"
+line = 88
+begin = 18
 end = 30
 
-[JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[cons_Object_ensures_default]
-name = "Constructor of class Object"
-behavior = "default behavior"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_200]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_23]
+[JC_142]
 file = "HOME/tests/java/SelectionSort.jc"
-line = 61
-begin = 11
-end = 103
+line = 164
+begin = 15
+end = 3584
 
-[JC_201]
+[JC_211]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_24]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 60
-begin = 10
-end = 18
+[JC_146]
+file = "HOME/tests/java/SelectionSort.java"
+line = 93
+begin = 33
+end = 40
 
-[JC_202]
+[JC_249]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_25]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 61
-begin = 11
-end = 103
-
-[JC_203]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
-
-[JC_26]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 60
-begin = 10
-end = 18
-
-[JC_204]
+[JC_66]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_27]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_205]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
-
-[JC_190]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_206]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_191]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_29]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 65
-begin = 8
-end = 23
-
-[JC_207]
+[JC_59]
 file = "HOME/"
 line = 0
 begin = -1
@@ -2437,55 +2522,94 @@ line = 0
 begin = -1
 end = -1
 
-[JC_208]
+[JC_18]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_193]
+[JC_239]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_209]
+[JC_3]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 23
+begin = 12
+end = 22
+
+[JC_92]
+file = "HOME/tests/java/SelectionSort.jc"
+line = 191
+begin = 21
+end = 1600
+
+[JC_152]
+kind = UserCall
+file = "HOME/tests/java/SelectionSort.java"
+line = 101
+begin = 21
+end = 29
+
+[SelectionSort_sort_ensures_default]
+name = "Method sort"
+behavior = "default behavior"
+file = "HOME/tests/java/SelectionSort.java"
+line = 78
+begin = 9
+end = 13
+
+[JC_228]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_194]
+[JC_60]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_195]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
+[JC_183]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_139]
+file = "HOME/tests/java/SelectionSort.java"
+line = 87
+begin = 22
+end = 54
+
+[JC_119]
+file = "HOME/tests/java/SelectionSort.java"
+line = 84
+begin = 8
+end = 90
+
+[JC_210]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_76]
+file = "HOME/tests/java/SelectionSort.java"
+line = 76
 begin = 18
-end = 26
+end = 50
 
-[JC_196]
+[JC_244]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_197]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
-
-[JC_198]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_199]
+[JC_230]
 file = "HOME/"
 line = 0
 begin = -1
@@ -2497,146 +2621,23 @@ line = 0
 begin = -1
 end = -1
 
-[JC_31]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 65
-begin = 8
-end = 23
-
-[JC_32]
+[JC_234]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_210]
+[JC_226]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_211]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
-
-[JC_34]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_212]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_35]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_213]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
-
-[JC_36]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_214]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_37]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 67
-begin = 11
-end = 65
-
-[JC_215]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_38]
-file = "HOME/tests/java/SelectionSort.jc"
-line = 67
-begin = 11
-end = 65
-
-[JC_216]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_39]
-file = "HOME/tests/java/SelectionSort.java"
-line = 61
-begin = 17
-end = 26
-
-[JC_217]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_218]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_219]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
-
-[SelectionSort_sort_safety]
-name = "Method sort"
-behavior = "Safety"
-file = "HOME/tests/java/SelectionSort.java"
-line = 78
-begin = 9
-end = 13
 
 [JC_100]
 file = "HOME/tests/java/SelectionSort.java"
 line = 108
 begin = 33
 end = 68
-
-[JC_101]
-kind = ArithOverflow
-file = "HOME/tests/java/SelectionSort.jc"
-line = 186
-begin = 24
-end = 30
-
-[JC_102]
-file = "HOME/tests/java/SelectionSort.java"
-line = 88
-begin = 18
-end = 30
 
 ========== file tests/java/why/SelectionSort.why ==========
 type Object
@@ -3042,19 +3043,19 @@ exception Loop_exit_exc of unit
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_clone :
- this_6:Object pointer ->
+ this_4:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_clone_requires :
- this_6:Object pointer ->
+ this_4:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_equals :
- this_5:Object pointer ->
+ this_7:Object pointer ->
   obj:Object pointer -> { } bool reads Object_alloc_table { true }
 
 parameter Object_equals_requires :
- this_5:Object pointer ->
+ this_7:Object pointer ->
   obj:Object pointer -> { } bool reads Object_alloc_table { true }
 
 parameter Object_finalize :
@@ -3064,22 +3065,22 @@ parameter Object_finalize_requires :
  this_13:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_hashCode :
- this_4:Object pointer -> { } int32 reads Object_alloc_table { true }
+ this_6:Object pointer -> { } int32 reads Object_alloc_table { true }
 
 parameter Object_hashCode_requires :
- this_4:Object pointer -> { } int32 reads Object_alloc_table { true }
+ this_6:Object pointer -> { } int32 reads Object_alloc_table { true }
 
 parameter Object_notify :
- this_8:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_9:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notifyAll :
- this_9:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_5:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notifyAll_requires :
- this_9:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_5:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notify_requires :
- this_8:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_9:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_registerNatives : tt:unit -> { } unit { true }
 
@@ -3088,26 +3089,26 @@ parameter Object_registerNatives_requires : tt:unit -> { } unit { true }
 parameter Object_tag_table : Object tag_table ref
 
 parameter Object_toString :
- this_7:Object pointer ->
+ this_11:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_toString_requires :
- this_7:Object pointer ->
+ this_11:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_wait :
- this_12:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_8:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long :
  this_10:Object pointer ->
   timeout:long -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_int :
- this_11:Object pointer ->
+ this_12:Object pointer ->
   timeout_0:long -> nanos:int32 -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_int_requires :
- this_11:Object pointer ->
+ this_12:Object pointer ->
   timeout_0:long -> nanos:int32 -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_requires :
@@ -3115,7 +3116,7 @@ parameter Object_wait_long_requires :
   timeout:long -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_requires :
- this_12:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_8:Object pointer -> { } unit reads Object_alloc_table { true }
 
 exception Return_label_exc of unit
 
@@ -3480,7 +3481,7 @@ let SelectionSort_sort_ensures_default =
      (let mi = ref (any_int32 void) in
      (let mv = ref (any_int32 void) in
      begin
-       (let jessie_<num> = (i_3 := (safe_int32_of_integer_ (0))) in void);
+       (let _jessie_<num> = (i_3 := (safe_int32_of_integer_ (0))) in void);
       try
        (loop_3:
        while true do
@@ -3494,17 +3495,17 @@ let SelectionSort_sort_ensures_default =
                                                     (K_46:
                                                     (safe_int32_of_integer_ 
                                                      ((sub_int (K_45:
-                                                               (let jessie_<num> =
+                                                               (let _jessie_<num> =
                                                                t_0 in
                                                                (JC_107:
-                                                               (java_array_length_intM jessie_<num>))))) (1)))))))
+                                                               (java_array_length_intM _jessie_<num>))))) (1)))))))
             then
              begin
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (mv := (K_24:
                       ((safe_acc_ !intM_intP) ((shift t_0) (integer_of_int32 !i_3))))) in
-               void); (let jessie_<num> = (mi := !i_3) in void);
-              (let jessie_<num> =
+               void); (let _jessie_<num> = (mi := !i_3) in void);
+              (let _jessie_<num> =
               (j_3 := (K_40:
                       (safe_int32_of_integer_ ((add_int (integer_of_int32 !i_3)) (1))))) in
               void);
@@ -3527,10 +3528,10 @@ let SelectionSort_sort_ensures_default =
                   begin
                     (if (K_39:
                         ((lt_int_ (integer_of_int32 !j_3)) (K_38:
-                                                           (let jessie_<num> =
+                                                           (let _jessie_<num> =
                                                            t_0 in
                                                            (JC_115:
-                                                           (java_array_length_intM jessie_<num>))))))
+                                                           (java_array_length_intM _jessie_<num>))))))
                     then
                      (if (K_36:
                          ((lt_int_ (integer_of_int32 (K_35:
@@ -3538,42 +3539,42 @@ let SelectionSort_sort_ensures_default =
                                                       ((shift t_0) (integer_of_int32 !j_3)))))) 
                           (integer_of_int32 !mv)))
                      then
-                      (let jessie_<num> =
+                      (let _jessie_<num> =
                       begin
-                        (let jessie_<num> = (mi := !j_3) in void);
+                        (let _jessie_<num> = (mi := !j_3) in void);
                        (mv := (K_34:
                               ((safe_acc_ !intM_intP) ((shift t_0) (integer_of_int32 !j_3)))));
                        !mv end in void) else void)
                     else (raise (Loop_exit_exc void)));
                    (raise (Loop_continue_exc void)) end with
-                  Loop_continue_exc jessie_<num> ->
-                  (let jessie_<num> =
+                  Loop_continue_exc _jessie_<num> ->
+                  (let _jessie_<num> =
                   (K_37:
-                  (let jessie_<num> = !j_3 in
+                  (let _jessie_<num> = !j_3 in
                   begin
-                    (let jessie_<num> =
-                    (j_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1)))) in
-                    void); jessie_<num> end)) in void) end end done) with
-               Loop_exit_exc jessie_<num> -> void end;
+                    (let _jessie_<num> =
+                    (j_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 _jessie_<num>)) (1)))) in
+                    void); _jessie_<num> end)) in void) end end done) with
+               Loop_exit_exc _jessie_<num> -> void end;
               (Before:
               (K_41:
-              (let jessie_<num> = this_0 in
-              (let jessie_<num> = t_0 in
-              (let jessie_<num> = !i_3 in
-              (let jessie_<num> = !mi in
+              (let _jessie_<num> = this_0 in
+              (let _jessie_<num> = t_0 in
+              (let _jessie_<num> = !i_3 in
+              (let _jessie_<num> = !mi in
               (JC_116:
-              ((((SelectionSort_swap jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))))))
+              ((((SelectionSort_swap _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>))))))))
              end else (raise (Loop_exit_exc void)));
            (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> ->
-          (let jessie_<num> =
+          Loop_continue_exc _jessie_<num> ->
+          (let _jessie_<num> =
           (K_44:
-          (let jessie_<num> = !i_3 in
+          (let _jessie_<num> = !i_3 in
           begin
-            (let jessie_<num> =
-            (i_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1)))) in
-            void); jessie_<num> end)) in void) end end done) with
-       Loop_exit_exc jessie_<num> -> void end end)))); (raise Return) end with
+            (let _jessie_<num> =
+            (i_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 _jessie_<num>)) (1)))) in
+            void); _jessie_<num> end)) in void) end end done) with
+       Loop_exit_exc _jessie_<num> -> void end end)))); (raise Return) end with
    Return -> void end) { (JC_69: true) }
 
 let SelectionSort_sort_ensures_permutation =
@@ -3589,7 +3590,7 @@ let SelectionSort_sort_ensures_permutation =
      (let mi = ref (any_int32 void) in
      (let mv = ref (any_int32 void) in
      begin
-       (let jessie_<num> = (i_3 := (safe_int32_of_integer_ (0))) in void);
+       (let _jessie_<num> = (i_3 := (safe_int32_of_integer_ (0))) in void);
       try
        (loop_7:
        while true do
@@ -3608,22 +3609,20 @@ let SelectionSort_sort_ensures_permutation =
                                                     (K_46:
                                                     (safe_int32_of_integer_ 
                                                      ((sub_int (K_45:
-                                                               (let jessie_<num> =
+                                                               (let _jessie_<num> =
                                                                t_0 in
                                                                (JC_144:
-                                                               (java_array_length_intM jessie_<num>))))) (1)))))))
+                                                               (java_array_length_intM _jessie_<num>))))) (1)))))))
             then
              begin
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (mv := (K_24:
                       ((safe_acc_ !intM_intP) ((shift t_0) (integer_of_int32 !i_3))))) in
-               void); (let jessie_<num> = (mi := !i_3) in void);
-              (let jessie_<num> =
+               void); (let _jessie_<num> = (mi := !i_3) in void);
+              (let _jessie_<num> =
               (j_3 := (K_40:
                       (safe_int32_of_integer_ ((add_int (integer_of_int32 !i_3)) (1))))) in
               void);
-              (Before:
-              (K_41:
               begin
                 try
                  (loop_8:
@@ -3645,10 +3644,10 @@ let SelectionSort_sort_ensures_permutation =
                     begin
                       (if (K_39:
                           ((lt_int_ (integer_of_int32 !j_3)) (K_38:
-                                                             (let jessie_<num> =
+                                                             (let _jessie_<num> =
                                                              t_0 in
                                                              (JC_152:
-                                                             (java_array_length_intM jessie_<num>))))))
+                                                             (java_array_length_intM _jessie_<num>))))))
                       then
                        (if (K_36:
                            ((lt_int_ (integer_of_int32 (K_35:
@@ -3657,47 +3656,50 @@ let SelectionSort_sort_ensures_permutation =
                                                          (integer_of_int32 !j_3)))))) 
                             (integer_of_int32 !mv)))
                        then
-                        (let jessie_<num> =
+                        (let _jessie_<num> =
                         begin
-                          (let jessie_<num> = (mi := !j_3) in void);
+                          (let _jessie_<num> = (mi := !j_3) in void);
                          (mv := (K_34:
                                 ((safe_acc_ !intM_intP) ((shift t_0) 
                                                          (integer_of_int32 !j_3)))));
                          !mv end in void) else void)
                       else (raise (Loop_exit_exc void)));
                      (raise (Loop_continue_exc void)) end with
-                    Loop_continue_exc jessie_<num> ->
-                    (let jessie_<num> =
+                    Loop_continue_exc _jessie_<num> ->
+                    (let _jessie_<num> =
                     (K_37:
-                    (let jessie_<num> = !j_3 in
+                    (let _jessie_<num> = !j_3 in
                     begin
-                      (let jessie_<num> =
-                      (j_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1)))) in
-                      void); jessie_<num> end)) in void) end end done) with
-                 Loop_exit_exc jessie_<num> -> void end;
-               (let jessie_<num> = this_0 in
-               (let jessie_<num> = t_0 in
-               (let jessie_<num> = !i_3 in
-               (let jessie_<num> = !mi in
-               (JC_153:
-               ((((SelectionSort_swap jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
-               (K_43:
-               (assert
-               { (JC_154:
-                 Permut(t_0, (0),
-                 sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
-                 (1)), intM_intP, intM_intP@Before)) }; void)) end)) end
+                      (let _jessie_<num> =
+                      (j_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 _jessie_<num>)) (1)))) in
+                      void); _jessie_<num> end)) in void) end end done) with
+                 Loop_exit_exc _jessie_<num> -> void end;
+               (Before:
+               (K_41:
+               begin
+                 (let _jessie_<num> = this_0 in
+                 (let _jessie_<num> = t_0 in
+                 (let _jessie_<num> = !i_3 in
+                 (let _jessie_<num> = !mi in
+                 (JC_153:
+                 ((((SelectionSort_swap _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>))))));
+                (K_43:
+                (assert
+                { (JC_154:
+                  Permut(t_0, (0),
+                  sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
+                  (1)), intM_intP, intM_intP@Before)) }; void)) end)) end end
             else (raise (Loop_exit_exc void)));
            (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> ->
-          (let jessie_<num> =
+          Loop_continue_exc _jessie_<num> ->
+          (let _jessie_<num> =
           (K_44:
-          (let jessie_<num> = !i_3 in
+          (let _jessie_<num> = !i_3 in
           begin
-            (let jessie_<num> =
-            (i_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1)))) in
-            void); jessie_<num> end)) in void) end end done) with
-       Loop_exit_exc jessie_<num> -> void end end)))); (raise Return) end with
+            (let _jessie_<num> =
+            (i_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 _jessie_<num>)) (1)))) in
+            void); _jessie_<num> end)) in void) end end done) with
+       Loop_exit_exc _jessie_<num> -> void end end)))); (raise Return) end with
    Return -> void end)
   { (JC_75:
     Permut(t_0, (0),
@@ -3717,7 +3719,7 @@ let SelectionSort_sort_ensures_sorted =
      (let mi = ref (any_int32 void) in
      (let mv = ref (any_int32 void) in
      begin
-       (let jessie_<num> = (i_3 := (safe_int32_of_integer_ (0))) in void);
+       (let _jessie_<num> = (i_3 := (safe_int32_of_integer_ (0))) in void);
       try
        (loop_5:
        while true do
@@ -3746,17 +3748,17 @@ let SelectionSort_sort_ensures_sorted =
                                                     (K_46:
                                                     (safe_int32_of_integer_ 
                                                      ((sub_int (K_45:
-                                                               (let jessie_<num> =
+                                                               (let _jessie_<num> =
                                                                t_0 in
                                                                (JC_125:
-                                                               (java_array_length_intM jessie_<num>))))) (1)))))))
+                                                               (java_array_length_intM _jessie_<num>))))) (1)))))))
             then
              begin
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (mv := (K_24:
                       ((safe_acc_ !intM_intP) ((shift t_0) (integer_of_int32 !i_3))))) in
-               void); (let jessie_<num> = (mi := !i_3) in void);
-              (let jessie_<num> =
+               void); (let _jessie_<num> = (mi := !i_3) in void);
+              (let _jessie_<num> =
               (j_3 := (K_40:
                       (safe_int32_of_integer_ ((add_int (integer_of_int32 !i_3)) (1))))) in
               void);
@@ -3792,10 +3794,10 @@ let SelectionSort_sort_ensures_sorted =
                   begin
                     (if (K_39:
                         ((lt_int_ (integer_of_int32 !j_3)) (K_38:
-                                                           (let jessie_<num> =
+                                                           (let _jessie_<num> =
                                                            t_0 in
                                                            (JC_136:
-                                                           (java_array_length_intM jessie_<num>))))))
+                                                           (java_array_length_intM _jessie_<num>))))))
                     then
                      (if (K_36:
                          ((lt_int_ (integer_of_int32 (K_35:
@@ -3803,42 +3805,42 @@ let SelectionSort_sort_ensures_sorted =
                                                       ((shift t_0) (integer_of_int32 !j_3)))))) 
                           (integer_of_int32 !mv)))
                      then
-                      (let jessie_<num> =
+                      (let _jessie_<num> =
                       begin
-                        (let jessie_<num> = (mi := !j_3) in void);
+                        (let _jessie_<num> = (mi := !j_3) in void);
                        (mv := (K_34:
                               ((safe_acc_ !intM_intP) ((shift t_0) (integer_of_int32 !j_3)))));
                        !mv end in void) else void)
                     else (raise (Loop_exit_exc void)));
                    (raise (Loop_continue_exc void)) end with
-                  Loop_continue_exc jessie_<num> ->
-                  (let jessie_<num> =
+                  Loop_continue_exc _jessie_<num> ->
+                  (let _jessie_<num> =
                   (K_37:
-                  (let jessie_<num> = !j_3 in
+                  (let _jessie_<num> = !j_3 in
                   begin
-                    (let jessie_<num> =
-                    (j_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1)))) in
-                    void); jessie_<num> end)) in void) end end done) with
-               Loop_exit_exc jessie_<num> -> void end;
+                    (let _jessie_<num> =
+                    (j_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 _jessie_<num>)) (1)))) in
+                    void); _jessie_<num> end)) in void) end end done) with
+               Loop_exit_exc _jessie_<num> -> void end;
               (Before:
               (K_41:
-              (let jessie_<num> = this_0 in
-              (let jessie_<num> = t_0 in
-              (let jessie_<num> = !i_3 in
-              (let jessie_<num> = !mi in
+              (let _jessie_<num> = this_0 in
+              (let _jessie_<num> = t_0 in
+              (let _jessie_<num> = !i_3 in
+              (let _jessie_<num> = !mi in
               (JC_137:
-              ((((SelectionSort_swap jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))))))
+              ((((SelectionSort_swap _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>))))))))
              end else (raise (Loop_exit_exc void)));
            (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> ->
-          (let jessie_<num> =
+          Loop_continue_exc _jessie_<num> ->
+          (let _jessie_<num> =
           (K_44:
-          (let jessie_<num> = !i_3 in
+          (let _jessie_<num> = !i_3 in
           begin
-            (let jessie_<num> =
-            (i_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1)))) in
-            void); jessie_<num> end)) in void) end end done) with
-       Loop_exit_exc jessie_<num> -> void end end)))); (raise Return) end with
+            (let _jessie_<num> =
+            (i_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 _jessie_<num>)) (1)))) in
+            void); _jessie_<num> end)) in void) end end done) with
+       Loop_exit_exc _jessie_<num> -> void end end)))); (raise Return) end with
    Return -> void end)
   { (JC_73:
     Sorted(t_0, (0), add_int(offset_max(Object_alloc_table, t_0), (1)),
@@ -3857,7 +3859,7 @@ let SelectionSort_sort_safety =
      (let mi = ref (any_int32 void) in
      (let mv = ref (any_int32 void) in
      begin
-       (let jessie_<num> = (i_3 := (safe_int32_of_integer_ (0))) in void);
+       (let _jessie_<num> = (i_3 := (safe_int32_of_integer_ (0))) in void);
       try
        (loop_1:
        while true do
@@ -3877,25 +3879,25 @@ let SelectionSort_sort_safety =
                                                     (JC_83:
                                                     (int32_of_integer_ 
                                                      ((sub_int (K_45:
-                                                               (let jessie_<num> =
+                                                               (let _jessie_<num> =
                                                                t_0 in
                                                                (JC_82:
                                                                (assert
                                                                { ge_int(
                                                                  offset_max(Object_alloc_table,
-                                                                 jessie_<num>),
+                                                                 _jessie_<num>),
                                                                  (-1)) };
                                                                (JC_81:
-                                                               (java_array_length_intM_requires jessie_<num>))))))) (1))))))))
+                                                               (java_array_length_intM_requires _jessie_<num>))))))) (1))))))))
             then
              begin
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (mv := (K_24:
                       (JC_84:
                       ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) 
                        (integer_of_int32 !i_3))))) in void);
-              (let jessie_<num> = (mi := !i_3) in void);
-              (let jessie_<num> =
+              (let _jessie_<num> = (mi := !i_3) in void);
+              (let _jessie_<num> =
               (j_3 := (K_40:
                       (JC_85:
                       (int32_of_integer_ ((add_int (integer_of_int32 !i_3)) (1)))))) in
@@ -3924,15 +3926,15 @@ let SelectionSort_sort_safety =
                   begin
                     (if (K_39:
                         ((lt_int_ (integer_of_int32 !j_3)) (K_38:
-                                                           (let jessie_<num> =
+                                                           (let _jessie_<num> =
                                                            t_0 in
                                                            (JC_94:
                                                            (assert
                                                            { ge_int(offset_max(Object_alloc_table,
-                                                                    jessie_<num>),
+                                                                    _jessie_<num>),
                                                              (-1)) };
                                                            (JC_93:
-                                                           (java_array_length_intM_requires jessie_<num>))))))))
+                                                           (java_array_length_intM_requires _jessie_<num>))))))))
                     then
                      (if (K_36:
                          ((lt_int_ (integer_of_int32 (K_35:
@@ -3941,45 +3943,45 @@ let SelectionSort_sort_safety =
                                                       (integer_of_int32 !j_3)))))) 
                           (integer_of_int32 !mv)))
                      then
-                      (let jessie_<num> =
+                      (let _jessie_<num> =
                       begin
-                        (let jessie_<num> = (mi := !j_3) in void);
+                        (let _jessie_<num> = (mi := !j_3) in void);
                        (mv := (K_34:
                               (JC_96:
                               ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) 
                                (integer_of_int32 !j_3))))); !mv end in void)
                      else void) else (raise (Loop_exit_exc void)));
                    (raise (Loop_continue_exc void)) end with
-                  Loop_continue_exc jessie_<num> ->
-                  (let jessie_<num> =
+                  Loop_continue_exc _jessie_<num> ->
+                  (let _jessie_<num> =
                   (K_37:
-                  (let jessie_<num> = !j_3 in
+                  (let _jessie_<num> = !j_3 in
                   begin
-                    (let jessie_<num> =
+                    (let _jessie_<num> =
                     (j_3 := (JC_97:
-                            (int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1))))) in
-                    void); jessie_<num> end)) in void) end end done) with
-               Loop_exit_exc jessie_<num> -> void end;
+                            (int32_of_integer_ ((add_int (integer_of_int32 _jessie_<num>)) (1))))) in
+                    void); _jessie_<num> end)) in void) end end done) with
+               Loop_exit_exc _jessie_<num> -> void end;
               (Before:
               (K_41:
-              (let jessie_<num> = this_0 in
-              (let jessie_<num> = t_0 in
-              (let jessie_<num> = !i_3 in
-              (let jessie_<num> = !mi in
+              (let _jessie_<num> = this_0 in
+              (let _jessie_<num> = t_0 in
+              (let _jessie_<num> = !i_3 in
+              (let _jessie_<num> = !mi in
               (JC_99:
-              ((((SelectionSort_swap_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))))))
+              ((((SelectionSort_swap_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>))))))))
              end else (raise (Loop_exit_exc void)));
            (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> ->
-          (let jessie_<num> =
+          Loop_continue_exc _jessie_<num> ->
+          (let _jessie_<num> =
           (K_44:
-          (let jessie_<num> = !i_3 in
+          (let _jessie_<num> = !i_3 in
           begin
-            (let jessie_<num> =
+            (let _jessie_<num> =
             (i_3 := (JC_101:
-                    (int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1))))) in
-            void); jessie_<num> end)) in void) end end done) with
-       Loop_exit_exc jessie_<num> -> void end end)))); (raise Return) end with
+                    (int32_of_integer_ ((add_int (integer_of_int32 _jessie_<num>)) (1))))) in
+            void); _jessie_<num> end)) in void) end end done) with
+       Loop_exit_exc _jessie_<num> -> void end end)))); (raise Return) end with
    Return -> void end) { true }
 
 let SelectionSort_swap_ensures_default =
@@ -3999,24 +4001,24 @@ let SelectionSort_swap_ensures_default =
   (init:
   try
    begin
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (let tmp =
      (K_14: ((safe_acc_ !intM_intP) ((shift t) (integer_of_int32 i_2)))) in
      (K_12:
      begin
-       (let jessie_<num> =
-       (let jessie_<num> =
+       (let _jessie_<num> =
+       (let _jessie_<num> =
        (K_11: ((safe_acc_ !intM_intP) ((shift t) (integer_of_int32 j_2)))) in
-       (let jessie_<num> = t in
-       (let jessie_<num> = (integer_of_int32 i_2) in
-       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-       (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
+       (let _jessie_<num> = t in
+       (let _jessie_<num> = (integer_of_int32 i_2) in
+       (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+       (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>))))) in void);
       (K_13:
-      (let jessie_<num> = tmp in
-      (let jessie_<num> = t in
-      (let jessie_<num> = (integer_of_int32 j_2) in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      begin   (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>); jessie_<num> end)))))
+      (let _jessie_<num> = tmp in
+      (let _jessie_<num> = t in
+      (let _jessie_<num> = (integer_of_int32 j_2) in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      begin   (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>); _jessie_<num> end)))))
      end)) in void); (raise Return) end with Return -> void end)
   { (JC_55:
     ((JC_53:
@@ -4046,40 +4048,40 @@ let SelectionSort_swap_safety =
   (init:
   try
    begin
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (let tmp =
      (K_14:
      (JC_61:
      ((((offset_acc_ !Object_alloc_table) !intM_intP) t) (integer_of_int32 i_2)))) in
      (K_12:
      begin
-       (let jessie_<num> =
-       (let jessie_<num> =
+       (let _jessie_<num> =
+       (let _jessie_<num> =
        (K_11:
        (JC_62:
        ((((offset_acc_ !Object_alloc_table) !intM_intP) t) (integer_of_int32 j_2)))) in
-       (let jessie_<num> = t in
-       (let jessie_<num> = (integer_of_int32 i_2) in
-       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+       (let _jessie_<num> = t in
+       (let _jessie_<num> = (integer_of_int32 i_2) in
+       (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
        (JC_63:
-       (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+       (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
        void);
       (K_13:
-      (let jessie_<num> = tmp in
-      (let jessie_<num> = t in
-      (let jessie_<num> = (integer_of_int32 j_2) in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      (let _jessie_<num> = tmp in
+      (let _jessie_<num> = t in
+      (let _jessie_<num> = (integer_of_int32 j_2) in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
       (JC_64:
       begin
-        (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>);
-       jessie_<num> end)))))) end)) in void); (raise Return) end with Return ->
+        (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>);
+       _jessie_<num> end)))))) end)) in void); (raise Return) end with Return ->
    void end) { true }
 
 let cons_Object_ensures_default =
  fun (this_14 : Object pointer) ->
   { valid_struct_Object(this_14, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_255: true) }
+  { (JC_239: true) }
 
 let cons_Object_safety =
  fun (this_14 : Object pointer) ->
@@ -4091,7 +4093,7 @@ let cons_SelectionSort_ensures_default =
  fun (this_3 : Object pointer) ->
   { valid_struct_SelectionSort(this_3, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_159: true) }
+  { (JC_215: true) }
 
 let cons_SelectionSort_safety =
  fun (this_3 : Object pointer) ->
@@ -4189,7 +4191,7 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/SelectionSort_po25.why">
-      <location file = "why/SelectionSort.why" line = "1243" begin = "65" end = "316"/>
+      <location file = "why/SelectionSort.why" line = "1244" begin = "65" end = "317"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SelectionSort_po26.why">
@@ -10797,7 +10799,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP) |@tr
 (IMPLIES (>= (integer_of_int32 i_3_0) (integer_of_int32 result1))
 (Sorted t_0 0 (+ (offset_max Object_alloc_table t_0) 1) intM_intP0))))))))))))))))))
 
-;; SelectionSort_sort_safety_po_1, File "why/SelectionSort.why", line 1243, characters 65-316
+;; SelectionSort_sort_safety_po_1, File "why/SelectionSort.why", line 1244, characters 65-317
 (FORALL (this_0)
 (FORALL (t_0)
 (FORALL (Object_alloc_table)

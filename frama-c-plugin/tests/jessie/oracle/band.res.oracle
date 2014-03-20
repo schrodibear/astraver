@@ -1,9 +1,12 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only band.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD band.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only band.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/band.c"
 [kernel] warning: ignoring status of global invariant `tev'
 [kernel] warning: ignoring status of global invariant `ev'
 [kernel] warning: ignoring status of global invariant `eev'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global invariant `tev'
+[kernel] warning: ignoring status of global invariant `ev'
+[kernel] warning: ignoring status of global invariant `eev'
 [jessie] Producing Jessie files in subdir band.jessie
 [jessie] File band.jessie/band.jc written.
 [jessie] File band.jessie/band.cloc written.
@@ -62,10 +65,10 @@ invariant eev :
 int16 test1()
 behavior default:
   assigns returnValue;
-  ensures (C_6 : (\result >= 0));
+  ensures (_C_6 : (\result >= 0));
 {  
-   {  (C_5 : (returnValue = (C_4 : ((C_3 : ((C_2 : (ValueA :> int32)) &
-                                             (C_1 : (ValueB :> int32)))) :> int16))));
+   {  (_C_5 : (returnValue = (_C_4 : ((_C_3 : ((_C_2 : (ValueA :> int32)) &
+                                                (_C_1 : (ValueB :> int32)))) :> int16))));
       
       (return returnValue)
    }
@@ -74,17 +77,17 @@ behavior default:
 int16 test2()
 behavior default:
   assigns returnValue;
-  ensures (C_15 : (\result >= 0));
+  ensures (_C_15 : (\result >= 0));
 {  
-   {  (C_11 : (returnValue = (C_10 : ((C_9 : ((C_8 : (ValueA :> int32)) &
-                                               (C_7 : (ValueB :> int32)))) :> int16))));
-      (if ((C_13 : (returnValue :> int32)) < 0) then 
-      (goto _LOR) else (if ((C_12 : (returnValue :> int32)) > 10) then 
+   {  (_C_11 : (returnValue = (_C_10 : ((_C_9 : ((_C_8 : (ValueA :> int32)) &
+                                                  (_C_7 : (ValueB :> int32)))) :> int16))));
+      (if ((_C_13 : (returnValue :> int32)) < 0) then 
+      (goto _LOR) else (if ((_C_12 : (returnValue :> int32)) > 10) then 
                        (goto _LOR) else ()));
       
       (goto _LOR_0);
       (_LOR : 
-      {  (C_14 : (returnValue = 0))
+      {  (_C_14 : (returnValue = 0))
       });
       (_LOR_0 : ());
       
@@ -95,9 +98,9 @@ behavior default:
 int16 test3()
 behavior default:
   assigns returnValue;
-  ensures (C_17 : (\result >= 0));
+  ensures (_C_17 : (\result >= 0));
 {  
-   {  (C_16 : (returnValue = returnValue));
+   {  (_C_16 : (returnValue = returnValue));
       
       (return returnValue)
    }
@@ -546,19 +549,14 @@ let test1_ensures_default =
   (init:
   (let return = ref (any_int16 void) in
   try
-   (C_5:
    begin
-     (let jessie_<somenum> =
-     (returnValue := (C_4:
-                     (safe_int16_of_integer_ (C_3:
-                                             ((bw_and (integer_of_int32 
-                                                       (C_2:
+     (let _jessie_<somenum> =
+     (returnValue := (safe_int16_of_integer_ ((bw_and (integer_of_int32 
                                                        (safe_int32_of_integer_ 
-                                                        (integer_of_int16 ValueA))))) 
-                                              (integer_of_int32 (C_1:
-                                                                (safe_int32_of_integer_ 
-                                                                 (integer_of_int16 ValueB))))))))) in
-     void); (return := !returnValue); (raise Return); absurd  end) with
+                                                        (integer_of_int16 ValueA)))) 
+                                              (integer_of_int32 (safe_int32_of_integer_ 
+                                                                 (integer_of_int16 ValueB)))))) in
+     void); (return := !returnValue); (raise Return); absurd  end with
    Return -> !return end)) { (JC_<somenum>: ge_int(integer_of_int16(result), (0))) }
 
 let test1_safety =
@@ -567,21 +565,16 @@ let test1_safety =
   (init:
   (let return = ref (any_int16 void) in
   try
-   (C_5:
    begin
-     (let jessie_<somenum> =
-     (returnValue := (C_4:
-                     (JC_<somenum>:
-                     (int16_of_integer_ (C_3:
-                                        ((bw_and (integer_of_int32 (C_2:
-                                                                   (JC_<somenum>:
+     (let _jessie_<somenum> =
+     (returnValue := (JC_<somenum>:
+                     (int16_of_integer_ ((bw_and (integer_of_int32 (JC_<somenum>:
                                                                    (int32_of_integer_ 
-                                                                    (integer_of_int16 ValueA)))))) 
-                                         (integer_of_int32 (C_1:
-                                                           (JC_<somenum>:
+                                                                    (integer_of_int16 ValueA))))) 
+                                         (integer_of_int32 (JC_<somenum>:
                                                            (int32_of_integer_ 
-                                                            (integer_of_int16 ValueB))))))))))) in
-     void); (return := !returnValue); (raise Return); absurd  end) with
+                                                            (integer_of_int16 ValueB)))))))) in
+     void); (return := !returnValue); (raise Return); absurd  end with
    Return -> !return end))
   { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev)))) }
 
@@ -595,36 +588,27 @@ let test2_ensures_default =
      try
       begin
         try
-         (C_11:
          begin
-           (let jessie_<somenum> =
-           (returnValue := (C_10:
-                           (safe_int16_of_integer_ (C_9:
-                                                   ((bw_and (integer_of_int32 
-                                                             (C_8:
+           (let _jessie_<somenum> =
+           (returnValue := (safe_int16_of_integer_ ((bw_and (integer_of_int32 
                                                              (safe_int32_of_integer_ 
-                                                              (integer_of_int16 ValueA))))) 
+                                                              (integer_of_int16 ValueA)))) 
                                                     (integer_of_int32 
-                                                     (C_7:
                                                      (safe_int32_of_integer_ 
-                                                      (integer_of_int16 ValueB))))))))) in
+                                                      (integer_of_int16 ValueB)))))) in
            void);
-          (if ((lt_int_ (integer_of_int32 (C_13:
-                                          (safe_int32_of_integer_ (integer_of_int16 !returnValue))))) (0))
+          (if ((lt_int_ (integer_of_int32 (safe_int32_of_integer_ (integer_of_int16 !returnValue)))) (0))
           then (raise (Goto__LOR_exc void))
           else
-           (if ((gt_int_ (integer_of_int32 (C_12:
-                                           (safe_int32_of_integer_ (integer_of_int16 !returnValue))))) (10))
+           (if ((gt_int_ (integer_of_int32 (safe_int32_of_integer_ (integer_of_int16 !returnValue)))) (10))
            then (raise (Goto__LOR_exc void)) else void));
-          (raise (Goto__LOR_0_exc void)); (raise (Goto__LOR_exc void)) end)
-         with Goto__LOR_exc jessie_<somenum> ->
-         (let jessie_<somenum> =
-         (_LOR:
-         (C_14:
+          (raise (Goto__LOR_0_exc void)); (raise (Goto__LOR_exc void)) end
+         with Goto__LOR_exc _jessie_<somenum> ->
+         (let _jessie_<somenum> =
          begin   (returnValue := (safe_int16_of_integer_ (0))); !returnValue
-         end)) in void) end; (raise (Goto__LOR_0_exc void)) end with
-      Goto__LOR_0_exc jessie_<somenum> ->
-      (_LOR_0: begin   void; (return := !returnValue); (raise Return) end) end;
+         end in void) end; (raise (Goto__LOR_0_exc void)) end with
+      Goto__LOR_0_exc _jessie_<somenum> ->
+      begin   void; (return := !returnValue); (raise Return) end end; 
     absurd  end with Return -> !return end))
   { (JC_<somenum>: ge_int(integer_of_int16(result), (0))) }
 
@@ -638,40 +622,31 @@ let test2_safety =
      try
       begin
         try
-         (C_11:
          begin
-           (let jessie_<somenum> =
-           (returnValue := (C_10:
-                           (JC_<somenum>:
-                           (int16_of_integer_ (C_9:
-                                              ((bw_and (integer_of_int32 
-                                                        (C_8:
+           (let _jessie_<somenum> =
+           (returnValue := (JC_<somenum>:
+                           (int16_of_integer_ ((bw_and (integer_of_int32 
                                                         (JC_<somenum>:
                                                         (int32_of_integer_ 
-                                                         (integer_of_int16 ValueA)))))) 
-                                               (integer_of_int32 (C_7:
-                                                                 (JC_<somenum>:
+                                                         (integer_of_int16 ValueA))))) 
+                                               (integer_of_int32 (JC_<somenum>:
                                                                  (int32_of_integer_ 
-                                                                  (integer_of_int16 ValueB))))))))))) in
+                                                                  (integer_of_int16 ValueB)))))))) in
            void);
-          (if ((lt_int_ (integer_of_int32 (C_13:
-                                          (JC_<somenum>:
-                                          (int32_of_integer_ (integer_of_int16 !returnValue)))))) (0))
+          (if ((lt_int_ (integer_of_int32 (JC_<somenum>:
+                                          (int32_of_integer_ (integer_of_int16 !returnValue))))) (0))
           then (raise (Goto__LOR_exc void))
           else
-           (if ((gt_int_ (integer_of_int32 (C_12:
-                                           (JC_<somenum>:
-                                           (int32_of_integer_ (integer_of_int16 !returnValue)))))) (10))
+           (if ((gt_int_ (integer_of_int32 (JC_<somenum>:
+                                           (int32_of_integer_ (integer_of_int16 !returnValue))))) (10))
            then (raise (Goto__LOR_exc void)) else void));
-          (raise (Goto__LOR_0_exc void)); (raise (Goto__LOR_exc void)) end)
-         with Goto__LOR_exc jessie_<somenum> ->
-         (let jessie_<somenum> =
-         (_LOR:
-         (C_14:
+          (raise (Goto__LOR_0_exc void)); (raise (Goto__LOR_exc void)) end
+         with Goto__LOR_exc _jessie_<somenum> ->
+         (let _jessie_<somenum> =
          begin   (returnValue := (safe_int16_of_integer_ (0))); !returnValue
-         end)) in void) end; (raise (Goto__LOR_0_exc void)) end with
-      Goto__LOR_0_exc jessie_<somenum> ->
-      (_LOR_0: begin   void; (return := !returnValue); (raise Return) end) end;
+         end in void) end; (raise (Goto__LOR_0_exc void)) end with
+      Goto__LOR_0_exc _jessie_<somenum> ->
+      begin   void; (return := !returnValue); (raise Return) end end; 
     absurd  end with Return -> !return end))
   { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev)))) }
 
@@ -681,10 +656,9 @@ let test3_ensures_default =
   (init:
   (let return = ref (any_int16 void) in
   try
-   (C_16:
    begin
-     (let jessie_<somenum> = (returnValue := !returnValue) in void);
-    (return := !returnValue); (raise Return); absurd  end) with Return ->
+     (let _jessie_<somenum> = (returnValue := !returnValue) in void);
+    (return := !returnValue); (raise Return); absurd  end with Return ->
    !return end)) { (JC_<somenum>: ge_int(integer_of_int16(result), (0))) }
 
 let test3_safety =
@@ -693,10 +667,9 @@ let test3_safety =
   (init:
   (let return = ref (any_int16 void) in
   try
-   (C_16:
    begin
-     (let jessie_<somenum> = (returnValue := !returnValue) in void);
-    (return := !returnValue); (raise Return); absurd  end) with Return ->
+     (let _jessie_<somenum> = (returnValue := !returnValue) in void);
+    (return := !returnValue); (raise Return); absurd  end with Return ->
    !return end))
   { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev)))) }
 

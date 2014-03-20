@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only string_basic.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD string_basic.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only string_basic.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/string_basic.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir string_basic.jessie
 [jessie] File string_basic.jessie/string_basic.jc written.
@@ -45,25 +45,25 @@ invariant valid___string_toto :
 ((\offset_min(__string_toto) <= 0) && (\offset_max(__string_toto) >= 4))
 
 int32 endsat(charP[..] p, int32 i)
-  requires (C_9 : ((C_10 : (\offset_min(p) <= i)) &&
-                    (C_11 : (\offset_max(p) >= i))));
+  requires (_C_9 : ((_C_10 : (\offset_min(p) <= i)) &&
+                     (_C_11 : (\offset_max(p) >= i))));
 behavior default:
-  ensures (C_6 : true);
+  ensures (_C_6 : true);
 behavior ok:
   assumes ((p + i).charM == 0);
-  ensures (C_7 : (\result == 1));
+  ensures (_C_7 : (\result == 1));
 behavior ko:
   assumes ((p + i).charM != 0);
-  ensures (C_8 : (\result == 0));
+  ensures (_C_8 : (\result == 0));
 {  
    (var int32 __retres);
    
-   {  (if ((C_4 : ((C_3 : (C_2 : (p + i)).charM) :> int32)) == 0) then 
-      {  (C_1 : (__retres = 1));
+   {  (if ((_C_4 : ((_C_3 : (_C_2 : (p + i)).charM) :> int32)) == 0) then 
+      {  (_C_1 : (__retres = 1));
          
          (goto return_label)
       } else ());
-      (C_5 : (__retres = 0));
+      (_C_5 : (__retres = 0));
       (return_label : 
       (return __retres))
    }
@@ -76,14 +76,14 @@ invariant valid_gtoto :
 
 unit test1()
 behavior default:
-  ensures (C_15 : true);
+  ensures (_C_15 : true);
 {  
    (var int32 r1);
    
-   {  (C_13 : (r1 = (C_12 : endsat(gtoto, 4))));
+   {  (_C_13 : (r1 = (_C_12 : endsat(gtoto, 4))));
       
       {  
-         (assert for default: (C_14 : (jessie : (r1 == 1))));
+         (assert for default: (_C_14 : (jessie : (r1 == 1))));
          ()
       };
       
@@ -93,26 +93,26 @@ behavior default:
 
 unit test2()
 behavior default:
-  ensures (C_32 : true);
+  ensures (_C_32 : true);
 {  
    (var charP[0..4] ltoto);
    
    (var int32 r1_0);
    
-   {  (C_17 : (ltoto = (C_16 : (new charP[5]))));
-      (C_19 : ((C_18 : (ltoto + 0).charM) = 116));
-      (C_21 : ((C_20 : (ltoto + 1).charM) = 111));
-      (C_23 : ((C_22 : (ltoto + 2).charM) = 116));
-      (C_25 : ((C_24 : (ltoto + 3).charM) = 111));
-      (C_27 : ((C_26 : (ltoto + 4).charM) = 0));
-      (C_29 : (r1_0 = (C_28 : endsat(ltoto, 4))));
+   {  (_C_17 : (ltoto = (_C_16 : (new charP[5]))));
+      (_C_19 : ((_C_18 : (ltoto + 0).charM) = 116));
+      (_C_21 : ((_C_20 : (ltoto + 1).charM) = 111));
+      (_C_23 : ((_C_22 : (ltoto + 2).charM) = 116));
+      (_C_25 : ((_C_24 : (ltoto + 3).charM) = 111));
+      (_C_27 : ((_C_26 : (ltoto + 4).charM) = 0));
+      (_C_29 : (r1_0 = (_C_28 : endsat(ltoto, 4))));
       
       {  
-         (assert for default: (C_30 : (jessie : (r1_0 == 1))));
+         (assert for default: (_C_30 : (jessie : (r1_0 == 1))));
          ()
       };
       
-      {  (C_31 : (free(ltoto)));
+      {  (_C_31 : (free(ltoto)));
          
          (return ())
       }
@@ -123,14 +123,14 @@ charP[..] gptoto;
 
 unit test1ptr()
 behavior default:
-  ensures (C_36 : true);
+  ensures (_C_36 : true);
 {  
    (var int32 r1_1);
    
-   {  (C_34 : (r1_1 = (C_33 : endsat(gptoto, 4))));
+   {  (_C_34 : (r1_1 = (_C_33 : endsat(gptoto, 4))));
       
       {  
-         (assert for default: (C_35 : (jessie : (r1_1 == 1))));
+         (assert for default: (_C_35 : (jessie : (r1_1 == 1))));
          ()
       };
       
@@ -140,17 +140,17 @@ behavior default:
 
 unit test2ptr()
 behavior default:
-  ensures (C_41 : true);
+  ensures (_C_41 : true);
 {  
    (var charP[..] lptoto);
    
    (var int32 r1_2);
    
-   {  (C_37 : (lptoto = __string_toto));
-      (C_39 : (r1_2 = (C_38 : endsat(lptoto, 4))));
+   {  (_C_37 : (lptoto = __string_toto));
+      (_C_39 : (r1_2 = (_C_38 : endsat(lptoto, 4))));
       
       {  
-         (assert for default: (C_40 : (jessie : (r1_2 == 1))));
+         (assert for default: (_C_40 : (jessie : (r1_2 == 1))));
          ()
       };
       
@@ -681,22 +681,17 @@ let endsat_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (C_5:
       begin
-        (if ((eq_int_ (integer_of_int32 (C_4:
-                                        (safe_int32_of_integer_ (integer_of_int8 
-                                                                 (C_3:
+        (if ((eq_int_ (integer_of_int32 (safe_int32_of_integer_ (integer_of_int8 
                                                                  ((safe_acc_ charP_charM_p_4) 
-                                                                  (C_2:
                                                                   ((shift p) 
-                                                                   (integer_of_int32 i)))))))))) (0))
+                                                                   (integer_of_int32 i))))))) (0))
         then
-         (C_1:
          begin
-           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+           (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+           void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -719,22 +714,17 @@ let endsat_ensures_ko =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (C_5:
       begin
-        (if ((eq_int_ (integer_of_int32 (C_4:
-                                        (safe_int32_of_integer_ (integer_of_int8 
-                                                                 (C_3:
+        (if ((eq_int_ (integer_of_int32 (safe_int32_of_integer_ (integer_of_int8 
                                                                  ((safe_acc_ charP_charM_p_4) 
-                                                                  (C_2:
                                                                   ((shift p) 
-                                                                   (integer_of_int32 i)))))))))) (0))
+                                                                   (integer_of_int32 i))))))) (0))
         then
-         (C_1:
          begin
-           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+           (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+           void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -761,22 +751,17 @@ let endsat_ensures_ok =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (C_5:
       begin
-        (if ((eq_int_ (integer_of_int32 (C_4:
-                                        (safe_int32_of_integer_ (integer_of_int8 
-                                                                 (C_3:
+        (if ((eq_int_ (integer_of_int32 (safe_int32_of_integer_ (integer_of_int8 
                                                                  ((safe_acc_ charP_charM_p_4) 
-                                                                  (C_2:
                                                                   ((shift p) 
-                                                                   (integer_of_int32 i)))))))))) (0))
+                                                                   (integer_of_int32 i))))))) (0))
         then
-         (C_1:
          begin
-           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+           (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+           void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -800,22 +785,18 @@ let endsat_safety =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (C_5:
       begin
-        (if ((eq_int_ (integer_of_int32 (C_4:
-                                        (JC_<somenum>:
+        (if ((eq_int_ (integer_of_int32 (JC_<somenum>:
                                         (int32_of_integer_ (integer_of_int8 
-                                                            (C_3:
                                                             (JC_<somenum>:
                                                             ((((offset_acc_ charP_p_4_alloc_table) charP_charM_p_4) p) 
-                                                             (integer_of_int32 i)))))))))) (0))
+                                                             (integer_of_int32 i)))))))) (0))
         then
-         (C_1:
          begin
-           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+           (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+           void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -831,16 +812,14 @@ let test1_ensures_default =
   try
    begin
      (let r1 = ref (any_int32 void) in
-     (C_13:
      begin
-       (let jessie_<somenum> =
-       (r1 := (C_12:
-              (let jessie_<somenum> = gtoto in
-              (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
+       (let _jessie_<somenum> =
+       (r1 := (let _jessie_<somenum> = gtoto in
+              (let _jessie_<somenum> = (safe_int32_of_integer_ (4)) in
               (JC_<somenum>:
-              ((((endsat jessie_<somenum>) jessie_<somenum>) !charP_gtoto_2_alloc_table) !charP_charM_gtoto_2)))))) in
+              ((((endsat _jessie_<somenum>) _jessie_<somenum>) !charP_gtoto_2_alloc_table) !charP_charM_gtoto_2))))) in
        void); (assert { (JC_<somenum>: (integer_of_int32(r1) = (1))) }; void); void;
-      (raise Return) end)); (raise Return) end with Return -> void end)
+      (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let test1_safety =
@@ -852,17 +831,15 @@ let test1_safety =
   try
    begin
      (let r1 = ref (any_int32 void) in
-     (C_13:
      begin
-       (let jessie_<somenum> =
-       (r1 := (C_12:
-              (let jessie_<somenum> = gtoto in
-              (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
+       (let _jessie_<somenum> =
+       (r1 := (let _jessie_<somenum> = gtoto in
+              (let _jessie_<somenum> = (safe_int32_of_integer_ (4)) in
               (JC_<somenum>:
-              ((((endsat_requires jessie_<somenum>) jessie_<somenum>) !charP_gtoto_2_alloc_table) !charP_charM_gtoto_2)))))) in
+              ((((endsat_requires _jessie_<somenum>) _jessie_<somenum>) !charP_gtoto_2_alloc_table) !charP_charM_gtoto_2))))) in
        void);
       [ { } unit reads r1 { (JC_<somenum>: (integer_of_int32(r1) = (1))) } ]; void;
-      (raise Return) end)); (raise Return) end with Return -> void end)
+      (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
     and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
@@ -876,16 +853,14 @@ let test1ptr_ensures_default =
   try
    begin
      (let r1_1 = ref (any_int32 void) in
-     (C_34:
      begin
-       (let jessie_<somenum> =
-       (r1_1 := (C_33:
-                (let jessie_<somenum> = gptoto in
-                (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
+       (let _jessie_<somenum> =
+       (r1_1 := (let _jessie_<somenum> = gptoto in
+                (let _jessie_<somenum> = (safe_int32_of_integer_ (4)) in
                 (JC_<somenum>:
-                ((((endsat jessie_<somenum>) jessie_<somenum>) !charP_gptoto_3_alloc_table) !charP_charM_gptoto_3)))))) in
+                ((((endsat _jessie_<somenum>) _jessie_<somenum>) !charP_gptoto_3_alloc_table) !charP_charM_gptoto_3))))) in
        void); (assert { (JC_<somenum>: (integer_of_int32(r1_1) = (1))) }; void);
-      void; (raise Return) end)); (raise Return) end with Return -> void end)
+      void; (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let test1ptr_safety =
@@ -897,17 +872,15 @@ let test1ptr_safety =
   try
    begin
      (let r1_1 = ref (any_int32 void) in
-     (C_34:
      begin
-       (let jessie_<somenum> =
-       (r1_1 := (C_33:
-                (let jessie_<somenum> = gptoto in
-                (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
+       (let _jessie_<somenum> =
+       (r1_1 := (let _jessie_<somenum> = gptoto in
+                (let _jessie_<somenum> = (safe_int32_of_integer_ (4)) in
                 (JC_<somenum>:
-                ((((endsat_requires jessie_<somenum>) jessie_<somenum>) !charP_gptoto_3_alloc_table) !charP_charM_gptoto_3)))))) in
+                ((((endsat_requires _jessie_<somenum>) _jessie_<somenum>) !charP_gptoto_3_alloc_table) !charP_charM_gptoto_3))))) in
        void);
       [ { } unit reads r1_1 { (JC_<somenum>: (integer_of_int32(r1_1) = (1))) } ];
-      void; (raise Return) end)); (raise Return) end with Return -> void end)
+      void; (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
     and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
@@ -925,61 +898,50 @@ let test2_ensures_default =
      (let charP_ltoto_5_alloc_table = ref (any_alloc_table void) in
      (let ltoto = ref (any_pointer void) in
      (let r1_0 = ref (any_int32 void) in
-     (C_17:
-     (C_19:
-     (C_21:
-     (C_23:
-     (C_25:
-     (C_27:
-     (C_29:
      begin
-       (let jessie_<somenum> =
-       (ltoto := (C_16:
-                 (JC_<somenum>:
-                 (((alloc_struct_charP (5)) charP_ltoto_5_alloc_table) charP_ltoto_5_tag_table)))) in
+       (let _jessie_<somenum> =
+       (ltoto := (JC_<somenum>:
+                 (((alloc_struct_charP (5)) charP_ltoto_5_alloc_table) charP_ltoto_5_tag_table))) in
        void);
-      (let jessie_<somenum> = (safe_int8_of_integer_ (116)) in
-      (let jessie_<somenum> = !ltoto in
-      (let jessie_<somenum> = (safe_int8_of_integer_ (111)) in
-      (let jessie_<somenum> = !ltoto in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = (safe_int8_of_integer_ (116)) in
-      (let jessie_<somenum> = !ltoto in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = (safe_int8_of_integer_ (111)) in
-      (let jessie_<somenum> = !ltoto in
-      (let jessie_<somenum> = (3) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
-      (let jessie_<somenum> = !ltoto in
-      (let jessie_<somenum> = (4) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+      (let _jessie_<somenum> = (safe_int8_of_integer_ (116)) in
+      (let _jessie_<somenum> = !ltoto in
+      (let _jessie_<somenum> = (safe_int8_of_integer_ (111)) in
+      (let _jessie_<somenum> = !ltoto in
+      (let _jessie_<somenum> = (1) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      (let _jessie_<somenum> = (safe_int8_of_integer_ (116)) in
+      (let _jessie_<somenum> = !ltoto in
+      (let _jessie_<somenum> = (2) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      (let _jessie_<somenum> = (safe_int8_of_integer_ (111)) in
+      (let _jessie_<somenum> = !ltoto in
+      (let _jessie_<somenum> = (3) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      (let _jessie_<somenum> = (safe_int8_of_integer_ (0)) in
+      (let _jessie_<somenum> = !ltoto in
+      (let _jessie_<somenum> = (4) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
       [ { } unit reads charP_charM_ltoto_5,charP_ltoto_5_alloc_table
         writes charP_charM_ltoto_5
         { (not_assigns(charP_ltoto_5_alloc_table, charP_charM_ltoto_5@,
            charP_charM_ltoto_5,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (4)))
-          and ((select(charP_charM_ltoto_5, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(charP_charM_ltoto_5, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and ((select(charP_charM_ltoto_5, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
+           pset_range(pset_singleton(_jessie_<somenum>), (0), (4)))
+          and ((select(charP_charM_ltoto_5, shift(_jessie_<somenum>, (0))) = _jessie_<somenum>)
+              and ((select(charP_charM_ltoto_5, shift(_jessie_<somenum>, (1))) = _jessie_<somenum>)
+                  and ((select(charP_charM_ltoto_5, shift(_jessie_<somenum>, (2))) = _jessie_<somenum>)
                       and ((select(charP_charM_ltoto_5,
-                            shift(jessie_<somenum>, (3))) = jessie_<somenum>)
+                            shift(_jessie_<somenum>, (3))) = _jessie_<somenum>)
                           and (select(charP_charM_ltoto_5,
-                               shift(jessie_<somenum>, (4))) = jessie_<somenum>)))))) } ]))))))))))))))))));
-      (let jessie_<somenum> =
-      (r1_0 := (C_28:
-               (let jessie_<somenum> = !ltoto in
-               (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
+                               shift(_jessie_<somenum>, (4))) = _jessie_<somenum>)))))) } ]))))))))))))))))));
+      (let _jessie_<somenum> =
+      (r1_0 := (let _jessie_<somenum> = !ltoto in
+               (let _jessie_<somenum> = (safe_int32_of_integer_ (4)) in
                (JC_<somenum>:
-               ((((endsat jessie_<somenum>) jessie_<somenum>) !charP_ltoto_5_alloc_table) !charP_charM_ltoto_5)))))) in
+               ((((endsat _jessie_<somenum>) _jessie_<somenum>) !charP_ltoto_5_alloc_table) !charP_charM_ltoto_5))))) in
       void); (assert { (JC_<somenum>: (integer_of_int32(r1_0) = (1))) }; void);
-      (C_31:
-      begin
-        void; ((safe_free_parameter charP_ltoto_5_alloc_table) !ltoto);
-       (raise Return) end) end)))))))))))); (raise Return) end with Return ->
-   void end) { (JC_<somenum>: true) }
+      void; ((safe_free_parameter charP_ltoto_5_alloc_table) !ltoto);
+      (raise Return) end))))); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let test2_safety =
  fun (tt : unit) ->
@@ -994,66 +956,54 @@ let test2_safety =
      (let charP_ltoto_5_alloc_table = ref (any_alloc_table void) in
      (let ltoto = ref (any_pointer void) in
      (let r1_0 = ref (any_int32 void) in
-     (C_17:
-     (C_19:
-     (C_21:
-     (C_23:
-     (C_25:
-     (C_27:
-     (C_29:
      begin
-       (let jessie_<somenum> =
-       (ltoto := (let jessie_<somenum> =
-                 (C_16:
+       (let _jessie_<somenum> =
+       (ltoto := (let _jessie_<somenum> =
                  (JC_<somenum>:
-                 (((alloc_struct_charP_requires (5)) charP_ltoto_5_alloc_table) charP_ltoto_5_tag_table))) in
+                 (((alloc_struct_charP_requires (5)) charP_ltoto_5_alloc_table) charP_ltoto_5_tag_table)) in
                  (JC_<somenum>:
                  (assert
-                 { ge_int(offset_max(charP_ltoto_5_alloc_table, jessie_<somenum>),
-                   (4)) }; jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = (safe_int8_of_integer_ (116)) in
-      (let jessie_<somenum> = !ltoto in
-      (let jessie_<somenum> = (safe_int8_of_integer_ (111)) in
-      (let jessie_<somenum> = !ltoto in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = (safe_int8_of_integer_ (116)) in
-      (let jessie_<somenum> = !ltoto in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = (safe_int8_of_integer_ (111)) in
-      (let jessie_<somenum> = !ltoto in
-      (let jessie_<somenum> = (3) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
-      (let jessie_<somenum> = !ltoto in
-      (let jessie_<somenum> = (4) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                 { ge_int(offset_max(charP_ltoto_5_alloc_table, _jessie_<somenum>),
+                   (4)) }; _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> = (safe_int8_of_integer_ (116)) in
+      (let _jessie_<somenum> = !ltoto in
+      (let _jessie_<somenum> = (safe_int8_of_integer_ (111)) in
+      (let _jessie_<somenum> = !ltoto in
+      (let _jessie_<somenum> = (1) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      (let _jessie_<somenum> = (safe_int8_of_integer_ (116)) in
+      (let _jessie_<somenum> = !ltoto in
+      (let _jessie_<somenum> = (2) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      (let _jessie_<somenum> = (safe_int8_of_integer_ (111)) in
+      (let _jessie_<somenum> = !ltoto in
+      (let _jessie_<somenum> = (3) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      (let _jessie_<somenum> = (safe_int8_of_integer_ (0)) in
+      (let _jessie_<somenum> = !ltoto in
+      (let _jessie_<somenum> = (4) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
       [ { } unit reads charP_charM_ltoto_5,charP_ltoto_5_alloc_table
         writes charP_charM_ltoto_5
         { (not_assigns(charP_ltoto_5_alloc_table, charP_charM_ltoto_5@,
            charP_charM_ltoto_5,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (4)))
-          and ((select(charP_charM_ltoto_5, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(charP_charM_ltoto_5, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and ((select(charP_charM_ltoto_5, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
+           pset_range(pset_singleton(_jessie_<somenum>), (0), (4)))
+          and ((select(charP_charM_ltoto_5, shift(_jessie_<somenum>, (0))) = _jessie_<somenum>)
+              and ((select(charP_charM_ltoto_5, shift(_jessie_<somenum>, (1))) = _jessie_<somenum>)
+                  and ((select(charP_charM_ltoto_5, shift(_jessie_<somenum>, (2))) = _jessie_<somenum>)
                       and ((select(charP_charM_ltoto_5,
-                            shift(jessie_<somenum>, (3))) = jessie_<somenum>)
+                            shift(_jessie_<somenum>, (3))) = _jessie_<somenum>)
                           and (select(charP_charM_ltoto_5,
-                               shift(jessie_<somenum>, (4))) = jessie_<somenum>)))))) } ]))))))))))))))))));
-      (let jessie_<somenum> =
-      (r1_0 := (C_28:
-               (let jessie_<somenum> = !ltoto in
-               (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
+                               shift(_jessie_<somenum>, (4))) = _jessie_<somenum>)))))) } ]))))))))))))))))));
+      (let _jessie_<somenum> =
+      (r1_0 := (let _jessie_<somenum> = !ltoto in
+               (let _jessie_<somenum> = (safe_int32_of_integer_ (4)) in
                (JC_<somenum>:
-               ((((endsat_requires jessie_<somenum>) jessie_<somenum>) !charP_ltoto_5_alloc_table) !charP_charM_ltoto_5)))))) in
+               ((((endsat_requires _jessie_<somenum>) _jessie_<somenum>) !charP_ltoto_5_alloc_table) !charP_charM_ltoto_5))))) in
       void);
       [ { } unit reads r1_0 { (JC_<somenum>: (integer_of_int32(r1_0) = (1))) } ];
-      (C_31:
-      begin
-        void; ((free_parameter charP_ltoto_5_alloc_table) !ltoto);
-       (raise Return) end) end)))))))))))); (raise Return) end with Return ->
-   void end)
+      void; ((free_parameter charP_ltoto_5_alloc_table) !ltoto);
+      (raise Return) end))))); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
     and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
@@ -1068,19 +1018,16 @@ let test2ptr_ensures_default =
    begin
      (let lptoto = ref (any_pointer void) in
      (let r1_2 = ref (any_int32 void) in
-     (C_37:
-     (C_39:
      begin
-       (let jessie_<somenum> = (lptoto := __string_toto) in void);
-      (let jessie_<somenum> =
-      (r1_2 := (C_38:
-               (let jessie_<somenum> = !lptoto in
-               (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
+       (let _jessie_<somenum> = (lptoto := __string_toto) in void);
+      (let _jessie_<somenum> =
+      (r1_2 := (let _jessie_<somenum> = !lptoto in
+               (let _jessie_<somenum> = (safe_int32_of_integer_ (4)) in
                (JC_<somenum>:
-               ((((endsat jessie_<somenum>) jessie_<somenum>) !charP___string_toto_1_alloc_table) !charP_charM___string_toto_1)))))) in
+               ((((endsat _jessie_<somenum>) _jessie_<somenum>) !charP___string_toto_1_alloc_table) !charP_charM___string_toto_1))))) in
       void); (assert { (JC_<somenum>: (integer_of_int32(r1_2) = (1))) }; void);
-      void; (raise Return) end)))); (raise Return) end with Return ->
-   void end) { (JC_<somenum>: true) }
+      void; (raise Return) end)); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let test2ptr_safety =
  fun (tt : unit) ->
@@ -1092,20 +1039,16 @@ let test2ptr_safety =
    begin
      (let lptoto = ref (any_pointer void) in
      (let r1_2 = ref (any_int32 void) in
-     (C_37:
-     (C_39:
      begin
-       (let jessie_<somenum> = (lptoto := __string_toto) in void);
-      (let jessie_<somenum> =
-      (r1_2 := (C_38:
-               (let jessie_<somenum> = !lptoto in
-               (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
+       (let _jessie_<somenum> = (lptoto := __string_toto) in void);
+      (let _jessie_<somenum> =
+      (r1_2 := (let _jessie_<somenum> = !lptoto in
+               (let _jessie_<somenum> = (safe_int32_of_integer_ (4)) in
                (JC_<somenum>:
-               ((((endsat_requires jessie_<somenum>) jessie_<somenum>) !charP___string_toto_1_alloc_table) !charP_charM___string_toto_1)))))) in
+               ((((endsat_requires _jessie_<somenum>) _jessie_<somenum>) !charP___string_toto_1_alloc_table) !charP_charM___string_toto_1))))) in
       void);
       [ { } unit reads r1_2 { (JC_<somenum>: (integer_of_int32(r1_2) = (1))) } ];
-      void; (raise Return) end)))); (raise Return) end with Return ->
-   void end)
+      void; (raise Return) end)); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
     and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
@@ -1150,7 +1093,7 @@ text = "UserCall"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/string_basic_po21.why">
-      <location file = "why/string_basic.why" line = "852" begin = "19" end = "99"/>
+      <location file = "why/string_basic.why" line = "806" begin = "19" end = "100"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/string_basic_po22.why">
@@ -1164,7 +1107,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/string_basic_po24.why">
-      <location file = "why/string_basic.why" line = "894" begin = "15" end = "64"/>
+      <location file = "why/string_basic.why" line = "845" begin = "13" end = "62"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

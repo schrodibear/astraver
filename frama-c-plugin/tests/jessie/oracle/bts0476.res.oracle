@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0476.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0476.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0476.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0476.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0476.jessie
 [jessie] File bts0476.jessie/bts0476.jc written.
@@ -47,12 +47,12 @@ type voidP = [voidP]
 
 unit f(intP[..] t, int32 n_1)
 behavior default:
-  ensures (C_2 : true);
+  ensures (_C_2 : true);
 {  
    {  
       {  
-         (assert for default: (C_1 : (jessie : ((t + [0..(n_1 - 1)]).intM ==
-                                                 0))));
+         (assert for default: (_C_1 : (jessie : ((t + [0..(n_1 - 1)]).intM ==
+                                                  0))));
          ()
       };
       

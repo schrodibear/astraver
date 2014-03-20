@@ -1,6 +1,6 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts1058.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts1058.c"
-bts1058.c:6:[kernel] warning: Body of function f falls-through. Adding a return statement
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts1058.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts1058.c"
+PPCHOME/tests/jessie/bts1058.c:6:[kernel] warning: Body of function f falls-through. Adding a return statement
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts1058.jessie
 [jessie] File bts1058.jessie/bts1058.jc written.
@@ -42,25 +42,25 @@ type voidP = [voidP]
 
 int32 f()
 behavior default:
-  ensures (C_8 : true);
+  ensures (_C_8 : true);
 {  
    (var int32 x);
    
    (var int32 __retres);
    
-   {  (C_1 : (x = 0));
-      (L : (C_4 : (x = (C_3 : ((C_2 : (x + 1)) :> int32)))));
+   {  (_C_1 : (x = 0));
+      (L : (_C_4 : (x = (_C_3 : ((_C_2 : (x + 1)) :> int32)))));
       
       {  
-         (assert for default: (C_5 : (jessie : (\at(x,L) == (x - 1)))));
+         (assert for default: (_C_5 : (jessie : (\at(x,L) == (x - 1)))));
          ()
       };
       
       {  
-         (assert for default: (C_6 : (jessie : false)));
+         (assert for default: (_C_6 : (jessie : false)));
          ()
       };
-      (C_7 : (__retres = 0));
+      (_C_7 : (__retres = 0));
       
       (return __retres)
    }
@@ -421,25 +421,19 @@ let f_ensures_default =
    begin
      (let x_0 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
-     (C_1:
-     (L:
      begin
-       (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (0))) in void);
-      (let jessie_<somenum> =
-      (C_4:
-      (x_0 := (C_3:
-              (safe_int32_of_integer_ (C_2:
-                                      ((add_int (integer_of_int32 !x_0)) (1))))))) in
-      void);
-      (assert
-      { (JC_<somenum>:
-        (integer_of_int32(x_0@L) = sub_int(integer_of_int32(x_0), (1)))) };
-      void); void; (assert { (JC_<somenum>: (false = true)) }; void);
-      (C_7:
+       (let _jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (0))) in void);
+      (L:
       begin
-        void;
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end)))); absurd  end with
+        (let _jessie_<somenum> =
+        (x_0 := (safe_int32_of_integer_ ((add_int (integer_of_int32 !x_0)) (1)))) in
+        void);
+       (assert
+       { (JC_<somenum>:
+         (integer_of_int32(x_0@L) = sub_int(integer_of_int32(x_0), (1)))) };
+       void); void; (assert { (JC_<somenum>: (false = true)) }; void); void;
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres); (raise Return) end) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
@@ -451,26 +445,20 @@ let f_safety =
    begin
      (let x_0 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
-     (C_1:
-     (L:
      begin
-       (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (0))) in void);
-      (let jessie_<somenum> =
-      (C_4:
-      (x_0 := (C_3:
-              (JC_<somenum>:
-              (int32_of_integer_ (C_2:
-                                 ((add_int (integer_of_int32 !x_0)) (1)))))))) in
-      void);
-      [ { } unit reads x_0
-        { (JC_<somenum>:
-          (integer_of_int32(x_0@L) = sub_int(integer_of_int32(x_0), (1)))) } ];
-      void; [ { } unit { (JC_<somenum>: (false = true)) } ];
-      (C_7:
+       (let _jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (0))) in void);
+      (L:
       begin
-        void;
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end)))); absurd  end with
+        (let _jessie_<somenum> =
+        (x_0 := (JC_<somenum>:
+                (int32_of_integer_ ((add_int (integer_of_int32 !x_0)) (1))))) in
+        void);
+       [ { } unit reads x_0
+         { (JC_<somenum>:
+           (integer_of_int32(x_0@L) = sub_int(integer_of_int32(x_0), (1)))) } ];
+       void; [ { } unit { (JC_<somenum>: (false = true)) } ]; void;
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres); (raise Return) end) end)); absurd  end with
    Return -> !return end)) { true }
 
 

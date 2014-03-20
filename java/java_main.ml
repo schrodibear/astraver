@@ -2,21 +2,21 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2011                                               *)
+(*  Copyright (C) 2002-2014                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
-(*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
-(*    Yannick MOY, Univ. Paris-sud 11                                     *)
-(*    Romain BARDOU, Univ. Paris-sud 11                                   *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud                   *)
+(*    Claude MARCHE, INRIA & Univ. Paris-sud                              *)
+(*    Yannick MOY, Univ. Paris-sud                                        *)
+(*    Romain BARDOU, Univ. Paris-sud                                      *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
-(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
-(*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
-(*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
-(*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
-(*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  *)
-(*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       *)
+(*    Thierry HUBERT, Univ. Paris-sud  (former Caduceus front-end)        *)
+(*    Nicolas ROUSSET, Univ. Paris-sud (on Jessie & Krakatoa)             *)
+(*    Ali AYAD, CNRS & CEA Saclay      (floating-point support)           *)
+(*    Sylvie BOLDO, INRIA              (floating-point support)           *)
+(*    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     *)
+(*    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Lesser General Public            *)
@@ -177,7 +177,7 @@ let main () =
       Java_typing.type_table
       [] in
 
-  Java_options.lprintf "production phase 1.4 : generation of Jessie struct types@.";
+  Java_options.lprintf "production phase 1.3 : generation of Jessie struct types@.";
   let non_null_preds = Java_interp.tr_non_null_logic_fun () :: non_null_preds in
   let decls_java_types, decls_structs =
     Hashtbl.fold
@@ -190,15 +190,22 @@ let main () =
   let decls = decls_structs @ acc @ decls_java_types @ decl_any_string @ decls_constants @ non_null_preds @ decls in
 
 
-  Java_options.lprintf "production phase 1.3 : generation of Jessie logic functions@.";
-  let decls =
+  Java_options.lprintf "production phase 1.4 : generation of Jessie logic functions@.";
+  (* fix: Hashtbl.fold order is not specified... *)
+  let tmp =
     Hashtbl.fold
-      (fun _ (li,p) acc ->
+      (fun k x acc -> (k,x)::acc)
+      Java_typing.logic_defs_table []
+  in
+  let tmp = List.sort (fun (k1,_) (k2,_) -> Pervasives.compare k1 k2) tmp in
+  let decls =
+    List.fold_left
+      (fun acc (_,(li,p)) ->
 	 Java_options.lprintf "generating logic function `%s'@."
 	   li.java_logic_info_name;
 	 Java_interp.tr_logic_fun li (p :> Java_typing.logic_decl_body) acc)
-      Java_typing.logic_defs_table
       decls
+      tmp
   in
   let decls =
     Hashtbl.fold Java_interp.tr_axiomatic Java_typing.axiomatics_table

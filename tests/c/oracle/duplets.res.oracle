@@ -146,27 +146,28 @@ predicate is_duplet{L}(intP[..] a, integer len, integer i_1, integer j_0) =
   ((a + i_1).intM == (a + j_0).intM))
 
 unit duplet(intP[..] a, int32 len, intP[..] except, intP[..] pi, intP[..] pj)
-  requires (C_39 : ((((((C_44 : (2 <= len)) &&
-                         ((C_46 : (\offset_min(a) <= 0)) &&
-                           (C_47 : (\offset_max(a) >= (len - 1))))) &&
-                        ((C_49 : (\offset_min(pi) <= 0)) &&
-                          (C_50 : (\offset_max(pi) >= 0)))) &&
-                       ((C_52 : (\offset_min(pj) <= 0)) &&
-                         (C_53 : (\offset_max(pj) >= 0)))) &&
-                      (C_54 : ((except == null) ||
-                                ((\offset_min(except) <= 0) &&
-                                  (\offset_max(except) >= 0))))) &&
-                     (C_55 : (\exists integer i_2;
-                               (\exists integer j_1;
-                                 (is_duplet{Here}(a, len, i_2, j_1) &&
-                                   (! eq_opt{Here}((a + i_2).intM, except))))))));
+  requires (_C_39 : ((((((_C_44 : (2 <= len)) &&
+                          ((_C_46 : (\offset_min(a) <= 0)) &&
+                            (_C_47 : (\offset_max(a) >= (len - 1))))) &&
+                         ((_C_49 : (\offset_min(pi) <= 0)) &&
+                           (_C_50 : (\offset_max(pi) >= 0)))) &&
+                        ((_C_52 : (\offset_min(pj) <= 0)) &&
+                          (_C_53 : (\offset_max(pj) >= 0)))) &&
+                       (_C_54 : ((except == null) ||
+                                  ((\offset_min(except) <= 0) &&
+                                    (\offset_max(except) >= 0))))) &&
+                      (_C_55 : (\exists integer i_2;
+                                 (\exists integer j_1;
+                                   (is_duplet{Here}(a, len, i_2, j_1) &&
+                                     (! eq_opt{Here}((a + i_2).intM, except))))))));
 behavior default:
   assigns pi.intM,
   pj.intM;
-  ensures (C_36 : ((C_37 : is_duplet{Here}(\at(a,Old), \at(len,Old),
-                                           \at(pi,Old).intM, \at(pj,Old).intM)) &&
-                    (C_38 : (! eq_opt{Here}((\at(a,Old) + \at(pi,Old).intM).intM,
-                                            \at(except,Old))))));
+  ensures (_C_36 : ((_C_37 : is_duplet{Here}(\at(a,Old), \at(len,Old),
+                                             \at(pi,Old).intM,
+                                             \at(pj,Old).intM)) &&
+                     (_C_38 : (! eq_opt{Here}((\at(a,Old) + \at(pi,Old).intM).intM,
+                                              \at(except,Old))))));
 {  
    (var int32 i);
    
@@ -175,70 +176,71 @@ behavior default:
    (var int32 j);
    
    {  
-      {  (C_1 : (i = 0));
+      {  (_C_1 : (i = 0));
          
          loop 
          behavior default:
-           invariant (C_3 : (((C_5 : (0 <= i)) && (C_6 : (i <= (len - 1)))) &&
-                              (C_7 : (\forall integer k;
-                                       (\forall integer l_0;
-                                         ((((0 <= k) && (k < i)) &&
-                                            ((k < l_0) && (l_0 < len))) ==>
-                                           ((! eq_opt{Here}((a + k).intM,
-                                                            except)) ==>
-                                             (! is_duplet{Here}(a, len, k,
-                                                                l_0)))))))));
-         variant (C_2 : (len - i));
+           invariant (_C_3 : (((_C_5 : (0 <= i)) &&
+                                (_C_6 : (i <= (len - 1)))) &&
+                               (_C_7 : (\forall integer k;
+                                         (\forall integer l_0;
+                                           ((((0 <= k) && (k < i)) &&
+                                              ((k < l_0) && (l_0 < len))) ==>
+                                             ((! eq_opt{Here}((a + k).intM,
+                                                              except)) ==>
+                                               (! is_duplet{Here}(a, len, k,
+                                                                  l_0)))))))));
+         variant (_C_2 : (len - i));
          while (true)
          {  
-            {  (if (i <= (C_9 : ((C_8 : (len - 2)) :> int32))) then () else 
+            {  (if (i <= (_C_9 : ((_C_8 : (len - 2)) :> int32))) then () else 
                (goto while_0_break));
                
-               {  (C_12 : (v = (C_11 : (C_10 : (a + i)).intM)));
+               {  (_C_12 : (v = (_C_11 : (_C_10 : (a + i)).intM)));
                   (if (except == null) then 
-                  (goto _LOR) else (if ((C_13 : except.intM) != v) then 
+                  (goto _LOR) else (if ((_C_13 : except.intM) != v) then 
                                    (goto _LOR) else ()));
                   
                   (goto _LOR_0);
                   (_LOR : 
-                  {  (C_16 : (j = (C_15 : ((C_14 : (i + 1)) :> int32))));
+                  {  (_C_16 : (j = (_C_15 : ((_C_14 : (i + 1)) :> int32))));
                      
                      loop 
                      behavior default:
-                       invariant (C_18 : (((C_20 : ((i + 1) <= j)) &&
-                                            (C_21 : (j <= len))) &&
-                                           (C_22 : (\forall integer l;
-                                                     (((i < l) && (l < j)) ==>
-                                                       (! is_duplet{Here}(
-                                                       a, len, i, l)))))));
-                     variant (C_17 : (len - j));
+                       invariant (_C_18 : (((_C_20 : ((i + 1) <= j)) &&
+                                             (_C_21 : (j <= len))) &&
+                                            (_C_22 : (\forall integer l;
+                                                       (((i < l) && (l < j)) ==>
+                                                         (! is_duplet{Here}(
+                                                         a, len, i, l)))))));
+                     variant (_C_17 : (len - j));
                      while (true)
                      {  
                         {  (if (j < len) then () else 
                            (goto while_1_break));
                            
-                           {  (if ((C_28 : (C_27 : (a + j)).intM) == v) then 
-                              {  (C_24 : ((C_23 : pi.intM) = i));
-                                 (C_26 : ((C_25 : pj.intM) = j));
+                           {  (if ((_C_28 : (_C_27 : (a + j)).intM) == v) then 
+                              {  (_C_24 : ((_C_23 : pi.intM) = i));
+                                 (_C_26 : ((_C_25 : pj.intM) = j));
                                  
                                  (goto return_label)
                               } else ())
                            };
-                           (C_31 : (j = (C_30 : ((C_29 : (j + 1)) :> int32))))
+                           (_C_31 : (j = (_C_30 : ((_C_29 : (j + 1)) :> int32))))
                         }
                      };
                      (while_1_break : ())
                   });
                   (_LOR_0 : ())
                };
-               (C_34 : (i = (C_33 : ((C_32 : (i + 1)) :> int32))))
+               (_C_34 : (i = (_C_33 : ((_C_32 : (i + 1)) :> int32))))
             }
          };
          (while_0_break : ())
       };
       
       {  
-         (assert for default: (C_35 : (jessie : false)));
+         (assert for default: (_C_35 : (jessie : false)));
          ()
       };
       (return_label : 
@@ -248,56 +250,108 @@ behavior default:
 
 unit duplets(intP[..] a_0, int32 len_0, intP[..] pi_0, intP[..] pj_0,
              intP[..] pk, intP[..] pl)
-  requires (C_65 : (((((((C_71 : (4 <= len_0)) &&
-                          ((C_73 : (\offset_min(a_0) <= 0)) &&
-                            (C_74 : (\offset_max(a_0) >= (len_0 - 1))))) &&
-                         ((C_76 : (\offset_min(pi_0) <= 0)) &&
-                           (C_77 : (\offset_max(pi_0) >= 0)))) &&
-                        ((C_79 : (\offset_min(pj_0) <= 0)) &&
-                          (C_80 : (\offset_max(pj_0) >= 0)))) &&
-                       ((C_82 : (\offset_min(pk) <= 0)) &&
-                         (C_83 : (\offset_max(pk) >= 0)))) &&
-                      ((C_85 : (\offset_min(pl) <= 0)) &&
-                        (C_86 : (\offset_max(pl) >= 0)))) &&
-                     (C_87 : (\exists integer i_3;
-                               (\exists integer j_2;
-                                 (\exists integer k_0;
-                                   (\exists integer l_1;
-                                     ((is_duplet{Here}(a_0, len_0, i_3, j_2) &&
-                                        is_duplet{Here}(a_0, len_0, k_0, l_1)) &&
-                                       ((a_0 + i_3).intM != (a_0 + k_0).intM)))))))));
+  requires (_C_65 : (((((((_C_71 : (4 <= len_0)) &&
+                           ((_C_73 : (\offset_min(a_0) <= 0)) &&
+                             (_C_74 : (\offset_max(a_0) >= (len_0 - 1))))) &&
+                          ((_C_76 : (\offset_min(pi_0) <= 0)) &&
+                            (_C_77 : (\offset_max(pi_0) >= 0)))) &&
+                         ((_C_79 : (\offset_min(pj_0) <= 0)) &&
+                           (_C_80 : (\offset_max(pj_0) >= 0)))) &&
+                        ((_C_82 : (\offset_min(pk) <= 0)) &&
+                          (_C_83 : (\offset_max(pk) >= 0)))) &&
+                       ((_C_85 : (\offset_min(pl) <= 0)) &&
+                         (_C_86 : (\offset_max(pl) >= 0)))) &&
+                      (_C_87 : (\exists integer i_3;
+                                 (\exists integer j_2;
+                                   (\exists integer k_0;
+                                     (\exists integer l_1;
+                                       ((is_duplet{Here}(a_0, len_0, i_3, j_2) &&
+                                          is_duplet{Here}(a_0, len_0, k_0,
+                                                          l_1)) &&
+                                         ((a_0 + i_3).intM !=
+                                           (a_0 + k_0).intM)))))))));
 behavior default:
   assigns pi_0.intM,
   pj_0.intM,
   pk.intM,
   pl.intM;
-  ensures (C_60 : (((C_62 : is_duplet{Here}(\at(a_0,Old), \at(len_0,Old),
-                                            \at(pi_0,Old).intM,
-                                            \at(pj_0,Old).intM)) &&
-                     (C_63 : is_duplet{Here}(\at(a_0,Old), \at(len_0,Old),
-                                             \at(pk,Old).intM,
-                                             \at(pl,Old).intM))) &&
-                    (C_64 : ((\at(a_0,Old) + \at(pi_0,Old).intM).intM !=
-                              (\at(a_0,Old) + \at(pk,Old).intM).intM))));
+  ensures (_C_60 : (((_C_62 : is_duplet{Here}(\at(a_0,Old), \at(len_0,Old),
+                                              \at(pi_0,Old).intM,
+                                              \at(pj_0,Old).intM)) &&
+                      (_C_63 : is_duplet{Here}(\at(a_0,Old), \at(len_0,Old),
+                                               \at(pk,Old).intM,
+                                               \at(pl,Old).intM))) &&
+                     (_C_64 : ((\at(a_0,Old) + \at(pi_0,Old).intM).intM !=
+                                (\at(a_0,Old) + \at(pk,Old).intM).intM))));
 {  
-   {  (C_56 : duplet(a_0, len_0, null, pi_0, pj_0));
-      (C_59 : duplet(a_0, len_0, (C_58 : (a_0 + (C_57 : pi_0.intM))), pk, pl));
+   {  (_C_56 : duplet(a_0, len_0, null, pi_0, pj_0));
+      (_C_59 : duplet(a_0, len_0, (_C_58 : (a_0 + (_C_57 : pi_0.intM))), pk,
+                      pl));
       
       (return ())
    }
 }
 ========== file tests/c/duplets.jessie/duplets.cloc ==========
-[C_50]
+[duplet]
+name = "Function duplet"
+file = "HOME/tests/c/duplets.c"
+line = 42
+begin = 5
+end = 11
+
+[_C_52]
+file = "HOME/tests/c/duplets.c"
+line = 33
+begin = 47
+end = 57
+
+[_C_35]
+file = "HOME/tests/c/duplets.c"
+line = 63
+begin = 13
+end = 19
+
+[_C_56]
+file = "HOME/tests/c/duplets.c"
+line = 79
+begin = 2
+end = 30
+
+[_C_28]
+file = "HOME/tests/c/duplets.c"
+line = 56
+begin = 12
+end = 16
+
+[_C_72]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 6
+end = 29
+
+[_C_59]
+file = "HOME/tests/c/duplets.c"
+line = 80
+begin = 2
+end = 29
+
+[_C_48]
 file = "HOME/tests/c/duplets.c"
 line = 33
 begin = 33
 end = 43
 
-[C_51]
+[_C_51]
 file = "HOME/tests/c/duplets.c"
 line = 33
 begin = 47
 end = 57
+
+[_C_31]
+file = "HOME/tests/c/duplets.c"
+line = 55
+begin = 31
+end = 34
 
 [duplets]
 name = "Function duplets"
@@ -306,522 +360,473 @@ line = 78
 begin = 5
 end = 12
 
-[C_52]
+[_C_77]
 file = "HOME/tests/c/duplets.c"
-line = 33
-begin = 47
-end = 57
+line = 69
+begin = 33
+end = 43
 
-[C_53]
+[_C_83]
 file = "HOME/tests/c/duplets.c"
-line = 33
-begin = 47
-end = 57
-
-[C_54]
-file = "HOME/tests/c/duplets.c"
-line = 34
+line = 70
 begin = 6
-end = 42
+end = 16
 
-[C_55]
+[_C_41]
 file = "HOME/tests/c/duplets.c"
-line = 35
-begin = 6
-end = 80
+line = 32
+begin = 13
+end = 82
 
-[C_56]
+[_C_4]
 file = "HOME/tests/c/duplets.c"
-line = 79
-begin = 2
-end = 30
+line = 43
+begin = 21
+end = 36
 
-[C_57]
+[_C_71]
 file = "HOME/tests/c/duplets.c"
-line = 80
-begin = 18
+line = 68
+begin = 13
 end = 21
 
-[C_58]
+[_C_70]
 file = "HOME/tests/c/duplets.c"
-line = 80
-begin = 16
-end = 17
+line = 68
+begin = 13
+end = 54
 
-[C_59]
-file = "HOME/tests/c/duplets.c"
-line = 80
-begin = 2
-end = 29
-
-[duplet]
-name = "Function duplet"
-file = "HOME/tests/c/duplets.c"
-line = 42
-begin = 5
-end = 11
-
-[C_60]
-file = "HOME/tests/c/duplets.c"
-line = 74
-begin = 12
-end = 96
-
-[C_61]
+[_C_61]
 file = "HOME/tests/c/duplets.c"
 line = 74
 begin = 12
 end = 70
 
-[C_62]
-file = "HOME/tests/c/duplets.c"
-line = 74
-begin = 12
-end = 36
-
-[C_10]
-file = "HOME/tests/c/duplets.c"
-line = 49
-begin = 12
-end = 13
-
-[C_63]
-file = "HOME/tests/c/duplets.c"
-line = 75
-begin = 6
-end = 30
-
-[C_11]
-file = "HOME/tests/c/duplets.c"
-line = 49
-begin = 12
-end = 16
-
-[C_64]
-file = "HOME/tests/c/duplets.c"
-line = 76
-begin = 6
-end = 22
-
-[C_12]
-file = "HOME/tests/c/duplets.c"
-line = 49
-begin = 4
-end = 7
-
-[C_65]
+[_C_69]
 file = "HOME/tests/c/duplets.c"
 line = 68
 begin = 13
-end = 219
+end = 68
 
-[C_13]
+[_C_32]
+file = "HOME/tests/c/duplets.c"
+line = 48
+begin = 29
+end = 32
+
+[_C_23]
+file = "HOME/tests/c/duplets.c"
+line = 57
+begin = 16
+end = 17
+
+[_C_19]
+file = "HOME/tests/c/duplets.c"
+line = 51
+begin = 25
+end = 40
+
+[_C_42]
+file = "HOME/tests/c/duplets.c"
+line = 32
+begin = 13
+end = 68
+
+[_C_82]
+file = "HOME/tests/c/duplets.c"
+line = 70
+begin = 6
+end = 16
+
+[_C_84]
+file = "HOME/tests/c/duplets.c"
+line = 70
+begin = 20
+end = 30
+
+[_C_13]
 file = "HOME/tests/c/duplets.c"
 line = 50
 begin = 30
 end = 37
 
-[C_66]
-file = "HOME/tests/c/duplets.c"
-line = 68
-begin = 13
-end = 116
-
-[C_14]
-file = "HOME/tests/c/duplets.c"
-line = 55
-begin = 17
-end = 20
-
-[C_67]
-file = "HOME/tests/c/duplets.c"
-line = 68
-begin = 13
-end = 102
-
-[C_15]
-file = "HOME/tests/c/duplets.c"
-line = 55
-begin = 17
-end = 20
-
-[C_68]
-file = "HOME/tests/c/duplets.c"
-line = 68
-begin = 13
-end = 82
-
-[C_16]
-file = "HOME/tests/c/duplets.c"
-line = 55
-begin = 11
-end = 14
-
-[C_69]
-file = "HOME/tests/c/duplets.c"
-line = 68
-begin = 13
-end = 68
-
-[C_17]
-file = "HOME/tests/c/duplets.c"
-line = 53
-begin = 23
-end = 30
-
-[C_18]
-file = "HOME/tests/c/duplets.c"
-line = 51
-begin = 25
-end = 111
-
-[C_19]
-file = "HOME/tests/c/duplets.c"
-line = 51
-begin = 25
-end = 40
-
-[C_1]
-file = "HOME/tests/c/duplets.c"
-line = 48
-begin = 6
-end = 9
-
-[C_2]
-file = "HOME/tests/c/duplets.c"
-line = 46
-begin = 19
-end = 26
-
-[C_70]
-file = "HOME/tests/c/duplets.c"
-line = 68
-begin = 13
-end = 54
-
-[C_3]
-file = "HOME/tests/c/duplets.c"
-line = 43
-begin = 21
-end = 155
-
-[C_71]
-file = "HOME/tests/c/duplets.c"
-line = 68
-begin = 13
-end = 21
-
-[C_4]
-file = "HOME/tests/c/duplets.c"
-line = 43
-begin = 21
-end = 36
-
-[C_72]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 6
-end = 29
-
-[C_20]
-file = "HOME/tests/c/duplets.c"
-line = 51
-begin = 25
-end = 33
-
-[C_5]
+[_C_5]
 file = "HOME/tests/c/duplets.c"
 line = 43
 begin = 21
 end = 27
 
-[C_73]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 6
-end = 29
-
-[C_21]
-file = "HOME/tests/c/duplets.c"
-line = 51
-begin = 32
-end = 40
-
-[C_6]
-file = "HOME/tests/c/duplets.c"
-line = 43
-begin = 26
-end = 36
-
-[C_74]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 6
-end = 29
-
-[C_22]
-file = "HOME/tests/c/duplets.c"
-line = 52
-begin = 12
-end = 67
-
-[C_7]
-file = "HOME/tests/c/duplets.c"
-line = 44
-begin = 7
-end = 115
-
-[C_75]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 33
-end = 43
-
-[C_23]
-file = "HOME/tests/c/duplets.c"
-line = 57
-begin = 16
-end = 17
-
-[C_8]
-file = "HOME/tests/c/duplets.c"
-line = 48
-begin = 20
-end = 27
-
-[C_76]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 33
-end = 43
-
-[C_24]
-file = "HOME/tests/c/duplets.c"
-line = 57
-begin = 16
-end = 17
-
-[C_9]
-file = "HOME/tests/c/duplets.c"
-line = 48
-begin = 20
-end = 27
-
-[C_77]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 33
-end = 43
-
-[C_25]
-file = "HOME/tests/c/duplets.c"
-line = 57
-begin = 25
-end = 26
-
-[C_78]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 47
-end = 57
-
-[C_26]
-file = "HOME/tests/c/duplets.c"
-line = 57
-begin = 25
-end = 26
-
-[C_79]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 47
-end = 57
-
-[C_27]
-file = "HOME/tests/c/duplets.c"
-line = 56
-begin = 12
-end = 13
-
-[C_28]
-file = "HOME/tests/c/duplets.c"
-line = 56
-begin = 12
-end = 16
-
-[C_29]
-file = "HOME/tests/c/duplets.c"
-line = 55
-begin = 31
-end = 34
-
-[C_80]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 47
-end = 57
-
-[C_81]
-file = "HOME/tests/c/duplets.c"
-line = 70
-begin = 6
-end = 16
-
-[C_82]
-file = "HOME/tests/c/duplets.c"
-line = 70
-begin = 6
-end = 16
-
-[C_30]
-file = "HOME/tests/c/duplets.c"
-line = 55
-begin = 31
-end = 34
-
-[C_83]
-file = "HOME/tests/c/duplets.c"
-line = 70
-begin = 6
-end = 16
-
-[C_31]
-file = "HOME/tests/c/duplets.c"
-line = 55
-begin = 31
-end = 34
-
-[C_84]
-file = "HOME/tests/c/duplets.c"
-line = 70
-begin = 20
-end = 30
-
-[C_32]
-file = "HOME/tests/c/duplets.c"
-line = 48
-begin = 29
-end = 32
-
-[C_85]
-file = "HOME/tests/c/duplets.c"
-line = 70
-begin = 20
-end = 30
-
-[C_33]
-file = "HOME/tests/c/duplets.c"
-line = 48
-begin = 29
-end = 32
-
-[C_86]
-file = "HOME/tests/c/duplets.c"
-line = 70
-begin = 20
-end = 30
-
-[C_34]
-file = "HOME/tests/c/duplets.c"
-line = 48
-begin = 29
-end = 32
-
-[C_87]
-file = "HOME/tests/c/duplets.c"
-line = 71
-begin = 6
-end = 99
-
-[C_35]
-file = "HOME/tests/c/duplets.c"
-line = 63
-begin = 13
-end = 19
-
-[C_36]
+[_C_36]
 file = "HOME/tests/c/duplets.c"
 line = 39
 begin = 6
 end = 63
 
-[C_37]
+[_C_12]
 file = "HOME/tests/c/duplets.c"
-line = 39
+line = 49
+begin = 4
+end = 7
+
+[_C_33]
+file = "HOME/tests/c/duplets.c"
+line = 48
+begin = 29
+end = 32
+
+[_C_79]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 47
+end = 57
+
+[_C_85]
+file = "HOME/tests/c/duplets.c"
+line = 70
+begin = 20
+end = 30
+
+[_C_22]
+file = "HOME/tests/c/duplets.c"
+line = 52
+begin = 12
+end = 67
+
+[_C_65]
+file = "HOME/tests/c/duplets.c"
+line = 68
+begin = 13
+end = 219
+
+[_C_9]
+file = "HOME/tests/c/duplets.c"
+line = 48
+begin = 20
+end = 27
+
+[_C_57]
+file = "HOME/tests/c/duplets.c"
+line = 80
+begin = 18
+end = 21
+
+[_C_54]
+file = "HOME/tests/c/duplets.c"
+line = 34
+begin = 6
+end = 42
+
+[_C_30]
+file = "HOME/tests/c/duplets.c"
+line = 55
+begin = 31
+end = 34
+
+[_C_63]
+file = "HOME/tests/c/duplets.c"
+line = 75
 begin = 6
 end = 30
 
-[C_38]
+[_C_6]
+file = "HOME/tests/c/duplets.c"
+line = 43
+begin = 26
+end = 36
+
+[_C_64]
+file = "HOME/tests/c/duplets.c"
+line = 76
+begin = 6
+end = 22
+
+[_C_49]
+file = "HOME/tests/c/duplets.c"
+line = 33
+begin = 33
+end = 43
+
+[_C_24]
+file = "HOME/tests/c/duplets.c"
+line = 57
+begin = 16
+end = 17
+
+[_C_45]
+file = "HOME/tests/c/duplets.c"
+line = 33
+begin = 6
+end = 29
+
+[_C_20]
+file = "HOME/tests/c/duplets.c"
+line = 51
+begin = 25
+end = 33
+
+[_C_73]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 6
+end = 29
+
+[_C_38]
 file = "HOME/tests/c/duplets.c"
 line = 40
 begin = 6
 end = 29
 
-[C_39]
+[_C_3]
 file = "HOME/tests/c/duplets.c"
-line = 32
-begin = 13
-end = 212
+line = 43
+begin = 21
+end = 155
 
-[C_40]
+[_C_81]
 file = "HOME/tests/c/duplets.c"
-line = 32
-begin = 13
-end = 128
+line = 70
+begin = 6
+end = 16
 
-[C_41]
+[_C_17]
 file = "HOME/tests/c/duplets.c"
-line = 32
-begin = 13
-end = 82
+line = 53
+begin = 23
+end = 30
 
-[C_42]
+[_C_7]
 file = "HOME/tests/c/duplets.c"
-line = 32
-begin = 13
-end = 68
+line = 44
+begin = 7
+end = 115
 
-[C_43]
+[_C_86]
 file = "HOME/tests/c/duplets.c"
-line = 32
-begin = 13
-end = 54
+line = 70
+begin = 20
+end = 30
 
-[C_44]
+[_C_62]
+file = "HOME/tests/c/duplets.c"
+line = 74
+begin = 12
+end = 36
+
+[_C_55]
+file = "HOME/tests/c/duplets.c"
+line = 35
+begin = 6
+end = 80
+
+[_C_27]
+file = "HOME/tests/c/duplets.c"
+line = 56
+begin = 12
+end = 13
+
+[_C_87]
+file = "HOME/tests/c/duplets.c"
+line = 71
+begin = 6
+end = 99
+
+[_C_46]
+file = "HOME/tests/c/duplets.c"
+line = 33
+begin = 6
+end = 29
+
+[_C_44]
 file = "HOME/tests/c/duplets.c"
 line = 32
 begin = 13
 end = 21
 
-[C_45]
+[_C_15]
+file = "HOME/tests/c/duplets.c"
+line = 55
+begin = 17
+end = 20
+
+[_C_26]
+file = "HOME/tests/c/duplets.c"
+line = 57
+begin = 25
+end = 26
+
+[_C_47]
 file = "HOME/tests/c/duplets.c"
 line = 33
 begin = 6
 end = 29
 
-[C_46]
+[_C_10]
+file = "HOME/tests/c/duplets.c"
+line = 49
+begin = 12
+end = 13
+
+[_C_68]
+file = "HOME/tests/c/duplets.c"
+line = 68
+begin = 13
+end = 82
+
+[_C_60]
+file = "HOME/tests/c/duplets.c"
+line = 74
+begin = 12
+end = 96
+
+[_C_53]
 file = "HOME/tests/c/duplets.c"
 line = 33
-begin = 6
-end = 29
+begin = 47
+end = 57
 
-[C_47]
+[_C_40]
 file = "HOME/tests/c/duplets.c"
-line = 33
-begin = 6
-end = 29
+line = 32
+begin = 13
+end = 128
 
-[C_48]
+[_C_58]
+file = "HOME/tests/c/duplets.c"
+line = 80
+begin = 16
+end = 17
+
+[_C_8]
+file = "HOME/tests/c/duplets.c"
+line = 48
+begin = 20
+end = 27
+
+[_C_66]
+file = "HOME/tests/c/duplets.c"
+line = 68
+begin = 13
+end = 116
+
+[_C_18]
+file = "HOME/tests/c/duplets.c"
+line = 51
+begin = 25
+end = 111
+
+[_C_29]
+file = "HOME/tests/c/duplets.c"
+line = 55
+begin = 31
+end = 34
+
+[_C_75]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 33
+end = 43
+
+[_C_14]
+file = "HOME/tests/c/duplets.c"
+line = 55
+begin = 17
+end = 20
+
+[_C_50]
 file = "HOME/tests/c/duplets.c"
 line = 33
 begin = 33
 end = 43
 
-[C_49]
+[_C_37]
 file = "HOME/tests/c/duplets.c"
-line = 33
+line = 39
+begin = 6
+end = 30
+
+[_C_43]
+file = "HOME/tests/c/duplets.c"
+line = 32
+begin = 13
+end = 54
+
+[_C_2]
+file = "HOME/tests/c/duplets.c"
+line = 46
+begin = 19
+end = 26
+
+[_C_34]
+file = "HOME/tests/c/duplets.c"
+line = 48
+begin = 29
+end = 32
+
+[_C_67]
+file = "HOME/tests/c/duplets.c"
+line = 68
+begin = 13
+end = 102
+
+[_C_16]
+file = "HOME/tests/c/duplets.c"
+line = 55
+begin = 11
+end = 14
+
+[_C_1]
+file = "HOME/tests/c/duplets.c"
+line = 48
+begin = 6
+end = 9
+
+[_C_76]
+file = "HOME/tests/c/duplets.c"
+line = 69
 begin = 33
 end = 43
+
+[_C_25]
+file = "HOME/tests/c/duplets.c"
+line = 57
+begin = 25
+end = 26
+
+[_C_39]
+file = "HOME/tests/c/duplets.c"
+line = 32
+begin = 13
+end = 212
+
+[_C_80]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 47
+end = 57
+
+[_C_74]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 6
+end = 29
+
+[_C_78]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 47
+end = 57
+
+[_C_11]
+file = "HOME/tests/c/duplets.c"
+line = 49
+begin = 12
+end = 16
+
+[_C_21]
+file = "HOME/tests/c/duplets.c"
+line = 51
+begin = 32
+end = 40
 
 ========== jessie execution ==========
 Generating Why function duplet
@@ -836,10 +841,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs duplets.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs duplets.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs duplets.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs duplets.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -984,13 +990,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: duplets.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: duplets.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: duplets.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include duplets.depend
 
@@ -1001,15 +1007,348 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/duplets.jessie/duplets.loc ==========
-[duplets_safety]
-name = "Function duplets"
-behavior = "Safety"
+[JC_94]
+file = "HOME/tests/c/duplets.c"
+line = 70
+begin = 20
+end = 30
+
+[JC_73]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 82
+begin = 9
+end = 2835
+
+[JC_63]
+kind = PointerDeref
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 124
+begin = 43
+end = 64
+
+[JC_80]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 109
+begin = 21
+end = 1263
+
+[JC_51]
+file = "HOME/tests/c/duplets.c"
+line = 51
+begin = 32
+end = 40
+
+[duplet_ensures_default]
+name = "Function duplet"
+behavior = "default behavior"
+file = "HOME/tests/c/duplets.c"
+line = 42
+begin = 5
+end = 11
+
+[JC_71]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 82
+begin = 9
+end = 2835
+
+[JC_45]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 82
+begin = 9
+end = 2835
+
+[JC_123]
+file = "HOME/tests/c/duplets.c"
+line = 75
+begin = 6
+end = 30
+
+[JC_106]
+file = "HOME/tests/c/duplets.c"
+line = 70
+begin = 6
+end = 16
+
+[JC_113]
+file = "HOME/tests/c/duplets.c"
+line = 75
+begin = 6
+end = 30
+
+[JC_116]
 file = "HOME/tests/c/duplets.c"
 line = 78
 begin = 5
 end = 12
 
-[JC_90]
+[JC_64]
+kind = PointerDeref
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 125
+begin = 43
+end = 64
+
+[JC_133]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_99]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 6
+end = 29
+
+[JC_85]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 6
+end = 29
+
+[JC_126]
+file = "HOME/tests/c/duplets.c"
+line = 78
+begin = 5
+end = 12
+
+[JC_31]
+file = "HOME/tests/c/duplets.c"
+line = 40
+begin = 6
+end = 29
+
+[JC_17]
+file = "HOME/tests/c/duplets.c"
+line = 33
+begin = 47
+end = 57
+
+[JC_122]
+file = "HOME/tests/c/duplets.c"
+line = 74
+begin = 12
+end = 36
+
+[JC_81]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 109
+begin = 21
+end = 1263
+
+[JC_55]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 109
+begin = 21
+end = 1263
+
+[JC_138]
+kind = UserCall
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 189
+begin = 15
+end = 102
+
+[JC_134]
+kind = UserCall
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 188
+begin = 15
+end = 51
+
+[JC_137]
+kind = UserCall
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 188
+begin = 15
+end = 51
+
+[JC_48]
+kind = PointerDeref
+file = "HOME/tests/c/duplets.c"
+line = 50
+begin = 30
+end = 37
+
+[JC_23]
+file = "HOME/tests/c/duplets.c"
+line = 39
+begin = 6
+end = 30
+
+[JC_22]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_121]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 174
+begin = 9
+end = 16
+
+[JC_5]
+file = "HOME/tests/c/duplets.c"
+line = 33
+begin = 33
+end = 43
+
+[JC_125]
+file = "HOME/tests/c/duplets.c"
+line = 74
+begin = 12
+end = 96
+
+[JC_67]
+file = "HOME/tests/c/duplets.c"
+line = 44
+begin = 7
+end = 115
+
+[JC_9]
+file = "HOME/tests/c/duplets.c"
+line = 35
+begin = 6
+end = 80
+
+[JC_75]
+file = "HOME/tests/c/duplets.c"
+line = 51
+begin = 32
+end = 40
+
+[JC_24]
+file = "HOME/tests/c/duplets.c"
+line = 40
+begin = 6
+end = 29
+
+[JC_25]
+file = "HOME/tests/c/duplets.c"
+line = 39
+begin = 6
+end = 63
+
+[duplet_safety]
+name = "Function duplet"
+behavior = "Safety"
+file = "HOME/tests/c/duplets.c"
+line = 42
+begin = 5
+end = 11
+
+[JC_78]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_41]
+file = "HOME/tests/c/duplets.c"
+line = 44
+begin = 7
+end = 115
+
+[JC_74]
+file = "HOME/tests/c/duplets.c"
+line = 51
+begin = 25
+end = 33
+
+[JC_47]
+kind = PointerDeref
+file = "HOME/tests/c/duplets.c"
+line = 49
+begin = 12
+end = 16
+
+[JC_52]
+file = "HOME/tests/c/duplets.c"
+line = 52
+begin = 12
+end = 67
+
+[JC_26]
+file = "HOME/tests/c/duplets.c"
+line = 42
+begin = 5
+end = 11
+
+[JC_8]
+file = "HOME/tests/c/duplets.c"
+line = 34
+begin = 6
+end = 42
+
+[JC_54]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_79]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 109
+begin = 21
+end = 1263
+
+[JC_13]
+file = "HOME/tests/c/duplets.c"
+line = 33
+begin = 6
+end = 29
+
+[JC_130]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 175
+begin = 10
+end = 54
+
+[JC_82]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 109
+begin = 21
+end = 1263
+
+[JC_87]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 33
+end = 43
+
+[JC_11]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_98]
+file = "HOME/tests/c/duplets.c"
+line = 68
+begin = 13
+end = 21
+
+[JC_70]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 82
+begin = 9
+end = 2835
+
+[JC_15]
+file = "HOME/tests/c/duplets.c"
+line = 33
+begin = 33
+end = 43
+
+[JC_36]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 64
+begin = 9
+end = 16
+
+[JC_104]
 file = "HOME/tests/c/duplets.c"
 line = 69
 begin = 47
@@ -1021,11 +1360,17 @@ line = 70
 begin = 6
 end = 16
 
-[JC_92]
+[JC_39]
 file = "HOME/tests/c/duplets.c"
-line = 70
-begin = 6
-end = 16
+line = 43
+begin = 21
+end = 27
+
+[JC_112]
+file = "HOME/tests/c/duplets.c"
+line = 74
+begin = 12
+end = 36
 
 [JC_40]
 file = "HOME/tests/c/duplets.c"
@@ -1033,23 +1378,126 @@ line = 43
 begin = 26
 end = 36
 
-[JC_93]
+[JC_135]
+kind = PointerDeref
+file = "HOME/tests/c/duplets.c"
+line = 80
+begin = 18
+end = 21
+
+[JC_83]
+file = "HOME/tests/c/duplets.c"
+line = 63
+begin = 13
+end = 19
+
+[JC_35]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 65
+begin = 10
+end = 28
+
+[JC_132]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_27]
+file = "HOME/tests/c/duplets.c"
+line = 42
+begin = 5
+end = 11
+
+[JC_115]
+file = "HOME/tests/c/duplets.c"
+line = 74
+begin = 12
+end = 96
+
+[JC_109]
+file = "HOME/tests/c/duplets.c"
+line = 71
+begin = 6
+end = 99
+
+[JC_107]
 file = "HOME/tests/c/duplets.c"
 line = 70
 begin = 20
 end = 30
 
-[JC_41]
-file = "HOME/tests/c/duplets.c"
-line = 44
-begin = 7
-end = 115
+[JC_69]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_94]
+[JC_124]
 file = "HOME/tests/c/duplets.c"
-line = 70
-begin = 20
-end = 30
+line = 76
+begin = 6
+end = 22
+
+[JC_38]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_12]
+file = "HOME/tests/c/duplets.c"
+line = 32
+begin = 13
+end = 21
+
+[JC_6]
+file = "HOME/tests/c/duplets.c"
+line = 33
+begin = 47
+end = 57
+
+[JC_127]
+file = "HOME/tests/c/duplets.c"
+line = 78
+begin = 5
+end = 12
+
+[JC_44]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 82
+begin = 9
+end = 2835
+
+[JC_4]
+file = "HOME/tests/c/duplets.c"
+line = 33
+begin = 33
+end = 43
+
+[JC_62]
+file = "HOME/tests/c/duplets.c"
+line = 63
+begin = 13
+end = 19
+
+[JC_101]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 33
+end = 43
+
+[JC_88]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 33
+end = 43
+
+[JC_129]
+file = "HOME/tests/c/duplets.c"
+line = 78
+begin = 5
+end = 12
 
 [JC_42]
 file = "HOME/tests/c/duplets.c"
@@ -1057,47 +1505,17 @@ line = 43
 begin = 21
 end = 155
 
-[JC_95]
-file = "HOME/tests/c/duplets.c"
-line = 71
-begin = 6
-end = 99
-
-[JC_43]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_96]
+[JC_110]
 file = "HOME/tests/c/duplets.c"
 line = 68
 begin = 13
 end = 219
 
-[JC_44]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 81
-begin = 9
-end = 2749
-
-[JC_97]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_45]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 81
-begin = 9
-end = 2749
-
-[JC_98]
+[JC_103]
 file = "HOME/tests/c/duplets.c"
-line = 68
-begin = 13
-end = 21
+line = 69
+begin = 47
+end = 57
 
 [JC_46]
 kind = ArithOverflow
@@ -1106,335 +1524,37 @@ line = 48
 begin = 20
 end = 27
 
-[JC_1]
-file = "HOME/tests/c/duplets.c"
-line = 32
-begin = 13
-end = 21
-
-[duplets_ensures_default]
-name = "Function duplets"
-behavior = "default behavior"
-file = "HOME/tests/c/duplets.c"
-line = 78
-begin = 5
-end = 12
-
-[JC_100]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 6
-end = 29
-
-[JC_99]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 6
-end = 29
-
-[JC_47]
-kind = PointerDeref
-file = "HOME/tests/c/duplets.c"
-line = 49
-begin = 12
-end = 16
-
-[JC_2]
-file = "HOME/tests/c/duplets.c"
-line = 33
-begin = 6
-end = 29
-
-[JC_101]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 33
-end = 43
-
-[JC_48]
-kind = PointerDeref
-file = "HOME/tests/c/duplets.c"
-line = 50
-begin = 30
-end = 37
-
-[JC_3]
-file = "HOME/tests/c/duplets.c"
-line = 33
-begin = 6
-end = 29
-
-[JC_102]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 33
-end = 43
-
-[JC_49]
-kind = ArithOverflow
-file = "HOME/tests/c/duplets.c"
-line = 55
-begin = 17
-end = 20
-
-[JC_4]
-file = "HOME/tests/c/duplets.c"
-line = 33
-begin = 33
-end = 43
-
-[JC_103]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 47
-end = 57
-
-[JC_5]
-file = "HOME/tests/c/duplets.c"
-line = 33
-begin = 33
-end = 43
-
-[JC_104]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 47
-end = 57
-
-[JC_6]
-file = "HOME/tests/c/duplets.c"
-line = 33
-begin = 47
-end = 57
-
-[JC_105]
-file = "HOME/tests/c/duplets.c"
-line = 70
-begin = 6
-end = 16
-
-[JC_7]
-file = "HOME/tests/c/duplets.c"
-line = 33
-begin = 47
-end = 57
-
-[JC_106]
-file = "HOME/tests/c/duplets.c"
-line = 70
-begin = 6
-end = 16
-
-[JC_8]
-file = "HOME/tests/c/duplets.c"
-line = 34
-begin = 6
-end = 42
-
-[JC_107]
-file = "HOME/tests/c/duplets.c"
-line = 70
-begin = 20
-end = 30
-
-[JC_9]
-file = "HOME/tests/c/duplets.c"
-line = 35
-begin = 6
-end = 80
-
-[JC_108]
-file = "HOME/tests/c/duplets.c"
-line = 70
-begin = 20
-end = 30
-
-[JC_109]
-file = "HOME/tests/c/duplets.c"
-line = 71
-begin = 6
-end = 99
-
-[JC_50]
-file = "HOME/tests/c/duplets.c"
-line = 51
-begin = 25
-end = 33
-
-[JC_51]
-file = "HOME/tests/c/duplets.c"
-line = 51
-begin = 32
-end = 40
-
-[JC_52]
-file = "HOME/tests/c/duplets.c"
-line = 52
-begin = 12
-end = 67
-
-[JC_53]
-file = "HOME/tests/c/duplets.c"
-line = 51
-begin = 25
-end = 111
-
-[JC_54]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_55]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 107
-begin = 21
-end = 1241
-
-[JC_56]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 107
-begin = 21
-end = 1241
-
-[JC_110]
-file = "HOME/tests/c/duplets.c"
-line = 68
-begin = 13
-end = 219
-
-[JC_57]
-kind = PointerDeref
-file = "HOME/tests/c/duplets.c"
-line = 56
-begin = 12
-end = 16
-
-[JC_111]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_58]
-kind = ArithOverflow
-file = "HOME/tests/c/duplets.c"
-line = 55
-begin = 31
-end = 34
-
-[JC_112]
-file = "HOME/tests/c/duplets.c"
-line = 74
-begin = 12
-end = 36
-
-[JC_59]
-file = "HOME/tests/c/duplets.c"
-line = 53
-begin = 23
-end = 30
-
-[JC_113]
-file = "HOME/tests/c/duplets.c"
-line = 75
-begin = 6
-end = 30
-
-[JC_114]
-file = "HOME/tests/c/duplets.c"
-line = 76
-begin = 6
-end = 22
-
-[JC_115]
-file = "HOME/tests/c/duplets.c"
-line = 74
-begin = 12
-end = 96
-
-[JC_116]
-file = "HOME/tests/c/duplets.c"
-line = 78
-begin = 5
-end = 12
-
-[JC_117]
-file = "HOME/tests/c/duplets.c"
-line = 78
-begin = 5
-end = 12
-
-[duplet_safety]
-name = "Function duplet"
-behavior = "Safety"
-file = "HOME/tests/c/duplets.c"
-line = 42
-begin = 5
-end = 11
-
-[JC_118]
-file = "HOME/tests/c/duplets.c"
-line = 78
-begin = 5
-end = 12
-
-[JC_119]
-file = "HOME/tests/c/duplets.c"
-line = 78
-begin = 5
-end = 12
-
-[JC_60]
-kind = ArithOverflow
-file = "HOME/tests/c/duplets.c"
-line = 48
-begin = 29
-end = 32
-
 [JC_61]
 file = "HOME/tests/c/duplets.c"
 line = 46
 begin = 19
 end = 26
 
-[JC_62]
+[JC_32]
 file = "HOME/tests/c/duplets.c"
-line = 63
-begin = 13
-end = 19
+line = 39
+begin = 6
+end = 63
 
-[JC_10]
-file = "HOME/tests/c/duplets.c"
-line = 32
-begin = 13
-end = 212
-
-[JC_63]
-kind = PointerDeref
+[JC_56]
 file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 122
-begin = 42
-end = 62
+line = 109
+begin = 21
+end = 1263
 
-[JC_11]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_64]
-kind = PointerDeref
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 123
-begin = 42
-end = 62
-
-[JC_12]
+[duplets_safety]
+name = "Function duplets"
+behavior = "Safety"
 file = "HOME/tests/c/duplets.c"
-line = 32
-begin = 13
-end = 21
+line = 78
+begin = 5
+end = 12
+
+[JC_33]
+file = "HOME/tests/c/duplets.c"
+line = 42
+begin = 5
+end = 11
 
 [JC_65]
 file = "HOME/tests/c/duplets.c"
@@ -1442,45 +1562,21 @@ line = 43
 begin = 21
 end = 27
 
-[JC_13]
+[JC_118]
 file = "HOME/tests/c/duplets.c"
-line = 33
+line = 78
+begin = 5
+end = 12
+
+[JC_105]
+file = "HOME/tests/c/duplets.c"
+line = 70
 begin = 6
-end = 29
+end = 16
 
-[JC_66]
-file = "HOME/tests/c/duplets.c"
-line = 43
-begin = 26
-end = 36
-
-[JC_14]
-file = "HOME/tests/c/duplets.c"
-line = 33
-begin = 6
-end = 29
-
-[JC_120]
+[JC_29]
 file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 171
-begin = 10
-end = 54
-
-[JC_67]
-file = "HOME/tests/c/duplets.c"
-line = 44
-begin = 7
-end = 115
-
-[JC_15]
-file = "HOME/tests/c/duplets.c"
-line = 33
-begin = 33
-end = 43
-
-[JC_121]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 170
+line = 64
 begin = 9
 end = 16
 
@@ -1490,306 +1586,53 @@ line = 43
 begin = 21
 end = 155
 
+[JC_7]
+file = "HOME/tests/c/duplets.c"
+line = 33
+begin = 47
+end = 57
+
 [JC_16]
 file = "HOME/tests/c/duplets.c"
 line = 33
 begin = 33
 end = 43
 
-[JC_122]
+[JC_96]
 file = "HOME/tests/c/duplets.c"
-line = 74
-begin = 12
-end = 36
-
-[JC_69]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_17]
-file = "HOME/tests/c/duplets.c"
-line = 33
-begin = 47
-end = 57
-
-[JC_123]
-file = "HOME/tests/c/duplets.c"
-line = 75
-begin = 6
-end = 30
-
-[JC_18]
-file = "HOME/tests/c/duplets.c"
-line = 33
-begin = 47
-end = 57
-
-[JC_124]
-file = "HOME/tests/c/duplets.c"
-line = 76
-begin = 6
-end = 22
-
-[JC_19]
-file = "HOME/tests/c/duplets.c"
-line = 34
-begin = 6
-end = 42
-
-[JC_125]
-file = "HOME/tests/c/duplets.c"
-line = 74
-begin = 12
-end = 96
-
-[JC_126]
-file = "HOME/tests/c/duplets.c"
-line = 78
-begin = 5
-end = 12
-
-[JC_127]
-file = "HOME/tests/c/duplets.c"
-line = 78
-begin = 5
-end = 12
-
-[JC_128]
-file = "HOME/tests/c/duplets.c"
-line = 78
-begin = 5
-end = 12
-
-[JC_129]
-file = "HOME/tests/c/duplets.c"
-line = 78
-begin = 5
-end = 12
-
-[JC_70]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 81
-begin = 9
-end = 2749
-
-[JC_71]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 81
-begin = 9
-end = 2749
-
-[JC_72]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 81
-begin = 9
-end = 2749
-
-[JC_20]
-file = "HOME/tests/c/duplets.c"
-line = 35
-begin = 6
-end = 80
-
-[JC_73]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 81
-begin = 9
-end = 2749
-
-[JC_21]
-file = "HOME/tests/c/duplets.c"
-line = 32
+line = 68
 begin = 13
-end = 212
+end = 219
 
-[JC_74]
-file = "HOME/tests/c/duplets.c"
-line = 51
-begin = 25
-end = 33
-
-[JC_22]
+[JC_43]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_75]
+[JC_2]
 file = "HOME/tests/c/duplets.c"
-line = 51
-begin = 32
-end = 40
-
-[JC_23]
-file = "HOME/tests/c/duplets.c"
-line = 39
-begin = 6
-end = 30
-
-[JC_76]
-file = "HOME/tests/c/duplets.c"
-line = 52
-begin = 12
-end = 67
-
-[JC_24]
-file = "HOME/tests/c/duplets.c"
-line = 40
+line = 33
 begin = 6
 end = 29
 
-[JC_130]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 171
-begin = 10
-end = 54
-
-[JC_77]
+[JC_95]
 file = "HOME/tests/c/duplets.c"
-line = 51
-begin = 25
-end = 111
-
-[JC_25]
-file = "HOME/tests/c/duplets.c"
-line = 39
+line = 71
 begin = 6
-end = 63
+end = 99
 
-[JC_131]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 170
-begin = 9
-end = 16
-
-[JC_78]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_26]
+[JC_93]
 file = "HOME/tests/c/duplets.c"
-line = 42
-begin = 5
-end = 11
-
-[JC_132]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_79]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 107
-begin = 21
-end = 1241
-
-[JC_27]
-file = "HOME/tests/c/duplets.c"
-line = 42
-begin = 5
-end = 11
-
-[JC_133]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_28]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 65
-begin = 10
-end = 28
-
-[JC_134]
-kind = UserCall
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 184
-begin = 14
-end = 50
-
-[JC_29]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 64
-begin = 9
-end = 16
-
-[JC_135]
-kind = PointerDeref
-file = "HOME/tests/c/duplets.c"
-line = 80
-begin = 18
-end = 21
-
-[JC_136]
-kind = UserCall
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 185
-begin = 14
-end = 77
-
-[JC_137]
-kind = UserCall
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 184
-begin = 14
-end = 50
-
-[JC_138]
-kind = UserCall
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 185
-begin = 14
-end = 77
-
-[duplet_ensures_default]
-name = "Function duplet"
-behavior = "default behavior"
-file = "HOME/tests/c/duplets.c"
-line = 42
-begin = 5
-end = 11
-
-[JC_80]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 107
-begin = 21
-end = 1241
-
-[JC_81]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 107
-begin = 21
-end = 1241
-
-[JC_82]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 107
-begin = 21
-end = 1241
-
-[JC_30]
-file = "HOME/tests/c/duplets.c"
-line = 39
-begin = 6
+line = 70
+begin = 20
 end = 30
 
-[JC_83]
-file = "HOME/tests/c/duplets.c"
-line = 63
-begin = 13
-end = 19
-
-[JC_31]
-file = "HOME/tests/c/duplets.c"
-line = 40
-begin = 6
-end = 29
+[JC_97]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_84]
 file = "HOME/tests/c/duplets.c"
@@ -1797,29 +1640,11 @@ line = 68
 begin = 13
 end = 21
 
-[JC_32]
+[JC_128]
 file = "HOME/tests/c/duplets.c"
-line = 39
-begin = 6
-end = 63
-
-[JC_85]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 6
-end = 29
-
-[JC_33]
-file = "HOME/tests/c/duplets.c"
-line = 42
+line = 78
 begin = 5
-end = 11
-
-[JC_86]
-file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 6
-end = 29
+end = 12
 
 [JC_34]
 file = "HOME/tests/c/duplets.c"
@@ -1827,28 +1652,102 @@ line = 42
 begin = 5
 end = 11
 
-[JC_87]
+[JC_114]
+file = "HOME/tests/c/duplets.c"
+line = 76
+begin = 6
+end = 22
+
+[JC_14]
+file = "HOME/tests/c/duplets.c"
+line = 33
+begin = 6
+end = 29
+
+[JC_117]
+file = "HOME/tests/c/duplets.c"
+line = 78
+begin = 5
+end = 12
+
+[JC_90]
 file = "HOME/tests/c/duplets.c"
 line = 69
-begin = 33
-end = 43
+begin = 47
+end = 57
 
-[JC_35]
-file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 65
-begin = 10
-end = 28
-
-[JC_88]
+[JC_53]
 file = "HOME/tests/c/duplets.c"
-line = 69
-begin = 33
-end = 43
+line = 51
+begin = 25
+end = 111
 
-[JC_36]
+[JC_21]
+file = "HOME/tests/c/duplets.c"
+line = 32
+begin = 13
+end = 212
+
+[JC_111]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_77]
+file = "HOME/tests/c/duplets.c"
+line = 51
+begin = 25
+end = 111
+
+[JC_49]
+kind = ArithOverflow
+file = "HOME/tests/c/duplets.c"
+line = 55
+begin = 17
+end = 20
+
+[JC_1]
+file = "HOME/tests/c/duplets.c"
+line = 32
+begin = 13
+end = 21
+
+[JC_131]
 file = "HOME/tests/c/duplets.jessie/duplets.jc"
-line = 64
+line = 174
 begin = 9
+end = 16
+
+[JC_102]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 33
+end = 43
+
+[JC_37]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_10]
+file = "HOME/tests/c/duplets.c"
+line = 32
+begin = 13
+end = 212
+
+[JC_108]
+file = "HOME/tests/c/duplets.c"
+line = 70
+begin = 20
+end = 30
+
+[JC_57]
+kind = PointerDeref
+file = "HOME/tests/c/duplets.c"
+line = 56
+begin = 12
 end = 16
 
 [JC_89]
@@ -1857,23 +1756,130 @@ line = 69
 begin = 47
 end = 57
 
-[JC_37]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_136]
+kind = UserCall
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 189
+begin = 15
+end = 102
 
-[JC_38]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_39]
+[JC_66]
 file = "HOME/tests/c/duplets.c"
 line = 43
-begin = 21
-end = 27
+begin = 26
+end = 36
+
+[JC_59]
+file = "HOME/tests/c/duplets.c"
+line = 53
+begin = 23
+end = 30
+
+[JC_20]
+file = "HOME/tests/c/duplets.c"
+line = 35
+begin = 6
+end = 80
+
+[JC_18]
+file = "HOME/tests/c/duplets.c"
+line = 33
+begin = 47
+end = 57
+
+[JC_3]
+file = "HOME/tests/c/duplets.c"
+line = 33
+begin = 6
+end = 29
+
+[JC_92]
+file = "HOME/tests/c/duplets.c"
+line = 70
+begin = 6
+end = 16
+
+[duplets_ensures_default]
+name = "Function duplets"
+behavior = "default behavior"
+file = "HOME/tests/c/duplets.c"
+line = 78
+begin = 5
+end = 12
+
+[JC_86]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 6
+end = 29
+
+[JC_60]
+kind = ArithOverflow
+file = "HOME/tests/c/duplets.c"
+line = 48
+begin = 29
+end = 32
+
+[JC_72]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 82
+begin = 9
+end = 2835
+
+[JC_19]
+file = "HOME/tests/c/duplets.c"
+line = 34
+begin = 6
+end = 42
+
+[JC_119]
+file = "HOME/tests/c/duplets.c"
+line = 78
+begin = 5
+end = 12
+
+[JC_76]
+file = "HOME/tests/c/duplets.c"
+line = 52
+begin = 12
+end = 67
+
+[JC_50]
+file = "HOME/tests/c/duplets.c"
+line = 51
+begin = 25
+end = 33
+
+[JC_30]
+file = "HOME/tests/c/duplets.c"
+line = 39
+begin = 6
+end = 30
+
+[JC_120]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 175
+begin = 10
+end = 54
+
+[JC_58]
+kind = ArithOverflow
+file = "HOME/tests/c/duplets.c"
+line = 55
+begin = 31
+end = 34
+
+[JC_100]
+file = "HOME/tests/c/duplets.c"
+line = 69
+begin = 6
+end = 29
+
+[JC_28]
+file = "HOME/tests/c/duplets.jessie/duplets.jc"
+line = 65
+begin = 10
+end = 28
 
 ========== file tests/c/duplets.jessie/why/duplets.why ==========
 type charP
@@ -2650,153 +2656,137 @@ let duplet_ensures_default =
      try
       begin
         try
-         (C_1:
-         (loop_3:
          begin
-           (let jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
-          while true do
-          { invariant
-              ((JC_68:
-               ((JC_65: le_int((0), integer_of_int32(i)))
-               and ((JC_66:
-                    le_int(integer_of_int32(i),
-                    sub_int(integer_of_int32(len_0), (1))))
-                   and (JC_67:
-                       (forall k:int.
-                        (forall l_0:int.
-                         ((le_int((0), k)
-                          and (lt_int(k, integer_of_int32(i))
-                              and (lt_int(k, l_0)
-                                  and lt_int(l_0, integer_of_int32(len_0))))) ->
-                          ((not eq_opt(integer_of_int32(select(intP_intM_a_3,
-                                                        shift(a_0, k))),
-                                except, intP_intM_except_4)) ->
-                           (not is_duplet(a_0, integer_of_int32(len_0), k,
-                                l_0, intP_intM_a_3))))))))))
-              and (JC_72:
-                  ((JC_70:
-                   not_assigns(intP_pi_5_alloc_table, intP_intM_pi_5@init,
-                   intP_intM_pi_5, pset_singleton(pi)))
-                  and (JC_71:
-                      not_assigns(intP_pj_6_alloc_table, intP_intM_pj_6@init,
-                      intP_intM_pj_6, pset_singleton(pj))))))  }
-           begin
-             [ { } unit { true } ];
-            try
+           (let _jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
+          (loop_3:
+          begin
+            while true do
+            { invariant
+                ((JC_68:
+                 ((JC_65: le_int((0), integer_of_int32(i)))
+                 and ((JC_66:
+                      le_int(integer_of_int32(i),
+                      sub_int(integer_of_int32(len_0), (1))))
+                     and (JC_67:
+                         (forall k:int.
+                          (forall l_0:int.
+                           ((le_int((0), k)
+                            and (lt_int(k, integer_of_int32(i))
+                                and (lt_int(k, l_0)
+                                    and lt_int(l_0, integer_of_int32(len_0))))) ->
+                            ((not eq_opt(integer_of_int32(select(intP_intM_a_3,
+                                                          shift(a_0, k))),
+                                  except, intP_intM_except_4)) ->
+                             (not is_duplet(a_0, integer_of_int32(len_0), k,
+                                  l_0, intP_intM_a_3))))))))))
+                and (JC_72:
+                    ((JC_70:
+                     not_assigns(intP_pi_5_alloc_table, intP_intM_pi_5@init,
+                     intP_intM_pi_5, pset_singleton(pi)))
+                    and (JC_71:
+                        not_assigns(intP_pj_6_alloc_table,
+                        intP_intM_pj_6@init, intP_intM_pj_6,
+                        pset_singleton(pj))))))  }
              begin
-               (let jessie_<num> =
-               (C_34:
+               [ { } unit { true } ];
+              try
                begin
-                 (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 
-                                                       (C_9:
-                                                       (safe_int32_of_integer_ 
-                                                        (C_8:
-                                                        ((sub_int (integer_of_int32 len_0)) (2)))))))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                try
+                 (let _jessie_<num> =
                  begin
-                   try
-                    (C_12:
-                    begin
-                      (let jessie_<num> =
-                      (v := (C_11:
-                            ((safe_acc_ intP_intM_a_3) (C_10:
-                                                       ((shift a_0) (integer_of_int32 !i)))))) in
-                      void);
-                     (if ((safe_eq_pointer except) null)
-                     then (raise (Goto__LOR_exc void))
-                     else
-                      (if ((neq_int_ (integer_of_int32 (C_13:
-                                                       ((safe_acc_ intP_intM_except_4) except)))) 
-                           (integer_of_int32 !v))
-                      then (raise (Goto__LOR_exc void)) else void));
-                     (raise (Goto__LOR_0_exc void));
-                     (raise (Goto__LOR_exc void)) end) with
-                    Goto__LOR_exc jessie_<num> ->
-                    (_LOR:
-                    try
-                     (C_16:
-                     (loop_4:
-                     begin
-                       (let jessie_<num> =
-                       (j := (C_15:
-                             (safe_int32_of_integer_ (C_14:
-                                                     ((add_int (integer_of_int32 !i)) (1)))))) in
-                       void);
-                      while true do
-                      { invariant
-                          ((JC_77:
-                           ((JC_74:
-                            le_int(add_int(integer_of_int32(i), (1)),
-                            integer_of_int32(j)))
-                           and ((JC_75:
-                                le_int(integer_of_int32(j),
-                                integer_of_int32(len_0)))
-                               and (JC_76:
-                                   (forall l:int.
-                                    ((lt_int(integer_of_int32(i), l)
-                                     and lt_int(l, integer_of_int32(j))) ->
-                                     (not is_duplet(a_0,
-                                          integer_of_int32(len_0),
-                                          integer_of_int32(i), l,
-                                          intP_intM_a_3))))))))
-                          and (JC_81:
-                              ((JC_79:
-                               not_assigns(intP_pi_5_alloc_table,
-                               intP_intM_pi_5@init, intP_intM_pi_5,
-                               pset_singleton(pi)))
-                              and (JC_80:
-                                  not_assigns(intP_pj_6_alloc_table,
-                                  intP_intM_pj_6@init, intP_intM_pj_6,
-                                  pset_singleton(pj))))))  }
+                   (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 
+                                                         (safe_int32_of_integer_ 
+                                                          ((sub_int (integer_of_int32 len_0)) (2)))))
+                   then void else (raise (Goto_while_0_break_exc void)));
+                  try
+                   begin
+                     try
+                      begin
+                        (let _jessie_<num> =
+                        (v := ((safe_acc_ intP_intM_a_3) ((shift a_0) 
+                                                          (integer_of_int32 !i)))) in
+                        void);
+                       (if ((safe_eq_pointer except) null)
+                       then (raise (Goto__LOR_exc void))
+                       else
+                        (if ((neq_int_ (integer_of_int32 ((safe_acc_ intP_intM_except_4) except))) 
+                             (integer_of_int32 !v))
+                        then (raise (Goto__LOR_exc void)) else void));
+                       (raise (Goto__LOR_0_exc void));
+                       (raise (Goto__LOR_exc void)) end with
+                      Goto__LOR_exc _jessie_<num> ->
+                      try
                        begin
-                         [ { } unit { true } ];
-                        try
-                         begin
-                           (let jessie_<num> =
-                           (C_31:
+                         (let _jessie_<num> =
+                         (j := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))) in
+                         void);
+                        (loop_4:
+                        begin
+                          while true do
+                          { invariant
+                              ((JC_77:
+                               ((JC_74:
+                                le_int(add_int(integer_of_int32(i), (1)),
+                                integer_of_int32(j)))
+                               and ((JC_75:
+                                    le_int(integer_of_int32(j),
+                                    integer_of_int32(len_0)))
+                                   and (JC_76:
+                                       (forall l:int.
+                                        ((lt_int(integer_of_int32(i), l)
+                                         and lt_int(l, integer_of_int32(j))) ->
+                                         (not is_duplet(a_0,
+                                              integer_of_int32(len_0),
+                                              integer_of_int32(i), l,
+                                              intP_intM_a_3))))))))
+                              and (JC_81:
+                                  ((JC_79:
+                                   not_assigns(intP_pi_5_alloc_table,
+                                   intP_intM_pi_5@init, intP_intM_pi_5,
+                                   pset_singleton(pi)))
+                                  and (JC_80:
+                                      not_assigns(intP_pj_6_alloc_table,
+                                      intP_intM_pj_6@init, intP_intM_pj_6,
+                                      pset_singleton(pj))))))  }
                            begin
-                             (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 len_0))
-                             then void
-                             else (raise (Goto_while_1_break_exc void)));
-                            (if ((eq_int_ (integer_of_int32 (C_28:
-                                                            ((safe_acc_ intP_intM_a_3) 
-                                                             (C_27:
-                                                             ((shift a_0) 
-                                                              (integer_of_int32 !j))))))) 
-                                 (integer_of_int32 !v))
-                            then
-                             (C_24:
-                             (C_26:
+                             [ { } unit { true } ];
+                            try
                              begin
-                               (let jessie_<num> = !i in
-                               (let jessie_<num> = pi in
-                               (((safe_upd_ intP_intM_pi_5) jessie_<num>) jessie_<num>)));
-                              (let jessie_<num> = !j in
-                              (let jessie_<num> = pj in
-                              (((safe_upd_ intP_intM_pj_6) jessie_<num>) jessie_<num>)));
-                              (raise (Return_label_exc void)) end))
-                            else void);
-                            (j := (C_30:
-                                  (safe_int32_of_integer_ (C_29:
-                                                          ((add_int (integer_of_int32 !j)) (1))))));
-                            !j end) in void);
-                          (raise (Loop_continue_exc void)) end with
-                         Loop_continue_exc jessie_<num> -> void end end done;
-                      (raise (Goto_while_1_break_exc void)) end)) with
-                     Goto_while_1_break_exc jessie_<num> ->
-                     (while_1_break: void) end) end;
-                  (raise (Goto__LOR_0_exc void)) end with
-                 Goto__LOR_0_exc jessie_<num> -> (_LOR_0: void) end;
-                (i := (C_33:
-                      (safe_int32_of_integer_ (C_32:
-                                              ((add_int (integer_of_int32 !i)) (1))))));
-                !i end) in void); (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end)) with
-         Goto_while_0_break_exc jessie_<num> -> (while_0_break: void) end;
+                               (let _jessie_<num> =
+                               begin
+                                 (if ((lt_int_ (integer_of_int32 !j)) 
+                                      (integer_of_int32 len_0)) then void
+                                 else (raise (Goto_while_1_break_exc void)));
+                                (if ((eq_int_ (integer_of_int32 ((safe_acc_ intP_intM_a_3) 
+                                                                 ((shift a_0) 
+                                                                  (integer_of_int32 !j))))) 
+                                     (integer_of_int32 !v))
+                                then
+                                 begin
+                                   (let _jessie_<num> = !i in
+                                   (let _jessie_<num> = pi in
+                                   (((safe_upd_ intP_intM_pi_5) _jessie_<num>) _jessie_<num>)));
+                                  (let _jessie_<num> = !j in
+                                  (let _jessie_<num> = pj in
+                                  (((safe_upd_ intP_intM_pj_6) _jessie_<num>) _jessie_<num>)));
+                                  (raise (Return_label_exc void)) end
+                                else void);
+                                (j := (safe_int32_of_integer_ ((add_int 
+                                                                (integer_of_int32 !j)) (1))));
+                                !j end in void);
+                              (raise (Loop_continue_exc void)) end with
+                             Loop_continue_exc _jessie_<num> -> void end end done;
+                         (raise (Goto_while_1_break_exc void)) end) end with
+                       Goto_while_1_break_exc _jessie_<num> ->
+                       (while_1_break: void) end end;
+                    (raise (Goto__LOR_0_exc void)) end with
+                   Goto__LOR_0_exc _jessie_<num> -> void end;
+                  (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))));
+                  !i end in void); (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
+         Goto_while_0_break_exc _jessie_<num> -> (while_0_break: void) end;
        (assert { (JC_83: (false = true)) }; void); void;
-       (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: (raise Return)) end))); (raise Return) end with
    Return -> void end)
   { (JC_29:
@@ -2862,147 +2852,131 @@ let duplet_safety =
      try
       begin
         try
-         (C_1:
-         (loop_1:
          begin
-           (let jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
-          while true do
-          { invariant (JC_44: true)
-            variant (JC_61 : sub_int(integer_of_int32(len_0),
-                             integer_of_int32(i))) }
-           begin
-             [ { } unit reads i
-               { (JC_42:
-                 ((JC_39: le_int((0), integer_of_int32(i)))
-                 and ((JC_40:
-                      le_int(integer_of_int32(i),
-                      sub_int(integer_of_int32(len_0), (1))))
-                     and (JC_41:
-                         (forall k:int.
-                          (forall l_0:int.
-                           ((le_int((0), k)
-                            and (lt_int(k, integer_of_int32(i))
-                                and (lt_int(k, l_0)
-                                    and lt_int(l_0, integer_of_int32(len_0))))) ->
-                            ((not eq_opt(integer_of_int32(select(intP_intM_a_3,
-                                                          shift(a_0, k))),
-                                  except, intP_intM_except_4)) ->
-                             (not is_duplet(a_0, integer_of_int32(len_0), k,
-                                  l_0, intP_intM_a_3)))))))))) } ];
-            try
+           (let _jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
+          (loop_1:
+          begin
+            while true do
+            { invariant (JC_44: true)
+              variant (JC_61 : sub_int(integer_of_int32(len_0),
+                               integer_of_int32(i))) }
              begin
-               (let jessie_<num> =
-               (C_34:
+               [ { } unit reads i
+                 { (JC_42:
+                   ((JC_39: le_int((0), integer_of_int32(i)))
+                   and ((JC_40:
+                        le_int(integer_of_int32(i),
+                        sub_int(integer_of_int32(len_0), (1))))
+                       and (JC_41:
+                           (forall k:int.
+                            (forall l_0:int.
+                             ((le_int((0), k)
+                              and (lt_int(k, integer_of_int32(i))
+                                  and (lt_int(k, l_0)
+                                      and lt_int(l_0,
+                                          integer_of_int32(len_0))))) ->
+                              ((not eq_opt(integer_of_int32(select(intP_intM_a_3,
+                                                            shift(a_0, k))),
+                                    except, intP_intM_except_4)) ->
+                               (not is_duplet(a_0, integer_of_int32(len_0),
+                                    k, l_0, intP_intM_a_3)))))))))) } ];
+              try
                begin
-                 (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 
-                                                       (C_9:
-                                                       (JC_46:
-                                                       (int32_of_integer_ 
-                                                        (C_8:
-                                                        ((sub_int (integer_of_int32 len_0)) (2))))))))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                try
+                 (let _jessie_<num> =
                  begin
-                   try
-                    (C_12:
-                    begin
-                      (let jessie_<num> =
-                      (v := (C_11:
-                            (JC_47:
-                            ((((offset_acc_ intP_a_3_alloc_table) intP_intM_a_3) a_0) 
-                             (integer_of_int32 !i))))) in void);
-                     (if ((eq_pointer except) null)
-                     then (raise (Goto__LOR_exc void))
-                     else
-                      (if ((neq_int_ (integer_of_int32 (C_13:
-                                                       (JC_48:
-                                                       (((acc_ intP_except_4_alloc_table) intP_intM_except_4) except))))) 
-                           (integer_of_int32 !v))
-                      then (raise (Goto__LOR_exc void)) else void));
-                     (raise (Goto__LOR_0_exc void));
-                     (raise (Goto__LOR_exc void)) end) with
-                    Goto__LOR_exc jessie_<num> ->
-                    (_LOR:
-                    try
-                     (C_16:
-                     (loop_2:
-                     begin
-                       (let jessie_<num> =
-                       (j := (C_15:
-                             (JC_49:
-                             (int32_of_integer_ (C_14:
-                                                ((add_int (integer_of_int32 !i)) (1))))))) in
-                       void);
-                      while true do
-                      { invariant (JC_55: true)
-                        variant (JC_59 : sub_int(integer_of_int32(len_0),
-                                         integer_of_int32(j))) }
+                   (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 
+                                                         (JC_46:
+                                                         (int32_of_integer_ 
+                                                          ((sub_int (integer_of_int32 len_0)) (2))))))
+                   then void else (raise (Goto_while_0_break_exc void)));
+                  try
+                   begin
+                     try
+                      begin
+                        (let _jessie_<num> =
+                        (v := (JC_47:
+                              ((((offset_acc_ intP_a_3_alloc_table) intP_intM_a_3) a_0) 
+                               (integer_of_int32 !i)))) in void);
+                       (if ((eq_pointer except) null)
+                       then (raise (Goto__LOR_exc void))
+                       else
+                        (if ((neq_int_ (integer_of_int32 (JC_48:
+                                                         (((acc_ intP_except_4_alloc_table) intP_intM_except_4) except)))) 
+                             (integer_of_int32 !v))
+                        then (raise (Goto__LOR_exc void)) else void));
+                       (raise (Goto__LOR_0_exc void));
+                       (raise (Goto__LOR_exc void)) end with
+                      Goto__LOR_exc _jessie_<num> ->
+                      try
                        begin
-                         [ { } unit reads i,j
-                           { (JC_53:
-                             ((JC_50:
-                              le_int(add_int(integer_of_int32(i), (1)),
-                              integer_of_int32(j)))
-                             and ((JC_51:
-                                  le_int(integer_of_int32(j),
-                                  integer_of_int32(len_0)))
-                                 and (JC_52:
-                                     (forall l:int.
-                                      ((lt_int(integer_of_int32(i), l)
-                                       and lt_int(l, integer_of_int32(j))) ->
-                                       (not is_duplet(a_0,
-                                            integer_of_int32(len_0),
-                                            integer_of_int32(i), l,
-                                            intP_intM_a_3)))))))) } ];
-                        try
-                         begin
-                           (let jessie_<num> =
-                           (C_31:
+                         (let _jessie_<num> =
+                         (j := (JC_49:
+                               (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))))) in
+                         void);
+                        (loop_2:
+                        begin
+                          while true do
+                          { invariant (JC_55: true)
+                            variant (JC_59 : sub_int(integer_of_int32(len_0),
+                                             integer_of_int32(j))) }
                            begin
-                             (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 len_0))
-                             then void
-                             else (raise (Goto_while_1_break_exc void)));
-                            (if ((eq_int_ (integer_of_int32 (C_28:
-                                                            (JC_57:
-                                                            ((((offset_acc_ intP_a_3_alloc_table) intP_intM_a_3) a_0) 
-                                                             (integer_of_int32 !j)))))) 
-                                 (integer_of_int32 !v))
-                            then
-                             (C_24:
-                             (C_26:
+                             [ { } unit reads i,j
+                               { (JC_53:
+                                 ((JC_50:
+                                  le_int(add_int(integer_of_int32(i), (1)),
+                                  integer_of_int32(j)))
+                                 and ((JC_51:
+                                      le_int(integer_of_int32(j),
+                                      integer_of_int32(len_0)))
+                                     and (JC_52:
+                                         (forall l:int.
+                                          ((lt_int(integer_of_int32(i), l)
+                                           and lt_int(l, integer_of_int32(j))) ->
+                                           (not is_duplet(a_0,
+                                                integer_of_int32(len_0),
+                                                integer_of_int32(i), l,
+                                                intP_intM_a_3)))))))) } ];
+                            try
                              begin
-                               (let jessie_<num> = !i in
-                               (let jessie_<num> = pi in
-                               (JC_63:
-                               ((((upd_ intP_pi_5_alloc_table) intP_intM_pi_5) jessie_<num>) jessie_<num>))));
-                              (let jessie_<num> = !j in
-                              (let jessie_<num> = pj in
-                              (JC_64:
-                              ((((upd_ intP_pj_6_alloc_table) intP_intM_pj_6) jessie_<num>) jessie_<num>))));
-                              (raise (Return_label_exc void)) end))
-                            else void);
-                            (j := (C_30:
-                                  (JC_58:
-                                  (int32_of_integer_ (C_29:
-                                                     ((add_int (integer_of_int32 !j)) (1)))))));
-                            !j end) in void);
-                          (raise (Loop_continue_exc void)) end with
-                         Loop_continue_exc jessie_<num> -> void end end done;
-                      (raise (Goto_while_1_break_exc void)) end)) with
-                     Goto_while_1_break_exc jessie_<num> ->
-                     (while_1_break: void) end) end;
-                  (raise (Goto__LOR_0_exc void)) end with
-                 Goto__LOR_0_exc jessie_<num> -> (_LOR_0: void) end;
-                (i := (C_33:
-                      (JC_60:
-                      (int32_of_integer_ (C_32:
-                                         ((add_int (integer_of_int32 !i)) (1)))))));
-                !i end) in void); (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end)) with
-         Goto_while_0_break_exc jessie_<num> -> (while_0_break: void) end;
+                               (let _jessie_<num> =
+                               begin
+                                 (if ((lt_int_ (integer_of_int32 !j)) 
+                                      (integer_of_int32 len_0)) then void
+                                 else (raise (Goto_while_1_break_exc void)));
+                                (if ((eq_int_ (integer_of_int32 (JC_57:
+                                                                ((((offset_acc_ intP_a_3_alloc_table) intP_intM_a_3) a_0) 
+                                                                 (integer_of_int32 !j))))) 
+                                     (integer_of_int32 !v))
+                                then
+                                 begin
+                                   (let _jessie_<num> = !i in
+                                   (let _jessie_<num> = pi in
+                                   (JC_63:
+                                   ((((upd_ intP_pi_5_alloc_table) intP_intM_pi_5) _jessie_<num>) _jessie_<num>))));
+                                  (let _jessie_<num> = !j in
+                                  (let _jessie_<num> = pj in
+                                  (JC_64:
+                                  ((((upd_ intP_pj_6_alloc_table) intP_intM_pj_6) _jessie_<num>) _jessie_<num>))));
+                                  (raise (Return_label_exc void)) end
+                                else void);
+                                (j := (JC_58:
+                                      (int32_of_integer_ ((add_int (integer_of_int32 !j)) (1)))));
+                                !j end in void);
+                              (raise (Loop_continue_exc void)) end with
+                             Loop_continue_exc _jessie_<num> -> void end end done;
+                         (raise (Goto_while_1_break_exc void)) end) end with
+                       Goto_while_1_break_exc _jessie_<num> ->
+                       (while_1_break: void) end end;
+                    (raise (Goto__LOR_0_exc void)) end with
+                   Goto__LOR_0_exc _jessie_<num> -> void end;
+                  (i := (JC_60:
+                        (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))));
+                  !i end in void); (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
+         Goto_while_0_break_exc _jessie_<num> -> (while_0_break: void) end;
        [ { } unit { (JC_62: (false = true)) } ]; void;
-       (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: (raise Return)) end))); (raise Return) end with
    Return -> void end) { true }
 
@@ -3065,27 +3039,23 @@ let duplets_ensures_default =
    begin
      (let intP_intM_null_15 = (any_memory void) in
      (let intP_null_15_alloc_table = (any_alloc_table void) in
-     (C_56:
-     (C_59:
      begin
-       (let jessie_<num> = a_0_0 in
-       (let jessie_<num> = len_0_0 in
-       (let jessie_<num> = null in
-       (let jessie_<num> = pi_0 in
-       (let jessie_<num> = pj_0 in
+       (let _jessie_<num> = a_0_0 in
+       (let _jessie_<num> = len_0_0 in
+       (let _jessie_<num> = null in
+       (let _jessie_<num> = pi_0 in
+       (let _jessie_<num> = pj_0 in
        (JC_137:
-       (((((((((((((duplet jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_pj_0_9) intP_intM_pi_0_8) intP_pj_0_9_alloc_table) intP_pi_0_8_alloc_table) intP_null_15_alloc_table) intP_a_0_7_alloc_table) intP_intM_null_15) intP_intM_a_0_7)))))));
-      (let jessie_<num> = a_0_0 in
-      (let jessie_<num> = len_0_0 in
-      (let jessie_<num> =
-      (C_58:
-      ((shift a_0_0) (integer_of_int32 (C_57:
-                                       ((safe_acc_ !intP_intM_pi_0_8) pi_0))))) in
-      (let jessie_<num> = pk in
-      (let jessie_<num> = pl in
+       (((((((((((((duplet _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_pj_0_9) intP_intM_pi_0_8) intP_pj_0_9_alloc_table) intP_pi_0_8_alloc_table) intP_null_15_alloc_table) intP_a_0_7_alloc_table) intP_intM_null_15) intP_intM_a_0_7)))))));
+      (let _jessie_<num> = a_0_0 in
+      (let _jessie_<num> = len_0_0 in
+      (let _jessie_<num> =
+      ((shift a_0_0) (integer_of_int32 ((safe_acc_ !intP_intM_pi_0_8) pi_0))) in
+      (let _jessie_<num> = pk in
+      (let _jessie_<num> = pl in
       (JC_138:
-      (((((((((((((duplet jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_pl_11) intP_intM_pk_10) intP_pl_11_alloc_table) intP_pk_10_alloc_table) intP_a_0_7_alloc_table) intP_a_0_7_alloc_table) intP_intM_a_0_7) intP_intM_a_0_7)))))));
-      (raise Return) end)))); (raise Return) end with Return -> void end)
+      (((((((((((((duplet _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_pl_11) intP_intM_pk_10) intP_pl_11_alloc_table) intP_pk_10_alloc_table) intP_a_0_7_alloc_table) intP_a_0_7_alloc_table) intP_intM_a_0_7) intP_intM_a_0_7)))))));
+      (raise Return) end)); (raise Return) end with Return -> void end)
   { (JC_121:
     ((JC_115:
      ((JC_112:
@@ -3179,28 +3149,24 @@ let duplets_safety =
    begin
      (let intP_intM_null_15 = (any_memory void) in
      (let intP_null_15_alloc_table = (any_alloc_table void) in
-     (C_56:
-     (C_59:
      begin
-       (let jessie_<num> = a_0_0 in
-       (let jessie_<num> = len_0_0 in
-       (let jessie_<num> = null in
-       (let jessie_<num> = pi_0 in
-       (let jessie_<num> = pj_0 in
+       (let _jessie_<num> = a_0_0 in
+       (let _jessie_<num> = len_0_0 in
+       (let _jessie_<num> = null in
+       (let _jessie_<num> = pi_0 in
+       (let _jessie_<num> = pj_0 in
        (JC_134:
-       (((((((((((((duplet_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_pj_0_9) intP_intM_pi_0_8) intP_pj_0_9_alloc_table) intP_pi_0_8_alloc_table) intP_null_15_alloc_table) intP_a_0_7_alloc_table) intP_intM_null_15) intP_intM_a_0_7)))))));
-      (let jessie_<num> = a_0_0 in
-      (let jessie_<num> = len_0_0 in
-      (let jessie_<num> =
-      (C_58:
-      ((shift a_0_0) (integer_of_int32 (C_57:
-                                       (JC_135:
-                                       (((acc_ intP_pi_0_8_alloc_table) !intP_intM_pi_0_8) pi_0)))))) in
-      (let jessie_<num> = pk in
-      (let jessie_<num> = pl in
+       (((((((((((((duplet_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_pj_0_9) intP_intM_pi_0_8) intP_pj_0_9_alloc_table) intP_pi_0_8_alloc_table) intP_null_15_alloc_table) intP_a_0_7_alloc_table) intP_intM_null_15) intP_intM_a_0_7)))))));
+      (let _jessie_<num> = a_0_0 in
+      (let _jessie_<num> = len_0_0 in
+      (let _jessie_<num> =
+      ((shift a_0_0) (integer_of_int32 (JC_135:
+                                       (((acc_ intP_pi_0_8_alloc_table) !intP_intM_pi_0_8) pi_0)))) in
+      (let _jessie_<num> = pk in
+      (let _jessie_<num> = pl in
       (JC_136:
-      (((((((((((((duplet_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_pl_11) intP_intM_pk_10) intP_pl_11_alloc_table) intP_pk_10_alloc_table) intP_a_0_7_alloc_table) intP_a_0_7_alloc_table) intP_intM_a_0_7) intP_intM_a_0_7)))))));
-      (raise Return) end)))); (raise Return) end with Return -> void end)
+      (((((((((((((duplet_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_pl_11) intP_intM_pk_10) intP_pl_11_alloc_table) intP_pk_10_alloc_table) intP_a_0_7_alloc_table) intP_a_0_7_alloc_table) intP_intM_a_0_7) intP_intM_a_0_7)))))));
+      (raise Return) end)); (raise Return) end with Return -> void end)
   { true }
 
 

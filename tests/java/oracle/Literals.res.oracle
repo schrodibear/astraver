@@ -34,11 +34,11 @@ class Literals {
 
     public static final int x = 0xbad;
 
-    /*@ ensures \result == 0xd;
+    /*@ ensures \result == 5991;
       @*/
     int f() {
-	int x = 0xbad;
-	return 015;
+	int y = 0xbad;
+	return y+x+015;
     }
 
 }
@@ -54,8 +54,8 @@ End:
 ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
-Generating JC function Literals_f for method Literals.f
 Generating JC function cons_Literals for constructor Literals
+Generating JC function Literals_f for method Literals.f
 Done.
 ========== file tests/java/Literals.jc ==========
 # InvariantPolicy = Arguments
@@ -83,19 +83,19 @@ logic int32 Literals_x =
 String[0..] any_string()
 ;
 
-tag Object = {
+tag String = Object with {
 }
 
-tag String = Object with {
+tag Literals = Object with {
 }
 
 tag Throwable = Object with {
 }
 
-tag Exception = Object with {
+tag Object = {
 }
 
-tag Literals = Object with {
+tag Exception = Object with {
 }
 
 type Object = [Object]
@@ -110,22 +110,22 @@ behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
 
+exception Exception of Exception[0..]
+
 exception Throwable of Throwable[0..]
 
-exception Exception of Exception[0..]
+unit cons_Literals(! Literals[0] this_1){()}
 
 int32 Literals_f(Literals[0] this_0)
 behavior default:
-  ensures (K_1 : (\result == 0xd));
+  ensures (K_1 : (\result == 5991));
 {  
    {  
-      (var int32 x = (K_2 : 0xbad));
+      (var int32 y = (K_4 : 0xbad));
       
-      (return 015)
+      (return (K_3 : (((K_2 : ((y + Literals_x) :> int32)) + 015) :> int32)))
    }
 }
-
-unit cons_Literals(! Literals[0] this_1){()}
 
 /*
 Local Variables:
@@ -134,13 +134,6 @@ compile-command: "jessie -why-opt -split-user-conj -locs tests/java/Literals.jlo
 End:
 */
 ========== file tests/java/Literals.jloc ==========
-[Literals_f]
-name = "Method f"
-file = "HOME/tests/java/Literals.java"
-line = 38
-begin = 8
-end = 9
-
 [cons_Literals]
 name = "Constructor of class Literals"
 file = "HOME/"
@@ -152,17 +145,36 @@ end = -1
 file = "HOME/tests/java/Literals.java"
 line = 36
 begin = 16
-end = 30
+end = 31
 
-[K_2]
+[K_4]
 file = "HOME/tests/java/Literals.java"
 line = 39
 begin = 9
 end = 14
 
+[Literals_f]
+name = "Method f"
+file = "HOME/tests/java/Literals.java"
+line = 38
+begin = 8
+end = 9
+
+[K_2]
+file = "HOME/tests/java/Literals.java"
+line = 40
+begin = 8
+end = 11
+
+[K_3]
+file = "HOME/tests/java/Literals.java"
+line = 40
+begin = 8
+end = 15
+
 ========== jessie execution ==========
-Generating Why function Literals_f
 Generating Why function cons_Literals
+Generating Why function Literals_f
 ========== file tests/java/Literals.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -173,10 +185,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Literals.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Literals.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Literals.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Literals.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -321,13 +334,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: Literals.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: Literals.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: Literals.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include Literals.depend
 
@@ -338,33 +351,33 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/Literals.loc ==========
-[JC_1]
-file = "HOME/tests/java/Literals.jc"
-line = 23
-begin = 12
-end = 22
+[Literals_f_ensures_default]
+name = "Method f"
+behavior = "default behavior"
+file = "HOME/tests/java/Literals.java"
+line = 38
+begin = 8
+end = 9
 
-[JC_2]
+[JC_31]
+file = "HOME/tests/java/Literals.java"
+line = 36
+begin = 16
+end = 31
+
+[JC_17]
+file = "HOME/tests/java/Literals.jc"
+line = 50
+begin = 11
+end = 65
+
+[JC_23]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_3]
-file = "HOME/tests/java/Literals.jc"
-line = 23
-begin = 12
-end = 22
-
-[cons_Literals_safety]
-name = "Constructor of class Literals"
-behavior = "Safety"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_4]
+[JC_22]
 file = "HOME/"
 line = 0
 begin = -1
@@ -376,143 +389,17 @@ line = 0
 begin = -1
 end = -1
 
-[JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[cons_Literals_ensures_default]
-name = "Constructor of class Literals"
-behavior = "default behavior"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_9]
 file = "HOME/tests/java/Literals.jc"
 line = 48
 begin = 8
 end = 23
 
-[Literals_f_ensures_default]
-name = "Method f"
-behavior = "default behavior"
-file = "HOME/tests/java/Literals.java"
-line = 38
-begin = 8
-end = 9
-
-[JC_10]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_11]
-file = "HOME/tests/java/Literals.jc"
-line = 48
-begin = 8
-end = 23
-
-[JC_12]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_13]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Literals_f_safety]
-name = "Method f"
-behavior = "Safety"
-file = "HOME/tests/java/Literals.java"
-line = 38
-begin = 8
-end = 9
-
-[JC_14]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_15]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_16]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_17]
-file = "HOME/tests/java/Literals.jc"
-line = 50
-begin = 11
-end = 65
-
-[JC_18]
-file = "HOME/tests/java/Literals.jc"
-line = 50
-begin = 11
-end = 65
-
-[JC_19]
-file = "HOME/tests/java/Literals.java"
-line = 38
-begin = 8
-end = 9
-
-[JC_20]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_21]
-file = "HOME/tests/java/Literals.java"
-line = 38
-begin = 8
-end = 9
-
-[JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_23]
-file = "HOME/tests/java/Literals.java"
-line = 36
-begin = 16
-end = 30
-
 [JC_24]
-file = "HOME/tests/java/Literals.java"
-line = 36
-begin = 16
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_25]
 file = "HOME/"
@@ -526,19 +413,177 @@ line = 0
 begin = -1
 end = -1
 
-[JC_27]
+[JC_8]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_28]
+[JC_13]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_11]
+file = "HOME/tests/java/Literals.jc"
+line = 48
+begin = 8
+end = 23
+
+[cons_Literals_safety]
+name = "Constructor of class Literals"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_15]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[Literals_f_safety]
+name = "Method f"
+behavior = "Safety"
+file = "HOME/tests/java/Literals.java"
+line = 38
+begin = 8
+end = 9
+
+[JC_36]
+kind = ArithOverflow
+file = "HOME/tests/java/Literals.java"
+line = 40
+begin = 8
+end = 15
+
+[JC_35]
+kind = ArithOverflow
+file = "HOME/tests/java/Literals.java"
+line = 40
+begin = 8
+end = 11
+
+[JC_27]
+file = "HOME/tests/java/Literals.java"
+line = 38
+begin = 8
+end = 9
+
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_32]
+file = "HOME/tests/java/Literals.java"
+line = 36
+begin = 16
+end = 31
+
+[JC_33]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_29]
+file = "HOME/tests/java/Literals.java"
+line = 38
+begin = 8
+end = 9
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_16]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_14]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_21]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_1]
+file = "HOME/tests/java/Literals.jc"
+line = 23
+begin = 12
+end = 22
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_Literals_ensures_default]
+name = "Constructor of class Literals"
+behavior = "default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_18]
+file = "HOME/tests/java/Literals.jc"
+line = 50
+begin = 11
+end = 65
+
+[JC_3]
+file = "HOME/tests/java/Literals.jc"
+line = 23
+begin = 12
+end = 22
+
+[JC_19]
 file = "HOME/"
 line = 0
 begin = -1
@@ -550,25 +595,7 @@ line = 0
 begin = -1
 end = -1
 
-[JC_31]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_32]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_34]
+[JC_28]
 file = "HOME/"
 line = 0
 begin = -1
@@ -887,12 +914,12 @@ parameter Object_alloc_table : Object alloc_table ref
 parameter Literals_f :
  this_0:Object pointer ->
   { } int32 reads Object_alloc_table
-  { (JC_24: (integer_of_int32(result) = (13))) }
+  { (JC_32: (integer_of_int32(result) = (5991))) }
 
 parameter Literals_f_requires :
  this_0:Object pointer ->
   { } int32 reads Object_alloc_table
-  { (JC_24: (integer_of_int32(result) = (13))) }
+  { (JC_32: (integer_of_int32(result) = (5991))) }
 
 exception Loop_continue_exc of unit
 
@@ -1127,10 +1154,16 @@ let Literals_f_ensures_default =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let x_2 = (safe_int32_of_integer_ (K_2: (2989))) in
-     begin   (return := (safe_int32_of_integer_ (13))); (raise Return) end);
-    absurd  end with Return -> !return end))
-  { (JC_23: (integer_of_int32(result) = (13))) }
+     (let y = (safe_int32_of_integer_ (K_4: (2989))) in
+     begin
+       (return := (K_3:
+                  (safe_int32_of_integer_ ((add_int (integer_of_int32 
+                                                     (K_2:
+                                                     (safe_int32_of_integer_ 
+                                                      ((add_int (integer_of_int32 y)) 
+                                                       (integer_of_int32 Literals_x)))))) (13)))));
+      (raise Return) end); absurd  end with Return -> !return end))
+  { (JC_31: (integer_of_int32(result) = (5991))) }
 
 let Literals_f_safety =
  fun (this_0 : Object pointer) ->
@@ -1139,15 +1172,23 @@ let Literals_f_safety =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let x_2 = (safe_int32_of_integer_ (K_2: (2989))) in
-     begin   (return := (safe_int32_of_integer_ (13))); (raise Return) end);
-    absurd  end with Return -> !return end)) { true }
+     (let y = (safe_int32_of_integer_ (K_4: (2989))) in
+     begin
+       (return := (K_3:
+                  (JC_36:
+                  (int32_of_integer_ ((add_int (integer_of_int32 (K_2:
+                                                                 (JC_35:
+                                                                 (int32_of_integer_ 
+                                                                  ((add_int 
+                                                                    (integer_of_int32 y)) 
+                                                                   (integer_of_int32 Literals_x))))))) (13))))));
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 let cons_Literals_ensures_default =
  fun (this_1 : Object pointer) ->
   { valid_struct_Literals(this_1, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_31: true) }
+  { (JC_23: true) }
 
 let cons_Literals_safety =
  fun (this_1 : Object pointer) ->
@@ -1164,8 +1205,30 @@ why --project [...] why/Literals.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/Literals_po1.why">
-      <location file = "HOME/tests/java/Literals.java" line = "36" begin = "16" end = "30"/>
+      <location file = "HOME/tests/java/Literals.java" line = "36" begin = "16" end = "31"/>
       <explain kind = "Post"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/Literals_po2.why">
+      <location file = "HOME/tests/java/Literals.java" line = "40" begin = "8" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/Literals_po3.why">
+      <location file = "HOME/tests/java/Literals.java" line = "40" begin = "8" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/Literals_po4.why">
+      <location file = "HOME/tests/java/Literals.java" line = "40" begin = "8" end = "15"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/Literals_po5.why">
+      <location file = "HOME/tests/java/Literals.java" line = "40" begin = "8" end = "15"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     </behavior>
   </function>
@@ -2424,10 +2487,56 @@ goal Literals_f_ensures_default_po_1:
   forall result:int32.
   (integer_of_int32(result) = 2989) ->
   forall result0:int32.
-  (integer_of_int32(result0) = 13) ->
+  (integer_of_int32(result0) = (integer_of_int32(result) + integer_of_int32(Literals_x))) ->
+  forall result1:int32.
+  (integer_of_int32(result1) = (integer_of_int32(result0) + 13)) ->
   forall return:int32.
-  (return = result0) ->
-  ("JC_23": (integer_of_int32(return) = 13))
+  (return = result1) ->
+  ("JC_31": (integer_of_int32(return) = 5991))
+
+========== file tests/java/why/Literals_po2.why ==========
+goal Literals_f_safety_po_1:
+  forall this_0:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  valid_struct_Literals(this_0, 0, 0, Object_alloc_table) ->
+  forall result:int32.
+  (integer_of_int32(result) = 2989) ->
+  ((-2147483648) <= (integer_of_int32(result) + integer_of_int32(Literals_x)))
+
+========== file tests/java/why/Literals_po3.why ==========
+goal Literals_f_safety_po_2:
+  forall this_0:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  valid_struct_Literals(this_0, 0, 0, Object_alloc_table) ->
+  forall result:int32.
+  (integer_of_int32(result) = 2989) ->
+  ((integer_of_int32(result) + integer_of_int32(Literals_x)) <= 2147483647)
+
+========== file tests/java/why/Literals_po4.why ==========
+goal Literals_f_safety_po_3:
+  forall this_0:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  valid_struct_Literals(this_0, 0, 0, Object_alloc_table) ->
+  forall result:int32.
+  (integer_of_int32(result) = 2989) ->
+  (((-2147483648) <= (integer_of_int32(result) + integer_of_int32(Literals_x))) and
+   ((integer_of_int32(result) + integer_of_int32(Literals_x)) <= 2147483647)) ->
+  forall result0:int32.
+  (integer_of_int32(result0) = (integer_of_int32(result) + integer_of_int32(Literals_x))) ->
+  ((-2147483648) <= (integer_of_int32(result0) + 13))
+
+========== file tests/java/why/Literals_po5.why ==========
+goal Literals_f_safety_po_4:
+  forall this_0:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  valid_struct_Literals(this_0, 0, 0, Object_alloc_table) ->
+  forall result:int32.
+  (integer_of_int32(result) = 2989) ->
+  (((-2147483648) <= (integer_of_int32(result) + integer_of_int32(Literals_x))) and
+   ((integer_of_int32(result) + integer_of_int32(Literals_x)) <= 2147483647)) ->
+  forall result0:int32.
+  (integer_of_int32(result0) = (integer_of_int32(result) + integer_of_int32(Literals_x))) ->
+  ((integer_of_int32(result0) + 13) <= 2147483647)
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Literals.why
@@ -3508,25 +3617,77 @@ why -simplify [...] why/Literals.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; Literals_f_ensures_default_po_1, File "HOME/tests/java/Literals.java", line 36, characters 16-30
+;; Literals_f_ensures_default_po_1, File "HOME/tests/java/Literals.java", line 36, characters 16-31
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Literals this_0 0 0 Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 2989)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) 13)
+(IMPLIES (EQ (integer_of_int32 result0)
+         (+ (integer_of_int32 result) (integer_of_int32 Literals_x)))
+(FORALL (result1)
+(IMPLIES (EQ (integer_of_int32 result1) (+ (integer_of_int32 result0) 13))
 (FORALL (return)
-(IMPLIES (EQ return result0) (EQ (integer_of_int32 return) 13))))))))))
+(IMPLIES (EQ return result1) (EQ (integer_of_int32 return) 5991))))))))))))
+
+;; Literals_f_safety_po_1, File "HOME/tests/java/Literals.java", line 40, characters 8-11
+(FORALL (this_0)
+(FORALL (Object_alloc_table)
+(IMPLIES (valid_struct_Literals this_0 0 0 Object_alloc_table)
+(FORALL (result)
+(IMPLIES (EQ (integer_of_int32 result) 2989)
+(<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 result) 
+                                        (integer_of_int32 Literals_x))))))))
+
+;; Literals_f_safety_po_2, File "HOME/tests/java/Literals.java", line 40, characters 8-11
+(FORALL (this_0)
+(FORALL (Object_alloc_table)
+(IMPLIES (valid_struct_Literals this_0 0 0 Object_alloc_table)
+(FORALL (result)
+(IMPLIES (EQ (integer_of_int32 result) 2989)
+(<= (+ (integer_of_int32 result) (integer_of_int32 Literals_x)) constant_too_large_2147483647))))))
+
+;; Literals_f_safety_po_3, File "HOME/tests/java/Literals.java", line 40, characters 8-15
+(FORALL (this_0)
+(FORALL (Object_alloc_table)
+(IMPLIES (valid_struct_Literals this_0 0 0 Object_alloc_table)
+(FORALL (result)
+(IMPLIES (EQ (integer_of_int32 result) 2989)
+(IMPLIES (AND
+         (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 result) 
+                                                 (integer_of_int32
+                                                 Literals_x)))
+         (<= (+ (integer_of_int32 result) (integer_of_int32 Literals_x)) constant_too_large_2147483647))
+(FORALL (result0)
+(IMPLIES (EQ (integer_of_int32 result0)
+         (+ (integer_of_int32 result) (integer_of_int32 Literals_x)))
+(<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 result0) 13))))))))))
+
+;; Literals_f_safety_po_4, File "HOME/tests/java/Literals.java", line 40, characters 8-15
+(FORALL (this_0)
+(FORALL (Object_alloc_table)
+(IMPLIES (valid_struct_Literals this_0 0 0 Object_alloc_table)
+(FORALL (result)
+(IMPLIES (EQ (integer_of_int32 result) 2989)
+(IMPLIES (AND
+         (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 result) 
+                                                 (integer_of_int32
+                                                 Literals_x)))
+         (<= (+ (integer_of_int32 result) (integer_of_int32 Literals_x)) constant_too_large_2147483647))
+(FORALL (result0)
+(IMPLIES (EQ (integer_of_int32 result0)
+         (+ (integer_of_int32 result) (integer_of_int32 Literals_x)))
+(<= (+ (integer_of_int32 result0) 13) constant_too_large_2147483647)))))))))
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-simplify/Literals_why.sx      : . (1/0/0/0/0)
-total   :   1
-valid   :   1 (100%)
+simplify/Literals_why.sx      : ..?.? (3/0/2/0/0)
+total   :   5
+valid   :   3 ( 60%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
+unknown :   2 ( 40%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
 ========== generation of alt-ergo VC output ==========
@@ -4778,8 +4939,50 @@ goal Literals_f_ensures_default_po_1:
   forall result:int32.
   (integer_of_int32(result) = 2989) ->
   forall result0:int32.
-  (integer_of_int32(result0) = 13) ->
+  (integer_of_int32(result0) = (integer_of_int32(result) + integer_of_int32(Literals_x))) ->
+  forall result1:int32.
+  (integer_of_int32(result1) = (integer_of_int32(result0) + 13)) ->
   forall return:int32.
-  (return = result0) ->
-  ("JC_23": (integer_of_int32(return) = 13))
+  (return = result1) ->
+  ("JC_31": (integer_of_int32(return) = 5991))
+
+goal Literals_f_safety_po_1:
+  forall this_0:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  valid_struct_Literals(this_0, 0, 0, Object_alloc_table) ->
+  forall result:int32.
+  (integer_of_int32(result) = 2989) ->
+  ((-2147483648) <= (integer_of_int32(result) + integer_of_int32(Literals_x)))
+
+goal Literals_f_safety_po_2:
+  forall this_0:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  valid_struct_Literals(this_0, 0, 0, Object_alloc_table) ->
+  forall result:int32.
+  (integer_of_int32(result) = 2989) ->
+  ((integer_of_int32(result) + integer_of_int32(Literals_x)) <= 2147483647)
+
+goal Literals_f_safety_po_3:
+  forall this_0:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  valid_struct_Literals(this_0, 0, 0, Object_alloc_table) ->
+  forall result:int32.
+  (integer_of_int32(result) = 2989) ->
+  (((-2147483648) <= (integer_of_int32(result) + integer_of_int32(Literals_x))) and
+   ((integer_of_int32(result) + integer_of_int32(Literals_x)) <= 2147483647)) ->
+  forall result0:int32.
+  (integer_of_int32(result0) = (integer_of_int32(result) + integer_of_int32(Literals_x))) ->
+  ((-2147483648) <= (integer_of_int32(result0) + 13))
+
+goal Literals_f_safety_po_4:
+  forall this_0:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  valid_struct_Literals(this_0, 0, 0, Object_alloc_table) ->
+  forall result:int32.
+  (integer_of_int32(result) = 2989) ->
+  (((-2147483648) <= (integer_of_int32(result) + integer_of_int32(Literals_x))) and
+   ((integer_of_int32(result) + integer_of_int32(Literals_x)) <= 2147483647)) ->
+  forall result0:int32.
+  (integer_of_int32(result0) = (integer_of_int32(result) + integer_of_int32(Literals_x))) ->
+  ((integer_of_int32(result0) + 13) <= 2147483647)
 

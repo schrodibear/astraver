@@ -2,21 +2,21 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2011                                               *)
+(*  Copyright (C) 2002-2014                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
-(*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
-(*    Yannick MOY, Univ. Paris-sud 11                                     *)
-(*    Romain BARDOU, Univ. Paris-sud 11                                   *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud                   *)
+(*    Claude MARCHE, INRIA & Univ. Paris-sud                              *)
+(*    Yannick MOY, Univ. Paris-sud                                        *)
+(*    Romain BARDOU, Univ. Paris-sud                                      *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
-(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
-(*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
-(*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
-(*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
-(*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  *)
-(*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       *)
+(*    Thierry HUBERT, Univ. Paris-sud  (former Caduceus front-end)        *)
+(*    Nicolas ROUSSET, Univ. Paris-sud (on Jessie & Krakatoa)             *)
+(*    Ali AYAD, CNRS & CEA Saclay      (floating-point support)           *)
+(*    Sylvie BOLDO, INRIA              (floating-point support)           *)
+(*    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     *)
+(*    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Lesser General Public            *)
@@ -1278,7 +1278,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vexpr e =
+  method! vexpr e =
     ChangeDoChildrenPost (preaction_expr e, fun x -> x)
 
 (* I comment on purpose additional verifications, because they cause some tests
@@ -1590,7 +1590,7 @@ let mkalloc_statement v ty loc = mkStmt (Instr(mkalloc v ty loc))
 let mkalloc_array v ty num loc =
   let callee = new_exp ~loc (Lval(Var(malloc_function ()),NoOffset)) in
   let arg = constant_expr
-    (Integer.of_int64 (Int64.mul num (Int64.of_int (sizeOf_int ty))))
+    (Integer.of_int64 (Int64.mul num (Int64.of_int (bytesSizeOf ty))))
   in
   Call(Some(Var v,NoOffset),callee,[arg],loc)
 
@@ -1620,6 +1620,13 @@ let take n lst =
     | _ -> List.rev acc
   in
   take [] n lst
+
+let predicate loc p =
+  {
+    name = [];
+    loc = loc;
+    content = p;
+  }
 
 (*
 Local Variables:

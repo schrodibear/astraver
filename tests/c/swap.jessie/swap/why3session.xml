@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
   name="Z3"
@@ -35,10 +35,12 @@
     locfile="../../swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="VC for swap_ensures_default"
-    sum="8a810da30705484c45f912205aad5bb7"
+    sum="b3a5eac3646b623036a1cd1e1a99e679"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4ainteger_of_int32V1Aainfix =ainteger_of_int32V3ainteger_of_int32V0Iainfix =V4V2FIainfix =V3V0FIainfix =V2V1FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function swap, default behavior"/>
     <label
@@ -73,7 +75,7 @@
     locfile="../../swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="VC for swap_safety"
-    sum="7208bbaa6587562d5373e9459be61588"
+    sum="0eb6ccc72bbe95eba1298b92126834fe"
     proved="true"
     expanded="true"
     shape="t">

@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only e63-bis.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD e63-bis.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only e63-bis.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/e63-bis.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir e63-bis.jessie
 [jessie] File e63-bis.jessie/e63-bis.jc written.
@@ -72,148 +72,148 @@ predicate incr3{L}(floatP[..] t_3, integer i_5, integer j_3) =
 
 unit f()
 behavior default:
-  ensures (C_27 : true);
+  ensures (_C_27 : true);
 {  
    (var floatP[0..19] t);
    
-   {  (C_2 : (t = (C_1 : (new floatP[20]))));
+   {  (_C_2 : (t = (_C_1 : (new floatP[20]))));
       
       {  
-         (assert for default: (C_3 : (jessie : (((t + 0).floatM :> real) ==
-                                                 0.))));
+         (assert for default: (_C_3 : (jessie : (((t + 0).floatM :> real) ==
+                                                  0.))));
          ()
       };
       
       {  
-         (assert for default: (C_4 : (jessie : (((t + 1).floatM :> real) ==
-                                                 1.))));
+         (assert for default: (_C_4 : (jessie : (((t + 1).floatM :> real) ==
+                                                  1.))));
          ()
       };
       
       {  
-         (assert for default: (C_5 : (jessie : (((t + 2).floatM :> real) ==
-                                                 2.))));
+         (assert for default: (_C_5 : (jessie : (((t + 2).floatM :> real) ==
+                                                  2.))));
          ()
       };
       
       {  
-         (assert for default: (C_6 : (jessie : (((t + 3).floatM :> real) ==
-                                                 3.))));
+         (assert for default: (_C_6 : (jessie : (((t + 3).floatM :> real) ==
+                                                  3.))));
          ()
       };
       
       {  
-         (assert for default: (C_7 : (jessie : (((t + 4).floatM :> real) ==
-                                                 4.))));
+         (assert for default: (_C_7 : (jessie : (((t + 4).floatM :> real) ==
+                                                  4.))));
          ()
       };
       
       {  
-         (assert for default: (C_8 : (jessie : (((t + 5).floatM :> real) ==
-                                                 5.))));
+         (assert for default: (_C_8 : (jessie : (((t + 5).floatM :> real) ==
+                                                  5.))));
          ()
       };
       
       {  
-         (assert for default: (C_9 : (jessie : (((t + 6).floatM :> real) ==
-                                                 6.))));
+         (assert for default: (_C_9 : (jessie : (((t + 6).floatM :> real) ==
+                                                  6.))));
          ()
       };
       
       {  
-         (assert for default: (C_10 : (jessie : (((t + 7).floatM :> real) ==
-                                                  7.))));
+         (assert for default: (_C_10 : (jessie : (((t + 7).floatM :> real) ==
+                                                   7.))));
          ()
       };
       
       {  
-         (assert for default: (C_11 : (jessie : (((t + 8).floatM :> real) ==
-                                                  8.))));
+         (assert for default: (_C_11 : (jessie : (((t + 8).floatM :> real) ==
+                                                   8.))));
          ()
       };
       
       {  
-         (assert for default: (C_12 : (jessie : (((t + 9).floatM :> real) ==
-                                                  9.))));
+         (assert for default: (_C_12 : (jessie : (((t + 9).floatM :> real) ==
+                                                   9.))));
          ()
       };
       
       {  
-         (assert for default: (C_13 : (jessie : (((t + 10).floatM :> real) ==
-                                                  10.))));
+         (assert for default: (_C_13 : (jessie : (((t + 10).floatM :> real) ==
+                                                   10.))));
          ()
       };
       
       {  
-         (assert for default: (C_14 : (jessie : (((t + 11).floatM :> real) ==
-                                                  11.))));
+         (assert for default: (_C_14 : (jessie : (((t + 11).floatM :> real) ==
+                                                   11.))));
          ()
       };
       
       {  
-         (assert for default: (C_15 : (jessie : (((t + 12).floatM :> real) ==
-                                                  12.))));
+         (assert for default: (_C_15 : (jessie : (((t + 12).floatM :> real) ==
+                                                   12.))));
          ()
       };
       
       {  
-         (assert for default: (C_16 : (jessie : (((t + 13).floatM :> real) ==
-                                                  13.))));
+         (assert for default: (_C_16 : (jessie : (((t + 13).floatM :> real) ==
+                                                   13.))));
          ()
       };
       
       {  
-         (assert for default: (C_17 : (jessie : (((t + 14).floatM :> real) ==
-                                                  14.))));
+         (assert for default: (_C_17 : (jessie : (((t + 14).floatM :> real) ==
+                                                   14.))));
          ()
       };
       
       {  
-         (assert for default: (C_18 : (jessie : (((t + 15).floatM :> real) ==
-                                                  15.))));
+         (assert for default: (_C_18 : (jessie : (((t + 15).floatM :> real) ==
+                                                   15.))));
          ()
       };
       
       {  
-         (assert for default: (C_19 : (jessie : (((t + 16).floatM :> real) ==
-                                                  16.))));
+         (assert for default: (_C_19 : (jessie : (((t + 16).floatM :> real) ==
+                                                   16.))));
          ()
       };
       
       {  
-         (assert for default: (C_20 : (jessie : (((t + 17).floatM :> real) ==
-                                                  17.))));
+         (assert for default: (_C_20 : (jessie : (((t + 17).floatM :> real) ==
+                                                   17.))));
          ()
       };
       
       {  
-         (assert for default: (C_21 : (jessie : (((t + 18).floatM :> real) ==
-                                                  18.))));
+         (assert for default: (_C_21 : (jessie : (((t + 18).floatM :> real) ==
+                                                   18.))));
          ()
       };
       
       {  
-         (assert for default: (C_22 : (jessie : (((t + 19).floatM :> real) ==
-                                                  19.))));
+         (assert for default: (_C_22 : (jessie : (((t + 19).floatM :> real) ==
+                                                   19.))));
          ()
       };
       
       {  
-         (assert for default: (C_23 : (jessie : incr3{Here}((t + 0), 0, 4))));
+         (assert for default: (_C_23 : (jessie : incr3{Here}((t + 0), 0, 4))));
          ()
       };
       
       {  
-         (assert for default: (C_24 : (jessie : incr3{Here}((t + 0), 0, 9))));
+         (assert for default: (_C_24 : (jessie : incr3{Here}((t + 0), 0, 9))));
          ()
       };
       
       {  
-         (assert for default: (C_25 : (jessie : incr3{Here}((t + 0), 0, 19))));
+         (assert for default: (_C_25 : (jessie : incr3{Here}((t + 0), 0, 19))));
          ()
       };
       
-      {  (C_26 : (free(t)));
+      {  (_C_26 : (free(t)));
          
          (return ())
       }
@@ -651,12 +651,10 @@ let f_ensures_default =
      (let floatP_t_6_alloc_table = ref (any_alloc_table void) in
      (let floatP_floatM_t_6 = (any_memory void) in
      (let t_4 = ref (any_pointer void) in
-     (C_2:
      begin
-       (let jessie_<somenum> =
-       (t_4 := (C_1:
-               (JC_<somenum>:
-               (((alloc_struct_floatP (20)) floatP_t_6_alloc_table) floatP_t_6_tag_table)))) in
+       (let _jessie_<somenum> =
+       (t_4 := (JC_<somenum>:
+               (((alloc_struct_floatP (20)) floatP_t_6_alloc_table) floatP_t_6_tag_table))) in
        void);
       (assert
       { (JC_<somenum>:
@@ -746,12 +744,9 @@ let f_ensures_default =
       void;
       (assert
       { (JC_<somenum>: incr3(shift(t_4, (0)), (0), (19), floatP_floatM_t_6)) };
-      void);
-      (C_26:
-      begin
-        void; ((safe_free_parameter floatP_t_6_alloc_table) !t_4);
-       (raise Return) end) end))))); (raise Return) end with Return ->
-   void end) { (JC_<somenum>: true) }
+      void); void; ((safe_free_parameter floatP_t_6_alloc_table) !t_4);
+      (raise Return) end)))); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -763,17 +758,15 @@ let f_safety =
      (let floatP_t_6_alloc_table = ref (any_alloc_table void) in
      (let floatP_floatM_t_6 = (any_memory void) in
      (let t_4 = ref (any_pointer void) in
-     (C_2:
      begin
-       (let jessie_<somenum> =
-       (t_4 := (let jessie_<somenum> =
-               (C_1:
+       (let _jessie_<somenum> =
+       (t_4 := (let _jessie_<somenum> =
                (JC_<somenum>:
-               (((alloc_struct_floatP_requires (20)) floatP_t_6_alloc_table) floatP_t_6_tag_table))) in
+               (((alloc_struct_floatP_requires (20)) floatP_t_6_alloc_table) floatP_t_6_tag_table)) in
                (JC_<somenum>:
                (assert
-               { ge_int(offset_max(floatP_t_6_alloc_table, jessie_<somenum>), (19)) };
-               jessie_<somenum>)))) in void);
+               { ge_int(offset_max(floatP_t_6_alloc_table, _jessie_<somenum>), (19)) };
+               _jessie_<somenum>)))) in void);
       [ { } unit reads t_4
         { (JC_<somenum>:
           (single_value(select(floatP_floatM_t_6, shift(t_4, (0)))) = 0.)) } ];
@@ -862,10 +855,8 @@ let f_safety =
       void;
       [ { } unit reads t_4
         { (JC_<somenum>: incr3(shift(t_4, (0)), (0), (19), floatP_floatM_t_6)) } ];
-      (C_26:
-      begin
-        void; ((free_parameter floatP_t_6_alloc_table) !t_4); (raise Return)
-      end) end))))); (raise Return) end with Return -> void end) { true }
+      void; ((free_parameter floatP_t_6_alloc_table) !t_4); (raise Return)
+     end)))); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C e63-bis.jessie --quiet -f e63-bis.makefile project
@@ -974,11 +965,11 @@ why --project [...] why/e63-bis.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/e63-bis_po25.why">
-      <location file = "why/e63-bis.why" line = "553" begin = "17" end = "75"/>
+      <location file = "why/e63-bis.why" line = "546" begin = "17" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/e63-bis_po26.why">
-      <location file = "why/e63-bis.why" line = "645" begin = "15" end = "59"/>
+      <location file = "why/e63-bis.why" line = "636" begin = "13" end = "57"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

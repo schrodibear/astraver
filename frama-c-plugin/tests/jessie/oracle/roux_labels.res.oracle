@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only roux_labels.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD roux_labels.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only roux_labels.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/roux_labels.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir roux_labels.jessie
 [jessie] File roux_labels.jessie/roux_labels.jc written.
@@ -46,27 +46,27 @@ tag voidP = {
 type voidP = [voidP]
 
 unit f(intP[..] a)
-  requires (C_6 : ((C_7 : (\offset_min(a) <= 0)) &&
-                    (C_8 : (\offset_max(a) >= 0))));
+  requires (_C_6 : ((_C_7 : (\offset_min(a) <= 0)) &&
+                     (_C_8 : (\offset_max(a) >= 0))));
 behavior default:
-  ensures (C_4 : true);
+  ensures (_C_4 : true);
 behavior az:
   assumes (a.intM == 0);
-  ensures (C_5 : (\at(a,Old).intM == 0));
+  ensures (_C_5 : (\at(a,Old).intM == 0));
 {  
-   {  (if ((C_3 : a.intM) != 0) then (C_2 : ((C_1 : a.intM) = 1)) else ());
+   {  (if ((_C_3 : a.intM) != 0) then (_C_2 : ((_C_1 : a.intM) = 1)) else ());
       
       (return ())
    }
 }
 
 unit g(intP[..] a_0)
-  requires (C_11 : ((C_12 : (\offset_min(a_0) <= 0)) &&
-                     (C_13 : (\offset_max(a_0) >= 0))));
+  requires (_C_11 : ((_C_12 : (\offset_min(a_0) <= 0)) &&
+                      (_C_13 : (\offset_max(a_0) >= 0))));
 behavior default:
-  ensures (C_10 : ((\at(a_0.intM,Old) == 0) ==> (\at(a_0,Old).intM == 0)));
+  ensures (_C_10 : ((\at(a_0.intM,Old) == 0) ==> (\at(a_0,Old).intM == 0)));
 {  
-   {  (C_9 : f(a_0));
+   {  (_C_9 : f(a_0));
       
       (return ())
    }
@@ -536,11 +536,11 @@ let f_ensures_az =
   (init:
   try
    begin
-     (if ((neq_int_ (integer_of_int32 (C_3: ((safe_acc_ !intP_intM_a_1) a)))) (0))
+     (if ((neq_int_ (integer_of_int32 ((safe_acc_ !intP_intM_a_1) a))) (0))
      then
-      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = a in
-      (((safe_upd_ intP_intM_a_1) jessie_<somenum>) jessie_<somenum>))) else void);
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+      (let _jessie_<somenum> = a in
+      (((safe_upd_ intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>))) else void);
     (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: (integer_of_int32(select(intP_intM_a_1, a)) = (0))) }
 
@@ -552,11 +552,12 @@ let f_ensures_default =
   (init:
   try
    begin
-     (if ((neq_int_ (integer_of_int32 (C_3: ((safe_acc_ !intP_intM_a_1) a)))) (0))
+     (if ((neq_int_ (integer_of_int32 ((safe_acc_ !intP_intM_a_1) a))) (0))
      then
-      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = a in (((safe_upd_ intP_intM_a_1) jessie_<somenum>) jessie_<somenum>)))
-     else void); (raise Return); (raise Return) end with Return -> void end)
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+      (let _jessie_<somenum> = a in
+      (((safe_upd_ intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>))) else void);
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let f_safety =
@@ -567,14 +568,13 @@ let f_safety =
   (init:
   try
    begin
-     (if ((neq_int_ (integer_of_int32 (C_3:
-                                      (JC_<somenum>:
-                                      (((acc_ intP_a_1_alloc_table) !intP_intM_a_1) a))))) (0))
+     (if ((neq_int_ (integer_of_int32 (JC_<somenum>:
+                                      (((acc_ intP_a_1_alloc_table) !intP_intM_a_1) a)))) (0))
      then
-      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = a in
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+      (let _jessie_<somenum> = a in
       (JC_<somenum>:
-      ((((upd_ intP_a_1_alloc_table) intP_intM_a_1) jessie_<somenum>) jessie_<somenum>))))
+      ((((upd_ intP_a_1_alloc_table) intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>))))
      else void); (raise Return); (raise Return) end with Return -> void end)
   { true }
 
@@ -585,11 +585,10 @@ let g_ensures_default =
     and (JC_<somenum>: ge_int(offset_max(intP_a_0_2_alloc_table, a_0), (0))))) }
   (init:
   try
-   (C_9:
    begin
-     (let jessie_<somenum> = a_0 in
-     (JC_<somenum>: (((f jessie_<somenum>) intP_intM_a_0_2) intP_a_0_2_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = a_0 in
+     (JC_<somenum>: (((f _jessie_<somenum>) intP_intM_a_0_2) intP_a_0_2_alloc_table)));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((integer_of_int32(select(intP_intM_a_0_2@, a_0)) = (0)) ->
      (integer_of_int32(select(intP_intM_a_0_2, a_0)) = (0)))) }
@@ -601,12 +600,11 @@ let g_safety =
     and (JC_<somenum>: ge_int(offset_max(intP_a_0_2_alloc_table, a_0), (0))))) }
   (init:
   try
-   (C_9:
    begin
-     (let jessie_<somenum> = a_0 in
+     (let _jessie_<somenum> = a_0 in
      (JC_<somenum>:
-     (((f_requires jessie_<somenum>) intP_intM_a_0_2) intP_a_0_2_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+     (((f_requires _jessie_<somenum>) intP_intM_a_0_2) intP_a_0_2_alloc_table)));
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C roux_labels.jessie --quiet -f roux_labels.makefile project
@@ -622,12 +620,12 @@ why --project [...] why/roux_labels.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/roux_labels_po7.why">
-      <location file = "PPCHOME/tests/jessie/roux_labels.jessie/roux_labels.jc" line = "63" begin = "13" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/roux_labels.jessie/roux_labels.jc" line = "63" begin = "14" end = "20"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/roux_labels_po8.why">
-      <location file = "PPCHOME/tests/jessie/roux_labels.jessie/roux_labels.jc" line = "63" begin = "13" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/roux_labels.jessie/roux_labels.jc" line = "63" begin = "14" end = "20"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

@@ -1,3 +1,16 @@
+version 2.34, March 16, 2014
+==========================
+
+  o [Jessie/Frama-C plugin] Compatible with release Neon of Frama-C
+  o [Jessie] Fixed some issues with labels (partly contributed by
+    Mikhail Mandrykin)
+  o [Jessie] Fixed various issues with Why3 output (contributed by
+    Mikhail Mandrykin)
+  o [Krakatoa] Fixed a bug in the order of logic definitions
+  o [Jessie] Synchronized with Why3 0.83, to benefit from all Why3
+    recent improvements, in particular regarding efficiency, both in
+    term of execution time and memory comsumption. 
+
 version 2.33, April 20, 2013
 ==========================
 
@@ -573,7 +586,7 @@ version 1.40, December 19th, 2003
 ================================
   o disabled C support: C is now supported by an external tool, Caduceus
     (to be released soon with Why)
-  o support for polymorphism (contribution by C. Marché)
+  o support for polymorphism (contribution by C. Marchï¿½)
   o syntax of haRVey output now uses integer constants, predefined
     arithmetic operators, and does not change capitalization of
     variables, to be conform with the syntax of the next version of
@@ -688,7 +701,7 @@ version 0.72, November 12th, 2002
     (customized with --ocaml-annot, --ocaml-ext, --output)
   o quantifier "exists" added to the logic syntax
   o manual: added lexical conventions
-  o examples: added maximum sort (by Sylvain Boulmé)
+  o examples: added maximum sort (by Sylvain Boulmï¿½)
   o new feature: exceptions (beta test)
 
 version 0.71, October 15th, 2002 (bug fix release)

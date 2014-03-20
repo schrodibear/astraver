@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only roux3.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD roux3.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only roux3.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/roux3.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir roux3.jessie
 [jessie] File roux3.jessie/roux3.jc written.
@@ -47,7 +47,7 @@ type voidP = [voidP]
 
 unit f(intP[..] p)
 behavior default:
-  ensures (C_1 : true);
+  ensures (_C_1 : true);
 {  
    {  
       (return ())
@@ -56,16 +56,16 @@ behavior default:
 
 int32 g()
 behavior default:
-  ensures (C_7 : true);
+  ensures (_C_7 : true);
 {  
    (var intP[0] i);
    
-   {  (C_3 : (i = (C_2 : (new intP[1]))));
-      (C_4 : f(i));
+   {  (_C_3 : (i = (_C_2 : (new intP[1]))));
+      (_C_4 : f(i));
       
-      {  (C_5 : (free(i)));
+      {  (_C_5 : (free(i)));
          
-         (return (C_6 : i.intM))
+         (return (_C_6 : i.intM))
       }
    }
 }
@@ -518,17 +518,13 @@ let g_ensures_default =
      (let intP_i_2_alloc_table = ref (any_alloc_table void) in
      (let intP_intM_i_2 = (any_memory void) in
      (let i = ref (any_pointer void) in
-     (C_3:
-     (C_4:
-     (C_5:
      begin
-       (let jessie_<somenum> =
-       (i := (C_2:
-             (JC_<somenum>:
-             (((alloc_struct_intP (1)) intP_i_2_alloc_table) intP_i_2_tag_table)))) in
-       void); (let jessie_<somenum> = !i in (JC_<somenum>: (f jessie_<somenum>)));
+       (let _jessie_<somenum> =
+       (i := (JC_<somenum>:
+             (((alloc_struct_intP (1)) intP_i_2_alloc_table) intP_i_2_tag_table))) in
+       void); (let _jessie_<somenum> = !i in (JC_<somenum>: (f _jessie_<somenum>)));
       ((safe_free_parameter intP_i_2_alloc_table) !i);
-      (return := (C_6: ((safe_acc_ intP_intM_i_2) !i))); (raise Return) end)))))));
+      (return := ((safe_acc_ intP_intM_i_2) !i)); (raise Return) end))));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let g_safety =
@@ -542,22 +538,18 @@ let g_safety =
      (let intP_i_2_alloc_table = ref (any_alloc_table void) in
      (let intP_intM_i_2 = (any_memory void) in
      (let i = ref (any_pointer void) in
-     (C_3:
-     (C_4:
-     (C_5:
      begin
-       (let jessie_<somenum> =
-       (i := (let jessie_<somenum> =
-             (C_2:
+       (let _jessie_<somenum> =
+       (i := (let _jessie_<somenum> =
              (JC_<somenum>:
-             (((alloc_struct_intP_requires (1)) intP_i_2_alloc_table) intP_i_2_tag_table))) in
+             (((alloc_struct_intP_requires (1)) intP_i_2_alloc_table) intP_i_2_tag_table)) in
              (JC_<somenum>:
              (assert
-             { ge_int(offset_max(intP_i_2_alloc_table, jessie_<somenum>), (0)) };
-             jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = !i in (JC_<somenum>: (f_requires jessie_<somenum>)));
+             { ge_int(offset_max(intP_i_2_alloc_table, _jessie_<somenum>), (0)) };
+             _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> = !i in (JC_<somenum>: (f_requires _jessie_<somenum>)));
       ((free_parameter intP_i_2_alloc_table) !i);
-      (return := (C_6: ((safe_acc_ intP_intM_i_2) !i))); (raise Return) end)))))));
+      (return := ((safe_acc_ intP_intM_i_2) !i)); (raise Return) end))));
     absurd  end with Return -> !return end)) { true }
 
 
@@ -573,11 +565,11 @@ why --project [...] why/roux3.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/roux3_po2.why">
-      <location file = "why/roux3.why" line = "484" begin = "15" end = "70"/>
+      <location file = "why/roux3.why" line = "476" begin = "15" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/roux3_po3.why">
-      <location file = "why/roux3.why" line = "487" begin = "7" end = "47"/>
+      <location file = "why/roux3.why" line = "479" begin = "7" end = "47"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

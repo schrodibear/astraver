@@ -2,21 +2,21 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2011                                               *)
+(*  Copyright (C) 2002-2014                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
-(*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
-(*    Yannick MOY, Univ. Paris-sud 11                                     *)
-(*    Romain BARDOU, Univ. Paris-sud 11                                   *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud                   *)
+(*    Claude MARCHE, INRIA & Univ. Paris-sud                              *)
+(*    Yannick MOY, Univ. Paris-sud                                        *)
+(*    Romain BARDOU, Univ. Paris-sud                                      *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
-(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
-(*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
-(*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
-(*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
-(*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  *)
-(*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       *)
+(*    Thierry HUBERT, Univ. Paris-sud  (former Caduceus front-end)        *)
+(*    Nicolas ROUSSET, Univ. Paris-sud (on Jessie & Krakatoa)             *)
+(*    Ali AYAD, CNRS & CEA Saclay      (floating-point support)           *)
+(*    Sylvie BOLDO, INRIA              (floating-point support)           *)
+(*    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     *)
+(*    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Lesser General Public            *)
@@ -171,8 +171,9 @@ type expr_node =
   | Absurd
   | Loc of Lexing.position * expr
 
-and expr =
+and expr = 
     { expr_labels : string list;
+      expr_loc_labels : string list;
       expr_node : expr_node;
     }
 
@@ -182,7 +183,9 @@ val mk_expr : expr_node -> expr
 val mk_var : string -> expr
 val void : expr
 
-val make_block : string list -> expr list -> expr
+(*
+val make_block : string list -> string list -> expr list -> expr
+*)
 
 val fprintf_expr : Format.formatter -> expr -> unit
 
@@ -234,7 +237,8 @@ type goal_kind = KAxiom | KLemma | KGoal
 
 type why_decl =
   | Param of bool * why_id * why_type         (*r parameter in why *)
-  | Def of why_id * expr               (*r global let in why *)
+  | Def of why_id * bool *     (* "diverges" flag *)
+            expr               (*r global let in why *)
   | Logic of bool * why_id * (string * logic_type) list * logic_type    (*r logic decl in why *)
   | Predicate of bool * why_id * (string * logic_type) list * assertion
   | Inductive of bool * why_id * (string * logic_type) list *

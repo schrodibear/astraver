@@ -2,21 +2,21 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2011                                               *)
+(*  Copyright (C) 2002-2014                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
-(*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
-(*    Yannick MOY, Univ. Paris-sud 11                                     *)
-(*    Romain BARDOU, Univ. Paris-sud 11                                   *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud                   *)
+(*    Claude MARCHE, INRIA & Univ. Paris-sud                              *)
+(*    Yannick MOY, Univ. Paris-sud                                        *)
+(*    Romain BARDOU, Univ. Paris-sud                                      *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
-(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
-(*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
-(*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
-(*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
-(*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  *)
-(*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       *)
+(*    Thierry HUBERT, Univ. Paris-sud  (former Caduceus front-end)        *)
+(*    Nicolas ROUSSET, Univ. Paris-sud (on Jessie & Krakatoa)             *)
+(*    Ali AYAD, CNRS & CEA Saclay      (floating-point support)           *)
+(*    Sylvie BOLDO, INRIA              (floating-point support)           *)
+(*    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     *)
+(*    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Lesser General Public            *)
@@ -389,6 +389,7 @@ let create_logic_fun pos fi =
     List.map (create_var pos) fi.java_logic_info_parameters;
   nfi.jc_logic_info_labels <-
     List.map tr_logic_label fi.java_logic_info_labels;
+  (* eprintf "adding symbol %s in logics_table@." fi.java_logic_info_name; *)
   Hashtbl.add logics_table fi.java_logic_info_tag nfi;
   nfi
 
@@ -1466,7 +1467,8 @@ let rec expr ?(reg=false) e =
 	  let si = get_class ci.constr_info_class.class_info_name in
 	  let ty = JCTpointer(JCtag(si, []), Some num_zero, Some num_zero) in
 	  let this = Jc_pervasives.var ~formal:true ty "this" in
-	  let tt = Jc_pervasives.var ~formal:true Jc_pervasives.unit_type "tt" in
+	  let tt = Jc_pervasives.var ~formal:true
+            Jc_pervasives.unit_type "_tt" in
 	  let args =
             (mkvar ~name:(var_name this) ()) :: List.map expr args in
           mklet

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
   name="Z3"
@@ -35,10 +35,12 @@
     locfile="../Termination.java"
     loclnum="36" loccnumb="9" loccnume="14"
     expl="VC for _Termination_loop1_ensures_default"
-    sum="acd4b1eafb772c42f210e0da7600f104"
+    sum="0772e248b54a2aa65825c6a5d5e00644"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method loop1, default behavior"/>
     <label
@@ -73,7 +75,7 @@
     locfile="../Termination.java"
     loclnum="36" loccnumb="9" loccnume="14"
     expl="VC for _Termination_loop1_safety"
-    sum="ae767d79771b3ce3d70a80e14229bc3e"
+    sum="4c8ea539ea965675b28848833640f32c"
     proved="true"
     expanded="false"
     shape="ainfix &lt;V3V2Aainfix &lt;=c0V2Iainfix =V3ainfix -V2c1FIainfix &gt;V2c0FIavalid_struct_TerminationV0c0c0V1FF">
@@ -111,10 +113,12 @@
     locfile="../Termination.java"
     loclnum="41" loccnumb="9" loccnume="14"
     expl="VC for _Termination_loop2_ensures_default"
-    sum="acd4b1eafb772c42f210e0da7600f104"
+    sum="0772e248b54a2aa65825c6a5d5e00644"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method loop2, default behavior"/>
     <label
@@ -149,7 +153,7 @@
     locfile="../Termination.java"
     loclnum="41" loccnumb="9" loccnume="14"
     expl="VC for _Termination_loop2_safety"
-    sum="21335c0388718b0d93bfa88db504e04c"
+    sum="1bd8c35866f094e58909f5c61ebb5b42"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -c100V3ainfix -c100V2Aainfix &lt;=c0ainfix -c100V2Iainfix =V3ainfix +V2c1FIainfix &lt;V2c100FIavalid_struct_TerminationV0c0c0V1FF">
@@ -187,10 +191,12 @@
     locfile="../Termination.java"
     loclnum="47" loccnumb="8" loccnume="13"
     expl="VC for _Termination_loop3_ensures_default"
-    sum="6daf159c5367107f91db82e27df0764f"
+    sum="8ea5479ae446559dd564119df6ea7b5f"
     proved="true"
     expanded="false"
-    shape="iainfix &gt;V2c0ainfix &lt;=V3c100Aainfix &lt;=c0V3Iainfix =V3ainfix -V2c1Fainfix =V4c0Iainfix =V4V2FIainfix &lt;=V2c100Aainfix &lt;=c0V2FAainfix &lt;=c100c100Aainfix &lt;=c0c100Iavalid_struct_TerminationV0c0c0V1FF">
+    shape="iainfix =V3c0Iainfix =V3V2Fainfix &lt;=V4c100Aainfix &lt;=c0V4Iainfix =V4ainfix -V2c1Fainfix &gt;V2c0Iainfix &lt;=V2c100Aainfix &lt;=c0V2FAainfix &lt;=c100c100Aainfix &lt;=c0c100Iavalid_struct_TerminationV0c0c0V1FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method loop3, default behavior"/>
     <label
@@ -225,7 +231,7 @@
     locfile="../Termination.java"
     loclnum="47" loccnumb="8" loccnume="13"
     expl="VC for _Termination_loop3_safety"
-    sum="601a93a767479f365cd3207857e69982"
+    sum="a0a0555e33577f6246b9a16b0b542ed8"
     proved="true"
     expanded="false"
     shape="ainfix &lt;V3V2Aainfix &lt;=c0V2Iainfix =V3ainfix -V2c1FIainfix &gt;V2c0Iainfix &lt;=V2c100Aainfix &lt;=c0V2FIavalid_struct_TerminationV0c0c0V1FF">
@@ -260,13 +266,15 @@
    </goal>
    <goal
     name="WP_parameter cons_Termination_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Termination_ensures_default"
-    sum="acd4b1eafb772c42f210e0da7600f104"
+    sum="0772e248b54a2aa65825c6a5d5e00644"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Termination, default behavior"/>
     <label
@@ -298,10 +306,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Termination_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Termination_safety"
-    sum="acd4b1eafb772c42f210e0da7600f104"
+    sum="0772e248b54a2aa65825c6a5d5e00644"
     proved="true"
     expanded="false"
     shape="t">

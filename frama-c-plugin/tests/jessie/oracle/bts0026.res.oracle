@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0026.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0026.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0026.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0026.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0026.jessie
 [jessie] File bts0026.jessie/bts0026.jc written.
@@ -35,12 +35,12 @@ type voidP = [voidP]
 integer f1(integer n_1)
 behavior b1:
   assumes (n_1 > 0);
-  ensures (C_3 : true);
+  ensures (_C_3 : true);
 behavior b2:
   assumes (n_1 <= 0);
-  ensures (C_4 : true);
+  ensures (_C_4 : true);
 behavior default:
-  ensures (C_5 : true);
+  ensures (_C_5 : true);
 {  
    (check (disjoint_behaviors : (! ((n_1 > 0) && (n_1 <= 0)))));
    
@@ -48,22 +48,22 @@ behavior default:
    
    (var integer __retres);
    
-   {  (C_2 : (__retres = (C_1 : (n_1 + 1))));
+   {  (_C_2 : (__retres = (_C_1 : (n_1 + 1))));
       
       (return __retres)
    }
 }
 
 integer f2(integer x, integer y)
-  requires (C_11 : ((x * y) < 0));
+  requires (_C_11 : ((x * y) < 0));
 behavior default:
-  ensures (C_8 : true);
+  ensures (_C_8 : true);
 behavior b1:
   assumes (x >= 0);
-  ensures (C_9 : true);
+  ensures (_C_9 : true);
 behavior b2:
   assumes (y >= 0);
-  ensures (C_10 : true);
+  ensures (_C_10 : true);
 {  
    (check (disjoint_behaviors : (! ((x >= 0) && (y >= 0)))));
    
@@ -71,7 +71,7 @@ behavior b2:
    
    (var integer __retres_0);
    
-   {  (C_7 : (__retres_0 = (C_6 : (x + y))));
+   {  (_C_7 : (__retres_0 = (_C_6 : (x + y))));
       
       (return __retres_0)
    }
@@ -336,10 +336,9 @@ let f1_ensures_b1 =
   try
    begin
      (let __retres = ref (any_int void) in
-     (C_2:
      begin
-       (let jessie_<somenum> = (__retres := (C_1: ((add_int n_1) (1)))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+       (let _jessie_<somenum> = (__retres := ((add_int n_1) (1))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { (JC_<somenum>: true) }
 
 let f1_ensures_b2 =
@@ -350,10 +349,9 @@ let f1_ensures_b2 =
   try
    begin
      (let __retres = ref (any_int void) in
-     (C_2:
      begin
-       (let jessie_<somenum> = (__retres := (C_1: ((add_int n_1) (1)))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+       (let _jessie_<somenum> = (__retres := ((add_int n_1) (1))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { (JC_<somenum>: true) }
 
 let f1_ensures_default =
@@ -366,10 +364,9 @@ let f1_ensures_default =
      (check { (JC_<somenum>: (not (gt_int(n_1, (0)) and le_int(n_1, (0))))) }; void);
     (check { (JC_<somenum>: (le_int(n_1, (0)) or gt_int(n_1, (0)))) }; void);
     (let __retres = ref (any_int void) in
-    (C_2:
     begin
-      (let jessie_<somenum> = (__retres := (C_1: ((add_int n_1) (1)))) in void);
-     (return := !__retres); (raise Return) end)); absurd  end with Return ->
+      (let _jessie_<somenum> = (__retres := ((add_int n_1) (1))) in void);
+     (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { (JC_<somenum>: true) }
 
 let f1_safety =
@@ -380,10 +377,9 @@ let f1_safety =
   try
    begin
      (let __retres = ref (any_int void) in
-     (C_2:
      begin
-       (let jessie_<somenum> = (__retres := (C_1: ((add_int n_1) (1)))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+       (let _jessie_<somenum> = (__retres := ((add_int n_1) (1))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { true }
 
 let f2_ensures_b1 =
@@ -394,10 +390,9 @@ let f2_ensures_b1 =
   try
    begin
      (let __retres_0 = ref (any_int void) in
-     (C_7:
      begin
-       (let jessie_<somenum> = (__retres_0 := (C_6: ((add_int x_0) y))) in void);
-      (return := !__retres_0); (raise Return) end)); absurd  end with
+       (let _jessie_<somenum> = (__retres_0 := ((add_int x_0) y)) in void);
+      (return := !__retres_0); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let f2_ensures_b2 =
@@ -408,10 +403,9 @@ let f2_ensures_b2 =
   try
    begin
      (let __retres_0 = ref (any_int void) in
-     (C_7:
      begin
-       (let jessie_<somenum> = (__retres_0 := (C_6: ((add_int x_0) y))) in void);
-      (return := !__retres_0); (raise Return) end)); absurd  end with
+       (let _jessie_<somenum> = (__retres_0 := ((add_int x_0) y)) in void);
+      (return := !__retres_0); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let f2_ensures_default =
@@ -424,11 +418,10 @@ let f2_ensures_default =
      (check { (JC_<somenum>: (not (ge_int(x_0, (0)) and ge_int(y, (0))))) }; void);
     (check { (JC_<somenum>: (ge_int(y, (0)) or ge_int(x_0, (0)))) }; void);
     (let __retres_0 = ref (any_int void) in
-    (C_7:
     begin
-      (let jessie_<somenum> = (__retres_0 := (C_6: ((add_int x_0) y))) in void);
-     (return := !__retres_0); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+      (let _jessie_<somenum> = (__retres_0 := ((add_int x_0) y)) in void);
+     (return := !__retres_0); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: true) }
 
 let f2_safety =
  fun (x_0 : int) (y : int) ->
@@ -438,10 +431,9 @@ let f2_safety =
   try
    begin
      (let __retres_0 = ref (any_int void) in
-     (C_7:
      begin
-       (let jessie_<somenum> = (__retres_0 := (C_6: ((add_int x_0) y))) in void);
-      (return := !__retres_0); (raise Return) end)); absurd  end with
+       (let _jessie_<somenum> = (__retres_0 := ((add_int x_0) y)) in void);
+      (return := !__retres_0); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 

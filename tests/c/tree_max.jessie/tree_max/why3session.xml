@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
-  name="CVC3"
-  version="2.4.1"/>
+  name="CVC4"
+  version="1.3"/>
  <prover
   id="3"
   name="Z3"
@@ -43,10 +43,12 @@
     locfile="../../tree_max.c"
     loclnum="62" loccnumb="4" loccnume="12"
     expl="VC for tree_max_ensures_default"
-    sum="e0335ad6a603500654bf1ff2fa276508"
+    sum="212e5c9435b7d031d7913118779ee7a9"
     proved="true"
     expanded="true"
-    shape="iainfix =V7aTrueiainfix =V14aTrueainfix &gt;=ainteger_of_int32V20ainteger_of_int32V21IamemV21V0V4V3V2FAamemV20V0V4V3V2Iainfix =V20V19FIainfix =V19V18FIainfix =ainteger_of_int32V18amaxainteger_of_int32V12ainteger_of_int32V17FIainfix =V17V16FIainfix &gt;=ainteger_of_int32V16ainteger_of_int32V22IamemV22V15V4V3V2FAamemV16V15V4V3V2FLaselectV4V0ainfix &gt;=ainteger_of_int32V23ainteger_of_int32V24IamemV24V0V4V3V2FAamemV23V0V4V3V2Iainfix =V23V12FIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFLaselectV4V0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V25IamemV25V8V4V3V2FAamemV9V8V4V3V2FLaselectV3V0iainfix =V27aTrueainfix &gt;=ainteger_of_int32V33ainteger_of_int32V34IamemV34V0V4V3V2FAamemV33V0V4V3V2Iainfix =V33V32FIainfix =V32V31FIainfix =ainteger_of_int32V31amaxainteger_of_int32V5ainteger_of_int32V30FIainfix =V30V29FIainfix &gt;=ainteger_of_int32V29ainteger_of_int32V35IamemV35V28V4V3V2FAamemV29V28V4V3V2FLaselectV4V0ainfix &gt;=ainteger_of_int32V36ainteger_of_int32V37IamemV37V0V4V3V2FAamemV36V0V4V3V2Iainfix =V36V5FIiainfix =V27aTrueainfix =V26anullNainfix =V26anullFLaselectV4V0Iiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
+    shape="iiainfix &gt;=ainteger_of_int32V12ainteger_of_int32V13IamemV13V0V4V3V2FAamemV12V0V4V3V2Iainfix =V12V5Fainfix &gt;=ainteger_of_int32V19ainteger_of_int32V20IamemV20V0V4V3V2FAamemV19V0V4V3V2Iainfix =V19V18FIainfix =V18V17FIainfix =ainteger_of_int32V17amaxainteger_of_int32V5ainteger_of_int32V16FIainfix =V16V15FIainfix &gt;=ainteger_of_int32V15ainteger_of_int32V21IamemV21V14V4V3V2FAamemV15V14V4V3V2FLaselectV4V0ainfix =V11aTrueIiainfix =V10V9Nainfix =V10V9ainfix =V11aTrueFLaselectV4V0Lanulliainfix &gt;=ainteger_of_int32V30ainteger_of_int32V31IamemV31V0V4V3V2FAamemV30V0V4V3V2Iainfix =V30V26Fainfix &gt;=ainteger_of_int32V37ainteger_of_int32V38IamemV38V0V4V3V2FAamemV37V0V4V3V2Iainfix =V37V36FIainfix =V36V35FIainfix =ainteger_of_int32V35amaxainteger_of_int32V26ainteger_of_int32V34FIainfix =V34V33FIainfix &gt;=ainteger_of_int32V33ainteger_of_int32V39IamemV39V32V4V3V2FAamemV33V32V4V3V2FLaselectV4V0ainfix =V29aTrueIiainfix =V28V27Nainfix =V28V27ainfix =V29aTrueFLaselectV4V0LanullIainfix =V26V25FIainfix =ainteger_of_int32V25amaxainteger_of_int32V5ainteger_of_int32V24FIainfix =V24V23FIainfix &gt;=ainteger_of_int32V23ainteger_of_int32V40IamemV40V22V4V3V2FAamemV23V22V4V3V2FLaselectV3V0ainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFLaselectV3V0LanullIainfix =V5aselectV2V0FIavalid_treeV0V1V4V3ANainfix =V0anullF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function tree_max, default behavior"/>
     <label
@@ -60,32 +62,18 @@
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="1. postcondition"
-      sum="07ebd8a6ccb9042f08894fc872feb922"
+      sum="93c08102efffefeddc8cb5e02d82e712"
       proved="true"
-      expanded="true"
-      shape="ainfix &gt;=ainteger_of_int32V20ainteger_of_int32V21IamemV21V0V4V3V2FAamemV20V0V4V3V2Iainfix =V20V19FIainfix =V19V18FIainfix =ainteger_of_int32V18amaxainteger_of_int32V12ainteger_of_int32V17FIainfix =V17V16FIainfix &gt;=ainteger_of_int32V16ainteger_of_int32V22IamemV22V15V4V3V2FAamemV16V15V4V3V2FLaselectV4V0Iainfix =V14aTrueIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFLaselectV4V0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V23IamemV23V8V4V3V2FAamemV9V8V4V3V2FLaselectV3V0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      expanded="false"
+      shape="postconditionainfix &gt;=ainteger_of_int32V22ainteger_of_int32V23IamemV23V0V4V3V2FAamemV22V0V4V3V2Iainfix =V22V21FIainfix =V21V20FIainfix =ainteger_of_int32V20amaxainteger_of_int32V13ainteger_of_int32V19FIainfix =V19V18FIainfix &gt;=ainteger_of_int32V18ainteger_of_int32V24IamemV24V17V4V3V2FAamemV18V17V4V3V2FLaselectV4V0Iainfix =V16aTrueIiainfix =V15V14Nainfix =V15V14ainfix =V16aTrueFLaselectV4V0LanullIainfix =V13V12FIainfix =ainteger_of_int32V12amaxainteger_of_int32V5ainteger_of_int32V11FIainfix =V11V10FIainfix &gt;=ainteger_of_int32V10ainteger_of_int32V25IamemV25V9V4V3V2FAamemV10V9V4V3V2FLaselectV3V0Iainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFLaselectV3V0LanullIainfix =V5aselectV2V0FIavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, default behavior"/>
       <label
        name="expl:VC for tree_max_ensures_default"/>
       <proof
-       prover="0"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.39"/>
-      </proof>
-      <proof
        prover="1"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.18"/>
-      </proof>
-      <proof
-       prover="2"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -93,6 +81,14 @@
        <result status="valid" time="0.26"/>
       </proof>
       <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.12"/>
+      </proof>
+      <proof
        prover="3"
        timelimit="5"
        memlimit="1000"
@@ -100,24 +96,18 @@
        archived="false">
        <result status="valid" time="0.08"/>
       </proof>
-      <proof
-       prover="4"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="3.92"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_ensures_default.2"
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="2. postcondition"
-      sum="a64b638829edef8959202aa3bd8ee94e"
+      sum="c45544530f8e1d5cdcf2869f1db8960b"
       proved="true"
       expanded="false"
-      shape="ainfix &gt;=ainteger_of_int32V15ainteger_of_int32V16IamemV16V0V4V3V2FAamemV15V0V4V3V2Iainfix =V15V12FIainfix =V14aTrueNIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFLaselectV4V0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V17IamemV17V8V4V3V2FAamemV9V8V4V3V2FLaselectV3V0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="postconditionainfix &gt;=ainteger_of_int32V17ainteger_of_int32V18IamemV18V0V4V3V2FAamemV17V0V4V3V2Iainfix =V17V13FINainfix =V16aTrueIiainfix =V15V14Nainfix =V15V14ainfix =V16aTrueFLaselectV4V0LanullIainfix =V13V12FIainfix =ainteger_of_int32V12amaxainteger_of_int32V5ainteger_of_int32V11FIainfix =V11V10FIainfix &gt;=ainteger_of_int32V10ainteger_of_int32V19IamemV19V9V4V3V2FAamemV10V9V4V3V2FLaselectV3V0Iainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFLaselectV3V0LanullIainfix =V5aselectV2V0FIavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, default behavior"/>
       <label
@@ -128,7 +118,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.88"/>
+       <result status="valid" time="0.50"/>
       </proof>
       <proof
        prover="1"
@@ -144,7 +134,47 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter tree_max_ensures_default.3"
+      locfile="../../tree_max.c"
+      loclnum="62" loccnumb="4" loccnume="12"
+      expl="3. postcondition"
+      sum="11606307da696e24584e2ee11396ccaf"
+      proved="true"
+      expanded="false"
+      shape="postconditionainfix &gt;=ainteger_of_int32V17ainteger_of_int32V18IamemV18V0V4V3V2FAamemV17V0V4V3V2Iainfix =V17V16FIainfix =V16V15FIainfix =ainteger_of_int32V15amaxainteger_of_int32V5ainteger_of_int32V14FIainfix =V14V13FIainfix &gt;=ainteger_of_int32V13ainteger_of_int32V19IamemV19V12V4V3V2FAamemV13V12V4V3V2FLaselectV4V0Iainfix =V11aTrueIiainfix =V10V9Nainfix =V10V9ainfix =V11aTrueFLaselectV4V0LanullINainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFLaselectV3V0LanullIainfix =V5aselectV2V0FIavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
+      <label
+       name="expl:Function tree_max, default behavior"/>
+      <label
+       name="expl:VC for tree_max_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.52"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.18"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.09"/>
       </proof>
       <proof
        prover="3"
@@ -154,175 +184,18 @@
        archived="false">
        <result status="valid" time="0.08"/>
       </proof>
-      <proof
-       prover="4"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="3.78"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter tree_max_ensures_default.3"
-      locfile="../../tree_max.c"
-      loclnum="62" loccnumb="4" loccnume="12"
-      expl="3. postcondition"
-      sum="d45d50a0fad26c7b7cec41f3211be203"
-      proved="true"
-      expanded="true"
-      shape="ainfix &gt;=ainteger_of_int32V15ainteger_of_int32V16IamemV16V0V4V3V2FAamemV15V0V4V3V2Iainfix =V15V14FIainfix =V14V13FIainfix =ainteger_of_int32V13amaxainteger_of_int32V5ainteger_of_int32V12FIainfix =V12V11FIainfix &gt;=ainteger_of_int32V11ainteger_of_int32V17IamemV17V10V4V3V2FAamemV11V10V4V3V2FLaselectV4V0Iainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFLaselectV4V0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
-      <label
-       name="expl:Function tree_max, default behavior"/>
-      <label
-       name="expl:VC for tree_max_ensures_default"/>
-      <proof
-       prover="0"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.95"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.12"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="3.43"/>
-      </proof>
-      <transf
-       name="split_goal"
-       proved="true"
-       expanded="true">
-       <goal
-        name="WP_parameter tree_max_ensures_default.3.1"
-        locfile="../../tree_max.c"
-        loclnum="62" loccnumb="4" loccnume="12"
-        expl="1."
-        sum="90bcb5235e386321c43f87325336e8dc"
-        proved="true"
-        expanded="true"
-        shape="amemV15V0V4V3V2Iainfix =V15V14FIainfix =V14V13FIainfix =ainteger_of_int32V13amaxainteger_of_int32V5ainteger_of_int32V12FIainfix =V12V11FIainfix &gt;=ainteger_of_int32V11ainteger_of_int32V16IamemV16V10V4V3V2FAamemV11V10V4V3V2FLaselectV4V0Iainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFLaselectV4V0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
-        <label
-         name="expl:Function tree_max, default behavior"/>
-        <label
-         name="expl:VC for tree_max_ensures_default"/>
-        <proof
-         prover="0"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.08"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="3"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.08"/>
-        </proof>
-        <proof
-         prover="2"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.15"/>
-        </proof>
-        <proof
-         prover="3"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.06"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="3"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.06"/>
-        </proof>
-       </goal>
-       <goal
-        name="WP_parameter tree_max_ensures_default.3.2"
-        locfile="../../tree_max.c"
-        loclnum="62" loccnumb="4" loccnume="12"
-        expl="2."
-        sum="081d3261d4fabb90f0581530f0db19bc"
-        proved="true"
-        expanded="true"
-        shape="ainfix &gt;=ainteger_of_int32V15ainteger_of_int32V16IamemV16V0V4V3V2FIainfix =V15V14FIainfix =V14V13FIainfix =ainteger_of_int32V13amaxainteger_of_int32V5ainteger_of_int32V12FIainfix =V12V11FIainfix &gt;=ainteger_of_int32V11ainteger_of_int32V17IamemV17V10V4V3V2FAamemV11V10V4V3V2FLaselectV4V0Iainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFLaselectV4V0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
-        <label
-         name="expl:Function tree_max, default behavior"/>
-        <label
-         name="expl:VC for tree_max_ensures_default"/>
-        <proof
-         prover="0"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.39"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="3"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.06"/>
-        </proof>
-        <proof
-         prover="2"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.09"/>
-        </proof>
-        <proof
-         prover="3"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.07"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="3"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="3.24"/>
-        </proof>
-       </goal>
-      </transf>
      </goal>
      <goal
       name="WP_parameter tree_max_ensures_default.4"
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="4. postcondition"
-      sum="6ca507ec640866d438591cde30c5bcd1"
+      sum="856b55325181861fabc068458028ff6c"
       proved="true"
-      expanded="true"
-      shape="ainfix &gt;=ainteger_of_int32V10ainteger_of_int32V11IamemV11V0V4V3V2FAamemV10V0V4V3V2Iainfix =V10V5FIainfix =V9aTrueNIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFLaselectV4V0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      expanded="false"
+      shape="postconditionainfix &gt;=ainteger_of_int32V12ainteger_of_int32V13IamemV13V0V4V3V2FAamemV12V0V4V3V2Iainfix =V12V5FINainfix =V11aTrueIiainfix =V10V9Nainfix =V10V9ainfix =V11aTrueFLaselectV4V0LanullINainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFLaselectV3V0LanullIainfix =V5aselectV2V0FIavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, default behavior"/>
       <label
@@ -335,95 +208,22 @@
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
-      <transf
-       name="split_goal"
-       proved="true"
-       expanded="true">
-       <goal
-        name="WP_parameter tree_max_ensures_default.4.1"
-        locfile="../../tree_max.c"
-        loclnum="62" loccnumb="4" loccnume="12"
-        expl="1."
-        sum="f929519861f71caf3e70303454fc1fb5"
-        proved="true"
-        expanded="false"
-        shape="amemV10V0V4V3V2Iainfix =V10V5FIainfix =V9aTrueNIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFLaselectV4V0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
-        <label
-         name="expl:Function tree_max, default behavior"/>
-        <label
-         name="expl:VC for tree_max_ensures_default"/>
-        <proof
-         prover="0"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.02"/>
-        </proof>
-        <proof
-         prover="2"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.06"/>
-        </proof>
-        <proof
-         prover="3"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.06"/>
-        </proof>
-       </goal>
-       <goal
-        name="WP_parameter tree_max_ensures_default.4.2"
-        locfile="../../tree_max.c"
-        loclnum="62" loccnumb="4" loccnume="12"
-        expl="2."
-        sum="a718e31794530efbc91f8ef027a58a06"
-        proved="true"
-        expanded="false"
-        shape="ainfix &gt;=ainteger_of_int32V10ainteger_of_int32V11IamemV11V0V4V3V2FIainfix =V10V5FIainfix =V9aTrueNIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFLaselectV4V0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
-        <label
-         name="expl:Function tree_max, default behavior"/>
-        <label
-         name="expl:VC for tree_max_ensures_default"/>
-        <proof
-         prover="0"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.19"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="3"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.05"/>
-        </proof>
-        <proof
-         prover="2"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.08"/>
-        </proof>
-        <proof
-         prover="3"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.29"/>
-        </proof>
-       </goal>
-      </transf>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
      </goal>
     </transf>
    </goal>
@@ -432,10 +232,12 @@
     locfile="../../tree_max.c"
     loclnum="62" loccnumb="4" loccnume="12"
     expl="VC for tree_max_safety"
-    sum="6d8d2dd9cccd1f13b18c0ae82ab9f0c0"
+    sum="46fc6a24dcab1510e5389c97695e826f"
     proved="true"
     expanded="true"
-    shape="iainfix =V7aTrueavalid_treeV15V1V4V3Aainfix =V15anullNLaselectV4V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V14aTrueIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFAainfix =anullanullOainfix =V13anullOasame_blockV13anullLaselectV4V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V16IamemV16V8V4V3V2FAamemV9V8V4V3V2FAavalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0avalid_treeV19V1V4V3Aainfix =V19anullNLaselectV4V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V18aTrueIiainfix =V18aTrueainfix =V17anullNainfix =V17anullFAainfix =anullanullOainfix =V17anullOasame_blockV17anullLaselectV4V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iiainfix =V7aTrueainfix =V6anullNainfix =V6anullFAainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FAainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+    shape="iavalid_treeV12V1V4V3ANainfix =V12anullLaselectV4V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V11aTrueIiainfix =V10V9Nainfix =V10V9ainfix =V11aTrueFAainfix =V9anullOainfix =V10anullOasame_blockV10V9LaselectV4V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Lanullavalid_treeV21V1V4V3ANainfix =V21anullLaselectV4V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V20aTrueIiainfix =V19V18Nainfix =V19V18ainfix =V20aTrueFAainfix =V18anullOainfix =V19anullOasame_blockV19V18LaselectV4V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V17V16FIainfix =ainteger_of_int32V16amaxainteger_of_int32V5ainteger_of_int32V15FIainfix =V15V14FIainfix &gt;=ainteger_of_int32V14ainteger_of_int32V22IamemV22V13V4V3V2FAamemV14V13V4V3V2FAavalid_treeV13V1V4V3ANainfix =V13anullLaselectV3V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0ainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFAainfix =V6anullOainfix =V7anullOasame_blockV7V6LaselectV3V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V5aselectV2V0FAainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3ANainfix =V0anullF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function tree_max, Safety"/>
     <label
@@ -449,10 +251,12 @@
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="1. pointer dereference"
-      sum="3fd938ad4eb686efa936c1930e3dc0ff"
+      sum="aadb0c41ab51866c8473e6cc06276429"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="pointer dereferenceainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, Safety"/>
       <label
@@ -467,11 +271,11 @@
       </proof>
       <proof
        prover="1"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="2"
@@ -503,10 +307,12 @@
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="2. pointer dereference"
-      sum="7109c0bc411276e62da9fce7b2b500e0"
+      sum="c736f06efed3f075834a0cd9b69496b5"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="pointer dereferenceainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, Safety"/>
       <label
@@ -520,12 +326,20 @@
        <result status="valid" time="0.01"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="3"
@@ -549,10 +363,12 @@
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="3. precondition"
-      sum="a0b9a323f4ee9fb04061ff734c88142c"
+      sum="ff58be98d6090e32ec763b98d9c3be49"
       proved="true"
       expanded="false"
-      shape="ainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="preconditionainfix =V6anullOainfix =V7anullOasame_blockV7V6LaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, Safety"/>
       <label
@@ -566,12 +382,20 @@
        <result status="valid" time="0.01"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="3"
@@ -595,10 +419,12 @@
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="4. pointer dereference"
-      sum="e9ba54f4574f579e1d3b9b09144f53d5"
+      sum="4f2adacc09cb9318fbde0e4a3e05d0d0"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="pointer dereferenceainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFIainfix =V6anullOainfix =V7anullOasame_blockV7V6LaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, Safety"/>
       <label
@@ -609,7 +435,15 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="2"
@@ -617,7 +451,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="3"
@@ -641,10 +475,12 @@
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="5. precondition for call"
-      sum="ca1a3c4d284def699a445d983f904f57"
+      sum="1be9c7ecec511bf7cd93dfd2a5384103"
       proved="true"
       expanded="false"
-      shape="avalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="precondition for callavalid_treeV9V1V4V3ANainfix =V9anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFIainfix =V6anullOainfix =V7anullOasame_blockV7V6LaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, Safety"/>
       <label
@@ -658,12 +494,20 @@
        <result status="valid" time="0.04"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.10"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.09"/>
       </proof>
       <proof
        prover="3"
@@ -687,10 +531,12 @@
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="6. pointer dereference"
-      sum="592e1dc1ef9af5383d43838c98ed9492"
+      sum="98c459f7997e14a9ea5f1107de7daa72"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V13IamemV13V8V4V3V2FAamemV9V8V4V3V2FIavalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="pointer dereferenceainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V13V12FIainfix =ainteger_of_int32V12amaxainteger_of_int32V5ainteger_of_int32V11FIainfix =V11V10FIainfix &gt;=ainteger_of_int32V10ainteger_of_int32V15IamemV15V9V4V3V2FAamemV10V9V4V3V2FIavalid_treeV9V1V4V3ANainfix =V9anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFIainfix =V6anullOainfix =V7anullOasame_blockV7V6LaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, Safety"/>
       <label
@@ -701,7 +547,15 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="2"
@@ -717,7 +571,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="4"
@@ -733,10 +587,12 @@
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="7. precondition"
-      sum="1be49daef2dc16ebe21d19fb342f8b90"
+      sum="363da5b66d2bcdc46fa039e90c0ef9e3"
       proved="true"
       expanded="false"
-      shape="ainfix =anullanullOainfix =V13anullOasame_blockV13anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V14IamemV14V8V4V3V2FAamemV9V8V4V3V2FIavalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="preconditionainfix =V14anullOainfix =V15anullOasame_blockV15V14LaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V13V12FIainfix =ainteger_of_int32V12amaxainteger_of_int32V5ainteger_of_int32V11FIainfix =V11V10FIainfix &gt;=ainteger_of_int32V10ainteger_of_int32V16IamemV16V9V4V3V2FAamemV10V9V4V3V2FIavalid_treeV9V1V4V3ANainfix =V9anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFIainfix =V6anullOainfix =V7anullOasame_blockV7V6LaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, Safety"/>
       <label
@@ -747,7 +603,15 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.01"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
       </proof>
       <proof
        prover="2"
@@ -779,10 +643,12 @@
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="8. pointer dereference"
-      sum="45b1ac41ff57359ca1dc6b6108115770"
+      sum="40be05ae704047dcf6d1ca2bf9f80bde"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V14aTrueIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFIainfix =anullanullOainfix =V13anullOasame_blockV13anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V15IamemV15V8V4V3V2FAamemV9V8V4V3V2FIavalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="pointer dereferenceainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V16aTrueIiainfix =V15V14Nainfix =V15V14ainfix =V16aTrueFIainfix =V14anullOainfix =V15anullOasame_blockV15V14LaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V13V12FIainfix =ainteger_of_int32V12amaxainteger_of_int32V5ainteger_of_int32V11FIainfix =V11V10FIainfix &gt;=ainteger_of_int32V10ainteger_of_int32V17IamemV17V9V4V3V2FAamemV10V9V4V3V2FIavalid_treeV9V1V4V3ANainfix =V9anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFIainfix =V6anullOainfix =V7anullOasame_blockV7V6LaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, Safety"/>
       <label
@@ -796,12 +662,20 @@
        <result status="valid" time="0.03"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="3"
@@ -825,10 +699,12 @@
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="9. precondition for call"
-      sum="cafc9669d49f98987207d373cb9f4987"
+      sum="a028aad40a458aead5abf9e8c1f9d364"
       proved="true"
       expanded="false"
-      shape="avalid_treeV15V1V4V3Aainfix =V15anullNLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V14aTrueIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFIainfix =anullanullOainfix =V13anullOasame_blockV13anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V16IamemV16V8V4V3V2FAamemV9V8V4V3V2FIavalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="precondition for callavalid_treeV17V1V4V3ANainfix =V17anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V16aTrueIiainfix =V15V14Nainfix =V15V14ainfix =V16aTrueFIainfix =V14anullOainfix =V15anullOasame_blockV15V14LaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V13V12FIainfix =ainteger_of_int32V12amaxainteger_of_int32V5ainteger_of_int32V11FIainfix =V11V10FIainfix &gt;=ainteger_of_int32V10ainteger_of_int32V18IamemV18V9V4V3V2FAamemV10V9V4V3V2FIavalid_treeV9V1V4V3ANainfix =V9anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFIainfix =V6anullOainfix =V7anullOasame_blockV7V6LaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, Safety"/>
       <label
@@ -839,15 +715,15 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.72"/>
+       <result status="valid" time="0.16"/>
       </proof>
       <proof
        prover="1"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.14"/>
       </proof>
       <proof
        prover="2"
@@ -855,7 +731,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.14"/>
+       <result status="valid" time="0.10"/>
       </proof>
       <proof
        prover="3"
@@ -879,10 +755,12 @@
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="10. pointer dereference"
-      sum="5696aba6b1d8679c38c37255a637cd3c"
+      sum="63c87692f6a98c45ccb583d69f6a1f49"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="pointer dereferenceainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullINainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFIainfix =V6anullOainfix =V7anullOasame_blockV7V6LaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, Safety"/>
       <label
@@ -893,7 +771,15 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.01"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="2"
@@ -901,7 +787,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.07"/>
       </proof>
       <proof
        prover="3"
@@ -925,10 +811,12 @@
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="11. precondition"
-      sum="c8bab99ffc1a77ca84f3c20aba90b49e"
+      sum="480854488b0464cb5b37ad1c7e34cc77"
       proved="true"
       expanded="false"
-      shape="ainfix =anullanullOainfix =V8anullOasame_blockV8anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="preconditionainfix =V9anullOainfix =V10anullOasame_blockV10V9LaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullINainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFIainfix =V6anullOainfix =V7anullOasame_blockV7V6LaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, Safety"/>
       <label
@@ -939,7 +827,15 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="2"
@@ -947,7 +843,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="3"
@@ -971,10 +867,12 @@
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="12. pointer dereference"
-      sum="a57fc890532f5906ffed5192398df82f"
+      sum="be797312eefa0f061fc8a2c19a3fd64b"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFIainfix =anullanullOainfix =V8anullOasame_blockV8anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="pointer dereferenceainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V11aTrueIiainfix =V10V9Nainfix =V10V9ainfix =V11aTrueFIainfix =V9anullOainfix =V10anullOasame_blockV10V9LaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullINainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFIainfix =V6anullOainfix =V7anullOasame_blockV7V6LaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, Safety"/>
       <label
@@ -985,15 +883,15 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.01"/>
       </proof>
       <proof
        prover="1"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.07"/>
       </proof>
       <proof
        prover="2"
@@ -1001,7 +899,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.09"/>
       </proof>
       <proof
        prover="3"
@@ -1009,7 +907,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="4"
@@ -1025,10 +923,12 @@
       locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="13. precondition for call"
-      sum="a330219402aa228aacde63335e520d07"
+      sum="03d86563efbff9a8c9b279fb98ccf716"
       proved="true"
       expanded="false"
-      shape="avalid_treeV10V1V4V3Aainfix =V10anullNLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFIainfix =anullanullOainfix =V8anullOasame_blockV8anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="precondition for callavalid_treeV12V1V4V3ANainfix =V12anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V11aTrueIiainfix =V10V9Nainfix =V10V9ainfix =V11aTrueFIainfix =V9anullOainfix =V10anullOasame_blockV10V9LaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullINainfix =V8aTrueIiainfix =V7V6Nainfix =V7V6ainfix =V8aTrueFIainfix =V6anullOainfix =V7anullOasame_blockV7V6LaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0LanullIainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3ANainfix =V0anullF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function tree_max, Safety"/>
       <label
@@ -1043,11 +943,11 @@
       </proof>
       <proof
        prover="1"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.10"/>
       </proof>
       <proof
        prover="2"
@@ -1055,7 +955,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="3"

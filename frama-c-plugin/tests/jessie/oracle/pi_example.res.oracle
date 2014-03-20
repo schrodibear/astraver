@@ -1,6 +1,6 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only pi_example.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD pi_example.c"
-pi_example.c:11:[kernel] warning: Floating-point constant 3.14 is not represented exactly. Will use 0x1.91eb851eb851fp1. See documentation for option -warn-decimal-float
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only pi_example.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/pi_example.c"
+PPCHOME/tests/jessie/pi_example.c:11:[kernel] warning: Floating-point constant 3.14 is not represented exactly. Will use 0x1.91eb851eb851fp1. See documentation for option -warn-decimal-float
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir pi_example.jessie
 [jessie] File pi_example.jessie/pi_example.jc written.
@@ -39,36 +39,36 @@ tag voidP = {
 type voidP = [voidP]
 
 float Perimeter1(float radius)
-  requires (C_8 : ((radius :> real) > 0.0));
-  requires (C_7 : ((radius :> real) <= 3.1391));
+  requires (_C_8 : ((radius :> real) > 0.0));
+  requires (_C_7 : ((radius :> real) <= 3.1391));
 behavior default:
-  ensures (C_6 : (\real_abs(((\result :> real) -
-                              ((3.141592654 * 2.0) *
-                                (\at(radius,Old) :> real)))) <=
-                   0.01));
+  ensures (_C_6 : (\real_abs(((\result :> real) -
+                               ((3.141592654 * 2.0) *
+                                 (\at(radius,Old) :> real)))) <=
+                    0.01));
 {  
    (var float __retres);
    
-   {  (C_5 : (__retres = (C_4 : ((C_3 : ((C_2 : ((3.14 :> double) *
-                                                  (2.0 :> double))) *
-                                          (C_1 : (radius :> double)))) :> float))));
+   {  (_C_5 : (__retres = (_C_4 : ((_C_3 : ((_C_2 : ((3.14 :> double) *
+                                                      (2.0 :> double))) *
+                                             (_C_1 : (radius :> double)))) :> float))));
       
       (return __retres)
    }
 }
 
 float Perimeter2(float radius_0)
-  requires (C_12 : ((C_13 : (0.0 <= (radius_0 :> real))) &&
-                     (C_14 : ((radius_0 :> real) <= 3.1392))));
+  requires (_C_12 : ((_C_13 : (0.0 <= (radius_0 :> real))) &&
+                      (_C_14 : ((radius_0 :> real) <= 3.1392))));
 behavior default:
-  ensures (C_11 : (\real_abs(((\result :> real) -
-                               ((3.141592654 * 2.0) *
-                                 (\at(radius_0,Old) :> real)))) <=
-                    0.01));
+  ensures (_C_11 : (\real_abs(((\result :> real) -
+                                ((3.141592654 * 2.0) *
+                                  (\at(radius_0,Old) :> real)))) <=
+                     0.01));
 {  
    (var float __retres_0);
    
-   {  (C_10 : (__retres_0 = (C_9 : ((6.28 :> float) * radius_0))));
+   {  (_C_10 : (__retres_0 = (_C_9 : ((6.28 :> float) * radius_0))));
       
       (return __retres_0)
    }
@@ -83,31 +83,31 @@ lemma le_mul :
           ((x * z) <= (y * t)))))))
 
 float Perimeter3(float radius_1)
-  requires (C_20 : ((C_21 : (0.0 <= (radius_1 :> real))) &&
-                     (C_22 : ((radius_1 :> real) <= 3.0))));
+  requires (_C_20 : ((_C_21 : (0.0 <= (radius_1 :> real))) &&
+                      (_C_22 : ((radius_1 :> real) <= 3.0))));
 behavior default:
-  ensures (C_19 : (\real_abs(((\result :> real) -
-                               ((\pi * 2.0) * (\at(radius_1,Old) :> real)))) <=
-                    0.01));
+  ensures (_C_19 : (\real_abs(((\result :> real) -
+                                ((\pi * 2.0) * (\at(radius_1,Old) :> real)))) <=
+                     0.01));
 {  
    (var float r);
    
-   {  (C_16 : (r = (C_15 : ((6.28 :> float) * radius_1))));
+   {  (_C_16 : (r = (_C_15 : ((6.28 :> float) * radius_1))));
       
       {  
-         (assert for default: (C_17 : (jessie : (\real_abs(((r :> real) -
-                                                             (6.28 *
-                                                               (radius_1 :> real)))) <=
-                                                  0x1p-19))));
+         (assert for default: (_C_17 : (jessie : (\real_abs(((r :> real) -
+                                                              (6.28 *
+                                                                (radius_1 :> real)))) <=
+                                                   0x1p-19))));
          ()
       };
       
       {  
-         (assert for default: (C_18 : (jessie : (\real_abs(((6.28 *
-                                                              (radius_1 :> real)) -
-                                                             ((\pi * 2.0) *
-                                                               (radius_1 :> real)))) <=
-                                                  0x1p-4))));
+         (assert for default: (_C_18 : (jessie : (\real_abs(((6.28 *
+                                                               (radius_1 :> real)) -
+                                                              ((\pi * 2.0) *
+                                                                (radius_1 :> real)))) <=
+                                                   0x1p-4))));
          ()
       };
       
@@ -505,21 +505,16 @@ let Perimeter1_ensures_default =
   try
    begin
      (let __retres = ref (any_single void) in
-     (C_5:
      begin
-       (let jessie_<somenum> =
-       (__retres := (C_4:
-                    ((single_of_double_safe nearest_even) (C_3:
-                                                          (JC_<somenum>:
+       (let _jessie_<somenum> =
+       (__retres := ((single_of_double_safe nearest_even) (JC_<somenum>:
                                                           (((mul_double_safe nearest_even) 
-                                                            (C_2:
                                                             (JC_<somenum>:
                                                             (((mul_double_safe nearest_even) 
                                                               ((double_of_real_safe nearest_even) 3.14)) 
-                                                             (double_of_real_exact 2.0))))) 
-                                                           (C_1:
-                                                           (double_of_single radius)))))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+                                                             (double_of_real_exact 2.0)))) 
+                                                           (double_of_single radius))))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     le_real(abs_real(sub_real(single_value(result),
@@ -537,23 +532,18 @@ let Perimeter1_safety =
   try
    begin
      (let __retres = ref (any_single void) in
-     (C_5:
      begin
-       (let jessie_<somenum> =
-       (__retres := (C_4:
-                    (JC_<somenum>:
-                    ((single_of_double nearest_even) (C_3:
-                                                     (JC_<somenum>:
+       (let _jessie_<somenum> =
+       (__retres := (JC_<somenum>:
+                    ((single_of_double nearest_even) (JC_<somenum>:
                                                      (((mul_double nearest_even) 
-                                                       (C_2:
                                                        (JC_<somenum>:
                                                        (((mul_double nearest_even) 
                                                          (JC_<somenum>:
                                                          ((double_of_real nearest_even) 3.14))) 
-                                                        (double_of_real_exact 2.0))))) 
-                                                      (C_1:
-                                                      (double_of_single radius))))))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+                                                        (double_of_real_exact 2.0)))) 
+                                                      (double_of_single radius)))))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 let Perimeter2_ensures_default =
@@ -566,13 +556,11 @@ let Perimeter2_ensures_default =
   try
    begin
      (let __retres_0 = ref (any_single void) in
-     (C_10:
      begin
-       (let jessie_<somenum> =
-       (__retres_0 := (C_9:
-                      (JC_<somenum>:
-                      (((mul_single_safe nearest_even) ((single_of_real_safe nearest_even) 6.28)) radius_0)))) in
-       void); (return := !__retres_0); (raise Return) end)); absurd  end with
+       (let _jessie_<somenum> =
+       (__retres_0 := (JC_<somenum>:
+                      (((mul_single_safe nearest_even) ((single_of_real_safe nearest_even) 6.28)) radius_0))) in
+       void); (return := !__retres_0); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     le_real(abs_real(sub_real(single_value(result),
@@ -590,14 +578,12 @@ let Perimeter2_safety =
   try
    begin
      (let __retres_0 = ref (any_single void) in
-     (C_10:
      begin
-       (let jessie_<somenum> =
-       (__retres_0 := (C_9:
-                      (JC_<somenum>:
+       (let _jessie_<somenum> =
+       (__retres_0 := (JC_<somenum>:
                       (((mul_single nearest_even) (JC_<somenum>:
-                                                  ((single_of_real nearest_even) 6.28))) radius_0)))) in
-       void); (return := !__retres_0); (raise Return) end)); absurd  end with
+                                                  ((single_of_real nearest_even) 6.28))) radius_0))) in
+       void); (return := !__retres_0); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 let Perimeter3_ensures_default =
@@ -610,12 +596,10 @@ let Perimeter3_ensures_default =
   try
    begin
      (let r = ref (any_single void) in
-     (C_16:
      begin
-       (let jessie_<somenum> =
-       (r := (C_15:
-             (JC_<somenum>:
-             (((mul_single_safe nearest_even) ((single_of_real_safe nearest_even) 6.28)) radius_1)))) in
+       (let _jessie_<somenum> =
+       (r := (JC_<somenum>:
+             (((mul_single_safe nearest_even) ((single_of_real_safe nearest_even) 6.28)) radius_1))) in
        void);
       (assert
       { (JC_<somenum>:
@@ -626,7 +610,7 @@ let Perimeter3_ensures_default =
       { (JC_<somenum>:
         le_real(abs_real(sub_real(mul_real(6.28, single_value(radius_1)),
                          mul_real(mul_real(pi, 2.0), single_value(radius_1)))),
-        0x1p-4)) }; void); void; (return := !r); (raise Return) end)); 
+        0x1p-4)) }; void); void; (return := !r); (raise Return) end); 
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
     le_real(abs_real(sub_real(single_value(result),
@@ -643,13 +627,11 @@ let Perimeter3_safety =
   try
    begin
      (let r = ref (any_single void) in
-     (C_16:
      begin
-       (let jessie_<somenum> =
-       (r := (C_15:
-             (JC_<somenum>:
+       (let _jessie_<somenum> =
+       (r := (JC_<somenum>:
              (((mul_single nearest_even) (JC_<somenum>:
-                                         ((single_of_real nearest_even) 6.28))) radius_1)))) in
+                                         ((single_of_real nearest_even) 6.28))) radius_1))) in
        void);
       [ { } unit reads r
         { (JC_<somenum>:
@@ -661,7 +643,7 @@ let Perimeter3_safety =
           le_real(abs_real(sub_real(mul_real(6.28, single_value(radius_1)),
                            mul_real(mul_real(pi, 2.0),
                            single_value(radius_1)))),
-          0x1p-4)) } ]; void; (return := !r); (raise Return) end)); absurd 
+          0x1p-4)) } ]; void; (return := !r); (raise Return) end); absurd 
    end with Return -> !return end)) { true }
 
 
@@ -696,7 +678,7 @@ why --project [...] why/pi_example.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/pi_example_po13.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.jessie/pi_example.jc" line = "88" begin = "28" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/pi_example.jessie/pi_example.jc" line = "88" begin = "30" end = "45"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -717,7 +699,7 @@ text = "FPOverflow"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/pi_example_po8.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.jessie/pi_example.jc" line = "64" begin = "36" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/pi_example.jessie/pi_example.jc" line = "64" begin = "38" end = "53"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -738,7 +720,7 @@ text = "FPOverflow"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/pi_example_po3.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.jessie/pi_example.jc" line = "45" begin = "49" end = "65"/>
+      <location file = "PPCHOME/tests/jessie/pi_example.jessie/pi_example.jc" line = "45" begin = "53" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0329.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0329.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0329.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0329.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0329.jessie
 [jessie] File bts0329.jessie/bts0329.jc written.
@@ -38,19 +38,19 @@ tag voidP = {
 type voidP = [voidP]
 
 float cosine1a(float x)
-  requires (C_8 : ((C_9 : (\real_abs(\single_exact(x)) <= 0x1p-5)) &&
-                    (C_10 : (\single_round_error(x) <= 0x1p-20))));
+  requires (_C_8 : ((_C_9 : (\real_abs(\single_exact(x)) <= 0x1p-5)) &&
+                     (_C_10 : (\single_round_error(x) <= 0x1p-20))));
 behavior default:
-  ensures (C_5 : ((C_6 : (\real_abs((\single_exact(\result) -
-                                      \cos(\single_exact(\at(x,Old))))) <=
-                           0x1p-24)) &&
-                   (C_7 : (\single_round_error(\result) <=
-                            (\single_round_error(\at(x,Old)) + 0x3p-24)))));
+  ensures (_C_5 : ((_C_6 : (\real_abs((\single_exact(\result) -
+                                        \cos(\single_exact(\at(x,Old))))) <=
+                             0x1p-24)) &&
+                    (_C_7 : (\single_round_error(\result) <=
+                              (\single_round_error(\at(x,Old)) + 0x3p-24)))));
 {  
    (var float r);
    
-   {  (C_4 : (r = (C_3 : ((1.0 :> float) -
-                           (C_2 : ((C_1 : (x * x)) * (0.5 :> float)))))));
+   {  (_C_4 : (r = (_C_3 : ((1.0 :> float) -
+                             (_C_2 : ((_C_1 : (x * x)) * (0.5 :> float)))))));
       
       (return r)
    }
@@ -399,19 +399,15 @@ let cosine1a_ensures_default =
   try
    begin
      (let r = ref (any_single void) in
-     (C_4:
      begin
-       (let jessie_<somenum> =
-       (r := (C_3:
-             (JC_<somenum>:
+       (let _jessie_<somenum> =
+       (r := (JC_<somenum>:
              (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-              (C_2:
               (JC_<somenum>:
-              (((mul_single_safe nearest_even) (C_1:
-                                               (JC_<somenum>:
-                                               (((mul_single_safe nearest_even) x_0) x_0)))) 
-               (single_of_real_exact 0.5)))))))) in void); (return := !r);
-      (raise Return) end)); absurd  end with Return -> !return end))
+              (((mul_single_safe nearest_even) (JC_<somenum>:
+                                               (((mul_single_safe nearest_even) x_0) x_0))) 
+               (single_of_real_exact 0.5)))))) in void); (return := !r);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_0)))),
@@ -430,20 +426,15 @@ let cosine1a_safety =
   try
    begin
      (let r = ref (any_single void) in
-     (C_4:
      begin
-       (let jessie_<somenum> =
-       (r := (C_3:
-             (JC_<somenum>:
+       (let _jessie_<somenum> =
+       (r := (JC_<somenum>:
              (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-              (C_2:
               (JC_<somenum>:
-              (((mul_single nearest_even) (C_1:
-                                          (JC_<somenum>:
-                                          (((mul_single nearest_even) x_0) x_0)))) 
-               (single_of_real_exact 0.5)))))))) in void); (return := !r);
-      (raise Return) end)); absurd  end with Return -> !return end)) 
-  { true }
+              (((mul_single nearest_even) (JC_<somenum>:
+                                          (((mul_single nearest_even) x_0) x_0))) 
+               (single_of_real_exact 0.5)))))) in void); (return := !r);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0329.jessie --quiet -f bts0329.makefile project

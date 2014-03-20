@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only jeannin.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD jeannin.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only jeannin.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/jeannin.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir jeannin.jessie
 [jessie] File jeannin.jessie/jeannin.jc written.
@@ -46,9 +46,9 @@ int32 b;
 unit f()
 behavior default:
   assigns b;
-  ensures (C_2 : true);
+  ensures (_C_2 : true);
 {  
-   {  (C_1 : (a = 1));
+   {  (_C_1 : (a = 1));
       
       (return ())
    }
@@ -409,10 +409,9 @@ let f_ensures_default =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_1:
    begin
-     (let jessie_<somenum> = (a := (safe_int32_of_integer_ (1))) in void);
-    (raise Return); (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = (a := (safe_int32_of_integer_ (1))) in void);
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: (a = a@)) }
 
 let f_safety =
@@ -420,10 +419,9 @@ let f_safety =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_1:
    begin
-     (let jessie_<somenum> = (a := (safe_int32_of_integer_ (1))) in void);
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+     (let _jessie_<somenum> = (a := (safe_int32_of_integer_ (1))) in void);
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C jeannin.jessie --quiet -f jeannin.makefile project

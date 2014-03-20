@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0332.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0332.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0332.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0332.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0332.jessie
 [jessie] File bts0332.jessie/bts0332.jc written.
@@ -46,14 +46,14 @@ tag voidP = {
 type voidP = [voidP]
 
 unit f(intP[..] p, int32 e, int32 t, int32 f_0, int32 r)
-  requires (C_9 : ((C_10 : (\offset_min(p) <= 0)) &&
-                    (C_11 : (\offset_max(p) >= 0))));
+  requires (_C_9 : ((_C_10 : (\offset_min(p) <= 0)) &&
+                     (_C_11 : (\offset_max(p) >= 0))));
 behavior default:
   assigns p.intM;
-  ensures (C_8 : ((\at(p,Old).intM != 0) ==
-                   (((\at(e,Old) != 0) ||
-                      ((\at(t,Old) != 0) && (\at(f_0,Old) != 0))) &&
-                     ((\at(t,Old) != 0) || (\at(f_0,Old) != 0)))));
+  ensures (_C_8 : ((\at(p,Old).intM != 0) ==
+                    (((\at(e,Old) != 0) ||
+                       ((\at(t,Old) != 0) && (\at(f_0,Old) != 0))) &&
+                      ((\at(t,Old) != 0) || (\at(f_0,Old) != 0)))));
 {  
    (var int32 tmp);
    
@@ -61,17 +61,17 @@ behavior default:
       {  
          {  (if (e != 0) then 
             (goto _LOR) else (if (t != 0) then (if (f_0 != 0) then 
-                                               (goto _LOR) else (C_2 : (tmp = 0))) else 
-                             (C_1 : (tmp = 0))));
+                                               (goto _LOR) else (_C_2 : (tmp = 0))) else 
+                             (_C_1 : (tmp = 0))));
             
             (goto _LOR_0);
             (_LOR : ());
-            (if (t != 0) then (C_5 : (tmp = 1)) else (if (f_0 != 0) then 
-                                                     (C_4 : (tmp = 1)) else 
-                                                     (C_3 : (tmp = 0))));
+            (if (t != 0) then (_C_5 : (tmp = 1)) else (if (f_0 != 0) then 
+                                                      (_C_4 : (tmp = 1)) else 
+                                                      (_C_3 : (tmp = 0))));
             (_LOR_0 : ())
          };
-         (C_7 : ((C_6 : p.intM) = tmp))
+         (_C_7 : ((_C_6 : p.intM) = tmp))
       };
       
       (return ())
@@ -552,7 +552,7 @@ let f_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        begin
          try
           begin
@@ -566,37 +566,30 @@ let f_ensures_default =
                  (if ((neq_int_ (integer_of_int32 f_0)) (0))
                  then (raise (Goto__LOR_exc void))
                  else
-                  (let jessie_<somenum> =
-                  (C_2: (tmp := (safe_int32_of_integer_ (0)))) in void))
+                  (let _jessie_<somenum> = (tmp := (safe_int32_of_integer_ (0))) in
+                  void))
                 else
-                 (let jessie_<somenum> =
-                 (C_1: (tmp := (safe_int32_of_integer_ (0)))) in void)));
-              (raise (Goto__LOR_0_exc void)); (raise (Goto__LOR_exc void))
-             end with Goto__LOR_exc jessie_<somenum> ->
-             (let jessie_<somenum> =
-             (_LOR:
+                 (let _jessie_<somenum> = (tmp := (safe_int32_of_integer_ (0))) in
+                 void))); (raise (Goto__LOR_0_exc void));
+              (raise (Goto__LOR_exc void)) end with
+             Goto__LOR_exc _jessie_<somenum> ->
+             (let _jessie_<somenum> =
              begin
                void;
               (if ((neq_int_ (integer_of_int32 t)) (0))
-              then
-               (C_5: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
+              then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
               else
                (if ((neq_int_ (integer_of_int32 f_0)) (0))
-               then
-                (C_4:
-                begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-               else
-                (C_3:
-                begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)))
-             end) in void) end; (raise (Goto__LOR_0_exc void)) end with
-          Goto__LOR_0_exc jessie_<somenum> -> (_LOR_0: void) end;
-        (C_7:
-        (let jessie_<somenum> = !tmp in
+               then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
+               else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
+             end in void) end; (raise (Goto__LOR_0_exc void)) end with
+          Goto__LOR_0_exc _jessie_<somenum> -> void end;
+        (let _jessie_<somenum> = !tmp in
         begin
-          (let jessie_<somenum> = p in
-          (((safe_upd_ intP_intM_p_1) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
-       end in void); (raise Return) end); (raise Return) end with Return ->
-   void end)
+          (let _jessie_<somenum> = p in
+          (((safe_upd_ intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>)); _jessie_<somenum>
+        end) end in void); (raise Return) end); (raise Return) end with
+   Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      (neq_int_bool(integer_of_int32(select(intP_intM_p_1, p)), (0)) = 
@@ -619,7 +612,7 @@ let f_safety =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        begin
          try
           begin
@@ -633,37 +626,30 @@ let f_safety =
                  (if ((neq_int_ (integer_of_int32 f_0)) (0))
                  then (raise (Goto__LOR_exc void))
                  else
-                  (let jessie_<somenum> =
-                  (C_2: (tmp := (safe_int32_of_integer_ (0)))) in void))
+                  (let _jessie_<somenum> = (tmp := (safe_int32_of_integer_ (0))) in
+                  void))
                 else
-                 (let jessie_<somenum> =
-                 (C_1: (tmp := (safe_int32_of_integer_ (0)))) in void)));
-              (raise (Goto__LOR_0_exc void)); (raise (Goto__LOR_exc void))
-             end with Goto__LOR_exc jessie_<somenum> ->
-             (let jessie_<somenum> =
-             (_LOR:
+                 (let _jessie_<somenum> = (tmp := (safe_int32_of_integer_ (0))) in
+                 void))); (raise (Goto__LOR_0_exc void));
+              (raise (Goto__LOR_exc void)) end with
+             Goto__LOR_exc _jessie_<somenum> ->
+             (let _jessie_<somenum> =
              begin
                void;
               (if ((neq_int_ (integer_of_int32 t)) (0))
-              then
-               (C_5: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
+              then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
               else
                (if ((neq_int_ (integer_of_int32 f_0)) (0))
-               then
-                (C_4:
-                begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-               else
-                (C_3:
-                begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)))
-             end) in void) end; (raise (Goto__LOR_0_exc void)) end with
-          Goto__LOR_0_exc jessie_<somenum> -> (_LOR_0: void) end;
-        (C_7:
-        (let jessie_<somenum> = !tmp in
+               then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
+               else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
+             end in void) end; (raise (Goto__LOR_0_exc void)) end with
+          Goto__LOR_0_exc _jessie_<somenum> -> void end;
+        (let _jessie_<somenum> = !tmp in
         begin
-          (let jessie_<somenum> = p in
+          (let _jessie_<somenum> = p in
           (JC_<somenum>:
-          ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) jessie_<somenum>) jessie_<somenum>)));
-         jessie_<somenum> end)) end in void); (raise Return) end); (raise Return)
+          ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>)));
+         _jessie_<somenum> end) end in void); (raise Return) end); (raise Return)
    end with Return -> void end) { true }
 
 
@@ -684,12 +670,12 @@ why --project [...] why/bts0332.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0332_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0332.jessie/bts0332.jc" line = "68" begin = "17" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/bts0332.jessie/bts0332.jc" line = "68" begin = "18" end = "39"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0332_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0332.jessie/bts0332.jc" line = "68" begin = "17" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/bts0332.jessie/bts0332.jc" line = "68" begin = "18" end = "39"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

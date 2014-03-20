@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0071.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0071.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0071.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0071.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0071.jessie
 [jessie] File bts0071.jessie/bts0071.jc written.
@@ -41,14 +41,14 @@ type voidP = [voidP]
 
 unit myfun(int32 p)
 behavior default:
-  ensures (C_4 : true);
+  ensures (_C_4 : true);
 {  
-   {  (C_1 : (p = 1));
+   {  (_C_1 : (p = 1));
       (Mylabel : ());
-      (C_2 : (p = 2));
+      (_C_2 : (p = 2));
       
       {  
-         (assert for default: (C_3 : (jessie : (\at(p,Mylabel) == (p - 1)))));
+         (assert for default: (_C_3 : (jessie : (\at(p,Mylabel) == (p - 1)))));
          ()
       };
       
@@ -408,18 +408,17 @@ let myfun_ensures_default =
   (let mutable_p = ref p in
   (init:
   try
-   (C_1:
-   (Mylabel:
-   (C_2:
    begin
-     (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
-    void;
-    (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (2))) in void);
-    (assert
-    { (JC_<somenum>:
-      (integer_of_int32(mutable_p@Mylabel) = sub_int(integer_of_int32(mutable_p),
-                                             (1)))) }; void); void;
-    (raise Return); (raise Return) end))) with Return -> void end))
+     (let _jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
+    (Mylabel:
+    begin
+      void;
+     (let _jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (2))) in void);
+     (assert
+     { (JC_<somenum>:
+       (integer_of_int32(mutable_p@Mylabel) = sub_int(integer_of_int32(mutable_p),
+                                              (1)))) }; void); void;
+     (raise Return); (raise Return) end) end with Return -> void end))
   { (JC_<somenum>: true) }
 
 let myfun_safety =
@@ -428,18 +427,18 @@ let myfun_safety =
   (let mutable_p = ref p in
   (init:
   try
-   (C_1:
-   (Mylabel:
-   (C_2:
    begin
-     (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
-    void;
-    (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (2))) in void);
-    [ { } unit reads mutable_p
-      { (JC_<somenum>:
-        (integer_of_int32(mutable_p@Mylabel) = sub_int(integer_of_int32(mutable_p),
-                                               (1)))) } ]; void;
-    (raise Return); (raise Return) end))) with Return -> void end)) { true }
+     (let _jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
+    (Mylabel:
+    begin
+      void;
+     (let _jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (2))) in void);
+     [ { } unit reads mutable_p
+       { (JC_<somenum>:
+         (integer_of_int32(mutable_p@Mylabel) = sub_int(integer_of_int32(mutable_p),
+                                                (1)))) } ]; void;
+     (raise Return); (raise Return) end) end with Return -> void end))
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0071.jessie --quiet -f bts0071.makefile project

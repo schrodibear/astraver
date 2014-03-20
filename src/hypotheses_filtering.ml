@@ -2,21 +2,21 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2011                                               *)
+(*  Copyright (C) 2002-2014                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
-(*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
-(*    Yannick MOY, Univ. Paris-sud 11                                     *)
-(*    Romain BARDOU, Univ. Paris-sud 11                                   *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud                   *)
+(*    Claude MARCHE, INRIA & Univ. Paris-sud                              *)
+(*    Yannick MOY, Univ. Paris-sud                                        *)
+(*    Romain BARDOU, Univ. Paris-sud                                      *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
-(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
-(*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
-(*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
-(*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
-(*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  *)
-(*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       *)
+(*    Thierry HUBERT, Univ. Paris-sud  (former Caduceus front-end)        *)
+(*    Nicolas ROUSSET, Univ. Paris-sud (on Jessie & Krakatoa)             *)
+(*    Ali AYAD, CNRS & CEA Saclay      (floating-point support)           *)
+(*    Sylvie BOLDO, INRIA              (floating-point support)           *)
+(*    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     *)
+(*    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Lesser General Public            *)
@@ -2126,9 +2126,9 @@ let filter_acc_variables l concl_rep selection_strategy pred_symb =
             if debug then
 	      begin
  		if (!predicateMaximumDepth< !pb) then
- 		  Format.printf "Keeped #1 (Vars - No filter due to VariableMaximumDepth<PredDepth)\n\n"
+ 		  Format.printf "Kept #1 (Vars - No filter due to VariableMaximumDepth<PredDepth)\n\n"
  		else
- 		  Format.printf "Keeped #1 (Vars)\n\n"
+ 		  Format.printf "Kept #1 (Vars)\n\n"
  	      end;
             
             (* the predicate symbols has to be in the list of symbols *)
@@ -2147,9 +2147,9 @@ let filter_acc_variables l concl_rep selection_strategy pred_symb =
                   if debug then 
  		    begin
  		      if (!predicateMaximumDepth< !pb) then
- 			Format.printf "Keeped #2 (Preds - No filter due to MaxReachableDepth<PredDepth)\n\n"
+ 			Format.printf "Kept #2 (Preds - No filter due to MaxReachableDepth<PredDepth)\n\n"
  		      else
- 			Format.printf "Keeped #2 (Preds)\n\n"
+ 			Format.printf "Kept #2 (Preds)\n\n"
  		    end;
 		  Spred (t, p):: filter q
                 end
@@ -2187,9 +2187,9 @@ let managesContext relevantPreds decl =
             if debug then 
 	      begin
 		if (!predicateMaximumDepth< !pb) then
-		  Format.printf "Ctx Keeped (No filter due to MaxReachableDepth<PredDepth)\n\n"
+		  Format.printf "Ctx Kept (No filter due to MaxReachableDepth<PredDepth)\n\n"
 		else
-		  Format.printf "Ctx Keeped \n\n"
+		  Format.printf "Ctx Kept \n\n"
 	      end;
             Queue.push ax decl
 	  end
@@ -2212,9 +2212,9 @@ let managesContext relevantPreds decl =
                 if debug then
 		  begin
 		    if (!predicateMaximumDepth< !pb) then
-		      Format.printf "Ctx Keeped (No filter due to MaxReachableDepth<PredDepth)\n\n"
+		      Format.printf "Ctx Kept (No filter due to MaxReachableDepth<PredDepth)\n\n"
 		    else
-                      Format.printf "Ctx Keeped\n\n"
+                      Format.printf "Ctx Kept\n\n"
 		  end;
                 Queue.push (Dpredicate_def (loc, ident, def)) decl;
                 filter l
@@ -2246,9 +2246,9 @@ let managesContext relevantPreds decl =
                 if debug then
 		  begin
 		    if (!predicateMaximumDepth< !pb) then
-		      Format.printf "Ctx Keeped (No filter due to MaxReachableDepth<PredDepth)\n\n"
+		      Format.printf "Ctx Kept (No filter due to MaxReachableDepth<PredDepth)\n\n"
 		    else
-                      Format.printf "Ctx Keeped\n\n"
+                      Format.printf "Ctx Kept\n\n"
 		  end;
 
                 Queue.push (Daxiom (loc, ident, ps)) decl;

@@ -119,7 +119,7 @@ End:
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/float_sqrt.c"
 [jessie] Starting Jessie translation
-[kernel] warning: No code nor implicit assigns clause for function sqrt_init, generating default assigns from the prototype
+tests/c/float_sqrt.c:85:[kernel] warning: No code nor implicit assigns clause for function sqrt_init, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir tests/c/float_sqrt.jessie
 [jessie] File tests/c/float_sqrt.jessie/float_sqrt.jc written.
 [jessie] File tests/c/float_sqrt.jessie/float_sqrt.cloc written.
@@ -175,23 +175,23 @@ predicate closeness(real u, real t_1, real x_1) =
   (\real_abs((u - (1 / \real_sqrt(x_1)))) <= 1))
 
 double sqrt_init(double x_0)
-  requires (C_2 : ((C_3 : (0.5 <= (x_0 :> real))) &&
-                    (C_4 : ((x_0 :> real) <= 2))));
+  requires (_C_2 : ((_C_3 : (0.5 <= (x_0 :> real))) &&
+                     (_C_4 : ((x_0 :> real) <= 2))));
 behavior default:
   assigns \nothing;
-  ensures (C_1 : (\real_abs(((\result :> real) -
-                              (1 / \real_sqrt((\at(x_0,Old) :> real))))) <=
-                   (0x1p-6 *
-                     \real_abs((1 / \real_sqrt((\at(x_0,Old) :> real)))))));
+  ensures (_C_1 : (\real_abs(((\result :> real) -
+                               (1 / \real_sqrt((\at(x_0,Old) :> real))))) <=
+                    (0x1p-6 *
+                      \real_abs((1 / \real_sqrt((\at(x_0,Old) :> real)))))));
 ;
 
 double sqrt(double x)
-  requires (C_41 : ((C_42 : (0.5 <= (x :> real))) &&
-                     (C_43 : ((x :> real) <= 2))));
+  requires (_C_41 : ((_C_42 : (0.5 <= (x :> real))) &&
+                      (_C_43 : ((x :> real) <= 2))));
 behavior default:
-  ensures (C_40 : (\real_abs(((\result :> real) -
-                               \real_sqrt((\at(x,Old) :> real)))) <=
-                    (0x1p-43 * \real_abs(\real_sqrt((\at(x,Old) :> real))))));
+  ensures (_C_40 : (\real_abs(((\result :> real) -
+                                \real_sqrt((\at(x,Old) :> real)))) <=
+                     (0x1p-43 * \real_abs(\real_sqrt((\at(x,Old) :> real))))));
 {  
    (var double t);
    
@@ -199,314 +199,151 @@ behavior default:
    
    (var double __retres);
    
-   {  (C_6 : (t = (C_5 : sqrt_init(x))));
-      (C_13 : (u = (C_12 : ((C_11 : ((0.5 :> double) * t)) *
-                             (C_10 : ((C_9 : (3 :> double)) -
-                                       (C_8 : ((C_7 : (t * t)) * x))))))));
+   {  (_C_6 : (t = (_C_5 : sqrt_init(x))));
+      (_C_13 : (u = (_C_12 : ((_C_11 : ((0.5 :> double) * t)) *
+                               (_C_10 : ((_C_9 : (3 :> double)) -
+                                          (_C_8 : ((_C_7 : (t * t)) * x))))))));
       
       {  
-         (assert for default: (C_14 : (jessie : newton_rel((t :> real),
+         (assert for default: (_C_14 : (jessie : newton_rel((t :> real),
+                                                            (x :> real)))));
+         ()
+      };
+      
+      {  
+         (assert for default: (_C_15 : (jessie : closeness((u :> real),
+                                                           (t :> real),
                                                            (x :> real)))));
          ()
       };
+      (_C_16 : (t = u));
+      (_C_23 : (u = (_C_22 : ((_C_21 : ((0.5 :> double) * t)) *
+                               (_C_20 : ((_C_19 : (3 :> double)) -
+                                          (_C_18 : ((_C_17 : (t * t)) * x))))))));
       
       {  
-         (assert for default: (C_15 : (jessie : closeness((u :> real),
-                                                          (t :> real),
-                                                          (x :> real)))));
+         (assert for default: (_C_24 : (jessie : newton_rel((t :> real),
+                                                            (x :> real)))));
          ()
       };
-      (C_16 : (t = u));
-      (C_23 : (u = (C_22 : ((C_21 : ((0.5 :> double) * t)) *
-                             (C_20 : ((C_19 : (3 :> double)) -
-                                       (C_18 : ((C_17 : (t * t)) * x))))))));
       
       {  
-         (assert for default: (C_24 : (jessie : newton_rel((t :> real),
+         (assert for default: (_C_25 : (jessie : closeness((u :> real),
+                                                           (t :> real),
                                                            (x :> real)))));
          ()
       };
+      (_C_26 : (t = u));
+      (_C_33 : (u = (_C_32 : ((_C_31 : ((0.5 :> double) * t)) *
+                               (_C_30 : ((_C_29 : (3 :> double)) -
+                                          (_C_28 : ((_C_27 : (t * t)) * x))))))));
       
       {  
-         (assert for default: (C_25 : (jessie : closeness((u :> real),
-                                                          (t :> real),
-                                                          (x :> real)))));
+         (assert for default: (_C_34 : (jessie : newton_rel((t :> real),
+                                                            (x :> real)))));
          ()
       };
-      (C_26 : (t = u));
-      (C_33 : (u = (C_32 : ((C_31 : ((0.5 :> double) * t)) *
-                             (C_30 : ((C_29 : (3 :> double)) -
-                                       (C_28 : ((C_27 : (t * t)) * x))))))));
       
       {  
-         (assert for default: (C_34 : (jessie : newton_rel((t :> real),
+         (assert for default: (_C_35 : (jessie : closeness((u :> real),
+                                                           (t :> real),
                                                            (x :> real)))));
          ()
       };
+      (_C_36 : (t = u));
       
       {  
-         (assert for default: (C_35 : (jessie : closeness((u :> real),
-                                                          (t :> real),
-                                                          (x :> real)))));
-         ()
-      };
-      (C_36 : (t = u));
-      
-      {  
-         (assert for default: (C_37 : (jessie : (((x :> real) *
-                                                   (1 /
-                                                     \real_sqrt((x :> real)))) ==
-                                                  \real_sqrt((x :> real))))));
+         (assert for default: (_C_37 : (jessie : (((x :> real) *
+                                                    (1 /
+                                                      \real_sqrt((x :> real)))) ==
+                                                   \real_sqrt((x :> real))))));
          ()
       };
       
-      {  (C_39 : (__retres = (C_38 : (x * t))));
+      {  (_C_39 : (__retres = (_C_38 : (x * t))));
          
          (return __retres)
       }
    }
 }
 ========== file tests/c/float_sqrt.jessie/float_sqrt.cloc ==========
-[C_10]
-file = "HOME/tests/c/float_sqrt.c"
-line = 90
-begin = 17
-end = 30
-
-[C_11]
-file = "HOME/tests/c/float_sqrt.c"
-line = 90
-begin = 6
-end = 13
-
-[C_12]
-file = "HOME/tests/c/float_sqrt.c"
-line = 90
-begin = 6
-end = 31
-
-[C_13]
-file = "HOME/tests/c/float_sqrt.c"
-line = 90
-begin = 6
-end = 31
-
-[C_14]
-file = "HOME/tests/c/float_sqrt.c"
-line = 91
-begin = 13
-end = 29
-
-[C_15]
-file = "HOME/tests/c/float_sqrt.c"
-line = 92
-begin = 13
-end = 31
-
-[C_16]
-file = "HOME/tests/c/float_sqrt.c"
-line = 93
-begin = 6
-end = 7
-
-[C_17]
-file = "HOME/tests/c/float_sqrt.c"
-line = 95
-begin = 21
-end = 26
-
-[C_18]
-file = "HOME/tests/c/float_sqrt.c"
-line = 95
-begin = 21
-end = 30
-
-[C_19]
-file = "HOME/tests/c/float_sqrt.c"
-line = 95
-begin = 17
-end = 18
-
-[C_1]
-file = "HOME/tests/c/float_sqrt.c"
-line = 77
-begin = 9
-end = 64
-
-[C_2]
-file = "HOME/tests/c/float_sqrt.c"
-line = 76
-begin = 10
-end = 23
-
-[C_3]
-file = "HOME/tests/c/float_sqrt.c"
-line = 76
-begin = 10
-end = 18
-
-[C_4]
-file = "HOME/tests/c/float_sqrt.c"
-line = 76
-begin = 17
-end = 23
-
-[C_20]
-file = "HOME/tests/c/float_sqrt.c"
-line = 95
-begin = 17
-end = 30
-
-[C_5]
-file = "HOME/tests/c/float_sqrt.c"
-line = 88
-begin = 6
-end = 18
-
-[C_21]
-file = "HOME/tests/c/float_sqrt.c"
-line = 95
-begin = 6
-end = 13
-
-[C_6]
-file = "HOME/tests/c/float_sqrt.c"
-line = 88
-begin = 6
-end = 18
-
-[C_22]
-file = "HOME/tests/c/float_sqrt.c"
-line = 95
-begin = 6
-end = 31
-
-[C_7]
-file = "HOME/tests/c/float_sqrt.c"
-line = 90
-begin = 21
-end = 26
-
-[C_23]
-file = "HOME/tests/c/float_sqrt.c"
-line = 95
-begin = 6
-end = 31
-
-[C_8]
-file = "HOME/tests/c/float_sqrt.c"
-line = 90
-begin = 21
-end = 30
-
-[C_24]
-file = "HOME/tests/c/float_sqrt.c"
-line = 96
-begin = 13
-end = 29
-
-[C_9]
-file = "HOME/tests/c/float_sqrt.c"
-line = 90
-begin = 17
-end = 18
-
-[C_25]
-file = "HOME/tests/c/float_sqrt.c"
-line = 97
-begin = 13
-end = 31
-
-[C_26]
-file = "HOME/tests/c/float_sqrt.c"
-line = 98
-begin = 6
-end = 7
-
-[C_27]
-file = "HOME/tests/c/float_sqrt.c"
-line = 100
-begin = 21
-end = 26
-
-[C_28]
-file = "HOME/tests/c/float_sqrt.c"
-line = 100
-begin = 21
-end = 30
-
-[C_29]
-file = "HOME/tests/c/float_sqrt.c"
-line = 100
-begin = 17
-end = 18
-
-[newton]
-name = "Lemma newton"
-file = "HOME/tests/c/float_sqrt.c"
-line = 68
-begin = 1
-end = 187
-
-[C_30]
-file = "HOME/tests/c/float_sqrt.c"
-line = 100
-begin = 17
-end = 30
-
-[C_31]
-file = "HOME/tests/c/float_sqrt.c"
-line = 100
-begin = 6
-end = 13
-
-[C_32]
-file = "HOME/tests/c/float_sqrt.c"
-line = 100
-begin = 6
-end = 31
-
-[C_33]
-file = "HOME/tests/c/float_sqrt.c"
-line = 100
-begin = 6
-end = 31
-
-[C_34]
-file = "HOME/tests/c/float_sqrt.c"
-line = 101
-begin = 13
-end = 29
-
-[C_35]
+[_C_35]
 file = "HOME/tests/c/float_sqrt.c"
 line = 102
 begin = 13
 end = 31
 
-[C_36]
+[_C_28]
+file = "HOME/tests/c/float_sqrt.c"
+line = 100
+begin = 21
+end = 30
+
+[_C_31]
+file = "HOME/tests/c/float_sqrt.c"
+line = 100
+begin = 6
+end = 13
+
+[_C_41]
+file = "HOME/tests/c/float_sqrt.c"
+line = 82
+begin = 10
+end = 23
+
+[_C_4]
+file = "HOME/tests/c/float_sqrt.c"
+line = 76
+begin = 17
+end = 23
+
+[_C_32]
+file = "HOME/tests/c/float_sqrt.c"
+line = 100
+begin = 6
+end = 31
+
+[_C_23]
+file = "HOME/tests/c/float_sqrt.c"
+line = 95
+begin = 6
+end = 31
+
+[_C_19]
+file = "HOME/tests/c/float_sqrt.c"
+line = 95
+begin = 17
+end = 18
+
+[_C_42]
+file = "HOME/tests/c/float_sqrt.c"
+line = 82
+begin = 10
+end = 18
+
+[_C_13]
+file = "HOME/tests/c/float_sqrt.c"
+line = 90
+begin = 6
+end = 31
+
+[_C_5]
+file = "HOME/tests/c/float_sqrt.c"
+line = 88
+begin = 6
+end = 18
+
+[_C_36]
 file = "HOME/tests/c/float_sqrt.c"
 line = 103
 begin = 6
 end = 7
 
-[C_37]
+[_C_12]
 file = "HOME/tests/c/float_sqrt.c"
-line = 105
-begin = 13
-end = 41
-
-[C_38]
-file = "HOME/tests/c/float_sqrt.c"
-line = 106
-begin = 9
-end = 14
-
-[C_39]
-file = "HOME/tests/c/float_sqrt.c"
-line = 106
-begin = 2
-end = 15
+line = 90
+begin = 6
+end = 31
 
 [sqrt]
 name = "Function sqrt"
@@ -515,29 +352,192 @@ line = 85
 begin = 7
 end = 11
 
-[C_40]
+[_C_33]
+file = "HOME/tests/c/float_sqrt.c"
+line = 100
+begin = 6
+end = 31
+
+[_C_22]
+file = "HOME/tests/c/float_sqrt.c"
+line = 95
+begin = 6
+end = 31
+
+[_C_9]
+file = "HOME/tests/c/float_sqrt.c"
+line = 90
+begin = 17
+end = 18
+
+[_C_30]
+file = "HOME/tests/c/float_sqrt.c"
+line = 100
+begin = 17
+end = 30
+
+[_C_6]
+file = "HOME/tests/c/float_sqrt.c"
+line = 88
+begin = 6
+end = 18
+
+[_C_24]
+file = "HOME/tests/c/float_sqrt.c"
+line = 96
+begin = 13
+end = 29
+
+[_C_20]
+file = "HOME/tests/c/float_sqrt.c"
+line = 95
+begin = 17
+end = 30
+
+[_C_38]
+file = "HOME/tests/c/float_sqrt.c"
+line = 106
+begin = 9
+end = 14
+
+[_C_3]
+file = "HOME/tests/c/float_sqrt.c"
+line = 76
+begin = 10
+end = 18
+
+[_C_17]
+file = "HOME/tests/c/float_sqrt.c"
+line = 95
+begin = 21
+end = 26
+
+[_C_7]
+file = "HOME/tests/c/float_sqrt.c"
+line = 90
+begin = 21
+end = 26
+
+[_C_27]
+file = "HOME/tests/c/float_sqrt.c"
+line = 100
+begin = 21
+end = 26
+
+[_C_15]
+file = "HOME/tests/c/float_sqrt.c"
+line = 92
+begin = 13
+end = 31
+
+[_C_26]
+file = "HOME/tests/c/float_sqrt.c"
+line = 98
+begin = 6
+end = 7
+
+[_C_10]
+file = "HOME/tests/c/float_sqrt.c"
+line = 90
+begin = 17
+end = 30
+
+[_C_40]
 file = "HOME/tests/c/float_sqrt.c"
 line = 83
 begin = 9
 end = 61
 
-[C_41]
+[_C_8]
 file = "HOME/tests/c/float_sqrt.c"
-line = 82
-begin = 10
-end = 23
+line = 90
+begin = 21
+end = 30
 
-[C_42]
+[_C_18]
 file = "HOME/tests/c/float_sqrt.c"
-line = 82
-begin = 10
+line = 95
+begin = 21
+end = 30
+
+[_C_29]
+file = "HOME/tests/c/float_sqrt.c"
+line = 100
+begin = 17
 end = 18
 
-[C_43]
+[_C_14]
+file = "HOME/tests/c/float_sqrt.c"
+line = 91
+begin = 13
+end = 29
+
+[_C_37]
+file = "HOME/tests/c/float_sqrt.c"
+line = 105
+begin = 13
+end = 41
+
+[_C_43]
 file = "HOME/tests/c/float_sqrt.c"
 line = 82
 begin = 17
 end = 23
+
+[_C_2]
+file = "HOME/tests/c/float_sqrt.c"
+line = 76
+begin = 10
+end = 23
+
+[_C_34]
+file = "HOME/tests/c/float_sqrt.c"
+line = 101
+begin = 13
+end = 29
+
+[_C_16]
+file = "HOME/tests/c/float_sqrt.c"
+line = 93
+begin = 6
+end = 7
+
+[newton]
+name = "Lemma newton"
+file = "HOME/tests/c/float_sqrt.c"
+line = 68
+begin = 1
+end = 187
+
+[_C_1]
+file = "HOME/tests/c/float_sqrt.c"
+line = 77
+begin = 9
+end = 64
+
+[_C_25]
+file = "HOME/tests/c/float_sqrt.c"
+line = 97
+begin = 13
+end = 31
+
+[_C_39]
+file = "HOME/tests/c/float_sqrt.c"
+line = 106
+begin = 2
+end = 15
+
+[_C_11]
+file = "HOME/tests/c/float_sqrt.c"
+line = 90
+begin = 6
+end = 13
+
+[_C_21]
+file = "HOME/tests/c/float_sqrt.c"
+line = 95
+begin = 6
+end = 13
 
 ========== jessie execution ==========
 Generating Why function sqrt
@@ -551,10 +551,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs float_sqrt.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs float_sqrt.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs float_sqrt.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs float_sqrt.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -699,13 +700,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: float_sqrt.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: float_sqrt.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: float_sqrt.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include float_sqrt.depend
 
@@ -716,38 +717,31 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/float_sqrt.jessie/float_sqrt.loc ==========
-[JC_40]
+[JC_73]
 file = "HOME/tests/c/float_sqrt.c"
-line = 96
+line = 105
 begin = 13
-end = 29
+end = 41
 
-[JC_41]
+[JC_63]
+kind = FPOverflow
 file = "HOME/tests/c/float_sqrt.c"
-line = 97
-begin = 13
+line = 95
+begin = 6
 end = 31
 
-[JC_42]
-kind = FPOverflow
+[JC_51]
+kind = UserCall
 file = "HOME/tests/c/float_sqrt.c"
-line = 100
+line = 88
 begin = 6
-end = 13
+end = 18
 
-[JC_43]
-kind = FPOverflow
+[JC_71]
 file = "HOME/tests/c/float_sqrt.c"
-line = 100
-begin = 21
-end = 26
-
-[JC_44]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 100
-begin = 21
-end = 30
+line = 101
+begin = 13
+end = 29
 
 [JC_45]
 kind = FPOverflow
@@ -756,30 +750,31 @@ line = 100
 begin = 17
 end = 30
 
-[JC_46]
-kind = FPOverflow
+[JC_64]
 file = "HOME/tests/c/float_sqrt.c"
-line = 100
-begin = 6
-end = 31
-
-[JC_1]
-file = "HOME/tests/c/float_sqrt.c"
-line = 76
-begin = 10
-end = 18
-
-[JC_47]
-file = "HOME/tests/c/float_sqrt.c"
-line = 101
+line = 96
 begin = 13
 end = 29
 
-[JC_2]
+[JC_31]
+kind = FPOverflow
 file = "HOME/tests/c/float_sqrt.c"
-line = 76
+line = 90
 begin = 17
+end = 30
+
+[JC_17]
+file = "HOME/tests/c/float_sqrt.c"
+line = 82
+begin = 10
 end = 23
+
+[JC_55]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 90
+begin = 17
+end = 30
 
 [JC_48]
 file = "HOME/tests/c/float_sqrt.c"
@@ -787,19 +782,13 @@ line = 102
 begin = 13
 end = 31
 
-[JC_3]
+[JC_23]
 file = "HOME/tests/c/float_sqrt.c"
-line = 76
-begin = 10
-end = 23
+line = 83
+begin = 9
+end = 61
 
-[JC_49]
-file = "HOME/tests/c/float_sqrt.c"
-line = 105
-begin = 13
-end = 41
-
-[JC_4]
+[JC_22]
 file = "HOME/"
 line = 0
 begin = -1
@@ -811,175 +800,6 @@ line = 76
 begin = 10
 end = 18
 
-[JC_6]
-file = "HOME/tests/c/float_sqrt.c"
-line = 76
-begin = 17
-end = 23
-
-[JC_7]
-file = "HOME/tests/c/float_sqrt.c"
-line = 76
-begin = 10
-end = 23
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_9]
-file = "HOME/tests/c/float_sqrt.c"
-line = 77
-begin = 9
-end = 64
-
-[JC_50]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 106
-begin = 9
-end = 14
-
-[JC_51]
-kind = UserCall
-file = "HOME/tests/c/float_sqrt.c"
-line = 88
-begin = 6
-end = 18
-
-[JC_52]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 90
-begin = 6
-end = 13
-
-[JC_53]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 90
-begin = 21
-end = 26
-
-[JC_54]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 90
-begin = 21
-end = 30
-
-[JC_55]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 90
-begin = 17
-end = 30
-
-[JC_56]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 90
-begin = 6
-end = 31
-
-[JC_57]
-file = "HOME/tests/c/float_sqrt.c"
-line = 91
-begin = 13
-end = 29
-
-[JC_58]
-file = "HOME/tests/c/float_sqrt.c"
-line = 92
-begin = 13
-end = 31
-
-[JC_59]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 95
-begin = 6
-end = 13
-
-[JC_60]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 95
-begin = 21
-end = 26
-
-[JC_61]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 95
-begin = 21
-end = 30
-
-[JC_62]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 95
-begin = 17
-end = 30
-
-[JC_10]
-file = "HOME/tests/c/float_sqrt.jessie/float_sqrt.jc"
-line = 55
-begin = 10
-end = 18
-
-[JC_63]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 95
-begin = 6
-end = 31
-
-[JC_11]
-file = "HOME/tests/c/float_sqrt.c"
-line = 77
-begin = 9
-end = 64
-
-[JC_64]
-file = "HOME/tests/c/float_sqrt.c"
-line = 96
-begin = 13
-end = 29
-
-[JC_12]
-file = "HOME/tests/c/float_sqrt.jessie/float_sqrt.jc"
-line = 55
-begin = 10
-end = 18
-
-[JC_65]
-file = "HOME/tests/c/float_sqrt.c"
-line = 97
-begin = 13
-end = 31
-
-[JC_13]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_66]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 100
-begin = 6
-end = 13
-
-[JC_14]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_67]
 kind = FPOverflow
 file = "HOME/tests/c/float_sqrt.c"
@@ -987,121 +807,11 @@ line = 100
 begin = 21
 end = 26
 
-[JC_15]
+[JC_9]
 file = "HOME/tests/c/float_sqrt.c"
-line = 82
-begin = 10
-end = 18
-
-[JC_68]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 100
-begin = 21
-end = 30
-
-[JC_16]
-file = "HOME/tests/c/float_sqrt.c"
-line = 82
-begin = 17
-end = 23
-
-[JC_69]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 100
-begin = 17
-end = 30
-
-[sqrt_safety]
-name = "Function sqrt"
-behavior = "Safety"
-file = "HOME/tests/c/float_sqrt.c"
-line = 85
-begin = 7
-end = 11
-
-[JC_17]
-file = "HOME/tests/c/float_sqrt.c"
-line = 82
-begin = 10
-end = 23
-
-[JC_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_19]
-file = "HOME/tests/c/float_sqrt.c"
-line = 82
-begin = 10
-end = 18
-
-[newton]
-name = "Lemma newton"
-behavior = "lemma"
-file = "HOME/tests/c/float_sqrt.c"
-line = 68
-begin = 1
-end = 187
-
-[JC_70]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 100
-begin = 6
-end = 31
-
-[JC_71]
-file = "HOME/tests/c/float_sqrt.c"
-line = 101
-begin = 13
-end = 29
-
-[JC_72]
-file = "HOME/tests/c/float_sqrt.c"
-line = 102
-begin = 13
-end = 31
-
-[JC_20]
-file = "HOME/tests/c/float_sqrt.c"
-line = 82
-begin = 17
-end = 23
-
-[JC_73]
-file = "HOME/tests/c/float_sqrt.c"
-line = 105
-begin = 13
-end = 41
-
-[JC_21]
-file = "HOME/tests/c/float_sqrt.c"
-line = 82
-begin = 10
-end = 23
-
-[JC_74]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 106
+line = 77
 begin = 9
-end = 14
-
-[JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_23]
-file = "HOME/tests/c/float_sqrt.c"
-line = 83
-begin = 9
-end = 61
+end = 64
 
 [JC_24]
 file = "HOME/tests/c/float_sqrt.c"
@@ -1115,11 +825,102 @@ line = 0
 begin = -1
 end = -1
 
+[JC_41]
+file = "HOME/tests/c/float_sqrt.c"
+line = 97
+begin = 13
+end = 31
+
+[JC_74]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 106
+begin = 9
+end = 14
+
+[JC_47]
+file = "HOME/tests/c/float_sqrt.c"
+line = 101
+begin = 13
+end = 29
+
+[JC_52]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 90
+begin = 6
+end = 13
+
 [JC_26]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_54]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 90
+begin = 21
+end = 30
+
+[JC_13]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_11]
+file = "HOME/tests/c/float_sqrt.c"
+line = 77
+begin = 9
+end = 64
+
+[JC_70]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 100
+begin = 6
+end = 31
+
+[JC_15]
+file = "HOME/tests/c/float_sqrt.c"
+line = 82
+begin = 10
+end = 18
+
+[JC_36]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 95
+begin = 21
+end = 26
+
+[JC_39]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 95
+begin = 6
+end = 31
+
+[JC_40]
+file = "HOME/tests/c/float_sqrt.c"
+line = 96
+begin = 13
+end = 29
+
+[JC_35]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 95
+begin = 6
+end = 13
 
 [JC_27]
 kind = UserCall
@@ -1128,19 +929,65 @@ line = 88
 begin = 6
 end = 18
 
-[JC_28]
+[JC_69]
 kind = FPOverflow
 file = "HOME/tests/c/float_sqrt.c"
-line = 90
+line = 100
+begin = 17
+end = 30
+
+[JC_38]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 95
+begin = 17
+end = 30
+
+[JC_12]
+file = "HOME/tests/c/float_sqrt.jessie/float_sqrt.jc"
+line = 55
+begin = 10
+end = 18
+
+[JC_6]
+file = "HOME/tests/c/float_sqrt.c"
+line = 76
+begin = 17
+end = 23
+
+[JC_44]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 100
+begin = 21
+end = 30
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_62]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 95
+begin = 17
+end = 30
+
+[JC_42]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 100
 begin = 6
 end = 13
 
-[JC_29]
+[JC_46]
 kind = FPOverflow
 file = "HOME/tests/c/float_sqrt.c"
-line = 90
-begin = 21
-end = 26
+line = 100
+begin = 6
+end = 31
 
 [sqrt_ensures_default]
 name = "Function sqrt"
@@ -1150,21 +997,21 @@ line = 85
 begin = 7
 end = 11
 
-[JC_30]
+[JC_61]
 kind = FPOverflow
 file = "HOME/tests/c/float_sqrt.c"
-line = 90
+line = 95
 begin = 21
 end = 30
 
-[JC_31]
+[JC_32]
 kind = FPOverflow
 file = "HOME/tests/c/float_sqrt.c"
 line = 90
-begin = 17
-end = 30
+begin = 6
+end = 31
 
-[JC_32]
+[JC_56]
 kind = FPOverflow
 file = "HOME/tests/c/float_sqrt.c"
 line = 90
@@ -1177,25 +1024,87 @@ line = 91
 begin = 13
 end = 29
 
+[JC_65]
+file = "HOME/tests/c/float_sqrt.c"
+line = 97
+begin = 13
+end = 31
+
+[JC_29]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 90
+begin = 21
+end = 26
+
+[JC_68]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 100
+begin = 21
+end = 30
+
+[JC_7]
+file = "HOME/tests/c/float_sqrt.c"
+line = 76
+begin = 10
+end = 23
+
+[JC_16]
+file = "HOME/tests/c/float_sqrt.c"
+line = 82
+begin = 17
+end = 23
+
+[JC_43]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 100
+begin = 21
+end = 26
+
+[JC_2]
+file = "HOME/tests/c/float_sqrt.c"
+line = 76
+begin = 17
+end = 23
+
 [JC_34]
 file = "HOME/tests/c/float_sqrt.c"
 line = 92
 begin = 13
 end = 31
 
-[JC_35]
-kind = FPOverflow
-file = "HOME/tests/c/float_sqrt.c"
-line = 95
-begin = 6
-end = 13
+[JC_14]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_36]
+[JC_53]
 kind = FPOverflow
 file = "HOME/tests/c/float_sqrt.c"
-line = 95
+line = 90
 begin = 21
 end = 26
+
+[JC_21]
+file = "HOME/tests/c/float_sqrt.c"
+line = 82
+begin = 10
+end = 23
+
+[JC_49]
+file = "HOME/tests/c/float_sqrt.c"
+line = 105
+begin = 13
+end = 41
+
+[JC_1]
+file = "HOME/tests/c/float_sqrt.c"
+line = 76
+begin = 10
+end = 18
 
 [JC_37]
 kind = FPOverflow
@@ -1204,19 +1113,111 @@ line = 95
 begin = 21
 end = 30
 
-[JC_38]
+[JC_10]
+file = "HOME/tests/c/float_sqrt.jessie/float_sqrt.jc"
+line = 55
+begin = 10
+end = 18
+
+[JC_57]
+file = "HOME/tests/c/float_sqrt.c"
+line = 91
+begin = 13
+end = 29
+
+[JC_66]
 kind = FPOverflow
 file = "HOME/tests/c/float_sqrt.c"
-line = 95
-begin = 17
-end = 30
+line = 100
+begin = 6
+end = 13
 
-[JC_39]
+[JC_59]
 kind = FPOverflow
 file = "HOME/tests/c/float_sqrt.c"
 line = 95
 begin = 6
+end = 13
+
+[newton]
+name = "Lemma newton"
+behavior = "lemma"
+file = "HOME/tests/c/float_sqrt.c"
+line = 68
+begin = 1
+end = 187
+
+[JC_20]
+file = "HOME/tests/c/float_sqrt.c"
+line = 82
+begin = 17
+end = 23
+
+[JC_18]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_3]
+file = "HOME/tests/c/float_sqrt.c"
+line = 76
+begin = 10
+end = 23
+
+[sqrt_safety]
+name = "Function sqrt"
+behavior = "Safety"
+file = "HOME/tests/c/float_sqrt.c"
+line = 85
+begin = 7
+end = 11
+
+[JC_60]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 95
+begin = 21
+end = 26
+
+[JC_72]
+file = "HOME/tests/c/float_sqrt.c"
+line = 102
+begin = 13
 end = 31
+
+[JC_19]
+file = "HOME/tests/c/float_sqrt.c"
+line = 82
+begin = 10
+end = 18
+
+[JC_50]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 106
+begin = 9
+end = 14
+
+[JC_30]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 90
+begin = 21
+end = 30
+
+[JC_58]
+file = "HOME/tests/c/float_sqrt.c"
+line = 92
+begin = 13
+end = 31
+
+[JC_28]
+kind = FPOverflow
+file = "HOME/tests/c/float_sqrt.c"
+line = 90
+begin = 6
+end = 13
 
 ========== file tests/c/float_sqrt.jessie/why/float_sqrt.why ==========
 type charP
@@ -1607,107 +1608,70 @@ let sqrt_ensures_default =
      (let t_2 = ref (any_double void) in
      (let u_0 = ref (any_double void) in
      (let __retres = ref (any_double void) in
-     (C_6:
-     (C_13:
      begin
-       (let jessie_<num> =
-       (t_2 := (C_5: (let jessie_<num> = x_2 in (JC_51: (sqrt_init jessie_<num>))))) in
+       (let _jessie_<num> =
+       (t_2 := (let _jessie_<num> = x_2 in (JC_51: (sqrt_init _jessie_<num>)))) in
        void);
-      (let jessie_<num> =
-      (u_0 := (C_12:
-              (JC_56:
-              (((mul_double_safe nearest_even) (C_11:
-                                               (JC_52:
+      (let _jessie_<num> =
+      (u_0 := (JC_56:
+              (((mul_double_safe nearest_even) (JC_52:
                                                (((mul_double_safe nearest_even) 
-                                                 (double_of_real_exact 0.5)) !t_2)))) 
-               (C_10:
+                                                 (double_of_real_exact 0.5)) !t_2))) 
                (JC_55:
-               (((sub_double_safe nearest_even) (C_9:
-                                                (double_of_real_exact 3.0))) 
-                (C_8:
+               (((sub_double_safe nearest_even) (double_of_real_exact 3.0)) 
                 (JC_54:
-                (((mul_double_safe nearest_even) (C_7:
-                                                 (JC_53:
-                                                 (((mul_double_safe nearest_even) !t_2) !t_2)))) x_2)))))))))) in
+                (((mul_double_safe nearest_even) (JC_53:
+                                                 (((mul_double_safe nearest_even) !t_2) !t_2))) x_2))))))) in
       void);
       (assert { (JC_57: newton_rel(double_value(t_2), double_value(x_2))) };
       void); void;
       (assert
       { (JC_58:
         closeness(double_value(u_0), double_value(t_2), double_value(x_2))) };
+      void); void; (let _jessie_<num> = (t_2 := !u_0) in void);
+      (let _jessie_<num> =
+      (u_0 := (JC_63:
+              (((mul_double_safe nearest_even) (JC_59:
+                                               (((mul_double_safe nearest_even) 
+                                                 (double_of_real_exact 0.5)) !t_2))) 
+               (JC_62:
+               (((sub_double_safe nearest_even) (double_of_real_exact 3.0)) 
+                (JC_61:
+                (((mul_double_safe nearest_even) (JC_60:
+                                                 (((mul_double_safe nearest_even) !t_2) !t_2))) x_2))))))) in
       void);
-      (C_16:
-      (C_23:
-      begin
-        void; (let jessie_<num> = (t_2 := !u_0) in void);
-       (let jessie_<num> =
-       (u_0 := (C_22:
-               (JC_63:
-               (((mul_double_safe nearest_even) (C_21:
-                                                (JC_59:
-                                                (((mul_double_safe nearest_even) 
-                                                  (double_of_real_exact 0.5)) !t_2)))) 
-                (C_20:
-                (JC_62:
-                (((sub_double_safe nearest_even) (C_19:
-                                                 (double_of_real_exact 3.0))) 
-                 (C_18:
-                 (JC_61:
-                 (((mul_double_safe nearest_even) (C_17:
-                                                  (JC_60:
-                                                  (((mul_double_safe nearest_even) !t_2) !t_2)))) x_2)))))))))) in
-       void);
-       (assert { (JC_64: newton_rel(double_value(t_2), double_value(x_2))) };
-       void); void;
-       (assert
-       { (JC_65:
-         closeness(double_value(u_0), double_value(t_2), double_value(x_2))) };
-       void);
-       (C_26:
-       (C_33:
-       begin
-         void; (let jessie_<num> = (t_2 := !u_0) in void);
-        (let jessie_<num> =
-        (u_0 := (C_32:
-                (JC_70:
-                (((mul_double_safe nearest_even) (C_31:
-                                                 (JC_66:
-                                                 (((mul_double_safe nearest_even) 
-                                                   (double_of_real_exact 0.5)) !t_2)))) 
-                 (C_30:
-                 (JC_69:
-                 (((sub_double_safe nearest_even) (C_29:
-                                                  (double_of_real_exact 3.0))) 
-                  (C_28:
-                  (JC_68:
-                  (((mul_double_safe nearest_even) (C_27:
-                                                   (JC_67:
-                                                   (((mul_double_safe nearest_even) !t_2) !t_2)))) x_2)))))))))) in
-        void);
-        (assert
-        { (JC_71: newton_rel(double_value(t_2), double_value(x_2))) }; void);
-        void;
-        (assert
-        { (JC_72:
-          closeness(double_value(u_0), double_value(t_2), double_value(x_2))) };
-        void);
-        (C_36:
-        begin
-          void; (let jessie_<num> = (t_2 := !u_0) in void);
-         (assert
-         { (JC_73:
-           (mul_real(double_value(x_2),
-            div_real(1.0, sqrt_real(double_value(x_2)))) = sqrt_real(
-                                                           double_value(x_2)))) };
-         void);
-         (C_39:
-         begin
-           void;
-          (let jessie_<num> =
-          (__retres := (C_38:
-                       (JC_74: (((mul_double_safe nearest_even) x_2) !t_2)))) in
-          void); (return := !__retres); (raise Return) end) end) end)) end))
-     end))))); absurd  end with Return -> !return end))
+      (assert { (JC_64: newton_rel(double_value(t_2), double_value(x_2))) };
+      void); void;
+      (assert
+      { (JC_65:
+        closeness(double_value(u_0), double_value(t_2), double_value(x_2))) };
+      void); void; (let _jessie_<num> = (t_2 := !u_0) in void);
+      (let _jessie_<num> =
+      (u_0 := (JC_70:
+              (((mul_double_safe nearest_even) (JC_66:
+                                               (((mul_double_safe nearest_even) 
+                                                 (double_of_real_exact 0.5)) !t_2))) 
+               (JC_69:
+               (((sub_double_safe nearest_even) (double_of_real_exact 3.0)) 
+                (JC_68:
+                (((mul_double_safe nearest_even) (JC_67:
+                                                 (((mul_double_safe nearest_even) !t_2) !t_2))) x_2))))))) in
+      void);
+      (assert { (JC_71: newton_rel(double_value(t_2), double_value(x_2))) };
+      void); void;
+      (assert
+      { (JC_72:
+        closeness(double_value(u_0), double_value(t_2), double_value(x_2))) };
+      void); void; (let _jessie_<num> = (t_2 := !u_0) in void);
+      (assert
+      { (JC_73:
+        (mul_real(double_value(x_2),
+         div_real(1.0, sqrt_real(double_value(x_2)))) = sqrt_real(double_value(x_2)))) };
+      void); void;
+      (let _jessie_<num> =
+      (__retres := (JC_74: (((mul_double_safe nearest_even) x_2) !t_2))) in
+      void); (return := !__retres); (raise Return) end))); absurd  end with
+   Return -> !return end))
   { (JC_23:
     le_real(abs_real(sub_real(double_value(result),
                      sqrt_real(double_value(x_2)))),
@@ -1725,28 +1689,20 @@ let sqrt_safety =
      (let t_2 = ref (any_double void) in
      (let u_0 = ref (any_double void) in
      (let __retres = ref (any_double void) in
-     (C_6:
-     (C_13:
      begin
-       (let jessie_<num> =
-       (t_2 := (C_5:
-               (let jessie_<num> = x_2 in (JC_27: (sqrt_init_requires jessie_<num>))))) in
-       void);
-      (let jessie_<num> =
-      (u_0 := (C_12:
-              (JC_32:
-              (((mul_double nearest_even) (C_11:
-                                          (JC_28:
+       (let _jessie_<num> =
+       (t_2 := (let _jessie_<num> = x_2 in
+               (JC_27: (sqrt_init_requires _jessie_<num>)))) in void);
+      (let _jessie_<num> =
+      (u_0 := (JC_32:
+              (((mul_double nearest_even) (JC_28:
                                           (((mul_double nearest_even) 
-                                            (double_of_real_exact 0.5)) !t_2)))) 
-               (C_10:
+                                            (double_of_real_exact 0.5)) !t_2))) 
                (JC_31:
-               (((sub_double nearest_even) (C_9: (double_of_real_exact 3.0))) 
-                (C_8:
+               (((sub_double nearest_even) (double_of_real_exact 3.0)) 
                 (JC_30:
-                (((mul_double nearest_even) (C_7:
-                                            (JC_29:
-                                            (((mul_double nearest_even) !t_2) !t_2)))) x_2)))))))))) in
+                (((mul_double nearest_even) (JC_29:
+                                            (((mul_double nearest_even) !t_2) !t_2))) x_2))))))) in
       void);
       [ { } unit reads t_2
         { (JC_33: newton_rel(double_value(t_2), double_value(x_2))) } ];
@@ -1754,77 +1710,52 @@ let sqrt_safety =
       [ { } unit reads t_2,u_0
         { (JC_34:
           closeness(double_value(u_0), double_value(t_2), double_value(x_2))) } ];
-      (C_16:
-      (C_23:
-      begin
-        void; (let jessie_<num> = (t_2 := !u_0) in void);
-       (let jessie_<num> =
-       (u_0 := (C_22:
-               (JC_39:
-               (((mul_double nearest_even) (C_21:
-                                           (JC_35:
-                                           (((mul_double nearest_even) 
-                                             (double_of_real_exact 0.5)) !t_2)))) 
-                (C_20:
-                (JC_38:
-                (((sub_double nearest_even) (C_19:
-                                            (double_of_real_exact 3.0))) 
-                 (C_18:
-                 (JC_37:
-                 (((mul_double nearest_even) (C_17:
-                                             (JC_36:
-                                             (((mul_double nearest_even) !t_2) !t_2)))) x_2)))))))))) in
-       void);
-       [ { } unit reads t_2
-         { (JC_40: newton_rel(double_value(t_2), double_value(x_2))) } ];
-       void;
-       [ { } unit reads t_2,u_0
-         { (JC_41:
-           closeness(double_value(u_0), double_value(t_2), double_value(x_2))) } ];
-       (C_26:
-       (C_33:
-       begin
-         void; (let jessie_<num> = (t_2 := !u_0) in void);
-        (let jessie_<num> =
-        (u_0 := (C_32:
-                (JC_46:
-                (((mul_double nearest_even) (C_31:
-                                            (JC_42:
-                                            (((mul_double nearest_even) 
-                                              (double_of_real_exact 0.5)) !t_2)))) 
-                 (C_30:
-                 (JC_45:
-                 (((sub_double nearest_even) (C_29:
-                                             (double_of_real_exact 3.0))) 
-                  (C_28:
-                  (JC_44:
-                  (((mul_double nearest_even) (C_27:
-                                              (JC_43:
-                                              (((mul_double nearest_even) !t_2) !t_2)))) x_2)))))))))) in
-        void);
-        [ { } unit reads t_2
-          { (JC_47: newton_rel(double_value(t_2), double_value(x_2))) } ];
-        void;
-        [ { } unit reads t_2,u_0
-          { (JC_48:
-            closeness(double_value(u_0), double_value(t_2),
-            double_value(x_2))) } ];
-        (C_36:
-        begin
-          void; (let jessie_<num> = (t_2 := !u_0) in void);
-         [ { } unit
-           { (JC_49:
-             (mul_real(double_value(x_2),
-              div_real(1.0, sqrt_real(double_value(x_2)))) = sqrt_real(
-                                                             double_value(x_2)))) } ];
-         (C_39:
-         begin
-           void;
-          (let jessie_<num> =
-          (__retres := (C_38:
-                       (JC_50: (((mul_double nearest_even) x_2) !t_2)))) in
-          void); (return := !__retres); (raise Return) end) end) end)) end))
-     end))))); absurd  end with Return -> !return end)) { true }
+      void; (let _jessie_<num> = (t_2 := !u_0) in void);
+      (let _jessie_<num> =
+      (u_0 := (JC_39:
+              (((mul_double nearest_even) (JC_35:
+                                          (((mul_double nearest_even) 
+                                            (double_of_real_exact 0.5)) !t_2))) 
+               (JC_38:
+               (((sub_double nearest_even) (double_of_real_exact 3.0)) 
+                (JC_37:
+                (((mul_double nearest_even) (JC_36:
+                                            (((mul_double nearest_even) !t_2) !t_2))) x_2))))))) in
+      void);
+      [ { } unit reads t_2
+        { (JC_40: newton_rel(double_value(t_2), double_value(x_2))) } ];
+      void;
+      [ { } unit reads t_2,u_0
+        { (JC_41:
+          closeness(double_value(u_0), double_value(t_2), double_value(x_2))) } ];
+      void; (let _jessie_<num> = (t_2 := !u_0) in void);
+      (let _jessie_<num> =
+      (u_0 := (JC_46:
+              (((mul_double nearest_even) (JC_42:
+                                          (((mul_double nearest_even) 
+                                            (double_of_real_exact 0.5)) !t_2))) 
+               (JC_45:
+               (((sub_double nearest_even) (double_of_real_exact 3.0)) 
+                (JC_44:
+                (((mul_double nearest_even) (JC_43:
+                                            (((mul_double nearest_even) !t_2) !t_2))) x_2))))))) in
+      void);
+      [ { } unit reads t_2
+        { (JC_47: newton_rel(double_value(t_2), double_value(x_2))) } ];
+      void;
+      [ { } unit reads t_2,u_0
+        { (JC_48:
+          closeness(double_value(u_0), double_value(t_2), double_value(x_2))) } ];
+      void; (let _jessie_<num> = (t_2 := !u_0) in void);
+      [ { } unit
+        { (JC_49:
+          (mul_real(double_value(x_2),
+           div_real(1.0, sqrt_real(double_value(x_2)))) = sqrt_real(double_value(x_2)))) } ];
+      void;
+      (let _jessie_<num> =
+      (__retres := (JC_50: (((mul_double nearest_even) x_2) !t_2))) in void);
+      (return := !__retres); (raise Return) end))); absurd  end with
+   Return -> !return end)) { true }
 
 
 ========== generation of alt-ergo VC output ==========

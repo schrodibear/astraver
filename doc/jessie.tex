@@ -2,21 +2,21 @@
 %                                                                        %
 %  The Why platform for program certification                            %
 %                                                                        %
-%  Copyright (C) 2002-2011                                               %
+%  Copyright (C) 2002-2014                                               %
 %                                                                        %
-%    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                %
-%    Claude MARCHE, INRIA & Univ. Paris-sud 11                           %
-%    Yannick MOY, Univ. Paris-sud 11                                     %
-%    Romain BARDOU, Univ. Paris-sud 11                                   %
+%    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud                   %
+%    Claude MARCHE, INRIA & Univ. Paris-sud                              %
+%    Yannick MOY, Univ. Paris-sud                                        %
+%    Romain BARDOU, Univ. Paris-sud                                      %
 %                                                                        %
 %  Secondary contributors:                                               %
 %                                                                        %
-%    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     %
-%    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          %
-%    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        %
-%    Sylvie BOLDO, INRIA                 (floating-point support)        %
-%    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  %
-%    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       %
+%    Thierry HUBERT, Univ. Paris-sud  (former Caduceus front-end)        %
+%    Nicolas ROUSSET, Univ. Paris-sud (on Jessie & Krakatoa)             %
+%    Ali AYAD, CNRS & CEA Saclay      (floating-point support)           %
+%    Sylvie BOLDO, INRIA              (floating-point support)           %
+%    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     %
+%    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          %
 %                                                                        %
 %  This software is free software; you can redistribute it and/or        %
 %  modify it under the terms of the GNU Lesser General Public            %
@@ -30,7 +30,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[a4paper,11pt,twoside,openright]{report}
-\usepackage{hevea}
 
 \usepackage[pdftex,colorlinks=true,urlcolor=blue,pdfstartview=FitH]{hyperref}
 
@@ -76,16 +75,15 @@
 \rhead[\fancyplain{}{\bfseries\leftmark}]{\fancyplain{}{\bfseries\thepage}}
 \lfoot{\fancyplain{}{C. March\'e, Y. Moy}}
 \cfoot{\fancyplain{}{Why platform, Jessie plugin for Frama-C}}
-\rfoot{\fancyplain{}{ProVal, \today}}
+\rfoot{\fancyplain{}{Toccata, \today}}
 
 
 \begin{document}
-\ifhevea%
-This document is also available in \ahref{jessie.pdf}{PDF format}.
-\else
+%HEVEA This document is also available in \ahref{jessie.pdf}{PDF format}.
+%BEGIN LATEX
 \sloppy
 \hbadness=9999
-\fi
+%END LATEX
 
 \whytitlepage{The Jessie plugin\\~\\ for Deductive Verification in Frama-C}{Tutorial and Reference Manual}{\whyversion}{Claude March\'e, Yannick Moy}
 
@@ -235,7 +233,7 @@ Safety, default behavior, normal behavior `normal` and normal behavior
 In the next chapters, we detail how to prove each kind of VC.
 We also recommend to
 look at the collection of verified programs at URL
-\url{http://proval.lri.fr/gallery/jessieplugin.en.html} to get more hints
+\url{http://toccata.lri.fr/gallery/jessieplugin.en.html} to get more hints
 on how to specify and prove programs with Jessie.
 
 \chapter{Safety Checking}
@@ -810,7 +808,6 @@ Here is a set of common error messages and possible fix or workaround.
 \end{document}
 
 \documentclass[a4paper]{report}
-\usepackage{hevea}
 
 \usepackage{hyperref}
 
@@ -844,37 +841,33 @@ Here is a set of common error messages and possible fix or workaround.
 \usepackage{xcolor}
 \definecolor{darkgreen}{rgb}{0, 0.5, 0}
 
-\ifhevea%
-\makeatletter%
-\renewenvironment{document}{%
-\@end{document}%
-\@atbegindocument%
-\@restartoutput\unskip%
-\@print{<#def title>Jessie Plug-in Tutorial</#def>
-<#def meta><meta name="GENERATOR" content="hevea }%
-\@getprint{\usebox{\@heveaversion}}\@print{"></#def>
-<#head>
-}%
-\usebox{\@toplinks}\usebox{\@linkstext}%
-\cutdef*[\thecuttingdepth]{\cuttingunit}%
-\renewcommand{\addstyle}[1]{\hva@warn{\addstyle{} must be used in document preamble}}%
-\@open@par%Open first paragraph
-}{%
-\@clearstyle\@footnoteflush{\@footnotelevel}\cutend*\title@flush@hook%
-\@atenddocument%
-\@final@footer%
-\@clearstyle%
-\@print{<#foot>}%
-\@raise@enddocument}%
-\makeatother%
-\fi
+%HEVEA \makeatletter%
+%HEVEA \renewenvironment{document}{%
+%HEVEA \@end{document}%
+%HEVEA \@atbegindocument%
+%HEVEA \@restartoutput\unskip%
+%HEVEA \@print{<#def title>Jessie Plug-in Tutorial</#def>
+%HEVEA <#def meta><meta name="GENERATOR" content="hevea }%
+%HEVEA \@getprint{\usebox{\@heveaversion}}\@print{"></#def>
+%HEVEA <#head>
+%HEVEA }%
+%HEVEA \usebox{\@toplinks}\usebox{\@linkstext}%
+%HEVEA \cutdef*[\thecuttingdepth]{\cuttingunit}%
+%HEVEA \renewcommand{\addstyle}[1]{\hva@warn{\addstyle{} must be used in document preamble}}%
+%HEVEA \@open@par%Open first paragraph
+%HEVEA }{%
+%HEVEA \@clearstyle\@footnoteflush{\@footnotelevel}\cutend*\title@flush@hook%
+%HEVEA \@atenddocument%
+%HEVEA \@final@footer%
+%HEVEA \@clearstyle%
+%HEVEA \@print{<#foot>}%
+%HEVEA \@raise@enddocument}%
+%HEVEA \makeatother%
 
 \begin{document}
 
-\ifhevea%
-This document is also available in
-\ahref{jessie/jessie-tutorial.pdf}{pdf format}.
-\else
+%HEVEA This document is also available in \ahref{jessie/jessie-tutorial.pdf}{pdf format}.
+%BEGIN LATEX
 \sloppy
 \hbadness=10000
 \begin{titlepage}
@@ -899,17 +892,17 @@ Jessie plug-in version: 2.30
 
 \vfill
 \begin{flushleft}
-$^1$ INRIA Saclay - \^Ile-de-France, ProVal, Orsay, F-91893 \\
+$^1$ INRIA Saclay - \^Ile-de-France, Toccata, Orsay, F-91893 \\
 $^2$ France T\'el\'ecom, Lannion, F-22307 \\
 $^3$ LRI, Univ Paris-Sud, CNRS, Orsay, F-91405
 \end{flushleft}
-  \textcopyright 2009-2011 INRIA
+  \textcopyright 2009-2014 CNRS/INRIA/Univ Paris-Sud
 
   This work was supported by the `CAT' ANR project
   (ANR-05-RNTL-0030x), the ANRT CIFRE contract 2005/973, and the `U3CAT'
   ANR project.
 \end{titlepage}
-\fi
+%END LATEX
 
 
 

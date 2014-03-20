@@ -1,7 +1,7 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only alloc.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD alloc.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only alloc.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/alloc.c"
 [jessie] Starting Jessie translation
-[kernel] warning: Neither code nor specification for function alloc, generating default assigns from the prototype
+PPCHOME/tests/jessie/alloc.c:34:[kernel] warning: Neither code nor specification for function alloc, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir alloc.jessie
 [jessie] File alloc.jessie/alloc.jc written.
 [jessie] File alloc.jessie/alloc.cloc written.
@@ -43,7 +43,7 @@ type voidP = [voidP]
 charP[..] alloc(uint32 size_0)
 behavior default:
   assigns \nothing;
-  ensures (C_1 : true);
+  ensures (_C_1 : true);
 ;
 
 charP[..] ptr1;
@@ -52,10 +52,10 @@ charP[..] ptr2;
 
 unit f()
 behavior default:
-  ensures (C_6 : (ptr1 != ptr2));
+  ensures (_C_6 : (ptr1 != ptr2));
 {  
-   {  (C_3 : (ptr1 = (C_2 : alloc(10))));
-      (C_5 : (ptr2 = (C_4 : alloc(10))));
+   {  (_C_3 : (ptr1 = (_C_2 : alloc(10))));
+      (_C_5 : (ptr2 = (_C_4 : alloc(10))));
       
       (return ())
    }
@@ -424,36 +424,28 @@ let f_ensures_default =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_3:
-   (C_5:
    begin
-     (let jessie_<somenum> =
-     (ptr1 := (C_2:
-              (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
-              (JC_<somenum>: (alloc jessie_<somenum>))))) in void);
-    (let jessie_<somenum> =
-    (ptr2 := (C_4:
-             (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
-             (JC_<somenum>: (alloc jessie_<somenum>))))) in void); (raise Return);
-    (raise Return) end)) with Return -> void end) { (JC_<somenum>: (ptr1 <> ptr2)) }
+     (let _jessie_<somenum> =
+     (ptr1 := (let _jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
+              (JC_<somenum>: (alloc _jessie_<somenum>)))) in void);
+    (let _jessie_<somenum> =
+    (ptr2 := (let _jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
+             (JC_<somenum>: (alloc _jessie_<somenum>)))) in void); (raise Return);
+    (raise Return) end with Return -> void end) { (JC_<somenum>: (ptr1 <> ptr2)) }
 
 let f_safety =
  fun (tt : unit) ->
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_3:
-   (C_5:
    begin
-     (let jessie_<somenum> =
-     (ptr1 := (C_2:
-              (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
-              (JC_<somenum>: (alloc_requires jessie_<somenum>))))) in void);
-    (let jessie_<somenum> =
-    (ptr2 := (C_4:
-             (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
-             (JC_<somenum>: (alloc_requires jessie_<somenum>))))) in void); (raise Return);
-    (raise Return) end)) with Return -> void end) { true }
+     (let _jessie_<somenum> =
+     (ptr1 := (let _jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
+              (JC_<somenum>: (alloc_requires _jessie_<somenum>)))) in void);
+    (let _jessie_<somenum> =
+    (ptr2 := (let _jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
+             (JC_<somenum>: (alloc_requires _jessie_<somenum>)))) in void); (raise Return);
+    (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C alloc.jessie --quiet -f alloc.makefile project

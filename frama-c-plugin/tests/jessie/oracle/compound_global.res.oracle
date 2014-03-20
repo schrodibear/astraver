@@ -1,8 +1,10 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only compound_global.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD compound_global.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only compound_global.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/compound_global.c"
 [kernel] warning: ignoring status of global invariant `gt'
 [kernel] warning: ignoring status of global invariant `gt2'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global invariant `gt'
+[kernel] warning: ignoring status of global invariant `gt2'
 [jessie] Producing Jessie files in subdir compound_global.jessie
 [jessie] File compound_global.jessie/compound_global.jc written.
 [jessie] File compound_global.jessie/compound_global.cloc written.
@@ -70,15 +72,15 @@ invariant gt :
 ((gt.ti == 1) && (gt.tj == 2))
 
 unit fc(T[..] t)
-  requires (C_10 : ((C_11 : (\offset_min(t) <= 0)) &&
-                     (C_12 : (\offset_max(t) >= 0))));
+  requires (_C_10 : ((_C_11 : (\offset_min(t) <= 0)) &&
+                      (_C_12 : (\offset_max(t) >= 0))));
 behavior default:
-  ensures (C_7 : ((C_8 : (\at(t,Old).ti == 1)) &&
-                   (C_9 : (\at(t,Old).tj == 2))));
+  ensures (_C_7 : ((_C_8 : (\at(t,Old).ti == 1)) &&
+                    (_C_9 : (\at(t,Old).tj == 2))));
 {  
    {  
-      {  (C_3 : ((C_2 : t.ti) = (C_1 : gt.ti)));
-         (C_6 : ((C_5 : t.tj) = (C_4 : gt.tj)))
+      {  (_C_3 : ((_C_2 : t.ti) = (_C_1 : gt.ti)));
+         (_C_6 : ((_C_5 : t.tj) = (_C_4 : gt.tj)))
       };
       
       (return ())
@@ -94,15 +96,15 @@ invariant gt2 :
 ((gs.i == 1) && (gs.p == null))
 
 unit fcp(S[..] s)
-  requires (C_22 : ((C_23 : (\offset_min(s) <= 0)) &&
-                     (C_24 : (\offset_max(s) >= 0))));
+  requires (_C_22 : ((_C_23 : (\offset_min(s) <= 0)) &&
+                      (_C_24 : (\offset_max(s) >= 0))));
 behavior default:
-  ensures (C_19 : ((C_20 : (\at(s,Old).i == 1)) &&
-                    (C_21 : (\at(s,Old).p == null))));
+  ensures (_C_19 : ((_C_20 : (\at(s,Old).i == 1)) &&
+                     (_C_21 : (\at(s,Old).p == null))));
 {  
    {  
-      {  (C_15 : ((C_14 : s.i) = (C_13 : gs.i)));
-         (C_18 : ((C_17 : s.p) = (C_16 : gs.p)))
+      {  (_C_15 : ((_C_14 : s.i) = (_C_13 : gs.i)));
+         (_C_18 : ((_C_17 : s.p) = (_C_16 : gs.p)))
       };
       
       (return ())
@@ -794,17 +796,15 @@ let fc_ensures_default =
   (init:
   try
    begin
-     (let jessie_<somenum> =
-     (C_3:
+     (let _jessie_<somenum> =
      begin
-       (let jessie_<somenum> = (C_1: ((safe_acc_ !T_ti_gt_1) gt)) in
-       (let jessie_<somenum> = t in (((safe_upd_ T_ti_t_3) jessie_<somenum>) jessie_<somenum>)));
-      (C_6:
-      (let jessie_<somenum> = (C_4: ((safe_acc_ !T_tj_gt_1) gt)) in
+       (let _jessie_<somenum> = ((safe_acc_ !T_ti_gt_1) gt) in
+       (let _jessie_<somenum> = t in (((safe_upd_ T_ti_t_3) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> = ((safe_acc_ !T_tj_gt_1) gt) in
       begin
-        (let jessie_<somenum> = t in (((safe_upd_ T_tj_t_3) jessie_<somenum>) jessie_<somenum>));
-       jessie_<somenum> end)) end) in void); (raise Return); (raise Return) end with
-   Return -> void end)
+        (let _jessie_<somenum> = t in
+        (((safe_upd_ T_tj_t_3) _jessie_<somenum>) _jessie_<somenum>)); _jessie_<somenum> end) end in
+     void); (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_int32(select(T_ti_t_3, t)) = (1)))
     and (JC_<somenum>: (integer_of_int32(select(T_tj_t_3, t)) = (2))))) }
@@ -822,18 +822,16 @@ let fc_safety =
   (init:
   try
    begin
-     (let jessie_<somenum> =
-     (C_3:
+     (let _jessie_<somenum> =
      begin
-       (let jessie_<somenum> = (C_1: ((safe_acc_ !T_ti_gt_1) gt)) in
-       (let jessie_<somenum> = t in
-       (JC_<somenum>: ((((upd_ T_t_3_alloc_table) T_ti_t_3) jessie_<somenum>) jessie_<somenum>))));
-      (C_6:
-      (let jessie_<somenum> = (C_4: ((safe_acc_ !T_tj_gt_1) gt)) in
+       (let _jessie_<somenum> = ((safe_acc_ !T_ti_gt_1) gt) in
+       (let _jessie_<somenum> = t in
+       (JC_<somenum>: ((((upd_ T_t_3_alloc_table) T_ti_t_3) _jessie_<somenum>) _jessie_<somenum>))));
+      (let _jessie_<somenum> = ((safe_acc_ !T_tj_gt_1) gt) in
       begin
-        (let jessie_<somenum> = t in
-        (JC_<somenum>: ((((upd_ T_t_3_alloc_table) T_tj_t_3) jessie_<somenum>) jessie_<somenum>)));
-       jessie_<somenum> end)) end) in void); (raise Return); (raise Return) end with
+        (let _jessie_<somenum> = t in
+        (JC_<somenum>: ((((upd_ T_t_3_alloc_table) T_tj_t_3) _jessie_<somenum>) _jessie_<somenum>)));
+       _jessie_<somenum> end) end in void); (raise Return); (raise Return) end with
    Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))
@@ -854,17 +852,16 @@ let fcp_ensures_default =
   (init:
   try
    begin
-     (let jessie_<somenum> =
-     (C_15:
+     (let _jessie_<somenum> =
      begin
-       (let jessie_<somenum> = (C_13: ((safe_acc_ !S_i_gs_2) gs)) in
-       (let jessie_<somenum> = s_0 in (((safe_upd_ S_i_s_4) jessie_<somenum>) jessie_<somenum>)));
-      (C_18:
-      (let jessie_<somenum> = (C_16: ((safe_acc_ !S_p_gs_2) gs)) in
+       (let _jessie_<somenum> = ((safe_acc_ !S_i_gs_2) gs) in
+       (let _jessie_<somenum> = s_0 in
+       (((safe_upd_ S_i_s_4) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> = ((safe_acc_ !S_p_gs_2) gs) in
       begin
-        (let jessie_<somenum> = s_0 in (((safe_upd_ S_p_s_4) jessie_<somenum>) jessie_<somenum>));
-       jessie_<somenum> end)) end) in void); (raise Return); (raise Return) end with
-   Return -> void end)
+        (let _jessie_<somenum> = s_0 in
+        (((safe_upd_ S_p_s_4) _jessie_<somenum>) _jessie_<somenum>)); _jessie_<somenum> end) end in
+     void); (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_int32(select(S_i_s_4, s_0)) = (1)))
     and (JC_<somenum>: (select(S_p_s_4, s_0) = null)))) }
@@ -882,18 +879,16 @@ let fcp_safety =
   (init:
   try
    begin
-     (let jessie_<somenum> =
-     (C_15:
+     (let _jessie_<somenum> =
      begin
-       (let jessie_<somenum> = (C_13: ((safe_acc_ !S_i_gs_2) gs)) in
-       (let jessie_<somenum> = s_0 in
-       (JC_<somenum>: ((((upd_ S_s_4_alloc_table) S_i_s_4) jessie_<somenum>) jessie_<somenum>))));
-      (C_18:
-      (let jessie_<somenum> = (C_16: ((safe_acc_ !S_p_gs_2) gs)) in
+       (let _jessie_<somenum> = ((safe_acc_ !S_i_gs_2) gs) in
+       (let _jessie_<somenum> = s_0 in
+       (JC_<somenum>: ((((upd_ S_s_4_alloc_table) S_i_s_4) _jessie_<somenum>) _jessie_<somenum>))));
+      (let _jessie_<somenum> = ((safe_acc_ !S_p_gs_2) gs) in
       begin
-        (let jessie_<somenum> = s_0 in
-        (JC_<somenum>: ((((upd_ S_s_4_alloc_table) S_p_s_4) jessie_<somenum>) jessie_<somenum>)));
-       jessie_<somenum> end)) end) in void); (raise Return); (raise Return) end with
+        (let _jessie_<somenum> = s_0 in
+        (JC_<somenum>: ((((upd_ S_s_4_alloc_table) S_p_s_4) _jessie_<somenum>) _jessie_<somenum>)));
+       _jessie_<somenum> end) end in void); (raise Return); (raise Return) end with
    Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))
@@ -919,22 +914,22 @@ why --project [...] why/compound_global.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/compound_global_po13.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "96" begin = "18" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "96" begin = "19" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_global_po14.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "96" begin = "18" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "96" begin = "19" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_global_po15.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "97" begin = "18" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "97" begin = "19" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_global_po16.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "97" begin = "18" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "97" begin = "19" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -970,22 +965,22 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/compound_global_po3.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "72" begin = "17" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "72" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_global_po4.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "72" begin = "17" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "72" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_global_po5.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "73" begin = "17" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "73" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_global_po6.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "73" begin = "17" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "73" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

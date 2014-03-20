@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only duprat3.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD duprat3.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only duprat3.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/duprat3.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir duprat3.jessie
 [jessie] File duprat3.jessie/duprat3.jc written.
@@ -48,17 +48,17 @@ predicate pcond2(integer p_0) =
 int32 ftest2(int32 x, int32 y)
 behavior ok:
   assumes (pcond1(x) && pcond2(y));
-  ensures (C_4 : (\result == 1));
+  ensures (_C_4 : (\result == 1));
 behavior ko:
   assumes ((! pcond1(x)) || (! pcond2(y)));
-  ensures (C_5 : (\result == 0));
+  ensures (_C_5 : (\result == 0));
 behavior default:
-  ensures (C_6 : true);
+  ensures (_C_6 : true);
 {  
    (var int32 tmp);
    
-   {  (if (x > 0) then (if (y < 10) then (C_3 : (tmp = 1)) else (C_2 : (tmp = 0))) else 
-      (C_1 : (tmp = 0)));
+   {  (if (x > 0) then (if (y < 10) then (_C_3 : (tmp = 1)) else (_C_2 : (tmp = 0))) else 
+      (_C_1 : (tmp = 0)));
       
       (return tmp)
    }
@@ -439,15 +439,15 @@ let ftest2_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (0))
        then
         (if ((lt_int_ (integer_of_int32 y)) (10))
-        then (C_3: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-        else (C_2: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
-       else (C_1: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void); (return := !tmp); (raise Return) end); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+        then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
+        else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)
+       else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end) in void);
+      (return := !tmp); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: true) }
 
 let ftest2_ensures_ko =
  fun (x_0 : int32) (y : int32) ->
@@ -459,15 +459,15 @@ let ftest2_ensures_ko =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (0))
        then
         (if ((lt_int_ (integer_of_int32 y)) (10))
-        then (C_3: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-        else (C_2: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
-       else (C_1: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void); (return := !tmp); (raise Return) end); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (0))) }
+        then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
+        else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)
+       else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end) in void);
+      (return := !tmp); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 let ftest2_ensures_ok =
  fun (x_0 : int32) (y : int32) ->
@@ -478,15 +478,15 @@ let ftest2_ensures_ok =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (0))
        then
         (if ((lt_int_ (integer_of_int32 y)) (10))
-        then (C_3: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-        else (C_2: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
-       else (C_1: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void); (return := !tmp); (raise Return) end); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (1))) }
+        then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
+        else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)
+       else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end) in void);
+      (return := !tmp); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: (integer_of_int32(result) = (1))) }
 
 let ftest2_safety =
  fun (x_0 : int32) (y : int32) ->
@@ -497,15 +497,15 @@ let ftest2_safety =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (0))
        then
         (if ((lt_int_ (integer_of_int32 y)) (10))
-        then (C_3: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-        else (C_2: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
-       else (C_1: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void); (return := !tmp); (raise Return) end); absurd  end with
-   Return -> !return end)) { true }
+        then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
+        else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)
+       else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end) in void);
+      (return := !tmp); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C duprat3.jessie --quiet -f duprat3.makefile project

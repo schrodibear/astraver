@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only shap.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD shap.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only shap.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/shap.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir shap.jessie
 [jessie] File shap.jessie/shap.jc written.
@@ -47,9 +47,9 @@ type voidP = [voidP]
 
 unit g(intP[..] ip)
 behavior default:
-  ensures (C_3 : true);
+  ensures (_C_3 : true);
 {  
-   {  (C_2 : ((C_1 : ip.intM) = 1));
+   {  (_C_2 : ((_C_1 : ip.intM) = 1));
       
       (return ())
    }
@@ -59,9 +59,9 @@ intP[0] a;
 
 unit f()
 behavior default:
-  ensures (C_5 : true);
+  ensures (_C_5 : true);
 {  
-   {  (C_4 : g(a));
+   {  (_C_4 : g(a));
       
       (return ())
    }
@@ -513,11 +513,10 @@ let f_ensures_default =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_4:
    begin
-     (let jessie_<somenum> = a in
-     (JC_<somenum>: (((g jessie_<somenum>) intP_intM_a_1) !intP_a_1_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = a in
+     (JC_<somenum>: (((g _jessie_<somenum>) intP_intM_a_1) !intP_a_1_alloc_table)));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let f_safety =
@@ -525,36 +524,33 @@ let f_safety =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_4:
    begin
-     (let jessie_<somenum> = a in
-     (JC_<somenum>: (((g_requires jessie_<somenum>) intP_intM_a_1) !intP_a_1_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+     (let _jessie_<somenum> = a in
+     (JC_<somenum>: (((g_requires _jessie_<somenum>) intP_intM_a_1) !intP_a_1_alloc_table)));
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 let g_ensures_default =
  fun (ip : intP pointer) (intP_intM_ip_2 : (intP, int32) memory ref) (intP_ip_2_alloc_table : intP alloc_table) ->
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let jessie_<somenum> = ip in (((safe_upd_ intP_intM_ip_2) jessie_<somenum>) jessie_<somenum>)));
-    (raise Return); (raise Return) end) with Return -> void end)
-  { (JC_<somenum>: true) }
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let _jessie_<somenum> = ip in
+     (((safe_upd_ intP_intM_ip_2) _jessie_<somenum>) _jessie_<somenum>))); (raise Return);
+    (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
 let g_safety =
  fun (ip : intP pointer) (intP_intM_ip_2 : (intP, int32) memory ref) (intP_ip_2_alloc_table : intP alloc_table) ->
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let jessie_<somenum> = ip in
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let _jessie_<somenum> = ip in
      (JC_<somenum>:
-     ((((upd_ intP_ip_2_alloc_table) intP_intM_ip_2) jessie_<somenum>) jessie_<somenum>))));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+     ((((upd_ intP_ip_2_alloc_table) intP_intM_ip_2) _jessie_<somenum>) _jessie_<somenum>))));
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C shap.jessie --quiet -f shap.makefile project
@@ -564,12 +560,12 @@ why --project [...] why/shap.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/shap_po1.why">
-      <location file = "PPCHOME/tests/jessie/shap.jessie/shap.jc" line = "46" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/shap.jessie/shap.jc" line = "46" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/shap_po2.why">
-      <location file = "PPCHOME/tests/jessie/shap.jessie/shap.jc" line = "46" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/shap.jessie/shap.jc" line = "46" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

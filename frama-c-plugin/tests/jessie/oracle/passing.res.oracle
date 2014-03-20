@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only passing.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD passing.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only passing.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/passing.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir passing.jessie
 [jessie] File passing.jessie/passing.jc written.
@@ -46,13 +46,13 @@ tag voidP = {
 type voidP = [voidP]
 
 unit g(intP[..] x_0)
-  requires (C_4 : ((C_5 : (\offset_min(x_0) <= 0)) &&
-                    (C_6 : (\offset_max(x_0) >= 0))));
+  requires (_C_4 : ((_C_5 : (\offset_min(x_0) <= 0)) &&
+                     (_C_6 : (\offset_max(x_0) >= 0))));
 behavior default:
   assigns x_0.intM;
-  ensures (C_3 : (\at(x_0,Old).intM == 0));
+  ensures (_C_3 : (\at(x_0,Old).intM == 0));
 {  
-   {  (C_2 : ((C_1 : x_0.intM) = 0));
+   {  (_C_2 : ((_C_1 : x_0.intM) = 0));
       
       (return ())
    }
@@ -61,28 +61,28 @@ behavior default:
 intP[..] r;
 
 int32 g2()
-  requires (C_11 : ((C_12 : (\offset_min(r) <= 0)) &&
-                     (C_13 : (\offset_max(r) >= 0))));
+  requires (_C_11 : ((_C_12 : (\offset_min(r) <= 0)) &&
+                      (_C_13 : (\offset_max(r) >= 0))));
 behavior default:
-  ensures (C_10 : (\result == 0));
+  ensures (_C_10 : (\result == 0));
 {  
    (var int32 __retres);
    
-   {  (C_7 : g(r));
-      (C_9 : (__retres = (C_8 : r.intM)));
+   {  (_C_7 : g(r));
+      (_C_9 : (__retres = (_C_8 : r.intM)));
       
       (return __retres)
    }
 }
 
 unit f(intP[..] x)
-  requires (C_18 : ((C_19 : (\offset_min(x) <= 0)) &&
-                     (C_20 : (\offset_max(x) >= 0))));
+  requires (_C_18 : ((_C_19 : (\offset_min(x) <= 0)) &&
+                      (_C_20 : (\offset_max(x) >= 0))));
 behavior default:
   assigns (x + 0).intM;
-  ensures (C_17 : ((\at(x,Old) + 0).intM == 1));
+  ensures (_C_17 : ((\at(x,Old) + 0).intM == 1));
 {  
-   {  (C_16 : ((C_15 : (C_14 : (x + 0)).intM) = 1));
+   {  (_C_16 : ((_C_15 : (_C_14 : (x + 0)).intM) = 1));
       
       (return ())
    }
@@ -95,9 +95,9 @@ invariant valid_t :
 
 unit main()
 behavior default:
-  ensures (C_22 : ((t + 0).intM == 1));
+  ensures (_C_22 : ((t + 0).intM == 1));
 {  
-   {  (C_21 : f(t));
+   {  (_C_21 : f(t));
       
       (return ())
    }
@@ -642,12 +642,11 @@ let f_ensures_default =
     and (JC_<somenum>: valid_t(intP_t_2_alloc_table)))) }
   (init:
   try
-   (C_16:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let jessie_<somenum> = x_1 in
-     (((safe_upd_ intP_intM_x_4) jessie_<somenum>) jessie_<somenum>))); (raise Return);
-    (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let _jessie_<somenum> = x_1 in
+     (((safe_upd_ intP_intM_x_4) _jessie_<somenum>) _jessie_<somenum>))); (raise Return);
+    (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      (integer_of_int32(select(intP_intM_x_4, shift(x_1, (0)))) = (1)))
@@ -664,13 +663,12 @@ let f_safety =
     and (JC_<somenum>: valid_t(intP_t_2_alloc_table)))) }
   (init:
   try
-   (C_16:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let jessie_<somenum> = x_1 in
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let _jessie_<somenum> = x_1 in
      (JC_<somenum>:
-     ((((upd_ intP_x_4_alloc_table) intP_intM_x_4) jessie_<somenum>) jessie_<somenum>))));
-    (raise Return); (raise Return) end) with Return -> void end)
+     ((((upd_ intP_x_4_alloc_table) intP_intM_x_4) _jessie_<somenum>) _jessie_<somenum>))));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: valid_t(intP_t_2_alloc_table)) }
 
 let g2_ensures_default =
@@ -685,14 +683,12 @@ let g2_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_7:
-     (C_9:
      begin
-       (let jessie_<somenum> = r in
-       (JC_<somenum>: (((g jessie_<somenum>) intP_intM_r_1) !intP_r_1_alloc_table)));
-      (let jessie_<somenum> = (__retres := (C_8: ((safe_acc_ !intP_intM_r_1) r))) in
-      void); (return := !__retres); (raise Return) end))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (0))) }
+       (let _jessie_<somenum> = r in
+       (JC_<somenum>: (((g _jessie_<somenum>) intP_intM_r_1) !intP_r_1_alloc_table)));
+      (let _jessie_<somenum> = (__retres := ((safe_acc_ !intP_intM_r_1) r)) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 let g2_safety =
  fun (tt : unit) ->
@@ -706,16 +702,13 @@ let g2_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_7:
-     (C_9:
      begin
-       (let jessie_<somenum> = r in
+       (let _jessie_<somenum> = r in
        (JC_<somenum>:
-       (((g_requires jessie_<somenum>) intP_intM_r_1) !intP_r_1_alloc_table)));
-      (let jessie_<somenum> =
-      (__retres := (C_8:
-                   (JC_<somenum>: (((acc_ !intP_r_1_alloc_table) !intP_intM_r_1) r)))) in
-      void); (return := !__retres); (raise Return) end))); absurd  end with
+       (((g_requires _jessie_<somenum>) intP_intM_r_1) !intP_r_1_alloc_table)));
+      (let _jessie_<somenum> =
+      (__retres := (JC_<somenum>: (((acc_ !intP_r_1_alloc_table) !intP_intM_r_1) r))) in
+      void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: valid_t(intP_t_2_alloc_table)) }
 
 let g_ensures_default =
@@ -727,12 +720,11 @@ let g_ensures_default =
     and (JC_<somenum>: valid_t(intP_t_2_alloc_table)))) }
   (init:
   try
-   (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-     (let jessie_<somenum> = x_0 in
-     (((safe_upd_ intP_intM_x_0_3) jessie_<somenum>) jessie_<somenum>))); (raise Return);
-    (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+     (let _jessie_<somenum> = x_0 in
+     (((safe_upd_ intP_intM_x_0_3) _jessie_<somenum>) _jessie_<somenum>))); (raise Return);
+    (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_int32(select(intP_intM_x_0_3, x_0)) = (0)))
     and (JC_<somenum>:
@@ -748,13 +740,12 @@ let g_safety =
     and (JC_<somenum>: valid_t(intP_t_2_alloc_table)))) }
   (init:
   try
-   (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-     (let jessie_<somenum> = x_0 in
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+     (let _jessie_<somenum> = x_0 in
      (JC_<somenum>:
-     ((((upd_ intP_x_0_3_alloc_table) intP_intM_x_0_3) jessie_<somenum>) jessie_<somenum>))));
-    (raise Return); (raise Return) end) with Return -> void end)
+     ((((upd_ intP_x_0_3_alloc_table) intP_intM_x_0_3) _jessie_<somenum>) _jessie_<somenum>))));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: valid_t(intP_t_2_alloc_table)) }
 
 let main_ensures_default =
@@ -762,11 +753,10 @@ let main_ensures_default =
   { (JC_<somenum>: valid_t(intP_t_2_alloc_table)) }
   (init:
   try
-   (C_21:
    begin
-     (let jessie_<somenum> = t in
-     (JC_<somenum>: (((f jessie_<somenum>) intP_intM_t_2) !intP_t_2_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = t in
+     (JC_<somenum>: (((f _jessie_<somenum>) intP_intM_t_2) !intP_t_2_alloc_table)));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: (integer_of_int32(select(intP_intM_t_2, shift(t, (0)))) = (1))) }
 
 let main_safety =
@@ -774,11 +764,10 @@ let main_safety =
   { (JC_<somenum>: valid_t(intP_t_2_alloc_table)) }
   (init:
   try
-   (C_21:
    begin
-     (let jessie_<somenum> = t in
-     (JC_<somenum>: (((f_requires jessie_<somenum>) intP_intM_t_2) !intP_t_2_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = t in
+     (JC_<somenum>: (((f_requires _jessie_<somenum>) intP_intM_t_2) !intP_t_2_alloc_table)));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: valid_t(intP_t_2_alloc_table)) }
 
 
@@ -795,12 +784,12 @@ why --project [...] why/passing.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/passing_po15.why">
-      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "94" begin = "14" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "94" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/passing_po16.why">
-      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "94" begin = "14" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "94" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -816,12 +805,12 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/passing_po6.why">
-      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "65" begin = "13" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "65" begin = "14" end = "18"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/passing_po7.why">
-      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "65" begin = "13" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "65" begin = "14" end = "18"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -851,12 +840,12 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/passing_po12.why">
-      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "49" begin = "14" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "49" begin = "15" end = "36"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/passing_po13.why">
-      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "49" begin = "14" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "49" begin = "15" end = "36"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -876,12 +865,12 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/passing_po3.why">
-      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "79" begin = "15" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "79" begin = "16" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/passing_po4.why">
-      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "79" begin = "15" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/passing.jessie/passing.jc" line = "79" begin = "16" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

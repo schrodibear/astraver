@@ -1,7 +1,7 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only allocation.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD allocation.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only allocation.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/allocation.c"
 [jessie] Starting Jessie translation
-[kernel] warning: Neither code nor specification for function malloc, generating default assigns from the prototype
+PPCHOME/tests/jessie/allocation.c:6:[kernel] warning: Neither code nor specification for function malloc, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir allocation.jessie
 [jessie] File allocation.jessie/allocation.jc written.
 [jessie] File allocation.jessie/allocation.cloc written.
@@ -43,14 +43,14 @@ tag voidP = {
 type voidP = [voidP]
 
 charP[..] f(int32 n_1)
-  requires (C_7 : (n_1 > 0));
+  requires (_C_7 : (n_1 > 0));
 behavior default:
-  ensures (C_4 : ((C_5 : (\offset_min(\result) <= 0)) &&
-                   (C_6 : (\offset_max(\result) >= (\at(n_1,Old) - 1)))));
+  ensures (_C_4 : ((_C_5 : (\offset_min(\result) <= 0)) &&
+                    (_C_6 : (\offset_max(\result) >= (\at(n_1,Old) - 1)))));
 {  
    (var charP[..] i);
    
-   {  (C_3 : (i = (C_2 : (new charP[(C_1 : (n_1 :> uint32))]))));
+   {  (_C_3 : (i = (_C_2 : (new charP[(_C_1 : (n_1 :> uint32))]))));
       
       (return i)
    }
@@ -465,16 +465,13 @@ let f_ensures_default =
   try
    begin
      (let i = ref (any_pointer void) in
-     (C_3:
      begin
-       (let jessie_<somenum> =
-       (i := (C_2:
-             (JC_<somenum>:
-             (((alloc_struct_charP (integer_of_uint32 (C_1:
-                                                      (safe_uint32_of_integer_ 
-                                                       (integer_of_int32 n_1))))) charP_result_1_alloc_table) charP_result_1_tag_table)))) in
-       void); (return := !i); (raise Return) end)); absurd  end with
-   Return -> !return end))
+       (let _jessie_<somenum> =
+       (i := (JC_<somenum>:
+             (((alloc_struct_charP (integer_of_uint32 (safe_uint32_of_integer_ 
+                                                       (integer_of_int32 n_1)))) charP_result_1_alloc_table) charP_result_1_tag_table))) in
+       void); (return := !i); (raise Return) end); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(offset_min(charP_result_1_alloc_table, result), (0)))
     and (JC_<somenum>:
@@ -489,17 +486,14 @@ let f_safety =
   try
    begin
      (let i = ref (any_pointer void) in
-     (C_3:
      begin
-       (let jessie_<somenum> =
-       (i := (C_2:
-             (JC_<somenum>:
-             (((alloc_struct_charP_requires (integer_of_uint32 (C_1:
-                                                               (JC_<somenum>:
+       (let _jessie_<somenum> =
+       (i := (JC_<somenum>:
+             (((alloc_struct_charP_requires (integer_of_uint32 (JC_<somenum>:
                                                                (uint32_of_integer_ 
-                                                                (integer_of_int32 n_1)))))) charP_result_1_alloc_table) charP_result_1_tag_table)))) in
-       void); (return := !i); (raise Return) end)); absurd  end with
-   Return -> !return end)) { true }
+                                                                (integer_of_int32 n_1))))) charP_result_1_alloc_table) charP_result_1_tag_table))) in
+       void); (return := !i); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C allocation.jessie --quiet -f allocation.makefile project

@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only footprint.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD footprint.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only footprint.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/footprint.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir footprint.jessie
 [jessie] File footprint.jessie/footprint.jc written.
@@ -56,17 +56,17 @@ axiomatic P {
 }
 
 unit f(intP[..] x)
-  requires (C_6 : (((C_8 : (\offset_min(x) <= 0)) &&
-                     (C_9 : (\offset_max(x) >= 1))) &&
-                    (C_10 : p{Here}(x))));
+  requires (_C_6 : (((_C_8 : (\offset_min(x) <= 0)) &&
+                      (_C_9 : (\offset_max(x) >= 1))) &&
+                     (_C_10 : p{Here}(x))));
 behavior default:
   assigns (x + 1).intM;
-  ensures (C_5 : true);
+  ensures (_C_5 : true);
 {  
-   {  (C_3 : ((C_2 : (C_1 : (x + 1)).intM) = 0));
+   {  (_C_3 : ((_C_2 : (_C_1 : (x + 1)).intM) = 0));
       
       {  
-         (assert for default: (C_4 : (jessie : p{Here}(x))));
+         (assert for default: (_C_4 : (jessie : p{Here}(x))));
          ()
       };
       
@@ -75,17 +75,17 @@ behavior default:
 }
 
 unit g(intP[..] x_0)
-  requires (C_14 : (((C_16 : (\offset_min(x_0) <= 0)) &&
-                      (C_17 : (\offset_max(x_0) >= 1))) &&
-                     (C_18 : p{Here}(x_0))));
+  requires (_C_14 : (((_C_16 : (\offset_min(x_0) <= 0)) &&
+                       (_C_17 : (\offset_max(x_0) >= 1))) &&
+                      (_C_18 : p{Here}(x_0))));
 behavior default:
   assigns (x_0 + 1).intM;
-  ensures (C_13 : true);
+  ensures (_C_13 : true);
 {  
-   {  (C_11 : f(x_0));
+   {  (_C_11 : f(x_0));
       
       {  
-         (assert for default: (C_12 : (jessie : p{Here}(x_0))));
+         (assert for default: (_C_12 : (jessie : p{Here}(x_0))));
          ()
       };
       
@@ -589,16 +589,15 @@ let f_ensures_default =
         and (JC_<somenum>: p(x_1, intP_intM_x_2))))) }
   (init:
   try
-   (C_3:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-     (let jessie_<somenum> = x_1 in
-     (let jessie_<somenum> = (1) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-     (((safe_upd_ intP_intM_x_2) jessie_<somenum>) jessie_<somenum>))))));
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+     (let _jessie_<somenum> = x_1 in
+     (let _jessie_<somenum> = (1) in
+     (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+     (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
+     (((safe_upd_ intP_intM_x_2) _jessie_<somenum>) _jessie_<somenum>))))));
     (assert { (JC_<somenum>: p(x_1, intP_intM_x_2)) }; void); void; (raise Return);
-    (raise Return) end) with Return -> void end)
+    (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     not_assigns(intP_x_2_alloc_table, intP_intM_x_2@, intP_intM_x_2,
     pset_range(pset_singleton(x_1), (1), (1)))) }
@@ -611,17 +610,16 @@ let f_safety =
         and (JC_<somenum>: p(x_1, intP_intM_x_2))))) }
   (init:
   try
-   (C_3:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-     (let jessie_<somenum> = x_1 in
-     (let jessie_<somenum> = (1) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+     (let _jessie_<somenum> = x_1 in
+     (let _jessie_<somenum> = (1) in
+     (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+     (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
      (JC_<somenum>:
-     ((((upd_ intP_x_2_alloc_table) intP_intM_x_2) jessie_<somenum>) jessie_<somenum>)))))));
+     ((((upd_ intP_x_2_alloc_table) intP_intM_x_2) _jessie_<somenum>) _jessie_<somenum>)))))));
     [ { } unit reads intP_intM_x_2 { (JC_<somenum>: p(x_1, intP_intM_x_2)) } ];
-    void; (raise Return); (raise Return) end) with Return -> void end)
+    void; (raise Return); (raise Return) end with Return -> void end)
   { true }
 
 let g_ensures_default =
@@ -632,12 +630,11 @@ let g_ensures_default =
         and (JC_<somenum>: p(x_0_0, intP_intM_x_0_3))))) }
   (init:
   try
-   (C_11:
    begin
-     (let jessie_<somenum> = x_0_0 in
-     (JC_<somenum>: (((f jessie_<somenum>) intP_intM_x_0_3) intP_x_0_3_alloc_table)));
+     (let _jessie_<somenum> = x_0_0 in
+     (JC_<somenum>: (((f _jessie_<somenum>) intP_intM_x_0_3) intP_x_0_3_alloc_table)));
     (assert { (JC_<somenum>: p(x_0_0, intP_intM_x_0_3)) }; void); void;
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     not_assigns(intP_x_0_3_alloc_table, intP_intM_x_0_3@, intP_intM_x_0_3,
     pset_range(pset_singleton(x_0_0), (1), (1)))) }
@@ -650,13 +647,12 @@ let g_safety =
         and (JC_<somenum>: p(x_0_0, intP_intM_x_0_3))))) }
   (init:
   try
-   (C_11:
    begin
-     (let jessie_<somenum> = x_0_0 in
+     (let _jessie_<somenum> = x_0_0 in
      (JC_<somenum>:
-     (((f_requires jessie_<somenum>) intP_intM_x_0_3) intP_x_0_3_alloc_table)));
+     (((f_requires _jessie_<somenum>) intP_intM_x_0_3) intP_x_0_3_alloc_table)));
     [ { } unit reads intP_intM_x_0_3 { (JC_<somenum>: p(x_0_0, intP_intM_x_0_3)) } ];
-    void; (raise Return); (raise Return) end) with Return -> void end)
+    void; (raise Return); (raise Return) end with Return -> void end)
   { true }
 
 
@@ -677,17 +673,17 @@ why --project [...] why/footprint.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/footprint_po7.why">
-      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "79" begin = "14" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "79" begin = "15" end = "21"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/footprint_po8.why">
-      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "79" begin = "14" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "79" begin = "15" end = "21"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/footprint_po9.why">
-      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "79" begin = "14" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "79" begin = "15" end = "21"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -707,12 +703,12 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/footprint_po3.why">
-      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "60" begin = "14" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "60" begin = "15" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/footprint_po4.why">
-      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "60" begin = "14" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "60" begin = "15" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

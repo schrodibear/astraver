@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts6453.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts6453.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts6453.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts6453.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts6453.jessie
 [jessie] File bts6453.jessie/bts6453.jc written.
@@ -46,10 +46,10 @@ tag voidP = {
 type voidP = [voidP]
 
 intP[..] foo(intP[..] a)
-  requires (C_2 : ((C_3 : (\offset_min(a) <= 0)) &&
-                    (C_4 : (\offset_max(a) >= 0))));
+  requires (_C_2 : ((_C_3 : (\offset_min(a) <= 0)) &&
+                     (_C_4 : (\offset_max(a) >= 0))));
 behavior default:
-  ensures (C_1 : (\result.intM == \at(a,Old).intM));
+  ensures (_C_1 : (\result.intM == \at(a,Old).intM));
 {  
    {  
       (return a)

@@ -1,6 +1,6 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only test8_floats.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD test8_floats.c"
-test8_floats.c:13:[kernel] warning: Floating-point constant 1.027030791 is not represented exactly. Will use 0x1.06eb7d6b547bap0. See documentation for option -warn-decimal-float
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only test8_floats.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/test8_floats.c"
+PPCHOME/tests/jessie/test8_floats.c:13:[kernel] warning: Floating-point constant 1.027030791 is not represented exactly. Will use 0x1.06eb7d6b547bap0. See documentation for option -warn-decimal-float
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir test8_floats.jessie
 [jessie] File test8_floats.jessie/test8_floats.jc written.
@@ -39,21 +39,21 @@ tag voidP = {
 type voidP = [voidP]
 
 double my_exp(double x)
-  requires (C_8 : (\real_abs((x :> real)) <= 1.0));
+  requires (_C_8 : (\real_abs((x :> real)) <= 1.0));
 behavior default:
-  ensures (C_7 : (((\double_exact(\result) ==
-                     \exp(\double_exact(\at(x,Old)))) &&
-                    (\double_relative_error(\at(x,Old)) == 0.0)) ==>
-                   (\double_relative_error(\result) <= 0.04)));
+  ensures (_C_7 : (((\double_exact(\result) ==
+                      \exp(\double_exact(\at(x,Old)))) &&
+                     (\double_relative_error(\at(x,Old)) == 0.0)) ==>
+                    (\double_relative_error(\result) <= 0.04)));
 {  
    (var double __retres);
    
-   {  (C_6 : (__retres = (C_5 : ((C_4 : ((1.027030791 :> double) +
-                                          (C_3 : ((1.113889894 :> double) *
-                                                   x)))) +
-                                  (C_2 : ((C_1 : ((0.4693555168 :> double) *
-                                                   x)) *
-                                           x))))));
+   {  (_C_6 : (__retres = (_C_5 : ((_C_4 : ((1.027030791 :> double) +
+                                             (_C_3 : ((1.113889894 :> double) *
+                                                       x)))) +
+                                    (_C_2 : ((_C_1 : ((0.4693555168 :> double) *
+                                                       x)) *
+                                              x))))));
       
       (return __retres)
    }

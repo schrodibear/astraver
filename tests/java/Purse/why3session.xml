@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
   name="Z3"
@@ -35,10 +35,12 @@
     locfile="../Purse.java"
     loclnum="58" loccnumb="16" loccnume="22"
     expl="VC for _Purse_credit_ensures_default"
-    sum="edbe49adbf6ee0c0bc781e677f431a98"
+    sum="d27f2bc692fc590a1ec48537a5bce34c"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix +aselectV2V0V1Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method credit, default behavior"/>
     <label
@@ -73,7 +75,7 @@
     locfile="../Purse.java"
     loclnum="58" loccnumb="16" loccnume="22"
     expl="VC for _Purse_credit_safety"
-    sum="746747352471da5a998f2e99227cf139"
+    sum="d1df789a5b331a7a3d79696c0b219a30"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
@@ -111,10 +113,12 @@
     locfile="../Purse.java"
     loclnum="77" loccnumb="15" loccnume="25"
     expl="VC for _Purse_getBalance_ensures_default"
-    sum="75e54529e3ab5a98a9f3c342573ec58e"
+    sum="3e9b64cf76a5988bdcdd7ae7a494ba50"
     proved="true"
     expanded="false"
     shape="ainfix =V3aselectV1V0Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method getBalance, default behavior"/>
     <label
@@ -149,7 +153,7 @@
     locfile="../Purse.java"
     loclnum="77" loccnumb="15" loccnume="25"
     expl="VC for _Purse_getBalance_safety"
-    sum="9816c355b6c2c5d84e5416eb053cbd47"
+    sum="ac00d4408703b253a5f5ee47e0b557c4"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V1Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FF">
@@ -187,10 +191,12 @@
     locfile="../Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="VC for _Purse_withdraw_ensures_default"
-    sum="7fa967a7886e9a6554db527452aa84b6"
+    sum="c36ea9994d63b62ddd097e01d2cda8a2"
     proved="true"
     expanded="false"
-    shape="iainfix &gt;=aselectV2V0V1anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix -aselectV2V0V1Aainfix &lt;=V1aselectV2V0Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fa_Non_null_ObjectV7V6IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
+    shape="ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFanot_assignsV3V2V7apset_singletonV0Aainfix =aselectV7V0ainfix -aselectV2V0V1Aainfix &lt;=V1aselectV2V0Iainfix =V7astoreV2V0ainfix -aselectV2V0V1Fainfix &gt;=aselectV2V0V1Iabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method withdraw, default behavior"/>
     <label
@@ -225,10 +231,12 @@
     locfile="../Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="VC for _Purse_withdraw_exsures_amount_too_large"
-    sum="a63046830adaa2ac0e26ccba83c87401"
+    sum="9e646565ee4f7dd2e7193d873eb36096"
     proved="true"
     expanded="false"
-    shape="anot_assignsV3V2V2apset_emptyAabalance_non_negativeV0V2Aainfix &gt;V1aselectV2V0Ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFIainfix &gt;=aselectV2V0V1NIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
+    shape="anot_assignsV3V2V2apset_emptyAabalance_non_negativeV0V2Aainfix &gt;V1aselectV2V0Ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFINainfix &gt;=aselectV2V0V1Iabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method withdraw, Behavior `amount_too_large&apos;"/>
     <label
@@ -263,10 +271,10 @@
     locfile="../Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="VC for _Purse_withdraw_safety"
-    sum="a9622204333218e0fc4da363831fd9f1"
+    sum="ab61bb9699a66ff7fa3099b6354b7077"
     proved="true"
     expanded="false"
-    shape="iainfix &gt;=aselectV2V0V1abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fainfix &gt;=aoffset_maxV6V7c0IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFAainfix &gt;=c1c0Iabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
+    shape="iainfix &gt;=aoffset_maxV5V6c0IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFAainfix &gt;=c1c0abalance_non_negativeV0V7Iainfix =V7astoreV2V0ainfix -aselectV2V0V1Fainfix &gt;=aselectV2V0V1Iabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
     <label
      name="expl:Method withdraw, Safety"/>
     <label
@@ -301,10 +309,12 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="58" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_String_Throwable_ensures_default"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Exception, default behavior"/>
     <label
@@ -339,7 +349,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="58" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_String_Throwable_safety"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -377,10 +387,12 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="40" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_String_ensures_default"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Exception, default behavior"/>
     <label
@@ -415,7 +427,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="40" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_String_safety"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -453,10 +465,12 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="76" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_Throwable_ensures_default"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Exception, default behavior"/>
     <label
@@ -491,7 +505,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="76" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_Throwable_safety"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -529,10 +543,12 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="28" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_ensures_default"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Exception, default behavior"/>
     <label
@@ -567,7 +583,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="28" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_safety"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -605,10 +621,12 @@
     locfile="../Purse.java"
     loclnum="37" loccnumb="11" loccnume="28"
     expl="VC for cons_NoCreditException_ensures_default"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class NoCreditException, default behavior"/>
     <label
@@ -643,7 +661,7 @@
     locfile="../Purse.java"
     loclnum="37" loccnumb="11" loccnume="28"
     expl="VC for cons_NoCreditException_safety"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -681,10 +699,12 @@
     locfile="../Purse.java"
     loclnum="50" loccnumb="11" loccnume="16"
     expl="VC for cons_Purse_ensures_default"
-    sum="bd1742a090d4ba3a50c4e9a219c0547c"
+    sum="bf9b3bad2e1fd49655c9e46c765c8287"
     proved="true"
     expanded="false"
     shape="anot_assignsV2V1V4apset_singletonV0Aainfix =aselectV4V0c0Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Purse, default behavior"/>
     <label
@@ -719,7 +739,7 @@
     locfile="../Purse.java"
     loclnum="50" loccnumb="11" loccnume="16"
     expl="VC for cons_Purse_safety"
-    sum="9ae2a9584cd8fae11144bae7bcb1ebaf"
+    sum="9d96b59d450db63584525a92382eb56c"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V4Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FF">
@@ -757,10 +777,12 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="216" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_String_Throwable_ensures_default"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Throwable, default behavior"/>
     <label
@@ -795,7 +817,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="216" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_String_Throwable_safety"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -833,10 +855,12 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="194" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_String_ensures_default"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Throwable, default behavior"/>
     <label
@@ -871,7 +895,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="194" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_String_safety"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -909,10 +933,12 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="239" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_Throwable_ensures_default"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Throwable, default behavior"/>
     <label
@@ -947,7 +973,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="239" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_Throwable_safety"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -985,10 +1011,12 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="179" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_ensures_default"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Throwable, default behavior"/>
     <label
@@ -1023,7 +1051,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="179" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_safety"
-    sum="65ad2aa56c876c3972ffdcbb08e29b19"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">

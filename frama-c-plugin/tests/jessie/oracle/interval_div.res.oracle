@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only interval_div.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD interval_div.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only interval_div.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/interval_div.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir interval_div.jessie
 [jessie] File interval_div.jessie/interval_div.jc written.
@@ -45,40 +45,40 @@ type voidP = [voidP]
 
 double fabs2(double x)
 behavior default:
-  ensures (C_5 : ((\result :> real) == \real_abs((\at(x,Old) :> real))));
+  ensures (_C_5 : ((\result :> real) == \real_abs((\at(x,Old) :> real))));
 {  
    (var double __retres);
    
    {  (if (x == (0.0 :> double)) then 
-      {  (C_1 : (__retres = (0.0 :> double)));
+      {  (_C_1 : (__retres = (0.0 :> double)));
          
          (goto return_label)
       } else ());
       (if (x > (0.0 :> double)) then 
-      {  (C_2 : (__retres = x));
+      {  (_C_2 : (__retres = x));
          
          (goto return_label)
       } else ());
-      (C_4 : (__retres = (C_3 : (- x))));
+      (_C_4 : (__retres = (_C_3 : (- x))));
       (return_label : 
       (return __retres))
    }
 }
 
 unit Limit(floatP[..] AB, floatP[..] CD)
-  requires (C_43 : (((C_45 : (\offset_min(AB) <= 0)) &&
-                      (C_46 : (\offset_max(AB) >= 0))) &&
-                     ((C_48 : (\offset_min(CD) <= 0)) &&
-                       (C_49 : (\offset_max(CD) >= 0)))));
-  requires (C_40 : ((C_41 : (1.0 <= (AB.floatM :> real))) &&
-                     (C_42 : ((AB.floatM :> real) <= 4.0))));
-  requires (C_37 : ((C_38 : (1.0 <= (CD.floatM :> real))) &&
-                     (C_39 : ((CD.floatM :> real) <= 8.0))));
+  requires (_C_43 : (((_C_45 : (\offset_min(AB) <= 0)) &&
+                       (_C_46 : (\offset_max(AB) >= 0))) &&
+                      ((_C_48 : (\offset_min(CD) <= 0)) &&
+                        (_C_49 : (\offset_max(CD) >= 0)))));
+  requires (_C_40 : ((_C_41 : (1.0 <= (AB.floatM :> real))) &&
+                      (_C_42 : ((AB.floatM :> real) <= 4.0))));
+  requires (_C_37 : ((_C_38 : (1.0 <= (CD.floatM :> real))) &&
+                      (_C_39 : ((CD.floatM :> real) <= 8.0))));
 behavior default:
-  ensures (C_30 : ((((C_33 : ((\at(AB,Old).floatM :> real) >= (- 2.0))) &&
-                      (C_34 : ((\at(AB,Old).floatM :> real) <= 2.0))) &&
-                     (C_35 : ((\at(CD,Old).floatM :> real) >= (- 2.0)))) &&
-                    (C_36 : ((\at(CD,Old).floatM :> real) <= 2.0))));
+  ensures (_C_30 : ((((_C_33 : ((\at(AB,Old).floatM :> real) >= (- 2.0))) &&
+                       (_C_34 : ((\at(AB,Old).floatM :> real) <= 2.0))) &&
+                      (_C_35 : ((\at(CD,Old).floatM :> real) >= (- 2.0)))) &&
+                     (_C_36 : ((\at(CD,Old).floatM :> real) <= 2.0))));
 {  
    (var double max);
    
@@ -86,19 +86,21 @@ behavior default:
    
    (var double Fabs_CD);
    
-   {  (C_9 : (Fabs_AB = (C_8 : fabs2((C_7 : ((C_6 : AB.floatM) :> double))))));
-      (C_13 : (Fabs_CD = (C_12 : fabs2((C_11 : ((C_10 : CD.floatM) :> double))))));
-      (C_14 : (max = Fabs_AB));
-      (if (Fabs_CD > Fabs_AB) then (C_15 : (max = Fabs_CD)) else ());
+   {  (_C_9 : (Fabs_AB = (_C_8 : fabs2((_C_7 : ((_C_6 : AB.floatM) :> double))))));
+      (_C_13 : (Fabs_CD = (_C_12 : fabs2((_C_11 : ((_C_10 : CD.floatM) :> double))))));
+      (_C_14 : (max = Fabs_AB));
+      (if (Fabs_CD > Fabs_AB) then (_C_15 : (max = Fabs_CD)) else ());
       (if (max > (2.0 :> double)) then 
-      {  (C_22 : ((C_21 : AB.floatM) = (C_20 : ((C_19 : ((C_18 : ((C_17 : (
-                                                                  (C_16 : AB.floatM) :> double)) *
-                                                                   (2.0 :> double))) /
-                                                          max)) :> float))));
-         (C_29 : ((C_28 : CD.floatM) = (C_27 : ((C_26 : ((C_25 : ((C_24 : (
-                                                                  (C_23 : CD.floatM) :> double)) *
-                                                                   (2.0 :> double))) /
-                                                          max)) :> float))))
+      {  (_C_22 : ((_C_21 : AB.floatM) = (_C_20 : ((_C_19 : ((_C_18 : 
+                                                             ((_C_17 : (
+                                                              (_C_16 : AB.floatM) :> double)) *
+                                                               (2.0 :> double))) /
+                                                              max)) :> float))));
+         (_C_29 : ((_C_28 : CD.floatM) = (_C_27 : ((_C_26 : ((_C_25 : 
+                                                             ((_C_24 : (
+                                                              (_C_23 : CD.floatM) :> double)) *
+                                                               (2.0 :> double))) /
+                                                              max)) :> float))))
       } else ());
       
       (return ())
@@ -590,64 +592,43 @@ let Limit_ensures_default =
      (let max = ref (any_double void) in
      (let Fabs_AB = ref (any_double void) in
      (let Fabs_CD = ref (any_double void) in
-     (C_9:
-     (C_13:
-     (C_14:
      begin
-       (let jessie_<somenum> =
-       (Fabs_AB := (C_8:
-                   (let jessie_<somenum> =
-                   (C_7:
-                   (double_of_single (C_6:
-                                     ((safe_acc_ !floatP_floatM_AB_1) AB)))) in
-                   (JC_<somenum>: (fabs2 jessie_<somenum>))))) in void);
-      (let jessie_<somenum> =
-      (Fabs_CD := (C_12:
-                  (let jessie_<somenum> =
-                  (C_11:
-                  (double_of_single (C_10:
-                                    ((safe_acc_ !floatP_floatM_CD_2) CD)))) in
-                  (JC_<somenum>: (fabs2 jessie_<somenum>))))) in void);
-      (let jessie_<somenum> = (max := !Fabs_AB) in void);
+       (let _jessie_<somenum> =
+       (Fabs_AB := (let _jessie_<somenum> =
+                   (double_of_single ((safe_acc_ !floatP_floatM_AB_1) AB)) in
+                   (JC_<somenum>: (fabs2 _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> =
+      (Fabs_CD := (let _jessie_<somenum> =
+                  (double_of_single ((safe_acc_ !floatP_floatM_CD_2) CD)) in
+                  (JC_<somenum>: (fabs2 _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> = (max := !Fabs_AB) in void);
       (if ((gt_double_ !Fabs_CD) !Fabs_AB)
-      then (let jessie_<somenum> = (C_15: (max := !Fabs_CD)) in void) else void);
+      then (let _jessie_<somenum> = (max := !Fabs_CD) in void) else void);
       (if ((gt_double_ !max) (double_of_real_exact 2.0))
       then
-       (let jessie_<somenum> =
-       (C_22:
+       (let _jessie_<somenum> =
        begin
-         (let jessie_<somenum> =
-         (C_20:
-         ((single_of_double_safe nearest_even) (C_19:
-                                               (JC_<somenum>:
+         (let _jessie_<somenum> =
+         ((single_of_double_safe nearest_even) (JC_<somenum>:
                                                (((div_double_safe nearest_even) 
-                                                 (C_18:
                                                  (JC_<somenum>:
                                                  (((mul_double_safe nearest_even) 
-                                                   (C_17:
                                                    (double_of_single 
-                                                    (C_16:
-                                                    ((safe_acc_ !floatP_floatM_AB_1) AB))))) 
-                                                  (double_of_real_exact 2.0))))) !max))))) in
-         (let jessie_<somenum> = AB in
-         (((safe_upd_ floatP_floatM_AB_1) jessie_<somenum>) jessie_<somenum>)));
-        (C_29:
-        (let jessie_<somenum> =
-        (C_27:
-        ((single_of_double_safe nearest_even) (C_26:
-                                              (JC_<somenum>:
+                                                    ((safe_acc_ !floatP_floatM_AB_1) AB))) 
+                                                  (double_of_real_exact 2.0)))) !max))) in
+         (let _jessie_<somenum> = AB in
+         (((safe_upd_ floatP_floatM_AB_1) _jessie_<somenum>) _jessie_<somenum>)));
+        (let _jessie_<somenum> =
+        ((single_of_double_safe nearest_even) (JC_<somenum>:
                                               (((div_double_safe nearest_even) 
-                                                (C_25:
                                                 (JC_<somenum>:
                                                 (((mul_double_safe nearest_even) 
-                                                  (C_24:
-                                                  (double_of_single (C_23:
-                                                                    ((safe_acc_ !floatP_floatM_CD_2) CD))))) 
-                                                 (double_of_real_exact 2.0))))) !max))))) in
+                                                  (double_of_single ((safe_acc_ !floatP_floatM_CD_2) CD))) 
+                                                 (double_of_real_exact 2.0)))) !max))) in
         begin
-          (let jessie_<somenum> = CD in
-          (((safe_upd_ floatP_floatM_CD_2) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum>
-        end)) end) in void) else void); (raise Return) end))))));
+          (let _jessie_<somenum> = CD in
+          (((safe_upd_ floatP_floatM_CD_2) _jessie_<somenum>) _jessie_<somenum>));
+         _jessie_<somenum> end) end in void) else void); (raise Return) end)));
     (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
@@ -686,71 +667,50 @@ let Limit_safety =
      (let max = ref (any_double void) in
      (let Fabs_AB = ref (any_double void) in
      (let Fabs_CD = ref (any_double void) in
-     (C_9:
-     (C_13:
-     (C_14:
      begin
-       (let jessie_<somenum> =
-       (Fabs_AB := (C_8:
-                   (let jessie_<somenum> =
-                   (C_7:
-                   (double_of_single (C_6:
-                                     (JC_<somenum>:
-                                     (((acc_ floatP_AB_1_alloc_table) !floatP_floatM_AB_1) AB))))) in
-                   (JC_<somenum>: (fabs2_requires jessie_<somenum>))))) in void);
-      (let jessie_<somenum> =
-      (Fabs_CD := (C_12:
-                  (let jessie_<somenum> =
-                  (C_11:
-                  (double_of_single (C_10:
-                                    (JC_<somenum>:
-                                    (((acc_ floatP_CD_2_alloc_table) !floatP_floatM_CD_2) CD))))) in
-                  (JC_<somenum>: (fabs2_requires jessie_<somenum>))))) in void);
-      (let jessie_<somenum> = (max := !Fabs_AB) in void);
+       (let _jessie_<somenum> =
+       (Fabs_AB := (let _jessie_<somenum> =
+                   (double_of_single (JC_<somenum>:
+                                     (((acc_ floatP_AB_1_alloc_table) !floatP_floatM_AB_1) AB))) in
+                   (JC_<somenum>: (fabs2_requires _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> =
+      (Fabs_CD := (let _jessie_<somenum> =
+                  (double_of_single (JC_<somenum>:
+                                    (((acc_ floatP_CD_2_alloc_table) !floatP_floatM_CD_2) CD))) in
+                  (JC_<somenum>: (fabs2_requires _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> = (max := !Fabs_AB) in void);
       (if ((gt_double_ !Fabs_CD) !Fabs_AB)
-      then (let jessie_<somenum> = (C_15: (max := !Fabs_CD)) in void) else void);
+      then (let _jessie_<somenum> = (max := !Fabs_CD) in void) else void);
       (if ((gt_double_ !max) (double_of_real_exact 2.0))
       then
-       (let jessie_<somenum> =
-       (C_22:
+       (let _jessie_<somenum> =
        begin
-         (let jessie_<somenum> =
-         (C_20:
+         (let _jessie_<somenum> =
          (JC_<somenum>:
-         ((single_of_double nearest_even) (C_19:
-                                          (JC_<somenum>:
+         ((single_of_double nearest_even) (JC_<somenum>:
                                           (((div_double nearest_even) 
-                                            (C_18:
                                             (JC_<somenum>:
                                             (((mul_double nearest_even) 
-                                              (C_17:
-                                              (double_of_single (C_16:
-                                                                (JC_<somenum>:
-                                                                (((acc_ floatP_AB_1_alloc_table) !floatP_floatM_AB_1) AB)))))) 
-                                             (double_of_real_exact 2.0))))) !max)))))) in
-         (let jessie_<somenum> = AB in
+                                              (double_of_single (JC_<somenum>:
+                                                                (((acc_ floatP_AB_1_alloc_table) !floatP_floatM_AB_1) AB)))) 
+                                             (double_of_real_exact 2.0)))) !max)))) in
+         (let _jessie_<somenum> = AB in
          (JC_<somenum>:
-         ((((upd_ floatP_AB_1_alloc_table) floatP_floatM_AB_1) jessie_<somenum>) jessie_<somenum>))));
-        (C_29:
-        (let jessie_<somenum> =
-        (C_27:
+         ((((upd_ floatP_AB_1_alloc_table) floatP_floatM_AB_1) _jessie_<somenum>) _jessie_<somenum>))));
+        (let _jessie_<somenum> =
         (JC_<somenum>:
-        ((single_of_double nearest_even) (C_26:
-                                         (JC_<somenum>:
+        ((single_of_double nearest_even) (JC_<somenum>:
                                          (((div_double nearest_even) 
-                                           (C_25:
                                            (JC_<somenum>:
                                            (((mul_double nearest_even) 
-                                             (C_24:
-                                             (double_of_single (C_23:
-                                                               (JC_<somenum>:
-                                                               (((acc_ floatP_CD_2_alloc_table) !floatP_floatM_CD_2) CD)))))) 
-                                            (double_of_real_exact 2.0))))) !max)))))) in
+                                             (double_of_single (JC_<somenum>:
+                                                               (((acc_ floatP_CD_2_alloc_table) !floatP_floatM_CD_2) CD)))) 
+                                            (double_of_real_exact 2.0)))) !max)))) in
         begin
-          (let jessie_<somenum> = CD in
+          (let _jessie_<somenum> = CD in
           (JC_<somenum>:
-          ((((upd_ floatP_CD_2_alloc_table) floatP_floatM_CD_2) jessie_<somenum>) jessie_<somenum>)));
-         jessie_<somenum> end)) end) in void) else void); (raise Return) end))))));
+          ((((upd_ floatP_CD_2_alloc_table) floatP_floatM_CD_2) _jessie_<somenum>) _jessie_<somenum>)));
+         _jessie_<somenum> end) end in void) else void); (raise Return) end)));
     (raise Return) end with Return -> void end) { true }
 
 let fabs2_ensures_default =
@@ -762,23 +722,19 @@ let fabs2_ensures_default =
    begin
      (let __retres = ref (any_double void) in
      try
-      (C_4:
       begin
         (if ((eq_double_ x_0) (double_of_real_exact 0.0))
         then
-         (C_1:
          begin
-           (let jessie_<somenum> = (__retres := (double_of_real_exact 0.0)) in void);
-          (raise (Return_label_exc void)) end) else void);
+           (let _jessie_<somenum> = (__retres := (double_of_real_exact 0.0)) in
+           void); (raise (Return_label_exc void)) end else void);
        (if ((gt_double_ x_0) (double_of_real_exact 0.0))
        then
-        (C_2:
         begin
-          (let jessie_<somenum> = (__retres := x_0) in void);
-         (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (__retres := (C_3: (JC_<somenum>: (neg_double x_0)))) in
-       void); (raise (Return_label_exc void)) end) with
-      Return_label_exc jessie_<somenum> ->
+          (let _jessie_<somenum> = (__retres := x_0) in void);
+         (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := (JC_<somenum>: (neg_double x_0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>: (double_value(result) = abs_real(double_value(x_0)))) }
@@ -792,22 +748,19 @@ let fabs2_safety =
    begin
      (let __retres = ref (any_double void) in
      try
-      (C_4:
       begin
         (if ((eq_double_ x_0) (double_of_real_exact 0.0))
         then
-         (C_1:
          begin
-           (let jessie_<somenum> = (__retres := (double_of_real_exact 0.0)) in void);
-          (raise (Return_label_exc void)) end) else void);
+           (let _jessie_<somenum> = (__retres := (double_of_real_exact 0.0)) in void);
+          (raise (Return_label_exc void)) end else void);
        (if ((gt_double_ x_0) (double_of_real_exact 0.0))
        then
-        (C_2:
         begin
-          (let jessie_<somenum> = (__retres := x_0) in void);
-         (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (__retres := (C_3: (JC_<somenum>: (neg_double x_0)))) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+          (let _jessie_<somenum> = (__retres := x_0) in void);
+         (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := (JC_<somenum>: (neg_double x_0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 
@@ -896,12 +849,12 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/interval_div_po15.why">
-      <location file = "PPCHOME/tests/jessie/interval_div.jessie/interval_div.jc" line = "88" begin = "18" end = "336"/>
+      <location file = "PPCHOME/tests/jessie/interval_div.jessie/interval_div.jc" line = "88" begin = "19" end = "401"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/interval_div_po16.why">
-      <location file = "PPCHOME/tests/jessie/interval_div.jessie/interval_div.jc" line = "88" begin = "18" end = "336"/>
+      <location file = "PPCHOME/tests/jessie/interval_div.jessie/interval_div.jc" line = "88" begin = "19" end = "401"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -936,12 +889,12 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/interval_div_po23.why">
-      <location file = "PPCHOME/tests/jessie/interval_div.jessie/interval_div.jc" line = "92" begin = "18" end = "336"/>
+      <location file = "PPCHOME/tests/jessie/interval_div.jessie/interval_div.jc" line = "93" begin = "19" end = "401"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/interval_div_po24.why">
-      <location file = "PPCHOME/tests/jessie/interval_div.jessie/interval_div.jc" line = "92" begin = "18" end = "336"/>
+      <location file = "PPCHOME/tests/jessie/interval_div.jessie/interval_div.jc" line = "93" begin = "19" end = "401"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0415.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0415.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0415.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0415.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0415.jessie
 [jessie] File bts0415.jessie/bts0415.jc written.
@@ -41,11 +41,11 @@ type voidP = [voidP]
 
 unit ftest8()
 behavior default:
-  ensures (C_2 : true);
+  ensures (_C_2 : true);
 {  
    {  
       {  
-         (assert for default: (C_1 : (jessie : ((- 2147483648) <= 0))));
+         (assert for default: (_C_1 : (jessie : ((- 2147483648) <= 0))));
          ()
       };
       
@@ -55,11 +55,11 @@ behavior default:
 
 unit ftest7()
 behavior default:
-  ensures (C_4 : true);
+  ensures (_C_4 : true);
 {  
    {  
       {  
-         (assert for default: (C_3 : (jessie : ((- 2147483647) <= 0))));
+         (assert for default: (_C_3 : (jessie : ((- 2147483647) <= 0))));
          ()
       };
       
@@ -69,11 +69,11 @@ behavior default:
 
 unit ftest6()
 behavior default:
-  ensures (C_6 : true);
+  ensures (_C_6 : true);
 {  
    {  
       {  
-         (assert for default: (C_5 : (jessie : ((- 2147483646) <= 0))));
+         (assert for default: (_C_5 : (jessie : ((- 2147483646) <= 0))));
          ()
       };
       
@@ -83,7 +83,7 @@ behavior default:
 
 unit ftest(int32 n_1)
 behavior default:
-  ensures (C_10 : true);
+  ensures (_C_10 : true);
 {  
    {  
       switch (n_1) {
@@ -91,7 +91,7 @@ behavior default:
         {  
            {  
               {  
-                 (assert for default: (C_7 : (jessie : ((- 2147483648) <= 0))));
+                 (assert for default: (_C_7 : (jessie : ((- 2147483648) <= 0))));
                  ()
               };
               
@@ -102,7 +102,7 @@ behavior default:
         {  
            {  
               {  
-                 (assert for default: (C_8 : (jessie : ((- 2147483647) <= 0))));
+                 (assert for default: (_C_8 : (jessie : ((- 2147483647) <= 0))));
                  ()
               };
               
@@ -113,7 +113,7 @@ behavior default:
         {  
            {  
               {  
-                 (assert for default: (C_9 : (jessie : ((- 2147483646) <= 0))));
+                 (assert for default: (_C_9 : (jessie : ((- 2147483646) <= 0))));
                  ()
               };
               
@@ -552,26 +552,26 @@ let ftest_ensures_default =
    begin
      try
       begin
-        (let jessie_<somenum> = n_1 in
-        (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (8))
+        (let _jessie_<somenum> = n_1 in
+        (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (8))
         then
          begin
            (assert { (JC_<somenum>: le_int(neg_int((2147483648)), (0))) }; void);
           void; (raise (Goto_switch_0_break_exc void)) end
         else
-         (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (7))
+         (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (7))
          then
           begin
             (assert { (JC_<somenum>: le_int(neg_int((2147483647)), (0))) }; void);
            void; (raise (Goto_switch_0_break_exc void)) end
          else
-          (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (6))
+          (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (6))
           then
            begin
              (assert { (JC_<somenum>: le_int(neg_int((2147483646)), (0))) }; void);
             void; (raise (Goto_switch_0_break_exc void)) end else void))));
        (raise (Goto_switch_0_break_exc void)) end with
-      Goto_switch_0_break_exc jessie_<somenum> ->
+      Goto_switch_0_break_exc _jessie_<somenum> ->
       (switch_0_break: begin   void; (raise Return) end) end; (raise Return)
    end with Return -> void end) { (JC_<somenum>: true) }
 
@@ -583,26 +583,26 @@ let ftest_safety =
    begin
      try
       begin
-        (let jessie_<somenum> = n_1 in
-        (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (8))
+        (let _jessie_<somenum> = n_1 in
+        (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (8))
         then
          begin
            [ { } unit { (JC_<somenum>: le_int(neg_int((2147483648)), (0))) } ];
           void; (raise (Goto_switch_0_break_exc void)) end
         else
-         (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (7))
+         (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (7))
          then
           begin
             [ { } unit { (JC_<somenum>: le_int(neg_int((2147483647)), (0))) } ];
            void; (raise (Goto_switch_0_break_exc void)) end
          else
-          (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (6))
+          (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (6))
           then
            begin
              [ { } unit { (JC_<somenum>: le_int(neg_int((2147483646)), (0))) } ];
             void; (raise (Goto_switch_0_break_exc void)) end else void))));
        (raise (Goto_switch_0_break_exc void)) end with
-      Goto_switch_0_break_exc jessie_<somenum> ->
+      Goto_switch_0_break_exc _jessie_<somenum> ->
       (switch_0_break: begin   void; (raise Return) end) end; (raise Return)
    end with Return -> void end) { true }
 

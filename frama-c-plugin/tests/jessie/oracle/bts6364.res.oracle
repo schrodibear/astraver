@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts6364.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts6364.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts6364.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts6364.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts6364.jessie
 [jessie] File bts6364.jessie/bts6364.jc written.
@@ -46,18 +46,18 @@ tag voidP = {
 type voidP = [voidP]
 
 int8 f(intP[..] p1, intP[..] p2)
-  requires (C_4 : (\base_block(p1) != \base_block(p2)));
+  requires (_C_4 : (\base_block(p1) != \base_block(p2)));
 behavior default:
-  ensures (C_3 : true);
+  ensures (_C_3 : true);
 {  
    (var int8 __retres);
    
    {  
       {  
-         (assert for default: (C_1 : (jessie : (p1 != p2))));
+         (assert for default: (_C_1 : (jessie : (p1 != p2))));
          ()
       };
-      (C_2 : (__retres = 0));
+      (_C_2 : (__retres = 0));
       
       (return __retres)
    }
@@ -493,13 +493,10 @@ let f_ensures_default =
    begin
      (let __retres = ref (any_int8 void) in
      begin
-       (assert { (JC_<somenum>: (p1 <> p2)) }; void);
-      (C_2:
-      begin
-        void;
-       (let jessie_<somenum> = (__retres := (safe_int8_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+       (assert { (JC_<somenum>: (p1 <> p2)) }; void); void;
+      (let _jessie_<somenum> = (__retres := (safe_int8_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (p1 : intP pointer) (p2 : intP pointer) ->
@@ -510,13 +507,10 @@ let f_safety =
    begin
      (let __retres = ref (any_int8 void) in
      begin
-       [ { } unit { (JC_<somenum>: (p1 <> p2)) } ];
-      (C_2:
-      begin
-        void;
-       (let jessie_<somenum> = (__retres := (safe_int8_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
-   Return -> !return end)) { true }
+       [ { } unit { (JC_<somenum>: (p1 <> p2)) } ]; void;
+      (let _jessie_<somenum> = (__retres := (safe_int8_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts6364.jessie --quiet -f bts6364.makefile project

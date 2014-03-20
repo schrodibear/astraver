@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0823bis.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0823bis.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0823bis.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0823bis.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0823bis.jessie
 [jessie] File bts0823bis.jessie/bts0823bis.jc written.
@@ -58,18 +58,18 @@ axiomatic leibniz_law {
 }
 
 unit ftest(_elem[..] a, _elem[..] b)
-  requires (C_5 : ((((C_8 : (\offset_min(a) <= 0)) &&
-                      (C_9 : (\offset_max(a) >= 0))) &&
-                     ((C_11 : (\offset_min(b) <= 0)) &&
-                       (C_12 : (\offset_max(b) >= 0)))) &&
-                    (C_13 : (a == b))));
+  requires (_C_5 : ((((_C_8 : (\offset_min(a) <= 0)) &&
+                       (_C_9 : (\offset_max(a) >= 0))) &&
+                      ((_C_11 : (\offset_min(b) <= 0)) &&
+                        (_C_12 : (\offset_max(b) >= 0)))) &&
+                     (_C_13 : (a == b))));
 behavior default:
-  ensures (C_4 : true);
+  ensures (_C_4 : true);
 {  
-   {  (C_2 : ((C_1 : b.next) = null));
+   {  (_C_2 : ((_C_1 : b.next) = null));
       
       {  
-         (assert for default: (C_3 : (jessie : (\at(b.next,Pre) == b.next))));
+         (assert for default: (_C_3 : (jessie : (\at(b.next,Pre) == b.next))));
          ()
       };
       
@@ -503,13 +503,13 @@ let ftest_ensures_default =
                 and (JC_<somenum>: (a = b))))))) }
   (init:
   try
-   (C_2:
    begin
-     (let jessie_<somenum> = null in
-     (let jessie_<somenum> = b in (((safe_upd_ _elem_next_a_1) jessie_<somenum>) jessie_<somenum>)));
+     (let _jessie_<somenum> = null in
+     (let _jessie_<somenum> = b in
+     (((safe_upd_ _elem_next_a_1) _jessie_<somenum>) _jessie_<somenum>)));
     (assert
     { (JC_<somenum>: (select(_elem_next_a_1@init, b) = select(_elem_next_a_1, b))) };
-    void); void; (raise Return); (raise Return) end) with Return -> void end)
+    void); void; (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let ftest_safety =
@@ -522,15 +522,14 @@ let ftest_safety =
                 and (JC_<somenum>: (a = b))))))) }
   (init:
   try
-   (C_2:
    begin
-     (let jessie_<somenum> = null in
-     (let jessie_<somenum> = b in
+     (let _jessie_<somenum> = null in
+     (let _jessie_<somenum> = b in
      (JC_<somenum>:
-     ((((upd_ _elem_a_1_alloc_table) _elem_next_a_1) jessie_<somenum>) jessie_<somenum>))));
+     ((((upd_ _elem_a_1_alloc_table) _elem_next_a_1) _jessie_<somenum>) _jessie_<somenum>))));
     [ { } unit reads _elem_next_a_1
       { (JC_<somenum>: (select(_elem_next_a_1@init, b) = select(_elem_next_a_1, b))) } ];
-    void; (raise Return); (raise Return) end) with Return -> void end)
+    void; (raise Return); (raise Return) end with Return -> void end)
   { true }
 
 
@@ -547,12 +546,12 @@ why --project [...] why/bts0823bis.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0823bis_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0823bis.jessie/bts0823bis.jc" line = "63" begin = "14" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0823bis.jessie/bts0823bis.jc" line = "63" begin = "15" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0823bis_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0823bis.jessie/bts0823bis.jc" line = "63" begin = "14" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0823bis.jessie/bts0823bis.jc" line = "63" begin = "15" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

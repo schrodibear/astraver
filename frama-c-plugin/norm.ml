@@ -2,21 +2,21 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2011                                               *)
+(*  Copyright (C) 2002-2014                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
-(*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
-(*    Yannick MOY, Univ. Paris-sud 11                                     *)
-(*    Romain BARDOU, Univ. Paris-sud 11                                   *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud                   *)
+(*    Claude MARCHE, INRIA & Univ. Paris-sud                              *)
+(*    Yannick MOY, Univ. Paris-sud                                        *)
+(*    Romain BARDOU, Univ. Paris-sud                                      *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
-(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
-(*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
-(*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
-(*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
-(*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  *)
-(*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       *)
+(*    Thierry HUBERT, Univ. Paris-sud  (former Caduceus front-end)        *)
+(*    Nicolas ROUSSET, Univ. Paris-sud (on Jessie & Krakatoa)             *)
+(*    Ali AYAD, CNRS & CEA Saclay      (floating-point support)           *)
+(*    Sylvie BOLDO, INRIA              (floating-point support)           *)
+(*    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     *)
+(*    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Lesser General Public            *)
@@ -198,7 +198,7 @@ object(self)
 
   inherit Visitor.frama_c_inplace
 
-  method vvdec v =
+  method! vvdec v =
     if isArrayType v.vtype && not (Cil_datatype.Varinfo.Set.mem v !varset) then
       begin
         assert (not v.vformal);
@@ -230,7 +230,7 @@ object(self)
       end;
     DoChildren
 
-  method vlogic_var_decl lv =
+  method! vlogic_var_decl lv =
     if not (Cil_datatype.Logic_var.Hashtbl.mem lvar_to_strawlvar lv) &&
       app_term_type isArrayType false lv.lv_type then
       begin
@@ -260,7 +260,7 @@ object(self)
       end;
       DoChildren
 
-  method vglob_aux g = match g with
+  method! vglob_aux g = match g with
     | GVar(v,_init,_loc) ->
         (* Make sure variable declaration is treated before definition *)
         ignore (Cil.visitCilVarDecl (self:>Cil.cilVisitor) v);
@@ -294,7 +294,7 @@ object(self)
     | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
     | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
 
-  method vfunc f =
+  method! vfunc f =
     (* First change type of local array variables *)
     List.iter (ignore $ Cil.visitCilVarDecl (self:>Cil.cilVisitor)) f.slocals;
     List.iter (ignore $ Cil.visitCilVarDecl (self:>Cil.cilVisitor)) f.sformals;
@@ -312,16 +312,16 @@ object(self)
     ) f.slocals;
     DoChildren
 
-  method vlval lv =
+  method! vlval lv =
     ChangeDoChildrenPost (preaction_lval lv, postaction_lval)
 
-  method vterm_lval lv =
+  method! vterm_lval lv =
     do_on_term_lval (Some preaction_lval, Some postaction_lval) lv
 
-  method vexpr e =
+  method! vexpr e =
     ChangeDoChildrenPost (preaction_expr e, fun x -> x)
 
-  method vterm =
+  method! vterm =
     do_on_term (Some preaction_expr, None)
 
 end
@@ -415,7 +415,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vannotation =
+  method! vannotation =
     let return_type ty =
       change_result_type := false;
       match ty with
@@ -474,10 +474,10 @@ object
       | Dcustom_annot _ -> DoChildren (* FIXME: correct ? *)
     in annot
 
-  method vterm_lval tlv =
+  method! vterm_lval tlv =
     ChangeDoChildrenPost (tlv, postaction_term_lval)
 
-  method vterm t =
+  method! vterm t =
     let preaction_term t =
       match t.term_node with
         | Tapp(callee,labels,args) ->
@@ -512,7 +512,7 @@ object
     in
     ChangeDoChildrenPost (preaction_term t, postaction_term)
 
-  method vpredicate = function
+  method! vpredicate = function
     | Papp(callee,labels,args) ->
         let args = List.map (fun arg ->
           (* Type of [arg] has not been changed. *)
@@ -663,7 +663,7 @@ class expandStructAssign () =
 object(self)
 
   inherit Visitor.frama_c_inplace
-  method vglob_aux =
+  method! vglob_aux =
     let retype_func fvi =
       let formal (n,ty,a) =
         let ty = 
@@ -692,7 +692,7 @@ object(self)
       | GVar _  | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
       | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
 
-  method vfunc f =
+  method! vfunc f =
     let var v =
       if isStructOrUnionType v.vtype then
         let newv = copyVarinfo v (unique_name ("v_" ^ v.vname)) in
@@ -732,7 +732,7 @@ object(self)
     setReturnType f rt;
     DoChildren
 
-  method vbehavior b =
+  method! vbehavior b =
     let lval loc lv = expand lv (typeOfLval lv) loc in
     let term t = match t.term_node with
       | TLval tlv ->
@@ -777,7 +777,7 @@ object(self)
       (* But the full expansion can cause the plugin to hang, so we don't expand \froms *)
       List.map (fun z -> z, froms) zl
     in
-    let assigns =
+    let assigns = (* b.b_assigns *)
       (* the following may stop completely the execution of the plugin ??? *)
       (* Mikhail: Because \assigns as1 \from as2 if, for instance, as1 and as2 *)
       (*          are some arrays (about 50 elements) of big structures (about 50 fields),  *)
@@ -809,7 +809,7 @@ object(self)
     in
     ChangeDoChildrenPost(new_bhv,fun x -> x)
 
-  method vstmt_aux s = match s.skind with
+  method! vstmt_aux s = match s.skind with
     | Return(Some e,loc) ->
         (* Type of [e] has not been changed by retyping formals and return. *)
         if isStructOrUnionType (typeOf e) then
@@ -829,7 +829,7 @@ object(self)
         else SkipChildren
     | _ -> DoChildren
 
-  method vinst =
+  method! vinst =
     function
       | Set(lv,e,loc) ->
           (* Type of [e] has not been changed by retyping formals and return. *)
@@ -878,10 +878,10 @@ object(self)
       | Asm _ | Skip _ -> SkipChildren
       | Code_annot _ -> assert false
 
-  method vterm_lval tlv =
+  method! vterm_lval tlv =
     ChangeDoChildrenPost (tlv, postaction_term_lval)
 
-  method vterm t =
+  method! vterm t =
     (* Renormalize the term tree. *)
     let postaction t =
       match t.term_node with
@@ -955,7 +955,7 @@ object(self)
 
   inherit Visitor.frama_c_inplace
 
-  method vvdec v =
+  method! vvdec v =
     if isStructOrUnionType v.vtype && not v.vformal then
       begin
         v.vtype <- mkTRef v.vtype "Norm.vvdec";
@@ -963,7 +963,7 @@ object(self)
       end;
     DoChildren
 
-  method vquantifiers vl =
+  method! vquantifiers vl =
     List.iter (fun v ->
                  (* Only iterate on logic variable with C type *)
                  if app_term_type (fun _ -> true) false v.lv_type then
@@ -974,7 +974,7 @@ object(self)
               ) vl;
     DoChildren
 
-  method vlogic_var_decl v =
+  method! vlogic_var_decl v =
     let newty =
       app_term_type
         (fun ty ->
@@ -984,7 +984,7 @@ object(self)
     v.lv_type <- newty;
     DoChildren
 
-  method vglob_aux = function
+  method! vglob_aux = function
     | GVar (_,_,_) as g ->
         let postaction = function
           | [GVar (v,_,_)] ->
@@ -1019,7 +1019,7 @@ object(self)
     | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
     | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
 
-  method vfunc f =
+  method! vfunc f =
     (* First change type of local structure variables *)
     List.iter (ignore $ Cil.visitCilVarDecl (self:>Cil.cilVisitor)) f.slocals;
     List.iter (ignore $ Cil.visitCilVarDecl (self:>Cil.cilVisitor)) f.sformals;
@@ -1035,12 +1035,12 @@ object(self)
     ) f.slocals;
     DoChildren
 
-  method vlval lv =
+  method! vlval lv =
     ChangeDoChildrenPost (lv, postaction_lval)
 
-  method vterm_lval lv = ChangeDoChildrenPost(lv, postaction_tlval)
+  method! vterm_lval lv = ChangeDoChildrenPost(lv, postaction_tlval)
 
-  method vexpr e =
+  method! vexpr e =
     (* Renormalize the expression tree. *)
     let postaction e = match e.enode with
       | AddrOf(Mem e,NoOffset) -> e
@@ -1048,7 +1048,7 @@ object(self)
     in
     ChangeDoChildrenPost (e, postaction)
 
-  method vterm t =
+  method! vterm t =
     (* Renormalize the term tree. *)
     let postaction t =
       match t.term_node with
@@ -1185,7 +1185,7 @@ class retypeAddressTaken =
       | TField (fi,_) ->
           if Cil_datatype.Fieldinfo.Set.mem fi !fieldset then
             (TMem
-               (Logic_utils.mk_dummy_term (TLval(host,off)) fi.ftype),TNoOffset)
+               (Logic_const.term (TLval(host,off)) (Ctype fi.ftype)),TNoOffset)
           else host,off
       | TModel _ | TIndex _ | TNoOffset -> host,off
   in
@@ -1228,7 +1228,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vglob_aux = function
+  method! vglob_aux = function
     | GVar(v,_,_) ->
         if retypable_var v then
           begin
@@ -1252,7 +1252,7 @@ object
     | GType _ | GCompTagDecl _ | GEnumTagDecl _ | GEnumTag _
     | GAsm _ | GPragma _ | GText _ -> SkipChildren
 
-  method vfunc f =
+  method! vfunc f =
     (* Change types before code. *)
     let formals,locals,pairs =
       List.fold_right (fun v (fl,ll,pl) ->
@@ -1296,11 +1296,11 @@ object
     ) f.slocals;
     DoChildren
 
-  method vspec _ =
+  method! vspec _ =
     in_funspec := true;
     DoChildrenPost (fun x -> in_funspec := false; x)
 
-  method vlogic_var_use v =
+  method! vlogic_var_use v =
     if !in_funspec then
       match v.lv_origin with
         | None -> SkipChildren
@@ -1315,15 +1315,15 @@ object
         DoChildren
       end
 
-  method vlogic_var_decl v = if retypable_lvar v then retype_lvar v; DoChildren
+  method! vlogic_var_decl v = if retypable_lvar v then retype_lvar v; DoChildren
 
-  method vlval lv = ChangeDoChildrenPost (lv, postaction_lval)
+  method! vlval lv = ChangeDoChildrenPost (lv, postaction_lval)
 
-  method vterm_lval lv = ChangeDoChildrenPost (lv, postaction_tlval)
+  method! vterm_lval lv = ChangeDoChildrenPost (lv, postaction_tlval)
 
-  method vexpr e = ChangeDoChildrenPost(e, postaction_expr)
+  method! vexpr e = ChangeDoChildrenPost(e, postaction_expr)
 
-  method vterm t = ChangeDoChildrenPost(t,postaction_term)
+  method! vterm t = ChangeDoChildrenPost(t,postaction_term)
 
 end
 
@@ -1433,7 +1433,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vglob_aux = function
+  method! vglob_aux = function
     | GCompTag (compinfo,_) ->
         let field fi =
           if isStructOrUnionType fi.ftype then
@@ -1458,16 +1458,16 @@ object
     | GType _ | GCompTagDecl _ | GEnumTagDecl _
     | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
 
-  method vlval lv =
+  method! vlval lv =
     ChangeDoChildrenPost (lv, postaction_lval)
 
-  method vterm_lval =
+  method! vterm_lval =
     do_on_term_lval (None,Some postaction_lval)
 
-  method vexpr e =
+  method! vexpr e =
     ChangeDoChildrenPost(e, postaction_expr)
 
-  method vterm =
+  method! vterm =
     do_on_term (None,Some postaction_expr)
 
 end
@@ -1485,7 +1485,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vterm t = match t.term_node with
+  method! vterm t = match t.term_node with
     | Ttype ty -> ChangeTo ({ t with term_node = Ttype(TPtr(ty,[])) })
     | _ -> DoChildren
 
@@ -1643,11 +1643,11 @@ object(self)
 
   inherit Visitor.frama_c_inplace
 
-  method vfile _ =
+  method! vfile _ =
     Common.struct_type_for_void := self#new_wrapper_for_type voidType;
     DoChildren
 
-  method vtype ty =
+  method! vtype ty =
     let ty = match self#wrap_type_if_needed ty with
       | Some newty -> newty
       | None -> ty
@@ -1658,7 +1658,7 @@ object(self)
     else
       ChangeTo ty
 
-  method vglob_aux =
+  method! vglob_aux =
     let retype_return v =
       let retyp = getReturnType v.vtype in
       let newtyp = Cil.visitCilType (self:>Cil.cilVisitor) retyp in
@@ -1683,10 +1683,10 @@ object(self)
       | GCompTagDecl _ | GEnumTag _ | GEnumTagDecl _
       | GAsm _ | GPragma _ | GText _  -> SkipChildren
 
-  method vlval lv =
+  method! vlval lv =
     ChangeDoChildrenPost (lv, self#postaction_lval)
 
-  method vterm_lval t =
+  method! vterm_lval t =
     do_on_term_lval (None,Some self#postaction_lval) t
 
 end
@@ -1748,9 +1748,9 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vexpr e = ChangeDoChildrenPost (preaction_expr e, fun x -> x)
+  method! vexpr e = ChangeDoChildrenPost (preaction_expr e, fun x -> x)
 
-  method vterm t = ChangeDoChildrenPost (preaction_term t, fun x -> x)
+  method! vterm t = ChangeDoChildrenPost (preaction_term t, fun x -> x)
 
 end
 
@@ -1795,7 +1795,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vglob_aux = function
+  method! vglob_aux = function
     | GCompTag (compinfo,_) as g when not compinfo.cstruct ->
         let fields = compinfo.cfields in
         let field fi = new_field_type fi in
@@ -1805,10 +1805,10 @@ object
     | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
     | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
 
-  method voffs off =
+  method! voffs off =
     ChangeDoChildrenPost(off,postaction_offset)
 
-  method vterm_offset =
+  method! vterm_offset =
     do_on_term_offset (None, Some postaction_offset)
 
 end
@@ -1825,7 +1825,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vexpr e =
+  method! vexpr e =
     let preaction e = match e.enode with
       | AddrOf(Mem ptre,Index(ie,NoOffset)) ->
           let ptrty = typeOf e in
@@ -1834,7 +1834,7 @@ object
     in
     ChangeDoChildrenPost (preaction e, fun x -> x)
 
-  method vterm t =
+  method! vterm t =
     let preaction t = match t.term_node with
       | TAddrOf(TMem ptrt,TIndex(it,TNoOffset)) ->
           { t with term_node = TBinOp (PlusPI, ptrt, it); }

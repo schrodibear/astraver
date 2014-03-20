@@ -68,8 +68,8 @@ End:
 ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
-Generating JC function negate_negate for method negate.negate
 Generating JC function cons_negate for constructor negate
+Generating JC function negate_negate for method negate.negate
 Done.
 ========== file tests/java/Negate.jc ==========
 # InvariantPolicy = Arguments
@@ -87,19 +87,19 @@ predicate Non_null_Object{Here}(Object[0..] x) =
 String[0..] any_string()
 ;
 
-tag Object = {
+tag String = Object with {
 }
 
-tag String = Object with {
+tag negate = Object with {
 }
 
 tag Throwable = Object with {
 }
 
-tag Exception = Object with {
+tag Object = {
 }
 
-tag negate = Object with {
+tag Exception = Object with {
 }
 
 type Object = [Object]
@@ -131,9 +131,11 @@ behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
 
+exception Exception of Exception[0..]
+
 exception Throwable of Throwable[0..]
 
-exception Exception of Exception[0..]
+unit cons_negate(! negate[0] this_0){()}
 
 unit negate_negate(intM[0..] t)
   requires (K_2 : Non_null_intM(t));
@@ -169,8 +171,6 @@ behavior default:
    }
 }
 
-unit cons_negate(! negate[0] this_0){()}
-
 /*
 Local Variables:
 mode: java
@@ -178,22 +178,16 @@ compile-command: "jessie -why-opt -split-user-conj -locs tests/java/Negate.jloc 
 End:
 */
 ========== file tests/java/Negate.jloc ==========
-[K_10]
+[K_17]
 file = "HOME/tests/java/Negate.java"
-line = 48
-begin = 18
-end = 28
+line = 42
+begin = 9
+end = 10
 
 [K_11]
 file = "HOME/tests/java/Negate.java"
 line = 51
 begin = 13
-end = 17
-
-[K_12]
-file = "HOME/tests/java/Negate.java"
-line = 51
-begin = 12
 end = 17
 
 [K_13]
@@ -202,29 +196,11 @@ line = 51
 begin = 5
 end = 17
 
-[K_14]
+[K_9]
 file = "HOME/tests/java/Negate.java"
-line = 52
-begin = 5
-end = 8
-
-[K_15]
-file = "HOME/tests/java/Negate.java"
-line = 50
-begin = 12
-end = 20
-
-[K_16]
-file = "HOME/tests/java/Negate.java"
-line = 50
-begin = 8
-end = 20
-
-[K_17]
-file = "HOME/tests/java/Negate.java"
-line = 42
-begin = 9
-end = 10
+line = 44
+begin = 7
+end = 169
 
 [K_1]
 file = "HOME/tests/java/Negate.java"
@@ -232,17 +208,11 @@ line = 39
 begin = 16
 end = 76
 
-[K_2]
+[K_15]
 file = "HOME/tests/java/Negate.java"
-line = 37
-begin = 17
-end = 26
-
-[K_3]
-file = "HOME/tests/java/Negate.java"
-line = 46
-begin = 8
-end = 70
+line = 50
+begin = 12
+end = 20
 
 [K_4]
 file = "HOME/tests/java/Negate.java"
@@ -250,11 +220,23 @@ line = 45
 begin = 8
 end = 64
 
-[K_5]
+[K_12]
 file = "HOME/tests/java/Negate.java"
-line = 44
+line = 51
 begin = 12
-end = 25
+end = 17
+
+[K_2]
+file = "HOME/tests/java/Negate.java"
+line = 37
+begin = 17
+end = 26
+
+[K_10]
+file = "HOME/tests/java/Negate.java"
+line = 48
+begin = 18
+end = 28
 
 [K_6]
 file = "HOME/tests/java/Negate.java"
@@ -262,30 +244,23 @@ line = 44
 begin = 7
 end = 13
 
-[K_7]
-file = "HOME/tests/java/Negate.java"
-line = 44
-begin = 7
-end = 25
-
 [K_8]
 file = "HOME/tests/java/Negate.java"
 line = 44
 begin = 7
 end = 94
 
-[K_9]
+[K_3]
 file = "HOME/tests/java/Negate.java"
-line = 44
-begin = 7
-end = 169
+line = 46
+begin = 8
+end = 70
 
-[cons_negate]
-name = "Constructor of class negate"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[K_14]
+file = "HOME/tests/java/Negate.java"
+line = 52
+begin = 5
+end = 8
 
 [negate_negate]
 name = "Method negate"
@@ -294,9 +269,34 @@ line = 41
 begin = 16
 end = 22
 
+[K_5]
+file = "HOME/tests/java/Negate.java"
+line = 44
+begin = 12
+end = 25
+
+[cons_negate]
+name = "Constructor of class negate"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[K_7]
+file = "HOME/tests/java/Negate.java"
+line = 44
+begin = 7
+end = 25
+
+[K_16]
+file = "HOME/tests/java/Negate.java"
+line = 50
+begin = 8
+end = 20
+
 ========== jessie execution ==========
-Generating Why function negate_negate
 Generating Why function cons_negate
+Generating Why function negate_negate
 ========== file tests/java/Negate.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -307,10 +307,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Negate.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Negate.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Negate.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Negate.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -455,13 +456,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: Negate.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: Negate.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: Negate.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include Negate.depend
 
@@ -472,69 +473,44 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/Negate.loc ==========
-[JC_40]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_41]
+[JC_73]
 file = "HOME/tests/java/Negate.java"
-line = 37
-begin = 17
-end = 26
+line = 44
+begin = 12
+end = 25
 
-[JC_42]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_63]
+file = "HOME/tests/java/Negate.java"
+line = 44
+begin = 7
+end = 169
 
-[JC_43]
+[JC_80]
+kind = UserCall
+file = "HOME/tests/java/Negate.java"
+line = 50
+begin = 12
+end = 20
+
+[JC_51]
 file = "HOME/tests/java/Negate.java"
 line = 39
 begin = 16
 end = 76
 
-[JC_44]
+[JC_71]
 file = "HOME/tests/java/Negate.java"
-line = 41
-begin = 16
-end = 22
+line = 48
+begin = 18
+end = 28
 
 [JC_45]
-file = "HOME/tests/java/Negate.jc"
-line = 66
-begin = 9
-end = 16
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[negate_negate_safety]
-name = "Method negate"
-behavior = "Safety"
-file = "HOME/tests/java/Negate.java"
-line = 41
-begin = 16
-end = 22
-
-[JC_46]
-file = "HOME/tests/java/Negate.java"
-line = 39
-begin = 16
-end = 76
-
-[JC_1]
-file = "HOME/tests/java/Negate.jc"
-line = 13
-begin = 12
-end = 22
-
-[JC_47]
-file = "HOME/tests/java/Negate.java"
-line = 41
-begin = 16
-end = 22
-
-[JC_2]
+[JC_64]
 file = "HOME/"
 line = 0
 begin = -1
@@ -548,25 +524,45 @@ line = 0
 begin = -1
 end = -1
 
-[JC_48]
-file = "HOME/tests/java/Negate.jc"
-line = 66
-begin = 9
-end = 16
-
-[JC_3]
-file = "HOME/tests/java/Negate.jc"
-line = 13
-begin = 12
+[negate_negate_ensures_default]
+name = "Method negate"
+behavior = "default behavior"
+file = "HOME/tests/java/Negate.java"
+line = 41
+begin = 16
 end = 22
 
-[JC_49]
+[JC_31]
+file = "HOME/tests/java/Negate.jc"
+line = 55
+begin = 8
+end = 23
+
+[JC_17]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_4]
+[JC_55]
+file = "HOME/tests/java/Negate.java"
+line = 41
+begin = 16
+end = 22
+
+[JC_48]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_23]
+file = "HOME/tests/java/Negate.jc"
+line = 51
+begin = 11
+end = 103
+
+[JC_22]
 file = "HOME/"
 line = 0
 begin = -1
@@ -578,85 +574,7 @@ line = 0
 begin = -1
 end = -1
 
-[JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_9]
-file = "HOME/tests/java/Negate.jc"
-line = 42
-begin = 8
-end = 21
-
-[JC_50]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_51]
-file = "HOME/tests/java/Negate.java"
-line = 44
-begin = 7
-end = 13
-
-[JC_52]
-file = "HOME/tests/java/Negate.java"
-line = 44
-begin = 12
-end = 25
-
-[JC_53]
-file = "HOME/tests/java/Negate.java"
-line = 45
-begin = 8
-end = 64
-
-[JC_54]
-file = "HOME/tests/java/Negate.java"
-line = 46
-begin = 8
-end = 70
-
-[JC_55]
-file = "HOME/tests/java/Negate.java"
-line = 44
-begin = 7
-end = 169
-
-[JC_56]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_57]
-file = "HOME/tests/java/Negate.jc"
-line = 75
-begin = 6
-end = 1025
-
-[JC_58]
-file = "HOME/tests/java/Negate.jc"
-line = 75
-begin = 6
-end = 1025
-
-[JC_59]
+[JC_67]
 kind = UserCall
 file = "HOME/tests/java/Negate.java"
 line = 50
@@ -671,195 +589,17 @@ line = 0
 begin = -1
 end = -1
 
-[JC_60]
-kind = IndexBounds
-file = "HOME/tests/java/Negate.java"
-line = 50
-begin = 12
-end = 20
-
-[JC_61]
-kind = PointerDeref
-file = "HOME/tests/java/Negate.java"
-line = 51
-begin = 13
-end = 17
-
-[JC_62]
-kind = PointerDeref
-file = "HOME/tests/java/Negate.jc"
-line = 91
-begin = 21
-end = 70
-
-[JC_10]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_63]
-file = "HOME/tests/java/Negate.java"
-line = 48
-begin = 18
-end = 28
-
-[JC_11]
+[JC_9]
 file = "HOME/tests/java/Negate.jc"
 line = 42
 begin = 8
 end = 21
 
-[JC_64]
-file = "HOME/tests/java/Negate.java"
-line = 44
-begin = 7
-end = 13
-
-[JC_12]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_65]
-file = "HOME/tests/java/Negate.java"
-line = 44
-begin = 12
-end = 25
-
-[JC_13]
-file = "HOME/tests/java/Negate.jc"
-line = 45
-begin = 11
-end = 66
-
-[JC_66]
-file = "HOME/tests/java/Negate.java"
-line = 45
-begin = 8
-end = 64
-
-[JC_14]
-file = "HOME/tests/java/Negate.jc"
-line = 44
-begin = 10
-end = 18
-
-[JC_67]
+[JC_75]
 file = "HOME/tests/java/Negate.java"
 line = 46
 begin = 8
 end = 70
-
-[JC_15]
-file = "HOME/tests/java/Negate.jc"
-line = 45
-begin = 11
-end = 66
-
-[JC_68]
-file = "HOME/tests/java/Negate.java"
-line = 44
-begin = 7
-end = 169
-
-[JC_16]
-file = "HOME/tests/java/Negate.jc"
-line = 44
-begin = 10
-end = 18
-
-[JC_69]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_17]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_19]
-file = "HOME/tests/java/Negate.jc"
-line = 48
-begin = 8
-end = 30
-
-[JC_70]
-file = "HOME/tests/java/Negate.jc"
-line = 75
-begin = 6
-end = 1025
-
-[JC_71]
-file = "HOME/tests/java/Negate.jc"
-line = 75
-begin = 6
-end = 1025
-
-[JC_72]
-kind = UserCall
-file = "HOME/tests/java/Negate.java"
-line = 50
-begin = 12
-end = 20
-
-[JC_20]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_73]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_21]
-file = "HOME/tests/java/Negate.jc"
-line = 48
-begin = 8
-end = 30
-
-[JC_74]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_75]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_23]
-file = "HOME/tests/java/Negate.jc"
-line = 51
-begin = 11
-end = 103
-
-[JC_76]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
 
 [JC_24]
 file = "HOME/tests/java/Negate.jc"
@@ -867,27 +607,45 @@ line = 50
 begin = 10
 end = 18
 
-[JC_77]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_25]
 file = "HOME/tests/java/Negate.jc"
 line = 51
 begin = 11
 end = 103
 
+[negate_negate_safety]
+name = "Method negate"
+behavior = "Safety"
+file = "HOME/tests/java/Negate.java"
+line = 41
+begin = 16
+end = 22
+
 [JC_78]
+file = "HOME/tests/java/Negate.jc"
+line = 77
+begin = 6
+end = 1025
+
+[JC_41]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[negate_negate_ensures_default]
-name = "Method negate"
-behavior = "default behavior"
+[JC_74]
+file = "HOME/tests/java/Negate.java"
+line = 45
+begin = 8
+end = 64
+
+[JC_47]
+file = "HOME/tests/java/Negate.java"
+line = 37
+begin = 17
+end = 26
+
+[JC_52]
 file = "HOME/tests/java/Negate.java"
 line = 41
 begin = 16
@@ -899,61 +657,62 @@ line = 50
 begin = 10
 end = 18
 
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_54]
+file = "HOME/tests/java/Negate.java"
+line = 39
+begin = 16
+end = 76
+
 [JC_79]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_27]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_29]
 file = "HOME/tests/java/Negate.jc"
-line = 55
-begin = 8
-end = 23
+line = 77
+begin = 6
+end = 1025
 
-[JC_80]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_30]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_31]
+[JC_13]
 file = "HOME/tests/java/Negate.jc"
-line = 55
+line = 45
+begin = 11
+end = 66
+
+[JC_11]
+file = "HOME/tests/java/Negate.jc"
+line = 42
 begin = 8
-end = 23
+end = 21
 
-[JC_32]
+[JC_70]
+kind = PointerDeref
+file = "HOME/tests/java/Negate.jc"
+line = 93
+begin = 21
+end = 70
+
+[JC_15]
+file = "HOME/tests/java/Negate.jc"
+line = 45
+begin = 11
+end = 66
+
+[JC_36]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_33]
+[JC_39]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_34]
+[JC_40]
 file = "HOME/"
 line = 0
 begin = -1
@@ -965,17 +724,18 @@ line = 0
 begin = -1
 end = -1
 
-[JC_36]
+[JC_27]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_37]
-file = "HOME/tests/java/Negate.jc"
-line = 57
-begin = 11
-end = 65
+[JC_69]
+kind = PointerDeref
+file = "HOME/tests/java/Negate.java"
+line = 51
+begin = 13
+end = 17
 
 [JC_38]
 file = "HOME/tests/java/Negate.jc"
@@ -983,11 +743,252 @@ line = 57
 begin = 11
 end = 65
 
-[JC_39]
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_62]
+file = "HOME/tests/java/Negate.java"
+line = 46
+begin = 8
+end = 70
+
+[JC_42]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_46]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_61]
+file = "HOME/tests/java/Negate.java"
+line = 45
+begin = 8
+end = 64
+
+[JC_32]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_56]
+file = "HOME/tests/java/Negate.jc"
+line = 68
+begin = 9
+end = 16
+
+[JC_33]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_65]
+file = "HOME/tests/java/Negate.jc"
+line = 77
+begin = 6
+end = 1025
+
+[JC_29]
+file = "HOME/tests/java/Negate.jc"
+line = 55
+begin = 8
+end = 23
+
+[JC_68]
+kind = IndexBounds
+file = "HOME/tests/java/Negate.java"
+line = 50
+begin = 12
+end = 20
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_16]
+file = "HOME/tests/java/Negate.jc"
+line = 44
+begin = 10
+end = 18
+
+[JC_43]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_14]
+file = "HOME/tests/java/Negate.jc"
+line = 44
+begin = 10
+end = 18
+
+[JC_53]
+file = "HOME/tests/java/Negate.jc"
+line = 68
+begin = 9
+end = 16
+
+[JC_21]
+file = "HOME/tests/java/Negate.jc"
+line = 48
+begin = 8
+end = 30
+
+[JC_77]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_49]
 file = "HOME/tests/java/Negate.java"
 line = 37
 begin = 17
 end = 26
+
+[JC_1]
+file = "HOME/tests/java/Negate.jc"
+line = 13
+begin = 12
+end = 22
+
+[JC_37]
+file = "HOME/tests/java/Negate.jc"
+line = 57
+begin = 11
+end = 65
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_57]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_66]
+file = "HOME/tests/java/Negate.jc"
+line = 77
+begin = 6
+end = 1025
+
+[JC_59]
+file = "HOME/tests/java/Negate.java"
+line = 44
+begin = 7
+end = 13
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_18]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_3]
+file = "HOME/tests/java/Negate.jc"
+line = 13
+begin = 12
+end = 22
+
+[JC_60]
+file = "HOME/tests/java/Negate.java"
+line = 44
+begin = 12
+end = 25
+
+[JC_72]
+file = "HOME/tests/java/Negate.java"
+line = 44
+begin = 7
+end = 13
+
+[JC_19]
+file = "HOME/tests/java/Negate.jc"
+line = 48
+begin = 8
+end = 30
+
+[JC_76]
+file = "HOME/tests/java/Negate.java"
+line = 44
+begin = 7
+end = 169
+
+[JC_50]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_30]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_58]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_28]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/java/why/Negate.why ==========
 type Object
@@ -1409,30 +1410,30 @@ parameter java_array_length_intM_requires :
 parameter negate_negate :
  t:Object pointer ->
   { } unit reads Object_alloc_table,intM_intP writes intM_intP
-  { (JC_48:
-    ((JC_46:
+  { (JC_56:
+    ((JC_54:
      (forall k:int.
       ((le_int((0), k)
        and lt_int(k, add_int(offset_max(Object_alloc_table, t), (1)))) ->
        (select(intM_intP, shift(t, k)) = neg_int(select(intM_intP@,
                                                  shift(t, k)))))))
-    and (JC_47:
+    and (JC_55:
         not_assigns(Object_alloc_table@, intM_intP@, intM_intP,
         pset_range(pset_singleton(t), (0),
         sub_int(add_int(offset_max(Object_alloc_table@, t), (1)), (1))))))) }
 
 parameter negate_negate_requires :
  t:Object pointer ->
-  { (JC_39: Non_null_intM(t, Object_alloc_table))} unit
+  { (JC_47: Non_null_intM(t, Object_alloc_table))} unit
   reads Object_alloc_table,intM_intP writes intM_intP
-  { (JC_48:
-    ((JC_46:
+  { (JC_56:
+    ((JC_54:
      (forall k:int.
       ((le_int((0), k)
        and lt_int(k, add_int(offset_max(Object_alloc_table, t), (1)))) ->
        (select(intM_intP, shift(t, k)) = neg_int(select(intM_intP@,
                                                  shift(t, k)))))))
-    and (JC_47:
+    and (JC_55:
         not_assigns(Object_alloc_table@, intM_intP@, intM_intP,
         pset_range(pset_singleton(t), (0),
         sub_int(add_int(offset_max(Object_alloc_table@, t), (1)), (1))))))) }
@@ -1469,7 +1470,7 @@ let cons_negate_ensures_default =
  fun (this_0 : Object pointer) ->
   { valid_struct_negate(this_0, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_77: true) }
+  { (JC_43: true) }
 
 let cons_negate_safety =
  fun (this_0 : Object pointer) ->
@@ -1480,7 +1481,7 @@ let cons_negate_safety =
 let negate_negate_ensures_default =
  fun (t : Object pointer) ->
   { (left_valid_struct_intM(t, (0), Object_alloc_table)
-    and (JC_41: Non_null_intM(t, Object_alloc_table))) }
+    and (JC_49: Non_null_intM(t, Object_alloc_table))) }
   (init:
   try
    begin
@@ -1489,24 +1490,24 @@ let negate_negate_ensures_default =
       (loop_2:
       while true do
       { invariant
-          ((JC_68:
-           ((JC_64: le_int((0), i))
-           and ((JC_65:
+          ((JC_76:
+           ((JC_72: le_int((0), i))
+           and ((JC_73:
                 le_int(i, add_int(offset_max(Object_alloc_table, t), (1))))
-               and ((JC_66:
+               and ((JC_74:
                     (forall k_0:int.
                      ((le_int((0), k_0) and lt_int(k_0, i)) ->
                       (select(intM_intP, shift(t, k_0)) = neg_int(select(intM_intP@init,
                                                                   shift(t,
                                                                   k_0)))))))
-                   and (JC_67:
+                   and (JC_75:
                        (forall k_1:int.
                         ((le_int(i, k_1)
                          and lt_int(k_1,
                              add_int(offset_max(Object_alloc_table, t), (1)))) ->
                          (select(intM_intP, shift(t, k_1)) = select(intM_intP@init,
                                                              shift(t, k_1))))))))))
-          and (JC_70:
+          and (JC_78:
               not_assigns(Object_alloc_table@init, intM_intP@init, intM_intP,
               pset_range(pset_singleton(t), (0),
               sub_int(add_int(offset_max(Object_alloc_table@init, t), (1)),
@@ -1517,37 +1518,38 @@ let negate_negate_ensures_default =
          begin
            (if (K_16:
                ((lt_int_ !i) (K_15:
-                             (let jessie_<num> = t in
-                             (JC_72: (java_array_length_intM jessie_<num>))))))
+                             (let _jessie_<num> = t in
+                             (JC_80: (java_array_length_intM _jessie_<num>))))))
            then
-            (let jessie_<num> =
+            (let _jessie_<num> =
             (K_13:
             begin
-              (let jessie_<num> =
-              (let jessie_<num> =
+              (let _jessie_<num> =
+              (let _jessie_<num> =
               (K_12:
               (neg_int (K_11: ((safe_acc_ !intM_intP) ((shift t) !i))))) in
-              (let jessie_<num> = t in
-              (let jessie_<num> = !i in
-              (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-              (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
+              (let _jessie_<num> = t in
+              (let _jessie_<num> = !i in
+              (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+              (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>))))) in void);
              (K_14:
-             (let jessie_<num> = !i in
+             (let _jessie_<num> = !i in
              begin
-               (let jessie_<num> = (i := ((add_int jessie_<num>) (1))) in void);
-              jessie_<num> end)) end) in void) else (raise (Loop_exit_exc void)));
+               (let _jessie_<num> = (i := ((add_int _jessie_<num>) (1))) in void);
+              _jessie_<num> end)) end) in void)
+           else (raise (Loop_exit_exc void)));
           (raise (Loop_continue_exc void)) end with
-         Loop_continue_exc jessie_<num> -> void end end done) with
-      Loop_exit_exc jessie_<num> -> void end); (raise Return) end with Return ->
+         Loop_continue_exc _jessie_<num> -> void end end done) with
+      Loop_exit_exc _jessie_<num> -> void end); (raise Return) end with Return ->
    void end)
-  { (JC_45:
-    ((JC_43:
+  { (JC_53:
+    ((JC_51:
      (forall k:int.
       ((le_int((0), k)
        and lt_int(k, add_int(offset_max(Object_alloc_table, t), (1)))) ->
        (select(intM_intP, shift(t, k)) = neg_int(select(intM_intP@,
                                                  shift(t, k)))))))
-    and (JC_44:
+    and (JC_52:
         not_assigns(Object_alloc_table@, intM_intP@, intM_intP,
         pset_range(pset_singleton(t), (0),
         sub_int(add_int(offset_max(Object_alloc_table@, t), (1)), (1))))))) }
@@ -1555,7 +1557,7 @@ let negate_negate_ensures_default =
 let negate_negate_safety =
  fun (t : Object pointer) ->
   { (left_valid_struct_intM(t, (0), Object_alloc_table)
-    and (JC_41: Non_null_intM(t, Object_alloc_table))) }
+    and (JC_49: Non_null_intM(t, Object_alloc_table))) }
   (init:
   try
    begin
@@ -1563,23 +1565,23 @@ let negate_negate_safety =
      try
       (loop_1:
       while true do
-      { invariant (JC_57: true)
-        variant (JC_63 : sub_int(add_int(offset_max(Object_alloc_table, t),
+      { invariant (JC_65: true)
+        variant (JC_71 : sub_int(add_int(offset_max(Object_alloc_table, t),
                                  (1)),
                          i)) }
        begin
          [ { } unit reads Object_alloc_table,i,intM_intP
-           { (JC_55:
-             ((JC_51: le_int((0), i))
-             and ((JC_52:
+           { (JC_63:
+             ((JC_59: le_int((0), i))
+             and ((JC_60:
                   le_int(i, add_int(offset_max(Object_alloc_table, t), (1))))
-                 and ((JC_53:
+                 and ((JC_61:
                       (forall k_0:int.
                        ((le_int((0), k_0) and lt_int(k_0, i)) ->
                         (select(intM_intP, shift(t, k_0)) = neg_int(select(intM_intP@init,
                                                                     shift(t,
                                                                     k_0)))))))
-                     and (JC_54:
+                     and (JC_62:
                          (forall k_1:int.
                           ((le_int(i, k_1)
                            and lt_int(k_1,
@@ -1591,38 +1593,39 @@ let negate_negate_safety =
          begin
            (if (K_16:
                ((lt_int_ !i) (K_15:
-                             (let jessie_<num> = t in
-                             (JC_60:
+                             (let _jessie_<num> = t in
+                             (JC_68:
                              (assert
                              { ge_int(offset_max(Object_alloc_table,
-                                      jessie_<num>),
+                                      _jessie_<num>),
                                (-1)) };
-                             (JC_59:
-                             (java_array_length_intM_requires jessie_<num>))))))))
+                             (JC_67:
+                             (java_array_length_intM_requires _jessie_<num>))))))))
            then
-            (let jessie_<num> =
+            (let _jessie_<num> =
             (K_13:
             begin
-              (let jessie_<num> =
-              (let jessie_<num> =
+              (let _jessie_<num> =
+              (let _jessie_<num> =
               (K_12:
               (neg_int (K_11:
-                       (JC_61:
+                       (JC_69:
                        ((((offset_acc_ !Object_alloc_table) !intM_intP) t) !i))))) in
-              (let jessie_<num> = t in
-              (let jessie_<num> = !i in
-              (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-              (JC_62:
-              (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+              (let _jessie_<num> = t in
+              (let _jessie_<num> = !i in
+              (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+              (JC_70:
+              (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
               void);
              (K_14:
-             (let jessie_<num> = !i in
+             (let _jessie_<num> = !i in
              begin
-               (let jessie_<num> = (i := ((add_int jessie_<num>) (1))) in void);
-              jessie_<num> end)) end) in void) else (raise (Loop_exit_exc void)));
+               (let _jessie_<num> = (i := ((add_int _jessie_<num>) (1))) in void);
+              _jessie_<num> end)) end) in void)
+           else (raise (Loop_exit_exc void)));
           (raise (Loop_continue_exc void)) end with
-         Loop_continue_exc jessie_<num> -> void end end done) with
-      Loop_exit_exc jessie_<num> -> void end); (raise Return) end with Return ->
+         Loop_continue_exc _jessie_<num> -> void end end done) with
+      Loop_exit_exc _jessie_<num> -> void end); (raise Return) end with Return ->
    void end) { true }
 
 
@@ -1646,7 +1649,7 @@ why --project [...] why/Negate.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Negate_po4.why">
-      <location file = "HOME/tests/java/Negate.jc" line = "75" begin = "6" end = "1025"/>
+      <location file = "HOME/tests/java/Negate.jc" line = "77" begin = "6" end = "1025"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Negate_po5.why">
@@ -1666,7 +1669,7 @@ why --project [...] why/Negate.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Negate_po9.why">
-      <location file = "HOME/tests/java/Negate.jc" line = "75" begin = "6" end = "1025"/>
+      <location file = "HOME/tests/java/Negate.jc" line = "77" begin = "6" end = "1025"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Negate_po10.why">
@@ -1676,7 +1679,7 @@ why --project [...] why/Negate.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/Negate_po11.why">
-      <location file = "why/Negate.why" line = "605" begin = "31" end = "154"/>
+      <location file = "why/Negate.why" line = "606" begin = "31" end = "155"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Negate_po12.why">
@@ -2857,8 +2860,8 @@ goal negate_negate_ensures_default_po_1:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
-  ("JC_68": ("JC_64": (0 <= 0)))
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
+  ("JC_76": ("JC_72": (0 <= 0)))
 
 ========== file tests/java/why/Negate_po10.why ==========
 goal negate_negate_ensures_default_po_10:
@@ -2867,23 +2870,23 @@ goal negate_negate_ensures_default_po_10:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  (("JC_68":
-   (("JC_64": (0 <= i)) and
-    (("JC_65": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-     (("JC_66":
+  (("JC_76":
+   (("JC_72": (0 <= i)) and
+    (("JC_73": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+     (("JC_74":
       (forall k_0:int.
         (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
          k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-      ("JC_67":
+      ("JC_75":
       (forall k_1:int.
         (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
          (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
          k_1)))))))))) and
-   ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
+   ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
    pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
    t) + 1) - 1))))) ->
   forall result:int.
@@ -2893,8 +2896,8 @@ goal negate_negate_ensures_default_po_10:
   (i >= result) ->
   forall k:int.
   ((0 <= k) and (k < (offset_max(Object_alloc_table, t) + 1))) ->
-  ("JC_45":
-  ("JC_43": (select(intM_intP0, shift(t, k)) = (-select(intM_intP, shift(t,
+  ("JC_53":
+  ("JC_51": (select(intM_intP0, shift(t, k)) = (-select(intM_intP, shift(t,
   k))))))
 
 ========== file tests/java/why/Negate_po11.why ==========
@@ -2904,19 +2907,19 @@ goal negate_negate_safety_po_1:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_57": true) ->
-  ("JC_55":
-  (("JC_51": (0 <= i)) and
-   (("JC_52": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-    (("JC_53":
+  ("JC_65": true) ->
+  ("JC_63":
+  (("JC_59": (0 <= i)) and
+   (("JC_60": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+    (("JC_61":
      (forall k_0:int.
        (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
         k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-     ("JC_54":
+     ("JC_62":
      (forall k_1:int.
        (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
         (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
@@ -2930,19 +2933,19 @@ goal negate_negate_safety_po_2:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_57": true) ->
-  ("JC_55":
-  (("JC_51": (0 <= i)) and
-   (("JC_52": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-    (("JC_53":
+  ("JC_65": true) ->
+  ("JC_63":
+  (("JC_59": (0 <= i)) and
+   (("JC_60": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+    (("JC_61":
      (forall k_0:int.
        (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
         k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-     ("JC_54":
+     ("JC_62":
      (forall k_1:int.
        (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
         (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
@@ -2962,19 +2965,19 @@ goal negate_negate_safety_po_3:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_57": true) ->
-  ("JC_55":
-  (("JC_51": (0 <= i)) and
-   (("JC_52": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-    (("JC_53":
+  ("JC_65": true) ->
+  ("JC_63":
+  (("JC_59": (0 <= i)) and
+   (("JC_60": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+    (("JC_61":
      (forall k_0:int.
        (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
         k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-     ("JC_54":
+     ("JC_62":
      (forall k_1:int.
        (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
         (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
@@ -2994,19 +2997,19 @@ goal negate_negate_safety_po_4:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_57": true) ->
-  ("JC_55":
-  (("JC_51": (0 <= i)) and
-   (("JC_52": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-    (("JC_53":
+  ("JC_65": true) ->
+  ("JC_63":
+  (("JC_59": (0 <= i)) and
+   (("JC_60": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+    (("JC_61":
      (forall k_0:int.
        (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
         k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-     ("JC_54":
+     ("JC_62":
      (forall k_1:int.
        (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
         (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
@@ -3028,7 +3031,7 @@ goal negate_negate_safety_po_4:
   (intM_intP1 = store(intM_intP0, shift(t, i), (-result0))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  (0 <= ("JC_63": ((offset_max(Object_alloc_table, t) + 1) - i)))
+  (0 <= ("JC_71": ((offset_max(Object_alloc_table, t) + 1) - i)))
 
 ========== file tests/java/why/Negate_po15.why ==========
 goal negate_negate_safety_po_5:
@@ -3037,19 +3040,19 @@ goal negate_negate_safety_po_5:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_57": true) ->
-  ("JC_55":
-  (("JC_51": (0 <= i)) and
-   (("JC_52": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-    (("JC_53":
+  ("JC_65": true) ->
+  ("JC_63":
+  (("JC_59": (0 <= i)) and
+   (("JC_60": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+    (("JC_61":
      (forall k_0:int.
        (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
         k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-     ("JC_54":
+     ("JC_62":
      (forall k_1:int.
        (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
         (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
@@ -3071,7 +3074,7 @@ goal negate_negate_safety_po_5:
   (intM_intP1 = store(intM_intP0, shift(t, i), (-result0))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  (("JC_63": ((offset_max(Object_alloc_table, t) + 1) - i0)) < ("JC_63":
+  (("JC_71": ((offset_max(Object_alloc_table, t) + 1) - i0)) < ("JC_71":
                                                                ((offset_max(Object_alloc_table,
                                                                t) + 1) - i)))
 
@@ -3080,8 +3083,8 @@ goal negate_negate_ensures_default_po_2:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
-  ("JC_68": ("JC_65": (0 <= (offset_max(Object_alloc_table, t) + 1))))
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
+  ("JC_76": ("JC_73": (0 <= (offset_max(Object_alloc_table, t) + 1))))
 
 ========== file tests/java/why/Negate_po3.why ==========
 goal negate_negate_ensures_default_po_3:
@@ -3090,11 +3093,11 @@ goal negate_negate_ensures_default_po_3:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall k_0:int.
   ((0 <= k_0) and (k_0 < 0)) ->
-  ("JC_68":
-  ("JC_66": (select(intM_intP, shift(t, k_0)) = (-select(intM_intP, shift(t,
+  ("JC_76":
+  ("JC_74": (select(intM_intP, shift(t, k_0)) = (-select(intM_intP, shift(t,
   k_0))))))
 
 ========== file tests/java/why/Negate_po4.why ==========
@@ -3104,8 +3107,8 @@ goal negate_negate_ensures_default_po_4:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
-  ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP,
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
+  ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP,
   pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
   t) + 1) - 1))))
 
@@ -3116,23 +3119,23 @@ goal negate_negate_ensures_default_po_5:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  (("JC_68":
-   (("JC_64": (0 <= i)) and
-    (("JC_65": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-     (("JC_66":
+  (("JC_76":
+   (("JC_72": (0 <= i)) and
+    (("JC_73": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+     (("JC_74":
       (forall k_0:int.
         (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
          k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-      ("JC_67":
+      ("JC_75":
       (forall k_1:int.
         (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
          (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
          k_1)))))))))) and
-   ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
+   ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
    pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
    t) + 1) - 1))))) ->
   forall result:int.
@@ -3147,7 +3150,7 @@ goal negate_negate_ensures_default_po_5:
   (intM_intP1 = store(intM_intP0, shift(t, i), (-result0))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_68": ("JC_64": (0 <= i0)))
+  ("JC_76": ("JC_72": (0 <= i0)))
 
 ========== file tests/java/why/Negate_po6.why ==========
 goal negate_negate_ensures_default_po_6:
@@ -3156,23 +3159,23 @@ goal negate_negate_ensures_default_po_6:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  (("JC_68":
-   (("JC_64": (0 <= i)) and
-    (("JC_65": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-     (("JC_66":
+  (("JC_76":
+   (("JC_72": (0 <= i)) and
+    (("JC_73": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+     (("JC_74":
       (forall k_0:int.
         (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
          k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-      ("JC_67":
+      ("JC_75":
       (forall k_1:int.
         (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
          (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
          k_1)))))))))) and
-   ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
+   ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
    pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
    t) + 1) - 1))))) ->
   forall result:int.
@@ -3187,7 +3190,7 @@ goal negate_negate_ensures_default_po_6:
   (intM_intP1 = store(intM_intP0, shift(t, i), (-result0))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_68": ("JC_65": (i0 <= (offset_max(Object_alloc_table, t) + 1))))
+  ("JC_76": ("JC_73": (i0 <= (offset_max(Object_alloc_table, t) + 1))))
 
 ========== file tests/java/why/Negate_po7.why ==========
 goal negate_negate_ensures_default_po_7:
@@ -3196,23 +3199,23 @@ goal negate_negate_ensures_default_po_7:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  (("JC_68":
-   (("JC_64": (0 <= i)) and
-    (("JC_65": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-     (("JC_66":
+  (("JC_76":
+   (("JC_72": (0 <= i)) and
+    (("JC_73": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+     (("JC_74":
       (forall k_0:int.
         (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
          k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-      ("JC_67":
+      ("JC_75":
       (forall k_1:int.
         (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
          (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
          k_1)))))))))) and
-   ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
+   ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
    pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
    t) + 1) - 1))))) ->
   forall result:int.
@@ -3229,8 +3232,8 @@ goal negate_negate_ensures_default_po_7:
   (i0 = (i + 1)) ->
   forall k_0:int.
   ((0 <= k_0) and (k_0 < i0)) ->
-  ("JC_68":
-  ("JC_66": (select(intM_intP1, shift(t, k_0)) = (-select(intM_intP, shift(t,
+  ("JC_76":
+  ("JC_74": (select(intM_intP1, shift(t, k_0)) = (-select(intM_intP, shift(t,
   k_0))))))
 
 ========== file tests/java/why/Negate_po8.why ==========
@@ -3240,23 +3243,23 @@ goal negate_negate_ensures_default_po_8:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  (("JC_68":
-   (("JC_64": (0 <= i)) and
-    (("JC_65": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-     (("JC_66":
+  (("JC_76":
+   (("JC_72": (0 <= i)) and
+    (("JC_73": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+     (("JC_74":
       (forall k_0:int.
         (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
          k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-      ("JC_67":
+      ("JC_75":
       (forall k_1:int.
         (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
          (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
          k_1)))))))))) and
-   ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
+   ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
    pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
    t) + 1) - 1))))) ->
   forall result:int.
@@ -3273,8 +3276,8 @@ goal negate_negate_ensures_default_po_8:
   (i0 = (i + 1)) ->
   forall k_1:int.
   ((i0 <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
-  ("JC_68":
-  ("JC_67": (select(intM_intP1, shift(t, k_1)) = select(intM_intP, shift(t,
+  ("JC_76":
+  ("JC_75": (select(intM_intP1, shift(t, k_1)) = select(intM_intP, shift(t,
   k_1)))))
 
 ========== file tests/java/why/Negate_po9.why ==========
@@ -3284,23 +3287,23 @@ goal negate_negate_ensures_default_po_9:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  (("JC_68":
-   (("JC_64": (0 <= i)) and
-    (("JC_65": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-     (("JC_66":
+  (("JC_76":
+   (("JC_72": (0 <= i)) and
+    (("JC_73": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+     (("JC_74":
       (forall k_0:int.
         (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
          k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-      ("JC_67":
+      ("JC_75":
       (forall k_1:int.
         (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
          (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
          k_1)))))))))) and
-   ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
+   ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
    pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
    t) + 1) - 1))))) ->
   forall result:int.
@@ -3315,7 +3318,7 @@ goal negate_negate_ensures_default_po_9:
   (intM_intP1 = store(intM_intP0, shift(t, i), (-result0))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP1,
+  ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP1,
   pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
   t) + 1) - 1))))
 
@@ -4342,7 +4345,7 @@ why -simplify [...] why/Negate.why
 (IMPLIES (AND (<= 0 k_0) (< k_0 0))
 (EQ (select intM_intP (shift t k_0)) (- 0 (select intM_intP (shift t k_0))))))))))
 
-;; negate_negate_ensures_default_po_4, File "HOME/tests/java/Negate.jc", line 75, characters 6-1025
+;; negate_negate_ensures_default_po_4, File "HOME/tests/java/Negate.jc", line 77, characters 6-1025
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -4510,7 +4513,7 @@ Object_alloc_table intM_intP intM_intP (pset_range
 (IMPLIES (AND (<= i0 k_1) (< k_1 (+ (offset_max Object_alloc_table t) 1)))
 (EQ (select intM_intP1 (shift t k_1)) (select intM_intP (shift t k_1)))))))))))))))))))))
 
-;; negate_negate_ensures_default_po_9, File "HOME/tests/java/Negate.jc", line 75, characters 6-1025
+;; negate_negate_ensures_default_po_9, File "HOME/tests/java/Negate.jc", line 77, characters 6-1025
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -4587,7 +4590,7 @@ Object_alloc_table intM_intP intM_intP1 (pset_range
 (IMPLIES (AND (<= 0 k) (< k (+ (offset_max Object_alloc_table t) 1)))
 (EQ (select intM_intP0 (shift t k)) (- 0 (select intM_intP (shift t k))))))))))))))))
 
-;; negate_negate_safety_po_1, File "why/Negate.why", line 605, characters 31-154
+;; negate_negate_safety_po_1, File "why/Negate.why", line 606, characters 31-155
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -5910,15 +5913,15 @@ goal negate_negate_ensures_default_po_1:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
-  ("JC_68": ("JC_64": (0 <= 0)))
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
+  ("JC_76": ("JC_72": (0 <= 0)))
 
 goal negate_negate_ensures_default_po_2:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
-  ("JC_68": ("JC_65": (0 <= (offset_max(Object_alloc_table, t) + 1))))
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
+  ("JC_76": ("JC_73": (0 <= (offset_max(Object_alloc_table, t) + 1))))
 
 goal negate_negate_ensures_default_po_3:
   forall t:Object pointer.
@@ -5926,11 +5929,11 @@ goal negate_negate_ensures_default_po_3:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall k_0:int.
   ((0 <= k_0) and (k_0 < 0)) ->
-  ("JC_68":
-  ("JC_66": (select(intM_intP, shift(t, k_0)) = (-select(intM_intP, shift(t,
+  ("JC_76":
+  ("JC_74": (select(intM_intP, shift(t, k_0)) = (-select(intM_intP, shift(t,
   k_0))))))
 
 goal negate_negate_ensures_default_po_4:
@@ -5939,8 +5942,8 @@ goal negate_negate_ensures_default_po_4:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
-  ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP,
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
+  ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP,
   pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
   t) + 1) - 1))))
 
@@ -5950,23 +5953,23 @@ goal negate_negate_ensures_default_po_5:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  (("JC_68":
-   (("JC_64": (0 <= i)) and
-    (("JC_65": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-     (("JC_66":
+  (("JC_76":
+   (("JC_72": (0 <= i)) and
+    (("JC_73": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+     (("JC_74":
       (forall k_0:int.
         (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
          k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-      ("JC_67":
+      ("JC_75":
       (forall k_1:int.
         (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
          (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
          k_1)))))))))) and
-   ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
+   ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
    pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
    t) + 1) - 1))))) ->
   forall result:int.
@@ -5981,7 +5984,7 @@ goal negate_negate_ensures_default_po_5:
   (intM_intP1 = store(intM_intP0, shift(t, i), (-result0))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_68": ("JC_64": (0 <= i0)))
+  ("JC_76": ("JC_72": (0 <= i0)))
 
 goal negate_negate_ensures_default_po_6:
   forall t:Object pointer.
@@ -5989,23 +5992,23 @@ goal negate_negate_ensures_default_po_6:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  (("JC_68":
-   (("JC_64": (0 <= i)) and
-    (("JC_65": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-     (("JC_66":
+  (("JC_76":
+   (("JC_72": (0 <= i)) and
+    (("JC_73": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+     (("JC_74":
       (forall k_0:int.
         (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
          k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-      ("JC_67":
+      ("JC_75":
       (forall k_1:int.
         (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
          (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
          k_1)))))))))) and
-   ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
+   ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
    pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
    t) + 1) - 1))))) ->
   forall result:int.
@@ -6020,7 +6023,7 @@ goal negate_negate_ensures_default_po_6:
   (intM_intP1 = store(intM_intP0, shift(t, i), (-result0))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_68": ("JC_65": (i0 <= (offset_max(Object_alloc_table, t) + 1))))
+  ("JC_76": ("JC_73": (i0 <= (offset_max(Object_alloc_table, t) + 1))))
 
 goal negate_negate_ensures_default_po_7:
   forall t:Object pointer.
@@ -6028,23 +6031,23 @@ goal negate_negate_ensures_default_po_7:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  (("JC_68":
-   (("JC_64": (0 <= i)) and
-    (("JC_65": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-     (("JC_66":
+  (("JC_76":
+   (("JC_72": (0 <= i)) and
+    (("JC_73": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+     (("JC_74":
       (forall k_0:int.
         (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
          k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-      ("JC_67":
+      ("JC_75":
       (forall k_1:int.
         (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
          (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
          k_1)))))))))) and
-   ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
+   ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
    pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
    t) + 1) - 1))))) ->
   forall result:int.
@@ -6061,8 +6064,8 @@ goal negate_negate_ensures_default_po_7:
   (i0 = (i + 1)) ->
   forall k_0:int.
   ((0 <= k_0) and (k_0 < i0)) ->
-  ("JC_68":
-  ("JC_66": (select(intM_intP1, shift(t, k_0)) = (-select(intM_intP, shift(t,
+  ("JC_76":
+  ("JC_74": (select(intM_intP1, shift(t, k_0)) = (-select(intM_intP, shift(t,
   k_0))))))
 
 goal negate_negate_ensures_default_po_8:
@@ -6071,23 +6074,23 @@ goal negate_negate_ensures_default_po_8:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  (("JC_68":
-   (("JC_64": (0 <= i)) and
-    (("JC_65": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-     (("JC_66":
+  (("JC_76":
+   (("JC_72": (0 <= i)) and
+    (("JC_73": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+     (("JC_74":
       (forall k_0:int.
         (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
          k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-      ("JC_67":
+      ("JC_75":
       (forall k_1:int.
         (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
          (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
          k_1)))))))))) and
-   ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
+   ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
    pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
    t) + 1) - 1))))) ->
   forall result:int.
@@ -6104,8 +6107,8 @@ goal negate_negate_ensures_default_po_8:
   (i0 = (i + 1)) ->
   forall k_1:int.
   ((i0 <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
-  ("JC_68":
-  ("JC_67": (select(intM_intP1, shift(t, k_1)) = select(intM_intP, shift(t,
+  ("JC_76":
+  ("JC_75": (select(intM_intP1, shift(t, k_1)) = select(intM_intP, shift(t,
   k_1)))))
 
 goal negate_negate_ensures_default_po_9:
@@ -6114,23 +6117,23 @@ goal negate_negate_ensures_default_po_9:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  (("JC_68":
-   (("JC_64": (0 <= i)) and
-    (("JC_65": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-     (("JC_66":
+  (("JC_76":
+   (("JC_72": (0 <= i)) and
+    (("JC_73": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+     (("JC_74":
       (forall k_0:int.
         (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
          k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-      ("JC_67":
+      ("JC_75":
       (forall k_1:int.
         (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
          (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
          k_1)))))))))) and
-   ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
+   ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
    pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
    t) + 1) - 1))))) ->
   forall result:int.
@@ -6145,7 +6148,7 @@ goal negate_negate_ensures_default_po_9:
   (intM_intP1 = store(intM_intP0, shift(t, i), (-result0))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP1,
+  ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP1,
   pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
   t) + 1) - 1))))
 
@@ -6155,23 +6158,23 @@ goal negate_negate_ensures_default_po_10:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  (("JC_68":
-   (("JC_64": (0 <= i)) and
-    (("JC_65": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-     (("JC_66":
+  (("JC_76":
+   (("JC_72": (0 <= i)) and
+    (("JC_73": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+     (("JC_74":
       (forall k_0:int.
         (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
          k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-      ("JC_67":
+      ("JC_75":
       (forall k_1:int.
         (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
          (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
          k_1)))))))))) and
-   ("JC_70": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
+   ("JC_78": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
    pset_range(pset_singleton(t), 0, ((offset_max(Object_alloc_table,
    t) + 1) - 1))))) ->
   forall result:int.
@@ -6181,8 +6184,8 @@ goal negate_negate_ensures_default_po_10:
   (i >= result) ->
   forall k:int.
   ((0 <= k) and (k < (offset_max(Object_alloc_table, t) + 1))) ->
-  ("JC_45":
-  ("JC_43": (select(intM_intP0, shift(t, k)) = (-select(intM_intP, shift(t,
+  ("JC_53":
+  ("JC_51": (select(intM_intP0, shift(t, k)) = (-select(intM_intP, shift(t,
   k))))))
 
 goal negate_negate_safety_po_1:
@@ -6191,19 +6194,19 @@ goal negate_negate_safety_po_1:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_57": true) ->
-  ("JC_55":
-  (("JC_51": (0 <= i)) and
-   (("JC_52": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-    (("JC_53":
+  ("JC_65": true) ->
+  ("JC_63":
+  (("JC_59": (0 <= i)) and
+   (("JC_60": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+    (("JC_61":
      (forall k_0:int.
        (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
         k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-     ("JC_54":
+     ("JC_62":
      (forall k_1:int.
        (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
         (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
@@ -6216,19 +6219,19 @@ goal negate_negate_safety_po_2:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_57": true) ->
-  ("JC_55":
-  (("JC_51": (0 <= i)) and
-   (("JC_52": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-    (("JC_53":
+  ("JC_65": true) ->
+  ("JC_63":
+  (("JC_59": (0 <= i)) and
+   (("JC_60": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+    (("JC_61":
      (forall k_0:int.
        (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
         k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-     ("JC_54":
+     ("JC_62":
      (forall k_1:int.
        (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
         (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
@@ -6247,19 +6250,19 @@ goal negate_negate_safety_po_3:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_57": true) ->
-  ("JC_55":
-  (("JC_51": (0 <= i)) and
-   (("JC_52": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-    (("JC_53":
+  ("JC_65": true) ->
+  ("JC_63":
+  (("JC_59": (0 <= i)) and
+   (("JC_60": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+    (("JC_61":
      (forall k_0:int.
        (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
         k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-     ("JC_54":
+     ("JC_62":
      (forall k_1:int.
        (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
         (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
@@ -6278,19 +6281,19 @@ goal negate_negate_safety_po_4:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_57": true) ->
-  ("JC_55":
-  (("JC_51": (0 <= i)) and
-   (("JC_52": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-    (("JC_53":
+  ("JC_65": true) ->
+  ("JC_63":
+  (("JC_59": (0 <= i)) and
+   (("JC_60": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+    (("JC_61":
      (forall k_0:int.
        (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
         k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-     ("JC_54":
+     ("JC_62":
      (forall k_1:int.
        (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
         (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
@@ -6312,7 +6315,7 @@ goal negate_negate_safety_po_4:
   (intM_intP1 = store(intM_intP0, shift(t, i), (-result0))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  (0 <= ("JC_63": ((offset_max(Object_alloc_table, t) + 1) - i)))
+  (0 <= ("JC_71": ((offset_max(Object_alloc_table, t) + 1) - i)))
 
 goal negate_negate_safety_po_5:
   forall t:Object pointer.
@@ -6320,19 +6323,19 @@ goal negate_negate_safety_po_5:
   forall intM_intP:(Object,
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t, Object_alloc_table))) ->
   forall i:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_57": true) ->
-  ("JC_55":
-  (("JC_51": (0 <= i)) and
-   (("JC_52": (i <= (offset_max(Object_alloc_table, t) + 1))) and
-    (("JC_53":
+  ("JC_65": true) ->
+  ("JC_63":
+  (("JC_59": (0 <= i)) and
+   (("JC_60": (i <= (offset_max(Object_alloc_table, t) + 1))) and
+    (("JC_61":
      (forall k_0:int.
        (((0 <= k_0) and (k_0 < i)) -> (select(intM_intP0, shift(t,
         k_0)) = (-select(intM_intP, shift(t, k_0))))))) and
-     ("JC_54":
+     ("JC_62":
      (forall k_1:int.
        (((i <= k_1) and (k_1 < (offset_max(Object_alloc_table, t) + 1))) ->
         (select(intM_intP0, shift(t, k_1)) = select(intM_intP, shift(t,
@@ -6354,7 +6357,7 @@ goal negate_negate_safety_po_5:
   (intM_intP1 = store(intM_intP0, shift(t, i), (-result0))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  (("JC_63": ((offset_max(Object_alloc_table, t) + 1) - i0)) < ("JC_63":
+  (("JC_71": ((offset_max(Object_alloc_table, t) + 1) - i0)) < ("JC_71":
                                                                ((offset_max(Object_alloc_table,
                                                                t) + 1) - i)))
 

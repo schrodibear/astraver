@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only float_to_int.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD float_to_int.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only float_to_int.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/float_to_int.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir float_to_int.jessie
 [jessie] File float_to_int.jessie/float_to_int.jc written.
@@ -33,27 +33,27 @@ tag voidP = {
 type voidP = [voidP]
 
 integer f(double x)
-  requires (C_23 : (\real_abs((x :> real)) <= 0x1p30));
+  requires (_C_23 : (\real_abs((x :> real)) <= 0x1p30));
 behavior default:
-  ensures (C_4 : (\real_abs((\result - (\at(x,Old) :> real))) <= 1.0));
+  ensures (_C_4 : (\real_abs((\result - (\at(x,Old) :> real))) <= 1.0));
 behavior positive:
   assumes ((x :> real) >= 0.0);
-  ensures (C_5 : (((C_7 : (0 <= \result)) &&
-                    ((C_9 : (\result <= (\at(x,Old) :> real))) &&
-                      (C_10 : ((\at(x,Old) :> real) < (\result + 1))))) &&
-                   ((C_12 : ((- 1.0) <= (\result - (\at(x,Old) :> real)))) &&
-                     (C_13 : ((\result - (\at(x,Old) :> real)) <= 0.0)))));
+  ensures (_C_5 : (((_C_7 : (0 <= \result)) &&
+                     ((_C_9 : (\result <= (\at(x,Old) :> real))) &&
+                       (_C_10 : ((\at(x,Old) :> real) < (\result + 1))))) &&
+                    ((_C_12 : ((- 1.0) <= (\result - (\at(x,Old) :> real)))) &&
+                      (_C_13 : ((\result - (\at(x,Old) :> real)) <= 0.0)))));
 behavior negative:
   assumes ((x :> real) <= 0.0);
-  ensures (C_14 : (((C_16 : (0 >= \result)) &&
-                     ((C_18 : (\result >= (\at(x,Old) :> real))) &&
-                       (C_19 : ((\at(x,Old) :> real) > (\result - 1))))) &&
-                    ((C_21 : (1.0 >= (\result - (\at(x,Old) :> real)))) &&
-                      (C_22 : ((\result - (\at(x,Old) :> real)) >= 0.0)))));
+  ensures (_C_14 : (((_C_16 : (0 >= \result)) &&
+                      ((_C_18 : (\result >= (\at(x,Old) :> real))) &&
+                        (_C_19 : ((\at(x,Old) :> real) > (\result - 1))))) &&
+                     ((_C_21 : (1.0 >= (\result - (\at(x,Old) :> real)))) &&
+                       (_C_22 : ((\result - (\at(x,Old) :> real)) >= 0.0)))));
 {  
    (var integer i);
    
-   {  (C_3 : (i = (C_2 : \truncate_real_to_int((C_1 : (x :> real))))));
+   {  (_C_3 : (i = (_C_2 : \truncate_real_to_int((_C_1 : (x :> real))))));
       
       (return i)
    }
@@ -377,13 +377,11 @@ let f_ensures_default =
   try
    begin
      (let i = ref (any_int void) in
-     (C_3:
      begin
-       (let jessie_<somenum> =
-       (i := (C_2:
-             (let jessie_<somenum> = (C_1: (double_value x_0)) in
-             (truncate_real_to_int jessie_<somenum>)))) in void); (return := !i);
-      (raise Return) end)); absurd  end with Return -> !return end))
+       (let _jessie_<somenum> =
+       (i := (let _jessie_<somenum> = (double_value x_0) in
+             (truncate_real_to_int _jessie_<somenum>))) in void); (return := !i);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     le_real(abs_real(sub_real(real_of_int(result), double_value(x_0))), 1.0)) }
 
@@ -396,13 +394,11 @@ let f_ensures_negative =
   try
    begin
      (let i = ref (any_int void) in
-     (C_3:
      begin
-       (let jessie_<somenum> =
-       (i := (C_2:
-             (let jessie_<somenum> = (C_1: (double_value x_0)) in
-             (truncate_real_to_int jessie_<somenum>)))) in void); (return := !i);
-      (raise Return) end)); absurd  end with Return -> !return end))
+       (let _jessie_<somenum> =
+       (i := (let _jessie_<somenum> = (double_value x_0) in
+             (truncate_real_to_int _jessie_<somenum>))) in void); (return := !i);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int((0), result))
     and ((JC_<somenum>: ge_real(real_of_int(result), double_value(x_0)))
@@ -424,13 +420,11 @@ let f_ensures_positive =
   try
    begin
      (let i = ref (any_int void) in
-     (C_3:
      begin
-       (let jessie_<somenum> =
-       (i := (C_2:
-             (let jessie_<somenum> = (C_1: (double_value x_0)) in
-             (truncate_real_to_int jessie_<somenum>)))) in void); (return := !i);
-      (raise Return) end)); absurd  end with Return -> !return end))
+       (let _jessie_<somenum> =
+       (i := (let _jessie_<somenum> = (double_value x_0) in
+             (truncate_real_to_int _jessie_<somenum>))) in void); (return := !i);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: le_int((0), result))
     and ((JC_<somenum>: le_real(real_of_int(result), double_value(x_0)))
@@ -451,14 +445,11 @@ let f_safety =
   try
    begin
      (let i = ref (any_int void) in
-     (C_3:
      begin
-       (let jessie_<somenum> =
-       (i := (C_2:
-             (let jessie_<somenum> = (C_1: (double_value x_0)) in
-             (truncate_real_to_int jessie_<somenum>)))) in void); (return := !i);
-      (raise Return) end)); absurd  end with Return -> !return end)) 
-  { true }
+       (let _jessie_<somenum> =
+       (i := (let _jessie_<somenum> = (double_value x_0) in
+             (truncate_real_to_int _jessie_<somenum>))) in void); (return := !i);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C float_to_int.jessie --quiet -f float_to_int.makefile project

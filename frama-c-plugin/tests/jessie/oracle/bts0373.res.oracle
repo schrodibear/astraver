@@ -1,7 +1,8 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0373.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0373.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0373.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0373.c"
 [kernel] warning: ignoring status of global invariant `toto'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global invariant `toto'
 [jessie] Producing Jessie files in subdir bts0373.jessie
 [jessie] File bts0373.jessie/bts0373.jc written.
 [jessie] File bts0373.jessie/bts0373.cloc written.
@@ -45,11 +46,11 @@ invariant toto :
 
 int32 main()
 behavior default:
-  ensures (C_2 : (\result == 0));
+  ensures (_C_2 : (\result == 0));
 {  
    (var int32 __retres);
    
-   {  (C_1 : (__retres = 1));
+   {  (_C_1 : (__retres = 1));
       
       (return __retres)
    }
@@ -416,10 +417,9 @@ let main_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_1:
      begin
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 let main_safety =
@@ -430,10 +430,9 @@ let main_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_1:
      begin
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { (JC_<somenum>: toto) }
 
 

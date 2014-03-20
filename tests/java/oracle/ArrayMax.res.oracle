@@ -52,8 +52,8 @@ End:
 ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
-Generating JC function ArrayMax_max for method ArrayMax.max
 Generating JC function cons_ArrayMax for constructor ArrayMax
+Generating JC function ArrayMax_max for method ArrayMax.max
 Done.
 ========== file tests/java/ArrayMax.jc ==========
 # InvariantPolicy = Arguments
@@ -81,19 +81,19 @@ predicate Non_null_Object{Here}(Object[0..] x) =
 String[0..] any_string()
 ;
 
-tag Object = {
+tag String = Object with {
 }
 
-tag String = Object with {
+tag ArrayMax = Object with {
 }
 
 tag Throwable = Object with {
 }
 
-tag Exception = Object with {
+tag Object = {
 }
 
-tag ArrayMax = Object with {
+tag Exception = Object with {
 }
 
 type Object = [Object]
@@ -141,9 +141,11 @@ axiomatic integer_max {
   
 }
 
+exception Exception of Exception[0..]
+
 exception Throwable of Throwable[0..]
 
-exception Exception of Exception[0..]
+unit cons_ArrayMax(! ArrayMax[0] this_0){()}
 
 int32 ArrayMax_max(intM[0..] a)
   requires (K_6 : ((\offset_max(a) + 1) > 0));
@@ -187,8 +189,6 @@ behavior default:
    }
 }
 
-unit cons_ArrayMax(! ArrayMax[0] this_0){()}
-
 /*
 Local Variables:
 mode: java
@@ -196,42 +196,6 @@ compile-command: "jessie -why-opt -split-user-conj -locs tests/java/ArrayMax.jlo
 End:
 */
 ========== file tests/java/ArrayMax.jloc ==========
-[K_10]
-file = "HOME/tests/java/ArrayMax.java"
-line = 30
-begin = 27
-end = 33
-
-[K_11]
-file = "HOME/tests/java/ArrayMax.java"
-line = 30
-begin = 27
-end = 38
-
-[K_12]
-file = "HOME/tests/java/ArrayMax.java"
-line = 30
-begin = 27
-end = 49
-
-[K_13]
-file = "HOME/tests/java/ArrayMax.java"
-line = 30
-begin = 27
-end = 186
-
-[K_14]
-file = "HOME/tests/java/ArrayMax.java"
-line = 34
-begin = 25
-end = 30
-
-[K_15]
-file = "HOME/tests/java/ArrayMax.java"
-line = 38
-begin = 21
-end = 24
-
 [ArrayMax_max]
 name = "Method max"
 file = "HOME/tests/java/ArrayMax.java"
@@ -239,11 +203,11 @@ line = 27
 begin = 22
 end = 25
 
-[K_16]
+[K_23]
 file = "HOME/tests/java/ArrayMax.java"
-line = 37
-begin = 30
-end = 33
+line = 28
+begin = 16
+end = 17
 
 [K_17]
 file = "HOME/tests/java/ArrayMax.java"
@@ -251,109 +215,17 @@ line = 37
 begin = 16
 end = 20
 
-[cons_ArrayMax]
-name = "Constructor of class ArrayMax"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[K_18]
-file = "HOME/tests/java/ArrayMax.java"
-line = 37
-begin = 24
-end = 28
-
-[K_19]
-file = "HOME/tests/java/ArrayMax.java"
-line = 37
-begin = 16
-end = 28
-
-[K_20]
-file = "HOME/tests/java/ArrayMax.java"
-line = 36
-begin = 15
-end = 21
-
-[K_21]
-file = "HOME/tests/java/ArrayMax.java"
-line = 29
-begin = 16
-end = 24
-
-[K_22]
-file = "HOME/tests/java/ArrayMax.java"
-line = 29
-begin = 16
-end = 26
-
-[K_23]
-file = "HOME/tests/java/ArrayMax.java"
-line = 28
-begin = 16
-end = 17
-
-[K_1]
-file = "HOME/tests/java/ArrayMax.java"
-line = 25
-begin = 10
-end = 69
-
-[K_2]
-file = "HOME/tests/java/ArrayMax.java"
-line = 24
-begin = 21
-end = 39
-
-[K_3]
-file = "HOME/tests/java/ArrayMax.java"
-line = 24
-begin = 16
-end = 28
-
-[K_4]
-file = "HOME/tests/java/ArrayMax.java"
-line = 24
-begin = 16
-end = 39
-
-[K_5]
-file = "HOME/tests/java/ArrayMax.java"
-line = 24
-begin = 16
-end = 112
-
-[K_6]
-file = "HOME/tests/java/ArrayMax.java"
-line = 23
-begin = 17
-end = 29
-
-[K_7]
-file = "HOME/tests/java/ArrayMax.java"
-line = 31
-begin = 17
-end = 133
-
-[K_8]
+[K_11]
 file = "HOME/tests/java/ArrayMax.java"
 line = 30
-begin = 37
-end = 49
-
-[K_9]
-file = "HOME/tests/java/ArrayMax.java"
-line = 30
-begin = 32
+begin = 27
 end = 38
 
-[max_is_ge]
-name = "Lemma max_is_ge"
-file = "HOME/"
-line = 0
-begin = 0
-end = 0
+[K_13]
+file = "HOME/tests/java/ArrayMax.java"
+line = 30
+begin = 27
+end = 186
 
 [max_is_some]
 name = "Lemma max_is_some"
@@ -362,9 +234,137 @@ line = 0
 begin = 0
 end = 0
 
+[K_9]
+file = "HOME/tests/java/ArrayMax.java"
+line = 30
+begin = 32
+end = 38
+
+[K_1]
+file = "HOME/tests/java/ArrayMax.java"
+line = 25
+begin = 10
+end = 69
+
+[K_15]
+file = "HOME/tests/java/ArrayMax.java"
+line = 38
+begin = 21
+end = 24
+
+[K_4]
+file = "HOME/tests/java/ArrayMax.java"
+line = 24
+begin = 16
+end = 39
+
+[K_12]
+file = "HOME/tests/java/ArrayMax.java"
+line = 30
+begin = 27
+end = 49
+
+[cons_ArrayMax]
+name = "Constructor of class ArrayMax"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[K_20]
+file = "HOME/tests/java/ArrayMax.java"
+line = 36
+begin = 15
+end = 21
+
+[K_2]
+file = "HOME/tests/java/ArrayMax.java"
+line = 24
+begin = 21
+end = 39
+
+[K_10]
+file = "HOME/tests/java/ArrayMax.java"
+line = 30
+begin = 27
+end = 33
+
+[K_6]
+file = "HOME/tests/java/ArrayMax.java"
+line = 23
+begin = 17
+end = 29
+
+[K_8]
+file = "HOME/tests/java/ArrayMax.java"
+line = 30
+begin = 37
+end = 49
+
+[K_3]
+file = "HOME/tests/java/ArrayMax.java"
+line = 24
+begin = 16
+end = 28
+
+[max_is_ge]
+name = "Lemma max_is_ge"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
+
+[K_21]
+file = "HOME/tests/java/ArrayMax.java"
+line = 29
+begin = 16
+end = 24
+
+[K_14]
+file = "HOME/tests/java/ArrayMax.java"
+line = 34
+begin = 25
+end = 30
+
+[K_19]
+file = "HOME/tests/java/ArrayMax.java"
+line = 37
+begin = 16
+end = 28
+
+[K_5]
+file = "HOME/tests/java/ArrayMax.java"
+line = 24
+begin = 16
+end = 112
+
+[K_18]
+file = "HOME/tests/java/ArrayMax.java"
+line = 37
+begin = 24
+end = 28
+
+[K_7]
+file = "HOME/tests/java/ArrayMax.java"
+line = 31
+begin = 17
+end = 133
+
+[K_22]
+file = "HOME/tests/java/ArrayMax.java"
+line = 29
+begin = 16
+end = 26
+
+[K_16]
+file = "HOME/tests/java/ArrayMax.java"
+line = 37
+begin = 30
+end = 33
+
 ========== jessie execution ==========
-Generating Why function ArrayMax_max
 Generating Why function cons_ArrayMax
+Generating Why function ArrayMax_max
 ========== file tests/java/ArrayMax.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -375,10 +375,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs ArrayMax.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs ArrayMax.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs ArrayMax.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs ArrayMax.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -523,13 +524,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: ArrayMax.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: ArrayMax.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: ArrayMax.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include ArrayMax.depend
 
@@ -540,323 +541,37 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/ArrayMax.loc ==========
-[JC_40]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_41]
+[JC_73]
+kind = PointerDeref
 file = "HOME/tests/java/ArrayMax.java"
-line = 23
-begin = 17
-end = 29
-
-[JC_42]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_43]
-file = "HOME/tests/java/ArrayMax.java"
-line = 24
-begin = 16
+line = 37
+begin = 24
 end = 28
 
-[JC_44]
-file = "HOME/tests/java/ArrayMax.java"
-line = 24
-begin = 21
-end = 39
-
-[JC_45]
-file = "HOME/tests/java/ArrayMax.java"
-line = 25
-begin = 10
-end = 69
-
-[JC_46]
-file = "HOME/tests/java/ArrayMax.java"
-line = 24
-begin = 16
-end = 112
-
-[JC_1]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 23
-begin = 12
-end = 22
-
-[JC_47]
-file = "HOME/tests/java/ArrayMax.java"
-line = 24
-begin = 16
-end = 28
-
-[JC_2]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_48]
-file = "HOME/tests/java/ArrayMax.java"
-line = 24
-begin = 21
-end = 39
-
-[JC_3]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 23
-begin = 12
-end = 22
-
-[JC_49]
-file = "HOME/tests/java/ArrayMax.java"
-line = 25
-begin = 10
-end = 69
-
-[JC_4]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_5]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_9]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 52
-begin = 8
-end = 21
-
-[JC_50]
-file = "HOME/tests/java/ArrayMax.java"
-line = 24
-begin = 16
-end = 112
-
-[cons_ArrayMax_ensures_default]
-name = "Constructor of class ArrayMax"
-behavior = "default behavior"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_51]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_52]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_53]
-kind = UserCall
-file = "HOME/tests/java/ArrayMax.java"
-line = 29
-begin = 16
-end = 24
-
-[JC_54]
-kind = IndexBounds
-file = "HOME/tests/java/ArrayMax.java"
-line = 29
-begin = 16
-end = 24
-
-[JC_55]
+[JC_63]
 kind = ArithOverflow
 file = "HOME/tests/java/ArrayMax.java"
 line = 29
 begin = 16
 end = 26
 
-[JC_56]
-file = "HOME/tests/java/ArrayMax.java"
-line = 30
-begin = 27
-end = 33
-
-[JC_57]
-file = "HOME/tests/java/ArrayMax.java"
-line = 30
-begin = 32
-end = 38
-
-[JC_58]
+[JC_80]
 file = "HOME/tests/java/ArrayMax.java"
 line = 30
 begin = 37
 end = 49
 
-[JC_59]
+[JC_51]
 file = "HOME/tests/java/ArrayMax.java"
-line = 31
-begin = 17
-end = 133
-
-[JC_60]
-file = "HOME/tests/java/ArrayMax.java"
-line = 30
-begin = 27
-end = 186
-
-[JC_61]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_62]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 106
-begin = 12
-end = 1096
-
-[JC_10]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_63]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 106
-begin = 12
-end = 1096
-
-[JC_11]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 52
-begin = 8
-end = 21
-
-[JC_64]
-kind = PointerDeref
-file = "HOME/tests/java/ArrayMax.java"
-line = 37
+line = 24
 begin = 16
-end = 20
-
-[JC_12]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_65]
-kind = PointerDeref
-file = "HOME/tests/java/ArrayMax.java"
-line = 37
-begin = 24
 end = 28
 
-[JC_13]
+[JC_71]
 file = "HOME/tests/java/ArrayMax.jc"
-line = 55
-begin = 11
-end = 66
-
-[JC_66]
-kind = ArithOverflow
-file = "HOME/tests/java/ArrayMax.jc"
-line = 122
-begin = 69
-end = 75
-
-[JC_14]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 54
-begin = 10
-end = 18
-
-[JC_67]
-kind = ArithOverflow
-file = "HOME/tests/java/ArrayMax.jc"
-line = 123
-begin = 24
-end = 30
-
-[JC_15]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 55
-begin = 11
-end = 66
-
-[JC_68]
-file = "HOME/tests/java/ArrayMax.java"
-line = 34
-begin = 25
-end = 30
-
-[JC_16]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 54
-begin = 10
-end = 18
-
-[max_is_ge]
-name = "Lemma max_is_ge"
-behavior = "axiom"
-file = "HOME/"
-line = 0
-begin = 0
-end = 0
-
-[JC_69]
-kind = UserCall
-file = "HOME/tests/java/ArrayMax.java"
-line = 29
-begin = 16
-end = 24
-
-[JC_17]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_19]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 58
-begin = 8
-end = 30
+line = 108
+begin = 12
+end = 1096
 
 [cons_ArrayMax_safety]
 name = "Constructor of class ArrayMax"
@@ -866,55 +581,57 @@ line = 0
 begin = -1
 end = -1
 
-[JC_70]
+[JC_45]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_64]
 file = "HOME/tests/java/ArrayMax.java"
 line = 30
 begin = 27
 end = 33
 
-[JC_71]
-file = "HOME/tests/java/ArrayMax.java"
-line = 30
-begin = 32
-end = 38
+[max_is_some]
+name = "Lemma max_is_some"
+behavior = "axiom"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
 
-[JC_72]
-file = "HOME/tests/java/ArrayMax.java"
-line = 30
-begin = 37
-end = 49
+[JC_85]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 108
+begin = 12
+end = 1096
 
-[JC_20]
+[JC_31]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 65
+begin = 8
+end = 23
+
+[JC_17]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_73]
+[JC_81]
 file = "HOME/tests/java/ArrayMax.java"
 line = 31
 begin = 17
 end = 133
 
-[JC_21]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 58
-begin = 8
-end = 30
-
-[JC_74]
+[JC_55]
 file = "HOME/tests/java/ArrayMax.java"
-line = 30
-begin = 27
-end = 186
+line = 24
+begin = 16
+end = 28
 
-[JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_75]
+[JC_48]
 file = "HOME/"
 line = 0
 begin = -1
@@ -926,23 +643,42 @@ line = 61
 begin = 11
 end = 103
 
-[JC_76]
+[JC_22]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_5]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_67]
+file = "HOME/tests/java/ArrayMax.java"
+line = 31
+begin = 17
+end = 133
+
+[JC_9]
 file = "HOME/tests/java/ArrayMax.jc"
-line = 106
-begin = 12
-end = 1096
+line = 52
+begin = 8
+end = 21
+
+[JC_75]
+kind = ArithOverflow
+file = "HOME/tests/java/ArrayMax.jc"
+line = 125
+begin = 24
+end = 30
 
 [JC_24]
 file = "HOME/tests/java/ArrayMax.jc"
 line = 60
 begin = 10
 end = 18
-
-[JC_77]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 106
-begin = 12
-end = 1096
 
 [JC_25]
 file = "HOME/tests/java/ArrayMax.jc"
@@ -951,10 +687,43 @@ begin = 11
 end = 103
 
 [JC_78]
+file = "HOME/tests/java/ArrayMax.java"
+line = 30
+begin = 27
+end = 33
+
+[JC_41]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_74]
+kind = ArithOverflow
+file = "HOME/tests/java/ArrayMax.jc"
+line = 124
+begin = 69
+end = 75
+
+[ArrayMax_max_ensures_default]
+name = "Method max"
+behavior = "default behavior"
+file = "HOME/tests/java/ArrayMax.java"
+line = 27
+begin = 22
+end = 25
+
+[JC_47]
+file = "HOME/tests/java/ArrayMax.java"
+line = 23
+begin = 17
+end = 29
+
+[JC_52]
+file = "HOME/tests/java/ArrayMax.java"
+line = 24
+begin = 21
+end = 39
 
 [JC_26]
 file = "HOME/tests/java/ArrayMax.jc"
@@ -962,7 +731,181 @@ line = 60
 begin = 10
 end = 18
 
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_54]
+file = "HOME/tests/java/ArrayMax.java"
+line = 24
+begin = 16
+end = 112
+
 [JC_79]
+file = "HOME/tests/java/ArrayMax.java"
+line = 30
+begin = 32
+end = 38
+
+[JC_13]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 55
+begin = 11
+end = 66
+
+[JC_82]
+file = "HOME/tests/java/ArrayMax.java"
+line = 30
+begin = 27
+end = 186
+
+[JC_11]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 52
+begin = 8
+end = 21
+
+[JC_70]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 108
+begin = 12
+end = 1096
+
+[JC_15]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 55
+begin = 11
+end = 66
+
+[JC_36]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_39]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_40]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_83]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_35]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_27]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_69]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_38]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 67
+begin = 11
+end = 65
+
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_62]
+kind = IndexBounds
+file = "HOME/tests/java/ArrayMax.java"
+line = 29
+begin = 16
+end = 24
+
+[max_is_ge]
+name = "Lemma max_is_ge"
+behavior = "axiom"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
+
+[JC_42]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_46]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_61]
+kind = UserCall
+file = "HOME/tests/java/ArrayMax.java"
+line = 29
+begin = 16
+end = 24
+
+[JC_32]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_56]
+file = "HOME/tests/java/ArrayMax.java"
+line = 24
+begin = 21
+end = 39
+
+[cons_ArrayMax_ensures_default]
+name = "Constructor of class ArrayMax"
+behavior = "default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_33]
 file = "HOME/"
 line = 0
 begin = -1
@@ -976,17 +919,11 @@ line = 27
 begin = 22
 end = 25
 
-[JC_27]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_65]
+file = "HOME/tests/java/ArrayMax.java"
+line = 30
+begin = 32
+end = 38
 
 [JC_29]
 file = "HOME/tests/java/ArrayMax.jc"
@@ -994,35 +931,159 @@ line = 65
 begin = 8
 end = 23
 
-[max_is_some]
-name = "Lemma max_is_some"
-behavior = "axiom"
-file = "HOME/"
-line = 0
-begin = 0
-end = 0
-
-[ArrayMax_max_ensures_default]
-name = "Method max"
-behavior = "default behavior"
+[JC_68]
 file = "HOME/tests/java/ArrayMax.java"
-line = 27
-begin = 22
-end = 25
+line = 30
+begin = 27
+end = 186
 
-[JC_80]
+[JC_7]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_81]
+[JC_16]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 54
+begin = 10
+end = 18
+
+[JC_43]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_82]
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_84]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 108
+begin = 12
+end = 1096
+
+[JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_14]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 54
+begin = 10
+end = 18
+
+[JC_53]
+file = "HOME/tests/java/ArrayMax.java"
+line = 25
+begin = 10
+end = 69
+
+[JC_21]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 58
+begin = 8
+end = 30
+
+[JC_77]
+kind = UserCall
+file = "HOME/tests/java/ArrayMax.java"
+line = 29
+begin = 16
+end = 24
+
+[JC_49]
+file = "HOME/tests/java/ArrayMax.java"
+line = 23
+begin = 17
+end = 29
+
+[JC_1]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 23
+begin = 12
+end = 22
+
+[JC_37]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 67
+begin = 11
+end = 65
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_57]
+file = "HOME/tests/java/ArrayMax.java"
+line = 25
+begin = 10
+end = 69
+
+[JC_66]
+file = "HOME/tests/java/ArrayMax.java"
+line = 30
+begin = 37
+end = 49
+
+[JC_59]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_18]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_3]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 23
+begin = 12
+end = 22
+
+[JC_60]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_72]
+kind = PointerDeref
+file = "HOME/tests/java/ArrayMax.java"
+line = 37
+begin = 16
+end = 20
+
+[JC_19]
+file = "HOME/tests/java/ArrayMax.jc"
+line = 58
+begin = 8
+end = 30
+
+[JC_76]
+file = "HOME/tests/java/ArrayMax.java"
+line = 34
+begin = 25
+end = 30
+
+[JC_50]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1034,77 +1095,17 @@ line = 0
 begin = -1
 end = -1
 
-[JC_83]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_31]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 65
-begin = 8
-end = 23
-
-[JC_84]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_32]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_85]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_34]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_35]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_36]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_37]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 67
-begin = 11
-end = 65
-
-[JC_38]
-file = "HOME/tests/java/ArrayMax.jc"
-line = 67
-begin = 11
-end = 65
-
-[JC_39]
+[JC_58]
 file = "HOME/tests/java/ArrayMax.java"
-line = 23
-begin = 17
-end = 29
+line = 24
+begin = 16
+end = 112
+
+[JC_28]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/java/why/ArrayMax.why ==========
 type Object
@@ -1452,12 +1453,12 @@ parameter intM_intP : (Object, int32) memory ref
 parameter ArrayMax_max :
  a:Object pointer ->
   { } int32 reads Object_alloc_table,intM_intP
-  { (JC_50:
-    ((JC_47: le_int((0), integer_of_int32(result)))
-    and ((JC_48:
+  { (JC_58:
+    ((JC_55: le_int((0), integer_of_int32(result)))
+    and ((JC_56:
          lt_int(integer_of_int32(result),
          add_int(offset_max(Object_alloc_table, a), (1))))
-        and (JC_49:
+        and (JC_57:
             (forall i:int.
              ((le_int((0), i)
               and lt_int(i, add_int(offset_max(Object_alloc_table, a), (1)))) ->
@@ -1467,14 +1468,14 @@ parameter ArrayMax_max :
 
 parameter ArrayMax_max_requires :
  a:Object pointer ->
-  { (JC_39: gt_int(add_int(offset_max(Object_alloc_table, a), (1)), (0)))}
+  { (JC_47: gt_int(add_int(offset_max(Object_alloc_table, a), (1)), (0)))}
   int32 reads Object_alloc_table,intM_intP
-  { (JC_50:
-    ((JC_47: le_int((0), integer_of_int32(result)))
-    and ((JC_48:
+  { (JC_58:
+    ((JC_55: le_int((0), integer_of_int32(result)))
+    and ((JC_56:
          lt_int(integer_of_int32(result),
          add_int(offset_max(Object_alloc_table, a), (1))))
-        and (JC_49:
+        and (JC_57:
             (forall i:int.
              ((le_int((0), i)
               and lt_int(i, add_int(offset_max(Object_alloc_table, a), (1)))) ->
@@ -1766,7 +1767,7 @@ parameter short_of_integer_ :
 let ArrayMax_max_ensures_default =
  fun (a : Object pointer) ->
   { (left_valid_struct_intM(a, (0), Object_alloc_table)
-    and (JC_41: gt_int(add_int(offset_max(Object_alloc_table, a), (1)), (0)))) }
+    and (JC_49: gt_int(add_int(offset_max(Object_alloc_table, a), (1)), (0)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1775,22 +1776,22 @@ let ArrayMax_max_ensures_default =
      (let y_2 =
      ref (K_22:
          (safe_int32_of_integer_ ((sub_int (K_21:
-                                           (let jessie_<num> = a in
-                                           (JC_69:
-                                           (java_array_length_intM jessie_<num>))))) (1)))) in
+                                           (let _jessie_<num> = a in
+                                           (JC_77:
+                                           (java_array_length_intM _jessie_<num>))))) (1)))) in
      begin
        try
         (loop_2:
         while true do
         { invariant
-            (JC_74:
-            ((JC_70: le_int((0), integer_of_int32(x_2_0)))
-            and ((JC_71:
+            (JC_82:
+            ((JC_78: le_int((0), integer_of_int32(x_2_0)))
+            and ((JC_79:
                  le_int(integer_of_int32(x_2_0), integer_of_int32(y_2)))
-                and ((JC_72:
+                and ((JC_80:
                      lt_int(integer_of_int32(y_2),
                      add_int(offset_max(Object_alloc_table, a), (1))))
-                    and (JC_73:
+                    and (JC_81:
                         (forall i_0:int.
                          (((le_int((0), i_0)
                            and lt_int(i_0, integer_of_int32(x_2_0)))
@@ -1813,7 +1814,7 @@ let ArrayMax_max_ensures_default =
              (if (K_20:
                  ((neq_int_ (integer_of_int32 !x_2_0)) (integer_of_int32 !y_2)))
              then
-              (let jessie_<num> =
+              (let _jessie_<num> =
               (if (K_19:
                   ((le_int_ (integer_of_int32 (K_17:
                                               ((safe_acc_ !intM_intP) 
@@ -1823,29 +1824,29 @@ let ArrayMax_max_ensures_default =
                                                               (integer_of_int32 !y_2)))))))
               then
                (K_16:
-               (let jessie_<num> = !x_2_0 in
+               (let _jessie_<num> = !x_2_0 in
                begin
-                 (let jessie_<num> =
-                 (x_2_0 := (safe_int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1)))) in
-                 void); jessie_<num> end))
+                 (let _jessie_<num> =
+                 (x_2_0 := (safe_int32_of_integer_ ((add_int (integer_of_int32 _jessie_<num>)) (1)))) in
+                 void); _jessie_<num> end))
               else
                (K_15:
-               (let jessie_<num> = !y_2 in
+               (let _jessie_<num> = !y_2 in
                begin
-                 (let jessie_<num> =
-                 (y_2 := (safe_int32_of_integer_ ((sub_int (integer_of_int32 jessie_<num>)) (1)))) in
-                 void); jessie_<num> end))) in void)
+                 (let _jessie_<num> =
+                 (y_2 := (safe_int32_of_integer_ ((sub_int (integer_of_int32 _jessie_<num>)) (1)))) in
+                 void); _jessie_<num> end))) in void)
              else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc jessie_<num> -> void end end done) with
-        Loop_exit_exc jessie_<num> -> void end; (return := !x_2_0);
+           Loop_continue_exc _jessie_<num> -> void end end done) with
+        Loop_exit_exc _jessie_<num> -> void end; (return := !x_2_0);
       (raise Return) end)); absurd  end with Return -> !return end))
-  { (JC_46:
-    ((JC_43: le_int((0), integer_of_int32(result)))
-    and ((JC_44:
+  { (JC_54:
+    ((JC_51: le_int((0), integer_of_int32(result)))
+    and ((JC_52:
          lt_int(integer_of_int32(result),
          add_int(offset_max(Object_alloc_table, a), (1))))
-        and (JC_45:
+        and (JC_53:
             (forall i:int.
              ((le_int((0), i)
               and lt_int(i, add_int(offset_max(Object_alloc_table, a), (1)))) ->
@@ -1856,7 +1857,7 @@ let ArrayMax_max_ensures_default =
 let ArrayMax_max_safety =
  fun (a : Object pointer) ->
   { (left_valid_struct_intM(a, (0), Object_alloc_table)
-    and (JC_41: gt_int(add_int(offset_max(Object_alloc_table, a), (1)), (0)))) }
+    and (JC_49: gt_int(add_int(offset_max(Object_alloc_table, a), (1)), (0)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1864,33 +1865,33 @@ let ArrayMax_max_safety =
      (let x_2_0 = ref (safe_int32_of_integer_ (K_23: (0))) in
      (let y_2 =
      ref (K_22:
-         (JC_55:
+         (JC_63:
          (int32_of_integer_ ((sub_int (K_21:
-                                      (let jessie_<num> = a in
-                                      (JC_54:
+                                      (let _jessie_<num> = a in
+                                      (JC_62:
                                       (assert
                                       { ge_int(offset_max(Object_alloc_table,
-                                               jessie_<num>),
+                                               _jessie_<num>),
                                         (-1)) };
-                                      (JC_53:
-                                      (java_array_length_intM_requires jessie_<num>))))))) (1))))) in
+                                      (JC_61:
+                                      (java_array_length_intM_requires _jessie_<num>))))))) (1))))) in
      begin
        try
         (loop_1:
         while true do
-        { invariant (JC_62: true)
-          variant (JC_68 : sub_int(integer_of_int32(y_2),
+        { invariant (JC_70: true)
+          variant (JC_76 : sub_int(integer_of_int32(y_2),
                            integer_of_int32(x_2_0))) }
          begin
            [ { } unit reads Object_alloc_table,intM_intP,x_2_0,y_2
-             { (JC_60:
-               ((JC_56: le_int((0), integer_of_int32(x_2_0)))
-               and ((JC_57:
+             { (JC_68:
+               ((JC_64: le_int((0), integer_of_int32(x_2_0)))
+               and ((JC_65:
                     le_int(integer_of_int32(x_2_0), integer_of_int32(y_2)))
-                   and ((JC_58:
+                   and ((JC_66:
                         lt_int(integer_of_int32(y_2),
                         add_int(offset_max(Object_alloc_table, a), (1))))
-                       and (JC_59:
+                       and (JC_67:
                            (forall i_0:int.
                             (((le_int((0), i_0)
                               and lt_int(i_0, integer_of_int32(x_2_0)))
@@ -1910,36 +1911,36 @@ let ArrayMax_max_safety =
              (if (K_20:
                  ((neq_int_ (integer_of_int32 !x_2_0)) (integer_of_int32 !y_2)))
              then
-              (let jessie_<num> =
+              (let _jessie_<num> =
               (if (K_19:
                   ((le_int_ (integer_of_int32 (K_17:
-                                              (JC_64:
+                                              (JC_72:
                                               ((((offset_acc_ !Object_alloc_table) !intM_intP) a) 
                                                (integer_of_int32 !x_2_0)))))) 
                    (integer_of_int32 (K_18:
-                                     (JC_65:
+                                     (JC_73:
                                      ((((offset_acc_ !Object_alloc_table) !intM_intP) a) 
                                       (integer_of_int32 !y_2)))))))
               then
                (K_16:
-               (let jessie_<num> = !x_2_0 in
+               (let _jessie_<num> = !x_2_0 in
                begin
-                 (let jessie_<num> =
-                 (x_2_0 := (JC_66:
-                           (int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1))))) in
-                 void); jessie_<num> end))
+                 (let _jessie_<num> =
+                 (x_2_0 := (JC_74:
+                           (int32_of_integer_ ((add_int (integer_of_int32 _jessie_<num>)) (1))))) in
+                 void); _jessie_<num> end))
               else
                (K_15:
-               (let jessie_<num> = !y_2 in
+               (let _jessie_<num> = !y_2 in
                begin
-                 (let jessie_<num> =
-                 (y_2 := (JC_67:
-                         (int32_of_integer_ ((sub_int (integer_of_int32 jessie_<num>)) (1))))) in
-                 void); jessie_<num> end))) in void)
+                 (let _jessie_<num> =
+                 (y_2 := (JC_75:
+                         (int32_of_integer_ ((sub_int (integer_of_int32 _jessie_<num>)) (1))))) in
+                 void); _jessie_<num> end))) in void)
              else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc jessie_<num> -> void end end done) with
-        Loop_exit_exc jessie_<num> -> void end; (return := !x_2_0);
+           Loop_continue_exc _jessie_<num> -> void end end done) with
+        Loop_exit_exc _jessie_<num> -> void end; (return := !x_2_0);
       (raise Return) end)); absurd  end with Return -> !return end)) 
   { true }
 
@@ -1947,7 +1948,7 @@ let cons_ArrayMax_ensures_default =
  fun (this_0 : Object pointer) ->
   { valid_struct_ArrayMax(this_0, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_82: true) }
+  { (JC_43: true) }
 
 let cons_ArrayMax_safety =
  fun (this_0 : Object pointer) ->
@@ -2022,7 +2023,7 @@ why --project [...] why/ArrayMax.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/ArrayMax_po15.why">
-      <location file = "why/ArrayMax.why" line = "763" begin = "40" end = "181"/>
+      <location file = "why/ArrayMax.why" line = "763" begin = "40" end = "182"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/ArrayMax_po16.why">
@@ -2056,12 +2057,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ArrayMax_po22.why">
-      <location file = "HOME/tests/java/ArrayMax.jc" line = "122" begin = "69" end = "75"/>
+      <location file = "HOME/tests/java/ArrayMax.jc" line = "124" begin = "69" end = "75"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/ArrayMax_po23.why">
-      <location file = "HOME/tests/java/ArrayMax.jc" line = "122" begin = "69" end = "75"/>
+      <location file = "HOME/tests/java/ArrayMax.jc" line = "124" begin = "69" end = "75"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2074,12 +2075,12 @@ text = "ArithOverflow"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/ArrayMax_po26.why">
-      <location file = "HOME/tests/java/ArrayMax.jc" line = "123" begin = "24" end = "30"/>
+      <location file = "HOME/tests/java/ArrayMax.jc" line = "125" begin = "24" end = "30"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/ArrayMax_po27.why">
-      <location file = "HOME/tests/java/ArrayMax.jc" line = "123" begin = "24" end = "30"/>
+      <location file = "HOME/tests/java/ArrayMax.jc" line = "125" begin = "24" end = "30"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -3378,7 +3379,7 @@ goal ArrayMax_max_ensures_default_po_1:
   forall a:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3387,7 +3388,7 @@ goal ArrayMax_max_ensures_default_po_1:
    ((result0 >= 0) and (result0 = (offset_max(Object_alloc_table, a) + 1))))) ->
   forall result1:int32.
   (integer_of_int32(result1) = (result0 - 1)) ->
-  ("JC_74": ("JC_70": (0 <= integer_of_int32(result))))
+  ("JC_82": ("JC_78": (0 <= integer_of_int32(result))))
 
 ========== file tests/java/why/ArrayMax_po10.why ==========
 goal ArrayMax_max_ensures_default_po_10:
@@ -3396,7 +3397,7 @@ goal ArrayMax_max_ensures_default_po_10:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3407,12 +3408,12 @@ goal ArrayMax_max_ensures_default_po_10:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -3431,8 +3432,8 @@ goal ArrayMax_max_ensures_default_po_10:
   (integer_of_int32(result4) = (integer_of_int32(y_2) - 1)) ->
   forall y_2_0:int32.
   (y_2_0 = result4) ->
-  ("JC_74":
-  ("JC_72": (integer_of_int32(y_2_0) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  ("JC_80": (integer_of_int32(y_2_0) < (offset_max(Object_alloc_table,
   a) + 1))))
 
 ========== file tests/java/why/ArrayMax_po11.why ==========
@@ -3442,7 +3443,7 @@ goal ArrayMax_max_ensures_default_po_11:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3453,12 +3454,12 @@ goal ArrayMax_max_ensures_default_po_11:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -3481,8 +3482,8 @@ goal ArrayMax_max_ensures_default_po_11:
   (((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
    ((integer_of_int32(y_2_0) < i_0) and
     (i_0 < (offset_max(Object_alloc_table, a) + 1)))) ->
-  ("JC_74":
-  ("JC_73": (integer_of_int32(select(intM_intP, shift(a,
+  ("JC_82":
+  ("JC_81": (integer_of_int32(select(intM_intP, shift(a,
   i_0))) <= max(integer_of_int32(select(intM_intP, shift(a,
   integer_of_int32(x_2_0)))), integer_of_int32(select(intM_intP, shift(a,
   integer_of_int32(y_2_0))))))))
@@ -3494,7 +3495,7 @@ goal ArrayMax_max_ensures_default_po_12:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3505,12 +3506,12 @@ goal ArrayMax_max_ensures_default_po_12:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -3522,7 +3523,7 @@ goal ArrayMax_max_ensures_default_po_12:
   (integer_of_int32(x_2_0) = integer_of_int32(y_2)) ->
   forall return:int32.
   (return = x_2_0) ->
-  ("JC_46": ("JC_43": (0 <= integer_of_int32(return))))
+  ("JC_54": ("JC_51": (0 <= integer_of_int32(return))))
 
 ========== file tests/java/why/ArrayMax_po13.why ==========
 goal ArrayMax_max_ensures_default_po_13:
@@ -3531,7 +3532,7 @@ goal ArrayMax_max_ensures_default_po_13:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3542,12 +3543,12 @@ goal ArrayMax_max_ensures_default_po_13:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -3559,8 +3560,8 @@ goal ArrayMax_max_ensures_default_po_13:
   (integer_of_int32(x_2_0) = integer_of_int32(y_2)) ->
   forall return:int32.
   (return = x_2_0) ->
-  ("JC_46":
-  ("JC_44": (integer_of_int32(return) < (offset_max(Object_alloc_table,
+  ("JC_54":
+  ("JC_52": (integer_of_int32(return) < (offset_max(Object_alloc_table,
   a) + 1))))
 
 ========== file tests/java/why/ArrayMax_po14.why ==========
@@ -3570,7 +3571,7 @@ goal ArrayMax_max_ensures_default_po_14:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3581,12 +3582,12 @@ goal ArrayMax_max_ensures_default_po_14:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -3600,8 +3601,8 @@ goal ArrayMax_max_ensures_default_po_14:
   (return = x_2_0) ->
   forall i:int.
   ((0 <= i) and (i < (offset_max(Object_alloc_table, a) + 1))) ->
-  ("JC_46":
-  ("JC_45": (integer_of_int32(select(intM_intP, shift(a,
+  ("JC_54":
+  ("JC_53": (integer_of_int32(select(intM_intP, shift(a,
   i))) <= integer_of_int32(select(intM_intP, shift(a,
   integer_of_int32(return)))))))
 
@@ -3610,7 +3611,7 @@ goal ArrayMax_max_safety_po_1:
   forall a:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1))
@@ -3620,7 +3621,7 @@ goal ArrayMax_max_safety_po_2:
   forall a:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -3635,7 +3636,7 @@ goal ArrayMax_max_safety_po_3:
   forall a:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -3652,7 +3653,7 @@ goal ArrayMax_max_safety_po_4:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -3665,13 +3666,13 @@ goal ArrayMax_max_safety_po_4:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -3690,7 +3691,7 @@ goal ArrayMax_max_safety_po_5:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -3703,13 +3704,13 @@ goal ArrayMax_max_safety_po_5:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -3726,7 +3727,7 @@ goal ArrayMax_max_ensures_default_po_2:
   forall a:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3735,8 +3736,8 @@ goal ArrayMax_max_ensures_default_po_2:
    ((result0 >= 0) and (result0 = (offset_max(Object_alloc_table, a) + 1))))) ->
   forall result1:int32.
   (integer_of_int32(result1) = (result0 - 1)) ->
-  ("JC_74":
-  ("JC_71": (integer_of_int32(result) <= integer_of_int32(result1))))
+  ("JC_82":
+  ("JC_79": (integer_of_int32(result) <= integer_of_int32(result1))))
 
 ========== file tests/java/why/ArrayMax_po20.why ==========
 goal ArrayMax_max_safety_po_6:
@@ -3745,7 +3746,7 @@ goal ArrayMax_max_safety_po_6:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -3758,13 +3759,13 @@ goal ArrayMax_max_safety_po_6:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -3787,7 +3788,7 @@ goal ArrayMax_max_safety_po_7:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -3800,13 +3801,13 @@ goal ArrayMax_max_safety_po_7:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -3829,7 +3830,7 @@ goal ArrayMax_max_safety_po_8:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -3842,13 +3843,13 @@ goal ArrayMax_max_safety_po_8:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -3876,7 +3877,7 @@ goal ArrayMax_max_safety_po_9:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -3889,13 +3890,13 @@ goal ArrayMax_max_safety_po_9:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -3923,7 +3924,7 @@ goal ArrayMax_max_safety_po_10:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -3936,13 +3937,13 @@ goal ArrayMax_max_safety_po_10:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -3967,7 +3968,7 @@ goal ArrayMax_max_safety_po_10:
   (integer_of_int32(result4) = (integer_of_int32(x_2_0) + 1)) ->
   forall x_2_0_0:int32.
   (x_2_0_0 = result4) ->
-  (0 <= ("JC_68": (integer_of_int32(y_2) - integer_of_int32(x_2_0))))
+  (0 <= ("JC_76": (integer_of_int32(y_2) - integer_of_int32(x_2_0))))
 
 ========== file tests/java/why/ArrayMax_po25.why ==========
 goal ArrayMax_max_safety_po_11:
@@ -3976,7 +3977,7 @@ goal ArrayMax_max_safety_po_11:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -3989,13 +3990,13 @@ goal ArrayMax_max_safety_po_11:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -4020,7 +4021,7 @@ goal ArrayMax_max_safety_po_11:
   (integer_of_int32(result4) = (integer_of_int32(x_2_0) + 1)) ->
   forall x_2_0_0:int32.
   (x_2_0_0 = result4) ->
-  (("JC_68": (integer_of_int32(y_2) - integer_of_int32(x_2_0_0))) < ("JC_68":
+  (("JC_76": (integer_of_int32(y_2) - integer_of_int32(x_2_0_0))) < ("JC_76":
                                                                     (integer_of_int32(y_2) - integer_of_int32(x_2_0))))
 
 ========== file tests/java/why/ArrayMax_po26.why ==========
@@ -4030,7 +4031,7 @@ goal ArrayMax_max_safety_po_12:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -4043,13 +4044,13 @@ goal ArrayMax_max_safety_po_12:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -4077,7 +4078,7 @@ goal ArrayMax_max_safety_po_13:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -4090,13 +4091,13 @@ goal ArrayMax_max_safety_po_13:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -4124,7 +4125,7 @@ goal ArrayMax_max_safety_po_14:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -4137,13 +4138,13 @@ goal ArrayMax_max_safety_po_14:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -4168,7 +4169,7 @@ goal ArrayMax_max_safety_po_14:
   (integer_of_int32(result4) = (integer_of_int32(y_2) - 1)) ->
   forall y_2_0:int32.
   (y_2_0 = result4) ->
-  (0 <= ("JC_68": (integer_of_int32(y_2) - integer_of_int32(x_2_0))))
+  (0 <= ("JC_76": (integer_of_int32(y_2) - integer_of_int32(x_2_0))))
 
 ========== file tests/java/why/ArrayMax_po29.why ==========
 goal ArrayMax_max_safety_po_15:
@@ -4177,7 +4178,7 @@ goal ArrayMax_max_safety_po_15:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -4190,13 +4191,13 @@ goal ArrayMax_max_safety_po_15:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -4221,7 +4222,7 @@ goal ArrayMax_max_safety_po_15:
   (integer_of_int32(result4) = (integer_of_int32(y_2) - 1)) ->
   forall y_2_0:int32.
   (y_2_0 = result4) ->
-  (("JC_68": (integer_of_int32(y_2_0) - integer_of_int32(x_2_0))) < ("JC_68":
+  (("JC_76": (integer_of_int32(y_2_0) - integer_of_int32(x_2_0))) < ("JC_76":
                                                                     (integer_of_int32(y_2) - integer_of_int32(x_2_0))))
 
 ========== file tests/java/why/ArrayMax_po3.why ==========
@@ -4229,7 +4230,7 @@ goal ArrayMax_max_ensures_default_po_3:
   forall a:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4238,8 +4239,8 @@ goal ArrayMax_max_ensures_default_po_3:
    ((result0 >= 0) and (result0 = (offset_max(Object_alloc_table, a) + 1))))) ->
   forall result1:int32.
   (integer_of_int32(result1) = (result0 - 1)) ->
-  ("JC_74":
-  ("JC_72": (integer_of_int32(result1) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  ("JC_80": (integer_of_int32(result1) < (offset_max(Object_alloc_table,
   a) + 1))))
 
 ========== file tests/java/why/ArrayMax_po4.why ==========
@@ -4249,7 +4250,7 @@ goal ArrayMax_max_ensures_default_po_4:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4262,8 +4263,8 @@ goal ArrayMax_max_ensures_default_po_4:
   (((0 <= i_0) and (i_0 < integer_of_int32(result))) or
    ((integer_of_int32(result1) < i_0) and
     (i_0 < (offset_max(Object_alloc_table, a) + 1)))) ->
-  ("JC_74":
-  ("JC_73": (integer_of_int32(select(intM_intP, shift(a,
+  ("JC_82":
+  ("JC_81": (integer_of_int32(select(intM_intP, shift(a,
   i_0))) <= max(integer_of_int32(select(intM_intP, shift(a,
   integer_of_int32(result)))), integer_of_int32(select(intM_intP, shift(a,
   integer_of_int32(result1))))))))
@@ -4275,7 +4276,7 @@ goal ArrayMax_max_ensures_default_po_5:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4286,12 +4287,12 @@ goal ArrayMax_max_ensures_default_po_5:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -4310,7 +4311,7 @@ goal ArrayMax_max_ensures_default_po_5:
   (integer_of_int32(result4) = (integer_of_int32(x_2_0) + 1)) ->
   forall x_2_0_0:int32.
   (x_2_0_0 = result4) ->
-  ("JC_74": ("JC_70": (0 <= integer_of_int32(x_2_0_0))))
+  ("JC_82": ("JC_78": (0 <= integer_of_int32(x_2_0_0))))
 
 ========== file tests/java/why/ArrayMax_po6.why ==========
 goal ArrayMax_max_ensures_default_po_6:
@@ -4319,7 +4320,7 @@ goal ArrayMax_max_ensures_default_po_6:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4330,12 +4331,12 @@ goal ArrayMax_max_ensures_default_po_6:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -4354,7 +4355,7 @@ goal ArrayMax_max_ensures_default_po_6:
   (integer_of_int32(result4) = (integer_of_int32(x_2_0) + 1)) ->
   forall x_2_0_0:int32.
   (x_2_0_0 = result4) ->
-  ("JC_74": ("JC_71": (integer_of_int32(x_2_0_0) <= integer_of_int32(y_2))))
+  ("JC_82": ("JC_79": (integer_of_int32(x_2_0_0) <= integer_of_int32(y_2))))
 
 ========== file tests/java/why/ArrayMax_po7.why ==========
 goal ArrayMax_max_ensures_default_po_7:
@@ -4363,7 +4364,7 @@ goal ArrayMax_max_ensures_default_po_7:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4374,12 +4375,12 @@ goal ArrayMax_max_ensures_default_po_7:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -4398,8 +4399,8 @@ goal ArrayMax_max_ensures_default_po_7:
   (integer_of_int32(result4) = (integer_of_int32(x_2_0) + 1)) ->
   forall x_2_0_0:int32.
   (x_2_0_0 = result4) ->
-  ("JC_74":
-  ("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  ("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
   a) + 1))))
 
 ========== file tests/java/why/ArrayMax_po8.why ==========
@@ -4409,7 +4410,7 @@ goal ArrayMax_max_ensures_default_po_8:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4420,12 +4421,12 @@ goal ArrayMax_max_ensures_default_po_8:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -4448,8 +4449,8 @@ goal ArrayMax_max_ensures_default_po_8:
   (((0 <= i_0) and (i_0 < integer_of_int32(x_2_0_0))) or
    ((integer_of_int32(y_2) < i_0) and (i_0 < (offset_max(Object_alloc_table,
     a) + 1)))) ->
-  ("JC_74":
-  ("JC_73": (integer_of_int32(select(intM_intP, shift(a,
+  ("JC_82":
+  ("JC_81": (integer_of_int32(select(intM_intP, shift(a,
   i_0))) <= max(integer_of_int32(select(intM_intP, shift(a,
   integer_of_int32(x_2_0_0)))), integer_of_int32(select(intM_intP, shift(a,
   integer_of_int32(y_2))))))))
@@ -4461,7 +4462,7 @@ goal ArrayMax_max_ensures_default_po_9:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4472,12 +4473,12 @@ goal ArrayMax_max_ensures_default_po_9:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -4496,7 +4497,7 @@ goal ArrayMax_max_ensures_default_po_9:
   (integer_of_int32(result4) = (integer_of_int32(y_2) - 1)) ->
   forall y_2_0:int32.
   (y_2_0 = result4) ->
-  ("JC_74": ("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2_0))))
+  ("JC_82": ("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2_0))))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/ArrayMax.why
@@ -6188,7 +6189,7 @@ why -simplify [...] why/ArrayMax.why
                                                                 a (integer_of_int32
                                                                   return)))))))))))))))))))))))
 
-;; ArrayMax_max_safety_po_1, File "why/ArrayMax.why", line 763, characters 40-181
+;; ArrayMax_max_safety_po_1, File "why/ArrayMax.why", line 763, characters 40-182
 (FORALL (a)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM a 0 Object_alloc_table)
@@ -6413,7 +6414,7 @@ why -simplify [...] why/ArrayMax.why
 (IMPLIES (EQ result2 (select intM_intP (shift a (integer_of_int32 x_2_0))))
 (<= (integer_of_int32 y_2) (offset_max Object_alloc_table a))))))))))))))))))))))
 
-;; ArrayMax_max_safety_po_8, File "HOME/tests/java/ArrayMax.jc", line 122, characters 69-75
+;; ArrayMax_max_safety_po_8, File "HOME/tests/java/ArrayMax.jc", line 124, characters 69-75
 (FORALL (a)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -6467,7 +6468,7 @@ why -simplify [...] why/ArrayMax.why
 (IMPLIES (<= (integer_of_int32 result2) (integer_of_int32 result3))
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 x_2_0) 1))))))))))))))))))))))))))
 
-;; ArrayMax_max_safety_po_9, File "HOME/tests/java/ArrayMax.jc", line 122, characters 69-75
+;; ArrayMax_max_safety_po_9, File "HOME/tests/java/ArrayMax.jc", line 124, characters 69-75
 (FORALL (a)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -6645,7 +6646,7 @@ why -simplify [...] why/ArrayMax.why
                                                             y_2) (integer_of_int32
                                                                  x_2_0))))))))))))))))))))))))))))))))
 
-;; ArrayMax_max_safety_po_12, File "HOME/tests/java/ArrayMax.jc", line 123, characters 24-30
+;; ArrayMax_max_safety_po_12, File "HOME/tests/java/ArrayMax.jc", line 125, characters 24-30
 (FORALL (a)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -6699,7 +6700,7 @@ why -simplify [...] why/ArrayMax.why
 (IMPLIES (> (integer_of_int32 result2) (integer_of_int32 result3))
 (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 y_2) 1))))))))))))))))))))))))))
 
-;; ArrayMax_max_safety_po_13, File "HOME/tests/java/ArrayMax.jc", line 123, characters 24-30
+;; ArrayMax_max_safety_po_13, File "HOME/tests/java/ArrayMax.jc", line 125, characters 24-30
 (FORALL (a)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8166,7 +8167,7 @@ goal ArrayMax_max_ensures_default_po_1:
   forall a:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -8175,13 +8176,13 @@ goal ArrayMax_max_ensures_default_po_1:
    ((result0 >= 0) and (result0 = (offset_max(Object_alloc_table, a) + 1))))) ->
   forall result1:int32.
   (integer_of_int32(result1) = (result0 - 1)) ->
-  ("JC_74": ("JC_70": (0 <= integer_of_int32(result))))
+  ("JC_82": ("JC_78": (0 <= integer_of_int32(result))))
 
 goal ArrayMax_max_ensures_default_po_2:
   forall a:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -8190,14 +8191,14 @@ goal ArrayMax_max_ensures_default_po_2:
    ((result0 >= 0) and (result0 = (offset_max(Object_alloc_table, a) + 1))))) ->
   forall result1:int32.
   (integer_of_int32(result1) = (result0 - 1)) ->
-  ("JC_74":
-  ("JC_71": (integer_of_int32(result) <= integer_of_int32(result1))))
+  ("JC_82":
+  ("JC_79": (integer_of_int32(result) <= integer_of_int32(result1))))
 
 goal ArrayMax_max_ensures_default_po_3:
   forall a:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -8206,8 +8207,8 @@ goal ArrayMax_max_ensures_default_po_3:
    ((result0 >= 0) and (result0 = (offset_max(Object_alloc_table, a) + 1))))) ->
   forall result1:int32.
   (integer_of_int32(result1) = (result0 - 1)) ->
-  ("JC_74":
-  ("JC_72": (integer_of_int32(result1) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  ("JC_80": (integer_of_int32(result1) < (offset_max(Object_alloc_table,
   a) + 1))))
 
 goal ArrayMax_max_ensures_default_po_4:
@@ -8216,7 +8217,7 @@ goal ArrayMax_max_ensures_default_po_4:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -8229,8 +8230,8 @@ goal ArrayMax_max_ensures_default_po_4:
   (((0 <= i_0) and (i_0 < integer_of_int32(result))) or
    ((integer_of_int32(result1) < i_0) and
     (i_0 < (offset_max(Object_alloc_table, a) + 1)))) ->
-  ("JC_74":
-  ("JC_73": (integer_of_int32(select(intM_intP, shift(a,
+  ("JC_82":
+  ("JC_81": (integer_of_int32(select(intM_intP, shift(a,
   i_0))) <= max(integer_of_int32(select(intM_intP, shift(a,
   integer_of_int32(result)))), integer_of_int32(select(intM_intP, shift(a,
   integer_of_int32(result1))))))))
@@ -8241,7 +8242,7 @@ goal ArrayMax_max_ensures_default_po_5:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -8252,12 +8253,12 @@ goal ArrayMax_max_ensures_default_po_5:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8276,7 +8277,7 @@ goal ArrayMax_max_ensures_default_po_5:
   (integer_of_int32(result4) = (integer_of_int32(x_2_0) + 1)) ->
   forall x_2_0_0:int32.
   (x_2_0_0 = result4) ->
-  ("JC_74": ("JC_70": (0 <= integer_of_int32(x_2_0_0))))
+  ("JC_82": ("JC_78": (0 <= integer_of_int32(x_2_0_0))))
 
 goal ArrayMax_max_ensures_default_po_6:
   forall a:Object pointer.
@@ -8284,7 +8285,7 @@ goal ArrayMax_max_ensures_default_po_6:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -8295,12 +8296,12 @@ goal ArrayMax_max_ensures_default_po_6:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8319,7 +8320,7 @@ goal ArrayMax_max_ensures_default_po_6:
   (integer_of_int32(result4) = (integer_of_int32(x_2_0) + 1)) ->
   forall x_2_0_0:int32.
   (x_2_0_0 = result4) ->
-  ("JC_74": ("JC_71": (integer_of_int32(x_2_0_0) <= integer_of_int32(y_2))))
+  ("JC_82": ("JC_79": (integer_of_int32(x_2_0_0) <= integer_of_int32(y_2))))
 
 goal ArrayMax_max_ensures_default_po_7:
   forall a:Object pointer.
@@ -8327,7 +8328,7 @@ goal ArrayMax_max_ensures_default_po_7:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -8338,12 +8339,12 @@ goal ArrayMax_max_ensures_default_po_7:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8362,8 +8363,8 @@ goal ArrayMax_max_ensures_default_po_7:
   (integer_of_int32(result4) = (integer_of_int32(x_2_0) + 1)) ->
   forall x_2_0_0:int32.
   (x_2_0_0 = result4) ->
-  ("JC_74":
-  ("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  ("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
   a) + 1))))
 
 goal ArrayMax_max_ensures_default_po_8:
@@ -8372,7 +8373,7 @@ goal ArrayMax_max_ensures_default_po_8:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -8383,12 +8384,12 @@ goal ArrayMax_max_ensures_default_po_8:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8411,8 +8412,8 @@ goal ArrayMax_max_ensures_default_po_8:
   (((0 <= i_0) and (i_0 < integer_of_int32(x_2_0_0))) or
    ((integer_of_int32(y_2) < i_0) and (i_0 < (offset_max(Object_alloc_table,
     a) + 1)))) ->
-  ("JC_74":
-  ("JC_73": (integer_of_int32(select(intM_intP, shift(a,
+  ("JC_82":
+  ("JC_81": (integer_of_int32(select(intM_intP, shift(a,
   i_0))) <= max(integer_of_int32(select(intM_intP, shift(a,
   integer_of_int32(x_2_0_0)))), integer_of_int32(select(intM_intP, shift(a,
   integer_of_int32(y_2))))))))
@@ -8423,7 +8424,7 @@ goal ArrayMax_max_ensures_default_po_9:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -8434,12 +8435,12 @@ goal ArrayMax_max_ensures_default_po_9:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8458,7 +8459,7 @@ goal ArrayMax_max_ensures_default_po_9:
   (integer_of_int32(result4) = (integer_of_int32(y_2) - 1)) ->
   forall y_2_0:int32.
   (y_2_0 = result4) ->
-  ("JC_74": ("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2_0))))
+  ("JC_82": ("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2_0))))
 
 goal ArrayMax_max_ensures_default_po_10:
   forall a:Object pointer.
@@ -8466,7 +8467,7 @@ goal ArrayMax_max_ensures_default_po_10:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -8477,12 +8478,12 @@ goal ArrayMax_max_ensures_default_po_10:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8501,8 +8502,8 @@ goal ArrayMax_max_ensures_default_po_10:
   (integer_of_int32(result4) = (integer_of_int32(y_2) - 1)) ->
   forall y_2_0:int32.
   (y_2_0 = result4) ->
-  ("JC_74":
-  ("JC_72": (integer_of_int32(y_2_0) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  ("JC_80": (integer_of_int32(y_2_0) < (offset_max(Object_alloc_table,
   a) + 1))))
 
 goal ArrayMax_max_ensures_default_po_11:
@@ -8511,7 +8512,7 @@ goal ArrayMax_max_ensures_default_po_11:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -8522,12 +8523,12 @@ goal ArrayMax_max_ensures_default_po_11:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8550,8 +8551,8 @@ goal ArrayMax_max_ensures_default_po_11:
   (((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
    ((integer_of_int32(y_2_0) < i_0) and
     (i_0 < (offset_max(Object_alloc_table, a) + 1)))) ->
-  ("JC_74":
-  ("JC_73": (integer_of_int32(select(intM_intP, shift(a,
+  ("JC_82":
+  ("JC_81": (integer_of_int32(select(intM_intP, shift(a,
   i_0))) <= max(integer_of_int32(select(intM_intP, shift(a,
   integer_of_int32(x_2_0)))), integer_of_int32(select(intM_intP, shift(a,
   integer_of_int32(y_2_0))))))))
@@ -8562,7 +8563,7 @@ goal ArrayMax_max_ensures_default_po_12:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -8573,12 +8574,12 @@ goal ArrayMax_max_ensures_default_po_12:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8590,7 +8591,7 @@ goal ArrayMax_max_ensures_default_po_12:
   (integer_of_int32(x_2_0) = integer_of_int32(y_2)) ->
   forall return:int32.
   (return = x_2_0) ->
-  ("JC_46": ("JC_43": (0 <= integer_of_int32(return))))
+  ("JC_54": ("JC_51": (0 <= integer_of_int32(return))))
 
 goal ArrayMax_max_ensures_default_po_13:
   forall a:Object pointer.
@@ -8598,7 +8599,7 @@ goal ArrayMax_max_ensures_default_po_13:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -8609,12 +8610,12 @@ goal ArrayMax_max_ensures_default_po_13:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8626,8 +8627,8 @@ goal ArrayMax_max_ensures_default_po_13:
   (integer_of_int32(x_2_0) = integer_of_int32(y_2)) ->
   forall return:int32.
   (return = x_2_0) ->
-  ("JC_46":
-  ("JC_44": (integer_of_int32(return) < (offset_max(Object_alloc_table,
+  ("JC_54":
+  ("JC_52": (integer_of_int32(return) < (offset_max(Object_alloc_table,
   a) + 1))))
 
 goal ArrayMax_max_ensures_default_po_14:
@@ -8636,7 +8637,7 @@ goal ArrayMax_max_ensures_default_po_14:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -8647,12 +8648,12 @@ goal ArrayMax_max_ensures_default_po_14:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_74":
-  (("JC_70": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_71": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_72": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_82":
+  (("JC_78": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_79": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_80": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_73":
+     ("JC_81":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8666,8 +8667,8 @@ goal ArrayMax_max_ensures_default_po_14:
   (return = x_2_0) ->
   forall i:int.
   ((0 <= i) and (i < (offset_max(Object_alloc_table, a) + 1))) ->
-  ("JC_46":
-  ("JC_45": (integer_of_int32(select(intM_intP, shift(a,
+  ("JC_54":
+  ("JC_53": (integer_of_int32(select(intM_intP, shift(a,
   i))) <= integer_of_int32(select(intM_intP, shift(a,
   integer_of_int32(return)))))))
 
@@ -8675,7 +8676,7 @@ goal ArrayMax_max_safety_po_1:
   forall a:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1))
@@ -8684,7 +8685,7 @@ goal ArrayMax_max_safety_po_2:
   forall a:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -8698,7 +8699,7 @@ goal ArrayMax_max_safety_po_3:
   forall a:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -8714,7 +8715,7 @@ goal ArrayMax_max_safety_po_4:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -8727,13 +8728,13 @@ goal ArrayMax_max_safety_po_4:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8751,7 +8752,7 @@ goal ArrayMax_max_safety_po_5:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -8764,13 +8765,13 @@ goal ArrayMax_max_safety_po_5:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8788,7 +8789,7 @@ goal ArrayMax_max_safety_po_6:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -8801,13 +8802,13 @@ goal ArrayMax_max_safety_po_6:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8829,7 +8830,7 @@ goal ArrayMax_max_safety_po_7:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -8842,13 +8843,13 @@ goal ArrayMax_max_safety_po_7:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8870,7 +8871,7 @@ goal ArrayMax_max_safety_po_8:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -8883,13 +8884,13 @@ goal ArrayMax_max_safety_po_8:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8916,7 +8917,7 @@ goal ArrayMax_max_safety_po_9:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -8929,13 +8930,13 @@ goal ArrayMax_max_safety_po_9:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -8962,7 +8963,7 @@ goal ArrayMax_max_safety_po_10:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -8975,13 +8976,13 @@ goal ArrayMax_max_safety_po_10:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -9006,7 +9007,7 @@ goal ArrayMax_max_safety_po_10:
   (integer_of_int32(result4) = (integer_of_int32(x_2_0) + 1)) ->
   forall x_2_0_0:int32.
   (x_2_0_0 = result4) ->
-  (0 <= ("JC_68": (integer_of_int32(y_2) - integer_of_int32(x_2_0))))
+  (0 <= ("JC_76": (integer_of_int32(y_2) - integer_of_int32(x_2_0))))
 
 goal ArrayMax_max_safety_po_11:
   forall a:Object pointer.
@@ -9014,7 +9015,7 @@ goal ArrayMax_max_safety_po_11:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -9027,13 +9028,13 @@ goal ArrayMax_max_safety_po_11:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -9058,7 +9059,7 @@ goal ArrayMax_max_safety_po_11:
   (integer_of_int32(result4) = (integer_of_int32(x_2_0) + 1)) ->
   forall x_2_0_0:int32.
   (x_2_0_0 = result4) ->
-  (("JC_68": (integer_of_int32(y_2) - integer_of_int32(x_2_0_0))) < ("JC_68":
+  (("JC_76": (integer_of_int32(y_2) - integer_of_int32(x_2_0_0))) < ("JC_76":
                                                                     (integer_of_int32(y_2) - integer_of_int32(x_2_0))))
 
 goal ArrayMax_max_safety_po_12:
@@ -9067,7 +9068,7 @@ goal ArrayMax_max_safety_po_12:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -9080,13 +9081,13 @@ goal ArrayMax_max_safety_po_12:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -9113,7 +9114,7 @@ goal ArrayMax_max_safety_po_13:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -9126,13 +9127,13 @@ goal ArrayMax_max_safety_po_13:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -9159,7 +9160,7 @@ goal ArrayMax_max_safety_po_14:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -9172,13 +9173,13 @@ goal ArrayMax_max_safety_po_14:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -9203,7 +9204,7 @@ goal ArrayMax_max_safety_po_14:
   (integer_of_int32(result4) = (integer_of_int32(y_2) - 1)) ->
   forall y_2_0:int32.
   (y_2_0 = result4) ->
-  (0 <= ("JC_68": (integer_of_int32(y_2) - integer_of_int32(x_2_0))))
+  (0 <= ("JC_76": (integer_of_int32(y_2) - integer_of_int32(x_2_0))))
 
 goal ArrayMax_max_safety_po_15:
   forall a:Object pointer.
@@ -9211,7 +9212,7 @@ goal ArrayMax_max_safety_po_15:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(a, 0, Object_alloc_table) and
-   ("JC_41": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
+   ("JC_49": ((offset_max(Object_alloc_table, a) + 1) > 0))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, a) >= (-1)) ->
@@ -9224,13 +9225,13 @@ goal ArrayMax_max_safety_po_15:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall x_2_0:int32.
   forall y_2:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_56": (0 <= integer_of_int32(x_2_0))) and
-   (("JC_57": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
-    (("JC_58": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_64": (0 <= integer_of_int32(x_2_0))) and
+   (("JC_65": (integer_of_int32(x_2_0) <= integer_of_int32(y_2))) and
+    (("JC_66": (integer_of_int32(y_2) < (offset_max(Object_alloc_table,
      a) + 1))) and
-     ("JC_59":
+     ("JC_67":
      (forall i_0:int.
        ((((0 <= i_0) and (i_0 < integer_of_int32(x_2_0))) or
          ((integer_of_int32(y_2) < i_0) and
@@ -9255,6 +9256,6 @@ goal ArrayMax_max_safety_po_15:
   (integer_of_int32(result4) = (integer_of_int32(y_2) - 1)) ->
   forall y_2_0:int32.
   (y_2_0 = result4) ->
-  (("JC_68": (integer_of_int32(y_2_0) - integer_of_int32(x_2_0))) < ("JC_68":
+  (("JC_76": (integer_of_int32(y_2_0) - integer_of_int32(x_2_0))) < ("JC_76":
                                                                     (integer_of_int32(y_2) - integer_of_int32(x_2_0))))
 

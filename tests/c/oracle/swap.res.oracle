@@ -88,53 +88,41 @@ int32 b;
 
 unit swap()
 behavior default:
-  ensures (C_4 : ((C_5 : (a == \at(b,Old))) && (C_6 : (b == \at(a,Old)))));
+  ensures (_C_4 : ((_C_5 : (a == \at(b,Old))) && (_C_6 : (b == \at(a,Old)))));
 {  
    (var int32 tmp);
    
-   {  (C_1 : (tmp = a));
-      (C_2 : (a = b));
-      (C_3 : (b = tmp));
+   {  (_C_1 : (tmp = a));
+      (_C_2 : (a = b));
+      (_C_3 : (b = tmp));
       
       (return ())
    }
 }
 ========== file tests/c/swap.jessie/swap.cloc ==========
-[C_1]
-file = "HOME/tests/c/swap.c"
-line = 38
-begin = 2
-end = 5
-
-[C_2]
-file = "HOME/tests/c/swap.c"
-line = 39
-begin = 6
-end = 7
-
-[C_3]
-file = "HOME/tests/c/swap.c"
-line = 40
-begin = 6
-end = 9
-
-[C_4]
+[_C_4]
 file = "HOME/tests/c/swap.c"
 line = 35
 begin = 12
 end = 40
 
-[C_5]
+[_C_5]
 file = "HOME/tests/c/swap.c"
 line = 35
 begin = 12
 end = 24
 
-[C_6]
+[_C_6]
 file = "HOME/tests/c/swap.c"
 line = 35
 begin = 28
 end = 40
+
+[_C_3]
+file = "HOME/tests/c/swap.c"
+line = 40
+begin = 6
+end = 9
 
 [swap]
 name = "Function swap"
@@ -142,6 +130,18 @@ file = "HOME/tests/c/swap.c"
 line = 37
 begin = 5
 end = 9
+
+[_C_2]
+file = "HOME/tests/c/swap.c"
+line = 39
+begin = 6
+end = 7
+
+[_C_1]
+file = "HOME/tests/c/swap.c"
+line = 38
+begin = 2
+end = 5
 
 ========== jessie execution ==========
 Generating Why function swap
@@ -155,10 +155,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs swap.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs swap.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs swap.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs swap.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -303,13 +304,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: swap.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: swap.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: swap.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include swap.depend
 
@@ -320,49 +321,7 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/swap.jessie/swap.loc ==========
-[JC_1]
-file = "HOME/tests/c/swap.c"
-line = 37
-begin = 5
-end = 9
-
-[JC_2]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_3]
-file = "HOME/tests/c/swap.c"
-line = 37
-begin = 5
-end = 9
-
-[JC_4]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_5]
-file = "HOME/tests/c/swap.c"
-line = 35
-begin = 12
-end = 24
-
-[JC_6]
-file = "HOME/tests/c/swap.c"
-line = 35
-begin = 28
-end = 40
-
-[JC_7]
-file = "HOME/tests/c/swap.c"
-line = 35
-begin = 12
-end = 40
-
-[JC_8]
 file = "HOME/tests/c/swap.c"
 line = 35
 begin = 12
@@ -374,19 +333,11 @@ line = 35
 begin = 28
 end = 40
 
-[swap_safety]
-name = "Function swap"
-behavior = "Safety"
-file = "HOME/tests/c/swap.c"
-line = 37
-begin = 5
-end = 9
-
-[JC_10]
+[JC_8]
 file = "HOME/tests/c/swap.c"
 line = 35
 begin = 12
-end = 40
+end = 24
 
 [JC_11]
 file = "HOME/"
@@ -400,9 +351,59 @@ line = 0
 begin = -1
 end = -1
 
+[JC_6]
+file = "HOME/tests/c/swap.c"
+line = 35
+begin = 28
+end = 40
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [swap_ensures_default]
 name = "Function swap"
 behavior = "default behavior"
+file = "HOME/tests/c/swap.c"
+line = 37
+begin = 5
+end = 9
+
+[swap_safety]
+name = "Function swap"
+behavior = "Safety"
+file = "HOME/tests/c/swap.c"
+line = 37
+begin = 5
+end = 9
+
+[JC_7]
+file = "HOME/tests/c/swap.c"
+line = 35
+begin = 12
+end = 40
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_1]
+file = "HOME/tests/c/swap.c"
+line = 37
+begin = 5
+end = 9
+
+[JC_10]
+file = "HOME/tests/c/swap.c"
+line = 35
+begin = 12
+end = 40
+
+[JC_3]
 file = "HOME/tests/c/swap.c"
 line = 37
 begin = 5
@@ -776,13 +777,10 @@ let swap_ensures_default =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_1:
-     (C_2:
-     (C_3:
      begin
-       (let jessie_<num> = (tmp := !a) in void);
-      (let jessie_<num> = (a := !b) in void);
-      (let jessie_<num> = (b := !tmp) in void); (raise Return) end))));
+       (let _jessie_<num> = (tmp := !a) in void);
+      (let _jessie_<num> = (a := !b) in void);
+      (let _jessie_<num> = (b := !tmp) in void); (raise Return) end);
     (raise Return) end with Return -> void end)
   { (JC_7:
     ((JC_5: (integer_of_int32(a) = integer_of_int32(b@)))
@@ -795,13 +793,10 @@ let swap_safety =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_1:
-     (C_2:
-     (C_3:
      begin
-       (let jessie_<num> = (tmp := !a) in void);
-      (let jessie_<num> = (a := !b) in void);
-      (let jessie_<num> = (b := !tmp) in void); (raise Return) end))));
+       (let _jessie_<num> = (tmp := !a) in void);
+      (let _jessie_<num> = (a := !b) in void);
+      (let _jessie_<num> = (b := !tmp) in void); (raise Return) end);
     (raise Return) end with Return -> void end) { true }
 
 

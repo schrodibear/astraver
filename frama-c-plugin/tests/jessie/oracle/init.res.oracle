@@ -1,8 +1,10 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only init.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD init.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only init.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/init.c"
 [kernel] warning: ignoring status of global invariant `t_const'
 [kernel] warning: ignoring status of global invariant `s_const'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global invariant `t_const'
+[kernel] warning: ignoring status of global invariant `s_const'
 [jessie] Producing Jessie files in subdir init.jessie
 [jessie] File init.jessie/init.jc written.
 [jessie] File init.jessie/init.cloc written.
@@ -74,17 +76,20 @@ invariant s_const :
 
 int32 f()
 behavior default:
-  ensures (C_12 : (\result == 7));
+  ensures (_C_12 : (\result == 7));
 {  
    (var int32 y);
    
    (var int32 __retres);
    
-   {  (C_1 : (y = x));
-      (C_11 : (__retres = (C_10 : ((C_9 : ((C_8 : ((C_7 : ((C_6 : (t + 1).intM) +
-                                                            (C_5 : ((C_4 : s.b) +
-                                                                    0).intM))) :> int32)) +
-                                            (C_3 : ((C_2 : s.b) + 2).intM))) :> int32))));
+   {  (_C_1 : (y = x));
+      (_C_11 : (__retres = (_C_10 : ((_C_9 : ((_C_8 : ((_C_7 : ((_C_6 : 
+                                                                (t +
+                                                                  1).intM) +
+                                                                 (_C_5 : 
+                                                                 ((_C_4 : s.b) +
+                                                                   0).intM))) :> int32)) +
+                                               (_C_3 : ((_C_2 : s.b) + 2).intM))) :> int32))));
       
       (return __retres)
    }
@@ -92,7 +97,7 @@ behavior default:
 
 int32 g()
 behavior default:
-  ensures (C_23 : (\result == 4));
+  ensures (_C_23 : (\result == 4));
 {  
    (var intP[0..1] t_0);
    
@@ -100,13 +105,13 @@ behavior default:
    
    (var int32 __retres_0);
    
-   {  (C_14 : (t_0 = (C_13 : (new intP[2]))));
-      (C_16 : ((C_15 : (t_0 + 0).intM) = 4));
-      (C_18 : ((C_17 : (t_0 + 1).intM) = 5));
-      (C_19 : (x_0 = 45));
-      (C_21 : (__retres_0 = (C_20 : (t_0 + 0).intM)));
+   {  (_C_14 : (t_0 = (_C_13 : (new intP[2]))));
+      (_C_16 : ((_C_15 : (t_0 + 0).intM) = 4));
+      (_C_18 : ((_C_17 : (t_0 + 1).intM) = 5));
+      (_C_19 : (x_0 = 45));
+      (_C_21 : (__retres_0 = (_C_20 : (t_0 + 0).intM)));
       
-      {  (C_22 : (free(t_0)));
+      {  (_C_22 : (free(t_0)));
          
          (return __retres_0)
       }
@@ -115,25 +120,25 @@ behavior default:
 
 int32 h()
 behavior default:
-  ensures (C_41 : (\result == 12));
+  ensures (_C_41 : (\result == 12));
 {  
    (var intP[0..2] u);
    
    (var int32 __retres_1);
    
-   {  (C_25 : (u = (C_24 : (new intP[3]))));
-      (C_27 : ((C_26 : (u + 0).intM) = 3));
-      (C_29 : ((C_28 : (u + 1).intM) = 4));
-      (C_31 : ((C_30 : (u + 2).intM) = 5));
-      (C_39 : (__retres_1 = (C_38 : ((C_37 : ((C_36 : ((C_35 : ((C_34 : 
-                                                                (u +
-                                                                  0).intM) +
-                                                                 (C_33 : 
-                                                                 (u +
-                                                                   1).intM))) :> int32)) +
-                                               (C_32 : (u + 2).intM))) :> int32))));
+   {  (_C_25 : (u = (_C_24 : (new intP[3]))));
+      (_C_27 : ((_C_26 : (u + 0).intM) = 3));
+      (_C_29 : ((_C_28 : (u + 1).intM) = 4));
+      (_C_31 : ((_C_30 : (u + 2).intM) = 5));
+      (_C_39 : (__retres_1 = (_C_38 : ((_C_37 : ((_C_36 : ((_C_35 : ((_C_34 : 
+                                                                    (u +
+                                                                    0).intM) +
+                                                                    (_C_33 : 
+                                                                    (u +
+                                                                    1).intM))) :> int32)) +
+                                                  (_C_32 : (u + 2).intM))) :> int32))));
       
-      {  (C_40 : (free(u)));
+      {  (_C_40 : (free(u)));
          
          (return __retres_1)
       }
@@ -774,32 +779,21 @@ let f_ensures_default =
    begin
      (let y = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
-     (C_1:
-     (C_11:
      begin
-       (let jessie_<somenum> = (y := x_0) in void);
-      (let jessie_<somenum> =
-      (__retres := (C_10:
-                   (safe_int32_of_integer_ (C_9:
-                                           ((add_int (integer_of_int32 
-                                                      (C_8:
+       (let _jessie_<somenum> = (y := x_0) in void);
+      (let _jessie_<somenum> =
+      (__retres := (safe_int32_of_integer_ ((add_int (integer_of_int32 
                                                       (safe_int32_of_integer_ 
-                                                       (C_7:
                                                        ((add_int (integer_of_int32 
-                                                                  (C_6:
                                                                   ((safe_acc_ !intP_intM_t_1) 
-                                                                   ((shift t) (1)))))) 
+                                                                   ((shift t) (1))))) 
                                                         (integer_of_int32 
-                                                         (C_5:
                                                          ((safe_acc_ !intP_intM_s_2) 
-                                                          ((shift (C_4:
-                                                                  ((safe_acc_ !S_b_s_2) s_0))) (0))))))))))) 
-                                            (integer_of_int32 (C_3:
-                                                              ((safe_acc_ !intP_intM_s_2) 
+                                                          ((shift ((safe_acc_ !S_b_s_2) s_0)) (0)))))))) 
+                                            (integer_of_int32 ((safe_acc_ !intP_intM_s_2) 
                                                                ((shift 
-                                                                 (C_2:
-                                                                 ((safe_acc_ !S_b_s_2) s_0))) (2)))))))))) in
-      void); (return := !__retres); (raise Return) end)))); absurd  end with
+                                                                 ((safe_acc_ !S_b_s_2) s_0)) (2))))))) in
+      void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (7))) }
 
 let f_safety =
@@ -815,34 +809,23 @@ let f_safety =
    begin
      (let y = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
-     (C_1:
-     (C_11:
      begin
-       (let jessie_<somenum> = (y := x_0) in void);
-      (let jessie_<somenum> =
-      (__retres := (C_10:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_9:
-                                      ((add_int (integer_of_int32 (C_8:
-                                                                  (JC_<somenum>:
+       (let _jessie_<somenum> = (y := x_0) in void);
+      (let _jessie_<somenum> =
+      (__retres := (JC_<somenum>:
+                   (int32_of_integer_ ((add_int (integer_of_int32 (JC_<somenum>:
                                                                   (int32_of_integer_ 
-                                                                   (C_7:
                                                                    ((add_int 
                                                                     (integer_of_int32 
-                                                                    (C_6:
                                                                     ((safe_acc_ !intP_intM_t_1) 
-                                                                    ((shift t) (1)))))) 
+                                                                    ((shift t) (1))))) 
                                                                     (integer_of_int32 
-                                                                    (C_5:
                                                                     ((safe_acc_ !intP_intM_s_2) 
                                                                     ((shift 
-                                                                    (C_4:
-                                                                    ((safe_acc_ !S_b_s_2) s_0))) (0)))))))))))) 
-                                       (integer_of_int32 (C_3:
-                                                         ((safe_acc_ !intP_intM_s_2) 
-                                                          ((shift (C_2:
-                                                                  ((safe_acc_ !S_b_s_2) s_0))) (2))))))))))) in
-      void); (return := !__retres); (raise Return) end)))); absurd  end with
+                                                                    ((safe_acc_ !S_b_s_2) s_0)) (0))))))))) 
+                                       (integer_of_int32 ((safe_acc_ !intP_intM_s_2) 
+                                                          ((shift ((safe_acc_ !S_b_s_2) s_0)) (2)))))))) in
+      void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: s_const(S_b_s_2, intP_intM_s_2))
@@ -867,37 +850,29 @@ let g_ensures_default =
      (let t_0 = ref (any_pointer void) in
      (let x_0_0 = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
-     (C_14:
-     (C_16:
-     (C_18:
-     (C_19:
-     (C_21:
-     (C_22:
      begin
-       (let jessie_<somenum> =
-       (t_0 := (C_13:
-               (JC_<somenum>:
-               (((alloc_struct_intP (2)) intP_t_0_3_alloc_table) intP_t_0_3_tag_table)))) in
+       (let _jessie_<somenum> =
+       (t_0 := (JC_<somenum>:
+               (((alloc_struct_intP (2)) intP_t_0_3_alloc_table) intP_t_0_3_tag_table))) in
        void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
-      (let jessie_<somenum> = !t_0 in
-      (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
-      (let jessie_<somenum> = !t_0 in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (4)) in
+      (let _jessie_<somenum> = !t_0 in
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (5)) in
+      (let _jessie_<somenum> = !t_0 in
+      (let _jessie_<somenum> = (1) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
       [ { } unit reads intP_intM_t_0_3,intP_t_0_3_alloc_table
         writes intP_intM_t_0_3
         { (not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3@,
-           intP_intM_t_0_3, pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-          and ((select(intP_intM_t_0_3, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and (select(intP_intM_t_0_3, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
-      (let jessie_<somenum> = (x_0_0 := (safe_int32_of_integer_ (45))) in void);
-      (let jessie_<somenum> =
-      (__retres_0 := (C_20:
-                     ((safe_acc_ !intP_intM_t_0_3) ((shift !t_0) (0))))) in
+           intP_intM_t_0_3, pset_range(pset_singleton(_jessie_<somenum>), (0), (1)))
+          and ((select(intP_intM_t_0_3, shift(_jessie_<somenum>, (0))) = _jessie_<somenum>)
+              and (select(intP_intM_t_0_3, shift(_jessie_<somenum>, (1))) = _jessie_<somenum>))) } ]))))));
+      (let _jessie_<somenum> = (x_0_0 := (safe_int32_of_integer_ (45))) in void);
+      (let _jessie_<somenum> =
+      (__retres_0 := ((safe_acc_ !intP_intM_t_0_3) ((shift !t_0) (0)))) in
       void); ((safe_free_parameter intP_t_0_3_alloc_table) !t_0);
-      (return := !__retres_0); (raise Return) end)))))))))))); absurd  end
-   with Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (4))) }
+      (return := !__retres_0); (raise Return) end)))))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (4))) }
 
 let g_safety =
  fun (tt : unit) ->
@@ -916,41 +891,33 @@ let g_safety =
      (let t_0 = ref (any_pointer void) in
      (let x_0_0 = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
-     (C_14:
-     (C_16:
-     (C_18:
-     (C_19:
-     (C_21:
-     (C_22:
      begin
-       (let jessie_<somenum> =
-       (t_0 := (let jessie_<somenum> =
-               (C_13:
+       (let _jessie_<somenum> =
+       (t_0 := (let _jessie_<somenum> =
                (JC_<somenum>:
-               (((alloc_struct_intP_requires (2)) intP_t_0_3_alloc_table) intP_t_0_3_tag_table))) in
+               (((alloc_struct_intP_requires (2)) intP_t_0_3_alloc_table) intP_t_0_3_tag_table)) in
                (JC_<somenum>:
                (assert
-               { ge_int(offset_max(intP_t_0_3_alloc_table, jessie_<somenum>), (1)) };
-               jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
-      (let jessie_<somenum> = !t_0 in
-      (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
-      (let jessie_<somenum> = !t_0 in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+               { ge_int(offset_max(intP_t_0_3_alloc_table, _jessie_<somenum>), (1)) };
+               _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (4)) in
+      (let _jessie_<somenum> = !t_0 in
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (5)) in
+      (let _jessie_<somenum> = !t_0 in
+      (let _jessie_<somenum> = (1) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
       [ { } unit reads intP_intM_t_0_3,intP_t_0_3_alloc_table
         writes intP_intM_t_0_3
         { (not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3@,
-           intP_intM_t_0_3, pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-          and ((select(intP_intM_t_0_3, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and (select(intP_intM_t_0_3, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
-      (let jessie_<somenum> = (x_0_0 := (safe_int32_of_integer_ (45))) in void);
-      (let jessie_<somenum> =
-      (__retres_0 := (C_20:
-                     ((safe_acc_ !intP_intM_t_0_3) ((shift !t_0) (0))))) in
+           intP_intM_t_0_3, pset_range(pset_singleton(_jessie_<somenum>), (0), (1)))
+          and ((select(intP_intM_t_0_3, shift(_jessie_<somenum>, (0))) = _jessie_<somenum>)
+              and (select(intP_intM_t_0_3, shift(_jessie_<somenum>, (1))) = _jessie_<somenum>))) } ]))))));
+      (let _jessie_<somenum> = (x_0_0 := (safe_int32_of_integer_ (45))) in void);
+      (let _jessie_<somenum> =
+      (__retres_0 := ((safe_acc_ !intP_intM_t_0_3) ((shift !t_0) (0)))) in
       void); ((free_parameter intP_t_0_3_alloc_table) !t_0);
-      (return := !__retres_0); (raise Return) end)))))))))))); absurd  end
-   with Return -> !return end))
+      (return := !__retres_0); (raise Return) end)))))); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: s_const(S_b_s_2, intP_intM_s_2))
     and ((JC_<somenum>: valid_s(S_s_2_alloc_table))
@@ -973,57 +940,42 @@ let h_ensures_default =
      (let intP_u_5_alloc_table = ref (any_alloc_table void) in
      (let u = ref (any_pointer void) in
      (let __retres_1 = ref (any_int32 void) in
-     (C_25:
-     (C_27:
-     (C_29:
-     (C_31:
-     (C_39:
-     (C_40:
      begin
-       (let jessie_<somenum> =
-       (u := (C_24:
-             (JC_<somenum>:
-             (((alloc_struct_intP (3)) intP_u_5_alloc_table) intP_u_5_tag_table)))) in
+       (let _jessie_<somenum> =
+       (u := (JC_<somenum>:
+             (((alloc_struct_intP (3)) intP_u_5_alloc_table) intP_u_5_tag_table))) in
        void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
-      (let jessie_<somenum> = !u in
-      (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
-      (let jessie_<somenum> = !u in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
-      (let jessie_<somenum> = !u in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+      (let _jessie_<somenum> = !u in
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (4)) in
+      (let _jessie_<somenum> = !u in
+      (let _jessie_<somenum> = (1) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (5)) in
+      (let _jessie_<somenum> = !u in
+      (let _jessie_<somenum> = (2) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
       [ { } unit reads intP_intM_u_5,intP_u_5_alloc_table
         writes intP_intM_u_5
         { (not_assigns(intP_u_5_alloc_table, intP_intM_u_5@, intP_intM_u_5,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-          and ((select(intP_intM_u_5, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(intP_intM_u_5, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and (select(intP_intM_u_5, shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
-      (let jessie_<somenum> =
-      (__retres_1 := (C_38:
-                     (safe_int32_of_integer_ (C_37:
-                                             ((add_int (integer_of_int32 
-                                                        (C_36:
+           pset_range(pset_singleton(_jessie_<somenum>), (0), (2)))
+          and ((select(intP_intM_u_5, shift(_jessie_<somenum>, (0))) = _jessie_<somenum>)
+              and ((select(intP_intM_u_5, shift(_jessie_<somenum>, (1))) = _jessie_<somenum>)
+                  and (select(intP_intM_u_5, shift(_jessie_<somenum>, (2))) = _jessie_<somenum>)))) } ]))))))))));
+      (let _jessie_<somenum> =
+      (__retres_1 := (safe_int32_of_integer_ ((add_int (integer_of_int32 
                                                         (safe_int32_of_integer_ 
-                                                         (C_35:
                                                          ((add_int (integer_of_int32 
-                                                                    (C_34:
                                                                     ((safe_acc_ !intP_intM_u_5) 
-                                                                    ((shift !u) (0)))))) 
+                                                                    ((shift !u) (0))))) 
                                                           (integer_of_int32 
-                                                           (C_33:
                                                            ((safe_acc_ !intP_intM_u_5) 
-                                                            ((shift !u) (1))))))))))) 
-                                              (integer_of_int32 (C_32:
-                                                                ((safe_acc_ !intP_intM_u_5) 
-                                                                 ((shift !u) (2)))))))))) in
+                                                            ((shift !u) (1)))))))) 
+                                              (integer_of_int32 ((safe_acc_ !intP_intM_u_5) 
+                                                                 ((shift !u) (2))))))) in
       void); ((safe_free_parameter intP_u_5_alloc_table) !u);
-      (return := !__retres_1); (raise Return) end))))))))))); absurd  end
-   with Return -> !return end))
-  { (JC_<somenum>: (integer_of_int32(result) = (12))) }
+      (return := !__retres_1); (raise Return) end))))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (12))) }
 
 let h_safety =
  fun (tt : unit) ->
@@ -1041,62 +993,48 @@ let h_safety =
      (let intP_u_5_alloc_table = ref (any_alloc_table void) in
      (let u = ref (any_pointer void) in
      (let __retres_1 = ref (any_int32 void) in
-     (C_25:
-     (C_27:
-     (C_29:
-     (C_31:
-     (C_39:
-     (C_40:
      begin
-       (let jessie_<somenum> =
-       (u := (let jessie_<somenum> =
-             (C_24:
+       (let _jessie_<somenum> =
+       (u := (let _jessie_<somenum> =
              (JC_<somenum>:
-             (((alloc_struct_intP_requires (3)) intP_u_5_alloc_table) intP_u_5_tag_table))) in
+             (((alloc_struct_intP_requires (3)) intP_u_5_alloc_table) intP_u_5_tag_table)) in
              (JC_<somenum>:
              (assert
-             { ge_int(offset_max(intP_u_5_alloc_table, jessie_<somenum>), (2)) };
-             jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
-      (let jessie_<somenum> = !u in
-      (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
-      (let jessie_<somenum> = !u in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
-      (let jessie_<somenum> = !u in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             { ge_int(offset_max(intP_u_5_alloc_table, _jessie_<somenum>), (2)) };
+             _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+      (let _jessie_<somenum> = !u in
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (4)) in
+      (let _jessie_<somenum> = !u in
+      (let _jessie_<somenum> = (1) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (5)) in
+      (let _jessie_<somenum> = !u in
+      (let _jessie_<somenum> = (2) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
       [ { } unit reads intP_intM_u_5,intP_u_5_alloc_table
         writes intP_intM_u_5
         { (not_assigns(intP_u_5_alloc_table, intP_intM_u_5@, intP_intM_u_5,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-          and ((select(intP_intM_u_5, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(intP_intM_u_5, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and (select(intP_intM_u_5, shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
-      (let jessie_<somenum> =
-      (__retres_1 := (C_38:
-                     (JC_<somenum>:
-                     (int32_of_integer_ (C_37:
-                                        ((add_int (integer_of_int32 (C_36:
-                                                                    (JC_<somenum>:
+           pset_range(pset_singleton(_jessie_<somenum>), (0), (2)))
+          and ((select(intP_intM_u_5, shift(_jessie_<somenum>, (0))) = _jessie_<somenum>)
+              and ((select(intP_intM_u_5, shift(_jessie_<somenum>, (1))) = _jessie_<somenum>)
+                  and (select(intP_intM_u_5, shift(_jessie_<somenum>, (2))) = _jessie_<somenum>)))) } ]))))))))));
+      (let _jessie_<somenum> =
+      (__retres_1 := (JC_<somenum>:
+                     (int32_of_integer_ ((add_int (integer_of_int32 (JC_<somenum>:
                                                                     (int32_of_integer_ 
-                                                                    (C_35:
                                                                     ((add_int 
                                                                     (integer_of_int32 
-                                                                    (C_34:
                                                                     ((safe_acc_ !intP_intM_u_5) 
-                                                                    ((shift !u) (0)))))) 
+                                                                    ((shift !u) (0))))) 
                                                                     (integer_of_int32 
-                                                                    (C_33:
                                                                     ((safe_acc_ !intP_intM_u_5) 
-                                                                    ((shift !u) (1)))))))))))) 
-                                         (integer_of_int32 (C_32:
-                                                           ((safe_acc_ !intP_intM_u_5) 
-                                                            ((shift !u) (2))))))))))) in
+                                                                    ((shift !u) (1))))))))) 
+                                         (integer_of_int32 ((safe_acc_ !intP_intM_u_5) 
+                                                            ((shift !u) (2)))))))) in
       void); ((free_parameter intP_u_5_alloc_table) !u);
-      (return := !__retres_1); (raise Return) end))))))))))); absurd  end
-   with Return -> !return end))
+      (return := !__retres_1); (raise Return) end))))); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: s_const(S_b_s_2, intP_intM_s_2))
     and ((JC_<somenum>: valid_s(S_s_2_alloc_table))
@@ -1122,7 +1060,7 @@ why --project [...] why/init.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/init_po18.why">
-      <location file = "why/init.why" line = "916" begin = "15" end = "71"/>
+      <location file = "why/init.why" line = "856" begin = "15" end = "72"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/init_po19.why">
@@ -1146,7 +1084,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/init_po23.why">
-      <location file = "why/init.why" line = "955" begin = "14" end = "54"/>
+      <location file = "why/init.why" line = "888" begin = "14" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1179,11 +1117,11 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/init_po11.why">
-      <location file = "why/init.why" line = "791" begin = "17" end = "75"/>
+      <location file = "why/init.why" line = "754" begin = "17" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/init_po12.why">
-      <location file = "why/init.why" line = "809" begin = "14" end = "58"/>
+      <location file = "why/init.why" line = "771" begin = "14" end = "58"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

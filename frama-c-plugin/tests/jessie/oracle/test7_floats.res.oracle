@@ -1,6 +1,6 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only test7_floats.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD test7_floats.c"
-test7_floats.c:15:[kernel] warning: Floating-point constant 0.9890365552 is not represented exactly. Will use 0x1.fa62ffd643d6ep-1. See documentation for option -warn-decimal-float
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only test7_floats.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/test7_floats.c"
+PPCHOME/tests/jessie/test7_floats.c:15:[kernel] warning: Floating-point constant 0.9890365552 is not represented exactly. Will use 0x1.fa62ffd643d6ep-1. See documentation for option -warn-decimal-float
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir test7_floats.jessie
 [jessie] File test7_floats.jessie/test7_floats.jc written.
@@ -39,32 +39,32 @@ tag voidP = {
 type voidP = [voidP]
 
 double my_exp(double x)
-  requires (C_9 : (\real_abs((x :> real)) <= 1.0));
+  requires (_C_9 : (\real_abs((x :> real)) <= 1.0));
 behavior default:
-  ensures (C_8 : (\real_abs(((\result :> real) - \exp((\at(x,Old) :> real)))) <=
-                   0x1p-4));
+  ensures (_C_8 : (\real_abs(((\result :> real) - \exp((\at(x,Old) :> real)))) <=
+                    0x1p-4));
 {  
    (var double __retres);
    
    {  
       {  
-         (assert for default: (C_1 : (jessie : (\real_abs((((0.9890365552 +
-                                                              (1.130258690 *
-                                                                (x :> real))) +
-                                                             ((0.5540440796 *
-                                                                (x :> real)) *
-                                                               (x :> real))) -
-                                                            \exp((x :> real)))) <=
-                                                 0x0.FFFFp-4))));
+         (assert for default: (_C_1 : (jessie : (\real_abs((((0.9890365552 +
+                                                               (1.130258690 *
+                                                                 (x :> real))) +
+                                                              ((0.5540440796 *
+                                                                 (x :> real)) *
+                                                                (x :> real))) -
+                                                             \exp((x :> real)))) <=
+                                                  0x0.FFFFp-4))));
          ()
       };
       
-      {  (C_7 : (__retres = (C_6 : ((C_5 : ((0.9890365552 :> double) +
-                                             (C_4 : ((1.130258690 :> double) *
-                                                      x)))) +
-                                     (C_3 : ((C_2 : ((0.5540440796 :> double) *
-                                                      x)) *
-                                              x))))));
+      {  (_C_7 : (__retres = (_C_6 : ((_C_5 : ((0.9890365552 :> double) +
+                                                (_C_4 : ((1.130258690 :> double) *
+                                                          x)))) +
+                                       (_C_3 : ((_C_2 : ((0.5540440796 :> double) *
+                                                          x)) *
+                                                 x))))));
          
          (return __retres)
       }
@@ -411,29 +411,21 @@ let my_exp_ensures_default =
                                             double_value(x_0)),
                                    double_value(x_0))),
                           exp(double_value(x_0)))),
-         0x0.FFFFp-4)) }; void);
-      (C_7:
-      begin
-        void;
-       (let jessie_<somenum> =
-       (__retres := (C_6:
-                    (JC_<somenum>:
-                    (((add_double_safe nearest_even) (C_5:
+         0x0.FFFFp-4)) }; void); void;
+      (let _jessie_<somenum> =
+      (__retres := (JC_<somenum>:
+                   (((add_double_safe nearest_even) (JC_<somenum>:
+                                                    (((add_double_safe nearest_even) 
+                                                      ((double_of_real_safe nearest_even) 0.9890365552)) 
                                                      (JC_<somenum>:
-                                                     (((add_double_safe nearest_even) 
-                                                       ((double_of_real_safe nearest_even) 0.9890365552)) 
-                                                      (C_4:
-                                                      (JC_<somenum>:
-                                                      (((mul_double_safe nearest_even) 
-                                                        ((double_of_real_safe nearest_even) 1.130258690)) x_0))))))) 
-                     (C_3:
-                     (JC_<somenum>:
-                     (((mul_double_safe nearest_even) (C_2:
-                                                      (JC_<somenum>:
-                                                      (((mul_double_safe nearest_even) 
-                                                        ((double_of_real_safe nearest_even) 0.5540440796)) x_0)))) x_0))))))) in
-       void); (return := !__retres); (raise Return) end) end); absurd  end
-   with Return -> !return end))
+                                                     (((mul_double_safe nearest_even) 
+                                                       ((double_of_real_safe nearest_even) 1.130258690)) x_0))))) 
+                    (JC_<somenum>:
+                    (((mul_double_safe nearest_even) (JC_<somenum>:
+                                                     (((mul_double_safe nearest_even) 
+                                                       ((double_of_real_safe nearest_even) 0.5540440796)) x_0))) x_0))))) in
+      void); (return := !__retres); (raise Return) end); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     le_real(abs_real(sub_real(double_value(result), exp(double_value(x_0)))),
     0x1p-4)) }
@@ -456,32 +448,24 @@ let my_exp_safety =
                                               double_value(x_0)),
                                      double_value(x_0))),
                             exp(double_value(x_0)))),
-           0x0.FFFFp-4)) } ];
-      (C_7:
-      begin
-        void;
-       (let jessie_<somenum> =
-       (__retres := (C_6:
-                    (JC_<somenum>:
-                    (((add_double nearest_even) (C_5:
+           0x0.FFFFp-4)) } ]; void;
+      (let _jessie_<somenum> =
+      (__retres := (JC_<somenum>:
+                   (((add_double nearest_even) (JC_<somenum>:
+                                               (((add_double nearest_even) 
+                                                 (JC_<somenum>:
+                                                 ((double_of_real nearest_even) 0.9890365552))) 
                                                 (JC_<somenum>:
-                                                (((add_double nearest_even) 
+                                                (((mul_double nearest_even) 
                                                   (JC_<somenum>:
-                                                  ((double_of_real nearest_even) 0.9890365552))) 
-                                                 (C_4:
-                                                 (JC_<somenum>:
-                                                 (((mul_double nearest_even) 
-                                                   (JC_<somenum>:
-                                                   ((double_of_real nearest_even) 1.130258690))) x_0))))))) 
-                     (C_3:
-                     (JC_<somenum>:
-                     (((mul_double nearest_even) (C_2:
-                                                 (JC_<somenum>:
-                                                 (((mul_double nearest_even) 
-                                                   (JC_<somenum>:
-                                                   ((double_of_real nearest_even) 0.5540440796))) x_0)))) x_0))))))) in
-       void); (return := !__retres); (raise Return) end) end); absurd  end
-   with Return -> !return end)) { true }
+                                                  ((double_of_real nearest_even) 1.130258690))) x_0))))) 
+                    (JC_<somenum>:
+                    (((mul_double nearest_even) (JC_<somenum>:
+                                                (((mul_double nearest_even) 
+                                                  (JC_<somenum>:
+                                                  ((double_of_real nearest_even) 0.5540440796))) x_0))) x_0))))) in
+      void); (return := !__retres); (raise Return) end); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C test7_floats.jessie --quiet -f test7_floats.makefile project
@@ -501,12 +485,12 @@ why --project [...] why/test7_floats.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/test7_floats_po3.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "55" begin = "44" end = "68"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "55" begin = "47" end = "71"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test7_floats_po4.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "56" begin = "53" end = "76"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "56" begin = "57" end = "80"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -521,7 +505,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test7_floats_po7.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "58" begin = "53" end = "77"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "58" begin = "57" end = "81"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

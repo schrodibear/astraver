@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0284.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0284.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0284.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0284.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0284.jessie
 [jessie] File bts0284.jessie/bts0284.jc written.
@@ -54,11 +54,11 @@ invariant valid_t :
 
 int32 main()
 behavior default:
-  ensures (C_5 : (\result == 8));
+  ensures (_C_5 : (\result == 8));
 {  
    (var int32 __retres);
    
-   {  (C_4 : (__retres = (C_3 : ((C_2 : (x + (C_1 : (t + 1).intM))) :> int32))));
+   {  (_C_4 : (__retres = (_C_3 : ((_C_2 : (x + (_C_1 : (t + 1).intM))) :> int32))));
       
       (return __retres)
    }
@@ -514,16 +514,12 @@ let main_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_4:
      begin
-       (let jessie_<somenum> =
-       (__retres := (C_3:
-                    (safe_int32_of_integer_ (C_2:
-                                            ((add_int (integer_of_int32 x_0)) 
-                                             (integer_of_int32 (C_1:
-                                                               ((safe_acc_ !intP_intM_t_1) 
-                                                                ((shift t) (1)))))))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+       (let _jessie_<somenum> =
+       (__retres := (safe_int32_of_integer_ ((add_int (integer_of_int32 x_0)) 
+                                             (integer_of_int32 ((safe_acc_ !intP_intM_t_1) 
+                                                                ((shift t) (1))))))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (8))) }
 
 let main_safety =
@@ -534,17 +530,13 @@ let main_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_4:
      begin
-       (let jessie_<somenum> =
-       (__retres := (C_3:
-                    (JC_<somenum>:
-                    (int32_of_integer_ (C_2:
-                                       ((add_int (integer_of_int32 x_0)) 
-                                        (integer_of_int32 (C_1:
-                                                          ((safe_acc_ !intP_intM_t_1) 
-                                                           ((shift t) (1))))))))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+       (let _jessie_<somenum> =
+       (__retres := (JC_<somenum>:
+                    (int32_of_integer_ ((add_int (integer_of_int32 x_0)) 
+                                        (integer_of_int32 ((safe_acc_ !intP_intM_t_1) 
+                                                           ((shift t) (1)))))))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: valid_t(intP_t_1_alloc_table)) }
 
 

@@ -2,21 +2,21 @@
 /*                                                                        */
 /*  The Why platform for program certification                            */
 /*                                                                        */
-/*  Copyright (C) 2002-2011                                               */
+/*  Copyright (C) 2002-2014                                               */
 /*                                                                        */
-/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
-/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
-/*    Yannick MOY, Univ. Paris-sud 11                                     */
-/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud                   */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud                              */
+/*    Yannick MOY, Univ. Paris-sud                                        */
+/*    Romain BARDOU, Univ. Paris-sud                                      */
 /*                                                                        */
 /*  Secondary contributors:                                               */
 /*                                                                        */
-/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
-/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
-/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
-/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
-/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
-/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*    Thierry HUBERT, Univ. Paris-sud  (former Caduceus front-end)        */
+/*    Nicolas ROUSSET, Univ. Paris-sud (on Jessie & Krakatoa)             */
+/*    Ali AYAD, CNRS & CEA Saclay      (floating-point support)           */
+/*    Sylvie BOLDO, INRIA              (floating-point support)           */
+/*    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     */
+/*    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          */
 /*                                                                        */
 /*  This software is free software; you can redistribute it and/or        */
 /*  modify it under the terms of the GNU Lesser General Public            */
@@ -50,9 +50,9 @@ class TestNonNull {
 
     //@ requires t.length >= 4;
     void test(int[] t) {
-	int i = t[3];
+	int _i = t[3];
 	t[2] = 1;
-	int j = t[N];
+	int _j = t[N];
 	t[N + 1] = 1;
 	st[3] == 1;
     }

@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0427.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0427.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0427.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0427.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0427.jessie
 [jessie] File bts0427.jessie/bts0427.jc written.
@@ -67,64 +67,64 @@ predicate stack_empty{L}(stack_t[..] s_1) =
 \at((stack_initialized{L}(s_1) && (s_1.used == 0)),L)
 
 int32 stack_valid(stack_t[..] stack_2)
-  requires (C_11 : ((C_12 : (\offset_min(stack_2) <= 0)) &&
-                     (C_13 : (\offset_max(stack_2) >= 0))));
+  requires (_C_11 : ((_C_12 : (\offset_min(stack_2) <= 0)) &&
+                      (_C_13 : (\offset_max(stack_2) >= 0))));
 behavior default:
-  ensures (C_6 : (((C_8 : (0 <= \result)) && (C_9 : (\result <= 1))) &&
-                   (C_10 : (stack_initialized{Here}(\at(stack_2,Old)) ==>
-                             (\result == 1)))));
+  ensures (_C_6 : (((_C_8 : (0 <= \result)) && (_C_9 : (\result <= 1))) &&
+                    (_C_10 : (stack_initialized{Here}(\at(stack_2,Old)) ==>
+                               (\result == 1)))));
 {  
    (var int32 tmp);
    
-   {  (if ((C_5 : stack_2.data_0) != null) then (if ((C_4 : stack_2.size_2) !=
-                                                      0) then (C_3 : (tmp = 1)) else 
-                                                (C_2 : (tmp = 0))) else 
-      (C_1 : (tmp = 0)));
+   {  (if ((_C_5 : stack_2.data_0) != null) then (if ((_C_4 : stack_2.size_2) !=
+                                                       0) then (_C_3 : (tmp = 1)) else 
+                                                 (_C_2 : (tmp = 0))) else 
+      (_C_1 : (tmp = 0)));
       
       (return tmp)
    }
 }
 
 unit stack_init(stack_t[..] stack, intP[..] data, uint32 size_1)
-  requires (C_30 : ((C_31 : (\offset_min(stack) <= 0)) &&
-                     (C_32 : (\offset_max(stack) >= 0))));
-  requires (C_27 : ((C_28 : (\offset_min(data) <= 0)) &&
-                     (C_29 : (\offset_max(data) >= 0))));
-  requires (C_24 : ((C_25 : (\offset_min(data) <= 0)) &&
-                     (C_26 : (\offset_max(data) >= size_1))));
-  requires (C_23 : (0 < size_1));
+  requires (_C_30 : ((_C_31 : (\offset_min(stack) <= 0)) &&
+                      (_C_32 : (\offset_max(stack) >= 0))));
+  requires (_C_27 : ((_C_28 : (\offset_min(data) <= 0)) &&
+                      (_C_29 : (\offset_max(data) >= 0))));
+  requires (_C_24 : ((_C_25 : (\offset_min(data) <= 0)) &&
+                      (_C_26 : (\offset_max(data) >= size_1))));
+  requires (_C_23 : (0 < size_1));
 behavior default:
-  ensures (C_20 : ((C_21 : stack_initialized{Here}(\at(stack,Old))) &&
-                    (C_22 : (\at(stack,Old).used == 0))));
+  ensures (_C_20 : ((_C_21 : stack_initialized{Here}(\at(stack,Old))) &&
+                     (_C_22 : (\at(stack,Old).used == 0))));
 {  
-   {  (C_15 : ((C_14 : stack.data_0) = data));
-      (C_17 : ((C_16 : stack.size_2) = size_1));
-      (C_19 : ((C_18 : stack.used) = 0));
+   {  (_C_15 : ((_C_14 : stack.data_0) = data));
+      (_C_17 : ((_C_16 : stack.size_2) = size_1));
+      (_C_19 : ((_C_18 : stack.used) = 0));
       
       (return ())
    }
 }
 
 int32 stack_push(stack_t[..] stack_1, int32 item_0)
-  requires (C_49 : ((C_50 : (\offset_min(stack_1) <= 0)) &&
-                     (C_51 : (\offset_max(stack_1) >= 0))));
-  requires (C_48 : stack_initialized{Here}(stack_1));
+  requires (_C_49 : ((_C_50 : (\offset_min(stack_1) <= 0)) &&
+                      (_C_51 : (\offset_max(stack_1) >= 0))));
+  requires (_C_48 : stack_initialized{Here}(stack_1));
 behavior default:
-  ensures (C_47 : ((! stack_full{Here}(\at(stack_1,Old))) ==>
-                    (\at(stack_1.used,Old) < \at(stack_1,Old).used)));
+  ensures (_C_47 : ((! stack_full{Here}(\at(stack_1,Old))) ==>
+                     (\at(stack_1.used,Old) < \at(stack_1,Old).used)));
 {  
    (var int32 __retres);
    
-   {  (if ((C_46 : stack_1.used) < (C_45 : stack_1.size_2)) then 
-      {  (C_38 : ((C_37 : stack_1.used) = (C_36 : ((C_35 : ((C_34 : stack_1.used) +
-                                                             1)) :> uint32))));
-         (C_43 : ((C_42 : (C_41 : ((C_40 : stack_1.data_0) +
-                                    (C_39 : stack_1.used))).intM) = item_0));
-         (C_44 : (__retres = 1));
+   {  (if ((_C_46 : stack_1.used) < (_C_45 : stack_1.size_2)) then 
+      {  (_C_38 : ((_C_37 : stack_1.used) = (_C_36 : ((_C_35 : ((_C_34 : stack_1.used) +
+                                                                 1)) :> uint32))));
+         (_C_43 : ((_C_42 : (_C_41 : ((_C_40 : stack_1.data_0) +
+                                       (_C_39 : stack_1.used))).intM) = item_0));
+         (_C_44 : (__retres = 1));
          
          (goto return_label)
       } else 
-      {  (C_33 : (__retres = 0));
+      {  (_C_33 : (__retres = 0));
          
          (goto return_label)
       });
@@ -134,26 +134,26 @@ behavior default:
 }
 
 int32 stack_pop(stack_t[..] stack_0, intP[..] item)
-  requires (C_71 : ((C_72 : (\offset_min(stack_0) <= 0)) &&
-                     (C_73 : (\offset_max(stack_0) >= 0))));
-  requires (C_70 : stack_initialized{Here}(stack_0));
-  requires (C_67 : ((C_68 : (\offset_min(item) <= 0)) &&
-                     (C_69 : (\offset_max(item) >= 0))));
+  requires (_C_71 : ((_C_72 : (\offset_min(stack_0) <= 0)) &&
+                      (_C_73 : (\offset_max(stack_0) >= 0))));
+  requires (_C_70 : stack_initialized{Here}(stack_0));
+  requires (_C_67 : ((_C_68 : (\offset_min(item) <= 0)) &&
+                      (_C_69 : (\offset_max(item) >= 0))));
 behavior default:
-  ensures (C_66 : true);
+  ensures (_C_66 : true);
 {  
    (var int32 __retres_0);
    
-   {  (if ((C_65 : stack_0.used) > 0) then 
-      {  (C_58 : ((C_57 : item.intM) = (C_56 : (C_55 : ((C_54 : stack_0.data_0) +
-                                                         (C_53 : stack_0.used))).intM)));
-         (C_63 : ((C_62 : stack_0.used) = (C_61 : ((C_60 : ((C_59 : stack_0.used) -
-                                                             1)) :> uint32))));
-         (C_64 : (__retres_0 = 1));
+   {  (if ((_C_65 : stack_0.used) > 0) then 
+      {  (_C_58 : ((_C_57 : item.intM) = (_C_56 : (_C_55 : ((_C_54 : stack_0.data_0) +
+                                                             (_C_53 : stack_0.used))).intM)));
+         (_C_63 : ((_C_62 : stack_0.used) = (_C_61 : ((_C_60 : ((_C_59 : stack_0.used) -
+                                                                 1)) :> uint32))));
+         (_C_64 : (__retres_0 = 1));
          
          (goto return_label)
       } else 
-      {  (C_52 : (__retres_0 = 0));
+      {  (_C_52 : (__retres_0 = 0));
          
          (goto return_label)
       });
@@ -923,20 +923,17 @@ let stack_init_ensures_default =
                         and (JC_<somenum>: lt_int((0), integer_of_uint32(size_1)))))))))) }
   (init:
   try
-   (C_15:
-   (C_17:
-   (C_19:
    begin
-     (let jessie_<somenum> = data in
-     (let jessie_<somenum> = stack in
-     (((safe_upd_ stack_t_data_0_stack_5) jessie_<somenum>) jessie_<somenum>)));
-    (let jessie_<somenum> = size_1 in
-    (let jessie_<somenum> = stack in
-    (((safe_upd_ stack_t_size_2_stack_5) jessie_<somenum>) jessie_<somenum>)));
-    (let jessie_<somenum> = (safe_uint32_of_integer_ (0)) in
-    (let jessie_<somenum> = stack in
-    (((safe_upd_ stack_t_used_stack_5) jessie_<somenum>) jessie_<somenum>)));
-    (raise Return); (raise Return) end))) with Return -> void end)
+     (let _jessie_<somenum> = data in
+     (let _jessie_<somenum> = stack in
+     (((safe_upd_ stack_t_data_0_stack_5) _jessie_<somenum>) _jessie_<somenum>)));
+    (let _jessie_<somenum> = size_1 in
+    (let _jessie_<somenum> = stack in
+    (((safe_upd_ stack_t_size_2_stack_5) _jessie_<somenum>) _jessie_<somenum>)));
+    (let _jessie_<somenum> = (safe_uint32_of_integer_ (0)) in
+    (let _jessie_<somenum> = stack in
+    (((safe_upd_ stack_t_used_stack_5) _jessie_<somenum>) _jessie_<somenum>)));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      stack_initialized(stack, intP_data_6_alloc_table,
@@ -960,23 +957,20 @@ let stack_init_safety =
                         and (JC_<somenum>: lt_int((0), integer_of_uint32(size_1)))))))))) }
   (init:
   try
-   (C_15:
-   (C_17:
-   (C_19:
    begin
-     (let jessie_<somenum> = data in
-     (let jessie_<somenum> = stack in
+     (let _jessie_<somenum> = data in
+     (let _jessie_<somenum> = stack in
      (JC_<somenum>:
-     ((((upd_ stack_t_stack_5_alloc_table) stack_t_data_0_stack_5) jessie_<somenum>) jessie_<somenum>))));
-    (let jessie_<somenum> = size_1 in
-    (let jessie_<somenum> = stack in
+     ((((upd_ stack_t_stack_5_alloc_table) stack_t_data_0_stack_5) _jessie_<somenum>) _jessie_<somenum>))));
+    (let _jessie_<somenum> = size_1 in
+    (let _jessie_<somenum> = stack in
     (JC_<somenum>:
-    ((((upd_ stack_t_stack_5_alloc_table) stack_t_size_2_stack_5) jessie_<somenum>) jessie_<somenum>))));
-    (let jessie_<somenum> = (safe_uint32_of_integer_ (0)) in
-    (let jessie_<somenum> = stack in
+    ((((upd_ stack_t_stack_5_alloc_table) stack_t_size_2_stack_5) _jessie_<somenum>) _jessie_<somenum>))));
+    (let _jessie_<somenum> = (safe_uint32_of_integer_ (0)) in
+    (let _jessie_<somenum> = stack in
     (JC_<somenum>:
-    ((((upd_ stack_t_stack_5_alloc_table) stack_t_used_stack_5) jessie_<somenum>) jessie_<somenum>))));
-    (raise Return); (raise Return) end))) with Return -> void end) { true }
+    ((((upd_ stack_t_stack_5_alloc_table) stack_t_used_stack_5) _jessie_<somenum>) _jessie_<somenum>))));
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 let stack_pop_ensures_default =
  fun (stack_0 : stack_t pointer) (item : intP pointer) (intP_intM_item_9 : (intP, int32) memory ref) (stack_t_used_stack_0_8 : (stack_t, uint32) memory ref) (intP_item_9_alloc_table : intP alloc_table) (intP_data_0_15_alloc_table : intP alloc_table) (stack_t_stack_0_8_alloc_table : stack_t alloc_table) (intP_intM_data_0_15 : (intP, int32) memory) (stack_t_data_0_stack_0_8 : (stack_t, intP pointer) memory) (stack_t_size_2_stack_0_8 : (stack_t, uint32) memory) ->
@@ -998,37 +992,25 @@ let stack_pop_ensures_default =
      (let __retres_0 = ref (any_int32 void) in
      try
       begin
-        (if ((gt_int_ (integer_of_uint32 (C_65:
-                                         ((safe_acc_ !stack_t_used_stack_0_8) stack_0)))) (0))
+        (if ((gt_int_ (integer_of_uint32 ((safe_acc_ !stack_t_used_stack_0_8) stack_0))) (0))
         then
-         (C_58:
-         (C_63:
-         (C_64:
          begin
-           (let jessie_<somenum> =
-           (C_56:
-           ((safe_acc_ intP_intM_data_0_15) (C_55:
-                                            ((shift (C_54:
-                                                    ((safe_acc_ stack_t_data_0_stack_0_8) stack_0))) 
-                                             (integer_of_uint32 (C_53:
-                                                                ((safe_acc_ !stack_t_used_stack_0_8) stack_0))))))) in
-           (let jessie_<somenum> = item in
-           (((safe_upd_ intP_intM_item_9) jessie_<somenum>) jessie_<somenum>)));
-          (let jessie_<somenum> =
-          (C_61:
-          (safe_uint32_of_integer_ (C_60:
-                                   ((sub_int (integer_of_uint32 (C_59:
-                                                                ((safe_acc_ !stack_t_used_stack_0_8) stack_0)))) (1))))) in
-          (let jessie_<somenum> = stack_0 in
-          (((safe_upd_ stack_t_used_stack_0_8) jessie_<somenum>) jessie_<somenum>)));
-          (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (1))) in
-          void); (raise (Return_label_exc void)) end)))
+           (let _jessie_<somenum> =
+           ((safe_acc_ intP_intM_data_0_15) ((shift ((safe_acc_ stack_t_data_0_stack_0_8) stack_0)) 
+                                             (integer_of_uint32 ((safe_acc_ !stack_t_used_stack_0_8) stack_0)))) in
+           (let _jessie_<somenum> = item in
+           (((safe_upd_ intP_intM_item_9) _jessie_<somenum>) _jessie_<somenum>)));
+          (let _jessie_<somenum> =
+          (safe_uint32_of_integer_ ((sub_int (integer_of_uint32 ((safe_acc_ !stack_t_used_stack_0_8) stack_0))) (1))) in
+          (let _jessie_<somenum> = stack_0 in
+          (((safe_upd_ stack_t_used_stack_0_8) _jessie_<somenum>) _jessie_<somenum>)));
+          (let _jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (1))) in
+          void); (raise (Return_label_exc void)) end
         else
-         (C_52:
          begin
-           (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end));
-       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
+           (let _jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (0))) in
+           void); (raise (Return_label_exc void)) end);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -1052,45 +1034,34 @@ let stack_pop_safety =
      (let __retres_0 = ref (any_int32 void) in
      try
       begin
-        (if ((gt_int_ (integer_of_uint32 (C_65:
-                                         (JC_<somenum>:
-                                         (((acc_ stack_t_stack_0_8_alloc_table) !stack_t_used_stack_0_8) stack_0))))) (0))
+        (if ((gt_int_ (integer_of_uint32 (JC_<somenum>:
+                                         (((acc_ stack_t_stack_0_8_alloc_table) !stack_t_used_stack_0_8) stack_0)))) (0))
         then
-         (C_58:
-         (C_63:
-         (C_64:
          begin
-           (let jessie_<somenum> =
-           (C_56:
+           (let _jessie_<somenum> =
            (JC_<somenum>:
            ((((offset_acc_ intP_data_0_15_alloc_table) intP_intM_data_0_15) 
-             (C_54:
              (JC_<somenum>:
-             (((acc_ stack_t_stack_0_8_alloc_table) stack_t_data_0_stack_0_8) stack_0)))) 
-            (integer_of_uint32 (C_53:
-                               (JC_<somenum>:
-                               (((acc_ stack_t_stack_0_8_alloc_table) !stack_t_used_stack_0_8) stack_0))))))) in
-           (let jessie_<somenum> = item in
+             (((acc_ stack_t_stack_0_8_alloc_table) stack_t_data_0_stack_0_8) stack_0))) 
+            (integer_of_uint32 (JC_<somenum>:
+                               (((acc_ stack_t_stack_0_8_alloc_table) !stack_t_used_stack_0_8) stack_0))))) in
+           (let _jessie_<somenum> = item in
            (JC_<somenum>:
-           ((((upd_ intP_item_9_alloc_table) intP_intM_item_9) jessie_<somenum>) jessie_<somenum>))));
-          (let jessie_<somenum> =
-          (C_61:
+           ((((upd_ intP_item_9_alloc_table) intP_intM_item_9) _jessie_<somenum>) _jessie_<somenum>))));
+          (let _jessie_<somenum> =
           (JC_<somenum>:
-          (uint32_of_integer_ (C_60:
-                              ((sub_int (integer_of_uint32 (C_59:
-                                                           (JC_<somenum>:
-                                                           (((acc_ stack_t_stack_0_8_alloc_table) !stack_t_used_stack_0_8) stack_0))))) (1)))))) in
-          (let jessie_<somenum> = stack_0 in
+          (uint32_of_integer_ ((sub_int (integer_of_uint32 (JC_<somenum>:
+                                                           (((acc_ stack_t_stack_0_8_alloc_table) !stack_t_used_stack_0_8) stack_0)))) (1)))) in
+          (let _jessie_<somenum> = stack_0 in
           (JC_<somenum>:
-          ((((upd_ stack_t_stack_0_8_alloc_table) stack_t_used_stack_0_8) jessie_<somenum>) jessie_<somenum>))));
-          (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (1))) in
-          void); (raise (Return_label_exc void)) end)))
+          ((((upd_ stack_t_stack_0_8_alloc_table) stack_t_used_stack_0_8) _jessie_<somenum>) _jessie_<somenum>))));
+          (let _jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (1))) in
+          void); (raise (Return_label_exc void)) end
         else
-         (C_52:
          begin
-           (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end));
-       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
+           (let _jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (0))) in
+           void); (raise (Return_label_exc void)) end);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 
@@ -1110,40 +1081,29 @@ let stack_push_ensures_default =
      (let __retres = ref (any_int32 void) in
      try
       begin
-        (if ((lt_int_ (integer_of_uint32 (C_46:
-                                         ((safe_acc_ !stack_t_used_stack_1_7) stack_1)))) 
-             (integer_of_uint32 (C_45:
-                                ((safe_acc_ stack_t_size_2_stack_1_7) stack_1))))
+        (if ((lt_int_ (integer_of_uint32 ((safe_acc_ !stack_t_used_stack_1_7) stack_1))) 
+             (integer_of_uint32 ((safe_acc_ stack_t_size_2_stack_1_7) stack_1)))
         then
-         (C_38:
-         (C_43:
-         (C_44:
          begin
-           (let jessie_<somenum> =
-           (C_36:
-           (safe_uint32_of_integer_ (C_35:
-                                    ((add_int (integer_of_uint32 (C_34:
-                                                                 ((safe_acc_ !stack_t_used_stack_1_7) stack_1)))) (1))))) in
-           (let jessie_<somenum> = stack_1 in
-           (((safe_upd_ stack_t_used_stack_1_7) jessie_<somenum>) jessie_<somenum>)));
-          (let jessie_<somenum> =
-          (let jessie_<somenum> = item_0 in
-          (let jessie_<somenum> =
-          (C_40: ((safe_acc_ stack_t_data_0_stack_1_7) stack_1)) in
-          (let jessie_<somenum> =
-          (integer_of_uint32 (C_39:
-                             ((safe_acc_ !stack_t_used_stack_1_7) stack_1))) in
-          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-          (((safe_upd_ intP_intM_data_0_14) jessie_<somenum>) jessie_<somenum>))))) in
+           (let _jessie_<somenum> =
+           (safe_uint32_of_integer_ ((add_int (integer_of_uint32 ((safe_acc_ !stack_t_used_stack_1_7) stack_1))) (1))) in
+           (let _jessie_<somenum> = stack_1 in
+           (((safe_upd_ stack_t_used_stack_1_7) _jessie_<somenum>) _jessie_<somenum>)));
+          (let _jessie_<somenum> =
+          (let _jessie_<somenum> = item_0 in
+          (let _jessie_<somenum> = ((safe_acc_ stack_t_data_0_stack_1_7) stack_1) in
+          (let _jessie_<somenum> =
+          (integer_of_uint32 ((safe_acc_ !stack_t_used_stack_1_7) stack_1)) in
+          (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+          (((safe_upd_ intP_intM_data_0_14) _jessie_<somenum>) _jessie_<somenum>))))) in
           void);
-          (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-          void); (raise (Return_label_exc void)) end)))
+          (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+          void); (raise (Return_label_exc void)) end
         else
-         (C_33:
          begin
-           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end));
-       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
+           (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+           void); (raise (Return_label_exc void)) end);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -1169,49 +1129,38 @@ let stack_push_safety =
      (let __retres = ref (any_int32 void) in
      try
       begin
-        (if ((lt_int_ (integer_of_uint32 (C_46:
-                                         (JC_<somenum>:
-                                         (((acc_ stack_t_stack_1_7_alloc_table) !stack_t_used_stack_1_7) stack_1))))) 
-             (integer_of_uint32 (C_45:
-                                (JC_<somenum>:
-                                (((acc_ stack_t_stack_1_7_alloc_table) stack_t_size_2_stack_1_7) stack_1)))))
+        (if ((lt_int_ (integer_of_uint32 (JC_<somenum>:
+                                         (((acc_ stack_t_stack_1_7_alloc_table) !stack_t_used_stack_1_7) stack_1)))) 
+             (integer_of_uint32 (JC_<somenum>:
+                                (((acc_ stack_t_stack_1_7_alloc_table) stack_t_size_2_stack_1_7) stack_1))))
         then
-         (C_38:
-         (C_43:
-         (C_44:
          begin
-           (let jessie_<somenum> =
-           (C_36:
+           (let _jessie_<somenum> =
            (JC_<somenum>:
-           (uint32_of_integer_ (C_35:
-                               ((add_int (integer_of_uint32 (C_34:
-                                                            (JC_<somenum>:
-                                                            (((acc_ stack_t_stack_1_7_alloc_table) !stack_t_used_stack_1_7) stack_1))))) (1)))))) in
-           (let jessie_<somenum> = stack_1 in
+           (uint32_of_integer_ ((add_int (integer_of_uint32 (JC_<somenum>:
+                                                            (((acc_ stack_t_stack_1_7_alloc_table) !stack_t_used_stack_1_7) stack_1)))) (1)))) in
+           (let _jessie_<somenum> = stack_1 in
            (JC_<somenum>:
-           ((((upd_ stack_t_stack_1_7_alloc_table) stack_t_used_stack_1_7) jessie_<somenum>) jessie_<somenum>))));
-          (let jessie_<somenum> =
-          (let jessie_<somenum> = item_0 in
-          (let jessie_<somenum> =
-          (C_40:
+           ((((upd_ stack_t_stack_1_7_alloc_table) stack_t_used_stack_1_7) _jessie_<somenum>) _jessie_<somenum>))));
+          (let _jessie_<somenum> =
+          (let _jessie_<somenum> = item_0 in
+          (let _jessie_<somenum> =
           (JC_<somenum>:
-          (((acc_ stack_t_stack_1_7_alloc_table) stack_t_data_0_stack_1_7) stack_1))) in
-          (let jessie_<somenum> =
-          (integer_of_uint32 (C_39:
-                             (JC_<somenum>:
-                             (((acc_ stack_t_stack_1_7_alloc_table) !stack_t_used_stack_1_7) stack_1)))) in
-          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+          (((acc_ stack_t_stack_1_7_alloc_table) stack_t_data_0_stack_1_7) stack_1)) in
+          (let _jessie_<somenum> =
+          (integer_of_uint32 (JC_<somenum>:
+                             (((acc_ stack_t_stack_1_7_alloc_table) !stack_t_used_stack_1_7) stack_1))) in
+          (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
           (JC_<somenum>:
-          (((((offset_upd_ intP_data_0_14_alloc_table) intP_intM_data_0_14) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+          (((((offset_upd_ intP_data_0_14_alloc_table) intP_intM_data_0_14) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
           void);
-          (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-          void); (raise (Return_label_exc void)) end)))
+          (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+          void); (raise (Return_label_exc void)) end
         else
-         (C_33:
          begin
-           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end));
-       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
+           (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+           void); (raise (Return_label_exc void)) end);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 
@@ -1227,17 +1176,15 @@ let stack_valid_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
-       (if ((safe_neq_pointer (C_5:
-                              ((safe_acc_ stack_t_data_0_stack_2_4) stack_2))) null)
+       (let _jessie_<somenum> =
+       (if ((safe_neq_pointer ((safe_acc_ stack_t_data_0_stack_2_4) stack_2)) null)
        then
-        (if ((neq_int_ (integer_of_uint32 (C_4:
-                                          ((safe_acc_ stack_t_size_2_stack_2_4) stack_2)))) (0))
-        then (C_3: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-        else (C_2: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
-       else (C_1: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void); (return := !tmp); (raise Return) end); absurd  end with
-   Return -> !return end))
+        (if ((neq_int_ (integer_of_uint32 ((safe_acc_ stack_t_size_2_stack_2_4) stack_2))) (0))
+        then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
+        else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)
+       else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end) in void);
+      (return := !tmp); (raise Return) end); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: le_int((0), integer_of_int32(result)))
     and ((JC_<somenum>: le_int(integer_of_int32(result), (1)))
@@ -1258,19 +1205,17 @@ let stack_valid_safety =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
-       (if ((neq_pointer (C_5:
-                         (JC_<somenum>:
-                         (((acc_ stack_t_stack_2_4_alloc_table) stack_t_data_0_stack_2_4) stack_2)))) null)
+       (let _jessie_<somenum> =
+       (if ((neq_pointer (JC_<somenum>:
+                         (((acc_ stack_t_stack_2_4_alloc_table) stack_t_data_0_stack_2_4) stack_2))) null)
        then
-        (if ((neq_int_ (integer_of_uint32 (C_4:
-                                          (JC_<somenum>:
-                                          (((acc_ stack_t_stack_2_4_alloc_table) stack_t_size_2_stack_2_4) stack_2))))) (0))
-        then (C_3: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-        else (C_2: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
-       else (C_1: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void); (return := !tmp); (raise Return) end); absurd  end with
-   Return -> !return end)) { true }
+        (if ((neq_int_ (integer_of_uint32 (JC_<somenum>:
+                                          (((acc_ stack_t_stack_2_4_alloc_table) stack_t_size_2_stack_2_4) stack_2)))) (0))
+        then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
+        else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)
+       else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end) in void);
+      (return := !tmp); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0427.jessie --quiet -f bts0427.makefile project
@@ -1304,7 +1249,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po47.why">
-      <location file = "why/bts0427.why" line = "1098" begin = "12" end = "170"/>
+      <location file = "why/bts0427.why" line = "1045" begin = "12" end = "138"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1370,12 +1315,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0427_po34.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "113" begin = "18" end = "160"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "113" begin = "19" end = "169"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po35.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "113" begin = "18" end = "160"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "113" begin = "19" end = "169"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1400,12 +1345,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po40.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "115" begin = "18" end = "135"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "115" begin = "19" end = "143"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po41.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "115" begin = "18" end = "135"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "115" begin = "19" end = "143"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1455,12 +1400,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po17.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "142" begin = "18" end = "168"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "142" begin = "19" end = "178"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po18.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "142" begin = "18" end = "168"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "142" begin = "19" end = "178"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1485,12 +1430,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0427_po23.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "144" begin = "18" end = "160"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "144" begin = "19" end = "169"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po24.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "144" begin = "18" end = "160"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "144" begin = "19" end = "169"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1510,32 +1455,32 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0427_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "94" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "94" begin = "16" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "94" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "94" begin = "16" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "95" begin = "15" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "95" begin = "16" end = "47"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "95" begin = "15" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "95" begin = "16" end = "47"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po7.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "96" begin = "15" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "96" begin = "16" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "96" begin = "15" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "96" begin = "16" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

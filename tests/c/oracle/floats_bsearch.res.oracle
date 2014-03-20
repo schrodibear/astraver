@@ -36,7 +36,7 @@
   @    \forall integer i,j; a <= i <= j <= b ==> \le_float(t[i],t[j]);
   @*/
 
-/*@ requires n >= 0 && \valid_range(t,0,n-1);
+/*@ requires n >= 0 && \valid(t + (0 .. n-1));
   @ requires ! \is_NaN(v);
   @ requires \forall integer i; 0 <= i <= n-1 ==> ! \is_NaN(t[i]);
   @ ensures -1 <= \result < n;
@@ -66,7 +66,12 @@ int binary_search(double t[], int n, double v) {
     if (t[m] < v) l = m + 1;
     else if (t[m] > v) u = m - 1;
     else
-      return m;
+      {
+        // assert ! \is_NaN(t[m]);
+        // assert \le_float(t[m],v);
+        // assert \ge_float(t[m],v);
+        return m;
+      }
   }
   return -1;
 }
@@ -78,7 +83,6 @@ End:
 */
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/floats_bsearch.c"
-tests/c/floats_bsearch.c:38:[kernel] warning: parsing obsolete ACSL construct '\valid_range(addr,min,max)'. '\valid(addr+(min..max))' should be used instead.
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir tests/c/floats_bsearch.jessie
 [jessie] File tests/c/floats_bsearch.jessie/floats_bsearch.jc written.
@@ -133,25 +137,25 @@ predicate sorted{L}(doubleP[..] t, integer a, integer b) =
       \le_double((t + i_1).doubleM, (t + j_0).doubleM))))
 
 int32 binary_search(doubleP[..] t, int32 n_1, double v)
-  requires (C_38 : ((C_39 : (n_1 >= 0)) &&
-                     ((C_41 : (\offset_min(t) <= 0)) &&
-                       (C_42 : (\offset_max(t) >= (n_1 - 1))))));
-  requires (C_37 : (! \double_is_NaN(v)));
-  requires (C_36 : (\forall integer i_2;
-                     (((0 <= i_2) && (i_2 <= (n_1 - 1))) ==>
-                       (! \double_is_NaN((t + i_2).doubleM)))));
+  requires (_C_38 : ((_C_39 : (n_1 >= 0)) &&
+                      ((_C_41 : (\offset_min(t) <= 0)) &&
+                        (_C_42 : (\offset_max(t) >= (n_1 - 1))))));
+  requires (_C_37 : (! \double_is_NaN(v)));
+  requires (_C_36 : (\forall integer i_2;
+                      (((0 <= i_2) && (i_2 <= (n_1 - 1))) ==>
+                        (! \double_is_NaN((t + i_2).doubleM)))));
 behavior default:
-  ensures (C_31 : ((C_32 : ((- 1) <= \result)) &&
-                    (C_33 : (\result < \at(n_1,Old)))));
+  ensures (_C_31 : ((_C_32 : ((- 1) <= \result)) &&
+                     (_C_33 : (\result < \at(n_1,Old)))));
 behavior success:
-  ensures (C_34 : ((\result >= 0) ==>
-                    \eq_double((\at(t,Old) + \result).doubleM, \at(v,Old))));
+  ensures (_C_34 : ((\result >= 0) ==>
+                     \eq_double((\at(t,Old) + \result).doubleM, \at(v,Old))));
 behavior failure:
   assumes sorted{Here}(t, 0, (n_1 - 1));
-  ensures (C_35 : ((\result == (- 1)) ==>
-                    (\forall integer k_1;
-                      (((0 <= k_1) && (k_1 < \at(n_1,Old))) ==>
-                        \ne_double((\at(t,Old) + k_1).doubleM, \at(v,Old))))));
+  ensures (_C_35 : ((\result == (- 1)) ==>
+                     (\forall integer k_1;
+                       (((0 <= k_1) && (k_1 < \at(n_1,Old))) ==>
+                         \ne_double((\at(t,Old) + k_1).doubleM, \at(v,Old))))));
 {  
    (var int32 l);
    
@@ -161,50 +165,44 @@ behavior failure:
    
    (var int32 __retres);
    
-   {  (C_1 : (l = 0));
-      (C_4 : (u = (C_3 : ((C_2 : (n_1 - 1)) :> int32))));
+   {  (_C_1 : (l = 0));
+      (_C_4 : (u = (_C_3 : ((_C_2 : (n_1 - 1)) :> int32))));
       
       loop 
       behavior default:
-        invariant (C_8 : ((C_9 : (0 <= l)) && (C_10 : (u <= (n_1 - 1)))));
+        invariant (_C_8 : ((_C_9 : (0 <= l)) && (_C_10 : (u <= (n_1 - 1)))));
       behavior failure:
-        invariant (C_7 : (\forall integer k;
-                           (((0 <= k) && (k < l)) ==>
-                             \lt_double((t + k).doubleM, v))));
+        invariant (_C_7 : (\forall integer k;
+                            (((0 <= k) && (k < l)) ==>
+                              \lt_double((t + k).doubleM, v))));
       behavior failure:
-        invariant (C_6 : (\forall integer k_0;
-                           (((u < k_0) && (k_0 <= (n_1 - 1))) ==>
-                             \lt_double(v, (t + k_0).doubleM))));
-      variant (C_5 : (u - l));
+        invariant (_C_6 : (\forall integer k_0;
+                            (((u < k_0) && (k_0 <= (n_1 - 1))) ==>
+                              \lt_double(v, (t + k_0).doubleM))));
+      variant (_C_5 : (u - l));
       while (true)
       {  
          {  (if (l <= u) then () else 
             (goto while_0_break));
             
-            {  (C_17 : (m = (C_16 : ((C_15 : (l +
-                                               (C_14 : ((C_13 : ((C_12 : (
-                                                                 (C_11 : 
-                                                                 (u -
-                                                                   l)) :> int32)) /
-                                                                  2)) :> int32)))) :> int32))));
+            {  (_C_17 : (m = (_C_16 : ((_C_15 : (l +
+                                                  (_C_14 : ((_C_13 : 
+                                                            ((_C_12 : (
+                                                             (_C_11 : 
+                                                             (u - l)) :> int32)) /
+                                                              2)) :> int32)))) :> int32))));
                
                {  
-                  (assert for default: (C_18 : (jessie : ((l <= m) &&
-                                                           (m <= u)))));
+                  (assert for default: (_C_18 : (jessie : ((l <= m) &&
+                                                            (m <= u)))));
                   ()
                };
                
-               {  (if ((C_29 : (C_28 : (t + m)).doubleM) < v) then (C_27 : (l = 
-                                                                   (C_26 : (
-                                                                   (C_25 : 
-                                                                   (m +
-                                                                    1)) :> int32)))) else 
-                  (if ((C_24 : (C_23 : (t + m)).doubleM) > v) then (C_22 : (u = 
-                                                                   (C_21 : (
-                                                                   (C_20 : 
-                                                                   (m -
-                                                                    1)) :> int32)))) else 
-                  {  (C_19 : (__retres = m));
+               {  (if ((_C_29 : (_C_28 : (t + m)).doubleM) < v) then 
+                  (_C_27 : (l = (_C_26 : ((_C_25 : (m + 1)) :> int32)))) else 
+                  (if ((_C_24 : (_C_23 : (t + m)).doubleM) > v) then 
+                  (_C_22 : (u = (_C_21 : ((_C_20 : (m - 1)) :> int32)))) else 
+                  {  (_C_19 : (__retres = m));
                      
                      (goto return_label)
                   }))
@@ -213,95 +211,101 @@ behavior failure:
          }
       };
       (while_0_break : ());
-      (C_30 : (__retres = -1));
+      (_C_30 : (__retres = -1));
       (return_label : 
       (return __retres))
    }
 }
 ========== file tests/c/floats_bsearch.jessie/floats_bsearch.cloc ==========
-[C_10]
+[_C_35]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 52
+line = 46
+begin = 14
+end = 91
+
+[_C_28]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 65
+begin = 8
+end = 9
+
+[_C_31]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 41
+begin = 12
+end = 29
+
+[_C_41]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 38
+begin = 23
+end = 45
+
+[_C_4]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 50
+begin = 2
+end = 5
+
+[_C_32]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 41
+begin = 12
+end = 25
+
+[_C_23]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 66
+begin = 13
+end = 14
+
+[_C_19]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 72
+begin = 8
+end = 17
+
+[_C_42]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 38
+begin = 23
+end = 45
+
+[_C_13]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 63
+begin = 16
+end = 27
+
+[_C_5]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 60
+begin = 19
+end = 22
+
+[_C_36]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 40
+begin = 13
+end = 65
+
+[_C_12]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 63
+begin = 17
+end = 22
+
+[_C_33]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 41
 begin = 18
-end = 26
+end = 29
 
-[C_11]
+[_C_22]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 63
-begin = 17
-end = 22
-
-[C_12]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 63
-begin = 17
-end = 22
-
-[C_13]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 63
-begin = 16
-end = 27
-
-[C_14]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 63
-begin = 16
-end = 27
-
-[C_15]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 63
-begin = 12
-end = 27
-
-[C_16]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 63
-begin = 12
-end = 27
-
-[C_17]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 63
-begin = 4
-end = 7
-
-[C_18]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 64
-begin = 15
-end = 26
-
-[C_19]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 68
-begin = 6
-end = 15
-
-[C_1]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 50
-begin = 2
-end = 5
-
-[C_2]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 50
-begin = 17
-end = 20
-
-[C_3]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 50
-begin = 17
-end = 20
-
-[C_4]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 50
-begin = 2
-end = 5
+line = 66
+begin = 27
+end = 32
 
 [binary_search]
 name = "Function binary_search"
@@ -310,173 +314,167 @@ line = 49
 begin = 4
 end = 17
 
-[C_20]
+[_C_9]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 66
-begin = 27
-end = 32
+line = 52
+begin = 8
+end = 14
 
-[C_5]
+[_C_30]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 60
-begin = 19
-end = 22
+line = 75
+begin = 2
+end = 12
 
-[C_21]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 66
-begin = 27
-end = 32
-
-[C_6]
+[_C_6]
 file = "HOME/tests/c/floats_bsearch.c"
 line = 58
 begin = 10
 end = 74
 
-[C_22]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 66
-begin = 27
-end = 32
-
-[C_7]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 55
-begin = 10
-end = 72
-
-[C_23]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 66
-begin = 13
-end = 14
-
-[C_8]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 52
-begin = 8
-end = 26
-
-[C_24]
+[_C_24]
 file = "HOME/tests/c/floats_bsearch.c"
 line = 66
 begin = 13
 end = 17
 
-[C_9]
+[_C_20]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 66
+begin = 27
+end = 32
+
+[_C_38]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 38
+begin = 13
+end = 45
+
+[_C_3]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 50
+begin = 17
+end = 20
+
+[_C_17]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 63
+begin = 4
+end = 7
+
+[_C_7]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 55
+begin = 10
+end = 72
+
+[_C_27]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 65
+begin = 22
+end = 27
+
+[_C_15]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 63
+begin = 12
+end = 27
+
+[_C_26]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 65
+begin = 22
+end = 27
+
+[_C_10]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 52
+begin = 18
+end = 26
+
+[_C_40]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 38
+begin = 23
+end = 45
+
+[_C_8]
 file = "HOME/tests/c/floats_bsearch.c"
 line = 52
 begin = 8
-end = 14
+end = 26
 
-[C_25]
+[_C_18]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 65
-begin = 22
-end = 27
+line = 64
+begin = 15
+end = 26
 
-[C_26]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 65
-begin = 22
-end = 27
-
-[C_27]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 65
-begin = 22
-end = 27
-
-[C_28]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 65
-begin = 8
-end = 9
-
-[C_29]
+[_C_29]
 file = "HOME/tests/c/floats_bsearch.c"
 line = 65
 begin = 8
 end = 12
 
-[C_30]
+[_C_14]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 70
-begin = 2
-end = 12
+line = 63
+begin = 16
+end = 27
 
-[C_31]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 41
-begin = 12
-end = 29
-
-[C_32]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 41
-begin = 12
-end = 25
-
-[C_33]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 41
-begin = 18
-end = 29
-
-[C_34]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 43
-begin = 14
-end = 54
-
-[C_35]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 46
-begin = 14
-end = 91
-
-[C_36]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 40
-begin = 13
-end = 65
-
-[C_37]
+[_C_37]
 file = "HOME/tests/c/floats_bsearch.c"
 line = 39
 begin = 13
 end = 25
 
-[C_38]
+[_C_2]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 38
-begin = 13
-end = 44
+line = 50
+begin = 17
+end = 20
 
-[C_39]
+[_C_34]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 43
+begin = 14
+end = 54
+
+[_C_16]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 63
+begin = 12
+end = 27
+
+[_C_1]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 50
+begin = 2
+end = 5
+
+[_C_25]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 65
+begin = 22
+end = 27
+
+[_C_39]
 file = "HOME/tests/c/floats_bsearch.c"
 line = 38
 begin = 13
 end = 19
 
-[C_40]
+[_C_11]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 38
-begin = 23
-end = 44
+line = 63
+begin = 17
+end = 22
 
-[C_41]
+[_C_21]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 38
-begin = 23
-end = 44
-
-[C_42]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 38
-begin = 23
-end = 44
+line = 66
+begin = 27
+end = 32
 
 ========== jessie execution ==========
 Generating Why function binary_search
@@ -490,10 +488,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs floats_bsearch.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs floats_bsearch.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs floats_bsearch.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs floats_bsearch.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_full.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -638,13 +637,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: floats_bsearch.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: floats_bsearch.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: floats_bsearch.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include floats_bsearch.depend
 
@@ -655,145 +654,11 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/floats_bsearch.jessie/floats_bsearch.loc ==========
-[binary_search_safety]
-name = "Function binary_search"
-behavior = "Safety"
-file = "HOME/tests/c/floats_bsearch.c"
-line = 49
-begin = 4
-end = 17
-
-[JC_40]
-kind = ArithOverflow
-file = "HOME/tests/c/floats_bsearch.c"
-line = 65
-begin = 22
-end = 27
-
-[JC_41]
-kind = PointerDeref
-file = "HOME/tests/c/floats_bsearch.c"
-line = 66
-begin = 13
-end = 17
-
-[JC_42]
-kind = ArithOverflow
-file = "HOME/tests/c/floats_bsearch.c"
-line = 66
-begin = 27
-end = 32
-
-[JC_43]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 60
-begin = 19
-end = 22
-
-[JC_44]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 52
-begin = 8
-end = 14
-
-[JC_45]
+[JC_63]
 file = "HOME/tests/c/floats_bsearch.c"
 line = 52
 begin = 18
 end = 26
-
-[JC_46]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 52
-begin = 8
-end = 26
-
-[JC_1]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 38
-begin = 13
-end = 19
-
-[JC_47]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_2]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 38
-begin = 23
-end = 44
-
-[JC_48]
-file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
-line = 81
-begin = 6
-end = 2305
-
-[JC_3]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 38
-begin = 23
-end = 44
-
-[JC_49]
-file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
-line = 81
-begin = 6
-end = 2305
-
-[JC_4]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 39
-begin = 13
-end = 25
-
-[JC_5]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 40
-begin = 13
-end = 65
-
-[JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_8]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 38
-begin = 13
-end = 19
-
-[JC_9]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 38
-begin = 23
-end = 44
-
-[JC_50]
-kind = DivByZero
-file = "HOME/tests/c/floats_bsearch.c"
-line = 63
-begin = 16
-end = 27
-
-[binary_search_ensures_failure]
-name = "Function binary_search"
-behavior = "Behavior `failure'"
-file = "HOME/tests/c/floats_bsearch.c"
-line = 49
-begin = 4
-end = 17
 
 [JC_51]
 file = "HOME/tests/c/floats_bsearch.c"
@@ -801,90 +666,19 @@ line = 64
 begin = 15
 end = 26
 
-[JC_52]
+[binary_search_ensures_default]
+name = "Function binary_search"
+behavior = "default behavior"
 file = "HOME/tests/c/floats_bsearch.c"
-line = 52
-begin = 8
-end = 14
+line = 49
+begin = 4
+end = 17
 
-[JC_53]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 52
-begin = 18
-end = 26
-
-[JC_54]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 52
-begin = 8
-end = 26
-
-[JC_55]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_56]
-file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
-line = 81
-begin = 6
-end = 2305
-
-[JC_57]
-file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
-line = 81
-begin = 6
-end = 2305
-
-[JC_58]
-kind = DivByZero
-file = "HOME/tests/c/floats_bsearch.c"
-line = 63
-begin = 16
-end = 27
-
-[JC_59]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 64
-begin = 15
-end = 26
-
-[JC_60]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 58
-begin = 10
-end = 74
-
-[JC_61]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 55
-begin = 10
-end = 72
-
-[JC_62]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 52
-begin = 8
-end = 14
-
-[JC_10]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 38
-begin = 23
-end = 44
-
-[JC_63]
+[JC_45]
 file = "HOME/tests/c/floats_bsearch.c"
 line = 52
 begin = 18
 end = 26
-
-[JC_11]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 39
-begin = 13
-end = 25
 
 [JC_64]
 file = "HOME/tests/c/floats_bsearch.c"
@@ -892,74 +686,11 @@ line = 52
 begin = 8
 end = 26
 
-[JC_12]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 40
-begin = 13
-end = 65
-
-[JC_65]
+[JC_31]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_13]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_66]
-file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
-line = 81
-begin = 6
-end = 2305
-
-[binary_search_ensures_success]
-name = "Function binary_search"
-behavior = "Behavior `success'"
-file = "HOME/tests/c/floats_bsearch.c"
-line = 49
-begin = 4
-end = 17
-
-[JC_14]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_67]
-file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
-line = 81
-begin = 6
-end = 2305
-
-[JC_15]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 41
-begin = 12
-end = 25
-
-[JC_68]
-kind = DivByZero
-file = "HOME/tests/c/floats_bsearch.c"
-line = 63
-begin = 16
-end = 27
-
-[JC_16]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 41
-begin = 18
-end = 29
-
-[JC_69]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 64
-begin = 15
-end = 26
 
 [JC_17]
 file = "HOME/tests/c/floats_bsearch.c"
@@ -967,29 +698,23 @@ line = 41
 begin = 12
 end = 29
 
-[JC_18]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 41
-begin = 12
-end = 25
-
-[JC_19]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 41
-begin = 18
-end = 29
-
-[JC_20]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 41
-begin = 12
-end = 29
-
-[JC_21]
+[JC_55]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_48]
+file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
+line = 81
+begin = 6
+end = 1814
+
+[JC_23]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 43
+begin = 14
+end = 54
 
 [JC_22]
 file = "HOME/"
@@ -997,11 +722,23 @@ line = 0
 begin = -1
 end = -1
 
-[JC_23]
+[JC_5]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 43
-begin = 14
-end = 54
+line = 40
+begin = 13
+end = 65
+
+[JC_67]
+file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
+line = 81
+begin = 6
+end = 1814
+
+[JC_9]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 38
+begin = 23
+end = 45
 
 [JC_24]
 file = "HOME/tests/c/floats_bsearch.c"
@@ -1015,76 +752,76 @@ line = 46
 begin = 14
 end = 91
 
+[JC_41]
+kind = PointerDeref
+file = "HOME/tests/c/floats_bsearch.c"
+line = 66
+begin = 13
+end = 17
+
+[JC_47]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_52]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 52
+begin = 8
+end = 14
+
 [JC_26]
 file = "HOME/tests/c/floats_bsearch.c"
 line = 46
 begin = 14
 end = 91
 
-[JC_27]
-kind = ArithOverflow
+[JC_8]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 50
-begin = 17
-end = 20
+line = 38
+begin = 13
+end = 19
 
-[JC_28]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 52
-begin = 8
-end = 14
-
-[JC_29]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 52
-begin = 18
-end = 26
-
-[JC_30]
+[JC_54]
 file = "HOME/tests/c/floats_bsearch.c"
 line = 52
 begin = 8
 end = 26
 
-[JC_31]
+[JC_13]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[binary_search_ensures_default]
+[binary_search_ensures_success]
 name = "Function binary_search"
-behavior = "default behavior"
+behavior = "Behavior `success'"
 file = "HOME/tests/c/floats_bsearch.c"
 line = 49
 begin = 4
 end = 17
 
-[JC_32]
-file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
-line = 81
-begin = 6
-end = 2305
-
-[JC_33]
-file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
-line = 81
-begin = 6
-end = 2305
-
-[JC_34]
-kind = ArithOverflow
+[binary_search_ensures_failure]
+name = "Function binary_search"
+behavior = "Behavior `failure'"
 file = "HOME/tests/c/floats_bsearch.c"
-line = 63
-begin = 17
-end = 22
+line = 49
+begin = 4
+end = 17
 
-[JC_35]
-kind = DivByZero
+[JC_11]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 63
-begin = 16
-end = 27
+line = 39
+begin = 13
+end = 25
+
+[JC_15]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 41
+begin = 12
+end = 25
 
 [JC_36]
 kind = ArithOverflow
@@ -1093,12 +830,39 @@ line = 63
 begin = 16
 end = 27
 
-[JC_37]
+[JC_39]
+kind = PointerDeref
+file = "HOME/tests/c/floats_bsearch.c"
+line = 65
+begin = 8
+end = 12
+
+[JC_40]
 kind = ArithOverflow
 file = "HOME/tests/c/floats_bsearch.c"
-line = 63
-begin = 12
+line = 65
+begin = 22
 end = 27
+
+[JC_35]
+kind = DivByZero
+file = "HOME/tests/c/floats_bsearch.c"
+line = 63
+begin = 16
+end = 27
+
+[JC_27]
+kind = ArithOverflow
+file = "HOME/tests/c/floats_bsearch.c"
+line = 50
+begin = 17
+end = 20
+
+[JC_69]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 64
+begin = 15
+end = 26
 
 [JC_38]
 file = "HOME/tests/c/floats_bsearch.c"
@@ -1106,12 +870,247 @@ line = 64
 begin = 15
 end = 26
 
-[JC_39]
-kind = PointerDeref
+[JC_12]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 65
+line = 40
+begin = 13
+end = 65
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 52
 begin = 8
-end = 12
+end = 14
+
+[JC_4]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 39
+begin = 13
+end = 25
+
+[JC_62]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 52
+begin = 8
+end = 14
+
+[JC_42]
+kind = ArithOverflow
+file = "HOME/tests/c/floats_bsearch.c"
+line = 66
+begin = 27
+end = 32
+
+[JC_46]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 52
+begin = 8
+end = 26
+
+[JC_61]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 55
+begin = 10
+end = 72
+
+[JC_32]
+file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
+line = 81
+begin = 6
+end = 1814
+
+[JC_56]
+file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
+line = 81
+begin = 6
+end = 1814
+
+[JC_33]
+file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
+line = 81
+begin = 6
+end = 1814
+
+[JC_65]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_29]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 52
+begin = 18
+end = 26
+
+[JC_68]
+kind = DivByZero
+file = "HOME/tests/c/floats_bsearch.c"
+line = 63
+begin = 16
+end = 27
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_16]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 41
+begin = 18
+end = 29
+
+[JC_43]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 60
+begin = 19
+end = 22
+
+[JC_2]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 38
+begin = 23
+end = 45
+
+[JC_34]
+kind = ArithOverflow
+file = "HOME/tests/c/floats_bsearch.c"
+line = 63
+begin = 17
+end = 22
+
+[JC_14]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_53]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 52
+begin = 18
+end = 26
+
+[JC_21]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_49]
+file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
+line = 81
+begin = 6
+end = 1814
+
+[JC_1]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 38
+begin = 13
+end = 19
+
+[JC_37]
+kind = ArithOverflow
+file = "HOME/tests/c/floats_bsearch.c"
+line = 63
+begin = 12
+end = 27
+
+[JC_10]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 38
+begin = 23
+end = 45
+
+[JC_57]
+file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
+line = 81
+begin = 6
+end = 1814
+
+[JC_66]
+file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
+line = 81
+begin = 6
+end = 1814
+
+[JC_59]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 64
+begin = 15
+end = 26
+
+[JC_20]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 41
+begin = 12
+end = 29
+
+[JC_18]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 41
+begin = 12
+end = 25
+
+[JC_3]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 38
+begin = 23
+end = 45
+
+[JC_60]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 58
+begin = 10
+end = 74
+
+[JC_19]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 41
+begin = 18
+end = 29
+
+[JC_50]
+kind = DivByZero
+file = "HOME/tests/c/floats_bsearch.c"
+line = 63
+begin = 16
+end = 27
+
+[binary_search_safety]
+name = "Function binary_search"
+behavior = "Safety"
+file = "HOME/tests/c/floats_bsearch.c"
+line = 49
+begin = 4
+end = 17
+
+[JC_30]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 52
+begin = 8
+end = 26
+
+[JC_58]
+kind = DivByZero
+file = "HOME/tests/c/floats_bsearch.c"
+line = 63
+begin = 16
+end = 27
+
+[JC_28]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 52
+begin = 8
+end = 14
 
 ========== file tests/c/floats_bsearch.jessie/why/floats_bsearch.why ==========
 type charP
@@ -1632,91 +1631,69 @@ let binary_search_ensures_default =
      try
       begin
         try
-         (C_1:
-         (C_4:
-         (loop_2:
          begin
-           (let jessie_<num> = (l := (safe_int32_of_integer_ (0))) in void);
-          (let jessie_<num> =
-          (u := (C_3:
-                (safe_int32_of_integer_ (C_2:
-                                        ((sub_int (integer_of_int32 n_1)) (1)))))) in
+           (let _jessie_<num> = (l := (safe_int32_of_integer_ (0))) in void);
+          (let _jessie_<num> =
+          (u := (safe_int32_of_integer_ ((sub_int (integer_of_int32 n_1)) (1)))) in
           void);
-          while true do
-          { invariant
-              (JC_46:
-              ((JC_44: le_int((0), integer_of_int32(l)))
-              and (JC_45:
-                  le_int(integer_of_int32(u),
-                  sub_int(integer_of_int32(n_1), (1))))))  }
-           begin
-             [ { } unit { true } ];
-            try
-             (C_17:
+          (loop_2:
+          begin
+            while true do
+            { invariant
+                (JC_46:
+                ((JC_44: le_int((0), integer_of_int32(l)))
+                and (JC_45:
+                    le_int(integer_of_int32(u),
+                    sub_int(integer_of_int32(n_1), (1))))))  }
              begin
-               (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
-               then void else (raise (Goto_while_0_break_exc void)));
-              (let jessie_<num> =
-              (m := (C_16:
-                    (safe_int32_of_integer_ (C_15:
-                                            ((add_int (integer_of_int32 !l)) 
-                                             (integer_of_int32 (C_14:
-                                                               (safe_int32_of_integer_ 
-                                                                (C_13:
-                                                                (JC_50:
-                                                                ((computer_div 
-                                                                  (integer_of_int32 
-                                                                   (C_12:
-                                                                   (safe_int32_of_integer_ 
-                                                                    (C_11:
+               [ { } unit { true } ];
+              try
+               begin
+                 (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
+                 then void else (raise (Goto_while_0_break_exc void)));
+                (let _jessie_<num> =
+                (m := (safe_int32_of_integer_ ((add_int (integer_of_int32 !l)) 
+                                               (integer_of_int32 (safe_int32_of_integer_ 
+                                                                  (JC_50:
+                                                                  ((computer_div 
+                                                                    (integer_of_int32 
+                                                                    (safe_int32_of_integer_ 
                                                                     ((sub_int 
                                                                     (integer_of_int32 !u)) 
-                                                                    (integer_of_int32 !l))))))) (2)))))))))))) in
-              void);
-              (assert
-              { (JC_51:
-                (le_int(integer_of_int32(l), integer_of_int32(m))
-                and le_int(integer_of_int32(m), integer_of_int32(u)))) };
-              void); void;
-              (if ((lt_double_ (C_29:
-                               ((safe_acc_ doubleP_doubleM_t_2) (C_28:
-                                                                ((shift t_0) 
-                                                                 (integer_of_int32 !m)))))) v)
-              then
-               (let jessie_<num> =
-               (C_27:
-               (l := (C_26:
-                     (safe_int32_of_integer_ (C_25:
-                                             ((add_int (integer_of_int32 !m)) (1))))))) in
-               void)
-              else
-               (if ((gt_double_ (C_24:
-                                ((safe_acc_ doubleP_doubleM_t_2) (C_23:
-                                                                 ((shift t_0) 
-                                                                  (integer_of_int32 !m)))))) v)
-               then
-                (let jessie_<num> =
-                (C_22:
-                (u := (C_21:
-                      (safe_int32_of_integer_ (C_20:
-                                              ((sub_int (integer_of_int32 !m)) (1))))))) in
-                void)
-               else
-                (C_19:
-                begin
-                  (let jessie_<num> = (__retres := !m) in void);
-                 (raise (Return_label_exc void)) end)));
-              (raise (Loop_continue_exc void)) end) with
-             Loop_continue_exc jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end))) with
-         Goto_while_0_break_exc jessie_<num> ->
-         (let jessie_<num> =
+                                                                    (integer_of_int32 !l))))) (2)))))))) in
+                void);
+                (assert
+                { (JC_51:
+                  (le_int(integer_of_int32(l), integer_of_int32(m))
+                  and le_int(integer_of_int32(m), integer_of_int32(u)))) };
+                void); void;
+                (if ((lt_double_ ((safe_acc_ doubleP_doubleM_t_2) ((shift t_0) 
+                                                                   (integer_of_int32 !m)))) v)
+                then
+                 (let _jessie_<num> =
+                 (l := (safe_int32_of_integer_ ((add_int (integer_of_int32 !m)) (1)))) in
+                 void)
+                else
+                 (if ((gt_double_ ((safe_acc_ doubleP_doubleM_t_2) ((shift t_0) 
+                                                                    (integer_of_int32 !m)))) v)
+                 then
+                  (let _jessie_<num> =
+                  (u := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !m)) (1)))) in
+                  void)
+                 else
+                  begin
+                    (let _jessie_<num> = (__retres := !m) in void);
+                   (raise (Return_label_exc void)) end));
+                (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
+         Goto_while_0_break_exc _jessie_<num> ->
+         (let _jessie_<num> =
          (while_0_break:
-         (C_30:
          begin
            void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
-          !__retres end)) in void) end; (raise (Return_label_exc void)) end
-      with Return_label_exc jessie_<num> ->
+          !__retres end) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_17:
@@ -1752,102 +1729,81 @@ let binary_search_ensures_failure =
      try
       begin
         try
-         (C_1:
-         (C_4:
-         (loop_4:
          begin
-           (let jessie_<num> = (l := (safe_int32_of_integer_ (0))) in void);
-          (let jessie_<num> =
-          (u := (C_3:
-                (safe_int32_of_integer_ (C_2:
-                                        ((sub_int (integer_of_int32 n_1)) (1)))))) in
+           (let _jessie_<num> = (l := (safe_int32_of_integer_ (0))) in void);
+          (let _jessie_<num> =
+          (u := (safe_int32_of_integer_ ((sub_int (integer_of_int32 n_1)) (1)))) in
           void);
-          while true do
-          { invariant
-              ((JC_60:
-               (forall k_0:int.
-                ((lt_int(integer_of_int32(u), k_0)
-                 and le_int(k_0, sub_int(integer_of_int32(n_1), (1)))) ->
-                 lt_double_full(v,
-                 select(doubleP_doubleM_t_2, shift(t_0, k_0))))))
-              and (JC_61:
-                  (forall k:int.
-                   ((le_int((0), k) and lt_int(k, integer_of_int32(l))) ->
-                    lt_double_full(select(doubleP_doubleM_t_2, shift(t_0, k)),
-                    v)))))  }
-           begin
-             [ { } unit reads l,u
-               { (JC_64:
-                 ((JC_62: le_int((0), integer_of_int32(l)))
-                 and (JC_63:
-                     le_int(integer_of_int32(u),
-                     sub_int(integer_of_int32(n_1), (1)))))) } ];
-            try
-             (C_17:
+          (loop_4:
+          begin
+            while true do
+            { invariant
+                ((JC_60:
+                 (forall k_0:int.
+                  ((lt_int(integer_of_int32(u), k_0)
+                   and le_int(k_0, sub_int(integer_of_int32(n_1), (1)))) ->
+                   lt_double_full(v,
+                   select(doubleP_doubleM_t_2, shift(t_0, k_0))))))
+                and (JC_61:
+                    (forall k:int.
+                     ((le_int((0), k) and lt_int(k, integer_of_int32(l))) ->
+                      lt_double_full(select(doubleP_doubleM_t_2,
+                                     shift(t_0, k)),
+                      v)))))  }
              begin
-               (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
-               then void else (raise (Goto_while_0_break_exc void)));
-              (let jessie_<num> =
-              (m := (C_16:
-                    (safe_int32_of_integer_ (C_15:
-                                            ((add_int (integer_of_int32 !l)) 
-                                             (integer_of_int32 (C_14:
-                                                               (safe_int32_of_integer_ 
-                                                                (C_13:
-                                                                (JC_68:
-                                                                ((computer_div 
-                                                                  (integer_of_int32 
-                                                                   (C_12:
-                                                                   (safe_int32_of_integer_ 
-                                                                    (C_11:
+               [ { } unit reads l,u
+                 { (JC_64:
+                   ((JC_62: le_int((0), integer_of_int32(l)))
+                   and (JC_63:
+                       le_int(integer_of_int32(u),
+                       sub_int(integer_of_int32(n_1), (1)))))) } ];
+              try
+               begin
+                 (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
+                 then void else (raise (Goto_while_0_break_exc void)));
+                (let _jessie_<num> =
+                (m := (safe_int32_of_integer_ ((add_int (integer_of_int32 !l)) 
+                                               (integer_of_int32 (safe_int32_of_integer_ 
+                                                                  (JC_68:
+                                                                  ((computer_div 
+                                                                    (integer_of_int32 
+                                                                    (safe_int32_of_integer_ 
                                                                     ((sub_int 
                                                                     (integer_of_int32 !u)) 
-                                                                    (integer_of_int32 !l))))))) (2)))))))))))) in
-              void);
-              [ { } unit reads l,m,u
-                { (JC_69:
-                  (le_int(integer_of_int32(l), integer_of_int32(m))
-                  and le_int(integer_of_int32(m), integer_of_int32(u)))) } ];
-              void;
-              (if ((lt_double_ (C_29:
-                               ((safe_acc_ doubleP_doubleM_t_2) (C_28:
-                                                                ((shift t_0) 
-                                                                 (integer_of_int32 !m)))))) v)
-              then
-               (let jessie_<num> =
-               (C_27:
-               (l := (C_26:
-                     (safe_int32_of_integer_ (C_25:
-                                             ((add_int (integer_of_int32 !m)) (1))))))) in
-               void)
-              else
-               (if ((gt_double_ (C_24:
-                                ((safe_acc_ doubleP_doubleM_t_2) (C_23:
-                                                                 ((shift t_0) 
-                                                                  (integer_of_int32 !m)))))) v)
-               then
-                (let jessie_<num> =
-                (C_22:
-                (u := (C_21:
-                      (safe_int32_of_integer_ (C_20:
-                                              ((sub_int (integer_of_int32 !m)) (1))))))) in
-                void)
-               else
-                (C_19:
-                begin
-                  (let jessie_<num> = (__retres := !m) in void);
-                 (raise (Return_label_exc void)) end)));
-              (raise (Loop_continue_exc void)) end) with
-             Loop_continue_exc jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end))) with
-         Goto_while_0_break_exc jessie_<num> ->
-         (let jessie_<num> =
+                                                                    (integer_of_int32 !l))))) (2)))))))) in
+                void);
+                [ { } unit reads l,m,u
+                  { (JC_69:
+                    (le_int(integer_of_int32(l), integer_of_int32(m))
+                    and le_int(integer_of_int32(m), integer_of_int32(u)))) } ];
+                void;
+                (if ((lt_double_ ((safe_acc_ doubleP_doubleM_t_2) ((shift t_0) 
+                                                                   (integer_of_int32 !m)))) v)
+                then
+                 (let _jessie_<num> =
+                 (l := (safe_int32_of_integer_ ((add_int (integer_of_int32 !m)) (1)))) in
+                 void)
+                else
+                 (if ((gt_double_ ((safe_acc_ doubleP_doubleM_t_2) ((shift t_0) 
+                                                                    (integer_of_int32 !m)))) v)
+                 then
+                  (let _jessie_<num> =
+                  (u := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !m)) (1)))) in
+                  void)
+                 else
+                  begin
+                    (let _jessie_<num> = (__retres := !m) in void);
+                   (raise (Return_label_exc void)) end));
+                (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
+         Goto_while_0_break_exc _jessie_<num> ->
+         (let _jessie_<num> =
          (while_0_break:
-         (C_30:
          begin
            void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
-          !__retres end)) in void) end; (raise (Return_label_exc void)) end
-      with Return_label_exc jessie_<num> ->
+          !__retres end) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_25:
@@ -1882,91 +1838,69 @@ let binary_search_ensures_success =
      try
       begin
         try
-         (C_1:
-         (C_4:
-         (loop_3:
          begin
-           (let jessie_<num> = (l := (safe_int32_of_integer_ (0))) in void);
-          (let jessie_<num> =
-          (u := (C_3:
-                (safe_int32_of_integer_ (C_2:
-                                        ((sub_int (integer_of_int32 n_1)) (1)))))) in
+           (let _jessie_<num> = (l := (safe_int32_of_integer_ (0))) in void);
+          (let _jessie_<num> =
+          (u := (safe_int32_of_integer_ ((sub_int (integer_of_int32 n_1)) (1)))) in
           void);
-          while true do
-          { invariant (JC_56: true)  }
-           begin
-             [ { } unit reads l,u
-               { (JC_54:
-                 ((JC_52: le_int((0), integer_of_int32(l)))
-                 and (JC_53:
-                     le_int(integer_of_int32(u),
-                     sub_int(integer_of_int32(n_1), (1)))))) } ];
-            try
-             (C_17:
+          (loop_3:
+          begin
+            while true do
+            { invariant (JC_56: true)  }
              begin
-               (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
-               then void else (raise (Goto_while_0_break_exc void)));
-              (let jessie_<num> =
-              (m := (C_16:
-                    (safe_int32_of_integer_ (C_15:
-                                            ((add_int (integer_of_int32 !l)) 
-                                             (integer_of_int32 (C_14:
-                                                               (safe_int32_of_integer_ 
-                                                                (C_13:
-                                                                (JC_58:
-                                                                ((computer_div 
-                                                                  (integer_of_int32 
-                                                                   (C_12:
-                                                                   (safe_int32_of_integer_ 
-                                                                    (C_11:
+               [ { } unit reads l,u
+                 { (JC_54:
+                   ((JC_52: le_int((0), integer_of_int32(l)))
+                   and (JC_53:
+                       le_int(integer_of_int32(u),
+                       sub_int(integer_of_int32(n_1), (1)))))) } ];
+              try
+               begin
+                 (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
+                 then void else (raise (Goto_while_0_break_exc void)));
+                (let _jessie_<num> =
+                (m := (safe_int32_of_integer_ ((add_int (integer_of_int32 !l)) 
+                                               (integer_of_int32 (safe_int32_of_integer_ 
+                                                                  (JC_58:
+                                                                  ((computer_div 
+                                                                    (integer_of_int32 
+                                                                    (safe_int32_of_integer_ 
                                                                     ((sub_int 
                                                                     (integer_of_int32 !u)) 
-                                                                    (integer_of_int32 !l))))))) (2)))))))))))) in
-              void);
-              [ { } unit reads l,m,u
-                { (JC_59:
-                  (le_int(integer_of_int32(l), integer_of_int32(m))
-                  and le_int(integer_of_int32(m), integer_of_int32(u)))) } ];
-              void;
-              (if ((lt_double_ (C_29:
-                               ((safe_acc_ doubleP_doubleM_t_2) (C_28:
-                                                                ((shift t_0) 
-                                                                 (integer_of_int32 !m)))))) v)
-              then
-               (let jessie_<num> =
-               (C_27:
-               (l := (C_26:
-                     (safe_int32_of_integer_ (C_25:
-                                             ((add_int (integer_of_int32 !m)) (1))))))) in
-               void)
-              else
-               (if ((gt_double_ (C_24:
-                                ((safe_acc_ doubleP_doubleM_t_2) (C_23:
-                                                                 ((shift t_0) 
-                                                                  (integer_of_int32 !m)))))) v)
-               then
-                (let jessie_<num> =
-                (C_22:
-                (u := (C_21:
-                      (safe_int32_of_integer_ (C_20:
-                                              ((sub_int (integer_of_int32 !m)) (1))))))) in
-                void)
-               else
-                (C_19:
-                begin
-                  (let jessie_<num> = (__retres := !m) in void);
-                 (raise (Return_label_exc void)) end)));
-              (raise (Loop_continue_exc void)) end) with
-             Loop_continue_exc jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end))) with
-         Goto_while_0_break_exc jessie_<num> ->
-         (let jessie_<num> =
+                                                                    (integer_of_int32 !l))))) (2)))))))) in
+                void);
+                [ { } unit reads l,m,u
+                  { (JC_59:
+                    (le_int(integer_of_int32(l), integer_of_int32(m))
+                    and le_int(integer_of_int32(m), integer_of_int32(u)))) } ];
+                void;
+                (if ((lt_double_ ((safe_acc_ doubleP_doubleM_t_2) ((shift t_0) 
+                                                                   (integer_of_int32 !m)))) v)
+                then
+                 (let _jessie_<num> =
+                 (l := (safe_int32_of_integer_ ((add_int (integer_of_int32 !m)) (1)))) in
+                 void)
+                else
+                 (if ((gt_double_ ((safe_acc_ doubleP_doubleM_t_2) ((shift t_0) 
+                                                                    (integer_of_int32 !m)))) v)
+                 then
+                  (let _jessie_<num> =
+                  (u := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !m)) (1)))) in
+                  void)
+                 else
+                  begin
+                    (let _jessie_<num> = (__retres := !m) in void);
+                   (raise (Return_label_exc void)) end));
+                (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
+         Goto_while_0_break_exc _jessie_<num> ->
+         (let _jessie_<num> =
          (while_0_break:
-         (C_30:
          begin
            void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
-          !__retres end)) in void) end; (raise (Return_label_exc void)) end
-      with Return_label_exc jessie_<num> ->
+          !__retres end) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_23:
@@ -2001,99 +1935,79 @@ let binary_search_safety =
      try
       begin
         try
-         (C_1:
-         (C_4:
-         (loop_1:
          begin
-           (let jessie_<num> = (l := (safe_int32_of_integer_ (0))) in void);
-          (let jessie_<num> =
-          (u := (C_3:
-                (JC_27:
-                (int32_of_integer_ (C_2:
-                                   ((sub_int (integer_of_int32 n_1)) (1))))))) in
+           (let _jessie_<num> = (l := (safe_int32_of_integer_ (0))) in void);
+          (let _jessie_<num> =
+          (u := (JC_27:
+                (int32_of_integer_ ((sub_int (integer_of_int32 n_1)) (1))))) in
           void);
-          while true do
-          { invariant (JC_32: true)
-            variant (JC_43 : sub_int(integer_of_int32(u),
-                             integer_of_int32(l))) }
-           begin
-             [ { } unit reads l,u
-               { (JC_30:
-                 ((JC_28: le_int((0), integer_of_int32(l)))
-                 and (JC_29:
-                     le_int(integer_of_int32(u),
-                     sub_int(integer_of_int32(n_1), (1)))))) } ];
-            try
-             (C_17:
+          (loop_1:
+          begin
+            while true do
+            { invariant (JC_32: true)
+              variant (JC_43 : sub_int(integer_of_int32(u),
+                               integer_of_int32(l))) }
              begin
-               (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
-               then void else (raise (Goto_while_0_break_exc void)));
-              (let jessie_<num> =
-              (m := (C_16:
-                    (JC_37:
-                    (int32_of_integer_ (C_15:
-                                       ((add_int (integer_of_int32 !l)) 
-                                        (integer_of_int32 (C_14:
-                                                          (JC_36:
-                                                          (int32_of_integer_ 
-                                                           (C_13:
-                                                           (JC_35:
-                                                           ((computer_div_ 
-                                                             (integer_of_int32 
-                                                              (C_12:
-                                                              (JC_34:
-                                                              (int32_of_integer_ 
-                                                               (C_11:
-                                                               ((sub_int 
-                                                                 (integer_of_int32 !u)) 
-                                                                (integer_of_int32 !l)))))))) (2)))))))))))))) in
-              void);
-              [ { } unit reads l,m,u
-                { (JC_38:
-                  (le_int(integer_of_int32(l), integer_of_int32(m))
-                  and le_int(integer_of_int32(m), integer_of_int32(u)))) } ];
-              void;
-              (if ((lt_double_ (C_29:
-                               (JC_39:
-                               ((((offset_acc_ doubleP_t_2_alloc_table) doubleP_doubleM_t_2) t_0) 
-                                (integer_of_int32 !m))))) v)
-              then
-               (let jessie_<num> =
-               (C_27:
-               (l := (C_26:
-                     (JC_40:
-                     (int32_of_integer_ (C_25:
-                                        ((add_int (integer_of_int32 !m)) (1)))))))) in
-               void)
-              else
-               (if ((gt_double_ (C_24:
-                                (JC_41:
-                                ((((offset_acc_ doubleP_t_2_alloc_table) doubleP_doubleM_t_2) t_0) 
-                                 (integer_of_int32 !m))))) v)
-               then
-                (let jessie_<num> =
-                (C_22:
-                (u := (C_21:
-                      (JC_42:
-                      (int32_of_integer_ (C_20:
-                                         ((sub_int (integer_of_int32 !m)) (1)))))))) in
-                void)
-               else
-                (C_19:
-                begin
-                  (let jessie_<num> = (__retres := !m) in void);
-                 (raise (Return_label_exc void)) end)));
-              (raise (Loop_continue_exc void)) end) with
-             Loop_continue_exc jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end))) with
-         Goto_while_0_break_exc jessie_<num> ->
-         (let jessie_<num> =
+               [ { } unit reads l,u
+                 { (JC_30:
+                   ((JC_28: le_int((0), integer_of_int32(l)))
+                   and (JC_29:
+                       le_int(integer_of_int32(u),
+                       sub_int(integer_of_int32(n_1), (1)))))) } ];
+              try
+               begin
+                 (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
+                 then void else (raise (Goto_while_0_break_exc void)));
+                (let _jessie_<num> =
+                (m := (JC_37:
+                      (int32_of_integer_ ((add_int (integer_of_int32 !l)) 
+                                          (integer_of_int32 (JC_36:
+                                                            (int32_of_integer_ 
+                                                             (JC_35:
+                                                             ((computer_div_ 
+                                                               (integer_of_int32 
+                                                                (JC_34:
+                                                                (int32_of_integer_ 
+                                                                 ((sub_int 
+                                                                   (integer_of_int32 !u)) 
+                                                                  (integer_of_int32 !l)))))) (2)))))))))) in
+                void);
+                [ { } unit reads l,m,u
+                  { (JC_38:
+                    (le_int(integer_of_int32(l), integer_of_int32(m))
+                    and le_int(integer_of_int32(m), integer_of_int32(u)))) } ];
+                void;
+                (if ((lt_double_ (JC_39:
+                                 ((((offset_acc_ doubleP_t_2_alloc_table) doubleP_doubleM_t_2) t_0) 
+                                  (integer_of_int32 !m)))) v)
+                then
+                 (let _jessie_<num> =
+                 (l := (JC_40:
+                       (int32_of_integer_ ((add_int (integer_of_int32 !m)) (1))))) in
+                 void)
+                else
+                 (if ((gt_double_ (JC_41:
+                                  ((((offset_acc_ doubleP_t_2_alloc_table) doubleP_doubleM_t_2) t_0) 
+                                   (integer_of_int32 !m)))) v)
+                 then
+                  (let _jessie_<num> =
+                  (u := (JC_42:
+                        (int32_of_integer_ ((sub_int (integer_of_int32 !m)) (1))))) in
+                  void)
+                 else
+                  begin
+                    (let _jessie_<num> = (__retres := !m) in void);
+                   (raise (Return_label_exc void)) end));
+                (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
+         Goto_while_0_break_exc _jessie_<num> ->
+         (let _jessie_<num> =
          (while_0_break:
-         (C_30:
          begin
            void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
-          !__retres end)) in void) end; (raise (Return_label_exc void)) end
-      with Return_label_exc jessie_<num> ->
+          !__retres end) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end)) { true }
 

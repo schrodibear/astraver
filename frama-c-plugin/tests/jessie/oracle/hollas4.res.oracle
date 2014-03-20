@@ -1,6 +1,6 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only hollas4.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD hollas4.c"
-hollas4.c:4:[kernel] warning: found two contracts. Merging them
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only hollas4.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/hollas4.c"
+PPCHOME/tests/jessie/hollas4.c:4:[kernel] warning: found two contracts. Merging them
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir hollas4.jessie
 [jessie] File hollas4.jessie/hollas4.jc written.
@@ -41,21 +41,21 @@ tag voidP = {
 type voidP = [voidP]
 
 int32 foo(int32 a)
-  requires (C_17 : ((C_18 : (0 <= a)) && (C_19 : (a <= 10))));
-  requires (C_14 : ((C_15 : (0 <= a)) && (C_16 : (a <= 11))));
+  requires (_C_17 : ((_C_18 : (0 <= a)) && (_C_19 : (a <= 10))));
+  requires (_C_14 : ((_C_15 : (0 <= a)) && (_C_16 : (a <= 11))));
 behavior default:
-  ensures (C_7 : (((C_9 : (0 <= \result)) && (C_10 : (\result <= 11))) &&
-                   ((C_12 : (0 <= \result)) && (C_13 : (\result <= 10)))));
+  ensures (_C_7 : (((_C_9 : (0 <= \result)) && (_C_10 : (\result <= 11))) &&
+                    ((_C_12 : (0 <= \result)) && (_C_13 : (\result <= 10)))));
 {  
    (var int32 __retres);
    
    {  (if (a == 11) then 
-      {  (C_5 : (__retres = (C_4 : ((C_3 : (1 /
-                                             (C_2 : ((C_1 : (a - 11)) :> int32)))) :> int32))));
+      {  (_C_5 : (__retres = (_C_4 : ((_C_3 : (1 /
+                                                (_C_2 : ((_C_1 : (a - 11)) :> int32)))) :> int32))));
          
          (goto return_label)
       } else ());
-      (C_6 : (__retres = a));
+      (_C_6 : (__retres = a));
       (return_label : 
       (return __retres))
    }
@@ -439,25 +439,19 @@ let foo_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (C_6:
       begin
         (if ((eq_int_ (integer_of_int32 a)) (11))
         then
-         (C_5:
          begin
-           (let jessie_<somenum> =
-           (__retres := (C_4:
-                        (safe_int32_of_integer_ (C_3:
-                                                (JC_<somenum>:
+           (let _jessie_<somenum> =
+           (__retres := (safe_int32_of_integer_ (JC_<somenum>:
                                                 ((computer_div (1)) (integer_of_int32 
-                                                                    (C_2:
                                                                     (safe_int32_of_integer_ 
-                                                                    (C_1:
                                                                     ((sub_int 
-                                                                    (integer_of_int32 a)) (11)))))))))))) in
-           void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (__retres := a) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+                                                                    (integer_of_int32 a)) (11)))))))) in
+           void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := a) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -479,27 +473,21 @@ let foo_safety =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (C_6:
       begin
         (if ((eq_int_ (integer_of_int32 a)) (11))
         then
-         (C_5:
          begin
-           (let jessie_<somenum> =
-           (__retres := (C_4:
-                        (JC_<somenum>:
-                        (int32_of_integer_ (C_3:
-                                           (JC_<somenum>:
+           (let _jessie_<somenum> =
+           (__retres := (JC_<somenum>:
+                        (int32_of_integer_ (JC_<somenum>:
                                            ((computer_div_ (1)) (integer_of_int32 
-                                                                 (C_2:
                                                                  (JC_<somenum>:
                                                                  (int32_of_integer_ 
-                                                                  (C_1:
                                                                   ((sub_int 
-                                                                    (integer_of_int32 a)) (11)))))))))))))) in
-           void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (__retres := a) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+                                                                    (integer_of_int32 a)) (11)))))))))) in
+           void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := a) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 

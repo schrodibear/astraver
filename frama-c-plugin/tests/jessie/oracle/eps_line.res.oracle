@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only eps_line.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD eps_line.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only eps_line.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/eps_line.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir eps_line.jessie
 [jessie] File eps_line.jessie/eps_line.jc written.
@@ -37,51 +37,53 @@ logic integer l_sign(real x) =
 (if (x >= 0.0) then 1 else (- 1))
 
 integer sign(double x, double e1, double e2)
-  requires (C_7 : ((C_8 : ((e1 :> real) <= ((x :> real) - \double_exact(x)))) &&
-                    (C_9 : (((x :> real) - \double_exact(x)) <= (e2 :> real)))));
+  requires (_C_7 : ((_C_8 : ((e1 :> real) <=
+                              ((x :> real) - \double_exact(x)))) &&
+                     (_C_9 : (((x :> real) - \double_exact(x)) <=
+                               (e2 :> real)))));
 behavior default:
-  ensures (C_4 : ((C_5 : ((\result != 0) ==>
-                           (\result == l_sign(\double_exact(\at(x,Old)))))) &&
-                   (C_6 : (\integer_abs(\result) <= 1))));
+  ensures (_C_4 : ((_C_5 : ((\result != 0) ==>
+                             (\result == l_sign(\double_exact(\at(x,Old)))))) &&
+                    (_C_6 : (\integer_abs(\result) <= 1))));
 {  
    (var integer __retres);
    
    {  (if (x > e2) then 
-      {  (C_1 : (__retres = 1));
+      {  (_C_1 : (__retres = 1));
          
          (goto return_label)
       } else ());
       (if (x < e1) then 
-      {  (C_2 : (__retres = -1));
+      {  (_C_2 : (__retres = -1));
          
          (goto return_label)
       } else ());
-      (C_3 : (__retres = 0));
+      (_C_3 : (__retres = 0));
       (return_label : 
       (return __retres))
    }
 }
 
 integer eps_line(double sx, double sy, double vx, double vy)
-  requires (C_25 : ((((((((C_32 : ((sx :> real) == \double_exact(sx))) &&
-                           (C_33 : ((sy :> real) == \double_exact(sy)))) &&
-                          (C_34 : ((vx :> real) == \double_exact(vx)))) &&
-                         (C_35 : ((vy :> real) == \double_exact(vy)))) &&
-                        (C_36 : (\real_abs((sx :> real)) <= 100.0))) &&
-                       (C_37 : (\real_abs((sy :> real)) <= 100.0))) &&
-                      (C_38 : (\real_abs((vx :> real)) <= 1.0))) &&
-                     (C_39 : (\real_abs((vy :> real)) <= 1.0))));
+  requires (_C_25 : ((((((((_C_32 : ((sx :> real) == \double_exact(sx))) &&
+                            (_C_33 : ((sy :> real) == \double_exact(sy)))) &&
+                           (_C_34 : ((vx :> real) == \double_exact(vx)))) &&
+                          (_C_35 : ((vy :> real) == \double_exact(vy)))) &&
+                         (_C_36 : (\real_abs((sx :> real)) <= 100.0))) &&
+                        (_C_37 : (\real_abs((sy :> real)) <= 100.0))) &&
+                       (_C_38 : (\real_abs((vx :> real)) <= 1.0))) &&
+                      (_C_39 : (\real_abs((vy :> real)) <= 1.0))));
 behavior default:
-  ensures (C_24 : ((\result != 0) ==>
-                    (\result ==
-                      (l_sign(((\double_exact(\at(sx,Old)) *
-                                 \double_exact(\at(vx,Old))) +
-                                (\double_exact(\at(sy,Old)) *
-                                  \double_exact(\at(vy,Old))))) *
-                        l_sign(((\double_exact(\at(sx,Old)) *
-                                  \double_exact(\at(vy,Old))) -
+  ensures (_C_24 : ((\result != 0) ==>
+                     (\result ==
+                       (l_sign(((\double_exact(\at(sx,Old)) *
+                                  \double_exact(\at(vx,Old))) +
                                  (\double_exact(\at(sy,Old)) *
-                                   \double_exact(\at(vx,Old)))))))));
+                                   \double_exact(\at(vy,Old))))) *
+                         l_sign(((\double_exact(\at(sx,Old)) *
+                                   \double_exact(\at(vy,Old))) -
+                                  (\double_exact(\at(sy,Old)) *
+                                    \double_exact(\at(vx,Old)))))))));
 {  
    (var integer s1);
    
@@ -89,15 +91,15 @@ behavior default:
    
    (var integer __retres_0);
    
-   {  (C_15 : (s1 = (C_14 : sign((C_12 : ((C_11 : (sx * vx)) +
-                                           (C_10 : (sy * vy)))),
-                                 (C_13 : (- (0x1.9000000001ap-45 :> double))),
-                                 (0x1.9000000001ap-45 :> double)))));
-      (C_21 : (s2 = (C_20 : sign((C_18 : ((C_17 : (sx * vy)) -
-                                           (C_16 : (sy * vx)))),
-                                 (C_19 : (- (0x1.9000000001ap-45 :> double))),
-                                 (0x1.9000000001ap-45 :> double)))));
-      (C_23 : (__retres_0 = (C_22 : (s1 * s2))));
+   {  (_C_15 : (s1 = (_C_14 : sign((_C_12 : ((_C_11 : (sx * vx)) +
+                                              (_C_10 : (sy * vy)))),
+                                   (_C_13 : (- (0x1.9000000001ap-45 :> double))),
+                                   (0x1.9000000001ap-45 :> double)))));
+      (_C_21 : (s2 = (_C_20 : sign((_C_18 : ((_C_17 : (sx * vy)) -
+                                              (_C_16 : (sy * vx)))),
+                                   (_C_19 : (- (0x1.9000000001ap-45 :> double))),
+                                   (0x1.9000000001ap-45 :> double)))));
+      (_C_23 : (__retres_0 = (_C_22 : (s1 * s2))));
       
       (return __retres_0)
    }
@@ -435,47 +437,36 @@ let eps_line_ensures_default =
      (let s1_1 = ref (any_int void) in
      (let s2_1 = ref (any_int void) in
      (let __retres_0 = ref (any_int void) in
-     (C_15:
-     (C_21:
-     (C_23:
      begin
-       (let jessie_<somenum> =
-       (s1_1 := (C_14:
-                (let jessie_<somenum> =
-                (C_12:
+       (let _jessie_<somenum> =
+       (s1_1 := (let _jessie_<somenum> =
                 (JC_<somenum>:
-                (((add_double_safe nearest_even) (C_11:
-                                                 (JC_<somenum>:
-                                                 (((mul_double_safe nearest_even) sx) vx)))) 
-                 (C_10: (JC_<somenum>: (((mul_double_safe nearest_even) sy) vy)))))) in
-                (let jessie_<somenum> =
-                (C_13:
+                (((add_double_safe nearest_even) (JC_<somenum>:
+                                                 (((mul_double_safe nearest_even) sx) vx))) 
+                 (JC_<somenum>: (((mul_double_safe nearest_even) sy) vy)))) in
+                (let _jessie_<somenum> =
                 (JC_<somenum>:
-                ((neg_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1.9000000001ap-45)))) in
-                (let jessie_<somenum> =
+                ((neg_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1.9000000001ap-45))) in
+                (let _jessie_<somenum> =
                 ((double_of_real_safe nearest_even) 0x1.9000000001ap-45) in
-                (JC_<somenum>: (((sign jessie_<somenum>) jessie_<somenum>) jessie_<somenum>))))))) in
+                (JC_<somenum>: (((sign _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
        void);
-      (let jessie_<somenum> =
-      (s2_1 := (C_20:
-               (let jessie_<somenum> =
-               (C_18:
+      (let _jessie_<somenum> =
+      (s2_1 := (let _jessie_<somenum> =
                (JC_<somenum>:
-               (((sub_double_safe nearest_even) (C_17:
-                                                (JC_<somenum>:
-                                                (((mul_double_safe nearest_even) sx) vy)))) 
-                (C_16: (JC_<somenum>: (((mul_double_safe nearest_even) sy) vx)))))) in
-               (let jessie_<somenum> =
-               (C_19:
+               (((sub_double_safe nearest_even) (JC_<somenum>:
+                                                (((mul_double_safe nearest_even) sx) vy))) 
+                (JC_<somenum>: (((mul_double_safe nearest_even) sy) vx)))) in
+               (let _jessie_<somenum> =
                (JC_<somenum>:
-               ((neg_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1.9000000001ap-45)))) in
-               (let jessie_<somenum> =
+               ((neg_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1.9000000001ap-45))) in
+               (let _jessie_<somenum> =
                ((double_of_real_safe nearest_even) 0x1.9000000001ap-45) in
-               (JC_<somenum>: (((sign jessie_<somenum>) jessie_<somenum>) jessie_<somenum>))))))) in
+               (JC_<somenum>: (((sign _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
       void);
-      (let jessie_<somenum> = (__retres_0 := (C_22: ((mul_int !s1_1) !s2_1))) in
-      void); (return := !__retres_0); (raise Return) end)))))); absurd  end
-   with Return -> !return end))
+      (let _jessie_<somenum> = (__retres_0 := ((mul_int !s1_1) !s2_1)) in void);
+      (return := !__retres_0); (raise Return) end))); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     ((result <> (0)) ->
      (result = mul_int(l_sign(add_real(mul_real(double_exact(sx),
@@ -504,49 +495,38 @@ let eps_line_safety =
      (let s1_1 = ref (any_int void) in
      (let s2_1 = ref (any_int void) in
      (let __retres_0 = ref (any_int void) in
-     (C_15:
-     (C_21:
-     (C_23:
      begin
-       (let jessie_<somenum> =
-       (s1_1 := (C_14:
-                (let jessie_<somenum> =
-                (C_12:
+       (let _jessie_<somenum> =
+       (s1_1 := (let _jessie_<somenum> =
                 (JC_<somenum>:
-                (((add_double nearest_even) (C_11:
-                                            (JC_<somenum>:
-                                            (((mul_double nearest_even) sx) vx)))) 
-                 (C_10: (JC_<somenum>: (((mul_double nearest_even) sy) vy)))))) in
-                (let jessie_<somenum> =
-                (C_13:
+                (((add_double nearest_even) (JC_<somenum>:
+                                            (((mul_double nearest_even) sx) vx))) 
+                 (JC_<somenum>: (((mul_double nearest_even) sy) vy)))) in
+                (let _jessie_<somenum> =
                 (JC_<somenum>:
                 ((neg_double nearest_even) (JC_<somenum>:
-                                           ((double_of_real nearest_even) 0x1.9000000001ap-45))))) in
-                (let jessie_<somenum> =
+                                           ((double_of_real nearest_even) 0x1.9000000001ap-45)))) in
+                (let _jessie_<somenum> =
                 (JC_<somenum>: ((double_of_real nearest_even) 0x1.9000000001ap-45)) in
-                (JC_<somenum>: (((sign_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>))))))) in
+                (JC_<somenum>: (((sign_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
        void);
-      (let jessie_<somenum> =
-      (s2_1 := (C_20:
-               (let jessie_<somenum> =
-               (C_18:
+      (let _jessie_<somenum> =
+      (s2_1 := (let _jessie_<somenum> =
                (JC_<somenum>:
-               (((sub_double nearest_even) (C_17:
-                                           (JC_<somenum>:
-                                           (((mul_double nearest_even) sx) vy)))) 
-                (C_16: (JC_<somenum>: (((mul_double nearest_even) sy) vx)))))) in
-               (let jessie_<somenum> =
-               (C_19:
+               (((sub_double nearest_even) (JC_<somenum>:
+                                           (((mul_double nearest_even) sx) vy))) 
+                (JC_<somenum>: (((mul_double nearest_even) sy) vx)))) in
+               (let _jessie_<somenum> =
                (JC_<somenum>:
                ((neg_double nearest_even) (JC_<somenum>:
-                                          ((double_of_real nearest_even) 0x1.9000000001ap-45))))) in
-               (let jessie_<somenum> =
+                                          ((double_of_real nearest_even) 0x1.9000000001ap-45)))) in
+               (let _jessie_<somenum> =
                (JC_<somenum>: ((double_of_real nearest_even) 0x1.9000000001ap-45)) in
-               (JC_<somenum>: (((sign_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>))))))) in
+               (JC_<somenum>: (((sign_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
       void);
-      (let jessie_<somenum> = (__retres_0 := (C_22: ((mul_int !s1_1) !s2_1))) in
-      void); (return := !__retres_0); (raise Return) end)))))); absurd  end
-   with Return -> !return end)) { true }
+      (let _jessie_<somenum> = (__retres_0 := ((mul_int !s1_1) !s2_1)) in void);
+      (return := !__retres_0); (raise Return) end))); absurd  end with
+   Return -> !return end)) { true }
 
 let sign_ensures_default =
  fun (x_1 : double) (e1 : double) (e2 : double) ->
@@ -563,22 +543,19 @@ let sign_ensures_default =
    begin
      (let __retres = ref (any_int void) in
      try
-      (C_3:
       begin
         (if ((gt_double_ x_1) e2)
         then
-         (C_1:
          begin
-           (let jessie_<somenum> = (__retres := (1)) in void);
-          (raise (Return_label_exc void)) end) else void);
+           (let _jessie_<somenum> = (__retres := (1)) in void);
+          (raise (Return_label_exc void)) end else void);
        (if ((lt_double_ x_1) e1)
        then
-        (C_2:
         begin
-          (let jessie_<somenum> = (__retres := (neg_int (1))) in void);
-         (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (__retres := (0)) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+          (let _jessie_<somenum> = (__retres := (neg_int (1))) in void);
+         (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := (0)) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -600,22 +577,19 @@ let sign_safety =
    begin
      (let __retres = ref (any_int void) in
      try
-      (C_3:
       begin
         (if ((gt_double_ x_1) e2)
         then
-         (C_1:
          begin
-           (let jessie_<somenum> = (__retres := (1)) in void);
-          (raise (Return_label_exc void)) end) else void);
+           (let _jessie_<somenum> = (__retres := (1)) in void);
+          (raise (Return_label_exc void)) end else void);
        (if ((lt_double_ x_1) e1)
        then
-        (C_2:
         begin
-          (let jessie_<somenum> = (__retres := (neg_int (1))) in void);
-         (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (__retres := (0)) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+          (let _jessie_<somenum> = (__retres := (neg_int (1))) in void);
+         (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := (0)) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 
@@ -661,7 +635,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po5.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "88" begin = "44" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "90" begin = "47" end = "78"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -671,7 +645,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po7.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "89" begin = "33" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "91" begin = "35" end = "66"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -701,7 +675,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po13.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "92" begin = "44" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "94" begin = "47" end = "78"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -711,7 +685,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po15.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "93" begin = "33" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "95" begin = "35" end = "66"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

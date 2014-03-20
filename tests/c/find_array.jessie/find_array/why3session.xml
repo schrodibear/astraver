@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -35,10 +35,12 @@
     locfile="../../find_array.c"
     loclnum="27" loccnumb="4" loccnume="14"
     expl="VC for find_array_ensures_default"
-    sum="47f7f74041734b8a6165786a343831d4"
+    sum="0a1494f45efd3b2e97a38e422c81f523"
     proved="true"
     expanded="true"
-    shape="iainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2ainfix &lt;=c0ainteger_of_int32V16Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V16Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V18FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V14c1Fainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V20ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix &lt;V21ainteger_of_int32V10Aainfix &lt;=c0V21FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V22ainteger_of_int32V2Iainfix &lt;V22ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V20V22FIainfix =V20V19FIainfix =ainteger_of_int32V19ainfix -ainteger_of_int32V14c1FIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V23ainteger_of_int32V2Iainfix &lt;V23ainteger_of_int32V10Aainfix &lt;=c0V23FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V24ainteger_of_int32V2Iainfix &lt;V24ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V24FFAainfix &lt;=c0ainteger_of_int32V6Aainfix &lt;ainteger_of_int32V8ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V25ainteger_of_int32V2Iainfix &lt;V25ainteger_of_int32V6Aainfix &lt;=c0V25FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V26ainteger_of_int32V2Iainfix &lt;V26ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V8V26FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+    shape="iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V16ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V10Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V16V18FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1Fainfix &lt;=c0ainteger_of_int32V20Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix &lt;V21ainteger_of_int32V20Aainfix &lt;=c0V21FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V22ainteger_of_int32V2Iainfix &lt;V22ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V22FIainfix =V20V19FIainfix =ainteger_of_int32V19ainfix +ainteger_of_int32V14c1Fainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2INainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V23ainteger_of_int32V2Iainfix &lt;V23ainteger_of_int32V10Aainfix &lt;=c0V23FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V24ainteger_of_int32V2Iainfix &lt;V24ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V24FFAainfix &lt;=c0ainteger_of_int32V6Aainfix &lt;ainteger_of_int32V8ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V25ainteger_of_int32V2Iainfix &lt;V25ainteger_of_int32V6Aainfix &lt;=c0V25FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V26ainteger_of_int32V2Iainfix &lt;V26ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V8V26FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function find_array, default behavior"/>
     <label
@@ -52,10 +54,12 @@
       locfile="../../find_array.c"
       loclnum="27" loccnumb="4" loccnume="14"
       expl="1. loop invariant init"
-      sum="4d84fed33816007bc45b3f54e8491d63"
+      sum="1e27e313f0f673234a4573488b3a1479"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=c0ainteger_of_int32V6Aainfix &lt;ainteger_of_int32V8ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V9ainteger_of_int32V2Iainfix &lt;V9ainteger_of_int32V6Aainfix &lt;=c0V9FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V10ainteger_of_int32V2Iainfix &lt;V10ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V8V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+      shape="loop invariant initainfix &lt;=c0ainteger_of_int32V6Aainfix &lt;ainteger_of_int32V8ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V9ainteger_of_int32V2Iainfix &lt;V9ainteger_of_int32V6Aainfix &lt;=c0V9FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V10ainteger_of_int32V2Iainfix &lt;V10ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V8V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function find_array, default behavior"/>
       <label
@@ -90,10 +94,12 @@
       locfile="../../find_array.c"
       loclnum="27" loccnumb="4" loccnume="14"
       expl="2. loop invariant preservation"
-      sum="ac46714f0d0392af6f01b530e6a34c33"
+      sum="e6933c77eafa41360413599f53c9bffe"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=c0ainteger_of_int32V16Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V16Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V18FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V14c1FIainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V19ainteger_of_int32V2Iainfix &lt;V19ainteger_of_int32V10Aainfix &lt;=c0V19FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix &lt;V20ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V20FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+      shape="loop invariant preservationainfix &lt;=c0ainteger_of_int32V16Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V16Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V18FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V14c1FIainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2INainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V19ainteger_of_int32V2Iainfix &lt;V19ainteger_of_int32V10Aainfix &lt;=c0V19FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix &lt;V20ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V20FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function find_array, default behavior"/>
       <label
@@ -104,7 +110,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.62"/>
+       <result status="valid" time="0.45"/>
       </proof>
       <proof
        prover="2"
@@ -120,10 +126,12 @@
       locfile="../../find_array.c"
       loclnum="27" loccnumb="4" loccnume="14"
       expl="3. loop invariant preservation"
-      sum="3249fa8e682870d7218cd53121d656c1"
+      sum="32c8894feeff84134dcc1e5e2092626f"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V16ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V10Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V16V18FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FIainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V19ainteger_of_int32V2Iainfix &lt;V19ainteger_of_int32V10Aainfix &lt;=c0V19FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix &lt;V20ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V20FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+      shape="loop invariant preservationainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V16ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V10Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V16V18FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FINainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2INainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V19ainteger_of_int32V2Iainfix &lt;V19ainteger_of_int32V10Aainfix &lt;=c0V19FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix &lt;V20ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V20FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function find_array, default behavior"/>
       <label
@@ -145,10 +153,12 @@
         locfile="../../find_array.c"
         loclnum="27" loccnumb="4" loccnume="14"
         expl="1."
-        sum="8ec74f553a672b1a688c7bf51c18e5df"
+        sum="e107f6f1725a89285a83e0c35b34289a"
         proved="true"
         expanded="true"
-        shape="ainfix &gt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V16V17FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FIainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V10Aainfix &lt;=c0V18FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V19ainteger_of_int32V2Iainfix &lt;V19ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V19FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+        shape="ainfix &gt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V16V17FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FINainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2INainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V10Aainfix &lt;=c0V18FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V19ainteger_of_int32V2Iainfix &lt;V19ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V19FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function find_array, default behavior"/>
         <label
@@ -175,10 +185,12 @@
         locfile="../../find_array.c"
         loclnum="27" loccnumb="4" loccnume="14"
         expl="2."
-        sum="3631f4451ea51ca89d6db05d585435ca"
+        sum="88528b2fa930e4f3432f24caab78b095"
         proved="true"
         expanded="true"
-        shape="ainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V10Aainfix &lt;=c0V17FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FIainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V10Aainfix &lt;=c0V18FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V19ainteger_of_int32V2Iainfix &lt;V19ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V19FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+        shape="ainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V10Aainfix &lt;=c0V17FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FINainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2INainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V10Aainfix &lt;=c0V18FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V19ainteger_of_int32V2Iainfix &lt;V19ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V19FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function find_array, default behavior"/>
         <label
@@ -213,10 +225,12 @@
         locfile="../../find_array.c"
         loclnum="27" loccnumb="4" loccnume="14"
         expl="3."
-        sum="f1f899185f2d67fdd450ac4a9becc68a"
+        sum="6c529a53c6dbf6c02360765b17986aa8"
         proved="true"
         expanded="true"
-        shape="ainfix &lt;ainteger_of_int32V16ainteger_of_int32V1Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FIainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V10Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V18FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+        shape="ainfix &lt;ainteger_of_int32V16ainteger_of_int32V1Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FINainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2INainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V10Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V18FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function find_array, default behavior"/>
         <label
@@ -251,10 +265,12 @@
         locfile="../../find_array.c"
         loclnum="27" loccnumb="4" loccnume="14"
         expl="4."
-        sum="2930f6810dd3aef71bcb25be72686e4c"
+        sum="9336070aa06b383e938af57b0e8bc640"
         proved="true"
         expanded="true"
-        shape="ainfix &lt;=c0ainteger_of_int32V10Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FIainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V10Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V18FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+        shape="ainfix &lt;=c0ainteger_of_int32V10Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FINainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2INainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V10Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V18FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function find_array, default behavior"/>
         <label
@@ -293,10 +309,12 @@
     locfile="../../find_array.c"
     loclnum="27" loccnumb="4" loccnume="14"
     expl="VC for find_array_ensures_exists"
-    sum="9c9220e9854b1bcca729b1b31f3df8be"
+    sum="c138586a4e8e5f2d9e77d35614a90fd4"
     proved="true"
     expanded="true"
-    shape="iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9ainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V16ainteger_of_int32V2Iainfix =V16V15FIainfix =V15V14FIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10Fainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V19ainteger_of_int32V2Iainfix =V19V18FIainfix =V18V17FIainfix =ainteger_of_int32V17aprefix -c1FIainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix &lt;V20ainteger_of_int32V10Aainfix &lt;=c0V20FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix &lt;V21ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V21FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4AamemV2V0ainteger_of_int32V1V4F">
+    shape="iainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V13ainteger_of_int32V2Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1Fainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V19ainteger_of_int32V2Iainfix =V19V18FIainfix =V18V17FIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V17ainteger_of_int32V2Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V10ainteger_of_int32V15FIainfix =ainteger_of_int32V15adivainteger_of_int32V14c2FIainfix =ainteger_of_int32V14ainfix -ainteger_of_int32V9ainteger_of_int32V10Fainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix &lt;V20ainteger_of_int32V10Aainfix &lt;=c0V20FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix &lt;V21ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V21FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4AamemV2V0ainteger_of_int32V1V4F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function find_array, Behavior `exists&apos;"/>
     <label
@@ -331,10 +349,12 @@
     locfile="../../find_array.c"
     loclnum="27" loccnumb="4" loccnume="14"
     expl="VC for find_array_ensures_not_exists"
-    sum="027d7e90a1e0b371e39cddcf58852920"
+    sum="e5ae0803eefaad2b179993ffa45c013e"
     proved="true"
     expanded="true"
-    shape="iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9ainfix =ainteger_of_int32V16aprefix -c1Iainfix =V16V15FIainfix =V15V14FIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10Fainfix =ainteger_of_int32V19aprefix -c1Iainfix =V19V18FIainfix =V18V17FIainfix =ainteger_of_int32V17aprefix -c1FIainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix &lt;V20ainteger_of_int32V10Aainfix &lt;=c0V20FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix &lt;V21ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V21FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4AamemV2V0ainteger_of_int32V1V4NF">
+    shape="iainfix =ainteger_of_int32V13aprefix -c1Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1Fainfix =ainteger_of_int32V19aprefix -c1Iainfix =V19V18FIainfix =V18V17FIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V17ainteger_of_int32V2Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V10ainteger_of_int32V15FIainfix =ainteger_of_int32V15adivainteger_of_int32V14c2FIainfix =ainteger_of_int32V14ainfix -ainteger_of_int32V9ainteger_of_int32V10Fainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix &lt;V20ainteger_of_int32V10Aainfix &lt;=c0V20FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix &lt;V21ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V21FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4ANamemV2V0ainteger_of_int32V1V4F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function find_array, Behavior `not_exists&apos;"/>
     <label
@@ -348,10 +368,12 @@
       locfile="../../find_array.c"
       loclnum="27" loccnumb="4" loccnume="14"
       expl="1. postcondition"
-      sum="c8bdda2d44186a217c781d416bcb84fe"
+      sum="76fd64695736eca2b4948a8daa8fa144"
       proved="true"
       expanded="true"
-      shape="ainfix =ainteger_of_int32V16aprefix -c1Iainfix =V16V15FIainfix =V15V14FIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V10Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V18FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4AamemV2V0ainteger_of_int32V1V4NF">
+      shape="postconditionainfix =ainteger_of_int32V16aprefix -c1Iainfix =V16V15FIainfix =V15V14FIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V10Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;V18ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V18FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4ANamemV2V0ainteger_of_int32V1V4F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function find_array, Behavior `not_exists&apos;"/>
       <label
@@ -378,10 +400,12 @@
       locfile="../../find_array.c"
       loclnum="27" loccnumb="4" loccnume="14"
       expl="2. postcondition"
-      sum="879226893e67dd092931631377f54c3c"
+      sum="df53979d37f3da8dc030fc6f86e49f9e"
       proved="true"
       expanded="true"
-      shape="ainfix =ainteger_of_int32V13aprefix -c1Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9NIainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V14ainteger_of_int32V2Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V15ainteger_of_int32V2Iainfix &lt;V15ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V15FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4AamemV2V0ainteger_of_int32V1V4NF">
+      shape="postconditionainfix =ainteger_of_int32V13aprefix -c1Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1FINainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V14ainteger_of_int32V2Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V15ainteger_of_int32V2Iainfix &lt;V15ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V15FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4ANamemV2V0ainteger_of_int32V1V4F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function find_array, Behavior `not_exists&apos;"/>
       <label
@@ -418,10 +442,10 @@
     locfile="../../find_array.c"
     loclnum="27" loccnumb="4" loccnume="14"
     expl="VC for find_array_safety"
-    sum="904a9bbbcfa581ecd4d2d079977e9d2e"
+    sum="af1b2256c870b6c5b65c7d6f8647dbf8"
     proved="true"
     expanded="true"
-    shape="iainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V15ainteger_of_int32V2ainfix &lt;ainfix -ainteger_of_int32V9ainteger_of_int32V17ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V15c1FAainfix &lt;=ainfix +ainteger_of_int32V15c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V15c1ainfix &lt;ainfix -ainteger_of_int32V19ainteger_of_int32V10ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix -ainteger_of_int32V15c1FAainfix &lt;=ainfix -ainteger_of_int32V15c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V15c1Aainfix &lt;=ainteger_of_int32V15aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V15Iainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V15ainteger_of_int32V2NAainfix &lt;=ainteger_of_int32V15aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V15Iainfix =V15V14FIainfix =ainteger_of_int32V14ainfix +ainteger_of_int32V10ainteger_of_int32V13FAainfix &lt;=ainfix +ainteger_of_int32V10ainteger_of_int32V13c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V13Iainfix =ainteger_of_int32V13V12FAainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Aainfix =c2c0NIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FAainfix &lt;=ainfix -ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V9ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix &lt;V20ainteger_of_int32V10Aainfix &lt;=c0V20FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix &lt;V21ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V9V21FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FAainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
+    shape="iainfix &lt;ainfix -ainteger_of_int32V23ainteger_of_int32V11ainfix -ainteger_of_int32V10ainteger_of_int32V11Aainfix &lt;=c0ainfix -ainteger_of_int32V10ainteger_of_int32V11Iainfix =V23V22FIainfix =ainteger_of_int32V22V21FAainfix &lt;=V21c2147483647Aainfix &lt;=aprefix -c2147483648V21Lainfix -ainteger_of_int32V18c1ainfix &lt;ainfix -ainteger_of_int32V10ainteger_of_int32V26ainfix -ainteger_of_int32V10ainteger_of_int32V11Aainfix &lt;=c0ainfix -ainteger_of_int32V10ainteger_of_int32V11Iainfix =V26V25FIainfix =ainteger_of_int32V25V24FAainfix &lt;=V24c2147483647Aainfix &lt;=aprefix -c2147483648V24Lainfix +ainteger_of_int32V18c1ainfix &lt;ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Aainfix &lt;=V20aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V20Lainteger_of_int32V18INainfix =ainteger_of_int32aselectV4ashiftV0V19ainteger_of_int32V2Aainfix &lt;=V19aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V19Lainteger_of_int32V18Iainfix =V18V17FIainfix =ainteger_of_int32V17V16FAainfix &lt;=V16c2147483647Aainfix &lt;=aprefix -c2147483648V16Lainfix +ainteger_of_int32V11ainteger_of_int32V15Iainfix =ainteger_of_int32V15V14FAainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2ANainfix =c2c0Iainfix =ainteger_of_int32V13V12FAainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix -ainteger_of_int32V10ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;ainteger_of_int32V10ainteger_of_int32V1Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V27ainteger_of_int32V2Iainfix &lt;V27ainteger_of_int32V11Aainfix &lt;=c0V27FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V28ainteger_of_int32V2Iainfix &lt;V28ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V10V28FFIainfix =V9V8FIainfix =ainteger_of_int32V8V7FAainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4F">
     <label
      name="expl:Function find_array, Safety"/>
     <label
@@ -432,7 +456,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="6.04"/>
+     <result status="valid" time="4.26"/>
     </proof>
     <proof
      prover="1"

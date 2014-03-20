@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
- <prover
-  id="2"
-  name="CVC3"
   version="2.4.1"/>
  <prover
-  id="3"
+  id="2"
   name="Z3"
   version="3.2"/>
  <prover
-  id="4"
+  id="3"
   name="Z3"
   version="4.3.1"/>
  <file
@@ -43,10 +39,12 @@
     locfile="../AllZeros.java"
     loclnum="44" loccnumb="19" loccnume="28"
     expl="VC for _AllZeros_all_zeros_ensures_default"
-    sum="a9d71ed757ef64a77d2ee972c13cc3d1"
+    sum="66bc90659b3a11a88ef53b10a391f6f3"
     proved="true"
     expanded="true"
-    shape="iainfix &lt;ainteger_of_int32V4V5iainfix =ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V4c0Nainfix =ainteger_of_int32aselectV1ashiftV0V7c0Iainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Fqainfix =V6aTrueIainfix =V6aFalseFainfix =ainteger_of_int32aselectV1ashiftV0V10c0Iainfix &lt;V10ainteger_of_int32V9Aainfix &lt;=c0V10FAainfix &lt;=ainteger_of_int32V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V9Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix +ainteger_of_int32V4c1Fainfix =ainteger_of_int32aselectV1ashiftV0V12c0Iainfix &lt;V12ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V12Fqainfix =V11aTrueIainfix =V11aTrueFIainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV2V0c1Iainfix =ainteger_of_int32aselectV1ashiftV0V13c0Iainfix &lt;V13ainteger_of_int32V4Aainfix &lt;=c0V13FAainfix &lt;=ainteger_of_int32V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V4FAainfix =ainteger_of_int32aselectV1ashiftV0V14c0Iainfix &lt;V14ainteger_of_int32V3Aainfix &lt;=c0V14FAainfix &lt;=ainteger_of_int32V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V3Iainfix =ainteger_of_int32V3c0FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+    shape="iainfix =ainteger_of_int32aselectV1ashiftV0V7c0Iainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Fqainfix =V6aTrueIainfix =V6aTrueFiainfix =ainteger_of_int32aselectV1ashiftV0V10c0Iainfix &lt;V10ainteger_of_int32V9Aainfix &lt;=c0V10FAainfix &lt;=ainteger_of_int32V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V9Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix +ainteger_of_int32V4c1Fainfix =ainteger_of_int32aselectV1ashiftV0V12c0Iainfix &lt;V12ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V12Fqainfix =V11aTrueIainfix =V11aFalseFNainfix =ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V4c0ainfix &lt;ainteger_of_int32V4V5Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV2V0c1Iainfix =ainteger_of_int32aselectV1ashiftV0V13c0Iainfix &lt;V13ainteger_of_int32V4Aainfix &lt;=c0V13FAainfix &lt;=ainteger_of_int32V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V4FAainfix =ainteger_of_int32aselectV1ashiftV0V14c0Iainfix &lt;V14ainteger_of_int32V3Aainfix &lt;=c0V14FAainfix &lt;=ainteger_of_int32V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V3Iainfix =ainteger_of_int32V3c0FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method all_zeros, default behavior"/>
     <label
@@ -62,10 +60,10 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.16"/>
     </proof>
     <proof
      prover="2"
@@ -73,23 +71,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.16"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.07"/>
-    </proof>
-    <proof
-     prover="4"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.19"/>
     </proof>
    </goal>
    <goal
@@ -97,10 +79,10 @@
     locfile="../AllZeros.java"
     loclnum="44" loccnumb="19" loccnume="28"
     expl="index bounds"
-    sum="0d5f6466ce2cb1c5d154c8b561daa39f"
+    sum="3e84b9497ac7200291c2e5af58d55ebf"
     proved="true"
     expanded="true"
-    shape="ainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V7ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V4Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V4Iainfix =V7V6FIainfix =ainteger_of_int32V6ainfix +ainteger_of_int32V4c1FAainfix &lt;=ainfix +ainteger_of_int32V4c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V4c1Iainfix =ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V4c0Aainfix &lt;=ainteger_of_int32V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainteger_of_int32V4Iainfix &lt;ainteger_of_int32V4V5Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iainfix =ainteger_of_int32aselectV1ashiftV0V8c0Iainfix &lt;V8ainteger_of_int32V4Aainfix &lt;=c0V8FAainfix &lt;=ainteger_of_int32V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V4FIainfix =ainteger_of_int32V3c0FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+    shape="index boundsainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V9ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V4Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V4Iainfix =V9V8FIainfix =ainteger_of_int32V8V7FAainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix +ainteger_of_int32V4c1Iainfix =ainteger_of_int32aselectV1ashiftV0V6c0Aainfix &lt;=V6aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V6Lainteger_of_int32V4Iainfix &lt;ainteger_of_int32V4V5Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iainfix =ainteger_of_int32aselectV1ashiftV0V10c0Iainfix &lt;V10ainteger_of_int32V4Aainfix &lt;=c0V10FAainfix &lt;=ainteger_of_int32V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V4FIainfix =ainteger_of_int32V3c0FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:Method all_zeros, Safety"/>
     <label
@@ -116,10 +98,10 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="2"
@@ -132,14 +114,6 @@
     <proof
      prover="3"
      timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.07"/>
-    </proof>
-    <proof
-     prover="4"
-     timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
@@ -151,10 +125,12 @@
     locfile="../AllZeros.java"
     loclnum="34" loccnumb="15" loccnume="35"
     expl="VC for _AllZeros_should_not_be_proved_ensures_default"
-    sum="c93f02bf2618f9921b1b747779476e24"
+    sum="05407472b6076f49251aad8329622746"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method should_not_be_proved, default behavior"/>
     <label
@@ -170,7 +146,7 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -181,18 +157,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -205,10 +173,10 @@
     locfile="../AllZeros.java"
     loclnum="34" loccnumb="15" loccnume="35"
     expl="index bounds"
-    sum="e6b80267e65ce7760dc21b4b11c48c7b"
+    sum="8eceb5b0706f9b67795ff69aaa315f54"
     proved="false"
     expanded="true"
-    shape="ainfix &lt;=V2c2147483647Aainfix &lt;=aprefix -c2147483648V2Iainfix &gt;=V2c0Aainfix &lt;=V2c2147483647Lainfix +aoffset_maxV1V0c1Aainfix &gt;=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
+    shape="index boundsainfix &lt;=V2c2147483647Aainfix &lt;=aprefix -c2147483648V2Iainfix &gt;=V2c0Aainfix &lt;=V2c2147483647Lainfix +aoffset_maxV1V0c1Aainfix &gt;=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
     <label
      name="expl:Method should_not_be_proved, Safety"/>
     <label
@@ -222,10 +190,10 @@
       locfile="../AllZeros.java"
       loclnum="34" loccnumb="15" loccnume="35"
       expl="1. assertion"
-      sum="3b4abdf4da02cd4651212e090b7adddd"
+      sum="a6bf9ef2c5288e943dbdce5781b13abb"
       proved="false"
       expanded="true"
-      shape="ainfix &gt;=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
+      shape="assertionainfix &gt;=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
       <label
        name="expl:Method should_not_be_proved, Safety"/>
       <label
@@ -241,10 +209,10 @@
       <proof
        prover="1"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="1.16"/>
+       <result status="timeout" time="5.02"/>
       </proof>
       <proof
        prover="2"
@@ -252,18 +220,10 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.02"/>
-      </proof>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
        <result status="timeout" time="5.03"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -276,10 +236,10 @@
       locfile="../AllZeros.java"
       loclnum="34" loccnumb="15" loccnume="35"
       expl="2. arithmetic overflow"
-      sum="7c095d2e57e1f129afa05b9611ae6aae"
+      sum="ee01a9eec0579d902828f8805517ed74"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=V2c2147483647Aainfix &lt;=aprefix -c2147483648V2Iainfix &gt;=V2c0Aainfix &lt;=V2c2147483647Lainfix +aoffset_maxV1V0c1Iainfix &gt;=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
+      shape="arithmetic overflowainfix &lt;=V2c2147483647Aainfix &lt;=aprefix -c2147483648V2Iainfix &gt;=V2c0Aainfix &lt;=V2c2147483647Lainfix +aoffset_maxV1V0c1Iainfix &gt;=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
       <label
        name="expl:Method should_not_be_proved, Safety"/>
       <label
@@ -295,10 +255,10 @@
       <proof
        prover="1"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="2"
@@ -306,18 +266,10 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.04"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -329,13 +281,15 @@
    </goal>
    <goal
     name="WP_parameter cons_AllZeros_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_AllZeros_ensures_default"
-    sum="c93f02bf2618f9921b1b747779476e24"
+    sum="05407472b6076f49251aad8329622746"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class AllZeros, default behavior"/>
     <label
@@ -351,10 +305,10 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="2"
@@ -362,18 +316,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -383,10 +329,10 @@
    </goal>
    <goal
     name="WP_parameter cons_AllZeros_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_AllZeros_safety"
-    sum="c93f02bf2618f9921b1b747779476e24"
+    sum="05407472b6076f49251aad8329622746"
     proved="true"
     expanded="true"
     shape="t">
@@ -405,10 +351,10 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="2"
@@ -416,18 +362,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="0"
      obsolete="false"

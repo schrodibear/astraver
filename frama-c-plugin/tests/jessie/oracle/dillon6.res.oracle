@@ -1,7 +1,7 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only dillon6.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD dillon6.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only dillon6.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/dillon6.c"
 [jessie] Starting Jessie translation
-[kernel] warning: No code nor implicit assigns clause for function g, generating default assigns from the prototype
+PPCHOME/tests/jessie/dillon6.c:8:[kernel] warning: No code nor implicit assigns clause for function g, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir dillon6.jessie
 [jessie] File dillon6.jessie/dillon6.jc written.
 [jessie] File dillon6.jessie/dillon6.cloc written.
@@ -53,11 +53,11 @@ tag __anonstruct_las_1 = {
 type __anonstruct_las_1 = [__anonstruct_las_1]
 
 unit g(intP[..] p)
-  requires (C_2 : ((C_3 : (\offset_min(p) <= 0)) &&
-                    (C_4 : (\offset_max(p) >= 0))));
+  requires (_C_2 : ((_C_3 : (\offset_min(p) <= 0)) &&
+                     (_C_4 : (\offset_max(p) >= 0))));
 behavior default:
   assigns p.intM;
-  ensures (C_1 : true);
+  ensures (_C_1 : true);
 ;
 
 __anonstruct_las_1[0] v;
@@ -67,9 +67,9 @@ invariant valid_v :
 
 unit f()
 behavior default:
-  ensures (C_7 : true);
+  ensures (_C_7 : true);
 {  
-   {  (C_6 : g((C_5 : v.a)));
+   {  (_C_6 : g((_C_5 : v.a)));
       
       (return ())
    }
@@ -659,11 +659,10 @@ let f_ensures_default =
   { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
   (init:
   try
-   (C_6:
    begin
-     (let jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_las_1_a_v_1) v)) in
-     (JC_<somenum>: (((g jessie_<somenum>) intP_intM_v_1) !intP_v_1_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_las_1_a_v_1) v) in
+     (JC_<somenum>: (((g _jessie_<somenum>) intP_intM_v_1) !intP_v_1_alloc_table)));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let f_safety =
@@ -671,11 +670,10 @@ let f_safety =
   { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
   (init:
   try
-   (C_6:
    begin
-     (let jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_las_1_a_v_1) v)) in
-     (JC_<somenum>: (((g_requires jessie_<somenum>) intP_intM_v_1) !intP_v_1_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_las_1_a_v_1) v) in
+     (JC_<somenum>: (((g_requires _jessie_<somenum>) intP_intM_v_1) !intP_v_1_alloc_table)));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
 
@@ -686,12 +684,12 @@ why --project [...] why/dillon6.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/dillon6_po1.why">
-      <location file = "PPCHOME/tests/jessie/dillon6.jessie/dillon6.jc" line = "65" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/dillon6.jessie/dillon6.jc" line = "65" begin = "14" end = "29"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/dillon6_po2.why">
-      <location file = "PPCHOME/tests/jessie/dillon6.jessie/dillon6.jc" line = "65" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/dillon6.jessie/dillon6.jc" line = "65" begin = "14" end = "29"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

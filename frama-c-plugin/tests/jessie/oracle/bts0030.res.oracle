@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0030.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0030.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0030.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0030.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0030.jessie
 [jessie] File bts0030.jessie/bts0030.jc written.
@@ -47,97 +47,98 @@ type voidP = [voidP]
 
 int32 lexicographical_compare_array(intP[..] a, int32 length_a, intP[..] b,
                                     int32 length_b)
-  requires (C_36 : (0 <= length_a));
-  requires (C_35 : (0 <= length_b));
-  requires (C_32 : ((C_33 : (\offset_min(a) <= 0)) &&
-                     (C_34 : (\offset_max(a) >= (length_a - 1)))));
-  requires (C_29 : ((C_30 : (\offset_min(b) <= 0)) &&
-                     (C_31 : (\offset_max(b) >= (length_b - 1)))));
+  requires (_C_36 : (0 <= length_a));
+  requires (_C_35 : (0 <= length_b));
+  requires (_C_32 : ((_C_33 : (\offset_min(a) <= 0)) &&
+                      (_C_34 : (\offset_max(a) >= (length_a - 1)))));
+  requires (_C_29 : ((_C_30 : (\offset_min(b) <= 0)) &&
+                      (_C_31 : (\offset_max(b) >= (length_b - 1)))));
 behavior default:
   assigns \nothing;
-  ensures (C_26 : ((C_27 : ((\result == 1) || (\result == 0))) &&
-                    (C_28 : ((((\exists integer k1_1;
-                                 ((((0 <= k1_1) &&
-                                     (k1_1 < \at(length_a,Old))) &&
-                                    ((0 <= k1_1) &&
-                                      (k1_1 < \at(length_b,Old)))) &&
-                                   ((\at(a,Old) + k1_1).intM <
-                                     (\at(b,Old) + k1_1).intM))) ||
-                                (\forall integer k2_0;
-                                  (((0 <= k2_0) &&
-                                     (k2_0 < \at(length_a,Old))) ==>
-                                    ((\at(length_a,Old) < \at(length_b,Old)) &&
-                                      ((\at(a,Old) + k2_0).intM ==
-                                        (\at(b,Old) + k2_0).intM))))) &&
-                               (! (\result == 0))) ||
-                              ((\result == 0) &&
-                                (! ((\exists integer k1_1;
-                                      ((((0 <= k1_1) &&
-                                          (k1_1 < \at(length_a,Old))) &&
-                                         ((0 <= k1_1) &&
-                                           (k1_1 < \at(length_b,Old)))) &&
-                                        ((\at(a,Old) + k1_1).intM <
-                                          (\at(b,Old) + k1_1).intM))) ||
-                                     (\forall integer k2_0;
-                                       (((0 <= k2_0) &&
-                                          (k2_0 < \at(length_a,Old))) ==>
-                                         ((\at(length_a,Old) <
-                                            \at(length_b,Old)) &&
-                                           ((\at(a,Old) + k2_0).intM ==
-                                             (\at(b,Old) + k2_0).intM)))))))))));
+  ensures (_C_26 : ((_C_27 : ((\result == 1) || (\result == 0))) &&
+                     (_C_28 : ((((\exists integer k1_1;
+                                   ((((0 <= k1_1) &&
+                                       (k1_1 < \at(length_a,Old))) &&
+                                      ((0 <= k1_1) &&
+                                        (k1_1 < \at(length_b,Old)))) &&
+                                     ((\at(a,Old) + k1_1).intM <
+                                       (\at(b,Old) + k1_1).intM))) ||
+                                  (\forall integer k2_0;
+                                    (((0 <= k2_0) &&
+                                       (k2_0 < \at(length_a,Old))) ==>
+                                      ((\at(length_a,Old) <
+                                         \at(length_b,Old)) &&
+                                        ((\at(a,Old) + k2_0).intM ==
+                                          (\at(b,Old) + k2_0).intM))))) &&
+                                 (! (\result == 0))) ||
+                                ((\result == 0) &&
+                                  (! ((\exists integer k1_1;
+                                        ((((0 <= k1_1) &&
+                                            (k1_1 < \at(length_a,Old))) &&
+                                           ((0 <= k1_1) &&
+                                             (k1_1 < \at(length_b,Old)))) &&
+                                          ((\at(a,Old) + k1_1).intM <
+                                            (\at(b,Old) + k1_1).intM))) ||
+                                       (\forall integer k2_0;
+                                         (((0 <= k2_0) &&
+                                            (k2_0 < \at(length_a,Old))) ==>
+                                           ((\at(length_a,Old) <
+                                              \at(length_b,Old)) &&
+                                             ((\at(a,Old) + k2_0).intM ==
+                                               (\at(b,Old) + k2_0).intM)))))))))));
 {  
    (var int32 i);
    
    (var int32 __retres);
    
-   {  (C_1 : (i = 0));
+   {  (_C_1 : (i = 0));
       
       loop 
       behavior default:
-        invariant (C_6 : ((C_7 : (0 <= i)) && (C_8 : (i <= length_a))));
+        invariant (_C_6 : ((_C_7 : (0 <= i)) && (_C_8 : (i <= length_a))));
       behavior default:
-        invariant (C_3 : ((C_4 : (0 <= i)) && (C_5 : (i <= length_b))));
+        invariant (_C_3 : ((_C_4 : (0 <= i)) && (_C_5 : (i <= length_b))));
       behavior default:
-        invariant (C_2 : (\forall integer k;
-                           (((0 <= k) && (k < i)) ==>
-                             ((a + k).intM == (b + k).intM))));
+        invariant (_C_2 : (\forall integer k;
+                            (((0 <= k) && (k < i)) ==>
+                              ((a + k).intM == (b + k).intM))));
       while (true)
       {  
          {  (if (i != length_a) then (if (i != length_b) then () else 
                                      (goto while_0_break)) else 
             (goto while_0_break));
             
-            {  (if ((C_14 : (C_13 : (a + i)).intM) <
-                     (C_12 : (C_11 : (b + i)).intM)) then 
+            {  (if ((_C_14 : (_C_13 : (a + i)).intM) <
+                     (_C_12 : (_C_11 : (b + i)).intM)) then 
                {  
                   {  
-                     (assert for default: (C_9 : (jessie : (\exists integer k1;
-                                                             (((0 <= k1) &&
-                                                                (k1 <= i)) &&
-                                                               ((a + k1).intM <
-                                                                 (b + k1).intM))))));
+                     (assert for default: (_C_9 : (jessie : (\exists integer k1;
+                                                              (((0 <= k1) &&
+                                                                 (k1 <= i)) &&
+                                                                ((a + k1).intM <
+                                                                  (b + k1).intM))))));
                      ()
                   };
-                  (C_10 : (__retres = 1));
+                  (_C_10 : (__retres = 1));
                   
                   (goto return_label)
                } else ());
-               (if ((C_19 : (C_18 : (b + i)).intM) <
-                     (C_17 : (C_16 : (a + i)).intM)) then 
-               {  (C_15 : (__retres = 0));
+               (if ((_C_19 : (_C_18 : (b + i)).intM) <
+                     (_C_17 : (_C_16 : (a + i)).intM)) then 
+               {  (_C_15 : (__retres = 0));
                   
                   (goto return_label)
                } else ())
             };
-            (C_22 : (i = (C_21 : ((C_20 : (i + 1)) :> int32))))
+            (_C_22 : (i = (_C_21 : ((_C_20 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
       (if (i == length_a) then (if (i != length_b) then 
                                {  
                                   {  
-                                     (assert for default: (C_23 : (jessie : 
-                                                                  ((\exists integer k1_0;
+                                     (assert for default: (_C_23 : (jessie : 
+                                                                   ((\exists integer k1_0;
                                                                     ((((0 <=
                                                                     k1_0) &&
                                                                     (k1_0 <
@@ -161,14 +162,14 @@ behavior default:
                                                                     (b + k2).intM))))))));
                                      ()
                                   };
-                                  (C_24 : (__retres = 1));
+                                  (_C_24 : (__retres = 1));
                                   
                                   (goto return_label)
                                } else 
                                (goto _LAND)) else 
       (goto _LAND));
       (_LAND : 
-      {  (C_25 : (__retres = 0));
+      {  (_C_25 : (__retres = 0));
          (return_label : 
          (return __retres))
       })
@@ -745,86 +746,71 @@ let lexicographical_compare_array_ensures_default =
      try
       begin
         try
-         (C_1:
-         (loop_2:
          begin
-           (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-          while true do
-          { invariant
-              ((JC_<somenum>:
-               (forall k:int.
-                ((le_int((0), k) and lt_int(k, integer_of_int32(i))) ->
-                 (integer_of_int32(select(intP_intM_a_1, shift(a, k))) = 
-                 integer_of_int32(select(intP_intM_b_2, shift(b, k)))))))
-              and ((JC_<somenum>:
-                   ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-                   and (JC_<somenum>:
-                       le_int(integer_of_int32(i),
-                       integer_of_int32(length_b)))))
-                  and (JC_<somenum>:
-                      ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-                      and (JC_<somenum>:
-                          le_int(integer_of_int32(i),
-                          integer_of_int32(length_a)))))))  }
-           begin
-             [ { } unit { true } ];
-            try
+           (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+          (loop_2:
+          begin
+            while true do
+            { invariant
+                ((JC_<somenum>:
+                 (forall k:int.
+                  ((le_int((0), k) and lt_int(k, integer_of_int32(i))) ->
+                   (integer_of_int32(select(intP_intM_a_1, shift(a, k))) = 
+                   integer_of_int32(select(intP_intM_b_2, shift(b, k)))))))
+                and ((JC_<somenum>:
+                     ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                     and (JC_<somenum>:
+                         le_int(integer_of_int32(i),
+                         integer_of_int32(length_b)))))
+                    and (JC_<somenum>:
+                        ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                        and (JC_<somenum>:
+                            le_int(integer_of_int32(i),
+                            integer_of_int32(length_a)))))))  }
              begin
-               (let jessie_<somenum> =
+               [ { } unit { true } ];
+              try
                begin
-                 (if ((neq_int_ (integer_of_int32 !i)) (integer_of_int32 length_a))
-                 then
-                  (if ((neq_int_ (integer_of_int32 !i)) (integer_of_int32 length_b))
-                  then void else (raise (Goto_while_0_break_exc void)))
-                 else (raise (Goto_while_0_break_exc void)));
-                (if ((lt_int_ (integer_of_int32 (C_14:
-                                                ((safe_acc_ intP_intM_a_1) 
-                                                 (C_13:
-                                                 ((shift a) (integer_of_int32 !i))))))) 
-                     (integer_of_int32 (C_12:
-                                       ((safe_acc_ intP_intM_b_2) (C_11:
-                                                                  ((shift b) 
-                                                                   (integer_of_int32 !i)))))))
-                then
+                 (let _jessie_<somenum> =
                  begin
-                   (assert
-                   { (JC_<somenum>:
-                     (exists k1:int.
-                      (le_int((0), k1)
-                      and (le_int(k1, integer_of_int32(i))
-                          and lt_int(integer_of_int32(select(intP_intM_a_1,
-                                                      shift(a, k1))),
-                              integer_of_int32(select(intP_intM_b_2,
-                                               shift(b, k1)))))))) }; void);
-                  (C_10:
-                  begin
-                    void;
-                   (let jessie_<somenum> =
-                   (__retres := (safe_int32_of_integer_ (1))) in void);
-                   (raise (Return_label_exc void)) end) end else void);
-                (C_22:
-                begin
-                  (if ((lt_int_ (integer_of_int32 (C_19:
-                                                  ((safe_acc_ intP_intM_b_2) 
-                                                   (C_18:
-                                                   ((shift b) (integer_of_int32 !i))))))) 
-                       (integer_of_int32 (C_17:
-                                         ((safe_acc_ intP_intM_a_1) (C_16:
-                                                                    ((shift a) 
-                                                                    (integer_of_int32 !i)))))))
+                   (if ((neq_int_ (integer_of_int32 !i)) (integer_of_int32 length_a))
+                   then
+                    (if ((neq_int_ (integer_of_int32 !i)) (integer_of_int32 length_b))
+                    then void else (raise (Goto_while_0_break_exc void)))
+                   else (raise (Goto_while_0_break_exc void)));
+                  (if ((lt_int_ (integer_of_int32 ((safe_acc_ intP_intM_a_1) 
+                                                   ((shift a) (integer_of_int32 !i))))) 
+                       (integer_of_int32 ((safe_acc_ intP_intM_b_2) ((shift b) 
+                                                                    (integer_of_int32 !i)))))
                   then
-                   (C_15:
                    begin
-                     (let jessie_<somenum> =
+                     (assert
+                     { (JC_<somenum>:
+                       (exists k1:int.
+                        (le_int((0), k1)
+                        and (le_int(k1, integer_of_int32(i))
+                            and lt_int(integer_of_int32(select(intP_intM_a_1,
+                                                        shift(a, k1))),
+                                integer_of_int32(select(intP_intM_b_2,
+                                                 shift(b, k1)))))))) }; void);
+                    void;
+                    (let _jessie_<somenum> =
+                    (__retres := (safe_int32_of_integer_ (1))) in void);
+                    (raise (Return_label_exc void)) end else void);
+                  (if ((lt_int_ (integer_of_int32 ((safe_acc_ intP_intM_b_2) 
+                                                   ((shift b) (integer_of_int32 !i))))) 
+                       (integer_of_int32 ((safe_acc_ intP_intM_a_1) ((shift a) 
+                                                                    (integer_of_int32 !i)))))
+                  then
+                   begin
+                     (let _jessie_<somenum> =
                      (__retres := (safe_int32_of_integer_ (0))) in void);
-                    (raise (Return_label_exc void)) end) else void);
-                 (i := (C_21:
-                       (safe_int32_of_integer_ (C_20:
-                                               ((add_int (integer_of_int32 !i)) (1))))));
-                 !i end) end in void); (raise (Loop_continue_exc void)) end
-             with Loop_continue_exc jessie_<somenum> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end)) with
-         Goto_while_0_break_exc jessie_<somenum> ->
+                    (raise (Return_label_exc void)) end else void);
+                  (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))));
+                  !i end in void); (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
+         Goto_while_0_break_exc _jessie_<somenum> ->
          (while_0_break:
          begin
            void;
@@ -853,23 +839,18 @@ let lexicographical_compare_array_ensures_default =
                                            shift(a, k2))) = integer_of_int32(
                                                             select(intP_intM_b_2,
                                                             shift(b, k2))))))))) };
-              void);
-             (C_24:
-             begin
-               void;
-              (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-              void); (raise (Return_label_exc void)) end) end
+              void); void;
+             (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+             void); (raise (Return_label_exc void)) end
            else (raise (Goto__LAND_exc void)))
           else (raise (Goto__LAND_exc void))) end) end;
-       (raise (Goto__LAND_exc void)) end with Goto__LAND_exc jessie_<somenum> ->
-      (_LAND:
+       (raise (Goto__LAND_exc void)) end with Goto__LAND_exc _jessie_<somenum> ->
       try
-       (C_25:
        begin
-         (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (raise (Return_label_exc void)) end) with
-       Return_label_exc jessie_<somenum> ->
-       (return_label: begin   (return := !__retres); (raise Return) end) end) end));
+         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+         void); (raise (Return_label_exc void)) end with
+       Return_label_exc _jessie_<somenum> ->
+       (return_label: begin   (return := !__retres); (raise Return) end) end end));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
@@ -937,87 +918,76 @@ let lexicographical_compare_array_safety =
      try
       begin
         try
-         (C_1:
-         (loop_1:
          begin
-           (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-          while true do
-          { invariant (JC_<somenum>: true) variant (0) }
-           begin
-             [ { } unit reads i
-               { ((JC_<somenum>:
-                  (forall k:int.
-                   ((le_int((0), k) and lt_int(k, integer_of_int32(i))) ->
-                    (integer_of_int32(select(intP_intM_a_1, shift(a, k))) = 
-                    integer_of_int32(select(intP_intM_b_2, shift(b, k)))))))
-                 and ((JC_<somenum>:
-                      ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-                      and (JC_<somenum>:
-                          le_int(integer_of_int32(i),
-                          integer_of_int32(length_b)))))
-                     and (JC_<somenum>:
-                         ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-                         and (JC_<somenum>:
-                             le_int(integer_of_int32(i),
-                             integer_of_int32(length_a))))))) } ];
-            try
+           (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+          (loop_1:
+          begin
+            while true do
+            { invariant (JC_<somenum>: true) variant (0) }
              begin
-               (let jessie_<somenum> =
+               [ { } unit reads i
+                 { ((JC_<somenum>:
+                    (forall k:int.
+                     ((le_int((0), k) and lt_int(k, integer_of_int32(i))) ->
+                      (integer_of_int32(select(intP_intM_a_1, shift(a, k))) = 
+                      integer_of_int32(select(intP_intM_b_2, shift(b, k)))))))
+                   and ((JC_<somenum>:
+                        ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                        and (JC_<somenum>:
+                            le_int(integer_of_int32(i),
+                            integer_of_int32(length_b)))))
+                       and (JC_<somenum>:
+                           ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                           and (JC_<somenum>:
+                               le_int(integer_of_int32(i),
+                               integer_of_int32(length_a))))))) } ];
+              try
                begin
-                 (if ((neq_int_ (integer_of_int32 !i)) (integer_of_int32 length_a))
-                 then
-                  (if ((neq_int_ (integer_of_int32 !i)) (integer_of_int32 length_b))
-                  then void else (raise (Goto_while_0_break_exc void)))
-                 else (raise (Goto_while_0_break_exc void)));
-                (if ((lt_int_ (integer_of_int32 (C_14:
-                                                (JC_<somenum>:
-                                                ((((offset_acc_ intP_a_1_alloc_table) intP_intM_a_1) a) 
-                                                 (integer_of_int32 !i)))))) 
-                     (integer_of_int32 (C_12:
-                                       (JC_<somenum>:
-                                       ((((offset_acc_ intP_b_2_alloc_table) intP_intM_b_2) b) 
-                                        (integer_of_int32 !i))))))
-                then
+                 (let _jessie_<somenum> =
                  begin
-                   [ { } unit reads i
-                     { (JC_<somenum>:
-                       (exists k1:int.
-                        (le_int((0), k1)
-                        and (le_int(k1, integer_of_int32(i))
-                            and lt_int(integer_of_int32(select(intP_intM_a_1,
-                                                        shift(a, k1))),
-                                integer_of_int32(select(intP_intM_b_2,
-                                                 shift(b, k1)))))))) } ];
-                  (C_10:
-                  begin
-                    void;
-                   (let jessie_<somenum> =
-                   (__retres := (safe_int32_of_integer_ (1))) in void);
-                   (raise (Return_label_exc void)) end) end else void);
-                (C_22:
-                begin
-                  (if ((lt_int_ (integer_of_int32 (C_19:
-                                                  (JC_<somenum>:
-                                                  ((((offset_acc_ intP_b_2_alloc_table) intP_intM_b_2) b) 
-                                                   (integer_of_int32 !i)))))) 
-                       (integer_of_int32 (C_17:
-                                         (JC_<somenum>:
-                                         ((((offset_acc_ intP_a_1_alloc_table) intP_intM_a_1) a) 
-                                          (integer_of_int32 !i))))))
+                   (if ((neq_int_ (integer_of_int32 !i)) (integer_of_int32 length_a))
+                   then
+                    (if ((neq_int_ (integer_of_int32 !i)) (integer_of_int32 length_b))
+                    then void else (raise (Goto_while_0_break_exc void)))
+                   else (raise (Goto_while_0_break_exc void)));
+                  (if ((lt_int_ (integer_of_int32 (JC_<somenum>:
+                                                  ((((offset_acc_ intP_a_1_alloc_table) intP_intM_a_1) a) 
+                                                   (integer_of_int32 !i))))) 
+                       (integer_of_int32 (JC_<somenum>:
+                                         ((((offset_acc_ intP_b_2_alloc_table) intP_intM_b_2) b) 
+                                          (integer_of_int32 !i)))))
                   then
-                   (C_15:
                    begin
-                     (let jessie_<somenum> =
+                     [ { } unit reads i
+                       { (JC_<somenum>:
+                         (exists k1:int.
+                          (le_int((0), k1)
+                          and (le_int(k1, integer_of_int32(i))
+                              and lt_int(integer_of_int32(select(intP_intM_a_1,
+                                                          shift(a, k1))),
+                                  integer_of_int32(select(intP_intM_b_2,
+                                                   shift(b, k1)))))))) } ];
+                    void;
+                    (let _jessie_<somenum> =
+                    (__retres := (safe_int32_of_integer_ (1))) in void);
+                    (raise (Return_label_exc void)) end else void);
+                  (if ((lt_int_ (integer_of_int32 (JC_<somenum>:
+                                                  ((((offset_acc_ intP_b_2_alloc_table) intP_intM_b_2) b) 
+                                                   (integer_of_int32 !i))))) 
+                       (integer_of_int32 (JC_<somenum>:
+                                         ((((offset_acc_ intP_a_1_alloc_table) intP_intM_a_1) a) 
+                                          (integer_of_int32 !i)))))
+                  then
+                   begin
+                     (let _jessie_<somenum> =
                      (__retres := (safe_int32_of_integer_ (0))) in void);
-                    (raise (Return_label_exc void)) end) else void);
-                 (i := (C_21:
-                       (JC_<somenum>:
-                       (int32_of_integer_ (C_20:
-                                          ((add_int (integer_of_int32 !i)) (1)))))));
-                 !i end) end in void); (raise (Loop_continue_exc void)) end
-             with Loop_continue_exc jessie_<somenum> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end)) with
-         Goto_while_0_break_exc jessie_<somenum> ->
+                    (raise (Return_label_exc void)) end else void);
+                  (i := (JC_<somenum>:
+                        (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))));
+                  !i end in void); (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
+         Goto_while_0_break_exc _jessie_<somenum> ->
          (while_0_break:
          begin
            void;
@@ -1046,22 +1016,18 @@ let lexicographical_compare_array_safety =
                                              shift(a, k2))) = integer_of_int32(
                                                               select(intP_intM_b_2,
                                                               shift(b, k2))))))))) } ];
-             (C_24:
-             begin
-               void;
-              (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-              void); (raise (Return_label_exc void)) end) end
+             void;
+             (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+             void); (raise (Return_label_exc void)) end
            else (raise (Goto__LAND_exc void)))
           else (raise (Goto__LAND_exc void))) end) end;
-       (raise (Goto__LAND_exc void)) end with Goto__LAND_exc jessie_<somenum> ->
-      (_LAND:
+       (raise (Goto__LAND_exc void)) end with Goto__LAND_exc _jessie_<somenum> ->
       try
-       (C_25:
        begin
-         (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (raise (Return_label_exc void)) end) with
-       Return_label_exc jessie_<somenum> ->
-       (return_label: begin   (return := !__retres); (raise Return) end) end) end));
+         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+         void); (raise (Return_label_exc void)) end with
+       Return_label_exc _jessie_<somenum> ->
+       (return_label: begin   (return := !__retres); (raise Return) end) end end));
     absurd  end with Return -> !return end)) { true }
 
 
@@ -1128,7 +1094,7 @@ why --project [...] why/bts0030.why
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/bts0030_po15.why">
-      <location file = "why/bts0030.why" line = "697" begin = "5" end = "2458"/>
+      <location file = "why/bts0030.why" line = "677" begin = "5" end = "2458"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -1184,15 +1150,15 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0030_po26.why">
-      <location file = "why/bts0030.why" line = "768" begin = "45" end = "46"/>
+      <location file = "why/bts0030.why" line = "748" begin = "47" end = "48"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0030_po27.why">
-      <location file = "why/bts0030.why" line = "768" begin = "45" end = "46"/>
+      <location file = "why/bts0030.why" line = "748" begin = "47" end = "48"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0030_po28.why">
-      <location file = "why/bts0030.why" line = "888" begin = "47" end = "51"/>
+      <location file = "why/bts0030.why" line = "853" begin = "47" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>

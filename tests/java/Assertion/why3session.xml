@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
-<why3session
- name="Assertion/why3session.xml">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -9,42 +8,43 @@
  <prover
   id="1"
   name="Yices"
-  version="1.0.25"/>
+  version="1.0.38"/>
  <file
   name="../Assertion.mlw"
   verified="false"
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="Assertion/../Assertion.mlw"
+   locfile="../Assertion.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
-   name="WP Jessie_program"
-   locfile="Assertion/../Assertion.mlw"
+   name="Jessie_program"
+   locfile="../Assertion.mlw"
    loclnum="295" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
    <goal
     name="WP_parameter _Assertion_max_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Assertion.java"
+    locfile="../Assertion.java"
     loclnum="5" loccnumb="27" loccnume="30"
-    expl="Method max, default behavior"
-    sum="16cd48bbff38dff8e249e9ac4a85f5fc"
+    expl="VC for _Assertion_max_ensures_default"
+    sum="212c505211a2302c48c9b398455d0457"
     proved="false"
     expanded="true"
     shape="ainfix =ainteger_of_int32V1c5Iainfix =V1V0FAainfix =ainteger_of_int32V0c5F">
     <label
-     name="expl:Method max, default behavior">
-     </label>
+     name="W:diverges:N"/>
     <label
-     name="expl:parameter _Assertion_max_ensures_default">
-     </label>
+     name="expl:Method max, default behavior"/>
+    <label
+     name="expl:VC for _Assertion_max_ensures_default"/>
     <proof
      prover="0"
      timelimit="3"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="unknown" time="0.02"/>
@@ -52,29 +52,29 @@
     <proof
      prover="1"
      timelimit="5"
-     obsolete="true"
+     memlimit="0"
+     obsolete="false"
      archived="false">
-     <result status="timeout" time="5.03"/>
+     <result status="unknown" time="10.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Assertion_max_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Assertion.java"
+    locfile="../Assertion.java"
     loclnum="5" loccnumb="27" loccnume="30"
-    expl="Method max, Safety"
-    sum="8b0153e1125285f1122c5111fa890e43"
+    expl="VC for _Assertion_max_safety"
+    sum="7d844d2ebd55699411b65dd19f1c1333"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Method max, Safety">
-     </label>
+     name="expl:Method max, Safety"/>
     <label
-     name="expl:parameter _Assertion_max_safety">
-     </label>
+     name="expl:VC for _Assertion_max_safety"/>
     <proof
      prover="0"
      timelimit="3"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -82,29 +82,31 @@
     <proof
      prover="1"
      timelimit="5"
-     obsolete="true"
+     memlimit="0"
+     obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Assertion_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Assertion, default behavior"
-    sum="9db589841c6e3d61b882e84e399fdf87"
+    expl="VC for cons_Assertion_ensures_default"
+    sum="7d844d2ebd55699411b65dd19f1c1333"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Assertion, default behavior">
-     </label>
+     name="W:diverges:N"/>
     <label
-     name="expl:parameter cons_Assertion_ensures_default">
-     </label>
+     name="expl:Constructor of class Assertion, default behavior"/>
+    <label
+     name="expl:VC for cons_Assertion_ensures_default"/>
     <proof
      prover="0"
      timelimit="3"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -112,29 +114,29 @@
     <proof
      prover="1"
      timelimit="5"
-     obsolete="true"
+     memlimit="0"
+     obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Assertion_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Assertion, Safety"
-    sum="a64ba8e675563be117051a99046ddb0b"
+    expl="VC for cons_Assertion_safety"
+    sum="7d844d2ebd55699411b65dd19f1c1333"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Assertion, Safety">
-     </label>
+     name="expl:Constructor of class Assertion, Safety"/>
     <label
-     name="expl:parameter cons_Assertion_safety">
-     </label>
+     name="expl:VC for cons_Assertion_safety"/>
     <proof
      prover="0"
      timelimit="3"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -142,7 +144,8 @@
     <proof
      prover="1"
      timelimit="5"
-     obsolete="true"
+     memlimit="0"
+     obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
     </proof>

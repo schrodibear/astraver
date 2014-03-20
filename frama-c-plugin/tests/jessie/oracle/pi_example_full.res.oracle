@@ -1,6 +1,6 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only pi_example_full.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD pi_example_full.c"
-pi_example_full.c:13:[kernel] warning: Floating-point constant 6.28f is not represented exactly. Will use 0x1.91eb860000000p2. See documentation for option -warn-decimal-float
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only pi_example_full.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/pi_example_full.c"
+PPCHOME/tests/jessie/pi_example_full.c:13:[kernel] warning: Floating-point constant 6.28f is not represented exactly. Will use 0x1.91eb860000000p2. See documentation for option -warn-decimal-float
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir pi_example_full.jessie
 [jessie] File pi_example_full.jessie/pi_example_full.jc written.
@@ -48,48 +48,48 @@ lemma le_mul :
           ((x * z) <= (y * t)))))))
 
 float Perimeter(float radius)
-  requires (C_11 : (((C_13 : \single_is_finite(radius)) &&
-                      (C_14 : ((radius :> real) > 0.0))) &&
-                     (C_15 : ((radius :> real) <= 3.0))));
+  requires (_C_11 : (((_C_13 : \single_is_finite(radius)) &&
+                       (_C_14 : ((radius :> real) > 0.0))) &&
+                      (_C_15 : ((radius :> real) <= 3.0))));
 behavior default:
-  ensures (C_8 : ((C_9 : \single_is_finite(\result)) &&
-                   (C_10 : (\real_abs(((\result :> real) -
-                                        ((3.141592654 * 2.0) *
-                                          (\at(radius,Old) :> real)))) <=
-                             0.01))));
+  ensures (_C_8 : ((_C_9 : \single_is_finite(\result)) &&
+                    (_C_10 : (\real_abs(((\result :> real) -
+                                          ((3.141592654 * 2.0) *
+                                            (\at(radius,Old) :> real)))) <=
+                               0.01))));
 {  
    (var float a);
    
    (var float r);
    
-   {  (C_1 : (a = (6.28 :> float)));
+   {  (_C_1 : (a = (6.28 :> float)));
       
       {  
-         (assert for default: (C_2 : (jessie : \single_is_finite(a))));
+         (assert for default: (_C_2 : (jessie : \single_is_finite(a))));
          ()
       };
       
       {  
-         (assert for default: (C_3 : (jessie : ((6.27 <= (a :> real)) &&
-                                                 ((a :> real) <= 6.29)))));
+         (assert for default: (_C_3 : (jessie : ((6.27 <= (a :> real)) &&
+                                                  ((a :> real) <= 6.29)))));
          ()
       };
       
-      {  (C_5 : (r = (C_4 : (a * radius))))
+      {  (_C_5 : (r = (_C_4 : (a * radius))))
       };
       
       {  
-         (assert for default: (C_6 : (jessie : ((0.0 <=
-                                                  ((a :> real) *
-                                                    (radius :> real))) &&
-                                                 (((a :> real) *
-                                                    (radius :> real)) <=
-                                                   (6.29 * 3.0))))));
+         (assert for default: (_C_6 : (jessie : ((0.0 <=
+                                                   ((a :> real) *
+                                                     (radius :> real))) &&
+                                                  (((a :> real) *
+                                                     (radius :> real)) <=
+                                                    (6.29 * 3.0))))));
          ()
       };
       
       {  
-         (assert for default: (C_7 : (jessie : \single_is_finite(r))));
+         (assert for default: (_C_7 : (jessie : \single_is_finite(r))));
          ()
       };
       
@@ -454,27 +454,24 @@ let Perimeter_ensures_default =
    begin
      (let a = ref (any_single void) in
      (let r = ref (any_single void) in
-     (C_1:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (a := (JC_<somenum>: ((single_of_real nearest_even) 6.28))) in void);
       (assert { (JC_<somenum>: single_is_finite(a)) }; void); void;
       (assert
       { (JC_<somenum>:
         (le_real(6.27, single_value(a)) and le_real(single_value(a), 6.29))) };
       void); void;
-      (let jessie_<somenum> =
-      (C_5:
-      begin
-        (r := (C_4: (JC_<somenum>: (((mul_single nearest_even) !a) radius)))); !r
-      end) in void);
+      (let _jessie_<somenum> =
+      begin   (r := (JC_<somenum>: (((mul_single nearest_even) !a) radius))); !r end in
+      void);
       (assert
       { (JC_<somenum>:
         (le_real(0.0, mul_real(single_value(a), single_value(radius)))
         and le_real(mul_real(single_value(a), single_value(radius)),
             mul_real(6.29, 3.0)))) }; void); void;
       (assert { (JC_<somenum>: single_is_finite(r)) }; void); void; (return := !r);
-      (raise Return) end))); absurd  end with Return -> !return end))
+      (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: single_is_finite(result))
     and (JC_<somenum>:
@@ -495,27 +492,24 @@ let Perimeter_safety =
    begin
      (let a = ref (any_single void) in
      (let r = ref (any_single void) in
-     (C_1:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (a := (JC_<somenum>: ((single_of_real nearest_even) 6.28))) in void);
       [ { } unit reads a { (JC_<somenum>: single_is_finite(a)) } ]; void;
       [ { } unit reads a
         { (JC_<somenum>:
           (le_real(6.27, single_value(a)) and le_real(single_value(a), 6.29))) } ];
       void;
-      (let jessie_<somenum> =
-      (C_5:
-      begin
-        (r := (C_4: (JC_<somenum>: (((mul_single nearest_even) !a) radius)))); !r
-      end) in void);
+      (let _jessie_<somenum> =
+      begin   (r := (JC_<somenum>: (((mul_single nearest_even) !a) radius))); !r end in
+      void);
       [ { } unit reads a
         { (JC_<somenum>:
           (le_real(0.0, mul_real(single_value(a), single_value(radius)))
           and le_real(mul_real(single_value(a), single_value(radius)),
               mul_real(6.29, 3.0)))) } ]; void;
       [ { } unit reads r { (JC_<somenum>: single_is_finite(r)) } ]; void;
-      (return := !r); (raise Return) end))); absurd  end with Return ->
+      (return := !r); (raise Return) end)); absurd  end with Return ->
    !return end)) { true }
 
 

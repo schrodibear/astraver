@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
   name="Z3"
@@ -16,13 +16,13 @@
  <file
   name="../Literals.mlw"
   verified="true"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
    locfile="../Literals.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
-   expanded="true">
+   expanded="false">
   </theory>
   <theory
    name="Jessie_program"
@@ -35,10 +35,12 @@
     locfile="../Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
     expl="VC for _Literals_f_ensures_default"
-    sum="475bd2ee000672a08cc7397a59f4bd05"
+    sum="aa57bc1db73c10d15d1e52fe89549324"
     proved="true"
-    expanded="true"
-    shape="ainfix =ainteger_of_int32V4c13Iainfix =V4V3FIainfix =ainteger_of_int32V3c13FIainfix =ainteger_of_int32V2c2989FIavalid_struct_LiteralsV0c0c0V1FF">
+    expanded="false"
+    shape="ainfix =ainteger_of_int32V5c5991Iainfix =V5V4FIainfix =ainteger_of_int32V4ainfix +ainteger_of_int32V3c13FIainfix =ainteger_of_int32V3ainfix +ainteger_of_int32V2ainteger_of_int32a_Literals_xFIainfix =ainteger_of_int32V2c2989FIavalid_struct_LiteralsV0c0c0V1FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method f, default behavior"/>
     <label
@@ -57,7 +59,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="2"
@@ -65,7 +67,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -73,10 +75,10 @@
     locfile="../Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
     expl="VC for _Literals_f_safety"
-    sum="b5301ce11b620bd25d019ade98a0fab3"
+    sum="affb789587d5bda51f031f7b1692cbd0"
     proved="true"
-    expanded="true"
-    shape="t">
+    expanded="false"
+    shape="ainfix &lt;=V5c2147483647Aainfix &lt;=aprefix -c2147483648V5Lainfix +ainteger_of_int32V4c13Iainfix =ainteger_of_int32V4V3FAainfix &lt;=V3c2147483647Aainfix &lt;=aprefix -c2147483648V3Lainfix +ainteger_of_int32V2ainteger_of_int32a_Literals_xIainfix =ainteger_of_int32V2c2989FIavalid_struct_LiteralsV0c0c0V1FF">
     <label
      name="expl:Method f, Safety"/>
     <label
@@ -108,13 +110,15 @@
    </goal>
    <goal
     name="WP_parameter cons_Literals_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Literals_ensures_default"
-    sum="b5301ce11b620bd25d019ade98a0fab3"
+    sum="459986c011dfe5f114205859e8dc9ba1"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Literals, default behavior"/>
     <label
@@ -146,12 +150,12 @@
    </goal>
    <goal
     name="WP_parameter cons_Literals_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Literals_safety"
-    sum="b5301ce11b620bd25d019ade98a0fab3"
+    sum="459986c011dfe5f114205859e8dc9ba1"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
      name="expl:Constructor of class Literals, Safety"/>

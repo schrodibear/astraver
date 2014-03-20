@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -12,11 +12,11 @@
  <prover
   id="2"
   name="Coq"
-  version="8.4"/>
+  version="8.4pl2"/>
  <prover
   id="3"
   name="Gappa"
-  version="0.16.6"/>
+  version="1.0.0"/>
  <prover
   id="4"
   name="Z3"
@@ -43,10 +43,12 @@
     locfile="../../Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
     expl="VC for _Sterbenz_ensures_default"
-    sum="ad900b9e8b06e72dab77617389fc5cec"
+    sum="15df6cc40396f29cbf3e47c5f2d1c7bf"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FAainfix &lt;=c0.0avalueV0Aainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function Sterbenz, default behavior"/>
     <label
@@ -60,10 +62,12 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="1. assertion"
-      sum="8a03137976c1974f2912e0a08d2c78ce"
+      sum="a1b537eac80c2c893ef1ac880b3991b0"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
+      shape="assertionainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function Sterbenz, default behavior"/>
       <label
@@ -98,10 +102,12 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="2. assertion"
-      sum="c0489f1364d06a736542725d7efd48f0"
+      sum="30b03dc716e10c7e23cb0a31167bd525"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
+      shape="assertionainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function Sterbenz, default behavior"/>
       <label
@@ -136,10 +142,12 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="3. postcondition"
-      sum="c8363b30abe02b619319b9cd1f638e04"
+      sum="f50f1f80e3b301c46dd2d8176ba70627"
       proved="true"
       expanded="true"
-      shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
+      shape="postconditionainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function Sterbenz, default behavior"/>
       <label
@@ -151,7 +159,7 @@
        edited="Sterbenz_Jessie_program_WP_parameter__Sterbenz_ensures_default_1.v"
        obsolete="false"
        archived="false">
-       <result status="valid" time="3.06"/>
+       <result status="valid" time="1.82"/>
       </proof>
      </goal>
     </transf>
@@ -161,7 +169,7 @@
     locfile="../../Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
     expl="VC for _Sterbenz_safety"
-    sum="95ca1a9e6040694f1c85d24be482da94"
+    sum="8ea4c5409de46a921f804cd3320b35f6"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV0avalueV1amax_singleIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">

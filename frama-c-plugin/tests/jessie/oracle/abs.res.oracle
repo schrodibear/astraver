@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only abs.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD abs.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only abs.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/abs.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir abs.jessie
 [jessie] File abs.jessie/abs.jc written.
@@ -40,24 +40,23 @@ type voidP = [voidP]
 
 unit abs1(intP[..] p)
 behavior default:
-  ensures (C_6 : (\at(p,Old).intM >= 0));
+  ensures (_C_6 : (\at(p,Old).intM >= 0));
 {  
-   {  (if ((C_5 : p.intM) < 0) then (C_4 : ((C_3 : p.intM) = (C_2 : (- 
-                                                                    (C_1 : p.intM))))) else ());
+   {  (if ((_C_5 : p.intM) < 0) then (_C_4 : ((_C_3 : p.intM) = (_C_2 : 
+                                                                (- (_C_1 : p.intM))))) else ());
       
       (return ())
    }
 }
 
 unit abs2(intP[..] p_0)
-  requires (C_13 : ((C_14 : (\offset_min(p_0) <= 0)) &&
-                     (C_15 : (\offset_max(p_0) >= 0))));
+  requires (_C_13 : ((_C_14 : (\offset_min(p_0) <= 0)) &&
+                      (_C_15 : (\offset_max(p_0) >= 0))));
 behavior default:
-  ensures (C_12 : (\at(p_0,Old).intM >= 0));
+  ensures (_C_12 : (\at(p_0,Old).intM >= 0));
 {  
-   {  (if ((C_11 : p_0.intM) < 0) then (C_10 : ((C_9 : p_0.intM) = (C_8 : 
-                                                                   (- 
-                                                                   (C_7 : p_0.intM))))) else ());
+   {  (if ((_C_11 : p_0.intM) < 0) then (_C_10 : ((_C_9 : p_0.intM) = 
+                                        (_C_8 : (- (_C_7 : p_0.intM))))) else ());
       
       (return ())
    }
@@ -415,12 +414,12 @@ let abs1_ensures_default =
   (init:
   try
    begin
-     (if ((lt_int_ (C_5: ((safe_acc_ !intP_intM_p_1) p))) (0))
+     (if ((lt_int_ ((safe_acc_ !intP_intM_p_1) p)) (0))
      then
-      (let jessie_<somenum> =
-      (C_2: (neg_int (C_1: ((safe_acc_ !intP_intM_p_1) p)))) in
-      (let jessie_<somenum> = p in (((safe_upd_ intP_intM_p_1) jessie_<somenum>) jessie_<somenum>)))
-     else void); (raise Return); (raise Return) end with Return -> void end)
+      (let _jessie_<somenum> = (neg_int ((safe_acc_ !intP_intM_p_1) p)) in
+      (let _jessie_<somenum> = p in
+      (((safe_upd_ intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>))) else void);
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: ge_int(select(intP_intM_p_1, p), (0))) }
 
 let abs1_safety =
@@ -429,16 +428,13 @@ let abs1_safety =
   (init:
   try
    begin
-     (if ((lt_int_ (C_5:
-                   (JC_<somenum>: (((acc_ intP_p_1_alloc_table) !intP_intM_p_1) p)))) (0))
+     (if ((lt_int_ (JC_<somenum>: (((acc_ intP_p_1_alloc_table) !intP_intM_p_1) p))) (0))
      then
-      (let jessie_<somenum> =
-      (C_2:
-      (neg_int (C_1:
-               (JC_<somenum>: (((acc_ intP_p_1_alloc_table) !intP_intM_p_1) p))))) in
-      (let jessie_<somenum> = p in
+      (let _jessie_<somenum> =
+      (neg_int (JC_<somenum>: (((acc_ intP_p_1_alloc_table) !intP_intM_p_1) p))) in
+      (let _jessie_<somenum> = p in
       (JC_<somenum>:
-      ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) jessie_<somenum>) jessie_<somenum>))))
+      ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>))))
      else void); (raise Return); (raise Return) end with Return -> void end)
   { true }
 
@@ -450,12 +446,11 @@ let abs2_ensures_default =
   (init:
   try
    begin
-     (if ((lt_int_ (C_11: ((safe_acc_ !intP_intM_p_0_2) p_0))) (0))
+     (if ((lt_int_ ((safe_acc_ !intP_intM_p_0_2) p_0)) (0))
      then
-      (let jessie_<somenum> =
-      (C_8: (neg_int (C_7: ((safe_acc_ !intP_intM_p_0_2) p_0)))) in
-      (let jessie_<somenum> = p_0 in
-      (((safe_upd_ intP_intM_p_0_2) jessie_<somenum>) jessie_<somenum>))) else void);
+      (let _jessie_<somenum> = (neg_int ((safe_acc_ !intP_intM_p_0_2) p_0)) in
+      (let _jessie_<somenum> = p_0 in
+      (((safe_upd_ intP_intM_p_0_2) _jessie_<somenum>) _jessie_<somenum>))) else void);
     (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: ge_int(select(intP_intM_p_0_2, p_0), (0))) }
 
@@ -467,18 +462,15 @@ let abs2_safety =
   (init:
   try
    begin
-     (if ((lt_int_ (C_11:
-                   (JC_<somenum>:
-                   (((acc_ intP_p_0_2_alloc_table) !intP_intM_p_0_2) p_0)))) (0))
+     (if ((lt_int_ (JC_<somenum>:
+                   (((acc_ intP_p_0_2_alloc_table) !intP_intM_p_0_2) p_0))) (0))
      then
-      (let jessie_<somenum> =
-      (C_8:
-      (neg_int (C_7:
-               (JC_<somenum>:
-               (((acc_ intP_p_0_2_alloc_table) !intP_intM_p_0_2) p_0))))) in
-      (let jessie_<somenum> = p_0 in
+      (let _jessie_<somenum> =
+      (neg_int (JC_<somenum>:
+               (((acc_ intP_p_0_2_alloc_table) !intP_intM_p_0_2) p_0))) in
+      (let _jessie_<somenum> = p_0 in
       (JC_<somenum>:
-      ((((upd_ intP_p_0_2_alloc_table) intP_intM_p_0_2) jessie_<somenum>) jessie_<somenum>))))
+      ((((upd_ intP_p_0_2_alloc_table) intP_intM_p_0_2) _jessie_<somenum>) _jessie_<somenum>))))
      else void); (raise Return); (raise Return) end with Return -> void end)
   { true }
 

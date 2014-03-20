@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only dillon5.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD dillon5.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only dillon5.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/dillon5.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir dillon5.jessie
 [jessie] File dillon5.jessie/dillon5.jc written.
@@ -61,29 +61,29 @@ invariant valid_v1 :
 ((\offset_min(v1) <= 0) && (\offset_max(v1) >= 0))
 
 unit g(__anonstruct_las2_1[..] v2)
-  requires (C_4 : ((C_5 : (\offset_min(v2) <= 0)) &&
-                    (C_6 : (\offset_max(v2) >= 0))));
+  requires (_C_4 : ((_C_5 : (\offset_min(v2) <= 0)) &&
+                     (_C_6 : (\offset_max(v2) >= 0))));
 behavior default:
   assigns v2.a;
-  ensures (C_3 : (\at(v2,Old).a == 3));
+  ensures (_C_3 : (\at(v2,Old).a == 3));
 {  
-   {  (C_2 : ((C_1 : v2.a) = 3));
+   {  (_C_2 : ((_C_1 : v2.a) = 3));
       
       (return ())
    }
 }
 
 int32 main()
-  requires (C_13 : ((C_14 : (\offset_min(v1.s) <= 0)) &&
-                     (C_15 : (\offset_max(v1.s) >= 0))));
+  requires (_C_13 : ((_C_14 : (\offset_min(v1.s) <= 0)) &&
+                      (_C_15 : (\offset_max(v1.s) >= 0))));
 behavior default:
   assigns v1.s.a;
-  ensures (C_12 : (v1.s.a == 3));
+  ensures (_C_12 : (v1.s.a == 3));
 {  
    (var int32 __retres);
    
-   {  (C_8 : g((C_7 : v1.s)));
-      (C_11 : (__retres = (C_10 : (C_9 : v1.s).a)));
+   {  (_C_8 : g((_C_7 : v1.s)));
+      (_C_11 : (__retres = (_C_10 : (_C_9 : v1.s).a)));
       
       (return __retres)
    }
@@ -756,12 +756,11 @@ let g_ensures_default =
     and (JC_<somenum>: valid_v1(__anonstruct_las1_2_v1_1_alloc_table)))) }
   (init:
   try
-   (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
-     (let jessie_<somenum> = v2 in
-     (((safe_upd_ __anonstruct_las2_1_a_v2_3) jessie_<somenum>) jessie_<somenum>)));
-    (raise Return); (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+     (let _jessie_<somenum> = v2 in
+     (((safe_upd_ __anonstruct_las2_1_a_v2_3) _jessie_<somenum>) _jessie_<somenum>)));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      (integer_of_int32(select(__anonstruct_las2_1_a_v2_3, v2)) = (3)))
@@ -781,13 +780,12 @@ let g_safety =
     and (JC_<somenum>: valid_v1(__anonstruct_las1_2_v1_1_alloc_table)))) }
   (init:
   try
-   (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
-     (let jessie_<somenum> = v2 in
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+     (let _jessie_<somenum> = v2 in
      (JC_<somenum>:
-     ((((upd_ __anonstruct_las2_1_v2_3_alloc_table) __anonstruct_las2_1_a_v2_3) jessie_<somenum>) jessie_<somenum>))));
-    (raise Return); (raise Return) end) with Return -> void end)
+     ((((upd_ __anonstruct_las2_1_v2_3_alloc_table) __anonstruct_las2_1_a_v2_3) _jessie_<somenum>) _jessie_<somenum>))));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: valid_v1(__anonstruct_las1_2_v1_1_alloc_table)) }
 
 let main_ensures_default =
@@ -808,18 +806,13 @@ let main_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_8:
-     (C_11:
      begin
-       (let jessie_<somenum> =
-       (C_7: ((safe_acc_ !__anonstruct_las1_2_s_v1_1) v1)) in
+       (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_las1_2_s_v1_1) v1) in
        (JC_<somenum>:
-       (((g jessie_<somenum>) __anonstruct_las2_1_a_v1_1) !__anonstruct_las2_1_v1_1_alloc_table)));
-      (let jessie_<somenum> =
-      (__retres := (C_10:
-                   ((safe_acc_ !__anonstruct_las2_1_a_v1_1) (C_9:
-                                                            ((safe_acc_ !__anonstruct_las1_2_s_v1_1) v1))))) in
-      void); (return := !__retres); (raise Return) end))); absurd  end with
+       (((g _jessie_<somenum>) __anonstruct_las2_1_a_v1_1) !__anonstruct_las2_1_v1_1_alloc_table)));
+      (let _jessie_<somenum> =
+      (__retres := ((safe_acc_ !__anonstruct_las2_1_a_v1_1) ((safe_acc_ !__anonstruct_las1_2_s_v1_1) v1))) in
+      void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
@@ -848,18 +841,13 @@ let main_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_8:
-     (C_11:
      begin
-       (let jessie_<somenum> =
-       (C_7: ((safe_acc_ !__anonstruct_las1_2_s_v1_1) v1)) in
+       (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_las1_2_s_v1_1) v1) in
        (JC_<somenum>:
-       (((g_requires jessie_<somenum>) __anonstruct_las2_1_a_v1_1) !__anonstruct_las2_1_v1_1_alloc_table)));
-      (let jessie_<somenum> =
-      (__retres := (C_10:
-                   ((safe_acc_ !__anonstruct_las2_1_a_v1_1) (C_9:
-                                                            ((safe_acc_ !__anonstruct_las1_2_s_v1_1) v1))))) in
-      void); (return := !__retres); (raise Return) end))); absurd  end with
+       (((g_requires _jessie_<somenum>) __anonstruct_las2_1_a_v1_1) !__anonstruct_las2_1_v1_1_alloc_table)));
+      (let _jessie_<somenum> =
+      (__retres := ((safe_acc_ !__anonstruct_las2_1_a_v1_1) ((safe_acc_ !__anonstruct_las1_2_s_v1_1) v1))) in
+      void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>: valid_v1(__anonstruct_las1_2_v1_1_alloc_table)) }
 
@@ -881,12 +869,12 @@ why --project [...] why/dillon5.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/dillon5_po7.why">
-      <location file = "PPCHOME/tests/jessie/dillon5.jessie/dillon5.jc" line = "79" begin = "13" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/dillon5.jessie/dillon5.jc" line = "79" begin = "14" end = "30"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/dillon5_po8.why">
-      <location file = "PPCHOME/tests/jessie/dillon5.jessie/dillon5.jc" line = "79" begin = "13" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/dillon5.jessie/dillon5.jc" line = "79" begin = "14" end = "30"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -906,12 +894,12 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/dillon5_po3.why">
-      <location file = "PPCHOME/tests/jessie/dillon5.jessie/dillon5.jc" line = "64" begin = "14" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/dillon5.jessie/dillon5.jc" line = "64" begin = "15" end = "32"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/dillon5_po4.why">
-      <location file = "PPCHOME/tests/jessie/dillon5.jessie/dillon5.jc" line = "64" begin = "14" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/dillon5.jessie/dillon5.jc" line = "64" begin = "15" end = "32"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

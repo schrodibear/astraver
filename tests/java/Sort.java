@@ -2,21 +2,21 @@
 /*                                                                        */
 /*  The Why platform for program certification                            */
 /*                                                                        */
-/*  Copyright (C) 2002-2011                                               */
+/*  Copyright (C) 2002-2014                                               */
 /*                                                                        */
-/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
-/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
-/*    Yannick MOY, Univ. Paris-sud 11                                     */
-/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud                   */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud                              */
+/*    Yannick MOY, Univ. Paris-sud                                        */
+/*    Romain BARDOU, Univ. Paris-sud                                      */
 /*                                                                        */
 /*  Secondary contributors:                                               */
 /*                                                                        */
-/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
-/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
-/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
-/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
-/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
-/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*    Thierry HUBERT, Univ. Paris-sud  (former Caduceus front-end)        */
+/*    Nicolas ROUSSET, Univ. Paris-sud (on Jessie & Krakatoa)             */
+/*    Ali AYAD, CNRS & CEA Saclay      (floating-point support)           */
+/*    Sylvie BOLDO, INRIA              (floating-point support)           */
+/*    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     */
+/*    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          */
 /*                                                                        */
 /*  This software is free software; you can redistribute it and/or        */
 /*  modify it under the terms of the GNU Lesser General Public            */
@@ -45,25 +45,25 @@
 
 /*@ axiomatic Permut {
   @  predicate Permut{L1,L2}(int a[], integer l, integer h);
-  @  axiom Permut_refl{L}: 
+  @  axiom Permut_refl{L}:
   @   \forall int a[], integer l h; Permut{L,L}(a, l, h) ;
-  @  axiom Permut_sym{L1,L2}: 
-  @    \forall int a[], integer l h; 
+  @  axiom Permut_sym{L1,L2}:
+  @    \forall int a[], integer l h;
   @      Permut{L1,L2}(a, l, h) ==> Permut{L2,L1}(a, l, h) ;
-  @  axiom Permut_trans{L1,L2,L3}: 
-  @    \forall int a[], integer l h; 
-  @      Permut{L1,L2}(a, l, h) && Permut{L2,L3}(a, l, h) ==> 
+  @  axiom Permut_trans{L1,L2,L3}:
+  @    \forall int a[], integer l h;
+  @      Permut{L1,L2}(a, l, h) && Permut{L2,L3}(a, l, h) ==>
   @        Permut{L1,L3}(a, l, h) ;
-  @  axiom Permut_swap{L1,L2}: 
-  @    \forall int a[], integer l h i j; 
-  @       l <= i <= h && l <= j <= h && Swap{L1,L2}(a, i, j) ==> 
+  @  axiom Permut_swap{L1,L2}:
+  @    \forall int a[], integer l h i j;
+  @       l <= i <= h && l <= j <= h && Swap{L1,L2}(a, i, j) ==>
   @     Permut{L1,L2}(a, l, h) ;
   @ }
   @*/
 
 class Sort {
 
-    /*@ requires t != null && 
+    /*@ requires t != null &&
       @    0 <= i < t.length && 0 <= j < t.length;
       @ assigns t[i],t[j];
       @ ensures Swap{Old,Here}(t,i,j);
@@ -73,7 +73,7 @@ class Sort {
 	t[i] = t[j];
 	t[j] = tmp;
     }
-    
+
     /*@ requires t != null;
       @ behavior sorted:
       @   ensures Sorted(t,0,t.length-1);
@@ -84,9 +84,9 @@ class Sort {
 	int i,j;
 	int mi,mv;
 	/*@ loop_invariant 0 <= i;
-	  @ for sorted: 
-	  @  loop_invariant Sorted(t,0,i) && 
-	  @   (\forall integer k1 k2 ; 
+	  @ for sorted:
+	  @  loop_invariant Sorted(t,0,i) &&
+	  @   (\forall integer k1 k2 ;
 	  @      0 <= k1 < i <= k2 < t.length ==> t[k1] <= t[k2]) ;
 	  @ for permutation:
 	  @   loop_invariant Permut{Pre,Here}(t,0,t.length-1);
@@ -102,8 +102,8 @@ class Sort {
 	      @  loop_invariant Permut{Pre,Here}(t,0,t.length-1);
 	      @*/
 	    for (j=i+1; j < t.length; j++) {
-		if (t[j] < mv) { 
-		    mi = j ; mv = t[j]; 
+		if (t[j] < mv) {
+		    mi = j ; mv = t[j];
 		}
 	    }
 	    swap(t,i,mi);

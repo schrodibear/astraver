@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only null2.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD null2.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only null2.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/null2.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir null2.jessie
 [jessie] File null2.jessie/null2.jc written.
@@ -53,11 +53,11 @@ type _wrap = [_wrap]
 
 _wrap[..] f()
 behavior default:
-  ensures (C_2 : (\result == null));
+  ensures (_C_2 : (\result == null));
 {  
    (var _wrap[..] p);
    
-   {  (C_1 : (p = null));
+   {  (_C_1 : (p = null));
       
       (return p)
    }
@@ -65,11 +65,11 @@ behavior default:
 
 intP[..] f2()
 behavior default:
-  ensures (C_4 : (\result == null));
+  ensures (_C_4 : (\result == null));
 {  
    (var intP[..] p_0);
    
-   {  (C_3 : (p_0 = null));
+   {  (_C_3 : (p_0 = null));
       
       (return p_0)
    }
@@ -77,11 +77,11 @@ behavior default:
 
 _wrap[..] g()
 behavior default:
-  ensures (C_6 : (\result == null));
+  ensures (_C_6 : (\result == null));
 {  
    (var _wrap[..] p_1);
    
-   {  (C_5 : (p_1 = null));
+   {  (_C_5 : (p_1 = null));
       
       (return p_1)
    }
@@ -600,10 +600,9 @@ let f2_ensures_default =
   try
    begin
      (let p_0 = ref (any_pointer void) in
-     (C_3:
      begin
-       (let jessie_<somenum> = (p_0 := null) in void); (return := !p_0);
-      (raise Return) end)); absurd  end with Return -> !return end))
+       (let _jessie_<somenum> = (p_0 := null) in void); (return := !p_0);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_<somenum>: (result = null)) }
 
 let f2_safety =
@@ -614,11 +613,9 @@ let f2_safety =
   try
    begin
      (let p_0 = ref (any_pointer void) in
-     (C_3:
      begin
-       (let jessie_<somenum> = (p_0 := null) in void); (return := !p_0);
-      (raise Return) end)); absurd  end with Return -> !return end)) 
-  { true }
+       (let _jessie_<somenum> = (p_0 := null) in void); (return := !p_0);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 let f_ensures_default =
  fun (tt : unit) ->
@@ -628,10 +625,9 @@ let f_ensures_default =
   try
    begin
      (let p = ref (any_pointer void) in
-     (C_1:
      begin
-       (let jessie_<somenum> = (p := null) in void); (return := !p); (raise Return)
-     end)); absurd  end with Return -> !return end))
+       (let _jessie_<somenum> = (p := null) in void); (return := !p); (raise Return)
+     end); absurd  end with Return -> !return end))
   { (JC_<somenum>: (result = null)) }
 
 let f_safety =
@@ -642,10 +638,9 @@ let f_safety =
   try
    begin
      (let p = ref (any_pointer void) in
-     (C_1:
      begin
-       (let jessie_<somenum> = (p := null) in void); (return := !p); (raise Return)
-     end)); absurd  end with Return -> !return end)) { true }
+       (let _jessie_<somenum> = (p := null) in void); (return := !p); (raise Return)
+     end); absurd  end with Return -> !return end)) { true }
 
 let g_ensures_default =
  fun (tt : unit) ->
@@ -655,10 +650,9 @@ let g_ensures_default =
   try
    begin
      (let p_1 = ref (any_pointer void) in
-     (C_5:
      begin
-       (let jessie_<somenum> = (p_1 := null) in void); (return := !p_1);
-      (raise Return) end)); absurd  end with Return -> !return end))
+       (let _jessie_<somenum> = (p_1 := null) in void); (return := !p_1);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_<somenum>: (result = null)) }
 
 let g_safety =
@@ -669,11 +663,9 @@ let g_safety =
   try
    begin
      (let p_1 = ref (any_pointer void) in
-     (C_5:
      begin
-       (let jessie_<somenum> = (p_1 := null) in void); (return := !p_1);
-      (raise Return) end)); absurd  end with Return -> !return end)) 
-  { true }
+       (let _jessie_<somenum> = (p_1 := null) in void); (return := !p_1);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C null2.jessie --quiet -f null2.makefile project

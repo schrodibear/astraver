@@ -32,18 +32,18 @@ Typing OK.
 Generating JC function cons_Fresh for constructor Fresh
 Generating JC function Fresh_create for method Fresh.create
 Generating JC function Fresh_test for method Fresh.test
-Generating JC function Object_registerNatives for method Object.registerNatives
+Generating JC function Object_clone for method Object.clone
+Generating JC function Object_notifyAll for method Object.notifyAll
 Generating JC function Object_hashCode for method Object.hashCode
 Generating JC function Object_equals for method Object.equals
-Generating JC function Object_clone for method Object.clone
-Generating JC function Object_toString for method Object.toString
-Generating JC function Object_notify for method Object.notify
-Generating JC function Object_notifyAll for method Object.notifyAll
-Generating JC function Object_wait_long for method Object.wait
-Generating JC function Object_wait_long_int for method Object.wait
 Generating JC function Object_wait for method Object.wait
-Generating JC function Object_finalize for method Object.finalize
+Generating JC function Object_notify for method Object.notify
+Generating JC function Object_wait_long for method Object.wait
+Generating JC function Object_toString for method Object.toString
+Generating JC function Object_wait_long_int for method Object.wait
 Generating JC function cons_Object for constructor Object
+Generating JC function Object_finalize for method Object.finalize
+Generating JC function Object_registerNatives for method Object.registerNatives
 Done.
 ========== file tests/java/Fresh.jc ==========
 # InvariantPolicy = Arguments
@@ -68,19 +68,19 @@ predicate Non_null_Object{Here}(Object[0..] x) =
 String[0..] any_string()
 ;
 
-tag Object = {
+tag String = Object with {
 }
 
-tag String = Object with {
+tag Fresh = Object with {
 }
 
 tag Throwable = Object with {
 }
 
-tag Exception = Object with {
+tag Object = {
 }
 
-tag Fresh = Object with {
+tag Exception = Object with {
 }
 
 type Object = [Object]
@@ -95,9 +95,9 @@ behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
 
-exception Throwable of Throwable[0..]
-
 exception Exception of Exception[0..]
+
+exception Throwable of Throwable[0..]
 
 unit cons_Fresh(! Fresh[0] this_2){()}
 
@@ -111,7 +111,7 @@ behavior default:
       (var Fresh[0] this = (new Fresh[1]));
       
       {  
-         (var unit tt = cons_Fresh(this));
+         (var unit _tt = cons_Fresh(this));
          this
       }
    })
@@ -126,40 +126,40 @@ unit Fresh_test(Fresh[0] this_0)
    }
 }
 
-unit Object_registerNatives()
+Object[0..] Object_clone(Object[0] this_3)
 ;
 
-int32 Object_hashCode(Object[0] this_3)
+unit Object_notifyAll(Object[0] this_4)
 ;
 
-boolean Object_equals(Object[0] this_4, Object[0..] obj)
+int32 Object_hashCode(Object[0] this_5)
 ;
 
-Object[0..] Object_clone(Object[0] this_5)
+boolean Object_equals(Object[0] this_6, Object[0..] obj)
 ;
 
-String[0..] Object_toString(Object[0] this_6)
+unit Object_wait(Object[0] this_7)
 ;
 
-unit Object_notify(Object[0] this_7)
-;
-
-unit Object_notifyAll(Object[0] this_8)
+unit Object_notify(Object[0] this_8)
 ;
 
 unit Object_wait_long(Object[0] this_9, long timeout)
 ;
 
-unit Object_wait_long_int(Object[0] this_10, long timeout_0, int32 nanos)
+String[0..] Object_toString(Object[0] this_10)
 ;
 
-unit Object_wait(Object[0] this_11)
+unit Object_wait_long_int(Object[0] this_11, long timeout_0, int32 nanos)
 ;
+
+unit cons_Object(! Object[0] this_13){()}
 
 unit Object_finalize(Object[0] this_12)
 ;
 
-unit cons_Object(! Object[0] this_13){()}
+unit Object_registerNatives()
+;
 
 /*
 Local Variables:
@@ -168,11 +168,80 @@ compile-command: "jessie -why-opt -split-user-conj -locs tests/java/Fresh.jloc t
 End:
 */
 ========== file tests/java/Fresh.jloc ==========
+[cons_Fresh]
+name = "Constructor of class Fresh"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[Object_wait_long]
+name = "Method wait"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
+
+[Object_finalize]
+name = "Method finalize"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
+
+[Object_wait]
+name = "Method wait"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[Object_notify]
+name = "Method notify"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 243
+begin = 29
+end = 35
+
+[Object_clone]
+name = "Method clone"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 184
+begin = 28
+end = 33
+
+[cons_Object]
+name = "Constructor of class Object"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [K_1]
 file = "HOME/tests/java/Fresh.java"
 line = 6
 begin = 16
 end = 31
+
+[K_4]
+file = "HOME/tests/java/Fresh.java"
+line = 13
+begin = 18
+end = 27
+
+[Object_wait_long_int]
+name = "Method wait"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
+
+[Object_registerNatives]
+name = "Method registerNatives"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
 
 [K_2]
 file = "HOME/tests/java/Fresh.java"
@@ -186,74 +255,12 @@ line = 14
 begin = 19
 end = 28
 
-[cons_Fresh]
-name = "Constructor of class Fresh"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Object_equals]
-name = "Method equals"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
-
-[K_4]
-file = "HOME/tests/java/Fresh.java"
-line = 13
-begin = 18
-end = 27
-
 [Fresh_test]
 name = "Method test"
 file = "HOME/tests/java/Fresh.java"
 line = 12
 begin = 9
 end = 13
-
-[Object_notify]
-name = "Method notify"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
-
-[Fresh_create]
-name = "Method create"
-file = "HOME/tests/java/Fresh.java"
-line = 8
-begin = 17
-end = 23
-
-[cons_Object]
-name = "Constructor of class Object"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Object_wait_long_int]
-name = "Method wait"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
-
-[Object_wait_long]
-name = "Method wait"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
-
-[Object_hashCode]
-name = "Method hashCode"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
 
 [Object_notifyAll]
 name = "Method notifyAll"
@@ -262,40 +269,33 @@ line = 267
 begin = 29
 end = 38
 
+[Fresh_create]
+name = "Method create"
+file = "HOME/tests/java/Fresh.java"
+line = 8
+begin = 17
+end = 23
+
+[Object_equals]
+name = "Method equals"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
+
+[Object_hashCode]
+name = "Method hashCode"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 74
+begin = 22
+end = 30
+
 [Object_toString]
 name = "Method toString"
 file = "HOME/lib/java_api/java/lang/Object.java"
 line = 207
 begin = 18
 end = 26
-
-[Object_registerNatives]
-name = "Method registerNatives"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
-
-[Object_clone]
-name = "Method clone"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
-
-[Object_wait]
-name = "Method wait"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
-
-[Object_finalize]
-name = "Method finalize"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
 
 ========== jessie execution ==========
 Generating Why function cons_Fresh
@@ -312,10 +312,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Fresh.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Fresh.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Fresh.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Fresh.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -460,13 +461,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: Fresh.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: Fresh.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: Fresh.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include Fresh.depend
 
@@ -477,405 +478,13 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/Fresh.loc ==========
-[JC_90]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Fresh_create_safety]
-name = "Method create"
-behavior = "Safety"
-file = "HOME/tests/java/Fresh.java"
-line = 8
-begin = 17
-end = 23
-
-[JC_91]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_92]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
-
-[JC_40]
-file = "HOME/tests/java/Fresh.java"
-line = 12
-begin = 9
-end = 13
-
-[JC_93]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_41]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_94]
 file = "HOME/lib/java_api/java/lang/Object.java"
 line = 243
 begin = 29
 end = 35
 
-[JC_42]
-file = "HOME/tests/java/Fresh.java"
-line = 12
-begin = 9
-end = 13
-
-[JC_95]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_43]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_96]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_44]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_97]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_45]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_98]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_46]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_1]
-file = "HOME/tests/java/Fresh.jc"
-line = 20
-begin = 12
-end = 22
-
-[JC_100]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
-
-[JC_99]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_47]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_2]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_101]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_48]
-kind = UserCall
-file = "HOME/tests/java/Fresh.java"
-line = 13
-begin = 18
-end = 27
-
-[JC_3]
-file = "HOME/tests/java/Fresh.jc"
-line = 20
-begin = 12
-end = 22
-
-[JC_102]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
-
-[JC_49]
-file = "HOME/tests/java/Fresh.java"
-line = 14
-begin = 19
-end = 28
-
-[JC_4]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_103]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Fresh_create_ensures_default]
-name = "Method create"
-behavior = "default behavior"
-file = "HOME/tests/java/Fresh.java"
-line = 8
-begin = 17
-end = 23
-
-[JC_5]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_104]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_105]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[cons_Object_safety]
-name = "Constructor of class Object"
-behavior = "Safety"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_106]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_107]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_9]
-file = "HOME/tests/java/Fresh.jc"
-line = 45
-begin = 8
-end = 23
-
-[JC_108]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
-
-[JC_109]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_50]
-kind = UserCall
-file = "HOME/tests/java/Fresh.java"
-line = 13
-begin = 18
-end = 27
-
-[JC_51]
-file = "HOME/tests/java/Fresh.java"
-line = 14
-begin = 19
-end = 28
-
-[JC_52]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
-
-[JC_53]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_54]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
-
-[JC_55]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_56]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_110]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
-
-[JC_57]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_111]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_58]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_112]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_59]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_113]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_114]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_115]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_116]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
-
-[JC_117]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_118]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
-
-[JC_119]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_60]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
-
-[JC_61]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_62]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
-
-[JC_10]
+[JC_73]
 file = "HOME/"
 line = 0
 begin = -1
@@ -887,177 +496,17 @@ line = 0
 begin = -1
 end = -1
 
-[JC_11]
-file = "HOME/tests/java/Fresh.jc"
-line = 45
-begin = 8
-end = 23
-
-[JC_64]
+[JC_80]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_12]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_65]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_13]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_66]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_14]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_120]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_67]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_15]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_121]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_68]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
-
-[JC_16]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_122]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_69]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_17]
-file = "HOME/tests/java/Fresh.jc"
-line = 47
-begin = 11
-end = 65
-
-[JC_123]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_18]
-file = "HOME/tests/java/Fresh.jc"
-line = 47
-begin = 11
-end = 65
-
-[JC_124]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
-
-[JC_19]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_125]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_126]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
-
-[Fresh_test_safety]
-name = "Method test"
-behavior = "Safety"
+[JC_51]
 file = "HOME/tests/java/Fresh.java"
-line = 12
-begin = 9
-end = 13
-
-[cons_Fresh_safety]
-name = "Constructor of class Fresh"
-behavior = "Safety"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_127]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_128]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_129]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_70]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
+line = 14
 begin = 19
-end = 25
+end = 28
 
 [JC_71]
 file = "HOME/"
@@ -1065,61 +514,55 @@ line = 0
 begin = -1
 end = -1
 
-[JC_72]
+[JC_147]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_20]
+[JC_45]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_73]
+[JC_123]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_21]
+[JC_106]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_74]
+[JC_143]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_22]
+[JC_113]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_75]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_23]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_76]
+[JC_116]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+line = 386
+begin = 22
+end = 26
 
-[JC_24]
+[JC_64]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_133]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1133,139 +576,19 @@ line = 0
 begin = -1
 end = -1
 
-[JC_130]
+[JC_99]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_77]
+[JC_85]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_25]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_131]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_78]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
-
-[JC_26]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_132]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
-
-[JC_79]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_27]
-file = "HOME/tests/java/Fresh.java"
-line = 8
-begin = 17
-end = 23
-
-[JC_133]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_134]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
-
-[JC_29]
-file = "HOME/tests/java/Fresh.java"
-line = 8
-begin = 17
-end = 23
-
-[JC_135]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_136]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_137]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_138]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_139]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_80]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_81]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_82]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_30]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_83]
+[JC_126]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1277,43 +600,190 @@ line = 6
 begin = 16
 end = 31
 
-[JC_84]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
+[JC_17]
+file = "HOME/tests/java/Fresh.jc"
+line = 47
+begin = 11
+end = 65
 
-[JC_32]
+[JC_122]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_81]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_55]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_138]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_134]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
+
+[JC_137]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_48]
+kind = UserCall
 file = "HOME/tests/java/Fresh.java"
-line = 6
-begin = 16
-end = 31
-
-[JC_85]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_86]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
+line = 13
 begin = 18
-end = 26
+end = 27
 
-[JC_34]
+[JC_23]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_140]
+[JC_22]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_121]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_5]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_125]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_67]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_9]
+file = "HOME/tests/java/Fresh.jc"
+line = 45
+begin = 8
+end = 23
+
+[JC_75]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_24]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_25]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_78]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
+
+[JC_41]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_74]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_47]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_52]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 184
+begin = 28
+end = 33
+
+[JC_26]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_54]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 184
+begin = 28
+end = 33
+
+[JC_79]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_13]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_130]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_82]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_Fresh_ensures_default]
+name = "Constructor of class Fresh"
+behavior = "default behavior"
 file = "HOME/"
 line = 0
 begin = -1
@@ -1325,20 +795,25 @@ line = 0
 begin = -1
 end = -1
 
-[JC_35]
-kind = AllocSize
+[JC_11]
 file = "HOME/tests/java/Fresh.jc"
-line = 63
-begin = 28
-end = 40
+line = 45
+begin = 8
+end = 23
 
-[JC_141]
+[JC_98]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_88]
+[JC_70]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 74
+begin = 22
+end = 30
+
+[JC_15]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1351,26 +826,93 @@ line = 63
 begin = 7
 end = 41
 
-[JC_142]
+[JC_104]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_89]
+[JC_91]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_37]
+[JC_39]
 kind = UserCall
 file = "HOME/tests/java/Fresh.jc"
 line = 66
-begin = 24
+begin = 25
+end = 41
+
+[JC_112]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_40]
+file = "HOME/tests/java/Fresh.java"
+line = 12
+begin = 9
+end = 13
+
+[JC_135]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_83]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_35]
+kind = AllocSize
+file = "HOME/tests/java/Fresh.jc"
+line = 63
+begin = 28
 end = 40
 
-[JC_143]
+[JC_132]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
+
+[JC_27]
+file = "HOME/tests/java/Fresh.java"
+line = 8
+begin = 17
+end = 23
+
+[JC_115]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_109]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_107]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_69]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_124]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1383,22 +925,279 @@ line = 63
 begin = 28
 end = 40
 
+[Fresh_create_safety]
+name = "Method create"
+behavior = "Safety"
+file = "HOME/tests/java/Fresh.java"
+line = 8
+begin = 17
+end = 23
+
+[Fresh_test_safety]
+name = "Method test"
+behavior = "Safety"
+file = "HOME/tests/java/Fresh.java"
+line = 12
+begin = 9
+end = 13
+
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_127]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_62]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 267
+begin = 29
+end = 38
+
+[JC_101]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_88]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_129]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_42]
+file = "HOME/tests/java/Fresh.java"
+line = 12
+begin = 9
+end = 13
+
+[JC_110]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 207
+begin = 18
+end = 26
+
+[JC_103]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_46]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_141]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_61]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_32]
+file = "HOME/tests/java/Fresh.java"
+line = 6
+begin = 16
+end = 31
+
+[JC_56]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[Fresh_create_ensures_default]
+name = "Method create"
+behavior = "default behavior"
+file = "HOME/tests/java/Fresh.java"
+line = 8
+begin = 17
+end = 23
+
+[JC_33]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_65]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_118]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
+
+[JC_105]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_140]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
+
+[JC_29]
+file = "HOME/tests/java/Fresh.java"
+line = 8
+begin = 17
+end = 23
+
 [JC_144]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_39]
-kind = UserCall
-file = "HOME/tests/java/Fresh.jc"
-line = 66
-begin = 24
-end = 40
+[cons_Object_safety]
+name = "Constructor of class Object"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[cons_Fresh_ensures_default]
-name = "Constructor of class Fresh"
-behavior = "default behavior"
+[JC_68]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 74
+begin = 22
+end = 30
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_16]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_96]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_43]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_95]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_93]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_97]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_84]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[JC_128]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_114]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_14]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_117]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_90]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_53]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1410,17 +1209,182 @@ line = 0
 begin = -1
 end = -1
 
+[JC_21]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_111]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_77]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_49]
+file = "HOME/tests/java/Fresh.java"
+line = 14
+begin = 19
+end = 28
+
+[JC_1]
+file = "HOME/tests/java/Fresh.jc"
+line = 20
+begin = 12
+end = 22
+
+[JC_131]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_102]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
+
+[JC_37]
+kind = UserCall
+file = "HOME/tests/java/Fresh.jc"
+line = 66
+begin = 25
+end = 41
+
+[JC_142]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_108]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 207
+begin = 18
+end = 26
+
+[JC_57]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_146]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_147]
+[JC_89]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_136]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_66]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_59]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_18]
+file = "HOME/tests/java/Fresh.jc"
+line = 47
+begin = 11
+end = 65
+
+[JC_3]
+file = "HOME/tests/java/Fresh.jc"
+line = 20
+begin = 12
+end = 22
+
+[JC_92]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 243
+begin = 29
+end = 35
+
+[JC_86]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[JC_60]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 267
+begin = 29
+end = 38
+
+[JC_139]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_72]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_19]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_119]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_Fresh_safety]
+name = "Constructor of class Fresh"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_76]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
 
 [Fresh_test_ensures_default]
 name = "Method test"
@@ -1429,6 +1393,43 @@ file = "HOME/tests/java/Fresh.java"
 line = 12
 begin = 9
 end = 13
+
+[JC_50]
+kind = UserCall
+file = "HOME/tests/java/Fresh.java"
+line = 13
+begin = 18
+end = 27
+
+[JC_30]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_120]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_58]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_100]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
+
+[JC_28]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/java/why/Fresh.why ==========
 type Object
@@ -1767,19 +1768,19 @@ exception Loop_continue_exc of unit
 exception Loop_exit_exc of unit
 
 parameter Object_clone :
- this_5:Object pointer ->
+ this_3:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_clone_requires :
- this_5:Object pointer ->
+ this_3:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_equals :
- this_4:Object pointer ->
+ this_6:Object pointer ->
   obj:Object pointer -> { } bool reads Object_alloc_table { true }
 
 parameter Object_equals_requires :
- this_4:Object pointer ->
+ this_6:Object pointer ->
   obj:Object pointer -> { } bool reads Object_alloc_table { true }
 
 parameter Object_finalize :
@@ -1789,48 +1790,48 @@ parameter Object_finalize_requires :
  this_12:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_hashCode :
- this_3:Object pointer -> { } int32 reads Object_alloc_table { true }
+ this_5:Object pointer -> { } int32 reads Object_alloc_table { true }
 
 parameter Object_hashCode_requires :
- this_3:Object pointer -> { } int32 reads Object_alloc_table { true }
+ this_5:Object pointer -> { } int32 reads Object_alloc_table { true }
 
 parameter Object_notify :
- this_7:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_8:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notifyAll :
- this_8:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_4:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notifyAll_requires :
- this_8:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_4:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notify_requires :
- this_7:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_8:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_registerNatives : tt:unit -> { } unit { true }
 
 parameter Object_registerNatives_requires : tt:unit -> { } unit { true }
 
 parameter Object_toString :
- this_6:Object pointer ->
+ this_10:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_toString_requires :
- this_6:Object pointer ->
+ this_10:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_wait :
- this_11:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_7:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long :
  this_9:Object pointer ->
   timeout:long -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_int :
- this_10:Object pointer ->
+ this_11:Object pointer ->
   timeout_0:long -> nanos:int32 -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_int_requires :
- this_10:Object pointer ->
+ this_11:Object pointer ->
   timeout_0:long -> nanos:int32 -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_requires :
@@ -1838,7 +1839,7 @@ parameter Object_wait_long_requires :
   timeout:long -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_requires :
- this_11:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_7:Object pointer -> { } unit reads Object_alloc_table { true }
 
 exception Return_label_exc of unit
 
@@ -2076,8 +2077,8 @@ let Fresh_create_ensures_default =
      (return := (let this =
                 (JC_38:
                 (((alloc_struct_Fresh (1)) Object_alloc_table) Object_tag_table)) in
-                (let tt =
-                (let jessie_<num> = this in (JC_39: (cons_Fresh jessie_<num>))) in
+                (let _tt =
+                (let _jessie_<num> = this in (JC_39: (cons_Fresh _jessie_<num>))) in
                 this))); (raise Return); absurd  end with Return ->
    !return end)) { (JC_31: (not valid(Object_alloc_table@, result))) }
 
@@ -2089,16 +2090,16 @@ let Fresh_create_safety =
   try
    begin
      (return := (let this =
-                (let jessie_<num> =
+                (let _jessie_<num> =
                 (JC_35:
                 (((alloc_struct_Fresh_requires (1)) Object_alloc_table) Object_tag_table)) in
                 (JC_36:
                 (assert
-                { ge_int(offset_max(Object_alloc_table, jessie_<num>), (0)) };
-                jessie_<num>))) in
-                (let tt =
-                (let jessie_<num> = this in
-                (JC_37: (cons_Fresh_requires jessie_<num>))) in this)));
+                { ge_int(offset_max(Object_alloc_table, _jessie_<num>), (0)) };
+                _jessie_<num>))) in
+                (let _tt =
+                (let _jessie_<num> = this in
+                (JC_37: (cons_Fresh_requires _jessie_<num>))) in this)));
     (raise Return); absurd  end with Return -> !return end)) { true }
 
 let Fresh_test_ensures_default =
@@ -2137,7 +2138,7 @@ let cons_Object_ensures_default =
  fun (this_13 : Object pointer) ->
   { valid_struct_Object(this_13, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_144: true) }
+  { (JC_128: true) }
 
 let cons_Object_safety =
  fun (this_13 : Object pointer) ->
@@ -2174,7 +2175,7 @@ why --project [...] why/Fresh.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Fresh_po3.why">
-      <location file = "why/Fresh.why" line = "664" begin = "18" end = "71"/>
+      <location file = "why/Fresh.why" line = "664" begin = "18" end = "72"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -4563,7 +4564,7 @@ why -simplify [...] why/Fresh.why
 ;; Fresh_create_safety_po_1, File "HOME/tests/java/Fresh.jc", line 63, characters 28-40
 (IMPLIES TRUE (>= 1 0))
 
-;; Fresh_create_safety_po_2, File "why/Fresh.why", line 664, characters 18-71
+;; Fresh_create_safety_po_2, File "why/Fresh.why", line 664, characters 18-72
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)

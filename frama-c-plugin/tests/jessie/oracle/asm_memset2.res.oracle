@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only asm_memset2.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD asm_memset2.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only asm_memset2.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/asm_memset2.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir asm_memset2.jessie
 [jessie] File asm_memset2.jessie/asm_memset2.jc written.
@@ -55,38 +55,38 @@ lemma div4_not_mod4 :
 
 unit memset_uchar(unsigned_charP[..] Adresse_0, uint8 ValOct_0, uint32 i_min,
                   uint32 i_max)
-  requires (C_18 : ((C_19 : (i_min <= i_max)) &&
-                     (C_20 : (i_max <= 4294967294))));
-  requires (C_15 : ((C_16 : (\offset_min(Adresse_0) <= i_min)) &&
-                     (C_17 : (\offset_max(Adresse_0) >= i_max))));
+  requires (_C_18 : ((_C_19 : (i_min <= i_max)) &&
+                      (_C_20 : (i_max <= 4294967294))));
+  requires (_C_15 : ((_C_16 : (\offset_min(Adresse_0) <= i_min)) &&
+                      (_C_17 : (\offset_max(Adresse_0) >= i_max))));
 behavior default:
   assigns (Adresse_0 + [i_min..i_max]).unsigned_charM;
-  ensures (C_14 : (\forall integer k_0;
-                    (((\at(i_min,Old) <= k_0) && (k_0 <= \at(i_max,Old))) ==>
-                      ((\at(Adresse_0,Old) + k_0).unsigned_charM ==
-                        \at(ValOct_0,Old)))));
+  ensures (_C_14 : (\forall integer k_0;
+                     (((\at(i_min,Old) <= k_0) && (k_0 <= \at(i_max,Old))) ==>
+                       ((\at(Adresse_0,Old) + k_0).unsigned_charM ==
+                         \at(ValOct_0,Old)))));
 {  
    (var uint32 i);
    
-   {  (C_1 : (i = i_min));
+   {  (_C_1 : (i = i_min));
       
       loop 
       behavior default:
-        invariant (C_3 : ((C_4 : (i_min <= i)) &&
-                           ((C_6 : (i <= (i_max + 1))) &&
-                             (C_7 : ((i_max + 1) <= 4294967295)))));
+        invariant (_C_3 : ((_C_4 : (i_min <= i)) &&
+                            ((_C_6 : (i <= (i_max + 1))) &&
+                              (_C_7 : ((i_max + 1) <= 4294967295)))));
       behavior default:
-        invariant (C_2 : (\forall integer k;
-                           (((i_min <= k) && (k < i)) ==>
-                             ((Adresse_0 + k).unsigned_charM == ValOct_0))));
+        invariant (_C_2 : (\forall integer k;
+                            (((i_min <= k) && (k < i)) ==>
+                              ((Adresse_0 + k).unsigned_charM == ValOct_0))));
       while (true)
       {  
          {  (if (i <= i_max) then () else 
             (goto while_0_break));
             
-            {  (C_10 : ((C_9 : (C_8 : (Adresse_0 + i)).unsigned_charM) = ValOct_0))
+            {  (_C_10 : ((_C_9 : (_C_8 : (Adresse_0 + i)).unsigned_charM) = ValOct_0))
             };
-            (C_13 : (i = (C_12 : ((C_11 : (i + 1)) :> uint32))))
+            (_C_13 : (i = (_C_12 : ((_C_11 : (i + 1)) :> uint32))))
          }
       };
       (while_0_break : ());
@@ -97,39 +97,40 @@ behavior default:
 
 unit memset_uint(unsigned_longP[..] Adresse_1, uint32 ValMot, uint32 i_min_0,
                  uint32 i_max_0)
-  requires (C_39 : ((C_40 : (i_min_0 <= i_max_0)) &&
-                     (C_41 : (i_max_0 <= 4294967294))));
-  requires (C_36 : ((C_37 : (\offset_min(Adresse_1) <= i_min_0)) &&
-                     (C_38 : (\offset_max(Adresse_1) >= i_max_0))));
+  requires (_C_39 : ((_C_40 : (i_min_0 <= i_max_0)) &&
+                      (_C_41 : (i_max_0 <= 4294967294))));
+  requires (_C_36 : ((_C_37 : (\offset_min(Adresse_1) <= i_min_0)) &&
+                      (_C_38 : (\offset_max(Adresse_1) >= i_max_0))));
 behavior default:
-  ensures (C_35 : (\forall integer k_2;
-                    (((\at(i_min_0,Old) <= k_2) && (k_2 <= \at(i_max_0,Old))) ==>
-                      ((\at(Adresse_1,Old) + k_2).unsigned_longM ==
-                        (\at(ValMot,Old) :> uint32)))));
+  ensures (_C_35 : (\forall integer k_2;
+                     (((\at(i_min_0,Old) <= k_2) &&
+                        (k_2 <= \at(i_max_0,Old))) ==>
+                       ((\at(Adresse_1,Old) + k_2).unsigned_longM ==
+                         (\at(ValMot,Old) :> uint32)))));
 {  
    (var uint32 i_0);
    
-   {  (C_21 : (i_0 = i_min_0));
+   {  (_C_21 : (i_0 = i_min_0));
       
       loop 
       behavior default:
-        invariant (C_23 : ((C_24 : (i_min_0 <= i_0)) &&
-                            ((C_26 : (i_0 <= (i_max_0 + 1))) &&
-                              (C_27 : ((i_max_0 + 1) <= 4294967295)))));
+        invariant (_C_23 : ((_C_24 : (i_min_0 <= i_0)) &&
+                             ((_C_26 : (i_0 <= (i_max_0 + 1))) &&
+                               (_C_27 : ((i_max_0 + 1) <= 4294967295)))));
       behavior default:
-        invariant (C_22 : (\forall integer k_1;
-                            (((i_min_0 <= k_1) && (k_1 < i_0)) ==>
-                              ((Adresse_1 + k_1).unsigned_longM ==
-                                (ValMot :> uint32)))));
+        invariant (_C_22 : (\forall integer k_1;
+                             (((i_min_0 <= k_1) && (k_1 < i_0)) ==>
+                               ((Adresse_1 + k_1).unsigned_longM ==
+                                 (ValMot :> uint32)))));
       while (true)
       {  
          {  (if (i_0 <= i_max_0) then () else 
             (goto while_0_break));
             
-            {  (C_31 : ((C_30 : (C_29 : (Adresse_1 + i_0)).unsigned_longM) = 
-               (C_28 : (ValMot :> uint32))))
+            {  (_C_31 : ((_C_30 : (_C_29 : (Adresse_1 + i_0)).unsigned_longM) = 
+               (_C_28 : (ValMot :> uint32))))
             };
-            (C_34 : (i_0 = (C_33 : ((C_32 : (i_0 + 1)) :> uint32))))
+            (_C_34 : (i_0 = (_C_33 : ((_C_32 : (i_0 + 1)) :> uint32))))
          }
       };
       (while_0_break : ());
@@ -141,37 +142,39 @@ behavior default:
 uint32 addr_mod4;
 
 unit memset_burst4(charP[..] Adresse, uint8 ValOct, uint32 NbOct)
-  requires (C_78 : ((C_79 : (0 <= addr_mod4)) && (C_80 : (addr_mod4 <= 3))));
-  requires (C_77 : (1 <= NbOct));
-  requires (C_74 : ((C_75 : (\offset_min(Adresse) <= 0)) &&
-                     (C_76 : (\offset_max(Adresse) >= (NbOct - 1)))));
+  requires (_C_78 : ((_C_79 : (0 <= addr_mod4)) &&
+                      (_C_80 : (addr_mod4 <= 3))));
+  requires (_C_77 : (1 <= NbOct));
+  requires (_C_74 : ((_C_75 : (\offset_min(Adresse) <= 0)) &&
+                      (_C_76 : (\offset_max(Adresse) >= (NbOct - 1)))));
 behavior default:
-  ensures (C_68 : true);
+  ensures (_C_68 : true);
 behavior small_data:
   assumes (NbOct < 4);
-  ensures (C_69 : (\forall integer k_7;
-                    (((0 <= k_7) && (k_7 <= (\at(NbOct,Old) - 1))) ==>
-                      ((\at(Adresse,Old) + k_7).charM == \at(ValOct,Old)))));
+  ensures (_C_69 : (\forall integer k_7;
+                     (((0 <= k_7) && (k_7 <= (\at(NbOct,Old) - 1))) ==>
+                       ((\at(Adresse,Old) + k_7).charM == \at(ValOct,Old)))));
 behavior misaligned_data:
   assumes ((NbOct >= 4) && (addr_mod4 != 0));
-  ensures (C_70 : ((C_71 : (\forall integer k_5;
-                             (((0 <= k_5) && (k_5 <= (3 - addr_mod4))) ==>
-                               ((\at(Adresse,Old) + k_5).charM ==
-                                 \at(ValOct,Old))))) &&
-                    (C_72 : (\forall integer k_6;
-                              (((((4 - addr_mod4) +
-                                   (4 *
-                                     ((\at(NbOct,Old) - (4 - addr_mod4)) / 4))) <=
-                                  k_6) &&
-                                 (k_6 <= (\at(NbOct,Old) - 1))) ==>
-                                ((\at(Adresse,Old) + k_6).charM ==
-                                  \at(ValOct,Old)))))));
+  ensures (_C_70 : ((_C_71 : (\forall integer k_5;
+                               (((0 <= k_5) && (k_5 <= (3 - addr_mod4))) ==>
+                                 ((\at(Adresse,Old) + k_5).charM ==
+                                   \at(ValOct,Old))))) &&
+                     (_C_72 : (\forall integer k_6;
+                                (((((4 - addr_mod4) +
+                                     (4 *
+                                       ((\at(NbOct,Old) - (4 - addr_mod4)) /
+                                         4))) <=
+                                    k_6) &&
+                                   (k_6 <= (\at(NbOct,Old) - 1))) ==>
+                                  ((\at(Adresse,Old) + k_6).charM ==
+                                    \at(ValOct,Old)))))));
 behavior aligned_data:
   assumes ((NbOct >= 4) && (addr_mod4 == 0));
-  ensures (C_73 : (\forall integer k_4;
-                    ((((4 * (\at(NbOct,Old) / 4)) <= k_4) &&
-                       (k_4 <= (\at(NbOct,Old) - 1))) ==>
-                      ((\at(Adresse,Old) + k_4).charM == \at(ValOct,Old)))));
+  ensures (_C_73 : (\forall integer k_4;
+                     ((((4 * (\at(NbOct,Old) / 4)) <= k_4) &&
+                        (k_4 <= (\at(NbOct,Old) - 1))) ==>
+                       ((\at(Adresse,Old) + k_4).charM == \at(ValOct,Old)))));
 {  
    (var unsigned_charP[..] s);
    
@@ -181,36 +184,37 @@ behavior aligned_data:
    
    (var uint32 nb_mots_alignes);
    
-   {  (C_43 : (s = (C_42 : (Adresse :> unsigned_charP[..]))));
-      (C_44 : (index_oct = 0));
+   {  (_C_43 : (s = (_C_42 : (Adresse :> unsigned_charP[..]))));
+      (_C_44 : (index_oct = 0));
       (if (NbOct >= 4) then 
-      {  (C_47 : (align = (C_46 : ((C_45 : (4 - addr_mod4)) :> uint32))));
+      {  (_C_47 : (align = (_C_46 : ((_C_45 : (4 - addr_mod4)) :> uint32))));
          (if (align < 4) then 
-         {  (C_50 : memset_uchar(s, ValOct, index_oct,
-                                 (C_49 : ((C_48 : (align - 1)) :> uint32))));
+         {  (_C_50 : memset_uchar(s, ValOct, index_oct,
+                                  (_C_49 : ((_C_48 : (align - 1)) :> uint32))));
             
             {  
-               (assert for misaligned_data: (C_51 : (jessie : (\forall integer k_3;
-                                                                (((0 <= k_3) &&
-                                                                   (k_3 <=
+               (assert for misaligned_data: (_C_51 : (jessie : (\forall integer k_3;
+                                                                 (((0 <= k_3) &&
+                                                                    (k_3 <=
                                                                     (3 -
                                                                     addr_mod4))) ==>
-                                                                  ((s + k_3).unsigned_charM ==
+                                                                   ((s + k_3).unsigned_charM ==
                                                                     ValOct))))));
                ()
             };
-            (C_54 : (index_oct = (C_53 : ((C_52 : (index_oct + align)) :> uint32))))
+            (_C_54 : (index_oct = (_C_53 : ((_C_52 : (index_oct + align)) :> uint32))))
          } else ());
-         (C_59 : (nb_mots_alignes = (C_58 : ((C_57 : ((C_56 : ((C_55 : 
-                                                               (NbOct -
-                                                                 index_oct)) :> uint32)) /
-                                                       4)) :> uint32))));
-         (C_64 : (index_oct = (C_63 : ((C_62 : (index_oct +
-                                                 (C_61 : ((C_60 : (4 *
-                                                                    nb_mots_alignes)) :> uint32)))) :> uint32))))
+         (_C_59 : (nb_mots_alignes = (_C_58 : ((_C_57 : ((_C_56 : ((_C_55 : 
+                                                                   (NbOct -
+                                                                    index_oct)) :> uint32)) /
+                                                          4)) :> uint32))));
+         (_C_64 : (index_oct = (_C_63 : ((_C_62 : (index_oct +
+                                                    (_C_61 : ((_C_60 : 
+                                                              (4 *
+                                                                nb_mots_alignes)) :> uint32)))) :> uint32))))
       } else ());
-      (C_67 : memset_uchar(s, ValOct, index_oct,
-                           (C_66 : ((C_65 : (NbOct - 1)) :> uint32))));
+      (_C_67 : memset_uchar(s, ValOct, index_oct,
+                            (_C_66 : ((_C_65 : (NbOct - 1)) :> uint32))));
       
       (return ())
    }

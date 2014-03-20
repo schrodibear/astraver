@@ -2,21 +2,21 @@
 #                                                                        #
 #  The Why platform for program certification                            #
 #                                                                        #
-#  Copyright (C) 2002-2011                                               #
+#  Copyright (C) 2002-2014                                               #
 #                                                                        #
-#    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                #
-#    Claude MARCHE, INRIA & Univ. Paris-sud 11                           #
-#    Yannick MOY, Univ. Paris-sud 11                                     #
-#    Romain BARDOU, Univ. Paris-sud 11                                   #
+#    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud                   #
+#    Claude MARCHE, INRIA & Univ. Paris-sud                              #
+#    Yannick MOY, Univ. Paris-sud                                        #
+#    Romain BARDOU, Univ. Paris-sud                                      #
 #                                                                        #
 #  Secondary contributors:                                               #
 #                                                                        #
-#    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     #
-#    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          #
-#    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        #
-#    Sylvie BOLDO, INRIA                 (floating-point support)        #
-#    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  #
-#    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       #
+#    Thierry HUBERT, Univ. Paris-sud  (former Caduceus front-end)        #
+#    Nicolas ROUSSET, Univ. Paris-sud (on Jessie & Krakatoa)             #
+#    Ali AYAD, CNRS & CEA Saclay      (floating-point support)           #
+#    Sylvie BOLDO, INRIA              (floating-point support)           #
+#    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     #
+#    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          #
 #                                                                        #
 #  This software is free software; you can redistribute it and/or        #
 #  modify it under the terms of the GNU Lesser General Public            #
@@ -90,7 +90,7 @@ ATPLIB = -I atp
 COQC7  = @COQC7@
 COQC8  = @COQC8@
 COQDEP = @COQDEP@
-COQLIB = "@COQLIB@"
+COQLIB = $(DESTDIR)"@COQLIB@"
 COQVER = @COQVER@
 
 VO7= lib/coq-v7/WhyInt.vo lib/coq-v7/WhyArrays.vo  lib/coq-v7/WhyBool.vo \
@@ -113,7 +113,7 @@ VO8= lib/coq/WhyInt.vo lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo \
 V8FILES=$(VO8:.vo=.v)
 
 PVSFILES = lib/pvs/why.pvs lib/pvs/jessie.pvs lib/pvs/whyfloat.pvs
-PVSLIB = @PVSLIB@
+PVSLIB = $(DESTDIR)@PVSLIB@
 
 GENERATED = src/version.ml src/rc.ml src/xml.ml \
 	    src/lexer.ml src/parser.mli \
@@ -331,7 +331,7 @@ jc/jc.cmi jc/jc.cmo: $(JCCMO_EXPORT)
 	$(OCAMLC) $(BFLAGS) -pack -o jc/jc.cmo src/ast.cmi $^
 
 jc/jc.cmx jc/jc.o: $(JCCMX_EXPORT)
-	$(OCAMLOPT) $(OFLAGS) -pack -o $@ src/ast.cmi $^
+	$(OCAMLOPT) $(OFLAGS) -pack -o jc/jc.cmx src/ast.cmi $^
 
 ppc: jc/jc.cmi jc/jc.cmo jc/jc.cmx
 
@@ -826,11 +826,13 @@ install-pvs-yes: $(PVSFILES)
 	(cd $(PVSLIB)/why ; @PVSC@ -batch -l pvscontext.el -q -v 2 > top.out)
 	@echo "======  Done compiling PVS theories ======"
 
+MIZARLIB = $(DESTDIR)@MIZARLIB@
+
 install-mizar-no:
 install-mizar-yes:
-	mkdir -p @MIZARLIB@/mml/dict
-	cp lib/mizar/why.miz @MIZARLIB@/mml
-	cp lib/mizar/dict/why.voc @MIZARLIB@/mml/dict
+	mkdir -p $(MIZARLIB)/mml/dict
+	cp lib/mizar/why.miz $(MIZARLIB)/mml
+	cp lib/mizar/dict/why.voc $(MIZARLIB)/mml/dict
 
 local-install: $(BINARY) $(WHYCONFIG) $(JESSIE) bin/gwhy.$(OCAMLBEST) byte bin/gwhy.byte
 	cp $(BINARY) $$HOME/bin/why
@@ -872,6 +874,7 @@ zip:
 
 DOC=doc/manual.ps doc/manual.html \
 	doc/krakatoa.pdf doc/krakatoa.html \
+	doc/jessie.pdf doc/jessie.html \
 	doc/main.pdf doc/main.html
 
 doc:: $(DOC)
@@ -893,6 +896,12 @@ doc/krakatoa.pdf: doc/krakatoa.tex doc/version.tex
 
 doc/krakatoa.html: doc/krakatoa.tex doc/version.tex
 	make -C doc krakatoa.html
+
+doc/jessie.pdf: doc/jessie.tex doc/version.tex
+	make -C doc jessie.pdf
+
+doc/jessie.html: doc/jessie.tex doc/version.tex
+	make -C doc jessie.html
 
 doc/main.pdf: doc/main.tex doc/version.tex
 	make -C doc main.pdf
@@ -1009,6 +1018,7 @@ EXPORT=export/$(NAME)
 
 WWW = /users/www-perso/projets/why
 FTP = $(WWW)/download
+WWWSRC=/home/marche/www/why
 WWWKRAKATOA = /users/www-perso/projets/krakatoa
 
 FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tools/*.ml* tools/*.c bin/gwhy.sh \
@@ -1056,9 +1066,9 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 distrib export: source export-doc export-www export-examples 
 
 export-www:
-	echo "<#def version>$(VERSION)</#def>" > /users/demons/filliatr/www/why/version.prehtml
-	echo "<#def cversion>$(CVERSION)</#def>" >> /users/demons/filliatr/www/why/version.prehtml
-	make -C /users/demons/filliatr/www/why install
+	echo "<#def version>$(VERSION)</#def>" > $(WWWSRC)/version.prehtml
+	echo "<#def cversion>$(CVERSION)</#def>" >> $(WWWSRC)/version.prehtml
+	make -C $(WWWSRC) install
 
 source: export/$(NAME).tar.gz
 	cp CHANGES export/$(NAME).tar.gz $(FTP)
@@ -1092,8 +1102,8 @@ export-doc: $(DOC) export-krakatoa-doc
 	(cd $(WWW)/manual; hacha manual.html)
 
 export-krakatoa-doc:
-	cp doc/krakatoa.pdf doc/krakatoa.html doc/*.png $(WWWKRAKATOA)/manual
-	(cd $(WWWKRAKATOA)/manual; hacha krakatoa.html)
+	cp doc/krakatoa.pdf doc/krakatoa.html doc/*.png $(WWWKRAKATOA)
+	cp doc/jessie.pdf doc/jessie.html $(WWWKRAKATOA)
 
 OSTYPE  ?= linux
 

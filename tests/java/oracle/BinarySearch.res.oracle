@@ -109,8 +109,8 @@ End:
 ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
-Generating JC function BinarySearch_binary_search for method BinarySearch.binary_search
 Generating JC function cons_BinarySearch for constructor BinarySearch
+Generating JC function BinarySearch_binary_search for method BinarySearch.binary_search
 Done.
 ========== file tests/java/BinarySearch.jc ==========
 # InvariantPolicy = Arguments
@@ -138,19 +138,19 @@ predicate Non_null_Object{Here}(Object[0..] x) =
 String[0..] any_string()
 ;
 
-tag Object = {
+tag String = Object with {
 }
 
-tag String = Object with {
+tag BinarySearch = Object with {
 }
 
 tag Throwable = Object with {
 }
 
-tag Exception = Object with {
+tag Object = {
 }
 
-tag BinarySearch = Object with {
+tag Exception = Object with {
 }
 
 type Object = [Object]
@@ -189,9 +189,11 @@ predicate is_sorted{L}(intM[0..] t) =
       ((((0 <= i) && (i <= j)) && (j < (\offset_max(t) + 1))) ==>
         ((t + i).intP <= (t + j).intP)))))
 
+exception Exception of Exception[0..]
+
 exception Throwable of Throwable[0..]
 
-exception Exception of Exception[0..]
+unit cons_BinarySearch(! BinarySearch[0] this_0){()}
 
 int32 BinarySearch_binary_search(intM[0..] t_0, int32 v)
   requires (K_6 : Non_null_intM(t_0));
@@ -250,8 +252,6 @@ behavior failure:
    }
 }
 
-unit cons_BinarySearch(! BinarySearch[0] this_0){()}
-
 /*
 Local Variables:
 mode: java
@@ -259,47 +259,11 @@ compile-command: "jessie -why-opt -split-user-conj -locs tests/java/BinarySearch
 End:
 */
 ========== file tests/java/BinarySearch.jloc ==========
-[K_10]
+[K_23]
 file = "HOME/tests/java/BinarySearch.java"
-line = 82
-begin = 8
-end = 74
-
-[K_11]
-file = "HOME/tests/java/BinarySearch.java"
-line = 84
-begin = 7
-end = 10
-
-[K_12]
-file = "HOME/tests/java/BinarySearch.java"
-line = 88
-begin = 17
-end = 22
-
-[K_13]
-file = "HOME/tests/java/BinarySearch.java"
-line = 88
-begin = 16
-end = 27
-
-[K_14]
-file = "HOME/tests/java/BinarySearch.java"
-line = 91
-begin = 28
-end = 34
-
-[K_15]
-file = "HOME/tests/java/BinarySearch.java"
-line = 91
-begin = 23
-end = 29
-
-[K_16]
-file = "HOME/tests/java/BinarySearch.java"
-line = 91
-begin = 23
-end = 34
+line = 92
+begin = 9
+end = 17
 
 [K_17]
 file = "HOME/tests/java/BinarySearch.java"
@@ -307,53 +271,11 @@ line = 91
 begin = 23
 end = 34
 
-[K_18]
+[K_11]
 file = "HOME/tests/java/BinarySearch.java"
-line = 93
-begin = 28
-end = 33
-
-[K_19]
-file = "HOME/tests/java/BinarySearch.java"
-line = 93
-begin = 14
-end = 18
-
-[K_20]
-file = "HOME/tests/java/BinarySearch.java"
-line = 93
-begin = 14
-end = 22
-
-[K_21]
-file = "HOME/tests/java/BinarySearch.java"
-line = 92
-begin = 23
-end = 28
-
-[K_22]
-file = "HOME/tests/java/BinarySearch.java"
-line = 92
-begin = 9
-end = 13
-
-[K_23]
-file = "HOME/tests/java/BinarySearch.java"
-line = 92
-begin = 9
-end = 17
-
-[K_24]
-file = "HOME/tests/java/BinarySearch.java"
-line = 86
-begin = 8
-end = 14
-
-[K_1]
-file = "HOME/tests/java/BinarySearch.java"
-line = 65
-begin = 22
-end = 40
+line = 84
+begin = 7
+end = 10
 
 [K_25]
 file = "HOME/tests/java/BinarySearch.java"
@@ -361,17 +283,84 @@ line = 96
 begin = 8
 end = 10
 
+[K_13]
+file = "HOME/tests/java/BinarySearch.java"
+line = 88
+begin = 16
+end = 27
+
+[K_9]
+file = "HOME/tests/java/BinarySearch.java"
+line = 79
+begin = 7
+end = 34
+
+[K_28]
+file = "HOME/tests/java/BinarySearch.java"
+line = 77
+begin = 9
+end = 10
+
+[K_1]
+file = "HOME/tests/java/BinarySearch.java"
+line = 65
+begin = 22
+end = 40
+
+[K_15]
+file = "HOME/tests/java/BinarySearch.java"
+line = 91
+begin = 23
+end = 29
+
+[K_4]
+file = "HOME/tests/java/BinarySearch.java"
+line = 67
+begin = 18
+end = 50
+
+[K_12]
+file = "HOME/tests/java/BinarySearch.java"
+line = 88
+begin = 17
+end = 22
+
+[K_20]
+file = "HOME/tests/java/BinarySearch.java"
+line = 93
+begin = 14
+end = 22
+
+[cons_BinarySearch]
+name = "Constructor of class BinarySearch"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [K_2]
 file = "HOME/tests/java/BinarySearch.java"
 line = 65
 begin = 16
 end = 29
 
-[K_26]
+[K_10]
 file = "HOME/tests/java/BinarySearch.java"
-line = 77
-begin = 16
-end = 24
+line = 82
+begin = 8
+end = 74
+
+[K_6]
+file = "HOME/tests/java/BinarySearch.java"
+line = 64
+begin = 17
+end = 26
+
+[K_8]
+file = "HOME/tests/java/BinarySearch.java"
+line = 79
+begin = 7
+end = 13
 
 [K_3]
 file = "HOME/tests/java/BinarySearch.java"
@@ -385,54 +374,35 @@ line = 77
 begin = 16
 end = 28
 
-[K_4]
+[K_21]
 file = "HOME/tests/java/BinarySearch.java"
-line = 67
-begin = 18
-end = 50
+line = 92
+begin = 23
+end = 28
 
-[K_28]
+[K_24]
 file = "HOME/tests/java/BinarySearch.java"
-line = 77
-begin = 9
-end = 10
+line = 86
+begin = 8
+end = 14
+
+[K_14]
+file = "HOME/tests/java/BinarySearch.java"
+line = 91
+begin = 28
+end = 34
+
+[K_19]
+file = "HOME/tests/java/BinarySearch.java"
+line = 93
+begin = 14
+end = 18
 
 [K_5]
 file = "HOME/tests/java/BinarySearch.java"
 line = 73
 begin = 17
 end = 96
-
-[K_6]
-file = "HOME/tests/java/BinarySearch.java"
-line = 64
-begin = 17
-end = 26
-
-[K_7]
-file = "HOME/tests/java/BinarySearch.java"
-line = 79
-begin = 17
-end = 34
-
-[K_8]
-file = "HOME/tests/java/BinarySearch.java"
-line = 79
-begin = 7
-end = 13
-
-[K_9]
-file = "HOME/tests/java/BinarySearch.java"
-line = 79
-begin = 7
-end = 34
-
-[cons_BinarySearch]
-name = "Constructor of class BinarySearch"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
 
 [BinarySearch_binary_search]
 name = "Method binary_search"
@@ -441,9 +411,39 @@ line = 76
 begin = 15
 end = 28
 
+[K_18]
+file = "HOME/tests/java/BinarySearch.java"
+line = 93
+begin = 28
+end = 33
+
+[K_7]
+file = "HOME/tests/java/BinarySearch.java"
+line = 79
+begin = 17
+end = 34
+
+[K_26]
+file = "HOME/tests/java/BinarySearch.java"
+line = 77
+begin = 16
+end = 24
+
+[K_22]
+file = "HOME/tests/java/BinarySearch.java"
+line = 92
+begin = 9
+end = 13
+
+[K_16]
+file = "HOME/tests/java/BinarySearch.java"
+line = 91
+begin = 23
+end = 34
+
 ========== jessie execution ==========
-Generating Why function BinarySearch_binary_search
 Generating Why function cons_BinarySearch
+Generating Why function BinarySearch_binary_search
 ========== file tests/java/BinarySearch.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -454,10 +454,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs BinarySearch.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs BinarySearch.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs BinarySearch.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs BinarySearch.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -602,13 +603,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: BinarySearch.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: BinarySearch.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: BinarySearch.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include BinarySearch.depend
 
@@ -619,202 +620,55 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/BinarySearch.loc ==========
-[JC_90]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_91]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 102
-begin = 12
-end = 1476
-
-[JC_92]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 102
-begin = 12
-end = 1476
-
-[JC_40]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_93]
-kind = DivByZero
-file = "HOME/tests/java/BinarySearch.jc"
-line = 118
-begin = 36
-end = 67
-
-[JC_41]
-file = "HOME/tests/java/BinarySearch.java"
-line = 64
-begin = 17
-end = 26
-
 [JC_94]
-file = "HOME/tests/java/BinarySearch.java"
-line = 91
-begin = 23
-end = 29
-
-[JC_42]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_95]
-file = "HOME/tests/java/BinarySearch.java"
-line = 91
-begin = 28
-end = 34
-
-[JC_43]
-file = "HOME/tests/java/BinarySearch.java"
-line = 65
-begin = 16
-end = 29
-
-[JC_96]
-file = "HOME/tests/java/BinarySearch.java"
-line = 91
-begin = 23
-end = 34
-
-[JC_44]
-file = "HOME/tests/java/BinarySearch.java"
-line = 65
-begin = 22
-end = 40
-
-[JC_97]
 kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
 line = 77
 begin = 16
 end = 24
 
-[JC_45]
+[JC_73]
+kind = DivByZero
+file = "HOME/tests/java/BinarySearch.jc"
+line = 120
+begin = 36
+end = 67
+
+[JC_63]
+kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
-line = 65
+line = 77
 begin = 16
-end = 40
+end = 24
 
-[JC_98]
+[BinarySearch_binary_search_ensures_success]
+name = "Method binary_search"
+behavior = "Behavior `success'"
 file = "HOME/tests/java/BinarySearch.java"
-line = 82
-begin = 8
-end = 74
+line = 76
+begin = 15
+end = 28
 
-[JC_46]
+[JC_80]
+kind = PointerDeref
+file = "HOME/tests/java/BinarySearch.java"
+line = 93
+begin = 14
+end = 18
+
+[JC_51]
 file = "HOME/tests/java/BinarySearch.java"
 line = 65
 begin = 16
 end = 29
 
-[JC_1]
+[JC_71]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 23
-begin = 12
-end = 22
-
-[JC_100]
-file = "HOME/tests/java/BinarySearch.java"
-line = 79
-begin = 17
-end = 34
-
-[JC_99]
-file = "HOME/tests/java/BinarySearch.java"
-line = 79
-begin = 7
-end = 13
-
-[JC_47]
-file = "HOME/tests/java/BinarySearch.java"
-line = 65
-begin = 22
-end = 40
-
-[JC_2]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_101]
-file = "HOME/tests/java/BinarySearch.java"
-line = 79
-begin = 7
-end = 34
-
-[JC_48]
-file = "HOME/tests/java/BinarySearch.java"
-line = 65
-begin = 16
-end = 40
-
-[JC_3]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 23
-begin = 12
-end = 22
-
-[JC_102]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_49]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_4]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_103]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 102
+line = 104
 begin = 12
 end = 1476
 
-[JC_5]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_104]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 102
-begin = 12
-end = 1476
-
-[JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_105]
-kind = DivByZero
-file = "HOME/tests/java/BinarySearch.jc"
-line = 118
-begin = 36
-end = 67
-
-[JC_7]
+[JC_45]
 file = "HOME/"
 line = 0
 begin = -1
@@ -822,20 +676,103 @@ end = -1
 
 [JC_106]
 file = "HOME/tests/java/BinarySearch.java"
+line = 82
+begin = 8
+end = 74
+
+[JC_113]
+kind = DivByZero
+file = "HOME/tests/java/BinarySearch.jc"
+line = 120
+begin = 36
+end = 67
+
+[JC_116]
+file = "HOME/tests/java/BinarySearch.java"
 line = 91
 begin = 23
-end = 29
+end = 34
 
-[JC_8]
+[JC_64]
+kind = IndexBounds
+file = "HOME/tests/java/BinarySearch.java"
+line = 77
+begin = 16
+end = 24
+
+[JC_99]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 104
+begin = 12
+end = 1476
+
+[JC_85]
+file = "HOME/tests/java/BinarySearch.java"
+line = 79
+begin = 17
+end = 34
+
+[JC_31]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 65
+begin = 8
+end = 23
+
+[JC_17]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_107]
+[JC_81]
+kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 91
+line = 93
 begin = 28
+end = 33
+
+[JC_55]
+file = "HOME/tests/java/BinarySearch.java"
+line = 65
+begin = 22
+end = 40
+
+[BinarySearch_binary_search_ensures_failure]
+name = "Method binary_search"
+behavior = "Behavior `failure'"
+file = "HOME/tests/java/BinarySearch.java"
+line = 76
+begin = 15
+end = 28
+
+[JC_48]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_23]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 61
+begin = 11
+end = 103
+
+[JC_22]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_5]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_67]
+file = "HOME/tests/java/BinarySearch.java"
+line = 79
+begin = 17
 end = 34
 
 [JC_9]
@@ -844,309 +781,63 @@ line = 52
 begin = 8
 end = 21
 
-[JC_108]
-file = "HOME/tests/java/BinarySearch.java"
-line = 91
-begin = 23
-end = 34
-
-[JC_109]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_50]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_51]
-file = "HOME/tests/java/BinarySearch.java"
-line = 67
-begin = 18
-end = 50
-
-[JC_52]
-file = "HOME/tests/java/BinarySearch.java"
-line = 67
-begin = 18
-end = 50
-
-[JC_53]
-file = "HOME/tests/java/BinarySearch.java"
-line = 73
-begin = 17
-end = 96
-
-[JC_54]
-file = "HOME/tests/java/BinarySearch.java"
-line = 73
-begin = 17
-end = 96
-
-[JC_55]
-kind = UserCall
-file = "HOME/tests/java/BinarySearch.java"
-line = 77
-begin = 16
-end = 24
-
-[JC_56]
-kind = IndexBounds
-file = "HOME/tests/java/BinarySearch.java"
-line = 77
-begin = 16
-end = 24
-
-[JC_110]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_57]
-kind = ArithOverflow
-file = "HOME/tests/java/BinarySearch.java"
-line = 77
-begin = 16
-end = 28
-
-[JC_111]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_58]
-file = "HOME/tests/java/BinarySearch.java"
-line = 79
-begin = 7
-end = 13
-
-[JC_112]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_59]
-file = "HOME/tests/java/BinarySearch.java"
-line = 79
-begin = 17
-end = 34
-
-[JC_113]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_114]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_115]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_116]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_60]
-file = "HOME/tests/java/BinarySearch.java"
-line = 79
-begin = 7
-end = 34
-
-[JC_61]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_62]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 102
-begin = 12
-end = 1476
-
-[JC_10]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_63]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 102
-begin = 12
-end = 1476
-
-[JC_11]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 52
-begin = 8
-end = 21
-
-[JC_64]
-kind = ArithOverflow
-file = "HOME/tests/java/BinarySearch.java"
-line = 88
-begin = 17
-end = 22
-
-[JC_12]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_65]
-kind = DivByZero
-file = "HOME/tests/java/BinarySearch.jc"
-line = 118
-begin = 36
-end = 67
-
-[JC_13]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 55
-begin = 11
-end = 66
-
-[JC_66]
-kind = ArithOverflow
-file = "HOME/tests/java/BinarySearch.java"
-line = 88
-begin = 16
-end = 27
-
-[JC_14]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 54
-begin = 10
-end = 18
-
-[JC_67]
+[JC_75]
 file = "HOME/tests/java/BinarySearch.java"
 line = 91
 begin = 23
 end = 29
 
-[JC_15]
+[JC_24]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 55
-begin = 11
-end = 66
-
-[JC_68]
-file = "HOME/tests/java/BinarySearch.java"
-line = 91
-begin = 28
-end = 34
-
-[JC_16]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 54
+line = 60
 begin = 10
 end = 18
 
-[JC_69]
-file = "HOME/tests/java/BinarySearch.java"
-line = 91
-begin = 23
-end = 34
-
-[JC_17]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_19]
+[JC_25]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 58
-begin = 8
-end = 30
+line = 61
+begin = 11
+end = 103
 
-[cons_BinarySearch_ensures_default]
-name = "Constructor of class BinarySearch"
-behavior = "default behavior"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_70]
+[JC_78]
 kind = PointerDeref
 file = "HOME/tests/java/BinarySearch.java"
 line = 92
 begin = 9
 end = 13
 
-[JC_71]
-kind = ArithOverflow
-file = "HOME/tests/java/BinarySearch.java"
-line = 92
-begin = 23
-end = 28
-
-[BinarySearch_binary_search_ensures_default]
-name = "Method binary_search"
-behavior = "default behavior"
-file = "HOME/tests/java/BinarySearch.java"
-line = 76
-begin = 15
-end = 28
-
-[JC_72]
-kind = PointerDeref
-file = "HOME/tests/java/BinarySearch.java"
-line = 93
-begin = 14
-end = 18
-
-[JC_20]
+[JC_41]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_73]
+[JC_74]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 93
-begin = 28
-end = 33
+line = 88
+begin = 16
+end = 27
 
-[JC_21]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 58
-begin = 8
-end = 30
-
-[JC_74]
+[JC_47]
 file = "HOME/tests/java/BinarySearch.java"
-line = 84
-begin = 7
-end = 10
+line = 64
+begin = 17
+end = 26
 
-[JC_22]
+[JC_52]
+file = "HOME/tests/java/BinarySearch.java"
+line = 65
+begin = 22
+end = 40
+
+[JC_26]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 60
+begin = 10
+end = 18
+
+[JC_8]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1160,64 +851,105 @@ line = 0
 begin = -1
 end = -1
 
-[JC_75]
+[JC_54]
+file = "HOME/tests/java/BinarySearch.java"
+line = 65
+begin = 16
+end = 29
+
+[JC_79]
+kind = ArithOverflow
+file = "HOME/tests/java/BinarySearch.java"
+line = 92
+begin = 23
+end = 28
+
+[JC_13]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 55
+begin = 11
+end = 66
+
+[JC_82]
+file = "HOME/tests/java/BinarySearch.java"
+line = 84
+begin = 7
+end = 10
+
+[JC_87]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_11]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 52
+begin = 8
+end = 21
+
+[JC_98]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_70]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 104
+begin = 12
+end = 1476
+
+[JC_15]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 55
+begin = 11
+end = 66
+
+[JC_36]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_104]
+file = "HOME/tests/java/BinarySearch.java"
+line = 91
+begin = 23
+end = 34
+
+[JC_91]
+file = "HOME/tests/java/BinarySearch.java"
+line = 91
+begin = 23
+end = 29
+
+[JC_39]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_112]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 104
+begin = 12
+end = 1476
+
+[JC_40]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_83]
 kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
 line = 77
 begin = 16
 end = 24
 
-[JC_23]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 61
-begin = 11
-end = 103
-
-[BinarySearch_binary_search_ensures_failure]
-name = "Method binary_search"
-behavior = "Behavior `failure'"
-file = "HOME/tests/java/BinarySearch.java"
-line = 76
-begin = 15
-end = 28
-
-[JC_76]
-file = "HOME/tests/java/BinarySearch.java"
-line = 79
-begin = 7
-end = 13
-
-[JC_24]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 60
-begin = 10
-end = 18
-
-[JC_77]
-file = "HOME/tests/java/BinarySearch.java"
-line = 79
-begin = 17
-end = 34
-
-[JC_25]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 61
-begin = 11
-end = 103
-
-[JC_78]
-file = "HOME/tests/java/BinarySearch.java"
-line = 79
-begin = 7
-end = 34
-
-[JC_26]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 60
-begin = 10
-end = 18
-
-[JC_79]
+[JC_35]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1229,127 +961,29 @@ line = 0
 begin = -1
 end = -1
 
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_29]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 65
-begin = 8
-end = 23
-
-[JC_80]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 102
-begin = 12
-end = 1476
-
-[JC_81]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 102
-begin = 12
-end = 1476
-
-[JC_82]
-kind = DivByZero
-file = "HOME/tests/java/BinarySearch.jc"
-line = 118
-begin = 36
-end = 67
-
-[JC_30]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_83]
-file = "HOME/tests/java/BinarySearch.java"
-line = 91
-begin = 23
-end = 29
-
-[JC_31]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 65
-begin = 8
-end = 23
-
-[JC_84]
+[JC_115]
 file = "HOME/tests/java/BinarySearch.java"
 line = 91
 begin = 28
 end = 34
 
-[JC_32]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_85]
+[JC_109]
 file = "HOME/tests/java/BinarySearch.java"
-line = 91
-begin = 23
+line = 79
+begin = 7
 end = 34
 
-[JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_86]
-kind = UserCall
-file = "HOME/tests/java/BinarySearch.java"
-line = 77
-begin = 16
-end = 24
-
-[JC_34]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_87]
+[JC_107]
 file = "HOME/tests/java/BinarySearch.java"
 line = 79
 begin = 7
 end = 13
 
-[JC_35]
+[JC_69]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_88]
-file = "HOME/tests/java/BinarySearch.java"
-line = 79
-begin = 17
-end = 34
-
-[JC_36]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_89]
-file = "HOME/tests/java/BinarySearch.java"
-line = 79
-begin = 7
-end = 34
-
-[JC_37]
-file = "HOME/tests/java/BinarySearch.jc"
-line = 67
-begin = 11
-end = 65
 
 [JC_38]
 file = "HOME/tests/java/BinarySearch.jc"
@@ -1357,19 +991,265 @@ line = 67
 begin = 11
 end = 65
 
-[BinarySearch_binary_search_ensures_success]
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_62]
+file = "HOME/tests/java/BinarySearch.java"
+line = 73
+begin = 17
+end = 96
+
+[JC_101]
+kind = DivByZero
+file = "HOME/tests/java/BinarySearch.jc"
+line = 120
+begin = 36
+end = 67
+
+[JC_88]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 104
+begin = 12
+end = 1476
+
+[JC_42]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_110]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_103]
+file = "HOME/tests/java/BinarySearch.java"
+line = 91
+begin = 28
+end = 34
+
+[JC_46]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_61]
+file = "HOME/tests/java/BinarySearch.java"
+line = 73
+begin = 17
+end = 96
+
+[JC_32]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_56]
+file = "HOME/tests/java/BinarySearch.java"
+line = 65
+begin = 16
+end = 40
+
+[JC_33]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_65]
+kind = ArithOverflow
+file = "HOME/tests/java/BinarySearch.java"
+line = 77
+begin = 16
+end = 28
+
+[JC_105]
+kind = UserCall
+file = "HOME/tests/java/BinarySearch.java"
+line = 77
+begin = 16
+end = 24
+
+[JC_29]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 65
+begin = 8
+end = 23
+
+[BinarySearch_binary_search_ensures_default]
 name = "Method binary_search"
-behavior = "Behavior `success'"
+behavior = "default behavior"
 file = "HOME/tests/java/BinarySearch.java"
 line = 76
 begin = 15
 end = 28
 
-[JC_39]
+[JC_68]
+file = "HOME/tests/java/BinarySearch.java"
+line = 79
+begin = 7
+end = 34
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_16]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 54
+begin = 10
+end = 18
+
+[JC_96]
+file = "HOME/tests/java/BinarySearch.java"
+line = 79
+begin = 17
+end = 34
+
+[JC_43]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_95]
+file = "HOME/tests/java/BinarySearch.java"
+line = 79
+begin = 7
+end = 13
+
+[JC_93]
+file = "HOME/tests/java/BinarySearch.java"
+line = 91
+begin = 23
+end = 34
+
+[cons_BinarySearch_ensures_default]
+name = "Constructor of class BinarySearch"
+behavior = "default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_97]
+file = "HOME/tests/java/BinarySearch.java"
+line = 79
+begin = 7
+end = 34
+
+[JC_84]
+file = "HOME/tests/java/BinarySearch.java"
+line = 79
+begin = 7
+end = 13
+
+[JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_114]
+file = "HOME/tests/java/BinarySearch.java"
+line = 91
+begin = 23
+end = 29
+
+[JC_14]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 54
+begin = 10
+end = 18
+
+[JC_90]
+kind = DivByZero
+file = "HOME/tests/java/BinarySearch.jc"
+line = 120
+begin = 36
+end = 67
+
+[JC_53]
+file = "HOME/tests/java/BinarySearch.java"
+line = 65
+begin = 16
+end = 40
+
+[JC_21]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 58
+begin = 8
+end = 30
+
+[JC_111]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 104
+begin = 12
+end = 1476
+
+[JC_77]
+file = "HOME/tests/java/BinarySearch.java"
+line = 91
+begin = 23
+end = 34
+
+[JC_49]
 file = "HOME/tests/java/BinarySearch.java"
 line = 64
 begin = 17
 end = 26
+
+[JC_1]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 23
+begin = 12
+end = 22
+
+[JC_102]
+file = "HOME/tests/java/BinarySearch.java"
+line = 91
+begin = 23
+end = 29
+
+[JC_37]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 67
+begin = 11
+end = 65
 
 [BinarySearch_binary_search_safety]
 name = "Method binary_search"
@@ -1378,6 +1258,127 @@ file = "HOME/tests/java/BinarySearch.java"
 line = 76
 begin = 15
 end = 28
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_108]
+file = "HOME/tests/java/BinarySearch.java"
+line = 79
+begin = 17
+end = 34
+
+[JC_57]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_89]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 104
+begin = 12
+end = 1476
+
+[JC_66]
+file = "HOME/tests/java/BinarySearch.java"
+line = 79
+begin = 7
+end = 13
+
+[JC_59]
+file = "HOME/tests/java/BinarySearch.java"
+line = 67
+begin = 18
+end = 50
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_18]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_3]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 23
+begin = 12
+end = 22
+
+[JC_92]
+file = "HOME/tests/java/BinarySearch.java"
+line = 91
+begin = 28
+end = 34
+
+[JC_86]
+file = "HOME/tests/java/BinarySearch.java"
+line = 79
+begin = 7
+end = 34
+
+[JC_60]
+file = "HOME/tests/java/BinarySearch.java"
+line = 67
+begin = 18
+end = 50
+
+[JC_72]
+kind = ArithOverflow
+file = "HOME/tests/java/BinarySearch.java"
+line = 88
+begin = 17
+end = 22
+
+[JC_19]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 58
+begin = 8
+end = 30
+
+[JC_76]
+file = "HOME/tests/java/BinarySearch.java"
+line = 91
+begin = 28
+end = 34
+
+[JC_50]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_30]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_58]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_100]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 104
+begin = 12
+end = 1476
+
+[JC_28]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/java/why/BinarySearch.why ==========
 type Object
@@ -1729,43 +1730,43 @@ parameter BinarySearch_binary_search :
   v:int32 ->
    { } int32 reads Object_alloc_table,intM_intP
    { ((is_sorted(t_0, Object_alloc_table@, intM_intP@) ->
-       (JC_54:
+       (JC_62:
        ((integer_of_int32(result) = neg_int((1))) ->
         (forall k:int.
          ((le_int((0), k)
           and lt_int(k, add_int(offset_max(Object_alloc_table, t_0), (1)))) ->
           (integer_of_int32(select(intM_intP, shift(t_0, k))) <> integer_of_int32(v)))))))
-     and ((JC_52:
+     and ((JC_60:
           (ge_int(integer_of_int32(result), (0)) ->
            (integer_of_int32(select(intM_intP,
                              shift(t_0, integer_of_int32(result)))) = 
            integer_of_int32(v))))
-         and (JC_48:
-             ((JC_46: le_int(neg_int((1)), integer_of_int32(result)))
-             and (JC_47:
+         and (JC_56:
+             ((JC_54: le_int(neg_int((1)), integer_of_int32(result)))
+             and (JC_55:
                  lt_int(integer_of_int32(result),
                  add_int(offset_max(Object_alloc_table, t_0), (1)))))))) }
 
 parameter BinarySearch_binary_search_requires :
  t_0:Object pointer ->
   v:int32 ->
-   { (JC_39: Non_null_intM(t_0, Object_alloc_table))} int32
+   { (JC_47: Non_null_intM(t_0, Object_alloc_table))} int32
    reads Object_alloc_table,intM_intP
    { ((is_sorted(t_0, Object_alloc_table@, intM_intP@) ->
-       (JC_54:
+       (JC_62:
        ((integer_of_int32(result) = neg_int((1))) ->
         (forall k:int.
          ((le_int((0), k)
           and lt_int(k, add_int(offset_max(Object_alloc_table, t_0), (1)))) ->
           (integer_of_int32(select(intM_intP, shift(t_0, k))) <> integer_of_int32(v)))))))
-     and ((JC_52:
+     and ((JC_60:
           (ge_int(integer_of_int32(result), (0)) ->
            (integer_of_int32(select(intM_intP,
                              shift(t_0, integer_of_int32(result)))) = 
            integer_of_int32(v))))
-         and (JC_48:
-             ((JC_46: le_int(neg_int((1)), integer_of_int32(result)))
-             and (JC_47:
+         and (JC_56:
+             ((JC_54: le_int(neg_int((1)), integer_of_int32(result)))
+             and (JC_55:
                  lt_int(integer_of_int32(result),
                  add_int(offset_max(Object_alloc_table, t_0), (1)))))))) }
 
@@ -2053,7 +2054,7 @@ parameter short_of_integer_ :
 let BinarySearch_binary_search_ensures_default =
  fun (t_0 : Object pointer) (v : int32) ->
   { (left_valid_struct_intM(t_0, (0), Object_alloc_table)
-    and (JC_41: Non_null_intM(t_0, Object_alloc_table))) }
+    and (JC_49: Non_null_intM(t_0, Object_alloc_table))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2062,17 +2063,17 @@ let BinarySearch_binary_search_ensures_default =
      (let u =
      ref (K_27:
          (safe_int32_of_integer_ ((sub_int (K_26:
-                                           (let jessie_<num> = t_0 in
-                                           (JC_75:
-                                           (java_array_length_intM jessie_<num>))))) (1)))) in
+                                           (let _jessie_<num> = t_0 in
+                                           (JC_83:
+                                           (java_array_length_intM _jessie_<num>))))) (1)))) in
      begin
        try
         (loop_2:
         while true do
         { invariant
-            (JC_78:
-            ((JC_76: le_int((0), integer_of_int32(l)))
-            and (JC_77:
+            (JC_86:
+            ((JC_84: le_int((0), integer_of_int32(l)))
+            and (JC_85:
                 le_int(integer_of_int32(u),
                 sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
                 (1))))))  }
@@ -2084,11 +2085,10 @@ let BinarySearch_binary_search_ensures_default =
                  ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
              then
               (let m = ref (any_int32 void) in
-              (K_17:
               begin
-                (let jessie_<num> =
+                (let _jessie_<num> =
                 (m := (K_13:
-                      (safe_int32_of_integer_ (JC_82:
+                      (safe_int32_of_integer_ (JC_90:
                                               ((computer_div (integer_of_int32 
                                                               (K_12:
                                                               (safe_int32_of_integer_ 
@@ -2096,42 +2096,44 @@ let BinarySearch_binary_search_ensures_default =
                                                                  (integer_of_int32 !u)) 
                                                                 (integer_of_int32 !l)))))) (2)))))) in
                 void);
-               (assert
-               { (JC_85:
-                 ((JC_83: le_int(integer_of_int32(l), integer_of_int32(m)))
-                 and (JC_84:
-                     le_int(integer_of_int32(m), integer_of_int32(u))))) };
-               void);
-               (if (K_23:
-                   ((lt_int_ (integer_of_int32 (K_22:
-                                               ((safe_acc_ !intM_intP) 
-                                                ((shift t_0) (integer_of_int32 !m)))))) 
-                    (integer_of_int32 v)))
-               then
-                (let jessie_<num> =
-                (l := (K_21:
-                      (safe_int32_of_integer_ ((add_int (integer_of_int32 !m)) (1))))) in
-                void)
-               else
-                (if (K_20:
-                    ((gt_int_ (integer_of_int32 (K_19:
+               (K_17:
+               begin
+                 (assert
+                 { (JC_93:
+                   ((JC_91: le_int(integer_of_int32(l), integer_of_int32(m)))
+                   and (JC_92:
+                       le_int(integer_of_int32(m), integer_of_int32(u))))) };
+                 void);
+                (if (K_23:
+                    ((lt_int_ (integer_of_int32 (K_22:
                                                 ((safe_acc_ !intM_intP) 
                                                  ((shift t_0) (integer_of_int32 !m)))))) 
                      (integer_of_int32 v)))
                 then
-                 (let jessie_<num> =
-                 (u := (K_18:
-                       (safe_int32_of_integer_ ((sub_int (integer_of_int32 !m)) (1))))) in
-                 void) else begin   (return := !m); (raise Return) end)) end))
-             else (raise (Loop_exit_exc void)));
+                 (let _jessie_<num> =
+                 (l := (K_21:
+                       (safe_int32_of_integer_ ((add_int (integer_of_int32 !m)) (1))))) in
+                 void)
+                else
+                 (if (K_20:
+                     ((gt_int_ (integer_of_int32 (K_19:
+                                                 ((safe_acc_ !intM_intP) 
+                                                  ((shift t_0) (integer_of_int32 !m)))))) 
+                      (integer_of_int32 v)))
+                 then
+                  (let _jessie_<num> =
+                  (u := (K_18:
+                        (safe_int32_of_integer_ ((sub_int (integer_of_int32 !m)) (1))))) in
+                  void) else begin   (return := !m); (raise Return) end)) end)
+              end) else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc jessie_<num> -> void end end done) with
-        Loop_exit_exc jessie_<num> -> void end;
+           Loop_continue_exc _jessie_<num> -> void end end done) with
+        Loop_exit_exc _jessie_<num> -> void end;
       (return := (K_25: (safe_int32_of_integer_ (neg_int (1)))));
       (raise Return) end)); absurd  end with Return -> !return end))
-  { (JC_45:
-    ((JC_43: le_int(neg_int((1)), integer_of_int32(result)))
-    and (JC_44:
+  { (JC_53:
+    ((JC_51: le_int(neg_int((1)), integer_of_int32(result)))
+    and (JC_52:
         lt_int(integer_of_int32(result),
         add_int(offset_max(Object_alloc_table, t_0), (1)))))) }
 
@@ -2139,7 +2141,7 @@ let BinarySearch_binary_search_ensures_failure =
  fun (t_0 : Object pointer) (v : int32) ->
   { (is_sorted(t_0, Object_alloc_table, intM_intP)
     and (left_valid_struct_intM(t_0, (0), Object_alloc_table)
-        and (JC_41: Non_null_intM(t_0, Object_alloc_table)))) }
+        and (JC_49: Non_null_intM(t_0, Object_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2148,15 +2150,15 @@ let BinarySearch_binary_search_ensures_failure =
      (let u =
      ref (K_27:
          (safe_int32_of_integer_ ((sub_int (K_26:
-                                           (let jessie_<num> = t_0 in
-                                           (JC_97:
-                                           (java_array_length_intM jessie_<num>))))) (1)))) in
+                                           (let _jessie_<num> = t_0 in
+                                           (JC_105:
+                                           (java_array_length_intM _jessie_<num>))))) (1)))) in
      begin
        try
         (loop_4:
         while true do
         { invariant
-            (JC_98:
+            (JC_106:
             (forall k_0:int.
              ((le_int((0), k_0)
               and lt_int(k_0,
@@ -2167,9 +2169,9 @@ let BinarySearch_binary_search_ensures_failure =
                and le_int(k_0, integer_of_int32(u)))))))  }
          begin
            [ { } unit reads Object_alloc_table,l,u
-             { (JC_101:
-               ((JC_99: le_int((0), integer_of_int32(l)))
-               and (JC_100:
+             { (JC_109:
+               ((JC_107: le_int((0), integer_of_int32(l)))
+               and (JC_108:
                    le_int(integer_of_int32(u),
                    sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
                    (1)))))) } ];
@@ -2179,11 +2181,10 @@ let BinarySearch_binary_search_ensures_failure =
                  ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
              then
               (let m = ref (any_int32 void) in
-              (K_17:
               begin
-                (let jessie_<num> =
+                (let _jessie_<num> =
                 (m := (K_13:
-                      (safe_int32_of_integer_ (JC_105:
+                      (safe_int32_of_integer_ (JC_113:
                                               ((computer_div (integer_of_int32 
                                                               (K_12:
                                                               (safe_int32_of_integer_ 
@@ -2191,40 +2192,42 @@ let BinarySearch_binary_search_ensures_failure =
                                                                  (integer_of_int32 !u)) 
                                                                 (integer_of_int32 !l)))))) (2)))))) in
                 void);
-               [ { } unit reads l,m,u
-                 { (JC_108:
-                   ((JC_106:
-                    le_int(integer_of_int32(l), integer_of_int32(m)))
-                   and (JC_107:
-                       le_int(integer_of_int32(m), integer_of_int32(u))))) } ];
-               (if (K_23:
-                   ((lt_int_ (integer_of_int32 (K_22:
-                                               ((safe_acc_ !intM_intP) 
-                                                ((shift t_0) (integer_of_int32 !m)))))) 
-                    (integer_of_int32 v)))
-               then
-                (let jessie_<num> =
-                (l := (K_21:
-                      (safe_int32_of_integer_ ((add_int (integer_of_int32 !m)) (1))))) in
-                void)
-               else
-                (if (K_20:
-                    ((gt_int_ (integer_of_int32 (K_19:
+               (K_17:
+               begin
+                 [ { } unit reads l,m,u
+                   { (JC_116:
+                     ((JC_114:
+                      le_int(integer_of_int32(l), integer_of_int32(m)))
+                     and (JC_115:
+                         le_int(integer_of_int32(m), integer_of_int32(u))))) } ];
+                (if (K_23:
+                    ((lt_int_ (integer_of_int32 (K_22:
                                                 ((safe_acc_ !intM_intP) 
                                                  ((shift t_0) (integer_of_int32 !m)))))) 
                      (integer_of_int32 v)))
                 then
-                 (let jessie_<num> =
-                 (u := (K_18:
-                       (safe_int32_of_integer_ ((sub_int (integer_of_int32 !m)) (1))))) in
-                 void) else begin   (return := !m); (raise Return) end)) end))
-             else (raise (Loop_exit_exc void)));
+                 (let _jessie_<num> =
+                 (l := (K_21:
+                       (safe_int32_of_integer_ ((add_int (integer_of_int32 !m)) (1))))) in
+                 void)
+                else
+                 (if (K_20:
+                     ((gt_int_ (integer_of_int32 (K_19:
+                                                 ((safe_acc_ !intM_intP) 
+                                                  ((shift t_0) (integer_of_int32 !m)))))) 
+                      (integer_of_int32 v)))
+                 then
+                  (let _jessie_<num> =
+                  (u := (K_18:
+                        (safe_int32_of_integer_ ((sub_int (integer_of_int32 !m)) (1))))) in
+                  void) else begin   (return := !m); (raise Return) end)) end)
+              end) else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc jessie_<num> -> void end end done) with
-        Loop_exit_exc jessie_<num> -> void end;
+           Loop_continue_exc _jessie_<num> -> void end end done) with
+        Loop_exit_exc _jessie_<num> -> void end;
       (return := (K_25: (safe_int32_of_integer_ (neg_int (1)))));
       (raise Return) end)); absurd  end with Return -> !return end))
-  { (JC_53:
+  { (JC_61:
     ((integer_of_int32(result) = neg_int((1))) ->
      (forall k:int.
       ((le_int((0), k)
@@ -2234,7 +2237,7 @@ let BinarySearch_binary_search_ensures_failure =
 let BinarySearch_binary_search_ensures_success =
  fun (t_0 : Object pointer) (v : int32) ->
   { (left_valid_struct_intM(t_0, (0), Object_alloc_table)
-    and (JC_41: Non_null_intM(t_0, Object_alloc_table))) }
+    and (JC_49: Non_null_intM(t_0, Object_alloc_table))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2243,19 +2246,19 @@ let BinarySearch_binary_search_ensures_success =
      (let u =
      ref (K_27:
          (safe_int32_of_integer_ ((sub_int (K_26:
-                                           (let jessie_<num> = t_0 in
-                                           (JC_86:
-                                           (java_array_length_intM jessie_<num>))))) (1)))) in
+                                           (let _jessie_<num> = t_0 in
+                                           (JC_94:
+                                           (java_array_length_intM _jessie_<num>))))) (1)))) in
      begin
        try
         (loop_3:
         while true do
-        { invariant (JC_91: true)  }
+        { invariant (JC_99: true)  }
          begin
            [ { } unit reads Object_alloc_table,l,u
-             { (JC_89:
-               ((JC_87: le_int((0), integer_of_int32(l)))
-               and (JC_88:
+             { (JC_97:
+               ((JC_95: le_int((0), integer_of_int32(l)))
+               and (JC_96:
                    le_int(integer_of_int32(u),
                    sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
                    (1)))))) } ];
@@ -2265,11 +2268,10 @@ let BinarySearch_binary_search_ensures_success =
                  ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
              then
               (let m = ref (any_int32 void) in
-              (K_17:
               begin
-                (let jessie_<num> =
+                (let _jessie_<num> =
                 (m := (K_13:
-                      (safe_int32_of_integer_ (JC_93:
+                      (safe_int32_of_integer_ (JC_101:
                                               ((computer_div (integer_of_int32 
                                                               (K_12:
                                                               (safe_int32_of_integer_ 
@@ -2277,39 +2279,42 @@ let BinarySearch_binary_search_ensures_success =
                                                                  (integer_of_int32 !u)) 
                                                                 (integer_of_int32 !l)))))) (2)))))) in
                 void);
-               [ { } unit reads l,m,u
-                 { (JC_96:
-                   ((JC_94: le_int(integer_of_int32(l), integer_of_int32(m)))
-                   and (JC_95:
-                       le_int(integer_of_int32(m), integer_of_int32(u))))) } ];
-               (if (K_23:
-                   ((lt_int_ (integer_of_int32 (K_22:
-                                               ((safe_acc_ !intM_intP) 
-                                                ((shift t_0) (integer_of_int32 !m)))))) 
-                    (integer_of_int32 v)))
-               then
-                (let jessie_<num> =
-                (l := (K_21:
-                      (safe_int32_of_integer_ ((add_int (integer_of_int32 !m)) (1))))) in
-                void)
-               else
-                (if (K_20:
-                    ((gt_int_ (integer_of_int32 (K_19:
+               (K_17:
+               begin
+                 [ { } unit reads l,m,u
+                   { (JC_104:
+                     ((JC_102:
+                      le_int(integer_of_int32(l), integer_of_int32(m)))
+                     and (JC_103:
+                         le_int(integer_of_int32(m), integer_of_int32(u))))) } ];
+                (if (K_23:
+                    ((lt_int_ (integer_of_int32 (K_22:
                                                 ((safe_acc_ !intM_intP) 
                                                  ((shift t_0) (integer_of_int32 !m)))))) 
                      (integer_of_int32 v)))
                 then
-                 (let jessie_<num> =
-                 (u := (K_18:
-                       (safe_int32_of_integer_ ((sub_int (integer_of_int32 !m)) (1))))) in
-                 void) else begin   (return := !m); (raise Return) end)) end))
-             else (raise (Loop_exit_exc void)));
+                 (let _jessie_<num> =
+                 (l := (K_21:
+                       (safe_int32_of_integer_ ((add_int (integer_of_int32 !m)) (1))))) in
+                 void)
+                else
+                 (if (K_20:
+                     ((gt_int_ (integer_of_int32 (K_19:
+                                                 ((safe_acc_ !intM_intP) 
+                                                  ((shift t_0) (integer_of_int32 !m)))))) 
+                      (integer_of_int32 v)))
+                 then
+                  (let _jessie_<num> =
+                  (u := (K_18:
+                        (safe_int32_of_integer_ ((sub_int (integer_of_int32 !m)) (1))))) in
+                  void) else begin   (return := !m); (raise Return) end)) end)
+              end) else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc jessie_<num> -> void end end done) with
-        Loop_exit_exc jessie_<num> -> void end;
+           Loop_continue_exc _jessie_<num> -> void end end done) with
+        Loop_exit_exc _jessie_<num> -> void end;
       (return := (K_25: (safe_int32_of_integer_ (neg_int (1)))));
       (raise Return) end)); absurd  end with Return -> !return end))
-  { (JC_51:
+  { (JC_59:
     (ge_int(integer_of_int32(result), (0)) ->
      (integer_of_int32(select(intM_intP,
                        shift(t_0, integer_of_int32(result)))) = integer_of_int32(v)))) }
@@ -2317,7 +2322,7 @@ let BinarySearch_binary_search_ensures_success =
 let BinarySearch_binary_search_safety =
  fun (t_0 : Object pointer) (v : int32) ->
   { (left_valid_struct_intM(t_0, (0), Object_alloc_table)
-    and (JC_41: Non_null_intM(t_0, Object_alloc_table))) }
+    and (JC_49: Non_null_intM(t_0, Object_alloc_table))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2325,27 +2330,27 @@ let BinarySearch_binary_search_safety =
      (let l = ref (safe_int32_of_integer_ (K_28: (0))) in
      (let u =
      ref (K_27:
-         (JC_57:
+         (JC_65:
          (int32_of_integer_ ((sub_int (K_26:
-                                      (let jessie_<num> = t_0 in
-                                      (JC_56:
+                                      (let _jessie_<num> = t_0 in
+                                      (JC_64:
                                       (assert
                                       { ge_int(offset_max(Object_alloc_table,
-                                               jessie_<num>),
+                                               _jessie_<num>),
                                         (-1)) };
-                                      (JC_55:
-                                      (java_array_length_intM_requires jessie_<num>))))))) (1))))) in
+                                      (JC_63:
+                                      (java_array_length_intM_requires _jessie_<num>))))))) (1))))) in
      begin
        try
         (loop_1:
         while true do
-        { invariant (JC_62: true)
-          variant (JC_74 : sub_int(integer_of_int32(u), integer_of_int32(l))) }
+        { invariant (JC_70: true)
+          variant (JC_82 : sub_int(integer_of_int32(u), integer_of_int32(l))) }
          begin
            [ { } unit reads Object_alloc_table,l,u
-             { (JC_60:
-               ((JC_58: le_int((0), integer_of_int32(l)))
-               and (JC_59:
+             { (JC_68:
+               ((JC_66: le_int((0), integer_of_int32(l)))
+               and (JC_67:
                    le_int(integer_of_int32(u),
                    sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
                    (1)))))) } ];
@@ -2355,54 +2360,56 @@ let BinarySearch_binary_search_safety =
                  ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
              then
               (let m = ref (any_int32 void) in
-              (K_17:
               begin
-                (let jessie_<num> =
+                (let _jessie_<num> =
                 (m := (K_13:
-                      (JC_66:
-                      (int32_of_integer_ (JC_65:
+                      (JC_74:
+                      (int32_of_integer_ (JC_73:
                                          ((computer_div_ (integer_of_int32 
                                                           (K_12:
-                                                          (JC_64:
+                                                          (JC_72:
                                                           (int32_of_integer_ 
                                                            ((add_int 
                                                              (integer_of_int32 !u)) 
                                                             (integer_of_int32 !l))))))) (2))))))) in
                 void);
-               [ { } unit reads l,m,u
-                 { (JC_69:
-                   ((JC_67: le_int(integer_of_int32(l), integer_of_int32(m)))
-                   and (JC_68:
-                       le_int(integer_of_int32(m), integer_of_int32(u))))) } ];
-               (if (K_23:
-                   ((lt_int_ (integer_of_int32 (K_22:
-                                               (JC_70:
-                                               ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) 
-                                                (integer_of_int32 !m)))))) 
-                    (integer_of_int32 v)))
-               then
-                (let jessie_<num> =
-                (l := (K_21:
-                      (JC_71:
-                      (int32_of_integer_ ((add_int (integer_of_int32 !m)) (1)))))) in
-                void)
-               else
-                (if (K_20:
-                    ((gt_int_ (integer_of_int32 (K_19:
-                                                (JC_72:
+               (K_17:
+               begin
+                 [ { } unit reads l,m,u
+                   { (JC_77:
+                     ((JC_75:
+                      le_int(integer_of_int32(l), integer_of_int32(m)))
+                     and (JC_76:
+                         le_int(integer_of_int32(m), integer_of_int32(u))))) } ];
+                (if (K_23:
+                    ((lt_int_ (integer_of_int32 (K_22:
+                                                (JC_78:
                                                 ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) 
                                                  (integer_of_int32 !m)))))) 
                      (integer_of_int32 v)))
                 then
-                 (let jessie_<num> =
-                 (u := (K_18:
-                       (JC_73:
-                       (int32_of_integer_ ((sub_int (integer_of_int32 !m)) (1)))))) in
-                 void) else begin   (return := !m); (raise Return) end)) end))
-             else (raise (Loop_exit_exc void)));
+                 (let _jessie_<num> =
+                 (l := (K_21:
+                       (JC_79:
+                       (int32_of_integer_ ((add_int (integer_of_int32 !m)) (1)))))) in
+                 void)
+                else
+                 (if (K_20:
+                     ((gt_int_ (integer_of_int32 (K_19:
+                                                 (JC_80:
+                                                 ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) 
+                                                  (integer_of_int32 !m)))))) 
+                      (integer_of_int32 v)))
+                 then
+                  (let _jessie_<num> =
+                  (u := (K_18:
+                        (JC_81:
+                        (int32_of_integer_ ((sub_int (integer_of_int32 !m)) (1)))))) in
+                  void) else begin   (return := !m); (raise Return) end)) end)
+              end) else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc jessie_<num> -> void end end done) with
-        Loop_exit_exc jessie_<num> -> void end;
+           Loop_continue_exc _jessie_<num> -> void end end done) with
+        Loop_exit_exc _jessie_<num> -> void end;
       (return := (K_25: (safe_int32_of_integer_ (neg_int (1)))));
       (raise Return) end)); absurd  end with Return -> !return end)) 
   { true }
@@ -2411,7 +2418,7 @@ let cons_BinarySearch_ensures_default =
  fun (this_0 : Object pointer) ->
   { valid_struct_BinarySearch(this_0, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_113: true) }
+  { (JC_43: true) }
 
 let cons_BinarySearch_safety =
  fun (this_0 : Object pointer) ->
@@ -2470,7 +2477,7 @@ why --project [...] why/BinarySearch.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/BinarySearch_po21.why">
-      <location file = "why/BinarySearch.why" line = "951" begin = "40" end = "181"/>
+      <location file = "why/BinarySearch.why" line = "955" begin = "40" end = "182"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po22.why">
@@ -2494,7 +2501,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po26.why">
-      <location file = "HOME/tests/java/BinarySearch.jc" line = "118" begin = "36" end = "67"/>
+      <location file = "HOME/tests/java/BinarySearch.jc" line = "120" begin = "36" end = "67"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
@@ -3885,7 +3892,7 @@ goal BinarySearch_binary_search_ensures_default_po_1:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3894,14 +3901,14 @@ goal BinarySearch_binary_search_ensures_default_po_1:
    ((result0 >= 0) and (result0 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   forall result1:int32.
   (integer_of_int32(result1) = (result0 - 1)) ->
-  ("JC_78": ("JC_76": (0 <= integer_of_int32(result))))
+  ("JC_86": ("JC_84": (0 <= integer_of_int32(result))))
 
 ========== file tests/java/why/BinarySearch_po10.why ==========
 goal BinarySearch_binary_search_ensures_default_po_10:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3912,17 +3919,17 @@ goal BinarySearch_binary_search_ensures_default_po_10:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) > integer_of_int32(u)) ->
   forall result2:int32.
   (integer_of_int32(result2) = (-1)) ->
   forall return:int32.
   (return = result2) ->
-  ("JC_45":
-  ("JC_44": (integer_of_int32(return) < (offset_max(Object_alloc_table,
+  ("JC_53":
+  ("JC_52": (integer_of_int32(return) < (offset_max(Object_alloc_table,
   t_0) + 1))))
 
 ========== file tests/java/why/BinarySearch_po11.why ==========
@@ -3934,7 +3941,7 @@ goal BinarySearch_binary_search_ensures_failure_po_1:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3947,7 +3954,7 @@ goal BinarySearch_binary_search_ensures_failure_po_1:
   ((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
   (integer_of_int32(select(intM_intP, shift(t_0,
   k_0))) = integer_of_int32(v)) ->
-  ("JC_98": (integer_of_int32(result) <= k_0))
+  ("JC_106": (integer_of_int32(result) <= k_0))
 
 ========== file tests/java/why/BinarySearch_po12.why ==========
 goal BinarySearch_binary_search_ensures_failure_po_2:
@@ -3958,7 +3965,7 @@ goal BinarySearch_binary_search_ensures_failure_po_2:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3971,7 +3978,7 @@ goal BinarySearch_binary_search_ensures_failure_po_2:
   ((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
   (integer_of_int32(select(intM_intP, shift(t_0,
   k_0))) = integer_of_int32(v)) ->
-  ("JC_98": (k_0 <= integer_of_int32(result1)))
+  ("JC_106": (k_0 <= integer_of_int32(result1)))
 
 ========== file tests/java/why/BinarySearch_po13.why ==========
 goal BinarySearch_binary_search_ensures_failure_po_3:
@@ -3982,7 +3989,7 @@ goal BinarySearch_binary_search_ensures_failure_po_3:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3993,15 +4000,15 @@ goal BinarySearch_binary_search_ensures_failure_po_3:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_98":
+  ("JC_106":
   (forall k_0:int.
     (((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
      ((integer_of_int32(select(intM_intP, shift(t_0,
       k_0))) = integer_of_int32(v)) ->
       ((integer_of_int32(l) <= k_0) and (k_0 <= integer_of_int32(u))))))) ->
-  ("JC_101":
-  (("JC_99": (0 <= integer_of_int32(l))) and
-   ("JC_100": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_109":
+  (("JC_107": (0 <= integer_of_int32(l))) and
+   ("JC_108": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -4010,9 +4017,9 @@ goal BinarySearch_binary_search_ensures_failure_po_3:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_108":
-  (("JC_106": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_107": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_116":
+  (("JC_114": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_115": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) < integer_of_int32(v)) ->
@@ -4024,7 +4031,7 @@ goal BinarySearch_binary_search_ensures_failure_po_3:
   ((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
   (integer_of_int32(select(intM_intP, shift(t_0,
   k_0))) = integer_of_int32(v)) ->
-  ("JC_98": (integer_of_int32(l0) <= k_0))
+  ("JC_106": (integer_of_int32(l0) <= k_0))
 
 ========== file tests/java/why/BinarySearch_po14.why ==========
 goal BinarySearch_binary_search_ensures_failure_po_4:
@@ -4035,7 +4042,7 @@ goal BinarySearch_binary_search_ensures_failure_po_4:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4046,15 +4053,15 @@ goal BinarySearch_binary_search_ensures_failure_po_4:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_98":
+  ("JC_106":
   (forall k_0:int.
     (((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
      ((integer_of_int32(select(intM_intP, shift(t_0,
       k_0))) = integer_of_int32(v)) ->
       ((integer_of_int32(l) <= k_0) and (k_0 <= integer_of_int32(u))))))) ->
-  ("JC_101":
-  (("JC_99": (0 <= integer_of_int32(l))) and
-   ("JC_100": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_109":
+  (("JC_107": (0 <= integer_of_int32(l))) and
+   ("JC_108": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -4063,9 +4070,9 @@ goal BinarySearch_binary_search_ensures_failure_po_4:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_108":
-  (("JC_106": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_107": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_116":
+  (("JC_114": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_115": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) < integer_of_int32(v)) ->
@@ -4077,7 +4084,7 @@ goal BinarySearch_binary_search_ensures_failure_po_4:
   ((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
   (integer_of_int32(select(intM_intP, shift(t_0,
   k_0))) = integer_of_int32(v)) ->
-  ("JC_98": (k_0 <= integer_of_int32(u)))
+  ("JC_106": (k_0 <= integer_of_int32(u)))
 
 ========== file tests/java/why/BinarySearch_po15.why ==========
 goal BinarySearch_binary_search_ensures_failure_po_5:
@@ -4088,7 +4095,7 @@ goal BinarySearch_binary_search_ensures_failure_po_5:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4099,15 +4106,15 @@ goal BinarySearch_binary_search_ensures_failure_po_5:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_98":
+  ("JC_106":
   (forall k_0:int.
     (((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
      ((integer_of_int32(select(intM_intP, shift(t_0,
       k_0))) = integer_of_int32(v)) ->
       ((integer_of_int32(l) <= k_0) and (k_0 <= integer_of_int32(u))))))) ->
-  ("JC_101":
-  (("JC_99": (0 <= integer_of_int32(l))) and
-   ("JC_100": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_109":
+  (("JC_107": (0 <= integer_of_int32(l))) and
+   ("JC_108": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -4116,9 +4123,9 @@ goal BinarySearch_binary_search_ensures_failure_po_5:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_108":
-  (("JC_106": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_107": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_116":
+  (("JC_114": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_115": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) >= integer_of_int32(v)) ->
@@ -4133,7 +4140,7 @@ goal BinarySearch_binary_search_ensures_failure_po_5:
   ((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
   (integer_of_int32(select(intM_intP, shift(t_0,
   k_0))) = integer_of_int32(v)) ->
-  ("JC_98": (integer_of_int32(l) <= k_0))
+  ("JC_106": (integer_of_int32(l) <= k_0))
 
 ========== file tests/java/why/BinarySearch_po16.why ==========
 goal BinarySearch_binary_search_ensures_failure_po_6:
@@ -4144,7 +4151,7 @@ goal BinarySearch_binary_search_ensures_failure_po_6:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4155,15 +4162,15 @@ goal BinarySearch_binary_search_ensures_failure_po_6:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_98":
+  ("JC_106":
   (forall k_0:int.
     (((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
      ((integer_of_int32(select(intM_intP, shift(t_0,
       k_0))) = integer_of_int32(v)) ->
       ((integer_of_int32(l) <= k_0) and (k_0 <= integer_of_int32(u))))))) ->
-  ("JC_101":
-  (("JC_99": (0 <= integer_of_int32(l))) and
-   ("JC_100": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_109":
+  (("JC_107": (0 <= integer_of_int32(l))) and
+   ("JC_108": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -4172,9 +4179,9 @@ goal BinarySearch_binary_search_ensures_failure_po_6:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_108":
-  (("JC_106": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_107": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_116":
+  (("JC_114": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_115": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) >= integer_of_int32(v)) ->
@@ -4189,7 +4196,7 @@ goal BinarySearch_binary_search_ensures_failure_po_6:
   ((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
   (integer_of_int32(select(intM_intP, shift(t_0,
   k_0))) = integer_of_int32(v)) ->
-  ("JC_98": (k_0 <= integer_of_int32(u0)))
+  ("JC_106": (k_0 <= integer_of_int32(u0)))
 
 ========== file tests/java/why/BinarySearch_po17.why ==========
 goal BinarySearch_binary_search_ensures_failure_po_7:
@@ -4200,7 +4207,7 @@ goal BinarySearch_binary_search_ensures_failure_po_7:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4211,15 +4218,15 @@ goal BinarySearch_binary_search_ensures_failure_po_7:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_98":
+  ("JC_106":
   (forall k_0:int.
     (((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
      ((integer_of_int32(select(intM_intP, shift(t_0,
       k_0))) = integer_of_int32(v)) ->
       ((integer_of_int32(l) <= k_0) and (k_0 <= integer_of_int32(u))))))) ->
-  ("JC_101":
-  (("JC_99": (0 <= integer_of_int32(l))) and
-   ("JC_100": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_109":
+  (("JC_107": (0 <= integer_of_int32(l))) and
+   ("JC_108": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -4228,9 +4235,9 @@ goal BinarySearch_binary_search_ensures_failure_po_7:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_108":
-  (("JC_106": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_107": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_116":
+  (("JC_114": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_115": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) >= integer_of_int32(v)) ->
@@ -4242,7 +4249,7 @@ goal BinarySearch_binary_search_ensures_failure_po_7:
   (integer_of_int32(return) = (-1)) ->
   forall k:int.
   ((0 <= k) and (k < (offset_max(Object_alloc_table, t_0) + 1))) ->
-  ("JC_53": (integer_of_int32(select(intM_intP, shift(t_0,
+  ("JC_61": (integer_of_int32(select(intM_intP, shift(t_0,
   k))) <> integer_of_int32(v)))
 
 ========== file tests/java/why/BinarySearch_po18.why ==========
@@ -4254,7 +4261,7 @@ goal BinarySearch_binary_search_ensures_failure_po_8:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4265,15 +4272,15 @@ goal BinarySearch_binary_search_ensures_failure_po_8:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_98":
+  ("JC_106":
   (forall k_0:int.
     (((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
      ((integer_of_int32(select(intM_intP, shift(t_0,
       k_0))) = integer_of_int32(v)) ->
       ((integer_of_int32(l) <= k_0) and (k_0 <= integer_of_int32(u))))))) ->
-  ("JC_101":
-  (("JC_99": (0 <= integer_of_int32(l))) and
-   ("JC_100": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_109":
+  (("JC_107": (0 <= integer_of_int32(l))) and
+   ("JC_108": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) > integer_of_int32(u)) ->
   forall result2:int32.
@@ -4283,7 +4290,7 @@ goal BinarySearch_binary_search_ensures_failure_po_8:
   (integer_of_int32(return) = (-1)) ->
   forall k:int.
   ((0 <= k) and (k < (offset_max(Object_alloc_table, t_0) + 1))) ->
-  ("JC_53": (integer_of_int32(select(intM_intP, shift(t_0,
+  ("JC_61": (integer_of_int32(select(intM_intP, shift(t_0,
   k))) <> integer_of_int32(v)))
 
 ========== file tests/java/why/BinarySearch_po19.why ==========
@@ -4294,7 +4301,7 @@ goal BinarySearch_binary_search_ensures_success_po_1:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4305,10 +4312,10 @@ goal BinarySearch_binary_search_ensures_success_po_1:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_91": true) ->
-  ("JC_89":
-  (("JC_87": (0 <= integer_of_int32(l))) and
-   ("JC_88": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_99": true) ->
+  ("JC_97":
+  (("JC_95": (0 <= integer_of_int32(l))) and
+   ("JC_96": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -4317,9 +4324,9 @@ goal BinarySearch_binary_search_ensures_success_po_1:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_96":
-  (("JC_94": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_95": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_104":
+  (("JC_102": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_103": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) >= integer_of_int32(v)) ->
@@ -4329,7 +4336,7 @@ goal BinarySearch_binary_search_ensures_success_po_1:
   forall return:int32.
   (return = m) ->
   (integer_of_int32(return) >= 0) ->
-  ("JC_51": (integer_of_int32(select(intM_intP, shift(t_0,
+  ("JC_59": (integer_of_int32(select(intM_intP, shift(t_0,
   integer_of_int32(return)))) = integer_of_int32(v)))
 
 ========== file tests/java/why/BinarySearch_po2.why ==========
@@ -4337,7 +4344,7 @@ goal BinarySearch_binary_search_ensures_default_po_2:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4346,8 +4353,8 @@ goal BinarySearch_binary_search_ensures_default_po_2:
    ((result0 >= 0) and (result0 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   forall result1:int32.
   (integer_of_int32(result1) = (result0 - 1)) ->
-  ("JC_78":
-  ("JC_77": (integer_of_int32(result1) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  ("JC_85": (integer_of_int32(result1) <= ((offset_max(Object_alloc_table,
   t_0) + 1) - 1))))
 
 ========== file tests/java/why/BinarySearch_po20.why ==========
@@ -4358,7 +4365,7 @@ goal BinarySearch_binary_search_ensures_success_po_2:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4369,10 +4376,10 @@ goal BinarySearch_binary_search_ensures_success_po_2:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_91": true) ->
-  ("JC_89":
-  (("JC_87": (0 <= integer_of_int32(l))) and
-   ("JC_88": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_99": true) ->
+  ("JC_97":
+  (("JC_95": (0 <= integer_of_int32(l))) and
+   ("JC_96": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) > integer_of_int32(u)) ->
   forall result2:int32.
@@ -4380,7 +4387,7 @@ goal BinarySearch_binary_search_ensures_success_po_2:
   forall return:int32.
   (return = result2) ->
   (integer_of_int32(return) >= 0) ->
-  ("JC_51": (integer_of_int32(select(intM_intP, shift(t_0,
+  ("JC_59": (integer_of_int32(select(intM_intP, shift(t_0,
   integer_of_int32(return)))) = integer_of_int32(v)))
 
 ========== file tests/java/why/BinarySearch_po21.why ==========
@@ -4388,7 +4395,7 @@ goal BinarySearch_binary_search_safety_po_1:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1))
@@ -4398,7 +4405,7 @@ goal BinarySearch_binary_search_safety_po_2:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4413,7 +4420,7 @@ goal BinarySearch_binary_search_safety_po_3:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4428,7 +4435,7 @@ goal BinarySearch_binary_search_safety_po_4:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4441,10 +4448,10 @@ goal BinarySearch_binary_search_safety_po_4:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   ((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l)))
@@ -4454,7 +4461,7 @@ goal BinarySearch_binary_search_safety_po_5:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4467,10 +4474,10 @@ goal BinarySearch_binary_search_safety_po_5:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   ((integer_of_int32(u) + integer_of_int32(l)) <= 2147483647)
@@ -4480,7 +4487,7 @@ goal BinarySearch_binary_search_safety_po_6:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4493,10 +4500,10 @@ goal BinarySearch_binary_search_safety_po_6:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -4510,7 +4517,7 @@ goal BinarySearch_binary_search_safety_po_7:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4523,10 +4530,10 @@ goal BinarySearch_binary_search_safety_po_7:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -4543,7 +4550,7 @@ goal BinarySearch_binary_search_safety_po_8:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4556,10 +4563,10 @@ goal BinarySearch_binary_search_safety_po_8:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -4576,7 +4583,7 @@ goal BinarySearch_binary_search_safety_po_9:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4589,10 +4596,10 @@ goal BinarySearch_binary_search_safety_po_9:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -4607,9 +4614,9 @@ goal BinarySearch_binary_search_safety_po_9:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   (offset_min(Object_alloc_table, t_0) <= integer_of_int32(m))
 
 ========== file tests/java/why/BinarySearch_po3.why ==========
@@ -4617,7 +4624,7 @@ goal BinarySearch_binary_search_ensures_default_po_3:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4628,9 +4635,9 @@ goal BinarySearch_binary_search_ensures_default_po_3:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -4639,14 +4646,14 @@ goal BinarySearch_binary_search_ensures_default_po_3:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_85": ("JC_83": (integer_of_int32(l) <= integer_of_int32(m))))
+  ("JC_93": ("JC_91": (integer_of_int32(l) <= integer_of_int32(m))))
 
 ========== file tests/java/why/BinarySearch_po30.why ==========
 goal BinarySearch_binary_search_safety_po_10:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4659,10 +4666,10 @@ goal BinarySearch_binary_search_safety_po_10:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -4677,9 +4684,9 @@ goal BinarySearch_binary_search_safety_po_10:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))
 
 ========== file tests/java/why/BinarySearch_po31.why ==========
@@ -4690,7 +4697,7 @@ goal BinarySearch_binary_search_safety_po_11:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4703,10 +4710,10 @@ goal BinarySearch_binary_search_safety_po_11:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -4721,9 +4728,9 @@ goal BinarySearch_binary_search_safety_po_11:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -4739,7 +4746,7 @@ goal BinarySearch_binary_search_safety_po_12:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4752,10 +4759,10 @@ goal BinarySearch_binary_search_safety_po_12:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -4770,9 +4777,9 @@ goal BinarySearch_binary_search_safety_po_12:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -4788,7 +4795,7 @@ goal BinarySearch_binary_search_safety_po_13:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4801,10 +4808,10 @@ goal BinarySearch_binary_search_safety_po_13:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -4819,9 +4826,9 @@ goal BinarySearch_binary_search_safety_po_13:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -4833,7 +4840,7 @@ goal BinarySearch_binary_search_safety_po_13:
   (integer_of_int32(result6) = (integer_of_int32(m) + 1)) ->
   forall l0:int32.
   (l0 = result6) ->
-  (0 <= ("JC_74": (integer_of_int32(u) - integer_of_int32(l))))
+  (0 <= ("JC_82": (integer_of_int32(u) - integer_of_int32(l))))
 
 ========== file tests/java/why/BinarySearch_po34.why ==========
 goal BinarySearch_binary_search_safety_po_14:
@@ -4843,7 +4850,7 @@ goal BinarySearch_binary_search_safety_po_14:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4856,10 +4863,10 @@ goal BinarySearch_binary_search_safety_po_14:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -4874,9 +4881,9 @@ goal BinarySearch_binary_search_safety_po_14:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -4888,7 +4895,7 @@ goal BinarySearch_binary_search_safety_po_14:
   (integer_of_int32(result6) = (integer_of_int32(m) + 1)) ->
   forall l0:int32.
   (l0 = result6) ->
-  (("JC_74": (integer_of_int32(u) - integer_of_int32(l0))) < ("JC_74":
+  (("JC_82": (integer_of_int32(u) - integer_of_int32(l0))) < ("JC_82":
                                                              (integer_of_int32(u) - integer_of_int32(l))))
 
 ========== file tests/java/why/BinarySearch_po35.why ==========
@@ -4899,7 +4906,7 @@ goal BinarySearch_binary_search_safety_po_15:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4912,10 +4919,10 @@ goal BinarySearch_binary_search_safety_po_15:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -4930,9 +4937,9 @@ goal BinarySearch_binary_search_safety_po_15:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -4953,7 +4960,7 @@ goal BinarySearch_binary_search_safety_po_16:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -4966,10 +4973,10 @@ goal BinarySearch_binary_search_safety_po_16:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -4984,9 +4991,9 @@ goal BinarySearch_binary_search_safety_po_16:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -5007,7 +5014,7 @@ goal BinarySearch_binary_search_safety_po_17:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -5020,10 +5027,10 @@ goal BinarySearch_binary_search_safety_po_17:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -5038,9 +5045,9 @@ goal BinarySearch_binary_search_safety_po_17:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -5057,7 +5064,7 @@ goal BinarySearch_binary_search_safety_po_17:
   (integer_of_int32(result7) = (integer_of_int32(m) - 1)) ->
   forall u0:int32.
   (u0 = result7) ->
-  (0 <= ("JC_74": (integer_of_int32(u) - integer_of_int32(l))))
+  (0 <= ("JC_82": (integer_of_int32(u) - integer_of_int32(l))))
 
 ========== file tests/java/why/BinarySearch_po38.why ==========
 goal BinarySearch_binary_search_safety_po_18:
@@ -5067,7 +5074,7 @@ goal BinarySearch_binary_search_safety_po_18:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -5080,10 +5087,10 @@ goal BinarySearch_binary_search_safety_po_18:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -5098,9 +5105,9 @@ goal BinarySearch_binary_search_safety_po_18:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -5117,7 +5124,7 @@ goal BinarySearch_binary_search_safety_po_18:
   (integer_of_int32(result7) = (integer_of_int32(m) - 1)) ->
   forall u0:int32.
   (u0 = result7) ->
-  (("JC_74": (integer_of_int32(u0) - integer_of_int32(l))) < ("JC_74":
+  (("JC_82": (integer_of_int32(u0) - integer_of_int32(l))) < ("JC_82":
                                                              (integer_of_int32(u) - integer_of_int32(l))))
 
 ========== file tests/java/why/BinarySearch_po4.why ==========
@@ -5125,7 +5132,7 @@ goal BinarySearch_binary_search_ensures_default_po_4:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -5136,9 +5143,9 @@ goal BinarySearch_binary_search_ensures_default_po_4:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -5147,7 +5154,7 @@ goal BinarySearch_binary_search_ensures_default_po_4:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_85": ("JC_84": (integer_of_int32(m) <= integer_of_int32(u))))
+  ("JC_93": ("JC_92": (integer_of_int32(m) <= integer_of_int32(u))))
 
 ========== file tests/java/why/BinarySearch_po5.why ==========
 goal BinarySearch_binary_search_ensures_default_po_5:
@@ -5157,7 +5164,7 @@ goal BinarySearch_binary_search_ensures_default_po_5:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -5168,9 +5175,9 @@ goal BinarySearch_binary_search_ensures_default_po_5:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -5179,9 +5186,9 @@ goal BinarySearch_binary_search_ensures_default_po_5:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_85":
-  (("JC_83": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_84": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_93":
+  (("JC_91": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_92": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) < integer_of_int32(v)) ->
@@ -5189,7 +5196,7 @@ goal BinarySearch_binary_search_ensures_default_po_5:
   (integer_of_int32(result5) = (integer_of_int32(m) + 1)) ->
   forall l0:int32.
   (l0 = result5) ->
-  ("JC_78": ("JC_76": (0 <= integer_of_int32(l0))))
+  ("JC_86": ("JC_84": (0 <= integer_of_int32(l0))))
 
 ========== file tests/java/why/BinarySearch_po6.why ==========
 goal BinarySearch_binary_search_ensures_default_po_6:
@@ -5199,7 +5206,7 @@ goal BinarySearch_binary_search_ensures_default_po_6:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -5210,9 +5217,9 @@ goal BinarySearch_binary_search_ensures_default_po_6:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -5221,9 +5228,9 @@ goal BinarySearch_binary_search_ensures_default_po_6:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_85":
-  (("JC_83": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_84": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_93":
+  (("JC_91": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_92": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) >= integer_of_int32(v)) ->
@@ -5234,8 +5241,8 @@ goal BinarySearch_binary_search_ensures_default_po_6:
   (integer_of_int32(result6) = (integer_of_int32(m) - 1)) ->
   forall u0:int32.
   (u0 = result6) ->
-  ("JC_78":
-  ("JC_77": (integer_of_int32(u0) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  ("JC_85": (integer_of_int32(u0) <= ((offset_max(Object_alloc_table,
   t_0) + 1) - 1))))
 
 ========== file tests/java/why/BinarySearch_po7.why ==========
@@ -5246,7 +5253,7 @@ goal BinarySearch_binary_search_ensures_default_po_7:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -5257,9 +5264,9 @@ goal BinarySearch_binary_search_ensures_default_po_7:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -5268,9 +5275,9 @@ goal BinarySearch_binary_search_ensures_default_po_7:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_85":
-  (("JC_83": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_84": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_93":
+  (("JC_91": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_92": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) >= integer_of_int32(v)) ->
@@ -5279,7 +5286,7 @@ goal BinarySearch_binary_search_ensures_default_po_7:
   (integer_of_int32(result5) <= integer_of_int32(v)) ->
   forall return:int32.
   (return = m) ->
-  ("JC_45": ("JC_43": ((-1) <= integer_of_int32(return))))
+  ("JC_53": ("JC_51": ((-1) <= integer_of_int32(return))))
 
 ========== file tests/java/why/BinarySearch_po8.why ==========
 goal BinarySearch_binary_search_ensures_default_po_8:
@@ -5289,7 +5296,7 @@ goal BinarySearch_binary_search_ensures_default_po_8:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -5300,9 +5307,9 @@ goal BinarySearch_binary_search_ensures_default_po_8:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -5311,9 +5318,9 @@ goal BinarySearch_binary_search_ensures_default_po_8:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_85":
-  (("JC_83": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_84": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_93":
+  (("JC_91": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_92": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) >= integer_of_int32(v)) ->
@@ -5322,8 +5329,8 @@ goal BinarySearch_binary_search_ensures_default_po_8:
   (integer_of_int32(result5) <= integer_of_int32(v)) ->
   forall return:int32.
   (return = m) ->
-  ("JC_45":
-  ("JC_44": (integer_of_int32(return) < (offset_max(Object_alloc_table,
+  ("JC_53":
+  ("JC_52": (integer_of_int32(return) < (offset_max(Object_alloc_table,
   t_0) + 1))))
 
 ========== file tests/java/why/BinarySearch_po9.why ==========
@@ -5331,7 +5338,7 @@ goal BinarySearch_binary_search_ensures_default_po_9:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -5342,16 +5349,16 @@ goal BinarySearch_binary_search_ensures_default_po_9:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) > integer_of_int32(u)) ->
   forall result2:int32.
   (integer_of_int32(result2) = (-1)) ->
   forall return:int32.
   (return = result2) ->
-  ("JC_45": ("JC_43": ((-1) <= integer_of_int32(return))))
+  ("JC_53": ("JC_51": ((-1) <= integer_of_int32(return))))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/BinarySearch.why
@@ -7165,7 +7172,7 @@ why -simplify [...] why/BinarySearch.why
     (select intM_intP (shift t_0 (integer_of_int32 return))))
 (integer_of_int32 v)))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 951, characters 40-181
+;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 955, characters 40-182
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_0 0 Object_alloc_table)
@@ -7251,7 +7258,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (<= (integer_of_int32 l) (integer_of_int32 u))
 (<= (+ (integer_of_int32 u) (integer_of_int32 l)) constant_too_large_2147483647)))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_6, File "HOME/tests/java/BinarySearch.jc", line 118, characters 36-67
+;; BinarySearch_binary_search_safety_po_6, File "HOME/tests/java/BinarySearch.jc", line 120, characters 36-67
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_0 0 Object_alloc_table)
@@ -9165,7 +9172,7 @@ goal BinarySearch_binary_search_ensures_default_po_1:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9174,13 +9181,13 @@ goal BinarySearch_binary_search_ensures_default_po_1:
    ((result0 >= 0) and (result0 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   forall result1:int32.
   (integer_of_int32(result1) = (result0 - 1)) ->
-  ("JC_78": ("JC_76": (0 <= integer_of_int32(result))))
+  ("JC_86": ("JC_84": (0 <= integer_of_int32(result))))
 
 goal BinarySearch_binary_search_ensures_default_po_2:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9189,15 +9196,15 @@ goal BinarySearch_binary_search_ensures_default_po_2:
    ((result0 >= 0) and (result0 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   forall result1:int32.
   (integer_of_int32(result1) = (result0 - 1)) ->
-  ("JC_78":
-  ("JC_77": (integer_of_int32(result1) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  ("JC_85": (integer_of_int32(result1) <= ((offset_max(Object_alloc_table,
   t_0) + 1) - 1))))
 
 goal BinarySearch_binary_search_ensures_default_po_3:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9208,9 +9215,9 @@ goal BinarySearch_binary_search_ensures_default_po_3:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -9219,13 +9226,13 @@ goal BinarySearch_binary_search_ensures_default_po_3:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_85": ("JC_83": (integer_of_int32(l) <= integer_of_int32(m))))
+  ("JC_93": ("JC_91": (integer_of_int32(l) <= integer_of_int32(m))))
 
 goal BinarySearch_binary_search_ensures_default_po_4:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9236,9 +9243,9 @@ goal BinarySearch_binary_search_ensures_default_po_4:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -9247,7 +9254,7 @@ goal BinarySearch_binary_search_ensures_default_po_4:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_85": ("JC_84": (integer_of_int32(m) <= integer_of_int32(u))))
+  ("JC_93": ("JC_92": (integer_of_int32(m) <= integer_of_int32(u))))
 
 goal BinarySearch_binary_search_ensures_default_po_5:
   forall t_0:Object pointer.
@@ -9256,7 +9263,7 @@ goal BinarySearch_binary_search_ensures_default_po_5:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9267,9 +9274,9 @@ goal BinarySearch_binary_search_ensures_default_po_5:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -9278,9 +9285,9 @@ goal BinarySearch_binary_search_ensures_default_po_5:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_85":
-  (("JC_83": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_84": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_93":
+  (("JC_91": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_92": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) < integer_of_int32(v)) ->
@@ -9288,7 +9295,7 @@ goal BinarySearch_binary_search_ensures_default_po_5:
   (integer_of_int32(result5) = (integer_of_int32(m) + 1)) ->
   forall l0:int32.
   (l0 = result5) ->
-  ("JC_78": ("JC_76": (0 <= integer_of_int32(l0))))
+  ("JC_86": ("JC_84": (0 <= integer_of_int32(l0))))
 
 goal BinarySearch_binary_search_ensures_default_po_6:
   forall t_0:Object pointer.
@@ -9297,7 +9304,7 @@ goal BinarySearch_binary_search_ensures_default_po_6:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9308,9 +9315,9 @@ goal BinarySearch_binary_search_ensures_default_po_6:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -9319,9 +9326,9 @@ goal BinarySearch_binary_search_ensures_default_po_6:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_85":
-  (("JC_83": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_84": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_93":
+  (("JC_91": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_92": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) >= integer_of_int32(v)) ->
@@ -9332,8 +9339,8 @@ goal BinarySearch_binary_search_ensures_default_po_6:
   (integer_of_int32(result6) = (integer_of_int32(m) - 1)) ->
   forall u0:int32.
   (u0 = result6) ->
-  ("JC_78":
-  ("JC_77": (integer_of_int32(u0) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  ("JC_85": (integer_of_int32(u0) <= ((offset_max(Object_alloc_table,
   t_0) + 1) - 1))))
 
 goal BinarySearch_binary_search_ensures_default_po_7:
@@ -9343,7 +9350,7 @@ goal BinarySearch_binary_search_ensures_default_po_7:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9354,9 +9361,9 @@ goal BinarySearch_binary_search_ensures_default_po_7:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -9365,9 +9372,9 @@ goal BinarySearch_binary_search_ensures_default_po_7:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_85":
-  (("JC_83": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_84": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_93":
+  (("JC_91": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_92": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) >= integer_of_int32(v)) ->
@@ -9376,7 +9383,7 @@ goal BinarySearch_binary_search_ensures_default_po_7:
   (integer_of_int32(result5) <= integer_of_int32(v)) ->
   forall return:int32.
   (return = m) ->
-  ("JC_45": ("JC_43": ((-1) <= integer_of_int32(return))))
+  ("JC_53": ("JC_51": ((-1) <= integer_of_int32(return))))
 
 goal BinarySearch_binary_search_ensures_default_po_8:
   forall t_0:Object pointer.
@@ -9385,7 +9392,7 @@ goal BinarySearch_binary_search_ensures_default_po_8:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9396,9 +9403,9 @@ goal BinarySearch_binary_search_ensures_default_po_8:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -9407,9 +9414,9 @@ goal BinarySearch_binary_search_ensures_default_po_8:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_85":
-  (("JC_83": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_84": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_93":
+  (("JC_91": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_92": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) >= integer_of_int32(v)) ->
@@ -9418,15 +9425,15 @@ goal BinarySearch_binary_search_ensures_default_po_8:
   (integer_of_int32(result5) <= integer_of_int32(v)) ->
   forall return:int32.
   (return = m) ->
-  ("JC_45":
-  ("JC_44": (integer_of_int32(return) < (offset_max(Object_alloc_table,
+  ("JC_53":
+  ("JC_52": (integer_of_int32(return) < (offset_max(Object_alloc_table,
   t_0) + 1))))
 
 goal BinarySearch_binary_search_ensures_default_po_9:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9437,22 +9444,22 @@ goal BinarySearch_binary_search_ensures_default_po_9:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) > integer_of_int32(u)) ->
   forall result2:int32.
   (integer_of_int32(result2) = (-1)) ->
   forall return:int32.
   (return = result2) ->
-  ("JC_45": ("JC_43": ((-1) <= integer_of_int32(return))))
+  ("JC_53": ("JC_51": ((-1) <= integer_of_int32(return))))
 
 goal BinarySearch_binary_search_ensures_default_po_10:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9463,17 +9470,17 @@ goal BinarySearch_binary_search_ensures_default_po_10:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_78":
-  (("JC_76": (0 <= integer_of_int32(l))) and
-   ("JC_77": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_86":
+  (("JC_84": (0 <= integer_of_int32(l))) and
+   ("JC_85": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) > integer_of_int32(u)) ->
   forall result2:int32.
   (integer_of_int32(result2) = (-1)) ->
   forall return:int32.
   (return = result2) ->
-  ("JC_45":
-  ("JC_44": (integer_of_int32(return) < (offset_max(Object_alloc_table,
+  ("JC_53":
+  ("JC_52": (integer_of_int32(return) < (offset_max(Object_alloc_table,
   t_0) + 1))))
 
 goal BinarySearch_binary_search_ensures_failure_po_1:
@@ -9484,7 +9491,7 @@ goal BinarySearch_binary_search_ensures_failure_po_1:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9497,7 +9504,7 @@ goal BinarySearch_binary_search_ensures_failure_po_1:
   ((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
   (integer_of_int32(select(intM_intP, shift(t_0,
   k_0))) = integer_of_int32(v)) ->
-  ("JC_98": (integer_of_int32(result) <= k_0))
+  ("JC_106": (integer_of_int32(result) <= k_0))
 
 goal BinarySearch_binary_search_ensures_failure_po_2:
   forall t_0:Object pointer.
@@ -9507,7 +9514,7 @@ goal BinarySearch_binary_search_ensures_failure_po_2:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9520,7 +9527,7 @@ goal BinarySearch_binary_search_ensures_failure_po_2:
   ((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
   (integer_of_int32(select(intM_intP, shift(t_0,
   k_0))) = integer_of_int32(v)) ->
-  ("JC_98": (k_0 <= integer_of_int32(result1)))
+  ("JC_106": (k_0 <= integer_of_int32(result1)))
 
 goal BinarySearch_binary_search_ensures_failure_po_3:
   forall t_0:Object pointer.
@@ -9530,7 +9537,7 @@ goal BinarySearch_binary_search_ensures_failure_po_3:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9541,15 +9548,15 @@ goal BinarySearch_binary_search_ensures_failure_po_3:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_98":
+  ("JC_106":
   (forall k_0:int.
     (((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
      ((integer_of_int32(select(intM_intP, shift(t_0,
       k_0))) = integer_of_int32(v)) ->
       ((integer_of_int32(l) <= k_0) and (k_0 <= integer_of_int32(u))))))) ->
-  ("JC_101":
-  (("JC_99": (0 <= integer_of_int32(l))) and
-   ("JC_100": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_109":
+  (("JC_107": (0 <= integer_of_int32(l))) and
+   ("JC_108": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -9558,9 +9565,9 @@ goal BinarySearch_binary_search_ensures_failure_po_3:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_108":
-  (("JC_106": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_107": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_116":
+  (("JC_114": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_115": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) < integer_of_int32(v)) ->
@@ -9572,7 +9579,7 @@ goal BinarySearch_binary_search_ensures_failure_po_3:
   ((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
   (integer_of_int32(select(intM_intP, shift(t_0,
   k_0))) = integer_of_int32(v)) ->
-  ("JC_98": (integer_of_int32(l0) <= k_0))
+  ("JC_106": (integer_of_int32(l0) <= k_0))
 
 goal BinarySearch_binary_search_ensures_failure_po_4:
   forall t_0:Object pointer.
@@ -9582,7 +9589,7 @@ goal BinarySearch_binary_search_ensures_failure_po_4:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9593,15 +9600,15 @@ goal BinarySearch_binary_search_ensures_failure_po_4:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_98":
+  ("JC_106":
   (forall k_0:int.
     (((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
      ((integer_of_int32(select(intM_intP, shift(t_0,
       k_0))) = integer_of_int32(v)) ->
       ((integer_of_int32(l) <= k_0) and (k_0 <= integer_of_int32(u))))))) ->
-  ("JC_101":
-  (("JC_99": (0 <= integer_of_int32(l))) and
-   ("JC_100": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_109":
+  (("JC_107": (0 <= integer_of_int32(l))) and
+   ("JC_108": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -9610,9 +9617,9 @@ goal BinarySearch_binary_search_ensures_failure_po_4:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_108":
-  (("JC_106": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_107": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_116":
+  (("JC_114": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_115": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) < integer_of_int32(v)) ->
@@ -9624,7 +9631,7 @@ goal BinarySearch_binary_search_ensures_failure_po_4:
   ((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
   (integer_of_int32(select(intM_intP, shift(t_0,
   k_0))) = integer_of_int32(v)) ->
-  ("JC_98": (k_0 <= integer_of_int32(u)))
+  ("JC_106": (k_0 <= integer_of_int32(u)))
 
 goal BinarySearch_binary_search_ensures_failure_po_5:
   forall t_0:Object pointer.
@@ -9634,7 +9641,7 @@ goal BinarySearch_binary_search_ensures_failure_po_5:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9645,15 +9652,15 @@ goal BinarySearch_binary_search_ensures_failure_po_5:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_98":
+  ("JC_106":
   (forall k_0:int.
     (((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
      ((integer_of_int32(select(intM_intP, shift(t_0,
       k_0))) = integer_of_int32(v)) ->
       ((integer_of_int32(l) <= k_0) and (k_0 <= integer_of_int32(u))))))) ->
-  ("JC_101":
-  (("JC_99": (0 <= integer_of_int32(l))) and
-   ("JC_100": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_109":
+  (("JC_107": (0 <= integer_of_int32(l))) and
+   ("JC_108": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -9662,9 +9669,9 @@ goal BinarySearch_binary_search_ensures_failure_po_5:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_108":
-  (("JC_106": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_107": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_116":
+  (("JC_114": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_115": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) >= integer_of_int32(v)) ->
@@ -9679,7 +9686,7 @@ goal BinarySearch_binary_search_ensures_failure_po_5:
   ((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
   (integer_of_int32(select(intM_intP, shift(t_0,
   k_0))) = integer_of_int32(v)) ->
-  ("JC_98": (integer_of_int32(l) <= k_0))
+  ("JC_106": (integer_of_int32(l) <= k_0))
 
 goal BinarySearch_binary_search_ensures_failure_po_6:
   forall t_0:Object pointer.
@@ -9689,7 +9696,7 @@ goal BinarySearch_binary_search_ensures_failure_po_6:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9700,15 +9707,15 @@ goal BinarySearch_binary_search_ensures_failure_po_6:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_98":
+  ("JC_106":
   (forall k_0:int.
     (((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
      ((integer_of_int32(select(intM_intP, shift(t_0,
       k_0))) = integer_of_int32(v)) ->
       ((integer_of_int32(l) <= k_0) and (k_0 <= integer_of_int32(u))))))) ->
-  ("JC_101":
-  (("JC_99": (0 <= integer_of_int32(l))) and
-   ("JC_100": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_109":
+  (("JC_107": (0 <= integer_of_int32(l))) and
+   ("JC_108": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -9717,9 +9724,9 @@ goal BinarySearch_binary_search_ensures_failure_po_6:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_108":
-  (("JC_106": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_107": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_116":
+  (("JC_114": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_115": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) >= integer_of_int32(v)) ->
@@ -9734,7 +9741,7 @@ goal BinarySearch_binary_search_ensures_failure_po_6:
   ((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
   (integer_of_int32(select(intM_intP, shift(t_0,
   k_0))) = integer_of_int32(v)) ->
-  ("JC_98": (k_0 <= integer_of_int32(u0)))
+  ("JC_106": (k_0 <= integer_of_int32(u0)))
 
 goal BinarySearch_binary_search_ensures_failure_po_7:
   forall t_0:Object pointer.
@@ -9744,7 +9751,7 @@ goal BinarySearch_binary_search_ensures_failure_po_7:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9755,15 +9762,15 @@ goal BinarySearch_binary_search_ensures_failure_po_7:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_98":
+  ("JC_106":
   (forall k_0:int.
     (((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
      ((integer_of_int32(select(intM_intP, shift(t_0,
       k_0))) = integer_of_int32(v)) ->
       ((integer_of_int32(l) <= k_0) and (k_0 <= integer_of_int32(u))))))) ->
-  ("JC_101":
-  (("JC_99": (0 <= integer_of_int32(l))) and
-   ("JC_100": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_109":
+  (("JC_107": (0 <= integer_of_int32(l))) and
+   ("JC_108": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -9772,9 +9779,9 @@ goal BinarySearch_binary_search_ensures_failure_po_7:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_108":
-  (("JC_106": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_107": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_116":
+  (("JC_114": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_115": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) >= integer_of_int32(v)) ->
@@ -9786,7 +9793,7 @@ goal BinarySearch_binary_search_ensures_failure_po_7:
   (integer_of_int32(return) = (-1)) ->
   forall k:int.
   ((0 <= k) and (k < (offset_max(Object_alloc_table, t_0) + 1))) ->
-  ("JC_53": (integer_of_int32(select(intM_intP, shift(t_0,
+  ("JC_61": (integer_of_int32(select(intM_intP, shift(t_0,
   k))) <> integer_of_int32(v)))
 
 goal BinarySearch_binary_search_ensures_failure_po_8:
@@ -9797,7 +9804,7 @@ goal BinarySearch_binary_search_ensures_failure_po_8:
   int32) memory.
   (is_sorted(t_0, Object_alloc_table, intM_intP) and
    (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-    ("JC_41": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_49": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9808,15 +9815,15 @@ goal BinarySearch_binary_search_ensures_failure_po_8:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_98":
+  ("JC_106":
   (forall k_0:int.
     (((0 <= k_0) and (k_0 < (offset_max(Object_alloc_table, t_0) + 1))) ->
      ((integer_of_int32(select(intM_intP, shift(t_0,
       k_0))) = integer_of_int32(v)) ->
       ((integer_of_int32(l) <= k_0) and (k_0 <= integer_of_int32(u))))))) ->
-  ("JC_101":
-  (("JC_99": (0 <= integer_of_int32(l))) and
-   ("JC_100": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_109":
+  (("JC_107": (0 <= integer_of_int32(l))) and
+   ("JC_108": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) > integer_of_int32(u)) ->
   forall result2:int32.
@@ -9826,7 +9833,7 @@ goal BinarySearch_binary_search_ensures_failure_po_8:
   (integer_of_int32(return) = (-1)) ->
   forall k:int.
   ((0 <= k) and (k < (offset_max(Object_alloc_table, t_0) + 1))) ->
-  ("JC_53": (integer_of_int32(select(intM_intP, shift(t_0,
+  ("JC_61": (integer_of_int32(select(intM_intP, shift(t_0,
   k))) <> integer_of_int32(v)))
 
 goal BinarySearch_binary_search_ensures_success_po_1:
@@ -9836,7 +9843,7 @@ goal BinarySearch_binary_search_ensures_success_po_1:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9847,10 +9854,10 @@ goal BinarySearch_binary_search_ensures_success_po_1:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_91": true) ->
-  ("JC_89":
-  (("JC_87": (0 <= integer_of_int32(l))) and
-   ("JC_88": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_99": true) ->
+  ("JC_97":
+  (("JC_95": (0 <= integer_of_int32(l))) and
+   ("JC_96": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   forall result2:int32.
@@ -9859,9 +9866,9 @@ goal BinarySearch_binary_search_ensures_success_po_1:
   (integer_of_int32(result3) = computer_div(integer_of_int32(result2), 2)) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_96":
-  (("JC_94": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_95": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_104":
+  (("JC_102": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_103": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   forall result4:int32.
   (result4 = select(intM_intP, shift(t_0, integer_of_int32(m)))) ->
   (integer_of_int32(result4) >= integer_of_int32(v)) ->
@@ -9871,7 +9878,7 @@ goal BinarySearch_binary_search_ensures_success_po_1:
   forall return:int32.
   (return = m) ->
   (integer_of_int32(return) >= 0) ->
-  ("JC_51": (integer_of_int32(select(intM_intP, shift(t_0,
+  ("JC_59": (integer_of_int32(select(intM_intP, shift(t_0,
   integer_of_int32(return)))) = integer_of_int32(v)))
 
 goal BinarySearch_binary_search_ensures_success_po_2:
@@ -9881,7 +9888,7 @@ goal BinarySearch_binary_search_ensures_success_po_2:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9892,10 +9899,10 @@ goal BinarySearch_binary_search_ensures_success_po_2:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_91": true) ->
-  ("JC_89":
-  (("JC_87": (0 <= integer_of_int32(l))) and
-   ("JC_88": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_99": true) ->
+  ("JC_97":
+  (("JC_95": (0 <= integer_of_int32(l))) and
+   ("JC_96": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) > integer_of_int32(u)) ->
   forall result2:int32.
@@ -9903,14 +9910,14 @@ goal BinarySearch_binary_search_ensures_success_po_2:
   forall return:int32.
   (return = result2) ->
   (integer_of_int32(return) >= 0) ->
-  ("JC_51": (integer_of_int32(select(intM_intP, shift(t_0,
+  ("JC_59": (integer_of_int32(select(intM_intP, shift(t_0,
   integer_of_int32(return)))) = integer_of_int32(v)))
 
 goal BinarySearch_binary_search_safety_po_1:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1))
@@ -9919,7 +9926,7 @@ goal BinarySearch_binary_search_safety_po_2:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -9933,7 +9940,7 @@ goal BinarySearch_binary_search_safety_po_3:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -9947,7 +9954,7 @@ goal BinarySearch_binary_search_safety_po_4:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -9960,10 +9967,10 @@ goal BinarySearch_binary_search_safety_po_4:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   ((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l)))
@@ -9972,7 +9979,7 @@ goal BinarySearch_binary_search_safety_po_5:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -9985,10 +9992,10 @@ goal BinarySearch_binary_search_safety_po_5:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   ((integer_of_int32(u) + integer_of_int32(l)) <= 2147483647)
@@ -9997,7 +10004,7 @@ goal BinarySearch_binary_search_safety_po_6:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -10010,10 +10017,10 @@ goal BinarySearch_binary_search_safety_po_6:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -10026,7 +10033,7 @@ goal BinarySearch_binary_search_safety_po_7:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -10039,10 +10046,10 @@ goal BinarySearch_binary_search_safety_po_7:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -10058,7 +10065,7 @@ goal BinarySearch_binary_search_safety_po_8:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -10071,10 +10078,10 @@ goal BinarySearch_binary_search_safety_po_8:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -10090,7 +10097,7 @@ goal BinarySearch_binary_search_safety_po_9:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -10103,10 +10110,10 @@ goal BinarySearch_binary_search_safety_po_9:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -10121,16 +10128,16 @@ goal BinarySearch_binary_search_safety_po_9:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   (offset_min(Object_alloc_table, t_0) <= integer_of_int32(m))
 
 goal BinarySearch_binary_search_safety_po_10:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -10143,10 +10150,10 @@ goal BinarySearch_binary_search_safety_po_10:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -10161,9 +10168,9 @@ goal BinarySearch_binary_search_safety_po_10:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))
 
 goal BinarySearch_binary_search_safety_po_11:
@@ -10173,7 +10180,7 @@ goal BinarySearch_binary_search_safety_po_11:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -10186,10 +10193,10 @@ goal BinarySearch_binary_search_safety_po_11:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -10204,9 +10211,9 @@ goal BinarySearch_binary_search_safety_po_11:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -10221,7 +10228,7 @@ goal BinarySearch_binary_search_safety_po_12:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -10234,10 +10241,10 @@ goal BinarySearch_binary_search_safety_po_12:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -10252,9 +10259,9 @@ goal BinarySearch_binary_search_safety_po_12:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -10269,7 +10276,7 @@ goal BinarySearch_binary_search_safety_po_13:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -10282,10 +10289,10 @@ goal BinarySearch_binary_search_safety_po_13:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -10300,9 +10307,9 @@ goal BinarySearch_binary_search_safety_po_13:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -10314,7 +10321,7 @@ goal BinarySearch_binary_search_safety_po_13:
   (integer_of_int32(result6) = (integer_of_int32(m) + 1)) ->
   forall l0:int32.
   (l0 = result6) ->
-  (0 <= ("JC_74": (integer_of_int32(u) - integer_of_int32(l))))
+  (0 <= ("JC_82": (integer_of_int32(u) - integer_of_int32(l))))
 
 goal BinarySearch_binary_search_safety_po_14:
   forall t_0:Object pointer.
@@ -10323,7 +10330,7 @@ goal BinarySearch_binary_search_safety_po_14:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -10336,10 +10343,10 @@ goal BinarySearch_binary_search_safety_po_14:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -10354,9 +10361,9 @@ goal BinarySearch_binary_search_safety_po_14:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -10368,7 +10375,7 @@ goal BinarySearch_binary_search_safety_po_14:
   (integer_of_int32(result6) = (integer_of_int32(m) + 1)) ->
   forall l0:int32.
   (l0 = result6) ->
-  (("JC_74": (integer_of_int32(u) - integer_of_int32(l0))) < ("JC_74":
+  (("JC_82": (integer_of_int32(u) - integer_of_int32(l0))) < ("JC_82":
                                                              (integer_of_int32(u) - integer_of_int32(l))))
 
 goal BinarySearch_binary_search_safety_po_15:
@@ -10378,7 +10385,7 @@ goal BinarySearch_binary_search_safety_po_15:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -10391,10 +10398,10 @@ goal BinarySearch_binary_search_safety_po_15:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -10409,9 +10416,9 @@ goal BinarySearch_binary_search_safety_po_15:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -10431,7 +10438,7 @@ goal BinarySearch_binary_search_safety_po_16:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -10444,10 +10451,10 @@ goal BinarySearch_binary_search_safety_po_16:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -10462,9 +10469,9 @@ goal BinarySearch_binary_search_safety_po_16:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -10484,7 +10491,7 @@ goal BinarySearch_binary_search_safety_po_17:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -10497,10 +10504,10 @@ goal BinarySearch_binary_search_safety_po_17:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -10515,9 +10522,9 @@ goal BinarySearch_binary_search_safety_po_17:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -10534,7 +10541,7 @@ goal BinarySearch_binary_search_safety_po_17:
   (integer_of_int32(result7) = (integer_of_int32(m) - 1)) ->
   forall u0:int32.
   (u0 = result7) ->
-  (0 <= ("JC_74": (integer_of_int32(u) - integer_of_int32(l))))
+  (0 <= ("JC_82": (integer_of_int32(u) - integer_of_int32(l))))
 
 goal BinarySearch_binary_search_safety_po_18:
   forall t_0:Object pointer.
@@ -10543,7 +10550,7 @@ goal BinarySearch_binary_search_safety_po_18:
   forall intM_intP:(Object,
   int32) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_41": Non_null_intM(t_0, Object_alloc_table))) ->
+   ("JC_49": Non_null_intM(t_0, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
@@ -10556,10 +10563,10 @@ goal BinarySearch_binary_search_safety_po_18:
   (integer_of_int32(result1) = (result0 - 1)) ->
   forall l:int32.
   forall u:int32.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_58": (0 <= integer_of_int32(l))) and
-   ("JC_59": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
+  ("JC_70": true) ->
+  ("JC_68":
+  (("JC_66": (0 <= integer_of_int32(l))) and
+   ("JC_67": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
    t_0) + 1) - 1))))) ->
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   (((-2147483648) <= (integer_of_int32(u) + integer_of_int32(l))) and
@@ -10574,9 +10581,9 @@ goal BinarySearch_binary_search_safety_po_18:
   (integer_of_int32(result4) = result3) ->
   forall m:int32.
   (m = result4) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u))))) ->
   ((offset_min(Object_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(Object_alloc_table, t_0))) ->
   forall result5:int32.
@@ -10593,7 +10600,7 @@ goal BinarySearch_binary_search_safety_po_18:
   (integer_of_int32(result7) = (integer_of_int32(m) - 1)) ->
   forall u0:int32.
   (u0 = result7) ->
-  (("JC_74": (integer_of_int32(u0) - integer_of_int32(l))) < ("JC_74":
+  (("JC_82": (integer_of_int32(u0) - integer_of_int32(l))) < ("JC_82":
                                                              (integer_of_int32(u) - integer_of_int32(l))))
 
 // RUNSIMPLIFY this tells regtests to run Simplify in this example
@@ -12408,7 +12415,7 @@ goal BinarySearch_binary_search_safety_po_18:
     (select intM_intP (shift t_0 (integer_of_int32 return))))
 (integer_of_int32 v)))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 951, characters 40-181
+;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 955, characters 40-182
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_0 0 Object_alloc_table)
@@ -12494,7 +12501,7 @@ goal BinarySearch_binary_search_safety_po_18:
 (IMPLIES (<= (integer_of_int32 l) (integer_of_int32 u))
 (<= (+ (integer_of_int32 u) (integer_of_int32 l)) constant_too_large_2147483647)))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_6, File "HOME/tests/java/BinarySearch.jc", line 118, characters 36-67
+;; BinarySearch_binary_search_safety_po_6, File "HOME/tests/java/BinarySearch.jc", line 120, characters 36-67
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_0 0 Object_alloc_table)

@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0473.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0473.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0473.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0473.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0473.jessie
 [jessie] File bts0473.jessie/bts0473.jc written.
@@ -41,17 +41,17 @@ type voidP = [voidP]
 
 unit main()
 behavior default:
-  ensures (C_6 : true);
+  ensures (_C_6 : true);
 {  
    (var int32 x);
    
-   {  (C_1 : (x = 2));
+   {  (_C_1 : (x = 2));
       
       {  
-         (assert for default: (C_2 : (jessie : (x == 2))));
+         (assert for default: (_C_2 : (jessie : (x == 2))));
          ()
       };
-      (C_5 : (x = (C_4 : ((C_3 : (1 / 0)) :> int32))));
+      (_C_5 : (x = (_C_4 : ((_C_3 : (1 / 0)) :> int32))));
       
       (return ())
    }
@@ -410,19 +410,13 @@ let main_ensures_default =
   try
    begin
      (let x_0 = ref (any_int32 void) in
-     (C_1:
      begin
-       (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (2))) in void);
-      (assert { (JC_<somenum>: (integer_of_int32(x_0) = (2))) }; void);
-      (C_5:
-      begin
-        void;
-       (let jessie_<somenum> =
-       (x_0 := (C_4:
-               (safe_int32_of_integer_ (C_3:
-                                       (JC_<somenum>: ((computer_div (1)) (0))))))) in
-       void); (raise Return) end) end)); (raise Return) end with Return ->
-   void end) { (JC_<somenum>: true) }
+       (let _jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (2))) in void);
+      (assert { (JC_<somenum>: (integer_of_int32(x_0) = (2))) }; void); void;
+      (let _jessie_<somenum> =
+      (x_0 := (safe_int32_of_integer_ (JC_<somenum>: ((computer_div (1)) (0))))) in
+      void); (raise Return) end); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -431,19 +425,13 @@ let main_safety =
   try
    begin
      (let x_0 = ref (any_int32 void) in
-     (C_1:
      begin
-       (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (2))) in void);
-      [ { } unit reads x_0 { (JC_<somenum>: (integer_of_int32(x_0) = (2))) } ];
-      (C_5:
-      begin
-        void;
-       (let jessie_<somenum> =
-       (x_0 := (C_4:
-               (JC_<somenum>:
-               (int32_of_integer_ (C_3: (JC_<somenum>: ((computer_div_ (1)) (0)))))))) in
-       void); (raise Return) end) end)); (raise Return) end with Return ->
-   void end) { true }
+       (let _jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (2))) in void);
+      [ { } unit reads x_0 { (JC_<somenum>: (integer_of_int32(x_0) = (2))) } ]; void;
+      (let _jessie_<somenum> =
+      (x_0 := (JC_<somenum>: (int32_of_integer_ (JC_<somenum>: ((computer_div_ (1)) (0)))))) in
+      void); (raise Return) end); (raise Return) end with Return -> void end)
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0473.jessie --quiet -f bts0473.makefile project

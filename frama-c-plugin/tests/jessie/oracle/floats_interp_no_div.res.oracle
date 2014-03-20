@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only floats_interp_no_div.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD floats_interp_no_div.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only floats_interp_no_div.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/floats_interp_no_div.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir floats_interp_no_div.jessie
 [jessie] File floats_interp_no_div.jessie/floats_interp_no_div.jc written.
@@ -42,27 +42,27 @@ predicate bounded(real z, real bound) =
 
 double interp_lin(double x1, double x2, double y1, double y2, double v,
                   double z)
-  requires (C_16 : ((C_17 : ((x1 :> real) <= (z :> real))) &&
-                     (C_18 : ((z :> real) <= (x2 :> real)))));
-  requires (C_15 : bounded((x1 :> real), 0x1p500));
-  requires (C_14 : bounded((x2 :> real), 0x1p500));
-  requires (C_13 : bounded((v :> real), 0x1p500));
-  requires (C_12 : (let real slope_0 =
-                   (((y2 :> real) - (y1 :> real)) /
-                     ((x2 :> real) - (x1 :> real)))
-                   in (bounded(slope_0, 0x1p500) &&
-                        (\real_abs(((v :> real) - slope_0)) <=
-                          (0x1p-53 * \real_abs(slope_0))))));
+  requires (_C_16 : ((_C_17 : ((x1 :> real) <= (z :> real))) &&
+                      (_C_18 : ((z :> real) <= (x2 :> real)))));
+  requires (_C_15 : bounded((x1 :> real), 0x1p500));
+  requires (_C_14 : bounded((x2 :> real), 0x1p500));
+  requires (_C_13 : bounded((v :> real), 0x1p500));
+  requires (_C_12 : (let real slope_0 =
+                    (((y2 :> real) - (y1 :> real)) /
+                      ((x2 :> real) - (x1 :> real)))
+                    in (bounded(slope_0, 0x1p500) &&
+                         (\real_abs(((v :> real) - slope_0)) <=
+                           (0x1p-53 * \real_abs(slope_0))))));
 behavior default:
-  ensures (C_11 : (let real slope_1 =
-                  (((\at(y2,Old) :> real) - (\at(y1,Old) :> real)) /
-                    ((\at(x2,Old) :> real) - (\at(x1,Old) :> real)))
-                  in (let real exact_result =
-                     ((\at(y1,Old) :> real) +
-                       (slope_1 *
-                         ((\at(z,Old) :> real) - (\at(x1,Old) :> real))))
-                     in (\real_abs(((\result :> real) - exact_result)) <=
-                          0x1p-1))));
+  ensures (_C_11 : (let real slope_1 =
+                   (((\at(y2,Old) :> real) - (\at(y1,Old) :> real)) /
+                     ((\at(x2,Old) :> real) - (\at(x1,Old) :> real)))
+                   in (let real exact_result =
+                      ((\at(y1,Old) :> real) +
+                        (slope_1 *
+                          ((\at(z,Old) :> real) - (\at(x1,Old) :> real))))
+                      in (\real_abs(((\result :> real) - exact_result)) <=
+                           0x1p-1))));
 {  
    (var double a);
    
@@ -70,53 +70,54 @@ behavior default:
    
    (var double __retres);
    
-   {  (C_2 : (a = (C_1 : (z - x1))));
+   {  (_C_2 : (a = (_C_1 : (z - x1))));
       
       {  
-         (assert for default: (C_3 : (jessie : (\real_abs(((a :> real) -
-                                                            ((z :> real) -
-                                                              (x1 :> real)))) <=
-                                                 (0x1p-53 *
-                                                   \real_abs(((z :> real) -
-                                                               (x1 :> real))))))));
+         (assert for default: (_C_3 : (jessie : (\real_abs(((a :> real) -
+                                                             ((z :> real) -
+                                                               (x1 :> real)))) <=
+                                                  (0x1p-53 *
+                                                    \real_abs(((z :> real) -
+                                                                (x1 :> real))))))));
          ()
       };
       
       {  
-         (assert for default: (C_4 : (jessie : bounded((a :> real), 0x1p502))));
+         (assert for default: (_C_4 : (jessie : bounded((a :> real), 0x1p502))));
          ()
       };
       
-      {  (C_6 : (b = (C_5 : (v * a))))
+      {  (_C_6 : (b = (_C_5 : (v * a))))
       };
       
       {  
-         (assert for default: (C_7 : (jessie : (\real_abs(((b :> real) -
-                                                            ((v :> real) *
-                                                              (a :> real)))) <=
-                                                 (0x1p-10 *
-                                                   \real_abs(((v :> real) *
-                                                               (a :> real))))))));
+         (assert for default: (_C_7 : (jessie : (\real_abs(((b :> real) -
+                                                             ((v :> real) *
+                                                               (a :> real)))) <=
+                                                  (0x1p-10 *
+                                                    \real_abs(((v :> real) *
+                                                                (a :> real))))))));
          ()
       };
       
       {  
-         (assert for default: (C_8 : (jessie : (let real slope =
-                                               (((y2 :> real) - (y1 :> real)) /
-                                                 ((x2 :> real) -
-                                                   (x1 :> real)))
-                                               in (\real_abs(((b :> real) -
-                                                               (slope *
-                                                                 ((z :> real) -
-                                                                   (x1 :> real))))) <=
-                                                    (0x1p-25 *
-                                                      \real_abs((slope *
+         (assert for default: (_C_8 : (jessie : (let real slope =
+                                                (((y2 :> real) -
+                                                   (y1 :> real)) /
+                                                  ((x2 :> real) -
+                                                    (x1 :> real)))
+                                                in (\real_abs(((b :> real) -
+                                                                (slope *
                                                                   ((z :> real) -
+                                                                    (x1 :> real))))) <=
+                                                     (0x1p-25 *
+                                                       \real_abs((slope *
+                                                                   ((z :> real) -
                                                                     (x1 :> real))))))))));
          ()
       };
       
-      {  (C_10 : (__retres = (C_9 : (y1 + b))));
+      {  (_C_10 : (__retres = (_C_9 : (y1 + b))));
          
          (return __retres)
       }
@@ -512,11 +513,9 @@ let interp_lin_ensures_default =
      (let a = ref (any_double void) in
      (let b = ref (any_double void) in
      (let __retres = ref (any_double void) in
-     (C_2:
      begin
-       (let jessie_<somenum> =
-       (a := (C_1: (JC_<somenum>: (((sub_double_safe nearest_even) z_0) x1)))) in
-       void);
+       (let _jessie_<somenum> =
+       (a := (JC_<somenum>: (((sub_double_safe nearest_even) z_0) x1))) in void);
       (assert
       { (JC_<somenum>:
         le_real(abs_real(sub_real(double_value(a),
@@ -525,11 +524,9 @@ let interp_lin_ensures_default =
         abs_real(sub_real(double_value(z_0), double_value(x1)))))) }; void);
       void; (assert { (JC_<somenum>: bounded(double_value(a), 0x1p502)) }; void);
       void;
-      (let jessie_<somenum> =
-      (C_6:
-      begin
-        (b := (C_5: (JC_<somenum>: (((mul_double_safe nearest_even) v) !a)))); !b
-      end) in void);
+      (let _jessie_<somenum> =
+      begin   (b := (JC_<somenum>: (((mul_double_safe nearest_even) v) !a))); !b end in
+      void);
       (assert
       { (JC_<somenum>:
         le_real(abs_real(sub_real(double_value(b),
@@ -548,14 +545,11 @@ let interp_lin_ensures_default =
          mul_real(0x1p-25,
          abs_real(mul_real(slope,
                   sub_real(double_value(z_0), double_value(x1)))))))) };
-      void);
-      (C_10:
-      begin
-        void;
-       (let jessie_<somenum> =
-       (__retres := (C_9: (JC_<somenum>: (((add_double_safe nearest_even) y1) !b)))) in
-       void); (return := !__retres); (raise Return) end) end)))); absurd  end
-   with Return -> !return end))
+      void); void;
+      (let _jessie_<somenum> =
+      (__retres := (JC_<somenum>: (((add_double_safe nearest_even) y1) !b))) in
+      void); (return := !__retres); (raise Return) end))); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     (let slope_1 =
           div_real(sub_real(double_value(y2), double_value(y1)),
@@ -589,10 +583,9 @@ let interp_lin_safety =
      (let a = ref (any_double void) in
      (let b = ref (any_double void) in
      (let __retres = ref (any_double void) in
-     (C_2:
      begin
-       (let jessie_<somenum> =
-       (a := (C_1: (JC_<somenum>: (((sub_double nearest_even) z_0) x1)))) in void);
+       (let _jessie_<somenum> =
+       (a := (JC_<somenum>: (((sub_double nearest_even) z_0) x1))) in void);
       [ { } unit reads a
         { (JC_<somenum>:
           le_real(abs_real(sub_real(double_value(a),
@@ -602,10 +595,9 @@ let interp_lin_safety =
       void;
       [ { } unit reads a { (JC_<somenum>: bounded(double_value(a), 0x1p502)) } ];
       void;
-      (let jessie_<somenum> =
-      (C_6:
-      begin   (b := (C_5: (JC_<somenum>: (((mul_double nearest_even) v) !a)))); !b
-      end) in void);
+      (let _jessie_<somenum> =
+      begin   (b := (JC_<somenum>: (((mul_double nearest_even) v) !a))); !b end in
+      void);
       [ { } unit reads a,b
         { (JC_<somenum>:
           le_real(abs_real(sub_real(double_value(b),
@@ -623,13 +615,11 @@ let interp_lin_safety =
            mul_real(0x1p-25,
            abs_real(mul_real(slope,
                     sub_real(double_value(z_0), double_value(x1)))))))) } ];
-      (C_10:
-      begin
-        void;
-       (let jessie_<somenum> =
-       (__retres := (C_9: (JC_<somenum>: (((add_double nearest_even) y1) !b)))) in
-       void); (return := !__retres); (raise Return) end) end)))); absurd  end
-   with Return -> !return end)) { true }
+      void;
+      (let _jessie_<somenum> =
+      (__retres := (JC_<somenum>: (((add_double nearest_even) y1) !b))) in void);
+      (return := !__retres); (raise Return) end))); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C floats_interp_no_div.jessie --quiet -f floats_interp_no_div.makefile project

@@ -1,8 +1,10 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only invariants.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD invariants.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only invariants.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/invariants.c"
 [kernel] warning: ignoring status of global invariant `i'
 [kernel] warning: ignoring status of global invariant `const_c'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global invariant `i'
+[kernel] warning: ignoring status of global invariant `const_c'
 [jessie] Producing Jessie files in subdir invariants.jessie
 [jessie] File invariants.jessie/invariants.jc written.
 [jessie] File invariants.jessie/invariants.cloc written.
@@ -71,15 +73,15 @@ invariant const_c :
 ((c + 0).intM == 12)
 
 unit f(int32 n_1)
-  requires (C_14 : (n_1 >= 0));
+  requires (_C_14 : (n_1 >= 0));
 behavior default:
-  ensures (C_13 : true);
+  ensures (_C_13 : true);
 {  
    (var int32 t);
    
-   {  (C_4 : (t = (C_3 : ((C_2 : ((C_1 : s.x) + n_1)) :> int32))));
-      (if (t <= (C_12 : ((C_11 : ((C_10 : s.y) - 20)) :> int32))) then 
-      (C_9 : ((C_8 : s.x) = (C_7 : ((C_6 : (t + (C_5 : (c + 0).intM))) :> int32)))) else ());
+   {  (_C_4 : (t = (_C_3 : ((_C_2 : ((_C_1 : s.x) + n_1)) :> int32))));
+      (if (t <= (_C_12 : ((_C_11 : ((_C_10 : s.y) - 20)) :> int32))) then 
+      (_C_9 : ((_C_8 : s.x) = (_C_7 : ((_C_6 : (t + (_C_5 : (c + 0).intM))) :> int32)))) else ());
       
       (return ())
    }
@@ -645,32 +647,23 @@ let f_ensures_default =
   try
    begin
      (let t = ref (any_int32 void) in
-     (C_4:
      begin
-       (let jessie_<somenum> =
-       (t := (C_3:
-             (safe_int32_of_integer_ (C_2:
-                                     ((add_int (integer_of_int32 (C_1:
-                                                                 ((safe_acc_ !s_0_x_s_1) s_0)))) 
-                                      (integer_of_int32 n_1)))))) in void);
-      (if ((le_int_ (integer_of_int32 !t)) (integer_of_int32 (C_12:
-                                                             (safe_int32_of_integer_ 
-                                                              (C_11:
+       (let _jessie_<somenum> =
+       (t := (safe_int32_of_integer_ ((add_int (integer_of_int32 ((safe_acc_ !s_0_x_s_1) s_0))) 
+                                      (integer_of_int32 n_1)))) in void);
+      (if ((le_int_ (integer_of_int32 !t)) (integer_of_int32 (safe_int32_of_integer_ 
                                                               ((sub_int 
                                                                 (integer_of_int32 
-                                                                 (C_10:
-                                                                 ((safe_acc_ !s_0_y_s_1) s_0)))) (20)))))))
+                                                                 ((safe_acc_ !s_0_y_s_1) s_0))) (20)))))
       then
-       (let jessie_<somenum> =
-       (C_7:
-       (safe_int32_of_integer_ (C_6:
-                               ((add_int (integer_of_int32 !t)) (integer_of_int32 
-                                                                 (C_5:
+       (let _jessie_<somenum> =
+       (safe_int32_of_integer_ ((add_int (integer_of_int32 !t)) (integer_of_int32 
                                                                  ((safe_acc_ !intP_intM_c_2) 
-                                                                  ((shift c) (0))))))))) in
-       (let jessie_<somenum> = s_0 in (((safe_upd_ s_0_x_s_1) jessie_<somenum>) jessie_<somenum>)))
-      else void); (raise Return) end)); (raise Return) end with Return ->
-   void end) { (JC_<somenum>: true) }
+                                                                  ((shift c) (0)))))) in
+       (let _jessie_<somenum> = s_0 in
+       (((safe_upd_ s_0_x_s_1) _jessie_<somenum>) _jessie_<somenum>))) else void);
+      (raise Return) end); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (n_1 : int32) ->
@@ -684,34 +677,24 @@ let f_safety =
   try
    begin
      (let t = ref (any_int32 void) in
-     (C_4:
      begin
-       (let jessie_<somenum> =
-       (t := (C_3:
-             (JC_<somenum>:
-             (int32_of_integer_ (C_2:
-                                ((add_int (integer_of_int32 (C_1:
-                                                            ((safe_acc_ !s_0_x_s_1) s_0)))) 
-                                 (integer_of_int32 n_1))))))) in void);
-      (if ((le_int_ (integer_of_int32 !t)) (integer_of_int32 (C_12:
-                                                             (JC_<somenum>:
+       (let _jessie_<somenum> =
+       (t := (JC_<somenum>:
+             (int32_of_integer_ ((add_int (integer_of_int32 ((safe_acc_ !s_0_x_s_1) s_0))) 
+                                 (integer_of_int32 n_1))))) in void);
+      (if ((le_int_ (integer_of_int32 !t)) (integer_of_int32 (JC_<somenum>:
                                                              (int32_of_integer_ 
-                                                              (C_11:
                                                               ((sub_int 
                                                                 (integer_of_int32 
-                                                                 (C_10:
-                                                                 ((safe_acc_ !s_0_y_s_1) s_0)))) (20))))))))
+                                                                 ((safe_acc_ !s_0_y_s_1) s_0))) (20))))))
       then
-       (let jessie_<somenum> =
-       (C_7:
+       (let _jessie_<somenum> =
        (JC_<somenum>:
-       (int32_of_integer_ (C_6:
-                          ((add_int (integer_of_int32 !t)) (integer_of_int32 
-                                                            (C_5:
+       (int32_of_integer_ ((add_int (integer_of_int32 !t)) (integer_of_int32 
                                                             ((safe_acc_ !intP_intM_c_2) 
-                                                             ((shift c) (0)))))))))) in
-       (let jessie_<somenum> = s_0 in (((safe_upd_ s_0_x_s_1) jessie_<somenum>) jessie_<somenum>)))
-      else void); (raise Return) end)); (raise Return) end with Return ->
+                                                             ((shift c) (0))))))) in
+       (let _jessie_<somenum> = s_0 in (((safe_upd_ s_0_x_s_1) _jessie_<somenum>) _jessie_<somenum>)))
+      else void); (raise Return) end); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
     ((JC_<somenum>: const_c(intP_intM_c_2))

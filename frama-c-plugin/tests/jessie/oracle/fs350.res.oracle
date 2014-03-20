@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only fs350.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD fs350.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only fs350.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/fs350.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir fs350.jessie
 [jessie] File fs350.jessie/fs350.jc written.
@@ -46,11 +46,11 @@ tag voidP = {
 type voidP = [voidP]
 
 int32 main(int32 argc, char_xP[..] argv)
-  requires (C_18 : ((C_19 : (0 <= argc)) && (C_20 : (argc <= 10))));
-  requires (C_15 : ((C_16 : (\offset_min(argv) <= 0)) &&
-                     (C_17 : (\offset_max(argv) >= (argc - 1)))));
+  requires (_C_18 : ((_C_19 : (0 <= argc)) && (_C_20 : (argc <= 10))));
+  requires (_C_15 : ((_C_16 : (\offset_min(argv) <= 0)) &&
+                      (_C_17 : (\offset_max(argv) >= (argc - 1)))));
 behavior default:
-  ensures (C_14 : true);
+  ensures (_C_14 : true);
 {  
    (var int32 i);
    
@@ -58,24 +58,24 @@ behavior default:
    
    (var int32 __retres);
    
-   {  (C_2 : (t = (C_1 : (new char_xP[10]))));
-      (C_3 : (i = 0));
+   {  (_C_2 : (t = (_C_1 : (new char_xP[10]))));
+      (_C_3 : (i = 0));
       
       loop 
       behavior default:
-        invariant (C_4 : (0 <= i));
+        invariant (_C_4 : (0 <= i));
       while (true)
       {  
          {  (if (i < argc) then () else 
             (goto while_0_break));
-            (C_8 : ((C_7 : (t + i).char_xM) = (C_6 : (C_5 : (argv + i)).char_xM)));
-            (C_11 : (i = (C_10 : ((C_9 : (i + 1)) :> int32))))
+            (_C_8 : ((_C_7 : (t + i).char_xM) = (_C_6 : (_C_5 : (argv + i)).char_xM)));
+            (_C_11 : (i = (_C_10 : ((_C_9 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
-      (C_12 : (__retres = 0));
+      (_C_12 : (__retres = 0));
       
-      {  (C_13 : (free(t)));
+      {  (_C_13 : (free(t)));
          
          (return __retres)
       }
@@ -547,53 +547,44 @@ let main_ensures_default =
      (let t = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      try
-      (C_2:
-      (C_3:
-      (loop_2:
       begin
-        (let jessie_<somenum> =
-        (t := (C_1:
-              (JC_<somenum>:
-              (((alloc_struct_char_xP (10)) char_xP_t_2_alloc_table) char_xP_t_2_tag_table)))) in
-        void); (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-       while true do
-       { invariant (JC_<somenum>: le_int((0), integer_of_int32(i)))  }
-        begin
-          [ { } unit { true } ];
-         try
+        (let _jessie_<somenum> =
+        (t := (JC_<somenum>:
+              (((alloc_struct_char_xP (10)) char_xP_t_2_alloc_table) char_xP_t_2_tag_table))) in
+        void);
+       (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+       (loop_2:
+       begin
+         while true do
+         { invariant (JC_<somenum>: le_int((0), integer_of_int32(i)))  }
           begin
-            (let jessie_<somenum> =
-            (C_8:
-            (C_11:
+            [ { } unit { true } ];
+           try
             begin
-              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 argc))
-              then void else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<somenum> =
-             (let jessie_<somenum> =
-             (C_6:
-             ((safe_acc_ char_xP_char_xM_argv_1) (C_5:
-                                                 ((shift argv) (integer_of_int32 !i))))) in
-             (let jessie_<somenum> = !t in
-             (let jessie_<somenum> = (integer_of_int32 !i) in
-             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-             (((safe_upd_ char_xP_char_xM_t_2) jessie_<somenum>) jessie_<somenum>))))) in
-             void);
-             (i := (C_10:
-                   (safe_int32_of_integer_ (C_9:
-                                           ((add_int (integer_of_int32 !i)) (1))))));
-             !i end)) in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done;
-       (raise (Goto_while_0_break_exc void)) end))) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+              (let _jessie_<somenum> =
+              begin
+                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 argc))
+                then void else (raise (Goto_while_0_break_exc void)));
+               (let _jessie_<somenum> =
+               (let _jessie_<somenum> =
+               ((safe_acc_ char_xP_char_xM_argv_1) ((shift argv) (integer_of_int32 !i))) in
+               (let _jessie_<somenum> = !t in
+               (let _jessie_<somenum> = (integer_of_int32 !i) in
+               (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+               (((safe_upd_ char_xP_char_xM_t_2) _jessie_<somenum>) _jessie_<somenum>))))) in
+               void);
+               (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))));
+               !i end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
+      Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break:
-      (C_12:
-      (C_13:
       begin
         void;
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
        ((safe_free_parameter char_xP_t_2_alloc_table) !t);
-       (return := !__retres); (raise Return) end))) end)))))); absurd  end
-   with Return -> !return end)) { (JC_<somenum>: true) }
+       (return := !__retres); (raise Return) end) end)))))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (argc : int32) (argv : char_xP pointer) (char_xP_argv_1_alloc_table : char_xP alloc_table) (char_xP_char_xM_argv_1 : (char_xP, charP pointer) memory) ->
@@ -616,61 +607,52 @@ let main_safety =
      (let t = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      try
-      (C_2:
-      (C_3:
-      (loop_1:
       begin
-        (let jessie_<somenum> =
-        (t := (let jessie_<somenum> =
-              (C_1:
+        (let _jessie_<somenum> =
+        (t := (let _jessie_<somenum> =
               (JC_<somenum>:
-              (((alloc_struct_char_xP_requires (10)) char_xP_t_2_alloc_table) char_xP_t_2_tag_table))) in
+              (((alloc_struct_char_xP_requires (10)) char_xP_t_2_alloc_table) char_xP_t_2_tag_table)) in
               (JC_<somenum>:
               (assert
-              { ge_int(offset_max(char_xP_t_2_alloc_table, jessie_<somenum>), (9)) };
-              jessie_<somenum>)))) in void);
-       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-       while true do
-       { invariant (JC_<somenum>: true) variant (0) }
-        begin
-          [ { } unit reads i { (JC_<somenum>: le_int((0), integer_of_int32(i))) } ];
-         try
+              { ge_int(offset_max(char_xP_t_2_alloc_table, _jessie_<somenum>), (9)) };
+              _jessie_<somenum>)))) in void);
+       (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+       (loop_1:
+       begin
+         while true do
+         { invariant (JC_<somenum>: true) variant (0) }
           begin
-            (let jessie_<somenum> =
-            (C_8:
-            (C_11:
+            [ { } unit reads i { (JC_<somenum>: le_int((0), integer_of_int32(i))) } ];
+           try
             begin
-              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 argc))
-              then void else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<somenum> =
-             (let jessie_<somenum> =
-             (C_6:
-             (JC_<somenum>:
-             ((((offset_acc_ char_xP_argv_1_alloc_table) char_xP_char_xM_argv_1) argv) 
-              (integer_of_int32 !i)))) in
-             (let jessie_<somenum> = !t in
-             (let jessie_<somenum> = (integer_of_int32 !i) in
-             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-             (JC_<somenum>:
-             (((((offset_upd_ !char_xP_t_2_alloc_table) char_xP_char_xM_t_2) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
-             void);
-             (i := (C_10:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_9:
-                                      ((add_int (integer_of_int32 !i)) (1)))))));
-             !i end)) in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done;
-       (raise (Goto_while_0_break_exc void)) end))) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+              (let _jessie_<somenum> =
+              begin
+                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 argc))
+                then void else (raise (Goto_while_0_break_exc void)));
+               (let _jessie_<somenum> =
+               (let _jessie_<somenum> =
+               (JC_<somenum>:
+               ((((offset_acc_ char_xP_argv_1_alloc_table) char_xP_char_xM_argv_1) argv) 
+                (integer_of_int32 !i))) in
+               (let _jessie_<somenum> = !t in
+               (let _jessie_<somenum> = (integer_of_int32 !i) in
+               (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+               (JC_<somenum>:
+               (((((offset_upd_ !char_xP_t_2_alloc_table) char_xP_char_xM_t_2) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
+               void);
+               (i := (JC_<somenum>:
+                     (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))));
+               !i end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
+      Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break:
-      (C_12:
-      (C_13:
       begin
         void;
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
        ((free_parameter char_xP_t_2_alloc_table) !t); (return := !__retres);
-       (raise Return) end))) end)))))); absurd  end with Return ->
-   !return end)) { true }
+       (raise Return) end) end)))))); absurd  end with Return -> !return end))
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fs350.jessie --quiet -f fs350.makefile project
@@ -695,7 +677,7 @@ why --project [...] why/fs350.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/fs350_po4.why">
-      <location file = "why/fs350.why" line = "546" begin = "16" end = "74"/>
+      <location file = "why/fs350.why" line = "533" begin = "16" end = "75"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/fs350_po5.why">
@@ -709,12 +691,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs350_po7.why">
-      <location file = "PPCHOME/tests/jessie/fs350.jessie/fs350.jc" line = "65" begin = "20" end = "80"/>
+      <location file = "PPCHOME/tests/jessie/fs350.jessie/fs350.jc" line = "65" begin = "21" end = "84"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs350_po8.why">
-      <location file = "PPCHOME/tests/jessie/fs350.jessie/fs350.jc" line = "65" begin = "20" end = "80"/>
+      <location file = "PPCHOME/tests/jessie/fs350.jessie/fs350.jc" line = "65" begin = "21" end = "84"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -729,15 +711,15 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs350_po11.why">
-      <location file = "why/fs350.why" line = "550" begin = "42" end = "43"/>
+      <location file = "why/fs350.why" line = "539" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/fs350_po12.why">
-      <location file = "why/fs350.why" line = "550" begin = "42" end = "43"/>
+      <location file = "why/fs350.why" line = "539" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/fs350_po13.why">
-      <location file = "why/fs350.why" line = "587" begin = "8" end = "51"/>
+      <location file = "why/fs350.why" line = "569" begin = "8" end = "51"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

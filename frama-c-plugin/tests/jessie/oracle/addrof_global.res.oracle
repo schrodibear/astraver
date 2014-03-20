@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only addrof_global.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD addrof_global.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only addrof_global.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/addrof_global.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir addrof_global.jessie
 [jessie] File addrof_global.jessie/addrof_global.jc written.
@@ -56,12 +56,12 @@ intP[0] i;
 int_xP[0] p;
 
 unit gi(intP[..] p_0, int32 i_0)
-  requires (C_4 : ((C_5 : (\offset_min(p_0) <= 0)) &&
-                    (C_6 : (\offset_max(p_0) >= 0))));
+  requires (_C_4 : ((_C_5 : (\offset_min(p_0) <= 0)) &&
+                     (_C_6 : (\offset_max(p_0) >= 0))));
 behavior default:
-  ensures (C_3 : (\at(p_0,Old).intM == \at(i_0,Old)));
+  ensures (_C_3 : (\at(p_0,Old).intM == \at(i_0,Old)));
 {  
-   {  (C_2 : ((C_1 : p_0.intM) = i_0));
+   {  (_C_2 : ((_C_1 : p_0.intM) = i_0));
       
       (return ())
    }
@@ -69,28 +69,28 @@ behavior default:
 
 int32 fi()
 behavior default:
-  ensures (C_10 : (\result == 0));
+  ensures (_C_10 : (\result == 0));
 {  
-   {  (C_8 : gi(i, (C_7 : i.intM)));
+   {  (_C_8 : gi(i, (_C_7 : i.intM)));
       
-      (return (C_9 : i.intM))
+      (return (_C_9 : i.intM))
    }
 }
 
 unit gp(int_xP[..] p_0_0, intP[..] i_0_0)
-  requires (C_20 : ((((C_23 : (\offset_min(p_0_0) <= 0)) &&
-                       (C_24 : (\offset_max(p_0_0) >= 0))) &&
-                      ((C_26 : (\offset_min(p_0_0.int_xM) <= 0)) &&
-                        (C_27 : (\offset_max(p_0_0.int_xM) >= 0)))) &&
-                     ((C_29 : (\offset_min(i_0_0) <= 0)) &&
-                       (C_30 : (\offset_max(i_0_0) >= 0)))));
+  requires (_C_20 : ((((_C_23 : (\offset_min(p_0_0) <= 0)) &&
+                        (_C_24 : (\offset_max(p_0_0) >= 0))) &&
+                       ((_C_26 : (\offset_min(p_0_0.int_xM) <= 0)) &&
+                         (_C_27 : (\offset_max(p_0_0.int_xM) >= 0)))) &&
+                      ((_C_29 : (\offset_min(i_0_0) <= 0)) &&
+                        (_C_30 : (\offset_max(i_0_0) >= 0)))));
 behavior default:
-  ensures (C_17 : ((C_18 : (\at(p_0_0,Old).int_xM.intM ==
-                             \at(i_0_0.intM,Old))) &&
-                    (C_19 : (\at(p_0_0,Old).int_xM == \at(i_0_0,Old)))));
+  ensures (_C_17 : ((_C_18 : (\at(p_0_0,Old).int_xM.intM ==
+                               \at(i_0_0.intM,Old))) &&
+                     (_C_19 : (\at(p_0_0,Old).int_xM == \at(i_0_0,Old)))));
 {  
-   {  (C_14 : ((C_13 : (C_12 : p_0_0.int_xM).intM) = (C_11 : i_0_0.intM)));
-      (C_16 : ((C_15 : p_0_0.int_xM) = i_0_0));
+   {  (_C_14 : ((_C_13 : (_C_12 : p_0_0.int_xM).intM) = (_C_11 : i_0_0.intM)));
+      (_C_16 : ((_C_15 : p_0_0.int_xM) = i_0_0));
       
       (return ())
    }
@@ -98,17 +98,17 @@ behavior default:
 
 int32 fp()
 behavior default:
-  ensures (C_38 : (\result == 0));
+  ensures (_C_38 : (\result == 0));
 {  
-   {  (C_32 : gp(p, (C_31 : p.int_xM)));
+   {  (_C_32 : gp(p, (_C_31 : p.int_xM)));
       
       {  
-         (assert for default: (C_33 : (jessie : (i.intM == 0))));
+         (assert for default: (_C_33 : (jessie : (i.intM == 0))));
          ()
       };
-      (C_36 : ((C_35 : (C_34 : p.int_xM).intM) = 0));
+      (_C_36 : ((_C_35 : (_C_34 : p.int_xM).intM) = 0));
       
-      (return (C_37 : i.intM))
+      (return (_C_37 : i.intM))
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs addrof_global.jessie/addrof_global.cloc addrof_global.jessie/addrof_global.jc
@@ -728,15 +728,13 @@ let fi_ensures_default =
   (init:
   (let return = ref (any_int32 void) in
   try
-   (C_8:
    begin
-     (let jessie_<somenum> = i in
-     (let jessie_<somenum> = (C_7: ((safe_acc_ !intP_intM_i_1) i)) in
+     (let _jessie_<somenum> = i in
+     (let _jessie_<somenum> = ((safe_acc_ !intP_intM_i_1) i) in
      (JC_<somenum>:
-     ((((gi jessie_<somenum>) jessie_<somenum>) intP_intM_i_1) !intP_i_1_alloc_table))));
-    (return := (C_9: ((safe_acc_ !intP_intM_i_1) i))); (raise Return); 
-    absurd  end) with Return -> !return end))
-  { (JC_<somenum>: (integer_of_int32(result) = (0))) }
+     ((((gi _jessie_<somenum>) _jessie_<somenum>) intP_intM_i_1) !intP_i_1_alloc_table))));
+    (return := ((safe_acc_ !intP_intM_i_1) i)); (raise Return); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 let fi_safety =
  fun (tt : unit) ->
@@ -744,14 +742,13 @@ let fi_safety =
   (init:
   (let return = ref (any_int32 void) in
   try
-   (C_8:
    begin
-     (let jessie_<somenum> = i in
-     (let jessie_<somenum> = (C_7: ((safe_acc_ !intP_intM_i_1) i)) in
+     (let _jessie_<somenum> = i in
+     (let _jessie_<somenum> = ((safe_acc_ !intP_intM_i_1) i) in
      (JC_<somenum>:
-     ((((gi_requires jessie_<somenum>) jessie_<somenum>) intP_intM_i_1) !intP_i_1_alloc_table))));
-    (return := (C_9: ((safe_acc_ !intP_intM_i_1) i))); (raise Return); 
-    absurd  end) with Return -> !return end)) { true }
+     ((((gi_requires _jessie_<somenum>) _jessie_<somenum>) intP_intM_i_1) !intP_i_1_alloc_table))));
+    (return := ((safe_acc_ !intP_intM_i_1) i)); (raise Return); absurd  end
+   with Return -> !return end)) { true }
 
 let fp_ensures_default =
  fun (tt : unit) ->
@@ -759,23 +756,18 @@ let fp_ensures_default =
   (init:
   (let return = ref (any_int32 void) in
   try
-   (C_32:
    begin
-     (let jessie_<somenum> = p in
-     (let jessie_<somenum> = (C_31: ((safe_acc_ !int_xP_int_xM_p_2) p)) in
+     (let _jessie_<somenum> = p in
+     (let _jessie_<somenum> = ((safe_acc_ !int_xP_int_xM_p_2) p) in
      (JC_<somenum>:
-     ((((((gp jessie_<somenum>) jessie_<somenum>) intP_intM_p_7) int_xP_int_xM_p_2) !int_xP_p_2_alloc_table) !intP_p_7_alloc_table))));
+     ((((((gp _jessie_<somenum>) _jessie_<somenum>) intP_intM_p_7) int_xP_int_xM_p_2) !int_xP_p_2_alloc_table) !intP_p_7_alloc_table))));
     (assert { (JC_<somenum>: (integer_of_int32(select(intP_intM_i_1, i)) = (0))) };
-    void);
-    (C_36:
-    begin
-      void;
-     (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-     (let jessie_<somenum> = (C_34: ((safe_acc_ !int_xP_int_xM_p_2) p)) in
-     (((safe_upd_ intP_intM_p_7) jessie_<somenum>) jessie_<somenum>)));
-     (return := (C_37: ((safe_acc_ !intP_intM_i_1) i))); (raise Return);
-     absurd  end) end) with Return -> !return end))
-  { (JC_<somenum>: (integer_of_int32(result) = (0))) }
+    void); void;
+    (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+    (let _jessie_<somenum> = ((safe_acc_ !int_xP_int_xM_p_2) p) in
+    (((safe_upd_ intP_intM_p_7) _jessie_<somenum>) _jessie_<somenum>)));
+    (return := ((safe_acc_ !intP_intM_i_1) i)); (raise Return); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 let fp_safety =
  fun (tt : unit) ->
@@ -783,23 +775,20 @@ let fp_safety =
   (init:
   (let return = ref (any_int32 void) in
   try
-   (C_32:
    begin
-     (let jessie_<somenum> = p in
-     (let jessie_<somenum> = (C_31: ((safe_acc_ !int_xP_int_xM_p_2) p)) in
+     (let _jessie_<somenum> = p in
+     (let _jessie_<somenum> = ((safe_acc_ !int_xP_int_xM_p_2) p) in
      (JC_<somenum>:
-     ((((((gp_requires jessie_<somenum>) jessie_<somenum>) intP_intM_p_7) int_xP_int_xM_p_2) !int_xP_p_2_alloc_table) !intP_p_7_alloc_table))));
+     ((((((gp_requires _jessie_<somenum>) _jessie_<somenum>) intP_intM_p_7) int_xP_int_xM_p_2) !int_xP_p_2_alloc_table) !intP_p_7_alloc_table))));
     [ { } unit reads intP_intM_i_1
       { (JC_<somenum>: (integer_of_int32(select(intP_intM_i_1, i)) = (0))) } ];
-    (C_36:
-    begin
-      void;
-     (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-     (let jessie_<somenum> = (C_34: ((safe_acc_ !int_xP_int_xM_p_2) p)) in
-     (JC_<somenum>:
-     ((((upd_ !intP_p_7_alloc_table) intP_intM_p_7) jessie_<somenum>) jessie_<somenum>))));
-     (return := (C_37: ((safe_acc_ !intP_intM_i_1) i))); (raise Return);
-     absurd  end) end) with Return -> !return end)) { true }
+    void;
+    (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+    (let _jessie_<somenum> = ((safe_acc_ !int_xP_int_xM_p_2) p) in
+    (JC_<somenum>:
+    ((((upd_ !intP_p_7_alloc_table) intP_intM_p_7) _jessie_<somenum>) _jessie_<somenum>))));
+    (return := ((safe_acc_ !intP_intM_i_1) i)); (raise Return); absurd  end
+   with Return -> !return end)) { true }
 
 let gi_ensures_default =
  fun (p_0 : intP pointer) (i_0 : int32) (intP_intM_p_0_3 : (intP, int32) memory ref) (intP_p_0_3_alloc_table : intP alloc_table) ->
@@ -808,12 +797,11 @@ let gi_ensures_default =
     and (JC_<somenum>: ge_int(offset_max(intP_p_0_3_alloc_table, p_0), (0))))) }
   (init:
   try
-   (C_2:
    begin
-     (let jessie_<somenum> = i_0 in
-     (let jessie_<somenum> = p_0 in
-     (((safe_upd_ intP_intM_p_0_3) jessie_<somenum>) jessie_<somenum>))); (raise Return);
-    (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = i_0 in
+     (let _jessie_<somenum> = p_0 in
+     (((safe_upd_ intP_intM_p_0_3) _jessie_<somenum>) _jessie_<somenum>))); (raise Return);
+    (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     (integer_of_int32(select(intP_intM_p_0_3, p_0)) = integer_of_int32(i_0))) }
 
@@ -824,13 +812,12 @@ let gi_safety =
     and (JC_<somenum>: ge_int(offset_max(intP_p_0_3_alloc_table, p_0), (0))))) }
   (init:
   try
-   (C_2:
    begin
-     (let jessie_<somenum> = i_0 in
-     (let jessie_<somenum> = p_0 in
+     (let _jessie_<somenum> = i_0 in
+     (let _jessie_<somenum> = p_0 in
      (JC_<somenum>:
-     ((((upd_ intP_p_0_3_alloc_table) intP_intM_p_0_3) jessie_<somenum>) jessie_<somenum>))));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+     ((((upd_ intP_p_0_3_alloc_table) intP_intM_p_0_3) _jessie_<somenum>) _jessie_<somenum>))));
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 let gp_ensures_default =
  fun (p_0_0 : int_xP pointer) (i_0_0 : intP pointer) (int_xP_int_xM_p_0_0_4 : (int_xP, intP pointer) memory ref) (intP_intM_i_0_0_5 : (intP, int32) memory ref) (intP_i_0_0_5_alloc_table : intP alloc_table) (int_xP_p_0_0_4_alloc_table : int_xP alloc_table) ->
@@ -852,16 +839,14 @@ let gp_ensures_default =
                         (0))))))))) }
   (init:
   try
-   (C_14:
-   (C_16:
    begin
-     (let jessie_<somenum> = (C_11: ((safe_acc_ !intP_intM_i_0_0_5) i_0_0)) in
-     (let jessie_<somenum> = (C_12: ((safe_acc_ !int_xP_int_xM_p_0_0_4) p_0_0)) in
-     (((safe_upd_ intP_intM_i_0_0_5) jessie_<somenum>) jessie_<somenum>)));
-    (let jessie_<somenum> = i_0_0 in
-    (let jessie_<somenum> = p_0_0 in
-    (((safe_upd_ int_xP_int_xM_p_0_0_4) jessie_<somenum>) jessie_<somenum>)));
-    (raise Return); (raise Return) end)) with Return -> void end)
+     (let _jessie_<somenum> = ((safe_acc_ !intP_intM_i_0_0_5) i_0_0) in
+     (let _jessie_<somenum> = ((safe_acc_ !int_xP_int_xM_p_0_0_4) p_0_0) in
+     (((safe_upd_ intP_intM_i_0_0_5) _jessie_<somenum>) _jessie_<somenum>)));
+    (let _jessie_<somenum> = i_0_0 in
+    (let _jessie_<somenum> = p_0_0 in
+    (((safe_upd_ int_xP_int_xM_p_0_0_4) _jessie_<somenum>) _jessie_<somenum>)));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      (integer_of_int32(select(intP_intM_i_0_0_5,
@@ -890,23 +875,19 @@ let gp_safety =
                         (0))))))))) }
   (init:
   try
-   (C_14:
-   (C_16:
    begin
-     (let jessie_<somenum> =
-     (C_11:
-     (JC_<somenum>: (((acc_ intP_i_0_0_5_alloc_table) !intP_intM_i_0_0_5) i_0_0))) in
-     (let jessie_<somenum> =
-     (C_12:
+     (let _jessie_<somenum> =
+     (JC_<somenum>: (((acc_ intP_i_0_0_5_alloc_table) !intP_intM_i_0_0_5) i_0_0)) in
+     (let _jessie_<somenum> =
      (JC_<somenum>:
-     (((acc_ int_xP_p_0_0_4_alloc_table) !int_xP_int_xM_p_0_0_4) p_0_0))) in
+     (((acc_ int_xP_p_0_0_4_alloc_table) !int_xP_int_xM_p_0_0_4) p_0_0)) in
      (JC_<somenum>:
-     ((((upd_ intP_i_0_0_5_alloc_table) intP_intM_i_0_0_5) jessie_<somenum>) jessie_<somenum>))));
-    (let jessie_<somenum> = i_0_0 in
-    (let jessie_<somenum> = p_0_0 in
+     ((((upd_ intP_i_0_0_5_alloc_table) intP_intM_i_0_0_5) _jessie_<somenum>) _jessie_<somenum>))));
+    (let _jessie_<somenum> = i_0_0 in
+    (let _jessie_<somenum> = p_0_0 in
     (JC_<somenum>:
-    ((((upd_ int_xP_p_0_0_4_alloc_table) int_xP_int_xM_p_0_0_4) jessie_<somenum>) jessie_<somenum>))));
-    (raise Return); (raise Return) end)) with Return -> void end) { true }
+    ((((upd_ int_xP_p_0_0_4_alloc_table) int_xP_int_xM_p_0_0_4) _jessie_<somenum>) _jessie_<somenum>))));
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C addrof_global.jessie --quiet -f addrof_global.makefile project
@@ -946,22 +927,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po23.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "86" begin = "15" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "86" begin = "16" end = "76"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po24.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "86" begin = "15" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "86" begin = "16" end = "76"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po25.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "87" begin = "15" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "87" begin = "16" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po26.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "87" begin = "15" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "87" begin = "16" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -977,12 +958,12 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/addrof_global_po15.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "58" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "58" begin = "15" end = "38"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po16.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "58" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "58" begin = "15" end = "38"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1002,42 +983,42 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/addrof_global_po6.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "97" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "97" begin = "15" end = "40"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po7.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "97" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "97" begin = "15" end = "40"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po8.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "97" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "97" begin = "15" end = "40"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po9.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "97" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "97" begin = "15" end = "40"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po10.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "97" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "97" begin = "15" end = "40"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po11.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "97" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "97" begin = "15" end = "40"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po12.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "103" begin = "15" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "103" begin = "16" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po13.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "103" begin = "15" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "103" begin = "16" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1053,12 +1034,12 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/addrof_global_po2.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "68" begin = "13" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "68" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po3.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "68" begin = "13" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "68" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0814.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0814.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0814.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0814.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0814.jessie
 [jessie] File bts0814.jessie/bts0814.jc written.
@@ -48,33 +48,33 @@ type voidP = [voidP]
 intP[..] asg;
 
 unit ftest(intP[..] src, intP[..] eql)
-  requires (C_8 : ((C_9 : (\offset_min(src) <= 0)) &&
-                    (C_10 : (\offset_max(src) >= 0))));
-  requires (C_7 : (src == eql));
+  requires (_C_8 : ((_C_9 : (\offset_min(src) <= 0)) &&
+                     (_C_10 : (\offset_max(src) >= 0))));
+  requires (_C_7 : (src == eql));
 behavior default:
-  ensures (C_6 : true);
+  ensures (_C_6 : true);
 {  
-   {  (C_1 : (asg = src));
+   {  (_C_1 : (asg = src));
       
       {  
-         (assert for default: (C_2 : (jessie : ((\offset_min(asg) <= 0) &&
-                                                 (\offset_max(asg) >= 0)))));
+         (assert for default: (_C_2 : (jessie : ((\offset_min(asg) <= 0) &&
+                                                  (\offset_max(asg) >= 0)))));
          ()
       };
       
       {  
-         (assert for default: (C_3 : (jessie : ((\offset_min(eql) <= 0) &&
-                                                 (\offset_max(eql) >= 0)))));
+         (assert for default: (_C_3 : (jessie : ((\offset_min(eql) <= 0) &&
+                                                  (\offset_max(eql) >= 0)))));
          ()
       };
       
       {  
-         (assert for default: (C_4 : (jessie : (src.intM == asg.intM))));
+         (assert for default: (_C_4 : (jessie : (src.intM == asg.intM))));
          ()
       };
       
       {  
-         (assert for default: (C_5 : (jessie : (src.intM == eql.intM))));
+         (assert for default: (_C_5 : (jessie : (src.intM == eql.intM))));
          ()
       };
       
@@ -528,9 +528,8 @@ let ftest_ensures_default =
         and (JC_<somenum>: (src = eql))))) }
   (init:
   try
-   (C_1:
    begin
-     (let jessie_<somenum> = (asg := src) in void);
+     (let _jessie_<somenum> = (asg := src) in void);
     (assert
     { (JC_<somenum>:
       (le_int(offset_min(intP_asg_1_alloc_table, asg), (0))
@@ -552,7 +551,7 @@ let ftest_ensures_default =
       (integer_of_int32(select(intP_intM_asg_1, src)) = integer_of_int32(
                                                         select(intP_intM_asg_1,
                                                         eql)))) }; void);
-    void; (raise Return); (raise Return) end) with Return -> void end)
+    void; (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let ftest_safety =
@@ -563,9 +562,8 @@ let ftest_safety =
         and (JC_<somenum>: (src = eql))))) }
   (init:
   try
-   (C_1:
    begin
-     (let jessie_<somenum> = (asg := src) in void);
+     (let _jessie_<somenum> = (asg := src) in void);
     [ { } unit reads asg,intP_asg_1_alloc_table
       { (JC_<somenum>:
         (le_int(offset_min(intP_asg_1_alloc_table, asg), (0))
@@ -584,7 +582,7 @@ let ftest_safety =
         (integer_of_int32(select(intP_intM_asg_1, src)) = integer_of_int32(
                                                           select(intP_intM_asg_1,
                                                           eql)))) } ]; void;
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0814.jessie --quiet -f bts0814.makefile project

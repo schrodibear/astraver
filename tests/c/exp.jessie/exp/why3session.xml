@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Coq"
-  version="8.4"/>
+  version="8.4pl2"/>
  <prover
   id="1"
   name="Gappa"
-  version="0.16.6"/>
+  version="1.0.0"/>
  <file
   name="../exp.mlw"
   verified="true"
@@ -31,10 +31,12 @@
     locfile="../../exp.c"
     loclnum="3" loccnumb="7" loccnume="13"
     expl="VC for my_exp_ensures_default"
-    sum="79d1bc4f2440af8d28db4075a77dd27c"
+    sum="a635a489c22a2ecebcbd3f14a491465c"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsainfix -avalueV10aexpavalueV0c0x1.p-4Iainfix =V10V9FIainfix =V9V8FIaadd_postaNearestTiesToEvenV7V3V8FIaadd_postaNearestTiesToEvenV6V5V7FIaof_real_postaNearestTiesToEvenc0.9890365552V6FIamul_postaNearestTiesToEvenV4V0V5FIaof_real_postaNearestTiesToEvenc1.130258690V4FIamul_postaNearestTiesToEvenV2V0V3FIamul_postaNearestTiesToEvenV1V0V2FIaof_real_postaNearestTiesToEvenc0.5540440796V1FAainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function my_exp, default behavior"/>
     <label
@@ -48,10 +50,12 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="1. assertion"
-      sum="fcabc9ad049b4d2138fcb56ab0e0c536"
+      sum="a4a51933897751209322ac4d6216f2ae"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
+      shape="assertionainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function my_exp, default behavior"/>
       <label
@@ -71,10 +75,12 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="2. postcondition"
-      sum="1584a972187667d9c72f6d04417c2f45"
+      sum="82fd87135997125fd507474c5d4976e1"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsainfix -avalueV10aexpavalueV0c0x1.p-4Iainfix =V10V9FIainfix =V9V8FIaadd_postaNearestTiesToEvenV7V3V8FIaadd_postaNearestTiesToEvenV6V5V7FIaof_real_postaNearestTiesToEvenc0.9890365552V6FIamul_postaNearestTiesToEvenV4V0V5FIaof_real_postaNearestTiesToEvenc1.130258690V4FIamul_postaNearestTiesToEvenV2V0V3FIamul_postaNearestTiesToEvenV1V0V2FIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
+      shape="postconditionainfix &lt;=aabsainfix -avalueV10aexpavalueV0c0x1.p-4Iainfix =V10V9FIainfix =V9V8FIaadd_postaNearestTiesToEvenV7V3V8FIaadd_postaNearestTiesToEvenV6V5V7FIaof_real_postaNearestTiesToEvenc0.9890365552V6FIamul_postaNearestTiesToEvenV4V0V5FIaof_real_postaNearestTiesToEvenc1.130258690V4FIamul_postaNearestTiesToEvenV2V0V3FIamul_postaNearestTiesToEvenV1V0V2FIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function my_exp, default behavior"/>
       <label
@@ -95,10 +101,10 @@
     locfile="../../exp.c"
     loclnum="3" loccnumb="7" loccnume="13"
     expl="VC for my_exp_safety"
-    sum="0135787ca5c64d214b69de0e3a6e6d3e"
+    sum="0482bb764c2aa140147d1c0173a94866"
     proved="true"
     expanded="true"
-    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV7avalueV3amax_doubleIaadd_postaNearestTiesToEvenV6V5V7FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV5amax_doubleIaof_real_postaNearestTiesToEvenc0.9890365552V6FAainfix &lt;=aabsaroundaNearestTiesToEvenc0.9890365552amax_doubleIamul_postaNearestTiesToEvenV4V0V5FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.130258690V4FAainfix &lt;=aabsaroundaNearestTiesToEvenc1.130258690amax_doubleIamul_postaNearestTiesToEvenV2V0V3FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV0amax_doubleIamul_postaNearestTiesToEvenV1V0V2FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FAainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV14avalueV6amax_doubleIaadd_postV13V12V10V14FAainfix &lt;=aabsaroundV13ainfix +avalueV12avalueV10amax_doubleLaNearestTiesToEvenIaof_real_postV11c0.9890365552V12FAainfix &lt;=aabsaroundV11c0.9890365552amax_doubleLaNearestTiesToEvenIamul_postV9V8V0V10FAainfix &lt;=aabsaroundV9ainfix *avalueV8avalueV0amax_doubleLaNearestTiesToEvenIaof_real_postV7c1.130258690V8FAainfix &lt;=aabsaroundV7c1.130258690amax_doubleLaNearestTiesToEvenIamul_postV5V4V0V6FAainfix &lt;=aabsaroundV5ainfix *avalueV4avalueV0amax_doubleLaNearestTiesToEvenIamul_postV3V2V0V4FAainfix &lt;=aabsaroundV3ainfix *avalueV2avalueV0amax_doubleLaNearestTiesToEvenIaof_real_postV1c0.5540440796V2FAainfix &lt;=aabsaroundV1c0.5540440796amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
     <label
      name="expl:Function my_exp, Safety"/>
     <label
@@ -112,10 +118,10 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="1. floating-point overflow"
-      sum="09cb604dda0e4b6f3de85cb1a2db544d"
+      sum="eb8aece6675010bba61d538676ab8d9c"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV1c0.5540440796amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
       <label
        name="expl:Function my_exp, Safety"/>
       <label
@@ -134,10 +140,10 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="2. floating-point overflow"
-      sum="8f6a59ebb377eaf8be22a224d312c462"
+      sum="410c782881c89d309b77d9696a128fac"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV3ainfix *avalueV2avalueV0amax_doubleLaNearestTiesToEvenIaof_real_postV1c0.5540440796V2FIainfix &lt;=aabsaroundV1c0.5540440796amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
       <label
        name="expl:Function my_exp, Safety"/>
       <label
@@ -148,7 +154,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.00"/>
+       <result status="valid" time="0.01"/>
       </proof>
      </goal>
      <goal
@@ -156,10 +162,10 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="3. floating-point overflow"
-      sum="0730383b386f377ea35f8b32500060f9"
+      sum="ef07d50ada6a5547340400ddfb7b5cdd"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV0amax_doubleIamul_postaNearestTiesToEvenV1V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV5ainfix *avalueV4avalueV0amax_doubleLaNearestTiesToEvenIamul_postV3V2V0V4FIainfix &lt;=aabsaroundV3ainfix *avalueV2avalueV0amax_doubleLaNearestTiesToEvenIaof_real_postV1c0.5540440796V2FIainfix &lt;=aabsaroundV1c0.5540440796amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
       <label
        name="expl:Function my_exp, Safety"/>
       <label
@@ -178,10 +184,10 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="4. floating-point overflow"
-      sum="0a8f29ac02bdf2a1953123f5197b26d5"
+      sum="83e2b41dc9a4a9300e0d1cb071917066"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc1.130258690amax_doubleIamul_postaNearestTiesToEvenV2V0V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV0amax_doubleIamul_postaNearestTiesToEvenV1V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV7c1.130258690amax_doubleLaNearestTiesToEvenIamul_postV5V4V0V6FIainfix &lt;=aabsaroundV5ainfix *avalueV4avalueV0amax_doubleLaNearestTiesToEvenIamul_postV3V2V0V4FIainfix &lt;=aabsaroundV3ainfix *avalueV2avalueV0amax_doubleLaNearestTiesToEvenIaof_real_postV1c0.5540440796V2FIainfix &lt;=aabsaroundV1c0.5540440796amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
       <label
        name="expl:Function my_exp, Safety"/>
       <label
@@ -192,7 +198,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
@@ -200,10 +206,10 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="5. floating-point overflow"
-      sum="48533162bcffc857a6ac97abbdca8c2f"
+      sum="a35167185488c7d30686f1bb333f40eb"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.130258690V4FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.130258690amax_doubleIamul_postaNearestTiesToEvenV2V0V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV0amax_doubleIamul_postaNearestTiesToEvenV1V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV9ainfix *avalueV8avalueV0amax_doubleLaNearestTiesToEvenIaof_real_postV7c1.130258690V8FIainfix &lt;=aabsaroundV7c1.130258690amax_doubleLaNearestTiesToEvenIamul_postV5V4V0V6FIainfix &lt;=aabsaroundV5ainfix *avalueV4avalueV0amax_doubleLaNearestTiesToEvenIamul_postV3V2V0V4FIainfix &lt;=aabsaroundV3ainfix *avalueV2avalueV0amax_doubleLaNearestTiesToEvenIaof_real_postV1c0.5540440796V2FIainfix &lt;=aabsaroundV1c0.5540440796amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
       <label
        name="expl:Function my_exp, Safety"/>
       <label
@@ -222,10 +228,10 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="6. floating-point overflow"
-      sum="4745b0069a4107420990043cc8dbc8ee"
+      sum="0fbbdddd2aeec5b124420a803b320a1e"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0.9890365552amax_doubleIamul_postaNearestTiesToEvenV4V0V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.130258690V4FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.130258690amax_doubleIamul_postaNearestTiesToEvenV2V0V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV0amax_doubleIamul_postaNearestTiesToEvenV1V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV11c0.9890365552amax_doubleLaNearestTiesToEvenIamul_postV9V8V0V10FIainfix &lt;=aabsaroundV9ainfix *avalueV8avalueV0amax_doubleLaNearestTiesToEvenIaof_real_postV7c1.130258690V8FIainfix &lt;=aabsaroundV7c1.130258690amax_doubleLaNearestTiesToEvenIamul_postV5V4V0V6FIainfix &lt;=aabsaroundV5ainfix *avalueV4avalueV0amax_doubleLaNearestTiesToEvenIamul_postV3V2V0V4FIainfix &lt;=aabsaroundV3ainfix *avalueV2avalueV0amax_doubleLaNearestTiesToEvenIaof_real_postV1c0.5540440796V2FIainfix &lt;=aabsaroundV1c0.5540440796amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
       <label
        name="expl:Function my_exp, Safety"/>
       <label
@@ -244,10 +250,10 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="7. floating-point overflow"
-      sum="329642421c13edbac69216d3e5135257"
+      sum="559f5a423e05594309cbb6a448e62bb2"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV5amax_doubleIaof_real_postaNearestTiesToEvenc0.9890365552V6FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.9890365552amax_doubleIamul_postaNearestTiesToEvenV4V0V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.130258690V4FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.130258690amax_doubleIamul_postaNearestTiesToEvenV2V0V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV0amax_doubleIamul_postaNearestTiesToEvenV1V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV13ainfix +avalueV12avalueV10amax_doubleLaNearestTiesToEvenIaof_real_postV11c0.9890365552V12FIainfix &lt;=aabsaroundV11c0.9890365552amax_doubleLaNearestTiesToEvenIamul_postV9V8V0V10FIainfix &lt;=aabsaroundV9ainfix *avalueV8avalueV0amax_doubleLaNearestTiesToEvenIaof_real_postV7c1.130258690V8FIainfix &lt;=aabsaroundV7c1.130258690amax_doubleLaNearestTiesToEvenIamul_postV5V4V0V6FIainfix &lt;=aabsaroundV5ainfix *avalueV4avalueV0amax_doubleLaNearestTiesToEvenIamul_postV3V2V0V4FIainfix &lt;=aabsaroundV3ainfix *avalueV2avalueV0amax_doubleLaNearestTiesToEvenIaof_real_postV1c0.5540440796V2FIainfix &lt;=aabsaroundV1c0.5540440796amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
       <label
        name="expl:Function my_exp, Safety"/>
       <label
@@ -266,10 +272,10 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="8. floating-point overflow"
-      sum="1220089d05f98367159df4c5c4c873b1"
+      sum="4ad315fea29d6841b637d0b60152db77"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV7avalueV3amax_doubleIaadd_postaNearestTiesToEvenV6V5V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV5amax_doubleIaof_real_postaNearestTiesToEvenc0.9890365552V6FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.9890365552amax_doubleIamul_postaNearestTiesToEvenV4V0V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.130258690V4FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.130258690amax_doubleIamul_postaNearestTiesToEvenV2V0V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV0amax_doubleIamul_postaNearestTiesToEvenV1V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV14avalueV6amax_doubleIaadd_postV13V12V10V14FIainfix &lt;=aabsaroundV13ainfix +avalueV12avalueV10amax_doubleLaNearestTiesToEvenIaof_real_postV11c0.9890365552V12FIainfix &lt;=aabsaroundV11c0.9890365552amax_doubleLaNearestTiesToEvenIamul_postV9V8V0V10FIainfix &lt;=aabsaroundV9ainfix *avalueV8avalueV0amax_doubleLaNearestTiesToEvenIaof_real_postV7c1.130258690V8FIainfix &lt;=aabsaroundV7c1.130258690amax_doubleLaNearestTiesToEvenIamul_postV5V4V0V6FIainfix &lt;=aabsaroundV5ainfix *avalueV4avalueV0amax_doubleLaNearestTiesToEvenIamul_postV3V2V0V4FIainfix &lt;=aabsaroundV3ainfix *avalueV2avalueV0amax_doubleLaNearestTiesToEvenIaof_real_postV1c0.5540440796V2FIainfix &lt;=aabsaroundV1c0.5540440796amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
       <label
        name="expl:Function my_exp, Safety"/>
       <label

@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0823.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0823.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0823.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0823.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0823.jessie
 [jessie] File bts0823.jessie/bts0823.jc written.
@@ -54,14 +54,14 @@ tag voidP = {
 type voidP = [voidP]
 
 unit ftest(intP[..] x, unsigned_intP[..] y)
-  requires (C_7 : ((C_8 : (\offset_min(x) <= 0)) &&
-                    (C_9 : (\offset_max(x) >= 0))));
-  requires (C_4 : ((C_5 : (\offset_min(y) <= 0)) &&
-                    (C_6 : (\offset_max(y) >= 0))));
+  requires (_C_7 : ((_C_8 : (\offset_min(x) <= 0)) &&
+                     (_C_9 : (\offset_max(x) >= 0))));
+  requires (_C_4 : ((_C_5 : (\offset_min(y) <= 0)) &&
+                     (_C_6 : (\offset_max(y) >= 0))));
 behavior default:
-  ensures (C_3 : (\at(x,Old).intM == \at(x.intM,Old)));
+  ensures (_C_3 : (\at(x,Old).intM == \at(x.intM,Old)));
 {  
-   {  (C_2 : ((C_1 : y.unsigned_intM) = 123));
+   {  (_C_2 : ((_C_1 : y.unsigned_intM) = 123));
       
       (return ())
    }
@@ -72,17 +72,17 @@ intP[0] p;
 unsigned_intP[..] q;
 
 int32 main()
-  requires (C_16 : ((C_17 : (\offset_min(p) <= 0)) &&
-                     (C_18 : (\offset_max(p) >= 0))));
-  requires (C_13 : ((C_14 : (\offset_min(q) <= 0)) &&
-                     (C_15 : (\offset_max(q) >= 0))));
+  requires (_C_16 : ((_C_17 : (\offset_min(p) <= 0)) &&
+                      (_C_18 : (\offset_max(p) >= 0))));
+  requires (_C_13 : ((_C_14 : (\offset_min(q) <= 0)) &&
+                      (_C_15 : (\offset_max(q) >= 0))));
 behavior default:
-  ensures (C_12 : (p.intM == \at(p.intM,Old)));
+  ensures (_C_12 : (p.intM == \at(p.intM,Old)));
 {  
    (var int32 __retres);
    
-   {  (C_10 : ftest(p, q));
-      (C_11 : (__retres = 0));
+   {  (_C_10 : ftest(p, q));
+      (_C_11 : (__retres = 0));
       
       (return __retres)
    }
@@ -689,12 +689,11 @@ let ftest_ensures_default =
                 ge_int(offset_max(unsigned_intP_alloc_table, y), (0))))))) }
   (init:
   try
-   (C_2:
    begin
-     (let jessie_<somenum> = (safe_uint32_of_integer_ (123)) in
-     (let jessie_<somenum> = y in
-     (((safe_upd_ unsigned_intP_unsigned_intM) jessie_<somenum>) jessie_<somenum>)));
-    (raise Return); (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = (safe_uint32_of_integer_ (123)) in
+     (let _jessie_<somenum> = y in
+     (((safe_upd_ unsigned_intP_unsigned_intM) _jessie_<somenum>) _jessie_<somenum>)));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     (integer_of_int32(select(intP_intM, x_0)) = integer_of_int32(select(intP_intM@,
                                                                  x_0)))) }
@@ -709,13 +708,12 @@ let ftest_safety =
                 ge_int(offset_max(unsigned_intP_alloc_table, y), (0))))))) }
   (init:
   try
-   (C_2:
    begin
-     (let jessie_<somenum> = (safe_uint32_of_integer_ (123)) in
-     (let jessie_<somenum> = y in
+     (let _jessie_<somenum> = (safe_uint32_of_integer_ (123)) in
+     (let _jessie_<somenum> = y in
      (JC_<somenum>:
-     ((((upd_ !unsigned_intP_alloc_table) unsigned_intP_unsigned_intM) jessie_<somenum>) jessie_<somenum>))));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+     ((((upd_ !unsigned_intP_alloc_table) unsigned_intP_unsigned_intM) _jessie_<somenum>) _jessie_<somenum>))));
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 let main_ensures_default =
  fun (tt : unit) ->
@@ -730,14 +728,12 @@ let main_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_10:
-     (C_11:
      begin
-       (let jessie_<somenum> = p in
-       (let jessie_<somenum> = q in (JC_<somenum>: ((ftest jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))); absurd  end with
-   Return -> !return end))
+       (let _jessie_<somenum> = p in
+       (let _jessie_<somenum> = q in (JC_<somenum>: ((ftest _jessie_<somenum>) _jessie_<somenum>))));
+      (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     (integer_of_int32(select(intP_intM, p)) = integer_of_int32(select(intP_intM@,
                                                                p)))) }
@@ -755,14 +751,13 @@ let main_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_10:
-     (C_11:
      begin
-       (let jessie_<somenum> = p in
-       (let jessie_<somenum> = q in (JC_<somenum>: ((ftest_requires jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))); absurd  end with
-   Return -> !return end)) { true }
+       (let _jessie_<somenum> = p in
+       (let _jessie_<somenum> = q in
+       (JC_<somenum>: ((ftest_requires _jessie_<somenum>) _jessie_<somenum>))));
+      (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0823.jessie --quiet -f bts0823.makefile project
@@ -772,22 +767,22 @@ why --project [...] why/bts0823.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0823_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0823.jessie/bts0823.jc" line = "78" begin = "14" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/bts0823.jessie/bts0823.jc" line = "78" begin = "15" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0823_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0823.jessie/bts0823.jc" line = "78" begin = "14" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/bts0823.jessie/bts0823.jc" line = "78" begin = "15" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0823_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0823.jessie/bts0823.jc" line = "78" begin = "14" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/bts0823.jessie/bts0823.jc" line = "78" begin = "15" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0823_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0823.jessie/bts0823.jc" line = "78" begin = "14" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/bts0823.jessie/bts0823.jc" line = "78" begin = "15" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -797,12 +792,12 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0823_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0823.jessie/bts0823.jc" line = "58" begin = "14" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts0823.jessie/bts0823.jc" line = "58" begin = "15" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0823_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0823.jessie/bts0823.jc" line = "58" begin = "14" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts0823.jessie/bts0823.jc" line = "58" begin = "15" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

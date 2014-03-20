@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
   name="Z3"
@@ -35,10 +35,12 @@
     locfile="../../minmax.c"
     loclnum="58" loccnumb="7" loccnume="11"
     expl="VC for dmax_ensures_default"
-    sum="aa5a2288f1fb3a6b6e557a1ffc4dc9d9"
+    sum="11c7663b206d183ca8c5e2be4a6f18a9"
     proved="true"
     expanded="true"
-    shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FF">
+    shape="iainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1Fainfix =V2aTrueIiainfix &gt;avalueV0avalueV1ainfix &lt;=avalueV0avalueV1ainfix =V2aTrueFF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function dmax, default behavior"/>
     <label
@@ -65,7 +67,7 @@
     locfile="../../minmax.c"
     loclnum="58" loccnumb="7" loccnume="11"
     expl="VC for dmax_safety"
-    sum="98cb4108ba654afb6f1a9d0f864cb7ec"
+    sum="84c51262c4113d855b9b51cfb90bbe1c"
     proved="true"
     expanded="true"
     shape="t">
@@ -103,10 +105,12 @@
     locfile="../../minmax.c"
     loclnum="64" loccnumb="7" loccnume="11"
     expl="VC for dmin_ensures_default"
-    sum="72e3bdee58611100dc6f7b90b5c76de9"
+    sum="d2de71a2fe6f240bef91e295c829d5f7"
     proved="true"
     expanded="true"
-    shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FF">
+    shape="iainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0Fainfix =V2aTrueIiainfix &gt;avalueV0avalueV1ainfix &lt;=avalueV0avalueV1ainfix =V2aTrueFF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function dmin, default behavior"/>
     <label
@@ -133,7 +137,7 @@
     locfile="../../minmax.c"
     loclnum="64" loccnumb="7" loccnume="11"
     expl="VC for dmin_safety"
-    sum="98cb4108ba654afb6f1a9d0f864cb7ec"
+    sum="84c51262c4113d855b9b51cfb90bbe1c"
     proved="true"
     expanded="true"
     shape="t">
@@ -171,10 +175,12 @@
     locfile="../../minmax.c"
     loclnum="46" loccnumb="6" loccnume="10"
     expl="VC for fmax_ensures_default"
-    sum="31e855ed4cd0d49182d83708c59e478c"
+    sum="dbe02472dc3786ecf8ffda5f1a058c26"
     proved="true"
     expanded="true"
-    shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FF">
+    shape="iainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1Fainfix =V2aTrueIiainfix &gt;avalueV0avalueV1ainfix &lt;=avalueV0avalueV1ainfix =V2aTrueFF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function fmax, default behavior"/>
     <label
@@ -201,7 +207,7 @@
     locfile="../../minmax.c"
     loclnum="46" loccnumb="6" loccnume="10"
     expl="VC for fmax_safety"
-    sum="98cb4108ba654afb6f1a9d0f864cb7ec"
+    sum="84c51262c4113d855b9b51cfb90bbe1c"
     proved="true"
     expanded="true"
     shape="t">
@@ -239,10 +245,12 @@
     locfile="../../minmax.c"
     loclnum="52" loccnumb="6" loccnume="10"
     expl="VC for fmin_ensures_default"
-    sum="ed92707278d6fb374e2aed8aa18a0eec"
+    sum="aadb6e9e937adff55f7a5a364ecf6ead"
     proved="true"
     expanded="true"
-    shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FF">
+    shape="iainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0Fainfix =V2aTrueIiainfix &gt;avalueV0avalueV1ainfix &lt;=avalueV0avalueV1ainfix =V2aTrueFF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function fmin, default behavior"/>
     <label
@@ -269,7 +277,7 @@
     locfile="../../minmax.c"
     loclnum="52" loccnumb="6" loccnume="10"
     expl="VC for fmin_safety"
-    sum="98cb4108ba654afb6f1a9d0f864cb7ec"
+    sum="84c51262c4113d855b9b51cfb90bbe1c"
     proved="true"
     expanded="true"
     shape="t">
@@ -307,10 +315,12 @@
     locfile="../../minmax.c"
     loclnum="34" loccnumb="4" loccnume="7"
     expl="VC for max_ensures_default"
-    sum="e8eb0b823540dc08e27585665ba4b8b4"
+    sum="a39e20d683793d793adab347634c196f"
     proved="true"
     expanded="true"
-    shape="iainfix &lt;=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V1Fainfix =ainteger_of_int32V5amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V0FF">
+    shape="iainfix =ainteger_of_int32V3amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V0Fainfix =ainteger_of_int32V5amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V1Fainfix &lt;=ainteger_of_int32V0ainteger_of_int32V1F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function max, default behavior"/>
     <label
@@ -337,7 +347,7 @@
     locfile="../../minmax.c"
     loclnum="34" loccnumb="4" loccnume="7"
     expl="VC for max_safety"
-    sum="98cb4108ba654afb6f1a9d0f864cb7ec"
+    sum="84c51262c4113d855b9b51cfb90bbe1c"
     proved="true"
     expanded="true"
     shape="t">
@@ -375,10 +385,12 @@
     locfile="../../minmax.c"
     loclnum="40" loccnumb="4" loccnume="7"
     expl="VC for min_ensures_default"
-    sum="c790fad98e6d895c4cbdbdcab19b70bc"
+    sum="e71bacf158ed6c0633c1c7c7eaca2a6e"
     proved="true"
     expanded="true"
-    shape="iainfix &lt;=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V0Fainfix =ainteger_of_int32V5aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V1FF">
+    shape="iainfix =ainteger_of_int32V3aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V1Fainfix =ainteger_of_int32V5aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V0Fainfix &lt;=ainteger_of_int32V0ainteger_of_int32V1F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function min, default behavior"/>
     <label
@@ -405,7 +417,7 @@
     locfile="../../minmax.c"
     loclnum="40" loccnumb="4" loccnume="7"
     expl="VC for min_safety"
-    sum="98cb4108ba654afb6f1a9d0f864cb7ec"
+    sum="84c51262c4113d855b9b51cfb90bbe1c"
     proved="true"
     expanded="true"
     shape="t">

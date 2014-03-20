@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
-  name="CVC3"
-  version="2.4.1"/>
+  name="CVC4"
+  version="1.3"/>
  <prover
   id="3"
   name="Z3"
@@ -43,10 +43,12 @@
     locfile="../Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
     expl="VC for _Fresh_create_ensures_default"
-    sum="01821558678cff3e54add2dd79953f75"
+    sum="202c9e7c84082e9c64f464fb4013b694"
     proved="true"
     expanded="true"
-    shape="avalidV0V4NIainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFF">
+    shape="NavalidV0V4Iainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method create, default behavior"/>
     <label
@@ -57,7 +59,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.10"/>
     </proof>
     <proof
      prover="2"
@@ -65,93 +67,15 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.08"/>
     </proof>
-    <transf
-     name="split_goal_wp"
-     proved="true"
-     expanded="true">
-     <goal
-      name="WP_parameter _Fresh_create_ensures_default.1"
-      locfile="../Fresh.java"
-      loclnum="8" loccnumb="17" loccnume="23"
-      expl="1. postcondition"
-      sum="01821558678cff3e54add2dd79953f75"
-      proved="true"
-      expanded="true"
-      shape="avalidV0V4NIainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFF">
-      <label
-       name="expl:Method create, default behavior"/>
-      <label
-       name="expl:VC for _Fresh_create_ensures_default"/>
-      <transf
-       name="inline_goal"
-       proved="true"
-       expanded="true">
-       <goal
-        name="WP_parameter _Fresh_create_ensures_default.1.1"
-        locfile="../Fresh.java"
-        loclnum="8" loccnumb="17" loccnume="23"
-        expl="1. postcondition"
-        sum="38ae57538b5689cb8307811bfbea7cf2"
-        proved="true"
-        expanded="true"
-        shape="ainfix &gt;=aoffset_maxV0V4c0Aainfix &lt;=aoffset_minV0V4c0NIainfix =V4V3FIasubtagatypeofV1V3a_Fresh_tagAavalidV0ashiftV3V5NIainfix &lt;V5c1Aainfix &lt;=c0V5FAaalloc_extendsV0V2Aastrict_valid_struct_ObjectV3c0ainfix -c1c1V2FFF">
-        <label
-         name="expl:Method create, default behavior"/>
-        <label
-         name="expl:VC for _Fresh_create_ensures_default"/>
-        <proof
-         prover="0"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="unknown" time="0.04"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.52"/>
-        </proof>
-        <proof
-         prover="2"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.79"/>
-        </proof>
-        <proof
-         prover="3"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.14"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.12"/>
-        </proof>
-       </goal>
-      </transf>
-     </goal>
-    </transf>
    </goal>
    <goal
     name="WP_parameter _Fresh_create_safety"
     locfile="../Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
     expl="VC for _Fresh_create_safety"
-    sum="cc9537d6b3f3e1f8a895588c9b583886"
+    sum="56cd36ccc41a7e2d57f4648aa833f07f"
     proved="true"
     expanded="true"
     shape="ainfix &gt;=aoffset_maxV2V3c0IainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFAainfix &gt;=c1c0F">
@@ -169,14 +93,6 @@
     </proof>
     <proof
      prover="1"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -205,10 +121,12 @@
     locfile="../Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
     expl="VC for _Fresh_test_ensures_default"
-    sum="b13543c73ad9cedb77d0274d5ce4ed3e"
+    sum="955bb06a495db0eaa3d79699895bff61"
     proved="true"
     expanded="true"
-    shape="ainfix =V0V2NIavalidV1V2NFIavalid_struct_FreshV0c0c0V1FF">
+    shape="Nainfix =V0V2INavalidV1V2FIavalid_struct_FreshV0c0c0V1FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method test, default behavior"/>
     <label
@@ -223,14 +141,6 @@
     </proof>
     <proof
      prover="1"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -259,7 +169,7 @@
     locfile="../Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
     expl="VC for _Fresh_test_safety"
-    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
+    sum="7d844d2ebd55699411b65dd19f1c1333"
     proved="true"
     expanded="true"
     shape="t">
@@ -277,14 +187,6 @@
     </proof>
     <proof
      prover="1"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -310,13 +212,15 @@
    </goal>
    <goal
     name="WP_parameter cons_Fresh_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fresh_ensures_default"
-    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
+    sum="7d844d2ebd55699411b65dd19f1c1333"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Fresh, default behavior"/>
     <label
@@ -331,14 +235,6 @@
     </proof>
     <proof
      prover="1"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -364,10 +260,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Fresh_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fresh_safety"
-    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
+    sum="7d844d2ebd55699411b65dd19f1c1333"
     proved="true"
     expanded="true"
     shape="t">
@@ -385,14 +281,6 @@
     </proof>
     <proof
      prover="1"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -418,13 +306,15 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
-    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
+    sum="7d844d2ebd55699411b65dd19f1c1333"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Object, default behavior"/>
     <label
@@ -439,14 +329,6 @@
     </proof>
     <proof
      prover="1"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -472,10 +354,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
-    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
+    sum="7d844d2ebd55699411b65dd19f1c1333"
     proved="true"
     expanded="true"
     shape="t">
@@ -493,14 +375,6 @@
     </proof>
     <proof
      prover="1"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"

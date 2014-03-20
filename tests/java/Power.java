@@ -1,3 +1,33 @@
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2014                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud                   */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud                              */
+/*    Yannick MOY, Univ. Paris-sud                                        */
+/*    Romain BARDOU, Univ. Paris-sud                                      */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud  (former Caduceus front-end)        */
+/*    Nicolas ROUSSET, Univ. Paris-sud (on Jessie & Krakatoa)             */
+/*    Ali AYAD, CNRS & CEA Saclay      (floating-point support)           */
+/*    Sylvie BOLDO, INRIA              (floating-point support)           */
+/*    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     */
+/*    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
 
 
 // int model: unbounded mathematical integers
@@ -11,15 +41,15 @@
   @ }
   @*/
 
-/*@ lemma power_mul: 
+/*@ lemma power_mul:
   @   \forall integer x y n; n >= 0 ==> power(x*y,n) == power(x,n)*power(y,n);
   @*/
 
-/*@ lemma power_even: 
+/*@ lemma power_even:
   @   \forall integer x n; n >= 0 && n % 2 == 0 ==> power(x,n) == power(x*x,n/2);
   @*/
 
-/*@ lemma power_odd: 
+/*@ lemma power_odd:
   @   \forall integer x n; n >= 0 && n % 2 != 0 ==> power(x,n) == x*power(x*x,n/2);
   @*/
 
@@ -49,7 +79,7 @@ class Power {
         long r = 1, p = x;
         int e = n;
 
-        /*@ loop_invariant 
+        /*@ loop_invariant
           @   0 <= e && r * power(p,e) == power(x,n);
           @ loop_variant e;
           @*/

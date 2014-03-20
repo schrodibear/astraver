@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Gappa"
-  version="0.16.6"/>
+  version="1.0.0"/>
  <file
   name="../double_rounding_strict_model.mlw"
   verified="true"
@@ -27,10 +27,12 @@
     locfile="../../double_rounding_strict_model.c"
     loclnum="3" loccnumb="7" loccnume="21"
     expl="VC for doublerounding_ensures_default"
-    sum="5fa919d349f549e92863642015032ec9"
+    sum="6be33c7e9cf45c0e9bab3df42bfc8666"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV7ainfix +c1.0c0x1.p-52Iainfix =V7V6FIaadd_postaNearestTiesToEvenV1V5V6FIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function doublerounding, default behavior"/>
     <label
@@ -49,10 +51,10 @@
     locfile="../../double_rounding_strict_model.c"
     loclnum="3" loccnumb="7" loccnume="21"
     expl="VC for doublerounding_safety"
-    sum="a73d3476740834fba41e9a434f1d0b50"
+    sum="5ca9274d4feecd40339ec992d5455020"
     proved="true"
     expanded="true"
-    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-53V3FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV8amax_doubleIainfix =V8V7FIaadd_postV6V5V3V7FAainfix &lt;=aabsaroundV6ainfix +avalueV5avalueV3amax_doubleLaNearestTiesToEvenIaof_real_postV4c0x1.p-53V5FAainfix &lt;=aabsaroundV4c0x1.p-53amax_doubleLaNearestTiesToEvenIaof_real_postV2c0x1.p-64V3FAainfix &lt;=aabsaroundV2c0x1.p-64amax_doubleLaNearestTiesToEvenIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
     <label
      name="expl:Function doublerounding, Safety"/>
     <label
@@ -66,10 +68,10 @@
       locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
       expl="1. floating-point overflow"
-      sum="c9cced664b136b40b0793e3b0a3559a5"
+      sum="2b2681305ff14a546a92e64cc9c5d2ec"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV2c0x1.p-64amax_doubleLaNearestTiesToEvenIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
       <label
        name="expl:Function doublerounding, Safety"/>
       <label
@@ -88,10 +90,10 @@
       locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
       expl="2. floating-point overflow"
-      sum="a2f7086a085204fa7dd981a88346891b"
+      sum="74daeb9ed2ae6bef502baf802d155119"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV4c0x1.p-53amax_doubleLaNearestTiesToEvenIaof_real_postV2c0x1.p-64V3FIainfix &lt;=aabsaroundV2c0x1.p-64amax_doubleLaNearestTiesToEvenIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
       <label
        name="expl:Function doublerounding, Safety"/>
       <label
@@ -110,10 +112,10 @@
       locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
       expl="3. floating-point overflow"
-      sum="ac92a837b5784f18a7e71cafa3ef1470"
+      sum="e477ecae0f56a1e5ed69dfb608955250"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV6ainfix +avalueV5avalueV3amax_doubleLaNearestTiesToEvenIaof_real_postV4c0x1.p-53V5FIainfix &lt;=aabsaroundV4c0x1.p-53amax_doubleLaNearestTiesToEvenIaof_real_postV2c0x1.p-64V3FIainfix &lt;=aabsaroundV2c0x1.p-64amax_doubleLaNearestTiesToEvenIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
       <label
        name="expl:Function doublerounding, Safety"/>
       <label
@@ -132,10 +134,10 @@
       locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
       expl="4. floating-point overflow"
-      sum="8247ec30fda29a27b9b4f4da3d8b4f6e"
+      sum="1e2e3ceab4cf9421fdd154a80805a9ce"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV8amax_doubleIainfix =V8V7FIaadd_postV6V5V3V7FIainfix &lt;=aabsaroundV6ainfix +avalueV5avalueV3amax_doubleLaNearestTiesToEvenIaof_real_postV4c0x1.p-53V5FIainfix &lt;=aabsaroundV4c0x1.p-53amax_doubleLaNearestTiesToEvenIaof_real_postV2c0x1.p-64V3FIainfix &lt;=aabsaroundV2c0x1.p-64amax_doubleLaNearestTiesToEvenIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
       <label
        name="expl:Function doublerounding, Safety"/>
       <label

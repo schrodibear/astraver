@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only glob.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD glob.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only glob.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/glob.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir glob.jessie
 [jessie] File glob.jessie/glob.jc written.
@@ -46,9 +46,9 @@ predicate gzero{L}() =
 
 unit f()
 behavior default:
-  ensures (C_2 : ((C_3 : gzero{Here}()) && (C_4 : (g == 0))));
+  ensures (_C_2 : ((_C_3 : gzero{Here}()) && (_C_4 : (g == 0))));
 {  
-   {  (C_1 : (g = 0));
+   {  (_C_1 : (g = 0));
       
       (return ())
    }
@@ -56,9 +56,9 @@ behavior default:
 
 unit h()
 behavior default:
-  ensures (C_6 : ((C_7 : gzero{Here}()) && (C_8 : (g == 0))));
+  ensures (_C_6 : ((_C_7 : gzero{Here}()) && (_C_8 : (g == 0))));
 {  
-   {  (C_5 : f());
+   {  (_C_5 : f());
       
       (return ())
    }
@@ -435,10 +435,9 @@ let f_ensures_default =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_1:
    begin
-     (let jessie_<somenum> = (g := (safe_int32_of_integer_ (0))) in void);
-    (raise Return); (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = (g := (safe_int32_of_integer_ (0))) in void);
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: ((JC_<somenum>: gzero(g)) and (JC_<somenum>: (integer_of_int32(g) = (0))))) }
 
 let f_safety =
@@ -446,26 +445,23 @@ let f_safety =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_1:
    begin
-     (let jessie_<somenum> = (g := (safe_int32_of_integer_ (0))) in void);
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+     (let _jessie_<somenum> = (g := (safe_int32_of_integer_ (0))) in void);
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 let h_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>: true) }
   (init:
-  try (C_5: (JC_<somenum>: begin   (f void); (raise Return); (raise Return) end))
-   with Return -> void end)
+  try (JC_<somenum>: begin   (f void); (raise Return); (raise Return) end) with
+   Return -> void end)
   { (JC_<somenum>: ((JC_<somenum>: gzero(g)) and (JC_<somenum>: (integer_of_int32(g) = (0))))) }
 
 let h_safety =
  fun (tt : unit) ->
   { (JC_<somenum>: true) }
   (init:
-  try
-   (C_5:
-   (JC_<somenum>: begin   (f_requires void); (raise Return); (raise Return) end))
+  try (JC_<somenum>: begin   (f_requires void); (raise Return); (raise Return) end)
    with Return -> void end) { true }
 
 

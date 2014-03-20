@@ -1,7 +1,7 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0040.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0040.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0040.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0040.c"
 [jessie] Starting Jessie translation
-[kernel] warning: Neither code nor specification for function g, generating default assigns from the prototype
+PPCHOME/tests/jessie/bts0040.c:18:[kernel] warning: Neither code nor specification for function g, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir bts0040.jessie
 [jessie] File bts0040.jessie/bts0040.jc written.
 [jessie] File bts0040.jessie/bts0040.cloc written.
@@ -53,14 +53,14 @@ type __anonstruct_las_1 = [__anonstruct_las_1]
 unit g(floatP[..] y)
 behavior default:
   assigns y.floatM;
-  ensures (C_1 : true);
+  ensures (_C_1 : true);
 ;
 
 unit f(__anonstruct_las_1[..] c)
 behavior default:
-  ensures (C_4 : true);
+  ensures (_C_4 : true);
 {  
-   {  (C_3 : g((C_2 : c.k)));
+   {  (_C_3 : g((_C_2 : c.k)));
       
       (return ())
    }
@@ -597,11 +597,10 @@ let f_ensures_default =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_3:
    begin
-     (let jessie_<somenum> = (C_2: ((safe_acc_ __anonstruct_las_1_k_c_2) c)) in
-     (JC_<somenum>: (((g jessie_<somenum>) floatP_floatM_c_2) floatP_c_2_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = ((safe_acc_ __anonstruct_las_1_k_c_2) c) in
+     (JC_<somenum>: (((g _jessie_<somenum>) floatP_floatM_c_2) floatP_c_2_alloc_table)));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let f_safety =
@@ -609,15 +608,13 @@ let f_safety =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_3:
    begin
-     (let jessie_<somenum> =
-     (C_2:
+     (let _jessie_<somenum> =
      (JC_<somenum>:
-     (((acc_ __anonstruct_las_1_c_2_alloc_table) __anonstruct_las_1_k_c_2) c))) in
+     (((acc_ __anonstruct_las_1_c_2_alloc_table) __anonstruct_las_1_k_c_2) c)) in
      (JC_<somenum>:
-     (((g_requires jessie_<somenum>) floatP_floatM_c_2) floatP_c_2_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+     (((g_requires _jessie_<somenum>) floatP_floatM_c_2) floatP_c_2_alloc_table)));
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0040.jessie --quiet -f bts0040.makefile project

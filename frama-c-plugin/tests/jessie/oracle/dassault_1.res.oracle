@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only dassault_1.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD dassault_1.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only dassault_1.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/dassault_1.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir dassault_1.jessie
 [jessie] File dassault_1.jessie/dassault_1.jc written.
@@ -75,13 +75,14 @@ invariant valid_y :
 
 int32 f()
 behavior default:
-  ensures (C_10 : (\result == ((x.a.d.b + 0).c + (y.b + 1).c)));
+  ensures (_C_10 : (\result == ((x.a.d.b + 0).c + (y.b + 1).c)));
 {  
    (var int32 __retres);
    
-   {  (C_9 : (__retres = (C_8 : ((C_7 : ((C_6 : ((C_5 : (C_4 : (C_3 : x.a).d).b) +
-                                                  0).c) +
-                                          (C_2 : ((C_1 : y.b) + 1).c))) :> int32))));
+   {  (_C_9 : (__retres = (_C_8 : ((_C_7 : ((_C_6 : ((_C_5 : (_C_4 : 
+                                                             (_C_3 : x.a).d).b) +
+                                                      0).c) +
+                                             (_C_2 : ((_C_1 : y.b) + 1).c))) :> int32))));
       
       (return __retres)
    }
@@ -897,26 +898,17 @@ let f_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_9:
      begin
-       (let jessie_<somenum> =
-       (__retres := (C_8:
-                    (safe_int32_of_integer_ (C_7:
-                                            ((add_int (integer_of_int32 
-                                                       (C_6:
+       (let _jessie_<somenum> =
+       (__retres := (safe_int32_of_integer_ ((add_int (integer_of_int32 
                                                        ((safe_acc_ !las3_c_x_1) 
-                                                        ((shift (C_5:
-                                                                ((safe_acc_ !las2_b_x_1) 
-                                                                 (C_4:
+                                                        ((shift ((safe_acc_ !las2_b_x_1) 
                                                                  ((safe_acc_ !las1_d_x_1) 
-                                                                  (C_3:
-                                                                  ((safe_acc_ !las_a_x_1) x_0))))))) (0)))))) 
-                                             (integer_of_int32 (C_2:
-                                                               ((safe_acc_ !las3_c_y_2) 
+                                                                  ((safe_acc_ !las_a_x_1) x_0)))) (0))))) 
+                                             (integer_of_int32 ((safe_acc_ !las3_c_y_2) 
                                                                 ((shift 
-                                                                  (C_1:
-                                                                  ((safe_acc_ !las2_b_y_2) y))) (1)))))))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+                                                                  ((safe_acc_ !las2_b_y_2) y)) (1))))))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     (integer_of_int32(result) = add_int(integer_of_int32(select(las3_c_x_1,
@@ -939,26 +931,17 @@ let f_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_9:
      begin
-       (let jessie_<somenum> =
-       (__retres := (C_8:
-                    (JC_<somenum>:
-                    (int32_of_integer_ (C_7:
-                                       ((add_int (integer_of_int32 (C_6:
-                                                                   ((safe_acc_ !las3_c_x_1) 
+       (let _jessie_<somenum> =
+       (__retres := (JC_<somenum>:
+                    (int32_of_integer_ ((add_int (integer_of_int32 ((safe_acc_ !las3_c_x_1) 
                                                                     ((shift 
-                                                                    (C_5:
                                                                     ((safe_acc_ !las2_b_x_1) 
-                                                                    (C_4:
                                                                     ((safe_acc_ !las1_d_x_1) 
-                                                                    (C_3:
-                                                                    ((safe_acc_ !las_a_x_1) x_0))))))) (0)))))) 
-                                        (integer_of_int32 (C_2:
-                                                          ((safe_acc_ !las3_c_y_2) 
-                                                           ((shift (C_1:
-                                                                   ((safe_acc_ !las2_b_y_2) y))) (1))))))))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+                                                                    ((safe_acc_ !las_a_x_1) x_0)))) (0))))) 
+                                        (integer_of_int32 ((safe_acc_ !las3_c_y_2) 
+                                                           ((shift ((safe_acc_ !las2_b_y_2) y)) (1)))))))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: valid_y(las2_y_2_alloc_table))

@@ -91,29 +91,31 @@ invariant valid_c :
 ((\offset_min(c) <= 0) && (\offset_max(c) >= 1))
 
 unit test()
-  requires (C_13 : ((((((((C_20 : (\offset_min(a) <= 0)) &&
-                           (C_21 : (\offset_max(a) >= 1))) &&
-                          ((C_23 : (\offset_min(b) <= 0)) &&
-                            (C_24 : (\offset_max(b) >= 1)))) &&
-                         ((C_26 : (\offset_min(c) <= 0)) &&
-                           (C_27 : (\offset_max(c) >= 1)))) &&
-                        (C_28 : (\real_abs(((b + 0).doubleM :> real)) <= 1.0))) &&
-                       (C_29 : (\real_abs(((b + 1).doubleM :> real)) <= 1.0))) &&
-                      (C_30 : (\real_abs(((c + 0).doubleM :> real)) <= 1.0))) &&
-                     (C_31 : (\real_abs(((c + 1).doubleM :> real)) <= 1.0))));
+  requires (_C_13 : ((((((((_C_20 : (\offset_min(a) <= 0)) &&
+                            (_C_21 : (\offset_max(a) >= 1))) &&
+                           ((_C_23 : (\offset_min(b) <= 0)) &&
+                             (_C_24 : (\offset_max(b) >= 1)))) &&
+                          ((_C_26 : (\offset_min(c) <= 0)) &&
+                            (_C_27 : (\offset_max(c) >= 1)))) &&
+                         (_C_28 : (\real_abs(((b + 0).doubleM :> real)) <=
+                                    1.0))) &&
+                        (_C_29 : (\real_abs(((b + 1).doubleM :> real)) <=
+                                   1.0))) &&
+                       (_C_30 : (\real_abs(((c + 0).doubleM :> real)) <= 1.0))) &&
+                      (_C_31 : (\real_abs(((c + 1).doubleM :> real)) <= 1.0))));
 behavior default:
-  ensures (C_12 : true);
+  ensures (_C_12 : true);
 {  
-   {  (C_5 : ((C_4 : (a + 0).doubleM) = (C_3 : ((C_2 : (b + 0).doubleM) +
-                                                 (C_1 : (c + 0).doubleM)))));
-      (C_10 : ((C_9 : (a + 1).doubleM) = (C_8 : ((C_7 : (b + 1).doubleM) +
-                                                  (C_6 : (c + 1).doubleM)))));
+   {  (_C_5 : ((_C_4 : (a + 0).doubleM) = (_C_3 : ((_C_2 : (b + 0).doubleM) +
+                                                    (_C_1 : (c + 0).doubleM)))));
+      (_C_10 : ((_C_9 : (a + 1).doubleM) = (_C_8 : ((_C_7 : (b + 1).doubleM) +
+                                                     (_C_6 : (c + 1).doubleM)))));
       
       {  
-         (assert for default: (C_11 : (jessie : (\real_abs((((a + 0).doubleM :> real) -
-                                                             (((b + 0).doubleM :> real) +
-                                                               ((c + 0).doubleM :> real)))) <=
-                                                  0x1p-53))));
+         (assert for default: (_C_11 : (jessie : (\real_abs((((a + 0).doubleM :> real) -
+                                                              (((b + 0).doubleM :> real) +
+                                                                ((c + 0).doubleM :> real)))) <=
+                                                   0x1p-53))));
          ()
       };
       
@@ -121,6 +123,18 @@ behavior default:
    }
 }
 ========== file tests/c/array_double.jessie/array_double.cloc ==========
+[_C_28]
+file = "HOME/tests/c/array_double.c"
+line = 13
+begin = 6
+end = 23
+
+[_C_31]
+file = "HOME/tests/c/array_double.c"
+line = 16
+begin = 6
+end = 23
+
 [test]
 name = "Function test"
 file = "HOME/tests/c/array_double.c"
@@ -128,191 +142,179 @@ line = 18
 begin = 5
 end = 9
 
-[C_10]
+[_C_4]
 file = "HOME/tests/c/array_double.c"
-line = 20
+line = 19
 begin = 9
 end = 20
 
-[C_11]
+[_C_23]
 file = "HOME/tests/c/array_double.c"
-line = 21
-begin = 13
-end = 50
+line = 11
+begin = 2
+end = 18
 
-[C_12]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[_C_19]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 18
 
-[C_13]
+[_C_13]
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
 end = 170
 
-[C_14]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 143
-
-[C_15]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 116
-
-[C_16]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 89
-
-[C_17]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 62
-
-[C_18]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 40
-
-[C_19]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 18
-
-[C_1]
-file = "HOME/tests/c/array_double.c"
-line = 19
-begin = 16
-end = 20
-
-[C_2]
-file = "HOME/tests/c/array_double.c"
-line = 19
-begin = 9
-end = 13
-
-[C_3]
+[_C_5]
 file = "HOME/tests/c/array_double.c"
 line = 19
 begin = 9
 end = 20
 
-[C_4]
-file = "HOME/tests/c/array_double.c"
-line = 19
-begin = 9
-end = 20
+[_C_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[C_20]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 18
-
-[C_5]
-file = "HOME/tests/c/array_double.c"
-line = 19
-begin = 9
-end = 20
-
-[C_21]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 18
-
-[C_6]
-file = "HOME/tests/c/array_double.c"
-line = 20
-begin = 16
-end = 20
-
-[C_22]
+[_C_22]
 file = "HOME/tests/c/array_double.c"
 line = 11
 begin = 2
 end = 18
 
-[C_7]
-file = "HOME/tests/c/array_double.c"
-line = 20
-begin = 9
-end = 13
-
-[C_23]
-file = "HOME/tests/c/array_double.c"
-line = 11
-begin = 2
-end = 18
-
-[C_8]
+[_C_9]
 file = "HOME/tests/c/array_double.c"
 line = 20
 begin = 9
 end = 20
 
-[C_24]
-file = "HOME/tests/c/array_double.c"
-line = 11
-begin = 2
-end = 18
-
-[C_9]
-file = "HOME/tests/c/array_double.c"
-line = 20
-begin = 9
-end = 20
-
-[C_25]
-file = "HOME/tests/c/array_double.c"
-line = 12
-begin = 2
-end = 18
-
-[C_26]
-file = "HOME/tests/c/array_double.c"
-line = 12
-begin = 2
-end = 18
-
-[C_27]
-file = "HOME/tests/c/array_double.c"
-line = 12
-begin = 2
-end = 18
-
-[C_28]
-file = "HOME/tests/c/array_double.c"
-line = 13
-begin = 6
-end = 23
-
-[C_29]
-file = "HOME/tests/c/array_double.c"
-line = 14
-begin = 6
-end = 23
-
-[C_30]
+[_C_30]
 file = "HOME/tests/c/array_double.c"
 line = 15
 begin = 6
 end = 23
 
-[C_31]
+[_C_6]
 file = "HOME/tests/c/array_double.c"
-line = 16
+line = 20
+begin = 16
+end = 20
+
+[_C_24]
+file = "HOME/tests/c/array_double.c"
+line = 11
+begin = 2
+end = 18
+
+[_C_20]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 18
+
+[_C_3]
+file = "HOME/tests/c/array_double.c"
+line = 19
+begin = 9
+end = 20
+
+[_C_17]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 62
+
+[_C_7]
+file = "HOME/tests/c/array_double.c"
+line = 20
+begin = 9
+end = 13
+
+[_C_27]
+file = "HOME/tests/c/array_double.c"
+line = 12
+begin = 2
+end = 18
+
+[_C_15]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 116
+
+[_C_26]
+file = "HOME/tests/c/array_double.c"
+line = 12
+begin = 2
+end = 18
+
+[_C_10]
+file = "HOME/tests/c/array_double.c"
+line = 20
+begin = 9
+end = 20
+
+[_C_8]
+file = "HOME/tests/c/array_double.c"
+line = 20
+begin = 9
+end = 20
+
+[_C_18]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 40
+
+[_C_29]
+file = "HOME/tests/c/array_double.c"
+line = 14
 begin = 6
 end = 23
+
+[_C_14]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 143
+
+[_C_2]
+file = "HOME/tests/c/array_double.c"
+line = 19
+begin = 9
+end = 13
+
+[_C_16]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 89
+
+[_C_1]
+file = "HOME/tests/c/array_double.c"
+line = 19
+begin = 16
+end = 20
+
+[_C_25]
+file = "HOME/tests/c/array_double.c"
+line = 12
+begin = 2
+end = 18
+
+[_C_11]
+file = "HOME/tests/c/array_double.c"
+line = 21
+begin = 13
+end = 50
+
+[_C_21]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 18
 
 ========== jessie execution ==========
 Generating Why function test
@@ -326,10 +328,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs array_double.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs array_double.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs array_double.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs array_double.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -474,13 +477,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: array_double.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: array_double.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: array_double.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include array_double.depend
 
@@ -491,35 +494,11 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/array_double.jessie/array_double.loc ==========
-[JC_40]
+[JC_51]
 file = "HOME/tests/c/array_double.c"
-line = 18
-begin = 5
-end = 9
-
-[JC_41]
-file = "HOME/tests/c/array_double.c"
-line = 18
-begin = 5
-end = 9
-
-[JC_42]
-file = "HOME/tests/c/array_double.c"
-line = 18
-begin = 5
-end = 9
-
-[JC_43]
-file = "HOME/tests/c/array_double.c"
-line = 18
-begin = 5
-end = 9
-
-[JC_44]
-file = "HOME/tests/c/array_double.c"
-line = 18
-begin = 5
-end = 9
+line = 21
+begin = 13
+end = 50
 
 [JC_45]
 file = "HOME/tests/c/array_double.c"
@@ -527,127 +506,7 @@ line = 18
 begin = 5
 end = 9
 
-[JC_46]
-kind = FPOverflow
-file = "HOME/tests/c/array_double.c"
-line = 19
-begin = 9
-end = 20
-
-[JC_47]
-kind = FPOverflow
-file = "HOME/tests/c/array_double.c"
-line = 20
-begin = 9
-end = 20
-
-[JC_48]
-file = "HOME/tests/c/array_double.c"
-line = 21
-begin = 13
-end = 50
-
-[JC_49]
-kind = FPOverflow
-file = "HOME/tests/c/array_double.c"
-line = 19
-begin = 9
-end = 20
-
-[JC_4]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 18
-
-[JC_5]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 18
-
-[JC_6]
-file = "HOME/tests/c/array_double.c"
-line = 11
-begin = 2
-end = 18
-
-[JC_7]
-file = "HOME/tests/c/array_double.c"
-line = 11
-begin = 2
-end = 18
-
-[JC_8]
-file = "HOME/tests/c/array_double.c"
-line = 12
-begin = 2
-end = 18
-
-[JC_9]
-file = "HOME/tests/c/array_double.c"
-line = 12
-begin = 2
-end = 18
-
-[JC_50]
-kind = FPOverflow
-file = "HOME/tests/c/array_double.c"
-line = 20
-begin = 9
-end = 20
-
-[JC_51]
-file = "HOME/tests/c/array_double.c"
-line = 21
-begin = 13
-end = 50
-
-[test_ensures_default]
-name = "Function test"
-behavior = "default behavior"
-file = "HOME/tests/c/array_double.c"
-line = 18
-begin = 5
-end = 9
-
-[JC_10]
-file = "HOME/tests/c/array_double.c"
-line = 13
-begin = 6
-end = 23
-
-[JC_11]
-file = "HOME/tests/c/array_double.c"
-line = 14
-begin = 6
-end = 23
-
-[JC_12]
-file = "HOME/tests/c/array_double.c"
-line = 15
-begin = 6
-end = 23
-
-[JC_13]
-file = "HOME/tests/c/array_double.c"
-line = 16
-begin = 6
-end = 23
-
-[JC_14]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 170
-
-[JC_15]
-file = "HOME/tests/c/array_double.c"
-line = 18
-begin = 5
-end = 9
-
-[JC_16]
+[JC_31]
 file = "HOME/tests/c/array_double.c"
 line = 18
 begin = 5
@@ -659,27 +518,15 @@ line = 18
 begin = 5
 end = 9
 
-[JC_18]
+[JC_48]
 file = "HOME/tests/c/array_double.c"
-line = 18
-begin = 5
-end = 9
+line = 21
+begin = 13
+end = 50
 
-[JC_19]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_20]
+[JC_23]
 file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 18
-
-[JC_21]
-file = "HOME/tests/c/array_double.c"
-line = 10
+line = 11
 begin = 2
 end = 18
 
@@ -689,9 +536,15 @@ line = 11
 begin = 2
 end = 18
 
-[JC_23]
+[JC_5]
 file = "HOME/tests/c/array_double.c"
-line = 11
+line = 10
+begin = 2
+end = 18
+
+[JC_9]
+file = "HOME/tests/c/array_double.c"
+line = 12
 begin = 2
 end = 18
 
@@ -707,11 +560,72 @@ line = 12
 begin = 2
 end = 18
 
+[JC_41]
+file = "HOME/tests/c/array_double.c"
+line = 18
+begin = 5
+end = 9
+
+[JC_47]
+kind = FPOverflow
+file = "HOME/tests/c/array_double.c"
+line = 20
+begin = 9
+end = 20
+
 [JC_26]
 file = "HOME/tests/c/array_double.c"
 line = 13
 begin = 6
 end = 23
+
+[JC_8]
+file = "HOME/tests/c/array_double.c"
+line = 12
+begin = 2
+end = 18
+
+[JC_13]
+file = "HOME/tests/c/array_double.c"
+line = 16
+begin = 6
+end = 23
+
+[JC_11]
+file = "HOME/tests/c/array_double.c"
+line = 14
+begin = 6
+end = 23
+
+[JC_15]
+file = "HOME/tests/c/array_double.c"
+line = 18
+begin = 5
+end = 9
+
+[JC_36]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_39]
+file = "HOME/tests/c/array_double.c"
+line = 18
+begin = 5
+end = 9
+
+[JC_40]
+file = "HOME/tests/c/array_double.c"
+line = 18
+begin = 5
+end = 9
+
+[JC_35]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_27]
 file = "HOME/tests/c/array_double.c"
@@ -719,29 +633,48 @@ line = 14
 begin = 6
 end = 23
 
-[JC_28]
+[JC_38]
+file = "HOME/tests/c/array_double.c"
+line = 18
+begin = 5
+end = 9
+
+[JC_12]
 file = "HOME/tests/c/array_double.c"
 line = 15
 begin = 6
 end = 23
 
-[JC_29]
+[JC_6]
 file = "HOME/tests/c/array_double.c"
-line = 16
-begin = 6
-end = 23
-
-[JC_30]
-file = "HOME/tests/c/array_double.c"
-line = 10
+line = 11
 begin = 2
-end = 170
+end = 18
 
-[JC_31]
+[JC_44]
 file = "HOME/tests/c/array_double.c"
 line = 18
 begin = 5
 end = 9
+
+[JC_4]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 18
+
+[JC_42]
+file = "HOME/tests/c/array_double.c"
+line = 18
+begin = 5
+end = 9
+
+[JC_46]
+kind = FPOverflow
+file = "HOME/tests/c/array_double.c"
+line = 19
+begin = 9
+end = 20
 
 [JC_32]
 file = "HOME/tests/c/array_double.c"
@@ -755,11 +688,74 @@ line = 18
 begin = 5
 end = 9
 
+[JC_29]
+file = "HOME/tests/c/array_double.c"
+line = 16
+begin = 6
+end = 23
+
+[JC_7]
+file = "HOME/tests/c/array_double.c"
+line = 11
+begin = 2
+end = 18
+
+[JC_16]
+file = "HOME/tests/c/array_double.c"
+line = 18
+begin = 5
+end = 9
+
+[JC_43]
+file = "HOME/tests/c/array_double.c"
+line = 18
+begin = 5
+end = 9
+
+[test_ensures_default]
+name = "Function test"
+behavior = "default behavior"
+file = "HOME/tests/c/array_double.c"
+line = 18
+begin = 5
+end = 9
+
 [JC_34]
 file = "HOME/tests/c/array_double.c"
 line = 18
 begin = 5
 end = 9
+
+[JC_14]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 170
+
+[JC_21]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 18
+
+[JC_49]
+kind = FPOverflow
+file = "HOME/tests/c/array_double.c"
+line = 19
+begin = 9
+end = 20
+
+[JC_37]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_10]
+file = "HOME/tests/c/array_double.c"
+line = 13
+begin = 6
+end = 23
 
 [test_safety]
 name = "Function test"
@@ -769,35 +765,42 @@ line = 18
 begin = 5
 end = 9
 
-[JC_35]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_20]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 18
 
-[JC_36]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_37]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_38]
+[JC_18]
 file = "HOME/tests/c/array_double.c"
 line = 18
 begin = 5
 end = 9
 
-[JC_39]
+[JC_19]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_50]
+kind = FPOverflow
 file = "HOME/tests/c/array_double.c"
-line = 18
-begin = 5
-end = 9
+line = 20
+begin = 9
+end = 20
+
+[JC_30]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 170
+
+[JC_28]
+file = "HOME/tests/c/array_double.c"
+line = 15
+begin = 6
+end = 23
 
 ========== file tests/c/array_double.jessie/why/array_double.why ==========
 type a_1
@@ -1309,36 +1312,28 @@ let test_ensures_default =
             and (JC_33: valid_a(doubleP_a_1_alloc_table)))))) }
   (init:
   try
-   (C_5:
-   (C_10:
    begin
-     (let jessie_<num> =
-     (C_3:
+     (let _jessie_<num> =
      (JC_49:
-     (((add_double_safe nearest_even) (C_2:
-                                      ((safe_acc_ !doubleP_doubleM_b_2) 
-                                       ((shift b) (0))))) (C_1:
-                                                          ((safe_acc_ !doubleP_doubleM_c_3) 
-                                                           ((shift c) (0))))))) in
-     (let jessie_<num> = a in
-     (let jessie_<num> =
-     (C_8:
+     (((add_double_safe nearest_even) ((safe_acc_ !doubleP_doubleM_b_2) 
+                                       ((shift b) (0)))) ((safe_acc_ !doubleP_doubleM_c_3) 
+                                                          ((shift c) (0))))) in
+     (let _jessie_<num> = a in
+     (let _jessie_<num> =
      (JC_50:
-     (((add_double_safe nearest_even) (C_7:
-                                      ((safe_acc_ !doubleP_doubleM_b_2) 
-                                       ((shift b) (1))))) (C_6:
-                                                          ((safe_acc_ !doubleP_doubleM_c_3) 
-                                                           ((shift c) (1))))))) in
-     (let jessie_<num> = a in
-     (let jessie_<num> = (1) in
-     (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+     (((add_double_safe nearest_even) ((safe_acc_ !doubleP_doubleM_b_2) 
+                                       ((shift b) (1)))) ((safe_acc_ !doubleP_doubleM_c_3) 
+                                                          ((shift c) (1))))) in
+     (let _jessie_<num> = a in
+     (let _jessie_<num> = (1) in
+     (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
      [ { } unit reads doubleP_a_1_alloc_table,doubleP_doubleM_a_1
        writes doubleP_doubleM_a_1
        { (not_assigns(doubleP_a_1_alloc_table, doubleP_doubleM_a_1@,
           doubleP_doubleM_a_1,
-          pset_range(pset_singleton(jessie_<num>), (0), (1)))
-         and ((select(doubleP_doubleM_a_1, shift(jessie_<num>, (0))) = jessie_<num>)
-             and (select(doubleP_doubleM_a_1, shift(jessie_<num>, (1))) = jessie_<num>))) } ]))))));
+          pset_range(pset_singleton(_jessie_<num>), (0), (1)))
+         and ((select(doubleP_doubleM_a_1, shift(_jessie_<num>, (0))) = _jessie_<num>)
+             and (select(doubleP_doubleM_a_1, shift(_jessie_<num>, (1))) = _jessie_<num>))) } ]))))));
     (assert
     { (JC_51:
       le_real(abs_real(sub_real(double_value(select(doubleP_doubleM_a_1,
@@ -1347,7 +1342,7 @@ let test_ensures_default =
                                              shift(b, (0)))),
                        double_value(select(doubleP_doubleM_c_3,
                                     shift(c, (0))))))),
-      0x1p-53)) }; void); void; (raise Return); (raise Return) end)) with
+      0x1p-53)) }; void); void; (raise Return); (raise Return) end with
    Return -> void end) { (JC_36: true) }
 
 let test_safety =
@@ -1386,32 +1381,26 @@ let test_safety =
             and (JC_33: valid_a(doubleP_a_1_alloc_table)))))) }
   (init:
   try
-   (C_5:
-   (C_10:
    begin
-     (let jessie_<num> =
-     (C_3:
+     (let _jessie_<num> =
      (JC_46:
-     (((add_double nearest_even) (C_2:
-                                 ((safe_acc_ !doubleP_doubleM_b_2) ((shift b) (0))))) 
-      (C_1: ((safe_acc_ !doubleP_doubleM_c_3) ((shift c) (0))))))) in
-     (let jessie_<num> = a in
-     (let jessie_<num> =
-     (C_8:
+     (((add_double nearest_even) ((safe_acc_ !doubleP_doubleM_b_2) ((shift b) (0)))) 
+      ((safe_acc_ !doubleP_doubleM_c_3) ((shift c) (0))))) in
+     (let _jessie_<num> = a in
+     (let _jessie_<num> =
      (JC_47:
-     (((add_double nearest_even) (C_7:
-                                 ((safe_acc_ !doubleP_doubleM_b_2) ((shift b) (1))))) 
-      (C_6: ((safe_acc_ !doubleP_doubleM_c_3) ((shift c) (1))))))) in
-     (let jessie_<num> = a in
-     (let jessie_<num> = (1) in
-     (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+     (((add_double nearest_even) ((safe_acc_ !doubleP_doubleM_b_2) ((shift b) (1)))) 
+      ((safe_acc_ !doubleP_doubleM_c_3) ((shift c) (1))))) in
+     (let _jessie_<num> = a in
+     (let _jessie_<num> = (1) in
+     (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
      [ { } unit reads doubleP_a_1_alloc_table,doubleP_doubleM_a_1
        writes doubleP_doubleM_a_1
        { (not_assigns(doubleP_a_1_alloc_table, doubleP_doubleM_a_1@,
           doubleP_doubleM_a_1,
-          pset_range(pset_singleton(jessie_<num>), (0), (1)))
-         and ((select(doubleP_doubleM_a_1, shift(jessie_<num>, (0))) = jessie_<num>)
-             and (select(doubleP_doubleM_a_1, shift(jessie_<num>, (1))) = jessie_<num>))) } ]))))));
+          pset_range(pset_singleton(_jessie_<num>), (0), (1)))
+         and ((select(doubleP_doubleM_a_1, shift(_jessie_<num>, (0))) = _jessie_<num>)
+             and (select(doubleP_doubleM_a_1, shift(_jessie_<num>, (1))) = _jessie_<num>))) } ]))))));
     [ { } unit
       reads doubleP_doubleM_a_1,doubleP_doubleM_b_2,doubleP_doubleM_c_3
       { (JC_48:
@@ -1421,7 +1410,7 @@ let test_safety =
                                                shift(b, (0)))),
                          double_value(select(doubleP_doubleM_c_3,
                                       shift(c, (0))))))),
-        0x1p-53)) } ]; void; (raise Return); (raise Return) end)) with
+        0x1p-53)) } ]; void; (raise Return); (raise Return) end with
    Return -> void end)
   { (JC_41:
     ((JC_38: valid_c(doubleP_c_3_alloc_table))

@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only loop_inv.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD loop_inv.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only loop_inv.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/loop_inv.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir loop_inv.jessie
 [jessie] File loop_inv.jessie/loop_inv.jc written.
@@ -44,22 +44,22 @@ int32 i;
 int32 c;
 
 unit f()
-  requires (C_10 : ((C_11 : (i >= 0)) && (C_12 : (c > 0))));
+  requires (_C_10 : ((_C_11 : (i >= 0)) && (_C_12 : (c > 0))));
 behavior default:
-  ensures (C_9 : (i == 0));
+  ensures (_C_9 : (i == 0));
 {  
    {  
       loop 
       behavior default:
-        invariant (C_2 : (i >= 0));
-      variant (C_1 : i);
+        invariant (_C_2 : (i >= 0));
+      variant (_C_1 : i);
       while (true)
       {  
          {  (if (i > 0) then () else 
             (goto while_0_break));
             
-            {  (if (i >= c) then (C_8 : (i = (C_7 : ((C_6 : (i - c)) :> int32)))) else 
-               (C_5 : (i = (C_4 : ((C_3 : (i - 1)) :> int32)))))
+            {  (if (i >= c) then (_C_8 : (i = (_C_7 : ((_C_6 : (i - c)) :> int32)))) else 
+               (_C_5 : (i = (_C_4 : ((_C_3 : (i - 1)) :> int32)))))
             }
          }
       };
@@ -445,29 +445,23 @@ let f_ensures_default =
            [ { } unit { true } ];
           try
            begin
-             (let jessie_<somenum> =
+             (let _jessie_<somenum> =
              begin
                (if ((gt_int_ (integer_of_int32 !i)) (0)) then void
                else (raise (Goto_while_0_break_exc void)));
               (if ((ge_int_ (integer_of_int32 !i)) (integer_of_int32 c))
               then
-               (C_8:
                begin
-                 (i := (C_7:
-                       (safe_int32_of_integer_ (C_6:
-                                               ((sub_int (integer_of_int32 !i)) 
-                                                (integer_of_int32 c)))))); !i
-               end)
+                 (i := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !i)) 
+                                                (integer_of_int32 c)))); !i
+               end
               else
-               (C_5:
                begin
-                 (i := (C_4:
-                       (safe_int32_of_integer_ (C_3:
-                                               ((sub_int (integer_of_int32 !i)) (1))))));
-                !i end)) end in void); (raise (Loop_continue_exc void)) end
-           with Loop_continue_exc jessie_<somenum> -> void end end done;
+                 (i := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !i)) (1))));
+                !i end) end in void); (raise (Loop_continue_exc void)) end
+           with Loop_continue_exc _jessie_<somenum> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+      Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end; (raise Return)
    end with Return -> void end) { (JC_<somenum>: (integer_of_int32(i) = (0))) }
 
@@ -488,30 +482,24 @@ let f_safety =
            [ { } unit reads i { (JC_<somenum>: ge_int(integer_of_int32(i), (0))) } ];
           try
            begin
-             (let jessie_<somenum> =
+             (let _jessie_<somenum> =
              begin
                (if ((gt_int_ (integer_of_int32 !i)) (0)) then void
                else (raise (Goto_while_0_break_exc void)));
               (if ((ge_int_ (integer_of_int32 !i)) (integer_of_int32 c))
               then
-               (C_8:
                begin
-                 (i := (C_7:
-                       (JC_<somenum>:
-                       (int32_of_integer_ (C_6:
-                                          ((sub_int (integer_of_int32 !i)) 
-                                           (integer_of_int32 c))))))); !i end)
+                 (i := (JC_<somenum>:
+                       (int32_of_integer_ ((sub_int (integer_of_int32 !i)) 
+                                           (integer_of_int32 c))))); !i end
               else
-               (C_5:
                begin
-                 (i := (C_4:
-                       (JC_<somenum>:
-                       (int32_of_integer_ (C_3:
-                                          ((sub_int (integer_of_int32 !i)) (1)))))));
-                !i end)) end in void); (raise (Loop_continue_exc void)) end
-           with Loop_continue_exc jessie_<somenum> -> void end end done;
+                 (i := (JC_<somenum>:
+                       (int32_of_integer_ ((sub_int (integer_of_int32 !i)) (1)))));
+                !i end) end in void); (raise (Loop_continue_exc void)) end
+           with Loop_continue_exc _jessie_<somenum> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+      Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end; (raise Return)
    end with Return -> void end) { true }
 
@@ -553,11 +541,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/loop_inv_po7.why">
-      <location file = "why/loop_inv.why" line = "415" begin = "42" end = "71"/>
+      <location file = "why/loop_inv.why" line = "409" begin = "42" end = "71"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/loop_inv_po8.why">
-      <location file = "why/loop_inv.why" line = "415" begin = "42" end = "71"/>
+      <location file = "why/loop_inv.why" line = "409" begin = "42" end = "71"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

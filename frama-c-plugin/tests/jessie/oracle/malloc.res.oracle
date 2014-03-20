@@ -1,7 +1,7 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only malloc.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD malloc.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only malloc.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/malloc.c"
 [jessie] Starting Jessie translation
-[kernel] warning: Neither code nor specification for function malloc, generating default assigns from the prototype
+PPCHOME/tests/jessie/malloc.c:43:[kernel] warning: Neither code nor specification for function malloc, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir malloc.jessie
 [jessie] File malloc.jessie/malloc.jc written.
 [jessie] File malloc.jessie/malloc.cloc written.
@@ -55,35 +55,36 @@ tag voidP = {
 type voidP = [voidP]
 
 int_xP[..] test(int32 n_1)
-  requires (C_22 : (n_1 >= 1));
+  requires (_C_22 : (n_1 >= 1));
 behavior default:
-  ensures (C_17 : (((C_19 : (\offset_min(\result) <= 0)) &&
-                     (C_20 : (\offset_max(\result) >= (\at(n_1,Old) - 1)))) &&
-                    (C_21 : (\forall int32 i_1;
-                              (((0 <= i_1) && (i_1 < \at(n_1,Old))) ==>
-                                ((\offset_min((\result + i_1).int_xM) <= 0) &&
-                                  (\offset_max((\result + i_1).int_xM) >= 0)))))));
+  ensures (_C_17 : (((_C_19 : (\offset_min(\result) <= 0)) &&
+                      (_C_20 : (\offset_max(\result) >= (\at(n_1,Old) - 1)))) &&
+                     (_C_21 : (\forall int32 i_1;
+                                (((0 <= i_1) && (i_1 < \at(n_1,Old))) ==>
+                                  ((\offset_min((\result + i_1).int_xM) <= 0) &&
+                                    (\offset_max((\result + i_1).int_xM) >=
+                                      0)))))));
 {  
    (var int_xP[..] t);
    
    (var int32 i);
    
-   {  (C_3 : (t = (C_2 : (new int_xP[(C_1 : (n_1 :> uint32))]))));
-      (C_4 : (i = 0));
+   {  (_C_3 : (t = (_C_2 : (new int_xP[(_C_1 : (n_1 :> uint32))]))));
+      (_C_4 : (i = 0));
       
       loop 
       behavior default:
-        invariant (C_5 : (((C_7 : (0 <= i)) && (C_8 : (i <= n_1))) &&
-                           (C_9 : (\forall int32 k;
-                                    (((0 <= k) && (k < i)) ==>
-                                      ((\offset_min((t + k).int_xM) <= 0) &&
-                                        (\offset_max((t + k).int_xM) >= 0)))))));
+        invariant (_C_5 : (((_C_7 : (0 <= i)) && (_C_8 : (i <= n_1))) &&
+                            (_C_9 : (\forall int32 k;
+                                      (((0 <= k) && (k < i)) ==>
+                                        ((\offset_min((t + k).int_xM) <= 0) &&
+                                          (\offset_max((t + k).int_xM) >= 0)))))));
       while (true)
       {  
          {  (if (i < n_1) then () else 
             (goto while_0_break));
-            (C_13 : ((C_12 : (C_11 : (t + i)).int_xM) = (C_10 : (new intP[1]))));
-            (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))))
+            (_C_13 : ((_C_12 : (_C_11 : (t + i)).int_xM) = (_C_10 : (new intP[1]))));
+            (_C_16 : (i = (_C_15 : ((_C_14 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
@@ -94,16 +95,16 @@ behavior default:
 
 int32 main()
 behavior default:
-  ensures (C_35 : (\result == 0));
+  ensures (_C_35 : (\result == 0));
 {  
    (var int_xP[..] t_0);
    
    (var int32 __retres);
    
-   {  (C_24 : (t_0 = (C_23 : test(10))));
-      (C_29 : ((C_28 : (C_27 : ((C_26 : (C_25 : (t_0 + 3)).int_xM) + 0)).intM) = 0));
-      (C_34 : (__retres = (C_33 : (C_32 : ((C_31 : (C_30 : (t_0 + 3)).int_xM) +
-                                            0)).intM)));
+   {  (_C_24 : (t_0 = (_C_23 : test(10))));
+      (_C_29 : ((_C_28 : (_C_27 : ((_C_26 : (_C_25 : (t_0 + 3)).int_xM) + 0)).intM) = 0));
+      (_C_34 : (__retres = (_C_33 : (_C_32 : ((_C_31 : (_C_30 : (t_0 + 3)).int_xM) +
+                                               0)).intM)));
       
       (return __retres)
    }
@@ -716,30 +717,21 @@ let main_ensures_default =
      (let intP_int_xM_10_alloc_table = ref (any_alloc_table void) in
      (let t_0 = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
-     (C_24:
-     (C_29:
-     (C_34:
      begin
-       (let jessie_<somenum> =
-       (t_0 := (C_23:
-               (let jessie_<somenum> = (safe_int32_of_integer_ (10)) in
+       (let _jessie_<somenum> =
+       (t_0 := (let _jessie_<somenum> = (safe_int32_of_integer_ (10)) in
                (JC_<somenum>:
-               ((((((test jessie_<somenum>) int_xP_t_0_8_alloc_table) intP_int_xM_10_alloc_table) int_xP_t_0_8_tag_table) intP_int_xM_10_tag_table) int_xP_int_xM_t_0_8))))) in
+               ((((((test _jessie_<somenum>) int_xP_t_0_8_alloc_table) intP_int_xM_10_alloc_table) int_xP_t_0_8_tag_table) intP_int_xM_10_tag_table) int_xP_int_xM_t_0_8)))) in
        void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> =
-      (C_26: ((safe_acc_ !int_xP_int_xM_t_0_8) (C_25: ((shift !t_0) (3))))) in
-      (((safe_upd_ intP_intM_int_xM_10) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> =
-      (__retres := (C_33:
-                   ((safe_acc_ !intP_intM_int_xM_10) (C_32:
-                                                     ((shift (C_31:
-                                                             ((safe_acc_ !int_xP_int_xM_t_0_8) 
-                                                              (C_30:
-                                                              ((shift !t_0) (3)))))) (0)))))) in
-      void); (return := !__retres); (raise Return) end))))))))))); absurd 
-   end with Return -> !return end))
-  { (JC_<somenum>: (integer_of_int32(result) = (0))) }
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+      (let _jessie_<somenum> =
+      ((safe_acc_ !int_xP_int_xM_t_0_8) ((shift !t_0) (3))) in
+      (((safe_upd_ intP_intM_int_xM_10) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> =
+      (__retres := ((safe_acc_ !intP_intM_int_xM_10) ((shift ((safe_acc_ !int_xP_int_xM_t_0_8) 
+                                                              ((shift !t_0) (3)))) (0)))) in
+      void); (return := !__retres); (raise Return) end)))))))); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -756,32 +748,25 @@ let main_safety =
      (let intP_int_xM_10_alloc_table = ref (any_alloc_table void) in
      (let t_0 = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
-     (C_24:
-     (C_29:
-     (C_34:
      begin
-       (let jessie_<somenum> =
-       (t_0 := (C_23:
-               (let jessie_<somenum> = (safe_int32_of_integer_ (10)) in
+       (let _jessie_<somenum> =
+       (t_0 := (let _jessie_<somenum> = (safe_int32_of_integer_ (10)) in
                (JC_<somenum>:
-               ((((((test_requires jessie_<somenum>) int_xP_t_0_8_alloc_table) intP_int_xM_10_alloc_table) int_xP_t_0_8_tag_table) intP_int_xM_10_tag_table) int_xP_int_xM_t_0_8))))) in
+               ((((((test_requires _jessie_<somenum>) int_xP_t_0_8_alloc_table) intP_int_xM_10_alloc_table) int_xP_t_0_8_tag_table) intP_int_xM_10_tag_table) int_xP_int_xM_t_0_8)))) in
        void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> =
-      (C_26:
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+      (let _jessie_<somenum> =
       (JC_<somenum>:
-      ((((offset_acc_ !int_xP_t_0_8_alloc_table) !int_xP_int_xM_t_0_8) !t_0) (3)))) in
+      ((((offset_acc_ !int_xP_t_0_8_alloc_table) !int_xP_int_xM_t_0_8) !t_0) (3))) in
       (JC_<somenum>:
-      ((((upd_ !intP_int_xM_10_alloc_table) intP_intM_int_xM_10) jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> =
-      (__retres := (C_33:
-                   (JC_<somenum>:
+      ((((upd_ !intP_int_xM_10_alloc_table) intP_intM_int_xM_10) _jessie_<somenum>) _jessie_<somenum>))));
+      (let _jessie_<somenum> =
+      (__retres := (JC_<somenum>:
                    (((acc_ !intP_int_xM_10_alloc_table) !intP_intM_int_xM_10) 
-                    (C_31:
                     (JC_<somenum>:
-                    ((((offset_acc_ !int_xP_t_0_8_alloc_table) !int_xP_int_xM_t_0_8) !t_0) (3)))))))) in
-      void); (return := !__retres); (raise Return) end))))))))))); absurd 
-   end with Return -> !return end)) { true }
+                    ((((offset_acc_ !int_xP_t_0_8_alloc_table) !int_xP_int_xM_t_0_8) !t_0) (3)))))) in
+      void); (return := !__retres); (raise Return) end)))))))); absurd  end
+   with Return -> !return end)) { true }
 
 let test_ensures_default =
  fun (n_1 : int32) (intP_int_xM_3_alloc_table : intP alloc_table ref) (int_xP_result_1_alloc_table : int_xP alloc_table ref) (int_xP_result_1_tag_table : int_xP tag_table ref) (intP_int_xM_3_tag_table : intP tag_table ref) (int_xP_int_xM_result_1 : (int_xP, intP pointer) memory ref) ->
@@ -793,61 +778,54 @@ let test_ensures_default =
      (let t = ref (any_pointer void) in
      (let i = ref (any_int32 void) in
      try
-      (C_3:
-      (C_4:
-      (loop_2:
       begin
-        (let jessie_<somenum> =
-        (t := (C_2:
-              (JC_<somenum>:
-              (((alloc_struct_int_xP (integer_of_uint32 (C_1:
-                                                        (safe_uint32_of_integer_ 
-                                                         (integer_of_int32 n_1))))) int_xP_result_1_alloc_table) int_xP_result_1_tag_table)))) in
-        void); (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-       while true do
-       { invariant
-           (JC_<somenum>:
-           ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-           and ((JC_<somenum>: le_int(integer_of_int32(i), integer_of_int32(n_1)))
-               and (JC_<somenum>:
-                   (forall k:int32.
-                    ((le_int((0), integer_of_int32(k))
-                     and lt_int(integer_of_int32(k), integer_of_int32(i))) ->
-                     (le_int(offset_min(intP_int_xM_3_alloc_table,
-                             select(int_xP_int_xM_result_1,
-                             shift(t, integer_of_int32(k)))),
-                      (0))
-                     and ge_int(offset_max(intP_int_xM_3_alloc_table,
-                                select(int_xP_int_xM_result_1,
-                                shift(t, integer_of_int32(k)))),
-                         (0)))))))))  }
-        begin
-          [ { } unit { true } ];
-         try
-          begin
-            (let jessie_<somenum> =
-            (C_13:
-            (C_16:
-            begin
-              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
-              then void else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<somenum> =
-             (let jessie_<somenum> =
-             (C_10:
+        (let _jessie_<somenum> =
+        (t := (JC_<somenum>:
+              (((alloc_struct_int_xP (integer_of_uint32 (safe_uint32_of_integer_ 
+                                                         (integer_of_int32 n_1)))) int_xP_result_1_alloc_table) int_xP_result_1_tag_table))) in
+        void);
+       (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+       (loop_2:
+       begin
+         while true do
+         { invariant
              (JC_<somenum>:
-             (((alloc_struct_intP (1)) intP_int_xM_3_alloc_table) intP_int_xM_3_tag_table))) in
-             (let jessie_<somenum> = !t in
-             (let jessie_<somenum> = (integer_of_int32 !i) in
-             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-             (((safe_upd_ int_xP_int_xM_result_1) jessie_<somenum>) jessie_<somenum>))))) in
-             void);
-             (i := (C_15:
-                   (safe_int32_of_integer_ (C_14:
-                                           ((add_int (integer_of_int32 !i)) (1))))));
-             !i end)) in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done;
-       (raise (Goto_while_0_break_exc void)) end))) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+             ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+             and ((JC_<somenum>: le_int(integer_of_int32(i), integer_of_int32(n_1)))
+                 and (JC_<somenum>:
+                     (forall k:int32.
+                      ((le_int((0), integer_of_int32(k))
+                       and lt_int(integer_of_int32(k), integer_of_int32(i))) ->
+                       (le_int(offset_min(intP_int_xM_3_alloc_table,
+                               select(int_xP_int_xM_result_1,
+                               shift(t, integer_of_int32(k)))),
+                        (0))
+                       and ge_int(offset_max(intP_int_xM_3_alloc_table,
+                                  select(int_xP_int_xM_result_1,
+                                  shift(t, integer_of_int32(k)))),
+                           (0)))))))))  }
+          begin
+            [ { } unit { true } ];
+           try
+            begin
+              (let _jessie_<somenum> =
+              begin
+                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
+                then void else (raise (Goto_while_0_break_exc void)));
+               (let _jessie_<somenum> =
+               (let _jessie_<somenum> =
+               (JC_<somenum>:
+               (((alloc_struct_intP (1)) intP_int_xM_3_alloc_table) intP_int_xM_3_tag_table)) in
+               (let _jessie_<somenum> = !t in
+               (let _jessie_<somenum> = (integer_of_int32 !i) in
+               (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+               (((safe_upd_ int_xP_int_xM_result_1) _jessie_<somenum>) _jessie_<somenum>))))) in
+               void);
+               (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))));
+               !i end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
+      Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (return := !t); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -878,66 +856,59 @@ let test_safety =
      (let t = ref (any_pointer void) in
      (let i = ref (any_int32 void) in
      try
-      (C_3:
-      (C_4:
-      (loop_1:
       begin
-        (let jessie_<somenum> =
-        (t := (C_2:
-              (JC_<somenum>:
-              (((alloc_struct_int_xP_requires (integer_of_uint32 (C_1:
-                                                                 (JC_<somenum>:
+        (let _jessie_<somenum> =
+        (t := (JC_<somenum>:
+              (((alloc_struct_int_xP_requires (integer_of_uint32 (JC_<somenum>:
                                                                  (uint32_of_integer_ 
-                                                                  (integer_of_int32 n_1)))))) int_xP_result_1_alloc_table) int_xP_result_1_tag_table)))) in
-        void); (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-       while true do
-       { invariant (JC_<somenum>: true) variant (0) }
-        begin
-          [ { } unit
-            reads i,intP_int_xM_3_alloc_table,int_xP_int_xM_result_1,t
-            { (JC_<somenum>:
-              ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-              and ((JC_<somenum>:
-                   le_int(integer_of_int32(i), integer_of_int32(n_1)))
-                  and (JC_<somenum>:
-                      (forall k:int32.
-                       ((le_int((0), integer_of_int32(k))
-                        and lt_int(integer_of_int32(k), integer_of_int32(i))) ->
-                        (le_int(offset_min(intP_int_xM_3_alloc_table,
-                                select(int_xP_int_xM_result_1,
-                                shift(t, integer_of_int32(k)))),
-                         (0))
-                        and ge_int(offset_max(intP_int_xM_3_alloc_table,
-                                   select(int_xP_int_xM_result_1,
-                                   shift(t, integer_of_int32(k)))),
-                            (0))))))))) } ];
-         try
+                                                                  (integer_of_int32 n_1))))) int_xP_result_1_alloc_table) int_xP_result_1_tag_table))) in
+        void); (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+       (loop_1:
+       begin
+         while true do
+         { invariant (JC_<somenum>: true) variant (0) }
           begin
-            (let jessie_<somenum> =
-            (C_13:
-            (C_16:
+            [ { } unit
+              reads i,intP_int_xM_3_alloc_table,int_xP_int_xM_result_1,t
+              { (JC_<somenum>:
+                ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                and ((JC_<somenum>:
+                     le_int(integer_of_int32(i), integer_of_int32(n_1)))
+                    and (JC_<somenum>:
+                        (forall k:int32.
+                         ((le_int((0), integer_of_int32(k))
+                          and lt_int(integer_of_int32(k),
+                              integer_of_int32(i))) ->
+                          (le_int(offset_min(intP_int_xM_3_alloc_table,
+                                  select(int_xP_int_xM_result_1,
+                                  shift(t, integer_of_int32(k)))),
+                           (0))
+                          and ge_int(offset_max(intP_int_xM_3_alloc_table,
+                                     select(int_xP_int_xM_result_1,
+                                     shift(t, integer_of_int32(k)))),
+                              (0))))))))) } ];
+           try
             begin
-              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
-              then void else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<somenum> =
-             (let jessie_<somenum> =
-             (C_10:
-             (JC_<somenum>:
-             (((alloc_struct_intP_requires (1)) intP_int_xM_3_alloc_table) intP_int_xM_3_tag_table))) in
-             (let jessie_<somenum> = !t in
-             (let jessie_<somenum> = (integer_of_int32 !i) in
-             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-             (JC_<somenum>:
-             (((((offset_upd_ !int_xP_result_1_alloc_table) int_xP_int_xM_result_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
-             void);
-             (i := (C_15:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_14:
-                                      ((add_int (integer_of_int32 !i)) (1)))))));
-             !i end)) in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done;
-       (raise (Goto_while_0_break_exc void)) end))) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+              (let _jessie_<somenum> =
+              begin
+                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
+                then void else (raise (Goto_while_0_break_exc void)));
+               (let _jessie_<somenum> =
+               (let _jessie_<somenum> =
+               (JC_<somenum>:
+               (((alloc_struct_intP_requires (1)) intP_int_xM_3_alloc_table) intP_int_xM_3_tag_table)) in
+               (let _jessie_<somenum> = !t in
+               (let _jessie_<somenum> = (integer_of_int32 !i) in
+               (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+               (JC_<somenum>:
+               (((((offset_upd_ !int_xP_result_1_alloc_table) int_xP_int_xM_result_1) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
+               void);
+               (i := (JC_<somenum>:
+                     (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))));
+               !i end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
+      Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (return := !t); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 
@@ -1019,12 +990,12 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/malloc_po27.why">
-      <location file = "PPCHOME/tests/jessie/malloc.jessie/malloc.jc" line = "78" begin = "21" end = "78"/>
+      <location file = "PPCHOME/tests/jessie/malloc.jessie/malloc.jc" line = "79" begin = "22" end = "82"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/malloc_po28.why">
-      <location file = "PPCHOME/tests/jessie/malloc.jessie/malloc.jc" line = "78" begin = "21" end = "78"/>
+      <location file = "PPCHOME/tests/jessie/malloc.jessie/malloc.jc" line = "79" begin = "22" end = "82"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1039,11 +1010,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/malloc_po31.why">
-      <location file = "why/malloc.why" line = "783" begin = "42" end = "43"/>
+      <location file = "why/malloc.why" line = "757" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/malloc_po32.why">
-      <location file = "why/malloc.why" line = "783" begin = "42" end = "43"/>
+      <location file = "why/malloc.why" line = "757" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1073,12 +1044,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/malloc_po5.why">
-      <location file = "PPCHOME/tests/jessie/malloc.jessie/malloc.jc" line = "97" begin = "15" end = "82"/>
+      <location file = "PPCHOME/tests/jessie/malloc.jessie/malloc.jc" line = "98" begin = "16" end = "87"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/malloc_po6.why">
-      <location file = "PPCHOME/tests/jessie/malloc.jessie/malloc.jc" line = "97" begin = "15" end = "82"/>
+      <location file = "PPCHOME/tests/jessie/malloc.jessie/malloc.jc" line = "98" begin = "16" end = "87"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

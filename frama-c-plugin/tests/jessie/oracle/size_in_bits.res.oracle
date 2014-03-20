@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only size_in_bits.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD size_in_bits.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only size_in_bits.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/size_in_bits.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir size_in_bits.jessie
 [jessie] File size_in_bits.jessie/size_in_bits.jc written.
@@ -53,14 +53,14 @@ type S = [S]
 
 unit f()
 behavior default:
-  ensures (C_6 : true);
+  ensures (_C_6 : true);
 {  
    (var S[0] s);
    
-   {  (C_2 : (s = (C_1 : (new S[1]))));
-      (C_4 : ((C_3 : s.i) = 0));
+   {  (_C_2 : (s = (_C_1 : (new S[1]))));
+      (_C_4 : ((_C_3 : s.i) = 0));
       
-      {  (C_5 : (free(s)));
+      {  (_C_5 : (free(s)));
          
          (return ())
       }
@@ -491,18 +491,15 @@ let f_ensures_default =
      (let S_s_1_tag_table = ref (any_tag_table void) in
      (let S_s_1_alloc_table = ref (any_alloc_table void) in
      (let s_0 = ref (any_pointer void) in
-     (C_2:
-     (C_4:
-     (C_5:
      begin
-       (let jessie_<somenum> =
-       (s_0 := (C_1:
-               (JC_<somenum>:
-               (((alloc_struct_S (1)) S_s_1_alloc_table) S_s_1_tag_table)))) in
+       (let _jessie_<somenum> =
+       (s_0 := (JC_<somenum>:
+               (((alloc_struct_S (1)) S_s_1_alloc_table) S_s_1_tag_table))) in
        void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = !s_0 in (((safe_upd_ S_i_s_1) jessie_<somenum>) jessie_<somenum>)));
-      ((safe_free_parameter S_s_1_alloc_table) !s_0); (raise Return) end)))))));
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+      (let _jessie_<somenum> = !s_0 in
+      (((safe_upd_ S_i_s_1) _jessie_<somenum>) _jessie_<somenum>)));
+      ((safe_free_parameter S_s_1_alloc_table) !s_0); (raise Return) end))));
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
 let f_safety =
@@ -515,22 +512,18 @@ let f_safety =
      (let S_s_1_tag_table = ref (any_tag_table void) in
      (let S_s_1_alloc_table = ref (any_alloc_table void) in
      (let s_0 = ref (any_pointer void) in
-     (C_2:
-     (C_4:
-     (C_5:
      begin
-       (let jessie_<somenum> =
-       (s_0 := (let jessie_<somenum> =
-               (C_1:
+       (let _jessie_<somenum> =
+       (s_0 := (let _jessie_<somenum> =
                (JC_<somenum>:
-               (((alloc_struct_S_requires (1)) S_s_1_alloc_table) S_s_1_tag_table))) in
+               (((alloc_struct_S_requires (1)) S_s_1_alloc_table) S_s_1_tag_table)) in
                (JC_<somenum>:
                (assert
-               { ge_int(offset_max(S_s_1_alloc_table, jessie_<somenum>), (0)) };
-               jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = !s_0 in (((safe_upd_ S_i_s_1) jessie_<somenum>) jessie_<somenum>)));
-      ((free_parameter S_s_1_alloc_table) !s_0); (raise Return) end)))))));
+               { ge_int(offset_max(S_s_1_alloc_table, _jessie_<somenum>), (0)) };
+               _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+      (let _jessie_<somenum> = !s_0 in (((safe_upd_ S_i_s_1) _jessie_<somenum>) _jessie_<somenum>)));
+      ((free_parameter S_s_1_alloc_table) !s_0); (raise Return) end))));
     (raise Return) end with Return -> void end) { true }
 
 
@@ -546,11 +539,11 @@ why --project [...] why/size_in_bits.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/size_in_bits_po2.why">
-      <location file = "why/size_in_bits.why" line = "460" begin = "17" end = "69"/>
+      <location file = "why/size_in_bits.why" line = "453" begin = "17" end = "70"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/size_in_bits_po3.why">
-      <location file = "why/size_in_bits.why" line = "464" begin = "7" end = "46"/>
+      <location file = "why/size_in_bits.why" line = "457" begin = "7" end = "46"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

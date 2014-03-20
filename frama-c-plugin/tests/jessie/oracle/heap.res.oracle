@@ -1,8 +1,10 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only heap.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD heap.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only heap.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/heap.c"
 [kernel] warning: ignoring status of global invariant `size_inv'
 [kernel] warning: ignoring status of global invariant `is_heap_inv'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global invariant `size_inv'
+[kernel] warning: ignoring status of global invariant `is_heap_inv'
 [jessie] Producing Jessie files in subdir heap.jessie
 [jessie] File heap.jessie/heap.jc written.
 [jessie] File heap.jessie/heap.cloc written.
@@ -184,21 +186,21 @@ bag_of_tree(tree_of_array{L}((heap + 0), 0, size))
 unit clear()
 behavior default:
   assigns size;
-  ensures (C_2 : (model{Here}() == empty_bag));
+  ensures (_C_2 : (model{Here}() == empty_bag));
 {  
-   {  (C_1 : (size = 0));
+   {  (_C_1 : (size = 0));
       
       (return ())
    }
 }
 
 unit push(int32 x)
-  requires (C_28 : (size < (100 - 1)));
+  requires (_C_28 : (size < (100 - 1)));
 behavior default:
   assigns (heap + [..]).intM,
   size;
-  ensures (C_27 : (model{Here}() ==
-                    add_bag(\at(x,Old), \at(model{Old}(),Old))));
+  ensures (_C_27 : (model{Here}() ==
+                     add_bag(\at(x,Old), \at(model{Old}(),Old))));
 {  
    (var int32 i);
    
@@ -206,73 +208,77 @@ behavior default:
    
    (var int32 p);
    
-   {  (C_3 : (i = size));
+   {  (_C_3 : (i = size));
       
       loop 
       behavior default:
-        invariant (C_5 : ((((C_8 : (0 <= i)) && (C_9 : (i <= size))) &&
-                            (C_10 : ((i == size) ==>
-                                      (is_heap(tree_of_array{Here}((heap + 0),
-                                                                   0, size)) &&
-                                        (model{Here}() == model{Pre}()))))) &&
-                           (C_11 : ((i < size) ==>
-                                     (is_heap(tree_of_array{Here}((heap + 0),
-                                                                  0,
-                                                                  (size + 1))) &&
-                                       (bag_of_tree(tree_of_array{Here}(
-                                                    (heap + 0), 0, (size + 1))) ==
-                                         add_bag((heap + i).intM,
-                                                 \at(model{Pre}(),Pre))))))));
+        invariant (_C_5 : ((((_C_8 : (0 <= i)) && (_C_9 : (i <= size))) &&
+                             (_C_10 : ((i == size) ==>
+                                        (is_heap(tree_of_array{Here}(
+                                                 (heap + 0), 0, size)) &&
+                                          (model{Here}() == model{Pre}()))))) &&
+                            (_C_11 : ((i < size) ==>
+                                       (is_heap(tree_of_array{Here}((heap +
+                                                                    0), 0,
+                                                                    (size +
+                                                                    1))) &&
+                                         (bag_of_tree(tree_of_array{Here}(
+                                                      (heap + 0), 0,
+                                                      (size + 1))) ==
+                                           add_bag((heap + i).intM,
+                                                   \at(model{Pre}(),Pre))))))));
       behavior default:
         
         assigns (heap + [..]).intM;
-      variant (C_4 : i);
+      variant (_C_4 : i);
       while (true)
       {  
          {  (if (i > 0) then () else 
             (goto while_0_break));
             
-            {  (C_16 : (parent = (C_15 : ((C_14 : ((C_13 : ((C_12 : (i - 1)) :> int32)) /
-                                                    2)) :> int32))));
-               (C_18 : (p = (C_17 : (heap + parent).intM)));
+            {  (_C_16 : (parent = (_C_15 : ((_C_14 : ((_C_13 : ((_C_12 : 
+                                                                (i -
+                                                                  1)) :> int32)) /
+                                                       2)) :> int32))));
+               (_C_18 : (p = (_C_17 : (heap + parent).intM)));
                (if (p >= x) then 
                (goto while_0_break) else ());
-               (C_20 : ((C_19 : (heap + i).intM) = p));
-               (C_21 : (i = parent))
+               (_C_20 : ((_C_19 : (heap + i).intM) = p));
+               (_C_21 : (i = parent))
             }
          }
       };
       (while_0_break : ());
-      (C_23 : ((C_22 : (heap + i).intM) = x));
-      (C_26 : (size = (C_25 : ((C_24 : (size + 1)) :> int32))));
+      (_C_23 : ((_C_22 : (heap + i).intM) = x));
+      (_C_26 : (size = (_C_25 : ((_C_24 : (size + 1)) :> int32))));
       
       (return ())
    }
 }
 
 int32 max()
-  requires (C_32 : (size > 0));
+  requires (_C_32 : (size > 0));
 behavior default:
   assigns \nothing;
-  ensures (C_31 : is_max_bag(model{Here}(), \result));
+  ensures (_C_31 : is_max_bag(model{Here}(), \result));
 {  
    (var int32 __retres);
    
-   {  (C_30 : (__retres = (C_29 : (heap + 0).intM)));
+   {  (_C_30 : (__retres = (_C_29 : (heap + 0).intM)));
       
       (return __retres)
    }
 }
 
 int32 pop()
-  requires (C_71 : (size > 0));
+  requires (_C_71 : (size > 0));
 behavior default:
   assigns (heap + [..]).intM,
   size;
-  ensures (C_66 : (((C_68 : (size == (\at(size,Old) - 1))) &&
-                     (C_69 : is_max_bag(\at(model{Old}(),Old), \result))) &&
-                    (C_70 : (\at(model{Old}(),Old) ==
-                              add_bag(\result, model{Here}())))));
+  ensures (_C_66 : (((_C_68 : (size == (\at(size,Old) - 1))) &&
+                      (_C_69 : is_max_bag(\at(model{Old}(),Old), \result))) &&
+                     (_C_70 : (\at(model{Old}(),Old) ==
+                                add_bag(\result, model{Here}())))));
 {  
    (var int32 res);
    
@@ -282,39 +288,43 @@ behavior default:
    
    (var int32 j);
    
-   {  (C_34 : (res = (C_33 : (heap + 0).intM)));
-      (C_37 : (size = (C_36 : ((C_35 : (size - 1)) :> int32))));
+   {  (_C_34 : (res = (_C_33 : (heap + 0).intM)));
+      (_C_37 : (size = (_C_36 : ((_C_35 : (size - 1)) :> int32))));
       (if (size != 0) then 
-      {  (C_39 : (v = (C_38 : (heap + size).intM)));
-         (C_40 : (i_0 = 0));
+      {  (_C_39 : (v = (_C_38 : (heap + size).intM)));
+         (_C_40 : (i_0 = 0));
          
          loop 
          behavior default:
-           invariant (C_42 : ((C_43 : (0 <= i_0)) && (C_44 : (i_0 <= size))));
+           invariant (_C_42 : ((_C_43 : (0 <= i_0)) &&
+                                (_C_44 : (i_0 <= size))));
          behavior default:
            
            assigns (heap + [..]).intM;
-         variant (C_41 : (size - i_0));
+         variant (_C_41 : (size - i_0));
          while (true)
          {  
             {  (if (i_0 < size) then () else 
                (goto while_0_break));
                
-               {  (C_49 : (j = (C_48 : ((C_47 : ((C_46 : ((C_45 : (2 * i_0)) :> int32)) +
-                                                  1)) :> int32))));
-                  (if (j < (C_58 : ((C_57 : (size - 1)) :> int32))) then 
-                  (if ((C_56 : (heap + j).intM) <
-                        (C_55 : (heap + (C_54 : ((C_53 : (j + 1)) :> int32))).intM)) then 
-                  (C_52 : (j = (C_51 : ((C_50 : (j + 1)) :> int32)))) else ()) else ());
-                  (if (v >= (C_59 : (heap + j).intM)) then 
+               {  (_C_49 : (j = (_C_48 : ((_C_47 : ((_C_46 : ((_C_45 : 
+                                                              (2 *
+                                                                i_0)) :> int32)) +
+                                                     1)) :> int32))));
+                  (if (j < (_C_58 : ((_C_57 : (size - 1)) :> int32))) then 
+                  (if ((_C_56 : (heap + j).intM) <
+                        (_C_55 : (heap +
+                                   (_C_54 : ((_C_53 : (j + 1)) :> int32))).intM)) then 
+                  (_C_52 : (j = (_C_51 : ((_C_50 : (j + 1)) :> int32)))) else ()) else ());
+                  (if (v >= (_C_59 : (heap + j).intM)) then 
                   (goto while_0_break) else ());
-                  (C_62 : ((C_61 : (heap + i_0).intM) = (C_60 : (heap + j).intM)));
-                  (C_63 : (i_0 = j))
+                  (_C_62 : ((_C_61 : (heap + i_0).intM) = (_C_60 : (heap + j).intM)));
+                  (_C_63 : (i_0 = j))
                }
             }
          };
          (while_0_break : ());
-         (C_65 : ((C_64 : (heap + i_0).intM) = v))
+         (_C_65 : ((_C_64 : (heap + i_0).intM) = v))
       } else ());
       
       (return res)
@@ -1052,10 +1062,9 @@ let clear_ensures_default =
         and (JC_<somenum>: valid_heap(intP_heap_1_alloc_table))))) }
   (init:
   try
-   (C_1:
    begin
-     (let jessie_<somenum> = (size := (safe_int32_of_integer_ (0))) in void);
-    (raise Return); (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = (size := (safe_int32_of_integer_ (0))) in void);
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: (model(intP_intM_heap_1, size) = empty_bag)) }
 
 let clear_safety =
@@ -1066,10 +1075,9 @@ let clear_safety =
         and (JC_<somenum>: valid_heap(intP_heap_1_alloc_table))))) }
   (init:
   try
-   (C_1:
    begin
-     (let jessie_<somenum> = (size := (safe_int32_of_integer_ (0))) in void);
-    (raise Return); (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = (size := (safe_int32_of_integer_ (0))) in void);
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: is_heap_inv(intP_intM_heap_1, size))
     and ((JC_<somenum>: size_inv(size))
@@ -1087,12 +1095,10 @@ let max_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_30:
      begin
-       (let jessie_<somenum> =
-       (__retres := (C_29:
-                    ((safe_acc_ !intP_intM_heap_1) ((shift heap) (0))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+       (let _jessie_<somenum> =
+       (__retres := ((safe_acc_ !intP_intM_heap_1) ((shift heap) (0)))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     is_max_bag(model(intP_intM_heap_1, size), integer_of_int32(result))) }
@@ -1109,12 +1115,10 @@ let max_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_30:
      begin
-       (let jessie_<somenum> =
-       (__retres := (C_29:
-                    ((safe_acc_ !intP_intM_heap_1) ((shift heap) (0))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+       (let _jessie_<somenum> =
+       (__retres := ((safe_acc_ !intP_intM_heap_1) ((shift heap) (0)))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: is_heap_inv(intP_intM_heap_1, size))
@@ -1136,120 +1140,95 @@ let pop_ensures_default =
      (let v = ref (any_int32 void) in
      (let i_0 = ref (any_int32 void) in
      (let j = ref (any_int32 void) in
-     (C_34:
-     (C_37:
      begin
-       (let jessie_<somenum> =
-       (res := (C_33: ((safe_acc_ !intP_intM_heap_1) ((shift heap) (0))))) in
-       void);
-      (let jessie_<somenum> =
-      (size := (C_36:
-               (safe_int32_of_integer_ (C_35:
-                                       ((sub_int (integer_of_int32 !size)) (1)))))) in
+       (let _jessie_<somenum> =
+       (res := ((safe_acc_ !intP_intM_heap_1) ((shift heap) (0)))) in void);
+      (let _jessie_<somenum> =
+      (size := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !size)) (1)))) in
       void);
       (if ((neq_int_ (integer_of_int32 !size)) (0))
       then
        try
-        (C_39:
-        (C_40:
-        (loop_4:
         begin
-          (let jessie_<somenum> =
-          (v := (C_38:
-                ((safe_acc_ !intP_intM_heap_1) ((shift heap) (integer_of_int32 !size))))) in
+          (let _jessie_<somenum> =
+          (v := ((safe_acc_ !intP_intM_heap_1) ((shift heap) (integer_of_int32 !size)))) in
           void);
-         (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
-         while true do
-         { invariant
-             ((JC_<somenum>:
-              ((JC_<somenum>: le_int((0), integer_of_int32(i_0)))
-              and (JC_<somenum>:
-                  le_int(integer_of_int32(i_0), integer_of_int32(size)))))
-             and ((JC_<somenum>:
-                  ((size = size@loop_4)
-                  and (JC_<somenum>:
-                      not_assigns(intP_heap_1_alloc_table@loop_4,
-                      intP_intM_heap_1@loop_4, intP_intM_heap_1,
-                      pset_all(pset_singleton(heap))))))
-                 and (JC_<somenum>:
-                     not_assigns(intP_heap_1_alloc_table@init,
-                     intP_intM_heap_1@init, intP_intM_heap_1,
-                     pset_all(pset_singleton(heap))))))  }
-          begin
-            [ { } unit { true } ];
-           try
+         (let _jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
+         (loop_4:
+         begin
+           while true do
+           { invariant
+               ((JC_<somenum>:
+                ((JC_<somenum>: le_int((0), integer_of_int32(i_0)))
+                and (JC_<somenum>:
+                    le_int(integer_of_int32(i_0), integer_of_int32(size)))))
+               and ((JC_<somenum>:
+                    ((size = size@loop_4)
+                    and (JC_<somenum>:
+                        not_assigns(intP_heap_1_alloc_table@loop_4,
+                        intP_intM_heap_1@loop_4, intP_intM_heap_1,
+                        pset_all(pset_singleton(heap))))))
+                   and (JC_<somenum>:
+                       not_assigns(intP_heap_1_alloc_table@init,
+                       intP_intM_heap_1@init, intP_intM_heap_1,
+                       pset_all(pset_singleton(heap))))))  }
             begin
-              (let jessie_<somenum> =
-              (C_49:
-              (C_62:
-              (C_63:
+              [ { } unit { true } ];
+             try
               begin
-                (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 !size))
-                then void else (raise (Goto_while_0_break_exc void)));
-               (let jessie_<somenum> =
-               (j := (C_48:
-                     (safe_int32_of_integer_ (C_47:
-                                             ((add_int (integer_of_int32 
-                                                        (C_46:
-                                                        (safe_int32_of_integer_ 
-                                                         (C_45:
-                                                         ((mul_int (2)) 
-                                                          (integer_of_int32 !i_0))))))) (1)))))) in
-               void);
-               (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 
-                                                     (C_58:
-                                                     (safe_int32_of_integer_ 
-                                                      (C_57:
-                                                      ((sub_int (integer_of_int32 !size)) (1)))))))
-               then
-                (if ((lt_int_ (integer_of_int32 (C_56:
-                                                ((safe_acc_ !intP_intM_heap_1) 
-                                                 ((shift heap) (integer_of_int32 !j)))))) 
-                     (integer_of_int32 (C_55:
-                                       ((safe_acc_ !intP_intM_heap_1) 
-                                        ((shift heap) (integer_of_int32 
-                                                       (C_54:
+                (let _jessie_<somenum> =
+                begin
+                  (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 !size))
+                  then void else (raise (Goto_while_0_break_exc void)));
+                 (let _jessie_<somenum> =
+                 (j := (safe_int32_of_integer_ ((add_int (integer_of_int32 
+                                                          (safe_int32_of_integer_ 
+                                                           ((mul_int (2)) 
+                                                            (integer_of_int32 !i_0))))) (1)))) in
+                 void);
+                 (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 
                                                        (safe_int32_of_integer_ 
-                                                        (C_53:
-                                                        ((add_int (integer_of_int32 !j)) (1)))))))))))
-                then
-                 (let jessie_<somenum> =
-                 (C_52:
-                 (j := (C_51:
-                       (safe_int32_of_integer_ (C_50:
-                                               ((add_int (integer_of_int32 !j)) (1))))))) in
-                 void) else void) else void);
-               (if ((ge_int_ (integer_of_int32 !v)) (integer_of_int32 
-                                                     (C_59:
-                                                     ((safe_acc_ !intP_intM_heap_1) 
-                                                      ((shift heap) (integer_of_int32 !j))))))
-               then (raise (Goto_while_0_break_exc void)) else void);
-               (let jessie_<somenum> =
-               (let jessie_<somenum> =
-               (C_60:
-               ((safe_acc_ !intP_intM_heap_1) ((shift heap) (integer_of_int32 !j)))) in
-               (let jessie_<somenum> = heap in
-               (let jessie_<somenum> = (integer_of_int32 !i_0) in
-               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-               (((safe_upd_ intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>))))) in
-               void); (i_0 := !j); !i_0 end))) in void);
-             (raise (Loop_continue_exc void)) end with
-            Loop_continue_exc jessie_<somenum> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end))) with
-        Goto_while_0_break_exc jessie_<somenum> ->
-        (let jessie_<somenum> =
+                                                        ((sub_int (integer_of_int32 !size)) (1)))))
+                 then
+                  (if ((lt_int_ (integer_of_int32 ((safe_acc_ !intP_intM_heap_1) 
+                                                   ((shift heap) (integer_of_int32 !j))))) 
+                       (integer_of_int32 ((safe_acc_ !intP_intM_heap_1) 
+                                          ((shift heap) (integer_of_int32 
+                                                         (safe_int32_of_integer_ 
+                                                          ((add_int (integer_of_int32 !j)) (1))))))))
+                  then
+                   (let _jessie_<somenum> =
+                   (j := (safe_int32_of_integer_ ((add_int (integer_of_int32 !j)) (1)))) in
+                   void) else void) else void);
+                 (if ((ge_int_ (integer_of_int32 !v)) (integer_of_int32 
+                                                       ((safe_acc_ !intP_intM_heap_1) 
+                                                        ((shift heap) 
+                                                         (integer_of_int32 !j)))))
+                 then (raise (Goto_while_0_break_exc void)) else void);
+                 (let _jessie_<somenum> =
+                 (let _jessie_<somenum> =
+                 ((safe_acc_ !intP_intM_heap_1) ((shift heap) (integer_of_int32 !j))) in
+                 (let _jessie_<somenum> = heap in
+                 (let _jessie_<somenum> = (integer_of_int32 !i_0) in
+                 (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+                 (((safe_upd_ intP_intM_heap_1) _jessie_<somenum>) _jessie_<somenum>))))) in
+                 void); (i_0 := !j); !i_0 end in void);
+               (raise (Loop_continue_exc void)) end with
+              Loop_continue_exc _jessie_<somenum> -> void end end done;
+          (raise (Goto_while_0_break_exc void)) end) end with
+        Goto_while_0_break_exc _jessie_<somenum> ->
+        (let _jessie_<somenum> =
         (while_0_break:
         begin
           void;
-         (C_65:
-         (let jessie_<somenum> = !v in
-         (let jessie_<somenum> = heap in
-         (let jessie_<somenum> = (integer_of_int32 !i_0) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+         (let _jessie_<somenum> = !v in
+         (let _jessie_<somenum> = heap in
+         (let _jessie_<somenum> = (integer_of_int32 !i_0) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
          begin
-           (((safe_upd_ intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>); jessie_<somenum>
-         end))))) end) in void) end else void); (return := !res);
-      (raise Return) end)))))); absurd  end with Return -> !return end))
+           (((safe_upd_ intP_intM_heap_1) _jessie_<somenum>) _jessie_<somenum>);
+          _jessie_<somenum> end)))) end) in void) end else void); (return := !res);
+      (raise Return) end)))); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>:
@@ -1279,125 +1258,100 @@ let pop_safety =
      (let v = ref (any_int32 void) in
      (let i_0 = ref (any_int32 void) in
      (let j = ref (any_int32 void) in
-     (C_34:
-     (C_37:
      begin
-       (let jessie_<somenum> =
-       (res := (C_33: ((safe_acc_ !intP_intM_heap_1) ((shift heap) (0))))) in
-       void);
-      (let jessie_<somenum> =
-      (size := (C_36:
-               (JC_<somenum>:
-               (int32_of_integer_ (C_35:
-                                  ((sub_int (integer_of_int32 !size)) (1))))))) in
+       (let _jessie_<somenum> =
+       (res := ((safe_acc_ !intP_intM_heap_1) ((shift heap) (0)))) in void);
+      (let _jessie_<somenum> =
+      (size := (JC_<somenum>:
+               (int32_of_integer_ ((sub_int (integer_of_int32 !size)) (1))))) in
       void);
       (if ((neq_int_ (integer_of_int32 !size)) (0))
       then
        try
-        (C_39:
-        (C_40:
-        (loop_3:
         begin
-          (let jessie_<somenum> =
-          (v := (C_38:
-                (JC_<somenum>:
+          (let _jessie_<somenum> =
+          (v := (JC_<somenum>:
                 ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
-                 (integer_of_int32 !size))))) in void);
-         (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
-         while true do
-         { invariant (JC_<somenum>: true)
-           variant (JC_<somenum> : sub_int(integer_of_int32(size),
-                             integer_of_int32(i_0))) }
-          begin
-            [ { } unit reads i_0,size
-              { (JC_<somenum>:
-                ((JC_<somenum>: le_int((0), integer_of_int32(i_0)))
-                and (JC_<somenum>:
-                    le_int(integer_of_int32(i_0), integer_of_int32(size))))) } ];
-           try
+                 (integer_of_int32 !size)))) in void);
+         (let _jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
+         (loop_3:
+         begin
+           while true do
+           { invariant (JC_<somenum>: true)
+             variant (JC_<somenum> : sub_int(integer_of_int32(size),
+                               integer_of_int32(i_0))) }
             begin
-              (let jessie_<somenum> =
-              (C_49:
-              (C_62:
-              (C_63:
+              [ { } unit reads i_0,size
+                { (JC_<somenum>:
+                  ((JC_<somenum>: le_int((0), integer_of_int32(i_0)))
+                  and (JC_<somenum>:
+                      le_int(integer_of_int32(i_0), integer_of_int32(size))))) } ];
+             try
               begin
-                (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 !size))
-                then void else (raise (Goto_while_0_break_exc void)));
-               (let jessie_<somenum> =
-               (j := (C_48:
-                     (JC_<somenum>:
-                     (int32_of_integer_ (C_47:
-                                        ((add_int (integer_of_int32 (C_46:
-                                                                    (JC_<somenum>:
-                                                                    (int32_of_integer_ 
-                                                                    (C_45:
-                                                                    ((mul_int (2)) 
-                                                                    (integer_of_int32 !i_0)))))))) (1))))))) in
-               void);
-               (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 
-                                                     (C_58:
+                (let _jessie_<somenum> =
+                begin
+                  (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 !size))
+                  then void else (raise (Goto_while_0_break_exc void)));
+                 (let _jessie_<somenum> =
+                 (j := (JC_<somenum>:
+                       (int32_of_integer_ ((add_int (integer_of_int32 
                                                      (JC_<somenum>:
                                                      (int32_of_integer_ 
-                                                      (C_57:
-                                                      ((sub_int (integer_of_int32 !size)) (1))))))))
-               then
-                (if ((lt_int_ (integer_of_int32 (C_56:
-                                                (JC_<somenum>:
-                                                ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
-                                                 (integer_of_int32 !j)))))) 
-                     (integer_of_int32 (C_55:
-                                       (JC_<somenum>:
-                                       ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
-                                        (integer_of_int32 (C_54:
-                                                          (JC_<somenum>:
-                                                          (int32_of_integer_ 
-                                                           (C_53:
-                                                           ((add_int 
-                                                             (integer_of_int32 !j)) (1))))))))))))
-                then
-                 (let jessie_<somenum> =
-                 (C_52:
-                 (j := (C_51:
-                       (JC_<somenum>:
-                       (int32_of_integer_ (C_50:
-                                          ((add_int (integer_of_int32 !j)) (1)))))))) in
-                 void) else void) else void);
-               (if ((ge_int_ (integer_of_int32 !v)) (integer_of_int32 
-                                                     (C_59:
-                                                     (JC_<somenum>:
-                                                     ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
-                                                      (integer_of_int32 !j))))))
-               then (raise (Goto_while_0_break_exc void)) else void);
-               (let jessie_<somenum> =
-               (let jessie_<somenum> =
-               (C_60:
-               (JC_<somenum>:
-               ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
-                (integer_of_int32 !j)))) in
-               (let jessie_<somenum> = heap in
-               (let jessie_<somenum> = (integer_of_int32 !i_0) in
-               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-               (JC_<somenum>:
-               (((((offset_upd_ !intP_heap_1_alloc_table) intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
-               void); (i_0 := !j); !i_0 end))) in void);
-             (raise (Loop_continue_exc void)) end with
-            Loop_continue_exc jessie_<somenum> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end))) with
-        Goto_while_0_break_exc jessie_<somenum> ->
-        (let jessie_<somenum> =
+                                                      ((mul_int (2)) 
+                                                       (integer_of_int32 !i_0)))))) (1))))) in
+                 void);
+                 (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 
+                                                       (JC_<somenum>:
+                                                       (int32_of_integer_ 
+                                                        ((sub_int (integer_of_int32 !size)) (1))))))
+                 then
+                  (if ((lt_int_ (integer_of_int32 (JC_<somenum>:
+                                                  ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
+                                                   (integer_of_int32 !j))))) 
+                       (integer_of_int32 (JC_<somenum>:
+                                         ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
+                                          (integer_of_int32 (JC_<somenum>:
+                                                            (int32_of_integer_ 
+                                                             ((add_int 
+                                                               (integer_of_int32 !j)) (1)))))))))
+                  then
+                   (let _jessie_<somenum> =
+                   (j := (JC_<somenum>:
+                         (int32_of_integer_ ((add_int (integer_of_int32 !j)) (1))))) in
+                   void) else void) else void);
+                 (if ((ge_int_ (integer_of_int32 !v)) (integer_of_int32 
+                                                       (JC_<somenum>:
+                                                       ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
+                                                        (integer_of_int32 !j)))))
+                 then (raise (Goto_while_0_break_exc void)) else void);
+                 (let _jessie_<somenum> =
+                 (let _jessie_<somenum> =
+                 (JC_<somenum>:
+                 ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
+                  (integer_of_int32 !j))) in
+                 (let _jessie_<somenum> = heap in
+                 (let _jessie_<somenum> = (integer_of_int32 !i_0) in
+                 (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+                 (JC_<somenum>:
+                 (((((offset_upd_ !intP_heap_1_alloc_table) intP_intM_heap_1) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
+                 void); (i_0 := !j); !i_0 end in void);
+               (raise (Loop_continue_exc void)) end with
+              Loop_continue_exc _jessie_<somenum> -> void end end done;
+          (raise (Goto_while_0_break_exc void)) end) end with
+        Goto_while_0_break_exc _jessie_<somenum> ->
+        (let _jessie_<somenum> =
         (while_0_break:
         begin
           void;
-         (C_65:
-         (let jessie_<somenum> = !v in
-         (let jessie_<somenum> = heap in
-         (let jessie_<somenum> = (integer_of_int32 !i_0) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+         (let _jessie_<somenum> = !v in
+         (let _jessie_<somenum> = heap in
+         (let _jessie_<somenum> = (integer_of_int32 !i_0) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
          (JC_<somenum>:
          begin
-           (((((offset_upd_ !intP_heap_1_alloc_table) intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>);
-          jessie_<somenum> end)))))) end) in void) end else void); (return := !res);
-      (raise Return) end)))))); absurd  end with Return -> !return end))
+           (((((offset_upd_ !intP_heap_1_alloc_table) intP_intM_heap_1) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>);
+          _jessie_<somenum> end))))) end) in void) end else void); (return := !res);
+      (raise Return) end)))); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: is_heap_inv(intP_intM_heap_1, size))
     and ((JC_<somenum>: size_inv(size))
@@ -1417,100 +1371,89 @@ let push_ensures_default =
      (let parent = ref (any_int32 void) in
      (let p = ref (any_int32 void) in
      try
-      (C_3:
-      (loop_2:
       begin
-        (let jessie_<somenum> = (i := !size) in void);
-       while true do
-       { invariant
-           ((JC_<somenum>:
-            ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-            and ((JC_<somenum>: le_int(integer_of_int32(i), integer_of_int32(size)))
-                and ((JC_<somenum>:
-                     ((integer_of_int32(i) = integer_of_int32(size)) ->
-                      (is_heap(tree_of_array(shift(heap, (0)), (0),
-                               integer_of_int32(size), intP_intM_heap_1))
-                      and (model(intP_intM_heap_1, size) = model(intP_intM_heap_1@init,
-                                                           size@init)))))
-                    and (JC_<somenum>:
-                        (lt_int(integer_of_int32(i), integer_of_int32(size)) ->
-                         (is_heap(tree_of_array(shift(heap, (0)), (0),
-                                  add_int(integer_of_int32(size), (1)),
-                                  intP_intM_heap_1))
-                         and (bag_of_tree(tree_of_array(shift(heap, (0)),
-                                          (0),
-                                          add_int(integer_of_int32(size),
-                                          (1)), intP_intM_heap_1)) = 
-                             add_bag(integer_of_int32(select(intP_intM_heap_1,
-                                                      shift(heap,
-                                                      integer_of_int32(i)))),
-                             model(intP_intM_heap_1@init, size@init))))))))))
-           and ((JC_<somenum>:
-                ((size = size@loop_2)
-                and (JC_<somenum>:
-                    not_assigns(intP_heap_1_alloc_table@loop_2,
-                    intP_intM_heap_1@loop_2, intP_intM_heap_1,
-                    pset_all(pset_singleton(heap))))))
-               and (JC_<somenum>:
-                   not_assigns(intP_heap_1_alloc_table@init,
-                   intP_intM_heap_1@init, intP_intM_heap_1,
-                   pset_all(pset_singleton(heap))))))  }
-        begin
-          [ { } unit { true } ];
-         try
+        (let _jessie_<somenum> = (i := !size) in void);
+       (loop_2:
+       begin
+         while true do
+         { invariant
+             ((JC_<somenum>:
+              ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+              and ((JC_<somenum>:
+                   le_int(integer_of_int32(i), integer_of_int32(size)))
+                  and ((JC_<somenum>:
+                       ((integer_of_int32(i) = integer_of_int32(size)) ->
+                        (is_heap(tree_of_array(shift(heap, (0)), (0),
+                                 integer_of_int32(size), intP_intM_heap_1))
+                        and (model(intP_intM_heap_1, size) = model(intP_intM_heap_1@init,
+                                                             size@init)))))
+                      and (JC_<somenum>:
+                          (lt_int(integer_of_int32(i),
+                           integer_of_int32(size)) ->
+                           (is_heap(tree_of_array(shift(heap, (0)), (0),
+                                    add_int(integer_of_int32(size), (1)),
+                                    intP_intM_heap_1))
+                           and (bag_of_tree(tree_of_array(shift(heap, (0)),
+                                            (0),
+                                            add_int(integer_of_int32(size),
+                                            (1)), intP_intM_heap_1)) = 
+                               add_bag(integer_of_int32(select(intP_intM_heap_1,
+                                                        shift(heap,
+                                                        integer_of_int32(i)))),
+                               model(intP_intM_heap_1@init, size@init))))))))))
+             and ((JC_<somenum>:
+                  ((size = size@loop_2)
+                  and (JC_<somenum>:
+                      not_assigns(intP_heap_1_alloc_table@loop_2,
+                      intP_intM_heap_1@loop_2, intP_intM_heap_1,
+                      pset_all(pset_singleton(heap))))))
+                 and (JC_<somenum>:
+                     not_assigns(intP_heap_1_alloc_table@init,
+                     intP_intM_heap_1@init, intP_intM_heap_1,
+                     pset_all(pset_singleton(heap))))))  }
           begin
-            (let jessie_<somenum> =
-            (C_16:
-            (C_18:
-            (C_20:
-            (C_21:
+            [ { } unit { true } ];
+           try
             begin
-              (if ((gt_int_ (integer_of_int32 !i)) (0)) then void
-              else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<somenum> =
-             (parent := (C_15:
-                        (safe_int32_of_integer_ (C_14:
-                                                (JC_<somenum>:
-                                                ((computer_div (integer_of_int32 
-                                                                (C_13:
-                                                                (safe_int32_of_integer_ 
-                                                                 (C_12:
-                                                                 ((sub_int 
-                                                                   (integer_of_int32 !i)) (1))))))) (2))))))) in
-             void);
-             (let jessie_<somenum> =
-             (p := (C_17:
-                   ((safe_acc_ !intP_intM_heap_1) ((shift heap) (integer_of_int32 !parent))))) in
-             void);
-             (if ((ge_int_ (integer_of_int32 !p)) (integer_of_int32 x_3))
-             then (raise (Goto_while_0_break_exc void)) else void);
-             (let jessie_<somenum> =
-             (let jessie_<somenum> = !p in
-             (let jessie_<somenum> = heap in
-             (let jessie_<somenum> = (integer_of_int32 !i) in
-             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-             (((safe_upd_ intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>))))) in
-             void); (i := !parent); !i end)))) in void);
-           (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done;
-       (raise (Goto_while_0_break_exc void)) end)) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+              (let _jessie_<somenum> =
+              begin
+                (if ((gt_int_ (integer_of_int32 !i)) (0)) then void
+                else (raise (Goto_while_0_break_exc void)));
+               (let _jessie_<somenum> =
+               (parent := (safe_int32_of_integer_ (JC_<somenum>:
+                                                  ((computer_div (integer_of_int32 
+                                                                  (safe_int32_of_integer_ 
+                                                                   ((sub_int 
+                                                                    (integer_of_int32 !i)) (1))))) (2))))) in
+               void);
+               (let _jessie_<somenum> =
+               (p := ((safe_acc_ !intP_intM_heap_1) ((shift heap) (integer_of_int32 !parent)))) in
+               void);
+               (if ((ge_int_ (integer_of_int32 !p)) (integer_of_int32 x_3))
+               then (raise (Goto_while_0_break_exc void)) else void);
+               (let _jessie_<somenum> =
+               (let _jessie_<somenum> = !p in
+               (let _jessie_<somenum> = heap in
+               (let _jessie_<somenum> = (integer_of_int32 !i) in
+               (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+               (((safe_upd_ intP_intM_heap_1) _jessie_<somenum>) _jessie_<somenum>))))) in
+               void); (i := !parent); !i end in void);
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
+      Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break:
-      (C_23:
-      (C_26:
       begin
         void;
-       (let jessie_<somenum> =
-       (let jessie_<somenum> = x_3 in
-       (let jessie_<somenum> = heap in
-       (let jessie_<somenum> = (integer_of_int32 !i) in
-       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-       (((safe_upd_ intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>))))) in void);
-       (let jessie_<somenum> =
-       (size := (C_25:
-                (safe_int32_of_integer_ (C_24:
-                                        ((add_int (integer_of_int32 !size)) (1)))))) in
-       void); (raise Return) end))) end))); (raise Return) end with Return ->
+       (let _jessie_<somenum> =
+       (let _jessie_<somenum> = x_3 in
+       (let _jessie_<somenum> = heap in
+       (let _jessie_<somenum> = (integer_of_int32 !i) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+       (((safe_upd_ intP_intM_heap_1) _jessie_<somenum>) _jessie_<somenum>))))) in void);
+       (let _jessie_<somenum> =
+       (size := (safe_int32_of_integer_ ((add_int (integer_of_int32 !size)) (1)))) in
+       void); (raise Return) end) end))); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
@@ -1534,99 +1477,86 @@ let push_safety =
      (let parent = ref (any_int32 void) in
      (let p = ref (any_int32 void) in
      try
-      (C_3:
-      (loop_1:
       begin
-        (let jessie_<somenum> = (i := !size) in void);
-       while true do
-       { invariant (JC_<somenum>: true) variant integer_of_int32((JC_<somenum> : i)) }
-        begin
-          [ { } unit reads i,intP_intM_heap_1,size
-            { (JC_<somenum>:
-              ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-              and ((JC_<somenum>:
-                   le_int(integer_of_int32(i), integer_of_int32(size)))
-                  and ((JC_<somenum>:
-                       ((integer_of_int32(i) = integer_of_int32(size)) ->
-                        (is_heap(tree_of_array(shift(heap, (0)), (0),
-                                 integer_of_int32(size), intP_intM_heap_1))
-                        and (model(intP_intM_heap_1, size) = model(intP_intM_heap_1@init,
-                                                             size@init)))))
-                      and (JC_<somenum>:
-                          (lt_int(integer_of_int32(i),
-                           integer_of_int32(size)) ->
-                           (is_heap(tree_of_array(shift(heap, (0)), (0),
-                                    add_int(integer_of_int32(size), (1)),
-                                    intP_intM_heap_1))
-                           and (bag_of_tree(tree_of_array(shift(heap, (0)),
-                                            (0),
-                                            add_int(integer_of_int32(size),
-                                            (1)), intP_intM_heap_1)) = 
-                               add_bag(integer_of_int32(select(intP_intM_heap_1,
-                                                        shift(heap,
-                                                        integer_of_int32(i)))),
-                               model(intP_intM_heap_1@init, size@init)))))))))) } ];
-         try
+        (let _jessie_<somenum> = (i := !size) in void);
+       (loop_1:
+       begin
+         while true do
+         { invariant (JC_<somenum>: true) variant integer_of_int32((JC_<somenum> : i)) }
           begin
-            (let jessie_<somenum> =
-            (C_16:
-            (C_18:
-            (C_20:
-            (C_21:
+            [ { } unit reads i,intP_intM_heap_1,size
+              { (JC_<somenum>:
+                ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                and ((JC_<somenum>:
+                     le_int(integer_of_int32(i), integer_of_int32(size)))
+                    and ((JC_<somenum>:
+                         ((integer_of_int32(i) = integer_of_int32(size)) ->
+                          (is_heap(tree_of_array(shift(heap, (0)), (0),
+                                   integer_of_int32(size), intP_intM_heap_1))
+                          and (model(intP_intM_heap_1, size) = model(intP_intM_heap_1@init,
+                                                               size@init)))))
+                        and (JC_<somenum>:
+                            (lt_int(integer_of_int32(i),
+                             integer_of_int32(size)) ->
+                             (is_heap(tree_of_array(shift(heap, (0)), (0),
+                                      add_int(integer_of_int32(size), (1)),
+                                      intP_intM_heap_1))
+                             and (bag_of_tree(tree_of_array(shift(heap, (0)),
+                                              (0),
+                                              add_int(integer_of_int32(size),
+                                              (1)), intP_intM_heap_1)) = 
+                                 add_bag(integer_of_int32(select(intP_intM_heap_1,
+                                                          shift(heap,
+                                                          integer_of_int32(i)))),
+                                 model(intP_intM_heap_1@init, size@init)))))))))) } ];
+           try
             begin
-              (if ((gt_int_ (integer_of_int32 !i)) (0)) then void
-              else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<somenum> =
-             (parent := (C_15:
-                        (JC_<somenum>:
-                        (int32_of_integer_ (C_14:
-                                           (JC_<somenum>:
-                                           ((computer_div_ (integer_of_int32 
-                                                            (C_13:
-                                                            (JC_<somenum>:
-                                                            (int32_of_integer_ 
-                                                             (C_12:
-                                                             ((sub_int 
-                                                               (integer_of_int32 !i)) (1)))))))) (2)))))))) in
-             void);
-             (let jessie_<somenum> =
-             (p := (C_17:
-                   (JC_<somenum>:
-                   ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
-                    (integer_of_int32 !parent))))) in void);
-             (if ((ge_int_ (integer_of_int32 !p)) (integer_of_int32 x_3))
-             then (raise (Goto_while_0_break_exc void)) else void);
-             (let jessie_<somenum> =
-             (let jessie_<somenum> = !p in
-             (let jessie_<somenum> = heap in
-             (let jessie_<somenum> = (integer_of_int32 !i) in
-             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-             (JC_<somenum>:
-             (((((offset_upd_ !intP_heap_1_alloc_table) intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
-             void); (i := !parent); !i end)))) in void);
-           (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done;
-       (raise (Goto_while_0_break_exc void)) end)) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+              (let _jessie_<somenum> =
+              begin
+                (if ((gt_int_ (integer_of_int32 !i)) (0)) then void
+                else (raise (Goto_while_0_break_exc void)));
+               (let _jessie_<somenum> =
+               (parent := (JC_<somenum>:
+                          (int32_of_integer_ (JC_<somenum>:
+                                             ((computer_div_ (integer_of_int32 
+                                                              (JC_<somenum>:
+                                                              (int32_of_integer_ 
+                                                               ((sub_int 
+                                                                 (integer_of_int32 !i)) (1)))))) (2)))))) in
+               void);
+               (let _jessie_<somenum> =
+               (p := (JC_<somenum>:
+                     ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
+                      (integer_of_int32 !parent)))) in void);
+               (if ((ge_int_ (integer_of_int32 !p)) (integer_of_int32 x_3))
+               then (raise (Goto_while_0_break_exc void)) else void);
+               (let _jessie_<somenum> =
+               (let _jessie_<somenum> = !p in
+               (let _jessie_<somenum> = heap in
+               (let _jessie_<somenum> = (integer_of_int32 !i) in
+               (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+               (JC_<somenum>:
+               (((((offset_upd_ !intP_heap_1_alloc_table) intP_intM_heap_1) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
+               void); (i := !parent); !i end in void);
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
+      Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break:
-      (C_23:
-      (C_26:
       begin
         void;
-       (let jessie_<somenum> =
-       (let jessie_<somenum> = x_3 in
-       (let jessie_<somenum> = heap in
-       (let jessie_<somenum> = (integer_of_int32 !i) in
-       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+       (let _jessie_<somenum> =
+       (let _jessie_<somenum> = x_3 in
+       (let _jessie_<somenum> = heap in
+       (let _jessie_<somenum> = (integer_of_int32 !i) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
        (JC_<somenum>:
-       (((((offset_upd_ !intP_heap_1_alloc_table) intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+       (((((offset_upd_ !intP_heap_1_alloc_table) intP_intM_heap_1) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
        void);
-       (let jessie_<somenum> =
-       (size := (C_25:
-                (JC_<somenum>:
-                (int32_of_integer_ (C_24:
-                                   ((add_int (integer_of_int32 !size)) (1))))))) in
-       void); (raise Return) end))) end))); (raise Return) end with Return ->
+       (let _jessie_<somenum> =
+       (size := (JC_<somenum>:
+                (int32_of_integer_ ((add_int (integer_of_int32 !size)) (1))))) in
+       void); (raise Return) end) end))); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
     ((JC_<somenum>: is_heap_inv(intP_intM_heap_1, size))
@@ -1671,11 +1601,11 @@ why --project [...] why/heap.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po58.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "203" begin = "6" end = "1615"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "203" begin = "6" end = "1890"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po59.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "203" begin = "6" end = "1615"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "203" begin = "6" end = "1890"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po60.why">
@@ -1703,11 +1633,11 @@ why --project [...] why/heap.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po66.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "203" begin = "6" end = "1615"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "203" begin = "6" end = "1890"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po67.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "203" begin = "6" end = "1615"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "203" begin = "6" end = "1890"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po68.why">
@@ -1756,30 +1686,30 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po77.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "232" begin = "24" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "236" begin = "25" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po78.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "232" begin = "24" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "236" begin = "25" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po79.why">
-      <location file = "why/heap.why" line = "1219" begin = "41" end = "70"/>
+      <location file = "why/heap.why" line = "1152" begin = "43" end = "72"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po80.why">
-      <location file = "why/heap.why" line = "1219" begin = "41" end = "70"/>
+      <location file = "why/heap.why" line = "1152" begin = "43" end = "72"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po81.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "238" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "242" begin = "16" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po82.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "238" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "242" begin = "16" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1819,11 +1749,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po12.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1107"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "287" begin = "9" end = "1327"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po13.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1107"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "287" begin = "9" end = "1327"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po14.why">
@@ -1835,11 +1765,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po16.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1107"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "287" begin = "9" end = "1327"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po17.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1107"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "287" begin = "9" end = "1327"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po18.why">
@@ -1971,12 +1901,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po44.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "303" begin = "27" end = "80"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "311" begin = "28" end = "83"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po45.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "303" begin = "27" end = "80"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "311" begin = "28" end = "83"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1989,12 +1919,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po48.why">
-      <location file = "why/heap.why" line = "1075" begin = "12" end = "103"/>
+      <location file = "why/heap.why" line = "1019" begin = "12" end = "106"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/heap_po49.why">
-      <location file = "why/heap.why" line = "1075" begin = "12" end = "103"/>
+      <location file = "why/heap.why" line = "1019" begin = "12" end = "106"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

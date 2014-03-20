@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
   name="Z3"
@@ -35,10 +35,12 @@
     locfile="../PreAndOld.java"
     loclnum="46" loccnumb="8" loccnume="9"
     expl="VC for _PreAndOld_g_ensures_default"
-    sum="509986485fc0a7a0e2df82289544f0ed"
+    sum="3cd8364b242c6166383852d17ff67faf"
     proved="true"
     expanded="true"
-    shape="ainfix =V5afV1V2Aainfix =V5afV1V2Aainfix =V5afV1V2Iainfix =V5ainfix +V1V2FIainfix =V4c12FIavalid_struct_PreAndOldV0c0c0V3FF">
+    shape="ainfix =V5afV1V2Iainfix =V5ainfix +V1V2FIainfix =V4c12FIavalid_struct_PreAndOldV0c0c0V3FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method g, default behavior"/>
     <label
@@ -73,7 +75,7 @@
     locfile="../PreAndOld.java"
     loclnum="46" loccnumb="8" loccnume="9"
     expl="VC for _PreAndOld_g_safety"
-    sum="53975606997ae606a41aa71102a13708"
+    sum="5fb41dcdd56da42d977d2fad7141f319"
     proved="true"
     expanded="true"
     shape="t">
@@ -108,13 +110,15 @@
    </goal>
    <goal
     name="WP_parameter cons_PreAndOld_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_PreAndOld_ensures_default"
-    sum="53975606997ae606a41aa71102a13708"
+    sum="5fb41dcdd56da42d977d2fad7141f319"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class PreAndOld, default behavior"/>
     <label
@@ -146,10 +150,10 @@
    </goal>
    <goal
     name="WP_parameter cons_PreAndOld_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_PreAndOld_safety"
-    sum="53975606997ae606a41aa71102a13708"
+    sum="5fb41dcdd56da42d977d2fad7141f319"
     proved="true"
     expanded="true"
     shape="t">

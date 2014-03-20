@@ -1,8 +1,8 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0303.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0303.c"
-bts0303.c:28:[kernel] warning: Variable-sized local variable a
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0303.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0303.c"
+PPCHOME/tests/jessie/bts0303.c:28:[kernel] warning: Variable-sized local variable a
 [jessie] Starting Jessie translation
-[kernel] warning: Neither code nor specification for function __builtin_alloca, generating default assigns from the prototype
+PPCHOME/tests/jessie/bts0303.c:26:[kernel] warning: Neither code nor specification for function __builtin_alloca, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir bts0303.jessie
 [jessie] File bts0303.jessie/bts0303.jc written.
 [jessie] File bts0303.jessie/bts0303.cloc written.
@@ -52,25 +52,25 @@ type voidP = [voidP]
 charP[..] __builtin_alloca(uint32 unnamed)
 behavior default:
   assigns \nothing;
-  ensures (C_1 : true);
+  ensures (_C_1 : true);
 ;
 
 unit Swap(intP[..] p, intP[..] q)
-  requires (C_12 : (((C_14 : (\offset_min(p) <= 0)) &&
-                      (C_15 : (\offset_max(p) >= 0))) &&
-                     ((C_17 : (\offset_min(q) <= 0)) &&
-                       (C_18 : (\offset_max(q) >= 0)))));
+  requires (_C_12 : (((_C_14 : (\offset_min(p) <= 0)) &&
+                       (_C_15 : (\offset_max(p) >= 0))) &&
+                      ((_C_17 : (\offset_min(q) <= 0)) &&
+                        (_C_18 : (\offset_max(q) >= 0)))));
 behavior default:
   assigns p.intM,
   q.intM;
-  ensures (C_9 : ((C_10 : (\at(p,Old).intM == \at(q.intM,Old))) &&
-                   (C_11 : (\at(q,Old).intM == \at(p.intM,Old)))));
+  ensures (_C_9 : ((_C_10 : (\at(p,Old).intM == \at(q.intM,Old))) &&
+                    (_C_11 : (\at(q,Old).intM == \at(p.intM,Old)))));
 {  
    (var int32 temp);
    
-   {  (C_3 : (temp = (C_2 : p.intM)));
-      (C_6 : ((C_5 : p.intM) = (C_4 : q.intM)));
-      (C_8 : ((C_7 : q.intM) = temp));
+   {  (_C_3 : (temp = (_C_2 : p.intM)));
+      (_C_6 : ((_C_5 : p.intM) = (_C_4 : q.intM)));
+      (_C_8 : ((_C_7 : q.intM) = temp));
       
       (return ())
    }
@@ -78,7 +78,7 @@ behavior default:
 
 unit Foo()
 behavior default:
-  ensures (C_42 : true);
+  ensures (_C_42 : true);
 {  
    (var int32 n_1);
    
@@ -88,26 +88,27 @@ behavior default:
    
    (var int32 i);
    
-   {  (C_19 : (n_1 = 10));
+   {  (_C_19 : (n_1 = 10));
       
-      {  (C_21 : (__lengthofa = (C_20 : (n_1 :> uint32))));
-         (C_27 : (let __cil_tmp =
-                 (C_24 : __builtin_alloca((C_23 : ((C_22 : (4 * __lengthofa)) :> uint32))))
-                 in (C_26 : (a = (C_25 : (__cil_tmp :> intP[..]))))))
+      {  (_C_21 : (__lengthofa = (_C_20 : (n_1 :> uint32))));
+         (_C_27 : (let __cil_tmp =
+                  (_C_24 : __builtin_alloca((_C_23 : ((_C_22 : (4 *
+                                                                 __lengthofa)) :> uint32))))
+                  in (_C_26 : (a = (_C_25 : (__cil_tmp :> intP[..]))))))
       };
-      (C_28 : (i = 0));
+      (_C_28 : (i = 0));
       
       loop 
       while (true)
       {  
          {  (if (i < n_1) then () else 
             (goto while_0_break));
-            (C_31 : ((C_30 : (C_29 : (a + i)).intM) = 0));
-            (C_34 : (i = (C_33 : ((C_32 : (i + 1)) :> int32))))
+            (_C_31 : ((_C_30 : (_C_29 : (a + i)).intM) = 0));
+            (_C_34 : (i = (_C_33 : ((_C_32 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
-      (C_35 : (i = 1));
+      (_C_35 : (i = 1));
       
       loop 
       behavior default:
@@ -117,8 +118,8 @@ behavior default:
       {  
          {  (if (i < n_1) then () else 
             (goto while_1_break));
-            (C_38 : Swap((C_36 : (a + i)), (C_37 : (a + 0))));
-            (C_41 : (i = (C_40 : ((C_39 : (i + 1)) :> int32))))
+            (_C_38 : Swap((_C_36 : (a + i)), (_C_37 : (a + 0))));
+            (_C_41 : (i = (_C_40 : ((_C_39 : (i + 1)) :> int32))))
          }
       };
       (while_1_break : ());

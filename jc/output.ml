@@ -2,21 +2,21 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2011                                               *)
+(*  Copyright (C) 2002-2014                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
-(*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
-(*    Yannick MOY, Univ. Paris-sud 11                                     *)
-(*    Romain BARDOU, Univ. Paris-sud 11                                   *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud                   *)
+(*    Claude MARCHE, INRIA & Univ. Paris-sud                              *)
+(*    Yannick MOY, Univ. Paris-sud                                        *)
+(*    Romain BARDOU, Univ. Paris-sud                                      *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
-(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
-(*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
-(*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
-(*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
-(*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  *)
-(*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       *)
+(*    Thierry HUBERT, Univ. Paris-sud  (former Caduceus front-end)        *)
+(*    Nicolas ROUSSET, Univ. Paris-sud (on Jessie & Krakatoa)             *)
+(*    Ali AYAD, CNRS & CEA Saclay      (floating-point support)           *)
+(*    Sylvie BOLDO, INRIA              (floating-point support)           *)
+(*    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     *)
+(*    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Lesser General Public            *)
@@ -164,6 +164,7 @@ let why3ident s =
     | "abs_int" -> "AbsInt.abs"
     | "abs_real" -> "AbsReal.abs"
     | "sqrt_real" -> "Square.sqrt"
+    | "pow_int" -> "Power.power"
     | "pow_real" -> "PowerReal.pow"
     | "pow_real_int" -> "PowerInt.power"
     | "exp" -> "ExpLog.exp"
@@ -228,6 +229,7 @@ let why3_reals = ref false
 let why3_FromInt = ref false
 let why3_Truncate = ref false
 let why3_Square = ref false
+let why3_Power = ref false
 let why3_PowerInt = ref false
 let why3_PowerReal = ref false
 let why3_RealMinMax = ref false
@@ -248,11 +250,12 @@ let compute_why3_dependencies f =
     | "mul_real"
     | "div_real" -> why3_reals := true
     | "sqrt_real" -> why3_Square := true
+    | "pow_int" -> why3_Power := true
     | "pow_real_int" -> why3_PowerInt := true
     | "pow_real" -> why3_PowerReal := true
     | "real_of_int" -> why3_FromInt := true
     | "truncate_real_to_int" -> why3_Truncate := true
-    | "real_min" 
+    | "real_min"
     | "real_max" -> why3_RealMinMax := true
     | "abs_int" -> why3_AbsInt := true
     | "abs_real" -> why3_AbsReal := true
@@ -440,7 +443,7 @@ let add_why3_local id = Hashtbl.add why3_locals id ()
 
 let () = add_why3_local "result"
 
-let remove_why3_local id = Hashtbl.remove why3_locals id 
+let remove_why3_local id = Hashtbl.remove why3_locals id
 
 type logic_type =
     { logic_type_name : string;
@@ -676,7 +679,7 @@ let rec fprintf_term form t =
       else
         fprintf form "(%s : %a)" lab fprintf_term t
   | TIf(t1,t2,t3) ->
-    if !why3syntax then 
+    if !why3syntax then
       let f = bool_to_prop t1 in
       fprintf form "@[<hov 1>(if %a@ then %a@ else %a)@]"
         fprintf_assertion f fprintf_term t2 fprintf_term t3
@@ -955,7 +958,7 @@ type expr_node =
       (int * bool * bool * string) list
   | Let of string * expr * expr
   | Let_ref of string * expr * expr
- (* optionnaly give the return type to enforce *)
+ (* optionaly give the return type to enforce *)
   | App of expr * expr * why_type option
   | Raise of string * expr option
   | Try of expr * string * string option * expr
@@ -970,11 +973,12 @@ type expr_node =
 
 and expr =
     { expr_labels : string list;
+      expr_loc_labels : string list;
       expr_node : expr_node;
     }
 ;;
 
-let mk_expr e = { expr_labels = []; expr_node = e }
+let mk_expr e = { expr_labels = []; expr_loc_labels = []; expr_node = e }
 let mk_var s = mk_expr (Var s)
 let void = mk_expr Void
 
@@ -1038,7 +1042,7 @@ let fprintf_variant form = function
       else
         fprintf form "variant %a for %s" fprintf_term t r
 
-let rec fprintf_expr_node form e =
+let rec fprintf_expr_node in_app form e =
   match e with
     | Cte(c) -> fprintf_constant form c
     | Var(id) ->
@@ -1104,8 +1108,13 @@ let rec fprintf_expr_node form e =
         when !why3syntax && is_why3_poly_neq id ->
 	fprintf form "@[<hov 1>(%a <> %a)@]" fprintf_expr e1 fprintf_expr e2
     | App(e1,e2,ty) when !why3syntax ->
-	fprintf form "@[<hov 1>(%a %a%a)@]" fprintf_expr e1 fprintf_expr e2
-          (Pp.print_option (fprintf_type ~need_colon:true false)) ty
+        if in_app then
+	  fprintf form "@[<hov 1>%a %a@]"
+            (fprintf_expr_gen true) e1 fprintf_expr e2
+        else
+	  fprintf form "@[<hov 1>(%a %a%a)@]"
+            (fprintf_expr_gen true) e1 fprintf_expr e2
+            (Pp.print_option (fprintf_type ~need_colon:true false)) ty
     | App(e1,e2,_) ->
 	fprintf form "@[<hov 1>(%a %a)@]" fprintf_expr e1 fprintf_expr e2
     | Raise(id,None) ->
@@ -1181,19 +1190,20 @@ let rec fprintf_expr_node form e =
       if !why3syntax then
         if o then
           begin
-            fprintf form "abstract %a@ ensures {@ %a }@ "
-              fprintf_expr e
+            fprintf form "abstract@ ensures {@ %a }@ "
 	      fprintf_assertion post;
             List.iter
               (fun (e,r) ->
                 fprintf form "@[<hov 2>raises { %s ->@ %a }@]" e fprintf_assertion r)
               exceps;
+            fprintf form "@ %a@ end"
+              fprintf_expr e
           end
         else
           begin
             match exceps with
 	      | [] ->
-                fprintf form "let _ = %a in assert { %a }" 
+                fprintf form "let _ = %a in assert { %a }"
                   fprintf_expr e
 		  fprintf_assertion post
               | _ -> assert false (* TODO *)
@@ -1203,7 +1213,7 @@ let rec fprintf_expr_node form e =
           fprintf form "(%a)@ " fprintf_expr e;
 	  match exceps with
 	    | [] ->
-		(if o then 
+		(if o then
                     fprintf form "{{ %a }}" else fprintf form "{ %a }")
 		  fprintf_assertion post
 	    | l ->
@@ -1239,10 +1249,10 @@ let rec fprintf_expr_node form e =
 	  (l.pos_cnum - l.pos_bol) fprintf_expr e
 	*)
 
-and fprintf_expr form e =
+and fprintf_expr_gen in_app form e =
   let rec aux l =
     match l with
-      | [] -> fprintf_expr_node form e.expr_node
+      | [] -> fprintf_expr_node in_app form e.expr_node
       | s::l ->
 (*
           if s="L2" then Format.eprintf "Output.fprintf_expr: printing label %s for expression %a@." s fprintf_expr_node e.expr_node;
@@ -1254,6 +1264,8 @@ and fprintf_expr form e =
           aux l;
           fprintf form ")@]"
   in aux e.expr_labels
+
+and fprintf_expr form e = fprintf_expr_gen false form e
 
 and fprintf_expr_list form l =
   match l with
@@ -1327,6 +1339,10 @@ let make_label label e =
 (*
   if label = "L2" then Format.eprintf "Output.make_label: adding label %s@." label;
 *)
+  assert (String.length label > 0);
+  if label.[0] = '_' then
+  { e with expr_loc_labels = label :: e.expr_loc_labels }
+  else
   { e with expr_labels = label :: e.expr_labels }
 
 let make_pre pre e =  mk_expr (Triple(false,pre,e,LTrue,[]))
@@ -1348,7 +1364,7 @@ let append_list e l =
     | e'::rem ->
         match e.expr_node,e'.expr_node with
           | MultiAssign(mark1,pos1,lets1,isrefa1,ta1,a1,tmpe1,e1,f1,l1),
-            MultiAssign(_,_,lets2,_isrefa2,_ta2,a2,_tmpe2,e2,f2,l2) 
+            MultiAssign(_,_,lets2,_isrefa2,_ta2,a2,_tmpe2,e2,f2,l2)
             when e'.expr_labels = [] ->
               (*
                 Format.eprintf
@@ -1364,6 +1380,7 @@ let append_list e l =
                       Format.eprintf "append_list, merge successful!@.";
                     *)
                     { expr_labels = e.expr_labels;
+                      expr_loc_labels = e.expr_loc_labels @ e'.expr_loc_labels;
                       expr_node =
                         MultiAssign(mark1,pos1,lets1@lets2,isrefa1,ta1,a1,tmpe1,e1,f1,l) }
                     ::rem
@@ -1398,11 +1415,12 @@ let append_list e l =
               e::l
 
 
-let make_block labels l =
+let make_block labels loc_labels l =
   match l with
       | [] -> assert false
-      | [e] -> {e with expr_labels = labels @ e.expr_labels }
-      | _ -> { expr_labels = labels ; expr_node = Block l }
+      | [e] -> {e with expr_labels = labels @ e.expr_labels ; 
+                       expr_loc_labels = loc_labels @ e.expr_loc_labels }
+      | _ -> { expr_labels = labels ; expr_loc_labels = loc_labels ; expr_node = Block l }
 
 (** Try hard to keep the labels visible by all the instructions that follow
     but also to remove unneeded block
@@ -1416,21 +1434,21 @@ let rec append' e1 e2 =
     | _,Void -> assert (e2.expr_labels = []); [e1]
     | Block(_),Block([]) -> [e1]
     | Block(l1),_ ->
-      [make_block e1.expr_labels (concat l1 e2)]
+      [make_block e1.expr_labels e1.expr_loc_labels (concat l1 e2)]
     | _,Block(l2) ->
       begin match e1.expr_labels, e2.expr_labels with
         | [], [] -> append_list e1 l2
         | labels1, [] ->
-          [make_block labels1 (append_list {e1 with expr_labels = []} l2)]
+          [make_block labels1 e1.expr_loc_labels (append_list {e1 with expr_labels = []} l2)]
         | labels1, _ ->
-          [make_block labels1 (append_list {e1 with expr_labels = []} [e2])]
+          [make_block labels1 e1.expr_loc_labels (append_list {e1 with expr_labels = []} [e2])]
       end
     | _ ->
       if e1.expr_labels = [] then
         append_list e1 [e2]
       else
         let e1' = {e1 with expr_labels = []} in
-        [make_block e1.expr_labels (append_list e1' [e2])]
+        [make_block e1.expr_labels [] (append_list e1' [e2])]
 
 and concat l1 e2 =
   match l1 with
@@ -1439,7 +1457,7 @@ and concat l1 e2 =
   | a1::l1 -> a1::(concat l1 e2)
 
 let append e1 e2 =
-  make_block [] (append' e1 e2)
+  make_block [] [] (append' e1 e2)
 
 type goal_kind = KAxiom | KLemma | KGoal
 
@@ -1449,7 +1467,7 @@ let id_no_loc s = { name = s; loc = Loc.dummy_floc }
 
 type why_decl =
   | Param of bool * why_id * why_type         (*r parameter in why *)
-  | Def of why_id * expr               (*r global let in why *)
+  | Def of why_id * bool * expr               (*r global let in why *)
   | Logic of bool * why_id * (string * logic_type) list * logic_type    (*r logic decl in why *)
   | Predicate of bool * why_id * (string * logic_type) list * assertion
   | Inductive of bool * why_id * (string * logic_type) list *
@@ -1465,7 +1483,7 @@ let get_why_id d =
   match d with
     | Param(_,id,_)
     | Logic(_,id,_,_)
-    | Def(id,_)
+    | Def(id,_,_)
     | Goal(_,id,_)
     | Predicate(_,id,_,_)
     | Function(_,id,_,_,_)
@@ -1476,7 +1494,7 @@ let get_why_id d =
 let iter_why_decl f d =
   match d with
     | Param(_,_,t) -> iter_why_type f t
-    | Def(_id,t) -> iter_expr f t
+    | Def(_id,_,t) -> iter_expr f t
     | Logic(_,_id,args,t) ->
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_logic_type f t
@@ -1614,12 +1632,13 @@ let fprintf_why_decl form d =
 	fprintf form "@[<hov 1>%s %s :@ %a@]@.@." (str_of_goal_kind k)
           id.name
 	  fprintf_assertion p
-    | Def(id,e) when !why3syntax ->
-        fprintf form "@[<hov 1>let %s %a=@ %a@]@.@."
+    | Def(id,diverges,e) when !why3syntax ->
+        fprintf form "@[<hov 1>let %s%s %a=@ %a@]@.@."
           (why3id id.name)
+          (if diverges then " \"W:diverges:N\"" else "")
           (why3loc ~prog:false) id.name
           fprintf_expr e
-    | Def(id,e) ->
+    | Def(id,_,e) ->
         fprintf form "@[<hov 1>let %s =@ %a@]@.@." (why3id_if id.name)
           fprintf_expr e
     | Predicate (b, id, args, p) when !why3syntax ->
@@ -1690,6 +1709,8 @@ let output_why3_imports form use_floats float_model =
     fprintf form "use real.Truncate@\n@\n";
   if !why3_Square then
     fprintf form "use real.Square@\n@\n";
+  if !why3_Power then
+    fprintf form "use int.Power@\n@\n";
   if !why3_PowerInt then
     fprintf form "use real.PowerInt@\n@\n";
   if !why3_PowerReal then
@@ -1784,7 +1805,7 @@ let fprintf_why_decls ?(why3=false) ?(use_floats=false)
     end;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) types;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) others;
-  if why3 then 
+  if why3 then
     begin
       fprintf form "end@\n@\n";
       fprintf form "module Jessie_program@\n@\n";

@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only fresh2.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD fresh2.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only fresh2.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/fresh2.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir fresh2.jessie
 [jessie] File fresh2.jessie/fresh2.jc written.
@@ -49,30 +49,30 @@ Str[..] create()
 behavior default:
   assigns \nothing;
   allocates \result;
-  ensures (C_3 : (((C_5 : (\offset_min(\result) <= 0)) &&
-                    (C_6 : (\offset_max(\result) >= 0))) &&
-                   (C_7 : \fresh(\result))));
+  ensures (_C_3 : (((_C_5 : (\offset_min(\result) <= 0)) &&
+                     (_C_6 : (\offset_max(\result) >= 0))) &&
+                    (_C_7 : \fresh(\result))));
 {  
    (var Str[..] s);
    
-   {  (C_2 : (s = (C_1 : (new Str[1]))));
+   {  (_C_2 : (s = (_C_1 : (new Str[1]))));
       
       (return s)
    }
 }
 
 unit test(Str[..] this)
-  requires (C_12 : ((C_13 : (\offset_min(this) <= 0)) &&
-                     (C_14 : (\offset_max(this) >= 0))));
+  requires (_C_12 : ((_C_13 : (\offset_min(this) <= 0)) &&
+                      (_C_14 : (\offset_max(this) >= 0))));
 behavior default:
-  ensures (C_11 : true);
+  ensures (_C_11 : true);
 {  
    (var Str[..] f);
    
-   {  (C_9 : (f = (C_8 : create())));
+   {  (_C_9 : (f = (_C_8 : create())));
       
       {  
-         (assert for default: (C_10 : (jessie : (this != f))));
+         (assert for default: (_C_10 : (jessie : (this != f))));
          ()
       };
       
@@ -82,17 +82,17 @@ behavior default:
 
 unit smoke_detector()
 behavior default:
-  ensures (C_20 : true);
+  ensures (_C_20 : true);
 {  
    (var Str[..] s1);
    
    (var Str[..] s2);
    
-   {  (C_16 : (s1 = (C_15 : create())));
-      (C_18 : (s2 = (C_17 : create())));
+   {  (_C_16 : (s1 = (_C_15 : create())));
+      (_C_18 : (s2 = (_C_17 : create())));
       
       {  
-         (assert for default: (C_19 : (jessie : (0 == 1))));
+         (assert for default: (_C_19 : (jessie : (0 == 1))));
          ()
       };
       
@@ -564,13 +564,11 @@ let create_ensures_default =
   try
    begin
      (let s_0 = ref (any_pointer void) in
-     (C_2:
      begin
-       (let jessie_<somenum> =
-       (s_0 := (C_1:
-               (JC_<somenum>:
-               (((alloc_struct_Str (1)) Str_alloc_table) Str_tag_table)))) in
-       void); (return := !s_0); (raise Return) end)); absurd  end with
+       (let _jessie_<somenum> =
+       (s_0 := (JC_<somenum>:
+               (((alloc_struct_Str (1)) Str_alloc_table) Str_tag_table))) in
+       void); (return := !s_0); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(offset_min(Str_alloc_table, result), (0)))
@@ -585,13 +583,11 @@ let create_safety =
   try
    begin
      (let s_0 = ref (any_pointer void) in
-     (C_2:
      begin
-       (let jessie_<somenum> =
-       (s_0 := (C_1:
-               (JC_<somenum>:
-               (((alloc_struct_Str_requires (1)) Str_alloc_table) Str_tag_table)))) in
-       void); (return := !s_0); (raise Return) end)); absurd  end with
+       (let _jessie_<somenum> =
+       (s_0 := (JC_<somenum>:
+               (((alloc_struct_Str_requires (1)) Str_alloc_table) Str_tag_table))) in
+       void); (return := !s_0); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 let smoke_detector_ensures_default =
@@ -602,12 +598,10 @@ let smoke_detector_ensures_default =
    begin
      (let s1_1 = ref (any_pointer void) in
      (let s2_1 = ref (any_pointer void) in
-     (C_16:
-     (C_18:
      begin
-       (let jessie_<somenum> = (s1_1 := (C_15: (JC_<somenum>: (create void)))) in void);
-      (let jessie_<somenum> = (s2_1 := (C_17: (JC_<somenum>: (create void)))) in void);
-      (assert { (JC_<somenum>: ((0) = (1))) }; void); void; (raise Return) end))));
+       (let _jessie_<somenum> = (s1_1 := (JC_<somenum>: (create void))) in void);
+      (let _jessie_<somenum> = (s2_1 := (JC_<somenum>: (create void))) in void);
+      (assert { (JC_<somenum>: ((0) = (1))) }; void); void; (raise Return) end));
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
 let smoke_detector_safety =
@@ -618,13 +612,10 @@ let smoke_detector_safety =
    begin
      (let s1_1 = ref (any_pointer void) in
      (let s2_1 = ref (any_pointer void) in
-     (C_16:
-     (C_18:
      begin
-       (let jessie_<somenum> = (s1_1 := (C_15: (JC_<somenum>: (create_requires void)))) in
-       void);
-      (let jessie_<somenum> = (s2_1 := (C_17: (JC_<somenum>: (create_requires void)))) in
-      void); [ { } unit { (JC_<somenum>: ((0) = (1))) } ]; void; (raise Return) end))));
+       (let _jessie_<somenum> = (s1_1 := (JC_<somenum>: (create_requires void))) in void);
+      (let _jessie_<somenum> = (s2_1 := (JC_<somenum>: (create_requires void))) in void);
+      [ { } unit { (JC_<somenum>: ((0) = (1))) } ]; void; (raise Return) end));
     (raise Return) end with Return -> void end) { true }
 
 let test_ensures_default =
@@ -636,10 +627,9 @@ let test_ensures_default =
   try
    begin
      (let f = ref (any_pointer void) in
-     (C_9:
      begin
-       (let jessie_<somenum> = (f := (C_8: (JC_<somenum>: (create void)))) in void);
-      (assert { (JC_<somenum>: (this <> f)) }; void); void; (raise Return) end));
+       (let _jessie_<somenum> = (f := (JC_<somenum>: (create void))) in void);
+      (assert { (JC_<somenum>: (this <> f)) }; void); void; (raise Return) end);
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
 let test_safety =
@@ -651,10 +641,9 @@ let test_safety =
   try
    begin
      (let f = ref (any_pointer void) in
-     (C_9:
      begin
-       (let jessie_<somenum> = (f := (C_8: (JC_<somenum>: (create_requires void)))) in void);
-      [ { } unit reads f { (JC_<somenum>: (this <> f)) } ]; void; (raise Return) end));
+       (let _jessie_<somenum> = (f := (JC_<somenum>: (create_requires void))) in void);
+      [ { } unit reads f { (JC_<somenum>: (this <> f)) } ]; void; (raise Return) end);
     (raise Return) end with Return -> void end) { true }
 
 

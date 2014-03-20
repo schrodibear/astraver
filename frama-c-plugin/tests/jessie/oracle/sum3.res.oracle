@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only sum3.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD sum3.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only sum3.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/sum3.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir sum3.jessie
 [jessie] File sum3.jessie/sum3.jc written.
@@ -53,28 +53,28 @@ invariant valid_vect :
 ((\offset_min(vect) <= 0) && (\offset_max(vect) >= 0))
 
 unit f()
-  requires (C_47 : ((((C_50 : (\offset_min(vect.a) <= 0)) &&
-                       (C_51 : (\offset_max(vect.a) >= 2))) &&
-                      ((C_53 : (\offset_min(vect.Sum) <= 0)) &&
-                        (C_54 : (\offset_max(vect.Sum) >= 2)))) &&
-                     ((C_56 : (\offset_min(vect.b) <= 0)) &&
-                       (C_57 : (\offset_max(vect.b) >= 2)))));
-  requires (C_46 : (\forall integer i_1;
-                     (\forall integer j_0;
-                       ((((0 <= i_1) && (i_1 <= 2)) &&
-                          ((0 <= j_0) && (j_0 <= 2))) ==>
-                         ((((vect.a + i_1) != (vect.b + j_0)) &&
-                            ((vect.a + i_1) != (vect.Sum + j_0))) &&
-                           ((vect.b + i_1) != (vect.Sum + j_0)))))));
+  requires (_C_47 : ((((_C_50 : (\offset_min(vect.a) <= 0)) &&
+                        (_C_51 : (\offset_max(vect.a) >= 2))) &&
+                       ((_C_53 : (\offset_min(vect.Sum) <= 0)) &&
+                         (_C_54 : (\offset_max(vect.Sum) >= 2)))) &&
+                      ((_C_56 : (\offset_min(vect.b) <= 0)) &&
+                        (_C_57 : (\offset_max(vect.b) >= 2)))));
+  requires (_C_46 : (\forall integer i_1;
+                      (\forall integer j_0;
+                        ((((0 <= i_1) && (i_1 <= 2)) &&
+                           ((0 <= j_0) && (j_0 <= 2))) ==>
+                          ((((vect.a + i_1) != (vect.b + j_0)) &&
+                             ((vect.a + i_1) != (vect.Sum + j_0))) &&
+                            ((vect.b + i_1) != (vect.Sum + j_0)))))));
 behavior default:
   assigns (vect.a + [0..2]).unsigned_charM,
   (vect.Sum + [0..2]).unsigned_charM,
   (vect.b + [0..2]).unsigned_charM;
-  ensures (C_45 : (\forall integer m_3;
-                    (((0 <= m_3) && (m_3 < 3)) ==>
-                      ((vect.Sum + m_3).unsigned_charM ==
-                        ((vect.a + m_3).unsigned_charM +
-                          (vect.b + m_3).unsigned_charM)))));
+  ensures (_C_45 : (\forall integer m_3;
+                     (((0 <= m_3) && (m_3 < 3)) ==>
+                       ((vect.Sum + m_3).unsigned_charM ==
+                         ((vect.a + m_3).unsigned_charM +
+                           (vect.b + m_3).unsigned_charM)))));
 {  
    (var uint8 i);
    
@@ -83,59 +83,61 @@ behavior default:
         behavior default:
           assigns (vect.a + [0..2]).unsigned_charM,
           (vect.b + [0..2]).unsigned_charM;
-          ensures (C_19 : true);
+          ensures (_C_19 : true);
         { 
-        {  (C_3 : ((C_2 : ((C_1 : vect.a) + 0).unsigned_charM) = 1));
-           (C_6 : ((C_5 : ((C_4 : vect.a) + 1).unsigned_charM) = 2));
-           (C_9 : ((C_8 : ((C_7 : vect.a) + 2).unsigned_charM) = 3));
-           (C_12 : ((C_11 : ((C_10 : vect.b) + 0).unsigned_charM) = 4));
-           (C_15 : ((C_14 : ((C_13 : vect.b) + 1).unsigned_charM) = 5));
-           (C_18 : ((C_17 : ((C_16 : vect.b) + 2).unsigned_charM) = 6))
+        {  (_C_3 : ((_C_2 : ((_C_1 : vect.a) + 0).unsigned_charM) = 1));
+           (_C_6 : ((_C_5 : ((_C_4 : vect.a) + 1).unsigned_charM) = 2));
+           (_C_9 : ((_C_8 : ((_C_7 : vect.a) + 2).unsigned_charM) = 3));
+           (_C_12 : ((_C_11 : ((_C_10 : vect.b) + 0).unsigned_charM) = 4));
+           (_C_15 : ((_C_14 : ((_C_13 : vect.b) + 1).unsigned_charM) = 5));
+           (_C_18 : ((_C_17 : ((_C_16 : vect.b) + 2).unsigned_charM) = 6))
         }
         });
       
       {  
-         (assert for default: (C_20 : (jessie : (\forall integer m;
-                                                  (((0 <= m) && (m < 3)) ==>
-                                                    ((vect.Sum + m).unsigned_charM ==
-                                                      \at((vect.Sum + m).unsigned_charM,Pre)))))));
+         (assert for default: (_C_20 : (jessie : (\forall integer m;
+                                                   (((0 <= m) && (m < 3)) ==>
+                                                     ((vect.Sum + m).unsigned_charM ==
+                                                       \at((vect.Sum + m).unsigned_charM,Pre)))))));
          ()
       };
       
-      {  (C_21 : (i = 0));
+      {  (_C_21 : (i = 0));
          
          loop 
          behavior default:
-           invariant (C_26 : ((C_27 : (0 <= i)) && (C_28 : (i <= 3))));
+           invariant (_C_26 : ((_C_27 : (0 <= i)) && (_C_28 : (i <= 3))));
          behavior default:
-           invariant (C_25 : (\forall integer m_0;
-                               (((0 <= m_0) && (m_0 < 3)) ==>
-                                 (((vect.a + m_0).unsigned_charM ==
-                                    \at((vect.a + m_0).unsigned_charM,Here)) &&
-                                   ((vect.b + m_0).unsigned_charM ==
-                                     \at((vect.b + m_0).unsigned_charM,Here))))));
+           invariant (_C_25 : (\forall integer m_0;
+                                (((0 <= m_0) && (m_0 < 3)) ==>
+                                  (((vect.a + m_0).unsigned_charM ==
+                                     \at((vect.a + m_0).unsigned_charM,Here)) &&
+                                    ((vect.b + m_0).unsigned_charM ==
+                                      \at((vect.b + m_0).unsigned_charM,Here))))));
          behavior default:
-           invariant (C_24 : (\forall integer m_1;
-                               (((i <= m_1) && (m_1 < 3)) ==>
-                                 ((vect.Sum + m_1).unsigned_charM ==
-                                   \at((vect.Sum + m_1).unsigned_charM,Pre)))));
+           invariant (_C_24 : (\forall integer m_1;
+                                (((i <= m_1) && (m_1 < 3)) ==>
+                                  ((vect.Sum + m_1).unsigned_charM ==
+                                    \at((vect.Sum + m_1).unsigned_charM,Pre)))));
          behavior default:
-           invariant (C_23 : (\forall integer m_2;
-                               (((0 <= m_2) && (m_2 < i)) ==>
-                                 ((vect.Sum + m_2).unsigned_charM ==
-                                   ((vect.a + m_2).unsigned_charM +
-                                     (vect.b + m_2).unsigned_charM)))));
-         variant (C_22 : (3 - i));
+           invariant (_C_23 : (\forall integer m_2;
+                                (((0 <= m_2) && (m_2 < i)) ==>
+                                  ((vect.Sum + m_2).unsigned_charM ==
+                                    ((vect.a + m_2).unsigned_charM +
+                                      (vect.b + m_2).unsigned_charM)))));
+         variant (_C_22 : (3 - i));
          while (true)
          {  
-            {  (if ((C_29 : (i :> int32)) < 3) then () else 
+            {  (if ((_C_29 : (i :> int32)) < 3) then () else 
                (goto while_0_break));
                
-               {  (C_40 : ((C_39 : ((C_38 : vect.Sum) + i).unsigned_charM) = 
-                  (C_37 : ((C_36 : ((C_35 : ((C_34 : ((C_33 : vect.a) + i).unsigned_charM) :> int32)) +
-                                     (C_32 : ((C_31 : ((C_30 : vect.b) + i).unsigned_charM) :> int32)))) :> uint8))))
+               {  (_C_40 : ((_C_39 : ((_C_38 : vect.Sum) + i).unsigned_charM) = 
+                  (_C_37 : ((_C_36 : ((_C_35 : ((_C_34 : ((_C_33 : vect.a) +
+                                                           i).unsigned_charM) :> int32)) +
+                                       (_C_32 : ((_C_31 : ((_C_30 : vect.b) +
+                                                            i).unsigned_charM) :> int32)))) :> uint8))))
                };
-               (C_44 : (i = (C_43 : ((C_42 : ((C_41 : (i :> int32)) + 1)) :> uint8))))
+               (_C_44 : (i = (_C_43 : ((_C_42 : ((_C_41 : (i :> int32)) + 1)) :> uint8))))
             }
          };
          (while_0_break : ())
@@ -821,53 +823,41 @@ let f_ensures_default =
    begin
      (let i = ref (any_uint8 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (assert { true };
-       ((C_3:
-        (C_6:
-        (C_9:
-        (C_12:
-        (C_15:
-        begin
-          (let jessie_<somenum> = (safe_uint8_of_integer_ (1)) in
-          (let jessie_<somenum> =
-          (C_1: ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect)) in
-          (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>)));
-         (let jessie_<somenum> = (safe_uint8_of_integer_ (2)) in
-         (let jessie_<somenum> =
-         (C_4: ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect)) in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>))))));
-         (let jessie_<somenum> = (safe_uint8_of_integer_ (3)) in
-         (let jessie_<somenum> =
-         (C_7: ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect)) in
-         (let jessie_<somenum> = (2) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>))))));
-         (let jessie_<somenum> = (safe_uint8_of_integer_ (4)) in
-         (let jessie_<somenum> =
-         (C_10: ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect)) in
-         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>)));
-         (let jessie_<somenum> = (safe_uint8_of_integer_ (5)) in
-         (let jessie_<somenum> =
-         (C_13: ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect)) in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>))))));
-         (C_18:
-         (let jessie_<somenum> = (safe_uint8_of_integer_ (6)) in
+       (begin
+          (let _jessie_<somenum> = (safe_uint8_of_integer_ (1)) in
+          (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect) in
+          (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) _jessie_<somenum>) _jessie_<somenum>)));
+         (let _jessie_<somenum> = (safe_uint8_of_integer_ (2)) in
+         (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect) in
+         (let _jessie_<somenum> = (1) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
+         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) _jessie_<somenum>) _jessie_<somenum>))))));
+         (let _jessie_<somenum> = (safe_uint8_of_integer_ (3)) in
+         (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect) in
+         (let _jessie_<somenum> = (2) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) (2)) in
+         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) _jessie_<somenum>) _jessie_<somenum>))))));
+         (let _jessie_<somenum> = (safe_uint8_of_integer_ (4)) in
+         (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect) in
+         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) _jessie_<somenum>) _jessie_<somenum>)));
+         (let _jessie_<somenum> = (safe_uint8_of_integer_ (5)) in
+         (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect) in
+         (let _jessie_<somenum> = (1) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
+         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) _jessie_<somenum>) _jessie_<somenum>))))));
+         (let _jessie_<somenum> = (safe_uint8_of_integer_ (6)) in
          begin
-           (let jessie_<somenum> =
-           (C_16: ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect)) in
-           (let jessie_<somenum> = (2) in
-           (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-           (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-           (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>)))));
-          jessie_<somenum> end)) end))))))
+           (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect) in
+           (let _jessie_<somenum> = (2) in
+           (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+           (let _jessie_<somenum> = ((shift _jessie_<somenum>) (2)) in
+           (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) _jessie_<somenum>) _jessie_<somenum>)))));
+          _jessie_<somenum> end) end)
        {{ ((JC_<somenum>: (true = true))
           and (JC_<somenum>:
               not_assigns(unsigned_charP_vect_1_alloc_table@init,
@@ -890,122 +880,109 @@ let f_ensures_default =
                                                           vect),
                                                     m))))))) }; void); void;
       try
-       (C_21:
-       (loop_2:
        begin
-         (let jessie_<somenum> = (i := (safe_uint8_of_integer_ (0))) in void);
-        while true do
-        { invariant
-            (((JC_<somenum>:
-              (forall m_2:int.
-               ((le_int((0), m_2) and lt_int(m_2, integer_of_uint8(i))) ->
-                (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
-                                  shift(select(__anonstruct_S_1_Sum_vect_1,
-                                        vect),
-                                  m_2))) = add_int(integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
-                                                                    shift(
-                                                                    select(__anonstruct_S_1_a_vect_1,
+         (let _jessie_<somenum> = (i := (safe_uint8_of_integer_ (0))) in void);
+        (loop_2:
+        begin
+          while true do
+          { invariant
+              (((JC_<somenum>:
+                (forall m_2:int.
+                 ((le_int((0), m_2) and lt_int(m_2, integer_of_uint8(i))) ->
+                  (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
+                                    shift(select(__anonstruct_S_1_Sum_vect_1,
+                                          vect),
+                                    m_2))) = add_int(integer_of_uint8(
+                                                     select(unsigned_charP_unsigned_charM_vect_1,
+                                                     shift(select(__anonstruct_S_1_a_vect_1,
+                                                           vect),
+                                                     m_2))),
+                                             integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
+                                                              shift(select(__anonstruct_S_1_b_vect_1,
                                                                     vect),
-                                                                    m_2))),
-                                           integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
-                                                            shift(select(__anonstruct_S_1_b_vect_1,
-                                                                  vect),
-                                                            m_2))))))))
-             and ((JC_<somenum>:
-                  (forall m_1:int.
-                   ((le_int(integer_of_uint8(i), m_1) and lt_int(m_1, (3))) ->
-                    (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
-                                      shift(select(__anonstruct_S_1_Sum_vect_1,
-                                            vect),
-                                      m_1))) = integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1@init,
-                                                                shift(
-                                                                select(__anonstruct_S_1_Sum_vect_1@init,
-                                                                vect), m_1)))))))
-                 and ((JC_<somenum>:
-                      (forall m_0:int.
-                       ((le_int((0), m_0) and lt_int(m_0, (3))) ->
-                        ((integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
-                                           shift(select(__anonstruct_S_1_a_vect_1,
-                                                 vect),
-                                           m_0))) = integer_of_uint8(
-                                                    select(unsigned_charP_unsigned_charM_vect_1,
-                                                    shift(select(__anonstruct_S_1_a_vect_1,
-                                                          vect),
-                                                    m_0))))
-                        and (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
-                                              shift(select(__anonstruct_S_1_b_vect_1,
-                                                    vect),
-                                              m_0))) = integer_of_uint8(
-                                                       select(unsigned_charP_unsigned_charM_vect_1,
-                                                       shift(select(__anonstruct_S_1_b_vect_1,
-                                                             vect),
-                                                       m_0))))))))
-                     and (JC_<somenum>:
-                         ((JC_<somenum>: le_int((0), integer_of_uint8(i)))
-                         and (JC_<somenum>: le_int(integer_of_uint8(i), (3))))))))
-            and (JC_<somenum>:
-                not_assigns(unsigned_charP_vect_1_alloc_table@init,
-                unsigned_charP_unsigned_charM_vect_1@init,
-                unsigned_charP_unsigned_charM_vect_1,
-                pset_union(pset_range(pset_deref(__anonstruct_S_1_b_vect_1@init,
-                                      pset_singleton(vect)),
-                           (0), (2)),
-                pset_union(pset_range(pset_deref(__anonstruct_S_1_Sum_vect_1@init,
-                                      pset_singleton(vect)),
-                           (0), (2)),
-                pset_range(pset_deref(__anonstruct_S_1_a_vect_1@init,
-                           pset_singleton(vect)),
-                (0), (2)))))))  }
-         begin
-           [ { } unit { true } ];
-          try
+                                                              m_2))))))))
+               and ((JC_<somenum>:
+                    (forall m_1:int.
+                     ((le_int(integer_of_uint8(i), m_1) and lt_int(m_1, (3))) ->
+                      (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
+                                        shift(select(__anonstruct_S_1_Sum_vect_1,
+                                              vect),
+                                        m_1))) = integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1@init,
+                                                                  shift(
+                                                                  select(__anonstruct_S_1_Sum_vect_1@init,
+                                                                  vect), m_1)))))))
+                   and ((JC_<somenum>:
+                        (forall m_0:int.
+                         ((le_int((0), m_0) and lt_int(m_0, (3))) ->
+                          ((integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
+                                             shift(select(__anonstruct_S_1_a_vect_1,
+                                                   vect),
+                                             m_0))) = integer_of_uint8(
+                                                      select(unsigned_charP_unsigned_charM_vect_1,
+                                                      shift(select(__anonstruct_S_1_a_vect_1,
+                                                            vect),
+                                                      m_0))))
+                          and (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
+                                                shift(select(__anonstruct_S_1_b_vect_1,
+                                                      vect),
+                                                m_0))) = integer_of_uint8(
+                                                         select(unsigned_charP_unsigned_charM_vect_1,
+                                                         shift(select(__anonstruct_S_1_b_vect_1,
+                                                               vect),
+                                                         m_0))))))))
+                       and (JC_<somenum>:
+                           ((JC_<somenum>: le_int((0), integer_of_uint8(i)))
+                           and (JC_<somenum>: le_int(integer_of_uint8(i), (3))))))))
+              and (JC_<somenum>:
+                  not_assigns(unsigned_charP_vect_1_alloc_table@init,
+                  unsigned_charP_unsigned_charM_vect_1@init,
+                  unsigned_charP_unsigned_charM_vect_1,
+                  pset_union(pset_range(pset_deref(__anonstruct_S_1_b_vect_1@init,
+                                        pset_singleton(vect)),
+                             (0), (2)),
+                  pset_union(pset_range(pset_deref(__anonstruct_S_1_Sum_vect_1@init,
+                                        pset_singleton(vect)),
+                             (0), (2)),
+                  pset_range(pset_deref(__anonstruct_S_1_a_vect_1@init,
+                             pset_singleton(vect)),
+                  (0), (2)))))))  }
            begin
-             (let jessie_<somenum> =
-             (C_44:
+             [ { } unit { true } ];
+            try
              begin
-               (if ((lt_int_ (integer_of_int32 (C_29:
-                                               (safe_int32_of_integer_ 
-                                                (integer_of_uint8 !i))))) (3))
-               then void else (raise (Goto_while_0_break_exc void)));
-              (let jessie_<somenum> =
-              (C_40:
-              (let jessie_<somenum> =
-              (C_37:
-              (safe_uint8_of_integer_ (C_36:
-                                      ((add_int (integer_of_int32 (C_35:
-                                                                  (safe_int32_of_integer_ 
-                                                                   (integer_of_uint8 
-                                                                    (C_34:
+               (let _jessie_<somenum> =
+               begin
+                 (if ((lt_int_ (integer_of_int32 (safe_int32_of_integer_ 
+                                                  (integer_of_uint8 !i)))) (3))
+                 then void else (raise (Goto_while_0_break_exc void)));
+                (let _jessie_<somenum> =
+                (let _jessie_<somenum> =
+                (safe_uint8_of_integer_ ((add_int (integer_of_int32 (safe_int32_of_integer_ 
+                                                                    (integer_of_uint8 
                                                                     ((safe_acc_ !unsigned_charP_unsigned_charM_vect_1) 
                                                                     ((shift 
-                                                                    (C_33:
-                                                                    ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect))) 
-                                                                    (integer_of_uint8 !i))))))))) 
-                                       (integer_of_int32 (C_32:
+                                                                    ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect)) 
+                                                                    (integer_of_uint8 !i))))))) 
+                                         (integer_of_int32 (safe_int32_of_integer_ 
+                                                            (integer_of_uint8 
+                                                             ((safe_acc_ !unsigned_charP_unsigned_charM_vect_1) 
+                                                              ((shift 
+                                                                ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect)) 
+                                                               (integer_of_uint8 !i)))))))) in
+                (let _jessie_<somenum> =
+                ((safe_acc_ !__anonstruct_S_1_Sum_vect_1) vect) in
+                (let _jessie_<somenum> = (integer_of_uint8 !i) in
+                (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+                begin
+                  (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) _jessie_<somenum>) _jessie_<somenum>);
+                 _jessie_<somenum> end)))) in void);
+                (i := (safe_uint8_of_integer_ ((add_int (integer_of_int32 
                                                          (safe_int32_of_integer_ 
-                                                          (integer_of_uint8 
-                                                           (C_31:
-                                                           ((safe_acc_ !unsigned_charP_unsigned_charM_vect_1) 
-                                                            ((shift (C_30:
-                                                                    ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect))) 
-                                                             (integer_of_uint8 !i)))))))))))) in
-              (let jessie_<somenum> =
-              (C_38: ((safe_acc_ !__anonstruct_S_1_Sum_vect_1) vect)) in
-              (let jessie_<somenum> = (integer_of_uint8 !i) in
-              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-              begin
-                (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>);
-               jessie_<somenum> end))))) in void);
-              (i := (C_43:
-                    (safe_uint8_of_integer_ (C_42:
-                                            ((add_int (integer_of_int32 
-                                                       (C_41:
-                                                       (safe_int32_of_integer_ 
-                                                        (integer_of_uint8 !i))))) (1))))));
-              !i end) in void); (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end)) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
+                                                          (integer_of_uint8 !i)))) (1))));
+                !i end in void); (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc _jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end with
+       Goto_while_0_break_exc _jessie_<somenum> -> (while_0_break: void) end;
       (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
@@ -1090,54 +1067,42 @@ let f_safety =
    begin
      (let i = ref (any_uint8 void) in
      begin
-       (let jessie_<somenum> =
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
+       (let _jessie_<somenum> =
        (assert { true };
-       ((C_3:
-        (C_6:
-        (C_9:
-        (C_12:
-        (C_15:
-        begin
-          (let jessie_<somenum> = (safe_uint8_of_integer_ (1)) in
-          (let jessie_<somenum> =
-          (C_1: ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect)) in
-          (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>)));
-         (let jessie_<somenum> = (safe_uint8_of_integer_ (2)) in
-         (let jessie_<somenum> =
-         (C_4: ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect)) in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>))))));
-         (let jessie_<somenum> = (safe_uint8_of_integer_ (3)) in
-         (let jessie_<somenum> =
-         (C_7: ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect)) in
-         (let jessie_<somenum> = (2) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>))))));
-         (let jessie_<somenum> = (safe_uint8_of_integer_ (4)) in
-         (let jessie_<somenum> =
-         (C_10: ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect)) in
-         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>)));
-         (let jessie_<somenum> = (safe_uint8_of_integer_ (5)) in
-         (let jessie_<somenum> =
-         (C_13: ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect)) in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>))))));
-         (C_18:
-         (let jessie_<somenum> = (safe_uint8_of_integer_ (6)) in
+       (begin
+          (let _jessie_<somenum> = (safe_uint8_of_integer_ (1)) in
+          (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect) in
+          (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) _jessie_<somenum>) _jessie_<somenum>)));
+         (let _jessie_<somenum> = (safe_uint8_of_integer_ (2)) in
+         (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect) in
+         (let _jessie_<somenum> = (1) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
+         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) _jessie_<somenum>) _jessie_<somenum>))))));
+         (let _jessie_<somenum> = (safe_uint8_of_integer_ (3)) in
+         (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect) in
+         (let _jessie_<somenum> = (2) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) (2)) in
+         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) _jessie_<somenum>) _jessie_<somenum>))))));
+         (let _jessie_<somenum> = (safe_uint8_of_integer_ (4)) in
+         (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect) in
+         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) _jessie_<somenum>) _jessie_<somenum>)));
+         (let _jessie_<somenum> = (safe_uint8_of_integer_ (5)) in
+         (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect) in
+         (let _jessie_<somenum> = (1) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
+         (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) _jessie_<somenum>) _jessie_<somenum>))))));
+         (let _jessie_<somenum> = (safe_uint8_of_integer_ (6)) in
          begin
-           (let jessie_<somenum> =
-           (C_16: ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect)) in
-           (let jessie_<somenum> = (2) in
-           (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-           (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-           (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>)))));
-          jessie_<somenum> end)) end))))))) in
+           (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect) in
+           (let _jessie_<somenum> = (2) in
+           (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+           (let _jessie_<somenum> = ((shift _jessie_<somenum>) (2)) in
+           (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) _jessie_<somenum>) _jessie_<somenum>)))));
+          _jessie_<somenum> end) end)) in
        begin
          [ { } unit
            { ((JC_<somenum>: (true = true))
@@ -1150,7 +1115,7 @@ let f_safety =
                             (0), (2)),
                  pset_range(pset_deref(__anonstruct_S_1_a_vect_1@,
                             pset_singleton(vect)),
-                 (0), (2)))))) } ]; jessie_<somenum> end) in void);
+                 (0), (2)))))) } ]; _jessie_<somenum> end) in void);
       [ { } unit
         reads __anonstruct_S_1_Sum_vect_1,unsigned_charP_unsigned_charM_vect_1
         { (JC_<somenum>:
@@ -1163,117 +1128,106 @@ let f_safety =
                                                             vect),
                                                       m))))))) } ]; void;
       try
-       (C_21:
-       (loop_1:
        begin
-         (let jessie_<somenum> = (i := (safe_uint8_of_integer_ (0))) in void);
-        while true do
-        { invariant (JC_<somenum>: true)
-          variant (JC_<somenum> : sub_int((3), integer_of_uint8(i))) }
-         begin
-           [ { } unit
-             reads __anonstruct_S_1_Sum_vect_1,__anonstruct_S_1_a_vect_1,__anonstruct_S_1_b_vect_1,i,unsigned_charP_unsigned_charM_vect_1
-             { ((JC_<somenum>:
-                (forall m_2:int.
-                 ((le_int((0), m_2) and lt_int(m_2, integer_of_uint8(i))) ->
-                  (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
-                                    shift(select(__anonstruct_S_1_Sum_vect_1,
-                                          vect),
-                                    m_2))) = add_int(integer_of_uint8(
-                                                     select(unsigned_charP_unsigned_charM_vect_1,
-                                                     shift(select(__anonstruct_S_1_a_vect_1,
-                                                           vect),
-                                                     m_2))),
-                                             integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
-                                                              shift(select(__anonstruct_S_1_b_vect_1,
-                                                                    vect),
-                                                              m_2))))))))
-               and ((JC_<somenum>:
-                    (forall m_1:int.
-                     ((le_int(integer_of_uint8(i), m_1) and lt_int(m_1, (3))) ->
-                      (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
-                                        shift(select(__anonstruct_S_1_Sum_vect_1,
-                                              vect),
-                                        m_1))) = integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1@init,
-                                                                  shift(
-                                                                  select(__anonstruct_S_1_Sum_vect_1@init,
-                                                                  vect), m_1)))))))
-                   and ((JC_<somenum>:
-                        (forall m_0:int.
-                         ((le_int((0), m_0) and lt_int(m_0, (3))) ->
-                          ((integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
-                                             shift(select(__anonstruct_S_1_a_vect_1,
-                                                   vect),
-                                             m_0))) = integer_of_uint8(
-                                                      select(unsigned_charP_unsigned_charM_vect_1,
-                                                      shift(select(__anonstruct_S_1_a_vect_1,
-                                                            vect),
-                                                      m_0))))
-                          and (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
-                                                shift(select(__anonstruct_S_1_b_vect_1,
-                                                      vect),
-                                                m_0))) = integer_of_uint8(
-                                                         select(unsigned_charP_unsigned_charM_vect_1,
-                                                         shift(select(__anonstruct_S_1_b_vect_1,
-                                                               vect),
-                                                         m_0))))))))
-                       and (JC_<somenum>:
-                           ((JC_<somenum>: le_int((0), integer_of_uint8(i)))
-                           and (JC_<somenum>: le_int(integer_of_uint8(i), (3)))))))) } ];
-          try
+         (let _jessie_<somenum> = (i := (safe_uint8_of_integer_ (0))) in void);
+        (loop_1:
+        begin
+          while true do
+          { invariant (JC_<somenum>: true)
+            variant (JC_<somenum> : sub_int((3), integer_of_uint8(i))) }
            begin
-             (let jessie_<somenum> =
-             (C_44:
+             [ { } unit
+               reads __anonstruct_S_1_Sum_vect_1,__anonstruct_S_1_a_vect_1,__anonstruct_S_1_b_vect_1,i,unsigned_charP_unsigned_charM_vect_1
+               { ((JC_<somenum>:
+                  (forall m_2:int.
+                   ((le_int((0), m_2) and lt_int(m_2, integer_of_uint8(i))) ->
+                    (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
+                                      shift(select(__anonstruct_S_1_Sum_vect_1,
+                                            vect),
+                                      m_2))) = add_int(integer_of_uint8(
+                                                       select(unsigned_charP_unsigned_charM_vect_1,
+                                                       shift(select(__anonstruct_S_1_a_vect_1,
+                                                             vect),
+                                                       m_2))),
+                                               integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
+                                                                shift(
+                                                                select(__anonstruct_S_1_b_vect_1,
+                                                                vect), m_2))))))))
+                 and ((JC_<somenum>:
+                      (forall m_1:int.
+                       ((le_int(integer_of_uint8(i), m_1)
+                        and lt_int(m_1, (3))) ->
+                        (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
+                                          shift(select(__anonstruct_S_1_Sum_vect_1,
+                                                vect),
+                                          m_1))) = integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1@init,
+                                                                    shift(
+                                                                    select(__anonstruct_S_1_Sum_vect_1@init,
+                                                                    vect),
+                                                                    m_1)))))))
+                     and ((JC_<somenum>:
+                          (forall m_0:int.
+                           ((le_int((0), m_0) and lt_int(m_0, (3))) ->
+                            ((integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
+                                               shift(select(__anonstruct_S_1_a_vect_1,
+                                                     vect),
+                                               m_0))) = integer_of_uint8(
+                                                        select(unsigned_charP_unsigned_charM_vect_1,
+                                                        shift(select(__anonstruct_S_1_a_vect_1,
+                                                              vect),
+                                                        m_0))))
+                            and (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
+                                                  shift(select(__anonstruct_S_1_b_vect_1,
+                                                        vect),
+                                                  m_0))) = integer_of_uint8(
+                                                           select(unsigned_charP_unsigned_charM_vect_1,
+                                                           shift(select(__anonstruct_S_1_b_vect_1,
+                                                                 vect),
+                                                           m_0))))))))
+                         and (JC_<somenum>:
+                             ((JC_<somenum>: le_int((0), integer_of_uint8(i)))
+                             and (JC_<somenum>: le_int(integer_of_uint8(i), (3)))))))) } ];
+            try
              begin
-               (if ((lt_int_ (integer_of_int32 (C_29:
-                                               (JC_<somenum>:
-                                               (int32_of_integer_ (integer_of_uint8 !i)))))) (3))
-               then void else (raise (Goto_while_0_break_exc void)));
-              (let jessie_<somenum> =
-              (C_40:
-              (let jessie_<somenum> =
-              (C_37:
-              (JC_<somenum>:
-              (uint8_of_integer_ (C_36:
-                                 ((add_int (integer_of_int32 (C_35:
-                                                             (JC_<somenum>:
-                                                             (int32_of_integer_ 
-                                                              (integer_of_uint8 
-                                                               (C_34:
-                                                               (JC_<somenum>:
-                                                               ((((offset_acc_ !unsigned_charP_vect_1_alloc_table) !unsigned_charP_unsigned_charM_vect_1) 
-                                                                 (C_33:
-                                                                 ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect))) 
-                                                                (integer_of_uint8 !i)))))))))) 
-                                  (integer_of_int32 (C_32:
+               (let _jessie_<somenum> =
+               begin
+                 (if ((lt_int_ (integer_of_int32 (JC_<somenum>:
+                                                 (int32_of_integer_ (integer_of_uint8 !i))))) (3))
+                 then void else (raise (Goto_while_0_break_exc void)));
+                (let _jessie_<somenum> =
+                (let _jessie_<somenum> =
+                (JC_<somenum>:
+                (uint8_of_integer_ ((add_int (integer_of_int32 (JC_<somenum>:
+                                                               (int32_of_integer_ 
+                                                                (integer_of_uint8 
+                                                                 (JC_<somenum>:
+                                                                 ((((offset_acc_ !unsigned_charP_vect_1_alloc_table) !unsigned_charP_unsigned_charM_vect_1) 
+                                                                   ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect)) 
+                                                                  (integer_of_uint8 !i)))))))) 
+                                    (integer_of_int32 (JC_<somenum>:
+                                                      (int32_of_integer_ 
+                                                       (integer_of_uint8 
+                                                        (JC_<somenum>:
+                                                        ((((offset_acc_ !unsigned_charP_vect_1_alloc_table) !unsigned_charP_unsigned_charM_vect_1) 
+                                                          ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect)) 
+                                                         (integer_of_uint8 !i)))))))))) in
+                (let _jessie_<somenum> =
+                ((safe_acc_ !__anonstruct_S_1_Sum_vect_1) vect) in
+                (let _jessie_<somenum> = (integer_of_uint8 !i) in
+                (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+                (JC_<somenum>:
+                begin
+                  (((((offset_upd_ !unsigned_charP_vect_1_alloc_table) unsigned_charP_unsigned_charM_vect_1) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>);
+                 _jessie_<somenum> end))))) in void);
+                (i := (JC_<somenum>:
+                      (uint8_of_integer_ ((add_int (integer_of_int32 
                                                     (JC_<somenum>:
                                                     (int32_of_integer_ 
-                                                     (integer_of_uint8 
-                                                      (C_31:
-                                                      (JC_<somenum>:
-                                                      ((((offset_acc_ !unsigned_charP_vect_1_alloc_table) !unsigned_charP_unsigned_charM_vect_1) 
-                                                        (C_30:
-                                                        ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect))) 
-                                                       (integer_of_uint8 !i)))))))))))))) in
-              (let jessie_<somenum> =
-              (C_38: ((safe_acc_ !__anonstruct_S_1_Sum_vect_1) vect)) in
-              (let jessie_<somenum> = (integer_of_uint8 !i) in
-              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-              (JC_<somenum>:
-              begin
-                (((((offset_upd_ !unsigned_charP_vect_1_alloc_table) unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>);
-               jessie_<somenum> end)))))) in void);
-              (i := (C_43:
-                    (JC_<somenum>:
-                    (uint8_of_integer_ (C_42:
-                                       ((add_int (integer_of_int32 (C_41:
-                                                                   (JC_<somenum>:
-                                                                   (int32_of_integer_ 
-                                                                    (integer_of_uint8 !i)))))) (1)))))));
-              !i end) in void); (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end)) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
+                                                     (integer_of_uint8 !i))))) (1)))));
+                !i end in void); (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc _jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end with
+       Goto_while_0_break_exc _jessie_<somenum> -> (while_0_break: void) end;
       (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_<somenum>: valid_vect(__anonstruct_S_1_vect_1_alloc_table)) }
 
@@ -1285,7 +1239,7 @@ why --project [...] why/sum3.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/sum3_po1.why">
-      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "81" begin = "8" end = "458"/>
+      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "81" begin = "8" end = "476"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/sum3_po2.why">
@@ -1309,7 +1263,7 @@ why --project [...] why/sum3.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/sum3_po7.why">
-      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "101" begin = "9" end = "1808"/>
+      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "101" begin = "9" end = "1964"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/sum3_po8.why">
@@ -1329,7 +1283,7 @@ why --project [...] why/sum3.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/sum3_po12.why">
-      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "101" begin = "9" end = "1808"/>
+      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "101" begin = "9" end = "1964"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/sum3_po13.why">
@@ -1403,12 +1357,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/sum3_po27.why">
-      <location file = "why/sum3.why" line = "1117" begin = "17" end = "138"/>
+      <location file = "why/sum3.why" line = "1071" begin = "19" end = "143"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/sum3_po28.why">
-      <location file = "why/sum3.why" line = "1117" begin = "17" end = "138"/>
+      <location file = "why/sum3.why" line = "1071" begin = "19" end = "143"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

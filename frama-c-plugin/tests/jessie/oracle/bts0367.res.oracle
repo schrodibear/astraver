@@ -1,6 +1,6 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0367.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0367.c"
-bts0367.c:18:[kernel] warning: Floating-point constant 1E-6 is not represented exactly. Will use 0x1.0c6f7a0b5ed8dp-20. See documentation for option -warn-decimal-float
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0367.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0367.c"
+PPCHOME/tests/jessie/bts0367.c:18:[kernel] warning: Floating-point constant 1E-6 is not represented exactly. Will use 0x1.0c6f7a0b5ed8dp-20. See documentation for option -warn-decimal-float
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0367.jessie
 [jessie] File bts0367.jessie/bts0367.jc written.
@@ -42,12 +42,12 @@ type voidP = [voidP]
 
 int32 func1(float x)
 behavior default:
-  ensures (C_3 : (\result == 1));
+  ensures (_C_3 : (\result == 1));
 {  
    (var int32 __retres);
    
-   {  (if ((C_1 : (x :> double)) < (1E-6 :> double)) then () else ());
-      (C_2 : (__retres = 1));
+   {  (if ((_C_1 : (x :> double)) < (1E-6 :> double)) then () else ());
+      (_C_2 : (__retres = 1));
       
       (return __retres)
    }
@@ -409,12 +409,11 @@ let func1_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_2:
      begin
-       (if ((lt_double_ (C_1: (double_of_single x_0))) ((double_of_real_safe nearest_even) 1E-6))
+       (if ((lt_double_ (double_of_single x_0)) ((double_of_real_safe nearest_even) 1E-6))
        then void else void);
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+      (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { (JC_<somenum>: (integer_of_int32(result) = (1))) }
 
 let func1_safety =
@@ -425,13 +424,12 @@ let func1_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_2:
      begin
-       (if ((lt_double_ (C_1: (double_of_single x_0))) (JC_<somenum>:
-                                                       ((double_of_real nearest_even) 1E-6)))
+       (if ((lt_double_ (double_of_single x_0)) (JC_<somenum>:
+                                                ((double_of_real nearest_even) 1E-6)))
        then void else void);
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+      (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { true }
 
 
@@ -448,7 +446,7 @@ why --project [...] why/bts0367.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0367_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0367.jessie/bts0367.jc" line = "42" begin = "35" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/bts0367.jessie/bts0367.jc" line = "42" begin = "36" end = "52"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

@@ -1,30 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
   version="0.94"/>
  <prover
   id="1"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="2"
   name="Gappa"
-  version="0.16.6"/>
+  version="1.1.0"/>
+ <prover
+  id="3"
+  name="Z3"
+  version="4.3.1"/>
  <file
   name="../scalar_product.mlw"
   verified="true"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
    locfile="../scalar_product.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
-   expanded="false">
+   expanded="true">
    <goal
     name="bound_int_to_real"
     locfile="../../scalar_product.c"
     loclnum="33" loccnumb="4" loccnume="76"
     expl="Lemma bound_int_to_real, lemma"
-    sum="95b78299157da4704af196f2b96bb8b4"
+    sum="b1f4817f33a0886c8105acb45942176f"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=afrom_intV0c10.0Iainfix &lt;=V0c10F">
@@ -32,11 +40,19 @@
      name="expl:Lemma bound_int_to_real, lemma"/>
     <proof
      prover="1"
-     timelimit="3"
-     memlimit="0"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
   </theory>
@@ -45,16 +61,18 @@
    locfile="../scalar_product.mlw"
    loclnum="379" loccnumb="7" loccnume="21"
    verified="true"
-   expanded="false">
+   expanded="true">
    <goal
     name="WP_parameter scalar_product_ensures_default"
     locfile="../../scalar_product.c"
     loclnum="45" loccnumb="7" loccnume="21"
     expl="VC for scalar_product_ensures_default"
-    sum="2420bb27d73bc95d395db95bc5c76ac6"
+    sum="bb8112b47fe90a757b213484d7096eb9"
     proved="true"
-    expanded="false"
-    shape="iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2ainfix &lt;=ainteger_of_int32V17ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V17Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V17V6V5afrom_intainteger_of_int32V17Aainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainteger_of_int32V17V6V5ainfix *afrom_intainteger_of_int32V17c0x1.1p-50Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FAainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Aainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FAainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Aainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0ainfix &lt;=aabsainfix -avalueV18aexact_scalar_productV0V1ainteger_of_int32V2V6V5ainfix *afrom_intainteger_of_int32V2c0x1.1p-50Iainfix =V18V12FIainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FAainfix &lt;=ainteger_of_int32V10ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V10V6V5afrom_intainteger_of_int32V10Aainfix &lt;=aabsainfix -avalueV8aexact_scalar_productV0V1ainteger_of_int32V10V6V5ainfix *afrom_intainteger_of_int32V10c0x1.1p-50Iainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V19c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V19c1.0Iainfix &lt;V19ainteger_of_int32V2Aainfix &lt;=c0V19FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+    expanded="true"
+    shape="iainfix &lt;=aabsainfix -avalueV13aexact_scalar_productV0V1ainteger_of_int32V2V6V5ainfix *afrom_intainteger_of_int32V2c0x1.1p-50Iainfix =V13V12Fainfix &lt;=ainteger_of_int32V18ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V18Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V18V6V5afrom_intainteger_of_int32V18Aainfix &lt;=aabsainfix -avalueV16aexact_scalar_productV0V1ainteger_of_int32V18V6V5ainfix *afrom_intainteger_of_int32V18c0x1.1p-50Iainfix =V18V17FIainfix =ainteger_of_int32V17ainfix +ainteger_of_int32V11c1FAainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Aainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV16aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV16ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV16ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V16V15FIaadd_postaNearestTiesToEvenV12V14V15FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V14FAainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Aainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0ainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FAainfix &lt;=ainteger_of_int32V10ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V10V6V5afrom_intainteger_of_int32V10Aainfix &lt;=aabsainfix -avalueV8aexact_scalar_productV0V1ainteger_of_int32V10V6V5ainfix *afrom_intainteger_of_int32V10c0x1.1p-50Iainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V19c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V19c1.0Iainfix &lt;V19ainteger_of_int32V2Aainfix &lt;=c0V19FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function scalar_product, default behavior"/>
     <label
@@ -68,10 +86,12 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="1. loop invariant init"
-      sum="3bdddf3e61a8783ec8cd29f6758f6b3e"
+      sum="063efb1788558ce0a871db4312a05a24"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=ainteger_of_int32V10ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V10V6V5afrom_intainteger_of_int32V10Aainfix &lt;=aabsainfix -avalueV8aexact_scalar_productV0V1ainteger_of_int32V10V6V5ainfix *afrom_intainteger_of_int32V10c0x1.1p-50Iainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V11c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V11c1.0Iainfix &lt;V11ainteger_of_int32V2Aainfix &lt;=c0V11FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="loop invariant initainfix &lt;=ainteger_of_int32V10ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V10V6V5afrom_intainteger_of_int32V10Aainfix &lt;=aabsainfix -avalueV8aexact_scalar_productV0V1ainteger_of_int32V10V6V5ainfix *afrom_intainteger_of_int32V10c0x1.1p-50Iainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V11c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V11c1.0Iainfix &lt;V11ainteger_of_int32V2Aainfix &lt;=c0V11FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function scalar_product, default behavior"/>
       <label
@@ -90,10 +110,12 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="2. assertion"
-      sum="1ebf03b5a2ba03cef1083503e5ee0567"
+      sum="5265e2b712fb5d2aad4c041be1f9f267"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V13c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V13c1.0Iainfix &lt;V13ainteger_of_int32V2Aainfix &lt;=c0V13FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="assertionainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V13c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V13c1.0Iainfix &lt;V13ainteger_of_int32V2Aainfix &lt;=c0V13FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function scalar_product, default behavior"/>
       <label
@@ -112,10 +134,12 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="3. assertion"
-      sum="7d0858c94af3a7709f128c80e87701ce"
+      sum="1462404067aa74771d570d336ec0ab4e"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V13c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V13c1.0Iainfix &lt;V13ainteger_of_int32V2Aainfix &lt;=c0V13FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="assertionainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V13c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V13c1.0Iainfix &lt;V13ainteger_of_int32V2Aainfix &lt;=c0V13FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function scalar_product, default behavior"/>
       <label
@@ -134,10 +158,12 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="4. assertion"
-      sum="106d9033fbec52d50623bf6a06a68be5"
+      sum="a15586bfa387dfbdb1614be80df12c00"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V13c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V13c1.0Iainfix &lt;V13ainteger_of_int32V2Aainfix &lt;=c0V13FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="assertionainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V13c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V13c1.0Iainfix &lt;V13ainteger_of_int32V2Aainfix &lt;=c0V13FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function scalar_product, default behavior"/>
       <label
@@ -156,16 +182,18 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="5. assertion"
-      sum="b14fae1fc30e45c1f7f0053515c25519"
+      sum="0f8c5491df3b7010bf2cdbe2ad986971"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V16c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V16c1.0Iainfix &lt;V16ainteger_of_int32V2Aainfix &lt;=c0V16FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="assertionainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V16c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V16c1.0Iainfix &lt;V16ainteger_of_int32V2Aainfix &lt;=c0V16FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function scalar_product, default behavior"/>
       <label
        name="expl:VC for scalar_product_ensures_default"/>
       <proof
-       prover="1"
+       prover="2"
        timelimit="3"
        memlimit="0"
        obsolete="false"
@@ -178,10 +206,12 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="6. assertion"
-      sum="2cc8e45a9d818f6a95ea6952c6f7d8fa"
+      sum="7dc4359db123fd4b1812d63d24f3d35e"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V16c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V16c1.0Iainfix &lt;V16ainteger_of_int32V2Aainfix &lt;=c0V16FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="assertionainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V16c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V16c1.0Iainfix &lt;V16ainteger_of_int32V2Aainfix &lt;=c0V16FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function scalar_product, default behavior"/>
       <label
@@ -200,10 +230,12 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="7. assertion"
-      sum="247c9ad370e21dfdb697f2af7b0cf27b"
+      sum="0a85749d42929e137a158937422903b4"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V16c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V16c1.0Iainfix &lt;V16ainteger_of_int32V2Aainfix &lt;=c0V16FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="assertionainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V16c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V16c1.0Iainfix &lt;V16ainteger_of_int32V2Aainfix &lt;=c0V16FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function scalar_product, default behavior"/>
       <label
@@ -214,7 +246,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.40"/>
+       <result status="valid" time="1.89"/>
       </proof>
      </goal>
      <goal
@@ -222,10 +254,12 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="8. assertion"
-      sum="3d6b39acb85acb98b459b55553e965ff"
+      sum="d91f0b37763c18514d686f5f144e5354"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V16c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V16c1.0Iainfix &lt;V16ainteger_of_int32V2Aainfix &lt;=c0V16FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="assertionainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V16c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V16c1.0Iainfix &lt;V16ainteger_of_int32V2Aainfix &lt;=c0V16FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function scalar_product, default behavior"/>
       <label
@@ -236,7 +270,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.82"/>
+       <result status="valid" time="1.43"/>
       </proof>
      </goal>
      <goal
@@ -244,10 +278,12 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="9. loop invariant preservation"
-      sum="33bbe07b310a76538119c235d6eef74c"
+      sum="3bfca7d0a0f4fa1b02c8d5ed3c467ca9"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=ainteger_of_int32V17ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V17Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V17V6V5afrom_intainteger_of_int32V17Aainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainteger_of_int32V17V6V5ainfix *afrom_intainteger_of_int32V17c0x1.1p-50Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V18c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V18c1.0Iainfix &lt;V18ainteger_of_int32V2Aainfix &lt;=c0V18FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="loop invariant preservationainfix &lt;=ainteger_of_int32V17ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V17Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V17V6V5afrom_intainteger_of_int32V17Aainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainteger_of_int32V17V6V5ainfix *afrom_intainteger_of_int32V17c0x1.1p-50Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V18c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V18c1.0Iainfix &lt;V18ainteger_of_int32V2Aainfix &lt;=c0V18FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function scalar_product, default behavior"/>
       <label
@@ -255,16 +291,18 @@
       <transf
        name="split_goal"
        proved="true"
-       expanded="true">
+       expanded="false">
        <goal
         name="WP_parameter scalar_product_ensures_default.9.1"
         locfile="../../scalar_product.c"
         loclnum="45" loccnumb="7" loccnume="21"
         expl="1."
-        sum="6103f8d523773e72ffbb3f0ea376394d"
+        sum="c03c93e47834cfb9e82a51fba1b98ca3"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainteger_of_int32V17V6V5ainfix *afrom_intainteger_of_int32V17c0x1.1p-50Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V18c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V18c1.0Iainfix &lt;V18ainteger_of_int32V2Aainfix &lt;=c0V18FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function scalar_product, default behavior"/>
         <label
@@ -283,10 +321,12 @@
         locfile="../../scalar_product.c"
         loclnum="45" loccnumb="7" loccnume="21"
         expl="2."
-        sum="f0c768d5ce17e212eed9b1bc66828c18"
+        sum="dc927398d30274082006653212d710d0"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V17V6V5afrom_intainteger_of_int32V17Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V18c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V18c1.0Iainfix &lt;V18ainteger_of_int32V2Aainfix &lt;=c0V18FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function scalar_product, default behavior"/>
         <label
@@ -305,10 +345,12 @@
         locfile="../../scalar_product.c"
         loclnum="45" loccnumb="7" loccnume="21"
         expl="3."
-        sum="85cb457aefb25e78673cbf47364f5513"
+        sum="84d5b9b804389232a2599161171f5cc1"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0ainteger_of_int32V17Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V18c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V18c1.0Iainfix &lt;V18ainteger_of_int32V2Aainfix &lt;=c0V18FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function scalar_product, default behavior"/>
         <label
@@ -327,10 +369,12 @@
         locfile="../../scalar_product.c"
         loclnum="45" loccnumb="7" loccnume="21"
         expl="4."
-        sum="402152c917d91b881f79e95f61399093"
+        sum="2766100bb00f7daf1fe011e00fb3b4ee"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=ainteger_of_int32V17ainteger_of_int32V2Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V18c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V18c1.0Iainfix &lt;V18ainteger_of_int32V2Aainfix &lt;=c0V18FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function scalar_product, default behavior"/>
         <label
@@ -351,10 +395,12 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="10. postcondition"
-      sum="746d00a97e727b554f5d40da4d9959b5"
+      sum="46f8ec564ed80127f5044b379e9f2cd1"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsainfix -avalueV13aexact_scalar_productV0V1ainteger_of_int32V2V6V5ainfix *afrom_intainteger_of_int32V2c0x1.1p-50Iainfix =V13V12FIainfix &lt;ainteger_of_int32V11ainteger_of_int32V2NIainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V14c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V14c1.0Iainfix &lt;V14ainteger_of_int32V2Aainfix &lt;=c0V14FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="postconditionainfix &lt;=aabsainfix -avalueV13aexact_scalar_productV0V1ainteger_of_int32V2V6V5ainfix *afrom_intainteger_of_int32V2c0x1.1p-50Iainfix =V13V12FINainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V14c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V14c1.0Iainfix &lt;V14ainteger_of_int32V2Aainfix &lt;=c0V14FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function scalar_product, default behavior"/>
       <label
@@ -375,10 +421,10 @@
     locfile="../../scalar_product.c"
     loclnum="45" loccnumb="7" loccnume="21"
     expl="VC for scalar_product_safety"
-    sum="45f9803e77ad00eaeb4bd4601470026e"
+    sum="8770c3e2212870bbd204a683c9975702"
     proved="true"
-    expanded="false"
-    shape="ainfix &lt;ainfix -ainteger_of_int32V2ainteger_of_int32V19ainfix -ainteger_of_int32V2ainteger_of_int32V11Aainfix &lt;=c0ainfix -ainteger_of_int32V2ainteger_of_int32V11Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix +ainteger_of_int32V11c1FAainfix &lt;=ainfix +ainteger_of_int32V11c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V11c1Iainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV17aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V17V16FIaadd_postaNearestTiesToEvenV12V15V16FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV12avalueV15amax_doubleIamul_postaNearestTiesToEvenV14V13V15FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV14avalueV13amax_doubleLaselectV5ashiftV0ainteger_of_int32V11Aainfix &lt;=ainteger_of_int32V11aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11Aainfix &lt;=ainteger_of_int32V11aoffset_maxV4V1Aainfix &lt;=aoffset_minV4V1ainteger_of_int32V11Iainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V20c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V20c1.0Iainfix &lt;V20ainteger_of_int32V2Aainfix &lt;=c0V20FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+    expanded="true"
+    shape="ainfix &lt;ainfix -ainteger_of_int32V2ainteger_of_int32V24ainfix -ainteger_of_int32V2ainteger_of_int32V11Aainfix &lt;=c0ainfix -ainteger_of_int32V2ainteger_of_int32V11Iainfix =V24V23FIainfix =ainteger_of_int32V23V22FAainfix &lt;=V22c2147483647Aainfix &lt;=aprefix -c2147483648V22Lainfix +ainteger_of_int32V11c1Iainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV21aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV21ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV21ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V21V20FIaadd_postV19V12V18V20FAainfix &lt;=aabsaroundV19ainfix +avalueV12avalueV18amax_doubleLaNearestTiesToEvenIamul_postV17V16V14V18FAainfix &lt;=aabsaroundV17ainfix *avalueV16avalueV14amax_doubleLaNearestTiesToEvenLaselectV5ashiftV0V15Aainfix &lt;=V15aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V15Lainteger_of_int32V11LaselectV6ashiftV1V13Aainfix &lt;=V13aoffset_maxV4V1Aainfix &lt;=aoffset_minV4V1V13Lainteger_of_int32V11Iainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V25c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V25c1.0Iainfix &lt;V25ainteger_of_int32V2Aainfix &lt;=c0V25FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
     <label
      name="expl:Function scalar_product, Safety"/>
     <label
@@ -392,10 +438,10 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="1. pointer dereference"
-      sum="d79be78b66e4c66a595cc4d6f4754bac"
+      sum="8266fdb31c695afde7df83b635f9bbf1"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=ainteger_of_int32V11aoffset_maxV4V1Aainfix &lt;=aoffset_minV4V1ainteger_of_int32V11Iainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V13c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V13c1.0Iainfix &lt;V13ainteger_of_int32V2Aainfix &lt;=c0V13FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="pointer dereferenceainfix &lt;=V13aoffset_maxV4V1Aainfix &lt;=aoffset_minV4V1V13Lainteger_of_int32V11Iainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V14c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V14c1.0Iainfix &lt;V14ainteger_of_int32V2Aainfix &lt;=c0V14FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
       <label
        name="expl:Function scalar_product, Safety"/>
       <label
@@ -414,10 +460,10 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="2. pointer dereference"
-      sum="3b4f02f8e00733f1dc97fcec3bea97da"
+      sum="7564ad98b3335e7a59d6fa7990939018"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=ainteger_of_int32V11aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11aoffset_maxV4V1Aainfix &lt;=aoffset_minV4V1ainteger_of_int32V11Iainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V14c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V14c1.0Iainfix &lt;V14ainteger_of_int32V2Aainfix &lt;=c0V14FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="pointer dereferenceainfix &lt;=V15aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V15Lainteger_of_int32V11LaselectV6ashiftV1V13Iainfix &lt;=V13aoffset_maxV4V1Aainfix &lt;=aoffset_minV4V1V13Lainteger_of_int32V11Iainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V16c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V16c1.0Iainfix &lt;V16ainteger_of_int32V2Aainfix &lt;=c0V16FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
       <label
        name="expl:Function scalar_product, Safety"/>
       <label
@@ -436,16 +482,16 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="3. floating-point overflow"
-      sum="389fe245bc74159d9eb84187961751a2"
+      sum="4a085366c16d2f274318c89c3a3131b9"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV14avalueV13amax_doubleLaselectV5ashiftV0ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11aoffset_maxV4V1Aainfix &lt;=aoffset_minV4V1ainteger_of_int32V11Iainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V15c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V15c1.0Iainfix &lt;V15ainteger_of_int32V2Aainfix &lt;=c0V15FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV17ainfix *avalueV16avalueV14amax_doubleLaNearestTiesToEvenLaselectV5ashiftV0V15Iainfix &lt;=V15aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V15Lainteger_of_int32V11LaselectV6ashiftV1V13Iainfix &lt;=V13aoffset_maxV4V1Aainfix &lt;=aoffset_minV4V1V13Lainteger_of_int32V11Iainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V18c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V18c1.0Iainfix &lt;V18ainteger_of_int32V2Aainfix &lt;=c0V18FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
       <label
        name="expl:Function scalar_product, Safety"/>
       <label
        name="expl:VC for scalar_product_safety"/>
       <proof
-       prover="1"
+       prover="2"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -458,16 +504,16 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="4. floating-point overflow"
-      sum="245d9ddbf0deb57e70b79beb437280ce"
+      sum="441982fbbe6364954cf944f6225eba15"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV12avalueV15amax_doubleIamul_postaNearestTiesToEvenV14V13V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV14avalueV13amax_doubleLaselectV5ashiftV0ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11aoffset_maxV4V1Aainfix &lt;=aoffset_minV4V1ainteger_of_int32V11Iainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V16c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V16c1.0Iainfix &lt;V16ainteger_of_int32V2Aainfix &lt;=c0V16FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV19ainfix +avalueV12avalueV18amax_doubleLaNearestTiesToEvenIamul_postV17V16V14V18FIainfix &lt;=aabsaroundV17ainfix *avalueV16avalueV14amax_doubleLaNearestTiesToEvenLaselectV5ashiftV0V15Iainfix &lt;=V15aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V15Lainteger_of_int32V11LaselectV6ashiftV1V13Iainfix &lt;=V13aoffset_maxV4V1Aainfix &lt;=aoffset_minV4V1V13Lainteger_of_int32V11Iainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V20c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V20c1.0Iainfix &lt;V20ainteger_of_int32V2Aainfix &lt;=c0V20FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
       <label
        name="expl:Function scalar_product, Safety"/>
       <label
        name="expl:VC for scalar_product_safety"/>
       <proof
-       prover="1"
+       prover="2"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -480,10 +526,10 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="5. arithmetic overflow"
-      sum="a3f59ffe65710468196efc565a3415ec"
+      sum="d5489deb0505b53ea436b5eb39225e70"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=ainfix +ainteger_of_int32V11c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V11c1Iainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV17aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V17V16FIaadd_postaNearestTiesToEvenV12V15V16FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV12avalueV15amax_doubleIamul_postaNearestTiesToEvenV14V13V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV14avalueV13amax_doubleLaselectV5ashiftV0ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11aoffset_maxV4V1Aainfix &lt;=aoffset_minV4V1ainteger_of_int32V11Iainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V18c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V18c1.0Iainfix &lt;V18ainteger_of_int32V2Aainfix &lt;=c0V18FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="arithmetic overflowainfix &lt;=V22c2147483647Aainfix &lt;=aprefix -c2147483648V22Lainfix +ainteger_of_int32V11c1Iainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV21aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV21ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV21ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V21V20FIaadd_postV19V12V18V20FIainfix &lt;=aabsaroundV19ainfix +avalueV12avalueV18amax_doubleLaNearestTiesToEvenIamul_postV17V16V14V18FIainfix &lt;=aabsaroundV17ainfix *avalueV16avalueV14amax_doubleLaNearestTiesToEvenLaselectV5ashiftV0V15Iainfix &lt;=V15aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V15Lainteger_of_int32V11LaselectV6ashiftV1V13Iainfix &lt;=V13aoffset_maxV4V1Aainfix &lt;=aoffset_minV4V1V13Lainteger_of_int32V11Iainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V23c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V23c1.0Iainfix &lt;V23ainteger_of_int32V2Aainfix &lt;=c0V23FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
       <label
        name="expl:Function scalar_product, Safety"/>
       <label
@@ -502,10 +548,10 @@
       locfile="../../scalar_product.c"
       loclnum="45" loccnumb="7" loccnume="21"
       expl="6. loop variant decrease"
-      sum="bdff9d61fb6247a7ca6821c0bb3d3e97"
+      sum="1fbec6e6beefc741ffeddab829a28581"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;ainfix -ainteger_of_int32V2ainteger_of_int32V19ainfix -ainteger_of_int32V2ainteger_of_int32V11Aainfix &lt;=c0ainfix -ainteger_of_int32V2ainteger_of_int32V11Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix +ainteger_of_int32V11c1FIainfix &lt;=ainfix +ainteger_of_int32V11c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V11c1Iainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV17aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V17V16FIaadd_postaNearestTiesToEvenV12V15V16FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV12avalueV15amax_doubleIamul_postaNearestTiesToEvenV14V13V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV14avalueV13amax_doubleLaselectV5ashiftV0ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11aoffset_maxV4V1Aainfix &lt;=aoffset_minV4V1ainteger_of_int32V11Iainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V20c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V20c1.0Iainfix &lt;V20ainteger_of_int32V2Aainfix &lt;=c0V20FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
+      shape="loop variant decreaseainfix &lt;ainfix -ainteger_of_int32V2ainteger_of_int32V24ainfix -ainteger_of_int32V2ainteger_of_int32V11Aainfix &lt;=c0ainfix -ainteger_of_int32V2ainteger_of_int32V11Iainfix =V24V23FIainfix =ainteger_of_int32V23V22FIainfix &lt;=V22c2147483647Aainfix &lt;=aprefix -c2147483648V22Lainfix +ainteger_of_int32V11c1Iainfix &lt;=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV21aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV21ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix &lt;=aabsainfix -avalueV21ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V21V20FIaadd_postV19V12V18V20FIainfix &lt;=aabsaroundV19ainfix +avalueV12avalueV18amax_doubleLaNearestTiesToEvenIamul_postV17V16V14V18FIainfix &lt;=aabsaroundV17ainfix *avalueV16avalueV14amax_doubleLaNearestTiesToEvenLaselectV5ashiftV0V15Iainfix &lt;=V15aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V15Lainteger_of_int32V11LaselectV6ashiftV1V13Iainfix &lt;=V13aoffset_maxV4V1Aainfix &lt;=aoffset_minV4V1V13Lainteger_of_int32V11Iainfix &lt;=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix &lt;=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix &lt;=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix &lt;ainteger_of_int32V11ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V2Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix &lt;=aabsavalueaselectV6ashiftV1V25c1.0Aainfix &lt;=aabsavalueaselectV5ashiftV0V25c1.0Iainfix &lt;V25ainteger_of_int32V2Aainfix &lt;=c0V25FAainfix &gt;=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV4V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &lt;=ainteger_of_int32V2c10Aainfix &lt;=c0ainteger_of_int32V2F">
       <label
        name="expl:Function scalar_product, Safety"/>
       <label

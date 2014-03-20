@@ -1,2 +1,2 @@
-File "bts6082.jessie/bts6082.jc", line 918, characters 7-14: unsupported goto (backward or to some inner block)
+File "bts6082.jessie/bts6082.jc", line 952, characters 7-14: unsupported goto (backward or to some inner block)
 make: *** [bts6082.regtest] Error 1

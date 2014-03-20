@@ -1,3 +1,33 @@
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2014                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud                   */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud                              */
+/*    Yannick MOY, Univ. Paris-sud                                        */
+/*    Romain BARDOU, Univ. Paris-sud                                      */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud  (former Caduceus front-end)        */
+/*    Nicolas ROUSSET, Univ. Paris-sud (on Jessie & Krakatoa)             */
+/*    Ali AYAD, CNRS & CEA Saclay      (floating-point support)           */
+/*    Sylvie BOLDO, INRIA              (floating-point support)           */
+/*    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     */
+/*    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
 
 // for N = 10
 #define NMAX 10
@@ -36,7 +66,7 @@
 
 
 /*@ requires 0 <= n <= NMAX;
-  @ requires \valid_range(x,0,n-1) && \valid_range(y,0,n-1) ;
+  @ requires \valid(x+(0..n-1)) && \valid(y+(0.. n-1)) ;
   @ requires \forall integer i; 0 <= i < n ==>
   @          \abs(x[i]) <= 1.0 && \abs(y[i]) <= 1.0 ;
   @ ensures
@@ -86,7 +116,7 @@ double scalar_product(double x[], double y[], int n) {
 
 /*
 Local Variables:
-compile-command: "make clock_drift.why3ide"
+compile-command: "make scalar_product.why3ide"
 End:
 */
 

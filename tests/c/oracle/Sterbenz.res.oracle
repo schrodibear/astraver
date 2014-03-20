@@ -88,79 +88,55 @@ tag voidP = {
 type voidP = [voidP]
 
 float Sterbenz(float x, float y)
-  requires (C_6 : ((C_7 : (((y :> real) / 2.0) <= (x :> real))) &&
-                    (C_8 : ((x :> real) <= (2.0 * (y :> real))))));
+  requires (_C_6 : ((_C_7 : (((y :> real) / 2.0) <= (x :> real))) &&
+                     (_C_8 : ((x :> real) <= (2.0 * (y :> real))))));
 behavior default:
-  ensures (C_5 : ((\result :> real) ==
-                   ((\at(x,Old) :> real) - (\at(y,Old) :> real))));
+  ensures (_C_5 : ((\result :> real) ==
+                    ((\at(x,Old) :> real) - (\at(y,Old) :> real))));
 {  
    (var float __retres);
    
    {  
       {  
-         (assert for default: (C_1 : (jessie : (0.0 <= (y :> real)))));
+         (assert for default: (_C_1 : (jessie : (0.0 <= (y :> real)))));
          ()
       };
       
       {  
-         (assert for default: (C_2 : (jessie : (0.0 <= (x :> real)))));
+         (assert for default: (_C_2 : (jessie : (0.0 <= (x :> real)))));
          ()
       };
       
-      {  (C_4 : (__retres = (C_3 : (x - y))));
+      {  (_C_4 : (__retres = (_C_3 : (x - y))));
          
          (return __retres)
       }
    }
 }
 ========== file tests/c/Sterbenz.jessie/Sterbenz.cloc ==========
-[C_1]
-file = "HOME/tests/c/Sterbenz.c"
-line = 38
-begin = 13
-end = 21
-
-[C_2]
-file = "HOME/tests/c/Sterbenz.c"
-line = 39
-begin = 13
-end = 21
-
-[C_3]
-file = "HOME/tests/c/Sterbenz.c"
-line = 40
-begin = 9
-end = 12
-
-[C_4]
+[_C_4]
 file = "HOME/tests/c/Sterbenz.c"
 line = 40
 begin = 2
 end = 13
 
-[C_5]
+[_C_5]
 file = "HOME/tests/c/Sterbenz.c"
 line = 35
 begin = 12
 end = 28
 
-[C_6]
+[_C_6]
 file = "HOME/tests/c/Sterbenz.c"
 line = 34
 begin = 13
 end = 36
 
-[C_7]
+[_C_3]
 file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 13
-end = 25
-
-[C_8]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 24
-end = 36
+line = 40
+begin = 9
+end = 12
 
 [Sterbenz]
 name = "Function Sterbenz"
@@ -168,6 +144,30 @@ file = "HOME/tests/c/Sterbenz.c"
 line = 37
 begin = 6
 end = 14
+
+[_C_7]
+file = "HOME/tests/c/Sterbenz.c"
+line = 34
+begin = 13
+end = 25
+
+[_C_8]
+file = "HOME/tests/c/Sterbenz.c"
+line = 34
+begin = 24
+end = 36
+
+[_C_2]
+file = "HOME/tests/c/Sterbenz.c"
+line = 39
+begin = 13
+end = 21
+
+[_C_1]
+file = "HOME/tests/c/Sterbenz.c"
+line = 38
+begin = 13
+end = 21
 
 ========== jessie execution ==========
 Generating Why function Sterbenz
@@ -181,10 +181,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Sterbenz.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Sterbenz.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Sterbenz.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Sterbenz.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -329,13 +330,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: Sterbenz.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: Sterbenz.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: Sterbenz.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include Sterbenz.depend
 
@@ -346,59 +347,11 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/Sterbenz.jessie/Sterbenz.loc ==========
-[JC_1]
+[JC_17]
 file = "HOME/tests/c/Sterbenz.c"
-line = 34
+line = 39
 begin = 13
-end = 25
-
-[JC_2]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 24
-end = 36
-
-[JC_3]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 13
-end = 36
-
-[JC_4]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_5]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 13
-end = 25
-
-[JC_6]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 24
-end = 36
-
-[JC_7]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 13
-end = 36
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_9]
-file = "HOME/tests/c/Sterbenz.c"
-line = 35
-begin = 12
-end = 28
+end = 21
 
 [Sterbenz_ensures_default]
 name = "Function Sterbenz"
@@ -408,19 +361,19 @@ line = 37
 begin = 6
 end = 14
 
-[JC_10]
+[JC_5]
+file = "HOME/tests/c/Sterbenz.c"
+line = 34
+begin = 13
+end = 25
+
+[JC_9]
 file = "HOME/tests/c/Sterbenz.c"
 line = 35
 begin = 12
 end = 28
 
-[JC_11]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_12]
+[JC_8]
 file = "HOME/"
 line = 0
 begin = -1
@@ -432,11 +385,11 @@ line = 38
 begin = 13
 end = 21
 
-[JC_14]
-file = "HOME/tests/c/Sterbenz.c"
-line = 39
-begin = 13
-end = 21
+[JC_11]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_15]
 kind = FPOverflow
@@ -445,24 +398,23 @@ line = 40
 begin = 9
 end = 12
 
-[JC_16]
-file = "HOME/tests/c/Sterbenz.c"
-line = 38
-begin = 13
-end = 21
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_17]
+[JC_6]
 file = "HOME/tests/c/Sterbenz.c"
-line = 39
-begin = 13
-end = 21
+line = 34
+begin = 24
+end = 36
 
-[JC_18]
-kind = FPOverflow
-file = "HOME/tests/c/Sterbenz.c"
-line = 40
-begin = 9
-end = 12
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [Sterbenz_safety]
 name = "Function Sterbenz"
@@ -471,6 +423,55 @@ file = "HOME/tests/c/Sterbenz.c"
 line = 37
 begin = 6
 end = 14
+
+[JC_7]
+file = "HOME/tests/c/Sterbenz.c"
+line = 34
+begin = 13
+end = 36
+
+[JC_16]
+file = "HOME/tests/c/Sterbenz.c"
+line = 38
+begin = 13
+end = 21
+
+[JC_2]
+file = "HOME/tests/c/Sterbenz.c"
+line = 34
+begin = 24
+end = 36
+
+[JC_14]
+file = "HOME/tests/c/Sterbenz.c"
+line = 39
+begin = 13
+end = 21
+
+[JC_1]
+file = "HOME/tests/c/Sterbenz.c"
+line = 34
+begin = 13
+end = 25
+
+[JC_10]
+file = "HOME/tests/c/Sterbenz.c"
+line = 35
+begin = 12
+end = 28
+
+[JC_18]
+kind = FPOverflow
+file = "HOME/tests/c/Sterbenz.c"
+line = 40
+begin = 9
+end = 12
+
+[JC_3]
+file = "HOME/tests/c/Sterbenz.c"
+line = 34
+begin = 13
+end = 36
 
 ========== file tests/c/Sterbenz.jessie/why/Sterbenz.why ==========
 type charP
@@ -810,14 +811,11 @@ let Sterbenz_ensures_default =
      (let __retres = ref (any_single void) in
      begin
        (assert { (JC_16: le_real(0.0, single_value(y))) }; void); void;
-      (assert { (JC_17: le_real(0.0, single_value(x_0))) }; void);
-      (C_4:
-      begin
-        void;
-       (let jessie_<num> =
-       (__retres := (C_3: (JC_18: (((sub_single_safe nearest_even) x_0) y)))) in
-       void); (return := !__retres); (raise Return) end) end); absurd  end
-   with Return -> !return end))
+      (assert { (JC_17: le_real(0.0, single_value(x_0))) }; void); void;
+      (let _jessie_<num> =
+      (__retres := (JC_18: (((sub_single_safe nearest_even) x_0) y))) in
+      void); (return := !__retres); (raise Return) end); absurd  end with
+   Return -> !return end))
   { (JC_9:
     (single_value(result) = sub_real(single_value(x_0), single_value(y)))) }
 
@@ -833,14 +831,11 @@ let Sterbenz_safety =
      (let __retres = ref (any_single void) in
      begin
        [ { } unit { (JC_13: le_real(0.0, single_value(y))) } ]; void;
-      [ { } unit { (JC_14: le_real(0.0, single_value(x_0))) } ];
-      (C_4:
-      begin
-        void;
-       (let jessie_<num> =
-       (__retres := (C_3: (JC_15: (((sub_single nearest_even) x_0) y)))) in
-       void); (return := !__retres); (raise Return) end) end); absurd  end
-   with Return -> !return end)) { true }
+      [ { } unit { (JC_14: le_real(0.0, single_value(x_0))) } ]; void;
+      (let _jessie_<num> =
+      (__retres := (JC_15: (((sub_single nearest_even) x_0) y))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 ========== generation of alt-ergo VC output ==========
@@ -2327,7 +2322,7 @@ goal Sterbenz_safety_po_1:
 // RUNCOQ: will ask regtests to check Coq proofs of this program
 ========== generation of Coq VC output ==========
 why -coq [...] why/Sterbenz.why
-File "/home/cmarche/recherche/why2-fluorine/tests/c/Sterbenz.jessie/coq/Sterbenz_why.v", line 4, characters 0-37:
+File "/home/marche/why2/tests/c/Sterbenz.jessie/coq/Sterbenz_why.v", line 4, characters 0-37:
 Error: Cannot find library WhyFloatsStrictLegacy in loadpath
 ========== file tests/c/Sterbenz.jessie/coq/Sterbenz_why.v ==========
 (* This file was originally generated by why.
@@ -2679,5 +2674,5 @@ apply Rle_ge; apply Rplus_le_reg_l with (single_value y); ring_simplify; auto wi
 Save.
 
 ========== running Coq ==========
-File "/home/cmarche/recherche/why2-fluorine/tests/c/Sterbenz.jessie/coq/Sterbenz_why.v", line 4, characters 0-37:
+File "/home/marche/why2/tests/c/Sterbenz.jessie/coq/Sterbenz_why.v", line 4, characters 0-37:
 Error: Cannot find library WhyFloatsStrictLegacy in loadpath

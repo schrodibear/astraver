@@ -405,34 +405,34 @@ predicate Permutation{A, B}(intP[..] c_2, int32 n_3) =
   (Count{A}(c_2, x, 0, n_3) == Count{B}(c_2, x, 0, n_3)))
 
 unit pop_push_heap_copy(intP[..] a_1, int32 n_3, int32 parent, int32 child)
-  requires (C_8 : ((C_9 : (0 < n_3)) &&
-                    (C_10 : IsValidRange{Here}(a_1, n_3))));
-  requires (C_3 : ((C_4 : (0 <= parent)) &&
-                    ((C_6 : (parent < child)) && (C_7 : (child < n_3)))));
-  requires (C_2 : ((a_1 + parent).intM == (a_1 + child).intM));
+  requires (_C_8 : ((_C_9 : (0 < n_3)) &&
+                     (_C_10 : IsValidRange{Here}(a_1, n_3))));
+  requires (_C_3 : ((_C_4 : (0 <= parent)) &&
+                     ((_C_6 : (parent < child)) && (_C_7 : (child < n_3)))));
+  requires (_C_2 : ((a_1 + parent).intM == (a_1 + child).intM));
 behavior default:
   assigns \nothing;
-  ensures (C_1 : (\forall int32 x_0;
-                   (CountWithHole{Here}(\at(a_1,Old), x_0, 0, \at(child,Old),
-                                        \at(n_3,Old)) ==
-                     CountWithHole{Here}(\at(a_1,Old), x_0, 0,
-                                         \at(parent,Old), \at(n_3,Old)))));
+  ensures (_C_1 : (\forall int32 x_0;
+                    (CountWithHole{Here}(\at(a_1,Old), x_0, 0,
+                                         \at(child,Old), \at(n_3,Old)) ==
+                      CountWithHole{Here}(\at(a_1,Old), x_0, 0,
+                                          \at(parent,Old), \at(n_3,Old)))));
 ;
 
 unit pop_heap(intP[..] a, int32 n_1)
-  requires (C_106 : ((C_107 : (0 < n_1)) &&
-                      (C_108 : (n_1 < ((2147483647 - 2) / 2)))));
-  requires (C_105 : IsValidRange{Here}(a, n_1));
-  requires (C_104 : IsHeap{Here}(a, n_1));
+  requires (_C_106 : ((_C_107 : (0 < n_1)) &&
+                       (_C_108 : (n_1 < ((2147483647 - 2) / 2)))));
+  requires (_C_105 : IsValidRange{Here}(a, n_1));
+  requires (_C_104 : IsHeap{Here}(a, n_1));
 behavior default:
   assigns (a + [0..(n_1 - 1)]).intM;
-  ensures (C_97 : ((C_98 : IsHeap{Here}(\at(a,Old), (\at(n_1,Old) - 1))) &&
-                    ((C_100 : ((\at(a,Old) + (\at(n_1,Old) - 1)).intM ==
-                                \at((a + 0).intM,Old))) &&
-                      ((C_102 : IsMaximum{Here}(\at(a,Old), \at(n_1,Old),
-                                                (\at(n_1,Old) - 1))) &&
-                        (C_103 : Permutation{Old,
-                        Here}(\at(a,Old), \at(n_1,Old)))))));
+  ensures (_C_97 : ((_C_98 : IsHeap{Here}(\at(a,Old), (\at(n_1,Old) - 1))) &&
+                     ((_C_100 : ((\at(a,Old) + (\at(n_1,Old) - 1)).intM ==
+                                  \at((a + 0).intM,Old))) &&
+                       ((_C_102 : IsMaximum{Here}(\at(a,Old), \at(n_1,Old),
+                                                  (\at(n_1,Old) - 1))) &&
+                         (_C_103 : Permutation{Old,
+                         Here}(\at(a,Old), \at(n_1,Old)))))));
 {  
    (var int32 tmp);
    
@@ -442,124 +442,127 @@ behavior default:
    
    (var int32 child_0);
    
-   {  (C_11 : pop_heap_induction(a, n_1));
+   {  (_C_11 : pop_heap_induction(a, n_1));
       
       {  
-         (assert for default: (C_12 : (jessie : (\forall integer i_16;
-                                                  (((0 < i_16) &&
-                                                     (i_16 < n_1)) ==>
-                                                    ((a + 0).intM >=
-                                                      (a + i_16).intM))))));
+         (assert for default: (_C_12 : (jessie : (\forall integer i_16;
+                                                   (((0 < i_16) &&
+                                                      (i_16 < n_1)) ==>
+                                                     ((a + 0).intM >=
+                                                       (a + i_16).intM))))));
          ()
       };
       
-      {  (C_13 : (tmp = 0));
-         (C_14 : (max = 0))
+      {  (_C_13 : (tmp = 0));
+         (_C_14 : (max = 0))
       };
-      (C_15 : (hole = 0));
-      (C_20 : (tmp = (C_19 : (C_18 : (a +
-                                       (C_17 : ((C_16 : (n_1 - 1)) :> int32)))).intM)));
-      (C_23 : (max = (C_22 : (C_21 : (a + 0)).intM)));
+      (_C_15 : (hole = 0));
+      (_C_20 : (tmp = (_C_19 : (_C_18 : (a +
+                                          (_C_17 : ((_C_16 : (n_1 - 1)) :> int32)))).intM)));
+      (_C_23 : (max = (_C_22 : (_C_21 : (a + 0)).intM)));
       
       {  
-         (assert for default: (C_24 : (jessie : (\forall int32 x_1;
-                                                  (CountWithHole{Here}(
-                                                    a, x_1, 0, hole, n_1) ==
-                                                    Count{Pre}(a, x_1, 1, n_1))))));
+         (assert for default: (_C_24 : (jessie : (\forall int32 x_1;
+                                                   (CountWithHole{Here}(
+                                                     a, x_1, 0, hole, n_1) ==
+                                                     Count{Pre}(a, x_1, 1,
+                                                                n_1))))));
          ()
       };
       
       loop 
       behavior default:
-        invariant (C_31 : ((C_32 : (0 <= hole)) && (C_33 : (hole < n_1))));
+        invariant (_C_31 : ((_C_32 : (0 <= hole)) && (_C_33 : (hole < n_1))));
       behavior default:
-        invariant (C_30 : IsHeap{Here}(a, (n_1 - 1)));
+        invariant (_C_30 : IsHeap{Here}(a, (n_1 - 1)));
       behavior default:
-        invariant (C_29 : (\forall integer i_17;
-                            (((0 <= i_17) && (i_17 < n_1)) ==>
-                              ((a + i_17).intM <= max))));
+        invariant (_C_29 : (\forall integer i_17;
+                             (((0 <= i_17) && (i_17 < n_1)) ==>
+                               ((a + i_17).intM <= max))));
       behavior default:
-        invariant (C_28 : (\forall integer i_18;
-                            (((hole < (n_1 - 1)) && ParentChild(i_18, hole)) ==>
-                              ((a + i_18).intM >= tmp))));
+        invariant (_C_28 : (\forall integer i_18;
+                             (((hole < (n_1 - 1)) && ParentChild(i_18, hole)) ==>
+                               ((a + i_18).intM >= tmp))));
       behavior default:
-        invariant (C_27 : (\forall int32 x_2;
-                            (CountWithHole{Here}(a, x_2, 0, hole, n_1) ==
-                              Count{Pre}(a, x_2, 1, n_1))));
+        invariant (_C_27 : (\forall int32 x_2;
+                             (CountWithHole{Here}(a, x_2, 0, hole, n_1) ==
+                               Count{Pre}(a, x_2, 1, n_1))));
       behavior default:
-        invariant (C_26 : (\at((a + (n_1 - 1)).intM,Pre) ==
-                            (a + (n_1 - 1)).intM));
+        invariant (_C_26 : (\at((a + (n_1 - 1)).intM,Pre) ==
+                             (a + (n_1 - 1)).intM));
       behavior default:
         
         assigns (a + [0..hole]).intM,
         hole;
-      variant (C_25 : (n_1 - hole));
+      variant (_C_25 : (n_1 - hole));
       while (true)
       {  
-         {  (C_38 : (child_0 = (C_37 : ((C_36 : ((C_35 : ((C_34 : (2 * hole)) :> int32)) +
-                                                  2)) :> int32))));
-            (if (child_0 < (C_79 : ((C_78 : (n_1 - 1)) :> int32))) then 
-            {  (if ((C_65 : (C_64 : (a + child_0)).intM) <
-                     (C_63 : (C_62 : (a +
-                                       (C_61 : ((C_60 : (child_0 - 1)) :> int32)))).intM)) then 
-               (C_59 : (child_0 = (C_58 : ((C_57 : (child_0 - 1)) :> int32)))) else ());
+         {  (_C_38 : (child_0 = (_C_37 : ((_C_36 : ((_C_35 : ((_C_34 : 
+                                                              (2 *
+                                                                hole)) :> int32)) +
+                                                     2)) :> int32))));
+            (if (child_0 < (_C_79 : ((_C_78 : (n_1 - 1)) :> int32))) then 
+            {  (if ((_C_65 : (_C_64 : (a + child_0)).intM) <
+                     (_C_63 : (_C_62 : (a +
+                                         (_C_61 : ((_C_60 : (child_0 - 1)) :> int32)))).intM)) then 
+               (_C_59 : (child_0 = (_C_58 : ((_C_57 : (child_0 - 1)) :> int32)))) else ());
                
                {  
-                  (assert for default: (C_66 : (jessie : ParentChild(
-                                               hole, child_0))));
+                  (assert for default: (_C_66 : (jessie : ParentChild(
+                                                hole, child_0))));
                   ()
                };
                
-               {  (if ((C_77 : (C_76 : (a + child_0)).intM) > tmp) then 
+               {  (if ((_C_77 : (_C_76 : (a + child_0)).intM) > tmp) then 
                   {  
                      {  
-                        (assert for default: (C_67 : (jessie : (hole <
-                                                                 (n_1 - 1)))));
+                        (assert for default: (_C_67 : (jessie : (hole <
+                                                                  (n_1 - 1)))));
                         ()
                      };
-                     (C_72 : ((C_71 : (C_70 : (a + hole)).intM) = (C_69 : 
-                                                                  (C_68 : 
-                                                                  (a +
-                                                                    child_0)).intM)));
+                     (_C_72 : ((_C_71 : (_C_70 : (a + hole)).intM) = 
+                     (_C_69 : (_C_68 : (a + child_0)).intM)));
                      
                      {  
-                        (assert for default: (C_73 : (jessie : (\at((a +
-                                                                    (n_1 - 1)).intM,Pre) ==
+                        (assert for default: (_C_73 : (jessie : (\at(
                                                                  (a +
-                                                                   (n_1 - 1)).intM))));
+                                                                   (n_1 - 1)).intM,Pre) ==
+                                                                  (a +
+                                                                    (n_1 - 1)).intM))));
                         ()
                      };
-                     (C_74 : pop_push_heap_copy(a, n_1, hole, child_0));
-                     (C_75 : (hole = child_0))
+                     (_C_74 : pop_push_heap_copy(a, n_1, hole, child_0));
+                     (_C_75 : (hole = child_0))
                   } else 
                   (goto while_0_break))
                }
             } else 
-            {  (C_43 : (child_0 = (C_42 : ((C_41 : ((C_40 : ((C_39 : 
-                                                             (2 *
-                                                               hole)) :> int32)) +
-                                                     1)) :> int32))));
-               (if (child_0 == (C_56 : ((C_55 : (n_1 - 2)) :> int32))) then 
-               (if ((C_54 : (C_53 : (a + child_0)).intM) > tmp) then 
+            {  (_C_43 : (child_0 = (_C_42 : ((_C_41 : ((_C_40 : ((_C_39 : 
+                                                                 (2 *
+                                                                   hole)) :> int32)) +
+                                                        1)) :> int32))));
+               (if (child_0 == (_C_56 : ((_C_55 : (n_1 - 2)) :> int32))) then 
+               (if ((_C_54 : (_C_53 : (a + child_0)).intM) > tmp) then 
                {  
                   {  
-                     (assert for default: (C_44 : (jessie : (hole <
-                                                              (n_1 - 1)))));
+                     (assert for default: (_C_44 : (jessie : (hole <
+                                                               (n_1 - 1)))));
                      ()
                   };
-                  (C_49 : ((C_48 : (C_47 : (a + hole)).intM) = (C_46 : 
-                                                               (C_45 : 
-                                                               (a +
-                                                                 child_0)).intM)));
+                  (_C_49 : ((_C_48 : (_C_47 : (a + hole)).intM) = (_C_46 : 
+                                                                  (_C_45 : 
+                                                                  (a +
+                                                                    child_0)).intM)));
                   
                   {  
-                     (assert for default: (C_50 : (jessie : (\at((a +
-                                                                   (n_1 - 1)).intM,Pre) ==
-                                                              (a + (n_1 - 1)).intM))));
+                     (assert for default: (_C_50 : (jessie : (\at((a +
+                                                                    (n_1 - 1)).intM,Pre) ==
+                                                               (a +
+                                                                 (n_1 - 1)).intM))));
                      ()
                   };
-                  (C_51 : pop_push_heap_copy(a, n_1, hole, child_0));
-                  (C_52 : (hole = child_0))
+                  (_C_51 : pop_push_heap_copy(a, n_1, hole, child_0));
+                  (_C_52 : (hole = child_0))
                } else ()) else ());
                
                (goto while_0_break)
@@ -569,149 +572,155 @@ behavior default:
       (while_0_break : ());
       
       {  
-         (assert for default: (C_80 : (jessie : (\forall integer i_19;
-                                                  (((hole < (n_1 - 1)) &&
-                                                     ParentChild(i_19, hole)) ==>
-                                                    ((a + i_19).intM >= tmp))))));
+         (assert for default: (_C_80 : (jessie : (\forall integer i_19;
+                                                   (((hole < (n_1 - 1)) &&
+                                                      ParentChild(i_19, hole)) ==>
+                                                     ((a + i_19).intM >= tmp))))));
          ()
       };
-      (C_83 : ((C_82 : (C_81 : (a + hole)).intM) = tmp));
+      (_C_83 : ((_C_82 : (_C_81 : (a + hole)).intM) = tmp));
       
       {  
-         (assert for default: (C_84 : (jessie : (\forall int32 x_3;
-                                                  (CountWithHole{Here}(
-                                                    a, x_3, 0, hole, n_1) ==
-                                                    Count{Pre}(a, x_3, 1, n_1))))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_85 : (jessie : ((hole < (n_1 - 1)) ==>
-                                                  (((a + hole).intM == tmp) &&
-                                                    ((tmp ==
-                                                       \at((a + (n_1 - 1)).intM,Pre)) &&
-                                                      (\at((a + (n_1 - 1)).intM,Pre) ==
-                                                        (a + (n_1 - 1)).intM)))))));
+         (assert for default: (_C_84 : (jessie : (\forall int32 x_3;
+                                                   (CountWithHole{Here}(
+                                                     a, x_3, 0, hole, n_1) ==
+                                                     Count{Pre}(a, x_3, 1,
+                                                                n_1))))));
          ()
       };
       
       {  
-         (assert for default: (C_86 : (jessie : (\forall int32 x_4;
-                                                  ((hole < (n_1 - 1)) ==>
-                                                    (Count{Here}(a, x_4,
-                                                                 (hole + 1),
-                                                                 ((n_1 - 1) +
-                                                                   1)) ==
-                                                      CountWithoutHole{Here}(
-                                                      a, x_4, (hole + 1),
-                                                      (n_1 - 1), n_1)))))));
+         (assert for default: (_C_85 : (jessie : ((hole < (n_1 - 1)) ==>
+                                                   (((a + hole).intM == tmp) &&
+                                                     ((tmp ==
+                                                        \at((a + (n_1 - 1)).intM,Pre)) &&
+                                                       (\at((a + (n_1 - 1)).intM,Pre) ==
+                                                         (a + (n_1 - 1)).intM)))))));
          ()
       };
       
       {  
-         (assert for default: (C_87 : (jessie : (\forall int32 x_5;
-                                                  (((hole < (n_1 - 1)) ==>
-                                                     ((CountWithHole{Here}(
-                                                        a, x_5, 0, hole, n_1) ==
-                                                        (CountWithHole{Here}(
-                                                          a, x_5, 0, hole,
-                                                          (n_1 - 1)) +
-                                                          Count{Here}(
-                                                          a, x_5, (n_1 - 1),
-                                                          ((n_1 - 1) + 1)))) &&
-                                                       (((CountWithHole{Here}(
+         (assert for default: (_C_86 : (jessie : (\forall int32 x_4;
+                                                   ((hole < (n_1 - 1)) ==>
+                                                     (Count{Here}(a, x_4,
+                                                                  (hole + 1),
+                                                                  ((n_1 - 1) +
+                                                                    1)) ==
+                                                       CountWithoutHole{Here}(
+                                                       a, x_4, (hole + 1),
+                                                       (n_1 - 1), n_1)))))));
+         ()
+      };
+      
+      {  
+         (assert for default: (_C_87 : (jessie : (\forall int32 x_5;
+                                                   (((hole < (n_1 - 1)) ==>
+                                                      ((CountWithHole{Here}(
+                                                         a, x_5, 0, hole, n_1) ==
+                                                         (CountWithHole{Here}(
                                                            a, x_5, 0, hole,
                                                            (n_1 - 1)) +
                                                            Count{Here}(
                                                            a, x_5, (n_1 - 1),
-                                                           ((n_1 - 1) + 1))) ==
-                                                          (CountWithoutHole{Here}(
+                                                           ((n_1 - 1) + 1)))) &&
+                                                        (((CountWithHole{Here}(
                                                             a, x_5, 0, hole,
-                                                            (hole + 1)) +
+                                                            (n_1 - 1)) +
                                                             Count{Here}(
                                                             a, x_5,
-                                                            (hole + 1),
-                                                            (n_1 - 1)))) &&
-                                                         (((CountWithoutHole{Here}(
+                                                            (n_1 - 1),
+                                                            ((n_1 - 1) + 1))) ==
+                                                           (CountWithoutHole{Here}(
                                                              a, x_5, 0, hole,
                                                              (hole + 1)) +
                                                              Count{Here}(
                                                              a, x_5,
                                                              (hole + 1),
-                                                             (n_1 - 1))) ==
-                                                            CountWithoutHole{Here}(
-                                                            a, x_5, 0, hole,
-                                                            (n_1 - 1))) &&
-                                                           (CountWithoutHole{Here}(
+                                                             (n_1 - 1)))) &&
+                                                          (((CountWithoutHole{Here}(
+                                                              a, x_5, 0,
+                                                              hole,
+                                                              (hole + 1)) +
+                                                              Count{Here}(
+                                                              a, x_5,
+                                                              (hole + 1),
+                                                              (n_1 - 1))) ==
+                                                             CountWithoutHole{Here}(
                                                              a, x_5, 0, hole,
-                                                             (n_1 - 1)) ==
-                                                             Count{Here}(
-                                                             a, x_5, 0,
-                                                             (n_1 - 1))))))) &&
-                                                    ((hole == (n_1 - 1)) ==>
-                                                      ((CountWithHole{Here}(
-                                                         a, x_5, 0, hole, n_1) ==
-                                                         CountWithHole{Here}(
-                                                         a, x_5, 0,
-                                                         (n_1 - 1), n_1)) &&
-                                                        (CountWithHole{Here}(
+                                                             (n_1 - 1))) &&
+                                                            (CountWithoutHole{Here}(
+                                                              a, x_5, 0,
+                                                              hole, (n_1 - 1)) ==
+                                                              Count{Here}(
+                                                              a, x_5, 0,
+                                                              (n_1 - 1))))))) &&
+                                                     ((hole == (n_1 - 1)) ==>
+                                                       ((CountWithHole{Here}(
+                                                          a, x_5, 0, hole,
+                                                          n_1) ==
+                                                          CountWithHole{Here}(
                                                           a, x_5, 0,
-                                                          (n_1 - 1), n_1) ==
-                                                          Count{Here}(
-                                                          a, x_5, 0,
-                                                          (n_1 - 1))))))))));
+                                                          (n_1 - 1), n_1)) &&
+                                                         (CountWithHole{Here}(
+                                                           a, x_5, 0,
+                                                           (n_1 - 1), n_1) ==
+                                                           Count{Here}(
+                                                           a, x_5, 0,
+                                                           (n_1 - 1))))))))));
          ()
       };
       
       {  
-         (assert for default: (C_88 : (jessie : (\forall int32 x_6;
-                                                  ((Count{Here}(a, x_6, 0,
-                                                                (n_1 - 1)) ==
-                                                     CountWithHole{Here}(
-                                                     a, x_6, 0, hole, n_1)) &&
-                                                    (CountWithHole{Here}(
-                                                      a, x_6, 0, hole, n_1) ==
-                                                      Count{Pre}(a, x_6, 1,
-                                                                 n_1)))))));
+         (assert for default: (_C_88 : (jessie : (\forall int32 x_6;
+                                                   ((Count{Here}(a, x_6, 0,
+                                                                 (n_1 - 1)) ==
+                                                      CountWithHole{Here}(
+                                                      a, x_6, 0, hole, n_1)) &&
+                                                     (CountWithHole{Here}(
+                                                       a, x_6, 0, hole, n_1) ==
+                                                       Count{Pre}(a, x_6, 1,
+                                                                  n_1)))))));
          ()
       };
-      (C_93 : ((C_92 : (C_91 : (a + (C_90 : ((C_89 : (n_1 - 1)) :> int32)))).intM) = max));
+      (_C_93 : ((_C_92 : (_C_91 : (a +
+                                    (_C_90 : ((_C_89 : (n_1 - 1)) :> int32)))).intM) = max));
       
       {  
-         (assert for default: (C_94 : (jessie : (\forall int32 x_7;
-                                                  (Count{Here}(a, x_7,
-                                                               (n_1 - 1),
-                                                               ((n_1 - 1) +
-                                                                 1)) ==
-                                                    Count{Pre}(a, x_7, 0, 1))))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_95 : (jessie : (\forall int32 x_8;
-                                                  (CountWithoutHole{Here}(
-                                                    a, x_8, 0, (n_1 - 1), n_1) ==
-                                                    CountWithoutHole{Pre}(
-                                                    a, x_8, 0, 1, n_1))))));
+         (assert for default: (_C_94 : (jessie : (\forall int32 x_7;
+                                                   (Count{Here}(a, x_7,
+                                                                (n_1 - 1),
+                                                                ((n_1 - 1) +
+                                                                  1)) ==
+                                                     Count{Pre}(a, x_7, 0, 1))))));
          ()
       };
       
       {  
-         (assert for default: (C_96 : (jessie : (\forall int32 x_9;
-                                                  ((Count{Here}(a, x_9, 0,
-                                                                n_1) ==
-                                                     CountWithoutHole{Here}(
-                                                     a, x_9, 0, (n_1 - 1),
-                                                     n_1)) &&
-                                                    ((CountWithoutHole{Here}(
-                                                       a, x_9, 0, (n_1 - 1),
-                                                       n_1) ==
-                                                       CountWithoutHole{Pre}(
-                                                       a, x_9, 0, 1, n_1)) &&
-                                                      (CountWithoutHole{Pre}(
-                                                        a, x_9, 0, 1, n_1) ==
-                                                        Count{Pre}(a, x_9, 0,
-                                                                   n_1))))))));
+         (assert for default: (_C_95 : (jessie : (\forall int32 x_8;
+                                                   (CountWithoutHole{Here}(
+                                                     a, x_8, 0, (n_1 - 1),
+                                                     n_1) ==
+                                                     CountWithoutHole{Pre}(
+                                                     a, x_8, 0, 1, n_1))))));
+         ()
+      };
+      
+      {  
+         (assert for default: (_C_96 : (jessie : (\forall int32 x_9;
+                                                   ((Count{Here}(a, x_9, 0,
+                                                                 n_1) ==
+                                                      CountWithoutHole{Here}(
+                                                      a, x_9, 0, (n_1 - 1),
+                                                      n_1)) &&
+                                                     ((CountWithoutHole{Here}(
+                                                        a, x_9, 0, (n_1 - 1),
+                                                        n_1) ==
+                                                        CountWithoutHole{Pre}(
+                                                        a, x_9, 0, 1, n_1)) &&
+                                                       (CountWithoutHole{Pre}(
+                                                         a, x_9, 0, 1, n_1) ==
+                                                         Count{Pre}(a, x_9,
+                                                                    0, n_1))))))));
          ()
       };
       
@@ -720,28 +729,28 @@ behavior default:
 }
 
 unit pop_heap_induction(intP[..] a_0, int32 n_2)
-  requires (C_121 : ((C_122 : (0 < n_2)) &&
-                      (C_123 : IsValidRange{Here}(a_0, n_2))));
-  requires (C_120 : IsHeap{Here}(a_0, n_2));
+  requires (_C_121 : ((_C_122 : (0 < n_2)) &&
+                       (_C_123 : IsValidRange{Here}(a_0, n_2))));
+  requires (_C_120 : IsHeap{Here}(a_0, n_2));
 behavior default:
   assigns \nothing;
-  ensures (C_119 : (\forall integer i_20;
-                     (((0 <= i_20) && (i_20 < \at(n_2,Old))) ==>
-                       ((\at(a_0,Old) + 0).intM >=
-                         (\at(a_0,Old) + i_20).intM))));
+  ensures (_C_119 : (\forall integer i_20;
+                      (((0 <= i_20) && (i_20 < \at(n_2,Old))) ==>
+                        ((\at(a_0,Old) + 0).intM >=
+                          (\at(a_0,Old) + i_20).intM))));
 {  
    (var int32 i);
    
-   {  (C_109 : (i = 1));
+   {  (_C_109 : (i = 1));
       
       loop 
       behavior default:
-        invariant (C_112 : ((C_113 : (0 <= i)) && (C_114 : (i <= n_2))));
+        invariant (_C_112 : ((_C_113 : (0 <= i)) && (_C_114 : (i <= n_2))));
       behavior default:
-        invariant (C_111 : (\forall integer j_9;
-                             (((0 <= j_9) && ((j_9 < i) && (i <= n_2))) ==>
-                               ((a_0 + 0).intM >= (a_0 + j_9).intM))));
-      variant (C_110 : (n_2 - i));
+        invariant (_C_111 : (\forall integer j_9;
+                              (((0 <= j_9) && ((j_9 < i) && (i <= n_2))) ==>
+                                ((a_0 + 0).intM >= (a_0 + j_9).intM))));
+      variant (_C_110 : (n_2 - i));
       while (true)
       {  
          {  (if (i < n_2) then () else 
@@ -749,13 +758,13 @@ behavior default:
             
             {  
                {  
-                  (assert for default: (C_115 : (jessie : ((0 < i) ==>
-                                                            ParentChild(
-                                                            ((i - 1) / 2), i)))));
+                  (assert for default: (_C_115 : (jessie : ((0 < i) ==>
+                                                             ParentChild(
+                                                             ((i - 1) / 2), i)))));
                   ()
                }
             };
-            (C_118 : (i = (C_117 : ((C_116 : (i + 1)) :> int32))))
+            (_C_118 : (i = (_C_117 : ((_C_116 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
@@ -764,528 +773,113 @@ behavior default:
    }
 }
 ========== file tests/c/popHeap.jessie/popHeap.cloc ==========
-[C_50]
-file = "HOME/tests/c/popHeap.c"
-line = 193
-begin = 19
-end = 44
-
-[C_51]
-file = "HOME/tests/c/popHeap.c"
-line = 194
-begin = 18
-end = 52
-
-[C_52]
-file = "HOME/tests/c/popHeap.c"
-line = 195
-begin = 15
-end = 20
-
-[C_53]
-file = "HOME/tests/c/popHeap.c"
-line = 189
-begin = 26
-end = 27
-
-[C_54]
-file = "HOME/tests/c/popHeap.c"
-line = 189
-begin = 26
-end = 34
-
-[C_55]
-file = "HOME/tests/c/popHeap.c"
-line = 189
-begin = 19
-end = 22
-
-[C_56]
-file = "HOME/tests/c/popHeap.c"
-line = 189
-begin = 19
-end = 22
-
-[C_57]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 33
-end = 40
-
-[C_58]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 33
-end = 40
-
-[C_59]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 33
-end = 40
-
-[pop_heap]
-name = "Function pop_heap"
-file = "HOME/tests/c/popHeap.c"
-line = 145
-begin = 5
-end = 13
-
-[Count0]
-name = "Lemma Count0"
-file = "HOME/tests/c/popHeap.c"
-line = 72
-begin = 4
-end = 105
-
-[Count1]
-name = "Lemma Count1"
-file = "HOME/tests/c/popHeap.c"
-line = 76
-begin = 4
-end = 184
-
-[Count2]
-name = "Lemma Count2"
-file = "HOME/tests/c/popHeap.c"
-line = 81
-begin = 4
-end = 162
-
-[C_60]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 23
-end = 30
-
-[C_61]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 23
-end = 30
-
-[C_62]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 21
-end = 22
-
-[C_10]
-file = "HOME/tests/c/popHeap.c"
-line = 117
-begin = 20
-end = 38
-
-[C_63]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 21
-end = 31
-
-[C_11]
-file = "HOME/tests/c/popHeap.c"
-line = 147
-begin = 12
-end = 35
-
-[C_64]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 10
-end = 11
-
-[C_12]
-file = "HOME/tests/c/popHeap.c"
-line = 148
-begin = 13
-end = 58
-
-[C_65]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 10
-end = 18
-
-[C_13]
-file = "HOME/tests/c/popHeap.c"
-line = 149
-begin = 2
-end = 12
-
-[C_66]
-file = "HOME/tests/c/popHeap.c"
-line = 175
-begin = 17
-end = 40
-
-[C_14]
-file = "HOME/tests/c/popHeap.c"
-line = 149
-begin = 2
-end = 12
-
-[C_67]
-file = "HOME/tests/c/popHeap.c"
-line = 178
-begin = 19
-end = 29
-
-[C_15]
-file = "HOME/tests/c/popHeap.c"
-line = 150
-begin = 2
-end = 11
-
-[C_100]
-file = "HOME/tests/c/popHeap.c"
-line = 138
-begin = 11
-end = 31
-
-[C_68]
-file = "HOME/tests/c/popHeap.c"
-line = 179
-begin = 18
-end = 19
-
-[C_16]
-file = "HOME/tests/c/popHeap.c"
-line = 151
-begin = 10
-end = 13
-
-[C_101]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_69]
-file = "HOME/tests/c/popHeap.c"
-line = 179
-begin = 18
-end = 26
-
-[C_17]
-file = "HOME/tests/c/popHeap.c"
-line = 151
-begin = 10
-end = 13
-
-[C_102]
-file = "HOME/tests/c/popHeap.c"
-line = 139
-begin = 11
-end = 31
-
-[C_18]
-file = "HOME/tests/c/popHeap.c"
-line = 151
-begin = 8
-end = 9
-
-[C_103]
-file = "HOME/tests/c/popHeap.c"
-line = 140
-begin = 11
-end = 39
-
-[C_19]
-file = "HOME/tests/c/popHeap.c"
-line = 151
-begin = 8
-end = 14
-
-[C_104]
-file = "HOME/tests/c/popHeap.c"
-line = 133
-begin = 12
-end = 24
-
-[C_105]
-file = "HOME/tests/c/popHeap.c"
-line = 132
-begin = 12
-end = 30
-
-[C_106]
-file = "HOME/tests/c/popHeap.c"
-line = 131
-begin = 12
-end = 37
-
-[C_107]
-file = "HOME/tests/c/popHeap.c"
-line = 131
-begin = 12
-end = 17
-
-[C_108]
-file = "HOME/tests/c/popHeap.c"
-line = 131
-begin = 16
-end = 37
-
-[C_109]
-file = "HOME/tests/c/popHeap.c"
-line = 249
-begin = 7
-end = 16
-
-[C_1]
-file = "HOME/tests/c/popHeap.c"
-line = 123
-begin = 10
-end = 105
-
-[C_2]
-file = "HOME/tests/c/popHeap.c"
-line = 119
-begin = 11
-end = 32
-
-[CountLemma]
-name = "Lemma CountLemma"
-file = "HOME/tests/c/popHeap.c"
-line = 93
-begin = 2
-end = 150
-
-[C_70]
-file = "HOME/tests/c/popHeap.c"
-line = 179
-begin = 8
-end = 9
-
-[C_3]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 11
-end = 34
-
-[C_71]
-file = "HOME/tests/c/popHeap.c"
-line = 179
-begin = 18
-end = 26
-
-[C_4]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 11
-end = 22
-
-[C_72]
-file = "HOME/tests/c/popHeap.c"
-line = 179
-begin = 18
-end = 26
-
-[C_20]
-file = "HOME/tests/c/popHeap.c"
-line = 151
-begin = 8
-end = 14
-
-[C_5]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 16
-end = 34
-
-[C_73]
-file = "HOME/tests/c/popHeap.c"
-line = 180
-begin = 19
-end = 44
-
-[C_21]
-file = "HOME/tests/c/popHeap.c"
-line = 152
-begin = 8
-end = 9
-
-[C_6]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 16
-end = 30
-
-[C_74]
-file = "HOME/tests/c/popHeap.c"
-line = 181
-begin = 18
-end = 52
-
-[C_22]
-file = "HOME/tests/c/popHeap.c"
-line = 152
-begin = 8
-end = 12
-
-[C_7]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 25
-end = 34
-
-[C_75]
-file = "HOME/tests/c/popHeap.c"
-line = 182
-begin = 15
-end = 20
-
-[C_23]
-file = "HOME/tests/c/popHeap.c"
-line = 152
-begin = 8
-end = 12
-
-[C_8]
-file = "HOME/tests/c/popHeap.c"
-line = 117
-begin = 11
-end = 38
-
-[C_76]
-file = "HOME/tests/c/popHeap.c"
-line = 176
-begin = 10
-end = 11
-
-[C_24]
-file = "HOME/tests/c/popHeap.c"
-line = 153
-begin = 13
-end = 93
-
-[C_9]
-file = "HOME/tests/c/popHeap.c"
-line = 117
-begin = 11
-end = 16
-
-[C_77]
-file = "HOME/tests/c/popHeap.c"
-line = 176
-begin = 10
-end = 18
-
-[C_25]
-file = "HOME/tests/c/popHeap.c"
-line = 167
-begin = 18
-end = 26
-
-[C_110]
-file = "HOME/tests/c/popHeap.c"
-line = 247
-begin = 15
-end = 20
-
-[C_78]
-file = "HOME/tests/c/popHeap.c"
-line = 172
-begin = 16
-end = 19
-
-[C_26]
-file = "HOME/tests/c/popHeap.c"
-line = 164
-begin = 20
-end = 45
-
-[C_111]
-file = "HOME/tests/c/popHeap.c"
-line = 245
-begin = 17
-end = 73
-
-[C_79]
-file = "HOME/tests/c/popHeap.c"
-line = 172
-begin = 16
-end = 19
-
-[C_27]
-file = "HOME/tests/c/popHeap.c"
-line = 162
-begin = 20
-end = 100
-
-[C_112]
-file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 17
-end = 28
-
-[C_28]
-file = "HOME/tests/c/popHeap.c"
-line = 160
-begin = 20
-end = 96
-
-[C_113]
-file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 17
-end = 23
-
-[C_29]
-file = "HOME/tests/c/popHeap.c"
-line = 159
-begin = 20
-end = 65
-
-[C_114]
-file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 22
-end = 28
-
-[C_115]
+[_C_115]
 file = "HOME/tests/c/popHeap.c"
 line = 251
 begin = 15
 end = 48
 
-[C_116]
+[_C_52]
+file = "HOME/tests/c/popHeap.c"
+line = 195
+begin = 15
+end = 20
+
+[_C_121]
+file = "HOME/tests/c/popHeap.c"
+line = 106
+begin = 11
+end = 38
+
+[_C_35]
+file = "HOME/tests/c/popHeap.c"
+line = 171
+begin = 22
+end = 28
+
+[_C_117]
 file = "HOME/tests/c/popHeap.c"
 line = 249
 begin = 31
 end = 34
 
-[C_117]
+[_C_120]
+file = "HOME/tests/c/popHeap.c"
+line = 107
+begin = 11
+end = 23
+
+[_C_56]
+file = "HOME/tests/c/popHeap.c"
+line = 189
+begin = 19
+end = 22
+
+[_C_28]
+file = "HOME/tests/c/popHeap.c"
+line = 160
+begin = 20
+end = 96
+
+[_C_72]
+file = "HOME/tests/c/popHeap.c"
+line = 179
+begin = 18
+end = 26
+
+[_C_59]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 33
+end = 40
+
+[_C_48]
+file = "HOME/tests/c/popHeap.c"
+line = 192
+begin = 18
+end = 26
+
+[_C_116]
 file = "HOME/tests/c/popHeap.c"
 line = 249
 begin = 31
 end = 34
 
-[ParentChild_1]
-name = "Lemma ParentChild_1"
+[_C_51]
 file = "HOME/tests/c/popHeap.c"
-line = 40
-begin = 4
-end = 126
+line = 194
+begin = 18
+end = 52
 
-[C_118]
+[_C_103]
 file = "HOME/tests/c/popHeap.c"
-line = 249
-begin = 31
-end = 34
+line = 140
+begin = 11
+end = 39
 
-[ParentChild_2]
-name = "Lemma ParentChild_2"
+[_C_31]
 file = "HOME/tests/c/popHeap.c"
-line = 44
-begin = 4
-end = 106
+line = 157
+begin = 20
+end = 33
 
-[C_119]
+[_C_108]
 file = "HOME/tests/c/popHeap.c"
-line = 111
+line = 131
+begin = 16
+end = 37
+
+[_C_77]
+file = "HOME/tests/c/popHeap.c"
+line = 176
 begin = 10
-end = 56
+end = 18
+
+[_C_83]
+file = "HOME/tests/c/popHeap.c"
+line = 204
+begin = 12
+end = 15
 
 [ParentChild_3]
 name = "Lemma ParentChild_3"
@@ -1294,145 +888,644 @@ line = 49
 begin = 2
 end = 234
 
-[C_80]
+[_C_41]
 file = "HOME/tests/c/popHeap.c"
-line = 200
+line = 188
 begin = 14
-end = 86
+end = 24
 
-[C_81]
+[_C_4]
 file = "HOME/tests/c/popHeap.c"
-line = 204
-begin = 2
-end = 3
-
-[C_82]
-file = "HOME/tests/c/popHeap.c"
-line = 204
-begin = 12
-end = 15
-
-[C_30]
-file = "HOME/tests/c/popHeap.c"
-line = 158
-begin = 20
-end = 33
-
-[C_83]
-file = "HOME/tests/c/popHeap.c"
-line = 204
-begin = 12
-end = 15
-
-[C_31]
-file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 20
-end = 33
-
-[C_84]
-file = "HOME/tests/c/popHeap.c"
-line = 205
-begin = 13
-end = 93
-
-[C_32]
-file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 20
-end = 29
-
-[C_85]
-file = "HOME/tests/c/popHeap.c"
-line = 208
-begin = 13
-end = 67
-
-[C_33]
-file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 25
-end = 33
-
-[C_86]
-file = "HOME/tests/c/popHeap.c"
-line = 209
-begin = 13
-end = 119
-
-[C_34]
-file = "HOME/tests/c/popHeap.c"
-line = 171
-begin = 22
-end = 28
-
-[C_87]
-file = "HOME/tests/c/popHeap.c"
-line = 213
-begin = 13
-end = 408
-
-[C_35]
-file = "HOME/tests/c/popHeap.c"
-line = 171
-begin = 22
-end = 28
-
-[C_120]
-file = "HOME/tests/c/popHeap.c"
-line = 107
+line = 118
 begin = 11
-end = 23
+end = 22
 
-[C_88]
+[ParentChild_1]
+name = "Lemma ParentChild_1"
 file = "HOME/tests/c/popHeap.c"
-line = 222
-begin = 13
-end = 113
+line = 40
+begin = 4
+end = 126
 
-[C_36]
+[_C_101]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[_C_71]
 file = "HOME/tests/c/popHeap.c"
-line = 171
-begin = 22
-end = 32
+line = 179
+begin = 18
+end = 26
 
-[C_121]
+[_C_70]
 file = "HOME/tests/c/popHeap.c"
-line = 106
-begin = 11
-end = 38
+line = 179
+begin = 8
+end = 9
 
-[C_89]
+[_C_89]
 file = "HOME/tests/c/popHeap.c"
 line = 226
 begin = 4
 end = 7
 
-[C_37]
+[_C_90]
+file = "HOME/tests/c/popHeap.c"
+line = 226
+begin = 4
+end = 7
+
+[_C_61]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 23
+end = 30
+
+[_C_69]
+file = "HOME/tests/c/popHeap.c"
+line = 179
+begin = 18
+end = 26
+
+[_C_32]
+file = "HOME/tests/c/popHeap.c"
+line = 157
+begin = 20
+end = 29
+
+[_C_23]
+file = "HOME/tests/c/popHeap.c"
+line = 152
+begin = 8
+end = 12
+
+[_C_19]
+file = "HOME/tests/c/popHeap.c"
+line = 151
+begin = 8
+end = 14
+
+[_C_42]
+file = "HOME/tests/c/popHeap.c"
+line = 188
+begin = 14
+end = 24
+
+[_C_82]
+file = "HOME/tests/c/popHeap.c"
+line = 204
+begin = 12
+end = 15
+
+[_C_110]
+file = "HOME/tests/c/popHeap.c"
+line = 247
+begin = 15
+end = 20
+
+[_C_94]
+file = "HOME/tests/c/popHeap.c"
+line = 227
+begin = 13
+end = 88
+
+[_C_84]
+file = "HOME/tests/c/popHeap.c"
+line = 205
+begin = 13
+end = 93
+
+[_C_13]
+file = "HOME/tests/c/popHeap.c"
+line = 149
+begin = 2
+end = 12
+
+[_C_5]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 16
+end = 34
+
+[_C_91]
+file = "HOME/tests/c/popHeap.c"
+line = 226
+begin = 2
+end = 3
+
+[_C_36]
 file = "HOME/tests/c/popHeap.c"
 line = 171
 begin = 22
 end = 32
 
-[C_122]
+[_C_12]
+file = "HOME/tests/c/popHeap.c"
+line = 148
+begin = 13
+end = 58
+
+[_C_33]
+file = "HOME/tests/c/popHeap.c"
+line = 157
+begin = 25
+end = 33
+
+[_C_111]
+file = "HOME/tests/c/popHeap.c"
+line = 245
+begin = 17
+end = 73
+
+[_C_79]
+file = "HOME/tests/c/popHeap.c"
+line = 172
+begin = 16
+end = 19
+
+[CountLemma]
+name = "Lemma CountLemma"
+file = "HOME/tests/c/popHeap.c"
+line = 93
+begin = 2
+end = 150
+
+[ParentChild_2]
+name = "Lemma ParentChild_2"
+file = "HOME/tests/c/popHeap.c"
+line = 44
+begin = 4
+end = 106
+
+[_C_104]
+file = "HOME/tests/c/popHeap.c"
+line = 133
+begin = 12
+end = 24
+
+[_C_85]
+file = "HOME/tests/c/popHeap.c"
+line = 208
+begin = 13
+end = 67
+
+[_C_22]
+file = "HOME/tests/c/popHeap.c"
+line = 152
+begin = 8
+end = 12
+
+[_C_65]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 10
+end = 18
+
+[_C_9]
+file = "HOME/tests/c/popHeap.c"
+line = 117
+begin = 11
+end = 16
+
+[_C_57]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 33
+end = 40
+
+[_C_54]
+file = "HOME/tests/c/popHeap.c"
+line = 189
+begin = 26
+end = 34
+
+[_C_30]
+file = "HOME/tests/c/popHeap.c"
+line = 158
+begin = 20
+end = 33
+
+[_C_63]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 21
+end = 31
+
+[_C_6]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 16
+end = 30
+
+[_C_64]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 10
+end = 11
+
+[_C_122]
 file = "HOME/tests/c/popHeap.c"
 line = 106
 begin = 11
 end = 16
 
-[C_38]
+[_C_95]
+file = "HOME/tests/c/popHeap.c"
+line = 230
+begin = 13
+end = 108
+
+[_C_93]
+file = "HOME/tests/c/popHeap.c"
+line = 226
+begin = 11
+end = 14
+
+[_C_102]
+file = "HOME/tests/c/popHeap.c"
+line = 139
+begin = 11
+end = 31
+
+[_C_49]
+file = "HOME/tests/c/popHeap.c"
+line = 192
+begin = 18
+end = 26
+
+[_C_24]
+file = "HOME/tests/c/popHeap.c"
+line = 153
+begin = 13
+end = 93
+
+[_C_45]
+file = "HOME/tests/c/popHeap.c"
+line = 192
+begin = 18
+end = 19
+
+[_C_97]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[_C_20]
+file = "HOME/tests/c/popHeap.c"
+line = 151
+begin = 8
+end = 14
+
+[_C_73]
+file = "HOME/tests/c/popHeap.c"
+line = 180
+begin = 19
+end = 44
+
+[pop_heap]
+name = "Function pop_heap"
+file = "HOME/tests/c/popHeap.c"
+line = 145
+begin = 5
+end = 13
+
+[Count2]
+name = "Lemma Count2"
+file = "HOME/tests/c/popHeap.c"
+line = 81
+begin = 4
+end = 162
+
+[_C_96]
+file = "HOME/tests/c/popHeap.c"
+line = 233
+begin = 13
+end = 157
+
+[_C_38]
 file = "HOME/tests/c/popHeap.c"
 line = 171
 begin = 4
 end = 13
 
-[C_123]
+[_C_3]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 11
+end = 34
+
+[_C_98]
+file = "HOME/tests/c/popHeap.c"
+line = 137
+begin = 11
+end = 25
+
+[_C_109]
+file = "HOME/tests/c/popHeap.c"
+line = 249
+begin = 7
+end = 16
+
+[_C_114]
+file = "HOME/tests/c/popHeap.c"
+line = 244
+begin = 22
+end = 28
+
+[_C_92]
+file = "HOME/tests/c/popHeap.c"
+line = 226
+begin = 11
+end = 14
+
+[_C_81]
+file = "HOME/tests/c/popHeap.c"
+line = 204
+begin = 2
+end = 3
+
+[_C_17]
+file = "HOME/tests/c/popHeap.c"
+line = 151
+begin = 10
+end = 13
+
+[_C_112]
+file = "HOME/tests/c/popHeap.c"
+line = 244
+begin = 17
+end = 28
+
+[Count0]
+name = "Lemma Count0"
+file = "HOME/tests/c/popHeap.c"
+line = 72
+begin = 4
+end = 105
+
+[_C_7]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 25
+end = 34
+
+[_C_86]
+file = "HOME/tests/c/popHeap.c"
+line = 209
+begin = 13
+end = 119
+
+[_C_62]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 21
+end = 22
+
+[_C_55]
+file = "HOME/tests/c/popHeap.c"
+line = 189
+begin = 19
+end = 22
+
+[_C_27]
+file = "HOME/tests/c/popHeap.c"
+line = 162
+begin = 20
+end = 100
+
+[_C_105]
+file = "HOME/tests/c/popHeap.c"
+line = 132
+begin = 12
+end = 30
+
+[_C_87]
+file = "HOME/tests/c/popHeap.c"
+line = 213
+begin = 13
+end = 408
+
+[_C_46]
+file = "HOME/tests/c/popHeap.c"
+line = 192
+begin = 18
+end = 26
+
+[_C_44]
+file = "HOME/tests/c/popHeap.c"
+line = 191
+begin = 19
+end = 29
+
+[_C_15]
+file = "HOME/tests/c/popHeap.c"
+line = 150
+begin = 2
+end = 11
+
+[_C_99]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[_C_26]
+file = "HOME/tests/c/popHeap.c"
+line = 164
+begin = 20
+end = 45
+
+[_C_47]
+file = "HOME/tests/c/popHeap.c"
+line = 192
+begin = 8
+end = 9
+
+[_C_10]
+file = "HOME/tests/c/popHeap.c"
+line = 117
+begin = 20
+end = 38
+
+[_C_68]
+file = "HOME/tests/c/popHeap.c"
+line = 179
+begin = 18
+end = 19
+
+[_C_60]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 23
+end = 30
+
+[_C_53]
+file = "HOME/tests/c/popHeap.c"
+line = 189
+begin = 26
+end = 27
+
+[_C_40]
+file = "HOME/tests/c/popHeap.c"
+line = 188
+begin = 14
+end = 20
+
+[_C_58]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 33
+end = 40
+
+[_C_8]
+file = "HOME/tests/c/popHeap.c"
+line = 117
+begin = 11
+end = 38
+
+[_C_119]
+file = "HOME/tests/c/popHeap.c"
+line = 111
+begin = 10
+end = 56
+
+[_C_66]
+file = "HOME/tests/c/popHeap.c"
+line = 175
+begin = 17
+end = 40
+
+[_C_18]
+file = "HOME/tests/c/popHeap.c"
+line = 151
+begin = 8
+end = 9
+
+[_C_29]
+file = "HOME/tests/c/popHeap.c"
+line = 159
+begin = 20
+end = 65
+
+[_C_75]
+file = "HOME/tests/c/popHeap.c"
+line = 182
+begin = 15
+end = 20
+
+[_C_14]
+file = "HOME/tests/c/popHeap.c"
+line = 149
+begin = 2
+end = 12
+
+[_C_123]
 file = "HOME/tests/c/popHeap.c"
 line = 106
 begin = 20
 end = 38
 
-[C_39]
+[_C_106]
+file = "HOME/tests/c/popHeap.c"
+line = 131
+begin = 12
+end = 37
+
+[_C_50]
+file = "HOME/tests/c/popHeap.c"
+line = 193
+begin = 19
+end = 44
+
+[_C_37]
+file = "HOME/tests/c/popHeap.c"
+line = 171
+begin = 22
+end = 32
+
+[_C_43]
+file = "HOME/tests/c/popHeap.c"
+line = 188
+begin = 14
+end = 24
+
+[_C_107]
+file = "HOME/tests/c/popHeap.c"
+line = 131
+begin = 12
+end = 17
+
+[_C_88]
+file = "HOME/tests/c/popHeap.c"
+line = 222
+begin = 13
+end = 113
+
+[_C_100]
+file = "HOME/tests/c/popHeap.c"
+line = 138
+begin = 11
+end = 31
+
+[_C_2]
+file = "HOME/tests/c/popHeap.c"
+line = 119
+begin = 11
+end = 32
+
+[Count1]
+name = "Lemma Count1"
+file = "HOME/tests/c/popHeap.c"
+line = 76
+begin = 4
+end = 184
+
+[_C_34]
+file = "HOME/tests/c/popHeap.c"
+line = 171
+begin = 22
+end = 28
+
+[_C_67]
+file = "HOME/tests/c/popHeap.c"
+line = 178
+begin = 19
+end = 29
+
+[_C_16]
+file = "HOME/tests/c/popHeap.c"
+line = 151
+begin = 10
+end = 13
+
+[_C_113]
+file = "HOME/tests/c/popHeap.c"
+line = 244
+begin = 17
+end = 23
+
+[_C_1]
+file = "HOME/tests/c/popHeap.c"
+line = 123
+begin = 10
+end = 105
+
+[_C_76]
+file = "HOME/tests/c/popHeap.c"
+line = 176
+begin = 10
+end = 11
+
+[_C_25]
+file = "HOME/tests/c/popHeap.c"
+line = 167
+begin = 18
+end = 26
+
+[_C_39]
 file = "HOME/tests/c/popHeap.c"
 line = 188
 begin = 14
@@ -1445,125 +1538,41 @@ line = 241
 begin = 5
 end = 23
 
-[C_90]
+[_C_80]
 file = "HOME/tests/c/popHeap.c"
-line = 226
-begin = 4
-end = 7
-
-[C_91]
-file = "HOME/tests/c/popHeap.c"
-line = 226
-begin = 2
-end = 3
-
-[C_92]
-file = "HOME/tests/c/popHeap.c"
-line = 226
-begin = 11
-end = 14
-
-[C_40]
-file = "HOME/tests/c/popHeap.c"
-line = 188
+line = 200
 begin = 14
-end = 20
+end = 86
 
-[C_93]
+[_C_74]
 file = "HOME/tests/c/popHeap.c"
-line = 226
-begin = 11
-end = 14
-
-[C_41]
-file = "HOME/tests/c/popHeap.c"
-line = 188
-begin = 14
-end = 24
-
-[C_94]
-file = "HOME/tests/c/popHeap.c"
-line = 227
-begin = 13
-end = 88
-
-[C_42]
-file = "HOME/tests/c/popHeap.c"
-line = 188
-begin = 14
-end = 24
-
-[C_95]
-file = "HOME/tests/c/popHeap.c"
-line = 230
-begin = 13
-end = 108
-
-[C_43]
-file = "HOME/tests/c/popHeap.c"
-line = 188
-begin = 14
-end = 24
-
-[C_96]
-file = "HOME/tests/c/popHeap.c"
-line = 233
-begin = 13
-end = 157
-
-[C_44]
-file = "HOME/tests/c/popHeap.c"
-line = 191
-begin = 19
-end = 29
-
-[C_97]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_45]
-file = "HOME/tests/c/popHeap.c"
-line = 192
+line = 181
 begin = 18
+end = 52
+
+[_C_78]
+file = "HOME/tests/c/popHeap.c"
+line = 172
+begin = 16
 end = 19
 
-[C_98]
+[_C_11]
 file = "HOME/tests/c/popHeap.c"
-line = 137
-begin = 11
-end = 25
+line = 147
+begin = 12
+end = 35
 
-[C_46]
+[_C_21]
 file = "HOME/tests/c/popHeap.c"
-line = 192
-begin = 18
-end = 26
-
-[C_99]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_47]
-file = "HOME/tests/c/popHeap.c"
-line = 192
+line = 152
 begin = 8
 end = 9
 
-[C_48]
+[_C_118]
 file = "HOME/tests/c/popHeap.c"
-line = 192
-begin = 18
-end = 26
-
-[C_49]
-file = "HOME/tests/c/popHeap.c"
-line = 192
-begin = 18
-end = 26
+line = 249
+begin = 31
+end = 34
 
 ========== jessie execution ==========
 Generating Why function pop_heap
@@ -1578,10 +1587,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs popHeap.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs popHeap.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs popHeap.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs popHeap.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -1726,13 +1736,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: popHeap.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: popHeap.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: popHeap.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include popHeap.depend
 
@@ -1743,760 +1753,11 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/popHeap.jessie/popHeap.loc ==========
-[JC_90]
-kind = UserCall
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 296
-begin = 26
-end = 67
-
-[JC_91]
-file = "HOME/tests/c/popHeap.c"
-line = 167
-begin = 18
-end = 26
-
-[JC_92]
-file = "HOME/tests/c/popHeap.c"
-line = 200
-begin = 14
-end = 86
-
-[JC_40]
-file = "HOME/tests/c/popHeap.c"
-line = 145
-begin = 5
-end = 13
-
-[JC_93]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 313
-begin = 15
-end = 54
-
-[JC_41]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 162
-begin = 9
-end = 16
-
 [JC_94]
 file = "HOME/tests/c/popHeap.c"
 line = 205
 begin = 13
 end = 93
-
-[JC_42]
-file = "HOME/tests/c/popHeap.c"
-line = 137
-begin = 11
-end = 25
-
-[JC_95]
-file = "HOME/tests/c/popHeap.c"
-line = 208
-begin = 13
-end = 67
-
-[JC_43]
-file = "HOME/tests/c/popHeap.c"
-line = 138
-begin = 11
-end = 31
-
-[JC_96]
-file = "HOME/tests/c/popHeap.c"
-line = 209
-begin = 13
-end = 119
-
-[JC_44]
-file = "HOME/tests/c/popHeap.c"
-line = 139
-begin = 11
-end = 31
-
-[pop_heap_induction_safety]
-name = "Function pop_heap_induction"
-behavior = "Safety"
-file = "HOME/tests/c/popHeap.c"
-line = 241
-begin = 5
-end = 23
-
-[JC_150]
-file = "HOME/tests/c/popHeap.c"
-line = 245
-begin = 17
-end = 73
-
-[JC_97]
-file = "HOME/tests/c/popHeap.c"
-line = 213
-begin = 13
-end = 408
-
-[JC_45]
-file = "HOME/tests/c/popHeap.c"
-line = 140
-begin = 11
-end = 39
-
-[JC_151]
-file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 17
-end = 23
-
-[JC_98]
-file = "HOME/tests/c/popHeap.c"
-line = 222
-begin = 13
-end = 113
-
-[JC_46]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_1]
-file = "HOME/tests/c/popHeap.c"
-line = 117
-begin = 11
-end = 16
-
-[JC_152]
-file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 22
-end = 28
-
-[JC_100]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 413
-begin = 15
-end = 88
-
-[JC_99]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 226
-begin = 4
-end = 7
-
-[JC_47]
-file = "HOME/tests/c/popHeap.c"
-line = 145
-begin = 5
-end = 13
-
-[JC_2]
-file = "HOME/tests/c/popHeap.c"
-line = 117
-begin = 20
-end = 38
-
-[JC_153]
-file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 17
-end = 28
-
-[JC_101]
-file = "HOME/tests/c/popHeap.c"
-line = 227
-begin = 13
-end = 88
-
-[JC_48]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 162
-begin = 9
-end = 16
-
-[JC_3]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 11
-end = 22
-
-[JC_154]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_102]
-file = "HOME/tests/c/popHeap.c"
-line = 230
-begin = 13
-end = 108
-
-[JC_49]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_4]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 16
-end = 30
-
-[JC_155]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 472
-begin = 6
-end = 883
-
-[JC_103]
-file = "HOME/tests/c/popHeap.c"
-line = 233
-begin = 13
-end = 157
-
-[JC_5]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 25
-end = 34
-
-[JC_156]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 472
-begin = 6
-end = 883
-
-[JC_104]
-kind = UserCall
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 180
-begin = 14
-end = 40
-
-[JC_6]
-file = "HOME/tests/c/popHeap.c"
-line = 119
-begin = 11
-end = 32
-
-[JC_157]
-file = "HOME/tests/c/popHeap.c"
-line = 251
-begin = 15
-end = 48
-
-[JC_105]
-file = "HOME/tests/c/popHeap.c"
-line = 148
-begin = 13
-end = 58
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[pop_heap_induction_ensures_default]
-name = "Function pop_heap_induction"
-behavior = "default behavior"
-file = "HOME/tests/c/popHeap.c"
-line = 241
-begin = 5
-end = 23
-
-[JC_158]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 249
-begin = 31
-end = 34
-
-[JC_106]
-file = "HOME/tests/c/popHeap.c"
-line = 153
-begin = 13
-end = 93
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_159]
-file = "HOME/tests/c/popHeap.c"
-line = 247
-begin = 15
-end = 20
-
-[JC_107]
-file = "HOME/tests/c/popHeap.c"
-line = 164
-begin = 20
-end = 45
-
-[JC_9]
-file = "HOME/tests/c/popHeap.c"
-line = 117
-begin = 11
-end = 16
-
-[JC_108]
-file = "HOME/tests/c/popHeap.c"
-line = 162
-begin = 20
-end = 100
-
-[JC_109]
-file = "HOME/tests/c/popHeap.c"
-line = 160
-begin = 20
-end = 96
-
-[Count0]
-name = "Lemma Count0"
-behavior = "axiom"
-file = "HOME/tests/c/popHeap.c"
-line = 72
-begin = 4
-end = 105
-
-[JC_50]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Count1]
-name = "Lemma Count1"
-behavior = "axiom"
-file = "HOME/tests/c/popHeap.c"
-line = 76
-begin = 4
-end = 184
-
-[JC_51]
-kind = UserCall
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 180
-begin = 14
-end = 40
-
-[Count2]
-name = "Lemma Count2"
-behavior = "axiom"
-file = "HOME/tests/c/popHeap.c"
-line = 81
-begin = 4
-end = 162
-
-[JC_52]
-file = "HOME/tests/c/popHeap.c"
-line = 148
-begin = 13
-end = 58
-
-[JC_53]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 151
-begin = 10
-end = 13
-
-[JC_54]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.c"
-line = 151
-begin = 8
-end = 14
-
-[JC_160]
-file = "HOME/tests/c/popHeap.c"
-line = 245
-begin = 17
-end = 73
-
-[JC_55]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.c"
-line = 152
-begin = 8
-end = 12
-
-[JC_161]
-file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 17
-end = 23
-
-[JC_56]
-file = "HOME/tests/c/popHeap.c"
-line = 153
-begin = 13
-end = 93
-
-[JC_162]
-file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 22
-end = 28
-
-[JC_110]
-file = "HOME/tests/c/popHeap.c"
-line = 159
-begin = 20
-end = 65
-
-[JC_57]
-file = "HOME/tests/c/popHeap.c"
-line = 164
-begin = 20
-end = 45
-
-[JC_163]
-file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 17
-end = 28
-
-[JC_111]
-file = "HOME/tests/c/popHeap.c"
-line = 158
-begin = 20
-end = 33
-
-[JC_58]
-file = "HOME/tests/c/popHeap.c"
-line = 162
-begin = 20
-end = 100
-
-[JC_164]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_112]
-file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 20
-end = 29
-
-[JC_59]
-file = "HOME/tests/c/popHeap.c"
-line = 160
-begin = 20
-end = 96
-
-[JC_165]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 472
-begin = 6
-end = 883
-
-[JC_113]
-file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 25
-end = 33
-
-[JC_166]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 472
-begin = 6
-end = 883
-
-[JC_114]
-file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 20
-end = 33
-
-[JC_167]
-file = "HOME/tests/c/popHeap.c"
-line = 251
-begin = 15
-end = 48
-
-[JC_115]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_116]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 207
-begin = 6
-end = 4644
-
-[JC_117]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 207
-begin = 6
-end = 4644
-
-[pop_heap_safety]
-name = "Function pop_heap"
-behavior = "Safety"
-file = "HOME/tests/c/popHeap.c"
-line = 145
-begin = 5
-end = 13
-
-[JC_118]
-file = "HOME/tests/c/popHeap.c"
-line = 175
-begin = 17
-end = 40
-
-[JC_119]
-file = "HOME/tests/c/popHeap.c"
-line = 178
-begin = 19
-end = 29
-
-[JC_60]
-file = "HOME/tests/c/popHeap.c"
-line = 159
-begin = 20
-end = 65
-
-[JC_61]
-file = "HOME/tests/c/popHeap.c"
-line = 158
-begin = 20
-end = 33
-
-[JC_62]
-file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 20
-end = 29
-
-[JC_10]
-file = "HOME/tests/c/popHeap.c"
-line = 117
-begin = 20
-end = 38
-
-[JC_63]
-file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 25
-end = 33
-
-[JC_11]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 11
-end = 22
-
-[JC_64]
-file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 20
-end = 33
-
-[JC_12]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 16
-end = 30
-
-[CountLemma]
-name = "Lemma CountLemma"
-behavior = "lemma"
-file = "HOME/tests/c/popHeap.c"
-line = 93
-begin = 2
-end = 150
-
-[JC_65]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_13]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 25
-end = 34
-
-[JC_66]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 207
-begin = 6
-end = 4644
-
-[JC_14]
-file = "HOME/tests/c/popHeap.c"
-line = 119
-begin = 11
-end = 32
-
-[JC_120]
-file = "HOME/tests/c/popHeap.c"
-line = 180
-begin = 19
-end = 44
-
-[JC_67]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 207
-begin = 6
-end = 4644
-
-[JC_15]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_121]
-kind = UserCall
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 267
-begin = 29
-end = 70
-
-[JC_68]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 171
-begin = 22
-end = 28
-
-[JC_16]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_122]
-file = "HOME/tests/c/popHeap.c"
-line = 191
-begin = 19
-end = 29
-
-[JC_69]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 171
-begin = 22
-end = 32
-
-[JC_17]
-file = "HOME/tests/c/popHeap.c"
-line = 123
-begin = 10
-end = 105
-
-[JC_123]
-file = "HOME/tests/c/popHeap.c"
-line = 193
-begin = 19
-end = 44
-
-[JC_18]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 149
-begin = 10
-end = 18
-
-[JC_124]
-kind = UserCall
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 296
-begin = 26
-end = 67
-
-[JC_19]
-file = "HOME/tests/c/popHeap.c"
-line = 123
-begin = 10
-end = 105
-
-[JC_125]
-file = "HOME/tests/c/popHeap.c"
-line = 200
-begin = 14
-end = 86
-
-[JC_126]
-file = "HOME/tests/c/popHeap.c"
-line = 205
-begin = 13
-end = 93
-
-[JC_127]
-file = "HOME/tests/c/popHeap.c"
-line = 208
-begin = 13
-end = 67
-
-[JC_128]
-file = "HOME/tests/c/popHeap.c"
-line = 209
-begin = 13
-end = 119
-
-[JC_129]
-file = "HOME/tests/c/popHeap.c"
-line = 213
-begin = 13
-end = 408
-
-[JC_70]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 172
-begin = 16
-end = 19
-
-[JC_71]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 10
-end = 18
-
-[ParentChild_1]
-name = "Lemma ParentChild_1"
-behavior = "axiom"
-file = "HOME/tests/c/popHeap.c"
-line = 40
-begin = 4
-end = 126
-
-[JC_72]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 23
-end = 30
-
-[JC_20]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 149
-begin = 10
-end = 18
-
-[ParentChild_2]
-name = "Lemma ParentChild_2"
-behavior = "axiom"
-file = "HOME/tests/c/popHeap.c"
-line = 44
-begin = 4
-end = 106
 
 [JC_73]
 kind = PointerDeref
@@ -2505,11 +1766,105 @@ line = 174
 begin = 21
 end = 31
 
-[JC_21]
+[JC_158]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 249
+begin = 31
+end = 34
+
+[JC_63]
+file = "HOME/tests/c/popHeap.c"
+line = 157
+begin = 25
+end = 33
+
+[JC_80]
+file = "HOME/tests/c/popHeap.c"
+line = 180
+begin = 19
+end = 44
+
+[JC_51]
+kind = UserCall
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 180
+begin = 15
+end = 41
+
+[JC_71]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 10
+end = 18
+
+[JC_147]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 471
+begin = 10
+end = 18
+
+[JC_151]
+file = "HOME/tests/c/popHeap.c"
+line = 244
+begin = 17
+end = 23
+
+[JC_45]
+file = "HOME/tests/c/popHeap.c"
+line = 140
+begin = 11
+end = 39
+
+[JC_123]
+file = "HOME/tests/c/popHeap.c"
+line = 193
+begin = 19
+end = 44
+
+[JC_106]
+file = "HOME/tests/c/popHeap.c"
+line = 153
+begin = 13
+end = 93
+
+[JC_143]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_113]
+file = "HOME/tests/c/popHeap.c"
+line = 157
+begin = 25
+end = 33
+
+[JC_116]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 208
+begin = 6
+end = 4815
+
+[JC_64]
+file = "HOME/tests/c/popHeap.c"
+line = 157
+begin = 20
+end = 33
+
+[JC_133]
+file = "HOME/tests/c/popHeap.c"
+line = 233
+begin = 13
+end = 157
+
+[JC_99]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 226
+begin = 4
+end = 7
 
 [ParentChild_3]
 name = "Lemma ParentChild_3"
@@ -2519,115 +1874,60 @@ line = 49
 begin = 2
 end = 234
 
-[pop_heap_ensures_default]
-name = "Function pop_heap"
-behavior = "default behavior"
-file = "HOME/tests/c/popHeap.c"
-line = 145
-begin = 5
-end = 13
-
-[JC_74]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 33
-end = 40
-
-[JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_75]
-file = "HOME/tests/c/popHeap.c"
-line = 175
-begin = 17
-end = 40
-
-[JC_23]
-file = "HOME/tests/c/popHeap.c"
-line = 131
-begin = 12
-end = 17
-
-[JC_76]
+[JC_85]
 kind = PointerDeref
 file = "HOME/tests/c/popHeap.c"
-line = 176
-begin = 10
-end = 18
+line = 189
+begin = 26
+end = 34
 
-[JC_24]
+[JC_126]
 file = "HOME/tests/c/popHeap.c"
-line = 131
-begin = 16
-end = 37
-
-[JC_130]
-file = "HOME/tests/c/popHeap.c"
-line = 222
+line = 205
 begin = 13
-end = 113
+end = 93
 
-[JC_77]
+[ParentChild_1]
+name = "Lemma ParentChild_1"
+behavior = "axiom"
 file = "HOME/tests/c/popHeap.c"
-line = 178
-begin = 19
-end = 29
+line = 40
+begin = 4
+end = 126
 
-[JC_25]
+[JC_31]
 file = "HOME/tests/c/popHeap.c"
 line = 132
 begin = 12
 end = 30
 
-[JC_131]
+[JC_17]
 file = "HOME/tests/c/popHeap.c"
-line = 227
-begin = 13
-end = 88
+line = 123
+begin = 10
+end = 105
 
-[JC_78]
-kind = PointerDeref
+[JC_122]
 file = "HOME/tests/c/popHeap.c"
-line = 179
-begin = 18
-end = 26
+line = 191
+begin = 19
+end = 29
 
-[JC_26]
-file = "HOME/tests/c/popHeap.c"
-line = 133
-begin = 12
-end = 24
-
-[JC_132]
-file = "HOME/tests/c/popHeap.c"
-line = 230
-begin = 13
-end = 108
-
-[JC_79]
-kind = PointerDeref
+[JC_81]
+kind = UserCall
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 255
+line = 269
 begin = 30
-end = 304
+end = 71
 
-[JC_27]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_133]
+[JC_55]
+kind = PointerDeref
 file = "HOME/tests/c/popHeap.c"
-line = 233
-begin = 13
-end = 157
+line = 152
+begin = 8
+end = 12
 
-[JC_28]
+[JC_138]
 file = "HOME/"
 line = 0
 begin = -1
@@ -2639,23 +1939,11 @@ line = 106
 begin = 11
 end = 16
 
-[JC_29]
-file = "HOME/tests/c/popHeap.c"
-line = 131
-begin = 12
-end = 17
-
-[JC_135]
-file = "HOME/tests/c/popHeap.c"
-line = 106
-begin = 20
-end = 38
-
-[JC_136]
-file = "HOME/tests/c/popHeap.c"
-line = 107
-begin = 11
-end = 23
+[JC_148]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_137]
 file = "HOME/"
@@ -2663,30 +1951,164 @@ line = 0
 begin = -1
 end = -1
 
-[JC_138]
+[JC_48]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 162
+begin = 9
+end = 16
+
+[JC_23]
+file = "HOME/tests/c/popHeap.c"
+line = 131
+begin = 12
+end = 17
+
+[JC_22]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_139]
+[JC_121]
+kind = UserCall
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 269
+begin = 30
+end = 71
+
+[JC_5]
 file = "HOME/tests/c/popHeap.c"
-line = 106
+line = 118
+begin = 25
+end = 34
+
+[JC_125]
+file = "HOME/tests/c/popHeap.c"
+line = 200
+begin = 14
+end = 86
+
+[JC_67]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 208
+begin = 6
+end = 4815
+
+[JC_9]
+file = "HOME/tests/c/popHeap.c"
+line = 117
 begin = 11
 end = 16
 
-[JC_80]
+[JC_75]
 file = "HOME/tests/c/popHeap.c"
-line = 180
-begin = 19
-end = 44
+line = 175
+begin = 17
+end = 40
 
-[JC_81]
-kind = UserCall
+[JC_24]
+file = "HOME/tests/c/popHeap.c"
+line = 131
+begin = 16
+end = 37
+
+[JC_25]
+file = "HOME/tests/c/popHeap.c"
+line = 132
+begin = 12
+end = 30
+
+[JC_78]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.c"
+line = 179
+begin = 18
+end = 26
+
+[JC_41]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 267
-begin = 29
-end = 70
+line = 162
+begin = 9
+end = 16
+
+[JC_74]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 33
+end = 40
+
+[JC_47]
+file = "HOME/tests/c/popHeap.c"
+line = 145
+begin = 5
+end = 13
+
+[JC_52]
+file = "HOME/tests/c/popHeap.c"
+line = 148
+begin = 13
+end = 58
+
+[JC_26]
+file = "HOME/tests/c/popHeap.c"
+line = 133
+begin = 12
+end = 24
+
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[CountLemma]
+name = "Lemma CountLemma"
+behavior = "lemma"
+file = "HOME/tests/c/popHeap.c"
+line = 93
+begin = 2
+end = 150
+
+[ParentChild_2]
+name = "Lemma ParentChild_2"
+behavior = "axiom"
+file = "HOME/tests/c/popHeap.c"
+line = 44
+begin = 4
+end = 106
+
+[JC_154]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_54]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.c"
+line = 151
+begin = 8
+end = 14
+
+[JC_79]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 258
+begin = 31
+end = 129
+
+[JC_13]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 25
+end = 34
+
+[JC_130]
+file = "HOME/tests/c/popHeap.c"
+line = 222
+begin = 13
+end = 113
 
 [JC_82]
 kind = ArithOverflow
@@ -2695,68 +2117,17 @@ line = 188
 begin = 14
 end = 20
 
-[JC_30]
+[JC_163]
 file = "HOME/tests/c/popHeap.c"
-line = 131
-begin = 16
-end = 37
+line = 244
+begin = 17
+end = 28
 
-[JC_83]
-kind = ArithOverflow
+[JC_153]
 file = "HOME/tests/c/popHeap.c"
-line = 188
-begin = 14
-end = 24
-
-[JC_31]
-file = "HOME/tests/c/popHeap.c"
-line = 132
-begin = 12
-end = 30
-
-[JC_84]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 189
-begin = 19
-end = 22
-
-[JC_32]
-file = "HOME/tests/c/popHeap.c"
-line = 133
-begin = 12
-end = 24
-
-[JC_85]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.c"
-line = 189
-begin = 26
-end = 34
-
-[JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_86]
-file = "HOME/tests/c/popHeap.c"
-line = 191
-begin = 19
-end = 29
-
-[JC_34]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_140]
-file = "HOME/tests/c/popHeap.c"
-line = 106
-begin = 20
-end = 38
+line = 244
+begin = 17
+end = 28
 
 [JC_87]
 kind = PointerDeref
@@ -2765,24 +2136,44 @@ line = 192
 begin = 18
 end = 26
 
-[JC_35]
+[JC_11]
 file = "HOME/tests/c/popHeap.c"
-line = 137
+line = 118
 begin = 11
-end = 25
+end = 22
 
-[JC_141]
+[pop_heap_induction_ensures_default]
+name = "Function pop_heap_induction"
+behavior = "default behavior"
 file = "HOME/tests/c/popHeap.c"
-line = 107
-begin = 11
+line = 241
+begin = 5
 end = 23
 
-[JC_88]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 285
-begin = 27
-end = 292
+[JC_167]
+file = "HOME/tests/c/popHeap.c"
+line = 251
+begin = 15
+end = 48
+
+[JC_98]
+file = "HOME/tests/c/popHeap.c"
+line = 222
+begin = 13
+end = 113
+
+[JC_70]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 172
+begin = 16
+end = 19
+
+[JC_15]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_36]
 file = "HOME/tests/c/popHeap.c"
@@ -2790,41 +2181,18 @@ line = 138
 begin = 11
 end = 31
 
-[JC_142]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_104]
+kind = UserCall
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 180
+begin = 15
+end = 41
 
-[JC_89]
+[JC_91]
 file = "HOME/tests/c/popHeap.c"
-line = 193
-begin = 19
-end = 44
-
-[JC_37]
-file = "HOME/tests/c/popHeap.c"
-line = 139
-begin = 11
-end = 31
-
-[JC_143]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_38]
-file = "HOME/tests/c/popHeap.c"
-line = 140
-begin = 11
-end = 39
-
-[JC_144]
-file = "HOME/tests/c/popHeap.c"
-line = 111
-begin = 10
-end = 56
+line = 167
+begin = 18
+end = 26
 
 [JC_39]
 file = "HOME/"
@@ -2832,11 +2200,530 @@ line = 0
 begin = -1
 end = -1
 
+[JC_112]
+file = "HOME/tests/c/popHeap.c"
+line = 157
+begin = 20
+end = 29
+
+[JC_40]
+file = "HOME/tests/c/popHeap.c"
+line = 145
+begin = 5
+end = 13
+
+[JC_162]
+file = "HOME/tests/c/popHeap.c"
+line = 244
+begin = 22
+end = 28
+
+[JC_135]
+file = "HOME/tests/c/popHeap.c"
+line = 106
+begin = 20
+end = 38
+
+[JC_83]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 188
+begin = 14
+end = 24
+
+[JC_35]
+file = "HOME/tests/c/popHeap.c"
+line = 137
+begin = 11
+end = 25
+
+[Count2]
+name = "Lemma Count2"
+behavior = "axiom"
+file = "HOME/tests/c/popHeap.c"
+line = 81
+begin = 4
+end = 162
+
+[JC_132]
+file = "HOME/tests/c/popHeap.c"
+line = 230
+begin = 13
+end = 108
+
+[JC_27]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_115]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_109]
+file = "HOME/tests/c/popHeap.c"
+line = 160
+begin = 20
+end = 96
+
+[JC_107]
+file = "HOME/tests/c/popHeap.c"
+line = 164
+begin = 20
+end = 45
+
+[JC_69]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 171
+begin = 22
+end = 32
+
+[JC_124]
+kind = UserCall
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 299
+begin = 27
+end = 68
+
+[JC_38]
+file = "HOME/tests/c/popHeap.c"
+line = 140
+begin = 11
+end = 39
+
+[JC_12]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 16
+end = 30
+
+[JC_6]
+file = "HOME/tests/c/popHeap.c"
+line = 119
+begin = 11
+end = 32
+
+[JC_156]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 481
+begin = 6
+end = 896
+
+[JC_127]
+file = "HOME/tests/c/popHeap.c"
+line = 208
+begin = 13
+end = 67
+
+[JC_164]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/tests/c/popHeap.c"
+line = 139
+begin = 11
+end = 31
+
+[JC_155]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 481
+begin = 6
+end = 896
+
+[JC_4]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 16
+end = 30
+
+[pop_heap_induction_safety]
+name = "Function pop_heap_induction"
+behavior = "Safety"
+file = "HOME/tests/c/popHeap.c"
+line = 241
+begin = 5
+end = 23
+
+[JC_62]
+file = "HOME/tests/c/popHeap.c"
+line = 157
+begin = 20
+end = 29
+
+[JC_101]
+file = "HOME/tests/c/popHeap.c"
+line = 227
+begin = 13
+end = 88
+
+[Count0]
+name = "Lemma Count0"
+behavior = "axiom"
+file = "HOME/tests/c/popHeap.c"
+line = 72
+begin = 4
+end = 105
+
+[JC_88]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 287
+begin = 28
+end = 306
+
+[JC_129]
+file = "HOME/tests/c/popHeap.c"
+line = 213
+begin = 13
+end = 408
+
+[JC_42]
+file = "HOME/tests/c/popHeap.c"
+line = 137
+begin = 11
+end = 25
+
+[JC_110]
+file = "HOME/tests/c/popHeap.c"
+line = 159
+begin = 20
+end = 65
+
+[JC_166]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 481
+begin = 6
+end = 896
+
+[JC_103]
+file = "HOME/tests/c/popHeap.c"
+line = 233
+begin = 13
+end = 157
+
+[JC_46]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_141]
+file = "HOME/tests/c/popHeap.c"
+line = 107
+begin = 11
+end = 23
+
+[JC_61]
+file = "HOME/tests/c/popHeap.c"
+line = 158
+begin = 20
+end = 33
+
+[JC_32]
+file = "HOME/tests/c/popHeap.c"
+line = 133
+begin = 12
+end = 24
+
+[JC_56]
+file = "HOME/tests/c/popHeap.c"
+line = 153
+begin = 13
+end = 93
+
+[JC_33]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_65]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_118]
+file = "HOME/tests/c/popHeap.c"
+line = 175
+begin = 17
+end = 40
+
+[JC_105]
+file = "HOME/tests/c/popHeap.c"
+line = 148
+begin = 13
+end = 58
+
+[JC_140]
+file = "HOME/tests/c/popHeap.c"
+line = 106
+begin = 20
+end = 38
+
+[JC_29]
+file = "HOME/tests/c/popHeap.c"
+line = 131
+begin = 12
+end = 17
+
+[JC_144]
+file = "HOME/tests/c/popHeap.c"
+line = 111
+begin = 10
+end = 56
+
+[JC_159]
+file = "HOME/tests/c/popHeap.c"
+line = 247
+begin = 15
+end = 20
+
+[JC_68]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 171
+begin = 22
+end = 28
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_16]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_96]
+file = "HOME/tests/c/popHeap.c"
+line = 209
+begin = 13
+end = 119
+
+[JC_43]
+file = "HOME/tests/c/popHeap.c"
+line = 138
+begin = 11
+end = 31
+
+[JC_2]
+file = "HOME/tests/c/popHeap.c"
+line = 117
+begin = 20
+end = 38
+
+[JC_95]
+file = "HOME/tests/c/popHeap.c"
+line = 208
+begin = 13
+end = 67
+
+[JC_93]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 316
+begin = 16
+end = 57
+
+[JC_97]
+file = "HOME/tests/c/popHeap.c"
+line = 213
+begin = 13
+end = 408
+
+[JC_84]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 189
+begin = 19
+end = 22
+
+[JC_160]
+file = "HOME/tests/c/popHeap.c"
+line = 245
+begin = 17
+end = 73
+
+[JC_128]
+file = "HOME/tests/c/popHeap.c"
+line = 209
+begin = 13
+end = 119
+
+[JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_114]
+file = "HOME/tests/c/popHeap.c"
+line = 157
+begin = 20
+end = 33
+
+[JC_14]
+file = "HOME/tests/c/popHeap.c"
+line = 119
+begin = 11
+end = 32
+
+[JC_150]
+file = "HOME/tests/c/popHeap.c"
+line = 245
+begin = 17
+end = 73
+
+[pop_heap_ensures_default]
+name = "Function pop_heap"
+behavior = "default behavior"
+file = "HOME/tests/c/popHeap.c"
+line = 145
+begin = 5
+end = 13
+
+[JC_117]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 208
+begin = 6
+end = 4815
+
+[pop_heap_safety]
+name = "Function pop_heap"
+behavior = "Safety"
+file = "HOME/tests/c/popHeap.c"
+line = 145
+begin = 5
+end = 13
+
+[JC_90]
+kind = UserCall
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 299
+begin = 27
+end = 68
+
+[JC_53]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 151
+begin = 10
+end = 13
+
+[JC_157]
+file = "HOME/tests/c/popHeap.c"
+line = 251
+begin = 15
+end = 48
+
 [JC_145]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 462
+line = 471
 begin = 10
 end = 18
+
+[JC_21]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_149]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_111]
+file = "HOME/tests/c/popHeap.c"
+line = 158
+begin = 20
+end = 33
+
+[JC_77]
+file = "HOME/tests/c/popHeap.c"
+line = 178
+begin = 19
+end = 29
+
+[JC_49]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_1]
+file = "HOME/tests/c/popHeap.c"
+line = 117
+begin = 11
+end = 16
+
+[JC_131]
+file = "HOME/tests/c/popHeap.c"
+line = 227
+begin = 13
+end = 88
+
+[JC_102]
+file = "HOME/tests/c/popHeap.c"
+line = 230
+begin = 13
+end = 108
+
+[JC_37]
+file = "HOME/tests/c/popHeap.c"
+line = 139
+begin = 11
+end = 31
+
+[Count1]
+name = "Lemma Count1"
+behavior = "axiom"
+file = "HOME/tests/c/popHeap.c"
+line = 76
+begin = 4
+end = 184
+
+[JC_142]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_10]
+file = "HOME/tests/c/popHeap.c"
+line = 117
+begin = 20
+end = 38
+
+[JC_108]
+file = "HOME/tests/c/popHeap.c"
+line = 162
+begin = 20
+end = 100
+
+[JC_57]
+file = "HOME/tests/c/popHeap.c"
+line = 164
+begin = 20
+end = 45
+
+[JC_161]
+file = "HOME/tests/c/popHeap.c"
+line = 244
+begin = 17
+end = 23
 
 [JC_146]
 file = "HOME/tests/c/popHeap.c"
@@ -2844,19 +2731,142 @@ line = 111
 begin = 10
 end = 56
 
-[JC_147]
+[JC_89]
+file = "HOME/tests/c/popHeap.c"
+line = 193
+begin = 19
+end = 44
+
+[JC_136]
+file = "HOME/tests/c/popHeap.c"
+line = 107
+begin = 11
+end = 23
+
+[JC_66]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 462
+line = 208
+begin = 6
+end = 4815
+
+[JC_59]
+file = "HOME/tests/c/popHeap.c"
+line = 160
+begin = 20
+end = 96
+
+[JC_20]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 149
 begin = 10
 end = 18
 
-[JC_148]
+[JC_165]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 481
+begin = 6
+end = 896
+
+[JC_18]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 149
+begin = 10
+end = 18
+
+[JC_3]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 11
+end = 22
+
+[JC_92]
+file = "HOME/tests/c/popHeap.c"
+line = 200
+begin = 14
+end = 86
+
+[JC_152]
+file = "HOME/tests/c/popHeap.c"
+line = 244
+begin = 22
+end = 28
+
+[JC_86]
+file = "HOME/tests/c/popHeap.c"
+line = 191
+begin = 19
+end = 29
+
+[JC_60]
+file = "HOME/tests/c/popHeap.c"
+line = 159
+begin = 20
+end = 65
+
+[JC_139]
+file = "HOME/tests/c/popHeap.c"
+line = 106
+begin = 11
+end = 16
+
+[JC_72]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 23
+end = 30
+
+[JC_19]
+file = "HOME/tests/c/popHeap.c"
+line = 123
+begin = 10
+end = 105
+
+[JC_119]
+file = "HOME/tests/c/popHeap.c"
+line = 178
+begin = 19
+end = 29
+
+[JC_76]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.c"
+line = 176
+begin = 10
+end = 18
+
+[JC_50]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_149]
+[JC_30]
+file = "HOME/tests/c/popHeap.c"
+line = 131
+begin = 16
+end = 37
+
+[JC_120]
+file = "HOME/tests/c/popHeap.c"
+line = 180
+begin = 19
+end = 44
+
+[JC_58]
+file = "HOME/tests/c/popHeap.c"
+line = 162
+begin = 20
+end = 100
+
+[JC_100]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 420
+begin = 16
+end = 129
+
+[JC_28]
 file = "HOME/"
 line = 0
 begin = -1
@@ -3585,172 +3595,140 @@ let pop_heap_ensures_default =
      (let hole = ref (any_int32 void) in
      (let child_0 = ref (any_int32 void) in
      try
-      (C_11:
       begin
-        (let jessie_<num> = a_4 in
-        (let jessie_<num> = n_1_0 in
-        (JC_104: ((pop_heap_induction jessie_<num>) jessie_<num>))));
+        (let _jessie_<num> = a_4 in
+        (let _jessie_<num> = n_1_0 in
+        (JC_104: ((pop_heap_induction _jessie_<num>) _jessie_<num>))));
        (assert
        { (JC_105:
          (forall i_16:int.
           ((lt_int((0), i_16) and lt_int(i_16, integer_of_int32(n_1_0))) ->
            ge_int(integer_of_int32(select(intP_intM, shift(a_4, (0)))),
            integer_of_int32(select(intP_intM, shift(a_4, i_16))))))) }; void);
-       (C_15:
-       (C_20:
-       (C_23:
+       void;
+       (let _jessie_<num> =
+       begin
+         (let _jessie_<num> = (tmp := (safe_int32_of_integer_ (0))) in void);
+        (max_1 := (safe_int32_of_integer_ (0))); !max_1 end in void);
+       (let _jessie_<num> = (hole := (safe_int32_of_integer_ (0))) in void);
+       (let _jessie_<num> =
+       (tmp := ((safe_acc_ !intP_intM) ((shift a_4) (integer_of_int32 
+                                                     (safe_int32_of_integer_ 
+                                                      ((sub_int (integer_of_int32 n_1_0)) (1))))))) in
+       void);
+       (let _jessie_<num> =
+       (max_1 := ((safe_acc_ !intP_intM) ((shift a_4) (0)))) in void);
+       (assert
+       { (JC_106:
+         (forall x_1:int32.
+          (CountWithHole(a_4, x_1, (0), integer_of_int32(hole),
+           integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_1, (1),
+                                                 integer_of_int32(n_1_0),
+                                                 intP_intM@init)))) }; void);
        begin
          void;
-        (let jessie_<num> =
-        (C_13:
-        (C_14:
-        begin
-          (let jessie_<num> = (tmp := (safe_int32_of_integer_ (0))) in void);
-         (max_1 := (safe_int32_of_integer_ (0))); !max_1 end)) in void);
-        (let jessie_<num> = (hole := (safe_int32_of_integer_ (0))) in void);
-        (let jessie_<num> =
-        (tmp := (C_19:
-                ((safe_acc_ !intP_intM) (C_18:
-                                        ((shift a_4) (integer_of_int32 
-                                                      (C_17:
-                                                      (safe_int32_of_integer_ 
-                                                       (C_16:
-                                                       ((sub_int (integer_of_int32 n_1_0)) (1))))))))))) in
-        void);
-        (let jessie_<num> =
-        (max_1 := (C_22: ((safe_acc_ !intP_intM) (C_21: ((shift a_4) (0)))))) in
-        void);
-        (assert
-        { (JC_106:
-          (forall x_1:int32.
-           (CountWithHole(a_4, x_1, (0), integer_of_int32(hole),
-            integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_1, (1),
-                                                  integer_of_int32(n_1_0),
-                                                  intP_intM@init)))) }; void);
         (loop_2:
         begin
-          void;
-         while true do
-         { invariant
-             (((JC_107:
-               (integer_of_int32(select(intP_intM@init,
+          while true do
+          { invariant
+              (((JC_107:
+                (integer_of_int32(select(intP_intM@init,
+                                  shift(a_4,
+                                  sub_int(integer_of_int32(n_1_0), (1))))) = 
+                integer_of_int32(select(intP_intM,
                                  shift(a_4,
-                                 sub_int(integer_of_int32(n_1_0), (1))))) = 
-               integer_of_int32(select(intP_intM,
-                                shift(a_4,
-                                sub_int(integer_of_int32(n_1_0), (1)))))))
-              and ((JC_108:
-                   (forall x_2:int32.
-                    (CountWithHole(a_4, x_2, (0), integer_of_int32(hole),
-                     integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_2,
-                                                           (1),
-                                                           integer_of_int32(n_1_0),
-                                                           intP_intM@init))))
-                  and ((JC_109:
-                       (forall i_18:int.
-                        ((lt_int(integer_of_int32(hole),
-                          sub_int(integer_of_int32(n_1_0), (1)))
-                         and ParentChild(i_18, integer_of_int32(hole))) ->
-                         ge_int(integer_of_int32(select(intP_intM,
-                                                 shift(a_4, i_18))),
-                         integer_of_int32(tmp)))))
-                      and ((JC_110:
-                           (forall i_17:int.
-                            ((le_int((0), i_17)
-                             and lt_int(i_17, integer_of_int32(n_1_0))) ->
-                             le_int(integer_of_int32(select(intP_intM,
-                                                     shift(a_4, i_17))),
-                             integer_of_int32(max_1)))))
-                          and ((JC_111:
-                               IsHeap(a_4,
-                               sub_int(integer_of_int32(n_1_0), (1)),
-                               intP_intM))
-                              and (JC_114:
-                                  ((JC_112:
-                                   le_int((0), integer_of_int32(hole)))
-                                  and (JC_113:
-                                      lt_int(integer_of_int32(hole),
-                                      integer_of_int32(n_1_0))))))))))
-             and ((JC_116:
-                  not_assigns(intP_alloc_table@loop_2, intP_intM@loop_2,
-                  intP_intM,
-                  pset_range(pset_singleton(a_4), (0),
-                  integer_of_int32(hole))))
-                 and (JC_117:
-                     not_assigns(intP_alloc_table@init, intP_intM@init,
-                     intP_intM,
-                     pset_range(pset_singleton(a_4), (0),
-                     sub_int(integer_of_int32(n_1_0), (1)))))))  }
-          begin
-            [ { } unit { true } ];
-           try
-            (C_38:
-            begin
-              (let jessie_<num> =
-              (child_0 := (C_37:
-                          (safe_int32_of_integer_ (C_36:
-                                                  ((add_int (integer_of_int32 
-                                                             (C_35:
-                                                             (safe_int32_of_integer_ 
-                                                              (C_34:
-                                                              ((mul_int (2)) 
-                                                               (integer_of_int32 !hole))))))) (2)))))) in
-              void);
-             (if ((lt_int_ (integer_of_int32 !child_0)) (integer_of_int32 
-                                                         (C_79:
-                                                         (safe_int32_of_integer_ 
-                                                          (C_78:
-                                                          ((sub_int (integer_of_int32 n_1_0)) (1)))))))
-             then
-              begin
-                (if ((lt_int_ (integer_of_int32 (C_65:
-                                                ((safe_acc_ !intP_intM) 
-                                                 (C_64:
-                                                 ((shift a_4) (integer_of_int32 !child_0))))))) 
-                     (integer_of_int32 (C_63:
-                                       ((safe_acc_ !intP_intM) (C_62:
-                                                               ((shift a_4) 
-                                                                (integer_of_int32 
-                                                                 (C_61:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_60:
-                                                                  ((sub_int 
-                                                                    (integer_of_int32 !child_0)) (1))))))))))))
+                                 sub_int(integer_of_int32(n_1_0), (1)))))))
+               and ((JC_108:
+                    (forall x_2:int32.
+                     (CountWithHole(a_4, x_2, (0), integer_of_int32(hole),
+                      integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_2,
+                                                            (1),
+                                                            integer_of_int32(n_1_0),
+                                                            intP_intM@init))))
+                   and ((JC_109:
+                        (forall i_18:int.
+                         ((lt_int(integer_of_int32(hole),
+                           sub_int(integer_of_int32(n_1_0), (1)))
+                          and ParentChild(i_18, integer_of_int32(hole))) ->
+                          ge_int(integer_of_int32(select(intP_intM,
+                                                  shift(a_4, i_18))),
+                          integer_of_int32(tmp)))))
+                       and ((JC_110:
+                            (forall i_17:int.
+                             ((le_int((0), i_17)
+                              and lt_int(i_17, integer_of_int32(n_1_0))) ->
+                              le_int(integer_of_int32(select(intP_intM,
+                                                      shift(a_4, i_17))),
+                              integer_of_int32(max_1)))))
+                           and ((JC_111:
+                                IsHeap(a_4,
+                                sub_int(integer_of_int32(n_1_0), (1)),
+                                intP_intM))
+                               and (JC_114:
+                                   ((JC_112:
+                                    le_int((0), integer_of_int32(hole)))
+                                   and (JC_113:
+                                       lt_int(integer_of_int32(hole),
+                                       integer_of_int32(n_1_0))))))))))
+              and ((JC_116:
+                   not_assigns(intP_alloc_table@loop_2, intP_intM@loop_2,
+                   intP_intM,
+                   pset_range(pset_singleton(a_4), (0),
+                   integer_of_int32(hole))))
+                  and (JC_117:
+                      not_assigns(intP_alloc_table@init, intP_intM@init,
+                      intP_intM,
+                      pset_range(pset_singleton(a_4), (0),
+                      sub_int(integer_of_int32(n_1_0), (1)))))))  }
+           begin
+             [ { } unit { true } ];
+            try
+             begin
+               (let _jessie_<num> =
+               (child_0 := (safe_int32_of_integer_ ((add_int (integer_of_int32 
+                                                              (safe_int32_of_integer_ 
+                                                               ((mul_int (2)) 
+                                                                (integer_of_int32 !hole))))) (2)))) in
+               void);
+              (if ((lt_int_ (integer_of_int32 !child_0)) (integer_of_int32 
+                                                          (safe_int32_of_integer_ 
+                                                           ((sub_int 
+                                                             (integer_of_int32 n_1_0)) (1)))))
+              then
+               begin
+                 (if ((lt_int_ (integer_of_int32 ((safe_acc_ !intP_intM) 
+                                                  ((shift a_4) (integer_of_int32 !child_0))))) 
+                      (integer_of_int32 ((safe_acc_ !intP_intM) ((shift a_4) 
+                                                                 (integer_of_int32 
+                                                                  (safe_int32_of_integer_ 
+                                                                   ((sub_int 
+                                                                    (integer_of_int32 !child_0)) (1))))))))
+                 then
+                  (let _jessie_<num> =
+                  (child_0 := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !child_0)) (1)))) in
+                  void) else void);
+                (assert
+                { (JC_118:
+                  ParentChild(integer_of_int32(hole),
+                  integer_of_int32(child_0))) }; void); void;
+                (if ((gt_int_ (integer_of_int32 ((safe_acc_ !intP_intM) 
+                                                 ((shift a_4) (integer_of_int32 !child_0))))) 
+                     (integer_of_int32 !tmp))
                 then
-                 (let jessie_<num> =
-                 (C_59:
-                 (child_0 := (C_58:
-                             (safe_int32_of_integer_ (C_57:
-                                                     ((sub_int (integer_of_int32 !child_0)) (1))))))) in
-                 void) else void);
-               (assert
-               { (JC_118:
-                 ParentChild(integer_of_int32(hole),
-                 integer_of_int32(child_0))) }; void); void;
-               (if ((gt_int_ (integer_of_int32 (C_77:
-                                               ((safe_acc_ !intP_intM) 
-                                                (C_76:
-                                                ((shift a_4) (integer_of_int32 !child_0))))))) 
-                    (integer_of_int32 !tmp))
-               then
-                (let jessie_<num> =
-                begin
-                  (assert
-                  { (JC_119:
-                    lt_int(integer_of_int32(hole),
-                    sub_int(integer_of_int32(n_1_0), (1)))) }; void);
-                 (C_72:
+                 (let _jessie_<num> =
                  begin
-                   void;
-                  (let jessie_<num> =
-                  (let jessie_<num> =
-                  (C_69:
-                  ((safe_acc_ !intP_intM) (C_68:
-                                          ((shift a_4) (integer_of_int32 !child_0))))) in
-                  (let jessie_<num> = a_4 in
-                  (let jessie_<num> = (integer_of_int32 !hole) in
-                  (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-                  (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in void);
+                   (assert
+                   { (JC_119:
+                     lt_int(integer_of_int32(hole),
+                     sub_int(integer_of_int32(n_1_0), (1)))) }; void); void;
+                  (let _jessie_<num> =
+                  (let _jessie_<num> =
+                  ((safe_acc_ !intP_intM) ((shift a_4) (integer_of_int32 !child_0))) in
+                  (let _jessie_<num> = a_4 in
+                  (let _jessie_<num> = (integer_of_int32 !hole) in
+                  (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+                  (((safe_upd_ intP_intM) _jessie_<num>) _jessie_<num>))))) in
+                  void);
                   (assert
                   { (JC_120:
                     (integer_of_int32(select(intP_intM@init,
@@ -3759,63 +3737,46 @@ let pop_heap_ensures_default =
                     integer_of_int32(select(intP_intM,
                                      shift(a_4,
                                      sub_int(integer_of_int32(n_1_0), (1))))))) };
-                  void);
-                  (C_74:
-                  (C_75:
-                  begin
-                    void;
-                   (let jessie_<num> = a_4 in
-                   (let jessie_<num> = n_1_0 in
-                   (let jessie_<num> = !hole in
-                   (let jessie_<num> = !child_0 in
-                   (JC_121:
-                   ((((pop_push_heap_copy jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
-                   (hole := !child_0); !hole end)) end) end in void)
-               else (raise (Goto_while_0_break_exc void))) end
-             else
-              (C_43:
-              begin
-                (let jessie_<num> =
-                (child_0 := (C_42:
-                            (safe_int32_of_integer_ (C_41:
-                                                    ((add_int (integer_of_int32 
-                                                               (C_40:
-                                                               (safe_int32_of_integer_ 
-                                                                (C_39:
-                                                                ((mul_int (2)) 
-                                                                 (integer_of_int32 !hole))))))) (1)))))) in
-                void);
-               (if ((eq_int_ (integer_of_int32 !child_0)) (integer_of_int32 
-                                                           (C_56:
-                                                           (safe_int32_of_integer_ 
-                                                            (C_55:
-                                                            ((sub_int 
-                                                              (integer_of_int32 n_1_0)) (2)))))))
-               then
-                (if ((gt_int_ (integer_of_int32 (C_54:
-                                                ((safe_acc_ !intP_intM) 
-                                                 (C_53:
-                                                 ((shift a_4) (integer_of_int32 !child_0))))))) 
-                     (integer_of_int32 !tmp))
+                  void); void;
+                  (let _jessie_<num> = a_4 in
+                  (let _jessie_<num> = n_1_0 in
+                  (let _jessie_<num> = !hole in
+                  (let _jessie_<num> = !child_0 in
+                  (JC_121:
+                  ((((pop_push_heap_copy _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>))))));
+                  (hole := !child_0); !hole end in void)
+                else (raise (Goto_while_0_break_exc void))) end
+              else
+               begin
+                 (let _jessie_<num> =
+                 (child_0 := (safe_int32_of_integer_ ((add_int (integer_of_int32 
+                                                                (safe_int32_of_integer_ 
+                                                                 ((mul_int (2)) 
+                                                                  (integer_of_int32 !hole))))) (1)))) in
+                 void);
+                (if ((eq_int_ (integer_of_int32 !child_0)) (integer_of_int32 
+                                                            (safe_int32_of_integer_ 
+                                                             ((sub_int 
+                                                               (integer_of_int32 n_1_0)) (2)))))
                 then
-                 (let jessie_<num> =
-                 begin
-                   (assert
-                   { (JC_122:
-                     lt_int(integer_of_int32(hole),
-                     sub_int(integer_of_int32(n_1_0), (1)))) }; void);
-                  (C_49:
+                 (if ((gt_int_ (integer_of_int32 ((safe_acc_ !intP_intM) 
+                                                  ((shift a_4) (integer_of_int32 !child_0))))) 
+                      (integer_of_int32 !tmp))
+                 then
+                  (let _jessie_<num> =
                   begin
-                    void;
-                   (let jessie_<num> =
-                   (let jessie_<num> =
-                   (C_46:
-                   ((safe_acc_ !intP_intM) (C_45:
-                                           ((shift a_4) (integer_of_int32 !child_0))))) in
-                   (let jessie_<num> = a_4 in
-                   (let jessie_<num> = (integer_of_int32 !hole) in
-                   (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-                   (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in void);
+                    (assert
+                    { (JC_122:
+                      lt_int(integer_of_int32(hole),
+                      sub_int(integer_of_int32(n_1_0), (1)))) }; void); void;
+                   (let _jessie_<num> =
+                   (let _jessie_<num> =
+                   ((safe_acc_ !intP_intM) ((shift a_4) (integer_of_int32 !child_0))) in
+                   (let _jessie_<num> = a_4 in
+                   (let _jessie_<num> = (integer_of_int32 !hole) in
+                   (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+                   (((safe_upd_ intP_intM) _jessie_<num>) _jessie_<num>))))) in
+                   void);
                    (assert
                    { (JC_123:
                      (integer_of_int32(select(intP_intM@init,
@@ -3824,23 +3785,19 @@ let pop_heap_ensures_default =
                      integer_of_int32(select(intP_intM,
                                       shift(a_4,
                                       sub_int(integer_of_int32(n_1_0), (1))))))) };
-                   void);
-                   (C_51:
-                   (C_52:
-                   begin
-                     void;
-                    (let jessie_<num> = a_4 in
-                    (let jessie_<num> = n_1_0 in
-                    (let jessie_<num> = !hole in
-                    (let jessie_<num> = !child_0 in
-                    (JC_124:
-                    ((((pop_push_heap_copy jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
-                    (hole := !child_0); !hole end)) end) end in void)
-                else void) else void); (raise (Goto_while_0_break_exc void))
-              end)); (raise (Loop_continue_exc void)) end) with
-            Loop_continue_exc jessie_<num> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end))) end) with
-      Goto_while_0_break_exc jessie_<num> ->
+                   void); void;
+                   (let _jessie_<num> = a_4 in
+                   (let _jessie_<num> = n_1_0 in
+                   (let _jessie_<num> = !hole in
+                   (let _jessie_<num> = !child_0 in
+                   (JC_124:
+                   ((((pop_push_heap_copy _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>))))));
+                   (hole := !child_0); !hole end in void) else void)
+                else void); (raise (Goto_while_0_break_exc void)) end);
+              (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc _jessie_<num> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end end with
+      Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break:
       begin
         void;
@@ -3851,171 +3808,159 @@ let pop_heap_ensures_default =
             sub_int(integer_of_int32(n_1_0), (1)))
            and ParentChild(i_19, integer_of_int32(hole))) ->
            ge_int(integer_of_int32(select(intP_intM, shift(a_4, i_19))),
-           integer_of_int32(tmp))))) }; void);
-       (C_83:
-       begin
-         void;
-        (let jessie_<num> =
-        (let jessie_<num> = !tmp in
-        (let jessie_<num> = a_4 in
-        (let jessie_<num> = (integer_of_int32 !hole) in
-        (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-        (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in void);
-        (assert
-        { (JC_126:
-          (forall x_3:int32.
-           (CountWithHole(a_4, x_3, (0), integer_of_int32(hole),
-            integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_3, (1),
-                                                  integer_of_int32(n_1_0),
-                                                  intP_intM@init)))) }; void);
-        void;
-        (assert
-        { (JC_127:
+           integer_of_int32(tmp))))) }; void); void;
+       (let _jessie_<num> =
+       (let _jessie_<num> = !tmp in
+       (let _jessie_<num> = a_4 in
+       (let _jessie_<num> = (integer_of_int32 !hole) in
+       (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+       (((safe_upd_ intP_intM) _jessie_<num>) _jessie_<num>))))) in void);
+       (assert
+       { (JC_126:
+         (forall x_3:int32.
+          (CountWithHole(a_4, x_3, (0), integer_of_int32(hole),
+           integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_3, (1),
+                                                 integer_of_int32(n_1_0),
+                                                 intP_intM@init)))) }; void);
+       void;
+       (assert
+       { (JC_127:
+         (lt_int(integer_of_int32(hole),
+          sub_int(integer_of_int32(n_1_0), (1))) ->
+          ((integer_of_int32(select(intP_intM,
+                             shift(a_4, integer_of_int32(hole)))) = integer_of_int32(tmp))
+          and ((integer_of_int32(tmp) = integer_of_int32(select(intP_intM@init,
+                                                         shift(a_4,
+                                                         sub_int(integer_of_int32(n_1_0),
+                                                         (1))))))
+              and (integer_of_int32(select(intP_intM@init,
+                                    shift(a_4,
+                                    sub_int(integer_of_int32(n_1_0), (1))))) = 
+                  integer_of_int32(select(intP_intM,
+                                   shift(a_4,
+                                   sub_int(integer_of_int32(n_1_0), (1)))))))))) };
+       void); void;
+       (assert
+       { (JC_128:
+         (forall x_4:int32.
           (lt_int(integer_of_int32(hole),
            sub_int(integer_of_int32(n_1_0), (1))) ->
-           ((integer_of_int32(select(intP_intM,
-                              shift(a_4, integer_of_int32(hole)))) = 
-            integer_of_int32(tmp))
-           and ((integer_of_int32(tmp) = integer_of_int32(select(intP_intM@init,
-                                                          shift(a_4,
-                                                          sub_int(integer_of_int32(n_1_0),
-                                                          (1))))))
-               and (integer_of_int32(select(intP_intM@init,
-                                     shift(a_4,
-                                     sub_int(integer_of_int32(n_1_0), (1))))) = 
-                   integer_of_int32(select(intP_intM,
-                                    shift(a_4,
-                                    sub_int(integer_of_int32(n_1_0), (1)))))))))) };
-        void); void;
-        (assert
-        { (JC_128:
-          (forall x_4:int32.
-           (lt_int(integer_of_int32(hole),
+           (Count(a_4, x_4, add_int(integer_of_int32(hole), (1)),
+            add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)), intP_intM) = 
+           CountWithoutHole(a_4, x_4, add_int(integer_of_int32(hole), (1)),
+           sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
+           intP_intM))))) }; void); void;
+       (assert
+       { (JC_129:
+         (forall x_5:int32.
+          ((lt_int(integer_of_int32(hole),
             sub_int(integer_of_int32(n_1_0), (1))) ->
-            (Count(a_4, x_4, add_int(integer_of_int32(hole), (1)),
-             add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)), intP_intM) = 
-            CountWithoutHole(a_4, x_4, add_int(integer_of_int32(hole), (1)),
-            sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
-            intP_intM))))) }; void); void;
-        (assert
-        { (JC_129:
-          (forall x_5:int32.
-           ((lt_int(integer_of_int32(hole),
-             sub_int(integer_of_int32(n_1_0), (1))) ->
-             ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
-               integer_of_int32(n_1_0), intP_intM) = add_int(CountWithHole(a_4,
-                                                             x_5, (0),
-                                                             integer_of_int32(hole),
-                                                             sub_int(
-                                                             integer_of_int32(n_1_0),
-                                                             (1)), intP_intM),
-                                                     Count(a_4, x_5,
-                                                     sub_int(integer_of_int32(n_1_0),
-                                                     (1)),
-                                                     add_int(sub_int(
-                                                             integer_of_int32(n_1_0),
-                                                             (1)),
-                                                     (1)), intP_intM)))
-             and ((add_int(CountWithHole(a_4, x_5, (0),
-                           integer_of_int32(hole),
-                           sub_int(integer_of_int32(n_1_0), (1)), intP_intM),
-                   Count(a_4, x_5, sub_int(integer_of_int32(n_1_0), (1)),
-                   add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)),
-                   intP_intM)) = add_int(CountWithoutHole(a_4, x_5, (0),
-                                         integer_of_int32(hole),
-                                         add_int(integer_of_int32(hole), (1)),
-                                         intP_intM),
-                                 Count(a_4, x_5,
-                                 add_int(integer_of_int32(hole), (1)),
-                                 sub_int(integer_of_int32(n_1_0), (1)),
-                                 intP_intM)))
-                 and ((add_int(CountWithoutHole(a_4, x_5, (0),
-                               integer_of_int32(hole),
-                               add_int(integer_of_int32(hole), (1)),
-                               intP_intM),
-                       Count(a_4, x_5, add_int(integer_of_int32(hole), (1)),
-                       sub_int(integer_of_int32(n_1_0), (1)), intP_intM)) = 
-                      CountWithoutHole(a_4, x_5, (0), integer_of_int32(hole),
-                      sub_int(integer_of_int32(n_1_0), (1)), intP_intM))
-                     and (CountWithoutHole(a_4, x_5, (0),
+            ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
+              integer_of_int32(n_1_0), intP_intM) = add_int(CountWithHole(a_4,
+                                                            x_5, (0),
+                                                            integer_of_int32(hole),
+                                                            sub_int(integer_of_int32(n_1_0),
+                                                            (1)), intP_intM),
+                                                    Count(a_4, x_5,
+                                                    sub_int(integer_of_int32(n_1_0),
+                                                    (1)),
+                                                    add_int(sub_int(integer_of_int32(n_1_0),
+                                                            (1)),
+                                                    (1)), intP_intM)))
+            and ((add_int(CountWithHole(a_4, x_5, (0),
                           integer_of_int32(hole),
-                          sub_int(integer_of_int32(n_1_0), (1)), intP_intM) = 
-                         Count(a_4, x_5, (0),
-                         sub_int(integer_of_int32(n_1_0), (1)), intP_intM))))))
-           and ((integer_of_int32(hole) = sub_int(integer_of_int32(n_1_0),
-                                          (1))) ->
-                ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
-                  integer_of_int32(n_1_0), intP_intM) = CountWithHole(a_4,
-                                                        x_5, (0),
-                                                        sub_int(integer_of_int32(n_1_0),
-                                                        (1)),
-                                                        integer_of_int32(n_1_0),
-                                                        intP_intM))
-                and (CountWithHole(a_4, x_5, (0),
-                     sub_int(integer_of_int32(n_1_0), (1)),
-                     integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_5,
-                                                           (0),
-                                                           sub_int(integer_of_int32(n_1_0),
-                                                           (1)), intP_intM))))))) };
-        void); void;
-        (assert
-        { (JC_130:
-          (forall x_6:int32.
-           ((Count(a_4, x_6, (0), sub_int(integer_of_int32(n_1_0), (1)),
-             intP_intM) = CountWithHole(a_4, x_6, (0),
-                          integer_of_int32(hole), integer_of_int32(n_1_0),
-                          intP_intM))
-           and (CountWithHole(a_4, x_6, (0), integer_of_int32(hole),
-                integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_6, (1),
+                          sub_int(integer_of_int32(n_1_0), (1)), intP_intM),
+                  Count(a_4, x_5, sub_int(integer_of_int32(n_1_0), (1)),
+                  add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)),
+                  intP_intM)) = add_int(CountWithoutHole(a_4, x_5, (0),
+                                        integer_of_int32(hole),
+                                        add_int(integer_of_int32(hole), (1)),
+                                        intP_intM),
+                                Count(a_4, x_5,
+                                add_int(integer_of_int32(hole), (1)),
+                                sub_int(integer_of_int32(n_1_0), (1)),
+                                intP_intM)))
+                and ((add_int(CountWithoutHole(a_4, x_5, (0),
+                              integer_of_int32(hole),
+                              add_int(integer_of_int32(hole), (1)),
+                              intP_intM),
+                      Count(a_4, x_5, add_int(integer_of_int32(hole), (1)),
+                      sub_int(integer_of_int32(n_1_0), (1)), intP_intM)) = 
+                     CountWithoutHole(a_4, x_5, (0), integer_of_int32(hole),
+                     sub_int(integer_of_int32(n_1_0), (1)), intP_intM))
+                    and (CountWithoutHole(a_4, x_5, (0),
+                         integer_of_int32(hole),
+                         sub_int(integer_of_int32(n_1_0), (1)), intP_intM) = 
+                        Count(a_4, x_5, (0),
+                        sub_int(integer_of_int32(n_1_0), (1)), intP_intM))))))
+          and ((integer_of_int32(hole) = sub_int(integer_of_int32(n_1_0),
+                                         (1))) ->
+               ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
+                 integer_of_int32(n_1_0), intP_intM) = CountWithHole(a_4,
+                                                       x_5, (0),
+                                                       sub_int(integer_of_int32(n_1_0),
+                                                       (1)),
+                                                       integer_of_int32(n_1_0),
+                                                       intP_intM))
+               and (CountWithHole(a_4, x_5, (0),
+                    sub_int(integer_of_int32(n_1_0), (1)),
+                    integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_5,
+                                                          (0),
+                                                          sub_int(integer_of_int32(n_1_0),
+                                                          (1)), intP_intM))))))) };
+       void); void;
+       (assert
+       { (JC_130:
+         (forall x_6:int32.
+          ((Count(a_4, x_6, (0), sub_int(integer_of_int32(n_1_0), (1)),
+            intP_intM) = CountWithHole(a_4, x_6, (0), integer_of_int32(hole),
+                         integer_of_int32(n_1_0), intP_intM))
+          and (CountWithHole(a_4, x_6, (0), integer_of_int32(hole),
+               integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_6, (1),
+                                                     integer_of_int32(n_1_0),
+                                                     intP_intM@init))))) };
+       void); void;
+       (let _jessie_<num> =
+       (let _jessie_<num> = !max_1 in
+       (let _jessie_<num> = a_4 in
+       (let _jessie_<num> =
+       (integer_of_int32 (safe_int32_of_integer_ ((sub_int (integer_of_int32 n_1_0)) (1)))) in
+       (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+       (((safe_upd_ intP_intM) _jessie_<num>) _jessie_<num>))))) in void);
+       (assert
+       { (JC_131:
+         (forall x_7:int32.
+          (Count(a_4, x_7, sub_int(integer_of_int32(n_1_0), (1)),
+           add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)), intP_intM) = 
+          Count(a_4, x_7, (0), (1), intP_intM@init)))) }; void); void;
+       (assert
+       { (JC_132:
+         (forall x_8:int32.
+          (CountWithoutHole(a_4, x_8, (0),
+           sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
+           intP_intM) = CountWithoutHole(a_4, x_8, (0), (1),
+                        integer_of_int32(n_1_0), intP_intM@init)))) }; void);
+       void;
+       (assert
+       { (JC_133:
+         (forall x_9:int32.
+          ((Count(a_4, x_9, (0), integer_of_int32(n_1_0), intP_intM) = 
+           CountWithoutHole(a_4, x_9, (0),
+           sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
+           intP_intM))
+          and ((CountWithoutHole(a_4, x_9, (0),
+                sub_int(integer_of_int32(n_1_0), (1)),
+                integer_of_int32(n_1_0), intP_intM) = CountWithoutHole(a_4,
+                                                      x_9, (0), (1),
                                                       integer_of_int32(n_1_0),
-                                                      intP_intM@init))))) };
-        void);
-        (C_93:
-        begin
-          void;
-         (let jessie_<num> =
-         (let jessie_<num> = !max_1 in
-         (let jessie_<num> = a_4 in
-         (let jessie_<num> =
-         (integer_of_int32 (C_90:
-                           (safe_int32_of_integer_ (C_89:
-                                                   ((sub_int (integer_of_int32 n_1_0)) (1)))))) in
-         (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-         (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in void);
-         (assert
-         { (JC_131:
-           (forall x_7:int32.
-            (Count(a_4, x_7, sub_int(integer_of_int32(n_1_0), (1)),
-             add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)), intP_intM) = 
-            Count(a_4, x_7, (0), (1), intP_intM@init)))) }; void); void;
-         (assert
-         { (JC_132:
-           (forall x_8:int32.
-            (CountWithoutHole(a_4, x_8, (0),
-             sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
-             intP_intM) = CountWithoutHole(a_4, x_8, (0), (1),
-                          integer_of_int32(n_1_0), intP_intM@init)))) };
-         void); void;
-         (assert
-         { (JC_133:
-           (forall x_9:int32.
-            ((Count(a_4, x_9, (0), integer_of_int32(n_1_0), intP_intM) = 
-             CountWithoutHole(a_4, x_9, (0),
-             sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
-             intP_intM))
-            and ((CountWithoutHole(a_4, x_9, (0),
-                  sub_int(integer_of_int32(n_1_0), (1)),
-                  integer_of_int32(n_1_0), intP_intM) = CountWithoutHole(a_4,
-                                                        x_9, (0), (1),
-                                                        integer_of_int32(n_1_0),
-                                                        intP_intM@init))
-                and (CountWithoutHole(a_4, x_9, (0), (1),
-                     integer_of_int32(n_1_0), intP_intM@init) = Count(a_4,
-                                                                x_9, (0),
-                                                                integer_of_int32(n_1_0),
-                                                                intP_intM@init)))))) };
-         void); void; (raise Return) end) end) end) end)))); (raise Return)
-   end with Return -> void end)
+                                                      intP_intM@init))
+              and (CountWithoutHole(a_4, x_9, (0), (1),
+                   integer_of_int32(n_1_0), intP_intM@init) = Count(a_4, x_9,
+                                                              (0),
+                                                              integer_of_int32(n_1_0),
+                                                              intP_intM@init)))))) };
+       void); void; (raise Return) end) end)))); (raise Return) end with
+   Return -> void end)
   { (JC_41:
     ((JC_39:
      ((JC_35: IsHeap(a_4, sub_int(integer_of_int32(n_1_0), (1)), intP_intM))
@@ -4044,48 +3989,43 @@ let pop_heap_induction_ensures_default =
    begin
      (let i = ref (any_int32 void) in
      try
-      (C_109:
-      (loop_4:
       begin
-        (let jessie_<num> = (i := (safe_int32_of_integer_ (1))) in void);
-       while true do
-       { invariant
-           ((JC_160:
-            (forall j_9:int.
-             ((le_int((0), j_9)
-              and (lt_int(j_9, integer_of_int32(i))
-                  and le_int(integer_of_int32(i), integer_of_int32(n_2_0)))) ->
-              ge_int(integer_of_int32(select(intP_intM, shift(a_0_0, (0)))),
-              integer_of_int32(select(intP_intM, shift(a_0_0, j_9)))))))
-           and (JC_163:
-               ((JC_161: le_int((0), integer_of_int32(i)))
-               and (JC_162:
-                   le_int(integer_of_int32(i), integer_of_int32(n_2_0))))))
-          }
-        begin
-          [ { } unit { true } ];
-         try
+        (let _jessie_<num> = (i := (safe_int32_of_integer_ (1))) in void);
+       (loop_4:
+       begin
+         while true do
+         { invariant
+             ((JC_160:
+              (forall j_9:int.
+               ((le_int((0), j_9)
+                and (lt_int(j_9, integer_of_int32(i))
+                    and le_int(integer_of_int32(i), integer_of_int32(n_2_0)))) ->
+                ge_int(integer_of_int32(select(intP_intM, shift(a_0_0, (0)))),
+                integer_of_int32(select(intP_intM, shift(a_0_0, j_9)))))))
+             and (JC_163:
+                 ((JC_161: le_int((0), integer_of_int32(i)))
+                 and (JC_162:
+                     le_int(integer_of_int32(i), integer_of_int32(n_2_0))))))
+            }
           begin
-            (let jessie_<num> =
+            [ { } unit { true } ];
+           try
             begin
-              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_2_0))
-              then void else (raise (Goto_while_0_break_exc void)));
-             (assert
-             { (JC_167:
-               (lt_int((0), integer_of_int32(i)) ->
-                ParentChild(computer_div(sub_int(integer_of_int32(i), (1)),
-                            (2)),
-                integer_of_int32(i)))) }; void);
-             (C_118:
-             begin
-               void;
-              (i := (C_117:
-                    (safe_int32_of_integer_ (C_116:
-                                            ((add_int (integer_of_int32 !i)) (1))))));
-              !i end) end in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> -> void end end done;
-       (raise (Goto_while_0_break_exc void)) end)) with
-      Goto_while_0_break_exc jessie_<num> ->
+              (let _jessie_<num> =
+              begin
+                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_2_0))
+                then void else (raise (Goto_while_0_break_exc void)));
+               (assert
+               { (JC_167:
+                 (lt_int((0), integer_of_int32(i)) ->
+                  ParentChild(computer_div(sub_int(integer_of_int32(i), (1)),
+                              (2)),
+                  integer_of_int32(i)))) }; void); void;
+               (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))));
+               !i end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
+      Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end)
   { (JC_144:
@@ -4106,50 +4046,48 @@ let pop_heap_induction_safety =
    begin
      (let i = ref (any_int32 void) in
      try
-      (C_109:
-      (loop_3:
       begin
-        (let jessie_<num> = (i := (safe_int32_of_integer_ (1))) in void);
-       while true do
-       { invariant (JC_155: true)
-         variant (JC_159 : sub_int(integer_of_int32(n_2_0),
-                           integer_of_int32(i))) }
-        begin
-          [ { } unit reads i,intP_intM
-            { ((JC_150:
-               (forall j_9:int.
-                ((le_int((0), j_9)
-                 and (lt_int(j_9, integer_of_int32(i))
-                     and le_int(integer_of_int32(i), integer_of_int32(n_2_0)))) ->
-                 ge_int(integer_of_int32(select(intP_intM, shift(a_0_0, (0)))),
-                 integer_of_int32(select(intP_intM, shift(a_0_0, j_9)))))))
-              and (JC_153:
-                  ((JC_151: le_int((0), integer_of_int32(i)))
-                  and (JC_152:
-                      le_int(integer_of_int32(i), integer_of_int32(n_2_0)))))) } ];
-         try
+        (let _jessie_<num> = (i := (safe_int32_of_integer_ (1))) in void);
+       (loop_3:
+       begin
+         while true do
+         { invariant (JC_155: true)
+           variant (JC_159 : sub_int(integer_of_int32(n_2_0),
+                             integer_of_int32(i))) }
           begin
-            (let jessie_<num> =
+            [ { } unit reads i,intP_intM
+              { ((JC_150:
+                 (forall j_9:int.
+                  ((le_int((0), j_9)
+                   and (lt_int(j_9, integer_of_int32(i))
+                       and le_int(integer_of_int32(i),
+                           integer_of_int32(n_2_0)))) ->
+                   ge_int(integer_of_int32(select(intP_intM,
+                                           shift(a_0_0, (0)))),
+                   integer_of_int32(select(intP_intM, shift(a_0_0, j_9)))))))
+                and (JC_153:
+                    ((JC_151: le_int((0), integer_of_int32(i)))
+                    and (JC_152:
+                        le_int(integer_of_int32(i), integer_of_int32(n_2_0)))))) } ];
+           try
             begin
-              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_2_0))
-              then void else (raise (Goto_while_0_break_exc void)));
-             [ { } unit reads i
-               { (JC_157:
-                 (lt_int((0), integer_of_int32(i)) ->
-                  ParentChild(computer_div(sub_int(integer_of_int32(i), (1)),
-                              (2)),
-                  integer_of_int32(i)))) } ];
-             (C_118:
-             begin
-               void;
-              (i := (C_117:
-                    (JC_158:
-                    (int32_of_integer_ (C_116:
-                                       ((add_int (integer_of_int32 !i)) (1)))))));
-              !i end) end in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> -> void end end done;
-       (raise (Goto_while_0_break_exc void)) end)) with
-      Goto_while_0_break_exc jessie_<num> ->
+              (let _jessie_<num> =
+              begin
+                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_2_0))
+                then void else (raise (Goto_while_0_break_exc void)));
+               [ { } unit reads i
+                 { (JC_157:
+                   (lt_int((0), integer_of_int32(i)) ->
+                    ParentChild(computer_div(sub_int(integer_of_int32(i),
+                                             (1)),
+                                (2)),
+                    integer_of_int32(i)))) } ]; void;
+               (i := (JC_158:
+                     (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))));
+               !i end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
+      Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end) { true }
 
@@ -4171,173 +4109,145 @@ let pop_heap_safety =
      (let hole = ref (any_int32 void) in
      (let child_0 = ref (any_int32 void) in
      try
-      (C_11:
       begin
-        (let jessie_<num> = a_4 in
-        (let jessie_<num> = n_1_0 in
-        (JC_51: ((pop_heap_induction_requires jessie_<num>) jessie_<num>))));
+        (let _jessie_<num> = a_4 in
+        (let _jessie_<num> = n_1_0 in
+        (JC_51: ((pop_heap_induction_requires _jessie_<num>) _jessie_<num>))));
        [ { } unit reads intP_intM
          { (JC_52:
            (forall i_16:int.
             ((lt_int((0), i_16) and lt_int(i_16, integer_of_int32(n_1_0))) ->
              ge_int(integer_of_int32(select(intP_intM, shift(a_4, (0)))),
              integer_of_int32(select(intP_intM, shift(a_4, i_16))))))) } ];
-       (C_15:
-       (C_20:
-       (C_23:
+       void;
+       (let _jessie_<num> =
        begin
-         void;
-        (let jessie_<num> =
-        (C_13:
-        (C_14:
-        begin
-          (let jessie_<num> = (tmp := (safe_int32_of_integer_ (0))) in void);
-         (max_1 := (safe_int32_of_integer_ (0))); !max_1 end)) in void);
-        (let jessie_<num> = (hole := (safe_int32_of_integer_ (0))) in void);
-        (let jessie_<num> =
-        (tmp := (C_19:
-                (JC_54:
-                ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) (integer_of_int32 
-                                                                    (C_17:
+         (let _jessie_<num> = (tmp := (safe_int32_of_integer_ (0))) in void);
+        (max_1 := (safe_int32_of_integer_ (0))); !max_1 end in void);
+       (let _jessie_<num> = (hole := (safe_int32_of_integer_ (0))) in void);
+       (let _jessie_<num> =
+       (tmp := (JC_54:
+               ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) (integer_of_int32 
                                                                     (JC_53:
                                                                     (int32_of_integer_ 
-                                                                    (C_16:
                                                                     ((sub_int 
-                                                                    (integer_of_int32 n_1_0)) (1))))))))))) in
-        void);
-        (let jessie_<num> =
-        (max_1 := (C_22:
-                  (JC_55: (((acc_ !intP_alloc_table) !intP_intM) a_4)))) in
-        void);
-        [ { } unit reads hole,intP_intM
-          { (JC_56:
-            (forall x_1:int32.
-             (CountWithHole(a_4, x_1, (0), integer_of_int32(hole),
-              integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_1, (1),
-                                                    integer_of_int32(n_1_0),
-                                                    intP_intM@init)))) } ];
+                                                                    (integer_of_int32 n_1_0)) (1)))))))) in
+       void);
+       (let _jessie_<num> =
+       (max_1 := (JC_55: (((acc_ !intP_alloc_table) !intP_intM) a_4))) in
+       void);
+       [ { } unit reads hole,intP_intM
+         { (JC_56:
+           (forall x_1:int32.
+            (CountWithHole(a_4, x_1, (0), integer_of_int32(hole),
+             integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_1, (1),
+                                                   integer_of_int32(n_1_0),
+                                                   intP_intM@init)))) } ];
+       begin
+         void;
         (loop_1:
         begin
-          void;
-         while true do
-         { invariant (JC_66: true)
-           variant (JC_91 : sub_int(integer_of_int32(n_1_0),
-                            integer_of_int32(hole))) }
-          begin
-            [ { } unit reads hole,intP_intM,max_1,tmp
-              { ((JC_57:
-                 (integer_of_int32(select(intP_intM@init,
+          while true do
+          { invariant (JC_66: true)
+            variant (JC_91 : sub_int(integer_of_int32(n_1_0),
+                             integer_of_int32(hole))) }
+           begin
+             [ { } unit reads hole,intP_intM,max_1,tmp
+               { ((JC_57:
+                  (integer_of_int32(select(intP_intM@init,
+                                    shift(a_4,
+                                    sub_int(integer_of_int32(n_1_0), (1))))) = 
+                  integer_of_int32(select(intP_intM,
                                    shift(a_4,
-                                   sub_int(integer_of_int32(n_1_0), (1))))) = 
-                 integer_of_int32(select(intP_intM,
-                                  shift(a_4,
-                                  sub_int(integer_of_int32(n_1_0), (1)))))))
-                and ((JC_58:
-                     (forall x_2:int32.
-                      (CountWithHole(a_4, x_2, (0), integer_of_int32(hole),
-                       integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_2,
-                                                             (1),
-                                                             integer_of_int32(n_1_0),
-                                                             intP_intM@init))))
-                    and ((JC_59:
-                         (forall i_18:int.
-                          ((lt_int(integer_of_int32(hole),
-                            sub_int(integer_of_int32(n_1_0), (1)))
-                           and ParentChild(i_18, integer_of_int32(hole))) ->
-                           ge_int(integer_of_int32(select(intP_intM,
-                                                   shift(a_4, i_18))),
-                           integer_of_int32(tmp)))))
-                        and ((JC_60:
-                             (forall i_17:int.
-                              ((le_int((0), i_17)
-                               and lt_int(i_17, integer_of_int32(n_1_0))) ->
-                               le_int(integer_of_int32(select(intP_intM,
-                                                       shift(a_4, i_17))),
-                               integer_of_int32(max_1)))))
-                            and ((JC_61:
-                                 IsHeap(a_4,
-                                 sub_int(integer_of_int32(n_1_0), (1)),
-                                 intP_intM))
-                                and (JC_64:
-                                    ((JC_62:
-                                     le_int((0), integer_of_int32(hole)))
-                                    and (JC_63:
-                                        lt_int(integer_of_int32(hole),
-                                        integer_of_int32(n_1_0)))))))))) } ];
-           try
-            (C_38:
-            begin
-              (let jessie_<num> =
-              (child_0 := (C_37:
-                          (JC_69:
-                          (int32_of_integer_ (C_36:
-                                             ((add_int (integer_of_int32 
-                                                        (C_35:
-                                                        (JC_68:
-                                                        (int32_of_integer_ 
-                                                         (C_34:
-                                                         ((mul_int (2)) 
-                                                          (integer_of_int32 !hole)))))))) (2))))))) in
-              void);
-             (if ((lt_int_ (integer_of_int32 !child_0)) (integer_of_int32 
-                                                         (C_79:
-                                                         (JC_70:
+                                   sub_int(integer_of_int32(n_1_0), (1)))))))
+                 and ((JC_58:
+                      (forall x_2:int32.
+                       (CountWithHole(a_4, x_2, (0), integer_of_int32(hole),
+                        integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_2,
+                                                              (1),
+                                                              integer_of_int32(n_1_0),
+                                                              intP_intM@init))))
+                     and ((JC_59:
+                          (forall i_18:int.
+                           ((lt_int(integer_of_int32(hole),
+                             sub_int(integer_of_int32(n_1_0), (1)))
+                            and ParentChild(i_18, integer_of_int32(hole))) ->
+                            ge_int(integer_of_int32(select(intP_intM,
+                                                    shift(a_4, i_18))),
+                            integer_of_int32(tmp)))))
+                         and ((JC_60:
+                              (forall i_17:int.
+                               ((le_int((0), i_17)
+                                and lt_int(i_17, integer_of_int32(n_1_0))) ->
+                                le_int(integer_of_int32(select(intP_intM,
+                                                        shift(a_4, i_17))),
+                                integer_of_int32(max_1)))))
+                             and ((JC_61:
+                                  IsHeap(a_4,
+                                  sub_int(integer_of_int32(n_1_0), (1)),
+                                  intP_intM))
+                                 and (JC_64:
+                                     ((JC_62:
+                                      le_int((0), integer_of_int32(hole)))
+                                     and (JC_63:
+                                         lt_int(integer_of_int32(hole),
+                                         integer_of_int32(n_1_0)))))))))) } ];
+            try
+             begin
+               (let _jessie_<num> =
+               (child_0 := (JC_69:
+                           (int32_of_integer_ ((add_int (integer_of_int32 
+                                                         (JC_68:
                                                          (int32_of_integer_ 
-                                                          (C_78:
-                                                          ((sub_int (integer_of_int32 n_1_0)) (1))))))))
-             then
-              begin
-                (if ((lt_int_ (integer_of_int32 (C_65:
-                                                (JC_71:
-                                                ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
-                                                 (integer_of_int32 !child_0)))))) 
-                     (integer_of_int32 (C_63:
-                                       (JC_73:
-                                       ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
-                                        (integer_of_int32 (C_61:
-                                                          (JC_72:
+                                                          ((mul_int (2)) 
+                                                           (integer_of_int32 !hole)))))) (2))))) in
+               void);
+              (if ((lt_int_ (integer_of_int32 !child_0)) (integer_of_int32 
+                                                          (JC_70:
                                                           (int32_of_integer_ 
-                                                           (C_60:
                                                            ((sub_int 
-                                                             (integer_of_int32 !child_0)) (1))))))))))))
+                                                             (integer_of_int32 n_1_0)) (1))))))
+              then
+               begin
+                 (if ((lt_int_ (integer_of_int32 (JC_71:
+                                                 ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
+                                                  (integer_of_int32 !child_0))))) 
+                      (integer_of_int32 (JC_73:
+                                        ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
+                                         (integer_of_int32 (JC_72:
+                                                           (int32_of_integer_ 
+                                                            ((sub_int 
+                                                              (integer_of_int32 !child_0)) (1)))))))))
+                 then
+                  (let _jessie_<num> =
+                  (child_0 := (JC_74:
+                              (int32_of_integer_ ((sub_int (integer_of_int32 !child_0)) (1))))) in
+                  void) else void);
+                [ { } unit reads child_0,hole
+                  { (JC_75:
+                    ParentChild(integer_of_int32(hole),
+                    integer_of_int32(child_0))) } ]; void;
+                (if ((gt_int_ (integer_of_int32 (JC_76:
+                                                ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
+                                                 (integer_of_int32 !child_0))))) 
+                     (integer_of_int32 !tmp))
                 then
-                 (let jessie_<num> =
-                 (C_59:
-                 (child_0 := (C_58:
-                             (JC_74:
-                             (int32_of_integer_ (C_57:
-                                                ((sub_int (integer_of_int32 !child_0)) (1)))))))) in
-                 void) else void);
-               [ { } unit reads child_0,hole
-                 { (JC_75:
-                   ParentChild(integer_of_int32(hole),
-                   integer_of_int32(child_0))) } ]; void;
-               (if ((gt_int_ (integer_of_int32 (C_77:
-                                               (JC_76:
-                                               ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
-                                                (integer_of_int32 !child_0)))))) 
-                    (integer_of_int32 !tmp))
-               then
-                (let jessie_<num> =
-                begin
-                  [ { } unit reads hole
-                    { (JC_77:
-                      lt_int(integer_of_int32(hole),
-                      sub_int(integer_of_int32(n_1_0), (1)))) } ];
-                 (C_72:
+                 (let _jessie_<num> =
                  begin
-                   void;
-                  (let jessie_<num> =
-                  (let jessie_<num> =
-                  (C_69:
+                   [ { } unit reads hole
+                     { (JC_77:
+                       lt_int(integer_of_int32(hole),
+                       sub_int(integer_of_int32(n_1_0), (1)))) } ]; void;
+                  (let _jessie_<num> =
+                  (let _jessie_<num> =
                   (JC_78:
                   ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
-                   (integer_of_int32 !child_0)))) in
-                  (let jessie_<num> = a_4 in
-                  (let jessie_<num> = (integer_of_int32 !hole) in
-                  (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+                   (integer_of_int32 !child_0))) in
+                  (let _jessie_<num> = a_4 in
+                  (let _jessie_<num> = (integer_of_int32 !hole) in
+                  (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
                   (JC_79:
-                  (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+                  (((((offset_upd_ !intP_alloc_table) intP_intM) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
                   void);
                   [ { } unit reads intP_intM
                     { (JC_80:
@@ -4347,67 +4257,52 @@ let pop_heap_safety =
                       integer_of_int32(select(intP_intM,
                                        shift(a_4,
                                        sub_int(integer_of_int32(n_1_0), (1))))))) } ];
-                  (C_74:
-                  (C_75:
-                  begin
-                    void;
-                   (let jessie_<num> = a_4 in
-                   (let jessie_<num> = n_1_0 in
-                   (let jessie_<num> = !hole in
-                   (let jessie_<num> = !child_0 in
-                   (JC_81:
-                   ((((pop_push_heap_copy_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
-                   (hole := !child_0); !hole end)) end) end in void)
-               else (raise (Goto_while_0_break_exc void))) end
-             else
-              (C_43:
-              begin
-                (let jessie_<num> =
-                (child_0 := (C_42:
-                            (JC_83:
-                            (int32_of_integer_ (C_41:
-                                               ((add_int (integer_of_int32 
-                                                          (C_40:
-                                                          (JC_82:
-                                                          (int32_of_integer_ 
-                                                           (C_39:
-                                                           ((mul_int (2)) 
-                                                            (integer_of_int32 !hole)))))))) (1))))))) in
-                void);
-               (if ((eq_int_ (integer_of_int32 !child_0)) (integer_of_int32 
-                                                           (C_56:
-                                                           (JC_84:
+                  void;
+                  (let _jessie_<num> = a_4 in
+                  (let _jessie_<num> = n_1_0 in
+                  (let _jessie_<num> = !hole in
+                  (let _jessie_<num> = !child_0 in
+                  (JC_81:
+                  ((((pop_push_heap_copy_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>))))));
+                  (hole := !child_0); !hole end in void)
+                else (raise (Goto_while_0_break_exc void))) end
+              else
+               begin
+                 (let _jessie_<num> =
+                 (child_0 := (JC_83:
+                             (int32_of_integer_ ((add_int (integer_of_int32 
+                                                           (JC_82:
                                                            (int32_of_integer_ 
-                                                            (C_55:
-                                                            ((sub_int 
-                                                              (integer_of_int32 n_1_0)) (2))))))))
-               then
-                (if ((gt_int_ (integer_of_int32 (C_54:
-                                                (JC_85:
-                                                ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
-                                                 (integer_of_int32 !child_0)))))) 
-                     (integer_of_int32 !tmp))
+                                                            ((mul_int (2)) 
+                                                             (integer_of_int32 !hole)))))) (1))))) in
+                 void);
+                (if ((eq_int_ (integer_of_int32 !child_0)) (integer_of_int32 
+                                                            (JC_84:
+                                                            (int32_of_integer_ 
+                                                             ((sub_int 
+                                                               (integer_of_int32 n_1_0)) (2))))))
                 then
-                 (let jessie_<num> =
-                 begin
-                   [ { } unit reads hole
-                     { (JC_86:
-                       lt_int(integer_of_int32(hole),
-                       sub_int(integer_of_int32(n_1_0), (1)))) } ];
-                  (C_49:
+                 (if ((gt_int_ (integer_of_int32 (JC_85:
+                                                 ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
+                                                  (integer_of_int32 !child_0))))) 
+                      (integer_of_int32 !tmp))
+                 then
+                  (let _jessie_<num> =
                   begin
-                    void;
-                   (let jessie_<num> =
-                   (let jessie_<num> =
-                   (C_46:
+                    [ { } unit reads hole
+                      { (JC_86:
+                        lt_int(integer_of_int32(hole),
+                        sub_int(integer_of_int32(n_1_0), (1)))) } ]; void;
+                   (let _jessie_<num> =
+                   (let _jessie_<num> =
                    (JC_87:
                    ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
-                    (integer_of_int32 !child_0)))) in
-                   (let jessie_<num> = a_4 in
-                   (let jessie_<num> = (integer_of_int32 !hole) in
-                   (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+                    (integer_of_int32 !child_0))) in
+                   (let _jessie_<num> = a_4 in
+                   (let _jessie_<num> = (integer_of_int32 !hole) in
+                   (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
                    (JC_88:
-                   (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+                   (((((offset_upd_ !intP_alloc_table) intP_intM) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
                    void);
                    [ { } unit reads intP_intM
                      { (JC_89:
@@ -4419,22 +4314,19 @@ let pop_heap_safety =
                                                                     sub_int(
                                                                     integer_of_int32(n_1_0),
                                                                     (1))))))) } ];
-                   (C_51:
-                   (C_52:
-                   begin
-                     void;
-                    (let jessie_<num> = a_4 in
-                    (let jessie_<num> = n_1_0 in
-                    (let jessie_<num> = !hole in
-                    (let jessie_<num> = !child_0 in
-                    (JC_90:
-                    ((((pop_push_heap_copy_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
-                    (hole := !child_0); !hole end)) end) end in void)
-                else void) else void); (raise (Goto_while_0_break_exc void))
-              end)); (raise (Loop_continue_exc void)) end) with
-            Loop_continue_exc jessie_<num> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end))) end) with
-      Goto_while_0_break_exc jessie_<num> ->
+                   void;
+                   (let _jessie_<num> = a_4 in
+                   (let _jessie_<num> = n_1_0 in
+                   (let _jessie_<num> = !hole in
+                   (let _jessie_<num> = !child_0 in
+                   (JC_90:
+                   ((((pop_push_heap_copy_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>))))));
+                   (hole := !child_0); !hole end in void) else void)
+                else void); (raise (Goto_while_0_break_exc void)) end);
+              (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc _jessie_<num> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end end with
+      Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break:
       begin
         void;
@@ -4445,185 +4337,170 @@ let pop_heap_safety =
               sub_int(integer_of_int32(n_1_0), (1)))
              and ParentChild(i_19, integer_of_int32(hole))) ->
              ge_int(integer_of_int32(select(intP_intM, shift(a_4, i_19))),
-             integer_of_int32(tmp))))) } ];
-       (C_83:
-       begin
-         void;
-        (let jessie_<num> =
-        (let jessie_<num> = !tmp in
-        (let jessie_<num> = a_4 in
-        (let jessie_<num> = (integer_of_int32 !hole) in
-        (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-        (JC_93:
-        (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
-        void);
-        [ { } unit reads hole,intP_intM
-          { (JC_94:
-            (forall x_3:int32.
-             (CountWithHole(a_4, x_3, (0), integer_of_int32(hole),
-              integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_3, (1),
-                                                    integer_of_int32(n_1_0),
-                                                    intP_intM@init)))) } ];
-        void;
-        [ { } unit reads hole,intP_intM,tmp
-          { (JC_95:
+             integer_of_int32(tmp))))) } ]; void;
+       (let _jessie_<num> =
+       (let _jessie_<num> = !tmp in
+       (let _jessie_<num> = a_4 in
+       (let _jessie_<num> = (integer_of_int32 !hole) in
+       (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+       (JC_93:
+       (((((offset_upd_ !intP_alloc_table) intP_intM) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
+       void);
+       [ { } unit reads hole,intP_intM
+         { (JC_94:
+           (forall x_3:int32.
+            (CountWithHole(a_4, x_3, (0), integer_of_int32(hole),
+             integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_3, (1),
+                                                   integer_of_int32(n_1_0),
+                                                   intP_intM@init)))) } ];
+       void;
+       [ { } unit reads hole,intP_intM,tmp
+         { (JC_95:
+           (lt_int(integer_of_int32(hole),
+            sub_int(integer_of_int32(n_1_0), (1))) ->
+            ((integer_of_int32(select(intP_intM,
+                               shift(a_4, integer_of_int32(hole)))) = 
+             integer_of_int32(tmp))
+            and ((integer_of_int32(tmp) = integer_of_int32(select(intP_intM@init,
+                                                           shift(a_4,
+                                                           sub_int(integer_of_int32(n_1_0),
+                                                           (1))))))
+                and (integer_of_int32(select(intP_intM@init,
+                                      shift(a_4,
+                                      sub_int(integer_of_int32(n_1_0), (1))))) = 
+                    integer_of_int32(select(intP_intM,
+                                     shift(a_4,
+                                     sub_int(integer_of_int32(n_1_0), (1)))))))))) } ];
+       void;
+       [ { } unit reads hole,intP_intM
+         { (JC_96:
+           (forall x_4:int32.
             (lt_int(integer_of_int32(hole),
              sub_int(integer_of_int32(n_1_0), (1))) ->
-             ((integer_of_int32(select(intP_intM,
-                                shift(a_4, integer_of_int32(hole)))) = 
-              integer_of_int32(tmp))
-             and ((integer_of_int32(tmp) = integer_of_int32(select(intP_intM@init,
-                                                            shift(a_4,
-                                                            sub_int(integer_of_int32(n_1_0),
-                                                            (1))))))
-                 and (integer_of_int32(select(intP_intM@init,
-                                       shift(a_4,
-                                       sub_int(integer_of_int32(n_1_0), (1))))) = 
-                     integer_of_int32(select(intP_intM,
-                                      shift(a_4,
-                                      sub_int(integer_of_int32(n_1_0), (1)))))))))) } ];
-        void;
-        [ { } unit reads hole,intP_intM
-          { (JC_96:
-            (forall x_4:int32.
-             (lt_int(integer_of_int32(hole),
+             (Count(a_4, x_4, add_int(integer_of_int32(hole), (1)),
+              add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)), intP_intM) = 
+             CountWithoutHole(a_4, x_4, add_int(integer_of_int32(hole), (1)),
+             sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
+             intP_intM))))) } ]; void;
+       [ { } unit reads hole,intP_intM
+         { (JC_97:
+           (forall x_5:int32.
+            ((lt_int(integer_of_int32(hole),
               sub_int(integer_of_int32(n_1_0), (1))) ->
-              (Count(a_4, x_4, add_int(integer_of_int32(hole), (1)),
-               add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)),
-               intP_intM) = CountWithoutHole(a_4, x_4,
-                            add_int(integer_of_int32(hole), (1)),
-                            sub_int(integer_of_int32(n_1_0), (1)),
-                            integer_of_int32(n_1_0), intP_intM))))) } ];
-        void;
-        [ { } unit reads hole,intP_intM
-          { (JC_97:
-            (forall x_5:int32.
-             ((lt_int(integer_of_int32(hole),
-               sub_int(integer_of_int32(n_1_0), (1))) ->
-               ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
-                 integer_of_int32(n_1_0), intP_intM) = add_int(CountWithHole(a_4,
-                                                               x_5, (0),
-                                                               integer_of_int32(hole),
-                                                               sub_int(
-                                                               integer_of_int32(n_1_0),
-                                                               (1)),
-                                                               intP_intM),
-                                                       Count(a_4, x_5,
-                                                       sub_int(integer_of_int32(n_1_0),
-                                                       (1)),
-                                                       add_int(sub_int(
-                                                               integer_of_int32(n_1_0),
-                                                               (1)),
-                                                       (1)), intP_intM)))
-               and ((add_int(CountWithHole(a_4, x_5, (0),
-                             integer_of_int32(hole),
-                             sub_int(integer_of_int32(n_1_0), (1)),
-                             intP_intM),
-                     Count(a_4, x_5, sub_int(integer_of_int32(n_1_0), (1)),
-                     add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)),
-                     intP_intM)) = add_int(CountWithoutHole(a_4, x_5, (0),
-                                           integer_of_int32(hole),
-                                           add_int(integer_of_int32(hole),
-                                           (1)), intP_intM),
-                                   Count(a_4, x_5,
-                                   add_int(integer_of_int32(hole), (1)),
-                                   sub_int(integer_of_int32(n_1_0), (1)),
-                                   intP_intM)))
-                   and ((add_int(CountWithoutHole(a_4, x_5, (0),
-                                 integer_of_int32(hole),
-                                 add_int(integer_of_int32(hole), (1)),
-                                 intP_intM),
-                         Count(a_4, x_5,
-                         add_int(integer_of_int32(hole), (1)),
-                         sub_int(integer_of_int32(n_1_0), (1)), intP_intM)) = 
-                        CountWithoutHole(a_4, x_5, (0),
-                        integer_of_int32(hole),
-                        sub_int(integer_of_int32(n_1_0), (1)), intP_intM))
-                       and (CountWithoutHole(a_4, x_5, (0),
+              ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
+                integer_of_int32(n_1_0), intP_intM) = add_int(CountWithHole(a_4,
+                                                              x_5, (0),
+                                                              integer_of_int32(hole),
+                                                              sub_int(
+                                                              integer_of_int32(n_1_0),
+                                                              (1)),
+                                                              intP_intM),
+                                                      Count(a_4, x_5,
+                                                      sub_int(integer_of_int32(n_1_0),
+                                                      (1)),
+                                                      add_int(sub_int(
+                                                              integer_of_int32(n_1_0),
+                                                              (1)),
+                                                      (1)), intP_intM)))
+              and ((add_int(CountWithHole(a_4, x_5, (0),
                             integer_of_int32(hole),
-                            sub_int(integer_of_int32(n_1_0), (1)), intP_intM) = 
-                           Count(a_4, x_5, (0),
-                           sub_int(integer_of_int32(n_1_0), (1)), intP_intM))))))
-             and ((integer_of_int32(hole) = sub_int(integer_of_int32(n_1_0),
-                                            (1))) ->
-                  ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
-                    integer_of_int32(n_1_0), intP_intM) = CountWithHole(a_4,
-                                                          x_5, (0),
-                                                          sub_int(integer_of_int32(n_1_0),
-                                                          (1)),
-                                                          integer_of_int32(n_1_0),
-                                                          intP_intM))
-                  and (CountWithHole(a_4, x_5, (0),
-                       sub_int(integer_of_int32(n_1_0), (1)),
-                       integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_5,
-                                                             (0),
-                                                             sub_int(
-                                                             integer_of_int32(n_1_0),
-                                                             (1)), intP_intM))))))) } ];
-        void;
-        [ { } unit reads hole,intP_intM
-          { (JC_98:
-            (forall x_6:int32.
-             ((Count(a_4, x_6, (0), sub_int(integer_of_int32(n_1_0), (1)),
-               intP_intM) = CountWithHole(a_4, x_6, (0),
-                            integer_of_int32(hole), integer_of_int32(n_1_0),
-                            intP_intM))
-             and (CountWithHole(a_4, x_6, (0), integer_of_int32(hole),
-                  integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_6, (1),
+                            sub_int(integer_of_int32(n_1_0), (1)), intP_intM),
+                    Count(a_4, x_5, sub_int(integer_of_int32(n_1_0), (1)),
+                    add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)),
+                    intP_intM)) = add_int(CountWithoutHole(a_4, x_5, (0),
+                                          integer_of_int32(hole),
+                                          add_int(integer_of_int32(hole),
+                                          (1)), intP_intM),
+                                  Count(a_4, x_5,
+                                  add_int(integer_of_int32(hole), (1)),
+                                  sub_int(integer_of_int32(n_1_0), (1)),
+                                  intP_intM)))
+                  and ((add_int(CountWithoutHole(a_4, x_5, (0),
+                                integer_of_int32(hole),
+                                add_int(integer_of_int32(hole), (1)),
+                                intP_intM),
+                        Count(a_4, x_5, add_int(integer_of_int32(hole), (1)),
+                        sub_int(integer_of_int32(n_1_0), (1)), intP_intM)) = 
+                       CountWithoutHole(a_4, x_5, (0),
+                       integer_of_int32(hole),
+                       sub_int(integer_of_int32(n_1_0), (1)), intP_intM))
+                      and (CountWithoutHole(a_4, x_5, (0),
+                           integer_of_int32(hole),
+                           sub_int(integer_of_int32(n_1_0), (1)), intP_intM) = 
+                          Count(a_4, x_5, (0),
+                          sub_int(integer_of_int32(n_1_0), (1)), intP_intM))))))
+            and ((integer_of_int32(hole) = sub_int(integer_of_int32(n_1_0),
+                                           (1))) ->
+                 ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
+                   integer_of_int32(n_1_0), intP_intM) = CountWithHole(a_4,
+                                                         x_5, (0),
+                                                         sub_int(integer_of_int32(n_1_0),
+                                                         (1)),
+                                                         integer_of_int32(n_1_0),
+                                                         intP_intM))
+                 and (CountWithHole(a_4, x_5, (0),
+                      sub_int(integer_of_int32(n_1_0), (1)),
+                      integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_5,
+                                                            (0),
+                                                            sub_int(integer_of_int32(n_1_0),
+                                                            (1)), intP_intM))))))) } ];
+       void;
+       [ { } unit reads hole,intP_intM
+         { (JC_98:
+           (forall x_6:int32.
+            ((Count(a_4, x_6, (0), sub_int(integer_of_int32(n_1_0), (1)),
+              intP_intM) = CountWithHole(a_4, x_6, (0),
+                           integer_of_int32(hole), integer_of_int32(n_1_0),
+                           intP_intM))
+            and (CountWithHole(a_4, x_6, (0), integer_of_int32(hole),
+                 integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_6, (1),
+                                                       integer_of_int32(n_1_0),
+                                                       intP_intM@init))))) } ];
+       void;
+       (let _jessie_<num> =
+       (let _jessie_<num> = !max_1 in
+       (let _jessie_<num> = a_4 in
+       (let _jessie_<num> =
+       (integer_of_int32 (JC_99:
+                         (int32_of_integer_ ((sub_int (integer_of_int32 n_1_0)) (1))))) in
+       (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+       (JC_100:
+       (((((offset_upd_ !intP_alloc_table) intP_intM) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
+       void);
+       [ { } unit reads intP_intM
+         { (JC_101:
+           (forall x_7:int32.
+            (Count(a_4, x_7, sub_int(integer_of_int32(n_1_0), (1)),
+             add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)), intP_intM) = 
+            Count(a_4, x_7, (0), (1), intP_intM@init)))) } ]; void;
+       [ { } unit reads intP_intM
+         { (JC_102:
+           (forall x_8:int32.
+            (CountWithoutHole(a_4, x_8, (0),
+             sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
+             intP_intM) = CountWithoutHole(a_4, x_8, (0), (1),
+                          integer_of_int32(n_1_0), intP_intM@init)))) } ];
+       void;
+       [ { } unit reads intP_intM
+         { (JC_103:
+           (forall x_9:int32.
+            ((Count(a_4, x_9, (0), integer_of_int32(n_1_0), intP_intM) = 
+             CountWithoutHole(a_4, x_9, (0),
+             sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
+             intP_intM))
+            and ((CountWithoutHole(a_4, x_9, (0),
+                  sub_int(integer_of_int32(n_1_0), (1)),
+                  integer_of_int32(n_1_0), intP_intM) = CountWithoutHole(a_4,
+                                                        x_9, (0), (1),
                                                         integer_of_int32(n_1_0),
-                                                        intP_intM@init))))) } ];
-        (C_93:
-        begin
-          void;
-         (let jessie_<num> =
-         (let jessie_<num> = !max_1 in
-         (let jessie_<num> = a_4 in
-         (let jessie_<num> =
-         (integer_of_int32 (C_90:
-                           (JC_99:
-                           (int32_of_integer_ (C_89:
-                                              ((sub_int (integer_of_int32 n_1_0)) (1))))))) in
-         (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-         (JC_100:
-         (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
-         void);
-         [ { } unit reads intP_intM
-           { (JC_101:
-             (forall x_7:int32.
-              (Count(a_4, x_7, sub_int(integer_of_int32(n_1_0), (1)),
-               add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)),
-               intP_intM) = Count(a_4, x_7, (0), (1), intP_intM@init)))) } ];
-         void;
-         [ { } unit reads intP_intM
-           { (JC_102:
-             (forall x_8:int32.
-              (CountWithoutHole(a_4, x_8, (0),
-               sub_int(integer_of_int32(n_1_0), (1)),
-               integer_of_int32(n_1_0), intP_intM) = CountWithoutHole(a_4,
-                                                     x_8, (0), (1),
-                                                     integer_of_int32(n_1_0),
-                                                     intP_intM@init)))) } ];
-         void;
-         [ { } unit reads intP_intM
-           { (JC_103:
-             (forall x_9:int32.
-              ((Count(a_4, x_9, (0), integer_of_int32(n_1_0), intP_intM) = 
-               CountWithoutHole(a_4, x_9, (0),
-               sub_int(integer_of_int32(n_1_0), (1)),
-               integer_of_int32(n_1_0), intP_intM))
-              and ((CountWithoutHole(a_4, x_9, (0),
-                    sub_int(integer_of_int32(n_1_0), (1)),
-                    integer_of_int32(n_1_0), intP_intM) = CountWithoutHole(a_4,
-                                                          x_9, (0), (1),
-                                                          integer_of_int32(n_1_0),
-                                                          intP_intM@init))
-                  and (CountWithoutHole(a_4, x_9, (0), (1),
-                       integer_of_int32(n_1_0), intP_intM@init) = Count(a_4,
-                                                                  x_9, (0),
-                                                                  integer_of_int32(n_1_0),
-                                                                  intP_intM@init)))))) } ];
-         void; (raise Return) end) end) end) end)))); (raise Return) end with
-   Return -> void end) { true }
+                                                        intP_intM@init))
+                and (CountWithoutHole(a_4, x_9, (0), (1),
+                     integer_of_int32(n_1_0), intP_intM@init) = Count(a_4,
+                                                                x_9, (0),
+                                                                integer_of_int32(n_1_0),
+                                                                intP_intM@init)))))) } ];
+       void; (raise Return) end) end)))); (raise Return) end with Return ->
+   void end) { true }
 
 
 ========== generation of alt-ergo VC output ==========

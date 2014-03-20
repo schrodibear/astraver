@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only fact.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD fact.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only fact.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/fact.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir fact.jessie
 [jessie] File fact.jessie/fact.jc written.
@@ -46,25 +46,25 @@ case is_prod_empty: (\forall integer a_0;
 }
 
 integer fact(integer n_1)
-  requires (C_8 : (n_1 >= 0));
-  decreases (C_9 : n_1);
+  requires (_C_8 : (n_1 >= 0));
+  decreases (_C_9 : n_1);
 behavior default:
-  ensures (C_7 : is_prod(1, \at(n_1,Old), \result));
+  ensures (_C_7 : is_prod(1, \at(n_1,Old), \result));
 {  
    (var integer tmp);
    
    (var integer __retres);
    
    {  (if (n_1 == 0) then 
-      {  (C_1 : (__retres = 1));
+      {  (_C_1 : (__retres = 1));
          
          (goto return_label)
       } else ());
       
-      {  (C_4 : (tmp = (C_3 : fact((C_2 : (n_1 - 1))))));
+      {  (_C_4 : (tmp = (_C_3 : fact((_C_2 : (n_1 - 1))))));
          ()
       };
-      (C_6 : (__retres = (C_5 : (n_1 * tmp))));
+      (_C_6 : (__retres = (_C_5 : (n_1 * tmp))));
       (return_label : 
       (return __retres))
    }
@@ -339,24 +339,17 @@ let fact_ensures_default =
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (C_4:
       begin
         (if ((eq_int_ n_1) (0))
         then
-         (C_1:
          begin
-           (let jessie_<somenum> = (__retres := (1)) in void);
-          (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> =
-       (tmp := (C_3:
-               (let jessie_<somenum> = (C_2: ((sub_int n_1) (1))) in
-               (JC_<somenum>: (fact jessie_<somenum>))))) in void);
-       (C_6:
-       begin
-         void;
-        (let jessie_<somenum> = (__retres := (C_5: ((mul_int n_1) !tmp))) in void);
-        (raise (Return_label_exc void)) end) end) with
-      Return_label_exc jessie_<somenum> ->
+           (let _jessie_<somenum> = (__retres := (1)) in void);
+          (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> =
+       (tmp := (let _jessie_<somenum> = ((sub_int n_1) (1)) in
+               (JC_<somenum>: (fact _jessie_<somenum>)))) in void); void;
+       (let _jessie_<somenum> = (__retres := ((mul_int n_1) !tmp)) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_<somenum>: is_prod((1), n_1, result)) }
@@ -371,26 +364,19 @@ let fact_safety =
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (C_4:
       begin
         (if ((eq_int_ n_1) (0))
         then
-         (C_1:
          begin
-           (let jessie_<somenum> = (__retres := (1)) in void);
-          (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> =
-       (tmp := (C_3:
-               (let jessie_<somenum> = (C_2: ((sub_int n_1) (1))) in
+           (let _jessie_<somenum> = (__retres := (1)) in void);
+          (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> =
+       (tmp := (let _jessie_<somenum> = ((sub_int n_1) (1)) in
                (JC_<somenum>:
-               (check { zwf_zero((JC_<somenum> : jessie_<somenum>), (JC_<somenum> : n_1)) };
-               (JC_<somenum>: (fact_requires jessie_<somenum>))))))) in void);
-       (C_6:
-       begin
-         void;
-        (let jessie_<somenum> = (__retres := (C_5: ((mul_int n_1) !tmp))) in void);
-        (raise (Return_label_exc void)) end) end) with
-      Return_label_exc jessie_<somenum> ->
+               (check { zwf_zero((JC_<somenum> : _jessie_<somenum>), (JC_<somenum> : n_1)) };
+               (JC_<somenum>: (fact_requires _jessie_<somenum>)))))) in void); void;
+       (let _jessie_<somenum> = (__retres := ((mul_int n_1) !tmp)) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 
@@ -408,11 +394,11 @@ why --project [...] why/fact.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/fact_po2.why">
-      <location file = "why/fact.why" line = "314" begin = "24" end = "67"/>
+      <location file = "why/fact.why" line = "304" begin = "24" end = "68"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/fact_po3.why">
-      <location file = "why/fact.why" line = "314" begin = "24" end = "67"/>
+      <location file = "why/fact.why" line = "304" begin = "24" end = "68"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/fact_po4.why">
