@@ -316,7 +316,7 @@ object(self)
 	DoChildren
     | _ -> DoChildren
 
-  method vterm ({ term_node } as t) = match term_node with
+  method! vterm ({ term_node } as t) = match term_node with
     | TCastE _ ->
       ignore @@ self#vexpr @@ stripInfo @@ fst @@ Common.force_term_to_exp t;
       DoChildren

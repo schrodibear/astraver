@@ -1340,7 +1340,7 @@ let eliminate_fps file =
 class dummy_struct_definer = object(self)
   inherit frama_c_inplace
 
-  method vcompinfo ci =
+  method! vcompinfo ci =
     if ci.cdefined = false && ci.cfields = [] then begin
       Jessie_options.warning
         "Defining dummy composite tag for %s in extract mode (enabled by -jessie-extract)"
@@ -1350,7 +1350,7 @@ class dummy_struct_definer = object(self)
     end;
     DoChildren
 
-  method vglob_aux = function
+  method! vglob_aux = function
    | GCompTagDecl (ci, _) -> 
        ignore (self#vcompinfo ci);
        DoChildren
@@ -2629,7 +2629,7 @@ class char_pointer_rewriter =
 object
   inherit frama_c_inplace
 
-  method vexpr e =
+  method! vexpr e =
     let void_ptr_with_attrs t = typeAddAttributes (typeAttrs t) voidPtrType in
     match e.enode with
     | CastE (tcharp, ein)
@@ -2673,7 +2673,7 @@ class side_cast_rewriter =
 object
   inherit frama_c_inplace
 
-  method vexpr e = match e.enode with
+  method! vexpr e = match e.enode with
     | CastE (tto, efrom)
       when isCharPtrType (typeOf efrom) &&
            isPointerType tto &&
