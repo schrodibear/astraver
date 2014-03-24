@@ -1464,7 +1464,7 @@ and triggers env l =
         (match pi.jc_logic_info_result_type with
           | None ->   JCAPatP (assertion env e)
           | Some _ -> JCAPatT (term env e))
-    | JCNEinstanceof _ | JCNEoffset _ -> JCAPatT (term env e)
+    | JCNEat _ | JCNEinstanceof _ | JCNEoffset _ -> JCAPatT (term env e)
     | JCNEbinary (_, #comparison_op, _) -> JCAPatP (assertion env e)
     | _ ->  typing_error e#pos "IllformedPattern" in
   List.map (List.map pat) l
@@ -2879,7 +2879,6 @@ let rec list_assoc_data lab l =
 	d=lab || list_assoc_data lab r
 
 let check_consistency id data =
-  let special_axiomatic = id = "__jessie_reinterpretation_axioms" in
   let pis = data.axiomatics_defined_ids in
   List.iter
     (fun (ABaxiom(loc,axid,labels,a)) ->
@@ -2900,13 +2899,12 @@ let check_consistency id data =
 	    Jc_options.lprintf "@]@\n")
 	 h;
        Jc_options.lprintf "@]@.";
-       if not special_axiomatic && Hashtbl.fold (fun _pi l acc -> acc && l=[]) h true then
+       if Hashtbl.fold (fun _pi l acc -> acc && l=[]) h true then
 	 typing_error loc
 	   "axiom %s should contain at least one occurrence of a symbol declared in axiomatic %s" axid id;
        List.iter
 	 (fun lab ->
-	    if not special_axiomatic &&
-               not (Hashtbl.fold (fun _pi l acc -> acc || List.exists (list_assoc_data lab) l) h false) then
+	    if not (Hashtbl.fold (fun _pi l acc -> acc || List.exists (list_assoc_data lab) l) h false) then
 	      typing_error loc
 		"there should be at least one declared symbol depending on label %a in this axiom" Jc_output_misc.label lab)
 	 labels
