@@ -405,6 +405,12 @@ let dummy_field ci =
 class extractor { Result. types; comps; fields; enums; vars; dcomps } = object
   inherit frama_c_inplace
 
+  method! vtype =
+    function
+    | TArray (t, eo, _, attrs) -> ChangeDoChildrenPost (TArray (t, eo, empty_size_cache (), attrs), id)
+    | TComp (ci, _, attrs) -> ChangeDoChildrenPost (TComp (ci, empty_size_cache (), attrs), id)
+    | _ -> DoChildren
+
   method! vglob_aux =
     let dummy_if_empty ci =
       function
@@ -414,7 +420,12 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } = object
     function
     | GType (ti, _) when T_set.mem types ti -> SkipChildren
     | GCompTag (ci, _) | GCompTagDecl (ci, _) when C_set.mem comps ci ->
-      ci.cfields <- dummy_if_empty ci (List.filter (fun fi -> F_set.mem fields fi) ci.cfields);
+      ci.cfields <- dummy_if_empty ci (List.filter (fun fi -> fi.faddrof || F_set.mem fields fi) ci.cfields);
+      ListLabels.iter ci.cfields
+        ~f:(fun fi ->
+             fi.fsize_in_bits <- None;
+             fi.foffset_in_bits <- None;
+             fi.fpadding_in_bits <- None);
       SkipChildren
     | GCompTag (ci, _) | GCompTagDecl (ci, _) when C_set.mem dcomps ci ->
       (* The composite is dummy i.e. only used as an abstract type, so *)
