@@ -1475,25 +1475,6 @@ end
 let retype_fields file =
   let visitor = new retypeFields in visitFramacFile visitor file
 
-
-(*****************************************************************************)
-(* Retype type tags.                                                         *)
-(*****************************************************************************)
-
-class retypeTypeTags =
-object
-
-  inherit Visitor.frama_c_inplace
-
-  method! vterm t = match t.term_node with
-    | Ttype ty -> ChangeTo ({ t with term_node = Ttype(TPtr(ty,[])) })
-    | _ -> DoChildren
-
-end
-
-let retype_type_tags file =
-  let visitor = new retypeTypeTags in visitFramacFile visitor file
-
 (*****************************************************************************)
 (* Retype pointers to base types.                                            *)
 (*****************************************************************************)
@@ -1909,11 +1890,6 @@ let normalize file =
   (* order: before [retype_base_pointer] *)
   Jessie_options.debug "Remove array address";
   remove_array_address file;
-  if checking () then check_types file;
-  (* Retype type tags. *)
-  (* order: before [retype_base_pointer] *)
-  Jessie_options.debug "Retype type tags";
-  retype_type_tags file;
   if checking () then check_types file;
   (* Retype pointers to base types. *)
   (* order: after [retype_fields] *)
