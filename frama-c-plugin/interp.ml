@@ -2721,13 +2721,14 @@ let type_conversions () =
     ) type_conversion_table []
 
 let get_compinfo globals =
-  let cis = Hashtbl.create 10 in
+  let module H = Datatype.String.Hashtbl in
+  let cis = H.create 10 in
   List.iter
-    (function GCompTag (ci, _) when ci.cstruct -> Hashtbl.add cis ci.cname ci | _ -> ())
+    (function GCompTag (ci, _) when ci.cstruct -> H.add cis ci.cname ci | _ -> ())
     globals;
   fun t ->
   try
-    Some (Hashtbl.find cis (wrapper_name t))
+    Some (H.find cis (wrapper_name t))
   with Not_found -> None
 
 let type_reinterpretations get_compinfo () =
