@@ -1230,9 +1230,12 @@ class fp_eliminating_visitor =
     let module Hashtbl = Cil_datatype.Varinfo.Hashtbl in
     let new_vis = Hashtbl.create 10 in
     fun ~loc vi ->
-      let addr0 vi = mkAddrOf ~loc (Var vi, Index (integer ~loc 0, NoOffset)) in
+      let cast_addr0 vi =
+        let e = mkAddrOf ~loc (Var vi, Index (integer ~loc 0, NoOffset)) in
+        mkCast ~force:false ~e ~newt:voidConstPtrType
+      in
       try
-        addr0 @@ Hashtbl.find new_vis vi
+        cast_addr0 @@ Hashtbl.find new_vis vi
       with Not_found ->
         let name = unique_name @@ "dummy_place_of_" ^ vi.vname in
         let typ = array_type ~length:(integer ~loc:vi.vdecl 16) charType in
@@ -1242,7 +1245,7 @@ class fp_eliminating_visitor =
         vi.vaddrof <- true;
         vi'.vaddrof <- true;
         Hashtbl.add new_vis vi vi';
-        addr0 vi'
+        cast_addr0 vi'
   in
   let do_expr_post e =
     if !do_not_touch = Some e.eid then (do_not_touch := None; e)
