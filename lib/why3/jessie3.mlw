@@ -366,7 +366,7 @@ val safe_sub_pointer_ (p:pointer 't) (q:pointer 't) : int
 val eq_pointer (p: pointer 't) (q: pointer 't) :
     bool
 
-  requires { same_block p q \/ p = null \/ q = null }
+  requires { true }
   ensures  { if result = True then p=q else p<>q }
 
 val safe_eq_pointer (p: pointer 't) (q: pointer 't) : bool
@@ -376,7 +376,7 @@ val safe_eq_pointer (p: pointer 't) (q: pointer 't) : bool
 val neq_pointer (p: pointer 't) (q: pointer 't) :
     bool
 
-  requires { same_block p q \/ p = null \/ q = null }
+  requires { true }
   ensures  { if result = True then p<>q else p=q }
 
 val safe_neq_pointer (p: pointer 't) (q: pointer 't) : bool
