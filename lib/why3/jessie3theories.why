@@ -51,7 +51,7 @@ axiom offset_min_shift:
     offset_min a (shift p i) = offset_min a p - i
 
 axiom neq_shift:
-  forall p:pointer 't. forall i:int. forall j:int [shift p i,shift p j].
+  forall p:pointer 't. forall i:int. forall j:int [shift p i, shift p j].
     i <> j -> shift p i <> shift p j
 
 (* null *)
@@ -64,6 +64,8 @@ axiom null_pointer:
     offset_min a null >= 0 /\ offset_max a null <= -2
 
 use import bool.Bool
+
+(* special funcions for construcing terms where predicates are actually needed (but only terms allowed) *)
 
 function eq_pointer_bool (pointer 't) (pointer 't) : bool
 function neq_pointer_bool (pointer 't) (pointer 't) : bool
@@ -434,7 +436,7 @@ axiom pow2_definition:
   pow2 31 = 2147483648
 
 axiom bw_or_plus:
-  forall a: int. forall b: int [bw_or a b, a + b, a >= 0, b >= 0].
+  forall a: int. forall b: int [bw_or a b, a + b].
     a >= 0 /\ b >= 0 /\ bw_and a b = 0 -> bw_or a b = a + b
 
 predicate bw_set (pos: int) (n: int) = bw_and (pow2 pos) n <> 0
@@ -445,8 +447,11 @@ axiom pow2_bw_set:
 axiom zero_bw_set:
   forall n: int [bw_set n 0]. not (bw_set n 0)
 
-axiom zero_bw_set_iff:
-  forall a: int [a = 0]. (forall n: int [bw_set n a]. not (bw_set n a)) <-> a = 0
+axiom zero_bw_set_iff1:
+  forall a: int. forall n: int [bw_set n a]. a = 0 -> not (bw_set n a)
+
+axiom zero_bw_set_iff2:
+  forall a: int. forall n: int [bw_set n a]. bw_set n a -> a <> 0
 
 axiom bw_and_self:
   forall a: int [bw_and a a].
@@ -508,11 +513,11 @@ axiom bw_or_and_distr:
     bw_or a (bw_and b c) = bw_and (bw_or a b) (bw_or a c)
 
 axiom bw_and_mono:
-  forall a: int. forall b: int [bw_and a b, a >= 0, b >= 0].
+  forall a: int. forall b: int [bw_and a b].
     a >= 0 /\ b >= 0 -> bw_and a b <= a /\ bw_and a b <= b
 
 axiom bw_or_mono:
-  forall a: int. forall b: int [bw_or a b, a >= 0, b >= 0].
+  forall a: int. forall b: int [bw_or a b].
     a >= 0 /\ b >= 0 -> bw_or a b >= a /\ bw_or a b >= b
 
 (* axioms for arithmetic overflow in bitwise operations *)
@@ -660,44 +665,58 @@ axiom lsr_of_lsl_identity_on_positive:
 (* shifts bitwise definition *)
 
 axiom lsl_definition:
-  forall m: int [m >= 0]. forall a: int [lsl a m]. forall n: int
+  forall m: int. forall a: int [lsl a m]. forall n: int
     [bw_set n (lsl a m), bw_set (n - m) a, n < m].
       m >= 0 -> not (bw_set n (lsl a m)) <-> not (bw_set (n - m) a) \/ n < m
 
 axiom lsr_definition:
-  forall m: int [m >= 0]. forall a: int [lsr a m]. forall n: int
+  forall m: int. forall a: int [lsr a m]. forall n: int
     [bw_set n (lsr a m), bw_set (n + m) a].
       m >= 0 -> bw_set n (lsr a m) <-> bw_set (n + m) a
 
 axiom lsl_induction:
-  forall n: int. forall m: int. forall k: int [n + m, k = n + m, k >= 0, n >= 0, m >= 0].
+  forall a: int.
+  forall n: int [lsl a n].
+  forall m: int [n + m].
+  forall k: int [lsl a k].
     k >=0 /\ n >= 0 /\ m >= 0 /\ k = n + m ->
-      (forall a: int. lsl a k = lsl (lsl a n) m)
+      lsl a k = lsl (lsl a n) m
 
 axiom lsr_induction:
-  forall n: int. forall m: int. forall k: int [n + m, k = n + m, k >= 0, n >= 0, m >= 0].
+  forall a: int.
+  forall n: int [lsr a n].
+  forall m: int [n + m].
+  forall k: int [lsr a k].
     k >=0 /\ n >= 0 /\ m >= 0 /\ k = n + m ->
-      (forall a: int. lsr a k = lsr (lsr a n) m)
+      lsr a k = lsr (lsr a n) m
 
 axiom lsl_assoc:
-  forall n: int [n >= 0]. forall m: int [m >= 0].
+  forall n: int.
+  forall m: int.
+  forall a: int [lsl (lsl a m) n, lsl (lsl a n) m].
     n >= 0 /\ m >= 0 ->
-      (forall a: int [lsl (lsl a m) n, lsl (lsl a n) m].
-        lsl (lsl a m) n = lsl (lsl a n) m)
+      lsl (lsl a m) n = lsl (lsl a n) m
 
 axiom lsr_assoc:
-  forall n: int [n >= 0]. forall m: int [m >= 0].
+  forall n: int.
+  forall m: int.
+  forall a: int [lsr (lsr a m) n, lsr (lsr a n) m].
     n >= 0 /\ m >= 0 ->
-      (forall a: int [lsr (lsr a m) n, lsr (lsr a n) m].
-        lsr (lsr a m) n = lsr (lsr a n) m)
+      lsr (lsr a m) n = lsr (lsr a n) m
 
 axiom lsl_init:
-  forall a: int [lsl a 1, a >= 0]. a >= 0 -> lsl a 1 = a * 2
+  forall a: int [lsl a 1 | a * 2]. a >= 0 -> lsl a 1 = a * 2
 
+axiom lsl_multiply:
+  forall a: int. forall n: int [lsl a n | a * pow2 n]. a >= 0 -> lsl a n = a * pow2 n
+  
 use import int.ComputerDivision
 
 axiom lsr_init:
-  forall a: int [lsr a 1, a >= 0]. a >= 0 -> lsr a 1 = div a 2
+  forall a: int [lsr a 1 | div a 2]. a >= 0 -> lsr a 1 = div a 2
+
+axiom lsr_divide:
+  forall a: int. forall n: int [lsr a n | div a (pow2 n)]. a >= 0 -> lsr a n = div a (pow2 n)
 
 (*****************************************************************************)
 (* dynamic allocation/deallocation                                           *)
