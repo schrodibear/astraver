@@ -1236,8 +1236,7 @@ class fp_eliminating_visitor =
     let new_vis = Hashtbl.create 10 in
     fun ~loc vi ->
       let cast_addr0 vi =
-        let e = mkAddrOf ~loc (Var vi, Index (integer ~loc 0, NoOffset)) in
-        mkCast ~force:false ~e ~newt:voidConstPtrType
+        mkCast ~force:false ~e:(mkAddrOf ~loc (Var vi, Index (integer ~loc 0, NoOffset))) ~newt:voidConstPtrType
       in
       try
         cast_addr0 @@ Hashtbl.find new_vis vi
