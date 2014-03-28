@@ -1827,6 +1827,7 @@ let fprintf_why_decls ?(why3=false) ?(use_floats=false)
             | Jc_env.FMmath -> assert false (* TODO *)
         end;
       fprintf form "use import jessie3.Jessie_memory_model_parameters@\n@\n";
+      fprintf form "use import jessie3_integer.Integer@\n@\n"
     end;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) params;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) defs;
