@@ -881,7 +881,12 @@ object(self)
         begin try
           let fpatt = Globals.Functions.find_by_name (fvar.vname ^ "__type") in
           if is_block_function fpatt then
-            let strip_void_ptr_casts e = if isVoidPtrType @@ typeOf e then stripCasts e else e in
+            let strip_cast e =
+              match e.enode with
+              | CastE (_, e) -> e
+              | _ -> e
+            in
+            let strip_void_ptr_casts e = if isVoidPtrType @@ typeOf e then strip_cast e else e in
             let args = List.map strip_void_ptr_casts args in
             let lval_type_opt = Option_misc.map typeOfLval lval_opt in
             let arg_types =  List.map typeOf args in
