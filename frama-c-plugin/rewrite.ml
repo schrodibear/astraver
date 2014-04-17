@@ -277,61 +277,124 @@ let replace_addrof_array file =
 (* Replace string constants by global variables.                             *)
 (*****************************************************************************)
 
+(* WARNING: C99 doesn't specify whether string literals with the same contents (values) should be merged *)
+(*          (i.e. stored within the same char array).                                                    *)
+(*          Therefore such optimizations must NOT be implemented.                                        *)
 class replaceStringConstants =
-
-  let string_to_var = Datatype.String.Hashtbl.create 17 in
-  let wstring_to_var = Cil_datatype.Wide_string.Hashtbl.create 17 in
 
   (* Use the Cil translation on initializers. First translate to primitive
    * AST to later apply translation in [blockInitializer].
    *)
   let string_cabs_init s =
-    SINGLE_INIT(
-      { expr_node = CONSTANT(CONST_STRING s); expr_loc = Cabshelper.cabslu }
-    )
+    SINGLE_INIT ({ expr_node = CONSTANT(CONST_STRING s); expr_loc = Cabshelper.cabslu })
   in
   let wstring_cabs_init ws =
-    SINGLE_INIT(
-      { expr_node = CONSTANT(CONST_WSTRING ws); expr_loc = Cabshelper.cabslu }
-    )
+    SINGLE_INIT ({ expr_node = CONSTANT(CONST_WSTRING ws); expr_loc = Cabshelper.cabslu })
+  in
+
+  let (memo_string, find_strings), (memo_wstring, find_wstrings) =
+    let module ScopeMap =
+      Map.Make
+        (struct
+          type t = fundec option
+          let compare = opt_compare Fundec.compare
+         end)
+    in
+    let memo_find (type a) (type b) (module Trie : Trie.S with type key = a) (explode : b -> a list) =
+      let strings = ref Trie.empty in
+      let memo_string s scope loc vi =
+        let path = explode s in
+        let scope_map = try Trie.find_exn !strings path with Not_found -> ScopeMap.empty in
+        strings :=
+          Trie.add
+            !strings
+            path
+            ScopeMap.(add scope ((loc, vi)::try find scope scope_map with Not_found -> []) scope_map)
+      in
+      let find_strings ?scope prefix =
+        Trie.find_all !strings (explode prefix)
+        |>
+         (match scope with
+          | Some scope -> List.map (fun map -> try ScopeMap.find scope map with Not_found -> [])
+          | None -> List.(flatten % map (map snd % ScopeMap.bindings)))
+        |> List.flatten
+        |> List.sort (fun (l1, _) (l2, _) -> Location.compare l1 l2)
+        |> List.map snd
+      in
+      memo_string, find_strings
+    in
+    memo_find (module StringTrie) string_explode, memo_find (module Int64Trie) id
   in
 
   (* Name of variable should be as close as possible to the string it
    * represents. To that end, we just filter out characters not allowed
    * in C names, before we add a discriminating number if necessary.
    *)
-  let string_var s =
+  let string_var s fundec_opt loc =
     let name = unique_name ("__string_" ^ (filter_alphanumeric s [] '_')) in
-    makeGlobalVar name (array_type charType)
+    let vi = makeGlobalVar name (array_type charType) in
+    memo_string s fundec_opt loc vi;
+    vi
   in
-  let wstring_var () =
+  let wstring_var ws fundec_opt loc =
     let name = unique_name "__wstring_" in
-    makeGlobalVar name (array_type theMachine.wcharType)
-(*     makeGlobalVar name (array_type (TInt(IUShort,[]))) *)
+    let vi = makeGlobalVar name (array_type theMachine.wcharType) in
+    memo_wstring ws fundec_opt loc vi;
+    vi
   in
 
-  let make_glob ~wstring v size inite =
+  let make_glob fundec_opt loc s =
+    let v, size, inite =
+      match s with
+      | `String s -> string_var s fundec_opt loc, String.length s, string_cabs_init s
+      | `Wstring ws -> wstring_var ws fundec_opt loc, List.length ws - 1, wstring_cabs_init ws
+    in
     (* Apply translation from initializer in primitive AST to block of code,
      * simple initializer and type.
      *)
     let _b,init,ty =
       Cabs2cil.blockInitializer Cabs2cil.empty_local_env v inite in
     (* Precise the array type *)
-    v.vtype <- ty;
+    v.vtype <- typeAddAttributes [Attr ("const", [])] ty;
+
     (* Attach global variable and code for global initialization *)
+
 (* DISABLED because does not work and uses deprecated Cil.getGlobInit
    See bts0284.c
     List.iter attach_globinit b.bstmts;
 *)
     attach_global (GVar(v,{init=Some init},CurrentLoc.get ()));
+    (* Define an invariant on the contents of the string *)
+    let content =
+      match s with
+      | `String s -> List.map (Logic_const.tinteger ~loc % int_of_char) (string_explode s @ ['\000'])
+      | `Wstring ws -> List.map (Logic_const.tint ~loc % Integer.of_int64) (ws @ [0x0L])
+    in
+    let lv = cvar_to_lvar v in
+    let content_inv =
+      Logic_const.(
+        pands @@
+          ListLabels.mapi content
+            ~f:(fun i c ->
+                  let el = term ~loc (TLval (TVar lv, TIndex (tinteger ~loc i, TNoOffset))) (Ctype charType) in
+                  prel ~loc (Req, el, c)))
+    in
+    let attach_invariant name_pref name_postf p =
+      let globinv = Cil_const.make_logic_info (unique_logic_name (name_pref ^ v.vname ^ name_postf)) in
+      globinv.l_labels <- [LogicLabel (None, "Here")];
+      globinv.l_body <- LBpred p;
+      attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
+      attach_global (GAnnot(Dinvariant (globinv, v.vdecl), v.vdecl))
+    in
+    attach_invariant "contents_of_" "" content_inv;
     (* Define a global string invariant *)
     begin try
     let validstring =
-      match Logic_env.find_all_logic_functions
-	(if wstring then
-	   name_of_valid_wstring
-	 else
-	   name_of_valid_string)
+      match
+        Logic_env.find_all_logic_functions
+	  (match s with
+	   | `Wstring _ -> name_of_valid_wstring
+	   | `String _ -> name_of_valid_string)
       with
 	| [i] -> i
 	| _  -> raise Exit
@@ -359,45 +422,46 @@ class replaceStringConstants =
     in
     let tv = term_of_var v in
     let strsize =
-      if wstring then
-	mkterm (Tapp(wcslen,[],[tv])) wcslen_type v.vdecl
-      else
-	mkterm (Tapp(strlen,[],[tv])) strlen_type v.vdecl
+      match s with
+      | `Wstring _ -> mkterm (Tapp(wcslen,[],[tv])) wcslen_type v.vdecl
+      | `String _ -> mkterm (Tapp(strlen,[],[tv])) strlen_type v.vdecl
     in
     let size = constant_term v.vdecl (Integer.of_int size) in
     let psize = Prel(Req,strsize,size) in
     let p = Pand(predicate v.vdecl pstring,predicate v.vdecl psize) in
-    let globinv =
-      Cil_const.make_logic_info (unique_logic_name ("valid_" ^ v.vname)) in
-    globinv.l_labels <- [ LogicLabel (None, "Here") ];
-    globinv.l_body <- LBpred (predicate v.vdecl p);
-    attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
-    attach_global (GAnnot(Dinvariant (globinv,v.vdecl),v.vdecl));
+
+    attach_invariant "validity_of" "" (predicate v.vdecl p);
     with Exit -> ()
     end;
     v
   in
-object
+object(self)
 
   inherit Visitor.frama_c_inplace
 
+  method find_strings = find_strings
+
+  method find_wstrings = find_wstrings
+
+  method literal_attr_name = "__literal"
+
+  method is_literal_proxy vi =
+    vi.vghost && vi.vglob && (vi.vstorage = Static || vi.vstorage = NoStorage) &&
+    (hasAttribute self#literal_attr_name vi.vattr)
+
+  method! vinit vi _ _ =
+    if self#is_literal_proxy vi then
+      SkipChildren
+    else
+      DoChildren
+
   method! vexpr e = match e.enode with
     | Const(CStr s) ->
-	let v =
-	  Datatype.String.Hashtbl.memo string_to_var s
-	    (fun s ->
-	       make_glob ~wstring:false (string_var s) (String.length s)
-		 (string_cabs_init s))
-	in
-	ChangeTo (new_exp ~loc:e.eloc (StartOf(Var v,NoOffset)))
+	let v = make_glob self#current_func e.eloc (`String s) in
+	ChangeTo (new_exp ~loc:e.eloc (StartOf(Var v, NoOffset)))
     | Const(CWStr ws) ->
-	let v =
-	  Cil_datatype.Wide_string.Hashtbl.memo wstring_to_var ws
-	    (fun ws ->
-	       make_glob ~wstring:true (wstring_var ()) (List.length ws - 1)
-		 (wstring_cabs_init ws))
-	in
-	ChangeTo (new_exp ~loc:e.eloc (StartOf(Var v,NoOffset)))
+	let v = make_glob self#current_func e.eloc (`Wstring ws) in
+	ChangeTo (new_exp ~loc:e.eloc (StartOf(Var v, NoOffset)))
     | _ -> DoChildren
 
   method! vglob_aux = function
@@ -414,10 +478,72 @@ object
 
 end
 
-let replace_string_constants file =
-  let visitor = new replaceStringConstants in
-  visit_and_update_globals visitor file
+class literal_proxy_visitor first_pass_visitor =
+object
 
+  inherit frama_c_inplace
+
+  method! vinit vi off init =
+    if first_pass_visitor#is_literal_proxy vi then
+      let attrparams = findAttribute first_pass_visitor#literal_attr_name vi.vattr in
+      let s, scope, idx =
+        match off, init with
+        | NoOffset,
+          SingleInit { enode = Const const } ->
+          let s =
+            match const with
+            | CStr s ->
+              let s =
+                if Str.last_chars s 3 = "..." then
+                  Str.first_chars s (String.length s - 3)
+               else s
+              in
+              `String s
+            | CWStr ws ->
+              let ws =
+                if take 3 (List.rev ws) = [0x2EL; 0x2EL; 0x2EL] then
+                  drop 3 ws
+                else ws
+              in
+              `Wstring ws
+            | _ -> fatal "Unrecognized literal proxy initializer: %a" Printer.pp_constant const
+          in
+          let conv_int i = Some (Integer.to_int i) in
+          (match attrparams with
+           | [AInt i] -> s, Some None, conv_int i
+           | ACons (f, []) :: aps ->
+             (try
+               s,
+               Some (Some (Kernel_function.get_definition @@ Globals.Functions.find_by_name f)),
+               (match aps with
+                | [AInt i] -> conv_int i
+                | [] -> None
+                | _ -> fatal "Invalid argument in proxy literal attribute: %a" Printer.pp_attributes vi.vattr)
+              with
+              | Not_found | Kernel_function.No_Definition ->
+                fatal "Invalid function name %s in literal proxy specification: %a" f Printer.pp_attributes vi.vattr)
+          | [] -> s, None, None
+          | _ -> fatal "Invalid literal proxy attribute specification: %a" Printer.pp_attributes vi.vattr)
+        | _ -> fatal "Unrecognized literal proxy specification for variable %a" Printer.pp_varinfo vi
+      in
+      let vis =
+        match s with
+        | `String s -> first_pass_visitor#find_strings ?scope s
+        | `Wstring ws -> first_pass_visitor#find_wstrings ?scope ws
+      in
+      let vis = opt_fold (fun i vis -> [List.nth vis i]) idx vis in
+      match vis with
+      | [vi] -> ChangeTo (SingleInit (mkAddrOfVi vi))
+      | [] -> fatal "No matching literals found for proxy specification (variable %a)" Printer.pp_varinfo vi
+      | _ -> fatal "Ambiguous literal proxy specification for variable %a" Printer.pp_varinfo vi
+    else
+      SkipChildren
+end
+
+let replace_string_constants file =
+  let first_pass_visitor = new replaceStringConstants in
+  visit_and_update_globals (first_pass_visitor :> frama_c_visitor) file;
+  visitFramacFile (new literal_proxy_visitor first_pass_visitor) file
 
 (*****************************************************************************)
 (* Put all global initializations in the [globinit] file.                    *)

@@ -63,6 +63,8 @@ val name_of_kmalloc : string
 
 val filter_alphanumeric : string -> (char * char) list -> char -> string
 
+val string_explode : string -> char list
+
 val type_name:  Cil_types.typ -> string
 
 val logic_type_name:  Cil_types.logic_type -> string
@@ -149,6 +151,8 @@ val get_struct_name : Cil_types.typ -> string
 val force_app_term_type : (Cil_types.typ -> 'a) -> Cil_types.logic_type -> 'a
 
 val app_term_type : (Cil_types.typ -> 'a) -> 'a -> Cil_types.logic_type -> 'a
+
+val (%) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
 
 val is_base_addr : Cil_types.term -> bool
 
@@ -257,3 +261,70 @@ val drop : int -> 'a list -> 'a list
 val take : int -> 'a list -> 'a list
 
 val predicate: location -> predicate -> predicate named
+
+module Trie : sig
+
+  (* GPL-licensed OCaml trie implementation from https://www.lri.fr/~filliatr/ftp/ocaml/ds/trie.ml.html *)
+
+  (**************************************************************************)
+  (*                                                                        *)
+  (*  Copyright (C) Jean-Christophe Filliatre                               *)
+  (*                                                                        *)
+  (*  This software is free software; you can redistribute it and/or        *)
+  (*  modify it under the terms of the GNU Library General Public           *)
+  (*  License version 2.1, with the special exception on linking            *)
+  (*  described in file LICENSE.                                            *)
+  (*                                                                        *)
+  (*  This software is distributed in the hope that it will be useful,      *)
+  (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
+  (*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
+  (*                                                                        *)
+  (**************************************************************************)
+
+  (** This module implements {\em tries}. Given a map [M] over an
+      arbitrary type [M.key], the following functor constructs a new map
+      over type [M.key list]. *)
+
+  module type Map = sig
+    type key
+    type +'a t
+    val empty : 'a t
+    val is_empty : 'a t -> bool
+    val add : key -> 'a -> 'a t -> 'a t
+    val find : key -> 'a t -> 'a
+    val remove : key -> 'a t -> 'a t
+    val mem : key -> 'a t -> bool
+    val iter : (key -> 'a -> unit) -> 'a t -> unit
+    val map : ('a -> 'b) -> 'a t -> 'b t
+    val mapi : (key -> 'a -> 'b) -> 'a t -> 'b t
+    val fold : (key -> 'a -> 'b -> 'b) -> 'a t -> 'b -> 'b
+    val compare : ('a -> 'a -> int) -> 'a t -> 'a t -> int
+    val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+  end
+
+  module type S = sig
+    type key
+    type +'a t
+    val empty : 'a t
+    val is_empty : 'a t -> bool
+    val add : 'a t -> key list -> 'a -> 'a t
+    val find_exn : 'a t -> key list -> 'a
+    val find_all : 'a t -> key list -> 'a list
+    val find_all2 : 'a t -> key list -> (key list * 'a) list
+    val remove : 'a t -> key list -> 'a t
+    val remove_all : 'a t -> key list -> 'a t
+    val mem : 'a t -> key list -> bool
+    val mem_any : 'a t -> key list -> bool
+    val iter : (key list -> 'a -> unit) -> 'a t -> unit
+    val map : ('a -> 'b) -> 'a t -> 'b t
+    val mapi : (key list -> 'a -> 'b) -> 'a t -> 'b t
+    val fold : (key list -> 'a -> 'b -> 'b) -> 'b -> 'a t -> 'b
+    val compare : ('a -> 'a -> int) -> 'a t -> 'a t -> int
+    val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+  end
+
+  module Make(M : Map) : (S with type key := M.key)
+end
+
+module StringTrie : Trie.S with type key = char
+module Int64Trie : Trie.S with type key = int64
