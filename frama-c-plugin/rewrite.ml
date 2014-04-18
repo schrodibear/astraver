@@ -282,16 +282,6 @@ let replace_addrof_array file =
 (*          Therefore such optimizations must NOT be implemented.                                        *)
 class replaceStringConstants =
 
-  (* Use the Cil translation on initializers. First translate to primitive
-   * AST to later apply translation in [blockInitializer].
-   *)
-  let string_cabs_init s =
-    SINGLE_INIT ({ expr_node = CONSTANT(CONST_STRING s); expr_loc = Cabshelper.cabslu })
-  in
-  let wstring_cabs_init ws =
-    SINGLE_INIT ({ expr_node = CONSTANT(CONST_WSTRING ws); expr_loc = Cabshelper.cabslu })
-  in
-
   let (memo_string, find_strings), (memo_wstring, find_wstrings) =
     let module ScopeMap =
       Map.Make
@@ -326,34 +316,72 @@ class replaceStringConstants =
     memo_find (module StringTrie) string_explode, memo_find (module Int64Trie) id
   in
 
+  (* Functions to build and attach an invariant for each string constant. The actual invariant generation is
+   * postponed until finding the corresponding proxy with the __invariant attribute.
+   *)
+  let content_inv ~loc s vi =
+    let lv = cvar_to_lvar vi in
+    let content =
+      match s with
+      | `String s -> List.map (Logic_const.tinteger ~loc % int_of_char) (string_explode s @ ['\000'])
+      | `Wstring ws -> List.map (Logic_const.tint ~loc % Integer.of_int64) (ws @ [0x0L])
+    in
+    Logic_const.(
+      pands @@
+        ListLabels.mapi content
+          ~f:(fun i c ->
+                let el = term ~loc (TLval (TVar lv, TIndex (tinteger ~loc i, TNoOffset))) (Ctype charType) in
+                  prel ~loc (Req, el, c)))
+  in
+  let attach_invariant name loc p =
+    let globinv = Cil_const.make_logic_info (unique_logic_name name) in
+    globinv.l_labels <- [LogicLabel (None, "Here")];
+    globinv.l_body <- LBpred p;
+    attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
+    attach_global (GAnnot(Dinvariant (globinv, loc), loc))
+  in
+
+  (* Use the Cil translation on initializers. First translate to primitive
+   * AST to later apply translation in [blockInitializer].
+   *)
+  let string_cabs_init =
+    function
+    | `String s -> SINGLE_INIT ({ expr_node = CONSTANT (CONST_STRING s); expr_loc = Cabshelper.cabslu })
+    | `Wstring ws -> SINGLE_INIT ({ expr_node = CONSTANT (CONST_WSTRING ws); expr_loc = Cabshelper.cabslu })
+  in
+
   (* Name of variable should be as close as possible to the string it
    * represents. To that end, we just filter out characters not allowed
    * in C names, before we add a discriminating number if necessary.
    *)
   let string_var s fundec_opt loc =
-    let name = unique_name ("__string_" ^ (filter_alphanumeric s [] '_')) in
-    let vi = makeGlobalVar name (array_type charType) in
-    memo_string s fundec_opt loc vi;
-    vi
-  in
-  let wstring_var ws fundec_opt loc =
-    let name = unique_name "__wstring_" in
-    let vi = makeGlobalVar name (array_type theMachine.wcharType) in
-    memo_wstring ws fundec_opt loc vi;
+    let name =
+      match s with
+      | `String s -> unique_name ("__string_" ^ filter_alphanumeric s [] '_')
+      | `Wstring _ -> unique_name "__wstring_"
+    in
+    let vi =
+      makeGlobalVar name (array_type @@ match s with `String _ -> charType | `Wstring _ -> theMachine.wcharType)
+    in
+    let f () =
+      (* Define an invariant on the contents of the string *)
+      let content_inv = content_inv ~loc s vi in
+      attach_invariant ("contents_of_" ^ vi.vname) vi.vdecl content_inv
+    in
+    (match s with `String s -> memo_string s | `Wstring ws -> memo_wstring ws) fundec_opt loc (vi, f);
     vi
   in
 
   let make_glob fundec_opt loc s =
-    let v, size, inite =
-      match s with
-      | `String s -> string_var s fundec_opt loc, String.length s, string_cabs_init s
-      | `Wstring ws -> wstring_var ws fundec_opt loc, List.length ws - 1, wstring_cabs_init ws
-    in
+    let v = string_var s fundec_opt loc in
+    let inite = string_cabs_init s in
+    let size = match s with `String s -> String.length s | `Wstring ws -> List.length ws - 1 in
     (* Apply translation from initializer in primitive AST to block of code,
      * simple initializer and type.
      *)
     let _b,init,ty =
-      Cabs2cil.blockInitializer Cabs2cil.empty_local_env v inite in
+      Cabs2cil.blockInitializer Cabs2cil.empty_local_env v inite
+    in
     (* Precise the array type *)
     v.vtype <- typeAddAttributes [Attr ("const", [])] ty;
 
@@ -364,29 +392,7 @@ class replaceStringConstants =
     List.iter attach_globinit b.bstmts;
 *)
     attach_global (GVar(v,{init=Some init},CurrentLoc.get ()));
-    (* Define an invariant on the contents of the string *)
-    let content =
-      match s with
-      | `String s -> List.map (Logic_const.tinteger ~loc % int_of_char) (string_explode s @ ['\000'])
-      | `Wstring ws -> List.map (Logic_const.tint ~loc % Integer.of_int64) (ws @ [0x0L])
-    in
-    let lv = cvar_to_lvar v in
-    let content_inv =
-      Logic_const.(
-        pands @@
-          ListLabels.mapi content
-            ~f:(fun i c ->
-                  let el = term ~loc (TLval (TVar lv, TIndex (tinteger ~loc i, TNoOffset))) (Ctype charType) in
-                  prel ~loc (Req, el, c)))
-    in
-    let attach_invariant name_pref name_postf p =
-      let globinv = Cil_const.make_logic_info (unique_logic_name (name_pref ^ v.vname ^ name_postf)) in
-      globinv.l_labels <- [LogicLabel (None, "Here")];
-      globinv.l_body <- LBpred p;
-      attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
-      attach_global (GAnnot(Dinvariant (globinv, v.vdecl), v.vdecl))
-    in
-    attach_invariant "contents_of_" "" content_inv;
+
     (* Define a global string invariant *)
     begin try
     let validstring =
@@ -430,7 +436,7 @@ class replaceStringConstants =
     let psize = Prel(Req,strsize,size) in
     let p = Pand(predicate v.vdecl pstring,predicate v.vdecl psize) in
 
-    attach_invariant "validity_of" "" (predicate v.vdecl p);
+    attach_invariant ("validity_of_" ^ v.vname) v.vdecl (predicate v.vdecl p);
     with Exit -> ()
     end;
     v
@@ -447,7 +453,10 @@ object(self)
 
   method is_literal_proxy vi =
     vi.vghost && vi.vglob && (vi.vstorage = Static || vi.vstorage = NoStorage) &&
-    (hasAttribute self#literal_attr_name vi.vattr)
+    isCharPtrType vi.vtype &&
+    hasAttribute "const" (typeAttr vi.vtype) &&
+    hasAttribute "const" (typeAttr @@ pointed_type vi.vtype) &&
+    hasAttribute self#literal_attr_name vi.vattr
 
   method! vinit vi _ _ =
     if self#is_literal_proxy vi then
@@ -531,9 +540,20 @@ object
         | `String s -> first_pass_visitor#find_strings ?scope s
         | `Wstring ws -> first_pass_visitor#find_wstrings ?scope ws
       in
-      let vis = opt_fold (fun i vis -> [List.nth vis i]) idx vis in
+      let vis =
+        opt_fold
+          (fun i vis ->
+            try [List.nth vis i]
+            with
+            | Invalid_argument "List.nth" -> fatal "Invalid string literal index: %a" Printer.pp_attributes vi.vattr)
+          idx
+          vis
+      in
       match vis with
-      | [vi] -> ChangeTo (SingleInit (mkAddrOfVi vi))
+      | [vi, attach_inv] ->
+        if hasAttribute "__invariant" vi.vattr then
+          attach_inv ();
+        ChangeTo (SingleInit (mkAddrOfVi vi))
       | [] -> fatal "No matching literals found for proxy specification (variable %a)" Printer.pp_varinfo vi
       | _ -> fatal "Ambiguous literal proxy specification for variable %a" Printer.pp_varinfo vi
     else
@@ -543,7 +563,7 @@ end
 let replace_string_constants file =
   let first_pass_visitor = new replaceStringConstants in
   visit_and_update_globals (first_pass_visitor :> frama_c_visitor) file;
-  visitFramacFile (new literal_proxy_visitor first_pass_visitor) file
+  visit_and_update_globals (new literal_proxy_visitor first_pass_visitor) file
 
 (*****************************************************************************)
 (* Put all global initializations in the [globinit] file.                    *)
