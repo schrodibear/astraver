@@ -1840,9 +1840,8 @@ module Trie = struct
     let find_all2 t l =
       let rec find_all2 acc t l =
         match l, t with
-        | [], Node (None, _)  -> List.rev acc
         | [], _               -> fold (fun l v acc -> (l, v) :: acc) acc t
-        | x :: r, Node (_, m) -> find_all2 acc (M.find x m) r
+        | x :: r, Node (_, m) -> try find_all2 acc (M.find x m) r with Not_found -> []
       in
       find_all2 [] t l
 
