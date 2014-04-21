@@ -319,8 +319,7 @@ class replaceStringConstants =
   (* Functions to build and attach an invariant for each string constant. The actual invariant generation is
    * postponed until finding the corresponding proxy with the __invariant attribute.
    *)
-  let content_inv ~loc s vi =
-    let lv = cvar_to_lvar vi in
+  let content_inv ~loc s tv =
     let content =
       match s with
       | `String s -> List.map (Logic_const.tinteger ~loc % int_of_char) (string_explode s @ ['\000'])
@@ -330,7 +329,7 @@ class replaceStringConstants =
       pands @@
         ListLabels.mapi content
           ~f:(fun i c ->
-                let el = term ~loc (TLval (TVar lv, TIndex (tinteger ~loc i, TNoOffset))) (Ctype charType) in
+                let el = term ~loc (TLval (TMem tv, TIndex (tinteger ~loc i, TNoOffset))) (Ctype charType) in
                   prel ~loc (Req, el, c)))
   in
   let attach_invariant name loc p =
@@ -363,12 +362,16 @@ class replaceStringConstants =
     let vi =
       makeGlobalVar name (array_type @@ match s with `String _ -> charType | `Wstring _ -> theMachine.wcharType)
     in
-    let f () =
-      (* Define an invariant on the contents of the string *)
-      let content_inv = content_inv ~loc s vi in
-      attach_invariant ("contents_of_" ^ vi.vname) vi.vdecl content_inv
+    let attach_invariants ?(content=false) vi' =
+      let tv' = term_of_var vi' in
+      attach_invariant ("proxy_" ^ vi'.vname ^ "_for_" ^ vi.vname) vi'.vdecl @@
+        Logic_const.prel ~loc:vi'.vdecl (Req, tv', term_of_var vi);
+      if content then
+        (* Define an invariant on the contents of the string *)
+        let content_inv = content_inv ~loc s tv' in
+        attach_invariant ("contents_of_" ^ vi.vname) vi.vdecl content_inv
     in
-    (match s with `String s -> memo_string s | `Wstring ws -> memo_wstring ws) fundec_opt loc (vi, f);
+    (match s with `String s -> memo_string s | `Wstring ws -> memo_wstring ws) fundec_opt loc (vi, attach_invariants);
     vi
   in
 
@@ -449,7 +452,7 @@ object(self)
 
   method find_wstrings = find_wstrings
 
-  method literal_attr_name = "__literal"
+  method literal_attr_name = "literal"
 
   method is_literal_proxy vi =
     vi.vghost && vi.vglob && (vi.vstorage = Static || vi.vstorage = NoStorage) &&
@@ -487,7 +490,7 @@ object(self)
 
 end
 
-class literal_proxy_visitor first_pass_visitor =
+class literal_proxy_visitor (first_pass_visitor : replaceStringConstants) =
 object
 
   inherit frama_c_inplace
@@ -550,10 +553,9 @@ object
           vis
       in
       match vis with
-      | [vi, attach_inv] ->
-        if hasAttribute "__invariant" vi.vattr then
-          attach_inv ();
-        ChangeTo (SingleInit (mkAddrOfVi vi))
+      | [vi', attach_invs] ->
+        attach_invs ~content:(hasAttribute "invariant" vi.vattr) vi;
+        ChangeTo (SingleInit (mkAddrOfVi vi'))
       | [] -> fatal "No matching literals found for proxy specification (variable %a)" Printer.pp_varinfo vi
       | _ -> fatal "Ambiguous literal proxy specification for variable %a" Printer.pp_varinfo vi
     else
