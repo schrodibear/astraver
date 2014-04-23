@@ -456,7 +456,8 @@ object(self)
 
   method is_literal_proxy vi =
     vi.vghost && vi.vglob && (vi.vstorage = Static || vi.vstorage = NoStorage) &&
-    isCharPtrType vi.vtype &&
+    (isCharPtrType vi.vtype ||
+     isPointerType vi.vtype && not (need_cast (pointed_type vi.vtype) theMachine.wcharType)) &&
     hasAttribute "const" (typeAttr vi.vtype) &&
     hasAttribute "const" (typeAttr @@ pointed_type vi.vtype) &&
     hasAttribute self#literal_attr_name vi.vattr
@@ -501,7 +502,7 @@ object
       let s, scope, idx =
         match off, init with
         | NoOffset,
-          SingleInit { enode = Const const } ->
+          SingleInit { enode = Const const | CastE (_, { enode = Const const }) } ->
           let s =
             match const with
             | CStr s ->
@@ -514,7 +515,7 @@ object
             | CWStr ws ->
               let ws =
                 if take 3 (List.rev ws) = [0x2EL; 0x2EL; 0x2EL] then
-                  drop 3 ws
+                  List.(rev @@ drop 3 @@ rev ws)
                 else ws
               in
               `Wstring ws
@@ -548,6 +549,7 @@ object
           (fun i vis ->
             try [List.nth vis i]
             with
+            | Failure "nth"
             | Invalid_argument "List.nth" -> fatal "Invalid string literal index: %a" Printer.pp_attributes vi.vattr)
           idx
           vis
