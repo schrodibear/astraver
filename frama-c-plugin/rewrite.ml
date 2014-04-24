@@ -345,8 +345,8 @@ class replaceStringConstants =
    *)
   let string_cabs_init =
     function
-    | `String s -> SINGLE_INIT ({ expr_node = CONSTANT (CONST_STRING s); expr_loc = Cabshelper.cabslu })
-    | `Wstring ws -> SINGLE_INIT ({ expr_node = CONSTANT (CONST_WSTRING ws); expr_loc = Cabshelper.cabslu })
+    | `String s -> SINGLE_INIT ({ expr_node = CONSTANT (CONST_STRING (s, None)); expr_loc = Cabshelper.cabslu })
+    | `Wstring ws -> SINGLE_INIT ({ expr_node = CONSTANT (CONST_WSTRING (ws, None)); expr_loc = Cabshelper.cabslu })
   in
 
   (* Name of variable should be as close as possible to the string it
