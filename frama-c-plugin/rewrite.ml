@@ -939,7 +939,7 @@ class specialize_blockfuns_visitor =
             end else
               let ta = if isPointerType ta then pointed_type ta else ta in
               if Option_misc.map_default (fun _type -> not (need_cast ta _type)) true !_type_ref then begin
-                _type_ref := Some ta;
+                if not (has_some !_type_ref) then _type_ref := Some ta;
                 true
               end else
                 false
