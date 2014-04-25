@@ -61,6 +61,8 @@ val name_of_free : string
 val name_of_malloc : string
 val name_of_kmalloc : string
 
+val name_of_nondet_int : string ref
+
 val filter_alphanumeric : string -> (char * char) list -> char -> string
 
 val string_explode : string -> char list

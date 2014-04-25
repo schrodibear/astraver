@@ -410,6 +410,8 @@ let name_of_kzalloc = "kzalloc"
 let name_of_calloc = "calloc"
 let name_of_realloc = "realloc"
 
+let name_of_nondet_int = ref "jessie_nondet_int"
+
 let predefined_name =
   [ (* coding functions *)
     name_of_assert;

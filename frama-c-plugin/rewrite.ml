@@ -3242,6 +3242,35 @@ let from_comprehension_to_range behavior file =
   let visitor = new fromComprehensionToRange behavior in
   Visitor.visitFramacFile visitor file
 
+(****************************************************************************)
+(* Add jessie_nondet_int () function for kmalloc.                           *)
+(****************************************************************************)
+
+let declare_jessie_nondet_int file =
+  visit_and_update_globals
+    (object
+      inherit frama_c_inplace
+      val mutable f_opt = None
+      method! vinst =
+        function
+        | Call(Some _, { enode = Lval (Var v, NoOffset) }, _, _)
+          when is_kmalloc_function v && f_opt = None ->
+          name_of_nondet_int := unique_name !name_of_nondet_int;
+          let t = intType in
+          f_opt <-
+            Some (makeGlobalVar ~generated:true !name_of_nondet_int @@
+              TFun (t, Some [], false, [Attr ("extern", []); Attr ("const", [])]));
+          let fspec = empty_funspec () in
+          fspec.spec_behavior <-
+            [mk_behavior ~assigns:(Writes [Logic_const.(new_identified_term (tresult t), FromAny)]) ()];
+          let f = the f_opt in
+          attach_global @@ GVarDecl (fspec, f, Location.unknown);
+          Globals.Functions.replace_by_declaration fspec f Location.unknown;
+          Annotations.register_funspec ~emitter:jessie_emitter (Globals.Functions.get f);
+          SkipChildren
+        | _ -> SkipChildren
+     end)
+    file
 
 (*****************************************************************************)
 (* Rewrite the C file for Jessie translation.                                *)
@@ -3369,6 +3398,9 @@ let rewrite file =
   if checking () then check_types file;
   Jessie_options.debug "Checking if there are unsupported predicates";
   remove_unsupported file;
+  if checking () then check_types file;
+  Jessie_options.debug "Inserting declaration for jessie_nondet_int (if necessary)";
+  declare_jessie_nondet_int file;
   if checking () then check_types file
 
 (*

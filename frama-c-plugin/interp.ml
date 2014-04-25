@@ -1902,7 +1902,16 @@ let instruction = function
             | TComp(compinfo,_,_) -> compinfo.cname
             | _ -> assert false
           in
-          JCPEalloc(arg,name_of_type)
+          let alloc = JCPEalloc (arg, name_of_type) in
+          if is_kmalloc_function v then
+            let cond =
+              mkexpr
+                (JCPEbinary (mkexpr (JCPEapp (!name_of_nondet_int, [], [])) pos, `Bneq, zero_expr))
+                pos
+            in
+            JCPEif (cond, mkexpr alloc pos, null_expr)
+          else
+            alloc (* Unconditionally successful allocation *)
         else if is_calloc_function v then
           let nelem,elsize = match eargs with
             | [nelem;elsize] -> nelem,elsize
