@@ -371,7 +371,10 @@ class replaceStringConstants =
         let content_inv = content_inv ~loc s tv' in
         attach_invariant ("contents_of_" ^ vi.vname) vi.vdecl content_inv
     in
-    (match s with `String s -> memo_string s | `Wstring ws -> memo_wstring ws) fundec_opt loc (vi, attach_invariants);
+    (match s with `String s -> memo_string s | `Wstring ws -> memo_wstring ws)
+      fundec_opt
+      loc
+      (Some vi, attach_invariants);
     vi
   in
 
@@ -487,6 +490,50 @@ object(self)
 	  SkipChildren
 	else
 	  DoChildren
+    | GVar (_, { init = Some (CompoundInit (TArray (_, _, _, _), lst)) }, loc) ->
+      let content =
+        ListLabels.mapi lst
+          ~f:(fun i pair ->
+                match pair with
+                | Index ({ enode = Const (CInt64 (i', _, _)) }, NoOffset),
+                  SingleInit ({ enode = Const (CChr _ | CInt64 _ as c)
+                                      | CastE (_, { enode = Const (CChr _ | CInt64 _ as c) }) } as e)
+                  when i = Integer.to_int i' ->
+                  let c =
+                    match c with
+                    | CInt64 (c, _, _) when isCharType (typeOf e) -> CChr (Char.chr @@ Integer.to_int c)
+                    | _ -> c
+                  in
+                  Some c
+                | _ -> None)
+      in
+      let content = take (List.length content - 1) content in
+      (try
+        let s =
+          match List.hd content with
+          | Some (CChr _) ->
+            `String (string_implode @@ List.map (function Some (CChr c) -> c | _ -> raise @@ Failure "s") content)
+          | Some (CInt64 _) ->
+            `Wstring
+              (ListLabels.map content
+               ~f:(function Some (CInt64 (i, _, _)) -> Integer.to_int64 i | _ -> raise @@ Failure "s"))
+          | _ -> raise @@ Failure "s"
+        in
+        let attach_invariants ?(content=false) vi' =
+          if content then
+            attach_invariant
+              ("contents_of_" ^ vi'.vname)
+                vi'.vdecl @@
+                  content_inv ~loc s @@
+                    term_of_var vi'
+        in
+        (match s with `String s -> memo_string s | `Wstring ws -> memo_wstring ws)
+          self#current_func
+          loc
+          (None, attach_invariants);
+        DoChildren
+      with
+      | Failure "hd" | Failure "s" -> DoChildren)
     | _ -> DoChildren
 
 end
@@ -555,9 +602,11 @@ object
           vis
       in
       match vis with
-      | [vi', attach_invs] ->
+      | [vi'_opt, attach_invs] ->
         attach_invs ~content:(hasAttribute "invariant" vi.vattr) vi;
-        ChangeTo (SingleInit (mkAddrOfVi vi'))
+        (match vi'_opt with
+         | Some vi' -> ChangeTo (SingleInit (mkAddrOfVi vi'))
+         | None -> (Globals.Vars.find vi).init <- None; SkipChildren)
       | [] -> fatal "No matching literals found for proxy specification (variable %a)" Printer.pp_varinfo vi
       | _ -> fatal "Ambiguous literal proxy specification for variable %a" Printer.pp_varinfo vi
     else

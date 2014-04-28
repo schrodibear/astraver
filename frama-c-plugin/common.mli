@@ -66,6 +66,7 @@ val name_of_nondet_int : string ref
 val filter_alphanumeric : string -> (char * char) list -> char -> string
 
 val string_explode : string -> char list
+val string_implode : char list -> string
 
 val type_name:  Cil_types.typ -> string
 
