@@ -269,21 +269,6 @@ module Trie : sig
 
   (* GPL-licensed OCaml trie implementation from https://www.lri.fr/~filliatr/ftp/ocaml/ds/trie.ml.html *)
 
-  (**************************************************************************)
-  (*                                                                        *)
-  (*  Copyright (C) Jean-Christophe Filliatre                               *)
-  (*                                                                        *)
-  (*  This software is free software; you can redistribute it and/or        *)
-  (*  modify it under the terms of the GNU Library General Public           *)
-  (*  License version 2.1, with the special exception on linking            *)
-  (*  described in file LICENSE.                                            *)
-  (*                                                                        *)
-  (*  This software is distributed in the hope that it will be useful,      *)
-  (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
-  (*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
-  (*                                                                        *)
-  (**************************************************************************)
-
   (** This module implements {\em tries}. Given a map [M] over an
       arbitrary type [M.key], the following functor constructs a new map
       over type [M.key list]. *)
@@ -296,7 +281,6 @@ module Trie : sig
     val add : key -> 'a -> 'a t -> 'a t
     val find : key -> 'a t -> 'a
     val remove : key -> 'a t -> 'a t
-    val mem : key -> 'a t -> bool
     val iter : (key -> 'a -> unit) -> 'a t -> unit
     val map : ('a -> 'b) -> 'a t -> 'b t
     val mapi : (key -> 'a -> 'b) -> 'a t -> 'b t
