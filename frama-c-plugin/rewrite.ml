@@ -2890,6 +2890,8 @@ object
       let tfrom = typeOf efrom in
       if (isPointerType tfrom || isArrayType tfrom) &&
          (isPointerType tto || isArrayType tto) &&
+         let tto = typeDeepDropAllAttributes tto
+         and tfrom = typeDeepDropAllAttributes tfrom in
          not (subtype tto tfrom || subtype tfrom tto)
       then
         let void_ptr_type = typeAddAttributes (typeAttrs tfrom) voidConstPtrType in
