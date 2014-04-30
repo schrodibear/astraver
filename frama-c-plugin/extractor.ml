@@ -354,7 +354,7 @@ let collect file =
   let do_comp ci =
     List.iter
       (fun ({ ftype } as fi) ->
-        if F_set.mem fields fi then
+        if fi.faddrof || F_set.mem fields fi then
           match unrollType ftype with
           | TPtr _ | TArray _ -> add_from_type' ftype
           | _ -> add_from_type ftype)
