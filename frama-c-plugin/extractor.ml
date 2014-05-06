@@ -313,7 +313,7 @@ let get_annotated_funs () =
     (fun kf acc ->
       if Annotations.(
            not (is_empty_funspec (funspec kf)) ||
-           code_annot_of_kf kf <> [])
+           List.exists Common.(has_code_annot ~emitter:Emitter.end_user % fst) @@ code_annot_of_kf kf)
       then
         Kernel_function.(try get_definition kf :: acc
                          with No_Definition -> acc)
