@@ -140,7 +140,7 @@ val mkStructSingleton :
   ?padding:int ->
   string -> string -> Cil_types.typ -> Cil_types.compinfo
 
-val malloc_function : unit -> Cil_types.varinfo
+val malloc_function : ?kernel:bool -> unit -> Cil_types.varinfo
 val free_function : unit -> Cil_types.varinfo
 
 val flatten_multi_dim_array :  bool ref

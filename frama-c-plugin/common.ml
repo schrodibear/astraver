@@ -1503,14 +1503,26 @@ let rec lift_offset ty = function
 *)
 (* Allocation/deallocation *)
 
-let malloc_function () =
+let malloc_function ?(kernel=false) () =
+  let fname, params =
+    let size = "size", uintType, [] in
+    if not kernel then
+      name_of_malloc, Some [size]
+    else
+      name_of_kmalloc, Some [size; "flags", intType, []]
+  in
+  let typ = TFun (voidPtrType, params, false, []) in
   try
-    Kernel_function.get_vi (Globals.Functions.find_by_name "malloc")
+    let vi = Kernel_function.get_vi (Globals.Functions.find_by_name fname) in
+    if not @@ Typ.equal vi.vtype typ then begin
+      setReturnTypeVI vi voidPtrType;
+      setFormalsDecl vi typ;
+      raise Not_found
+    end;
+    vi
   with Not_found ->
-    let params = Some ["size",uintType,[]] in
     let f =
-      findOrCreateFunc
-	(Ast.get ()) "malloc" (TFun(voidPtrType,params,false,[]))
+      findOrCreateFunc (Ast.get ()) fname typ
     in
     let prm =
       try

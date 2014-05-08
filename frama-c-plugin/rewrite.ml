@@ -3299,13 +3299,37 @@ let from_comprehension_to_range behavior file =
 
 let declare_jessie_nondet_int file =
   visit_and_update_globals
-    (object
+    (object(self)
       inherit frama_c_inplace
+
+      method private fix_vartype ~loc:(source, _) = function
+        | Var vi, NoOffset ->
+            if not @@ isPointerType vi.vtype then begin
+              try
+                match (List.hd (the self#current_stmt).succs).skind with
+                | Instr (Set (_, { enode = CastE (t, _) }, _)) when isPointerType t ->
+                  vi.vtype <- t
+                | _ -> raise Exit
+              with
+                | Invalid_argument "Extlib.the"
+                | Failure "hd"
+                | Exit ->
+                  (* Cannot use Common.unsupported with ~source due to argument erasure *)
+                  Jessie_options.with_failure
+                    (fun evt -> raise (Unsupported evt.Log.evt_message))
+                    ~current:true
+                    ~source
+                    "unable to recognize type of the allocation";
+            end
+        | _ -> ()
+
       val mutable f_opt = None
       method! vinst =
         function
-        | Call(Some _, { enode = Lval (Var v, NoOffset) }, _, _)
+        | Call (Some lv, { enode = Lval (Var v, NoOffset) }, _, loc)
           when is_kmalloc_function v && f_opt = None ->
+          (* Add the declaration for kmalloc if it's absent: prevents return type to be implicitly treated as int *)
+          ignore @@ malloc_function ~kernel:true ();
           name_of_nondet_int := unique_name !name_of_nondet_int;
           let t = intType in
           f_opt <-
@@ -3318,6 +3342,11 @@ let declare_jessie_nondet_int file =
           attach_global @@ GVarDecl (fspec, f, Location.unknown);
           Globals.Functions.replace_by_declaration fspec f Location.unknown;
           Annotations.register_funspec ~emitter:jessie_emitter (Globals.Functions.get f);
+          self#fix_vartype ~loc lv;
+          SkipChildren
+        | Call (Some lv, { enode = Lval (Var v, NoOffset) }, _, loc)
+          when is_malloc_function v || is_kmalloc_function v || is_realloc_function v ->
+          self#fix_vartype ~loc lv;
           SkipChildren
         | _ -> SkipChildren
      end)

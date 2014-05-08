@@ -1863,11 +1863,16 @@ let instruction = function
           let lvtyp = pointed_type (typeOfLval lv) in
           let lvsiz = lv_size lvtyp in
           let arg =
-            if is_malloc_function v then as_singleton eargs
-            else if is_kmalloc_function v then 
-              match eargs with [ arg; _ ] -> arg | _ -> assert false
-            else (* realloc *)
-              match eargs with [ _; arg ] -> arg | _ -> assert false
+            try
+              if is_malloc_function v then as_singleton eargs
+              else if is_kmalloc_function v then 
+                match eargs with [ arg; _ ] -> arg | _ -> raise Exit
+              else (* realloc *)
+                match eargs with [ _; arg ] -> arg | _ -> raise Exit
+            with
+            | Invalid_argument "Extlib.as_singleton"
+            | Exit ->
+              unsupported "incorrect arguments for Jessie builtin allocation function %s" v.vname
           in
           let arg = stripInfo arg in
           let loc = arg.eloc in
