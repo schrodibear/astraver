@@ -44,26 +44,48 @@ module Queue = struct
   let is_empty q = Q.is_empty q
 end
 
-module Set_of_hashtbl (H : Hashtbl.S) = struct
-  type t = unit H.t
-  let create () = H.create 100
-  let add t k = H.replace t k ()
-  let mem t k = H.mem t k
-end
+module Set : sig
+  type 'a t
+  val create : (module Datatype.S_with_collections with type t = 'a) -> 'a t
+  val add : 'a t -> 'a -> unit
+  val mem : 'a t -> 'a -> bool
+  val ensure : on_add:('a -> unit) -> 'a t -> 'a -> unit
+end = struct
+  module type H = sig
+    type t
+    type key
+    val replace : t -> key -> unit -> unit
+    val mem : t -> key -> bool
+  end
 
-module T_set = Set_of_hashtbl(Cil_datatype.Typeinfo.Hashtbl)
-module C_set = Set_of_hashtbl(Cil_datatype.Compinfo.Hashtbl)
-module F_set = Set_of_hashtbl(Cil_datatype.Fieldinfo.Hashtbl)
-module E_set = Set_of_hashtbl(Cil_datatype.Enuminfo.Hashtbl)
-module V_set = Set_of_hashtbl(Cil_datatype.Varinfo.Hashtbl)
+  module Hide (H : Hashtbl.S) = struct
+    type t = unit H.t
+    type key = H.key
+    let create = H.create
+    let mem = H.mem
+    let replace = H.replace
+  end
+
+  type 'a t = Set : (module H with type key = 'a and type t = 'b) * 'b -> 'a t
+  let create (type key) (module S : Datatype.S_with_collections with type t = key) =
+    let module H = Hide (S.Hashtbl) in
+    Set ((module H), H.create 100)
+  let add (type elt) (Set ((module H), t) : elt t) k = H.replace t k ()
+  let mem (type elt) (Set ((module H), t) : elt t) k = H.mem t k
+  let ensure ~on_add t k =
+    if not (mem t k) then begin
+      on_add k;
+      add t k
+    end
+end
 
 module State = struct
   type state = {
-    types  : T_set.t;
-    comps  : C_set.t; (* Relevant composites for which members matter *)
-    fields : F_set.t; (* Unused fields are filtered *)
-    enums  : E_set.t;
-    vars   : V_set.t;
+    types  : typeinfo Set.t;
+    comps  : compinfo Set.t; (* Relevant composites for which members matter *)
+    fields : fieldinfo Set.t; (* Unused fields are filtered *)
+    enums  : enuminfo Set.t;
+    vars   : varinfo Set.t;
     fun_queue  : fundec Queue.t;
     typ_queue  : typeinfo Queue.t;
     comp_queue : compinfo Queue.t
@@ -72,12 +94,12 @@ end
 
 module Result = struct
   type result = {
-    types  : T_set.t;
-    comps  : C_set.t;
-    fields : F_set.t;
-    enums  : E_set.t;
-    vars   : V_set.t;
-    dcomps : C_set.t (* Dummy composites only used in pointer types of fields *)
+    types  : typeinfo Set.t;
+    comps  : compinfo Set.t;
+    fields : fieldinfo Set.t;
+    enums  : enuminfo Set.t;
+    vars   : varinfo Set.t;
+    dcomps : compinfo Set.t (* Dummy composites only used in pointer types of fields *)
   }
 end
 
@@ -89,17 +111,11 @@ class relevant_type_visitor
   method! vtype t =
     begin match t with
     | TNamed (ti, _) ->
-      if not (T_set.mem types ti) then begin
-        T_set.add types ti;
-        Queue.add typ_queue ti
-      end
+      Set.ensure types ti ~on_add:(Queue.add typ_queue)
     | TComp (ci, _, _) ->
-      if not (C_set.mem comps ci) then begin
-        C_set.add comps ci;
-        Queue.add comp_queue ci
-      end
+      Set.ensure comps ci ~on_add:(Queue.add comp_queue)
     | TEnum (ei, _) ->
-      E_set.add enums ei
+      Set.add enums ei
     | _ -> ()
     end;
     DoChildren
@@ -113,8 +129,8 @@ class dummy_type_visitor { State. enums } dcomps = object(self)
     begin match t with
     | TNamed (ti, _) -> (* Forcing recursion into the type-info. *)
       ignore (visitFramacType (self :> frama_c_visitor) ti.ttype)
-    | TComp (ci, _, _) -> C_set.add dcomps ci
-    | TEnum (ei, _) -> E_set.add enums ei
+    | TComp (ci, _, _) -> Set.add dcomps ci
+    | TEnum (ei, _) -> Set.add enums ei
     | _ -> ()
     end;
     DoChildren
@@ -140,8 +156,8 @@ let do_expr_post f do_not_touch e =
 
 (* Add the function to the queue for traversal. *)
 let do_fun { State. vars; fun_queue } add_from_type (vi, kf_opt) =
-  if not (V_set.mem vars vi) then begin
-    V_set.add vars vi;
+  if not (Set.mem vars vi) then begin
+    Set.add vars vi;
     let kf = opt_conv (Globals.Functions.get vi) kf_opt in
     Kernel_function.(
      try Queue.add fun_queue (get_definition kf)
@@ -152,13 +168,13 @@ let do_fun { State. vars; fun_queue } add_from_type (vi, kf_opt) =
 let add_var_if_global add_from_type state vi =
   if vi.vglob then begin
     add_from_type vi.vtype;
-    V_set.add state.State.vars vi
+    Set.add state.State.vars vi
   end
 
 let add_field { State. fields } off =
   begin match off with
   | Field (fi, _) ->
-    F_set.add fields fi
+    Set.add fields fi
   | Index _ | NoOffset -> ()
   end;
   off
@@ -330,17 +346,18 @@ let collect file =
         fun_queue;
         typ_queue;
         comp_queue } as state =
+      let open Cil_datatype in
       { State.
-        types = T_set.create ();
-        comps = C_set.create ();
-        fields = F_set.create ();
-        enums = E_set.create ();
-        vars = V_set.create ();
+        types = Set.create (module Typeinfo);
+        comps = Set.create (module Compinfo);
+        fields = Set.create (module Fieldinfo);
+        enums = Set.create (module Enuminfo);
+        vars = Set.create (module Varinfo);
         fun_queue = Queue.create ();
         typ_queue = Queue.create ();
         comp_queue = Queue.create () }
   in
-  let dcomps = C_set.create () in
+  let dcomps = Set.create (module Cil_datatype.Compinfo) in
   let add_from_type t =
     ignore
       (visitFramacType (new relevant_type_visitor state) t)
@@ -354,7 +371,7 @@ let collect file =
   let do_comp ci =
     List.iter
       (fun ({ ftype } as fi) ->
-        if fi.faddrof || F_set.mem fields fi then
+        if fi.faddrof || Set.mem fields fi then
           match unrollType ftype with
           | TPtr _ | TArray _ -> add_from_type' ftype
           | _ -> add_from_type ftype)
@@ -371,7 +388,7 @@ let collect file =
   (* Now add all annotated functions. *)
   List.iter
     (fun fundec ->
-       V_set.add vars fundec.svar;
+       Set.add vars fundec.svar;
        Queue.add fun_queue fundec)
     (get_annotated_funs ());
   while not (Queue.is_empty fun_queue) do
@@ -418,24 +435,24 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } = object
       | l -> l
     in
     function
-    | GType (ti, _) when T_set.mem types ti -> SkipChildren
-    | GCompTag (ci, _) | GCompTagDecl (ci, _) when C_set.mem comps ci ->
-      ci.cfields <- dummy_if_empty ci (List.filter (fun fi -> fi.faddrof || F_set.mem fields fi) ci.cfields);
+    | GType (ti, _) when Set.mem types ti -> SkipChildren
+    | GCompTag (ci, _) | GCompTagDecl (ci, _) when Set.mem comps ci ->
+      ci.cfields <- dummy_if_empty ci (List.filter (fun fi -> fi.faddrof || Set.mem fields fi) ci.cfields);
       ListLabels.iter ci.cfields
         ~f:(fun fi ->
              fi.fsize_in_bits <- None;
              fi.foffset_in_bits <- None;
              fi.fpadding_in_bits <- None);
       SkipChildren
-    | GCompTag (ci, _) | GCompTagDecl (ci, _) when C_set.mem dcomps ci ->
+    | GCompTag (ci, _) | GCompTagDecl (ci, _) when Set.mem dcomps ci ->
       (* The composite is dummy i.e. only used as an abstract type, so *)
       (* its precise contents isn't matter. *)
       ci.cfields <- dummy_if_empty ci [];
       SkipChildren
-    | GEnumTag (ei, _) | GEnumTagDecl (ei, _) when E_set.mem enums ei ->
+    | GEnumTag (ei, _) | GEnumTagDecl (ei, _) when Set.mem enums ei ->
       SkipChildren
     | GVarDecl (_, vi, _) | GVar (vi, _, _) | GFun ( { svar = vi }, _)
-      when V_set.mem vars vi ->
+      when Set.mem vars vi ->
       SkipChildren
     | GPragma _ -> SkipChildren
     | GText _ -> SkipChildren
