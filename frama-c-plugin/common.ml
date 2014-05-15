@@ -426,10 +426,6 @@ let is_predefined_name s = List.mem s predefined_name
 let is_assert_function v = isFunctionType v.vtype && v.vname = name_of_assert
 let is_free_function v = isFunctionType v.vtype && v.vname = name_of_free
 let is_kfree_function v = isFunctionType v.vtype && v.vname = name_of_kfree
-let is_special_free_function v =
-  isFunctionType v.vtype && (
-    String.length v.vname > 5 && Str.first_chars v.vname 5 = "free_" ||
-    String.length v.vname > 6 && Str.first_chars v.vname 6 = "kfree_")
 let is_malloc_function v = isFunctionType v.vtype && v.vname = name_of_malloc
 let is_kmalloc_function v = isFunctionType v.vtype && v.vname = name_of_kmalloc
 let is_kzalloc_function v = isFunctionType v.vtype && v.vname = name_of_kzalloc

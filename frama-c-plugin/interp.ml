@@ -1832,21 +1832,16 @@ let instruction = function
                    Aassert,locate (boolean_expr (as_singleton eargs)))
       else
         let enode =
-          let default_result () = 
+          if is_free_function v || is_kfree_function v then
+            let arg = as_singleton eargs in
+            let subarg = stripCasts arg in
+            let arg = if isPointerType (typeOf subarg) then subarg else arg in
+            JCPEfree(expr arg)
+          else
             JCPEapp(v.vname,[],
                     keep_only_declared_nb_of_arguments
                       v
                       (List.map expr eargs))
-          in
-          if is_free_function v || is_kfree_function v || is_special_free_function v then
-            let arg = as_singleton eargs in
-            let subarg = stripCasts arg in
-            let arg = if isPointerType (typeOf subarg) then subarg else arg in
-            let result = JCPEfree(expr arg) in
-            if not (is_special_free_function v) then result
-            else JCPEblock [mkexpr (default_result ()) pos; mkexpr result pos]
-          else
-            default_result ()
         in
         (locate (mkexpr enode pos))#node
 

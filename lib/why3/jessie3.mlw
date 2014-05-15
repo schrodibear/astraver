@@ -615,7 +615,7 @@ val alloc_val_ownership (a:ref (alloc_table 't))
 val free_val_ownership (a:ref (alloc_table 't)) (com:ref (memory 't bool))
     (p:pointer 't) :
   unit
-  requires { (*Cannot express yet offset_min a p = 0 /\*) 
+  requires { offset_min !a p = 0 /\
              offset_max !a p >= 0 /\ select !com p = False }
   reads    { com }
   writes   { a }
@@ -646,7 +646,7 @@ val safe_alloc_parameter (a:ref (alloc_table 't)) (tag:ref (tag_table 't))
 val free_parameter (a:ref (alloc_table 't)) (p:pointer 't) :
   unit
   requires { p = null (* allowed, see man 3 free *) \/
-  (*Cannot express yet offset_min a p = 0 /\*) offset_max !a p >= 0 }
+  offset_min !a p = 0 /\ offset_max !a p >= 0 }
   writes { a }
   ensures  { (p = null -> !a = (old !a)) /\ (p <> null ->
      alloc_extends_except (old !a) !a
