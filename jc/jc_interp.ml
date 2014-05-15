@@ -1425,7 +1425,8 @@ let assigns ~type_safe ?region_list before ef locs loc =
     StringMap.fold
       (fun v p acc ->
         if p then acc else
-          make_and acc (LPred("eq", [LVar v; lvar ~constant:false (* <<- CHANGE THIS *) ~label_in_name:false before v])))
+          let at = lvar ~constant:false (* <<- CHANGE THIS *) ~label_in_name:false in
+          make_and acc (LPred("eq", [at LabelPost v; at before v])))
       refs LTrue
   in
   MemoryMap.fold
