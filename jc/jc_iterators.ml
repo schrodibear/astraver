@@ -179,6 +179,8 @@ let replace_sub_pexpr e el =
 	let e1 = as1 el in JCPEalloc(e1,name)
     | JCPEfree _e ->
 	let e1 = as1 el in JCPEfree e1
+    | JCPEreinterpret (_e, st) ->
+        let e1 = as1 el in JCPEreinterpret (e1, st)
     | JCPEmutable(_e,tag) ->
 	let e1 = as1 el in JCPEmutable(e1,tag)
     | JCPEblock elist ->
@@ -294,6 +296,7 @@ module PExprAst = struct
       | JCPEbase_block(e)
       | JCPEalloc(e, _)
       | JCPEfree e
+      | JCPEreinterpret (e, _)
       | JCPElet(_, _,None, e)
       | JCPEreturn e
       | JCPEthrow(_, e)
@@ -1115,6 +1118,8 @@ let replace_sub_expr e el =
 	let e1 = as1 el in JCEalloc(e1,name)
     | JCEfree _e ->
 	let e1 = as1 el in JCEfree e1
+    | JCEreinterpret (_e, st) ->
+        let e1 = as1 el in JCEreinterpret (e1, st)
     | JCEblock elist ->
 	assert (List.length elist = List.length el);
 	JCEblock el
@@ -1167,6 +1172,7 @@ module ExprAst = struct
       | JCEbase_block(e)
       | JCEalloc(e, _)
       | JCEfree e
+      | JCEreinterpret (e, _)
       | JCElet(_, None, e)
       | JCEloop(_, e)
       | JCEreturn(_, e)
@@ -1230,6 +1236,7 @@ let fold_sub_expr_and_term_and_assertion
     | JCEassign_var(_,e1) 
     | JCEalloc(e1,_) 
     | JCEfree e1 
+    | JCEreinterpret (e1, _)
     | JCEreturn(_,e1) ->
 	ite acc e1
     | JCElet(_,e1_opt,e2) ->
@@ -1326,6 +1333,7 @@ module NExprAst = struct
       | JCNEbase_block(e)
       | JCNEalloc(e, _)
       | JCNEfree e
+      | JCNEreinterpret (e, _)
       | JCNElet(_, _, None, e)
       | JCNEassert(_,_,e)
       | JCNEreturn(Some e)

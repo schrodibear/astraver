@@ -672,7 +672,7 @@ let eval_integral_const e =
       | JCEinstanceof _ | JCEcast _ | JCEbitwise_cast _ | JCEreal_cast _
       | JCEoffset _ | JCEbase_block _
       | JCEaddress _
-      | JCEalloc _ | JCEfree _ | JCEmatch _ |JCEunpack _ |JCEpack _
+      | JCEalloc _ | JCEfree _ | JCEreinterpret _ | JCEmatch _ |JCEunpack _ |JCEpack _
       | JCEthrow _ | JCEtry _ | JCEreturn _ | JCEloop _ | JCEblock _
       | JCEcontract _ | JCEassert _ | JCEfresh _ 
       | JCElet _ | JCEassign_heap _ | JCEassign_var _ | JCEapp _
@@ -1593,7 +1593,7 @@ let rec const_int_expr e =
     | JCEif _ ->
 	None (* TODO *)
     | JCEconst _ | JCEinstanceof _ | JCEreal_cast _
-    | JCEalloc _ | JCEfree _ | JCEassert _
+    | JCEalloc _ | JCEfree _ | JCEreinterpret _ | JCEassert _
     | JCEcontract _ | JCEblock _ | JCEloop _
     | JCEreturn_void | JCEreturn _ | JCEtry _
     | JCEthrow _ | JCEpack _ | JCEunpack _
@@ -2433,6 +2433,62 @@ and expr e =
 	  in
 	  make_app free_fun [alloc; e1']
 
+
+    | JCEreinterpret (e, st) ->
+      let ac = deref_alloc_class ~type_safe:false e in
+      let alloc = plain_alloc_table_var (ac, e#region) in
+      let tag = plain_tag_table_var (struct_root st, e#region) in
+      let s = mk_var (tag_name st) in
+      let fi =
+        match st.jc_struct_info_fields with
+        | [fi] -> fi
+        | _ -> unsupported e#pos "reinterpretation for structure with several fields"
+      in
+      let mc, _ufi_opt = deref_mem_class ~type_safe:false e fi in
+      let mem = plain_memory_var (mc, e#region) in
+      let any = any_value e#region fi.jc_field_info_type in
+      let e' = expr e in
+      let call =
+        match !Jc_options.inv_sem with
+        | InvOwnership ->
+          let com = committed_name (pointer_class e#typ) in
+          make_app "reinterpret_parameter_ownership"
+            [alloc; mk_var com; tag; s; mem; e'; any]
+        | InvNone | InvArguments ->
+          let reinterpret_fun =
+            if safety_checking () then "reinterpret_parameter"
+                                  else "safe_reinterpret_parameter"
+          in
+          make_app reinterpret_fun
+            [alloc; tag; s; mem; e'; any]
+      in
+      let before = fresh_reinterpret_label () in
+      let call = make_label before.label_info_final_name call in
+
+      let before = LabelName before in
+      let at = lvar ~constant:false ~label_in_name:false in
+      let alloc = alloc_table_name (ac, e#region) in
+      let tag = tag_table_name (struct_root st, e#region) in
+      let e =
+        match term_of_expr e with
+        | Some e -> e
+        | None -> unsupported e#pos "the argument for reinterpret .. as should be an expression without side effects"
+      in
+      let e' =
+        term
+          ~type_safe:(safety_checking ())
+          ~global_assertion:false
+          ~relocate:false
+          before
+          LabelHere
+          e
+      in
+      let reinterpret_cast =
+        LPred ("reinterpret_cast",
+               [e'; at before alloc; at LabelHere alloc; at before tag; at LabelHere tag])
+      in
+      let assumption = mk_expr @@ Assert (`ASSUME, reinterpret_cast, void) in
+      append call assumption
 
     | JCEapp call ->
 	begin match call.jc_call_fun with

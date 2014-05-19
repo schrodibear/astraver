@@ -93,11 +93,11 @@
 /* && || => <=> ! */
 %token AMPAMP BARBAR EQEQGT LTEQEQGT EXCLAM
 
-/* if then else return while break for fo break continue case switch default goto */
+/* if then else return while for do break continue case switch default goto loop */
 %token IF THEN ELSE RETURN WHILE FOR DO BREAK CONTINUE CASE SWITCH DEFAULT GOTO LOOP
 
 /* exception of throw try catch finally new free let in var */
-%token EXCEPTION OF THROW TRY CATCH FINALLY NEW FREE LET IN VAR
+%token EXCEPTION OF THROW TRY CATCH FINALLY NEW FREE REINTERPRET LET IN VAR
 
 /* pack unpack assert */
 %token ABSTRACT PACK UNPACK ASSERT ASSUME HINT CHECK
@@ -753,6 +753,8 @@ expression:
     { locate (JCPEalloc ($4, $2)) }
 | FREE LPAR expression RPAR
     { locate (JCPEfree $3) }
+| REINTERPRET expression AS IDENTIFIER
+    { locate (JCPEreinterpret ($2, $4)) }
 | expression LT expression 
     { locate (JCPEbinary ($1, `Blt, $3)) }
 | expression GT expression

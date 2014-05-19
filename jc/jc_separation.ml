@@ -187,7 +187,7 @@ let single_expr rresult e =
        | JCEmatch(_, []) ->
 	   ()
        | JCEconst _ | JCEvar _ | JCEshift _ | JCEunary _
-       | JCEderef _ | JCEoffset _ | JCEaddress _ | JCEinstanceof _ | JCEcast _
+       | JCEderef _ | JCEoffset _ | JCEaddress _ | JCEinstanceof _ | JCEcast _ | JCEreinterpret _
        | JCEbitwise_cast _ | JCEbase_block _ | JCEfresh _
        | JCErange_cast _ | JCEreal_cast _ | JCEalloc _ | JCEfree _
        | JCElet(_,None,_) ->

@@ -118,7 +118,7 @@ type variant = term * string option
 
 type opaque = bool
 
-type assert_kind = [`ASSERT | `CHECK]
+type assert_kind = [`ASSERT | `CHECK | `ASSUME]
 
 type expr_node =
   | Cte of constant

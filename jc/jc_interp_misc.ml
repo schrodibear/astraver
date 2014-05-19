@@ -260,13 +260,17 @@ let get_current_fun () =
   match !current_fun with None -> assert false | Some s -> s
 *)
 
-let fresh_loop_label =
+let make_label_counter prefix =
   let c = ref 0 in
-  fun () -> incr c;
-    let n = "loop_" ^ string_of_int !c in
-    { label_info_name = n;
-      label_info_final_name = n;
+  fun () ->
+    incr c;
+    let name = prefix ^ string_of_int !c in
+    { label_info_name = name;
+      label_info_final_name = name;
       times_used = 1 }
+
+let fresh_loop_label = make_label_counter "loop_"
+let fresh_reinterpret_label = make_label_counter "l__before_reinterpret_"
 
 (******************************************************************************)
 (*                                   types                                    *)

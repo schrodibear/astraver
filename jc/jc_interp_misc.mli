@@ -94,7 +94,7 @@ val reset_current_fun : unit -> unit
   *)
 val fresh_loop_label : unit -> Jc_env.label_info
 
-
+val fresh_reinterpret_label : unit -> Jc_env.label_info
 
 
 (** {1 helpers for Output module} *)

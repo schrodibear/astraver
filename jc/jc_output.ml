@@ -395,6 +395,8 @@ let rec expr fmt e =
 	  fprintf fmt "(new %s[%a])" si.jc_struct_info_name expr e
       | JCEfree e ->
 	  fprintf fmt "(free(%a))" expr e
+      | JCEreinterpret (e, si) ->
+          fprintf fmt "(reinterpret %a as %s)" expr e si.jc_struct_info_name
       | JCElet(vi,Some e1,e2) -> 
 	  fprintf fmt "@[(let %s =@ %a@ in %a)@]" 
 	    vi.jc_var_info_name expr e1 expr e2

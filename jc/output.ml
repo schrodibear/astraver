@@ -935,7 +935,7 @@ type variant = term * string option
 
 type opaque = bool
 
-type assert_kind = [`ASSERT | `CHECK]
+type assert_kind = [`ASSERT | `CHECK | `ASSUME]
 
 type expr_node =
   | Cte of constant
@@ -1231,7 +1231,7 @@ let rec fprintf_expr_node in_app form e =
       fprintf form ")@]"
     | Assert(k,p, e) ->
 	fprintf form "@[<hov 0>(%s@ { %a };@ %a)@]"
-          (match k with `ASSERT -> "assert" | `CHECK -> "check")
+          (match k with `ASSERT -> "assert" | `ASSUME -> "assume" | `CHECK -> "check")
 	  fprintf_assertion p fprintf_expr e
     | BlackBox(t) ->
 	if !why3syntax then

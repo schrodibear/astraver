@@ -253,6 +253,7 @@ rule token = parse
   | "predicate"             { PREDICATE }
   | "reads"                 { READS }
   | "real"                  { REAL}
+  | "reinterpret"           { REINTERPRET }
   | "rep"                   { REP }
   | "requires"              { REQUIRES }
   | "return"                { RETURN }

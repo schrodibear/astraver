@@ -137,6 +137,8 @@ let rec pexpr fmt e =
 	fprintf fmt "(new %s[%a])" si pexpr e
     | JCPEfree (e) ->
 	fprintf fmt "(free(%a))" pexpr e
+    | JCPEreinterpret (e, id) ->
+        fprintf fmt "(reinterpret %a as %s)" pexpr e id
     | JCPEoffset(k,e) ->
 	fprintf fmt "\\offset_m%a(%a)" offset_kind k pexpr e
     | JCPEaddress(absolute,e) ->

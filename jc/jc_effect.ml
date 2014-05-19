@@ -1488,6 +1488,55 @@ let rec expr fef e =
 	   let ac = alloc_class_of_pointer_class pc in
 	   true,
 	   add_alloc_writes LabelHere fef (ac,e#region)
+       | JCEreinterpret (e, st) ->
+         (*  Current support for reinterpretation is very limited --
+          *  it's supported only for two-level type hierarchies (e.g. void * -- other pointers),
+          *  for pointers to structures with a single non-embedded field of an integral type.
+          *  So actually only conversions between char <--> short <--> int <--> long and such are supported. 
+          *)
+         let error msg = Jc_typing.typing_error e#pos ("Unsupported reinterpretation " ^^ msg) in
+         let check_equal (type t) (module O : OrderedType with type t = t) v1 v2 =
+           if O.equal v1 v2 then
+             v1
+           else
+             error "(types from different hierarchies)"
+         in
+         let check_singleton msg =
+           function
+           | [s] -> s
+           | _ -> error "for %s" msg
+         in
+         let pc =
+           match st.jc_struct_info_hroot.jc_struct_info_root with
+           | Some ri ->
+             begin try
+               check_equal (module PointerClass) (JCroot ri) @@ JCroot (pointer_class_root @@ pointer_class e#typ)
+             with
+             | Invalid_argument _ | Assert_failure _ -> error "(source type isn't a pointer or has no root)"
+             end
+           | None -> error "(destination type has no root)"
+         in
+         let fef =
+           let alloc_equal = check_equal (module AllocClass) in
+           let ac =
+             alloc_equal (alloc_class_of_pointer_class pc) @@ deref_alloc_class ~type_safe:true e
+           in
+           let ac =
+            alloc_equal ac @@
+              check_singleton "embedded fields" @@ all_allocs ~select:fully_allocated pc
+           in
+           add_alloc_writes LabelHere fef (ac, e#region)
+         in
+         let fef =
+           let ri = check_singleton "nested subtype" @@ all_tags ~select:fully_allocated pc in
+           add_tag_writes LabelHere fef (ri, e#region)
+         in
+         let fef =
+           let fi = check_singleton "several fields" @@ st.jc_struct_info_fields in
+           if not @@ is_integral_type fi.jc_field_info_type then error "for non-integral field";
+           add_memory_writes LabelHere fef (JCmem_field fi, e#region)
+         in
+         true, fef
        | JCEpack(st,e,_st) ->
 	   (* Assert the invariants of the structure
 	      => need the reads of the invariants *)

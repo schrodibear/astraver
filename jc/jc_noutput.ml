@@ -79,6 +79,8 @@ let rec expr fmt e =
         out "(TODO alloc)"
     | JCNEfree _e1 ->
         out "(TODO free)"
+    | JCNEreinterpret (_e1, _id) ->
+        out "(TODO reinterpret)"
     | JCNElet(Some pty, id, Some e1, e2) ->
         out "(@[<hv 2>let %a %s = %a in@ %a@])" ptype pty id expr e1 expr e2
     | JCNElet(Some pty, id, None, e1) ->

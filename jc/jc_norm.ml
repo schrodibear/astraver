@@ -226,7 +226,7 @@ let duplicable =
        | JCPEassert _ | JCPEthrow _ | JCPEreturn _ | JCPEeqtype _
        | JCPEbreak _ | JCPEcontinue _  | JCPEgoto _  | JCPEdecl _
        | JCPElabel _ | JCPEinstanceof _ | JCPEalloc _
-       | JCPEfree _ | JCPElet _ | JCPEpack _ | JCPEunpack _
+       | JCPEfree _ | JCPEreinterpret _ | JCPElet _ | JCPEpack _ | JCPEunpack _
        | JCPEquantifier _ | JCPEmutable _ | JCPEassign _
        | JCPEassign_op _ | JCPEif _ | JCPEwhile _ | JCPEblock _
        | JCPEapp _ | JCPEtry _ | JCPEmatch _ | JCPEfor _
@@ -582,6 +582,7 @@ let rec expr e =
 	JCNErange(Option_misc.map expr e1opt,Option_misc.map expr e2opt)
     | JCPEalloc(e,id) -> JCNEalloc(expr e,id)
     | JCPEfree e -> JCNEfree(expr e)
+    | JCPEreinterpret (e, id) -> JCNEreinterpret (expr e, id)
     | JCPEmutable(e,tag) -> JCNEmutable(expr e,tag_ tag)
     | JCPEeqtype(tag1,tag2) -> JCNEeqtype(tag_ tag1,tag_ tag2)
     | JCPEsubtype(tag1,tag2) -> JCNEsubtype(tag_ tag1,tag_ tag2)

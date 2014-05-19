@@ -735,7 +735,7 @@ let rec type_labels env ~result_label label e =
     | JCNEconst _ | JCNEderef _ | JCNEbinary _
     | JCNEunary _ | JCNEassign _ | JCNEinstanceof _ | JCNEcast _
     | JCNEif _ | JCNEoffset _ | JCNEaddress _ | JCNEbase_block _ | JCNEfresh _
-    | JCNEalloc _ | JCNEfree _ | JCNElet _
+    | JCNEalloc _ | JCNEfree _ | JCNEreinterpret _ | JCNElet _
     | JCNEassert _ | JCNEloop _ | JCNEreturn _ | JCNEtry _
     | JCNEthrow _ | JCNEpack _ | JCNEunpack _ | JCNEmatch _ | JCNEquantifier _
     | JCNEmutable _ | JCNEeqtype _ | JCNEsubtype _ | JCNErange _ ->
@@ -1151,7 +1151,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     | JCNErange(None, None) ->
         integer_type, dummy_region,JCTrange(None,None)
     (* Not terms: *)
-    | JCNEassign _ | JCNEalloc _ | JCNEfree _ | JCNEblock _ | JCNEassert _ | JCNEfresh _
+    | JCNEassign _ | JCNEalloc _ | JCNEfree _ | JCNEreinterpret _ | JCNEblock _ | JCNEassert _ | JCNEfresh _
     | JCNEloop _ | JCNEreturn _ | JCNEtry _ | JCNEthrow _ | JCNEpack _
     | JCNEunpack _ | JCNEquantifier _ | JCNEcontract _
     | JCNEeqtype _ | JCNEsubtype _ ->
@@ -1427,7 +1427,7 @@ let rec assertion env e =
           not_the_good_type te1#pos te1#typ "pointer expected"
     (* Not assertions: *)
     | JCNEoffset _ | JCNEaddress _ | JCNEbase_block _
-    | JCNErange _ | JCNEassign _ | JCNEalloc _ | JCNEfree _
+    | JCNErange _ | JCNEassign _ | JCNEalloc _ | JCNEfree _ | JCNEreinterpret _
     | JCNEassert _ | JCNEblock _ | JCNEloop _ | JCNEreturn _ | JCNEtry _
     | JCNEthrow _ | JCNEpack _ | JCNEunpack _ | JCNEbinary _ | JCNEunary _
     | JCNEcontract _ ->
@@ -1552,7 +1552,7 @@ let rec location_set env e =
     | JCNErange _ | JCNEeqtype _ | JCNEmutable _ | JCNEold _
     | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
     | JCNEtry _ |JCNEreturn _ | JCNEloop _ |JCNEblock _ | JCNEassert _
-    | JCNElet _ |JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEaddress _
+    | JCNElet _ |JCNEfree _ | JCNEalloc _ | JCNEreinterpret _ | JCNEoffset _ | JCNEaddress _
     | JCNEif _ | JCNEcast _ | JCNEbase_block _
     | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _
     | JCNEconst _ | JCNEcontract _ | JCNEsubtype _ ->
@@ -1596,7 +1596,7 @@ let rec location env e =
     | JCNErange _ | JCNEeqtype _ | JCNEmutable _ | JCNEold _
     | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
     | JCNEtry _ | JCNEreturn _ | JCNEloop _ | JCNEblock _ | JCNEassert _
-    | JCNElet _ | JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEaddress _
+    | JCNElet _ | JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEreinterpret _ | JCNEaddress _
     | JCNEif _ | JCNEcast _ | JCNEbase_block _
     | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _ | JCNEbinary _
     | JCNEconst _ | JCNEcontract _ | JCNEsubtype _ | JCNEfresh _ ->
@@ -2079,6 +2079,10 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         let te1 = fe e1 in
         let st = find_struct_info e#pos t in
         boolean_type, dummy_region, JCEinstanceof(te1, st)
+    | JCNEreinterpret (e1, t) ->
+      unit_type,
+      dummy_region,
+      JCEreinterpret (fe e1, find_struct_info e#pos t)
     | JCNEcast(e1, t) ->
        let te1 = fe e1 in
 	let ty = type_type t in
@@ -2809,68 +2813,103 @@ let check_positivity loc pi a =
 *)
 
 let rec term_occurrences table t =
+  let term = term_occurrences table in
   match t#node with
-    | JCTconst _
-    | JCTvar _ -> ()
-    | JCTrange_cast (t, _)
-    | JCTat (t, _)
-    | JCTunary (_, t)
-    | JCToffset (_, t, _)
-    | JCTderef (t, _, _) -> term_occurrences table t
-    | JCTbinary (t1, _, t2)
-    | JCTshift (t1, t2) ->
-	term_occurrences table t1; term_occurrences table t2
-    | JCTapp app ->
-      begin
-        List.iter (term_occurrences table) app.jc_app_args;
-	try
-	  let l = Hashtbl.find table app.jc_app_fun.jc_logic_info_tag in
-	  Hashtbl.replace table app.jc_app_fun.jc_logic_info_tag (app.jc_app_label_assoc::l)
-	with Not_found -> ()
-      end
-    | JCTlet (_, _, _) -> assert false (* TODO *)
-    | JCTmatch (_, _) -> assert false (* TODO *)
-    | JCTrange (_, _) -> assert false (* TODO *)
-    | JCTif (_, _, _) -> assert false (* TODO *)
-    | JCTreal_cast (t, _) -> term_occurrences table t
-    | JCTbitwise_cast (_, _, _) -> assert false (* TODO *)
-    | JCTcast (t, _lab, _si) -> term_occurrences table t
-    | JCTinstanceof (_, _, _) -> assert false (* TODO *)
-    | JCTbase_block t -> term_occurrences table t
-    | JCTaddress (_, _) -> assert false (* TODO *)
-    | JCTold _ -> assert false (* TODO *)
+  | JCTconst _
+  | JCTvar _ ->
+    ()
+  | JCTrange_cast (t, _)
+  | JCTat (t, _)
+  | JCTold t
+  | JCTaddress (_, t)
+  | JCTbase_block t
+  | JCTunary (_, t)
+  | JCToffset (_, t, _)
+  | JCTderef (t, _, _)
+  | JCTinstanceof (t, _, _)
+  | JCTcast (t, _, _)
+  | JCTreal_cast (t, _)
+  | JCTbitwise_cast (t, _, _) ->
+    term t
+  | JCTbinary (t1, _, t2)
+  | JCTshift (t1, t2)
+  | JCTlet (_, t1, t2) ->
+    term t1;
+    term t2
+  | JCTapp app ->
+    begin
+      List.iter term app.jc_app_args;
+      try
+        let li_tag = app.jc_app_fun.jc_logic_info_tag in
+        let labs = app.jc_app_label_assoc in
+        Hashtbl.(replace table li_tag @@ labs :: find table li_tag)
+      with Not_found -> ()
+    end
+  | JCTmatch (t, l) ->
+    term t;
+    List.iter (term % snd) l
+  | JCTrange (to1, to2) ->
+    Option_misc.(
+      iter term to1;
+      iter term to2)
+  | JCTif (t, t1, t2) ->
+    term t;
+    term t1;
+    term t2
 
 let rec occurrences table a =
+  let assertion = occurrences table in
+  let term = term_occurrences table in
+  let tag t =
+    match t#node with
+    | JCTtag _ | JCTbottom -> ()
+    | JCTtypeof (t, _) -> term_occurrences table t
+  in
   match a#node with
   | JCAtrue | JCAfalse -> ()
   | JCAapp app ->
-      begin
-        List.iter (term_occurrences table) app.jc_app_args;
-	try
-	  let l = Hashtbl.find table app.jc_app_fun.jc_logic_info_tag in
-	  Hashtbl.replace table app.jc_app_fun.jc_logic_info_tag (app.jc_app_label_assoc::l)
-	with Not_found -> ()
-      end
-  | JCAnot p
-  | JCAquantifier (_, _, _, p) -> occurrences table p
-  | JCAiff (p1, p2)
-  | JCAimplies (p1, p2) ->
-      occurrences table p1; occurrences table p2
+    begin
+      List.iter term app.jc_app_args;
+      try
+        let l = Hashtbl.find table app.jc_app_fun.jc_logic_info_tag in
+        Hashtbl.replace table app.jc_app_fun.jc_logic_info_tag (app.jc_app_label_assoc :: l)
+      with Not_found -> ()
+    end
+  | JCAnot a
+  | JCAquantifier (_, _, _, a)
+  | JCAold a
+  | JCAat (a, _) ->
+    assertion a
+  | JCAiff (a1, a2)
+  | JCAimplies (a1, a2) ->
+    assertion a1;
+    assertion a2
   | JCAand l | JCAor l ->
-      List.iter (occurrences table) l
-  | JCArelation(t1,_op,t2) ->
-      term_occurrences table t1; term_occurrences table t2
-  | JCAsubtype (_, _, _) -> assert false (* TODO *)
-  | JCAeqtype (_, _, _) -> assert false (* TODO *)
-  | JCAmutable (_, _, _) -> assert false (* TODO *)
-  | JCAif (_, _, _) -> assert false (* TODO *)
-  | JCAbool_term _ -> assert false (* TODO *)
-  | JCAinstanceof (t, _lab, _si) -> term_occurrences table t
-  | JCAold p
-  | JCAat (p, _) -> occurrences table p
-  | JCAlet (_, _, _) -> assert false (* TODO *)
-  | JCAmatch (_, _) -> assert false (* TODO *)
-  | JCAfresh _ -> assert false (* TODO *)
+    List.iter assertion l
+  | JCArelation(t1, _op, t2) ->
+    term t1;
+    term t2
+  | JCAsubtype (t1, t2, _)
+  | JCAeqtype (t1, t2, _) ->
+    tag t1;
+    tag t2
+  | JCAmutable (t, _, t') ->
+    term t;
+    tag t'
+  | JCAif (t, a1, a2) ->
+    term t;
+    assertion a1;
+    assertion a2
+  | JCAinstanceof (t, _, _)
+  | JCAbool_term t
+  | JCAfresh t ->
+    term t
+  | JCAlet (_, t, a) ->
+    term t;
+    assertion a
+  | JCAmatch (t, l) ->
+    term t;
+    List.iter (assertion % snd) l
 
 let rec list_assoc_data lab l =
   match l with

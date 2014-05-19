@@ -192,6 +192,7 @@ and pexpr_node =
   | JCPErange of pexpr option * pexpr option
   | JCPEalloc of pexpr * string
   | JCPEfree of pexpr
+  | JCPEreinterpret of pexpr * string
   | JCPEmutable of pexpr * pexpr ptag
   | JCPEeqtype of pexpr ptag * pexpr ptag
   | JCPEsubtype of pexpr ptag * pexpr ptag
@@ -309,6 +310,7 @@ type nexpr_node =
   | JCNEbase_block of nexpr
   | JCNEalloc of nexpr * string
   | JCNEfree of nexpr
+  | JCNEreinterpret of nexpr * string
   | JCNElet of ptype option * string * nexpr option * nexpr
   | JCNEassert of identifier list * asrt_kind * nexpr
   | JCNEcontract of
@@ -553,6 +555,7 @@ type ('li,'fi) expr_node =
   | JCEbase_block of ('li,'fi) expr
   | JCEalloc of ('li,'fi) expr * struct_info
   | JCEfree of ('li,'fi) expr
+  | JCEreinterpret of ('li, 'fi) expr * struct_info
   | JCEfresh of ('li,'fi) expr
   | JCElet of var_info * ('li,'fi) expr option * ('li,'fi) expr
   | JCEassert of identifier list * asrt_kind * 'li assertion
