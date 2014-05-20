@@ -58,8 +58,12 @@ val name_of_integral_type : ?bitsize:int -> Cil_types.typ -> string
 
 val name_of_assert : string
 val name_of_free : string
+val name_of_kfree : string
 val name_of_malloc : string
 val name_of_kmalloc : string
+val name_of_kzalloc : string
+val name_of_calloc : string
+val name_of_realloc : string
 
 val name_of_nondet_int : string ref
 

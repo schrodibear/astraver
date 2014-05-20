@@ -3327,7 +3327,7 @@ let declare_jessie_nondet_int file =
       method! vinst =
         function
         | Call (Some lv, { enode = Lval (Var v, NoOffset) }, _, loc)
-          when is_kmalloc_function v && f_opt = None ->
+          when (is_kmalloc_function v || is_kzalloc_function v) && f_opt = None ->
           (* Add the declaration for kmalloc if it's absent: prevents return type to be implicitly treated as int *)
           ignore @@ malloc_function ~kernel:true ();
           name_of_nondet_int := unique_name !name_of_nondet_int;
@@ -3345,7 +3345,8 @@ let declare_jessie_nondet_int file =
           self#fix_vartype ~loc lv;
           SkipChildren
         | Call (Some lv, { enode = Lval (Var v, NoOffset) }, _, loc)
-          when is_malloc_function v || is_kmalloc_function v || is_realloc_function v ->
+          when is_malloc_function v || is_kmalloc_function v || is_kzalloc_function v ||
+               is_realloc_function v ->
           self#fix_vartype ~loc lv;
           SkipChildren
         | _ -> SkipChildren
@@ -3357,6 +3358,10 @@ let declare_jessie_nondet_int file =
 (*****************************************************************************)
 
 let rewrite file =
+  (* Insert declarations for kmalloc and jessie_nondet_int if necessary *)
+  Jessie_options.debug "Inserting declaration for jessie_nondet_int (if necessary)";
+  declare_jessie_nondet_int file;
+  if checking () then check_types file;
   (* Add definitions for undefined composite tags in extract mode. *)
   if Jessie_options.Extract.get () then
     begin
@@ -3478,9 +3483,6 @@ let rewrite file =
   if checking () then check_types file;
   Jessie_options.debug "Checking if there are unsupported predicates";
   remove_unsupported file;
-  if checking () then check_types file;
-  Jessie_options.debug "Inserting declaration for jessie_nondet_int (if necessary)";
-  declare_jessie_nondet_int file;
   if checking () then check_types file
 
 (*

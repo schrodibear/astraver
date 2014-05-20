@@ -2409,13 +2409,15 @@ let rec annotation is_axiomatic annot =
       []
   | Dcustom_annot _ -> Common.unsupported "custom annotation"
   | Daxiomatic(id,l,pos) ->
-      CurrentLoc.set pos;
-      (*
-	Format.eprintf "Translating axiomatic %s into jessie code@." id;
-      *)
-      let l = List.fold_left (fun acc d -> (annotation true d)@acc) [] l in
-      [JCDaxiomatic(id,List.map (fun d -> mkdecl  d pos)
-                      (List.rev l))]
+      if not (Filename.basename (fst pos).Lexing.pos_fname = blockfuns_include_file_name) then begin
+        CurrentLoc.set pos;
+        (*
+	  Format.eprintf "Translating axiomatic %s into jessie code@." id;
+        *)
+        let l = List.fold_left (fun acc d -> (annotation true d)@acc) [] l in
+        [JCDaxiomatic(id,List.map (fun d -> mkdecl  d pos)
+                        (List.rev l))]
+      end else []
 
 let default_field_modifiers = (false,false)
 
@@ -2567,12 +2569,33 @@ let global vardefs g =
     | GEnumTagDecl _ -> [] (* No enumeration declaration in Jessie *)
 
     | GVarDecl(_,v,pos) ->
+        let excluded_function_names =
+          [name_of_valid_string;
+           name_of_valid_wstring;
+           name_of_assert;
+           name_of_free;
+           name_of_kfree;
+           name_of_malloc;
+           name_of_kmalloc;
+           name_of_kzalloc;
+           name_of_calloc;
+           name_of_realloc]
+        in
+        let has_specialization vi =
+          try
+            ignore @@ Globals.Functions.find_by_name (vi.vname ^ "__type");
+            true
+          with Not_found -> false
+        in
+        let is_specialization_template vi =
+          Filename.basename (fst vi.vdecl).Lexing.pos_fname = blockfuns_include_file_name
+        in
         (* Keep only declarations for which there is no definition *)
-        if List.mem v vardefs
-          || (isFunctionType v.vtype &&
-                (v.vname = name_of_assert
-                    || v.vname = name_of_free
-                    || v.vname = name_of_malloc))
+        if List.mem v vardefs ||
+           (isFunctionType v.vtype &&
+             (List.mem v.vname excluded_function_names ||
+              is_specialization_template v ||
+              has_specialization v))
         then []
         else if isFunctionType v.vtype then
           let rtyp = match unrollType v.vtype with

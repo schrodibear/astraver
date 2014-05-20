@@ -416,12 +416,14 @@ let predefined_name =
   [ (* coding functions *)
     name_of_assert;
     name_of_malloc;
+    name_of_kmalloc;
+    name_of_kzalloc;
     name_of_calloc;
     name_of_realloc;
     name_of_free;
   ]
 
-let is_predefined_name s = List.mem s predefined_name
+let is_predefined_name s = List.mem s predefined_name || s = !name_of_nondet_int
 
 let is_assert_function v = isFunctionType v.vtype && v.vname = name_of_assert
 let is_free_function v = isFunctionType v.vtype && v.vname = name_of_free
