@@ -821,8 +821,9 @@ let specialize_memset file =
 class kzalloc_expanding_visitor = object
   inherit frama_c_inplace
 
-  method! vinst = function
-    | Call ((Some lv as lv_opt), { enode = Lval (Var fv, NoOffset); eloc }, ([size; _] as args), loc)
+  method! vstmt stmt =
+    match stmt.skind with
+    | Instr (Call ((Some lv as lv_opt), { enode = Lval (Var fv, NoOffset); eloc }, ([size; _] as args), loc))
       when is_kzalloc_function fv ->
         let get_function name =
           try Kernel_function.get_vi (Globals.Functions.find_by_name name)
@@ -833,9 +834,20 @@ class kzalloc_expanding_visitor = object
         in
         let vi_kmalloc = get_function name_of_kmalloc in
         let vi_memset = get_function "memset" in
-        ChangeTo
-          ([ Call (lv_opt, evar ~loc:eloc vi_kmalloc, args, loc);
-             Call (None, evar ~loc:eloc vi_memset, [new_exp ~loc (Lval lv); zero ~loc; size], loc) ])
+        let lv = new_exp ~loc (Lval lv) in
+        let z = zero ~loc in
+        stmt.skind <-
+          Block
+            (mkBlock
+              [mkStmt @@ Instr (Call (lv_opt, evar ~loc:eloc vi_kmalloc, args, loc));
+               mkStmt @@
+                 If
+                   (mkBinOp ~loc Ne lv z,
+                    mkBlock
+                     [mkStmt @@ Instr (Call (None, evar ~loc:eloc vi_memset, [lv; z; size], loc))],
+                    mkBlock [mkStmt @@ Instr (Skip loc)],
+                    loc)]);
+        SkipChildren
     | _ -> SkipChildren
 end
 
