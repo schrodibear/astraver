@@ -1055,7 +1055,7 @@ object(self)
                   Dfun_or_pred (li, loc)
               | _ -> fatal "Can't specialize unknown logic info in axiomatic: %s" name)
             in
-            let g = Daxiomatic (name, lst, loc) in
+            let g = Daxiomatic (name, lst, Location.unknown) in
             new_globals <- GAnnot (g, CurrentLoc.get ()) :: new_globals;
             Annotations.add_global jessie_emitter g;
             self#update_logic_info _type li
