@@ -47,16 +47,18 @@ let variant_of_alloc_class = function
   | JCalloc_root vi -> vi
   | JCalloc_bitvector -> assert false (* no variant *)
 
-let variant_of_mem_class = variant_of_alloc_class $ alloc_class_of_mem_class
+let variant_of_mem_class = variant_of_alloc_class % alloc_class_of_mem_class
 
 (* keep the pointers only and return their pointer_class *)
-let fields_pointer_class = List.flatten $
-  (List.map
-     (fun fi -> match fi.jc_field_info_type with
-	| JCTpointer(pc, _, _) -> [pc]
-	| _ -> []))
+let fields_pointer_class =
+  List.flatten %
+    List.map
+      (fun fi ->
+         match fi.jc_field_info_type with
+	 | JCTpointer(pc, _, _) -> [pc]
+	 | _ -> [])
 
-let embedded_field fi = 
+let embedded_field fi =
   match fi.jc_field_info_type with
     | JCTpointer(_fpc, Some _fa, Some _fb) -> true
     | _ -> false

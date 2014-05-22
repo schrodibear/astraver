@@ -3154,7 +3154,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
             in
 	    reset_return_label ();
             let b = Option_misc.map
-	      (unit_expr $ expr (("\\result",vi)::param_env)) body
+	      (unit_expr % expr (("\\result",vi)::param_env)) body
 	    in
 	    fi.jc_fun_info_has_return_label <- get_return_label ();
             IntHashtblIter.add functions_table fi.jc_fun_info_tag (fi,loc,s,b);

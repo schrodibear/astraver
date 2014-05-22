@@ -160,6 +160,36 @@ let valid_pred_name ~equal ~left ~right ac pc =
   in
   prefix ^ "_" ^ (pointer_class_name pc)
 
+type ('a, 'b) arg = (assertion, term, 'a, 'b) Jc_env.arg
+
+let fresh_pred_name (type t) : arg:(t, 'a) arg -> 'b -> 'c =
+  fun ~arg ac pc ->
+  let prefix =
+    match ac with
+    | JCalloc_root _ ->
+      "fresh" ^ (match arg with Singleton -> "_singleton" | Range_0_n -> "")
+    | JCalloc_bitvector -> "fresh_bitvector" (* TODO *)
+  in
+  prefix ^ "_" ^ (pointer_class_name pc)
+
+let instanceof_pred_name (type t) : arg:(t, 'a) arg -> 'b -> 'c =
+  fun ~arg ac pc ->
+  let prefix =
+    match ac with
+    | JCalloc_root _ ->
+      "instanceof" ^ (match arg with Singleton -> "_singleton" | Range_l_r -> "")
+    | JCalloc_bitvector -> "instanceof_bitvector" (* TODO *)
+  in
+  prefix ^ "_" ^ (pointer_class_name pc)
+
+let alloc_extends_pred_name ac pc =
+  let prefix =
+    match ac with
+    | JCalloc_root _ -> "alloc_extends"
+    | JCalloc_bitvector -> "alloc_extends_bitvector" (* TODO *)
+  in
+  prefix ^ "_" ^ (pointer_class_name pc)
+
 let alloc_param_name ~check_size ac pc = 
   let prefix = match ac with
     | JCalloc_root _ -> "alloc"
@@ -223,6 +253,7 @@ let unique_name =
     with Not_found ->
       Hashtbl.add unique_names s (ref 0); s
 
+let old_name s = "old_" ^ s
 
 (*
 Local Variables: 

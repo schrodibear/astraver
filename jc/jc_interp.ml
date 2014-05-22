@@ -486,6 +486,14 @@ let tr_struct st acc =
 	:: make_valid_pred ~in_param ~equal:false ac pc
 	:: make_valid_pred ~in_param ~equal:false ~right:false ac pc
 	:: make_valid_pred ~in_param ~equal:false ~left:false ac pc
+
+        :: make_fresh_pred ~arg:Range_0_n ac pc
+        :: make_fresh_pred ~arg:Singleton ac pc
+
+        :: make_instanceof_pred ~arg:Range_l_r ac pc
+        :: make_instanceof_pred ~arg:Singleton ac pc
+
+        :: make_alloc_extends_pred ac pc
 (*
 	:: make_valid_pred ~in_param ~equal:true (* TODO ? *) JCalloc_bitvector pc
 *)
@@ -2479,8 +2487,8 @@ and expr e =
           ~type_safe:(safety_checking ())
           ~global_assertion:false
           ~relocate:false
-          before
           LabelHere
+          before
           e
       in
       let reinterpret_cast =

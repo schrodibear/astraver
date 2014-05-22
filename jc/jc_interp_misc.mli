@@ -191,6 +191,12 @@ val make_valid_pred : in_param:bool -> equal:bool ->
            ?right:bool ->
            Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
 
+val make_fresh_pred : arg:('a, [`R0_n]) Jc_name.arg -> Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
+
+val make_instanceof_pred : arg:('a, [`Rl_r]) Jc_name.arg -> Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
+
+val make_alloc_extends_pred : Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
+
 val make_valid_pred_app : in_param:bool -> equal:bool ->
            Jc_env.alloc_class * Jc_region.RegionTable.key ->
            Jc_env.pointer_class ->

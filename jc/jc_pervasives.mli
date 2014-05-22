@@ -35,9 +35,25 @@ open Jc_envset
 open Jc_ast
 open Jc_fenv
 
-val ( $ ): ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
-
 val ( % ): ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
+
+val dup2 : 'a -> 'a * 'a
+
+val fdup2 : ('a -> 'b) -> ('a -> 'c) -> 'a -> 'b * 'c
+
+val map_fst : ('a -> 'c) -> 'a * 'b -> 'c * 'b
+
+val map_snd : ('b -> 'c) -> 'a * 'b -> 'a * 'c
+
+val map_pair : ('a -> 'b) -> 'a * 'a -> 'b * 'b
+
+val map_pair2 : ('a -> 'b) -> ('c -> 'd) -> 'a * 'c -> 'b * 'd
+
+val curry : ('a * 'b -> 'c) -> 'a ->  'b -> 'c
+
+val uncurry : ('a -> 'b -> 'c) -> ('a * 'b) -> 'c
+
+val range : int -> [< `Downto | `To ] -> int -> int list
 
 val id: 'a -> 'a
 

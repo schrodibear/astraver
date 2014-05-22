@@ -43,11 +43,45 @@ open Jc_constructors
 open Format
 open Num
 
-let ( $ ) = fun f g x -> f(g x)
-
 let ( % ) f g x = f (g x)
 
 let id x = x
+
+let dup2 a = a, a
+
+let fdup2 f g x = f x, g x
+
+let map_fst f (a, b) = f a, b
+
+let map_snd f (a, b) = a, f b
+
+let map_pair f (a, b) = f a, f b
+
+let map_pair2 f g (a, b) = f a, g b
+
+let uncurry f (a, b) = f a b
+
+let curry f a b = f (a, b)
+
+let range i dir j =
+  try
+    let op =
+      match dir with
+      | `To ->
+        if i <= j then pred
+                  else raise Exit
+      | `Downto ->
+        if i >= j then succ
+                  else raise Exit
+    in
+    let rec loop acc k =
+      if i = k then
+        k :: acc
+      else
+        loop (k :: acc) (op k)
+    in
+     loop [] j
+  with Exit -> []
 
 exception Error of Loc.position * string
 

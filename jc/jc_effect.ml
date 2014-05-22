@@ -1517,13 +1517,12 @@ let rec expr fef e =
            | None -> error "(destination type has no root)"
          in
          let fef =
-           let alloc_equal = check_equal (module AllocClass) in
            let ac =
-             alloc_equal (alloc_class_of_pointer_class pc) @@ deref_alloc_class ~type_safe:true e
+             check_equal (module AllocClass) (alloc_class_of_pointer_class pc) @@ deref_alloc_class ~type_safe:true e
            in
            let ac =
-            alloc_equal ac @@
-              check_singleton "embedded fields" @@ all_allocs ~select:fully_allocated pc
+             check_equal (module AllocClass) ac @@
+               check_singleton "embedded fields" @@ all_allocs ~select:fully_allocated pc
            in
            add_alloc_writes LabelHere fef (ac, e#region)
          in

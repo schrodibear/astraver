@@ -171,6 +171,12 @@ type mem_class =
   | JCmem_plain_union of root_info
   | JCmem_bitvector
 
+(* The first type parmeter specifies the return function type while the second specifies the function domain *) 
+type ('assertion, 'term, 'a, 'b) arg =
+  | Singleton : ('assertion, 'term, 'assertion, [< `R0_n | `Rl_r]) arg
+  | Range_0_n : ('assertion, 'term, 'term -> 'assertion, [`R0_n]) arg
+  | Range_l_r : ('assertion, 'term, 'term -> 'term -> 'assertion, [`Rl_r]) arg
+
 (*
 Local Variables: 
 compile-command: "unset LANG ; make -C .. byte"
