@@ -105,6 +105,7 @@ let interprocedural = ref false
 let main = ref ""
 let trust_ai = ref false
 let fast_ai = ref false
+let forall_inst_bound = ref 10
 
 let gen_frame_rule_with_ft = ref false
 
@@ -158,6 +159,8 @@ let _ =
 (*           "  <box,oct,pol,wp,boxwp,octwp,polwp> performs annotation inference" *)
 (*           ^ " with abstract interpretation using the Box, Octagon" *)
 (*           ^ " or Polyhedron domain, or with weakest preconditions or with both"; *)
+        "-forall-inst-bound", Arg.Set_int forall_inst_bound,
+          "  bound on the number of expressions resulting from unrolling some forall quantifiers";
 	"-main", Arg.Tuple [Arg.Set interprocedural; Arg.Set_string main],
 	  "  main function for interprocedural abstract interpretation (needs -ai <domain>)";
 	"-fast-ai", Arg.Set fast_ai,
@@ -214,6 +217,7 @@ let inv_sem = inv_sem
 let separation_sem = separation_sem
 let trust_ai = !trust_ai
 let fast_ai = !fast_ai
+let forall_inst_bound = !forall_inst_bound
 
 let verify_all_offsets = !verify_all_offsets
 let verify_invariants_only = !verify_invariants_only

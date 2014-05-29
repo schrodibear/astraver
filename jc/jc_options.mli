@@ -76,6 +76,7 @@ val float_model : Jc_env.float_model ref
 val float_instruction_set : Jc_env.float_instruction_set ref
 val trust_ai : bool
 val fast_ai : bool
+val forall_inst_bound: int
 
 val gen_frame_rule_with_ft : bool
 

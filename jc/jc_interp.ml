@@ -481,11 +481,11 @@ let tr_struct st acc =
       let pc = JCtag(st,[]) in
       let ac = alloc_class_of_pointer_class pc in
       let in_param = false in
-	(* Validity parameters *)
-	make_valid_pred ~in_param ~equal:true ac pc
-	:: make_valid_pred ~in_param ~equal:false ac pc
-	:: make_valid_pred ~in_param ~equal:false ~right:false ac pc
-	:: make_valid_pred ~in_param ~equal:false ~left:false ac pc
+        (* Validity parameters *)
+           make_valid_pred ~in_param ~equal:true ac pc
+        :: make_valid_pred ~in_param ~equal:false ac pc
+        :: make_valid_pred ~in_param ~equal:false ~right:false ac pc
+        :: make_valid_pred ~in_param ~equal:false ~left:false ac pc
 
         :: make_fresh_pred ~arg:Range_0_n ac pc
         :: make_fresh_pred ~arg:Singleton ac pc
@@ -495,16 +495,18 @@ let tr_struct st acc =
 
         :: make_alloc_extends_pred ac pc
 (*
-	:: make_valid_pred ~in_param ~equal:true (* TODO ? *) JCalloc_bitvector pc
+        :: make_valid_pred ~in_param ~equal:true (* TODO ? *) JCalloc_bitvector pc
 *)
-	  (* Allocation parameters *)
-	:: make_alloc_param ~check_size:true ac pc
-	:: make_alloc_param ~check_size:false ac pc
+        (* Allocation parameters *)
+        :: make_alloc_param ~arg:Singleton ~check_size:true ac pc
+        :: make_alloc_param ~arg:Singleton ~check_size:false ac pc
+        :: make_alloc_param ~arg:Range_0_n ~check_size:true ac pc
+        :: make_alloc_param ~arg:Range_0_n ~check_size:false ac pc
 (*
-	:: make_alloc_param ~check_size:true JCalloc_bitvector pc
-	:: make_alloc_param ~check_size:false JCalloc_bitvector pc
+        :: make_alloc_param ~check_size:true JCalloc_bitvector pc
+        :: make_alloc_param ~check_size:false JCalloc_bitvector pc
 *)
-	:: (if Region.exists_bitwise () then make_conversion_params pc else [])
+        :: (if Region.exists_bitwise () then make_conversion_params pc else [])
         @ acc
   in
 
@@ -2403,28 +2405,34 @@ and expr e =
     | JCEderef(e1,fi) ->
   	make_deref e#mark e#pos e1 fi
     | JCEalloc(e1,st) ->
-	let e1' = expr e1 in
-	let ac = deref_alloc_class ~type_safe:false e in
-        let alloc = plain_alloc_table_var (ac,e#region) in
-	let pc = JCtag(st,[]) in
-	let args = alloc_arguments (ac,e#region) pc in
+        let e1' = expr e1 in
+        let ac = deref_alloc_class ~type_safe:false e in
+        let alloc = plain_alloc_table_var (ac, e#region) in
+        let pc = JCtag(st,[]) in
         if !Jc_options.inv_sem = InvOwnership then
-          let tag = plain_tag_table_var (struct_root st,e#region) in
+          let tag = plain_tag_table_var (struct_root st, e#region) in
           let mut = mutable_name pc in
           let com = committed_name pc in
           make_app "alloc_parameter_ownership"
             [alloc; mk_var mut; mk_var com; tag; mk_var (tag_name st);
              coerce ~check_int_overflow:(safety_checking())
-	       e1#mark e1#pos integer_type
-	       e1#typ e1 e1']
-	else
-          make_guarded_app e#mark
-            AllocSize e#pos
-            (alloc_param_name ~check_size:(safety_checking()) ac pc)
-            (coerce ~check_int_overflow:(safety_checking())
-	       e1#mark e1#pos integer_type
-	       e1#typ e1 e1'
-             :: args)
+               e1#mark e1#pos integer_type
+               e1#typ e1 e1']
+        else
+          let args = alloc_arguments (ac, e#region) pc in
+          (match e1#node with
+           | JCEconst JCCinteger s
+             when (try let n = int_of_string s in n == 1 with Failure "int_of_string" -> false) ->
+             make_app (alloc_param_name ~arg:Singleton ~check_size:(safety_checking()) ac pc) args
+           | _ ->
+             make_guarded_app e#mark
+               AllocSize e#pos
+               (alloc_param_name ~arg:Range_0_n ~check_size:(safety_checking()) ac pc)
+               (coerce ~check_int_overflow:(safety_checking())
+                 e1#mark e1#pos integer_type
+                 e1#typ e1 e1'
+               :: args))
+
     | JCEfree e1 ->
 	let e1' = expr e1 in
 	let ac = deref_alloc_class ~type_safe:false e1 in
@@ -4495,22 +4503,24 @@ let tr_root rt acc =
 		  Ref_type(Base_type mem)) :: acc
       in
       let in_param = false in
-	(* Validity parameters *)
-	make_valid_pred ~in_param ~equal:true ac pc
-	:: make_valid_pred ~in_param ~equal:false ac pc
-	:: make_valid_pred ~in_param ~equal:false ~right:false ac pc
-	:: make_valid_pred ~in_param ~equal:false ~left:false ac pc
+        (* Validity parameters *)
+           make_valid_pred ~in_param ~equal:true ac pc
+        :: make_valid_pred ~in_param ~equal:false ac pc
+        :: make_valid_pred ~in_param ~equal:false ~right:false ac pc
+        :: make_valid_pred ~in_param ~equal:false ~left:false ac pc
 (*
         :: make_valid_pred ~in_param ~equal:false (* TODO ? *) JCalloc_bitvector pc
 *)
-	  (* Allocation parameter *)
-	:: make_alloc_param ~check_size:true ac pc
-	:: make_alloc_param ~check_size:false ac pc
+        (* Allocation parameter *)
+        :: make_alloc_param ~arg:Singleton ~check_size:true ac pc
+        :: make_alloc_param ~arg:Singleton ~check_size:false ac pc
+        :: make_alloc_param ~arg:Range_0_n ~check_size:true ac pc
+        :: make_alloc_param ~arg:Range_0_n ~check_size:false ac pc
 (*
-	:: make_alloc_param ~check_size:true JCalloc_bitvector pc
-	:: make_alloc_param ~check_size:false JCalloc_bitvector pc
+        :: make_alloc_param ~check_size:true JCalloc_bitvector pc
+        :: make_alloc_param ~check_size:false JCalloc_bitvector pc
 *)
-	:: acc
+        :: acc
     else
       make_valid_pred ~in_param:false ~equal:true ac pc
       :: make_valid_pred ~in_param:false ~equal:false ac pc

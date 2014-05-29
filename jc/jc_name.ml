@@ -160,9 +160,9 @@ let valid_pred_name ~equal ~left ~right ac pc =
   in
   prefix ^ "_" ^ (pointer_class_name pc)
 
-type ('a, 'b) arg = (assertion, term, 'a, 'b) Jc_env.arg
+type ('a, 'b, 'c, 'd) arg = (term, assertion, 'a, 'b, 'c, 'd) Jc_env.arg
 
-let fresh_pred_name (type t) : arg:(t, 'a) arg -> 'b -> 'c =
+let fresh_pred_name (type t1) (type t2) (type t3) : arg:(_, t1, t2, t3) arg -> _ =
   fun ~arg ac pc ->
   let prefix =
     match ac with
@@ -172,7 +172,7 @@ let fresh_pred_name (type t) : arg:(t, 'a) arg -> 'b -> 'c =
   in
   prefix ^ "_" ^ (pointer_class_name pc)
 
-let instanceof_pred_name (type t) : arg:(t, 'a) arg -> 'b -> 'c =
+let instanceof_pred_name (type t1) (type t2) (type t3) : arg:(_, t1, t2, t3) arg -> _ =
   fun ~arg ac pc ->
   let prefix =
     match ac with
@@ -190,9 +190,11 @@ let alloc_extends_pred_name ac pc =
   in
   prefix ^ "_" ^ (pointer_class_name pc)
 
-let alloc_param_name ~check_size ac pc = 
+let alloc_param_name (type t1) (type t2) (type t3) : arg:(_, t1, t2, t3) arg -> _ =
+  fun ~arg ~check_size ac pc ->
   let prefix = match ac with
-    | JCalloc_root _ -> "alloc"
+    | JCalloc_root _ ->
+      "alloc" ^ (match arg with Singleton -> "_singleton" | Range_0_n -> "")
     | JCalloc_bitvector -> "alloc_bitvector"
   in
   let n = prefix ^ "_" ^ (pointer_class_name pc) in

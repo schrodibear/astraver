@@ -191,9 +191,13 @@ val make_valid_pred : in_param:bool -> equal:bool ->
            ?right:bool ->
            Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
 
-val make_fresh_pred : arg:('a, [`R0_n]) Jc_name.arg -> Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
+type abstr
 
-val make_instanceof_pred : arg:('a, [`Rl_r]) Jc_name.arg -> Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
+val make_fresh_pred :
+  arg:([`Range_0_n | `Singleton], abstr, _, _) Jc_name.arg -> Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
+
+val make_instanceof_pred :
+  arg:([`Range_l_r | `Singleton], abstr, _, _) Jc_name.arg -> Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
 
 val make_alloc_extends_pred : Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
 
@@ -203,8 +207,9 @@ val make_valid_pred_app : in_param:bool -> equal:bool ->
            Output.term ->
            Output.term option -> Output.term option -> Output.assertion
 
-val make_alloc_param : check_size:bool ->
-           Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
+val make_alloc_param : 
+   arg:([`Range_0_n | `Singleton], abstr, _, _) Jc_name.arg -> check_size:bool ->
+      Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
 
 val make_conversion_params : Jc_env.pointer_class -> Output.why_decl list
 

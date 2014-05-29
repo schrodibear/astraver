@@ -952,166 +952,14 @@ let rewrite_effects ~type_safe ~params ef =
 
 let const_of_num n = LConst(Prim_int(Num.string_of_num n))
 
+let const_of_int i = LConst (Prim_int (string_of_int i))
+
 let define_locals ?(reads=[]) ?(writes=[]) e' =
-  let e' =
-    List.fold_left
-      (fun acc (n,ty') -> mk_expr (Let(n,any_value' ty',acc)))
-      e' reads
-  in
-  let e' =
-    List.fold_left
-      (fun acc (n,ty') -> mk_expr (Let_ref(n,any_value' ty',acc)))
-      e' writes
-  in
+  let e' = List.fold_left (fun acc (n, ty') -> mk_expr (Let (n, any_value' ty', acc))) e' reads in
+  let e' = List.fold_left (fun acc (n,ty') -> mk_expr (Let_ref (n, any_value' ty', acc))) e' writes in
   e'
 
-(* Validity *)
-
-let make_valid_pred_app ~in_param ~equal (ac, r) pc p ao bo =
-  assert (in_param = in_param);
-  let all_allocs = match ac with
-    | JCalloc_bitvector -> [ ac ]
-    | JCalloc_root rt ->
-	match rt.jc_root_info_kind with
-	  | Rvariant
-	  | RdiscrUnion -> all_allocs ~select:fully_allocated pc
-	  | RplainUnion -> [ ac ]
-  in
-  let allocs =
-    List.map (fun ac ->
-                (*
-                  let v = alloc_table_name(ac,r) in
-                  if in_param then LDeref v else LVar v
-                *)
-                let is_not_cte,v =
-                  talloc_table_var ~label_in_name:false LabelHere (ac,r)
-                in
-                match v with
-                  | LDeref x ->
-                      assert is_not_cte;
-                      assert in_param;
-                      if is_not_cte then v else LVar x
-                  | LVar x ->
-                      assert (not is_not_cte);
-                     (*  assert (not in_param); *)
-                      (* if in_param then *) LDeref x (* else v *)
-                  | _ -> assert false
-             ) all_allocs
-  in
-  let all_mems = match ac with
-    | JCalloc_bitvector -> []
-    | JCalloc_root rt ->
-	match rt.jc_root_info_kind with
-	  | Rvariant
-	  | RdiscrUnion -> all_memories ~select:fully_allocated pc
-	  | RplainUnion -> []
-  in
-  let mems =
-    List.map (fun mc ->
-                tmemory_var ~label_in_name:false LabelHere (mc,r))
-      all_mems
-  in
-  let params = allocs @ mems in
-  let f x acc = x :: acc in
-  let params = Option_misc.fold f bo params in
-  let params = Option_misc.fold f ao params in
-  LPred (valid_pred_name ~equal ~left:(ao <> None) ~right:(bo <> None) ac pc, p :: params)
-
-(*
-If T is a structure:
-   valid_T(p, a, b, allocs ...) =
-     if T is root:
-       offset_min(alloc_i, p) == a &&
-       offset_max(alloc_i, p) == b
-     else if S is the direct superclass of T:
-       valid_S(p, a, b, allocs ...)
-     and for all field (T'[a'..b'] f) of p,
-       valid_T'(p.f, a', b', allocs ...)
-If T is a variant, then we only have the condition on offset_min and max.
-*)
-let make_valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
-  let p = "p" in
-  let a = "a" in
-  let b = "b" in
-  let params =
-    let all_allocs = match ac with
-      | JCalloc_bitvector -> [ ac ]
-      | JCalloc_root rt ->
-	  match rt.jc_root_info_kind with
-	    | Rvariant
-	    | RdiscrUnion -> all_allocs ~select:fully_allocated pc
-	    | RplainUnion -> [ ac ]
-    in
-    let allocs =
-      List.map (fun ac -> generic_alloc_table_name ac,alloc_table_type ac)
-	all_allocs
-    in
-    let all_mems = match ac with
-      | JCalloc_bitvector -> []
-      | JCalloc_root rt ->
-	  match rt.jc_root_info_kind with
-	    | Rvariant
-	    | RdiscrUnion -> all_memories ~select:fully_allocated pc
-	    | RplainUnion -> []
-    in
-    let mems =
-      List.map (fun mc -> generic_memory_name mc,memory_type mc) all_mems
-    in
-    let p = p, pointer_type ac pc in
-    let a = a, why_integer_type in
-    let b = b, why_integer_type in
-    let params = allocs @ mems in
-    let params = if right then b :: params else params in
-    let params = if left then a :: params else params in
-      p :: params
-  in
-  let validity =
-    let omin, omax, super_valid = match pc with
-      | JCtag ({ jc_struct_info_parent = Some(st, pp) }, _) ->
-          LTrue,
-          LTrue,
-          make_valid_pred_app ~in_param ~equal
-	    (ac,dummy_region) (JCtag(st, pp)) (LVar p)
-	    (if left then Some (LVar a) else None)
-	    (if right then Some (LVar b) else None)
-      | JCtag ({ jc_struct_info_parent = None }, _)
-      | JCroot _ ->
-          (if equal then make_eq else make_le) (make_offset_min ac (LVar p)) (LVar a),
-          (if equal then make_eq else make_ge) (make_offset_max ac (LVar p)) (LVar b),
-          LTrue
-    in
-    let fields_valid = match ac with
-      | JCalloc_bitvector -> [ LTrue ]
-      | JCalloc_root rt ->
-	  match rt.jc_root_info_kind with
-	    | Rvariant ->
-		begin match pc with
-		  | JCtag(st,_) ->
-		      List.map
-			(function
-			   | { jc_field_info_type =
-				 JCTpointer(fpc, Some fa, Some fb) } as fi ->
-			       make_valid_pred_app ~in_param ~equal (ac,dummy_region) fpc
-				 (make_select_fi fi (LVar p))
-				 (if left then Some (const_of_num fa) else None)
-				 (if right then Some (const_of_num fb) else None)
-			   | _ ->
-			       LTrue)
-			st.jc_struct_info_fields
-		  | JCroot _ -> [ LTrue ]
-		end
-	    | RdiscrUnion
-	    | RplainUnion -> [ LTrue ]
-    in
-    let validity = super_valid :: fields_valid in
-    let validity = if right then omax :: validity else validity in
-    let validity = if left then omin :: validity else validity in
-      make_and_list validity
-  in
-  Predicate(false, id_no_loc (valid_pred_name ~equal ~left ~right ac pc),
-	    params, validity)
-
-(* Freshness *)
+(* Helper functions *)
 
 (* Returns all alloc classes for the struct and all its nested embeded fields *)
 let all_allocs_ac ac pc =
@@ -1151,20 +999,6 @@ let deref_if_needed ~in_param lab (is_not_cte, v) =
                 else v
   | t -> failwith @@ asprintf "deref_if_needed got unexpected expression: %a" fprintf_term t
 
-let make_fresh_pred_app (type t) : arg:(t, 'a) arg -> in_param:'b -> 'c -> 'd -> 'f -> t =
-  fun ~arg ~in_param (ac, r) pc p ->
-  let allocs =
-    ListLabels.map
-      (all_allocs_ac ac pc)
-      ~f:(fun ac ->
-            deref_if_needed ~in_param LabelOld @@ talloc_table_var ~label_in_name:false LabelHere (ac, r))
-  in
-  let mems = List.map (fun mc -> tmemory_var ~label_in_name:false LabelHere (mc, r)) @@ all_mems_ac ac pc in
-  let params = allocs @ mems in
-  match arg with
-   | Singleton -> LPred (fresh_pred_name ~arg ac pc, p :: params)
-   | Range_0_n -> fun n -> LPred (fresh_pred_name ~arg ac pc, p :: n :: params)
-
 let map_st ~f ac pc =
   match ac with
   | JCalloc_bitvector -> []
@@ -1192,24 +1026,120 @@ let map_embedded_fields ~f ac =
                   end
                 | _ -> []))
 
+(* Validity *)
+
+let make_valid_pred_app ~in_param ~equal (ac, r) pc p ao bo =
+  let allocs =
+    ListLabels.map (all_allocs_ac ac pc)
+      ~f:(fun ac -> talloc_table_var ~label_in_name:false LabelHere (ac, r) |> deref_if_needed ~in_param LabelHere)
+  in
+  let mems = List.map (fun mc -> tmemory_var ~label_in_name:false LabelHere (mc, r)) @@ all_mems_ac ac pc in
+  let params = allocs @ mems in
+  let f x acc = x :: acc in
+  let params = Option_misc.fold f bo params in
+  let params = Option_misc.fold f ao params in
+  LPred (valid_pred_name ~equal ~left:(ao <> None) ~right:(bo <> None) ac pc, p :: params)
+
+(* If T is a structure:
+     valid_T(p, a, b, allocs ...) =
+       if T is root:
+         offset_min(alloc_i, p) == a &&
+         offset_max(alloc_i, p) == b
+       else if S is the direct superclass of T:
+         valid_S(p, a, b, allocs ...)
+       and for all field (T'[a'..b'] f) of p,
+         valid_T'(p.f, a', b', allocs ...)
+  If T is a variant, then we only have the condition on offset_min and max. *)
+let make_valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
+  let p = "p" in
+  let a = "a" in
+  let b = "b" in
+  let params =
+    let allocs = List.map (fdup2 generic_alloc_table_name alloc_table_type) @@ all_allocs_ac ac pc in
+    let mems = List.map (fdup2 generic_memory_name memory_type) @@ all_mems_ac ac pc in
+    let p = p, pointer_type ac pc in
+    let a = a, why_integer_type in
+    let b = b, why_integer_type in
+    let params = allocs @ mems in
+    let params = if right then b :: params else params in
+    let params = if left then a :: params else params in
+    p :: params
+  in
+  let validity =
+    let omin, omax, super_valid =
+      match pc with
+      | JCtag ({ jc_struct_info_parent = Some(st, pp) }, _) ->
+        let super_valid =
+          make_valid_pred_app ~in_param ~equal
+            (ac, dummy_region) (JCtag (st, pp)) (LVar p)
+            (if left then Some (LVar a) else None)
+            (if right then Some (LVar b) else None)
+        in
+        LTrue, LTrue, super_valid
+      | JCtag ({ jc_struct_info_parent = None }, _)
+      | JCroot _ ->
+        (if equal then make_eq else make_le) (make_offset_min ac (LVar p)) (LVar a),
+        (if equal then make_eq else make_ge) (make_offset_max ac (LVar p)) (LVar b),
+        LTrue
+    in
+    let fields_valid =
+      List.flatten @@
+        map_embedded_fields ac pc
+          ~f:(`Deref (LVar p,
+                      fun acr fpc p fa fb ->
+                        [make_valid_pred_app ~in_param ~equal acr fpc p
+                          (if left then Some (const_of_num fa) else None)
+                          (if right then Some (const_of_num fb) else None)]))
+    in
+    let validity = super_valid :: fields_valid in
+    let validity = if right then omax :: validity else validity in
+    let validity = if left then omin :: validity else validity in
+    make_and_list validity
+  in
+  Predicate(false, id_no_loc (valid_pred_name ~equal ~left ~right ac pc), params, validity)
+
+(* Freshness *)
+
+let make_fresh_pred_app (type t1) (type t2) (type t3) : arg:(_, t1, t2, t3) arg -> in_param:_ -> _ -> _ -> _ -> t3 =
+  fun ~arg ~in_param (ac, r) pc p ->
+  let allocs =
+    ListLabels.map
+      (all_allocs_ac ac pc)
+      ~f:(fun ac ->
+            deref_if_needed ~in_param LabelOld @@ talloc_table_var ~label_in_name:false LabelHere (ac, r))
+  in
+  let mems = List.map (fun mc -> tmemory_var ~label_in_name:false LabelHere (mc, r)) @@ all_mems_ac ac pc in
+  let params = allocs @ mems in
+  match arg with
+   | Singleton -> LPred (fresh_pred_name ~arg ac pc, p :: params)
+   | Range_0_n -> fun n -> LPred (fresh_pred_name ~arg ac pc, p :: n :: params)
+
 let make_forall_i_in_range l r f p =
   let i = "i" in
       LForall (i, why_integer_type, [],
         LImpl (make_and (LPred ("ge_int", [l; LVar i])) @@ LPred ("lt_int", [LVar i; r]),
                make_and_list @@ f @@ LApp ("shift", [LVar p; LVar i])))
 
-let const_of_int i = LConst (Prim_int (string_of_int i))
+type abstr = string
 
-let make_fresh_pred (type t) : arg : (t, 'a) arg -> 'b -> 'c -> 'd =
+let make_fresh_pred (type t1) (type t2) : arg : (_, abstr, t1, t2) arg -> _ =
   fun ~arg ac pc ->
   let p = "p" in
-  let n = "n" in
+  let n : t1 =
+    match arg with
+    | Singleton -> ()
+    | Range_0_n -> "n"
+  in
   let params =
     let p = p, pointer_type ac pc in
-    let n = n, why_integer_type in
+    let n =
+      match arg with
+      | Singleton -> []
+      | Range_0_n -> [(n : string), why_integer_type]
+    in
     let allocs = List.map (fdup2 generic_alloc_table_name alloc_table_type) @@ all_allocs_ac ac pc in
     let mems = List.map (fdup2 generic_memory_name memory_type) @@ all_mems_ac ac pc in
-    p :: n :: allocs @ mems
+    p :: n @ allocs @ mems
   in
   let super_fresh =
     match pc with
@@ -1221,9 +1151,11 @@ let make_fresh_pred (type t) : arg : (t, 'a) arg -> 'b -> 'c -> 'd =
       end
     | JCtag ({ jc_struct_info_parent = None }, _)
     | JCroot _ ->
-        let alloc = generic_alloc_table_name ac in
-        LPred ("alloc_fresh",
-               [LVar alloc; LVar p; match arg with Singleton -> const_of_int 1 | Range_0_n -> LVar n])
+      let alloc = generic_alloc_table_name ac in
+      let fresh_pred n = LPred ("alloc_fresh", [LVar alloc; LVar p; n]) in
+      match arg with
+      | Singleton -> make_and (fresh_pred @@ const_of_int 1) @@ LNot (LPred ("valid", [LVar alloc; LVar p]))
+      | Range_0_n -> fresh_pred (LVar n)
   in
   let fields_fresh p =
     List.flatten @@
@@ -1232,7 +1164,7 @@ let make_fresh_pred (type t) : arg : (t, 'a) arg -> 'b -> 'c -> 'd =
               let open Num in
               if l <=/ Int 0 then
                 (* WARNING: Here we neglect the possibly negative left bound, that's generally wrong *)
-                if r <=/ Int 10 then
+                if r <=/ Int Jc_options.forall_inst_bound then
                   (* An optimization, use several alloc_fresh for singletons avoiding foralls *)
                   let fresh p =
                     make_fresh_pred_app ~arg:Singleton ~in_param:false acr pc p
@@ -1249,7 +1181,7 @@ let make_fresh_pred (type t) : arg : (t, 'a) arg -> 'b -> 'c -> 'd =
   match arg with
   | Singleton ->
     let freshness = make_and_list @@ super_fresh :: fields_fresh (LVar p) in
-    Predicate (false, id_no_loc (fresh_pred_name ~arg ac pc), List.remove_assoc n params, freshness)
+    Predicate (false, id_no_loc (fresh_pred_name ~arg ac pc), params, freshness)
   | Range_0_n ->
     (* WARNING: Here we neglect the possibly negative left bound, that's generally wrong *)
     let fields_fresh = make_forall_i_in_range (const_of_int 0) (LVar n) fields_fresh p in
@@ -1258,7 +1190,7 @@ let make_fresh_pred (type t) : arg : (t, 'a) arg -> 'b -> 'c -> 'd =
 
 (* Instanceof *)
 
-let make_instanceof_pred_app (type t) : arg:(t, 'a) arg -> in_param:'b -> 'c -> 'd -> 'e -> t =
+let make_instanceof_pred_app (type t1) (type t2) (type t3) : arg:(_, t1 , t2, t3) arg -> in_param:_ -> _ -> _ -> _ -> t3 =
   fun ~arg ~in_param (ac, r) pc p ->
   let allocs =
     ListLabels.map
@@ -1272,18 +1204,24 @@ let make_instanceof_pred_app (type t) : arg:(t, 'a) arg -> in_param:'b -> 'c -> 
   | Singleton -> LPred (instanceof_pred_name ~arg ac pc, p :: params)
   | Range_l_r -> fun l r -> LPred (instanceof_pred_name ~arg ac pc, p :: l :: r :: params)
 
-let make_instanceof_pred (type t) : arg : (t, 'a) arg -> 'b -> 'c -> 'd =
+let make_instanceof_pred (type t1) (type t2) : arg : (_, abstr, t1, t2) arg -> _ =
   fun ~arg ac pc ->
   let p = "p" in
-  let l = "l" in
-  let r = "r" in
+  let l_r : t1 =
+    match arg with
+    | Singleton -> ()
+    | Range_l_r -> "l", "r"
+  in
   let params =
     let p = p, pointer_type ac pc in
-    let l = l, why_integer_type in
-    let r = r, why_integer_type in
+    let l_r =
+      match arg with
+      | Singleton -> []
+      | Range_l_r -> List.map (fun a -> a, why_integer_type) [fst l_r; snd l_r]
+    in
     let tags = List.map (fdup2 (tag_table_name % fun vi -> vi, dummy_region) tag_table_type) @@ all_tags_ac ac pc in
     let mems = List.map (fdup2 generic_memory_name memory_type) @@  all_mems_ac ac pc in
-    p :: l :: r :: tags @ mems
+    p :: l_r @ tags @ mems
   in
   let self_instanceof p =
     map_st ac pc
@@ -1296,7 +1234,7 @@ let make_instanceof_pred (type t) : arg : (t, 'a) arg -> 'b -> 'c -> 'd =
       map_embedded_fields ac pc
         ~f:(`Deref (p, fun acr pc p l r ->
               let open Num in
-              if r -/ l >=/ Int 0 && l -/ r <=/ Int 10 then
+              if r -/ l >=/ Int 0 && l -/ r <=/ Int Jc_options.forall_inst_bound then
                 let instanceof p =
                   make_instanceof_pred_app ~arg:Singleton ~in_param:false acr pc p
                 in
@@ -1311,11 +1249,10 @@ let make_instanceof_pred (type t) : arg : (t, 'a) arg -> 'b -> 'c -> 'd =
   match arg with
   | Singleton ->
     let instanceof = make_and_list @@ self_instanceof (LVar p) @ fields_instanceof (LVar p) in
-    let params = List.(remove_assoc l @@ remove_assoc r @@ params) in
     Predicate (false, id_no_loc (instanceof_pred_name ~arg ac pc), params, instanceof)
   | Range_l_r ->
     let instanceof =
-      make_forall_i_in_range (LVar l) (LVar r) (uncurry (@) % fdup2 self_instanceof fields_instanceof) p
+      make_forall_i_in_range (LVar (fst l_r)) (LVar (snd l_r)) (uncurry (@) % fdup2 self_instanceof fields_instanceof) p
     in
     Predicate (false, id_no_loc (instanceof_pred_name ~arg ac pc), params, instanceof)
 
@@ -1367,117 +1304,95 @@ let make_alloc_extends_pred ac pc =
 
 (* Allocation *)
 
-let alloc_write_parameters (ac,r) pc =
-  let all_allocs = match ac with
-    | JCalloc_bitvector -> [ ac ]
-    | JCalloc_root rt ->
-	match rt.jc_root_info_kind with
-	  | Rvariant
-	  | RdiscrUnion -> all_allocs ~select:fully_allocated pc
-	  | RplainUnion -> [ ac ]
-  in
-  let allocs =
-    List.map (fun ac -> plain_alloc_table_var (ac,r), alloc_table_type ac)
-      all_allocs
-  in
-  let all_tags = match ac with
-    | JCalloc_bitvector -> []
-    | JCalloc_root rt ->
-	match rt.jc_root_info_kind with
-	  | Rvariant
-	  | RdiscrUnion -> [ rt ]
-	  | RplainUnion -> []
-  in
-  let tags =
-    List.map (fun vi -> plain_tag_table_var (vi,r), tag_table_type vi)
-      all_tags
-  in
+let alloc_write_parameters (ac, r) pc =
+  let allocs = List.map (fdup2 (fun ac -> plain_alloc_table_var (ac, r)) alloc_table_type) @@ all_allocs_ac ac pc in
+  let tags = List.map (fdup2 (fun vi -> plain_tag_table_var (vi, r)) tag_table_type) @@ all_tags_ac ac pc in
   allocs @ tags
 
-let alloc_read_parameters (ac,r) pc =
-  let all_mems = match ac with
-    | JCalloc_bitvector -> []
-    | JCalloc_root rt ->
-	match rt.jc_root_info_kind with
-	  | Rvariant
-	  | RdiscrUnion -> all_memories ~select:fully_allocated pc
-	  | RplainUnion -> []
-  in
+let alloc_read_parameters (ac, r) pc =
   let mems =
-    List.map
-      (fun mc ->
-	 memory_var ~test_current_function:true (mc,r), memory_type mc)
-      all_mems
+    List.map (fdup2 (fun mc -> memory_var ~test_current_function:true (mc, r)) memory_type) @@
+      all_mems_ac ac pc
   in
   mems
 
-let alloc_arguments (ac,r) pc =
-  let writes = alloc_write_parameters (ac,r) pc in
-  let reads = alloc_read_parameters (ac,r) pc in
-  List.map fst writes @ List.map fst reads
+let alloc_arguments (ac, r) pc =
+  let writes = alloc_write_parameters (ac, r) pc in
+  let reads = alloc_read_parameters (ac, r) pc in
+  List.map fst (writes @ reads)
 
-let make_alloc_param ~check_size ac pc =
-  let n = "n" in
+let make_alloc_param (type t1) (type t2) : arg:(_, abstr, t1, t2) arg -> _ =
+  fun ~arg ~check_size ac pc ->
+  let error = failwith % asprintf "unexpected parameter expression in make_alloc_param: %a" fprintf_expr in
+  let n : t1 =
+    match arg with
+    | Singleton -> ()
+    | Range_0_n -> "n"
+  in
   (* parameters and effects *)
-  let writes = alloc_write_parameters (ac,dummy_region) pc in
-  let write_effects =
-    List.map (function ({ expr_node = Var n},_ty') -> n | _ -> assert false) writes
-  in
-  let write_params =
-    List.map (fun (n,ty') -> (n,Ref_type(Base_type ty'))) writes
-  in
-  let reads = alloc_read_parameters (ac,dummy_region) pc in
-  let read_params =
-    List.map (fun (n,ty') -> (n,Base_type ty')) reads
-  in
-  let params = [ (mk_var n,Base_type why_integer_type) ] in
-  let params = params @ write_params @ read_params in
+  let writes = alloc_write_parameters (ac, dummy_region) pc in
+  let write_effects = List.map (function ({ expr_node = Var n }, _ty') -> n | (e, _) -> error e) writes in
+  let write_params = List.map (fun (n, ty') -> (n, Ref_type (Base_type ty'))) writes in
+  let reads = alloc_read_parameters (ac, dummy_region) pc in
+  let read_params = List.map (fun (n, ty') -> (n, Base_type ty')) reads in
   let params =
-    List.map (function ({expr_node = Var n},ty') -> (n,ty') | _ -> assert false) params
+    match arg with
+    | Singleton -> []
+    | Range_0_n -> [(mk_var n, Base_type why_integer_type)]
   in
+  let params = params @ write_params @ read_params in
+  let params = List.map (function ({expr_node = Var n}, ty') -> (n, ty') | (e, _) -> error e) params in
   (* precondition *)
   let pre =
-    if check_size then LPred("ge_int",[LVar n;LConst(Prim_int "0")])
-    else LTrue
+    match arg with
+    | Singleton -> LTrue
+    | Range_0_n ->
+      if check_size then LPred ("ge_int", [LVar n; const_of_int 0])
+      else LTrue
   in
   (* postcondition *)
-  let l = LConst (Prim_int "0") in
-  let r = LApp ("sub_int", [LVar n; LConst (Prim_int "1")]) in
   let instanceof_post =
-    map_st ac pc
-      ~f:(fun _ ->
-           [make_instanceof_pred_app ~arg:Range_l_r ~in_param:true (ac, dummy_region) pc (LVar "result") l r])
+    let f = make_instanceof_pred_app ~in_param:true (ac, dummy_region) pc (LVar "result") in
+    let f =
+      match arg with
+      | Singleton -> fun _ -> [f ~arg:Singleton]
+      | Range_0_n -> fun _ -> [f ~arg:Range_l_r (const_of_int 0) @@ LVar n]
+    in
+    map_st ~f ac pc
   in
   let alloc_type =
-    Annot_type(
-      (* [n >= 0] *)
+    Annot_type
+     ((* [n >= 0] *)
       pre,
       (* argument pointer type *)
-      Base_type(pointer_type ac pc),
+      Base_type (pointer_type ac pc),
       (* reads and writes *)
       [], write_effects,
       (* normal post *)
       make_and_list (
-	[
-          (* [valid_st(result,0,n-1,alloc...)] *)
-          make_valid_pred_app ~in_param:true ~equal:true (ac,dummy_region) pc (LVar "result") (Some l) (Some r);
-          (* [alloc_extends(old(alloc),alloc)] *)
-          (*LPred("alloc_extends",[LDerefAtLabel(alloc,"");LDeref alloc])*)
-          make_alloc_extends_pred_app ~in_param:true (ac, dummy_region) pc;
-          (* [alloc_fresh(old(alloc),result,n)] *)
-          (*LPred("alloc_fresh",[LDerefAtLabel(alloc,"");LVar "result";LVar n])*)
-          make_fresh_pred_app ~arg:Range_0_n ~in_param:true (ac, dummy_region) pc (LVar "result") (LVar n)
-	]
-	@ instanceof_post ),
+        [(* [valid_st(result, 0, n-1, alloc ...)] *)
+         (let f =
+            make_valid_pred_app ~in_param:true ~equal:true (ac,dummy_region) pc (LVar "result") (Some (const_of_int 0))
+          in
+          match arg with
+          | Singleton -> f @@ Some (const_of_int 0)
+          | Range_0_n -> f @@ Some (LApp ("sub_int", [LVar n; const_of_int 1])));
+         (* [alloc_extends(old(alloc),alloc)] *)
+         (*LPred("alloc_extends",[LDerefAtLabel(alloc,"");LDeref alloc])*)
+         make_alloc_extends_pred_app ~in_param:true (ac, dummy_region) pc;
+         (* [alloc_fresh(old(alloc),result,n)] *)
+         (*LPred("alloc_fresh",[LDerefAtLabel(alloc,"");LVar "result";LVar n])*)
+         let f = make_fresh_pred_app ~arg ~in_param:true (ac, dummy_region) pc (LVar "result") in
+         match arg with
+         | Singleton -> f
+         | Range_0_n -> f (LVar n)]
+        @ instanceof_post),
       (* no exceptional post *)
       [])
   in
-  let alloc_type =
-    List.fold_right (fun (n,ty') acc -> Prod_type(n, ty', acc))
-      params alloc_type
-  in
-  let name = alloc_param_name ~check_size ac pc in
-  Param(false,id_no_loc name,alloc_type)
+  let alloc_type = List.fold_right (fun (n, ty') acc -> Prod_type (n, ty', acc)) params alloc_type in
+  let name = alloc_param_name ~arg ~check_size ac pc in
+  Param (false, id_no_loc name, alloc_type)
 
 (* Conversion to and from bitvector *)
 
