@@ -498,8 +498,7 @@ let tr_struct st acc =
         :: make_valid_pred ~in_param ~equal:true (* TODO ? *) JCalloc_bitvector pc
 *)
         (* Allocation parameters *)
-        :: make_alloc_param ~arg:Singleton ~check_size:true ac pc
-        :: make_alloc_param ~arg:Singleton ~check_size:false ac pc
+        :: make_alloc_param ~arg:Singleton ac pc
         :: make_alloc_param ~arg:Range_0_n ~check_size:true ac pc
         :: make_alloc_param ~arg:Range_0_n ~check_size:false ac pc
 (*
@@ -2423,7 +2422,7 @@ and expr e =
           (match e1#node with
            | JCEconst JCCinteger s
              when (try let n = int_of_string s in n == 1 with Failure "int_of_string" -> false) ->
-             make_app (alloc_param_name ~arg:Singleton ~check_size:(safety_checking()) ac pc) args
+             make_app (alloc_param_name ~arg:Singleton ac pc) args
            | _ ->
              make_guarded_app e#mark
                AllocSize e#pos
@@ -4512,8 +4511,7 @@ let tr_root rt acc =
         :: make_valid_pred ~in_param ~equal:false (* TODO ? *) JCalloc_bitvector pc
 *)
         (* Allocation parameter *)
-        :: make_alloc_param ~arg:Singleton ~check_size:true ac pc
-        :: make_alloc_param ~arg:Singleton ~check_size:false ac pc
+        :: make_alloc_param ~arg:Singleton ac pc
         :: make_alloc_param ~arg:Range_0_n ~check_size:true ac pc
         :: make_alloc_param ~arg:Range_0_n ~check_size:false ac pc
 (*

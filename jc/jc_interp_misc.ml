@@ -1100,7 +1100,8 @@ let make_valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
 
 (* Freshness *)
 
-let make_fresh_pred_app (type t1) (type t2) (type t3) : arg:(_, t1, t2, t3) arg -> in_param:_ -> _ -> _ -> _ -> t3 =
+let make_fresh_pred_app (type t1) (type t2) :
+    arg:(assertion, term -> assertion, _, _, t1, t2) arg -> in_param:_ -> _ -> _ -> _ -> t2 =
   fun ~arg ~in_param (ac, r) pc p ->
   let allocs =
     ListLabels.map
@@ -1120,22 +1121,31 @@ let make_forall_i_in_range l r f p =
         LImpl (make_and (LPred ("ge_int", [l; LVar i])) @@ LPred ("lt_int", [LVar i; r]),
                make_and_list @@ f @@ LApp ("shift", [LVar p; LVar i])))
 
-type abstr = string
+type (_, 'a) param =
+  | Void : ([`Singleton], 'a) param
+  | N : 'a -> ([`Range_0_n], 'a) param
+  | L_R : 'a * 'a -> ([`Range_l_r], 'a) param
 
-let make_fresh_pred (type t1) (type t2) : arg : (_, abstr, t1, t2) arg -> _ =
+let get_n = function N n -> n
+
+let get_l = function L_R (l, _) -> l
+
+let get_r = function L_R (_, r) -> r
+
+let make_fresh_pred (type t1) (type t2) : arg : (assertion, term -> assertion, _, _, t1, t2) arg -> _ =
   fun ~arg ac pc ->
   let p = "p" in
-  let n : t1 =
+  let n : (t1, _) param =
     match arg with
-    | Singleton -> ()
-    | Range_0_n -> "n"
+    | Singleton -> Void
+    | Range_0_n -> N "n"
   in
   let params =
     let p = p, pointer_type ac pc in
     let n =
       match arg with
       | Singleton -> []
-      | Range_0_n -> [(n : string), why_integer_type]
+      | Range_0_n -> [get_n n, why_integer_type]
     in
     let allocs = List.map (fdup2 generic_alloc_table_name alloc_table_type) @@ all_allocs_ac ac pc in
     let mems = List.map (fdup2 generic_memory_name memory_type) @@ all_mems_ac ac pc in
@@ -1147,7 +1157,7 @@ let make_fresh_pred (type t1) (type t2) : arg : (_, abstr, t1, t2) arg -> _ =
       let f = make_fresh_pred_app ~arg ~in_param:false (ac, dummy_region) (JCtag (st, pp)) (LVar p) in
       begin match arg with
       | Singleton -> (f : assertion)
-      | Range_0_n -> f (LVar n)
+      | Range_0_n -> f (LVar (get_n n))
       end
     | JCtag ({ jc_struct_info_parent = None }, _)
     | JCroot _ ->
@@ -1155,7 +1165,7 @@ let make_fresh_pred (type t1) (type t2) : arg : (_, abstr, t1, t2) arg -> _ =
       let fresh_pred n = LPred ("alloc_fresh", [LVar alloc; LVar p; n]) in
       match arg with
       | Singleton -> make_and (fresh_pred @@ const_of_int 1) @@ LNot (LPred ("valid", [LVar alloc; LVar p]))
-      | Range_0_n -> fresh_pred (LVar n)
+      | Range_0_n -> fresh_pred (LVar (get_n n))
   in
   let fields_fresh p =
     List.flatten @@
@@ -1184,13 +1194,14 @@ let make_fresh_pred (type t1) (type t2) : arg : (_, abstr, t1, t2) arg -> _ =
     Predicate (false, id_no_loc (fresh_pred_name ~arg ac pc), params, freshness)
   | Range_0_n ->
     (* WARNING: Here we neglect the possibly negative left bound, that's generally wrong *)
-    let fields_fresh = make_forall_i_in_range (const_of_int 0) (LVar n) fields_fresh p in
+    let fields_fresh = make_forall_i_in_range (const_of_int 0) (LVar (get_n n)) fields_fresh p in
     let freshness = make_and_list [super_fresh; fields_fresh] in
     Predicate (false, id_no_loc (fresh_pred_name ~arg ac pc), params, freshness)
 
 (* Instanceof *)
 
-let make_instanceof_pred_app (type t1) (type t2) (type t3) : arg:(_, t1 , t2, t3) arg -> in_param:_ -> _ -> _ -> _ -> t3 =
+let make_instanceof_pred_app (type t1) (type t2) :
+  arg:(assertion, _, term -> term -> assertion, _, t1, t2) arg -> in_param:_ -> _ -> _ -> _ -> t2 =
   fun ~arg ~in_param (ac, r) pc p ->
   let allocs =
     ListLabels.map
@@ -1204,20 +1215,20 @@ let make_instanceof_pred_app (type t1) (type t2) (type t3) : arg:(_, t1 , t2, t3
   | Singleton -> LPred (instanceof_pred_name ~arg ac pc, p :: params)
   | Range_l_r -> fun l r -> LPred (instanceof_pred_name ~arg ac pc, p :: l :: r :: params)
 
-let make_instanceof_pred (type t1) (type t2) : arg : (_, abstr, t1, t2) arg -> _ =
+let make_instanceof_pred (type t1) (type t2) : arg : (assertion, _, term -> term -> assertion, _, t1, t2) arg -> _ =
   fun ~arg ac pc ->
   let p = "p" in
-  let l_r : t1 =
+  let l_r : (t1, _) param =
     match arg with
-    | Singleton -> ()
-    | Range_l_r -> "l", "r"
+    | Singleton -> Void
+    | Range_l_r -> L_R ("l", "r")
   in
   let params =
     let p = p, pointer_type ac pc in
     let l_r =
       match arg with
       | Singleton -> []
-      | Range_l_r -> List.map (fun a -> a, why_integer_type) [fst l_r; snd l_r]
+      | Range_l_r -> List.map (fun a -> a, why_integer_type) [get_l l_r; get_r l_r]
     in
     let tags = List.map (fdup2 (tag_table_name % fun vi -> vi, dummy_region) tag_table_type) @@ all_tags_ac ac pc in
     let mems = List.map (fdup2 generic_memory_name memory_type) @@  all_mems_ac ac pc in
@@ -1252,7 +1263,7 @@ let make_instanceof_pred (type t1) (type t2) : arg : (_, abstr, t1, t2) arg -> _
     Predicate (false, id_no_loc (instanceof_pred_name ~arg ac pc), params, instanceof)
   | Range_l_r ->
     let instanceof =
-      make_forall_i_in_range (LVar (fst l_r)) (LVar (snd l_r)) (uncurry (@) % fdup2 self_instanceof fields_instanceof) p
+      make_forall_i_in_range (LVar (get_l l_r)) (LVar (get_r l_r)) (uncurry (@) % fdup2 self_instanceof fields_instanceof) p
     in
     Predicate (false, id_no_loc (instanceof_pred_name ~arg ac pc), params, instanceof)
 
@@ -1321,13 +1332,14 @@ let alloc_arguments (ac, r) pc =
   let reads = alloc_read_parameters (ac, r) pc in
   List.map fst (writes @ reads)
 
-let make_alloc_param (type t1) (type t2) : arg:(_, abstr, t1, t2) arg -> _ =
-  fun ~arg ~check_size ac pc ->
+let make_alloc_param (type t1) (type t2) :
+  arg:(why_decl, check_size:bool -> why_decl, _, _, t1, t2) arg -> _ -> _ -> t2 =
+  fun ~arg ac pc ->
   let error = failwith % asprintf "unexpected parameter expression in make_alloc_param: %a" fprintf_expr in
-  let n : t1 =
+  let n : (t1, _) param =
     match arg with
-    | Singleton -> ()
-    | Range_0_n -> "n"
+    | Singleton -> Void
+    | Range_0_n -> N "n"
   in
   (* parameters and effects *)
   let writes = alloc_write_parameters (ac, dummy_region) pc in
@@ -1338,29 +1350,22 @@ let make_alloc_param (type t1) (type t2) : arg:(_, abstr, t1, t2) arg -> _ =
   let params =
     match arg with
     | Singleton -> []
-    | Range_0_n -> [(mk_var n, Base_type why_integer_type)]
+    | Range_0_n -> [(mk_var (get_n n), Base_type why_integer_type)]
   in
   let params = params @ write_params @ read_params in
   let params = List.map (function ({expr_node = Var n}, ty') -> (n, ty') | (e, _) -> error e) params in
-  (* precondition *)
-  let pre =
-    match arg with
-    | Singleton -> LTrue
-    | Range_0_n ->
-      if check_size then LPred ("ge_int", [LVar n; const_of_int 0])
-      else LTrue
-  in
   (* postcondition *)
   let instanceof_post =
     let f = make_instanceof_pred_app ~in_param:true (ac, dummy_region) pc (LVar "result") in
     let f =
       match arg with
       | Singleton -> fun _ -> [f ~arg:Singleton]
-      | Range_0_n -> fun _ -> [f ~arg:Range_l_r (const_of_int 0) @@ LVar n]
+      | Range_0_n -> fun _ -> [f ~arg:Range_l_r (const_of_int 0) @@ LVar (get_n n)]
     in
     map_st ~f ac pc
   in
-  let alloc_type =
+  let alloc_type pre =
+    List.fold_right (fun (n, ty') acc -> Prod_type (n, ty', acc)) params @@
     Annot_type
      ((* [n >= 0] *)
       pre,
@@ -1376,23 +1381,31 @@ let make_alloc_param (type t1) (type t2) : arg:(_, abstr, t1, t2) arg -> _ =
           in
           match arg with
           | Singleton -> f @@ Some (const_of_int 0)
-          | Range_0_n -> f @@ Some (LApp ("sub_int", [LVar n; const_of_int 1])));
+          | Range_0_n -> f @@ Some (LApp ("sub_int", [LVar (get_n n); const_of_int 1])));
          (* [alloc_extends(old(alloc),alloc)] *)
          (*LPred("alloc_extends",[LDerefAtLabel(alloc,"");LDeref alloc])*)
          make_alloc_extends_pred_app ~in_param:true (ac, dummy_region) pc;
          (* [alloc_fresh(old(alloc),result,n)] *)
          (*LPred("alloc_fresh",[LDerefAtLabel(alloc,"");LVar "result";LVar n])*)
-         let f = make_fresh_pred_app ~arg ~in_param:true (ac, dummy_region) pc (LVar "result") in
+         let f = make_fresh_pred_app ~in_param:true (ac, dummy_region) pc (LVar "result") in
          match arg with
-         | Singleton -> f
-         | Range_0_n -> f (LVar n)]
+         | Singleton -> f ~arg:Singleton
+         | Range_0_n -> f ~arg:Range_0_n (LVar (get_n n))]
         @ instanceof_post),
       (* no exceptional post *)
       [])
   in
-  let alloc_type = List.fold_right (fun (n, ty') acc -> Prod_type (n, ty', acc)) params alloc_type in
-  let name = alloc_param_name ~arg ~check_size ac pc in
-  Param (false, id_no_loc name, alloc_type)
+  let name = alloc_param_name ac pc in
+  match arg with
+  | Singleton -> Param (false, id_no_loc @@ name ~arg:Singleton, alloc_type LTrue)
+  | Range_0_n ->
+    fun ~check_size ->
+    (* precondition *)
+    let pre =
+      if check_size then LPred ("ge_int", [LVar (get_n n); const_of_int 0])
+                    else LTrue
+    in
+    Param (false, id_no_loc @@ name ~arg:Range_0_n ~check_size, alloc_type pre)
 
 (* Conversion to and from bitvector *)
 
