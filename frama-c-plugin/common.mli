@@ -161,6 +161,8 @@ val app_term_type : (Cil_types.typ -> 'a) -> 'a -> Cil_types.logic_type -> 'a
 
 val (%) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
 
+val (%>) : ('a -> 'b) -> ('b -> 'c) -> 'a -> 'c
+
 val is_base_addr : Cil_types.term -> bool
 
 val is_reference_type : Cil_types.typ -> bool
@@ -265,6 +267,13 @@ val force_back_lval_to_term_lval: opaque_term_env -> lval -> term_lval
 
 val drop : int -> 'a list -> 'a list
 val take : int -> 'a list -> 'a list
+val range : int -> [< `Downto | `To ] -> int -> int list
+val map_pair : ('a -> 'b) -> 'a * 'a -> 'b * 'b
+val map_fst : ('a -> 'b) -> 'a * 'c -> 'b * 'c
+val map_snd : ('a -> 'b) -> 'c * 'a -> 'c * 'b
+val uncurry : ('a -> 'b -> 'c) -> 'a * 'b -> 'c
+val flip : ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
+val swap : 'a * 'b -> 'b * 'a
 
 val predicate: location -> predicate -> predicate named
 

@@ -421,6 +421,7 @@ let predefined_name =
     name_of_calloc;
     name_of_realloc;
     name_of_free;
+    name_of_kfree
   ]
 
 let is_predefined_name s = List.mem s predefined_name || s = !name_of_nondet_int
@@ -976,6 +977,17 @@ let add_opaque_result ty env =
 
 let rec force_term_to_exp t =
   let loc = t.term_loc in
+  let force_lconst_to_const =
+    function
+    | Integer (i, so) when Integer.(le min_int64 i && le i max_int64) ->
+      CInt64 (i, ILongLong, so)
+    | LStr s -> CStr s
+    | LWStr il -> CWStr il
+    | LChr c -> CChr c
+    | LEnum ei -> CEnum ei
+    | LReal _
+    | Integer _ -> raise Exit
+  in
   let e,env = match t.term_node with
     | TLval tlv ->
         (match Logic_utils.unroll_type t.term_type with
@@ -1009,16 +1021,25 @@ let rec force_term_to_exp t =
         let e,env = force_term_to_exp t' in CastE(ty,e), env
     | TAlignOf ty -> AlignOf ty, empty_term_env
     | TSizeOf ty -> SizeOf ty, empty_term_env
+    | TConst c ->
+      (try Const (force_lconst_to_const c), empty_term_env with Exit -> add_opaque_term t empty_term_env)
     | Tapp _ | TDataCons _ | Tif _ | Tat _ | Tbase_addr _
     | Toffset _ | Toffset_max _ | Toffset_min _
     | Tblock_length _ | Tnull | TCoerce _ | TCoerceE _ | TUpdate _
     | Tlambda _ | Ttypeof _ | Ttype _ | Tcomprehension _
     | Tunion _ | Tinter _ | Tempty_set | Trange _ | Tlet _
-    | TConst _ | TLogic_coerce _
-        ->
-        add_opaque_term t empty_term_env
+    | TLogic_coerce _ -> add_opaque_term t empty_term_env
   in
-  new_exp ~loc (Info(new_exp ~loc e,exp_info_of_term t)), env
+  let info_if_needed t e =
+    let info () = new_exp ~loc @@ Info (e, exp_info_of_term t) in
+    if t.term_name = [] then
+      match t.term_type, typeOf e with
+      | Ctype t1, t2 when Typ.equal t1 t2 -> e
+      | Linteger, t2 when isIntegralType t2 -> e
+      | _ -> info ()
+    else info ()
+  in
+  info_if_needed t @@ new_exp ~loc e, env
 
 and force_term_lval_to_lval (lhost,toff) =
   let lhost,env1 = force_term_lhost_to_lhost lhost in
@@ -1374,6 +1395,8 @@ end
 
 let (%) f g x = f (g x)
 
+let (%>) f g x = g (f x)
+
 (* Queries *)
 
 let is_base_addr t = match (stripTermCasts t).term_node with
@@ -1634,6 +1657,37 @@ let take n lst =
     | _ -> List.rev acc
   in
   take [] n lst
+
+let range i dir j =
+  let op =
+    match dir with
+    | `To ->
+      if i <= j then pred
+      else invalid_arg (Printf.sprintf "Common.range %d `To %d" i j)
+    | `Downto ->
+      if i >= j then succ
+      else invalid_arg (Printf.sprintf "Common.range %d `Downto %d" i j)
+  in
+  let rec loop acc k =
+    if i = k then
+      k :: acc
+    else
+      loop (k :: acc) (op k)
+  in
+  loop [] j
+
+(* Tuples *)
+let map_fst f (a, b) = f a, b
+
+let map_snd f (a, b) = a, f b
+
+let map_pair f (a, b) = f a, f b
+
+let uncurry f (a, b) = f a b
+
+let flip = swap
+
+let swap (a, b) = b, a
 
 let predicate loc p =
   {

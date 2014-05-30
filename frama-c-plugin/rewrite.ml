@@ -1047,7 +1047,7 @@ object(self)
       in
       let specialize_logic_info = specialize_logic_info _type in
       begin match axiomatic_opt with
-        | Some Daxiomatic (name, lst, loc) ->
+        | Some Daxiomatic (name, lst, _) ->
             let name = get_specialized_name name in
             let lst = ListLabels.map lst ~f:(function
               | Dfun_or_pred (li, loc) ->
@@ -1268,7 +1268,11 @@ let fold_constants_in_terms =
   visitFramacFile
     (object
       inherit frama_c_inplace
-      method! vterm_node _ = DoChildrenPost constFoldTermNodeAtTop
+      method! vterm t =
+        ChangeTo (
+             force_term_to_exp t
+          |> map_fst (map_under_info @@ visitCilExpr @@ constFoldVisitor true)
+          |> uncurry force_back_exp_to_term % swap)
      end)
 
 (*****************************************************************************)
