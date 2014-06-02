@@ -55,11 +55,11 @@ module type TIterators = sig
   val iter: (t -> unit) -> t -> unit
 
   (* Parcours en profondeur d'abord, mais l'accumulateur obtenu est ensuite
-     passé aussi en largeur. *)
+     passÃ© aussi en largeur. *)
   val fold_left: ('a -> t -> 'a) -> 'a -> t -> 'a
   val fold_right: (t -> 'a -> 'a) -> t -> 'a -> 'a
 
-  (* Parcours en profondeur avec accumulateur (le même pour tous les fils). *)
+  (* Parcours en profondeur avec accumulateur (le mÃªme pour tous les fils). *)
   val iter_deep_left: ('a -> t -> 'a) -> 'a -> t -> unit
   val iter_deep_right: (t -> 'a -> 'a) -> t -> 'a -> unit
 end
