@@ -2886,131 +2886,145 @@ let type_and_memory_reinterpretations get_compinfo () =
           PDecl.mklemma_def ~name ~axiom:true ~labels:[l1; l2] ~body ())
     in
 
-    let const_2_pow n = mkint ~valuestr:Integer.(to_string @@ two_power_of_int n) () in
-    let d = const_2_pow part_bitsize in
-    let w = const_2_pow whole_bitsize in
+    let d, w =
+      map_pair
+        (fun n -> mkint ~valuestr:Integer.(to_string @@ two_power_of_int n) ())
+        (part_bitsize, whole_bitsize)
+    in
     let integral_type name = mktype (JCPTidentifier (name, [])) in
+    let tboolean = mktype (JCPTnative Tboolean) in
     let add_u s = if s.[0] <> 'u' then "u" ^ s else s in
+    let del_u s = if s.[0] = 'u' then Str.string_after s 1 else s in
+    let guard_declarations ~name bodies =
+      if Hashtbl.mem val_cast_pred_memo name then (name, [])
+      else (
+        Hashtbl.replace val_cast_pred_memo name ();
+        name, bodies ()
+      )
+    in
     (* Predicates for integral type conversions *)
     let unsigned_split_pred () =
-      let name = add_u whole_name ^ "_as_" ^ add_u part_name in
-      if Hashtbl.mem val_cast_pred_memo name then (name, [])
-      else
-        let r =
-          let svars =
-               range (v - 1) `Downto 0
-            |> List.map @@ fun i -> Printf.(sprintf "a%d" i, sprintf "d%d" i)
-          in
-          let vars = List.map (map_pair @@ fst % var) svars in
-          let body =
-            let an, dn = List.hd vars in
-            fst @@ ListLabels.fold_left2 vars svars
-              ~init:(mkeq an dn, snd @@ List.hd svars)
-              ~f:(fun (body, var) (ai, di) (_, dis) ->
-                    let expr1 = mkeq ai @@ mkbinary ~expr1:di ~op:`Bmod ~expr2:d () in
-                    let expr2 = mklet_nodecl ~var ~init:(mkbinary ~expr1:di ~op:`Bmod ~expr2:d ()) ~body () in
-                    mkand ~expr1 ~expr2 (), dis)
-          in
-          let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
-          PDecl.mklogic_def
-            ~typ:(mktype (JCPTnative Tboolean))
-            ~name
-            ~params:((whole_type, snd (List.hd svars)) :: List.map (fun (v, _) -> part_type, v) svars)
-            ~body
-            ()
+      let whole_name, part_name = map_pair add_u (whole_name, part_name) in
+      let name = whole_name ^ "_as_" ^ part_name in
+      guard_declarations ~name @@ fun () ->
+        let svars =
+             range (v - 1) `Downto 0
+          |> List.map @@ fun i -> Printf.(sprintf "a%d" i, sprintf "d%d" i)
         in
-        Hashtbl.replace val_cast_pred_memo name ();
-        name, [r]
+        let vars = List.map (map_pair @@ fst % var) svars in
+        let body =
+          let (an, dn), vars = List.(fdup2 hd tl vars) in
+          let (_, sdn), svars = List.(fdup2 hd tl svars) in
+          fst @@ ListLabels.fold_left2 vars svars
+            ~init:(mkeq an dn, sdn)
+            ~f:(fun (body, var) (ai, di) (_, sdi) ->
+                  let expr1 = mkeq ai @@ mkbinary ~expr1:di ~op:`Bmod ~expr2:d () in
+                  let expr2 = mklet_nodecl ~var ~init:(mkbinary ~expr1:di ~op:`Bdiv ~expr2:d ()) ~body () in
+                  mkand ~expr1 ~expr2 (), sdi)
+        in
+        let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
+        [PDecl.mklogic_def
+           ~typ:tboolean
+           ~name
+           ~params:((whole_type, snd (last svars)) :: List.map (fun (v, _) -> part_type, v) svars)
+           ~body
+           ()]
     in
     let unsigned_merge_pred () =
-      let name = add_u part_name ^ "_as_" ^ add_u whole_name in
-      if Hashtbl.mem val_cast_pred_memo name then (name, [])
-      else
-        let r =
-          let svars = List.map ((^) "a" % string_of_int) @@ range (v - 1) `Downto 0 in
-          let vars = List.map (fst % var) svars in
-          let d0 = "d0" in
-          let body =
-            let n =
-              ListLabels.fold_left vars
-                ~init:(List.hd vars)
-                ~f:(fun body expr2 ->
-                      let expr1 = mkbinary ~expr1:body ~op:`Bmul ~expr2:d () in
-                      mkbinary ~expr1 ~op:`Badd ~expr2 ())
-            in
-            mkeq (fst @@ var d0) n
+      let whole_name, part_name = map_pair add_u (whole_name, part_name) in
+      let name = part_name ^ "_as_" ^ whole_name in
+      guard_declarations ~name @@ fun () ->
+        let svars = List.map ((^) "a" % string_of_int) @@ range (v - 1) `Downto 0 in
+        let vars = List.map (fst % var) svars in
+        let d0 = "d0" in
+        let body =
+          let n =
+            ListLabels.(fold_left (tl vars)
+              ~init:(hd vars)
+              ~f:(fun body expr2 ->
+                    let expr1 = mkbinary ~expr1:body ~op:`Bmul ~expr2:d () in
+                    mkbinary ~expr1 ~op:`Badd ~expr2 ()))
           in
-          let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
-          PDecl.mklogic_def
-            ~typ:(mktype (JCPTnative Tboolean))
-            ~name
-            ~params:((whole_type, d0) :: List.map (fun v -> part_type, v) svars)
-            ~body
-            ()
+          mkeq (fst @@ var d0) n
         in
-        Hashtbl.replace val_cast_pred_memo name ();
-        name, [r]
+        let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
+        [PDecl.mklogic_def
+           ~typ:tboolean
+           ~name
+           ~params:((whole_type, d0) :: List.map (fun v -> part_type, v) svars)
+           ~body
+           ()]
     in
-    let complement vd =
-      mkif
-        ~condition:(mkbinary ~expr1:vd ~op:`Bge ~expr2:zero_expr ())
-        ~expr_then:vd
-        ~expr_else:(mkbinary ~expr1:vd ~op:`Badd ~expr2:w ())
-        ()
+    let complement what dv =
+      let t, max = match what with `Whole -> add_u whole_name, w | `Part -> add_u part_name, d in
+      let typ = integral_type t in
+      let sv = "v" in
+      let v = fst @@ var sv in
+      mklet_nodecl ~var:sv ~init:dv
+       ~body:(
+          mkif
+            ~condition:(mkbinary ~expr1:v ~op:`Bge ~expr2:zero_expr ())
+            ~expr_then:(mkcast ~expr:v ~typ ())
+            ~expr_else:(mkcast ~expr:(mkbinary ~expr1:(mkcast ~expr:v ~typ:tinteger ()) ~op:`Badd ~expr2:max ())
+                               ~typ ())
+            ())
+       ()
     in
-    let signed_pred unsigned_pred =
-      let name = whole_name ^ "_as_" ^ part_name in
-      let fun_name, unsigned_pred_defs = unsigned_pred () in
-      let r =
+    let signed_pred what =
+      let whole_name, part_name = del_u whole_name, add_u part_name in
+      let from, _to, unsigned_pred =
+        match what with
+        | `Split -> whole_name, part_name, unsigned_split_pred
+        | `Merge -> part_name, whole_name, unsigned_merge_pred
+      in
+      let name = from ^ "_as_" ^ _to in
+      guard_declarations ~name @@ fun () ->
+        let fun_name, unsigned_pred_defs = unsigned_pred () in
         let svars = List.map ((^) "a" % string_of_int) @@ range (v - 1) `Downto 0 in
         let d0 = "d0" in
         let body =
-          let whole = complement (fst @@ var d0) in
+          let whole = complement `Whole (fst @@ var d0) in
           mkapp ~fun_name ~args:(whole :: List.map (fst % var) svars) ()
         in
         let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
-        PDecl.mklogic_def
-              ~typ:(mktype (JCPTnative Tboolean))
-              ~name
-              ~params:((whole_type, d0) :: List.map (fun v -> part_type, v) svars)
-              ~body
-              ()
-      in
-      name, r :: unsigned_pred_defs
+        unsigned_pred_defs @
+        [PDecl.mklogic_def
+           ~typ:tboolean
+           ~name
+           ~params:((whole_type, d0) :: List.map (fun v -> part_type, v) svars)
+           ~body
+           ()]
     in
-    let signed_split_pred () = signed_pred unsigned_split_pred in
-    let signed_merge_pred () = signed_pred unsigned_merge_pred in
     let rmemory = mkapp ~fun_name:reinterpret_memory_name ~labels:[l1; l2] ~args:[p] () in
     (* Memory reinterpretation axioms *)
     let memory_axioms =
-      let is_u s = s.[0] = '0' in
-      let deref typ offs =
-        let expr1 = mkat ~expr:(pcasted typ) ~label:l1 () in
+      let is_u s = s.[0] = 'u' in
+      let deref typ label offs =
+        let expr1 = mkat ~expr:(pcasted typ) ~label () in
         let expr =
           if offs > 0 then mkbinary ~expr1 ~op:`Badd ~expr2:(mkint ~value:offs ()) ()
                       else expr1
         in
-        mkat ~expr:(mkderef ~expr ~field:(contents_name typ) ()) ~label:l1 ()
+        mkat ~expr:(mkderef ~expr ~field:(contents_name typ) ()) ~label ()
       in
-      let whole_deref = deref whole_type 0 in
-      let part_derefs = List.map (deref part_type) @@ range 0 `To (v - 1) in
-      let part_derefs =
-        if is_u part_name then
-          List.map (fun expr2 -> mkbinary ~expr1:(const_2_pow part_bitsize) ~op:`Bsub ~expr2 ()) part_derefs
-        else
-          part_derefs
+      let whole_deref l = deref whole_type l 0 in
+      let part_derefs l =
+           range 0 `To (v - 1)
+        |> List.map (deref part_type l)
+        |> if is_u part_name then id
+                             else List.map (complement `Part)
       in
       let impl expr2 = mkimplies ~expr1:rmemory ~expr2 () in
       let (split_name, split_defs), (merge_name, merge_defs) =
-        if is_u whole_name then signed_split_pred (), signed_merge_pred ()
-                           else unsigned_split_pred (), unsigned_merge_pred ()
+        if is_u whole_name then unsigned_split_pred (), unsigned_merge_pred ()
+                           else signed_pred `Split, signed_pred `Merge
       in
-      let app fun_name = mkapp ~fun_name ~args:(whole_deref :: part_derefs) () in
+      let app fun_name lw lp = mkapp ~fun_name ~args:(whole_deref lw :: part_derefs lp) () in
       let triggers typ = [[rmemory; mkat ~expr:(pcasted typ) ~label:l2 ()]] in
       let name from _to = unique_logic_name (from ^ "_as_"  ^ _to ^ "_axiom") in
       let axs =
-        ListLabels.map [name whole_name part_name, triggers part_type, impl (app split_name);
-                        name part_name whole_name, triggers whole_type, impl (app merge_name)]
+        ListLabels.map [name whole_name part_name, triggers part_type, impl (app split_name l1 l2);
+                        name part_name whole_name, triggers whole_type, impl (app merge_name l2 l1)]
           ~f:(fun (name, triggers, body) ->
               let body = mkforall ~typ:tvoidp ~vars:[ip] ~triggers ~body () in
               PDecl.mklemma_def ~name ~axiom:true ~labels:[l1; l2] ~body ())
