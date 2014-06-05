@@ -218,6 +218,7 @@ object
     | JCEbase_block e ->             JCEbase_block (wrap e)
     | JCEalloc (e, si) ->            JCEalloc (wrap e, si)
     | JCEfree e ->                   JCEfree (wrap e)
+    | JCEreinterpret (e, si) ->      JCEreinterpret (wrap e, si)
     | JCEfresh e ->                  JCEfresh (wrap e)
     | JCElet (vi, eo, e) ->          JCElet (vi, Option_misc.map wrap eo, wrap e)
     | JCEassert (il, ak, a) ->       JCEassert (List.map iwrap il, ak, awrap a)
