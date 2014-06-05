@@ -83,6 +83,35 @@ let range i dir j =
      loop [] j
   with Exit -> []
 
+module type MONAD = sig
+  type 'a m
+  val return : 'a -> 'a m
+  val bind : 'a m -> ('a -> 'b m) -> 'b m
+end
+
+module Monad (M : MONAD) = struct
+  include M
+  let (>>=) = M.bind
+  let (>>) m1 m2 = M.bind m1 (fun _ -> m2)
+end
+
+module Option_monad = struct
+  include Monad (struct
+      type 'a m = 'a option
+      let bind m f =
+        match m with
+        | Some v -> f v
+        | None -> None
+      let return v = Some v
+    end)
+
+  let abort = None
+  let default v m =
+    match m with
+    | Some v -> v
+    | None -> v
+end
+
 exception Error of Loc.position * string
 
 let error l =
