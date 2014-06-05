@@ -2484,6 +2484,7 @@ and expr e =
       let at = lvar ~constant:false ~label_in_name:false in
       let alloc = alloc_table_name (ac, e#region) in
       let tag = tag_table_name (struct_root st, e#region) in
+      let new_mem = memory_name (mc, e#region) in
       let e =
         match term_of_expr e with
         | Some e -> e
@@ -2502,7 +2503,49 @@ and expr e =
         LPred ("reinterpret_cast",
                [e'; at before alloc; at LabelHere alloc; at before tag; at LabelHere tag])
       in
-      let assumption = mk_expr @@ Assert (`ASSUME, reinterpret_cast, void) in
+      let reinterpret_memory =
+        let old_mems =
+          MemoryMap.fold
+            (fun (mc, _ as mcr) _ acc ->
+              match mc with
+              | JCmem_field { jc_field_info_rep = true;
+                              jc_field_info_abstract = false;
+                              jc_field_info_bitsize = Some _;
+                              jc_field_info_hroot = { jc_struct_info_fields = [] };
+                              jc_field_info_struct = { jc_struct_info_fields = [_] };
+                              jc_field_info_type = t }
+                when is_integral_type t ->
+                let mem = memory_name mcr in
+                if mem <> new_mem then mem :: acc
+                                  else acc
+              | JCmem_field _ | JCmem_plain_union _ | JCmem_bitvector -> acc)
+            infunction.jc_fun_info_effects.jc_reads.jc_effect_memories
+            []
+        in
+        let p = "p" in
+        let lp = LVar p in
+        let body old_mem =
+          let app p =
+            LPred ("reinterpret_memory",
+                   [p; at LabelHere tag; at before tag; at LabelHere new_mem; at before old_mem])
+          in
+          let i = "i" in
+          let li = LVar i in
+          make_and
+            (app lp) @@
+            LForall (i, why_integer_type, [],
+              LImpl (make_and (LPred ("le", [LApp ("offset_min", [at before alloc; lp]); li])) @@
+                               LPred ("le", [li; LApp ("offset_max", [at LabelHere alloc; lp])]),
+                     app @@ LApp ("shift", [lp; li])))
+        in
+        LLet (p, e', make_and_list @@ List.map body old_mems)
+      in
+      let assumption =
+        mk_expr @@
+          Assert (`ASSUME,
+                  reinterpret_cast,
+                  mk_expr @@ Assert (`ASSUME, reinterpret_memory, void))
+      in
       append call assumption
 
     | JCEapp call ->
