@@ -2892,7 +2892,6 @@ let type_and_memory_reinterpretations get_compinfo () =
         (part_bitsize, whole_bitsize)
     in
     let integral_type name = mktype (JCPTidentifier (name, [])) in
-    let tboolean = mktype (JCPTnative Tboolean) in
     let add_u s = if s.[0] <> 'u' then "u" ^ s else s in
     let del_u s = if s.[0] = 'u' then Str.string_after s 1 else s in
     let guard_declarations ~name bodies =
@@ -2924,7 +2923,6 @@ let type_and_memory_reinterpretations get_compinfo () =
         in
         let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
         [PDecl.mklogic_def
-           ~typ:tboolean
            ~name
            ~params:((whole_type, snd (last svars)) :: List.map (fun (v, _) -> part_type, v) svars)
            ~body
@@ -2949,7 +2947,6 @@ let type_and_memory_reinterpretations get_compinfo () =
         in
         let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
         [PDecl.mklogic_def
-           ~typ:tboolean
            ~name
            ~params:((whole_type, d0) :: List.map (fun v -> part_type, v) svars)
            ~body
@@ -2989,7 +2986,6 @@ let type_and_memory_reinterpretations get_compinfo () =
         let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
         unsigned_pred_defs @
         [PDecl.mklogic_def
-           ~typ:tboolean
            ~name
            ~params:((whole_type, d0) :: List.map (fun v -> part_type, v) svars)
            ~body
@@ -3029,7 +3025,7 @@ let type_and_memory_reinterpretations get_compinfo () =
               let body = mkforall ~typ:tvoidp ~vars:[ip] ~triggers ~body () in
               PDecl.mklemma_def ~name ~axiom:true ~labels:[l1; l2] ~body ())
       in
-      split_defs @ merge_defs @ axs
+      merge_defs @ split_defs @ axs
     in
     (* Finally concatenating all the above type and memory reinterpretation axioms (and predicates) *)
     type_axioms `Whole_into_parts @ type_axioms `Parts_into_whole, memory_axioms
@@ -3071,7 +3067,7 @@ let type_and_memory_reinterpretations get_compinfo () =
   in
   let type_decls, memory_decls =
     let def name =
-      PDecl.mklogic_def ~typ:(mktype (JCPTnative Tboolean)) ~name ~labels:[l1; l2] ~params:[tvoidp, "p"] ()
+      PDecl.mklogic_def ~name ~labels:[l1; l2] ~params:[tvoidp, "p"] ()
     in
     let type_decls, memory_decls = List.(map_pair flatten @@ split @@ map reinterpretation_axioms pairs) in
     def reinterpret_cast_name :: type_decls, def reinterpret_memory_name :: memory_decls
