@@ -915,101 +915,119 @@ struct
 end
 *)
 
+(* Memory merging.                                                                                  *)
+(* This is sometimes needed when we have a pointer to an hroot structure passed as a parameter to a *)
+(* logic function (predicate).                                                                      *)
+(* The pointer can potentially reference several memories, but its often                            *)
+(* the case that it can't reference every such memory in the context of the same axiom.             *)
+(* So it's very inefficient (and sometimes incorrect) to pass all these memories to such a function *)
+(* each time. The simple solution we use is a number of polymorphic memories.                       *)
+(* Here we apply a heuristic: we only pass the greatest number of memories                          *)
+(* counted as effects in either of the involved axioms.                                             *)
+let tr_logic_model_params f =
+  let open Jc_typing in
+  let module List = ListLabels in
+  let module LabelRegionMap = PairRegionMap(LogicLabelOrd)(PairOrd(LogicLabelOrd)(InternalRegion)) in
+  Lazy.force @@
+  let open Option_monad in
+  let tmodel_parameters = tmodel_parameters ~label_in_name:true in
+  default (lazy (tmodel_parameters f.jc_logic_info_effects)) begin
+
+      List.filter f.jc_logic_info_parameters
+        ~f:(function
+            | { jc_var_info_type = JCTpointer (JCtag ({ jc_struct_info_root = Some _ }, _), _, _) } -> true
+            | _ -> false)
+    |> List.map ~f:(function { jc_var_info_region = r } -> r)
+    |> function [] -> abort | l -> return l
+    >>= fun regions ->
+
+      MemoryMap.partition (fun (_, r) _ -> List.mem r ~set:regions) f.jc_logic_info_effects.jc_effect_memories
+    |> fun (replace, _ as r) -> if MemoryMap.is_empty replace then abort else return r
+    >>= fun (replace, keep) ->
+
+    (try
+      Option_misc.map (StringHashtblIter.find axiomatics_table) f.jc_logic_info_axiomatic
+     with Not_found -> abort)
+    >>= fun ax_data ->
+
+      List.filter ax_data.axiomatics_decls
+        ~f:(fun (ABaxiom (_, _, _, a)) -> List.hd (occurrences [f.jc_logic_info_tag] a) <> [])
+    |> function [] -> abort | l -> return l
+    >>= fun ax_decls ->
+
+    let with_empty_memories fn =
+      let eff = f.jc_logic_info_effects in
+      f.jc_logic_info_effects <- { f.jc_logic_info_effects with jc_effect_memories = MemoryMap.empty };
+      let r = fn () in
+      f.jc_logic_info_effects <- eff;
+      r
+    in
+      with_empty_memories @@
+        (fun () ->
+          List.map ax_decls
+            ~f:(fun decl ->
+                 let ef = axiomatic_decl_effect empty_effects decl in
+                 effects_from_decl f ef empty_effects decl))
+    |> let count mm =
+         LabelRegionMap.(
+           MemoryMap.fold
+             (fun (_, r) ls lrm ->
+               if List.mem r ~set:regions then
+                 LogicLabelSet.fold
+                   (fun l lrm ->
+                     let key = l, r in
+                     let c = try find key lrm with Not_found -> 0 in
+                     add key (c + 1) lrm)
+                   ls
+                   lrm
+               else lrm)
+             mm
+             empty)
+       in
+       List.map ~f:(fun { jc_effect_memories = mm } -> count mm)
+    %> List.fold_left ~init:LabelRegionMap.empty ~f:(LabelRegionMap.merge max)
+    %> fun maxs ->
+       if LabelRegionMap.compare (-) (count replace) maxs <= 0 then abort
+                                                               else return maxs
+    >>= fun maxs ->
+
+      LabelRegionMap.bindings maxs
+    |> List.mapi
+         ~f:(fun i ((l, r), c) ->
+              let poly_name i = "poly_" ^ string_of_int i ^ "_" ^ Region.name r in
+              let name = lvar_name ~label_in_name:true l % poly_name in
+              let var = lvar ~label_in_name:true ~constant:true l % poly_name in
+              let typ j =
+                let ri =
+                  match r.jc_reg_type with
+                  | JCTpointer (JCtag ({ jc_struct_info_root = Some ri }, _), _, _)
+                  | JCTpointer (JCroot ri, _, _) -> ri
+                  | _ -> failwith "unexpected region type in memory merging"
+                in
+                raw_memory_type (root_model_type ri) (logic_type_var @@ "a" ^ string_of_int i ^ "_" ^ string_of_int j)
+              in
+              List.map ~f:(fdup3 name var typ) @@ range 0 `To (c - 1))
+    |> List.flatten
+    |> fun poly_params ->
+       let initial_params = tmodel_parameters { f.jc_logic_info_effects with
+                                                  jc_effect_memories = keep;
+                                                  jc_effect_globals = VarMap.empty }
+       in
+       let final_params = tmodel_parameters { empty_effects with
+                                               jc_effect_globals = f.jc_logic_info_effects.jc_effect_globals }
+       in
+       return @@ lazy (initial_params @ poly_params @ final_params)
+  end
 
 let tr_params_usual_model_aux f =
     let lab = 
-    match f.jc_logic_info_labels with [lab] -> lab | _ -> LabelHere
-  in
+      match f.jc_logic_info_labels with [lab] -> lab | _ -> LabelHere
+    in
     let usual_params =
       List.map (tparam ~label_in_name:true lab) f.jc_logic_info_parameters
     in
     let _3to2 = List.map (fun (n,_v,ty') -> (n,ty')) in
-    (* Memory merging.                                                                                  *)
-    (* This is sometimes needed when we have a pointer to an hroot structure passed as a parameter to a *)
-    (* logic function (predicate).                                                                      *)
-    (* The pointer can potentially reference several memories, but its often                            *)
-    (* the case that it can't reference every such memory in the context of the same axiom.             *)
-    (* So it's very inefficient (and sometimes incorrect) to pass all these memories to such a function *)
-    (* each time. The simple solution we use is a number of polymorphic memories.                       *)
-    (* Here we apply a heuristic: we only pass the greatest number of memories                          *)
-    (* counted as effects in either of the involved axioms.                                             *)
-    let model_params =
-      let open Jc_typing in
-      let open StdLabels in
-      let module LabelRegionMap = PairRegionMap(LogicLabelOrd)(PairOrd(LogicLabelOrd)(InternalRegion)) in
-      Lazy.force @@
-      let open Option_monad in
-      let tmodel_parameters = _3to2 % tmodel_parameters ~label_in_name:true in
-      default (lazy (tmodel_parameters f.jc_logic_info_effects)) begin
-
-        List.filter f.jc_logic_info_parameters
-          ~f:(function
-              | { jc_var_info_type = JCTpointer (JCtag ({ jc_struct_info_root = Some _ }, _), _, _) } -> true
-              | _ -> false)
-      |> List.map ~f:(function { jc_var_info_region = r } -> r)
-      |> function [] -> abort | l -> return l
-      >>= fun regions ->
-
-        MemoryMap.partition (fun (_, r) _ -> List.mem r ~set:regions) f.jc_logic_info_effects.jc_effect_memories
-      |> fun (replace, _ as r) -> if MemoryMap.is_empty replace then abort else return r
-      >>= fun (replace, keep) ->
-
-      (try
-        Option_misc.map (StringHashtblIter.find axiomatics_table) f.jc_logic_info_axiomatic
-       with Not_found -> abort)
-      >>= fun ax_data ->
-
-        List.filter ax_data.axiomatics_decls
-          ~f:(fun (ABaxiom (_, _, _, a)) -> List.hd (occurrences [f.jc_logic_info_tag] a) <> [])
-      |> function [] -> abort | l -> return l
-      >>= fun ax_decls ->
-
-         List.map ax_decls
-           ~f:(fun decl ->
-                let ef = axiomatic_decl_effect empty_effects decl in
-                effects_from_decl f ef empty_effects decl)
-      |> let count mm =
-           LabelRegionMap.(
-             MemoryMap.fold
-               (fun (_, r) ls lrm ->
-                 if List.mem r ~set:regions then
-                   LogicLabelSet.fold
-                     (fun l lrm ->
-                       let key = l, r in
-                       let c = try find key lrm with Not_found -> 0 in
-                       add key (c + 1) lrm)
-                     ls
-                     lrm
-                 else lrm)
-               mm
-               empty)
-         in
-         List.map ~f:(fun { jc_effect_memories = mm } -> count mm)
-      %> List.fold_left ~init:LabelRegionMap.empty ~f:(LabelRegionMap.merge max)
-      %> fun maxs ->
-         if LabelRegionMap.compare (-) (count replace) maxs <= 0 then abort
-                                                                 else return maxs
-      >>= fun maxs ->
-
-        LabelRegionMap.bindings maxs
-      |> List.map
-           ~f:(fun ((l, r), c) ->
-                let name i = lvar_name ~label_in_name:true l ("poly_" ^ string_of_int i ^ "_" ^ Region.name r) in
-                let typ i =
-                  let ri =
-                    match r.jc_reg_type with
-                    | JCTpointer (JCtag ({ jc_struct_info_root = Some ri }, _), _, _)
-                    | JCTpointer (JCroot ri, _, _) -> ri
-                    | _ -> failwith "unexpected region type in memory merging"
-                  in
-                  raw_memory_type (root_model_type ri) (logic_type_var @@ "a" ^ string_of_int i)
-                in
-                List.map ~f:(fdup2 name typ) @@ range 0 `To (c - 1))
-      |> List.flatten
-      |> fun poly_params ->
-         return @@ lazy (tmodel_parameters { f.jc_logic_info_effects with jc_effect_memories = keep } @ poly_params)
-      end
-    in
+    let model_params = _3to2 (tr_logic_model_params f) in
     let usual_params = _3to2 usual_params in
     usual_params, model_params
 
