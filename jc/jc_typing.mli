@@ -103,6 +103,8 @@ val print_file : Format.formatter -> unit -> unit
 
 val type_labels_in_decl : nexpr decl -> unit
 
+val occurrences : int list -> assertion -> (label * label) list list list
+
 val pragma_gen_sep :  (int,
    [ `Sep | `Inc | `Cni] *
    [ `Logic of Jc_fenv.logic_info * string list * Jc_env.var_info list

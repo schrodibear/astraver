@@ -99,6 +99,8 @@ module AllocClass : OrderedHashedType with type t = alloc_class
 
 module PointerClass : OrderedHashedType with type t = pointer_class
 
+module LogicLabelOrd : Set.OrderedType with type t = label
+
 module LogicLabelSet : Set.S with type elt = label
 
 module TypeVarOrd : OrderedHashedType with type t = type_var_info

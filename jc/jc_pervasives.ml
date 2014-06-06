@@ -43,7 +43,9 @@ open Jc_constructors
 open Format
 open Num
 
-let ( % ) f g x = f (g x)
+let (%) f g x = f (g x)
+
+let (%>) f g x = g (f x)
 
 let id x = x
 
@@ -83,13 +85,19 @@ let range i dir j =
      loop [] j
   with Exit -> []
 
-module type MONAD = sig
+module type MONAD_DEF = sig
   type 'a m
   val return : 'a -> 'a m
   val bind : 'a m -> ('a -> 'b m) -> 'b m
 end
 
-module Monad (M : MONAD) = struct
+module type MONAD = sig
+  include MONAD_DEF
+  val (>>=) : 'a m -> ('a -> 'b m) -> 'b m
+  val (>>) : 'a m -> 'b m -> 'b m
+end
+
+module Monad (M : MONAD_DEF) = struct
   include M
   let (>>=) = M.bind
   let (>>) m1 m2 = M.bind m1 (fun _ -> m2)

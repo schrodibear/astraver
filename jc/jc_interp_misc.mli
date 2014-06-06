@@ -265,6 +265,8 @@ val tmemory_var : label_in_name:bool ->
 val lvar : constant:bool ->
            label_in_name:bool -> Jc_env.label -> string -> Output.term
 
+val lvar_name : label_in_name:bool -> ?label_assoc:(Jc_env.label * Jc_env.label) list -> Jc_env.label -> string -> string
+
 val plain_memory_var : Jc_env.mem_class * Jc_region.RegionTable.key -> Output.expr
 
 val memory_var : ?test_current_function:bool ->

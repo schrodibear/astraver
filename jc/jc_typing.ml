@@ -2950,6 +2950,12 @@ let check_consistency id data =
     )
     data.axiomatics_decls
 
+let occurrences tags a =
+  let h = Hashtbl.create 10 in
+  List.iter (fun tag -> Hashtbl.add h tag []) tags;
+  occurrences h a;
+  List.map (Hashtbl.find h) tags
+
 let update_axiomatic axiomatic pi =
   match axiomatic with
     | Some(id,data) ->

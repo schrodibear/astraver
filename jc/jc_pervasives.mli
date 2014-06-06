@@ -35,7 +35,9 @@ open Jc_envset
 open Jc_ast
 open Jc_fenv
 
-val ( % ): ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
+val (%) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
+
+val (%>) : ('a -> 'b) -> ('b -> 'c) -> 'a -> 'c
 
 val dup2 : 'a -> 'a * 'a
 
@@ -56,6 +58,26 @@ val uncurry : ('a -> 'b -> 'c) -> ('a * 'b) -> 'c
 val range : int -> [< `Downto | `To ] -> int -> int list
 
 val id: 'a -> 'a
+
+module type MONAD_DEF = sig
+  type 'a m
+  val return : 'a -> 'a m
+  val bind : 'a m -> ('a -> 'b m) -> 'b m
+end
+
+module type MONAD = sig
+  include MONAD_DEF
+  val (>>=) : 'a m -> ('a -> 'b m) -> 'b m
+  val (>>) : 'a m -> 'b m -> 'b m
+end
+
+module Monad (M : MONAD_DEF) : MONAD
+
+module Option_monad : sig
+  include MONAD with type 'a m = 'a option
+  val abort : 'a option
+  val default : 'a -> 'a m -> 'a
+end
 
 (*
 exception Error of Loc.position * string

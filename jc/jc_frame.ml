@@ -935,71 +935,83 @@ let tr_params_usual_model_aux f =
     (* counted as effects in either of the involved axioms.                                             *)
     let model_params =
       let open Jc_typing in
-      let occurrences a =
-        let h = Hashtbl.create 10 in
-        occurences h a;
-        h
-      in
-      let tmodel_parameters = _3to2 % tmodel_parameters ~label_in_name:true in
+      let open StdLabels in
       let module LabelRegionMap = PairRegionMap(LogicLabelOrd)(PairOrd(LogicLabelOrd)(InternalRegion)) in
       Lazy.force @@
       let open Option_monad in
-      default (lazy (tmodel_parameters f.jc_logic_info_effects)) @@
+      let tmodel_parameters = _3to2 % tmodel_parameters ~label_in_name:true in
+      default (lazy (tmodel_parameters f.jc_logic_info_effects)) begin
 
-        ListLabels.filter f.jc_logic_info_parameters
+        List.filter f.jc_logic_info_parameters
           ~f:(function
-              | { jc_var_info_type = JCpointer (JCtag ({ jc_struct_info_root = Some _ }, _), _, _) } -> true
+              | { jc_var_info_type = JCTpointer (JCtag ({ jc_struct_info_root = Some _ }, _), _, _) } -> true
               | _ -> false)
-      |> List.map (function { jc_var_info_region = r } -> r)
-      |> function [] -> abort | l -> return l >>= fun regions ->
+      |> List.map ~f:(function { jc_var_info_region = r } -> r)
+      |> function [] -> abort | l -> return l
+      >>= fun regions ->
 
-      MemoryMap.partition (fun (_, r) _ -> List.mem r regions) f.jc_logic_info_effects.jc_effect_memories
-      |> function ([], _) -> abort | ms -> return ms >>= fun (replace, keep) ->
+        MemoryMap.partition (fun (_, r) _ -> List.mem r ~set:regions) f.jc_logic_info_effects.jc_effect_memories
+      |> fun (replace, _ as r) -> if MemoryMap.is_empty replace then abort else return r
+      >>= fun (replace, keep) ->
 
       (try
-        return (StringHashtblIter.find axiomatics_table f.jc_logic_info_axiomatic)
-       with Not_found -> abort) >>= fun ax_data ->
+        Option_misc.map (StringHashtblIter.find axiomatics_table) f.jc_logic_info_axiomatic
+       with Not_found -> abort)
+      >>= fun ax_data ->
 
-        List.filter (fun ABaxiom (_, _, _, a) -> List.mem f.jc_logic_info_tag @@ occurrences a) ax_data.axiomatics_decls
-      |> function [] -> abort | l -> return l >>= fun ax_decls ->
+        List.filter ax_data.axiomatics_decls
+          ~f:(fun (ABaxiom (_, _, _, a)) -> List.hd (occurrences [f.jc_logic_info_tag] a) <> [])
+      |> function [] -> abort | l -> return l
+      >>= fun ax_decls ->
 
-         List.map (effects_from_decl f @@ axiomatic_decl_effect empty_effects) ax_decls
+         List.map ax_decls
+           ~f:(fun decl ->
+                let ef = axiomatic_decl_effect empty_effects decl in
+                effects_from_decl f ef empty_effects decl)
       |> let count mm =
            LabelRegionMap.(
              MemoryMap.fold
-               (fun (_, r) l ->
-                 if List.mem r regions then
-                   let key = l, r in
-                   let c = find key mm in
-                   add key (c + 1) mm)
+               (fun (_, r) ls lrm ->
+                 if List.mem r ~set:regions then
+                   LogicLabelSet.fold
+                     (fun l lrm ->
+                       let key = l, r in
+                       let c = try find key lrm with Not_found -> 0 in
+                       add key (c + 1) lrm)
+                     ls
+                     lrm
+                 else lrm)
                mm
                empty)
          in
-         ListLabels.map ~f:(fun { jc_effect_memories = mm } -> count mm)
-      |> ListLabels.fold_left ~init:LabelRegionMap.empty ~f:(LabelRegionMap.merge (fun _ c' c -> max c c'))
-      |> fun maxs ->
-         if LabelRegionMap.compare (<=) (count replace) maxs then abort
-                                                             else return maxs >>= fun maxs ->
+         List.map ~f:(fun { jc_effect_memories = mm } -> count mm)
+      %> List.fold_left ~init:LabelRegionMap.empty ~f:(LabelRegionMap.merge max)
+      %> fun maxs ->
+         if LabelRegionMap.compare (-) (count replace) maxs <= 0 then abort
+                                                                 else return maxs
+      >>= fun maxs ->
 
         LabelRegionMap.bindings maxs
-      |> List.map (fun ((l, r), c) -> 
-                     let name i = lvar_name ~label_in_name l ("poly_" ^ string_of_int i ^ "_" ^ Region.name r) in
-                     let typ i =
-                       let root =
-                         match r.jc_region_type with
-                         | JCpointer (JCtag ({ jc_struct_info_root = Some ri }, _), _, _)
-                         | JCpointer (JCroot ri) -> ri
-                         | _ -> failwith "unexpected region type in memory merging"
-                       in
-                       raw_memory_type (root_model_type ri) (logic_type_var @@ a ^ string_of_int i)
-                     in
-                     List.map (map_pair2 name typ) @@ range 0 `To (c - 1))
+      |> List.map
+           ~f:(fun ((l, r), c) ->
+                let name i = lvar_name ~label_in_name:true l ("poly_" ^ string_of_int i ^ "_" ^ Region.name r) in
+                let typ i =
+                  let ri =
+                    match r.jc_reg_type with
+                    | JCTpointer (JCtag ({ jc_struct_info_root = Some ri }, _), _, _)
+                    | JCTpointer (JCroot ri, _, _) -> ri
+                    | _ -> failwith "unexpected region type in memory merging"
+                  in
+                  raw_memory_type (root_model_type ri) (logic_type_var @@ "a" ^ string_of_int i)
+                in
+                List.map ~f:(fdup2 name typ) @@ range 0 `To (c - 1))
       |> List.flatten
       |> fun poly_params ->
-         tmodel_parameters { f.jc_logic_info_effects with jc_effect_memories = keep } @ poly_params
+         return @@ lazy (tmodel_parameters { f.jc_logic_info_effects with jc_effect_memories = keep } @ poly_params)
+      end
     in
     let usual_params = _3to2 usual_params in
-    usual_params,model_params
+    usual_params, model_params
 
 (*
 module Def_in :
