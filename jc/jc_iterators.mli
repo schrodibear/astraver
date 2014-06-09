@@ -89,6 +89,15 @@ val map_term_in_assertion :
   Jc_fenv.logic_info Jc_ast.assertion ->
   Jc_fenv.logic_info Jc_ast.assertion
 
+val map_assertion :
+  (Jc_constructors.assertion_with -> Jc_fenv.logic_info Jc_ast.assertion) ->
+  Jc_fenv.logic_info Jc_ast.assertion -> Jc_fenv.logic_info Jc_ast.assertion
+
+val map_term_and_assertion :
+  (Jc_constructors.assertion_with -> Jc_fenv.logic_info Jc_ast.assertion) ->
+  (Jc_constructors.term_with -> Jc_fenv.logic_info Jc_ast.term) ->
+  Jc_fenv.logic_info Jc_ast.assertion -> Jc_fenv.logic_info Jc_ast.assertion
+
 (* spec ? *)
 val fold_term : 
   ('a -> 'b Jc_ast.term -> 'a) -> 'a -> 'b Jc_ast.term -> 'a

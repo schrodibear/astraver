@@ -586,7 +586,10 @@ module TermOrd = struct
 	  in
 	  if comp <> 0 then comp else
 	    compare t11 t21
-      | JCTrange_cast(t11,ri1),JCTrange_cast(t21,ri2) ->
+      | JCTrange_cast(t11, None), JCTrange_cast(t21, None) -> compare t11 t21
+      | JCTrange_cast(_, Some _), JCTrange_cast(_, None) -> 1
+      | JCTrange_cast(_, None), JCTrange_cast(_, Some _) -> -1
+      | JCTrange_cast(t11, Some ri1),JCTrange_cast(t21, Some ri2) ->
 	  let comp =
 	    Pervasives.compare ri1.jc_enum_info_name ri2.jc_enum_info_name
 	  in

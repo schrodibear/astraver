@@ -169,7 +169,7 @@ let rec term fmt t =
     | JCTbitwise_cast (t, _, si) ->
 	fprintf fmt "(%a :> %s)" term t si.jc_struct_info_name
     | JCTrange_cast (t, ei) ->
-	fprintf fmt "(%a :> %s)" term t ei.jc_enum_info_name
+	fprintf fmt "(%a :> %s)" term t (Option_misc.map_default (fun r -> r.jc_enum_info_name) "integer" ei)
     | JCTreal_cast (t, rc) ->
 	fprintf fmt "(%a :> %a)" term t real_conversion rc
     | JCTinstanceof (t, _, si) ->
@@ -378,7 +378,7 @@ let rec expr fmt e =
       | JCEbitwise_cast(e, si) ->
 	  fprintf fmt "(%a :> %s)" expr e si.jc_struct_info_name
       | JCErange_cast(e, ri) ->
-	  fprintf fmt "(%a :> %s)" expr e ri.jc_enum_info_name
+	  fprintf fmt "(%a :> %s)" expr e (Option_misc.map_default (fun r -> r.jc_enum_info_name) "integer" ri)
       | JCEreal_cast(e, rc) ->
 	  fprintf fmt "(%a :> %a)" expr e real_conversion rc
       | JCEif(e1,e2,e3) -> 

@@ -393,7 +393,7 @@ and 'li term_node =
   | JCTinstanceof of 'li term * label * struct_info
   | JCTcast of 'li term * label * struct_info
   | JCTbitwise_cast of 'li term * label * struct_info
-  | JCTrange_cast of 'li term * enum_info
+  | JCTrange_cast of 'li term * enum_info option
   | JCTreal_cast of 'li term * real_conversion
   | JCTif of 'li term * 'li term * 'li term
   | JCTrange of 'li term option * 'li term option
@@ -547,7 +547,7 @@ type ('li,'fi) expr_node =
   | JCEinstanceof of ('li,'fi) expr * struct_info
   | JCEcast of ('li,'fi) expr * struct_info
   | JCEbitwise_cast of ('li,'fi) expr * struct_info
-  | JCErange_cast of ('li,'fi) expr * enum_info
+  | JCErange_cast of ('li,'fi) expr * enum_info option
   | JCEreal_cast of ('li,'fi) expr * real_conversion
   | JCEif of ('li,'fi) expr * ('li,'fi) expr * ('li,'fi) expr
   | JCEoffset of offset_kind * ('li,'fi) expr * struct_info

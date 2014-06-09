@@ -293,6 +293,15 @@ class assertion_with :
     .. > ->
   assertion
 
+val assertion_with_node :
+  < pos : Loc.position;
+    mark : string;
+    .. > ->
+  ?pos:Loc.position ->
+  ?mark:string ->
+  assertion_node ->
+  assertion
+
 class ['a] ptag :
   ?pos:Loc.position ->
   'a ptag_node ->

@@ -232,6 +232,9 @@ class assertion_with ?pos ?mark ?node a =
   let node = match node with None -> a#node | Some node -> node in
   assertion ~pos ~mark ?label:llab node
 
+let assertion_with_node a ?(pos=a#pos) ?(mark=a#mark) node =
+  new assertion ~pos ~mark node
+
 class ['expr] ptag ?(pos = Loc.dummy_position) node =
 object
   inherit ['expr ptag_node] node_positioned ~pos node

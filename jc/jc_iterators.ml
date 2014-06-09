@@ -34,15 +34,6 @@ open Jc_constructors
 
 open Jc_envset
 
-(*
-open Format
-open Jc_env
-open Jc_fenv
-open Jc_fenv
-open Jc_pervasives
-
-*)
-
 module type TAst = sig
   type t
   val subs: t -> t list
@@ -867,38 +858,40 @@ let iter_funspec ft fa fl fls spec =
   fold_funspec (fold_unit ft) (fold_unit fa) (fold_unit fl) (fold_unit fls) 
     () spec
 
-(*
-
 let rec map_assertion f a =
   let anode = match a#node with
-    | JCAtrue | JCAfalse | JCArelation _ | JCAapp _ | JCAeqtype _ 
-    | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ 
-    | JCAsubtype _ as anode -> 
-	anode
+    | JCAtrue | JCAfalse | JCArelation _ | JCAapp _ | JCAeqtype _
+    | JCAinstanceof _ | JCAbool_term _ | JCAmutable _
+    | JCAsubtype _ | JCAfresh _ as anode ->
+      anode
     | JCAand al ->
-	JCAand(List.map (map_assertion f) al)
+      JCAand (List.map (map_assertion f) al)
     | JCAor al ->
-	JCAor(List.map (map_assertion f) al)
-    | JCAimplies(a1,a2) ->
-	JCAimplies(map_assertion f a1,map_assertion f a2)
-    | JCAiff(a1,a2) ->
-	JCAiff(map_assertion f a1,map_assertion f a2)
-    | JCAif(t,a1,a2) ->
-	JCAif(t,map_assertion f a1,map_assertion f a2)
+      JCAor (List.map (map_assertion f) al)
+    | JCAimplies (a1,a2) ->
+      JCAimplies (map_assertion f a1,map_assertion f a2)
+    | JCAiff (a1,a2) ->
+      JCAiff (map_assertion f a1,map_assertion f a2)
+    | JCAif (t,a1,a2) ->
+      JCAif (t,map_assertion f a1,map_assertion f a2)
     | JCAnot a1 ->
-	JCAnot(map_assertion f a1)
-    | JCAquantifier(q,vi,a1) ->
-	JCAquantifier(q,vi,map_assertion f a1)
+      JCAnot (map_assertion f a1)
+    | JCAquantifier (q, vi, trigs, a1) ->
+      let trigs =
+        List.map
+         (List.map @@ function JCAPatT _ as t -> t | JCAPatP a -> JCAPatP (map_assertion f a))
+         trigs
+      in
+      JCAquantifier (q, vi, trigs, map_assertion f a1)
     | JCAold a1 ->
-	JCAold(map_assertion f a1)
-    | JCAat(a1,lab) ->
-	JCAat(map_assertion f a1,lab)
-    | JCAmatch(t, pal) ->
-	JCAmatch(t, List.map (fun (p, a) -> p, map_assertion f a) pal)
+      JCAold (map_assertion f a1)
+    | JCAat (a1,lab) ->
+      JCAat (map_assertion f a1,lab)
+    | JCAmatch (t, pal) ->
+      JCAmatch (t, List.map (fun (p, a) -> p, map_assertion f a) pal)
+    | JCAlet (vi, t, a) -> JCAlet (vi, t, map_assertion f a)
   in
   f (new assertion_with ~node:anode a)
-
-*)
 
 let map_term_in_tag f tag = 
   let tag_node = match tag#node with
@@ -963,54 +956,56 @@ let rec map_term_in_assertion f a =
   in
   new assertion_with ~node:anode a
 
-(*
 let rec map_term_and_assertion fa ft a =
   let anode = match a#node with
     | JCAtrue | JCAfalse as anode -> anode
-    | JCAeqtype(tag1,tag2,st) ->
-	JCAeqtype(map_term_in_tag ft tag1,map_term_in_tag ft tag2,st)
-    | JCAsubtype(tag1,tag2,st) ->
-	JCAsubtype(map_term_in_tag ft tag1,map_term_in_tag ft tag2,st)
-    | JCArelation(t1,op,t2) -> 
-	JCArelation(map_term ft t1,op,map_term ft t2)
+    | JCAfresh t -> JCAfresh (map_term ft t)
+    | JCAlet (vi, t, a) -> 
+      JCAlet (vi, map_term ft t, map_term_and_assertion fa ft a)
+    | JCAeqtype (tag1, tag2, st) ->
+      JCAeqtype (map_term_in_tag ft tag1, map_term_in_tag ft tag2, st)
+    | JCAsubtype (tag1, tag2, st) ->
+      JCAsubtype (map_term_in_tag ft tag1, map_term_in_tag ft tag2, st)
+    | JCArelation (t1, op, t2) -> 
+      JCArelation (map_term ft t1, op, map_term ft t2)
     | JCAapp app ->
-	JCAapp { app with jc_app_args = List.map (map_term ft) app.jc_app_args }
-    | JCAinstanceof(t1,lab,st) ->
-	JCAinstanceof(map_term ft t1,lab,st)
+      JCAapp { app with jc_app_args = List.map (map_term ft) app.jc_app_args }
+    | JCAinstanceof (t1, lab, st) ->
+      JCAinstanceof (map_term ft t1, lab, st)
     | JCAbool_term t1 ->
-	JCAbool_term(map_term ft t1)
-    | JCAmutable(t1,st,tag) ->
-	JCAmutable(map_term ft t1,st,tag)
+      JCAbool_term (map_term ft t1)
+    | JCAmutable (t1, st, tag) ->
+      JCAmutable (map_term ft t1, st, tag)
     | JCAand al ->
-	JCAand(List.map (map_term_and_assertion fa ft) al)
+      JCAand (List.map (map_term_and_assertion fa ft) al)
     | JCAor al ->
-	JCAor(List.map (map_term_and_assertion fa ft) al)
-    | JCAimplies(a1,a2) ->
-	JCAimplies
-	  (map_term_and_assertion fa ft a1,map_term_and_assertion fa ft a2)
-    | JCAiff(a1,a2) ->
-	JCAiff
-	  (map_term_and_assertion fa ft a1,map_term_and_assertion fa ft a2)
-    | JCAif(t1,a1,a2) ->
-	JCAif(
-	  map_term ft t1,
-	  map_term_and_assertion fa ft a1,
-	  map_term_and_assertion fa ft a2)
+      JCAor (List.map (map_term_and_assertion fa ft) al)
+    | JCAimplies (a1,a2) ->
+      JCAimplies (map_term_and_assertion fa ft a1, map_term_and_assertion fa ft a2)
+    | JCAiff (a1, a2) ->
+      JCAiff (map_term_and_assertion fa ft a1, map_term_and_assertion fa ft a2)
+    | JCAif (t1,a1,a2) ->
+      JCAif (map_term ft t1, map_term_and_assertion fa ft a1, map_term_and_assertion fa ft a2)
     | JCAnot a1 ->
-	JCAnot(map_term_and_assertion fa ft a1)
-    | JCAquantifier(q,vi,a1) ->
-	JCAquantifier(q,vi,map_term_and_assertion fa ft a1)
+      JCAnot (map_term_and_assertion fa ft a1)
+    | JCAquantifier (q, vi, trigs, a1) ->
+      let trigs =
+        List.map
+          (List.map @@
+            function
+            | JCAPatT t -> JCAPatT (map_term ft t)
+            | JCAPatP a -> JCAPatP (map_term_and_assertion fa ft a))
+          trigs
+      in
+      JCAquantifier (q, vi, trigs, map_term_and_assertion fa ft a1)
     | JCAold a1 ->
-	JCAold(map_term_and_assertion fa ft a1)
-    | JCAat(a1,lab) ->
-	JCAat(map_term_and_assertion fa ft a1,lab)
-    | JCAmatch(t, pal) ->
-	JCAmatch(map_term ft t,
-		 List.map (fun (p, a) -> p, map_term_and_assertion fa ft a) pal)
+      JCAold (map_term_and_assertion fa ft a1)
+    | JCAat (a1,lab) ->
+      JCAat (map_term_and_assertion fa ft a1,lab)
+    | JCAmatch (t, pal) ->
+      JCAmatch (map_term ft t, List.map (fun (p, a) -> p, map_term_and_assertion fa ft a) pal)
   in
   fa (new assertion_with ~node:anode a)
-
-*)
 
 (*****************************************************************************)
 (* General iterators on patterns.                                            *)

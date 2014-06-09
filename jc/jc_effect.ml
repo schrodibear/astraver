@@ -42,9 +42,7 @@ open Jc_fenv
 open Jc_name
 open Jc_constructors
 open Jc_pervasives
-(*
-open Jc_iterators
-*)
+
 open Jc_struct_tools
 
 open Format
@@ -1693,7 +1691,7 @@ let effects_from_app fi ax_effects acc app =
     fi.jc_logic_info_name
     app.jc_app_fun.jc_logic_info_name;
   Jc_options.lprintf "fi == app.jc_app_fun ? %b@." (fi == app.jc_app_fun);
-  if fi == app.jc_app_fun then
+  if fi.jc_logic_info_tag = app.jc_app_fun.jc_logic_info_tag then
     begin
       Jc_options.lprintf
 	"@[fi labels = @[{%a}@] ; app label_assoc = @[{%a}@]@]@."
@@ -1862,6 +1860,59 @@ let function_effects funs =
 	 (ExceptionSet.elements f.jc_fun_info_effects.jc_raises)
     ) funs
 
+let is_poly_mem_param =
+  function
+  | { jc_var_info_type = JCTpointer (JCtag ({ jc_struct_info_root = Some _ }, _), _, _) } -> true
+  | _ -> false
+
+let is_poly_mem_function f =
+  f.jc_logic_info_axiomatic <> None &&
+  List.exists is_poly_mem_param f.jc_logic_info_parameters
+
+let poly_mem_regions f =
+     List.filter is_poly_mem_param f.jc_logic_info_parameters
+  |> List.map @@ function { jc_var_info_region = r } -> r
+
+
+let restrict_poly_mems_in_assertion mm =
+  let map_app (* app *) =
+    let map_f (* f *) =
+      let memo f (* fi *) =
+        let memo = Hashtbl.create 5 in
+        fun fi ->
+        try Hashtbl.find memo fi.jc_logic_info_tag
+        with Not_found ->
+          let r = f fi in
+          Hashtbl.replace memo fi.jc_logic_info_tag r;
+          r
+      in
+      memo @@
+      fun f ->
+      let mems =
+        let poly_regs = poly_mem_regions f in
+        MemoryMap.(
+          f.jc_logic_info_effects.jc_effect_memories
+        |> filter (fun (_, r as key) _ -> not (List.exists (Region.equal r) poly_regs) || mem key mm)
+        |> merge (curry @@ fst) mm)
+      in
+      { f with jc_logic_info_effects = { f.jc_logic_info_effects with jc_effect_memories = mems }}
+   in
+   fun app -> { app with jc_app_fun = map_f app.jc_app_fun }
+  in
+  Jc_iterators.map_term_and_assertion
+    (fun a ->
+      match a#node with
+      | JCAapp app when is_poly_mem_function app.jc_app_fun ->
+        assertion_with_node a @@ JCAapp (map_app app)
+      | _ -> a)
+    (fun t ->
+      match t#node with
+      | JCTapp app when is_poly_mem_function app.jc_app_fun ->
+        term_with_node t @@ JCTapp (map_app app)
+      | _ -> t)
+
+let restrict_poly_mems_in_axiomatic_decl mm =
+  Jc_typing.(fun (ABaxiom (pos, name, ls, a)) -> ABaxiom (pos, name, ls, restrict_poly_mems_in_assertion mm a))
 
 (*
 Local Variables:

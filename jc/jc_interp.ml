@@ -914,11 +914,12 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
           LApp("downcast",[ tag; t1'; LVar (tag_name st) ])
     | JCTbitwise_cast(t1,_lab,_st) ->
 	ft t1
-    | JCTrange_cast(t1,ri) ->
+    | JCTrange_cast(t1, ri) ->
 (*         eprintf "range_cast in term: from %a to %a@."  *)
 (*           print_type t1#typ print_type (JCTenum ri); *)
         let t1' = ft t1 in
-        term_coerce ~cast:true t1#pos (JCTenum ri) t1#typ t1 t1'
+        let to_type = Option_misc.map_default (fun e -> JCTenum e) (JCTnative Tinteger) ri in
+        term_coerce ~cast:true t1#pos to_type t1#typ t1 t1'
     | JCTreal_cast(t1,rc) ->
         let t1' = ft t1 in
         begin match rc with
@@ -2379,10 +2380,11 @@ and expr e =
           mk_expr (Let(tmp,e1',call)) (* Yannick: why a temporary here? *)
     | JCEbitwise_cast(e1,_st) ->
 	expr e1
-    | JCErange_cast(e1,ri) ->
+    | JCErange_cast(e1, ri) ->
         let e1' = expr e1 in
+        let to_type = Option_misc.map_default (fun e -> JCTenum e) (JCTnative Tinteger) ri in
         coerce ~check_int_overflow:(safety_checking())
-          e#mark e#pos (JCTenum ri) e1#typ e1 e1'
+          e#mark e#pos to_type e1#typ e1 e1'
     | JCEreal_cast(e1,rc) ->
         let e1' = expr e1 in
         begin match rc with
@@ -2505,7 +2507,7 @@ and expr e =
       in
       let reinterpret_memory =
         let old_mems =
-          MemoryMap.fold
+          MemoryMap.(fold
             (fun (mc, _ as mcr) _ acc ->
               match mc with
               | JCmem_field { jc_field_info_rep = true;
@@ -2519,8 +2521,9 @@ and expr e =
                 if mem <> new_mem then mem :: acc
                                   else acc
               | JCmem_field _ | JCmem_plain_union _ | JCmem_bitvector -> acc)
-            infunction.jc_fun_info_effects.jc_reads.jc_effect_memories
-            []
+            (merge LogicLabelSet.union infunction.jc_fun_info_effects.jc_reads.jc_effect_memories
+                                       infunction.jc_fun_info_effects.jc_writes.jc_effect_memories)
+            [])
         in
         let p = "p" in
         let lp = LVar p in
@@ -3474,9 +3477,13 @@ let tr_axiom loc id ~is_axiom labels a acc =
     Format.printf "[interp] axiom %s@." id;
 
   let lab = match labels with [lab] -> lab | _ -> LabelHere in
-  let ef = Jc_effect.assertion empty_effects a in
+  (* Special (local) translation of effects for predicates with polymorphic memories.
+     We first entirely exclude their effects from the assertion, then only restore the effects that
+     are relevant in this axiom. So the effects from other axioms won't be translated. *)
+  let ef = Jc_effect.assertion empty_effects (restrict_poly_mems_in_assertion MemoryMap.empty a) in
   let a' =
-    assertion ~type_safe:false ~global_assertion:true ~relocate:false lab lab a
+    assertion ~type_safe:false ~global_assertion:true ~relocate:false lab lab @@
+      restrict_poly_mems_in_assertion ef.jc_effect_memories a
   in
   let params = tmodel_parameters ~label_in_name:true ef in
   let new_id = get_unique_name id in

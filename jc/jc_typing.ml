@@ -937,7 +937,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	      (*if is_real te1#typ then
 		integer_type, te1#region, JCTreal_cast(te1,Real_to_integer)
 	      else*) if is_integer te1#typ then
-		integer_type, te1#region, te1#node
+		integer_type, te1#region, JCTrange_cast (te1, None)
 	      else
                 not_the_good_type e#pos ty "bad cast to integer"
 		  (*typing_error e#pos "bad cast to integer"*)
@@ -994,7 +994,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	  | JCTnative _ -> assert false (* TODO *)
 	  | JCTenum ri ->
 	      if is_integer te1#typ then
-		JCTenum ri, dummy_region, JCTrange_cast(te1, ri)
+		JCTenum ri, dummy_region, JCTrange_cast(te1, Some ri)
 	      else
 		(* CM je ne comprends pas ce cast de real vers enum
 		   if is_real te1#typ then
@@ -2091,7 +2091,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	      (* if is_real te1#typ then
 		integer_type, te1#region, JCEreal_cast(te1,Real_to_integer)
 	      else*) if is_integer te1#typ then
-		integer_type, te1#region, te1#node
+		integer_type, te1#region, JCErange_cast (te1, None)
 	      else
 		typing_error e#pos "bad cast to integer"
 	  | JCTnative Treal ->
@@ -2140,7 +2140,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	  | JCTnative _ -> assert false (* TODO *)
 	  | JCTenum ri ->
 	      if is_integer te1#typ then
-		JCTenum ri, dummy_region, JCErange_cast(te1, ri)
+		JCTenum ri, dummy_region, JCErange_cast(te1, Some ri)
 	      else
 		(* CM je ne comprends pas ce cast de real vers enum
 		   if is_real te1#typ then

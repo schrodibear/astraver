@@ -933,15 +933,13 @@ let tr_logic_model_params f =
   let tmodel_parameters = tmodel_parameters ~label_in_name:true in
   default (lazy (tmodel_parameters f.jc_logic_info_effects)) begin
 
-      List.filter f.jc_logic_info_parameters
-        ~f:(function
-            | { jc_var_info_type = JCTpointer (JCtag ({ jc_struct_info_root = Some _ }, _), _, _) } -> true
-            | _ -> false)
-    |> List.map ~f:(function { jc_var_info_region = r } -> r)
+      poly_mem_regions f
     |> function [] -> abort | l -> return l
     >>= fun regions ->
 
-      MemoryMap.partition (fun (_, r) _ -> List.mem r ~set:regions) f.jc_logic_info_effects.jc_effect_memories
+      MemoryMap.partition
+        (fun (_, r) _ -> List.exists regions ~f:(Region.equal r))
+        f.jc_logic_info_effects.jc_effect_memories
     |> fun (replace, _ as r) -> if MemoryMap.is_empty replace then abort else return r
     >>= fun (replace, keep) ->
 
@@ -955,28 +953,20 @@ let tr_logic_model_params f =
     |> function [] -> abort | l -> return l
     >>= fun ax_decls ->
 
-    let with_empty_memories fn =
-      let eff = f.jc_logic_info_effects in
-      f.jc_logic_info_effects <- { f.jc_logic_info_effects with jc_effect_memories = MemoryMap.empty };
-      let r = fn () in
-      f.jc_logic_info_effects <- eff;
-      r
-    in
-      with_empty_memories @@
-        (fun () ->
-          List.map ax_decls
-            ~f:(fun decl ->
-                 let ef = axiomatic_decl_effect empty_effects decl in
-                 effects_from_decl f ef empty_effects decl))
+      List.map ax_decls
+        ~f:(fun decl ->
+             let decl = restrict_poly_mems_in_axiomatic_decl MemoryMap.empty decl in
+             let ef = axiomatic_decl_effect empty_effects decl in
+             effects_from_decl f ef empty_effects decl)
     |> let count mm =
          LabelRegionMap.(
            MemoryMap.fold
              (fun (_, r) ls lrm ->
-               if List.mem r ~set:regions then
+               if List.exists regions ~f:(Region.equal r) then
                  LogicLabelSet.fold
                    (fun l lrm ->
                      let key = l, r in
-                     let c = try find key lrm with Not_found -> 0 in
+                     let c = find_or_default key 0 lrm in
                      add key (c + 1) lrm)
                    ls
                    lrm
