@@ -2503,7 +2503,7 @@ and expr e =
       in
       let reinterpret_cast =
         LPred ("reinterpret_cast",
-               [e'; at before alloc; at LabelHere alloc; at before tag; at LabelHere tag])
+               [e'; at LabelHere alloc; at before alloc; at LabelHere tag; at before tag])
       in
       let reinterpret_memory =
         let old_mems =
@@ -2518,7 +2518,7 @@ and expr e =
                               jc_field_info_type = t }
                 when is_integral_type t ->
                 let mem = memory_name mcr in
-                if mem <> new_mem then mem :: acc
+                if mem <> new_mem then (mc, mem) :: acc
                                   else acc
               | JCmem_field _ | JCmem_plain_union _ | JCmem_bitvector -> acc)
             (merge LogicLabelSet.union infunction.jc_fun_info_effects.jc_reads.jc_effect_memories
@@ -2527,17 +2527,24 @@ and expr e =
         in
         let p = "p" in
         let lp = LVar p in
-        let body old_mem =
+        let body (old_mc, old_mem) =
+          let new_mem = at LabelHere new_mem in
+          let old_mem = at before old_mem in
+          (* Sorting memories in the order they appear in jc_effect_memories (i.e. increasing by MemoryClass) *)
+          let mem1, mem2 =
+            if MemClass.compare mc old_mc < 0 then old_mem, new_mem
+                                              else new_mem, old_mem
+          in
           let app p =
             LPred ("reinterpret_memory",
-                   [p; at LabelHere tag; at before tag; at LabelHere new_mem; at before old_mem])
+                   [p; at LabelHere tag; at before tag; mem1; mem2])
           in
           let i = "i" in
           let li = LVar i in
           make_and
             (app lp) @@
             LForall (i, why_integer_type, [],
-              LImpl (make_and (LPred ("le", [LApp ("offset_min", [at before alloc; lp]); li])) @@
+              LImpl (make_and (LPred ("le", [LApp ("offset_min", [at LabelHere alloc; lp]); li])) @@
                                LPred ("le", [li; LApp ("offset_max", [at LabelHere alloc; lp])]),
                      app @@ LApp ("shift", [lp; li])))
         in
