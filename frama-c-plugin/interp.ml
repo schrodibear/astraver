@@ -2858,11 +2858,15 @@ let type_and_memory_reinterpretations get_compinfo () =
           ~list:[instanceof p t_from l1;
                  instanceof p t_to l2;
                  rcast;
-                 mkeq (omin t_from l1) l;
-                 mkeq (omax t_from l1) r]
+                 mkbinary ~expr1:(omin t_from l1) ~op:`Ble ~expr2:l ();
+                 mkbinary ~expr1:(omax t_from l1) ~op:`Bge ~expr2:r ()]
           ()
       in
-      let expr2 = mkand ~list:[mkeq (omin t_to l2) l'; mkeq (omax t_to l2) r'] () in
+      let expr2 =
+        mkand ~list:[mkbinary ~expr1:(omin t_to l2) ~op:`Ble ~expr2:l' ();
+                     mkbinary ~expr1:(omax t_to l2) ~op:`Bge ~expr2:r' ()]
+              ()
+      in
       mkimplies ~expr1 ~expr2 ()
     in
     (* Type reinterpretation axiom generators *)
@@ -2952,20 +2956,25 @@ let type_and_memory_reinterpretations get_compinfo () =
            ~body
            ()]
     in
-    let complement what dv =
+    let complement what =
       let t, max = match what with `Whole -> add_u whole_name, w | `Part -> add_u part_name, d in
-      let typ = integral_type t in
-      let sv = "v" in
-      let v = fst @@ var sv in
-      mklet_nodecl ~var:sv ~init:dv
-       ~body:(
-          mkif
-            ~condition:(mkbinary ~expr1:v ~op:`Bge ~expr2:zero_expr ())
-            ~expr_then:(mkcast ~expr:v ~typ ())
-            ~expr_else:(mkcast ~expr:(mkbinary ~expr1:(mkcast ~expr:v ~typ:tinteger ()) ~op:`Badd ~expr2:max ())
-                               ~typ ())
-            ())
-       ()
+      let name = "complement_to_" ^ t in
+      guard_declarations ~name @@ fun () ->
+        let typ = integral_type t in
+        let sv = "v" in
+        let v = fst @@ var sv in
+        [PDecl.mklogic_def
+           ~typ
+           ~name
+           ~params:[integral_type @@ del_u t, sv]
+           ~body:(
+              mkif
+                ~condition:(mkbinary ~expr1:v ~op:`Bge ~expr2:zero_expr ())
+                ~expr_then:(mkcast ~expr:v ~typ ())
+                ~expr_else:(mkcast ~expr:(mkbinary ~expr1:(mkcast ~expr:v ~typ:tinteger ()) ~op:`Badd ~expr2:max ())
+                                   ~typ ())
+                ())
+           ()]
     in
     let signed_pred what =
       let whole_name, part_name = del_u whole_name, add_u part_name in
@@ -2977,14 +2986,16 @@ let type_and_memory_reinterpretations get_compinfo () =
       let name = from ^ "_as_" ^ _to in
       guard_declarations ~name @@ fun () ->
         let fun_name, unsigned_pred_defs = unsigned_pred () in
+        let complement_name, complement_def = complement `Whole in
         let svars = List.map ((^) "a" % string_of_int) @@ range (v - 1) `Downto 0 in
         let d0 = "d0" in
         let body =
-          let whole = complement `Whole (fst @@ var d0) in
+          let whole = mkapp ~fun_name:complement_name ~args:[fst @@ var d0] () in
           mkapp ~fun_name ~args:(whole :: List.map (fst % var) svars) ()
         in
         let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
         unsigned_pred_defs @
+        complement_def @
         [PDecl.mklogic_def
            ~name
            ~params:((whole_type, d0) :: List.map (fun v -> part_type, v) svars)
@@ -3004,11 +3015,16 @@ let type_and_memory_reinterpretations get_compinfo () =
         mkat ~expr:(mkderef ~expr ~field:(contents_name typ) ()) ~label ()
       in
       let whole_deref l = deref whole_type l 0 in
+      let complement_opt, complement_def =
+        if is_u part_name then id, []
+                          else
+                               complement `Part
+                            |> map_fst (fun fun_name -> List.map @@ fun a -> mkapp ~fun_name ~args:[a] ())
+      in
       let part_derefs l =
            range 0 `To (v - 1)
         |> List.map (deref part_type l)
-        |> if is_u part_name then id
-                             else List.map (complement `Part)
+        |> complement_opt
       in
       let impl expr2 = mkimplies ~expr1:rmemory ~expr2 () in
       let (split_name, split_defs), (merge_name, merge_defs) =
@@ -3025,7 +3041,7 @@ let type_and_memory_reinterpretations get_compinfo () =
               let body = mkforall ~typ:tvoidp ~vars:[ip] ~triggers ~body () in
               PDecl.mklemma_def ~name ~axiom:true ~labels:[l1; l2] ~body ())
       in
-      merge_defs @ split_defs @ axs
+      complement_def @ merge_defs @ split_defs @ axs
     in
     (* Finally concatenating all the above type and memory reinterpretation axioms (and predicates) *)
     type_axioms `Whole_into_parts @ type_axioms `Parts_into_whole, memory_axioms
