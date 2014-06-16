@@ -633,7 +633,8 @@ val reinterpret_val_ownership
   writes { a, t }
   requires { p = null \/ (offset_min !a p <= offset_max !a p /\ select !com p = False) }
   ensures  { instanceof !t p s /\
-             let pset = (pset_range (pset_singleton p) (offset_min (old !a) p) (offset_max (old !a) p)) in
+             let pset = (pset_range (pset_singleton p) (offset_min !a p) (offset_max !a p)) in
+             (forall p'. not in_pset p' pset -> forall s'. instanceof (old !t) p' s' -> instanceof !t p' s') /\
              (forall p'. not in_pset p' pset -> select !m p' = select (old !m) p')}
 
 (* With -inv-sem <> ownership *)
@@ -680,10 +681,12 @@ val reinterpret_parameter
   requires { p = null \/ offset_min !a p <= offset_max !a p }
   ensures  { (p = null -> !a = old !a /\ !t = old !t /\ !m = old !m) /\
              (p <> null ->
-               let pset = (pset_range (pset_singleton p) (offset_min (old !a) p) (offset_max (old !a) p)) in
-               alloc_extends_except (old !a) !a pset /\
+               let pset_old = (pset_range (pset_singleton p) (offset_min (old !a) p) (offset_max (old !a) p)) in
+               let pset_new = (pset_range (pset_singleton p) (offset_min !a p) (offset_max !a p)) in
+               alloc_extends_except (old !a) !a pset_old /\
                instanceof !t p s /\
-               (forall p'. not in_pset p' pset -> select !m p' = select (old !m) p')) }
+               (forall p'. not in_pset p' pset_new -> forall s'. instanceof (old !t) p' s' -> instanceof !t p' s') /\
+               (forall p'. not in_pset p' pset_new -> select !m p' = select (old !m) p')) }
 
 val safe_free_parameter (a:ref (alloc_table 't)) (p:pointer 't) :
   unit
@@ -701,11 +704,13 @@ val safe_reinterpret_parameter
       (p: pointer 't)
       (v: 'v) :
   unit
-  writes { a, t }
+  writes { a, t, m }
   ensures  { (p = null -> !a = old !a /\ !t = old !t) /\
              (p <> null ->
-               let pset = (pset_range (pset_singleton p) (offset_min (old !a) p) (offset_max (old !a) p)) in
-               alloc_extends_except (old !a) !a pset /\
+               let pset_old = (pset_range (pset_singleton p) (offset_min (old !a) p) (offset_max (old !a) p)) in
+               let pset_new = (pset_range (pset_singleton p) (offset_min !a p) (offset_max !a p)) in
+               alloc_extends_except (old !a) !a pset_old /\
                instanceof !t p s /\
-               (forall p'. not in_pset p' pset -> select !m p' = select (old !m) p')) }
+               (forall p'. not in_pset p' pset_new -> forall s'. instanceof (old !t) p' s' -> instanceof !t p' s') /\
+               (forall p'. not in_pset p' pset_new -> select !m p' = select (old !m) p')) }
 end
