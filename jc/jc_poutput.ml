@@ -133,6 +133,8 @@ let rec pexpr fmt e =
 	fprintf fmt "%a %s= %a" pexpr v (bin_op op) pexpr e
     | JCPEcast (e, si) ->
 	fprintf fmt "(%a :> %a)" pexpr e ptype si
+    | JCPEreinterpret_cast (e, si) ->
+        fprintf fmt "(%a as %a)" pexpr e ptype si
     | JCPEalloc (e, si) ->
 	fprintf fmt "(new %s[%a])" si pexpr e
     | JCPEfree (e) ->

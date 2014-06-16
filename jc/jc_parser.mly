@@ -580,6 +580,8 @@ primary_expression:
     { locate (JCPEconst (JCCstring $1)) }
 | LPAR expression COLONGT type_expr RPAR
     { locate (JCPEcast($2, $4)) }
+| LPAR expression AS type_expr RPAR
+    { locate (JCPEreinterpret_cast ($2, $4)) }
 | LPAR expression RPAR 
     { $2 }
 | LPAR IDENTIFIER COLON expression RPAR

@@ -221,7 +221,7 @@ let duplicable =
     (fun acc e -> acc && match e#node with
        | JCPEconst _ | JCPEvar _ | JCPErange _ | JCPEderef _ | JCPEfresh _
        | JCPEunary _ | JCPEoffset _ | JCPEaddress _ | JCPEold _ | JCPEat _
-       | JCPEbinary _ | JCPEcast _ | JCPEsubtype _ | JCPEbase_block _ ->
+       | JCPEbinary _ | JCPEcast _ | JCPEreinterpret_cast _ | JCPEsubtype _ | JCPEbase_block _ ->
 	   true
        | JCPEassert _ | JCPEthrow _ | JCPEreturn _ | JCPEeqtype _
        | JCPEbreak _ | JCPEcontinue _  | JCPEgoto _  | JCPEdecl _
@@ -563,6 +563,7 @@ let rec expr e =
     | JCPEassign_op _ -> assert false
     | JCPEinstanceof(e,id) -> JCNEinstanceof(expr e,id)
     | JCPEcast(e,id) -> JCNEcast(expr e,id)
+    | JCPEreinterpret_cast (e, id) -> JCNEreinterpret_cast (expr e, id)
     | JCPEquantifier(q,ty,idlist,trigs,e) ->
         JCNEquantifier(q,ty,idlist,List.map (List.map expr) trigs,expr e)
     | JCPEold e -> JCNEold(expr e)

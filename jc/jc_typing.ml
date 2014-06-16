@@ -733,7 +733,7 @@ let rec type_labels env ~result_label label e =
 *)
   match e#node with
     | JCNEconst _ | JCNEderef _ | JCNEbinary _
-    | JCNEunary _ | JCNEassign _ | JCNEinstanceof _ | JCNEcast _
+    | JCNEunary _ | JCNEassign _ | JCNEinstanceof _ | JCNEcast _ | JCNEreinterpret_cast _
     | JCNEif _ | JCNEoffset _ | JCNEaddress _ | JCNEbase_block _ | JCNEfresh _
     | JCNEalloc _ | JCNEfree _ | JCNEreinterpret _ | JCNElet _
     | JCNEassert _ | JCNEloop _ | JCNEreturn _ | JCNEtry _
@@ -1037,6 +1037,27 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	  | JCTpointer (JCroot _, _, _)  -> assert false (* TODO *)
 	  | JCTtype_var _|JCTlogic _|JCTany|JCTnull -> assert false (* TODO *)
 	end
+    | JCNEreinterpret_cast (e1, t) ->
+        let te1 = ft e1 in
+        let ty = type_type t in
+        begin match ty with
+        | JCTpointer (JCtag (st, _), _, _) ->
+          begin match te1#typ with
+          | JCTpointer (_st1, a, b) ->
+            JCTpointer (JCtag (st, []), a, b),
+            te1#region,
+            JCTbitwise_cast (te1, label (), st)
+          | JCTnull ->
+            JCTpointer (JCtag (st, []), None, None),
+            te1#region,
+            JCTbitwise_cast (te1, label (), st)
+          | JCTnative _ | JCTlogic _ | JCTenum _ | JCTany
+          | JCTtype_var _ -> not_the_good_type e#pos te1#typ "only structures can be cast"
+          end
+        |  JCTpointer (JCroot _, _, _)
+        | JCTnull | JCTnative _ | JCTlogic _ | JCTenum _ | JCTany
+        | JCTtype_var _ -> typing_error e#pos "unsupported reinterpret cast to a non-pointer type"
+        end
     | JCNEif(e1, e2, e3) ->
         let te1 = ft e1 and te2 = ft e2 and te3 = ft e3 in
         Jc_type_var.add uenv e#pos (JCTnative Tboolean) te1#typ;
@@ -1357,6 +1378,7 @@ let rec assertion env e =
     | JCNEinstanceof(e1, t) ->
         JCAinstanceof(ft e1, label (), find_struct_info e#pos t)
     | JCNEcast _ -> assert false (* TODO *)
+    | JCNEreinterpret_cast _ -> typing_error e#pos "unsupported reinterpret cast in assertion"
     | JCNEif(e1,e2,e3) ->
         let te1 = ft e1 and te2 = fa e2 and te3 = fa e3 in
         Jc_type_var.add uenv e1#pos te1#typ (JCTnative Tboolean);
@@ -1553,7 +1575,7 @@ let rec location_set env e =
     | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
     | JCNEtry _ |JCNEreturn _ | JCNEloop _ |JCNEblock _ | JCNEassert _
     | JCNElet _ |JCNEfree _ | JCNEalloc _ | JCNEreinterpret _ | JCNEoffset _ | JCNEaddress _
-    | JCNEif _ | JCNEcast _ | JCNEbase_block _
+    | JCNEif _ | JCNEcast _ | JCNEreinterpret_cast _ | JCNEbase_block _
     | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _
     | JCNEconst _ | JCNEcontract _ | JCNEsubtype _ ->
         typing_error e#pos "invalid memory location"
@@ -1597,7 +1619,7 @@ let rec location env e =
     | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
     | JCNEtry _ | JCNEreturn _ | JCNEloop _ | JCNEblock _ | JCNEassert _
     | JCNElet _ | JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEreinterpret _ | JCNEaddress _
-    | JCNEif _ | JCNEcast _ | JCNEbase_block _
+    | JCNEif _ | JCNEcast _ | JCNEreinterpret_cast _ | JCNEbase_block _
     | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _ | JCNEbinary _
     | JCNEconst _ | JCNEcontract _ | JCNEsubtype _ | JCNEfresh _ ->
         typing_error e#pos "invalid memory location"
@@ -2182,6 +2204,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	  | JCTpointer (JCroot _, _, _)  -> assert false (* TODO *)
 	  | JCTtype_var _|JCTlogic _|JCTany|JCTnull -> assert false (* TODO *)
 	end
+    | JCNEreinterpret_cast _ -> typing_error e#pos "unsupported reinterpret cast in expression: %a" Jc_noutput.expr e
     | JCNEif(e1,e2,e3) ->
         let te1 = fe e1 and te2 = fe e2 and te3 = fe e3 in
         begin match te1#typ with

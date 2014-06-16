@@ -148,6 +148,8 @@ let replace_sub_pexpr e el =
 	let e1 = as1 el in JCPEinstanceof(e1,st)
     | JCPEcast(_e,st) ->
 	let e1 = as1 el in JCPEcast(e1,st)
+    | JCPEreinterpret_cast (_e, st) ->
+        let e1 = as1 el in JCPEreinterpret_cast (e1, st)
     | JCPEif(_e1,_e2,_e3) ->
 	let e1,e2,e3 = as3 el in JCPEif(e1,e2,e3)
     | JCPErange(e1opt,e2opt) ->
@@ -282,6 +284,7 @@ module PExprAst = struct
       | JCPEunary(_, e)
       | JCPEinstanceof(e, _)
       | JCPEcast(e, _)
+      | JCPEreinterpret_cast (e, _)
       | JCPEoffset(_, e)
       | JCPEaddress(_,e)
       | JCPEbase_block(e)
@@ -1322,6 +1325,7 @@ module NExprAst = struct
       | JCNEunary(_, e)
       | JCNEinstanceof(e, _)
       | JCNEcast(e, _)
+      | JCNEreinterpret_cast (e, _)
       | JCNEoffset(_, e)
       | JCNEaddress(_,e)
       | JCNEfresh(e)

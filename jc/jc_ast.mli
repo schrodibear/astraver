@@ -177,6 +177,7 @@ and pexpr_node =
   | JCPEassign_op of pexpr * bin_op * pexpr
   | JCPEinstanceof of pexpr * string
   | JCPEcast of pexpr * ptype
+  | JCPEreinterpret_cast of pexpr * ptype
   | JCPEquantifier of quantifier * ptype * identifier list * pexpr list list * pexpr
   | JCPEfresh of pexpr
   | JCPEold of pexpr
@@ -303,6 +304,7 @@ type nexpr_node =
   | JCNEassign of nexpr * nexpr
   | JCNEinstanceof of nexpr * string
   | JCNEcast of nexpr * ptype
+  | JCNEreinterpret_cast of nexpr * ptype
   | JCNEif of nexpr * nexpr * nexpr
   | JCNEoffset of offset_kind * nexpr
   | JCNEaddress of address_kind * nexpr
