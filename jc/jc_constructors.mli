@@ -420,6 +420,9 @@ module PExpr :
     val mkcast :
       expr:pexpr -> typ:ptype -> ?pos:Loc.position -> unit -> pexpr
 
+    val mkreinterpret_cast :
+      expr:pexpr -> typ:ptype -> ?pos:Loc.position -> unit -> pexpr
+
     val mkquantifier :
       quantifier:quantifier ->
       typ:ptype ->
@@ -505,6 +508,9 @@ module PExpr :
       cases:(ppattern * pexpr) list ->
       ?pos:Loc.position -> unit -> pexpr
 *)
+
+    val mkreinterpret :
+      expr:pexpr -> typ:string -> ?pos:Loc.position -> unit -> pexpr
 
     val mkassert : ?behs:identifier list -> expr:pexpr -> ?pos:Loc.position -> unit -> pexpr
 

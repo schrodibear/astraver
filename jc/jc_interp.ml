@@ -2528,16 +2528,19 @@ and expr e =
         let p = "p" in
         let lp = LVar p in
         let body (old_mc, old_mem) =
-          let new_mem = at LabelHere new_mem in
-          let old_mem = at before old_mem in
+          let new_mem lab = at lab new_mem in
+          let old_mem lab = at lab old_mem in
           (* Sorting memories in the order they appear in jc_effect_memories (i.e. increasing by MemoryClass) *)
-          let mem1, mem2 =
-            if MemClass.compare mc old_mc < 0 then old_mem, new_mem
-                                              else new_mem, old_mem
+          let mem1, mem2, labs =
+            if MemClass.compare mc old_mc < 0 then old_mem, new_mem, (before, LabelHere)
+                                              else new_mem, old_mem, (LabelHere, before)
           in
+          let (mem1, mem2), (mem3, mem4) = map_pair2 mem1 mem2 labs, fdup2 mem1 mem2 LabelPre in
           let app p =
-            LPred ("reinterpret_memory",
-                   [p; at LabelHere tag; at before tag; mem1; mem2])
+            make_and (LPred ("reinterpret_memory",
+                             [p; at LabelHere tag; at before tag; mem1; mem2])) @@
+                      LPred ("reinterpret_memory",
+                             [p; at LabelHere tag; at before tag; mem3; mem4])
           in
           let i = "i" in
           let li = LVar i in
@@ -3518,6 +3521,40 @@ let tr_axiomatic_decl acc d =
   match d with
     | Jc_typing.ABaxiom(loc,id,labels,p) ->
 	tr_axiom loc ~is_axiom:true id labels p acc
+
+(******************************************)
+(*   special axiom for reinterpret_memory *)
+(******************************************)
+
+let reinterpret_memory_axiom ri =
+  let rm = "reinterpret_memory" in
+  let rmt = root_model_type ri in
+  let mem s = raw_memory_type rmt (logic_type_var s) in
+  let tag = raw_tag_table_type rmt in
+  let pointer = raw_pointer_type rmt in
+  let var = fdup2 id (fun s -> LVar s) in
+  let (a, va), (b, vb), (c, vc), (d, vd), (tab, vtab), (tcd, vtcd), (p, vp), (q, vq) =
+      var "a", var "b", var "c", var "d", var "tab"  ,   var "tcd", var "p", var "q"
+  in
+  let tvab = "a" and tvcd = "b" and eq = "eq" in
+  Goal (KAxiom, id_no_loc @@ rm ^ "not_assigns_axiom",
+        LForall (a, mem tvab, [],
+          LForall (b, mem tvab, [],
+            LForall (c, mem tvcd, [],
+              LForall (d, mem tvcd, [],
+                LForall (tab, tag, [],
+                  LForall (tcd, tag, [],
+                    let rm1 = LPred (rm, [vp; vtab; vtcd; va; vc])
+                    and rm2 = LPred (rm, [vp; vtab; vtcd; vb; vd]) in
+                    LForall (p, pointer, [[LPatP rm1; LPatP rm2]],
+                      LImpl (make_and rm1 rm2,
+                             let sel1 = make_select va vq
+                             and sel2 = make_select vb vq
+                             and sel3 = make_select vc vq
+                             and sel4 = make_select vd vq in
+                             LForall (q, pointer, List.(map @@ map @@ fun t -> LPatT t) [[sel1; sel2]; [sel3; sel4]],
+                               LImpl (LPred ("in_pset", [vq; LApp ("pset_all", [LApp ("pset_singleton", [vp])])]),
+                                 LIff (LPred (eq, [sel1; sel2]), LPred (eq, [sel3; sel4])))))))))))))
 
 (******************************************************************************)
 (*                                 Functions                                  *)

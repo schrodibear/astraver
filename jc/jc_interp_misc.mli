@@ -162,7 +162,7 @@ val alloc_table_type : Jc_env.alloc_class -> Output.logic_type
 
 val is_alloc_table_type : Output.logic_type -> bool
 
-
+val raw_tag_table_type: Output.logic_type -> Output.logic_type
 
 
 (**  {1 Variables} *)
@@ -331,6 +331,8 @@ val const_of_num :  Num.num -> Output.term
 val const : Jc_ast.const -> Output.constant
 (** constant *)
 
+
+val make_select : Output.term -> Output.term -> Output.term
 
 val make_select_fi : Jc_env.field_info -> Output.term -> Output.term
 (** dereferencing, builds select(f.name,t) *)

@@ -752,6 +752,7 @@ object
   method vassigns = visitor#vassigns
   method vloop_pragma = visitor#vloop_pragma
   method vslice_pragma = visitor#vslice_pragma
+  method vjessie_pragma = visitor#vjessie_pragma
   method vdeps = visitor#vdeps
   method vcode_annot = visitor#vcode_annot
   method vannotation = visitor#vannotation

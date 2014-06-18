@@ -342,6 +342,7 @@ either with (~expr1 AND ~expr2) OR ~list only."
       | Some op -> mk ~node:(JCPEassign_op(location, op, value))
   let mkinstanceof ~expr ~typ = mk ~node:(JCPEinstanceof(expr, typ))
   let mkcast ~expr ~typ = mk ~node:(JCPEcast(expr, typ))
+  let mkreinterpret_cast ~expr ~typ = mk ~node:(JCPEreinterpret_cast (expr, typ))
   let mkquantifier ~quantifier ~typ ~vars ?(triggers=[]) ~body =
     mk ~node:(JCPEquantifier(quantifier, typ, vars, triggers, body))
   let mkforall = mkquantifier ~quantifier:Forall
@@ -374,6 +375,7 @@ either with (~expr1 AND ~expr2) OR ~list only."
   let mkalloc ?(count = mkint ~value:1 ()) ~typ =
     mk ~node:(JCPEalloc(count, typ))
   let mkfree ~expr = mk ~node:(JCPEfree expr)
+  let mkreinterpret ~expr ~typ = mk ~node:(JCPEreinterpret (expr, typ))
   let mkmutable ~expr ~tag = mk ~node:(JCPEmutable(expr, tag))
   let mktag_equality ~tag1 ~tag2 = mk ~node:(JCPEeqtype(tag1, tag2))
   let mkmatch ~expr ~cases = mk ~node:(JCPEmatch(expr, cases))

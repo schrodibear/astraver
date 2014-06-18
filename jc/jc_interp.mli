@@ -138,6 +138,8 @@ val tr_axiomatic_decl :
   Output.why_decl list ->
   Jc_typing.axiomatic_decl -> Output.why_decl list
 
+val reinterpret_memory_axiom: Jc_env.root_info -> Output.why_decl
+
 (** {2 functions} *)
 
 val pre_tr_fun :

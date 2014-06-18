@@ -789,12 +789,75 @@ and terms t =
         when isIntegralType ty && isLogicRealType t.term_type ->
           List.map (fun x -> JCPEapp("\\truncate_real_to_int",[],[x])) (terms t)
 
-    | TCastE(ty,t)
-        when isIntegralType ty && isLogicArithmeticType t.term_type ->
-        if !int_model = IMexact then
-          List.map (fun x -> x#node) (terms t)
-        else
-          List.map (fun x -> JCPEcast(x,ctype ty)) (terms t)
+    | TCastE(ty,t')
+      when isIntegralType ty && isLogicArithmeticType t'.term_type ->
+      if !int_model = IMexact then
+        List.map (fun x -> x#node) (terms t')
+      else begin
+        match t'.term_node with
+        | TLval (TMem { term_node = TBinOp (PlusPI | IndexPI | MinusPI as op,
+                                            t1,
+                                            { term_node = Trange (lbo, rbo) }) },
+                 TField (_, TNoOffset))
+          when isIntegralType ty ->
+          let typ = pointer_type ty in
+          let from_bitsize =
+            let error =
+              unsupported "Can't properly reinterpret terms of type %a in %a (%s)"
+                          Printer.pp_logic_type t1.term_type Printer.pp_term t1
+            in
+            match t1.term_type with
+            | Ctype t when isPointerType t ->
+              begin match unrollType @@ pointed_type t with
+              | TComp ({ cname }, _, _) ->
+                begin match
+                  fold_integral_types (fun _ ty bs acc -> if wrapper_name ty = cname then Some bs else acc) None
+                with
+                | Some (Some bs) -> bs
+                | _ -> error "no bitsize"
+                end
+              | _ -> error "not a pointer to a composite after retyping"
+              end
+            | _ -> error "not a C pointer"
+          in
+          let open! Pervasives in (* to override the arithmetic operations from int64 back to int *)
+          let to_bitsize = integral_type_size_in_bits ty in
+          let adjust =
+            match from_bitsize / to_bitsize with
+            | 1 -> id
+            | a when a > 0 && from_bitsize mod to_bitsize == 0 ->
+              fun expr1 -> PExpr.(mkbinary ~expr1  ~op:`Bmul ~expr2:(mkint ~value:a ()) ())
+            | 0 when to_bitsize mod from_bitsize == 0 ->
+              fun expr1 -> PExpr.(mkbinary ~expr1 ~op:`Bdiv ~expr2:(mkint ~value:(to_bitsize / from_bitsize) ()) ())
+            | _ -> unsupported "Can't convert range bounds for types %a and %a with bit-sizes of %d and %d"
+                               Printer.pp_logic_type t1.term_type Printer.pp_typ ty from_bitsize to_bitsize
+          in
+          let adjust =
+            match op with
+            | PlusPI | IndexPI -> adjust
+            | MinusPI -> fun e -> PExpr.mkunary ~op:`Uminus ~expr:(adjust e) ()
+            | _ -> Jessie_options.fatal "unexpected op in terms translation: %a" Printer.pp_term t'
+          in
+          ListLabels.map (terms t1)
+            ~f:(fun expr -> JCPEderef (PExpr.(mkrange ~locations:(mkreinterpret_cast ~expr ~typ ())
+                                                      ?left:(opt_map (adjust % term) lbo)
+                                                      ?right:(opt_map (adjust % term) rbo)
+                                                      ()),
+                                       contents_name ty))
+        | TLval (TMem t1, (TField (_, TNoOffset) as offs)) when isIntegralType ty ->
+          let dummy_range =
+            Logic_const.(
+              let z = Some (tinteger ~loc:t1.term_loc 0) in
+              trange ~loc:t1.term_loc (z, z))
+          in
+          List.map (fun t -> t#node) @@ terms @@
+          { t with term_node= TCastE (ty,
+                                      { t' with term_node =
+                                                TLval (TMem { t1 with term_node =
+                                                                      TBinOp (PlusPI, t1, dummy_range) },
+                                                       offs) }) }
+        | _ -> List.map (fun x -> JCPEcast(x,ctype ty)) (terms t)
+      end
 
     | TCastE(ty,t)
         when isFloatingType ty && isLogicArithmeticType t.term_type ->
@@ -1466,6 +1529,34 @@ let code_annot pos ((acc_assert_before,contract) as acc) a =
               (JCPEassert
               (behav,Aassert,locate ~pos (named_pred p))) pos)
             *)
+    | APragma (Jessie_pragma (JPexpr t)) ->
+      begin match t.term_node with
+      | TCoerce (t, typ) ->
+        let from_type =
+          match t.term_type with
+          | Ctype t -> t
+          | ty -> unsupported "reinterpretation from a logic term %a of type %a"
+                              Printer.pp_term t Printer.pp_logic_type ty
+        in
+        let check_supported_type s t =
+          let integral_struct_name t =
+            match unrollType t with
+            | TComp ({ cname }, _, _) when
+              cname = wrapper_name voidType ||
+              fold_integral_types (fun _ ty _ acc -> acc || wrapper_name ty = cname) false ->
+              Some cname
+            | _ -> None
+          in
+          match isPointerType t, lazy (integral_struct_name @@ pointed_type t) with
+            | false, _ | true, lazy None ->
+              unsupported "reinterpretation %s what is not a pointer to an integer (%a)" s Printer.pp_typ t
+            | true, lazy (Some s) -> s
+        in
+        let _, typ = map_pair (uncurry @@ check_supported_type) (("from", from_type), ("to", typ)) in
+        if typ = wrapper_name voidType then unsupported "reinterpretation to void *"
+        else push @@ locate @@ PExpr.mkreinterpret ~expr:(term t) ~typ ~pos ()
+      | _ -> unsupported "unrecognized term in Jessie pragma: %a (only :> is recognized)" Printer.pp_term t
+      end
     | APragma _ -> acc (* just ignored *)
     | AAssigns (_, _) -> acc (* should be handled elsewhere *)
     | AAllocation _ -> acc (* should be handled elsewhere *)
@@ -1982,6 +2073,9 @@ let instruction = function
   | Asm _ -> Common.unsupported ~current:true "inline assembly"
 
   | Skip _pos -> JCPEconst JCCvoid
+
+  | Code_annot ({ annot_content = APragma (Jessie_pragma _) } as ca, loc) ->
+    (locate @@ List.hd @@ fst @@ code_annot loc ([], None) ca)#node
 
   | Code_annot _ -> Common.unsupported ~current:true "code annotation"
 
@@ -2906,6 +3000,7 @@ let type_and_memory_reinterpretations get_compinfo () =
       )
     in
     (* Predicates for integral type conversions *)
+    let endian_map = List.(if theMachine.theMachine.little_endian then rev_map else map) in
     let unsigned_split_pred () =
       let whole_name, part_name = map_pair add_u (whole_name, part_name) in
       let name = whole_name ^ "_as_" ^ part_name in
@@ -2928,7 +3023,7 @@ let type_and_memory_reinterpretations get_compinfo () =
         let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
         [PDecl.mklogic_def
            ~name
-           ~params:((whole_type, snd (last svars)) :: List.map (fun (v, _) -> part_type, v) svars)
+           ~params:((whole_type, snd (last svars)) :: endian_map (fun (v, _) -> part_type, v) svars)
            ~body
            ()]
     in
@@ -2952,7 +3047,7 @@ let type_and_memory_reinterpretations get_compinfo () =
         let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
         [PDecl.mklogic_def
            ~name
-           ~params:((whole_type, d0) :: List.map (fun v -> part_type, v) svars)
+           ~params:((whole_type, d0) :: endian_map (fun v -> part_type, v) svars)
            ~body
            ()]
     in
