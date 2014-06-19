@@ -4,6 +4,8 @@ DIR=$(dirname $(readlink -f $0))
 
 ocamlc -c -I "$DIR/../src/" -o "$DIR/jc_debug_output.cmo" "$DIR/jc_debug_output.ml"
 
+make -C $DIR/.. byte
+
 SCRIPT='load_printer nums.cma
 load_printer pp.cmo
 load_printer jc_stdlib.cmo
@@ -24,5 +26,6 @@ load_printer jc_debug_output.cmo
 install_printer Jc_debug_output.expr
 install_printer Jc_debug_output.assertion
 install_printer Jc_debug_output.term
+set print_depth 3
 '
-rlwrap -P "$SCRIPT" ocamldebug -I "$DIR/../src/" -I "$DIR" $@
+rlwrap -P "$SCRIPT" ocamldebug -I "$DIR/../src/" -I "$DIR" $DIR/../bin/jessie.byte $@
