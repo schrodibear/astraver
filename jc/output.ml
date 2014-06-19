@@ -764,6 +764,7 @@ and fprintf_assertion form a =
         end
       else
         begin
+          let id = try List.assoc id [("eq_int_bool", "eq_int")] with Not_found -> id in
           fprintf form "@[%s(%a" id fprintf_term t;
           List.iter (fun t -> fprintf form ",@ %a" fprintf_term t) tl;
           fprintf form ")@]"
