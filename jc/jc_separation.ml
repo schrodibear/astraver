@@ -55,7 +55,7 @@ let in_current_logic_component f1 =
     | None -> false
     | Some comp ->
 	List.exists
-	  (fun f2 -> f1.jc_logic_info_tag == f2.jc_logic_info_tag) comp
+	  (fun f2 -> f1.jc_logic_info_tag = f2.jc_logic_info_tag) comp
 
 let current_component = ref None
 let set_current_component comp = current_component := Some comp
@@ -65,7 +65,7 @@ let in_current_component f1 =
     | None -> false
     | Some comp ->
 	List.exists
-	  (fun f2 -> f1.jc_fun_info_tag == f2.jc_fun_info_tag) comp
+	  (fun f2 -> f1.jc_fun_info_tag = f2.jc_fun_info_tag) comp
 
 let single_term rresult t =
   match t#node with
@@ -80,7 +80,7 @@ let single_term rresult t =
 	     rem
        | JCTmatch(_, []) ->
 	   ()
-       | JCTlet _ -> ()
+       | JCTlet (vi, t, _) -> Region.unify vi.jc_var_info_region t#region
        | JCTapp app ->
 	   let li = app.jc_app_fun in
 	   let param_regions,result_region =
@@ -157,10 +157,11 @@ let single_assertion _rresult a =
 	Jc_options.lprintf "param:%a@." (print_list comma Region.print) param_regions;
 	Jc_options.lprintf "arg:%a@." (print_list comma Region.print) arg_regions;
 	List.iter2 Region.unify param_regions arg_regions
+    | JCAlet (vi, t, _) -> Region.unify vi.jc_var_info_region t#region
     | JCAtrue | JCAfalse | JCAeqtype _
     | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ | JCAfresh _
     | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _
-    | JCAlet _ | JCAmatch _
+    | JCAmatch _
     | JCAnot _ | JCAquantifier _ | JCAold _ | JCAat _ | JCAsubtype _ ->
 	()
 
