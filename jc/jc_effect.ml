@@ -238,6 +238,48 @@ let ef_union ef1 ef2 =
 	ef1.jc_effect_committed ef2.jc_effect_committed;
   }
 
+let ef_diff ef1 ef2 =
+  let module Hide = struct
+    type v = LogicLabelSet.t
+    module type S = sig
+      type t
+      val diff_merge : (v -> v -> v) -> (v -> bool) -> t -> t -> t
+    end
+    module Hide (M : Map.S) = struct
+      type t = v M.t
+      let diff_merge = M.diff_merge
+    end
+  end in 
+  let diff (type t) (module M : Hide.S with type t = t) f =
+    LogicLabelSet.(M.diff_merge union (not % is_empty) (f ef1) (f ef2))
+  in
+  let open Hide in
+  {
+    jc_effect_alloc_tables = diff (module Hide(AllocMap)) (fun e -> e.jc_effect_alloc_tables);
+    jc_effect_tag_tables = diff (module Hide(TagMap)) (fun e -> e.jc_effect_tag_tables);
+    jc_effect_raw_memories = diff (module Hide(MemoryMap)) (fun e -> e.jc_effect_raw_memories);
+    jc_effect_precise_memories = diff (module Hide(LocationMap)) (fun e -> e.jc_effect_precise_memories);
+    jc_effect_memories = diff (module Hide(MemoryMap)) (fun e -> e.jc_effect_memories);
+    jc_effect_globals = diff (module Hide(VarMap)) (fun e -> e.jc_effect_globals);
+    jc_effect_locals = diff (module Hide(VarMap)) (fun e -> e.jc_effect_locals);
+    jc_effect_mutable = StringSet.diff ef1.jc_effect_mutable ef2.jc_effect_mutable;
+    jc_effect_committed = StringSet.diff ef1.jc_effect_committed ef2.jc_effect_committed
+  }
+
+let ef_filter_by_region f ef =
+  let f (_, r) _ = f r
+  and f' (_, (_, r)) _ = f r
+  and f_vi vi _ = f vi.jc_var_info_region in
+  { ef with
+    jc_effect_alloc_tables = AllocMap.filter f ef.jc_effect_alloc_tables;
+    jc_effect_tag_tables = TagMap.filter f ef.jc_effect_tag_tables;
+    jc_effect_raw_memories = MemoryMap.filter f ef.jc_effect_raw_memories;
+    jc_effect_precise_memories = LocationMap.filter f' ef.jc_effect_precise_memories;
+    jc_effect_memories = MemoryMap.filter f ef.jc_effect_memories;
+    jc_effect_globals = VarMap.filter f_vi ef.jc_effect_globals;
+    jc_effect_locals = VarMap.filter f_vi ef.jc_effect_locals;
+  }
+
 let ef_filter_labels ~label_assoc ef =
   let filter_labels labs =
     List.fold_left
@@ -358,6 +400,20 @@ let fef_union fef1 fef2 =
     jc_reads = ef_union fef1.jc_reads fef2.jc_reads;
     jc_writes = ef_union fef1.jc_writes fef2.jc_writes;
     jc_raises = ExceptionSet.union fef1.jc_raises fef2.jc_raises;
+  }
+
+let fef_diff fef1 fef2 =
+  {
+    jc_reads = ef_diff fef1.jc_reads fef2.jc_reads;
+    jc_writes = ef_diff fef1.jc_writes fef2.jc_writes;
+    jc_raises = ExceptionSet.diff fef1.jc_raises fef2.jc_raises;
+  }
+
+let fef_filter_by_region f fef =
+  {
+    fef with
+    jc_reads = ef_filter_by_region f fef.jc_reads;
+    jc_writes = ef_filter_by_region f fef.jc_writes;
   }
 
 let fef_assoc ~region_assoc ~region_mem_assoc fef =

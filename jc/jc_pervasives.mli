@@ -39,6 +39,8 @@ val (%) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
 
 val (%>) : ('a -> 'b) -> ('b -> 'c) -> 'a -> 'c
 
+val cons : 'a -> 'a list -> 'a list
+
 val dup2 : 'a -> 'a * 'a
 
 val fdup2 : ('a -> 'b) -> ('a -> 'c) -> 'a -> 'b * 'c

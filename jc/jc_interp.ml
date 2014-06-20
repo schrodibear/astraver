@@ -1348,37 +1348,24 @@ let rec pset ~type_safe ~global_assertion before loc =
               term_coerce b#pos integer_type b#typ b b'])
     | JCLSat(locs,_) -> fpset locs
 
-let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
+let rec collect_locations ~type_safe ~global_assertion ~in_clause before (refs, mems) loc =
   let ft = term ~type_safe ~global_assertion ~relocate:false before before in
+  let ef = Jc_effect.location ~in_clause empty_fun_effect loc in
   match loc#node with
-    | JCLderef(e,lab,fi,_fr) ->
+    | JCLderef(e, lab, fi, _fr) ->
         let iloc = pset ~type_safe ~global_assertion lab e in
-        let mc =
-(*           if field_of_union fi then FVvariant (union_of_field fi) else *)
-	  JCmem_field fi
-        in
-        let l =
-          try
-            let l = MemoryMap.find (mc,location_set_region e) mems in
-            iloc::l
-          with Not_found -> [iloc]
-        in
-        (refs, MemoryMap.add (mc,location_set_region e) l mems)
+        (* ...?  if field_of_union fi then FVvariant (union_of_field fi) else *)
+        let mcr = JCmem_field fi, location_set_region e in
+        refs, MemoryMap.add_merge (@) mcr [iloc, ef] mems
     | JCLderef_term (t1, fi) ->
         let iloc = LApp ("pset_singleton", [ft t1]) in
-        let mc = JCmem_field fi in
-        let l =
-          try
-            let l = MemoryMap.find (mc, t1#region) mems in
-            iloc::l
-          with Not_found -> [iloc]
-        in
-        (refs, MemoryMap.add (mc, t1#region) l mems)
+        let mcr = JCmem_field fi, t1#region in
+        refs, MemoryMap.add_merge (@) mcr [iloc, ef] mems
     | JCLvar vi ->
         let var = vi.jc_var_info_final_name in
         (StringMap.add var true refs,mems)
     | JCLat(loc,_lab) ->
-        collect_locations ~type_safe ~global_assertion before (refs,mems) loc
+        collect_locations ~type_safe ~global_assertion ~in_clause before (refs, mems) loc
 
 let rec collect_pset_locations ~type_safe ~global_assertion loc =
   let ft = term ~type_safe ~global_assertion ~relocate:false in
@@ -1429,7 +1416,7 @@ let assigns ~type_safe ?region_list before ef locs loc =
       empty)
   in
   let refs,mems =
-    List.fold_left (collect_locations ~type_safe ~global_assertion:false before) (refs,mems) locs
+    List.fold_left (collect_locations ~type_safe ~global_assertion:false ~in_clause:Assigns before) (refs,mems) locs
   in
   let a =
     StringMap.fold
@@ -1440,30 +1427,39 @@ let assigns ~type_safe ?region_list before ef locs loc =
       refs LTrue
   in
   MemoryMap.fold
-    (fun (mc,r) p acc ->
-       let v = memory_name(mc,r) in
+    (fun (mc, r) pes acc ->
+       let v = memory_name (mc, r) in
        let ac = alloc_class_of_mem_class mc in
-       let _,alloc = talloc_table_var ~label_in_name:false before (ac,r) in
-
-       make_and acc
-	 (let a = LPred("not_assigns",
-                [alloc;
-                 lvar ~constant:false (* <<- CHANGE THIS *)
-                   ~label_in_name:false before v;
-                 LDeref v; location_list' p]) in
-	  LNamed(reg_check loc,a))
-    ) mems a
+       let _, alloc = talloc_table_var ~label_in_name:false before (ac, r) in
+       let ps, efs = List.split pes in
+       let ef =
+        fef_filter_by_region (fun r ->    not (Region.polymorphic r)
+                                       || Option_misc.map_default (RegionList.mem r) true region_list)
+                             ef
+       in
+       let ef = fef_diff (List.fold_left fef_union empty_fun_effect efs) ef in
+       let wrap_in_foralls =
+         List.fold_right (fun (n, _, ty) a -> LForall (n, ty, [], a)) @@
+           tmodel_parameters ~label_in_name:false ef.jc_reads
+       in
+       make_and acc @@
+         let a = LPred("not_assigns",
+                        [alloc;
+                         lvar ~constant:false (* <<- CHANGE THIS *) ~label_in_name:false before v;
+                         LDeref v;
+                         location_list' ps])
+         in
+         LNamed (reg_check loc, wrap_in_foralls a))
+    mems a
 
 let reads ~type_safe ~global_assertion locs (mc,r) =
-  let refs = StringMap.empty
+  let _refs, mems =
+    List.fold_left (collect_locations ~type_safe ~global_assertion ~in_clause:Reads LabelOld)
+                   (StringMap.empty, MemoryMap.empty)
+                   locs
   in
-  let mems = MemoryMap.empty
-  in
-  let _refs,mems =
-    List.fold_left (collect_locations ~type_safe ~global_assertion LabelOld) (refs,mems) locs
-  in
-  let p = try MemoryMap.find (mc,r) mems with Not_found -> [] in
-  location_list' p
+  let ps, _efs = List.split @@ MemoryMap.find_or_default (mc, r) [] mems in
+  location_list' ps
 
 
 (******************************************************************************)
@@ -3537,7 +3533,7 @@ let reinterpret_memory_axiom ri =
       var "a", var "b", var "c", var "d", var "tab"  ,   var "tcd", var "p", var "q"
   in
   let tvab = "a" and tvcd = "b" and eq = "eq" in
-  Goal (KAxiom, id_no_loc @@ rm ^ "not_assigns_axiom",
+  Goal (KAxiom, id_no_loc @@ rm ^ "_not_assigns_axiom",
         LForall (a, mem tvab, [],
           LForall (b, mem tvab, [],
             LForall (c, mem tvcd, [],
