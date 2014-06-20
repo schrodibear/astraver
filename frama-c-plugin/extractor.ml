@@ -331,8 +331,7 @@ let get_annotated_funs () =
            not (is_empty_funspec (funspec kf)) ||
            List.exists Common.(has_code_annot ~emitter:Emitter.end_user % fst) @@ code_annot_of_kf kf)
       then
-        Kernel_function.(try get_definition kf :: acc
-                         with No_Definition -> acc)
+        Kernel_function.((get_vi kf, if is_definition kf then Some (get_definition kf) else None) :: acc)
       else acc)
     []
 
@@ -387,9 +386,9 @@ let collect file =
   visitFramacFile (new annotation_visitor state add_from_type) file;
   (* Now add all annotated functions. *)
   List.iter
-    (fun fundec ->
-       Set.add vars fundec.svar;
-       Queue.add fun_queue fundec)
+    (fun (vi, fundec_opt) ->
+       Set.add vars vi;
+       may (Queue.add fun_queue) fundec_opt)
     (get_annotated_funs ());
   while not (Queue.is_empty fun_queue) do
     do_fun (Queue.take fun_queue)
