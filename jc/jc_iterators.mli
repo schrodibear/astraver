@@ -75,6 +75,12 @@ val iter_funspec :
   ('a Jc_ast.location -> unit) ->
   ('a Jc_ast.location_set -> unit) -> 'a Jc_ast.fun_spec -> unit
 
+val fold_funspec: ('a -> 'b Jc_ast.term -> 'a) ->
+                  ('a ->'b Jc_ast.assertion -> 'a) ->
+                  ('a ->'b Jc_ast.location ->'a) ->
+                  ('a ->'b Jc_ast.location_set -> 'a) ->
+                  'a -> 'b Jc_ast.fun_spec -> 'a
+
 (* spec ? *)
 val iter_pattern: (Jc_ast.pattern -> 'a) -> Jc_ast.pattern -> unit
 

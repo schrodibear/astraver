@@ -324,10 +324,29 @@ let logic_component fls =
   (* Fill in association table at each call site *)
   List.iter logic_function fls
 
+let unify_logic_apps =
+  let single_term acc t =
+    let eq_apps app1 app2 =
+      app1.jc_app_fun.jc_logic_info_tag = app2.jc_app_fun.jc_logic_info_tag &&
+      app1.jc_app_label_assoc = app2.jc_app_label_assoc &&
+      List.for_all2 (TermOrd.equal) app1.jc_app_args app2.jc_app_args
+    in
+    match t#node with
+    | JCTapp app ->
+      begin match List.mem_assoc_eq eq_apps app acc with
+      | None -> (app, t#region) :: acc
+      | Some r -> Region.unify r t#region; acc
+      end
+    | _ -> acc
+  in
+  let dummy acc _ = acc in
+  ignore % Jc_iterators.fold_funspec single_term dummy dummy dummy []
+
 let funspec rresult spec =
   Jc_iterators.iter_funspec
     (single_term rresult) (single_assertion rresult) single_location
-    single_location_set spec
+    single_location_set spec;
+  unify_logic_apps spec
 
 let code_function f =
   let (f, _, spec, body) =
