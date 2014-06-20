@@ -23,6 +23,18 @@ load_printer jc_type_var.cmo
 load_printer jc_poutput.cmo
 load_printer jc_output.cmo
 load_printer jc_debug_output.cmo
+
+load_printer jc_noutput.cmo
+load_printer rc.cmo
+load_printer version.cmo
+load_printer jc_options.cmo
+load_printer jc_norm.cmo
+load_printer jc_name.cmo
+load_printer jc_struct_tools.cmo
+load_printer jc_typing.cmo
+load_printer jc_effect.cmo
+install_printer Jc_effect.print_effect
+
 install_printer Jc_debug_output.expr
 install_printer Jc_debug_output.assertion
 install_printer Jc_debug_output.term
