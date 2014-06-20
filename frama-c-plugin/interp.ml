@@ -789,7 +789,7 @@ and terms t =
         when isIntegralType ty && isLogicRealType t.term_type ->
           List.map (fun x -> JCPEapp("\\truncate_real_to_int",[],[x])) (terms t)
 
-    | TCastE(ty,t')
+    | TCastE(ty, t')
       when isIntegralType ty && isLogicArithmeticType t'.term_type ->
       if !int_model = IMexact then
         List.map (fun x -> x#node) (terms t')
@@ -856,7 +856,7 @@ and terms t =
                                                 TLval (TMem { t1 with term_node =
                                                                       TBinOp (PlusPI, t1, dummy_range) },
                                                        offs) }) }
-        | _ -> List.map (fun x -> JCPEcast(x,ctype ty)) (terms t)
+        | _ -> List.map (fun x -> JCPEcast(x, ctype ty)) (terms t')
       end
 
     | TCastE(ty,t)
