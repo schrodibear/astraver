@@ -35,6 +35,8 @@ open Cil_types
 open Cil
 open Visitor
 
+open Common
+
 module Q = Queue
 module Queue = struct
   type 'a t = 'a Q.t
@@ -86,7 +88,7 @@ module State = struct
     fields : fieldinfo Set.t; (* Unused fields are filtered *)
     enums  : enuminfo Set.t;
     vars   : varinfo Set.t;
-    fun_queue  : fundec Queue.t;
+    fun_queue  : cil_function Queue.t;
     typ_queue  : typeinfo Queue.t;
     comp_queue : compinfo Queue.t
   }
@@ -155,18 +157,15 @@ let do_expr_post f do_not_touch e =
   | _ -> e
 
 (* Add the function to the queue for traversal. *)
-let do_fun { State. vars; fun_queue } add_from_type (vi, kf_opt) =
+let do_fun { State. vars; fun_queue } (vi, kf_opt) =
   if not (Set.mem vars vi) then begin
     Set.add vars vi;
     let kf = opt_conv (Globals.Functions.get vi) kf_opt in
-    Kernel_function.(
-     try Queue.add fun_queue (get_definition kf)
-     with No_Definition ->
-       List.iter (fun vi -> add_from_type vi.vtype) (get_formals kf))
+    Queue.add fun_queue kf.fundec
   end
 
 let add_var_if_global add_from_type state vi =
-  if vi.vglob then begin
+  if vi.vglob && not (isFunctionType vi.vtype) then begin
     add_from_type vi.vtype;
     Set.add state.State.vars vi
   end
@@ -180,7 +179,7 @@ let add_field { State. fields } off =
   off
 
 class relevant_function_visitor state add_from_type =
-  let do_fun = do_fun state add_from_type in
+  let do_fun = do_fun state in
   (* For marking function expressions in explicit function calls. *)
   let do_not_touch = ref None in
   (* Adds all functions occurring as variables to the queue. *)
@@ -252,7 +251,7 @@ end
 
 (* Visit all anotation in the file, add necessary types and variables. *)
 class annotation_visitor state add_from_type =
-  let do_fun = do_fun state add_from_type in
+  let do_fun = do_fun state in
   (* There are no explicit function calls from annotations. *)
   let do_expr_post = do_expr_post (fun vi -> do_fun (vi, None)) (ref None) in
   let add_var_if_global = add_var_if_global add_from_type state in
@@ -330,8 +329,7 @@ let get_annotated_funs () =
       if Annotations.(
            not (is_empty_funspec (funspec kf)) ||
            List.exists Common.(has_code_annot ~emitter:Emitter.end_user % fst) @@ code_annot_of_kf kf)
-      then
-        Kernel_function.((get_vi kf, if is_definition kf then Some (get_definition kf) else None) :: acc)
+      then kf.fundec :: acc
       else acc)
     []
 
@@ -357,15 +355,9 @@ let collect file =
         comp_queue = Queue.create () }
   in
   let dcomps = Set.create (module Cil_datatype.Compinfo) in
-  let add_from_type t =
-    ignore
-      (visitFramacType (new relevant_type_visitor state) t)
-  in
+  let add_from_type = ignore % visitFramacType (new relevant_type_visitor state) in
   (* For dummy composites *)
-  let add_from_type' t =
-    ignore
-      (visitFramacType (new dummy_type_visitor state dcomps) t)
-  in
+  let add_from_type' = ignore % visitFramacType (new dummy_type_visitor state dcomps) in
   let do_type ti = add_from_type ti.ttype in
   let do_comp ci =
     List.iter
@@ -376,9 +368,10 @@ let collect file =
           | _ -> add_from_type ftype)
       ci.cfields
   in
-  let do_fun f =
-    ignore @@
-      visitFramacFunction (new relevant_function_visitor state add_from_type) f
+  let do_fun =
+    function
+    | Definition (f, _) -> ignore @@ visitFramacFunction (new relevant_function_visitor state add_from_type) f
+    | Declaration (_, vi, vis_opt, _) -> List.iter (fun vi -> add_from_type vi.vtype) (vi :: opt_conv [] vis_opt)
   in
   (* Mark all addressed functions in their vaddrof field. *)
   visitFramacFile (new fun_vaddrof_visitor) file;
@@ -386,9 +379,9 @@ let collect file =
   visitFramacFile (new annotation_visitor state add_from_type) file;
   (* Now add all annotated functions. *)
   List.iter
-    (fun (vi, fundec_opt) ->
-       Set.add vars vi;
-       may (Queue.add fun_queue) fundec_opt)
+    (fun fundec ->
+       Set.add vars (Ast_info.Function.get_vi fundec);
+       Queue.add fun_queue fundec)
     (get_annotated_funs ());
   while not (Queue.is_empty fun_queue) do
     do_fun (Queue.take fun_queue)
