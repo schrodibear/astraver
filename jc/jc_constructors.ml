@@ -216,6 +216,9 @@ class expr_with ?pos ?typ ?mark ?region ?node ?original_type e =
   in
   expr ~pos ~typ ~mark ~region ~original_type node
 
+let expr_with_node e ?(pos=e#pos) ?(typ=e#typ) ?(mark=e#mark) ?(region=e#region) ?(original_type=e#original_type) =
+  new expr ~pos ~typ ~mark ~region ~original_type
+
 class assertion ?(mark="") ?label ?(pos = Loc.dummy_position) node =
 object
   inherit marked mark

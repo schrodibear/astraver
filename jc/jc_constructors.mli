@@ -270,6 +270,18 @@ class expr_with :
   expr
 
 
+val expr_with_node :
+  < pos : Loc.position; mark : string; node : expr_node;
+    original_type : jc_type; region : region;
+    typ : jc_type; .. > ->
+  ?pos:Loc.position ->
+  ?typ:jc_type ->
+  ?mark:string ->
+  ?region:region ->
+  ?original_type:jc_type ->
+  expr_node ->
+  expr
+
 class assertion :
   ?mark:string ->
   ?label:label ->

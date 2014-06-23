@@ -563,10 +563,10 @@ let make_logic_unary_op loc (op : Jc_ast.unary_op) e2 =
 
 (* [term_coerce t1 t2 e] applies coercion to expr e of type t1 to t2 *)
 let term_coerce t1 t2 e =
-  let tn1 =
+  let tn1, e =
     match t1 with
-      | JCTenum _ri -> Tinteger
-      | JCTnative t -> t
+      | JCTenum _ri -> Tinteger, term_with_node ~typ:(JCTnative Tinteger) e @@ JCTrange_cast (e, None)
+      | JCTnative t -> t, e
       | _ -> assert false
   in
   match tn1,t2 with
@@ -595,6 +595,11 @@ let term_coerce t1 t2 e =
 		  (JCTapp app)
 	end
     | _ -> e
+
+let term_coerce_to_type tto t =
+  match tto with
+  | JCTnative tto -> term_coerce t#typ tto t
+  | _ -> t
 
 let logic_bin_op (t : [< operator_type ]) (op : [< bin_op]) : term_bin_op =
   bin_op t op
@@ -1116,7 +1121,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         in
         let vi = var ty id in
         let te2 = term ((id, vi)::env) e2 in
-        te2#typ, te2#region, JCTlet(vi,te1,te2)
+        te2#typ, te2#region, JCTlet(vi, term_coerce_to_type ty te1, te2)
     | JCNElet(_ (* Some pty *), _id, None, _e2) ->
         typing_error e#pos "let without initial value"
 (*
@@ -1397,7 +1402,7 @@ let rec assertion env e =
         let vi = var ty1 id in
         let env = (id, vi) :: env in
 	let te2 = assertion env e2 in
-	JCAlet(vi,te1,te2)
+	JCAlet(vi, term_coerce_to_type ty1 te1, te2)
     | JCNElet(_ty,_id,None,_e2) ->
 	assert false (* TODO *)
     | JCNEmatch(arg, pel) ->
@@ -1755,10 +1760,10 @@ let make_unary_op loc (op : Jc_ast.unary_op) e2 =
           typing_error loc "numeric type expected"
 
 let coerce t1 t2 e =
-  let tn1 =
+  let tn1, e =
     match t1 with
-      | JCTenum _ri -> Tinteger
-      | JCTnative t -> t
+      | JCTenum _ri -> Tinteger, expr_with_node ~typ:(JCTnative Tinteger) e @@ JCErange_cast (e, None)
+      | JCTnative t -> t, e
       | _ -> assert false
   in
   match tn1, t2 with
@@ -1783,6 +1788,11 @@ let coerce t1 t2 e =
 		   })
 	end
     | _ -> e
+
+let coerce_to_type tto e =
+  match tto with
+  | JCTnative tto -> coerce e#typ tto e
+  | _ -> e
 
 let make_bin_op loc (op: operational_op) e1 e2 =
   let t1 = e1#typ and t2 = e2#typ in
@@ -2280,7 +2290,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         let te2 = expr ((id, vi)::env) e2 in
         te2#typ,
         te2#region,
-        JCElet(vi, te1o, te2)
+        JCElet(vi, Option_misc.map (coerce_to_type ty) te1o, te2)
     (* old statements *)
     | JCNEassert(behav,asrt,e1) ->
         unit_type, dummy_region, JCEassert(behav,asrt,assertion env e1)
