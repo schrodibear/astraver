@@ -688,7 +688,7 @@ let rec coerce_floats t =
             (terms t)
         else terms t
 
-and terms t =
+and terms ?(in_zone=false) t =
   CurrentLoc.set t.term_loc;
   let enode = match constFoldTermNodeAtTop t.term_node with
     | TConst c -> [logic_const t.term_loc c]
@@ -794,12 +794,12 @@ and terms t =
       if !int_model = IMexact then
         List.map (fun x -> x#node) (terms t')
       else begin
-        match t'.term_node with
-        | TLval (TMem { term_node = TBinOp (PlusPI | IndexPI | MinusPI as op,
+        match in_zone, t'.term_node with
+        | true,
+          TLval (TMem { term_node = TBinOp (PlusPI | IndexPI | MinusPI as op,
                                             t1,
                                             { term_node = Trange (lbo, rbo) }) },
-                 TField (_, TNoOffset))
-          when isIntegralType ty ->
+                 TField (_, TNoOffset)) ->
           let typ = pointer_type ty in
           let from_bitsize =
             let error =
@@ -844,7 +844,8 @@ and terms t =
                                                       ?right:(opt_map (adjust % term) rbo)
                                                       ()),
                                        contents_name ty))
-        | TLval (TMem t1, (TField (_, TNoOffset) as offs)) when isIntegralType ty ->
+        | true,
+          TLval (TMem t1, (TField (_, TNoOffset) as offs)) ->
           let dummy_range =
             Logic_const.(
               let z = Some (tinteger ~loc:t1.term_loc 0) in
@@ -1307,7 +1308,7 @@ let named_pred p =
 let conjunct pos pl =
   mkconjunct (List.map (pred $ Logic_const.pred_of_id_pred) pl) pos
 
-let zone (tset,_) = terms tset.it_content
+let zone (tset,_) = terms ~in_zone:true tset.it_content
 
 (* Distinguish between:
  * - no assign, which is the empty list in Cil and None in Jessie
