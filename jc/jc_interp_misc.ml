@@ -1118,7 +1118,7 @@ let make_fresh_pred_app (type t1) (type t2) :
 let make_forall_i_in_range l r f p =
   let i = "i" in
       LForall (i, why_integer_type, [],
-        LImpl (make_and (LPred ("ge_int", [l; LVar i])) @@ LPred ("lt_int", [LVar i; r]),
+        LImpl (make_and (LPred ("le_int", [l; LVar i])) @@ LPred ("lt_int", [LVar i; r]),
                make_and_list @@ f @@ LApp ("shift", [LVar p; LVar i])))
 
 type (_, 'a) param =
