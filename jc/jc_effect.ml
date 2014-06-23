@@ -1918,7 +1918,7 @@ let function_effects funs =
 
 let is_poly_mem_param =
   function
-  | { jc_var_info_type = JCTpointer (JCtag ({ jc_struct_info_hroot = { jc_struct_info_fields = [] } }, _), _, _) } ->
+  | { jc_var_info_type = JCTpointer (JCtag ({ jc_struct_info_fields = [] }, _), _, _) } ->
     true
   | _ -> false
 
