@@ -343,10 +343,10 @@ class replaceStringConstants =
   (* Use the Cil translation on initializers. First translate to primitive
    * AST to later apply translation in [blockInitializer].
    *)
-  let string_cabs_init =
+  let string_cabs_init expr_loc =
     function
-    | `String s -> SINGLE_INIT ({ expr_node = CONSTANT (CONST_STRING (s, None)); expr_loc = Cabshelper.cabslu })
-    | `Wstring ws -> SINGLE_INIT ({ expr_node = CONSTANT (CONST_WSTRING (ws, None)); expr_loc = Cabshelper.cabslu })
+    | `String s -> SINGLE_INIT ({ expr_node = CONSTANT (CONST_STRING (s, None)); expr_loc })
+    | `Wstring ws -> SINGLE_INIT ({ expr_node = CONSTANT (CONST_WSTRING (ws, None)); expr_loc })
   in
 
   (* Name of variable should be as close as possible to the string it
@@ -380,7 +380,7 @@ class replaceStringConstants =
 
   let make_glob fundec_opt loc s =
     let v = string_var s fundec_opt loc in
-    let inite = string_cabs_init s in
+    let inite = string_cabs_init loc s in
     let size = match s with `String s -> String.length s | `Wstring ws -> List.length ws - 1 in
     (* Apply translation from initializer in primitive AST to block of code,
      * simple initializer and type.
