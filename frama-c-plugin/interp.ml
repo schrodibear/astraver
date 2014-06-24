@@ -3102,24 +3102,25 @@ let type_and_memory_reinterpretations get_compinfo () =
     (* Memory reinterpretation axioms *)
     let memory_axioms =
       let is_u s = s.[0] = 'u' in
-      let deref typ label offs =
-        let expr1 = mkat ~expr:(pcasted typ) ~label () in
+      let deref ?boff typ label offs =
+        let shift offset expr = mkshift ~expr ~offset () in
+        let expr1 = mkat ~expr:(Option_misc.fold shift boff @@ pcasted typ) ~label () in
         let expr =
           if offs > 0 then mkbinary ~expr1 ~op:`Badd ~expr2:(mkint ~value:offs ()) ()
                       else expr1
         in
         mkat ~expr:(mkderef ~expr ~field:(contents_name typ) ()) ~label ()
       in
-      let whole_deref l = deref whole_type l 0 in
+      let whole_deref ?boff l = deref ?boff whole_type l 0 in
       let complement_opt, complement_def =
         if is_u part_name then id, []
                           else
                                complement `Part
                             |> map_fst (fun fun_name -> List.map @@ fun a -> mkapp ~fun_name ~args:[a] ())
       in
-      let part_derefs l =
+      let part_derefs ?boff l =
            range 0 `To (v - 1)
-        |> List.map (deref part_type l)
+        |> List.map (deref ?boff part_type l)
         |> complement_opt
       in
       let impl expr2 = mkimplies ~expr1:rmemory ~expr2 () in
@@ -3127,12 +3128,26 @@ let type_and_memory_reinterpretations get_compinfo () =
         if is_u whole_name then unsigned_split_pred (), unsigned_merge_pred ()
                            else signed_pred `Split, signed_pred `Merge
       in
-      let app fun_name lw lp = mkapp ~fun_name ~args:(whole_deref lw :: part_derefs lp) () in
+      let conseq lw lp =
+        let whole_deref ?woff () = whole_deref ?boff:woff lw in
+        let part_derefs ?poff () = part_derefs ?boff:poff lp in
+        let apps ?woff ?poff () =
+          let args = whole_deref ?woff () :: part_derefs ?poff () in
+          mkand ~list:[mkapp ~fun_name:split_name ~args (); mkapp ~fun_name:merge_name ~args ()] ()
+        in
+        let i, ii = var "i" in
+        let woff, poff =
+          i, if v > 1 then mkbinary ~expr1:i ~op:`Bmul ~expr2:(mkint ~value:v ()) () else i
+        in
+        let body = apps ~woff ~poff () in
+        let triggers = [body] :: [whole_deref ~woff ()] :: [part_derefs ~poff ()] in
+        mkand ~list:[apps (); mkforall ~typ:tinteger ~vars:[ii] ~triggers ~body ()] ()
+      in
       let triggers typ = [[rmemory; mkat ~expr:(pcasted typ) ~label:l2 ()]] in
       let name from _to = unique_logic_name (from ^ "_as_"  ^ _to ^ "_axiom") in
       let axs =
-        ListLabels.map [name whole_name part_name, triggers part_type, impl (app split_name l1 l2);
-                        name part_name whole_name, triggers whole_type, impl (app merge_name l2 l1)]
+        ListLabels.map [name whole_name part_name, triggers part_type, impl (conseq l1 l2);
+                        name part_name whole_name, triggers whole_type, impl (conseq l2 l1)]
           ~f:(fun (name, triggers, body) ->
               let body = mkforall ~typ:tvoidp ~vars:[ip] ~triggers ~body () in
               PDecl.mklemma_def ~name ~axiom:true ~labels:[l1; l2] ~body ())

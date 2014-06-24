@@ -1036,7 +1036,6 @@ let rec force_term_to_exp t =
     if t.term_name = [] then
       match t.term_type, typeOf e with
       | Ctype t1, t2 when Typ.equal t1 t2 -> e
-      | Linteger, t2 when isIntegralType t2 -> e
       | _ -> info ()
     else info ()
   in

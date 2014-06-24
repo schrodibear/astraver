@@ -2532,20 +2532,10 @@ and expr e =
                                               else new_mem, old_mem, (LabelHere, before)
           in
           let (mem1, mem2), (mem3, mem4) = map_pair2 mem1 mem2 labs, fdup2 mem1 mem2 LabelPre in
-          let app p =
-            make_and (LPred ("reinterpret_memory",
-                             [p; at LabelHere tag; at before tag; mem1; mem2])) @@
-                      LPred ("reinterpret_memory",
-                             [p; at LabelHere tag; at before tag; mem3; mem4])
-          in
-          let i = "i" in
-          let li = LVar i in
-          make_and
-            (app lp) @@
-            LForall (i, why_integer_type, [],
-              LImpl (make_and (LPred ("le", [LApp ("offset_min", [at LabelHere alloc; lp]); li])) @@
-                               LPred ("le", [li; LApp ("offset_max", [at LabelHere alloc; lp])]),
-                     app @@ LApp ("shift", [lp; li])))
+          make_and (LPred ("reinterpret_memory",
+                           [lp; at LabelHere tag; at before tag; mem1; mem2])) @@
+                    LPred ("reinterpret_memory",
+                           [lp; at LabelHere tag; at before tag; mem3; mem4])
         in
         LLet (p, e', make_and_list @@ List.map body old_mems)
       in
