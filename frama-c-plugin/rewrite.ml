@@ -2867,6 +2867,21 @@ object
 end
 
 class side_cast_rewriter =
+  let has_charp_casts e =
+    try
+      ignore @@ visitFramacExpr
+        (object
+          inherit frama_c_inplace
+          method! vexpr =
+            function
+            | { enode = CastE (tcharp, _) }
+              when isCharPtrType tcharp -> raise Exit
+            | _ -> DoChildren
+         end)
+        e;
+      false
+    with Exit -> true
+  in
   let rewrite_char_pointers = visitFramacExpr (new char_pointer_rewriter) in
   let struct_fields t =
     match unrollType t with
@@ -2892,7 +2907,7 @@ class side_cast_rewriter =
       (take len2 fields1)
       fields2
   in
-object
+object(self)
   inherit frama_c_inplace
 
   method! vexpr e = match e.enode with
@@ -2900,7 +2915,8 @@ object
       when isCharPtrType (typeOf efrom) &&
            isPointerType tto &&
            not (isCharPtrType tto) &&
-           not (isVoidPtrType tto) ->
+           not (isVoidPtrType tto) &&
+           has_charp_casts efrom ->
       ChangeTo ({ e with enode = CastE (tto, rewrite_char_pointers efrom) })
     | CastE (tto, efrom) ->
       let tfrom = typeOf efrom in
@@ -2916,6 +2932,9 @@ object
       else
         DoChildren
     | _ -> DoChildren
+
+  method! vterm =
+    do_on_term (Some (fun e -> match self#vexpr e with ChangeTo e | ChangeDoChildrenPost (e, _) -> e | _ -> e), None)
 end
 
 let rewrite_side_casts file =

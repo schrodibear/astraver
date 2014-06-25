@@ -870,7 +870,17 @@ and terms ?(in_zone=false) t =
           Printer.pp_logic_type t.term_type Printer.pp_typ ty
 
     | TCastE(ptrty,_t1) when isPointerType ptrty ->
-        let t = stripTermCasts t in
+        let rec strip_term_casts ?(cast=true) t =
+            match t.term_node with
+            | TCastE (_, t) when cast -> strip_term_casts ~cast:false t
+            | TCastE (_, t') ->
+              begin match (stripTermCasts t').term_node with
+              | TConst _ -> t'
+              | _ -> t
+              end
+            | _ -> t
+        in
+        let t = strip_term_casts t in
         begin match t.term_node with
           | Tnull ->
               [JCPEconst JCCnull]
@@ -2285,6 +2295,65 @@ and block bl =
 
 let drop_on_unsupported_feature = false
 
+let try_builtin_fun_or_pred ltyp_opt name labels params body f =
+  let open Pervasives in
+  let u = "\\(u?\\)" in
+  let int = "int" in
+  let compl = "complement_to_u" in
+  let bits = "\\(8\\|16\\|32\\|64\\)" in
+  let matches, group = Str.((fun r -> string_match r name 0), fun n -> matched_group n name) in
+  let int_from_bitsize_u (s, u) = TInt (intKindForSize (s lsr 3) u, []) in
+  let equal_int_types t1 t2 =
+    let open Logic_utils in
+    if map_pair (isLogicType @@ fun _ -> true) (t1, t2) = (true, true)
+    then
+      let t1, t2 = map_pair logicCType (t1, t2) in
+      isIntegralType t1 && isIntegralType t2 &&
+      let have_eq f = f t1 = f t2 in
+      have_eq isSignedInteger &&
+      have_eq bitsSizeOf
+    else false
+  in
+  if matches @@ Str.regexp @@ u ^ int ^ bits ^ "_as_" ^ u ^ int ^ bits then
+    let from_unsigned, to_unsigned = map_pair ((<>) "" % group) (1, 3) in
+    let from_bitsize, to_bitsize = map_pair (int_of_string % group) (2, 4) in
+    let from_type, to_type = map_pair int_from_bitsize_u ((from_bitsize, from_unsigned), (to_bitsize, to_unsigned)) in
+    let f, t = group 1 ^ int ^ group 2, group 3 ^ int ^ group 4 in
+    let part_type, whole_type, part_unsigned, fun_name, compl_name =
+      if from_bitsize < to_bitsize then from_type, to_type, from_unsigned, "u" ^ f ^ "_as_" ^ t, compl ^ f
+                                   else to_type, from_type, to_unsigned, f ^ "_as_u" ^ t, compl ^ t
+    in
+    match ltyp_opt, labels, params, body with
+    | None, [], { lv_type = whole_type' } :: ps, JCnone
+      when
+      equal_int_types whole_type' (Ctype whole_type) &&
+      List.for_all (fun lv -> equal_int_types lv.lv_type @@ Ctype part_type) ps ->
+      if not part_unsigned then
+        let w = "w" and d = "d" in
+        let ds = List.mapi (fun i _ -> d ^ string_of_int i) ps in
+        [(PDecl.mklogic_def
+            ~name
+            ~params:((ctype whole_type, w) :: List.map (fun p -> ctype part_type, p) ds)
+            ~body:PExpr.(
+              mkapp
+                ~fun_name
+                ~args:(mkvar ~name:w () ::
+                       List.map (fun name -> mkapp ~fun_name:compl_name ~args:[mkvar ~name ()] ()) ds)
+                ())
+            ())#node]
+      else []
+    | _ -> unsupported "builtin logic predicate %s redefinition or redeclaration with incompatible type" name
+  else if matches @@ Str.regexp @@ compl ^ int ^ bits then
+    let signed_type, unsigned_type =
+      map_pair (fun u -> int_from_bitsize_u (int_of_string @@ group 1, u)) (false, true)
+    in
+    match ltyp_opt, labels, params, body with
+    | Some ret_type, [], [{ lv_type }], JCnone
+      when equal_int_types ret_type (Ctype unsigned_type) && equal_int_types lv_type (Ctype signed_type) ->
+      []
+    | _ -> unsupported "builtin logic function %s redefinition or redeclaration with incompatible type" name
+  else f()
+
 let logic_variable v =
   let name = Extlib.may_map (fun v -> v.vname) ~dft:v.lv_name v.lv_origin in
   ltype v.lv_type, name
@@ -2321,18 +2390,20 @@ let rec annotation is_axiomatic annot =
         with Not_found ->
           translated_name info []
         in
-        (match info.l_type, info.l_labels, params with
-             Some t, [], [] ->
-               let def = match body with
-                 | JCnone | JCreads _ | JCinductive _ -> None
-                 | JCexpr t -> Some t
-               in
-               [JCDlogic_var (ltype t, name,def)]
-           | _ ->
-               [JCDlogic(Option_misc.map ltype info.l_type,
-                         name,[],
-                         logic_labels info.l_labels,
-                         params,body)])
+        try_builtin_fun_or_pred info.l_type name info.l_labels info.l_profile body @@
+          fun () ->
+             match info.l_type, info.l_labels, params with
+               Some t, [], [] ->
+                 let def = match body with
+                   | JCnone | JCreads _ | JCinductive _ -> None
+                   | JCexpr t -> Some t
+                 in
+                 [JCDlogic_var (ltype t, name,def)]
+             | _ ->
+                 [JCDlogic(Option_misc.map ltype info.l_type,
+                           name,[],
+                           logic_labels info.l_labels,
+                           params,body)]
       with (Unsupported _ | Log.FeatureRequest _)
         when drop_on_unsupported_feature ->
 	  warning "Dropping declaration of predicate %s@."
@@ -2511,8 +2582,8 @@ let rec annotation is_axiomatic annot =
 	  Format.eprintf "Translating axiomatic %s into jessie code@." id;
         *)
         let l = List.fold_left (fun acc d -> (annotation true d)@acc) [] l in
-        [JCDaxiomatic(id,List.map (fun d -> mkdecl  d pos)
-                        (List.rev l))]
+        if l <> [] then [JCDaxiomatic (id, List.map (fun d -> mkdecl  d pos) @@ List.rev l)]
+                   else []
       end else []
 
 let default_field_modifiers = (false,false)
@@ -3140,7 +3211,9 @@ let type_and_memory_reinterpretations get_compinfo () =
           i, if v > 1 then mkbinary ~expr1:i ~op:`Bmul ~expr2:(mkint ~value:v ()) () else i
         in
         let body = apps ~woff ~poff () in
-        let triggers = [body] :: [whole_deref ~woff ()] :: [part_derefs ~poff ()] in
+        let triggers =
+          List.map (fun a -> [a]) (Jc_iterators.IPExpr.subs body) @ [whole_deref ~woff ()] :: [part_derefs ~poff ()]
+        in
         mkand ~list:[apps (); mkforall ~typ:tinteger ~vars:[ii] ~triggers ~body ()] ()
       in
       let triggers typ = [[rmemory; mkat ~expr:(pcasted typ) ~label:l2 ()]] in
@@ -3244,10 +3317,10 @@ let file f =
   (* Define conversion functions and identity axiom for back
      and forth conversion *)
   @ type_conversions ()
+  @ (if has_some (get_compinfo voidType)
+     then type_and_memory_reinterpretations get_compinfo ()
+     else [])
   @ globals'
-  @ if has_some (get_compinfo voidType)
-    then type_and_memory_reinterpretations get_compinfo ()
-    else []
 
 (* Translate pragmas separately as their is no declaration for pragmas in
  * the parsed AST of Jessie, only in its types AST.
