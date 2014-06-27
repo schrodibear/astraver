@@ -440,6 +440,7 @@ struct
 	RegionTable.replace global_region_table r2 t
       with Not_found -> ()
     ) assocl;
+    List.iter (fun (r1, r2) -> if not (Region.polymorphic (RegionUF.repr r1)) then Region.unify r1 r2) assocl;
     assocl
 
   let reachable rls =
