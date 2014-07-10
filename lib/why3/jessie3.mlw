@@ -553,24 +553,23 @@ val rsafe_rbound_upd_ (alloc:alloc_table 't) (m: ref (memory 't 'v))
   ensures  { !m = store (old !m) (shift p off) v }
 
 
-val instanceof_ (a:(tag_table 't)) (p:pointer 't) (s:(tag_id 't)) :
+val instanceof_ (p : pointer 't) (s: tag_id 't) :
   bool
 
   requires { true }
-  ensures  { if result = True then instanceof a p s else not (instanceof a p s) }
+  ensures  { if result = True then instanceof p s else not (instanceof p s) }
 
-val downcast_ (a:(tag_table 't)) (p:pointer 't) (s:(tag_id 't)) :
-  pointer 't
-
-  requires { instanceof a  p (s) }
-  ensures  { result=p }
-
-val safe_downcast_ (a:(tag_table 't)) (p:pointer 't) (s:(tag_id 't)) :
+val downcast_ (p : pointer 't) (s : tag_id 't) :
   pointer 't
 
   requires { true }
-  ensures  { result=p }
+  ensures  { result = downcast p s }
 
+val safe_downcast_ (p:pointer 't) (s: tag_id 't) :
+  pointer 't
+
+  requires { true }
+  ensures  { result = downcast p s }
 
 (*****************************************************************************)
 (* default values                                                            *)
@@ -607,9 +606,9 @@ val alloc_val_ownership (a:ref (alloc_table 't))
   writes { a, tag }
 
   requires { n > 0 }
-  ensures  { alloc_extends (old !a) !a /\ alloc_fresh (old !a) result n
+  ensures  { alloc_extends (old !a) !a /\ alloc_fresh (old !a) result
     /\ offset_min !a result = 0 /\ offset_max !a result = n-1
-    /\ instanceof !tag result s /\ select !mut result = bottom_tag
+    /\ instanceof result s /\ select !mut result = bottom_tag
     /\ select !com result = False }
 
 val free_val_ownership (a:ref (alloc_table 't)) (com:ref (memory 't bool))
@@ -621,22 +620,6 @@ val free_val_ownership (a:ref (alloc_table 't)) (com:ref (memory 't bool))
   writes   { a }
   ensures  { offset_max !a p < offset_min !a p }
 
-val reinterpret_val_ownership
-      (a: ref (alloc_table 't))
-      (com:ref (memory 't bool))
-      (t: ref (tag_table 't))
-      (s: tag_id 't)
-      (m: ref (memory 't 'v))
-      (p: pointer 't)
-      (v : 'v) :
-  unit
-  writes { a, t }
-  requires { p = null \/ (offset_min !a p <= offset_max !a p /\ select !com p = False) }
-  ensures  { instanceof !t p s /\
-             let pset = (pset_range (pset_singleton p) (offset_min !a p) (offset_max !a p)) in
-             (forall p'. not in_pset p' pset -> forall s'. instanceof (old !t) p' s' -> instanceof !t p' s') /\
-             (forall p'. not in_pset p' pset -> select !m p' = select (old !m) p')}
-
 (* With -inv-sem <> ownership *)
 
 val alloc_parameter (a:ref (alloc_table 't)) (tag:ref (tag_table 't)) (s:(tag_id 't))
@@ -645,9 +628,9 @@ val alloc_parameter (a:ref (alloc_table 't)) (tag:ref (tag_table 't)) (s:(tag_id
   writes { a, tag }
 
   requires { n > 0 }
-  ensures  { alloc_extends (old !a) !a /\ alloc_fresh (old !a) result n
+  ensures  { alloc_extends (old !a) !a /\ alloc_fresh (old !a) result
     /\ offset_min !a result = 0 /\ offset_max !a result = n-1
-    /\ instanceof !tag result s }
+    /\ instanceof result s }
 
 val safe_alloc_parameter (a:ref (alloc_table 't)) (tag:ref (tag_table 't))
     (s:(tag_id 't)) (n:int) :
@@ -655,9 +638,9 @@ val safe_alloc_parameter (a:ref (alloc_table 't)) (tag:ref (tag_table 't))
   writes {a, tag }
 
   requires { true }
-  ensures  { alloc_extends (old !a) !a /\ alloc_fresh (old !a) result n
+  ensures  { alloc_extends (old !a) !a /\ alloc_fresh (old !a) result
     /\ offset_min !a (result) = 0 /\ offset_max !a (result) = n-1
-    /\ instanceof !tag result s }
+    /\ instanceof result s }
 
 val free_parameter (a:ref (alloc_table 't)) (p:pointer 't) :
   unit
@@ -669,25 +652,6 @@ val free_parameter (a:ref (alloc_table 't)) (p:pointer 't) :
      (pset_range (pset_singleton p) 0 (offset_max (old !a) p))
      /\ offset_max !a p < offset_min !a p) }
 
-val reinterpret_parameter
-      (a: ref (alloc_table 't))
-      (t: ref (tag_table 't))
-      (s: tag_id 't)
-      (m: ref (memory 't 'v))
-      (p: pointer 't)
-      (v: 'v) :
-  unit
-  writes { a, t, m }
-  requires { p = null \/ offset_min !a p <= offset_max !a p }
-  ensures  { (p = null -> !a = old !a /\ !t = old !t /\ !m = old !m) /\
-             (p <> null ->
-               let pset_old = (pset_range (pset_singleton p) (offset_min (old !a) p) (offset_max (old !a) p)) in
-               let pset_new = (pset_range (pset_singleton p) (offset_min !a p) (offset_max !a p)) in
-               alloc_extends_except (old !a) !a pset_old /\
-               instanceof !t p s /\
-               (forall p'. not in_pset p' pset_new -> forall s'. instanceof (old !t) p' s' -> instanceof !t p' s') /\
-               (forall p'. not in_pset p' pset_new -> select !m p' = select (old !m) p')) }
-
 val safe_free_parameter (a:ref (alloc_table 't)) (p:pointer 't) :
   unit
   writes { a }
@@ -697,20 +661,31 @@ val safe_free_parameter (a:ref (alloc_table 't)) (p:pointer 't) :
     /\ offset_max !a p < offset_min !a p }
 
 val safe_reinterpret_parameter
-      (a: ref (alloc_table 't))
-      (t: ref (tag_table 't))
-      (s: tag_id 't)
-      (m: ref (memory 't 'v))
-      (p: pointer 't)
-      (v: 'v) :
+      (a : ref (alloc_table 't))
+      (t : ref (tag_table 't))
+      (s1 : tag_id 't)
+      (s2 : tag_id 't)
+      (m : ref (memory 't 'v))
+      (p : pointer 't) :
   unit
-  writes { a, t, m }
-  ensures  { (p = null -> !a = old !a /\ !t = old !t) /\
-             (p <> null ->
-               let pset_old = (pset_range (pset_singleton p) (offset_min (old !a) p) (offset_max (old !a) p)) in
-               let pset_new = (pset_range (pset_singleton p) (offset_min !a p) (offset_max !a p)) in
-               alloc_extends_except (old !a) !a pset_old /\
-               instanceof !t p s /\
-               (forall p'. not in_pset p' pset_new -> forall s'. instanceof (old !t) p' s' -> instanceof !t p' s') /\
-               (forall p'. not in_pset p' pset_new -> select !m p' = select (old !m) p')) }
+  writes { a, m }
+  ensures  { let pset_old = pset_all (pset_singleton p) in
+             alloc_extends_except (old !a) !a pset_old /\
+             let ps = downcast p s2 in
+             alloc_fresh (old !a) ps /\
+             alloc_fresh !a p /\
+             not_assigns (old !a) (old !m) !m pset_empty }
+
+let reinterpret_parameter
+      (a : ref (alloc_table 't))
+      (t : ref (tag_table 't))
+      (s1 : tag_id 't)
+      (s2 : tag_id 't)
+      (m : ref (memory 't 'v))
+      (p : pointer 't) :
+  unit
+  writes { a, m }
+  requires { instanceof p s1 /\ offset_min !a p <= offset_max !a p } =
+  safe_reinterpret_parameter a t s1 s2 m p
+
 end

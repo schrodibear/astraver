@@ -320,23 +320,6 @@ let main () =
 	    Jc_frame.tr_logic_fun li p acc)
 	 Jc_typing.logic_functions_table );
 
-    (* production phase 4.1': adding special axiom for reinterpret_memory if it's present;                      *)
-    (* the axiom can't be part of the Jessie theory because the predicate and its axiomatic comes from the user *)
-    (* (e.g. Jessie plugin, where we still have information about integral type bitsizes)                       *)
-    push_decls @@
-     IntHashtblIter.fold
-      (fun _ (li, _) acc ->
-        if li.jc_logic_info_name = "reinterpret_memory" then
-          let ris =
-            match (List.hd li.jc_logic_info_parameters).jc_var_info_type with
-            | JCTpointer (JCtag ({ jc_struct_info_root = Some ri }, _), _, _)
-            | JCTpointer (JCroot ri, _, _) -> [ri]
-            | _ -> []
-          in
-          List.map Jc_interp.reinterpret_memory_axiom ris @ acc
-        else acc)
-      Jc_typing.logic_functions_table;
-
     (* production phase 4.2: generation of axiomatic logic decls*)
     Jc_options.lprintf "Translate axiomatic declarations@.";
     push_decls

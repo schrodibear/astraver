@@ -160,12 +160,10 @@ let valid_pred_name ~equal ~left ~right ac pc =
   in
   prefix ^ "_" ^ (pointer_class_name pc)
 
-let fresh_pred_name (type t1) (type t2) (type t3) (type t4) (type t5) : arg:(t1, t2, t3, _, t4, t5) arg -> _ =
-  fun ~arg ac pc ->
+let fresh_pred_name ac pc =
   let prefix =
     match ac with
-    | JCalloc_root _ ->
-      "fresh" ^ (match arg with Singleton -> "_singleton" | Range_0_n -> "")
+    | JCalloc_root _ -> "fresh"
     | JCalloc_bitvector -> "fresh_bitvector" (* TODO *)
   in
   prefix ^ "_" ^ (pointer_class_name pc)
@@ -257,6 +255,19 @@ let unique_name =
       Hashtbl.add unique_names s (ref 0); s
 
 let old_name s = "old_" ^ s
+
+let cast_factor_name = "cast_factor"
+
+let reinterpret_parameter_name ~safety_checking =
+  if safety_checking () then "reinterpret_parameter"
+                        else "safe_reinterpret_parameter"
+
+let reinterpret_cast_name op =
+  "reinterpret_cast_" ^
+  match op with
+  | `Retain -> "retain"
+  | `Merge _ -> "merge"
+  | `Split _ -> "split"
 
 (*
 Local Variables: 

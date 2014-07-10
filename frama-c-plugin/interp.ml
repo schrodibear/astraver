@@ -1299,7 +1299,7 @@ and pred p =
 
 
     | Psubtype({term_node = Ttypeof t},{term_node = Ttype ty}) ->
-        JCPEinstanceof(term t,get_struct_name (pointed_type ty))
+        JCPEinstanceof(term t, get_struct_name (pointed_type ty))
 
     | Psubtype(_t1,_t2) -> Common.unsupported "subtype"
 
@@ -2318,30 +2318,17 @@ let try_builtin_fun_or_pred ltyp_opt name labels params body f =
     let from_unsigned, to_unsigned = map_pair ((<>) "" % group) (1, 3) in
     let from_bitsize, to_bitsize = map_pair (int_of_string % group) (2, 4) in
     let from_type, to_type = map_pair int_from_bitsize_u ((from_bitsize, from_unsigned), (to_bitsize, to_unsigned)) in
-    let f, t = group 1 ^ int ^ group 2, group 3 ^ int ^ group 4 in
-    let part_type, whole_type, part_unsigned, fun_name, compl_name =
-      if from_bitsize < to_bitsize then from_type, to_type, from_unsigned, "u" ^ f ^ "_as_" ^ t, compl ^ f
-                                   else to_type, from_type, to_unsigned, f ^ "_as_u" ^ t, compl ^ t
+    let part_type, whole_type =
+      if (from_bitsize, not from_unsigned) < (to_bitsize, not to_unsigned)
+      then from_type, to_type
+      else to_type, from_type
     in
     match ltyp_opt, labels, params, body with
     | None, [], { lv_type = whole_type' } :: ps, JCnone
       when
       equal_int_types whole_type' (Ctype whole_type) &&
       List.for_all (fun lv -> equal_int_types lv.lv_type @@ Ctype part_type) ps ->
-      if not part_unsigned then
-        let w = "w" and d = "d" in
-        let ds = List.mapi (fun i _ -> d ^ string_of_int i) ps in
-        [(PDecl.mklogic_def
-            ~name
-            ~params:((ctype whole_type, w) :: List.map (fun p -> ctype part_type, p) ds)
-            ~body:PExpr.(
-              mkapp
-                ~fun_name
-                ~args:(mkvar ~name:w () ::
-                       List.map (fun name -> mkapp ~fun_name:compl_name ~args:[mkvar ~name ()] ()) ds)
-                ())
-            ())#node]
-      else []
+      []
     | _ -> unsupported "builtin logic predicate %s redefinition or redeclaration with incompatible type" name
   else if matches @@ Str.regexp @@ compl ^ int ^ bits then
     let signed_type, unsigned_type =
@@ -2937,125 +2924,28 @@ let get_compinfo globals =
    between the two control points specified by the predicate reinterpret_cast{L1, L2}(p).
    The second axiomatic specifies contraints on the pointed memory re-interpreted as the value of the new pointed type.
  *)
-let type_and_memory_reinterpretations get_compinfo () =
+let memory_reinterpretation_predicates get_compinfo () =
   let open! Pervasives in
-  let reinterpret_cast_name = "reinterpret_cast" in
-  let reinterpret_memory_name = "reinterpret_memory" in
-  let tvoidp = pointer_type voidType in
-  let lab name = logic_label (LogicLabel (None, name)) in
-  let l1, l2 = lab "L1", lab "L2" in
-
   (* Returns a pair of lists containing axiom and predicate definitions for the two axiomatics.
      Should be called for each pair of possible types to collect all necessary definitions. *)
-  let reinterpretation_axioms =
+  let memory_reinterpretation_predicates =
     (* The hashtable is used to ensure that predicate for each type conversion is defined only once.
        This is useful for signed types as they require the corresponding predicates for the unsigned counterparts. *)
     let val_cast_pred_memo = Hashtbl.create 16 in
     fun ((name1, type1, bitsize1), (name2, type2, bitsize2)) ->
 
-    let (part_name, part_type, part_bitsize), (whole_name, whole_type, whole_bitsize) =
-      let sort = List.sort (fun (_, _, s1) (_, _, s2) -> s1 - s2) in
-      match sort [(name1, type1, bitsize1); (name2, type2, bitsize2)] with
-      | [(n1, t1, bs1); (n2, t2, bs2)] when bs1 <= bs2 -> (n1, t1, bs1), (n2, t2, bs2)
-      | _ -> fatal
-               "Unexpected match failure in type_reinterpretations: (%s, %d), (%s, %d)"
-               name1 bitsize1 name2 bitsize2
+    let (part_name, part_bitsize), (whole_name, whole_bitsize) =
+      let pair1 = name1, bitsize1 and pair2 = name2, bitsize2 in
+      if (bitsize1, isSignedInteger type1) < (bitsize2, isSignedInteger type2) then pair1, pair2
+                                                                               else pair2, pair1
     in
 
     let open! PExpr in
     let var name = mkvar ~name (), new identifier name in
-    let p, ip = var "p" in
-    let instanceof expr t label = mkat ~expr:(mkinstanceof ~expr ~typ:(wrapper_name t) ()) ~label () in
-    let pcasted t = mkcast ~expr:p ~typ:(pointer_type t) () in
-    let omin, omax =
-      let make f t label = mkat ~expr:(f ~expr:(pcasted t) ?pos:None ()) ~label () in
-      make mkoffset_min, make mkoffset_max
-    in
-    let rcast = mkapp ~fun_name:reinterpret_cast_name ~labels:[l1; l2] ~args:[p] () in
     let tinteger = mktype (JCPTnative Tinteger) in
     let mkeq expr1 expr2 = mkeq ~expr1 ~expr2 () in
 
     let v = whole_bitsize / part_bitsize in
-    (* Type reinterpretation constraints for arbitrary-length arrays *)
-    let ax_full ~t_from ~t_to (op: [`Bdiv | `Bmul]) =
-      let antec = mkand ~list:[instanceof p t_from l1; instanceof p t_to l2; rcast] () in
-      let conseq =
-        let app op e =
-          match op, v with
-          | (`Bmul | `Bdiv), 1 -> e
-          | _ ->
-            mkbinary
-              ~expr1:e
-              ~op:(match op with `Incr -> `Badd | `Decr -> `Bsub | `Bmul | `Bdiv as op -> op)
-              ~expr2:(match op with `Incr | `Decr -> one_expr | `Bdiv | `Bmul -> mkint ~value:v ())
-              ()
-        in
-        let l' = app op (omin t_from  l1) in
-        let omax_old = omax t_from l1 in
-        let r' = if v <> 1 then app `Decr (app op (app `Incr omax_old)) else omax_old in
-        let expr1 =
-          let i, ii = var "i" in
-          let antec =
-            let expr1 = mkbinary ~expr1:i ~op:`Bge ~expr2:l' () in
-            let expr2 = mkbinary ~expr1:i ~op:`Ble ~expr2:r' () in
-            mkand ~expr1 ~expr2 ()
-          in
-          let conseq = instanceof (mkbinary ~expr1:p ~op:`Badd ~expr2:i ()) t_to l2 in
-          mkforall ~typ:tinteger ~vars:[ii] ~triggers:[[conseq]] ~body:(mkimplies ~expr1:antec ~expr2:conseq ()) ()
-        in
-        let expr2 =
-          let expr1 = mkeq (omin t_to l2) l' in
-          let expr2 = mkeq (omax t_to l2) r' in
-          mkand ~expr1 ~expr2 ()
-        in
-        mkand ~expr1 ~expr2 ()
-      in
-      mkimplies ~expr1:antec ~expr2:conseq ()
-    in
-    (* Type reinterpratation for single pointed values (reduced by 1 forall quntifier) *)
-    let ax_simple ~t_from ~t_to op =
-      let l, r, l', r' =
-        match op with
-        | `Bdiv -> zero_expr, mkint ~value:(v - 1) (), zero_expr, zero_expr
-        | `Bmul -> zero_expr, zero_expr, zero_expr, mkint ~value:(v - 1) ()
-      in
-      let expr1 =
-        mkand
-          ~list:[instanceof p t_from l1;
-                 instanceof p t_to l2;
-                 rcast;
-                 mkbinary ~expr1:(omin t_from l1) ~op:`Ble ~expr2:l ();
-                 mkbinary ~expr1:(omax t_from l1) ~op:`Bge ~expr2:r ()]
-          ()
-      in
-      let expr2 =
-        mkand ~list:[mkbinary ~expr1:(omin t_to l2) ~op:`Ble ~expr2:l' ();
-                     mkbinary ~expr1:(omax t_to l2) ~op:`Bge ~expr2:r' ()]
-              ()
-      in
-      mkimplies ~expr1 ~expr2 ()
-    in
-    (* Type reinterpretation axiom generators *)
-    let type_axioms direction =
-      let t_from, t_to, from_name, to_name, op =
-        match direction with
-        | `Parts_into_whole -> part_type, whole_type, part_name, whole_name, `Bdiv
-        | `Whole_into_parts -> whole_type, part_type, whole_name, part_name, `Bmul
-      in
-      let triggers t l = [[rcast; instanceof p t l; omin t l]; [rcast; instanceof p t l; omax t l]] in
-      let triggers = [[rcast; instanceof p t_to l2]] @ triggers t_from l1 @ triggers t_to l2 in
-      let forall_ps body = mkforall ~typ:tvoidp ~vars:[ip] ~triggers ~body () in
-      let concat s = unique_logic_name (from_name ^ "_as_"  ^ to_name ^ s ^ "_axiom") in
-      [concat "", forall_ps (ax_full ~t_from ~t_to op);
-       concat "_simplified", forall_ps (ax_simple ~t_from ~t_to op)]
-    in
-    let type_axioms direction =
-      ListLabels.map
-        (type_axioms direction)
-        ~f:(fun (name, body) ->
-          PDecl.mklemma_def ~name ~axiom:true ~labels:[l1; l2] ~body ())
-    in
-
     let d, w =
       map_pair
         (fun n -> mkint ~valuestr:Integer.(to_string @@ two_power_of_int n) ())
@@ -3169,66 +3059,32 @@ let type_and_memory_reinterpretations get_compinfo () =
            ~body
            ()]
     in
-    let rmemory = mkapp ~fun_name:reinterpret_memory_name ~labels:[l1; l2] ~args:[p] () in
-    (* Memory reinterpretation axioms *)
-    let memory_axioms =
+    let preds =
       let is_u s = s.[0] = 'u' in
-      let deref ?boff typ label offs =
-        let shift offset expr = mkshift ~expr ~offset () in
-        let expr1 = mkat ~expr:(Option_misc.fold shift boff @@ pcasted typ) ~label () in
-        let expr =
-          if offs > 0 then mkbinary ~expr1 ~op:`Badd ~expr2:(mkint ~value:offs ()) ()
-                      else expr1
-        in
-        mkat ~expr:(mkderef ~expr ~field:(contents_name typ) ()) ~label ()
-      in
-      let whole_deref ?boff l = deref ?boff whole_type l 0 in
-      let complement_opt, complement_def =
-        if is_u part_name then id, []
-                          else
-                               complement `Part
-                            |> map_fst (fun fun_name -> List.map @@ fun a -> mkapp ~fun_name ~args:[a] ())
-      in
-      let part_derefs ?boff l =
-           range 0 `To (v - 1)
-        |> List.map (deref ?boff part_type l)
-        |> complement_opt
-      in
-      let impl expr2 = mkimplies ~expr1:rmemory ~expr2 () in
       let (split_name, split_defs), (merge_name, merge_defs) =
         if is_u whole_name then unsigned_split_pred (), unsigned_merge_pred ()
                            else signed_pred `Split, signed_pred `Merge
       in
-      let conseq lw lp =
-        let whole_deref ?woff () = whole_deref ?boff:woff lw in
-        let part_derefs ?poff () = part_derefs ?boff:poff lp in
-        let apps ?woff ?poff () =
-          let args = whole_deref ?woff () :: part_derefs ?poff () in
-          mkand ~list:[mkapp ~fun_name:split_name ~args (); mkapp ~fun_name:merge_name ~args ()] ()
+      merge_defs @ split_defs @
+      if is_u part_name then []
+      else
+        let complement_name, complement_def = complement `Part in
+        let d0 = "d0" in
+        let svars = List.map ((^) "a" % string_of_int) @@ range (v - 1) `Downto 0 in
+        let args =
+          fst (var d0) ::
+          List.map (fun sv -> mkapp ~fun_name:complement_name ~args:[fst @@ var sv] ()) svars
         in
-        let i, ii = var "i" in
-        let woff, poff =
-          i, if v > 1 then mkbinary ~expr1:i ~op:`Bmul ~expr2:(mkint ~value:v ()) () else i
-        in
-        let body = apps ~woff ~poff () in
-        let triggers =
-          List.map (fun a -> [a]) (Jc_iterators.IPExpr.subs body) @ [whole_deref ~woff ()] :: [part_derefs ~poff ()]
-        in
-        mkand ~list:[apps (); mkforall ~typ:tinteger ~vars:[ii] ~triggers ~body ()] ()
-      in
-      let triggers typ = [[rmemory; mkat ~expr:(pcasted typ) ~label:l2 ()]] in
-      let name from _to = unique_logic_name (from ^ "_as_"  ^ _to ^ "_axiom") in
-      let axs =
-        ListLabels.map [name whole_name part_name, triggers part_type, impl (conseq l1 l2);
-                        name part_name whole_name, triggers whole_type, impl (conseq l2 l1)]
-          ~f:(fun (name, triggers, body) ->
-              let body = mkforall ~typ:tvoidp ~vars:[ip] ~triggers ~body () in
-              PDecl.mklemma_def ~name ~axiom:true ~labels:[l1; l2] ~body ())
-      in
-      complement_def @ merge_defs @ split_defs @ axs
+        let bodies = List.map (fun fun_name -> mkapp ~fun_name ~args ()) [merge_name; split_name] in
+        let names = [part_name ^ "_as_" ^ whole_name; whole_name ^ "_as_" ^ part_name] in
+        let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
+        complement_def @
+        List.map2
+          (fun name body ->
+            PDecl.mklogic_def ~name ~params:((whole_type, d0) :: List.map (fun v -> part_type, v) svars) ~body ())
+          names bodies
     in
-    (* Finally concatenating all the above type and memory reinterpretation axioms (and predicates) *)
-    type_axioms `Whole_into_parts @ type_axioms `Parts_into_whole, memory_axioms
+    preds
   in
   let pairwise lst =
     let rec loop r = function
@@ -3265,16 +3121,9 @@ let type_and_memory_reinterpretations get_compinfo () =
     in
     pairwise @@ Common.fold_integral_types handle_type []
   in
-  let type_decls, memory_decls =
-    let def name =
-      PDecl.mklogic_def ~name ~labels:[l1; l2] ~params:[tvoidp, "p"] ()
-    in
-    let type_decls, memory_decls = List.(map_pair flatten @@ split @@ map reinterpretation_axioms pairs) in
-    def reinterpret_cast_name :: type_decls, def reinterpret_memory_name :: memory_decls
-  in
+  let decls = List.(flatten @@ map memory_reinterpretation_predicates pairs) in
   if pairs <> [] then
-    [PDecl.mkaxiomatic ~name:"jessie_reinterpretation_axioms" ~decls:type_decls ();
-     PDecl.mkaxiomatic ~name:"jessie_memory_reinterpretation_axioms" ~decls:memory_decls ()]
+    [PDecl.mkaxiomatic ~name:"jessie_memory_reinterpretation_predicates" ~decls ()]
   else
     []
 
@@ -3318,7 +3167,7 @@ let file f =
      and forth conversion *)
   @ type_conversions ()
   @ (if has_some (get_compinfo voidType)
-     then type_and_memory_reinterpretations get_compinfo ()
+     then memory_reinterpretation_predicates get_compinfo ()
      else [])
   @ globals'
 

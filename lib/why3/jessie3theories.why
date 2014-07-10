@@ -3,7 +3,7 @@ theory Jessie_memory_model
 
 use import int.Int
 
-predicate zwf_zero (a:int) (b:int) = 0 <= b /\ a < b
+predicate zwf_zero (a : int) (b : int) = 0 <= a /\ a < b
 
 (*****************************************************************************)
 (* pointers, allocation, validity                                            *)
@@ -19,137 +19,99 @@ function offset_min (alloc_table 't) (pointer 't) : int
 
 (* shortcuts *)
 
-predicate valid (a:alloc_table 't) (p:pointer 't) =
+predicate valid (a : alloc_table 't) (p : pointer 't) =
   offset_min a p <= 0 /\ offset_max a p >= 0
 
-predicate same_block (p: pointer 't) (q:pointer 't)
+predicate same_block (p : pointer 't) (q : pointer 't)
 
 (* pointer arithmetic *)
 
 function sub_pointer (pointer 't) (pointer 't) : int
-function shift (pointer 't) int : (pointer 't)
+function shift (pointer 't) int : pointer 't
 
 (* null pointer*)
 
-function null : (pointer 't)
+function null : pointer 't
 
 (* shift *)
 
 axiom shift_zero:
-  forall p:pointer 't [shift p 0]. shift p 0 = p
+  forall p : pointer 't [shift p 0]. shift p 0 = p
 
 axiom shift_shift:
-  forall p:pointer 't. forall i:int. forall j:int [shift (shift p i) j].
-    shift (shift p i) j = shift p (i+j)
+  forall p : pointer 't. forall i : int. forall j : int [shift (shift p i) j].
+    shift (shift p i) j = shift p (i + j)
 
 axiom offset_max_shift:
-  forall a:alloc_table 't. forall p: pointer 't. forall i:int.
+  forall a : alloc_table 't. forall p : pointer 't. forall i : int.
     offset_max a (shift p i) = offset_max a p - i
 
 axiom offset_min_shift:
-  forall a:alloc_table 't. forall p: pointer 't. forall i:int.
+  forall a : alloc_table 't. forall p : pointer 't. forall i : int.
     offset_min a (shift p i) = offset_min a p - i
 
 axiom neq_shift:
-  forall p:pointer 't. forall i:int. forall j:int [shift p i, shift p j].
+  forall p : pointer 't. forall i : int. forall j : int [shift p i, shift p j].
     i <> j -> shift p i <> shift p j
 
 (* null *)
 
-axiom null_not_valid:
-  forall a:alloc_table 't. not (valid a null)
-
 axiom null_pointer:
-  forall a:alloc_table 't.
-    offset_min a null >= 0 /\ offset_max a null <= -2
+  forall a : alloc_table 't.
+    offset_max a null < offset_min a null
 
 use import bool.Bool
 
-(* special funcions for construcing terms where predicates are actually needed (but only terms allowed) *)
+(* special functions for constructing terms where predicates are actually needed (but only terms allowed) *)
 
-function eq_pointer_bool (pointer 't) (pointer 't) : bool
-function neq_pointer_bool (pointer 't) (pointer 't) : bool
-
-axiom eq_pointer_bool_def:
-  forall p1: pointer 't. forall p2: pointer 't.
-    eq_pointer_bool p1 p2 = True <-> p1 = p2
-
-axiom neq_pointer_bool_def:
-  forall p1: pointer 't. forall p2: pointer 't.
-    neq_pointer_bool p1 p2 = True <-> p1 <> p2
-
-(* makes Simplify loop on bench/java/Arrays.java !!!
-
-axiom same_block_shift:
-  forall p: pointer 't. forall i: int.
-    same_block p (shift p i)
-*)
+function eq_pointer_bool (p1 : pointer 't) (p2 : pointer 't) : bool = if p1 = p2 then True else False
+function neq_pointer_bool (p1 : pointer 't) (p2 : pointer 't) : bool = if p1 <> p2 then True else False
 
 axiom same_block_shift_right:
-  forall p: pointer 't. forall q:pointer 't. forall i:int
+  forall p : pointer 't. forall q : pointer 't. forall i : int
   [same_block p (shift q i)].
     same_block p q -> same_block p (shift q i)
 
 axiom same_block_shift_left:
-  forall p: pointer 't. forall q:pointer 't. forall i:int
+  forall p : pointer 't. forall q : pointer 't. forall i : int
   [same_block (shift q i) p].
     same_block q p -> same_block (shift q i) p
-
-
-(* makes Simplify loop on Jessie test roux.c
-
-axiom sub_pointer_same_block:
-  forall p:pointer 't. forall q:pointer 't [sub_pointer p q, same_block p q].
-    sub_pointer p q = 0 -> same_block p q
-*)
 
 (* sub_pointer *)
 
 axiom sub_pointer_shift:
-  forall p q:pointer 't [sub_pointer p q].
+  forall p q : pointer 't [sub_pointer p q].
     same_block p q -> p = shift q (sub_pointer p q)
 
 axiom sub_pointer_self:
-  forall p:pointer 't [sub_pointer p p]. sub_pointer p p = 0
+  forall p : pointer 't [sub_pointer p p]. sub_pointer p p = 0
 
 axiom sub_pointer_zero:
-  forall p q:pointer 't [sub_pointer p q].
+  forall p q : pointer 't [sub_pointer p q].
     same_block p q ->
       sub_pointer p q = 0 -> p = q
 
 axiom sub_pointer_shift_left:
-  forall p q:pointer 't, i:int [sub_pointer (shift p i) q].
-      sub_pointer (shift p i) q = sub_pointer p q + i
+  forall p q : pointer 't, i : int [sub_pointer (shift p i) q].
+      same_block p q -> sub_pointer (shift p i) q = sub_pointer p q + i
 
 axiom sub_pointer_shift_right:
-  forall p q:pointer 't, i:int [sub_pointer p (shift q i)].
-      sub_pointer p (shift q i) = sub_pointer p q - i
+  forall p q : pointer 't, i : int [sub_pointer p (shift q i)].
+      same_block p q -> sub_pointer p (shift q i) = sub_pointer p q - i
 
 axiom sub_pointer_neg:
-  forall p q:pointer 't. sub_pointer p q = - sub_pointer q p
+  forall p q : pointer 't. sub_pointer p q = - sub_pointer q p
 
 (*****************************************************************************)
 (* heap memories, select and store                                           *)
 (*****************************************************************************)
 
-type memory 't 'v
+use map.Map
 
-function select (memory 't 'v) (pointer 't) : 'v
-function store (memory 't 'v) (pointer 't) 'v : (memory 't 'v)
+type memory 't 'v = Map.map (pointer 't) 'v
 
-axiom select_store_eq:
-  forall m: (memory 't 'v).
-  forall p1: pointer 't.
-  forall p2: pointer 't.
-  forall a: 'v [store m p1 a, p2].
-    p1=p2 -> select (store m p1 a) p2 = a
-
-axiom select_store_neq:
-  forall m: (memory 't 'v).
-  forall p1: pointer 't.
-  forall p2: pointer 't.
-  forall a: 'v [store m p1 a,p2] .
-    p1 <> p2 -> select (store m p1 a) p2 = select m p2
+function select (m : memory 't 'v) (p : pointer 't) : 'v = Map.get m p
+function store (m : memory 't 'v) (p : pointer 't) (v : 'v) : memory 't 'v = Map.set m p v
 
 (*****************************************************************************)
 (* memory locations, not_assigns predicate, separation                       *)
@@ -157,139 +119,90 @@ axiom select_store_neq:
 
 type pset 't
 
-function pset_empty : (pset 't)
-function pset_singleton (pointer 't) : (pset 't)
+function pset_empty : pset 't
+function pset_singleton (pointer 't) : pset 't
 function pset_deref (memory 't (pointer 'v)) (pset 't) : pset 'v
-function pset_union (pset 't) (pset 't) : (pset 't)
-function pset_all (pset 'z) : (pset 'z) (* l(..) *)
-function pset_range (pset 't) int int : (pset 't) (* l(a..b) *)
-function pset_range_left (pset 'z) int : (pset 'z) (* l(..b) *)
-function pset_range_right (pset 'z) int : (pset 'z) (* l(a..) *)
+function pset_union (pset 't) (pset 't) : pset 't
+function pset_all (pset 'z) : pset 'z (* l(..) *)
+function pset_range (pset 't) int int : pset 't (* l(a..b) *)
+function pset_range_left (pset 'z) int : pset 'z (* l(..b) *)
+function pset_range_right (pset 'z) int : pset 'z (* l(a..) *)
 
 predicate in_pset (pointer 't) (pset 't)
-predicate valid_pset (alloc_table 't) (pset 't)
 
-predicate pset_disjoint (ps1:(pset 't)) (ps2:(pset 't)) =
-  forall p:pointer 't.
+predicate pset_disjoint (ps1 : pset 't) (ps2 : pset 't) =
+  forall p : pointer 't.
     not (in_pset p ps1 /\ in_pset p ps2)
 
-predicate pset_included (ps1:(pset 't)) (ps2:(pset 't)) =
-  forall p:pointer 't.
-    in_pset p ps1 -> in_pset p ps2
-
-axiom pset_included_self:
-  forall ps:(pset 't). pset_included ps ps
-
-axiom pset_included_range:
-  forall ps:(pset 't). forall a b c d : int
-  [pset_included (pset_range ps a b) (pset_range ps c d)].
-    c <= a /\ b <= d ->
-      pset_included (pset_range ps a b) (pset_range ps c d)
-
-axiom pset_included_range_all:
-  forall ps:(pset 't), a b : int
-  [pset_included (pset_range ps a b) (pset_all ps) ].
-    pset_included (pset_range ps a b) (pset_all ps)
-
 axiom in_pset_empty:
-  forall p:pointer 't. not (in_pset p pset_empty)
+  forall p : pointer 't. not (in_pset p pset_empty)
 
 axiom in_pset_singleton:
-  forall p:pointer 't.
-  forall q:pointer 't.
+  forall p : pointer 't.
+  forall q : pointer 't.
     in_pset p (pset_singleton q) <-> p=q
 
 axiom in_pset_deref:
-  forall p:pointer 'v.
-  forall m:memory 't (pointer 'v).
-  forall q:(pset 't).
+  forall p : pointer 'v.
+  forall m : memory 't (pointer 'v).
+  forall q : pset 't.
     in_pset p (pset_deref m q) <->
-	exists r:pointer 't. in_pset r q /\ p = select m r
+        exists r : pointer 't. in_pset r q /\ p = select m r
 
 axiom in_pset_all:
-  forall p:pointer 't.
-  forall q:(pset 't).
+  forall p : pointer 't.
+  forall q : pset 't.
     in_pset p (pset_all q) <->
-	exists i:int. exists r:pointer 't.
+        exists i : int. exists r : pointer 't.
           in_pset r q /\ p = shift r i
 
 axiom in_pset_range:
-  forall p:pointer 't.
-  forall q:(pset 't).
-  forall a:int. forall b:int.
+  forall p : pointer 't.
+  forall q : pset 't.
+  forall a: int. forall b:int.
     in_pset p (pset_range q a b) <->
-	exists i:int. exists r:pointer 't.
-          a <= i /\ i <= b /\ in_pset r q /\ p=shift r i
+        exists i : int. exists r : pointer 't.
+          a <= i /\ i <= b /\ in_pset r q /\ p = shift r i
 
 axiom in_pset_range_left:
-  forall p:pointer 't.
-  forall q:(pset 't).
-  forall b:int.
+  forall p : pointer 't.
+  forall q : pset 't.
+  forall b : int.
     in_pset p (pset_range_left q b) <->
-	exists i:int. exists r:pointer 't.
+        exists i : int. exists r : pointer 't.
           i <= b /\ in_pset r q /\ p = shift r i
 
 axiom in_pset_range_right:
-  forall p:pointer 't.
-  forall q:(pset 't).
-  forall a:int.
+  forall p : pointer 't.
+  forall q : pset 't.
+  forall a : int.
     in_pset p (pset_range_right q a) <->
-	exists i:int. exists r:pointer 't.
+        exists i : int. exists r : pointer 't.
           a <= i /\ in_pset r q /\ p = shift r i
 
 axiom in_pset_union:
-  forall p:pointer 't.
-  forall s1:(pset 't).
-  forall s2:(pset 't).
+  forall p : pointer 't.
+  forall s1 : pset 't.
+  forall s2 : pset 't.
     in_pset p (pset_union s1 s2) <-> in_pset p s1 \/ in_pset p s2
 
-axiom valid_pset_empty:
-  forall a:alloc_table 't. valid_pset a pset_empty
-
-axiom valid_pset_singleton:
-  forall a:alloc_table 't.
-  forall p:pointer 't.
-    valid_pset a (pset_singleton p) <-> valid a p
-
-axiom valid_pset_deref:
-  forall a:alloc_table 'v .
-  forall m:memory 't (pointer 'v).
-  forall q:(pset 't).
-    valid_pset a (pset_deref m q) <->
-      forall r:pointer 't. forall p:pointer 'v.
-        in_pset r q /\ p = select m r -> valid a p
-
-axiom valid_pset_range:
-  forall a:alloc_table 't.
-  forall q:(pset 't).
-  forall c:int. forall d:int.
-    valid_pset a (pset_range q c d) <->
-	forall i:int. forall r:pointer 't.
-          in_pset r q /\ c <= i /\ i <= d -> valid a (shift r i)
-
-axiom valid_pset_union:
-  forall a:alloc_table 't.
-  forall s1:(pset 't).
-  forall s2:(pset 't).
-    valid_pset a (pset_union s1 s2) <-> valid_pset a (s1) /\ valid_pset a (s2)
-
 predicate not_assigns
-  (a:alloc_table 't) (m1:(memory 't 'v)) (m2:(memory 't 'v)) (l:(pset 't)) =
+  (a : alloc_table 't) (m1 : memory 't 'v) (m2 : memory 't 'v ) (l : pset 't) =
     forall p:pointer 't.
       valid a p /\ not in_pset p l -> select m2 p = select m1 p
 
 axiom not_assigns_refl:
-  forall a: alloc_table 't.
-  forall m: (memory 't 'v).
-  forall l:(pset 't).
+  forall a : alloc_table 't.
+  forall m : memory 't 'v.
+  forall l : pset 't.
     not_assigns a m m l
 
 axiom not_assigns_trans:
-  forall a: alloc_table 't.
-  forall m1: (memory 't 'v).
-  forall m2: (memory 't 'v).
-  forall m3: (memory 't 'v).
-  forall l:(pset 't) [not_assigns a m1 m2 l, not_assigns a m1 m3 l] .
+  forall a : alloc_table 't.
+  forall m1 : memory 't 'v.
+  forall m2 : memory 't 'v.
+  forall m3 : memory 't 'v.
+  forall l : pset 't [not_assigns a m1 m2 l, not_assigns a m1 m3 l].
     not_assigns a m1 m2 l ->
     not_assigns a m2 m3 l ->
     not_assigns a m1 m3 l
@@ -314,27 +227,29 @@ instanceof is defined from typeof and subtag.
 int_of_tag gives a different integer to each tags to differenciate them.
 *****)
 
-type tag_table 't
+type tag_table 't (* TO BE DELETED! *)
 
 type tag_id 't
 
 function int_of_tag (tag_id 't) : int
 
-function typeof(tag_table 't) (pointer 't) : (tag_id 't)
+function typeof (pointer 't) : tag_id 't
 
-predicate parenttag (tag_id 't)  (tag_id 't)
+function cast_factor (tag_id 't) (tag_id 't) : int
+
+predicate parenttag (tag_id 't) (tag_id 't)
 
 predicate subtag (tag_id 't) (tag_id 't)
 
 function subtag_bool (tag_id 't) (tag_id 't) : bool
 
 axiom subtag_bool_def:
-  forall t1: (tag_id 't).
-  forall t2: (tag_id 't).
+  forall t1: tag_id 't.
+  forall t2: tag_id 't.
     subtag_bool t1 t2 = True <-> subtag t1 t2
 
 axiom subtag_refl:
-  forall t: (tag_id 't).
+  forall t: tag_id 't.
     subtag t t
 
 axiom subtag_parent:
@@ -343,39 +258,79 @@ axiom subtag_parent:
   forall t3: (tag_id 't).
     subtag t1 t2 -> parenttag t2 t3 -> subtag t1 t3
 
-predicate instanceof (a: (tag_table 't)) (p: pointer 't) (t: (tag_id 't)) =
-  subtag (typeof a p) t
+predicate instanceof (p : pointer 't) (s : tag_id 't) =
+  subtag (typeof p) s
 
-function downcast (tag_table 't) (pointer 't) (tag_id 't) : pointer 't
+function instanceof_bool (p : pointer 't) (s : tag_id 't) : bool =
+  if instanceof p s then True else False
+
+function downcast (pointer 't) (tag_id 't) : pointer 't
+
+axiom downcast_reduce:
+  forall p : pointer 't.
+    forall s2 : tag_id 't [downcast p s2].
+      forall s1: tag_id 't [downcast (downcast p s1) s2].
+        cast_factor s1 s2 <> 0 -> downcast (downcast p s1) s2 = downcast p s2
 
 axiom downcast_instanceof:
-  forall a:(tag_table 't).
-  forall p:pointer 't.
-  forall s:(tag_id 't).
-   instanceof a  p (s) -> downcast a  p (s)=p
+  forall p : pointer 't.
+  forall s : tag_id 't.
+   instanceof p s -> downcast p s = p
+
+axiom instanceof_downcast:
+  forall p : pointer 't.
+  forall s : tag_id 't.
+   instanceof (downcast p s) s
 
 function bottom_tag: tag_id 'a
 
 axiom bottom_tag_axiom:
-  forall t: (tag_id 't).
+  forall t : tag_id 't.
     subtag t bottom_tag
 
-predicate root_tag(t: (tag_id 't)) = parenttag t bottom_tag
+predicate root_tag (t : tag_id 't) = parenttag t bottom_tag
 
 axiom root_subtag:
-  forall a: (tag_id 't).
-  forall b: (tag_id 't).
-  forall c: (tag_id 't).
+  forall a: tag_id 't.
+  forall b: tag_id 't.
+  forall c: tag_id 't.
     root_tag(a) -> root_tag(b) -> a <> b -> subtag c a -> not (subtag c b)
 
-(*****************************************************************************)
-(* structure invariants                                                      *)
-(*****************************************************************************)
+use import int.ComputerDivision
 
-predicate fully_packed (tag_table: tag_table 'a)
-  (_mutable: memory 'a (tag_id 'a))
-  (this: pointer 'a) =
-    select _mutable this = typeof tag_table this
+predicate reinterpret_cast_merge
+      (a1 : alloc_table 't)
+      (a2 : alloc_table 't)
+      (p : pointer 't)
+      (s : tag_id 't)
+      (c : int) =
+  let ps = downcast p s in
+  (forall i : int [shift p i | shift ps (div i c)]. mod i c = 0 -> downcast (shift p i) s = shift ps (div i c)) /\
+  (forall i : int [shift ps i | shift p (i * c)]. downcast (shift p (i * c)) s = shift ps i) /\
+  offset_min a2 ps = div (offset_min a1 p) c /\
+  offset_max a2 ps = div (offset_max a1 p + 1) c - 1
+
+predicate reinterpret_cast_split
+      (a1 : alloc_table 't)
+      (a2 : alloc_table 't)
+      (p : pointer 't)
+      (s : tag_id 't)
+      (c : int) =
+  let ps = downcast p s in
+  (forall i : int [shift p i | shift ps (i * c)]. downcast (shift p i) s = shift ps (i * c)) /\
+  (forall i : int [shift ps i | shift p (div i c)]. mod i c = 0 -> downcast (shift p (div i c)) s = shift ps i) /\
+  offset_min a2 ps = c * offset_min a1 p /\
+  offset_max a2 ps = c * (offset_max a1 p + 1) - 1
+
+predicate reinterpret_cast_retain
+      (a1 : alloc_table 't)
+      (a2 : alloc_table 't)
+      (p : pointer 't)
+      (s : tag_id 't) =
+  let ps = downcast p s in
+  (forall i : int [shift p i | shift ps i]. downcast (shift p i) s = shift ps i) /\
+  offset_min a2 ps = offset_min a1 p /\
+  offset_max a2 ps = offset_max a1 p
 
 (*****************************************************************************)
 (* bitwise operations                                                        *)
@@ -709,8 +664,6 @@ axiom lsl_init:
 
 axiom lsl_multiply:
   forall a: int. forall n: int [lsl a n | a * pow2 n]. a >= 0 -> lsl a n = a * pow2 n
-  
-use import int.ComputerDivision
 
 axiom lsr_init:
   forall a: int [lsr a 1 | div a 2]. a >= 0 -> lsr a 1 = div a 2
@@ -722,67 +675,21 @@ axiom lsr_divide:
 (* dynamic allocation/deallocation                                           *)
 (*****************************************************************************)
 
-predicate alloc_extends (alloc_table 't) (alloc_table 't)
+predicate alloc_fresh (a : alloc_table 't) (p : pointer 't) =
+  offset_max a p < offset_min a p
+  /\ forall p' : pointer 't. in_pset p' (pset_all (pset_singleton p)) -> not valid a p'
 
-predicate alloc_fresh (a:alloc_table 't) (p:pointer 't) (n:int) =
-  forall i:int. 0 <= i < n -> not valid a (shift p i)
+predicate alloc_extends (a1: alloc_table 't) (a2: alloc_table 't) =
+  forall p: pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+    valid a1 p -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
 
-axiom alloc_extends_offset_min:
-  forall a1:alloc_table 't. forall a2:alloc_table 't [alloc_extends a1 a2].
-    alloc_extends a1 a2 ->
-      forall p:pointer 't.
-        valid(a1) p -> offset_min(a1) p = offset_min(a2) p
-
-axiom alloc_extends_offset_max:
-  forall a1:alloc_table 't. forall a2:alloc_table 't [alloc_extends a1 a2].
-    alloc_extends a1 a2 ->
-      forall p:pointer 't.
-        valid(a1) p -> offset_max(a1) p = offset_max(a2) p
-
-axiom alloc_extends_not_assigns_empty:
-  forall a1:alloc_table 't. forall a2:alloc_table 't.
-  forall m1: (memory 't 'v). forall m2: (memory 't 'v).
-  forall l:(pset 't). forall p:pointer 't. forall n:int
-  [alloc_extends a1 a2, alloc_fresh a1 p n, not_assigns a2 m1 m2 l].
-    alloc_extends a1 a2 /\ alloc_fresh a1 p n /\ not_assigns a2 m1 m2 l
-    /\ pset_included l (pset_all (pset_singleton p)) ->
-      not_assigns a1 m1 m2 pset_empty
-
-predicate alloc_extends_except (alloc_table 't) (alloc_table 't) (pset 't)
+predicate alloc_extends_except (a1: alloc_table 't) (a2: alloc_table 't) (l: pset 't) =
+  forall p: pointer 't [valid a1 p | valid a2 p | in_pset p l | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+    valid a1 p /\ not in_pset p l -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
 
 axiom alloc_extends_alloc_extends_except:
   forall a1: alloc_table 't. forall a2: alloc_table 't [alloc_extends a1 a2].
     forall l: pset 't [alloc_extends_except a1 a2 l].
       alloc_extends a1 a2 -> alloc_extends_except a1 a2 l
-
-axiom alloc_extends_except_offset_min:
- forall a1:alloc_table 't. forall a2:alloc_table 't. forall l:(pset 't)
- [alloc_extends_except a1 a2 l].
-   alloc_extends_except a1 a2 l ->
-     forall p:pointer 't.
-       valid(a1) p /\ not in_pset p (l) -> offset_min(a1) p = offset_min(a2) p
-
-axiom alloc_extends_except_offset_max:
- forall a1:alloc_table 't. forall a2:alloc_table 't. forall l:(pset 't)
- [alloc_extends_except a1 a2 l].
-   alloc_extends_except a1 a2 l ->
-     forall p:pointer 't.
-       valid(a1) p /\ not in_pset p (l) -> offset_max(a1) p = offset_max(a2) p
-
-axiom alloc_fresh_not_same_block_extends:
-  forall a1:alloc_table 't. forall a2:alloc_table 't [alloc_extends a1 a2].
-    alloc_extends a1 a2 ->
-      forall p: pointer 't. forall n:int [alloc_fresh a1 p n].
-        alloc_fresh a1 p n /\ valid(a2) p ->
-          forall p_old: pointer 't [same_block p p_old].
-            valid(a1) p_old -> not same_block p p_old
-
-axiom alloc_fresh_not_same_block_extends_except:
-  forall a1:alloc_table 't. forall a2:alloc_table 't. forall l:pset 't [alloc_extends_except a1 a2 l].
-    alloc_extends_except a1 a2 l ->
-      forall p: pointer 't. forall n:int [alloc_fresh a1 p n].
-        alloc_fresh a1 p n /\ valid(a2) p ->
-          forall p_old: pointer 't [same_block p p_old].
-            valid(a1) p_old -> not same_block p p_old
 
 end

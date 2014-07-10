@@ -120,8 +120,6 @@ val make_eq_pred : Jc_env.jc_type -> Output.term -> Output.term -> Output.assert
 
 val make_if_term : Output.term -> Output.term -> Output.term -> Output.term
 
-
-
 (** {1 Types} *)
 
 val why_unit_type : Output.logic_type
@@ -191,9 +189,7 @@ val make_valid_pred : in_param:bool -> equal:bool ->
            ?right:bool ->
            Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
 
-val make_fresh_pred :
-  arg:(Output.assertion, Output.term -> Output.assertion, _, [`Range_0_n | `Singleton], _, _) Jc_env.arg ->
-    Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
+val make_fresh_pred : Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
 
 val make_instanceof_pred :
   arg:(Output.assertion, _, Output.term -> Output.term -> Output.assertion, [`Range_l_r | `Singleton], _, _) Jc_env.arg ->
@@ -328,6 +324,8 @@ val logic_union_of_field : Jc_env.field_info -> string
 (** {2 building output terms} *)
 
 val const_of_num :  Num.num -> Output.term
+val const_of_int :  int -> Output.term
+
 val const : Jc_ast.const -> Output.constant
 (** constant *)
 
@@ -363,13 +361,12 @@ val make_logic_fun_call : label_in_name:bool ->
 
 val make_int_of_tag : Jc_env.struct_info -> Output.term
 
-val make_typeof : Jc_env.struct_info ->
-           Jc_region.RegionTable.key -> Output.term -> Output.term
+val make_typeof : Output.term -> Output.term
 (** typeof expression in logic *)
 
-val make_instanceof : Output.term ->
-  Output.term -> Jc_env.struct_info -> Output.assertion
+val make_instanceof : Output.term -> Jc_env.struct_info -> Output.assertion
 
+val make_instanceof_bool : Output.term -> Jc_env.struct_info -> Output.term
 
 
 (** {2 helpers for effects information} *)

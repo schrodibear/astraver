@@ -487,8 +487,7 @@ let tr_struct st acc =
         :: make_valid_pred ~in_param ~equal:false ~right:false ac pc
         :: make_valid_pred ~in_param ~equal:false ~left:false ac pc
 
-        :: make_fresh_pred ~arg:Range_0_n ac pc
-        :: make_fresh_pred ~arg:Singleton ac pc
+        :: make_fresh_pred ac pc
 
         :: make_instanceof_pred ~arg:Range_l_r ac pc
         :: make_instanceof_pred ~arg:Singleton ac pc
@@ -631,12 +630,8 @@ let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos
     | JCTpointer _ , JCTnull -> e'
     | JCTpointer(pc1,_,_), JCTpointer(JCtag(st2,_),_,_)
         when Jc_typing.substruct st2 pc1 -> e'
-    | JCTpointer(JCtag(st1,_),_,_), JCTpointer _ ->
-	let tag =
-	  ttag_table_var ~label_in_name:global_assertion lab
-	    (struct_root st1,e#region)
-	in
-        LApp("downcast", [ tag; e'; LVar (tag_name st1) ])
+    | JCTpointer (JCtag (st1, _), _, _), JCTpointer _ ->
+      LApp ("downcast", [e'; LVar (tag_name st1)])
     |  _ ->
          Jc_typing.typing_error pos
            "can't (term_)coerce type %a to type %a"
@@ -776,13 +771,11 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
     | JCTpointer _ , JCTnull -> e'
     | JCTpointer(pc1,_,_), JCTpointer(JCtag(st2,_),_,_)
         when Jc_typing.substruct st2 pc1 -> e'
-    | JCTpointer(JCtag(st1,_),_,_), JCTpointer _  ->
-	let downcast_fun =
-	  if safety_checking () then "downcast_" else "safe_downcast_"
-	in
-	let tag = tag_table_var(struct_root st1,e#region) in
-        make_guarded_app ~mark DownCast pos downcast_fun
-          [ tag; e'; mk_var(tag_name st1) ]
+    | JCTpointer (JCtag (st1, _), _, _), JCTpointer _  ->
+      let downcast_fun =
+        if safety_checking () then "downcast_" else "safe_downcast_"
+      in
+      make_app downcast_fun [e'; mk_var (tag_name st1)]
     | _ ->
         Jc_typing.typing_error pos
           "can't coerce type %a to type %a"
@@ -893,25 +886,13 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
         LApp("address",[ ft t1 ])
     | JCTbase_block(t1) ->
         LApp("base_block",[ ft t1 ])
-    | JCTinstanceof(t1,lab',st) ->
-      let lab = if relocate && lab' = LabelHere then lab else lab' in
-        let t1' = ft t1 in
-	let tag =
-	  ttag_table_var ~label_in_name:global_assertion lab
-	    (struct_root st,t1#region)
-	in
-        LApp("instanceof",[ tag; t1'; LVar (tag_name st) ])
-    | JCTcast(t1,lab',st) ->
-      let lab = if relocate && lab' = LabelHere then lab else lab' in
-        if struct_of_union st then
-	  ft t1
-	else
-          let t1' = ft t1 in
-	  let tag =
-	    ttag_table_var ~label_in_name:global_assertion lab
-	      (struct_root st,t1#region)
-	  in
-          LApp("downcast",[ tag; t1'; LVar (tag_name st) ])
+    | JCTinstanceof (t1, _, st) ->
+      let t1' = ft t1 in
+      LApp ("instanceof", [t1'; LVar (tag_name st)])
+    | JCTcast (t1, _, st) ->
+      if struct_of_union st
+      then ft t1
+      else LApp ("downcast", [ft t1; LVar (tag_name st)])
     | JCTbitwise_cast(t1,_lab,_st) ->
 	ft t1
     | JCTrange_cast(t1, ri) ->
@@ -1084,9 +1065,9 @@ let tag ~type_safe ~global_assertion ~relocate lab oldlab tag=
   match tag#node with
     | JCTtag st -> LVar (tag_name st)
     | JCTbottom -> LVar "bottom_tag"
-    | JCTtypeof(t,st) ->
+    | JCTtypeof (t, _) ->
 	let t' = term ~type_safe ~global_assertion ~relocate lab oldlab t in
-	make_typeof st t#region t'
+	make_typeof t'
 
 let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
   let fa = assertion ~type_safe ~global_assertion ~relocate lab oldlab in
@@ -1226,14 +1207,9 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
     | JCAbool_term t1 ->
         let t1' = ft t1 in
         LPred("eq",[ t1'; LConst(Prim_bool true) ])
-    | JCAinstanceof(t1,lab',st) ->
-	let lab = if relocate && lab' = LabelHere then lab else lab' in
-        let t1' = ft t1 in
-	let tag =
-	  ttag_table_var ~label_in_name:global_assertion lab
-	    (struct_root st,t1#region)
-	in
-        LPred("instanceof",[ tag; t1'; LVar (tag_name st) ])
+    | JCAinstanceof (t1, _, st) ->
+      let t1' = ft t1 in
+      LPred ("instanceof", [t1'; LVar (tag_name st)])
     | JCAmutable(te, st, ta) ->
         let te' = ft te in
         let tag = ftag ta in
@@ -1728,15 +1704,12 @@ let get_measure_for f =
          with Not_found -> raise Exit)
     | TPnever -> raise Exit
 
-
-
-
 (* Translate the heap update `e1.fi = tmp2'
 
    essentially we want
 
    let tmp1 = [e1] in
-   fi := upd(fi,tmp1,tmp2)
+   fi := upd(fi, tmp1, tmp2)
 
    special cases are considered to avoid statically known safety properties:
    if e1 has the form p + i then we build
@@ -1747,141 +1720,26 @@ let get_measure_for f =
     // depending on type of p and value of i
    ...
 *)
-(*
+
 let rec make_upd_simple mark pos e1 fi tmp2 =
   (* Temporary variables to avoid duplicating code *)
   let tmpp = tmp_var_name () in
   let tmpi = tmp_var_name () in
   let tmp1 = tmp_var_name () in
   (* Define memory and allocation table *)
-  let mc,_ufi_opt = deref_mem_class ~type_safe:false e1 fi in
-  let mem = plain_memory_var (mc,e1#region) in
+  let mc, _ufi_opt = deref_mem_class ~type_safe:false e1 fi in
+  let mem = memory_name (mc, e1#region) in
   let ac = alloc_class_of_mem_class mc in
-  let alloc = alloc_table_var (ac,e1#region) in
-  let lets, e' =
-    if safety_checking () then
-      let p,off,lb,rb = destruct_pointer e1 in
-      let p' = expr p in
-      let i' = offset off in
-      let letspi =
-	[ (tmpp,p') ; (tmpi,i') ;
-	  (tmp1,make_app "shift" [Var tmpp; Var tmpi])]
-      in
-      match off, lb, rb with
-	| Int_offset s, Some lb, Some rb when bounded lb rb s ->
-            let e1' = expr e1 in
-	    [ (tmp1, e1') ],
-            make_app "safe_upd_" [ mem; Var tmp1; Var tmp2 ]
-	| Int_offset s, Some lb, _ when lbounded lb s ->
-	    letspi,
-            make_guarded_app ~mark IndexBounds pos "lsafe_lbound_upd_"
-              [ alloc; mem; Var tmpp; Var tmpi; Var tmp2 ]
-	| Int_offset s, _, Some rb when rbounded rb s ->
-	    letspi,
-            make_guarded_app ~mark IndexBounds pos "rsafe_rbound_upd_"
-              [ alloc; mem; Var tmpp; Var tmpi; Var tmp2 ]
-	| Int_offset s, None, None when s = 0 ->
-	    [ (tmp1, p') ],
-            make_guarded_app ~mark PointerDeref pos "upd_"
-              [ alloc; mem ; Var tmp1; Var tmp2 ]
-	| _ ->
-	    letspi,
-            make_guarded_app ~mark PointerDeref pos "offset_upd_"
-              [ alloc; mem ; Var tmpp; Var tmpi; Var tmp2 ]
-    else
-      let e1' = expr e1 in
-      [ (tmp1,e1') ],
-      make_app "safe_upd_" [ mem; Var tmp1; Var tmp2 ]
-  in
-  tmp1, lets, e'
-*)
-
-
-
-let rec make_upd_simple mark pos e1 fi tmp2 =
-  (* Temporary variables to avoid duplicating code *)
-  let tmpp = tmp_var_name () in
-(*
-  eprintf "make_upd_simple: tmp_var_name for tmpp is %s@." tmpp;
-*)
-  let tmpi = tmp_var_name () in
-(*
-  eprintf "make_upd_simple: tmp_var_name for tmpi is %s@." tmpi;
-*)
-  let tmp1 = tmp_var_name () in
-(*
-  eprintf "make_upd_simple: tmp_var_name for tmp1 is %s@." tmp1;
-*)
-  (* Define memory and allocation table *)
-  let mc,_ufi_opt = deref_mem_class ~type_safe:false e1 fi in
-  let mem = match (plain_memory_var (mc,e1#region)).expr_node with
-    | Var v -> v
-    | _ -> assert false
-  in
-  let ac = alloc_class_of_mem_class mc in
-(*
-  let alloc_var = alloc_table_name (ac,e1#region) in
-*)
-  let alloc = alloc_table_var (ac,e1#region) in
-  let is_ref,talloc = talloc_table_var ~label_in_name:true LabelHere (ac,e1#region) in
-  let p,off,lb,rb = destruct_pointer e1 in
+  let alloc = alloc_table_var (ac, e1#region) in
+  let p, off, _, _ = destruct_pointer e1 in
   let p' = expr p in
   let i' = offset off in
-  let letspi =
-    [ (tmpp,p') ; (tmpi,i') ;
-      (tmp1,make_app "shift" [mk_var tmpp; mk_var tmpi])]
-  in
-  try
-    let s,b1,b2 =
-      match off, lb, rb with
-        | Int_offset s, Some lb, Some rb when bounded lb rb s ->
-            (*
-              make_app "safe_upd_" [ mem; mk_var tmp1; mk_var tmp2 ]
-            *)
-            s,true,true
-        | Int_offset s, Some lb, _ when lbounded lb s ->
-	    (*
-              make_guarded_app ~mark IndexBounds pos "lsafe_lbound_upd_"
-              [ alloc; mem; mk_var tmpp; mk_var tmpi; mk_var tmp2 ]
-            *)
-            s, true, false
-        | Int_offset s, _, Some rb when rbounded rb s ->
-	    (*
-              make_guarded_app ~mark IndexBounds pos "rsafe_rbound_upd_"
-              [ alloc; mem; mk_var tmpp; mk_var tmpi; mk_var tmp2 ]
-            *)
-            s, false, true
-              (*
-	        | Int_offset s, None, None when int_of_string s = 0 ->
-	        [ (tmp1, p') ],
-              (*
-                make_guarded_app ~mark PointerDeref pos "upd_"
-                [ alloc; mem ; mk_var tmp1; mk_var tmp2 ]
-              *)
-                Upd(alloc, mem , mk_var tmp1, mk_var tmp2)
-              *)
-        | Int_offset s, None, None ->
-	    (*
-              make_guarded_app ~mark PointerDeref pos "upd_"
-              [ alloc; mem ; mk_var tmp1; mk_var tmp2 ]
-            *)
-            s, false, false
-        | _ ->
-            raise Exit
-    in
-(*    Format.eprintf "found constant update let %s = %a in (%s + %d).%s = ...@." tmpp Output.fprintf_expr p' tmpp s mem;
-*)
-    let letspi = if s = 0 then [ (tmpp,p') ] else letspi in
-    tmp1, [],
-    mk_expr (MultiAssign(mark,pos,letspi, is_ref, talloc, alloc, tmpp, p', mem, [s, b1, b2, tmp2]))
- with Exit ->
-   tmp1,letspi,
-   if (safety_checking()) then
-     make_guarded_app ~mark PointerDeref pos "offset_upd_"
-	       [ alloc; mk_var mem ; mk_var tmpp; mk_var tmpi; mk_var tmp2 ]
+  let letspi = [tmpp, p'; tmpi, i'; tmp1, make_app "shift" [mk_var tmpp; mk_var tmpi]] in
+  tmp1, letspi,
+   if safety_checking () then
+     make_guarded_app ~mark PointerDeref pos "offset_upd_" [alloc; mk_var mem; mk_var tmpp; mk_var tmpi; mk_var tmp2]
    else
-     make_app "safe_upd_" [ mk_var mem; mk_var tmp1; mk_var tmp2 ]
-
+     make_app "safe_upd_" [mk_var mem; mk_var tmp1; mk_var tmp2]
 
 and make_upd_union mark pos off e1 fi tmp2 =
   let e1' = expr e1 in
@@ -2244,6 +2102,139 @@ and value_assigned mark pos ty e =
             (mk_expr (Assert(`ASSERT,a,mk_var tmp)))))
     else e
 
+and make_reinterpret e st =
+  let get_fi st =
+    match st.jc_struct_info_fields with
+    | [fi] -> fi
+    | _ -> unsupported e#pos "reinterpretation for structure with several fields"
+  in
+  let s_from, fi_from = (* src. subtag & field info *)
+    match e#typ with
+    | JCTpointer (JCtag (st, _), _, _) -> tag_name st, get_fi st
+    | _ -> unsupported e#pos "reinterpretation for a root pointer or a non-pointer"
+  in
+  let s_to, fi_to = tag_name st, get_fi st in (* dest. subtag & field_info *)
+  let ac = deref_alloc_class ~type_safe:false e in
+  let mc_from, mc_to = map_pair (fst % deref_mem_class ~type_safe:false e) (fi_from, fi_to) in
+  let before = fresh_reinterpret_label () in
+
+  (* call to [safe]_reinterpret_parameter *)
+  let call_parameter =
+    let alloc = plain_alloc_table_var (ac, e#region) in
+    let mem_to = plain_memory_var (mc_to, e#region) in
+    make_label before.label_info_final_name @@
+      match !Jc_options.inv_sem with
+      | InvOwnership -> unsupported e#pos "reinterpret .. as construct is not supported when inv_sem = InvOwnership"
+      | InvNone | InvArguments ->
+        make_app (reinterpret_parameter_name ~safety_checking) [alloc; mk_var s_from; mk_var s_to; mem_to; expr e]
+  in
+
+  (* Let's now switch to terms and assume predicates instead of calling params... *)
+  let before = LabelName before in
+  let alloc = alloc_table_name (ac, e#region) in
+  let at = lvar ~constant:false ~label_in_name:false in
+  (* reinterpretation kind (operation):
+     merging (e.g. char -> int) / splitting (e.g. int -> char) / plain (e.g. int -> long) *)
+  let op =
+    let from_bitsize, to_bitsize =
+      map_pair
+        (function
+         | { jc_field_info_bitsize = Some s } -> s
+         | _ -> unsupported e#pos "reinterpretation for field with no bitsize specified")
+        (fi_from, fi_to)
+    in
+    match compare from_bitsize to_bitsize with
+    | 0 -> `Retain
+    | v when v > 0 -> `Split (from_bitsize / to_bitsize)
+    | _ -> `Merge (to_bitsize / from_bitsize)
+  in
+  let e' =
+    term
+      ~type_safe:(safety_checking ())
+      ~global_assertion:false
+      ~relocate:false
+      LabelHere
+      before @@
+        match term_of_expr e with
+        | Some e -> e
+        | None ->
+          unsupported e#pos "the argument for reinterpret .. as should be an expression without side effects"
+  in
+
+  let alloc_assumption =
+    let app l = LPred (reinterpret_cast_name op, [at before alloc; at LabelHere alloc; e'; LVar s_to] @ l) in
+    match op with
+    | `Retain -> app []
+    | `Merge c | `Split c -> app [const_of_int c]
+  in
+
+  (* Assume reinterpretation predicates for all corresponingly shifted pointers *)
+  let memory_assumption =
+    let mem =
+      let old_mem, new_mem = map_pair (fun mc -> memory_name (mc, e#region)) (mc_from, mc_to) in
+      function
+      | `Old -> at before old_mem
+      | `New -> at LabelHere new_mem
+    in
+    let p, ps = "p", "ps" in
+    let lp, lps = LVar p, LVar ps in
+    let deref where p ?boff offs =
+      let shift t o1 o2 =
+        match o1, o2 with
+        | None, None -> t
+        | Some o, None
+        | None, Some o -> LApp ("shift", [t; o])
+        | Some o1, Some o2 -> LApp ("shift", [t; LApp ("add_int", [o1; o2])])
+      in
+      LApp ("select", [mem where; shift p boff @@ match offs with 0 -> None | o -> Some (const_of_int o)])
+    in
+    let enum_name =
+      function
+      | { jc_field_info_type = JCTenum { jc_enum_info_name = name } } -> name
+      | _ -> unsupported e#pos "reinterpretation for structure with a non-enum field"
+    in
+    let from_name, to_name = map_pair enum_name (fi_from, fi_to) in
+    let pred_names = [from_name ^ "_as_" ^ to_name; to_name ^ "_as_" ^ from_name] in
+    let assumptions =
+      let dwhole, dpart, c =
+      let dfrom, dto = map_pair (uncurry deref) ((`Old, lp), (`New, lps)) in
+        match op with
+        | `Merge c -> dto, dfrom, c
+        | `Retain when from_name.[0] = 'u' -> dto, dfrom, 1
+        | `Retain -> dfrom, dto, 1
+        | `Split c -> dfrom, dto, c
+      in
+      let dparts boff = List.map (dpart ?boff) (range 0 `To (c - 1)) in
+      ListLabels.map pred_names
+        ~f:(fun pred_name ->
+          make_and
+            (LPred (pred_name, dwhole 0 :: dparts None)) @@
+            let i = "i" in
+            let li = LVar i in
+            LForall (i, why_integer_type, [],
+                        let imul = if c > 1 then LApp ("mul_int", [li; const_of_int c]) else li in
+                        LPred (pred_name, dwhole ~boff:li 0 :: dparts (Some imul))))
+    in
+    LLet (p, e', LLet (ps, LApp ("downcast", [e'; LVar s_to]), make_and_list assumptions))
+  in
+
+  let cast_factor_assumption =
+    let c =
+      match op with
+      | `Split c -> c
+      | `Merge c -> -c
+      | `Retain -> 1
+    in
+    LPred ("eq_int", [LApp (cast_factor_name, [LVar s_from; LVar s_to]); const_of_int c])
+  in
+
+  let assumption =
+    mk_expr @@ Assert (`ASSUME, alloc_assumption,
+      mk_expr @@ Assert (`ASSUME, memory_assumption,
+        mk_expr @@ Assert (`ASSUME, cast_factor_assumption, void)))
+  in
+  append call_parameter assumption
+
 and expr e =
   let infunction = get_current_function () in
   let e' = match e#node with
@@ -2351,29 +2342,16 @@ and expr e =
     | JCEbase_block(e1) ->
         make_app "base_block" [ expr e1 ]
     | JCEfresh _ -> assert false
-    | JCEinstanceof(e1,st) ->
+    | JCEinstanceof (e1, st) ->
+      let e1' = expr e1 in
+      (* always safe *)
+      make_app "instanceof_" [e1'; mk_var (tag_name st)]
+    | JCEcast (e1, st) ->
+      if struct_of_union st
+      then expr e1
+      else
         let e1' = expr e1 in
-        let tag = tag_table_var (struct_root st,e1#region) in
-        (* always safe *)
-        make_app "instanceof_" [ tag; e1'; mk_var(tag_name st) ]
-    | JCEcast(e1,st) ->
-        if struct_of_union st then
-	  expr e1
-	else
-          let e1' = expr e1 in
-          let tmp = tmp_var_name () in
-(*
-          eprintf "JCEcast: tmp_var_name for tmp is %s@." tmp;
-*)
-          let tag = tag_table_var (struct_root st,e1#region) in
-	  let downcast_fun =
-	    if safety_checking () then "downcast_" else "safe_downcast_"
-	  in
-          let call =
-            make_guarded_app e#mark DownCast e#pos downcast_fun
-	      [ tag; mk_var tmp; mk_var(tag_name st) ]
-          in
-          mk_expr (Let(tmp,e1',call)) (* Yannick: why a temporary here? *)
+        make_app "downcast_" [e1'; mk_var (tag_name st)]
     | JCEbitwise_cast(e1,_st) ->
 	expr e1
     | JCErange_cast(e1, ri) ->
@@ -2446,106 +2424,7 @@ and expr e =
 	  in
 	  make_app free_fun [alloc; e1']
 
-
-    | JCEreinterpret (e, st) ->
-      let ac = deref_alloc_class ~type_safe:false e in
-      let alloc = plain_alloc_table_var (ac, e#region) in
-      let tag = plain_tag_table_var (struct_root st, e#region) in
-      let s = mk_var (tag_name st) in
-      let fi =
-        match st.jc_struct_info_fields with
-        | [fi] -> fi
-        | _ -> unsupported e#pos "reinterpretation for structure with several fields"
-      in
-      let mc, _ufi_opt = deref_mem_class ~type_safe:false e fi in
-      let mem = plain_memory_var (mc, e#region) in
-      let any = any_value e#region fi.jc_field_info_type in
-      let e' = expr e in
-      let call =
-        match !Jc_options.inv_sem with
-        | InvOwnership ->
-          let com = committed_name (pointer_class e#typ) in
-          make_app "reinterpret_parameter_ownership"
-            [alloc; mk_var com; tag; s; mem; e'; any]
-        | InvNone | InvArguments ->
-          let reinterpret_fun =
-            if safety_checking () then "reinterpret_parameter"
-                                  else "safe_reinterpret_parameter"
-          in
-          make_app reinterpret_fun
-            [alloc; tag; s; mem; e'; any]
-      in
-      let before = fresh_reinterpret_label () in
-      let call = make_label before.label_info_final_name call in
-
-      let before = LabelName before in
-      let at = lvar ~constant:false ~label_in_name:false in
-      let alloc = alloc_table_name (ac, e#region) in
-      let tag = tag_table_name (struct_root st, e#region) in
-      let new_mem = memory_name (mc, e#region) in
-      let e =
-        match term_of_expr e with
-        | Some e -> e
-        | None -> unsupported e#pos "the argument for reinterpret .. as should be an expression without side effects"
-      in
-      let e' =
-        term
-          ~type_safe:(safety_checking ())
-          ~global_assertion:false
-          ~relocate:false
-          LabelHere
-          before
-          e
-      in
-      let reinterpret_cast =
-        LPred ("reinterpret_cast",
-               [e'; at LabelHere alloc; at before alloc; at LabelHere tag; at before tag])
-      in
-      let reinterpret_memory =
-        let old_mems =
-          MemoryMap.(fold
-            (fun (mc, _ as mcr) _ acc ->
-              match mc with
-              | JCmem_field { jc_field_info_rep = true;
-                              jc_field_info_abstract = false;
-                              jc_field_info_bitsize = Some _;
-                              jc_field_info_hroot = { jc_struct_info_fields = [] };
-                              jc_field_info_struct = { jc_struct_info_fields = [_] };
-                              jc_field_info_type = t }
-                when is_integral_type t ->
-                let mem = memory_name mcr in
-                if mem <> new_mem then (mc, mem) :: acc
-                                  else acc
-              | JCmem_field _ | JCmem_plain_union _ | JCmem_bitvector -> acc)
-            (merge LogicLabelSet.union infunction.jc_fun_info_effects.jc_reads.jc_effect_memories
-                                       infunction.jc_fun_info_effects.jc_writes.jc_effect_memories)
-            [])
-        in
-        let p = "p" in
-        let lp = LVar p in
-        let body (old_mc, old_mem) =
-          let new_mem lab = at lab new_mem in
-          let old_mem lab = at lab old_mem in
-          (* Sorting memories in the order they appear in jc_effect_memories (i.e. increasing by MemoryClass) *)
-          let mem1, mem2, labs =
-            if MemClass.compare mc old_mc < 0 then old_mem, new_mem, (before, LabelHere)
-                                              else new_mem, old_mem, (LabelHere, before)
-          in
-          let (mem1, mem2), (mem3, mem4) = map_pair2 mem1 mem2 labs, fdup2 mem1 mem2 LabelPre in
-          make_and (LPred ("reinterpret_memory",
-                           [lp; at LabelHere tag; at before tag; mem1; mem2])) @@
-                    LPred ("reinterpret_memory",
-                           [lp; at LabelHere tag; at before tag; mem3; mem4])
-        in
-        LLet (p, e', make_and_list @@ List.map body old_mems)
-      in
-      let assumption =
-        mk_expr @@
-          Assert (`ASSUME,
-                  reinterpret_cast,
-                  mk_expr @@ Assert (`ASSUME, reinterpret_memory, void))
-      in
-      append call assumption
+    | JCEreinterpret (e, st) -> make_reinterpret e st
 
     | JCEapp call ->
 	begin match call.jc_call_fun with
@@ -3345,127 +3224,9 @@ let make_not_assigns talloc mem t l =
   in
   LPred("not_assigns",[talloc;LDerefAtLabel(mem,"") ; LDeref mem ; pset])
 
-
-
-
-
-let rec finalize e =
-  match e.expr_node with
-    | Absurd | Void | Cte _ | Var _ | BlackBox _ | Assert _ | Deref _
-    | Raise(_, None) -> e
-    | Triple(opaque,pre,e1,post,posts) ->
-      { e with expr_node = Triple(opaque,pre,finalize e1,post,posts) }
-    | Loc (l, e1) -> {e with expr_node = Loc(l,finalize e1) }
-(*
-    | Label (l, e) -> Label(l,finalize e)
-*)
-    | Fun (_, _, _, _, _) -> assert false
-    | Try (e1, exc, arg, e2) ->
-        {e with expr_node = Try(finalize e1, exc, arg, finalize e2)}
-    | Raise (id, Some e1) ->
-        {e with expr_node = Raise(id, Some(finalize e1))}
-    | App (e1, e2, ty) ->
-        {e with expr_node = App(finalize e1, finalize e2, ty)}
-    | Let_ref (x, e1, e2) ->
-        {e with expr_node = Let_ref(x, finalize e1, finalize e2)}
-    | Let (x, e1, e2) ->
-        {e with expr_node = Let(x, finalize e1, finalize e2)}
-    | Assign (x, e1) ->
-        {e with expr_node = Assign(x, finalize e1) }
-    | Block(l) ->
-        {e with expr_node = Block(List.map finalize l) }
-    | While (e1, inv, var, l) ->
-        {e with expr_node = While(finalize e1, inv, var, List.map finalize l)}
-    | If (e1, e2, e3) ->
-        {e with expr_node = If(finalize e1, finalize e2, finalize e3)}
-    | Not e1 ->
-        {e with expr_node = Not(finalize e1)}
-    | Or (e1, e2) ->
-        {e with expr_node = Or(finalize e1, finalize e2) }
-    | And (e1, e2) ->
-        {e with expr_node = And(finalize e1, finalize e2) }
-    | MultiAssign(mark,pos,lets,isrefalloc,talloc,alloc,tmpe,_e,mem,l) ->
-(*
-        eprintf "finalizing a MultiAssign@.";
-*)
-        match l with
-          | [] -> assert false
-          | [(i,b1,b2,e')] ->
-(*
-            eprintf "MultiAssign is only for one update@.";
-*)
-              if i=0 then
-                 make_lets lets
-                   (make_old_style_update_no_shift ~mark ~pos alloc tmpe mem b1 b2 e')
-              else
-                let tmpshift = tmp_var_name () in
-(*
-                eprintf "Jc_interp.finalize: tmp_var_name for tmpshift is %s@." tmpshift;
-*)
-                let i = Prim_int (string_of_int i) in
-                make_lets lets
-                  (make_lets [tmpshift,make_app "shift" [mk_var tmpe; mk_expr (Cte i)]]
-                     (make_old_style_update ~mark ~pos alloc tmpe tmpshift mem i b1 b2 e'))
-         | _ ->
-(*
-            eprintf "MultiAssign is for several updates !@.";
-*)
-              let pre =
-                if safety_checking() then
-                  make_and_list
-                    (List.fold_left
-                       (fun acc (i,b1,b2,_) ->
-                          (* valid e+i *)
-                          let i = LConst (Prim_int (string_of_int i)) in
-                          (if b1 then LTrue else
-                             (* offset_min(alloc,e) <= i *)
-	                     LPred ("le_int",
-		                    [LApp("offset_min",
-                                          [talloc; LVar tmpe]);
-                                     i])) ::
-                            (if b2 then LTrue else
-                               (* i <= offset_max(alloc,e) *)
-	                       LPred ("le_int",
-		                      [i ;
-                                       LApp("offset_max",
-                                            [talloc; LVar tmpe])]))
-                          ::acc
-                       )
-                       []
-                       l)
-                else LTrue
-              in
-              let post =
-                make_and_list
-                  (make_not_assigns talloc mem tmpe l ::
-                     List.map
-                     (fun (i,_,_,e') ->
-                        (* (e+i).f == e' *)
-                        LPred("eq",
-                              [ LApp("select",
-                                     [ LDeref mem;
-                                       LApp("shift",
-                                            [ LVar tmpe ; LConst (Prim_int (string_of_int i))] )]);
-                                LVar e'])) l)
-              in
-              let reads = if isrefalloc then
-                match talloc with
-                  | LVar v -> [v;mem]
-                  | LDeref v -> [v;mem]
-                  | _ -> assert false
-              else
-                [mem]
-              in
-              make_lets lets
-                (mk_expr (BlackBox (Annot_type(pre,unit_type,reads,[mem],post,[]))))
-
-
-let expr e = finalize (expr e)
-
-
 (*****************************)
-(* axioms, lemmas, goals   *)
-(**************************)
+(* axioms, lemmas, goals     *)
+(*****************************)
 
 let tr_axiom loc id ~is_axiom labels a acc =
 
@@ -3507,40 +3268,6 @@ let tr_axiomatic_decl acc d =
   match d with
     | Jc_typing.ABaxiom(loc,id,labels,p) ->
 	tr_axiom loc ~is_axiom:true id labels p acc
-
-(******************************************)
-(*   special axiom for reinterpret_memory *)
-(******************************************)
-
-let reinterpret_memory_axiom ri =
-  let rm = "reinterpret_memory" in
-  let rmt = root_model_type ri in
-  let mem s = raw_memory_type rmt (logic_type_var s) in
-  let tag = raw_tag_table_type rmt in
-  let pointer = raw_pointer_type rmt in
-  let var = fdup2 id (fun s -> LVar s) in
-  let (a, va), (b, vb), (c, vc), (d, vd), (tab, vtab), (tcd, vtcd), (p, vp), (q, vq) =
-      var "a", var "b", var "c", var "d", var "tab"  ,   var "tcd", var "p", var "q"
-  in
-  let tvab = "a" and tvcd = "b" and eq = "eq" in
-  Goal (KAxiom, id_no_loc @@ rm ^ "_not_assigns_axiom",
-        LForall (a, mem tvab, [],
-          LForall (b, mem tvab, [],
-            LForall (c, mem tvcd, [],
-              LForall (d, mem tvcd, [],
-                LForall (tab, tag, [],
-                  LForall (tcd, tag, [],
-                    let rm1 = LPred (rm, [vp; vtab; vtcd; va; vc])
-                    and rm2 = LPred (rm, [vp; vtab; vtcd; vb; vd]) in
-                    LForall (p, pointer, [[LPatP rm1; LPatP rm2]],
-                      LImpl (make_and rm1 rm2,
-                             let sel1 = make_select va vq
-                             and sel2 = make_select vb vq
-                             and sel3 = make_select vc vq
-                             and sel4 = make_select vd vq in
-                             LForall (q, pointer, List.(map @@ map @@ fun t -> LPatT t) [[sel1; sel2]; [sel3; sel4]],
-                               LImpl (LPred ("in_pset", [vq; LApp ("pset_all", [LApp ("pset_singleton", [vp])])]),
-                                 LIff (LPred (eq, [sel1; sel2]), LPred (eq, [sel3; sel4])))))))))))))
 
 (******************************************************************************)
 (*                                 Functions                                  *)
@@ -4655,20 +4382,12 @@ let tr_root rt acc =
   (* Axiom: the variant can only have the given tags *)
   let axiom_variant_has_tag =
     let v = "x" in
-    let tag_table = generic_tag_table_name rt in
-    Goal(KAxiom,
-      id_no_loc (variant_axiom_on_tags_name rt),
-      LForall(
-        v,
-        pointer_type ac pc, [],
-        LForall(
-          tag_table,
-          tag_table_type rt, [],
-          make_or_list
-            (List.map
-               (make_instanceof (LVar tag_table) (LVar v))
-               rt.jc_root_info_hroots)
-      )))
+    Goal (KAxiom, id_no_loc (variant_axiom_on_tags_name rt),
+      LForall (v, pointer_type ac pc, [],
+                  make_or_list @@
+                    List.map
+                      (make_instanceof @@ LVar v)
+                      rt.jc_root_info_hroots))
   in
   (* Axioms: int_of_tag(T1) = 1, ... *)
   let (acc, _) = List.fold_left
