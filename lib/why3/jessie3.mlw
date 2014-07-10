@@ -662,7 +662,6 @@ val safe_free_parameter (a:ref (alloc_table 't)) (p:pointer 't) :
 
 val safe_reinterpret_parameter
       (a : ref (alloc_table 't))
-      (t : ref (tag_table 't))
       (s1 : tag_id 't)
       (s2 : tag_id 't)
       (m : ref (memory 't 'v))
@@ -678,7 +677,6 @@ val safe_reinterpret_parameter
 
 let reinterpret_parameter
       (a : ref (alloc_table 't))
-      (t : ref (tag_table 't))
       (s1 : tag_id 't)
       (s2 : tag_id 't)
       (m : ref (memory 't 'v))
@@ -686,6 +684,6 @@ let reinterpret_parameter
   unit
   writes { a, m }
   requires { instanceof p s1 /\ offset_min !a p <= offset_max !a p } =
-  safe_reinterpret_parameter a t s1 s2 m p
+  safe_reinterpret_parameter a s1 s2 m p
 
 end
