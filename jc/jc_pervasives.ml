@@ -67,6 +67,8 @@ let uncurry f (a, b) = f a b
 
 let curry f a b = f (a, b)
 
+let swap (a, b) = b, a
+
 let fdup3 f g h x = f x, g x, h x
 
 let range i dir j =

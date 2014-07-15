@@ -33,13 +33,13 @@
 
 open Jc_env
 open Jc_region
-open Jc_ast 
+open Jc_ast
 open Jc_fenv
 
 class positioned ~pos =
 object
-  method pos: Loc.position = 
-    match pos with None -> Loc.dummy_position | Some pos -> pos 
+  method pos: Loc.position =
+    match pos with None -> Loc.dummy_position | Some pos -> pos
 end
 
 class typed ~typ =
@@ -66,19 +66,19 @@ object
   method set_region x = r <- x
 end
 
-class identifier ?pos name = 
+class identifier ?pos name =
 object
   inherit positioned pos
   method name: string = name
 end
 
-class ['a] node_positioned ?pos node = 
+class ['a] node_positioned ?pos node =
 object
   inherit positioned pos
   method node: 'a = node
 end
 
-class ptype ?(pos = Loc.dummy_position) node = 
+class ptype ?(pos = Loc.dummy_position) node =
 object
   inherit [ptype_node] node_positioned ~pos node
 end
@@ -118,8 +118,8 @@ class pattern_with ?pos ?node ?typ p =
   pattern ~pos ~typ node
 
 class term ?(pos = Loc.dummy_position) ~typ ?(mark="") ?label ?region node =
-  let region = 
-    match region with None -> dummy_region | Some region -> region 
+  let region =
+    match region with None -> dummy_region | Some region -> region
   in
 object
   inherit typed typ
@@ -132,8 +132,8 @@ end
 class term_with ?pos ?typ ?mark ?region ?node t =
   let pos = match pos with None -> t#pos | Some pos -> pos in
   let typ = match typ with None -> t#typ | Some typ -> typ in
-  let mark = 
-    match mark with None -> t#mark | Some mark -> mark 
+  let mark =
+    match mark with None -> t#mark | Some mark -> mark
   in
   let llab = t#label in
   let region = match region with None -> t#region | Some region -> region in
@@ -151,8 +151,8 @@ class term_var ?(pos = Loc.dummy_position) ?(mark="") v =
     (JCTvar v)
 
 class location ?(pos = Loc.dummy_position) ~typ ?label ?region node =
-  let region = 
-    match region with None -> dummy_region | Some region -> region 
+  let region =
+    match region with None -> dummy_region | Some region -> region
   in
 object
   inherit typed typ
@@ -167,9 +167,13 @@ class location_with ?pos ~typ ?label ?region ~node t =
   let region = match region with None -> t#region | Some region -> region in
   location ~pos ~typ ?label ~region node
 
+let location_with_node t ?(pos=t#pos) ?(typ=t#typ) ?label ?(region=t#region) node =
+  let label = match label with None -> t#label | Some _ -> label in
+  new location ~pos ~typ ?label ~region node
+
 class location_set ?(pos = Loc.dummy_position) ~typ ?label ?region node =
-  let region = 
-    match region with None -> dummy_region | Some region -> region 
+  let region =
+    match region with None -> dummy_region | Some region -> region
   in
 object
   inherit typed typ
@@ -190,23 +194,23 @@ let location_set_with_node t ?(pos=t#pos) ?(typ=t#typ) ?label ?(region=t#region)
 
 class expr ?(pos = Loc.dummy_position) ~typ ?(mark="") ?region
   ?original_type node =
-  let region = 
-    match region with None -> dummy_region | Some region -> region 
+  let region =
+    match region with None -> dummy_region | Some region -> region
   in
 object
   inherit typed typ
   inherit regioned region
   inherit marked mark
   inherit [expr_node] node_positioned ~pos node
-  method original_type = 
+  method original_type =
     match original_type with None -> typ | Some original_type -> original_type
 end
 
 class expr_with ?pos ?typ ?mark ?region ?node ?original_type e =
   let pos = match pos with None -> e#pos | Some pos -> pos in
   let typ = match typ with None -> e#typ | Some typ -> typ in
-  let mark = 
-    match mark with None -> e#mark | Some mark -> mark 
+  let mark =
+    match mark with None -> e#mark | Some mark -> mark
   in
   let region = match region with None -> e#region | Some region -> region in
   let node = match node with None -> e#node | Some node -> node in
@@ -228,8 +232,8 @@ end
 
 class assertion_with ?pos ?mark ?node a =
   let pos = match pos with None -> a#pos | Some pos -> pos in
-  let mark = 
-    match mark with None -> a#mark | Some mark -> mark 
+  let mark =
+    match mark with None -> a#mark | Some mark -> mark
   in
   let llab = a#label in
   let node = match node with None -> a#node | Some node -> node in
@@ -382,7 +386,7 @@ either with (~expr1 AND ~expr2) OR ~list only."
   let mkmutable ~expr ~tag = mk ~node:(JCPEmutable(expr, tag))
   let mktag_equality ~tag1 ~tag2 = mk ~node:(JCPEeqtype(tag1, tag2))
   let mkmatch ~expr ~cases = mk ~node:(JCPEmatch(expr, cases))
-  let mkassert ?(behs=[]) ~expr = 
+  let mkassert ?(behs=[]) ~expr =
     mk ~node:(JCPEassert (behs,Aassert,expr))
   let mkwhile ?(condition = mkboolean ~value:true ())
       ?(behaviors = []) ?variant ~body =
@@ -428,19 +432,19 @@ module PDecl = struct
     mk ~node:(JCDlemma(name, axiom, poly_args, labels, body))
   let mklogic_var_def ~typ ~name ?body =
     mk ~node:(JCDlogic_var(typ, name, body))
-  let mklogic_def ?typ ~name ?(poly_args = []) ?(labels = []) ?(params = []) 
-      ?reads ?body ?inductive = 
+  let mklogic_def ?typ ~name ?(poly_args = []) ?(labels = []) ?(params = [])
+      ?reads ?body ?inductive =
     let roe = match reads, body, inductive with
       | None, None, None -> JCnone
       | Some r, None, None -> JCreads r
       | None, Some b, None -> JCexpr b
-      | None, None, Some l -> JCinductive l 
+      | None, None, Some l -> JCinductive l
       | _ ->
           raise
             (Invalid_argument "mklogic_def: cannot use both ~reads and ~body and ~inductive")
     in
     mk ~node:(JCDlogic(typ, name, poly_args, labels, params, roe))
-      
+
   let mkaxiomatic ~name ~decls =
     mk ~node:(JCDaxiomatic(name,decls))
   let mklogic_type ?(args = []) ~name =
@@ -528,7 +532,7 @@ module Expr = struct
 
   let mklet ~var ?init ~body =
     mk ~typ:var.jc_var_info_type ~node:(JCElet(var, init, body))
-  let mkvar ~var = 
+  let mkvar ~var =
     mk ~typ:var.jc_var_info_type ~node:(JCEvar var)
 
   let is_app e = match e#node with JCEapp _ -> true | _ -> false
@@ -546,7 +550,7 @@ module Term = struct
   let mkint ?value ?valuestr = mkconst ~const:(Const.mkint ?value ?valuestr ())
   let mkbinary ~term1 ~op ~term2 = mk ~node:(JCTbinary(term1, op, term2))
 
-  let mkvar ~var = 
+  let mkvar ~var =
     mk ~typ:var.jc_var_info_type ~node:(JCTvar var)
 end
 
@@ -558,17 +562,17 @@ module Assertion = struct
   let mk ?pos ?mark ~node () =
     new assertion ?pos ?mark node
 
-  let fake ?pos:_ ?mark:_ ~value () = 
+  let fake ?pos:_ ?mark:_ ~value () =
     value
 
-  let is_true a = 
-    match a#node with 
+  let is_true a =
+    match a#node with
       | JCAtrue -> true
       | JCAbool_term t when t#node = JCTconst(JCCboolean true) -> true
       | _ -> false
-    
+
   let is_false a =
-    match a#node with 
+    match a#node with
       | JCAfalse -> true
       | JCAbool_term t when t#node = JCTconst(JCCboolean false) -> true
       | _ -> false
@@ -584,7 +588,7 @@ module Assertion = struct
       | [a] -> fake ~value:a
       | alist -> mk ~node:(JCAand alist)
 
-  let mkor ~disjuncts = 
+  let mkor ~disjuncts =
     (* optimization *)
     let disjuncts = List.filter (fun a -> not (is_false a)) disjuncts in
     match disjuncts with
@@ -596,7 +600,7 @@ module Assertion = struct
 end
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "LC_ALL=C nice make -j -C .. byte"
-End: 
+End:
 *)

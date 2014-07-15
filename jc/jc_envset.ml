@@ -73,11 +73,11 @@ module StringMap = Map.Make(String)
 (* used names (in order to rename identifiers when necessary) *)
 let used_names = Hashtbl.create 97
 
-let mark_as_used x = 
+let mark_as_used x =
   Hashtbl.add used_names x ()
 
-let () = 
-  List.iter mark_as_used 
+let () =
+  List.iter mark_as_used
     [ (* Why keywords *)
       "absurd"; "and"; "array"; "as"; "assert"; "axiom"; "begin";
       "bool"; "do"; "done"; "else"; "end"; "exception"; "exists";
@@ -87,7 +87,7 @@ let () =
       "reads"; "real"; "rec"; "ref"; "result"; "returns"; "then"; "true"; "try";
       "type"; "unit"; "variant"; "void"; "while"; "with"; "writes"; "init";
       (* Why prelude *)
-      "exp" ; "log" ; "sin" ; "cos" ; "tan" ; "sqr_real" ; "atan" ; 
+      "exp" ; "log" ; "sin" ; "cos" ; "tan" ; "sqr_real" ; "atan" ;
       (* jessie generated names *)
       "shift"
       (* "global" ; "alloc"  *)
@@ -95,22 +95,22 @@ let () =
 
 let is_used_name n = Hashtbl.mem used_names n
 
-let use_name ?local_names n = 
-  if is_used_name n then raise Exit; 
-  begin match local_names with 
-    | Some h -> if StringSet.mem n h then raise Exit 
-    | None -> () 
+let use_name ?local_names n =
+  if is_used_name n then raise Exit;
+  begin match local_names with
+    | Some h -> if StringSet.mem n h then raise Exit
+    | None -> ()
   end;
   mark_as_used n;
   n
 
-let rec next_name ?local_names n i = 
+let rec next_name ?local_names n i =
   let n_i = n ^ "_" ^ string_of_int i in
-  try use_name ?local_names n_i 
+  try use_name ?local_names n_i
   with Exit -> next_name ?local_names n (succ i)
 
-let get_unique_name ?local_names n = 
-  try use_name ?local_names n 
+let get_unique_name ?local_names n =
+  try use_name ?local_names n
   with Exit -> next_name ?local_names n 0
 
 let is_pointer_type t =
@@ -126,7 +126,7 @@ let is_nonnull_pointer_type t =
 
 let is_integral_type = function
   | JCTnative Tinteger -> true
-  | JCTenum _ -> true 
+  | JCTenum _ -> true
   | JCTnative _ | JCTlogic _ | JCTpointer _ | JCTnull | JCTany
   | JCTtype_var _ -> false
 
@@ -149,7 +149,7 @@ struct
   let hash v = Hashtbl.hash (X.tag_of_val v)
 end
 
-module VarOrd = OrderedHashedTypeOfTag 
+module VarOrd = OrderedHashedTypeOfTag
   (struct type t = var_info
           let tag_of_val x = x.jc_var_info_tag
    end)
@@ -160,13 +160,13 @@ module VarMap = Map.Make(VarOrd)
 
 module StructOrd =
   struct type t = struct_info
-	 let compare st1 st2 = 
-	   Pervasives.compare 
+	 let compare st1 st2 =
+	   Pervasives.compare
 	     st1.jc_struct_info_name st2.jc_struct_info_name
 	 let equal st1 st2 =
 	   st1.jc_struct_info_name = st2.jc_struct_info_name
 	 let hash st =
-	   Hashtbl.hash st.jc_struct_info_name 
+	   Hashtbl.hash st.jc_struct_info_name
   end
 
 module StructSet = Set.Make(StructOrd)
@@ -175,19 +175,19 @@ module StructMap = Map.Make(StructOrd)
 
 module VariantOrd = struct
   type t = root_info
-  let compare v1 v2 = 
+  let compare v1 v2 =
     Pervasives.compare v1.jc_root_info_name v2.jc_root_info_name
   let equal v1 v2 =
     v1.jc_root_info_name = v2.jc_root_info_name
   let hash v =
-    Hashtbl.hash v.jc_root_info_name 
+    Hashtbl.hash v.jc_root_info_name
 end
 
 module VariantSet = Set.Make(VariantOrd)
 
 module VariantMap = Map.Make(VariantOrd)
 
-module FieldOrd =  OrderedHashedTypeOfTag 
+module FieldOrd =  OrderedHashedTypeOfTag
   (struct type t = field_info
           let tag_of_val x = x.jc_field_info_tag
    end)
@@ -197,7 +197,7 @@ module FieldSet = Set.Make(FieldOrd)
 module FieldMap = Map.Make(FieldOrd)
 module FieldTable = Hashtbl.Make(FieldOrd)
 
-module MemClass = 
+module MemClass =
 struct
   type t = mem_class
   let equal fv1 fv2 = match fv1,fv2 with
@@ -221,7 +221,7 @@ end
 
 module MemClassSet = Set.Make(MemClass)
 
-module AllocClass = 
+module AllocClass =
 struct
   type t = alloc_class
   let equal fv1 fv2 = match fv1,fv2 with
@@ -239,7 +239,7 @@ struct
 end
 
 (* TODO: take into account type parameters *)
-module PointerClass = 
+module PointerClass =
 struct
   type t = pointer_class
   let equal fv1 fv2 = match fv1,fv2 with
@@ -256,10 +256,10 @@ struct
     | JCroot b -> VariantOrd.hash b
 end
 
-module ExceptionOrd =  OrderedHashedTypeOfTag 
+module ExceptionOrd =  OrderedHashedTypeOfTag
   (struct type t = exception_info
           let tag_of_val x = x.jc_exception_info_tag
-   end)  
+   end)
 
 module ExceptionSet = Set.Make(ExceptionOrd)
 
@@ -272,7 +272,7 @@ module LogicLabelOrd =
 
 module LogicLabelSet = Set.Make(LogicLabelOrd)
 
-module TypeVarOrd = OrderedHashedTypeOfTag 
+module TypeVarOrd = OrderedHashedTypeOfTag
   (struct type t = type_var_info
           let tag_of_val x = x.jc_type_var_info_tag
    end)
@@ -280,7 +280,7 @@ module TypeVarOrd = OrderedHashedTypeOfTag
 module TypeVarMap = Map.Make(TypeVarOrd)
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
-End: 
+End:
 *)

@@ -178,11 +178,11 @@ let instanceof_pred_name (type t1) (type t2) (type t3) (type t4) (type t5) : arg
   in
   prefix ^ "_" ^ (pointer_class_name pc)
 
-let alloc_extends_pred_name ac pc =
+let alloc_pred_name ac pc =
   let prefix =
     match ac with
-    | JCalloc_root _ -> "alloc_extends"
-    | JCalloc_bitvector -> "alloc_extends_bitvector" (* TODO *)
+    | JCalloc_root _ -> "alloc"
+    | JCalloc_bitvector -> "alloc_bitvector" (* TODO *)
   in
   prefix ^ "_" ^ (pointer_class_name pc)
 

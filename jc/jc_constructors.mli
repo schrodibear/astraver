@@ -147,7 +147,7 @@ class term_with :
   ?region:region ->
   ?node:term_node ->
   < pos : Loc.position; mark : string; node : term_node;
-    label: label option; 
+    label: label option;
     region : region; typ : jc_type; .. > ->
   term
 
@@ -203,6 +203,15 @@ class location_with :
   ?region:region ->
   node:location_node ->
   < pos : Loc.position; region : region; .. > ->
+  location
+
+val location_with_node :
+  < pos : Loc.position; region : region; label : label option; typ : jc_type; .. > ->
+  ?pos:Loc.position ->
+  ?typ:jc_type ->
+  ?label:label ->
+  ?region:region ->
+  location_node ->
   location
 
 class location_set :
@@ -603,7 +612,7 @@ module PExpr :
       field:string ->
       ?op:pexpr_unary_op -> ?pos:Loc.position -> unit -> pexpr
 
-    val mkcontract : 
+    val mkcontract :
       requires:pexpr option ->
       decreases:(pexpr * Jc_ast.identifier option) option ->
       behaviors:pexpr pbehavior list ->
@@ -657,8 +666,8 @@ module PDecl :
 
     val mkaxiomatic :
       name:string ->
-      decls:'a Jc_ast.decl list -> 
-      ?pos:Loc.position -> 
+      decls:'a Jc_ast.decl list ->
+      ?pos:Loc.position ->
       unit -> 'a decl_node node_positioned
 
     val mklogic_type :
@@ -793,7 +802,7 @@ module Expr :
     val mkbinary :
       expr1:expr ->
       op:expr_bin_op ->
-      expr2:expr -> 
+      expr2:expr ->
       ?pos:Loc.position ->
       typ:jc_type ->
       ?mark:string ->
@@ -841,7 +850,7 @@ module Term :
     val mkbinary :
       term1:term ->
       op:term_bin_op ->
-      term2:term -> 
+      term2:term ->
       ?pos:Loc.position ->
       typ:jc_type ->
       ?mark:string ->
@@ -884,7 +893,7 @@ module Assertion :
   end
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "LC_ALL=C nice make -j -C .. byte"
-End: 
+End:
 *)

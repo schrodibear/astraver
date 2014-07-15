@@ -149,6 +149,12 @@ axiom in_pset_deref:
     in_pset p (pset_deref m q) <->
         exists r : pointer 't. in_pset r q /\ p = select m r
 
+axiom in_pset_deref_singleton:
+  forall p : pointer 'v.
+  forall m : memory 't (pointer 'v).
+  forall q : pointer 't.
+    in_pset p (pset_deref m (pset_singleton q)) <-> p = select m q
+
 axiom in_pset_all:
   forall p : pointer 't.
   forall q : pset 't.
@@ -156,13 +162,25 @@ axiom in_pset_all:
         exists i : int. exists r : pointer 't.
           in_pset r q /\ p = shift r i
 
+axiom in_pset_all_singleton:
+  forall p : pointer 't.
+  forall q : pointer 't.
+    in_pset p (pset_all (pset_singleton q)) <-> same_block p q
+
 axiom in_pset_range:
   forall p : pointer 't.
   forall q : pset 't.
-  forall a: int. forall b:int.
+  forall a : int. forall b :int.
     in_pset p (pset_range q a b) <->
-        exists i : int. exists r : pointer 't.
-          a <= i /\ i <= b /\ in_pset r q /\ p = shift r i
+      exists i : int. exists r : pointer 't.
+        a <= i /\ i <= b /\ in_pset r q /\ p = shift r i
+
+axiom in_pset_range_singleton:
+  forall p : pointer 't.
+  forall q : pointer 't.
+  forall a b : int.
+    in_pset p (pset_range (pset_singleton q) a b) <->
+      same_block p q /\ a <= sub_pointer p q <= b
 
 axiom in_pset_range_left:
   forall p : pointer 't.
@@ -189,7 +207,7 @@ axiom in_pset_union:
 predicate not_assigns
   (a : alloc_table 't) (m1 : memory 't 'v) (m2 : memory 't 'v ) (l : pset 't) =
     forall p:pointer 't.
-      valid a p /\ not in_pset p l -> select m2 p = select m1 p
+      not in_pset p l -> select m2 p = select m1 p
 
 axiom not_assigns_refl:
   forall a : alloc_table 't.
@@ -269,7 +287,7 @@ function downcast (pointer 't) (tag_id 't) : pointer 't
 axiom downcast_reduce:
   forall p : pointer 't.
     forall s2 : tag_id 't [downcast p s2].
-      forall s1: tag_id 't [downcast (downcast p s1) s2].
+      forall s1 : tag_id 't [downcast (downcast p s1) s2].
         cast_factor s1 s2 <> 0 -> downcast (downcast p s1) s2 = downcast p s2
 
 axiom downcast_instanceof:
@@ -676,20 +694,17 @@ axiom lsr_divide:
 (*****************************************************************************)
 
 predicate alloc_fresh (a : alloc_table 't) (p : pointer 't) =
-  offset_max a p < offset_min a p
-  /\ forall p' : pointer 't. in_pset p' (pset_all (pset_singleton p)) -> not valid a p'
+  offset_max a p < offset_min a p /\
+  forall p' : pointer 't. in_pset p' (pset_all (pset_singleton p)) -> not valid a p' (* excess condition *)
 
-predicate alloc_extends (a1: alloc_table 't) (a2: alloc_table 't) =
-  forall p: pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
-    valid a1 p -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
-
-predicate alloc_extends_except (a1: alloc_table 't) (a2: alloc_table 't) (l: pset 't) =
+predicate alloc_same_except (a1 : alloc_table 't) (a2 : alloc_table 't) (l : pset 't) =
   forall p: pointer 't [valid a1 p | valid a2 p | in_pset p l | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
-    valid a1 p /\ not in_pset p l -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
+    not in_pset p l -> (valid a1 p -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p) /\
+                       (not valid a1 p -> not valid a2 p)
 
-axiom alloc_extends_alloc_extends_except:
-  forall a1: alloc_table 't. forall a2: alloc_table 't [alloc_extends a1 a2].
-    forall l: pset 't [alloc_extends_except a1 a2 l].
-      alloc_extends a1 a2 -> alloc_extends_except a1 a2 l
+predicate alloc (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) =
+  alloc_same_except a1 a2 (pset_all (pset_singleton p))
+
+predicate free (a1 : alloc_table 't) (a2 : alloc_table 't) ( p : pointer 't) = alloc a1 a2 p
 
 end

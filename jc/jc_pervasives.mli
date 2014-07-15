@@ -57,6 +57,8 @@ val curry : ('a * 'b -> 'c) -> 'a ->  'b -> 'c
 
 val uncurry : ('a -> 'b -> 'c) -> ('a * 'b) -> 'c
 
+val swap : 'a * 'b -> 'b * 'a
+
 val fdup3 : ('a -> 'b) -> ('a -> 'c) -> ('a -> 'd) -> 'a -> 'b * 'c * 'd
 
 val range : int -> [< `Downto | `To ] -> int -> int list
