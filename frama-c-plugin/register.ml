@@ -89,14 +89,14 @@ let steal_globals () =
             *)
             ChangeTo [g]
         | _ -> SkipChildren
-  end 
+  end
   in
   Visitor.visitFramacFile vis (FCAst.get())
 
 let steal_annots () =
   let emitter=Common.jessie_emitter in
-  let l = 
-    Annotations.fold_all_code_annot 
+  let l =
+    Annotations.fold_all_code_annot
       (fun stmt e ca acc ->
         Annotations.remove_code_annot e stmt ca;
         (stmt,ca)::acc)
@@ -124,7 +124,7 @@ let run () =
   Jessie_options.feedback "Starting Jessie translation";
   (* Work in our own project, initialized by a copy of the main one. *)
   let prj =
-    File.create_project_from_visitor "jessie" 
+    File.create_project_from_visitor "jessie"
       (fun prj -> new Visitor.frama_c_copy prj)
   in
   Jessie_options.debug "Project created";

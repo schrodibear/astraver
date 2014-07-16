@@ -119,6 +119,9 @@ val mkInfo : Cil_types.exp -> Cil_types.exp
 
 val lift_offset : Cil_types.typ -> Cil_types.offset -> Cil_types.offset
 
+val embedded_attr_name : string
+val noembed_attr_name : string
+
 val mkTRef : Cil_types.typ -> string -> Cil_types.typ
 
 val mkTRefArray :
@@ -268,6 +271,7 @@ val force_back_lval_to_term_lval: opaque_term_env -> lval -> term_lval
 val drop : int -> 'a list -> 'a list
 val take : int -> 'a list -> 'a list
 val range : int -> [< `Downto | `To ] -> int -> int list
+val fdup2 : ('a -> 'b) -> ('a -> 'c) -> 'a -> 'b * 'c
 val map_pair : ('a -> 'b) -> 'a * 'a -> 'b * 'b
 val map_fst : ('a -> 'b) -> 'a * 'c -> 'b * 'c
 val map_snd : ('a -> 'b) -> 'c * 'a -> 'c * 'b

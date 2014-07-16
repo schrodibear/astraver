@@ -266,6 +266,9 @@ let fold_integral_types f init =
         "Integral type %s is referenced but does not have a definition" s
   in Integral_types_iterator.fold apply init
 
+let embedded_attr_name = "embedded_from"
+let noembed_attr_name = "noembed"
+
 (* Reference type *)
 
 (* We introduce a reference type, that is different from the C pointer or
@@ -459,12 +462,11 @@ let unique_name_generator is_exception =
   aux, add
 
 let unique_name, add_unique_name =
-(*  let u = *)unique_name_generator is_predefined_name
-(* in (fun s -> let s' = u s in s') *)
+  unique_name_generator is_predefined_name
+
 
 let unique_logic_name, add_unique_logic_name =
-(*  let u = *) unique_name_generator (fun _ -> false)
-(* in (fun s -> let s' = u s in s')*)
+   unique_name_generator (fun _ -> false)
 
 let unique_logic_name = unique_logic_name ~force:true
 
@@ -1677,6 +1679,9 @@ let range i dir j =
   loop [] j
 
 (* Tuples *)
+
+let fdup2 f g x = f x, g x
+
 let map_fst f (a, b) = f a, b
 
 let map_snd f (a, b) = a, f b

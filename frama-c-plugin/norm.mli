@@ -29,9 +29,12 @@
 (*                                                                        *)
 (**************************************************************************)
 
-val generated_union_types : unit Cil_datatype.Typ.Hashtbl.t
+open Cil_types
+open Cil_datatype
 
-val model_fields : Cil_types.compinfo -> Cil_types.model_info list
+val generated_union_types : unit Typ.Hashtbl.t
+
+val model_fields : compinfo -> model_info list
 
 (* performs similar normalization tasks as Caduceus *)
-val normalize : Cil_types.file -> unit
+val normalize : file -> unit

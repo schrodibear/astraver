@@ -1056,7 +1056,7 @@ and terms_lval pos lv =
         if not fi.fcomp.cstruct then (* field of union *)
           List.map (fun e -> mkexpr (JCPEcast(e,ctype fi.ftype)) pos) e
         else
-          let repfi = Retype.FieldUnion.repr fi in
+          let repfi = Retype.FieldUF.repr fi in
           let e,fi =
             if Fieldinfo.equal fi repfi then
               e,fi
@@ -1083,7 +1083,7 @@ and terms_lval pos lv =
         if not fi.fcomp.cstruct then (* field of union *)
           List.map (fun e -> mkexpr (JCPEcast(e,ctype fi.ftype)) pos) e
         else
-          let repfi = Retype.FieldUnion.repr fi in
+          let repfi = Retype.FieldUF.repr fi in
           let e,fi =
             if Fieldinfo.equal fi repfi then
               e,fi
@@ -1871,7 +1871,7 @@ and lval pos = function
       if not fi.fcomp.cstruct then (* field of union *)
         locate (mkexpr (JCPEcast(e,ctype fi.ftype)) pos)
       else
-        let repfi = Retype.FieldUnion.repr fi in
+        let repfi = Retype.FieldUF.repr fi in
         let e,fi =
           if Fieldinfo.equal fi repfi then
             e,fi
@@ -1895,7 +1895,7 @@ and lval pos = function
       if not fi.fcomp.cstruct then (* field of union *)
         locate (mkexpr (JCPEcast(e,ctype fi.ftype)) pos)
       else
-        let repfi = Retype.FieldUnion.repr fi in
+        let repfi = Retype.FieldUF.repr fi in
         let e,fi =
           if Fieldinfo.equal fi repfi then
             e,fi
@@ -2619,7 +2619,7 @@ let global vardefs g =
         let fields =
           List.fold_right
             (fun fi acc ->
-               let repfi = Retype.FieldUnion.repr fi in
+               let repfi = Retype.FieldUF.repr fi in
                if Fieldinfo.equal fi repfi then
                  field fi @ acc
                else acc)
@@ -2635,7 +2635,7 @@ let global vardefs g =
 (*         in *)
         let ty = TComp(compinfo, empty_size_cache (), []) in
         begin try
-          let parentty = Typ.Hashtbl.find Retype.type_to_parent_type ty in
+          let parentty = Retype.parent_type ty in
           let parent = get_struct_name parentty in
           [
             JCDtag(compinfo.cname,[],Some (parent,[]),fields,[])
@@ -3245,8 +3245,7 @@ let type_and_memory_reinterpretations get_compinfo () =
         let ci_opt = get_compinfo ty in
         has_some ci_opt &&
         try
-          get_struct_name @@
-            Typ.Hashtbl.find Retype.type_to_parent_type (TComp (the ci_opt, empty_size_cache (), []))
+          get_struct_name @@ Retype.parent_type @@ TComp (the ci_opt, empty_size_cache (), [])
             = wrapper_name voidType
         with Not_found -> false
       in

@@ -46,38 +46,14 @@ open! Common
 (* Adds a default behavior for all functions                                 *)
 (*****************************************************************************)
 
-class add_default_behavior =
-  object(self)
-    inherit Visitor.frama_c_inplace
-
-    method! vspec s =
-      if not (List.exists (fun x -> x.b_name = Cil.default_behavior_name)
-                s.spec_behavior)
-      then begin
-        let bhv = Cil.mk_behavior ~name:Cil.default_behavior_name () in
-        let kf = Extlib.the self#current_kf in
-        let props = Property.ip_all_of_behavior kf Kglobal bhv in
-        List.iter Property_status.register props;
-        s.spec_behavior <- bhv :: s.spec_behavior
-      end;
-      SkipChildren
-
-    method! vcode_annot _ = SkipChildren
-
-  end
-
-let add_default_behavior () =
-  let treat_one_function kf =
-    let bhvs = Annotations.behaviors kf in
-    if not
-      (List.exists (fun bhv -> bhv.b_name = Cil.default_behavior_name) bhvs)
-    then begin
-      Annotations.add_behaviors Common.jessie_emitter kf [Cil.mk_behavior()];
-      (* ensures that default behavior will be correctly populated *)
-      ignore (Annotations.behaviors kf)
-    end
-  in
-  Globals.Functions.iter treat_one_function
+let add_default_behaviors () =
+  Globals.Functions.iter @@
+    fun kf ->
+      if not (List.exists is_default_behavior @@ Annotations.behaviors kf) then begin
+        Annotations.add_behaviors jessie_emitter kf [mk_behavior ()];
+        (* ensures that default behavior will be correctly populated *)
+        ignore (Annotations.behaviors kf)
+      end
 
 (*****************************************************************************)
 (* Rename entities to avoid conflicts with Jessie predefined names.          *)
@@ -128,9 +104,6 @@ let logic_names_overloading = Hashtbl.create 257
 let rename_entities file =
   let add_variable v =
     let s = unique_name v.vname in
-(*
-    Format.eprintf "Renaming variable %s into %s@." v.vname s;
-*)
     v.vname <- s;
     match v.vlogic_var_assoc with
       | None -> ()
@@ -2803,143 +2776,6 @@ let annotate_overflow file =
   let visitor = new annotateOverflow in
   visitFramacFile visitor file
 
-
-(*****************************************************************************)
-(* Rewrite type void* into char*.                                            *)
-(*****************************************************************************)
-
-class rewriteVoidPointer =
-object
-
-  inherit Visitor.frama_c_inplace
-
-  method! vtype ty =
-    if isVoidPtrType ty then
-      let attr = typeAttr ty in
-      ChangeTo (typeAddAttributes attr charPtrType)
-(*
-    else if isCharType ty then
-      (* Yannick: All (un)signed chars changed into char for now ...
-	 Claude: why ????
-      *)
-      let attr = typeAttr ty in
-      ChangeTo (typeAddAttributes attr charType)
-*)
-    else DoChildren
-
-end
-
-class debugVoid =
-object
-  inherit Visitor.frama_c_inplace
-  method! vterm ts = match ts.term_node with
-    | TLval(TResult _,_) -> DoChildren
-    | _ ->
-	assert (not (app_term_type isVoidPtrType false ts.term_type));
-	DoChildren
-end
-
-let rewrite_void_pointer file =
-  let visitor = new rewriteVoidPointer in
-  visitFramacFile visitor file
-
-(*****************************************************************************)
-(* Rewrite type char* into void* in successive castings.                     *)
-(*****************************************************************************)
-
-class char_pointer_rewriter =
-object
-  inherit frama_c_inplace
-
-  method! vexpr e =
-    let void_ptr_with_attrs t = typeAddAttributes (typeAttrs t) voidPtrType in
-    match e.enode with
-    | CastE (tcharp, ein)
-      when isCharPtrType tcharp ->
-        ChangeTo ({ e with enode = CastE (void_ptr_with_attrs tcharp, ein)})
-    | BinOp _ ->
-        DoChildrenPost (function
-          | { enode = BinOp (op, e1, e2, _); eloc } -> mkBinOp ~loc:eloc op e1 e2
-          | e -> fatal "Unexpected transformation of BinOp to: %a" Printer.pp_exp e)
-    | UnOp (op, ( { eloc } as e), typ) when isCharPtrType typ ->
-        ChangeDoChildrenPost (new_exp ~loc:eloc (UnOp (op, e, void_ptr_with_attrs typ)), id)
-    | _ -> DoChildren
-end
-
-class side_cast_rewriter =
-  let has_charp_casts e =
-    try
-      ignore @@ visitFramacExpr
-        (object
-          inherit frama_c_inplace
-          method! vexpr =
-            function
-            | { enode = CastE (tcharp, _) }
-              when isCharPtrType tcharp -> raise Exit
-            | _ -> DoChildren
-         end)
-        e;
-      false
-    with Exit -> true
-  in
-  let rewrite_char_pointers = visitFramacExpr (new char_pointer_rewriter) in
-  let struct_fields t =
-    match unrollType t with
-    | TComp (compinfo, _, _) -> compinfo.cfields
-    | t -> fatal "Expected coposite type, got: %a" Printer.pp_typ t
-  in
-  let pointed_type t =
-    match unrollType t with
-    | TPtr _ as t -> typeOf_pointed t
-    | TArray _ as t -> typeOf_array_elem t
-    | t -> t
-  in
-  let subtype t1 t2 =
-    isVoidPtrType t2 ||
-    let t1 = pointed_type t1 and t2 = pointed_type t2 in
-    Typ.equal t1 t2 ||
-    isStructOrUnionType t1 && isStructOrUnionType t2 &&
-    let fields1 = struct_fields t1 and fields2 = struct_fields t2 in
-    let len1 = List.length fields1 and len2 = List.length fields2 in
-    len1 > len2 &&
-    List.for_all2
-      (fun fi1 fi2 -> Typ.equal fi1.ftype fi2.ftype)
-      (take len2 fields1)
-      fields2
-  in
-object(self)
-  inherit frama_c_inplace
-
-  method! vexpr e = match e.enode with
-    | CastE (tto, efrom)
-      when isCharPtrType (typeOf efrom) &&
-           isPointerType tto &&
-           not (isCharPtrType tto) &&
-           not (isVoidPtrType tto) &&
-           has_charp_casts efrom ->
-      ChangeTo ({ e with enode = CastE (tto, rewrite_char_pointers efrom) })
-    | CastE (tto, efrom) ->
-      let tfrom = typeOf efrom in
-      if (isPointerType tfrom || isArrayType tfrom) &&
-         (isPointerType tto || isArrayType tto) &&
-         let tto = typeDeepDropAllAttributes tto
-         and tfrom = typeDeepDropAllAttributes tfrom in
-         not (subtype tto tfrom || subtype tfrom tto)
-      then
-        let void_ptr_type = typeAddAttributes (typeAttrs tfrom) voidConstPtrType in
-        ChangeDoChildrenPost
-          ({ e with enode = CastE (tto, mkCastT ~force:false ~e:efrom ~oldt:tfrom ~newt:void_ptr_type)}, id)
-      else
-        DoChildren
-    | _ -> DoChildren
-
-  method! vterm =
-    do_on_term (Some (fun e -> match self#vexpr e with ChangeTo e | ChangeDoChildrenPost (e, _) -> e | _ -> e), None)
-end
-
-let rewrite_side_casts file =
-  visitFramacFile (new side_cast_rewriter) file
-
 (* Jessie/Why has trouble with Pre labels inside function contracts. *)
 class rewritePreOld : Visitor.frama_c_visitor =
 object(self)
@@ -3099,15 +2935,7 @@ class fromRangeToComprehension behavior = object
 end
 
 let from_range_to_comprehension behavior file =
-  let visitor = new fromRangeToComprehension behavior in
-  Visitor.visitFramacFile visitor file
-
-let range_to_comprehension t =
-  let visitor =
-    new fromRangeToComprehension (Cil.copy_visit (Project.current ()))
-  in
-  Visitor.visitFramacTerm visitor t
-
+  visitFramacFile (new fromRangeToComprehension behavior) file
 
 class fromComprehensionToRange behavior =
   let ranges = Logic_var.Hashtbl.create 17 in
@@ -3438,7 +3266,7 @@ let rewrite file =
      it does not already exist.
    *)
   Jessie_options.debug "Adding default behavior to all functions";
-  add_default_behavior ();
+  add_default_behaviors ();
   if checking () then check_types file;
   (* Rename entities to avoid conflicts with Jessie predefined names.
      Should be performed before any call to [Cil.cvar_to_lvar] destroys
@@ -3474,19 +3302,6 @@ let rewrite file =
       rewrite_pointer_compare file;
       if checking () then check_types file
     end;
-  if not (Jessie_options.VoidSupertype.get ()) then
-    begin
-      (* Rewrite type void* and (un)signed char* into char*. *)
-      Jessie_options.debug "Rewrite type void* and (un)signed char* into char*";
-      rewrite_void_pointer file
-    end
-  else
-    begin
-      (* Rewrite char * into void * in successive casts. *)
-      Jessie_options.debug "Rewrite type char* into void* in successive casts";
-      rewrite_side_casts file
-    end;
-  if checking () then check_types file;
   Jessie_options.debug "Rewrite Pre as Old in funspec";
   rewrite_pre_old file;
   if checking () then check_types file;

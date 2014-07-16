@@ -134,17 +134,6 @@ module InferAnnot =
        let help = "infer function annotations (inv, pre, spre, wpre)"
      end)
 
-(*
-module Why3Backend =
-  False
-    (struct
-       let option_name = "-jessie-why3"
-       let module_name = "-jessie-why3"
-       let help = "Use the Why3 VC generator and GUI backend"
-       let kind = `Tuning
-     end)
-*)
-
 module CpuLimit =
   Zero
     (struct
@@ -184,13 +173,6 @@ module SpecBlockFuncs =
     (struct
       let option_name = "-jessie-specialize"
       let help = "generate specialized versions for block-level functions e.g. memcpy"
-     end)
-
-module VoidSupertype =
-  True
-    (struct
-      let option_name = "-jessie-void-supertype"
-      let help = "don't rewrite void * into char *, so that void * becomes a supertype for all types"
      end)
 
 module Extract =
