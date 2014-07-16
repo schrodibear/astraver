@@ -29,26 +29,17 @@
 (*                                                                        *)
 (**************************************************************************)
 
-include Plugin.S
+open Cil_types
 
-module ProjectName: Parameter_sig.String
-module Behavior: Parameter_sig.String
-module Analysis: Parameter_sig.Bool
-module WhyOpt: Parameter_sig.String_set
-module Why3Opt: Parameter_sig.String_set
-module JcOpt: Parameter_sig.String_set
-module GenOnly: Parameter_sig.Bool
-module InferAnnot: Parameter_sig.String
-module AbsDomain: Parameter_sig.String
-module Atp: Parameter_sig.String
-module CpuLimit: Parameter_sig.Int
-module HintLevel: Parameter_sig.Int
-module SpecBlockFuncs : Parameter_sig.Bool
-module Extract : Parameter_sig.Bool
-module FlatVararg : Parameter_sig.Bool
+module FieldUF :
+  sig
+    val repr : fieldinfo -> fieldinfo
+  end
 
-(*
-Local Variables:
-compile-command: "LC_ALL=C make"
-End:
-*)
+val same_fields : fieldinfo -> fieldinfo -> bool
+
+val subtype : typ -> typ -> bool
+
+val parent_type : typ -> typ
+
+val retype : file -> unit

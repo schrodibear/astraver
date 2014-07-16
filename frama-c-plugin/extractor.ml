@@ -207,7 +207,7 @@ object
     | Call (_, ({ enode = Lval (Var vi, _) } as e), _, _)
       when isFunctionType vi.vtype ->
       fatal_offset e
-    | Call (_, f, _, _) -> 
+    | Call (_, f, _, _) ->
       let types =
         match unrollType (typeOf f) with
         | TFun (rt, ao, _, _) | TPtr (TFun (rt, ao, _, _), _) ->
@@ -429,9 +429,15 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } = object
     function
     | GType (ti, _) when Set.mem types ti -> SkipChildren
     | GCompTag (ci, _) | GCompTagDecl (ci, _) when Set.mem comps ci ->
+      let is_old_parent =
+        let old_parent = try Some (List.hd ci.cfields) with Failure "hd" -> None in
+        fun fi -> may_map ~dft:false ((==) fi) old_parent
+      in
       ci.cfields <- dummy_if_empty ci (List.filter (fun fi -> fi.faddrof || Set.mem fields fi) ci.cfields);
-      ListLabels.iter ci.cfields
-        ~f:(fun fi ->
+      ListLabels.iteri ci.cfields
+        ~f:(fun i fi ->
+             if i == 0 && isStructOrUnionType fi.ftype && not (is_old_parent fi) then
+                fi.fattr <- addAttribute (Attr (noembed_attr_name, [])) fi.fattr;
              fi.fsize_in_bits <- None;
              fi.foffset_in_bits <- None;
              fi.fpadding_in_bits <- None);
@@ -457,5 +463,3 @@ let extract file =
   (* The following removes some Frama-C builtins from the tables (??) *)
   (*Ast.mark_as_changed ();*)
   Ast.compute ()
-
-

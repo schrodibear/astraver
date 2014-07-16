@@ -29,26 +29,12 @@
 (*                                                                        *)
 (**************************************************************************)
 
-include Plugin.S
+open Cil_types
+open Cil
 
-module ProjectName: Parameter_sig.String
-module Behavior: Parameter_sig.String
-module Analysis: Parameter_sig.Bool
-module WhyOpt: Parameter_sig.String_set
-module Why3Opt: Parameter_sig.String_set
-module JcOpt: Parameter_sig.String_set
-module GenOnly: Parameter_sig.Bool
-module InferAnnot: Parameter_sig.String
-module AbsDomain: Parameter_sig.String
-module Atp: Parameter_sig.String
-module CpuLimit: Parameter_sig.Int
-module HintLevel: Parameter_sig.Int
-module SpecBlockFuncs : Parameter_sig.Bool
-module Extract : Parameter_sig.Bool
-module FlatVararg : Parameter_sig.Bool
+val logic_names_overloading : (string, bool ref) Hashtbl.t
 
-(*
-Local Variables:
-compile-command: "LC_ALL=C make"
-End:
-*)
+val from_range_to_comprehension : visitor_behavior -> file -> unit
+val from_comprehension_to_range : visitor_behavior -> file -> unit
+
+val rewrite : file -> unit

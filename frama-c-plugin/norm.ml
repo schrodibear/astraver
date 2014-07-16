@@ -145,7 +145,7 @@ class retypeArrayVariables =
                      (Mem(new_exp ~loc (Lval(Var strawv,NoOffset))),off))
         end else e
     | AddrOf(Var v,off) ->
-        if Cil_datatype.Varinfo.Set.mem v !varset then 
+        if Cil_datatype.Varinfo.Set.mem v !varset then
           begin
             let ty = Cil_datatype.Varinfo.Hashtbl.find var_to_array_type v in
             let strawv = Cil_datatype.Varinfo.Hashtbl.find var_to_strawvar v in
@@ -155,13 +155,13 @@ class retypeArrayVariables =
                   new_exp ~loc
                     (BinOp(PlusPI,
                            new_exp ~loc (Lval(Var strawv,NoOffset)), ie,ptrty))
-              | NoOffset -> 
+              | NoOffset ->
                   unsupported "this instance of the address operator cannot be handled"
               | Index _ | Field _ ->
                   (* Field with address taken treated separately *)
                   new_exp ~loc
                     (AddrOf(Mem(new_exp ~loc (Lval(Var strawv,NoOffset))),off))
-          end 
+          end
         else e
     | BinOp(PlusPI,e1,e2,opty) ->
         begin match (stripInfo e1).enode with
@@ -239,9 +239,9 @@ object(self)
         let elemty = force_app_term_type element_type lv.lv_type in
         lvarset := Cil_datatype.Logic_var.Set.add lv !lvarset;
         let newty =
-          if Integer.gt 
-            (force_app_term_type array_size lv.lv_type) 
-            Integer.zero 
+          if Integer.gt
+            (force_app_term_type array_size lv.lv_type)
+            Integer.zero
           then
             begin
               let size =
@@ -303,8 +303,8 @@ object(self)
       if Cil_datatype.Varinfo.Set.mem v !allocvarset then
         let ty = Cil_datatype.Varinfo.Hashtbl.find var_to_array_type v in
         let elemty = element_type ty in
-        let ast = mkalloc_array_statement v elemty 
-          (Integer.to_int64 (array_size ty)) v.vdecl 
+        let ast = mkalloc_array_statement v elemty
+          (Integer.to_int64 (array_size ty)) v.vdecl
         in
         add_pending_statement ~beginning:true ast;
         let fst = mkfree_statement v v.vdecl in
@@ -455,19 +455,19 @@ object
           end
       | Dtype _ | Dlemma _ | Dinvariant _ | Dvolatile _  -> DoChildren
       | Daxiomatic _ -> DoChildren (* FIXME: correct ? *)
-      | Dmodel_annot (mi,_) -> 
+      | Dmodel_annot (mi,_) ->
           begin
             match unrollType mi.mi_base_type with
               | TComp (ci, _, _) ->
                   begin
-                    let l = 
+                    let l =
                       try Hashtbl.find model_fields_table ci.ckey
                       with Not_found -> []
                     in
                     (* Format.eprintf "filling model_fields_table for %s@." ci.cname; *)
                     Hashtbl.replace model_fields_table ci.ckey (mi::l)
                   end
-              | _ -> 
+              | _ ->
               Common.unsupported "model field only on structures"
           end;
           DoChildren (* FIXME: correct ? *)
@@ -538,7 +538,6 @@ end
 let retype_logic_functions file =
   let visitor = new retypeLogicFunctions in
   visitFramacFile visitor file
-
 
 (*****************************************************************************)
 (* Expand structure copying through parameter, return or assignment.         *)
@@ -628,7 +627,7 @@ class expandStructAssign () =
           in
           let rec all_elem acc i =
             if Integer.ge i Integer.zero
-            then all_elem (elem i @ acc) (Integer.pred i) 
+            then all_elem (elem i @ acc) (Integer.pred i)
             else acc
           in
           assert (not (is_reference_type ty));
@@ -666,7 +665,7 @@ object(self)
   method! vglob_aux =
     let retype_func fvi =
       let formal (n,ty,a) =
-        let ty = 
+        let ty =
           if isStructOrUnionType ty then mkTRef ty "Norm.vglob_aux" else ty
         in
         n, ty, a
@@ -676,10 +675,10 @@ object(self)
         | None -> None
         | Some p -> Some(List.map formal p)
       in
-      let rt = 
+      let rt =
         if isStructOrUnionType rt then
-          mkTRef rt "Norm.vglob_aux(2)" 
-        else rt 
+          mkTRef rt "Norm.vglob_aux(2)"
+        else rt
       in
       fvi.vtype <- TFun(rt,params,isva,a)
     in
@@ -788,15 +787,6 @@ object(self)
           WritesAny -> WritesAny
         | Writes l -> Writes (List.flatten (List.map assign l))
     in
-(*    Format.eprintf "[Norm.vbehavior] b_allocation = ";
-    begin
-      match b.b_allocation with
-        | FreeAllocAny ->
-            Format.eprintf "FreeAllocAny@."
-        | FreeAlloc(l1,l2) ->
-            Format.eprintf "FreeAlloc(%d,%d)@." (List.length l1) (List.length l2)
-    end;
-*)
     let new_bhv =
       Cil.mk_behavior
         ~name:b.b_name
@@ -856,7 +846,7 @@ object(self)
                 (* Type of [lv] has not been changed. *)
                 let lvty = typeOfLval lv in
                 if isStructOrUnionType lvty then
-                  let tmpv = 
+                  let tmpv =
                     makeTempVar
                       (Extlib.the self#current_func) (mkTRef lvty "Norm.vinst")
                   in
@@ -896,6 +886,200 @@ let expand_struct_assign file =
   let visitor = new expandStructAssign () in
   visitFramacFile (visit_and_push_statements_visitor visitor) file
 
+
+(*****************************************************************************)
+(* Move first substructure fields out to the outer structures to simplify    *)
+(* the successive subtyping relation computation.                            *)
+(*****************************************************************************)
+
+class embed_first_substructs_visitor =
+  let subfield_name ci fi = unique_name @@ ci.cname ^ "_" ^ fi.fname in
+  let is_embedded, embed_first_substruct, get_field  =
+    let module FI = Cil_datatype.Fieldinfo in
+    let module FH = FI.Hashtbl in
+    let embedded_fields = FH.create 10 in
+    let field_map = FH.create 10 in
+    (fun efi -> try FH.find embedded_fields efi with Not_found -> false),
+    (fun ci ci' ->
+      let efi, cfields = List.(hd ci.cfields, tl ci.cfields) in
+      let cfields' =
+        List.map
+          (fun fi ->
+             let fi' =
+               { fi with
+                 fcomp = ci;
+                 fname = subfield_name ci' fi;
+                 fattr =
+                   addAttribute (Attr (embedded_attr_name,
+                                       [AStr efi.forig_name; AStr (compFullName ci'); AStr fi.forig_name])) fi.fattr }
+             in
+             let fs =
+               try FH.find field_map efi
+               with
+               | Not_found ->
+                 let fs = FH.create 10 in
+                 FH.replace field_map efi fs;
+                 fs
+             in
+             FH.replace fs fi fi';
+             fi')
+          ci'.cfields
+      in
+      ci.cfields <- cfields' @ cfields;
+      FH.replace embedded_fields efi true),
+    fun efi -> FH.(find (find field_map efi))
+  in
+  let do_offs =
+    function
+    | Field (fi, Field (fi', NoOffset)) as offs when is_embedded fi ->
+      begin try
+        Field (get_field fi fi', NoOffset)
+      with
+      | Not_found -> offs (* Possible when address of an embedded field is taken *)
+      end
+    | off -> off
+  in
+  let do_expr e =
+    match e.enode with
+    | AddrOf (host, off) ->
+      let off =
+        visitFramacOffset
+          (object
+            inherit frama_c_inplace
+            method! voffs _ =
+              DoChildrenPost
+                (function
+                 | Field (fi, offs) when is_embedded fi ->
+                   offs
+                 | off -> off)
+          end)
+          off
+      in
+      mkCast ~force:true ~e:(mkAddrOf ~loc:e.eloc (host, off)) ~newt:(typeOf e)
+    | _ -> e
+  in
+object
+  inherit frama_c_inplace
+
+  method! vcompinfo ci =
+    match ci.cfields with
+    | { ftype; fattr } :: _ when isStructOrUnionType ftype && not (hasAttribute noembed_attr_name fattr)->
+      begin match unrollType ftype with
+      | TComp (ci', _, _) when ci'.cstruct ->
+        embed_first_substruct ci ci';
+        SkipChildren
+      | _ -> SkipChildren
+      end
+    | _ -> SkipChildren
+
+  method! voffs _ = DoChildrenPost do_offs
+  method! vterm_offset = do_on_term_offset (None, Some do_offs)
+
+  method! vexpr _ = DoChildrenPost do_expr
+  method! vterm = do_on_term (None, Some do_expr)
+
+end
+
+let embed_first_substructs = visitFramacFile (new embed_first_substructs_visitor)
+
+(*****************************************************************************)
+(* Rewrite type char* into void* in successive castings.                     *)
+(*****************************************************************************)
+
+class char_pointer_rewriter =
+object
+  inherit frama_c_inplace
+
+  method! vexpr e =
+    let void_ptr_with_attrs t = typeAddAttributes (typeAttrs t) voidPtrType in
+    match e.enode with
+    | CastE (tcharp, ein)
+      when isCharPtrType tcharp ->
+        ChangeTo ({ e with enode = CastE (void_ptr_with_attrs tcharp, ein)})
+    | BinOp _ ->
+      DoChildrenPost
+        (function
+         | { enode = BinOp (op, e1, e2, _); eloc } -> mkBinOp ~loc:eloc op e1 e2
+         | e -> fatal "Unexpected transformation of BinOp to: %a" Printer.pp_exp e)
+    | UnOp (op, ( { eloc } as e), typ) when isCharPtrType typ ->
+        ChangeDoChildrenPost (new_exp ~loc:eloc (UnOp (op, e, void_ptr_with_attrs typ)), id)
+    | _ -> DoChildren
+end
+
+class side_cast_rewriter =
+  let has_charp_casts e =
+    try
+      ignore @@ visitFramacExpr
+        (object
+          inherit frama_c_inplace
+          method! vexpr =
+            function
+            | { enode = CastE (tcharp, _) }
+              when isCharPtrType tcharp -> raise Exit
+            | _ -> DoChildren
+         end)
+        e;
+      false
+    with Exit -> true
+  in
+  let rewrite_char_pointers = visitFramacExpr (new char_pointer_rewriter) in
+  let struct_fields t =
+    match unrollType t with
+    | TComp (compinfo, _, _) -> compinfo.cfields
+    | t -> fatal "Expected coposite type, got: %a" Printer.pp_typ t
+  in
+  let pointed_type t =
+    match unrollType t with
+    | TPtr _ as t -> typeOf_pointed t
+    | TArray _ as t -> typeOf_array_elem t
+    | t -> t
+  in
+  let subtype t1 t2 =
+    isVoidPtrType t2 ||
+    let t1, t2 = map_pair pointed_type (t1, t2) in
+    Cil_datatype.Typ.equal t1 t2 ||
+    isStructOrUnionType t1 && isStructOrUnionType t2 &&
+    let fields1, fields2 = map_pair struct_fields (t1, t2) in
+    let len1, len2 = map_pair List.length (fields1, fields2) in
+    len1 > len2 &&
+    List.for_all2
+      (fun fi1 fi2 -> Retype.same_fields fi1 fi2)
+      (take len2 fields1)
+      fields2
+  in
+object(self)
+  inherit frama_c_inplace
+
+  method! vexpr e =
+    match e.enode with
+    | CastE (tto, efrom)
+      when isCharPtrType (typeOf efrom) &&
+           isPointerType tto &&
+           not (isCharPtrType tto) &&
+           not (isVoidPtrType tto) &&
+           has_charp_casts efrom ->
+      ChangeTo ({ e with enode = CastE (tto, rewrite_char_pointers efrom) })
+    | CastE (tto, efrom) ->
+      let tfrom = typeOf efrom in
+      if (isPointerType tfrom || isArrayType tfrom) &&
+         (isPointerType tto || isArrayType tto) &&
+         let tto = typeDeepDropAllAttributes tto
+         and tfrom = typeDeepDropAllAttributes tfrom in
+         not (subtype tto tfrom || subtype tfrom tto)
+      then
+        let void_ptr_type = typeAddAttributes (typeAttrs tfrom) voidConstPtrType in
+        ChangeDoChildrenPost
+          ({ e with enode = CastE (tto, mkCastT ~force:false ~e:efrom ~oldt:tfrom ~newt:void_ptr_type)}, id)
+      else
+        DoChildren
+    | _ -> DoChildren
+
+  method! vterm =
+    do_on_term (Some (fun e -> match self#vexpr e with ChangeTo e | ChangeDoChildrenPost (e, _) -> e | _ -> e), None)
+end
+
+let rewrite_side_casts file =
+  visitFramacFile (new side_cast_rewriter) file
 
 (*****************************************************************************)
 (* Retype variables of structure type.                                       *)
@@ -1705,7 +1889,7 @@ class removeUselessCasts =
             let ptty =
               match t.term_type with
                   Ctype tty ->
-                    if isPointerType tty then pointed_type tty 
+                    if isPointerType tty then pointed_type tty
                     else element_type tty
                 | ty -> fatal "Not a pointer type '%a'"
                   Cil_datatype.Logic_type.pretty ty
@@ -1854,6 +2038,14 @@ let normalize file =
   (* order: before [retype_address_taken], before [retype_struct_variables] *)
   Jessie_options.debug "Expand structure copying";
   expand_struct_assign file;
+  if checking () then check_types file;
+  (* Embed fields of first fist substructures *)
+  Jessie_options.debug "Embed fields of first substructures";
+  embed_first_substructs file;
+  if checking () then check_types file;
+  (* Rewrite char * into void * in successive casts. *)
+  Jessie_options.debug "Rewrite type char* into void* in successive casts";
+  rewrite_side_casts file;
   if checking () then check_types file;
   (* Retype variables of structure type. *)
   Jessie_options.debug "Retype variables of structure type";
