@@ -143,19 +143,6 @@ let fatal_offset =
     "Encountered function type with offset: %a"
     Printer.pp_exp
 
-(* Helper function to extract functions occurring as variables. *)
-let do_expr_post f do_not_touch e =
-  if !do_not_touch = Some e.eid then (do_not_touch := None; e)
-  else match e.enode with
-  | Lval (Var vi, NoOffset) | AddrOf (Var vi, NoOffset)
-    when isFunctionType vi.vtype ->
-    f vi;
-    e
-  | Lval (Var vi, _) | AddrOf (Var vi, _)
-    when isFunctionType vi.vtype ->
-    fatal_offset e
-  | _ -> e
-
 (* Add the function to the queue for traversal. *)
 let do_fun { State. vars; fun_queue } (vi, kf_opt) =
   if not (Set.mem vars vi) then begin
@@ -178,12 +165,48 @@ let add_field { State. fields } off =
   end;
   off
 
+let add_hcast { State.fields } typ exp =
+  let t = typeOf exp in
+  if List.for_all isPointerType [typ; t] then begin
+    match map_pair typeOf_pointed (typ, t) with
+    | TComp (ci1, _, _), TComp (ci2, _, _) ->
+      let add_first_field (ci1, ci2) =
+        try
+          let fi = List.hd ci1.cfields in
+          match unrollType fi.ftype with
+          | TComp (ci, _, _) when Cil_datatype.Compinfo.equal ci ci2 ->
+            Set.add fields fi
+          | _ -> ()
+        with
+        | Failure "hd" -> ()
+      in
+      List.iter add_first_field [ci1, ci2; ci2, ci1]
+    | _ -> ()
+  end
+
+(* Helper function to extract functions occurring as variables
+   and mark first structure fields used in hierarchical casts. *)
+let do_expr_post f do_not_touch ?state e =
+  if !do_not_touch = Some e.eid then (do_not_touch := None; e)
+  else match e.enode with
+  | Lval (Var vi, NoOffset) | AddrOf (Var vi, NoOffset)
+    when isFunctionType vi.vtype ->
+    f vi;
+    e
+  | Lval (Var vi, _) | AddrOf (Var vi, _)
+    when isFunctionType vi.vtype ->
+    fatal_offset e
+  | CastE (typ, exp) when has_some state ->
+    add_hcast (the state) typ exp;
+    e
+  | _ -> e
+
 class relevant_function_visitor state add_from_type =
   let do_fun = do_fun state in
   (* For marking function expressions in explicit function calls. *)
   let do_not_touch = ref None in
   (* Adds all functions occurring as variables to the queue. *)
-  let do_expr_post = do_expr_post (fun vi -> do_fun (vi, None)) do_not_touch in
+  let do_expr_post = do_expr_post ~state (fun vi -> do_fun (vi, None)) do_not_touch in
   let add_var_if_global = add_var_if_global add_from_type state in
   let do_lval lv = add_from_type (typeOfLval lv); lv in
   let do_offset = add_field state in
@@ -253,7 +276,7 @@ end
 class annotation_visitor state add_from_type =
   let do_fun = do_fun state in
   (* There are no explicit function calls from annotations. *)
-  let do_expr_post = do_expr_post (fun vi -> do_fun (vi, None)) (ref None) in
+  let do_expr_post = do_expr_post ~state (fun vi -> do_fun (vi, None)) (ref None) in
   let add_var_if_global = add_var_if_global add_from_type state in
 object(self)
   inherit frama_c_inplace
