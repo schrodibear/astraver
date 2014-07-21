@@ -3220,120 +3220,70 @@ let declare_jessie_nondet_int file =
 (* Rewrite the C file for Jessie translation.                                *)
 (*****************************************************************************)
 
+let apply ~file f msg =
+  Jessie_options.debug "Applying transformation: %s" msg;
+  f file;
+  if checking () then check_types file
+
 let rewrite file =
+  let apply = apply ~file in
+  let open Jessie_options in
   (* Insert declarations for kmalloc and jessie_nondet_int if necessary *)
-  Jessie_options.debug "Inserting declaration for jessie_nondet_int (if necessary)";
-  declare_jessie_nondet_int file;
-  if checking () then check_types file;
+  apply declare_jessie_nondet_int "inserting declaration for jessie_nondet_int (if necessary)";
   (* Add definitions for undefined composite tags in extract mode. *)
-  if Jessie_options.Extract.get () then
-    begin
-      Jessie_options.debug "Define dummy structs";
-      define_dummy_structs file;
-      if checking () then check_types file
-    end;
+  if Extract.get () then
+    apply define_dummy_structs "defining dummy structs";
   (* Eliminate function pointers through dummy variables, assertions and if-then-else statements *)
-  Jessie_options.debug "Eliminate function pointers";
-  eliminate_fps file;
-  if checking () then check_types file;
+  apply eliminate_fps "eliminating function pointers";
   (* Eliminate va_lists by replacing it with void * *)
-  Jessie_options.debug "Eliminate va_lists";
-  rewrite_va_lists file;
-  if checking () then check_types file;
+  apply rewrite_va_lists "eliminating va_lists";
   (* Replace inline assembly with undefined function calls (and switches) *)
-  Jessie_options.debug "Replace inline assembly with undefined function calls";
-  asms_to_functions file;
-  if checking () then check_types file;
+  apply asms_to_functions "replacing inline assembly with undefined function calls";
   (* Specialize block functions e.g. memcpy. *)
-  if Jessie_options.SpecBlockFuncs.get () then
-    begin
-      Jessie_options.debug "Expand kzallocs to kmalloc+memset";
-      expand_kzallocs file;
-      if checking () then check_types file;
-      Jessie_options.debug "Use specialized versions for block functions (e.g. memcpy)";
-      specialize_blockfuns file;
-      if checking () then check_types file;
-    end;
+  if SpecBlockFuncs.get () then begin
+    apply expand_kzallocs "expanding kzallocs to kmalloc+memset";
+    apply specialize_blockfuns "using specialized versions for block functions (e.g. memcpy)";
+  end;
   (* Expand assigns clauses and equalities for composite types. *)
-  Jessie_options.debug "Expand assigns clauses and equality for composite types";
-  expand_composites file;
-  if checking () then check_types file;
+  apply expand_composites "expanding assigns clauses and equality for composite types";
   (* Fold constants to avoid incorrect sizeofs. *)
-  Jessie_options.debug "Fold constants in terms to avoid incorrect sizeofs";
-  fold_constants_in_terms file;
-  if checking () then check_types file;
+  apply fold_constants_in_terms "folding constants in terms to avoid incorrect sizeofs";
   (* adds a behavior named [name_of_default_behavior] to all functions if
      it does not already exist.
    *)
-  Jessie_options.debug "Adding default behavior to all functions";
-  add_default_behaviors ();
-  if checking () then check_types file;
+  apply (fun _ -> add_default_behaviors ()) "adding default behavior to all functions";
   (* Rename entities to avoid conflicts with Jessie predefined names.
      Should be performed before any call to [Cil.cvar_to_lvar] destroys
      sharing among logic variables.
   *)
-  Jessie_options.debug "Rename entities";
-  rename_entities file;
-  if checking () then check_types file;
+  apply rename_entities "renaming entities";
   (* Fill offset/size information in fields *)
-  Jessie_options.debug "Fill offset/size information in fields";
-  fill_offset_size_in_fields file;
-  if checking () then check_types file;
+  apply fill_offset_size_in_fields "filling offset/size information in fields";
   (* Replace addrof array with startof. *)
-  Jessie_options.debug "Replace addrof array with startof";
-  replace_addrof_array file;
-  if checking () then check_types file;
+  apply replace_addrof_array "replacing addrof array with startof";
   (* Replace string constants by global variables. *)
-  Jessie_options.debug "Replace string constants by global variables";
-  replace_string_constants file;
-  if checking () then check_types file;
+  apply replace_string_constants "replacing string constants by global variables";
   (* Put all global initializations in the [globinit] file. *)
+  apply gather_initialization "putting all global initializations in the [globinit] file";
   (* Replace global compound initializations by equivalent statements. *)
-  Jessie_options.debug "Put all global initializations in the [globinit] file";
-  gather_initialization file;
-  if checking () then check_types file;
-  Jessie_options.debug "Use specialized versions of Frama_C_memset";
-  specialize_memset file;
-  if checking () then check_types file;
+  apply specialize_memset "using specialized versions of Frama_C_memset";
   (* Rewrite comparison of pointers into difference of pointers. *)
-  if Jessie_options.InferAnnot.get () <> "" then
-    begin
-      Jessie_options.debug "Rewrite comparison of pointers into difference of pointers";
-      rewrite_pointer_compare file;
-      if checking () then check_types file
-    end;
-  Jessie_options.debug "Rewrite Pre as Old in funspec";
-  rewrite_pre_old file;
-  if checking () then check_types file;
+  if InferAnnot.get () <> "" then
+    apply rewrite_pointer_compare "rewriting comparison of pointers into difference of pointers";
+  apply rewrite_pre_old "rewriting Pre as Old in funspecs";
   (* Rewrite cursor pointers into offsets from base pointers. *)
   (* order: after [rewrite_pointer_compare] *)
-  if Jessie_options.InferAnnot.get () <> "" then
-    begin
-      Jessie_options.debug "Rewrite cursor pointers into offsets from base pointers";
-      rewrite_cursor_pointers file;
-      if checking () then check_types file
-    end;
+  if InferAnnot.get () <> "" then
+    apply rewrite_cursor_pointers "rewriting cursor pointers into offsets from base pointers";
   (* Rewrite cursor integers into offsets from base integers. *)
-  if Jessie_options.InferAnnot.get () <> "" then
-    begin
-      Jessie_options.debug "Rewrite cursor integers into offsets from base integers";
-      rewrite_cursor_integers file;
-      if checking () then check_types file
-    end;
+  if InferAnnot.get () <> "" then
+    apply rewrite_cursor_integers "rewriting cursor integers into offsets from base integers";
   (* Annotate code with strlen. *)
-  if Jessie_options.HintLevel.get () > 0 then
-    begin
-      Jessie_options.debug "Annotate code with strlen";
-      annotate_code_strlen file;
-      if checking () then check_types file
-    end;
+  if HintLevel.get () > 0 then
+    apply annotate_code_strlen "annotating code with strlen";
   (* Annotate code with overflow checks. *)
-  Jessie_options.debug "Annotate code with overflow checks";
-  annotate_overflow file;
-  if checking () then check_types file;
-  Jessie_options.debug "Checking if there are unsupported predicates";
-  remove_unsupported file;
-  if checking () then check_types file
+  apply annotate_overflow "annotating code with overflow checks";
+  apply remove_unsupported "checking if there are unsupported predicates"
 
 (*
 Local Variables:
