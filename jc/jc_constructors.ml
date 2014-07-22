@@ -147,7 +147,7 @@ let term_with_node_nomark t ?(pos=t#pos) ?(typ=t#typ) ?(mark="") ?(region=t#regi
   new term ~pos ~typ ~mark ?label:t#label ~region node
 
 class term_var ?(pos = Loc.dummy_position) ?(mark="") v =
-  term ~pos ~typ:v.jc_var_info_type ~mark ~region:v.jc_var_info_region
+  term ~pos ~typ:v.vi_type ~mark ~region:v.vi_region
     (JCTvar v)
 
 class location ?(pos = Loc.dummy_position) ~typ ?label ?region node =
@@ -531,9 +531,9 @@ module Expr = struct
   let mkbinary ~expr1 ~op ~expr2 = mk ~node:(JCEbinary(expr1, op, expr2))
 
   let mklet ~var ?init ~body =
-    mk ~typ:var.jc_var_info_type ~node:(JCElet(var, init, body))
+    mk ~typ:var.vi_type ~node:(JCElet(var, init, body))
   let mkvar ~var =
-    mk ~typ:var.jc_var_info_type ~node:(JCEvar var)
+    mk ~typ:var.vi_type ~node:(JCEvar var)
 
   let is_app e = match e#node with JCEapp _ -> true | _ -> false
 end
@@ -551,7 +551,7 @@ module Term = struct
   let mkbinary ~term1 ~op ~term2 = mk ~node:(JCTbinary(term1, op, term2))
 
   let mkvar ~var =
-    mk ~typ:var.jc_var_info_type ~node:(JCTvar var)
+    mk ~typ:var.vi_type ~node:(JCTvar var)
 end
 
 (*******************************************************************************)

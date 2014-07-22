@@ -101,8 +101,8 @@ let () =
        let pl = List.map
 	 (fun ty -> var ~formal:true ty "_") pl
        in
-       pi.jc_logic_info_parameters <- pl;
-       pi.jc_logic_info_final_name <- whyid;
+       pi.li_parameters <- pl;
+       pi.li_final_name <- whyid;
        Hashtbl.add logic_functions_env x pi)
     Jc_pervasives.builtin_logic_symbols;
   List.iter
@@ -111,9 +111,9 @@ let () =
        let pl = List.map
 	 (fun ty -> (true,var ~formal:true ty "_")) pl
        in
-       pi.jc_fun_info_parameters <- pl;
-       pi.jc_fun_info_final_name <- whyid;
-       pi.jc_fun_info_builtin_treatment <- treat;
+       pi.fun_parameters <- pl;
+       pi.fun_final_name <- whyid;
+       pi.fun_builtin_treatment <- treat;
        Hashtbl.add functions_env x pi)
     Jc_pervasives.builtin_function_symbols
 
@@ -122,7 +122,7 @@ let real_of_integer =
     Hashtbl.find logic_functions_env "\\real_of_integer"
   in
 (*
-  eprintf "\\real_of_integer.jc_logic_fun_info_tag = %d@." fi.jc_logic_info_tag;
+  eprintf "\\real_of_integer.jc_logic_fun_info_tag = %d@." fi.li_tag;
 *)
   fi
 
@@ -143,19 +143,19 @@ let field_tag_counter = ref 0
 
 let create_mutable_field st =
   incr field_tag_counter;
-  let name = "committed_"^st.jc_struct_info_name in
+  let name = "committed_"^st.si_name in
   let fi = {
-    jc_field_info_tag = !field_tag_counter;
-    jc_field_info_name = name;
-    jc_field_info_final_name = Jc_envset.get_unique_name name;
-    jc_field_info_type = boolean_type;
-    jc_field_info_hroot = st.jc_struct_info_hroot;
-    jc_field_info_struct = st;
-    jc_field_info_rep = false;
-    jc_field_info_abstract = false;
-    jc_field_info_bitsize = None;
+    fi_tag = !field_tag_counter;
+    fi_name = name;
+    fi_final_name = Jc_envset.get_unique_name name;
+    fi_type = boolean_type;
+    fi_hroot = st.si_hroot;
+    fi_struct = st;
+    fi_rep = false;
+    fi_abstract = false;
+    fi_bitsize = None;
   } in
-  Hashtbl.add committed_fields_table st.jc_struct_info_name fi
+  Hashtbl.add committed_fields_table st.si_name fi
 
 let find_struct_info loc id =
   try
@@ -164,7 +164,7 @@ let find_struct_info loc id =
     typing_error loc "undeclared structure %s" id
 
 let find_struct_root st =
-  match st.jc_struct_info_hroot.jc_struct_info_root with
+  match st.si_hroot.si_root with
     | None -> raise Not_found
     | Some vi -> vi
 
@@ -225,7 +225,7 @@ let is_integer t =
     | _ -> false
 
 let is_root_struct st =
-  match st.jc_struct_info_parent with None -> true | Some _ -> false
+  match st.si_parent with None -> true | Some _ -> false
 
 let lub_numeric_types t1 t2 =
   match t1,t2 with
@@ -244,7 +244,7 @@ let rec substruct st = function
         let vi = struct_root st and vi' = struct_root st' in
         (vi == vi' && (root_is_union vi))
         ||
-        begin match st.jc_struct_info_parent with
+        begin match st.si_parent with
           | None -> false
           | Some(p, []) -> substruct p pc
           | Some(_p, _) -> assert false (* TODO *)
@@ -274,8 +274,8 @@ let subtype ?(allow_implicit_cast=true) t1 t2 =
 	   | _ -> false)
     | JCTenum ri1, JCTenum ri2 ->
         allow_implicit_cast ||
-          (Num.ge_num ri1.jc_enum_info_min ri2.jc_enum_info_min &&
-             Num.le_num ri1.jc_enum_info_max ri2.jc_enum_info_max)
+          (Num.ge_num ri1.ei_min ri2.ei_min &&
+             Num.le_num ri1.ei_max ri2.ei_max)
     | JCTenum _, JCTnative Tinteger ->
         true
     | JCTnative Tinteger, JCTenum _ ->
@@ -335,7 +335,7 @@ let rec same_type_no_coercion t1 t2 =
   match t1,t2 with
     | JCTnative t1, JCTnative t2 -> t1=t2
     | JCTenum ei1, JCTenum ei2 ->
-      ei1.jc_enum_info_name = ei2.jc_enum_info_name
+      ei1.ei_name = ei2.ei_name
     | JCTlogic (name1, args1), JCTlogic (name2, args2) ->
       name1=name2 && List.for_all2 same_type_no_coercion args1 args2
     | JCTpointer(pc1,_,_), JCTpointer(pc2,_,_) ->
@@ -382,18 +382,18 @@ let rec find_field_struct loc st allow_mutable = function
   | f ->
       try
         list_assoc_name
-          (fun f -> f.jc_field_info_name) f st.jc_struct_info_fields
+          (fun f -> f.fi_name) f st.si_fields
       with Not_found ->
-        match st.jc_struct_info_parent with
+        match st.si_parent with
           | None ->
               raise Not_found
 (*              typing_error loc "no field %s in structure %s"
-                f st.jc_struct_info_name*)
+                f st.si_name*)
           | Some(st, _) -> find_field_struct loc st allow_mutable f
 let find_field_struct loc st allow_mutable f =
   try find_field_struct loc st allow_mutable f
   with Not_found ->
-    typing_error loc "no field %s in structure %s" f st.jc_struct_info_name
+    typing_error loc "no field %s in structure %s" f st.si_name
 
 let find_field loc ty f allow_mutable =
   match ty with
@@ -485,7 +485,7 @@ let rec pattern env vars pat ety =
       StringMap.find id vars
     with Not_found ->
       let vi = var ety id in
-      vi.jc_var_info_assigned <- true;
+      vi.vi_assigned <- true;
       vi
   in
   let tpn, ty, newenv = match pat#node with
@@ -502,12 +502,12 @@ let rec pattern env vars pat ety =
         if not (substruct st pc) then
           typing_error id#pos
             "tag %s is not a subtag of %s"
-            st.jc_struct_info_name (Jc_output_misc.pointer_class pc);
+            st.si_name (Jc_output_misc.pointer_class pc);
         (* fields *)
         let env, tlpl = List.fold_left
           (fun (env, acc) (l, p) ->
              let fi = find_field_struct l#pos st false l#name in
-             let env, tp = pattern env vars p fi.jc_field_info_type in
+             let env, tp = pattern env vars p fi.fi_type in
              env, (fi, tp)::acc)
           (env, []) lpl
         in
@@ -582,10 +582,10 @@ let term_coerce t1 t2 e =
 		  (JCTconst(JCCreal (n^".0")))
 	    | _ ->
 		let app = {
-		  jc_app_fun = real_of_integer;
-		  jc_app_args = [e];
-		  jc_app_region_assoc = [];
-		  jc_app_label_assoc = [];
+		  app_fun = real_of_integer;
+		  app_args = [e];
+		  app_region_assoc = [];
+		  app_label_assoc = [];
 		} in
 		new term
 		  ~typ:real_type
@@ -781,9 +781,9 @@ let rec type_labels env ~result_label label e =
           env el
     | JCNElabel(lab, _) ->
         let lab = {
-          label_info_name = lab;
-          label_info_final_name = lab;
-          times_used = 0;
+          lab_name = lab;
+          lab_final_name = lab;
+          lab_times_used = 0;
         } in
         let env = (LabelName lab)::env in
         iter_subs ~env label;
@@ -854,7 +854,7 @@ let rec term env e =
             try List.assoc id env
 	    with Not_found -> Hashtbl.find variables_env id
           in
-          vi.jc_var_info_type, vi.jc_var_info_region, JCTvar vi
+          vi.vi_type, vi.vi_region, JCTvar vi
 	with Not_found ->
           (* François : Où teste-t-on que pi n'a pas d'argument? *)
 	  let pi =
@@ -862,23 +862,23 @@ let rec term env e =
               typing_error e#pos "unbound term identifier %s" id
 	  in
           let app = {
-            jc_app_fun = pi;
-            jc_app_args = [];
-            jc_app_region_assoc = [];
-            jc_app_label_assoc = [];
+            app_fun = pi;
+            app_args = [];
+            app_region_assoc = [];
+            app_label_assoc = [];
           } in
 	  let ty =
-	    match pi.jc_logic_info_result_type with
+	    match pi.li_result_type with
 	      | Some t -> t
 	      | None -> assert false (* check it is a function *)
 	  in
-          let ty = (Jc_type_var.instance pi.jc_logic_info_poly_args) ty in
-	  ty, Region.make_var ty pi.jc_logic_info_name, JCTapp app
+          let ty = (Jc_type_var.instance pi.li_poly_args) ty in
+	  ty, Region.make_var ty pi.li_name, JCTapp app
 	end
     | JCNEderef(e1, f) ->
         let te1 = ft e1 in
         let fi = find_field e#pos te1#typ f true in
-        fi.jc_field_info_type,
+        fi.fi_type,
         Region.make_field te1#region fi,
         JCTderef(te1, label (), fi)
     | JCNEbinary(e1, op, e2) ->
@@ -890,42 +890,42 @@ let rec term env e =
 (* Yannick: no need for different rule for const logic *)
 (*           if List.length args = 0 then *)
 (*             let vi = Hashtbl.find logic_constants_env id in *)
-(*             vi.jc_var_info_type, vi.jc_var_info_region, JCTvar vi *)
+(*             vi.vi_type, vi.vi_region, JCTvar vi *)
 (*           else *)
 	    begin
             let pi = find_logic_info id in
-            let subst = Jc_type_var.instance pi.jc_logic_info_poly_args in
+            let subst = Jc_type_var.instance pi.li_poly_args in
             let tl =
               try
                 List.map2
                   (fun vi e ->
-                     let ty = subst vi.jc_var_info_type in
+                     let ty = subst vi.vi_type in
                      let te = ft e in
                      Jc_type_var.add uenv te#pos te#typ ty;
                      te)
-                   pi.jc_logic_info_parameters args
+                   pi.li_parameters args
               with  Invalid_argument _ ->
                 typing_error e#pos
                   "wrong number of arguments for %s" id
             in
-            let ty = match pi.jc_logic_info_result_type with
+            let ty = match pi.li_result_type with
               | None ->
                   typing_error e#pos
                     "the logic info %s is a predicate; it should be \
-used as an assertion, not as a term" pi.jc_logic_info_name
+used as an assertion, not as a term" pi.li_name
               | Some ty -> ty
 	    in
             let ty = Jc_type_var.subst uenv (subst ty) in
             let label_assoc =
-	      label_assoc e#pos id e#label pi.jc_logic_info_labels labs
+	      label_assoc e#pos id e#label pi.li_labels labs
 	    in
             let app = {
-              jc_app_fun = pi;
-              jc_app_args = tl;
-              jc_app_region_assoc = [];
-              jc_app_label_assoc = label_assoc;
+              app_fun = pi;
+              app_args = tl;
+              app_region_assoc = [];
+              app_label_assoc = label_assoc;
             } in
-            ty, Region.make_var ty pi.jc_logic_info_name, JCTapp app
+            ty, Region.make_var ty pi.li_name, JCTapp app
           end
         with Not_found ->
           typing_error e#pos "unbound logic function identifier %s" id
@@ -1328,12 +1328,12 @@ let rec assertion env e =
       | JCTtypeof(_, st1), JCTtag st2
       | JCTtag st1, JCTtypeof(_, st2)
       | JCTtypeof(_, st1), JCTtypeof(_, st2) ->
-          if st1.jc_struct_info_hroot != st2.jc_struct_info_hroot then
+          if st1.si_hroot != st2.si_hroot then
             typing_error e#pos "the hierarchy %s and %s are different"
               (root_name st1)
               (root_name st2)
           else
-            Some st1.jc_struct_info_hroot
+            Some st1.si_hroot
   in
   let ta = match e#node with
     | JCNElabel(l, e) ->
@@ -1355,26 +1355,26 @@ let rec assertion env e =
     | JCNEapp (id, labs, args) ->
         begin try
           let pi = find_logic_info id in
-          let subst = Jc_type_var.instance pi.jc_logic_info_poly_args in
+          let subst = Jc_type_var.instance pi.li_poly_args in
           let tl = try
             List.map2
               (fun vi e ->
-                 let ty = subst vi.jc_var_info_type in
+                 let ty = subst vi.vi_type in
                  let te = ft e in
                  Jc_type_var.add uenv te#pos te#typ ty;
                  te)
-              pi.jc_logic_info_parameters args
+              pi.li_parameters args
           with Invalid_argument _ ->
             typing_error e#pos "wrong number of arguments for %s" id
           in
 	  let label_assoc =
-		label_assoc e#pos id e#label pi.jc_logic_info_labels labs
+		label_assoc e#pos id e#label pi.li_labels labs
 	      in
           let app = {
-            jc_app_fun = pi;
-            jc_app_args = tl;
-            jc_app_region_assoc = [];
-            jc_app_label_assoc = label_assoc;
+            app_fun = pi;
+            app_args = tl;
+            app_region_assoc = [];
+            app_label_assoc = label_assoc;
           } in
           JCAapp app
         with Not_found ->
@@ -1488,7 +1488,7 @@ and triggers env l =
     match e#node with
     | JCNEapp (id,_,_) ->
         let pi = find_logic_info id in
-        (match pi.jc_logic_info_result_type with
+        (match pi.li_result_type with
           | None ->   JCAPatP (assertion env e)
           | Some _ -> JCAPatT (term env e))
     | JCNEat _ | JCNEinstanceof _ | JCNEoffset _ -> JCAPatT (term env e)
@@ -1505,10 +1505,10 @@ let loop_annot =
   fun ~behaviors ~free_invariant ~variant ->
     incr cnt;
     {
-      jc_loop_tag = !cnt;
-      jc_loop_behaviors = behaviors;
-      jc_free_loop_invariant = free_invariant;
-      jc_loop_variant = variant;
+      loop_tag = !cnt;
+      loop_behaviors = behaviors;
+      loop_free_invariant = free_invariant;
+      loop_variant = variant;
     }
 
 let rec location_set env e =
@@ -1521,9 +1521,9 @@ let rec location_set env e =
             try Hashtbl.find variables_env id with Not_found ->
               typing_error e#pos "unbound identifier %s" id
         in
-        begin match vi.jc_var_info_type with
+        begin match vi.vi_type with
           | JCTpointer _ ->
-              vi.jc_var_info_type, vi.jc_var_info_region, JCLSvar vi
+              vi.vi_type, vi.vi_region, JCLSvar vi
           | _ -> assert false
         end
     | JCNEbinary(e, `Badd, i) ->
@@ -1571,7 +1571,7 @@ let rec location_set env e =
         let t,tr,tls = location_set env ls in
         let fi = find_field e#pos t f false in
         let fr = Region.make_field tr fi in
-        fi.jc_field_info_type, fr, JCLSderef(tls, get_label e, fi, fr)
+        fi.fi_type, fr, JCLSderef(tls, get_label e, fi, fr)
     | JCNEat(ls, lab) ->
 	let t,tr,tls = location_set env ls in
 	t,tr,JCLSat(tls,lab)
@@ -1604,18 +1604,18 @@ let rec location env e =
             try Hashtbl.find variables_env id with Not_found ->
               typing_error e#pos "unbound identifier %s" id
         in
-        vi.jc_var_info_type, vi.jc_var_info_region, JCLvar vi
+        vi.vi_type, vi.vi_region, JCLvar vi
     | JCNEderef(ls, f) ->
 	begin try
           let t, tr, tls = location_set env ls in
           let fi = find_field e#pos t f false in
           let fr = Region.make_field tr fi in
-          fi.jc_field_info_type, fr, JCLderef(tls, get_label e, fi, fr)
+          fi.fi_type, fr, JCLderef(tls, get_label e, fi, fr)
 	with Typing_error _ ->
           let t1 = term env ls in
           let fi = find_field e#pos t1#typ f false in
           let fr = Region.make_field t1#region fi in
-          fi.jc_field_info_type, fr, JCLderef_term(t1, fi)
+          fi.fi_type, fr, JCLderef_term(t1, fi)
 	end
     | JCNEat(e, lab) ->
         let t, tr, tl = location env e in
@@ -1641,20 +1641,20 @@ let rec location env e =
 let behavior env vi_result (loc, id, throws, assumes, _requires, assigns, allocates, ensures) =
   let throws,env_result =
     match throws with
-      | None -> None, (vi_result.jc_var_info_name,vi_result)::env
+      | None -> None, (vi_result.vi_name,vi_result)::env
       | Some id ->
           try
             let ei =
               StringHashtblIter.find exceptions_table id#name
             in
-            let tei = match ei.jc_exception_info_type with
+            let tei = match ei.exi_type with
               | Some tei -> tei
               | None -> typing_error id#pos
                   "exception without value"
             in
             let vi = var tei "\\result" in
-            vi.jc_var_info_final_name <- "result";
-            Some ei, (vi.jc_var_info_name,vi)::env
+            vi.vi_final_name <- "result";
+            Some ei, (vi.vi_name,vi)::env
           with Not_found ->
             typing_error id#pos
               "undeclared exception %s" id#name
@@ -1669,7 +1669,7 @@ let behavior env vi_result (loc, id, throws, assumes, _requires, assigns, alloca
          (loc, List.map
             (fun a -> let _,_,tl = location env_result a in
              (match tl#node with
-                | JCLvar vi -> vi.jc_var_info_assigned <- true
+                | JCLvar vi -> vi.vi_assigned <- true
                 | _ -> ());
              tl)
             l))
@@ -1681,27 +1681,27 @@ let behavior env vi_result (loc, id, throws, assumes, _requires, assigns, alloca
          (loc, List.map
             (fun a -> let _,_,tl = location env_result a in
              (match tl#node with
-                | JCLvar vi -> vi.jc_var_info_assigned <- true
+                | JCLvar vi -> vi.vi_assigned <- true
                 | _ -> ());
              tl)
             l))
       allocates
   in
   let b = {
-    jc_behavior_throws = throws;
-    jc_behavior_assumes = assumes;
+    b_throws = throws;
+    b_assumes = assumes;
     (*
-      jc_behavior_requires = requires;
+      b_requires = requires;
     *)
-    jc_behavior_assigns = assigns;
-    jc_behavior_allocates = allocates;
-    jc_behavior_ensures = assertion env_result ensures;
-    jc_behavior_free_ensures = Assertion.mktrue () }
+    b_assigns = assigns;
+    b_allocates = allocates;
+    b_ensures = assertion env_result ensures;
+    b_free_ensures = Assertion.mktrue () }
   in
   (*
     eprintf "lab,loc for ensures: \"%s\", %a@."
-    b.jc_behavior_ensures.jc_assertion_label
-    Loc.gen_report_position b.jc_behavior_ensures.jc_assertion_loc;
+    b.b_ensures.jc_assertion_label
+    Loc.gen_report_position b.b_ensures.jc_assertion_loc;
   *)
   (loc,id,b)
 
@@ -1723,8 +1723,8 @@ let make_unary_op loc (op : Jc_ast.unary_op) e2 =
             JCTnative (lub_numeric_types t2 t2) in
           match e2#node with
             | JCEvar v ->
-                v.jc_var_info_assigned <- true;
-                t, v.jc_var_info_region,
+                v.vi_assigned <- true;
+                t, v.vi_region,
                 assert false (* JCEincr_local(incr_op op, v) *)
             | JCEderef(e,f) ->
                 t, e2#region,
@@ -1781,10 +1781,10 @@ let coerce t1 t2 e =
 		  ~typ: real_type
 		  ~pos: e#pos
 		  (JCEapp{
-		     jc_call_fun = JClogic_fun real_of_integer;
-		     jc_call_args = [e];
-		     jc_call_region_assoc = [];
-		     jc_call_label_assoc = [];
+		     call_fun = JClogic_fun real_of_integer;
+		     call_args = [e];
+		     call_region_assoc = [];
+		     call_label_assoc = [];
 		   })
 	end
     | _ -> e
@@ -1935,30 +1935,30 @@ let rec expr env e =
           let vi =
             try List.assoc id env
 	    with Not_found -> Hashtbl.find variables_env id
-          in vi.jc_var_info_type, vi.jc_var_info_region, JCEvar vi
+          in vi.vi_type, vi.vi_region, JCEvar vi
 	with Not_found ->
           let pi =
 	    try Hashtbl.find logic_functions_env id with Not_found ->
               typing_error e#pos "unbound identifier %s" id
 	  in
           let app = {
-            jc_call_fun = JClogic_fun pi;
-            jc_call_args = [];
-            jc_call_region_assoc = [];
-            jc_call_label_assoc = [];
+            call_fun = JClogic_fun pi;
+            call_args = [];
+            call_region_assoc = [];
+            call_label_assoc = [];
           } in
 	  let ty =
-	    match pi.jc_logic_info_result_type with
+	    match pi.li_result_type with
 	      | Some r -> r
 	      | None -> assert false (* check it is a function *)
 	  in
-	  ty, Region.make_var ty pi.jc_logic_info_name, JCEapp app
+	  ty, Region.make_var ty pi.li_name, JCEapp app
 	end
 
     | JCNEderef(e1, f) ->
         let te1 = fe e1 in
         let fi = find_field e#pos te1#typ f false in
-        fi.jc_field_info_type,
+        fi.fi_type,
         Region.make_field te1#region fi,
         JCEderef(te1, fi)
     | JCNEbinary(e1, (#logical_op as op), e2) ->
@@ -1997,30 +1997,30 @@ let rec expr env e =
           let tl = try
             List.map2
               (fun (_valid,vi) e ->
-                 let ty = vi.jc_var_info_type in
+                 let ty = vi.vi_type in
                  let te = fe e in
                  if subtype te#typ ty then te
                  else
                    typing_error e#pos "type %a expected instead of %a"
                      print_type ty print_type te#typ)
-              fi.jc_fun_info_parameters args
+              fi.fun_parameters args
           with Invalid_argument _ ->
             typing_error e#pos "wrong number of arguments for %s" id
           in
-          let ty = fi.jc_fun_info_result.jc_var_info_type in
+          let ty = fi.fun_result.vi_type in
           ty,
-          Region.make_var ty fi.jc_fun_info_name,
+          Region.make_var ty fi.fun_name,
           JCEapp {
-            jc_call_fun = JCfun fi;
-            jc_call_args = tl;
-            jc_call_region_assoc = [];
-            jc_call_label_assoc = [];
+            call_fun = JCfun fi;
+            call_args = tl;
+            call_region_assoc = [];
+            call_label_assoc = [];
           }
         with Not_found -> try
 (* Yannick: no need for different rule for const logic *)
 (*           if List.length args = 0 then *)
 (*             let vi = Hashtbl.find logic_constants_env id in *)
-(*             vi.jc_var_info_type, vi.jc_var_info_region, JCEvar vi *)
+(*             vi.vi_type, vi.vi_region, JCEvar vi *)
 (*           else *)
 	  begin
             let pi = find_logic_info id in
@@ -2028,44 +2028,44 @@ let rec expr env e =
               try
                 List.map2
                   (fun vi e ->
-                     let ty = vi.jc_var_info_type in
+                     let ty = vi.vi_type in
                      let te = fe e in
                      if subtype_strict te#typ ty then te
                      else
                        typing_error e#pos
                          "type %a expected instead of %a"
                          print_type ty print_type te#typ)
-                  pi.jc_logic_info_parameters args
+                  pi.li_parameters args
               with  Invalid_argument _ ->
                 typing_error e#pos
                   "wrong number of arguments for %s" id
             in
-            let ty = match pi.jc_logic_info_result_type with
+            let ty = match pi.li_result_type with
               | None ->
                   typing_error e#pos
                     "the logic info %s is a predicate; it should be \
-used as an assertion, not as a term" pi.jc_logic_info_name
+used as an assertion, not as a term" pi.li_name
               | Some ty -> ty
             in
             let label_assoc =
-              match e#label, pi.jc_logic_info_labels, labs with
+              match e#label, pi.li_labels, labs with
                 | Some l, [lf], [] -> [lf,l]
                 | _ ->
                     try
                       List.map2
                         (fun l1 l2 -> (l1,l2))
-                        pi.jc_logic_info_labels labs
+                        pi.li_labels labs
                     with Invalid_argument _ ->
                       typing_error e#pos
                         "wrong number of labels for %s" id
             in
             let app = {
-              jc_call_fun = JClogic_fun pi;
-              jc_call_args = tl;
-              jc_call_region_assoc = [];
-              jc_call_label_assoc = label_assoc;
+              call_fun = JClogic_fun pi;
+              call_args = tl;
+              call_region_assoc = [];
+              call_label_assoc = label_assoc;
             } in
-            ty, Region.make_var ty pi.jc_logic_info_name, JCEapp app
+            ty, Region.make_var ty pi.li_name, JCEapp app
           end
         with Not_found ->
           typing_error e#pos "unbound function or logic function identifier %s" id
@@ -2101,7 +2101,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
           begin
 	    match te1#node with
               | JCEvar v ->
-                  v.jc_var_info_assigned <- true;
+                  v.vi_assigned <- true;
                   t1, te2#region, JCEassign_var(v, te2)
               | JCEderef(e, f) ->
                   t1, te2#region, JCEassign_heap(e, f, te2)
@@ -2334,13 +2334,13 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     | JCNEreturn(Some e1) ->
         let te1 = fe e1 in
         let vi = List.assoc "\\result" env in
-        if subtype te1#typ vi.jc_var_info_type then
+        if subtype te1#typ vi.vi_type then
           (unit_type,
            te1#region,
-           JCEreturn(vi.jc_var_info_type, te1))
+           JCEreturn(vi.vi_type, te1))
         else
           typing_error e#pos "type `%a' expected in return instead of `%a'"
-            print_type vi.jc_var_info_type print_type te1#typ
+            print_type vi.vi_type print_type te1#typ
     | JCNEtry(body, catches, finally) ->
         let tbody = unit_expr (fe body) in
         let tfinally = unit_expr (fe finally) in
@@ -2351,7 +2351,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
           with Not_found ->
             typing_error id#pos "undeclared exception: %s" id#name
           in
-          match ei.jc_exception_info_type with
+          match ei.exi_type with
             | Some tei ->
 		let vi = var tei v in
 		ei, Some vi, unit_expr (expr ((v, vi) :: env) cbody)
@@ -2370,7 +2370,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
           | None -> dummy_region, None
           | Some e1 ->
               let te1 = fe e1 in
-              let tei = match ei.jc_exception_info_type with
+              let tei = match ei.exi_type with
                 | Some tei -> tei
                 | None -> typing_error e#pos "this exception has no argument"
               in
@@ -2400,12 +2400,12 @@ used as an assertion, not as a term" pi.jc_logic_info_name
                 | Some t -> find_struct_info t#pos t#name
                 | None ->
                     let rec res = {
-                      jc_struct_info_params = [];
-                      jc_struct_info_name = "bottom";
-                      jc_struct_info_parent = None;
-                      jc_struct_info_hroot = res;
-                      jc_struct_info_fields = [];
-                      jc_struct_info_root = None;
+                      si_params = [];
+                      si_name = "bottom";
+                      si_parent = None;
+                      si_hroot = res;
+                      si_fields = [];
+                      si_root = None;
                     }
                     in res
               in
@@ -2543,10 +2543,10 @@ let clause env vi_result c acc =
   match c with
     | JCCrequires e ->
         { acc with
-          jc_fun_requires =
-            make_and (assertion env e) acc.jc_fun_requires; }
+          fs_requires =
+            make_and (assertion env e) acc.fs_requires; }
     | JCCdecreases(e,r) ->
-	assert (acc.jc_fun_decreases = None);
+	assert (acc.fs_decreases = None);
 	let pi = Option_misc.map
 	  (fun id ->
              let pi =
@@ -2556,14 +2556,14 @@ let clause env vi_result c acc =
 	     in pi)
 	  r
 	in
-        { acc with jc_fun_decreases = Some(term env e,pi) }
+        { acc with fs_decreases = Some(term env e,pi) }
 
     | JCCbehavior b ->
 	let (loc,id,b) = behavior env vi_result b in
 	if id = "default" then
-	  { acc with jc_fun_default_behavior = loc,id,b }
+	  { acc with fs_default_behavior = loc,id,b }
 	else
-          { acc with jc_fun_behavior = (loc,id,b)::acc.jc_fun_behavior }
+          { acc with fs_behavior = (loc,id,b)::acc.fs_behavior }
 
 let param (t,id) =
   let ty = type_type t in
@@ -2580,17 +2580,17 @@ let assertion_true = new assertion JCAtrue
 let field st root ((rep,abs), t, id, bitsize) =
   let ty = type_type t in
   incr field_tag_counter;
-  let name = st.jc_struct_info_name ^ "_" ^ id in
+  let name = st.si_name ^ "_" ^ id in
   let fi = {
-    jc_field_info_tag = !field_tag_counter;
-    jc_field_info_name = id ;
-    jc_field_info_final_name = Jc_envset.get_unique_name name;
-    jc_field_info_type = ty;
-    jc_field_info_hroot = root;
-    jc_field_info_struct = st;
-    jc_field_info_rep = rep || (not (is_pointer_type ty));
-    jc_field_info_abstract = abs;
-    jc_field_info_bitsize = bitsize;
+    fi_tag = !field_tag_counter;
+    fi_name = id ;
+    fi_final_name = Jc_envset.get_unique_name name;
+    fi_type = ty;
+    fi_hroot = root;
+    fi_struct = st;
+    fi_rep = rep || (not (is_pointer_type ty));
+    fi_abstract = abs;
+    fi_bitsize = bitsize;
   } in
   fi
 
@@ -2604,7 +2604,7 @@ let global_invariants_table = IntHashtblIter.create 17
           (None, None)
       | Some p ->
           let st = find_struct_info d.jc_pdecl_loc p in
-          (Some st.jc_struct_info_hroot, Some st)
+          (Some st.si_hroot, Some st)
   in
   let struct_info, root =
     try
@@ -2613,17 +2613,17 @@ let global_invariants_table = IntHashtblIter.create 17
         | Some x -> x
         | None -> struct_info
       in
-      struct_info.jc_struct_info_hroot <- root;
-      struct_info.jc_struct_info_parent <- par;
+      struct_info.si_hroot <- root;
+      struct_info.si_parent <- par;
       struct_info, root
     with Not_found ->
       assert false (* cannot happen, thanks to the function decl_declare *)
 (*      let rec struct_info =
-        { jc_struct_info_name = id;
-          jc_struct_info_fields = [];
-          jc_struct_info_parent = par;
-          jc_struct_info_hroot = struct_info;
-          jc_struct_info_root = None;
+        { si_name = id;
+          si_fields = [];
+          si_parent = par;
+          si_hroot = struct_info;
+          si_root = None;
         }
       in
       (* adding structure name in global environment before typing
@@ -2645,8 +2645,8 @@ let get_fundecl id =
   let fi = Hashtbl.find functions_env id in
   let param_env =
     List.map
-      (fun (_valid,v) -> (v.jc_var_info_name, v))
-      fi.jc_fun_info_parameters
+      (fun (_valid,v) -> (v.vi_name, v))
+      fi.fun_parameters
   in
   param_env, fi
 
@@ -2661,16 +2661,16 @@ let add_fundecl (ty,_loc,id,pl) =
     let param_env = List.map (fun (_,t,x) -> (t,x)) params in
     let ty = type_type ty in
     let fi = make_fun_info id ty in
-    fi.jc_fun_info_parameters <- List.map (fun (v,_,x) -> (v,x)) params;
+    fi.fun_parameters <- List.map (fun (v,_,x) -> (v,x)) params;
     Hashtbl.replace functions_env id fi;
     param_env, fi
 
 let add_logic_fundecl (ty,id,poly_args,labels,pl) =
   try
     let pi = Hashtbl.find logic_functions_env id in
-    let ty = pi.jc_logic_info_result_type in
+    let ty = pi.li_result_type in
     let param_env =
-      List.map (fun v -> v.jc_var_info_name, v) pi.jc_logic_info_parameters
+      List.map (fun v -> v.vi_name, v) pi.li_parameters
     in
     param_env, ty, pi
   with Not_found ->
@@ -2681,9 +2681,9 @@ let add_logic_fundecl (ty,id,poly_args,labels,pl) =
       | None -> make_pred id
       | Some ty -> make_logic_fun id ty
     in
-    pi.jc_logic_info_parameters <- List.map snd param_env;
-    pi.jc_logic_info_poly_args <- poly_args;
-    pi.jc_logic_info_labels <- labels;
+    pi.li_parameters <- List.map snd param_env;
+    pi.li_poly_args <- poly_args;
+    pi.li_labels <- labels;
     Hashtbl.replace logic_functions_env id pi;
     param_env, ty, pi
 
@@ -2691,7 +2691,7 @@ let add_logic_fundecl (ty,id,poly_args,labels,pl) =
 (* let add_logic_constdecl (ty, id) = *)
 (*   try *)
 (*     let vi = Hashtbl.find logic_constants_env id in *)
-(*       vi.jc_var_info_type, vi  *)
+(*       vi.vi_type, vi  *)
 (*   with Not_found -> *)
 (*     let ty = type_type ty in *)
 (*     let vi = var ~static:true ty id in *)
@@ -2703,12 +2703,12 @@ let type_range_of_term ty t =
     | JCTenum ri ->
         let mint =
           new term ~pos:t#pos ~typ:integer_type
-            (JCTconst(JCCinteger (Num.string_of_num ri.jc_enum_info_min)))
+            (JCTconst(JCCinteger (Num.string_of_num ri.ei_min)))
         in
         let mina = new assertion (JCArelation(mint,(`Ble,`Integer),t)) in
         let maxt =
           new term ~pos:t#pos ~typ:integer_type
-            (JCTconst(JCCinteger (Num.string_of_num ri.jc_enum_info_max)))
+            (JCTconst(JCCinteger (Num.string_of_num ri.ei_max)))
         in
         let maxa = new assertion (JCArelation(t,(`Ble,`Integer),maxt)) in
 	new assertion (JCAand [ mina; maxa ])
@@ -2760,11 +2760,11 @@ let type_range_of_term ty t =
     | JCPDtag(id, parent, fields, inv) ->
         (* declare structure name *)
         let rec struct_info = {
-          jc_struct_info_name = id;
-          jc_struct_info_fields = [];
-          jc_struct_info_parent = None;
-          jc_struct_info_hroot = struct_info;
-          jc_struct_info_root = None;
+          si_name = id;
+          si_fields = [];
+          si_parent = None;
+          si_hroot = struct_info;
+          si_root = None;
         } in
         Hashtbl.add structs_table id (struct_info, []);
         (* declare mutable field (if needed) *)
@@ -2775,8 +2775,8 @@ let type_range_of_term ty t =
         Hashtbl.replace structs_table id (struct_info, [])
     | JCPDvarianttype(id, _) ->
         Hashtbl.replace variants_table id {
-          jc_root_info_name = id;
-          jc_root_info_roots = [];
+          ri_name = id;
+          ri_roots = [];
         }
     | JCPDvar _
     | JCPDfun _
@@ -2795,7 +2795,7 @@ let type_range_of_term ty t =
 let rec signed_occurrences pi a =
 match a#node with
   | JCArelation _ | JCAtrue | JCAfalse -> (0,0)
-  | JCAapp app -> ((if app.jc_app_fun == pi then 1 else 0),0)
+  | JCAapp app -> ((if app.app_fun == pi then 1 else 0),0)
   | JCAquantifier (Forall, _vi, _, p) -> signed_occurrences pi p
   | JCAquantifier (Exists, _vi, _, _p) -> assert false (* TODO *)
   | JCAimplies (p1, p2) ->
@@ -2871,10 +2871,10 @@ let rec term_occurrences table t =
     term t2
   | JCTapp app ->
     begin
-      List.iter term app.jc_app_args;
+      List.iter term app.app_args;
       try
-        let li_tag = app.jc_app_fun.jc_logic_info_tag in
-        let labs = app.jc_app_label_assoc in
+        let li_tag = app.app_fun.li_tag in
+        let labs = app.app_label_assoc in
         Hashtbl.(replace table li_tag @@ labs :: find table li_tag)
       with Not_found -> ()
     end
@@ -2902,10 +2902,10 @@ let rec occurrences table a =
   | JCAtrue | JCAfalse -> ()
   | JCAapp app ->
     begin
-      List.iter term app.jc_app_args;
+      List.iter term app.app_args;
       try
-        let l = Hashtbl.find table app.jc_app_fun.jc_logic_info_tag in
-        Hashtbl.replace table app.jc_app_fun.jc_logic_info_tag (app.jc_app_label_assoc :: l)
+        let l = Hashtbl.find table app.app_fun.li_tag in
+        Hashtbl.replace table app.app_fun.li_tag (app.app_label_assoc :: l)
       with Not_found -> ()
     end
   | JCAnot a
@@ -2956,7 +2956,7 @@ let check_consistency id data =
     (fun (ABaxiom(loc,axid,labels,a)) ->
        let h = Hashtbl.create 17 in
        List.iter
-	 (fun pi -> Hashtbl.add h pi.jc_logic_info_tag [])
+	 (fun pi -> Hashtbl.add h pi.li_tag [])
 	 pis;
        occurrences h a;
        Jc_options.lprintf "@[<v 2>occurrences table for axiom %s in axiomatic %s:@\n" axid id;
@@ -2992,7 +2992,7 @@ let occurrences tags a =
 let update_axiomatic axiomatic pi =
   match axiomatic with
     | Some(id,data) ->
-	pi.jc_logic_info_axiomatic <- Some id;
+	pi.li_axiomatic <- Some id;
 	data.axiomatics_defined_ids <- pi :: data.axiomatics_defined_ids
     | None -> ()
 
@@ -3003,53 +3003,53 @@ let create_pragma_gen_frame_sub frame_or_sub loc id logic =
     try 
       find_logic_info logic
     with Not_found -> typing_error loc "logic unknown %s" logic in
-  let params1 = info.jc_logic_info_parameters in
-  let params2 = List.map (fun v -> var ~unique:true v.jc_var_info_type 
-    (v.jc_var_info_name^"_dest"))
-    info.jc_logic_info_parameters in
+  let params1 = info.li_parameters in
+  let params2 = List.map (fun v -> var ~unique:true v.vi_type 
+    (v.vi_name^"_dest"))
+    info.li_parameters in
   let pi = make_pred id in
-  pi.jc_logic_info_parameters <- params1@params2;
+  pi.li_parameters <- params1@params2;
   let label1 = LabelName { 
-    label_info_name = "L1";
-    label_info_final_name = "L1";
-    times_used = 0;
+    lab_name = "L1";
+    lab_final_name = "L1";
+    lab_times_used = 0;
   } in
   let label2 = LabelName { 
-    label_info_name = "L2";
-    label_info_final_name = "L2";
-    times_used = 0;
+    lab_name = "L2";
+    lab_final_name = "L2";
+    lab_times_used = 0;
   } in
-  pi.jc_logic_info_labels <- [label1;label2];
+  pi.li_labels <- [label1;label2];
   Hashtbl.replace logic_functions_env id pi;
   let def = 
     let params param = List.map 
-      (fun x -> new term ~pos:loc ~typ:x.jc_var_info_type (JCTvar x))
+      (fun x -> new term ~pos:loc ~typ:x.vi_type (JCTvar x))
       param in
     begin
-      match info.jc_logic_info_result_type with
+      match info.li_result_type with
         | None ->
-          let app label param = new assertion (JCAapp {jc_app_fun = info;
-                             jc_app_args = params param;
-                             jc_app_region_assoc = [];
-                             jc_app_label_assoc = 
+          let app label param = new assertion (JCAapp {app_fun = info;
+                             app_args = params param;
+                             app_region_assoc = [];
+                             app_label_assoc = 
               label_assoc loc "bug in the generation" 
-                (Some label) info.jc_logic_info_labels []
+                (Some label) info.li_labels []
                  }) in
           make_and (app label1 params1) (app label2 params2)
         | Some ty -> 
           let term label param = new term ~pos:loc ~typ:ty
-            (JCTapp {jc_app_fun = info;
-                     jc_app_args = params param;
-                     jc_app_region_assoc = [];
-                     jc_app_label_assoc = 
+            (JCTapp {app_fun = info;
+                     app_args = params param;
+                     app_region_assoc = [];
+                     app_label_assoc = 
                 label_assoc loc "bug in the generation" 
-                  (Some label) info.jc_logic_info_labels []}) in
+                  (Some label) info.li_labels []}) in
           new assertion (make_rel_bin_op loc `Beq
                            (term label1 params1) (term label2 params2))
     end in
   let def = JCAssertion def in
-  IntHashtblIter.add logic_functions_table pi.jc_logic_info_tag (pi, def);
-  Hashtbl.add pragma_gen_frame pi.jc_logic_info_tag
+  IntHashtblIter.add logic_functions_table pi.li_tag (pi, def);
+  Hashtbl.add pragma_gen_frame pi.li_tag
     (pi,info,params1,params2,frame_or_sub)
 
 
@@ -3077,7 +3077,7 @@ let create_pragma_gen_sep_logic_aux loc kind id li =
           failwith "TODO : sorry I'm lazy. But what have you done?" in
   let change_var_name = function
     |`Logic (info,restr) ->
-       let params = info.jc_logic_info_parameters in
+       let params = info.li_parameters in
        let new_params = List.map copyvar params in
        `Logic (info,restr,new_params)
     |`Pointer _ as e -> e in
@@ -3089,46 +3089,46 @@ let create_pragma_gen_sep_logic_aux loc kind id li =
   let params = List.map change_var_name params in
   let param_env = List.concat (List.map to_param params) in
   let pi = make_pred id in
-  pi.jc_logic_info_parameters <- param_env;
+  pi.li_parameters <- param_env;
   let cur_label = LabelName {
-    label_info_name = "L";
-    label_info_final_name = "L";
-    times_used = 0;
+    lab_name = "L";
+    lab_final_name = "L";
+    lab_times_used = 0;
   } in
-  pi.jc_logic_info_labels <- [cur_label];
+  pi.li_labels <- [cur_label];
   Hashtbl.replace logic_functions_env id pi;
   (* create a dumb definition with the correct effect
      which will be replace by the correcte one at the end *)
   let to_def = function
     | `Logic (info,_,params) ->
         let param = List.map
-          (fun x -> new term ~pos:loc ~typ:x.jc_var_info_type (JCTvar x))
+          (fun x -> new term ~pos:loc ~typ:x.vi_type (JCTvar x))
           params in
         new assertion begin
-          match info.jc_logic_info_result_type with
+          match info.li_result_type with
             | None ->
-                JCAapp {jc_app_fun = info;
-                        jc_app_args = param;
-                        jc_app_region_assoc = [];
-                        jc_app_label_assoc =
+                JCAapp {app_fun = info;
+                        app_args = param;
+                        app_region_assoc = [];
+                        app_label_assoc =
                     label_assoc loc "bug in the generation"
-                      (Some cur_label) info.jc_logic_info_labels []
+                      (Some cur_label) info.li_labels []
                        }
             | Some ty ->
                 let term = new term ~pos:loc
                   ~typ:ty
-                  (JCTapp {jc_app_fun = info;
-                           jc_app_args = param;
-                           jc_app_region_assoc = [];
-                           jc_app_label_assoc = []}) in
+                  (JCTapp {app_fun = info;
+                           app_args = param;
+                           app_region_assoc = [];
+                           app_label_assoc = []}) in
                 make_rel_bin_op loc `Beq term term
         end
     | `Pointer var ->
-        let t = new term ~pos:loc ~typ:var.jc_var_info_type (JCTvar var) in
+        let t = new term ~pos:loc ~typ:var.vi_type (JCTvar var) in
         new assertion (make_rel_bin_op loc `Beq t t) in
   let def = JCAssertion (make_and_list (List.map to_def params)) in
-  IntHashtblIter.add logic_functions_table pi.jc_logic_info_tag (pi, def);
-  Hashtbl.add pragma_gen_sep pi.jc_logic_info_tag
+  IntHashtblIter.add logic_functions_table pi.li_tag (pi, def);
+  Hashtbl.add pragma_gen_sep pi.li_tag
     (kind,params)
 
 
@@ -3166,7 +3166,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
 	      typing_error loc "not allowed inside axiomatic specification";
             let e = Option_misc.map (expr []) init in
             let vi = get_vardecl id in
-            IntHashtblIter.add variables_table vi.jc_var_info_tag (vi, e);
+            IntHashtblIter.add variables_table vi.vi_tag (vi, e);
 	    acc
 	  end
 	else
@@ -3181,22 +3181,22 @@ let rec decl_aux ~only_types ~axiomatic acc d =
 	      | None -> id#pos
 	    in
             let param_env, fi = get_fundecl id#name in
-            let vi = fi.jc_fun_info_result in
+            let vi = fi.fun_result in
             let s = List.fold_right
               (clause param_env vi) specs
-              { jc_fun_requires = assertion_true;
-                jc_fun_free_requires = assertion_true;
-		jc_fun_decreases = None;
-                jc_fun_default_behavior =
+              { fs_requires = assertion_true;
+                fs_free_requires = assertion_true;
+		fs_decreases = None;
+                fs_default_behavior =
 		  Loc.dummy_position ,"default", default_behavior;
-                jc_fun_behavior = [] }
+                fs_behavior = [] }
             in
 	    reset_return_label ();
             let b = Option_misc.map
 	      (unit_expr % expr (("\\result",vi)::param_env)) body
 	    in
-	    fi.jc_fun_info_has_return_label <- get_return_label ();
-            IntHashtblIter.add functions_table fi.jc_fun_info_tag (fi,loc,s,b);
+	    fi.fun_has_return_label <- get_return_label ();
+            IntHashtblIter.add functions_table fi.fun_tag (fi,loc,s,b);
 	    acc
 	  end
 	else
@@ -3212,9 +3212,9 @@ let rec decl_aux ~only_types ~axiomatic acc d =
 	        typing_error d#pos "duplicate range type `%s'" id
 	      with Not_found ->
                 let ri =
-                  { jc_enum_info_name = id;
-		    jc_enum_info_min = min;
-		    jc_enum_info_max = max;
+                  { ei_name = id;
+		    ei_min = min;
+		    ei_max = max;
                   }
                 in
                 StringHashtblIter.add enum_types_table id ri;
@@ -3243,12 +3243,12 @@ of an invariant policy";
                                       Some zero)) x in
                    let p = assertion [(x, vi)] e in
                    let pi = make_pred id#name in
-                   pi.jc_logic_info_parameters <- [vi];
-                   pi.jc_logic_info_labels <- [LabelHere];
+                   pi.li_parameters <- [vi];
+                   pi.li_labels <- [LabelHere];
                    eprintf "generating logic fun %s with one default label@."
-                     pi.jc_logic_info_name;
+                     pi.li_name;
                    IntHashtblIter.replace logic_functions_table
-                     pi.jc_logic_info_tag (pi, JCAssertion p);
+                     pi.li_tag (pi, JCAssertion p);
                    Hashtbl.replace logic_functions_env id#name pi;
                    (pi, p) :: acc)
                 []
@@ -3277,7 +3277,7 @@ of an invariant policy";
           | JCDstructtype(id,parent,fields,_) ->
           let root,struct_info = add_typedecl d (id,parent) in
           let env = List.map (field struct_info root) fields in
-          struct_info.jc_struct_info_fields <- env;
+          struct_info.si_fields <- env;
           Hashtbl.replace structs_table id (struct_info,[])
           | _ -> assert false
           ) pdecls;
@@ -3330,7 +3330,7 @@ of an invariant policy";
 	      typing_error loc "not allowed inside axiomatic specification";
             let a = assertion [] e in
             let li = make_pred id in
-            let idx = li.jc_logic_info_tag in
+            let idx = li.li_tag in
             if !Jc_common_options.inv_sem = InvArguments then
               IntHashtblIter.replace logic_functions_table
                 idx (li, JCAssertion a);
@@ -3361,7 +3361,7 @@ of an invariant policy";
         (*              else (t,mintype t#pos t#typ ty) *)
         (* 	  ) body *)
         (*         in *)
-        (*         Hashtbl.add logic_constants_table vi.jc_var_info_tag (vi, t) *)
+        (*         Hashtbl.add logic_constants_table vi.vi_tag (vi, t) *)
     | JCDlogic (None, id, poly_args, labels, pl, body) ->
 	if not only_types then
 	  begin
@@ -3406,7 +3406,7 @@ of an invariant policy";
             in
 	    update_axiomatic axiomatic pi;
             IntHashtblIter.add
-              logic_functions_table pi.jc_logic_info_tag (pi, p);
+              logic_functions_table pi.li_tag (pi, p);
 	    acc
 	  end
 	else
@@ -3440,7 +3440,7 @@ of an invariant policy";
 		    begin
 		      if pl = [] then
 			(* constant *)
-			Hashtbl.add logic_constants_table pi.jc_logic_info_tag (pi, t);
+			Hashtbl.add logic_constants_table pi.li_tag (pi, t);
 		      JCTerm t
 		    end
 		      (*
@@ -3453,7 +3453,7 @@ of an invariant policy";
             in
 	    update_axiomatic axiomatic pi;
             IntHashtblIter.add
-              logic_functions_table pi.jc_logic_info_tag (pi, t);
+              logic_functions_table pi.li_tag (pi, t);
 	    acc
 	  end
 	else
@@ -3505,7 +3505,7 @@ of an invariant policy";
               with Not_found -> raise (Identifier_Not_found logic) in
             (** TODO test that the arguments are the same *)
             Hashtbl.add pragma_gen_same
-              logic_info.jc_logic_info_tag pred_info
+              logic_info.li_tag pred_info
           end;
       acc
     | JCDaxiomatic(id,l) ->
@@ -3531,12 +3531,12 @@ let decl ~only_types d =
 let declare_struct_info d = match d#node with
   | JCDtag(id, _, parent, _, _) ->
       let rec si = {
-        jc_struct_info_params = [];
-        jc_struct_info_name = id;
-        jc_struct_info_fields = [];
-        jc_struct_info_parent = None;
-        jc_struct_info_hroot = si;
-        jc_struct_info_root = None;
+        si_params = [];
+        si_name = id;
+        si_fields = [];
+        si_parent = None;
+        si_hroot = si;
+        si_root = None;
       } in
       StringHashtblIter.add structs_table id (si, []);
       (* declare the "mutable" field (if needed) *)
@@ -3571,17 +3571,17 @@ let compute_struct_info_parent d = match d#node with
   | JCDtag(id, _, Some(parent, _), _, _) ->
       let si, _ = StringHashtblIter.find structs_table id in
       let psi = find_struct_info d#pos parent in
-      si.jc_struct_info_parent <- Some(psi, [])
+      si.si_parent <- Some(psi, [])
   | _ -> ()
 
 let fixpoint_struct_info_roots () =
   let modified = ref false in
   StringHashtblIter.iter
     (fun _ (si, _) ->
-       match si.jc_struct_info_parent with
+       match si.si_parent with
          | Some(psi, _) ->
-             if si.jc_struct_info_hroot != psi.jc_struct_info_hroot then begin
-               si.jc_struct_info_hroot <- psi.jc_struct_info_hroot;
+             if si.si_hroot != psi.si_hroot then begin
+               si.si_hroot <- psi.si_hroot;
                modified := true
              end
          | None -> ())
@@ -3592,9 +3592,9 @@ let type_variant d = match d#node with
   | JCDvariant_type(id, tags) | JCDunion_type(id,_,tags) ->
       (* declare the variant *)
       let vi = {
-        jc_root_info_name = id;
-        jc_root_info_hroots = [];
-        jc_root_info_kind =
+        ri_name = id;
+        ri_hroots = [];
+        ri_kind =
 	  (match d#node with
              | JCDvariant_type _ -> Rvariant
 	     | JCDunion_type(_,true,_) ->
@@ -3605,7 +3605,7 @@ let type_variant d = match d#node with
                  RplainUnion
 	     | _ -> assert false
 	  );
-	jc_root_info_union_size_in_bytes = 0;
+	ri_union_size_in_bytes = 0;
       } in
       StringHashtblIter.add roots_table id vi;
       (* tags *)
@@ -3619,18 +3619,18 @@ let type_variant d = match d#node with
                "undefined tag: %s" tag#name
            in
            (* the structure must be root *)
-           if st.jc_struct_info_parent <> None then
+           if st.si_parent <> None then
              typing_error tag#pos
                "the tag %s is not root" tag#name;
            (* the structure must not be used by another variant *)
-           match st.jc_struct_info_root with
+           match st.si_root with
              | None ->
                  (* update the structure variant and return the root *)
-                 st.jc_struct_info_root <- Some vi;
+                 st.si_root <- Some vi;
                  st
              | Some prev -> typing_error tag#pos
                  "tag %s is already used by type %s" tag#name
-                   prev.jc_root_info_name)
+                   prev.ri_name)
         tags
       in
       if root_is_union vi then
@@ -3638,18 +3638,18 @@ let type_variant d = match d#node with
 	  List.fold_left
 	    (fun size st -> max size (struct_size_in_bytes st)) 0 roots
 	in
-	vi.jc_root_info_union_size_in_bytes <- size
+	vi.ri_union_size_in_bytes <- size
       else ();
       (* update the variant *)
-      vi.jc_root_info_hroots <- roots
+      vi.ri_hroots <- roots
   | _ -> ()
 
 let declare_tag_fields d = match d#node with
   | JCDtag(id, _, _, fields, _inv) ->
       let struct_info, _ = StringHashtblIter.find structs_table id in
-      let root = struct_info.jc_struct_info_hroot in
+      let root = struct_info.si_hroot in
       let fields = List.map (field struct_info root) fields in
-      struct_info.jc_struct_info_fields <- fields;
+      struct_info.si_fields <- fields;
       StringHashtblIter.replace structs_table id (struct_info, [])
   | _ -> ()
 
@@ -3657,9 +3657,9 @@ let check_struct d = match d#node with
   | JCDtag(id, _, _, _, _) ->
       let loc = d#pos in
       let st = find_struct_info loc id in
-      if st.jc_struct_info_hroot.jc_struct_info_root = None then
+      if st.si_hroot.si_root = None then
         typing_error loc "the tag %s is not used by any type"
-          st.jc_struct_info_name
+          st.si_name
   | _ -> ()
 
 (* type declarations in the right order *)
@@ -3700,8 +3700,8 @@ let print_file fmt () =
     IntHashtblIter.fold
       (fun _ (finfo,_,fspec,slist) f ->
          Jc_output.JCfun_def
-           (finfo.jc_fun_info_result.jc_var_info_type,finfo.jc_fun_info_name,
-            finfo.jc_fun_info_parameters,fspec,slist)
+           (finfo.fun_result.vi_type,finfo.fun_name,
+            finfo.fun_parameters,fspec,slist)
          :: f
       ) functions_table []
   in
@@ -3709,10 +3709,10 @@ let print_file fmt () =
     IntHashtblIter.fold
       (fun _ (linfo,tora) f ->
          Jc_output.JClogic_fun_def
-           (linfo.jc_logic_info_result_type,linfo.jc_logic_info_name,
-            linfo.jc_logic_info_poly_args,
-            linfo.jc_logic_info_labels,
-            linfo.jc_logic_info_parameters, tora)
+           (linfo.li_result_type,linfo.li_name,
+            linfo.li_poly_args,
+            linfo.li_labels,
+            linfo.li_parameters, tora)
          :: f
       ) logic_functions_table []
   in
@@ -3720,7 +3720,7 @@ let print_file fmt () =
     Hashtbl.fold
       (fun _ (vi,t) f ->
          Jc_output.JClogic_const_def
-           (vi.jc_var_info_type, vi.jc_var_info_name, Option_misc.map fst t)
+           (vi.vi_type, vi.vi_name, Option_misc.map fst t)
         :: f
       ) logic_constants_table []
   in *)
@@ -3734,19 +3734,19 @@ let print_file fmt () =
     IntHashtblIter.fold
       (fun _ (vinfo,vinit) f ->
          Jc_output.JCvar_def
-           (vinfo.jc_var_info_type,vinfo.jc_var_info_name,vinit)
+           (vinfo.vi_type,vinfo.vi_name,vinit)
          :: f
       ) variables_table []
   in
   let structs =
     StringHashtblIter.fold
       (fun name (sinfo,_) f ->
-         let super = match sinfo.jc_struct_info_parent with
+         let super = match sinfo.si_parent with
            | None -> None
-           | Some(st, _) -> Some st.jc_struct_info_name
+           | Some(st, _) -> Some st.si_name
          in
          Jc_output.JCstruct_def
-           (name,super,sinfo.jc_struct_info_fields,[])
+           (name,super,sinfo.si_fields,[])
          :: f
       ) structs_table []
   in
@@ -3754,8 +3754,8 @@ let print_file fmt () =
     StringHashtblIter.fold
       (fun name vinfo f ->
         let tags =
-          List.map (fun sinfo -> sinfo.jc_struct_info_name)
-            vinfo.jc_root_info_hroots
+          List.map (fun sinfo -> sinfo.si_name)
+            vinfo.ri_hroots
         in
         Jc_output.JCvariant_type_def (name,tags)
         :: f
@@ -3765,7 +3765,7 @@ let print_file fmt () =
     StringHashtblIter.fold
       (fun name rinfo f ->
          Jc_output.JCenum_type_def
-           (name,rinfo.jc_enum_info_min,rinfo.jc_enum_info_max)
+           (name,rinfo.ei_min,rinfo.ei_max)
          :: f
       ) enum_types_table []
   in
@@ -3779,7 +3779,7 @@ let print_file fmt () =
   let global_invariants =
     IntHashtblIter.fold
       (fun _ (li, a) f ->
-         Jc_output.JCglobinv_def (li.jc_logic_info_name,a) :: f)
+         Jc_output.JCglobinv_def (li.li_name,a) :: f)
       global_invariants_table
       []
   in

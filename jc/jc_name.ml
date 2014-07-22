@@ -48,7 +48,7 @@ let bitvector_type_name = "bitvector"
 let simple_logic_type s =
   { logic_type_name = s; logic_type_args = [] }
 
-let root_type_name vi = vi.jc_root_info_name
+let root_type_name vi = vi.ri_name
 
 let struct_type_name st = root_type_name (struct_root st)
 
@@ -61,22 +61,22 @@ let alloc_class_name = function
   | JCalloc_bitvector -> bitvector_type_name
 
 let memory_class_name = function
-  | JCmem_field fi -> fi.jc_field_info_final_name
+  | JCmem_field fi -> fi.fi_final_name
   | JCmem_plain_union vi -> root_type_name vi
   | JCmem_bitvector -> bitvector_type_name
 
-let variant_alloc_table_name vi = vi.jc_root_info_name ^ "_alloc_table"
+let variant_alloc_table_name vi = vi.ri_name ^ "_alloc_table"
 
-let variant_tag_table_name vi = vi.jc_root_info_name ^ "_tag_table"
+let variant_tag_table_name vi = vi.ri_name ^ "_tag_table"
 
-let variant_axiom_on_tags_name vi = vi.jc_root_info_name ^ "_tags"
+let variant_axiom_on_tags_name vi = vi.ri_name ^ "_tags"
 
-let axiom_int_of_tag_name st = st.jc_struct_info_name ^ "_int"
+let axiom_int_of_tag_name st = st.si_name ^ "_int"
 
-let tag_name st = st.jc_struct_info_name ^ "_tag"
+let tag_name st = st.si_name ^ "_tag"
 
 let of_pointer_address_name vi = 
-  vi.jc_root_info_name ^ "_of_pointer_address"
+  vi.ri_name ^ "_of_pointer_address"
 
 let generic_tag_table_name vi =
   (root_type_name vi) ^ "_tag_table"
@@ -99,11 +99,11 @@ let alloc_table_name (ac,r) =
     (alloc_class_name ac) ^ "_alloc_table"
 
 let field_memory_name fi = 
-  let rt = struct_root fi.jc_field_info_struct in
+  let rt = struct_root fi.fi_struct in
   if root_is_plain_union rt then
-    rt.jc_root_info_name ^ "_fields"
+    rt.ri_name ^ "_fields"
   else
-    fi.jc_field_info_final_name
+    fi.fi_final_name
 
 let field_region_memory_name (fi,r) = 
   if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
@@ -112,7 +112,7 @@ let field_region_memory_name (fi,r) =
   else field_memory_name fi
 
 let union_memory_name vi =
-  vi.jc_root_info_name ^ "_fields"
+  vi.ri_name ^ "_fields"
 
 let union_region_memory_name (vi,r) = 
   if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
@@ -127,7 +127,7 @@ let bitvector_region_memory_name r =
   else bitvector_type_name
 
 let union_memory_type_name vi = 
-  vi.jc_root_info_name ^ "_union"
+  vi.ri_name ^ "_union"
 
 let generic_memory_name mc =
   memory_class_name mc
@@ -141,10 +141,10 @@ let memory_name (mc,r) =
 let pointer_class_name = function
   | JCtag(st, _) -> 
       if struct_of_union st then
-	"root_" ^ (struct_root st).jc_root_info_name
+	"root_" ^ (struct_root st).ri_name
       else
-	"struct_" ^ st.jc_struct_info_name
-  | JCroot vi -> "root_" ^ vi.jc_root_info_name
+	"struct_" ^ st.si_name
+  | JCroot vi -> "root_" ^ vi.ri_name
 
 let valid_pred_name ~equal ~left ~right ac pc = 
   let prefix = match ac with
@@ -221,7 +221,7 @@ let jessie_return_variable = "return"
 let jessie_return_exception = "Return"
 
 let exception_name ei =
-  ei.jc_exception_info_name ^ "_exc"
+  ei.exi_name ^ "_exc"
 
 let mutable_name pc =
   "mutable_"^(pointer_class_type_name pc)

@@ -56,9 +56,9 @@
     | "Post" -> LabelPost
     | _ -> 
 	LabelName { 
-	  label_info_name = s; 
-	  label_info_final_name = s;
-	  times_used = 0;
+	  lab_name = s; 
+	  lab_final_name = s;
+	  lab_times_used = 0;
 	}
 
   let lparams =

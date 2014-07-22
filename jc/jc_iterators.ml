@@ -385,7 +385,7 @@ let rec subst_term (subst : term_subst) t =
     | JCTrange_cast(t1,ei) -> JCTrange_cast(f t1,ei)
     | JCTreal_cast(t1,rconv) -> JCTreal_cast(f t1,rconv)
     | JCTapp app -> 
-        JCTapp({app with jc_app_args = List.map f app.jc_app_args})
+        JCTapp({app with app_args = List.map f app.app_args})
     | JCTif(t1,t2,t3) -> JCTif(f t1, f t2, f t3)
     | JCTlet(_vi,_t1,_t2) -> 
         assert false (* TODO, beware of variable capture *)
@@ -412,7 +412,7 @@ module TermAst = struct
       | JCTrange(None,Some t1) ->
 	  [t1]
       | JCTapp app ->
-	  app.jc_app_args 
+	  app.app_args 
       | JCTif(t1,t2,t3) ->
 	  [t1;t2;t3]
       | JCTmatch(t, ptl) ->
@@ -451,7 +451,7 @@ let fold_sub_term it f acc t =
     | JCTat(t1,_) ->
 	it acc t1
     | JCTapp app ->
-	let tl = app.jc_app_args in
+	let tl = app.app_args in
 	List.fold_left it acc tl
     | JCTif(t1,t2,t3) ->
 	let acc = it acc t1 in
@@ -488,8 +488,8 @@ let rec map_term f t =
     | JCTderef(t1,lab,fi) ->
 	JCTderef(map_term f t1,lab,fi)
     | JCTapp app ->
-	let tl = app.jc_app_args in
-	JCTapp { app with jc_app_args = List.map (map_term f) tl; }
+	let tl = app.app_args in
+	JCTapp { app with app_args = List.map (map_term f) tl; }
     | JCTold t ->
 	JCTold(map_term f t)
     | JCTat(t,lab) ->
@@ -546,7 +546,7 @@ let rec iter_term_and_assertion ft fa a =
 	(* ITerm.iter *) iter_term ft t1;
 	(* ITerm.iter *) iter_term ft t2
     | JCAapp app ->
-	List.iter (iter_term ft) app.jc_app_args
+	List.iter (iter_term ft) app.app_args
     | JCAfresh t1
     | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
 	iter_term ft t1
@@ -577,20 +577,20 @@ let rec iter_term_and_assertion ft fa a =
 (*
 let iter_term_and_assertion_in_loop_annot ft fa la =
   List.iter (fun (_behav,inv) ->
-	       iter_term_and_assertion ft fa inv) la.jc_loop_invariant;
-  iter_term_and_assertion ft fa la.jc_free_loop_invariant;
-  Option_misc.iter (ITerm.iter ft) la.jc_loop_variant
+	       iter_term_and_assertion ft fa inv) la.loop_invariant;
+  iter_term_and_assertion ft fa la.loop_free_invariant;
+  Option_misc.iter (ITerm.iter ft) la.loop_variant
 
 let iter_term_and_assertion_in_behavior ft fa bv =
-  Option_misc.iter (iter_term_and_assertion ft fa) bv.jc_behavior_assumes;
+  Option_misc.iter (iter_term_and_assertion ft fa) bv.b_assumes;
   (* TODO: assigns *)
-  iter_term_and_assertion ft fa bv.jc_behavior_ensures;
-  iter_term_and_assertion ft fa bv.jc_behavior_free_ensures
+  iter_term_and_assertion ft fa bv.b_ensures;
+  iter_term_and_assertion ft fa bv.b_free_ensures
 
 let iter_term_and_assertion_in_fun_spec ft fa spec =
-  iter_term_and_assertion ft fa spec.jc_fun_requires;
+  iter_term_and_assertion ft fa spec.fs_requires;
   List.iter (fun (_,_,bv) -> iter_term_and_assertion_in_behavior ft fa bv)
-    (spec.jc_fun_default_behavior :: spec.jc_fun_behavior)
+    (spec.fs_default_behavior :: spec.fs_behavior)
 
 let rec fold_assertion f acc a =
   let acc = f acc a in
@@ -639,7 +639,7 @@ let rec fold_term_in_assertion f acc a =
 	let acc = fold_term f acc t1 in
 	fold_term f acc t2
     | JCAapp app ->
-	List.fold_left (fold_term f) acc app.jc_app_args
+	List.fold_left (fold_term f) acc app.app_args
     | JCAfresh t1
     | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
 	fold_term f acc t1
@@ -672,7 +672,7 @@ let rec fold_term_in_assertion f acc a =
 (* 	let acc = fold_term ft acc t1 in *)
 (* 	fold_term ft acc t2 *)
 (*     | JCAapp app -> *)
-(* 	List.fold_left (fold_term ft) acc app.jc_app_args *)
+(* 	List.fold_left (fold_term ft) acc app.app_args *)
 (*     | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) -> *)
 (* 	fold_term ft acc t1 *)
 (*     | JCAand al | JCAor al -> *)
@@ -704,7 +704,7 @@ let rec fold_sub_term_and_assertion itt ita ft fa acc a =
 	let acc = itt ft acc t1 in
 	itt ft acc t2
     | JCAapp app ->
-	List.fold_left (itt ft) acc app.jc_app_args
+	List.fold_left (itt ft) acc app.app_args
     | JCAfresh t1
     | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
 	itt ft acc t1
@@ -809,14 +809,14 @@ let iter_location ft fl fls loc =
 
 let fold_sub_behavior _itt ita itl _itls ft fa fl fls acc b =
   let ita = ita ft fa and itl = itl ft fl fls in
-  let acc = Option_misc.fold_left ita acc b.jc_behavior_assumes in
+  let acc = Option_misc.fold_left ita acc b.b_assumes in
   let acc =
     Option_misc.fold_left
       (fun acc (_,locs) -> List.fold_left itl acc locs)
-      acc b.jc_behavior_assigns
+      acc b.b_assigns
   in
-  let acc = ita acc b.jc_behavior_ensures in
-  ita acc b.jc_behavior_free_ensures
+  let acc = ita acc b.b_ensures in
+  ita acc b.b_free_ensures
 
 let rec fold_behavior ft fa fl fls acc e =
   fold_sub_behavior 
@@ -839,11 +839,11 @@ let iter_behavior ft fa fl fls b =
 
 let fold_sub_funspec itb _itt ita _itl _itls ft fa fl fls acc spec =
   let ita = ita ft fa and itb = itb ft fa fl fls in
-  let acc = ita acc spec.jc_fun_requires in
-  let acc = ita acc spec.jc_fun_free_requires in
+  let acc = ita acc spec.fs_requires in
+  let acc = ita acc spec.fs_free_requires in
   List.fold_left
     (fun acc (_pos,_id,behav) -> itb acc behav)
-    acc (spec.jc_fun_default_behavior :: spec.jc_fun_behavior)
+    acc (spec.fs_default_behavior :: spec.fs_behavior)
 
 let fold_funspec ft fa fl fls acc spec =
   fold_sub_funspec 
@@ -915,7 +915,7 @@ let rec map_term_in_assertion f a =
     | JCArelation(t1,op,t2) -> 
 	JCArelation(map_term f t1,op,map_term f t2)
     | JCAapp app ->
-	JCAapp { app with jc_app_args = List.map (map_term f) app.jc_app_args }
+	JCAapp { app with app_args = List.map (map_term f) app.app_args }
     | JCAinstanceof(t1,lab,st) ->
 	JCAinstanceof(map_term f t1,lab,st)
     | JCAbool_term t1 ->
@@ -972,7 +972,7 @@ let rec map_term_and_assertion fa ft a =
     | JCArelation (t1, op, t2) -> 
       JCArelation (map_term ft t1, op, map_term ft t2)
     | JCAapp app ->
-      JCAapp { app with jc_app_args = List.map (map_term ft) app.jc_app_args }
+      JCAapp { app with app_args = List.map (map_term ft) app.app_args }
     | JCAinstanceof (t1, lab, st) ->
       JCAinstanceof (map_term ft t1, lab, st)
     | JCAbool_term t1 ->
@@ -1084,7 +1084,7 @@ let replace_sub_expr e el =
     | JCEderef(_e1,fi) ->
 	let e1 = as1 el in JCEderef(e1,fi)
     | JCEapp call ->
-	JCEapp { call with jc_call_args = el }
+	JCEapp { call with call_args = el }
     | JCEoffset(off,_e,st) ->
 	let e1 = as1 el in JCEoffset(off,e1,st)
     | JCEfresh(_e) ->
@@ -1188,7 +1188,7 @@ module ExprAst = struct
       | JCEblock el ->
           el
       | JCEapp call ->
-	  call.jc_call_args
+	  call.call_args
       | JCEtry(e1, l, e2) ->
           e1 :: List.map (fun (_, _, e) -> e) l @ [ e2 ]
       | JCEmatch(e, pel) ->
@@ -1241,7 +1241,7 @@ let fold_sub_expr_and_term_and_assertion
 	let acc = Option_misc.fold_left ite acc e1_opt in
 	ite acc e2
     | JCEapp call ->
-	List.fold_left ite acc call.jc_call_args
+	List.fold_left ite acc call.call_args
     | JCEif(e1,e2,e3) ->
 	let acc = ite acc e1 in
 	let acc = ite acc e2 in
@@ -1266,10 +1266,10 @@ let fold_sub_expr_and_term_and_assertion
 	    (fun acc (_id,inv,_assigns) -> 
 	       let acc = Option_misc.fold_left ita acc inv in
 	       acc (* TODO: fold on assigns *)
-	    ) acc la.jc_loop_behaviors
+	    ) acc la.loop_behaviors
 	in
-	let acc = ita acc la.jc_free_loop_invariant in
-	Option_misc.fold_left (fun acc (t,_) -> itt acc t) acc la.jc_loop_variant
+	let acc = ita acc la.loop_free_invariant in
+	Option_misc.fold_left (fun acc (t,_) -> itt acc t) acc la.loop_variant
     | JCEcontract(a_opt,t_opt,_v,behavs,e) ->
 	let acc = Option_misc.fold_left ita acc a_opt in
 	let acc = Option_misc.fold_left (fun acc (t,_) -> itt acc t) acc t_opt in

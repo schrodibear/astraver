@@ -42,24 +42,24 @@ end
 
 class type typed =
 object
-  method typ: jc_type
+  method typ : jc_type
 end
 
 class type labeled =
 object
-  method label: label option
-  method set_label: label option -> unit
+  method label : label option
+  method set_label : label option -> unit
 end
 
 class type marked =
 object
-  method mark: string
+  method mark : string
 end
 
 class type regioned =
 object
-  method region: region
-  method set_region: region -> unit
+  method region : region
+  method set_region : region -> unit
 end
 
 type const =
@@ -73,13 +73,13 @@ type const =
 class type identifier =
 object
   inherit positioned
-  method name: string
+  method name : string
 end
 
 class type ['a] node_positioned =
 object
   inherit positioned
-  method node: 'a
+  method node : 'a
 end
 
 (***************)
@@ -130,7 +130,7 @@ type quantifier = Forall | Exists
 type asrt_kind =
   | Aassert (* Assertion to prove *)
   | Ahint   (* Assertion to help in proofs,
-	       can be either discarded or both used and proved *)
+               can be either discarded or both used and proved *)
   | Aassume (* Assertion that can be relied on without proof *)
   | Acheck  (* Assertion to prove but which is not used after *)
 
@@ -156,7 +156,7 @@ and ppattern = ppattern_node node_positioned
 
 type 'expr pbehavior =
     Loc.position * string * identifier option * 'expr option
-    * 'expr option * (Loc.position * 'expr list) option * 
+    * 'expr option * (Loc.position * 'expr list) option *
     (Loc.position * 'expr list) option * 'expr
       (*r loc, name, throws, assumes,requires,assigns,allocates, ensures *)
 
@@ -185,7 +185,7 @@ and pexpr_node =
   | JCPEoffset of offset_kind * pexpr
   | JCPEaddress of address_kind * pexpr
       (* expression is of integer type for an absolute address, and of
-	 pointer type for a pointer address *)
+         pointer type for a pointer address *)
   | JCPEbase_block of pexpr
   | JCPEif of pexpr * pexpr * pexpr
   | JCPElet of ptype option * string * pexpr option * pexpr
@@ -202,16 +202,16 @@ and pexpr_node =
   | JCPEassert of identifier list * asrt_kind * pexpr
   | JCPEcontract of
       pexpr option * (pexpr * identifier option) option *
-	pexpr pbehavior list * pexpr
-	(* requires, decreases, behaviors, expression *)
+        pexpr pbehavior list * pexpr
+        (* requires, decreases, behaviors, expression *)
   | JCPEwhile of
       pexpr * pexpr loopbehavior list *
-	(pexpr * identifier option) option * pexpr
-	(*r condition, behaviors, variant, body *)
+        (pexpr * identifier option) option * pexpr
+        (*r condition, behaviors, variant, body *)
   | JCPEfor of
       pexpr list * pexpr * pexpr list * pexpr loopbehavior list
       * (pexpr * identifier option) option * pexpr
-	(*r inits, condition, updates, behaviors, variant, body *)
+        (*r inits, condition, updates, behaviors, variant, body *)
   | JCPEreturn of pexpr
   | JCPEbreak of string
   | JCPEcontinue of string
@@ -317,8 +317,8 @@ type nexpr_node =
   | JCNEassert of identifier list * asrt_kind * nexpr
   | JCNEcontract of
       nexpr option * (nexpr * identifier option) option *
-	nexpr pbehavior list * nexpr
-	(* requires, decreases, behaviors, expression *)
+        nexpr pbehavior list * nexpr
+        (* requires, decreases, behaviors, expression *)
   | JCNEblock of nexpr list
   | JCNEloop of nexpr loopbehavior list *
       (nexpr * identifier option) option * nexpr
@@ -371,13 +371,12 @@ object
   inherit ['node] node_positioned
 end
 
-type 'li app =
-    {
-      jc_app_fun : 'li;
-      jc_app_args : 'li term list;
-      mutable jc_app_region_assoc : (region * region) list;
-      jc_app_label_assoc : (label * label) list;
-    }
+type 'li app = {
+          app_fun          : 'li;
+          app_args         : 'li term list;
+  mutable app_region_assoc : (region * region) list;
+          app_label_assoc  : (label * label) list;
+}
 
 and 'li term_node =
   | JCTconst of const
@@ -481,44 +480,38 @@ type 'li term_or_assertion =
   | JCReads of 'li location list
   | JCInductive of (identifier * label list * 'li assertion) list
 
-type 'li loop_annot =
-    {
-      jc_loop_tag : int;
-      mutable jc_loop_behaviors :
-	(identifier list *
-	   'li assertion option *
-	   'li location list option) list;
-      mutable jc_free_loop_invariant : 'li assertion;
-      jc_loop_variant : ('li term * 'li option) option;
-    }
+type 'li loop_annot = {
+          loop_tag            : int;
+  mutable loop_behaviors      : (identifier list * 'li assertion option * 'li location list option) list;
+  mutable loop_free_invariant : 'li assertion;
+          loop_variant        : ('li term * 'li option) option;
+}
 
 
-type 'li behavior =
-    {
-      jc_behavior_throws : exception_info option ;
-      jc_behavior_assumes : 'li assertion option ;
-      jc_behavior_assigns : (Loc.position * 'li location list) option ;
-      jc_behavior_allocates : (Loc.position * 'li location list) option ;
-      mutable jc_behavior_ensures : 'li assertion;
-      (* "free" postcondition, proved by static analysis. It can be used
-	 as the postcondition of a call without being checked in the function
-	 body, if static analysis is trusted (option [-trust-ai]) *)
-      mutable jc_behavior_free_ensures : 'li assertion;
-    }
+type 'li behavior = {
+  b_throws               : exception_info option;
+  b_assumes              : 'li assertion option;
+  b_assigns              : (Loc.position * 'li location list) option;
+  b_allocates            : (Loc.position * 'li location list) option;
+  mutable b_ensures      : 'li assertion;
+  (* "free" postcondition, proved by static analysis. It can be used
+     as the postcondition of a call without being checked in the function
+     body, if static analysis is trusted (option [-trust-ai]) *)
+  mutable b_free_ensures : 'li assertion;
+}
 
-type 'li fun_spec =
-    {
-      mutable jc_fun_requires : 'li assertion;
-      (* "free" precondition, proved by static analysis. It can be used
-	 to prove the function correctness without being checked at
-	 calls, if static analysis is trusted (option [-trust-ai]) *)
-      mutable jc_fun_free_requires : 'li assertion;
-      mutable jc_fun_decreases : ('li term * 'li option) option;
-      (* special behavior without [assumes] clause, on which all annotations
-	 not specifically attached to a behavior are checked *)
-      mutable jc_fun_default_behavior : Loc.position * string * 'li behavior;
-      mutable jc_fun_behavior : (Loc.position * string * 'li behavior) list;
-    }
+type 'li fun_spec =    {
+  mutable fs_requires         : 'li assertion;
+  (* "free" precondition, proved by static analysis. It can be used
+     to prove the function correctness without being checked at
+     calls, if static analysis is trusted (option [-trust-ai]) *)
+  mutable fs_free_requires    : 'li assertion;
+  mutable fs_decreases        : ('li term * 'li option) option;
+  (* special behavior without [assumes] clause, on which all annotations
+     not specifically attached to a behavior are checked *)
+  mutable fs_default_behavior : Loc.position * string * 'li behavior;
+  mutable fs_behavior         : (Loc.position * string * 'li behavior) list;
+}
 
 
 (******************)
@@ -577,49 +570,17 @@ type ('li,'fi) expr_node =
   | JCEmatch of ('li,'fi) expr * (pattern * ('li,'fi) expr) list
   | JCEshift of ('li,'fi) expr * ('li,'fi) expr
 
-and ('li,'fi) expr = ('li,'fi) expr_node c_expr
+and ('li, 'fi) expr = ('li,'fi) expr_node c_expr
 
-and ('li,'fi) callee =
+and ('li, 'fi) callee =
     JClogic_fun of 'li | JCfun of 'fi
 
-and ('li,'fi) call =
-    {
-      jc_call_fun : ('li,'fi) callee;
-      jc_call_args : ('li,'fi) expr list;
-      mutable jc_call_region_assoc : (region * region) list;
-      jc_call_label_assoc : (label * label) list;
-    }
-
-
-(*type incr_op = Stat_inc | Stat_dec*)
-
-(* application, increment and assignment are exprs.
-   expressions (without any of the above) are not exprs anymore.
-   break, continue, goto are translated with exceptions.
-*)
-
-
-(*
-type behavior =
-    {
-      jc_behavior_throws : exception_info option ;
-      jc_behavior_assumes : assertion option ;
-(*
-      jc_behavior_requires : assertion option ;
-*)
-      jc_behavior_assigns : location list option ;
-      jc_behavior_ensures : assertion;
-    }
-*)
-
-(*
-type fun_spec =
-    {
-      jc_fun_requires : assertion;
-      jc_fun_behavior : (string * behavior) list;
-    }
-*)
-
+and ('li, 'fi) call = {
+          call_fun          : ('li, 'fi) callee;
+          call_args         : ('li, 'fi) expr list;
+  mutable call_region_assoc : (region * region) list;
+          call_label_assoc  : (label * label) list;
+}
 
 
 (*

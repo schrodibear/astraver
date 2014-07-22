@@ -182,10 +182,10 @@ let new_label_name =
     "JC_" ^ string_of_int !label_name_counter
 
 let root_name st =
-  st.jc_struct_info_hroot.jc_struct_info_name
+  st.si_hroot.si_name
 
 let field_root_name fi =
-  fi.jc_field_info_hroot.jc_struct_info_name
+  fi.fi_hroot.si_name
 
 let string_of_format f =
   match f with
@@ -202,19 +202,19 @@ let string_of_native t =
     | Tboolean -> "boolean"
     | Tstring -> "string"
 
-let print_type_var fmt v = fprintf fmt "(var_%s_%d)" v.jc_type_var_info_name v.jc_type_var_info_tag
+let print_type_var fmt v = fprintf fmt "(var_%s_%d)" v.tvi_name v.tvi_tag
 
 let rec print_type fmt t =
   match t with
     | JCTnative n -> fprintf fmt "%s" (string_of_native n)
     | JCTlogic (s,l) -> fprintf fmt "%s%a" s (Pp.print_list_delim Pp.lchevron Pp.rchevron Pp.comma print_type) l
-    | JCTenum ri -> fprintf fmt "%s" ri.jc_enum_info_name
+    | JCTenum ri -> fprintf fmt "%s" ri.ei_name
     | JCTpointer(pc, ao, bo) ->
         begin match pc with
-          | JCtag({ jc_struct_info_name = name }, [])
-          | JCroot { jc_root_info_name = name } ->
+          | JCtag({ si_name = name }, [])
+          | JCroot { ri_name = name } ->
               fprintf fmt "%s" name
-          | JCtag({ jc_struct_info_name = name }, params) ->
+          | JCtag({ si_name = name }, params) ->
               fprintf fmt "%s<%a>" name
                 (Pp.print_list Pp.comma print_type) params
         end;
@@ -248,7 +248,7 @@ let minus_one = Num.num_of_int (-1)
 
 let rec location_set_region locs =
   match locs#node with
-    | JCLSvar vi -> vi.jc_var_info_region
+    | JCLSvar vi -> vi.vi_region
     | JCLSderef(_,_,_,r) -> r
     | JCLSrange(ls,_,_) -> location_set_region ls
     | JCLSrange_term(t1,_,_) -> t1#region
@@ -315,16 +315,16 @@ let var_tag_counter = ref 0
 let var ?(unique=true) ?(static=false) ?(formal=false) ty id =
   incr var_tag_counter;
   let vi = {
-    jc_var_info_tag = !var_tag_counter;
-    jc_var_info_name = id;
-    jc_var_info_final_name =
+    vi_tag = !var_tag_counter;
+    vi_name = id;
+    vi_final_name =
       if unique then Jc_envset.get_unique_name id else id;
-    jc_var_info_region =
+    vi_region =
       if static then Region.make_const ty id else Region.make_var ty id;
-    jc_var_info_type = ty;
-    jc_var_info_formal = formal;
-    jc_var_info_assigned = false;
-    jc_var_info_static = static;
+    vi_type = ty;
+    vi_formal = formal;
+    vi_assigned = false;
+    vi_static = static;
   }
   in vi
 
@@ -332,17 +332,17 @@ let newvar ty = var ty (tmp_var_name())
 
 let newrefvar ty =
   let vi = newvar ty in
-    vi.jc_var_info_assigned <- true;
+    vi.vi_assigned <- true;
     vi
 
 let copyvar vi =
   incr var_tag_counter;
   { vi with
-    jc_var_info_tag = !var_tag_counter;
-    jc_var_info_name =
-      "__jc_" ^ (string_of_int !var_tag_counter) ^ vi.jc_var_info_name;
-    jc_var_info_final_name =
-      "__jc_" ^ (string_of_int !var_tag_counter) ^ vi.jc_var_info_final_name;
+    vi_tag = !var_tag_counter;
+    vi_name =
+      "__jc_" ^ (string_of_int !var_tag_counter) ^ vi.vi_name;
+    vi_final_name =
+      "__jc_" ^ (string_of_int !var_tag_counter) ^ vi.vi_final_name;
   }
 
 (* exceptions *)
@@ -352,9 +352,9 @@ let exception_tag_counter = ref 0
 let exception_info ty id =
   incr exception_tag_counter;
   let ei = {
-    jc_exception_info_tag = !exception_tag_counter;
-    jc_exception_info_name = id;
-    jc_exception_info_type = ty;
+    exi_tag = !exception_tag_counter;
+    exi_name = id;
+    exi_type = ty;
   }
   in ei
 
@@ -362,55 +362,55 @@ let exception_info ty id =
 (* logic functions *)
 
 let empty_effects =
-  { jc_effect_alloc_tables = AllocMap.empty;
-    jc_effect_tag_tables = TagMap.empty;
-    jc_effect_raw_memories = MemoryMap.empty;
-    jc_effect_precise_memories = LocationMap.empty;
-    jc_effect_memories = MemoryMap.empty;
-    jc_effect_globals = VarMap.empty;
-    jc_effect_locals = VarMap.empty;
-    jc_effect_mutable = StringSet.empty;
-    jc_effect_committed = StringSet.empty;
+  { e_alloc_tables = AllocMap.empty;
+    e_tag_tables = TagMap.empty;
+    e_raw_memories = MemoryMap.empty;
+    e_precise_memories = LocationMap.empty;
+    e_memories = MemoryMap.empty;
+    e_globals = VarMap.empty;
+    e_locals = VarMap.empty;
+    e_mutable = StringSet.empty;
+    e_committed = StringSet.empty;
   }
 
 let empty_logic_info =
   {
-    jc_logic_info_tag = 0;
-    jc_logic_info_name = "";
-    jc_logic_info_final_name = "";
-    jc_logic_info_result_type = None;
-    jc_logic_info_result_region = dummy_region; (* TODO *)
-    jc_logic_info_poly_args = [];
-    jc_logic_info_parameters = [];
-    jc_logic_info_param_regions = [];
-    jc_logic_info_effects = empty_effects;
-    jc_logic_info_calls = [];
+    li_tag = 0;
+    li_name = "";
+    li_final_name = "";
+    li_result_type = None;
+    li_result_region = dummy_region; (* TODO *)
+    li_poly_args = [];
+    li_parameters = [];
+    li_param_regions = [];
+    li_effects = empty_effects;
+    li_calls = [];
 (*
-    jc_logic_info_is_recursive = false;
+    li_is_recursive = false;
 *)
-    jc_logic_info_axiomatic = None;
-    jc_logic_info_labels = [];
+    li_axiomatic = None;
+    li_labels = [];
   }
 
 let logic_fun_tag_counter = ref 0
 
 let make_logic_fun name ty =
   incr logic_fun_tag_counter;
-  { jc_logic_info_tag = !logic_fun_tag_counter;
-    jc_logic_info_name = name;
-    jc_logic_info_final_name = Jc_envset.get_unique_name name;
-    jc_logic_info_result_type = Some ty;
-    jc_logic_info_result_region = Region.make_var ty name;
-    jc_logic_info_poly_args = [];
-    jc_logic_info_parameters = [];
-    jc_logic_info_param_regions = [];
-    jc_logic_info_effects = empty_effects;
-    jc_logic_info_calls = [];
+  { li_tag = !logic_fun_tag_counter;
+    li_name = name;
+    li_final_name = Jc_envset.get_unique_name name;
+    li_result_type = Some ty;
+    li_result_region = Region.make_var ty name;
+    li_poly_args = [];
+    li_parameters = [];
+    li_param_regions = [];
+    li_effects = empty_effects;
+    li_calls = [];
 (*
-    jc_logic_info_is_recursive = false;
+    li_is_recursive = false;
 *)
-    jc_logic_info_axiomatic = None;
-    jc_logic_info_labels = [];
+    li_axiomatic = None;
+    li_labels = [];
   }
 
 let any_string = make_logic_fun "any_string" string_type
@@ -418,7 +418,7 @@ let any_string = make_logic_fun "any_string" string_type
 (*
 let () =
   let vi = var ~formal:true integer_type "n" in
-  real_of_integer.jc_logic_info_parameters <- [vi]
+  real_of_integer.li_parameters <- [vi]
 *)
 
 let full_separated = make_logic_fun "full_separated" null_type
@@ -427,30 +427,30 @@ let full_separated = make_logic_fun "full_separated" null_type
 
 let make_pred name =
   incr logic_fun_tag_counter;
-  { jc_logic_info_tag = !logic_fun_tag_counter;
-    jc_logic_info_name = name;
-    jc_logic_info_final_name = Jc_envset.get_unique_name name;
-    jc_logic_info_result_type = None;
-    jc_logic_info_result_region = dummy_region;
-    jc_logic_info_poly_args = [];
-    jc_logic_info_parameters = [];
-    jc_logic_info_param_regions = [];
-    jc_logic_info_effects = empty_effects;
-    jc_logic_info_calls = [];
+  { li_tag = !logic_fun_tag_counter;
+    li_name = name;
+    li_final_name = Jc_envset.get_unique_name name;
+    li_result_type = None;
+    li_result_region = dummy_region;
+    li_poly_args = [];
+    li_parameters = [];
+    li_param_regions = [];
+    li_effects = empty_effects;
+    li_calls = [];
 (*
-    jc_logic_info_is_recursive = false;
+    li_is_recursive = false;
 *)
-    jc_logic_info_labels = [];
-    jc_logic_info_axiomatic = None;
+    li_labels = [];
+    li_axiomatic = None;
   }
 
 
 (* programs *)
 
 let empty_fun_effect =
-  { jc_reads = empty_effects;
-    jc_writes = empty_effects;
-    jc_raises = ExceptionSet.empty ;
+  { fe_reads = empty_effects;
+    fe_writes = empty_effects;
+    fe_raises = ExceptionSet.empty ;
   }
 
 let fun_tag_counter = ref 0
@@ -458,20 +458,20 @@ let fun_tag_counter = ref 0
 let make_fun_info name ty =
   incr fun_tag_counter;
   let vi = var ty "\\result" in
-  vi.jc_var_info_final_name <- "result";
-  { jc_fun_info_tag = !fun_tag_counter;
-    jc_fun_info_name = name;
-    jc_fun_info_final_name = Jc_envset.get_unique_name name;
-    jc_fun_info_builtin_treatment = TreatNothing;
-    jc_fun_info_parameters = [];
-    jc_fun_info_result = vi;
-    jc_fun_info_return_region = Region.make_var ty name;
-    jc_fun_info_has_return_label = false;
-    jc_fun_info_param_regions = [];
-    jc_fun_info_calls = [];
-    jc_fun_info_component = -1;
-    jc_fun_info_logic_apps = [];
-    jc_fun_info_effects = empty_fun_effect;
+  vi.vi_final_name <- "result";
+  { fun_tag = !fun_tag_counter;
+    fun_name = name;
+    fun_final_name = Jc_envset.get_unique_name name;
+    fun_builtin_treatment = TreatNothing;
+    fun_parameters = [];
+    fun_result = vi;
+    fun_return_region = Region.make_var ty name;
+    fun_has_return_label = false;
+    fun_param_regions = [];
+    fun_calls = [];
+    fun_component = -1;
+    fun_logic_apps = [];
+    fun_effects = empty_fun_effect;
   }
 
 
@@ -539,7 +539,7 @@ module TermOrd = struct
       | JCTconst c1,JCTconst c2 ->
 	  Pervasives.compare c1 c2
       | JCTvar v1,JCTvar v2 ->
-	  Pervasives.compare v1.jc_var_info_tag v2.jc_var_info_tag
+	  Pervasives.compare v1.vi_tag v2.vi_tag
       | JCTbinary(t11,op1,t12),JCTbinary(t21,op2,t22) ->
 	  let compop = Pervasives.compare op1 op2 in
 	  if compop = 0 then
@@ -561,14 +561,14 @@ module TermOrd = struct
 	  else compabs
       | JCTderef(t11,_,fi1),JCTderef(t21,_,fi2) ->
 	  let compfi =
-	    Pervasives.compare fi1.jc_field_info_tag fi2.jc_field_info_tag
+	    Pervasives.compare fi1.fi_tag fi2.fi_tag
 	  in
 	  if compfi = 0 then compare t11 t21 else compfi
       | JCToffset(ok1,t11,st1),JCToffset(ok2,t21,st2) ->
 	  let compok = Pervasives.compare ok1 ok2 in
 	  if compok = 0 then
 	    let compst =
-	      Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+	      Pervasives.compare st1.si_name st2.si_name
 	    in
 	    if compst = 0 then compare t11 t21 else compst
 	  else compok
@@ -576,7 +576,7 @@ module TermOrd = struct
       | JCTcast(t11,lab1,st1),JCTcast(t21,lab2,st2)
       | JCTbitwise_cast(t11,lab1,st1),JCTbitwise_cast(t21,lab2,st2) ->
 	  let compst =
-	    Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+	    Pervasives.compare st1.si_name st2.si_name
 	  in
 	  if compst <> 0 then compst else
 	    let compst =
@@ -595,7 +595,7 @@ module TermOrd = struct
       | JCTrange_cast(_, None), JCTrange_cast(_, Some _) -> -1
       | JCTrange_cast(t11, Some ri1),JCTrange_cast(t21, Some ri2) ->
 	  let comp =
-	    Pervasives.compare ri1.jc_enum_info_name ri2.jc_enum_info_name
+	    Pervasives.compare ri1.ei_name ri2.ei_name
 	  in
 	  if comp <> 0 then comp else
 	    compare t11 t21
@@ -605,10 +605,10 @@ module TermOrd = struct
 	    option_compare compare t12opt t22opt
 	  else comp1
       | JCTapp app1,JCTapp app2 ->
-	  let li1 = app1.jc_app_fun and ts1 = app1.jc_app_args in
-	  let li2 = app2.jc_app_fun and ts2 = app2.jc_app_args in
+	  let li1 = app1.app_fun and ts1 = app1.app_args in
+	  let li2 = app2.app_fun and ts2 = app2.app_args in
 	  let compli =
-	    Pervasives.compare li1.jc_logic_info_tag li2.jc_logic_info_tag
+	    Pervasives.compare li1.li_tag li2.li_tag
 	  in
 	  if compli = 0 then
 	    list_compare compare ts1 ts2
@@ -640,7 +640,7 @@ module TermOrd = struct
       | JCTconst c1 ->
 	  Hashtbl.hash c1
       | JCTvar v1 ->
-	  Hashtbl.hash v1.jc_var_info_tag
+	  Hashtbl.hash v1.vi_tag
       | JCTbinary(t11,op1,t12) ->
 	  Hashtbl.hash op1 * hash t11 * hash t12
       | JCTshift(t11,t12) ->
@@ -652,10 +652,10 @@ module TermOrd = struct
       | JCTaddress(absolute1,t11) ->
 	  Hashtbl.hash absolute1 * hash t11
       | JCTderef(t11,_,fi1) ->
-	  Hashtbl.hash fi1.jc_field_info_tag * hash t11
+	  Hashtbl.hash fi1.fi_tag * hash t11
       | JCToffset(ok1,t11,st1) ->
 	  Hashtbl.hash ok1 * hash t11
-	  * Hashtbl.hash st1.jc_struct_info_name
+	  * Hashtbl.hash st1.si_name
       | JCTinstanceof(t11,_,_)
       | JCTcast(t11,_,_)
       | JCTbase_block(t11)
@@ -668,10 +668,10 @@ module TermOrd = struct
 	  Option_misc.map_default hash 1 t11opt
 	  * Option_misc.map_default hash 1 t12opt
       | JCTapp app1 ->
-	  let li1 = app1.jc_app_fun and ts1 = app1.jc_app_args in
+	  let li1 = app1.app_fun and ts1 = app1.app_args in
 	  List.fold_left
 	    (fun h arg -> h * hash arg)
-	    (Hashtbl.hash li1.jc_logic_info_tag) ts1
+	    (Hashtbl.hash li1.li_tag) ts1
       | JCTif(t11,t12,t13) ->
 	  hash t11 * hash t12 * hash t13
       | JCTmatch (_, _) -> assert false (* TODO *)
@@ -694,11 +694,11 @@ let tag_num tag = match tag#node with
 let raw_tag_compare tag1 tag2 =
   match tag1#node,tag2#node with
     | JCTtag st1,JCTtag st2 ->
-        Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+        Pervasives.compare st1.si_name st2.si_name
     | JCTbottom,JCTbottom -> 0
     | JCTtypeof(t1,st1),JCTtypeof(t2,st2) ->
         let compst =
-	  Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+	  Pervasives.compare st1.si_name st2.si_name
         in
         if compst = 0 then TermOrd.compare t1 t2 else compst
   | _ -> tag_num tag2 - tag_num tag1
@@ -707,10 +707,10 @@ let raw_tag_compare tag1 tag2 =
 
 module EnumInfo = struct
     let equal ?(by_name=true) ei1 ei2 =
-      String.compare ei1.jc_enum_info_name ei2.jc_enum_info_name = 0 &&
+      String.compare ei1.ei_name ei2.ei_name = 0 &&
       (by_name ||
-        ei1.jc_enum_info_min =/ ei2.jc_enum_info_min &&
-        ei1.jc_enum_info_max =/ ei2.jc_enum_info_max)
+        ei1.ei_min =/ ei2.ei_min &&
+        ei1.ei_max =/ ei2.ei_max)
     let (=) = equal ~by_name:true
 end
 
@@ -760,14 +760,14 @@ module AssertionOrd = struct
       | JCAnot a1,JCAnot a2 | JCAold a1,JCAold a2 ->
           compare a1 a2
       | JCAapp app1, JCAapp app2 ->
-	  let li1 = app1.jc_app_fun in
-	  let li2 = app2.jc_app_fun in
+	  let li1 = app1.app_fun in
+	  let li2 = app2.app_fun in
           let compli =
-	    Pervasives.compare li1.jc_logic_info_tag li2.jc_logic_info_tag
+	    Pervasives.compare li1.li_tag li2.li_tag
           in
           if compli = 0 then
-	    let tls1 = app1.jc_app_args in
-	    let tls2 = app2.jc_app_args in
+	    let tls1 = app1.app_args in
+	    let tls2 = app2.app_args in
   	    list_compare TermOrd.compare tls1 tls2
           else compli
       | JCAquantifier(q1,vi1,trigs1,a1),JCAquantifier(q2,vi2,trigs2,a2) ->
@@ -783,7 +783,7 @@ module AssertionOrd = struct
           else compq
       | JCAinstanceof(t1,_,st1),JCAinstanceof(t2,_,st2) ->
           let compst =
-	    Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+	    Pervasives.compare st1.si_name st2.si_name
           in
           if compst = 0 then TermOrd.compare t1 t2 else compst
       | JCAbool_term t1,JCAbool_term t2 ->
@@ -796,7 +796,7 @@ module AssertionOrd = struct
           else comp0
       | JCAmutable(t1,st1,tag1),JCAmutable(t2,st2,tag2) ->
           let compst =
-	    Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+	    Pervasives.compare st1.si_name st2.si_name
           in
           if compst = 0 then
 	    let comptag = raw_tag_compare tag1 tag2 in
@@ -865,23 +865,23 @@ let rec is_constant_assertion a =
 (* fun specs *)
 
 let default_behavior = {
-  jc_behavior_throws = None;
-  jc_behavior_assumes = None;
-  jc_behavior_assigns = None;
-  jc_behavior_allocates = None;
-  jc_behavior_ensures = new assertion JCAtrue;
-  jc_behavior_free_ensures = new assertion JCAtrue;
+  b_throws = None;
+  b_assumes = None;
+  b_assigns = None;
+  b_allocates = None;
+  b_ensures = new assertion JCAtrue;
+  b_free_ensures = new assertion JCAtrue;
 }
 
 let contains_normal_behavior fs =
   List.exists
-    (fun (_, _, b) -> b.jc_behavior_throws = None)
-    (fs.jc_fun_default_behavior :: fs.jc_fun_behavior)
+    (fun (_, _, b) -> b.b_throws = None)
+    (fs.fs_default_behavior :: fs.fs_behavior)
 
 let contains_exceptional_behavior fs =
   List.exists
-    (fun (_, _, b) -> b.jc_behavior_throws <> None)
-    (fs.jc_fun_default_behavior :: fs.jc_fun_behavior)
+    (fun (_, _, b) -> b.b_throws <> None)
+    (fs.fs_default_behavior :: fs.fs_behavior)
 
 let is_purely_exceptional_fun fs =
   not (contains_normal_behavior fs) &&
@@ -908,25 +908,25 @@ let select_option opt default = match opt with Some v -> v | None -> default
 let direct_embedded_struct_fields st =
   List.fold_left
     (fun acc fi ->
-      match fi.jc_field_info_type with
+      match fi.fi_type with
 	| JCTpointer(JCtag st', Some _, Some _) ->
-	    assert (st.jc_struct_info_name <> st'.jc_struct_info_name);
+	    assert (st.si_name <> st'.si_name);
 	    fi :: acc
 	| JCTpointer(JCvariant st', Some _, Some _) ->
 	    assert false (* TODO *)
 	| _ -> acc
-    ) [] st.jc_struct_info_fields
+    ) [] st.si_fields
 
 let embedded_struct_fields st =
   let rec collect forbidden_set st =
-    let forbidden_set = StringSet.add st.jc_struct_info_name forbidden_set in
+    let forbidden_set = StringSet.add st.si_name forbidden_set in
     let fields = direct_embedded_struct_fields st in
     let fstructs =
       List.fold_left
-	(fun acc fi -> match fi.jc_field_info_type with
+	(fun acc fi -> match fi.fi_type with
 	  | JCTpointer (JCtag st', Some _, Some _) ->
 	      assert
-		(not (StringSet.mem st'.jc_struct_info_name forbidden_set));
+		(not (StringSet.mem st'.si_name forbidden_set));
 	      st' :: acc
 	   | JCTpointer (JCvariant vi, Some _, Some _) ->
 	       assert false (* TODO *)
@@ -936,19 +936,19 @@ let embedded_struct_fields st =
     in
     fields @ List.flatten (List.map (collect forbidden_set) fstructs)
   in
-  let fields = collect (StringSet.singleton st.jc_struct_info_name) st in
+  let fields = collect (StringSet.singleton st.si_name) st in
   let fields =
     List.fold_left (fun acc fi -> FieldSet.add fi acc) FieldSet.empty fields
   in
   FieldSet.elements fields
 *)
 let field_sinfo fi =
-  match fi.jc_field_info_type with
+  match fi.fi_type with
     | JCTpointer(JCtag(st, _), _, _) -> st
     | _ -> assert false
 
 let field_bounds fi =
-  match fi.jc_field_info_type with
+  match fi.fi_type with
     | JCTpointer(_,Some a,Some b) -> a,b | _ -> assert false
 
 let pointer_struct = function
@@ -982,13 +982,13 @@ let embedded_struct_roots st =
   StringSet.elements roots
 *)
 let struct_root st =
-  match st.jc_struct_info_hroot.jc_struct_info_root with
+  match st.si_hroot.si_root with
     | Some vi -> vi
     | None ->
 	raise (Invalid_argument
 		 ("struct_root in jc_pervasives.ml ("
-		  ^st.jc_struct_info_name^", "
-		  ^st.jc_struct_info_hroot.jc_struct_info_name^")"))
+		  ^st.si_name^", "
+		  ^st.si_hroot.si_name^")"))
 	(* don't use struct_root before checking that every tag is used
          * in a type *)
 
@@ -1003,29 +1003,29 @@ let rec pattern_vars acc pat =
 	  (fun acc (_, pat) -> pattern_vars acc pat)
 	  acc fpl
     | JCPvar vi ->
-	StringMap.add vi.jc_var_info_name vi acc
+	StringMap.add vi.vi_name vi acc
     | JCPor(pat, _) ->
 	pattern_vars acc pat
     | JCPas(pat, vi) ->
-	pattern_vars (StringMap.add vi.jc_var_info_name vi acc) pat
+	pattern_vars (StringMap.add vi.vi_name vi acc) pat
     | JCPany | JCPconst _ ->
 	acc
 
-let root_is_plain_union rt = rt.jc_root_info_kind = RplainUnion
-let root_is_discr_union rt = rt.jc_root_info_kind = RdiscrUnion
+let root_is_plain_union rt = rt.ri_kind = RplainUnion
+let root_is_discr_union rt = rt.ri_kind = RdiscrUnion
 let root_is_union rt = root_is_plain_union rt || root_is_discr_union rt
 
 let struct_of_plain_union st =
-  let vi = struct_root st in vi.jc_root_info_kind = RplainUnion
+  let vi = struct_root st in vi.ri_kind = RplainUnion
 
 let struct_of_discr_union st =
-  let vi = struct_root st in vi.jc_root_info_kind = RdiscrUnion
+  let vi = struct_root st in vi.ri_kind = RdiscrUnion
 
 let struct_of_union st =
   let vi = struct_root st in root_is_union vi
 
 let union_of_field fi =
-  let st = fi.jc_field_info_struct in
+  let st = fi.fi_struct in
   let vi = struct_root st in
   assert (root_is_union vi);
   vi
@@ -1033,24 +1033,24 @@ let union_of_field fi =
 let integral_union vi =
   assert (root_is_union vi);
   List.fold_left (fun acc st -> acc &&
-		    match st.jc_struct_info_fields with
-		      | [fi] -> is_integral_type fi.jc_field_info_type
+		    match st.si_fields with
+		      | [fi] -> is_integral_type fi.fi_type
 		      | _ -> false
-		 ) true vi.jc_root_info_hroots
+		 ) true vi.ri_hroots
 
 let struct_has_bytesize st =
   List.fold_left
     (fun acc fi -> acc &&
-       match fi.jc_field_info_bitsize with None -> false | Some _ -> true)
-    true st.jc_struct_info_fields
+       match fi.fi_bitsize with None -> false | Some _ -> true)
+    true st.si_fields
 
 let struct_bitsize st =
   List.fold_left
     (fun acc fi ->
-       match fi.jc_field_info_bitsize with
+       match fi.fi_bitsize with
 	 | Some x -> acc + x
 	 | None -> assert false)
-    0 st.jc_struct_info_fields
+    0 st.si_fields
 
 let struct_bytesize st =
   struct_bitsize st / 8

@@ -40,296 +40,234 @@ open Jc_fenv
 
 open Jc_constructors
 open Jc_pervasives
-(*
-open Jc_iterators
-*)
 
 open Format
 open Pp
 
-let current_logic_component = ref None
-let set_current_logic_component comp = current_logic_component := Some comp
-let reset_current_logic_component () = current_logic_component := None
-let in_current_logic_component f1 =
-  match !current_logic_component with
-    | None -> false
-    | Some comp ->
-	List.exists
-	  (fun f2 -> f1.jc_logic_info_tag = f2.jc_logic_info_tag) comp
+let in_logic_component f = List.exists (Logic_info.equal f)
 
-let current_component = ref None
-let set_current_component comp = current_component := Some comp
-let reset_current_component () = current_component := None
-let in_current_component f1 =
-  match !current_component with
-    | None -> false
-    | Some comp ->
-	List.exists
-	  (fun f2 -> f1.jc_fun_info_tag = f2.jc_fun_info_tag) comp
+let in_component f = List.exists (Fun_info.equal f)
 
-let single_term rresult t =
+let call_regions ~pos app in_current_comp param_regions result_region params =
+  let arg_regions =
+    List.map
+      (fun x -> x#region) @@
+       match app with
+       | `App app -> (app.app_args :> regioned list)
+       | `Call call -> (call.call_args :> regioned list)
+  in
+  if in_current_comp then
+    (* No generalization here, plain unification *)
+    result_region, List.map (fun vi -> vi.vi_region) params, arg_regions
+  else
+    (* Apply generalization before unification *)
+    let assoc = RegionList.duplicate param_regions in
+    begin match app with
+    | `App  app  -> app.app_region_assoc <- assoc
+    | `Call call -> call.call_region_assoc <- assoc
+    end;
+    let assoc r =
+      try
+        if not (is_dummy_region r) then RegionList.assoc r assoc
+                                   else dummy_region
+      with
+      | Not_found ->
+        Jc_options.jc_error
+          pos
+          "Unable to complete region analysis, aborting. Consider using #pragma SeparationPolicy(none)"
+    in
+    let param_regions = List.map (fun vi -> assoc vi.vi_region) params in
+    assoc result_region, param_regions, arg_regions
+
+let single_term comp result_region t =
   match t#node with
-       | JCTvar vi ->
-	   if vi.jc_var_info_name = "\\result" then
-	     Region.unify rresult vi.jc_var_info_region
-       | JCTbinary(t1,(_,`Pointer),t2) | JCTif(_,t1,t2) ->
-	   Region.unify t1#region t2#region
-       | JCTmatch(_, (_, t1)::rem) ->
-	   List.iter
-	     (fun (_, t2) -> Region.unify t1#region t2#region)
-	     rem
-       | JCTmatch(_, []) ->
-	   ()
-       | JCTlet (vi, t, _) -> Region.unify vi.jc_var_info_region t#region
-       | JCTapp app ->
-	   let li = app.jc_app_fun in
-	   let param_regions,result_region =
-	     if in_current_logic_component li then
-	       (* No generalization here, plain unification *)
-	       List.map (fun vi -> vi.jc_var_info_region)
-		 li.jc_logic_info_parameters,
-	     li.jc_logic_info_result_region
-	     else
-	       (* Apply generalization before unification *)
-	       let regions = li.jc_logic_info_param_regions in
-	       let assoc = RegionList.duplicate regions in
-	       app.jc_app_region_assoc <- assoc;
-	       let param_regions =
-		 List.map
-                   (fun vi ->
-		      if is_dummy_region vi.jc_var_info_region then dummy_region else
-			try RegionList.assoc vi.jc_var_info_region assoc
-			with Not_found ->
-                   	  Jc_options.jc_error t#pos "Unable to complete region analysis, aborting. Consider using #pragma SeparationPolicy(none)";
-)
-		   li.jc_logic_info_parameters
-	       in
-	       let result_region =
-		 try RegionList.assoc li.jc_logic_info_result_region assoc
-		 with Not_found -> assert false
-	       in
-	       param_regions,result_region
-	   in
-	   let arg_regions =
-	     List.map (fun t -> t#region) app.jc_app_args
-	   in
-	   Jc_options.lprintf "param:%a@." (print_list comma Region.print) param_regions;
-	   Jc_options.lprintf "arg:%a@." (print_list comma Region.print) arg_regions;
-	   List.iter2 Region.unify param_regions arg_regions;
-	   Jc_options.lprintf "param:%a@." Region.print result_region;
-	   Jc_options.lprintf "arg:%a@." Region.print t#region;
-	   Region.unify result_region t#region
-       | JCTconst _ | JCTrange(None,None) | JCTbinary _ | JCTshift _
-       | JCTrange _ | JCTunary _ | JCTderef _ | JCTold _ | JCTat _
-       | JCToffset _ | JCTbase_block _
-       | JCTaddress _ | JCTinstanceof _ | JCTcast _ | JCTbitwise_cast _
-       | JCTrange_cast _ | JCTreal_cast _ ->
-	   ()
+  | JCTvar { vi_name = "\\result"; vi_region = r } ->
+    Region.unify result_region r
+  | JCTvar _ -> ()
+  | JCTbinary (t1, (_, `Pointer), t2) | JCTif (_, t1, t2) ->
+    Region.unify t1#region t2#region
+  | JCTmatch (_, (_, t1) :: rem) ->
+    List.iter (fun (_, t2) -> Region.unify t1#region t2#region) rem
+  | JCTmatch (_, []) -> ()
+  | JCTlet (vi, t, _) -> Region.unify vi.vi_region t#region
+  | JCTapp app ->
+    let li = app.app_fun in
+    let result_region, param_regions, arg_regions =
+      call_regions
+        ~pos:t#pos
+        (`App app)
+        (in_logic_component li comp)
+        li.li_param_regions
+        result_region
+        li.li_parameters
+    in
+    List.iter2 Region.unify param_regions arg_regions;
+    Region.unify result_region t#region
+  | JCTconst _ | JCTrange (None, None) | JCTbinary _     | JCTshift _
+  | JCTrange _ | JCTunary _            | JCTderef _      | JCTold _
+  | JCTat _    | JCToffset _           | JCTbase_block _
+  | JCTaddress _                       | JCTinstanceof _
+  | JCTcast _  | JCTbitwise_cast _     | JCTrange_cast _ | JCTreal_cast _ ->
+    ()
 
-let term rresult t = Jc_iterators.iter_term (single_term rresult) t
+let term comp result_region = Jc_iterators.iter_term (single_term comp result_region)
 
-let single_assertion _rresult a =
+let single_assertion comp a =
   match a#node with
-    | JCArelation(t1,(_,`Pointer),t2) ->
-	Region.unify t1#region t2#region
-    | JCArelation _ -> ()
-    | JCAapp app ->
-	let li = app.jc_app_fun in
-	let param_regions =
-	  if in_current_logic_component li then
-	    (* No generalization here, plain unification *)
-	    List.map (fun vi -> vi.jc_var_info_region)
-	      li.jc_logic_info_parameters
-	  else
-	    (* Apply generalization before unification *)
-	    let regions = li.jc_logic_info_param_regions in
-	    let assoc = RegionList.duplicate regions in
-	    app.jc_app_region_assoc <- assoc;
-	    List.map (fun vi ->
-			if is_dummy_region vi.jc_var_info_region then dummy_region else
-			  try RegionList.assoc vi.jc_var_info_region assoc
-			  with Not_found -> assert false)
-	      li.jc_logic_info_parameters
-	in
-	let arg_regions =
-	  List.map (fun t -> t#region) app.jc_app_args
-	in
-	Jc_options.lprintf "param:%a@." (print_list comma Region.print) param_regions;
-	Jc_options.lprintf "arg:%a@." (print_list comma Region.print) arg_regions;
-	List.iter2 Region.unify param_regions arg_regions
-    | JCAlet (vi, t, _) -> Region.unify vi.jc_var_info_region t#region
-    | JCAtrue | JCAfalse | JCAeqtype _
-    | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ | JCAfresh _
-    | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _
-    | JCAmatch _
-    | JCAnot _ | JCAquantifier _ | JCAold _ | JCAat _ | JCAsubtype _ ->
-	()
+  | JCArelation(t1, (_, `Pointer), t2) ->
+    Region.unify t1#region t2#region
+  | JCArelation _ -> ()
+  | JCAapp app ->
+    let li = app.app_fun in
+    let _, param_regions, arg_regions =
+      call_regions
+        ~pos:a#pos
+        (`App app)
+        (in_logic_component li comp)
+        li.li_param_regions
+        dummy_region
+        li.li_parameters
+    in
+    List.iter2 Region.unify param_regions arg_regions
+  | JCAlet (vi, t, _) ->
+    Region.unify vi.vi_region t#region
+  | JCAtrue         | JCAfalse       | JCAeqtype _
+  | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ | JCAfresh _
+  | JCAand _        | JCAor _        | JCAimplies _ | JCAiff _   | JCAif _
+  | JCAmatch _      | JCAnot _       | JCAquantifier _
+  | JCAold _        | JCAat _        | JCAsubtype _ ->
+    ()
 
-let assertion rresult a =
-  Jc_iterators.iter_term_and_assertion
-    (single_term rresult) (single_assertion rresult) a
+let assertion comp result_region =
+  Jc_iterators.iter_term_and_assertion (single_term comp result_region) (single_assertion comp)
 
 let single_location = ignore
 
 let single_location_set = ignore
 
-let location rresult loc =
-  Jc_iterators.iter_location
-    (single_term rresult) single_location single_location_set loc
+let location comp result_region =
+  Jc_iterators.iter_location (single_term comp result_region) single_location single_location_set
 
-let single_expr rresult e =
+let single_expr comp logic_comp result_region e =
   match e#node with
-       | JCEbinary(e1,_,e2) | JCEif(_,e1,e2) ->
-	   Region.unify e1#region e2#region
-       | JCEmatch(_, (_, e1)::rem) ->
-	   List.iter
-	     (fun (_, e2) -> Region.unify e1#region e2#region)
-	     rem
-       | JCEmatch(_, []) ->
-	   ()
-       | JCEconst _ | JCEvar _ | JCEshift _ | JCEunary _
-       | JCEderef _ | JCEoffset _ | JCEaddress _ | JCEinstanceof _ | JCEcast _ | JCEreinterpret _
-       | JCEbitwise_cast _ | JCEbase_block _ | JCEfresh _
-       | JCErange_cast _ | JCEreal_cast _ | JCEalloc _ | JCEfree _
-       | JCElet(_,None,_) ->
-	   ()
-       | JCElet(vi,Some e,_) | JCEassign_var(vi,e) ->
-	   Region.unify vi.jc_var_info_region e#region
-    | JCEassign_heap(e1,fi,e2) ->
-	let fr = Region.make_field e1#region fi in
-	Region.unify fr e2#region
-    | JCEthrow(ei,_) ->
-	begin match ei.jc_exception_info_type with None -> () | Some ty ->
-	  assert(not(is_pointer_type ty)) (* TODO *)
-	end
-    | JCEapp call ->
-(*	let f = call.jc_call_fun in*)
-	let in_current_comp = match call.jc_call_fun with
-	  | JClogic_fun _f -> false
-	  | JCfun f -> in_current_component f
-	in
-	let params = match call.jc_call_fun with
-	  | JClogic_fun f -> f.jc_logic_info_parameters
-	  | JCfun f -> List.map snd f.jc_fun_info_parameters
-	in
-	let rregion = match call.jc_call_fun with
-	  | JClogic_fun f -> f.jc_logic_info_result_region
-	  | JCfun f -> f.jc_fun_info_return_region
-	in
-	let param_regions,result_region =
-	  if in_current_comp then
-	    (* No generalization here, plain unification *)
-	    List.map (fun vi -> vi.jc_var_info_region) params,
-	    rregion
-	  else
-	    (* Apply generalization before unification *)
-	    let regions = match call.jc_call_fun with
-	      | JClogic_fun f -> f.jc_logic_info_param_regions
-	      | JCfun f -> f.jc_fun_info_param_regions
-	    in
-	    let assoc = RegionList.duplicate regions in
-	    call.jc_call_region_assoc <- assoc;
-	    let param_regions =
-	      List.map (fun vi ->
-			  if is_dummy_region vi.jc_var_info_region then dummy_region else
-			    try RegionList.assoc vi.jc_var_info_region assoc
-			    with Not_found -> assert false)
-		params
-	    in
-	    let result_region =
-	      if is_dummy_region rregion then dummy_region
-	      else
-		try RegionList.assoc rregion assoc
-		with Not_found -> assert false
-	    in
-	    param_regions,result_region
-	in
-	let arg_regions =
-	  List.map (fun e -> e#region) call.jc_call_args
-	in
-	Jc_options.lprintf "param:%a@." (print_list comma Region.print) param_regions;
-	Jc_options.lprintf "arg:%a@." (print_list comma Region.print) arg_regions;
-	List.iter2 Region.unify param_regions arg_regions;
-	Jc_options.lprintf "param:%a@." Region.print result_region;
-	Jc_options.lprintf "arg:%a@." Region.print e#region;
-	if e#typ = unit_type then
-	  () (* Result of call discarded *)
-	else Region.unify result_region e#region
-    | JCEreturn(_ty,e) ->
-	Region.unify rresult e#region
-    | JCEassert(_behav,_asrt,a) ->
-	assertion rresult a
-    | JCEcontract(req,dec,_vi_result,_behs,_e) ->
-        (* TODO: decreases, behaviors, etc. *)
-        assert (dec = None);
-	Option_misc.iter (assertion rresult) req
+  | JCEbinary(e1,_,e2) | JCEif(_,e1,e2) ->
+    Region.unify e1#region e2#region
+  | JCEmatch(_, (_, e1) :: rem) ->
+    List.iter (fun (_, e2) -> Region.unify e1#region e2#region) rem
+  | JCEmatch(_, []) -> ()
+  | JCElet(vi, Some e, _)
+  | JCEassign_var (vi, e) ->
+    Region.unify vi.vi_region e#region
+  | JCEassign_heap (e1, fi, e2) ->
+    let fr = Region.make_field e1#region fi in
+    Region.unify fr e2#region
+  | JCEthrow(exi, _) ->
+    begin match exi.exi_type with
+    | Some ty when is_pointer_type ty ->
+      Jc_options.jc_error
+        e#pos
+        "Unsupported pointer in throw clause (TODO)" (* TODO *)
+    | Some _ | None -> ()
+    end
+  | JCEapp call ->
+    let in_current_comp, param_regions, result_region, params =
+      match call.call_fun with
+      | JClogic_fun f -> false,         f.li_param_regions,  f.li_result_region,  f.li_parameters
+      | JCfun f -> in_component f comp, f.fun_param_regions, f.fun_return_region, List.map snd f.fun_parameters
+    in
+    let result_region, param_regions, arg_regions =
+      call_regions
+        ~pos:e#pos
+        (`Call call)
+        in_current_comp
+        param_regions
+        result_region
+        params
+    in
+    List.iter2 Region.unify param_regions arg_regions;
+    if e#typ = unit_type
+    then () (* Result of call discarded *)
+    else Region.unify result_region e#region
+  | JCEreturn(_ty, e) ->
+    Region.unify result_region e#region
+  | JCEassert(_behav, _asrt, a) ->
+    assertion logic_comp result_region a
+  | JCEcontract (req, None, _vi_result, _behs, _e) ->
+    (* TODO: decreases, behaviors, etc. *)
+    Option_misc.iter (assertion logic_comp result_region) req
+  | JCEcontract _ ->
+    Jc_options.jc_error
+      e#pos
+      "Unsupported decreases clause in statement contract"
+  | JCEconst _        | JCEvar _        | JCEshift _   | JCEunary _
+  | JCEderef _        | JCEoffset _     | JCEaddress _ | JCEinstanceof _
+  | JCEcast _         | JCEreinterpret _
+  | JCEbitwise_cast _ | JCEbase_block _ | JCEfresh _
+  | JCErange_cast _   | JCEreal_cast _  | JCEalloc _   | JCEfree _
+  | JCElet (_, None, _)
+  | JCEloop (_, _)    | JCEblock _      | JCEtry _
+  | JCEreturn_void    | JCEpack _       | JCEunpack _ ->
+    ()
 
-    | JCEloop(_la,_) -> ()
-    | JCEblock _ | JCEtry _
-    | JCEreturn_void | JCEpack _ | JCEunpack _ ->
-	()
-
-let expr rresult e =
+let expr comp logic_comp result_region =
   Jc_iterators.iter_expr_and_term_and_assertion
-    (single_term rresult)
-    (single_assertion rresult) single_location single_location_set
-    (single_expr rresult) e
+    (single_term logic_comp result_region)
+    (single_assertion logic_comp)
+    single_location
+    single_location_set
+    (single_expr comp logic_comp result_region)
 
-(* let location rresult loc = *)
-(*   fold_location  *)
-(*     (fold_unit (term rresult)) (fold_unit ignore) (fold_unit ignore) () loc *)
-
-let axiomatic_decl d =
+let axiomatic_decl logic_comp d =
   match d with
-    | Jc_typing.ABaxiom(_,_,_,a) -> assertion dummy_region a
+  | Jc_typing.ABaxiom (_, _, _, a) ->
+    assertion logic_comp dummy_region a
 
-let axiomatic a =
+let axiomatic comp a =
   try
     let l = StringHashtblIter.find Jc_typing.axiomatics_table a in
-    List.iter axiomatic_decl l.Jc_typing.axiomatics_decls
-  with Not_found -> assert false
+    List.iter (axiomatic_decl comp) l.Jc_typing.axiomatics_decls
+  with
+  | Not_found ->
+    Jc_options.jc_error
+      Loc.dummy_position
+      "separation: axiomatic: can't find axiomatic: %s" a
 
-let logic_function f =
-  let (f, ta) =
-    IntHashtblIter.find Jc_typing.logic_functions_table f.jc_logic_info_tag
-  in
-  let rresult = f.jc_logic_info_result_region in
+let logic_function comp f =
+  let f, ta = IntHashtblIter.find Jc_typing.logic_functions_table f.li_tag in
+  let result_region = f.li_result_region in
   begin match ta with
-    | JCNone -> ()
-    | JCTerm t ->
-	begin
-	  term rresult t;
-	  Region.unify rresult t#region
-	end
-    | JCAssertion a -> assertion rresult a
-    | JCReads r -> List.iter (location rresult) r
-    | JCInductive l ->
-	List.iter (fun (_,_,a) -> assertion rresult a) l
+  | JCNone -> ()
+  | JCTerm t ->
+    term comp result_region t;
+    Region.unify result_region t#region
+  | JCAssertion a ->
+    assertion comp result_region a
+  | JCReads r ->
+    List.iter (location comp result_region) r
+  | JCInductive l ->
+    List.iter (fun (_, _, a) -> assertion comp result_region a) l
   end;
-  Option_misc.iter axiomatic f.jc_logic_info_axiomatic
+  Option_misc.iter (axiomatic comp) f.li_axiomatic
 
 let generalize_logic_function f =
-  let param_regions =
-    List.map (fun vi -> vi.jc_var_info_region) f.jc_logic_info_parameters in
-  let fun_regions = f.jc_logic_info_result_region :: param_regions in
-  f.jc_logic_info_param_regions <- RegionList.reachable fun_regions
+  let param_regions = List.map (fun vi -> vi.vi_region) f.li_parameters in
+  let fun_regions = f.li_result_region :: param_regions in
+  f.li_param_regions <- RegionList.reachable fun_regions
 
-let logic_component fls =
+let logic_component comp =
   (* Perform plain unification on component *)
-  set_current_logic_component fls;
-  List.iter logic_function fls;
-  reset_current_logic_component ();
+  List.iter (logic_function comp) comp;
   (* Generalize regions accessed *)
-  List.iter generalize_logic_function fls;
+  List.iter generalize_logic_function comp;
   (* Fill in association table at each call site *)
-  List.iter logic_function fls
+  List.iter (logic_function []) comp
 
 let unify_logic_apps =
   let single_term acc t =
     let eq_apps app1 app2 =
-      app1.jc_app_fun.jc_logic_info_tag = app2.jc_app_fun.jc_logic_info_tag &&
-      app1.jc_app_label_assoc = app2.jc_app_label_assoc &&
-      List.for_all2 (TermOrd.equal) app1.jc_app_args app2.jc_app_args
+      app1.app_fun.li_tag = app2.app_fun.li_tag &&
+      app1.app_label_assoc = app2.app_label_assoc &&
+      List.for_all2 (TermOrd.equal) app1.app_args app2.app_args
     in
     match t#node with
     | JCTapp app ->
@@ -342,59 +280,65 @@ let unify_logic_apps =
   let dummy acc _ = acc in
   ignore % Jc_iterators.fold_funspec single_term dummy dummy dummy []
 
-let funspec rresult spec =
+let funspec comp result_region spec =
   Jc_iterators.iter_funspec
-    (single_term rresult) (single_assertion rresult) single_location
-    single_location_set spec;
+    (single_term comp result_region)
+    (single_assertion comp)
+    single_location
+    single_location_set
+    spec;
   unify_logic_apps spec
 
-let code_function f =
-  let (f, _, spec, body) =
-    IntHashtblIter.find Jc_typing.functions_table f.jc_fun_info_tag
-  in
-  Jc_options.lprintf "Separation: treating function %s@." f.jc_fun_info_name;
-  let rresult = f.jc_fun_info_return_region in
-  funspec rresult spec;
-  Option_misc.iter (expr rresult) body
+let code_function comp f =
+  let f, _, spec, body = IntHashtblIter.find Jc_typing.functions_table f.fun_tag in
+  Jc_options.lprintf "Separation: treating function %s@." f.fun_name;
+  let result_region = f.fun_return_region in
+  funspec [] result_region spec;
+  Option_misc.iter (expr comp [] result_region) body
 
 let generalize_code_function f =
-  let param_regions =
-    List.map (fun (_,vi) -> vi.jc_var_info_region) f.jc_fun_info_parameters in
-  let fun_regions = f.jc_fun_info_return_region :: param_regions in
-  f.jc_fun_info_param_regions <- RegionList.reachable fun_regions
+  let param_regions = List.map (fun (_, vi) -> vi.vi_region) f.fun_parameters in
+  let fun_regions = f.fun_return_region :: param_regions in
+  f.fun_param_regions <- RegionList.reachable fun_regions
 
-let code_component fls =
+let code_component comp =
   (* Perform plain unification on component *)
-  set_current_component fls;
-  List.iter code_function fls;
-  reset_current_component ();
+  List.iter (code_function comp) comp;
   (* Generalize regions accessed *)
-  List.iter generalize_code_function fls;
+  List.iter generalize_code_function comp;
   (* Fill in association table at each call site *)
-  List.iter code_function fls
+  List.iter (code_function []) comp
 
-let axiom _id (_loc,_is_axiom,_,_labels,a) = assertion (* labels *) dummy_region a
+let axiom comp _id (_loc, _is_axiom, _, _labels, a) = assertion comp dummy_region a
 
 let regionalize_assertion a assoc =
-  Jc_iterators.map_term_in_assertion (fun t ->
-    let t = match t#node with
-      | JCTapp app ->
-	  let app_assoc =
-	    List.map (fun (rdist,rloc) ->
-	      try (rdist,RegionList.assoc rloc assoc) with Not_found -> (rdist,rloc)
-	    ) app.jc_app_region_assoc
-	  in
-	  let tnode = JCTapp { app with jc_app_region_assoc = app_assoc; } in
-	  new term_with ~node:tnode t
-      | JCTconst _ | JCTvar _ | JCTshift _
-      | JCTderef _ | JCTbinary _ | JCTunary _ | JCTold _ | JCTat _ | JCToffset _
-      | JCTaddress _ | JCTbase_block _
-      | JCTinstanceof _ | JCTcast _ | JCTbitwise_cast _ | JCTrange_cast _ | JCTreal_cast _ | JCTif _ | JCTmatch _ | JCTrange _ | JCTlet _ -> t
-
-    in
-    try new term_with ~region:(RegionList.assoc t#region assoc) t
-    with Not_found -> t
-  ) a
+  Jc_iterators.map_term_in_assertion
+    (fun t ->
+       let t =
+         match t#node with
+         | JCTapp app ->
+           let app_assoc =
+             List.map
+               (fun (rdist, rloc) ->
+                  try
+                    rdist, RegionList.assoc rloc assoc
+                  with
+                  | Not_found -> rdist, rloc)
+               app.app_region_assoc
+          in
+          let tnode = JCTapp { app with app_region_assoc = app_assoc } in
+          new term_with ~node:tnode t
+         | JCTconst _      | JCTvar _     | JCTshift _
+         | JCTderef _      | JCTbinary _  | JCTunary _        | JCTold _        | JCTat _        | JCToffset _
+         | JCTaddress _    | JCTbase_block _
+         | JCTinstanceof _ | JCTcast _    | JCTbitwise_cast _ | JCTrange_cast _ | JCTreal_cast _ | JCTif _
+         | JCTmatch _      | JCTrange _   | JCTlet _ -> t
+       in
+       try
+         new term_with ~region:(RegionList.assoc t#region assoc) t
+       with
+       | Not_found -> t)
+    a
 
 (*
 Local Variables:

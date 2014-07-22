@@ -72,18 +72,18 @@ let mutable_name2 a =
 let committed_name2 a =
   committed_name (JCtag (find_struct a, []))
 
-let logic_enum_of_int ri = ri.jc_enum_info_name ^ "_of_integer"
-let safe_fun_enum_of_int ri = "safe_" ^ ri.jc_enum_info_name ^ "_of_integer_"
+let logic_enum_of_int ri = ri.ei_name ^ "_of_integer"
+let safe_fun_enum_of_int ri = "safe_" ^ ri.ei_name ^ "_of_integer_"
 (* Yannick: why have both logic_enum_of_int and safe_fun_enum_of_int? *)
-let fun_enum_of_int ri = ri.jc_enum_info_name ^ "_of_integer_"
-let logic_int_of_enum ri = "integer_of_" ^ ri.jc_enum_info_name
-let mod_of_enum ri = "mod_" ^ ri.jc_enum_info_name ^ "_of_integer"
-let fun_any_enum ri = "any_" ^ ri.jc_enum_info_name
-let eq_of_enum ri = "eq_" ^ ri.jc_enum_info_name
+let fun_enum_of_int ri = ri.ei_name ^ "_of_integer_"
+let logic_int_of_enum ri = "integer_of_" ^ ri.ei_name
+let mod_of_enum ri = "mod_" ^ ri.ei_name ^ "_of_integer"
+let fun_any_enum ri = "any_" ^ ri.ei_name
+let eq_of_enum ri = "eq_" ^ ri.ei_name
 
 
-let logic_bitvector_of_enum ri = "bitvector_of_" ^ ri.jc_enum_info_name
-let logic_enum_of_bitvector ri = ri.jc_enum_info_name  ^ "_of_bitvector"
+let logic_bitvector_of_enum ri = "bitvector_of_" ^ ri.ei_name
+let logic_enum_of_bitvector ri = ri.ei_name  ^ "_of_bitvector"
 
 let logic_integer_of_bitvector = "integer_of_bitvector"
 let logic_bitvector_of_integer = "bitvector_of_integer"
@@ -102,11 +102,11 @@ let native_name = function
 (* let logic_bitvector_of_native nty = "bitvector_of_" ^ (native_name nty) *)
 (* let logic_native_of_bitvector nty = (native_name nty) ^ "_of_bitvector" *)
 
-let logic_bitvector_of_variant vi = "bitvector_of_" ^ vi.jc_root_info_name
-let logic_variant_of_bitvector vi = vi.jc_root_info_name ^ "_of_bitvector"
+let logic_bitvector_of_variant vi = "bitvector_of_" ^ vi.ri_name
+let logic_variant_of_bitvector vi = vi.ri_name ^ "_of_bitvector"
 
-let logic_union_of_field fi = "bitvector_of_" ^ fi.jc_field_info_name
-let logic_field_of_union fi = fi.jc_field_info_name ^ "_of_bitvector"
+let logic_union_of_field fi = "bitvector_of_" ^ fi.fi_name
+let logic_field_of_union fi = fi.fi_name ^ "_of_bitvector"
 
 
 let why_name_of_format = function
@@ -265,9 +265,9 @@ let make_label_counter prefix =
   fun () ->
     incr c;
     let name = prefix ^ string_of_int !c in
-    { label_info_name = name;
-      label_info_final_name = name;
-      times_used = 1 }
+    { lab_name = name;
+      lab_final_name = name;
+      lab_times_used = 1 }
 
 let fresh_loop_label = make_label_counter "loop_"
 let fresh_reinterpret_label = make_label_counter "l__before_reinterpret_"
@@ -354,7 +354,7 @@ let rec tr_base_type ?region = function
         logic_type_args = List.map (tr_base_type ?region)  l;
       }
   | JCTenum ri ->
-      simple_logic_type ri.jc_enum_info_name
+      simple_logic_type ri.ei_name
   | JCTpointer(pc, _, _) ->
       let ac = match region with
 	| None ->
@@ -370,10 +370,10 @@ let rec tr_base_type ?region = function
 let tr_type ~region ty = Base_type (tr_base_type ~region ty)
 
 let tr_var_base_type v =
-  tr_base_type ~region:v.jc_var_info_region v.jc_var_info_type
+  tr_base_type ~region:v.vi_region v.vi_type
 
 let tr_var_type v =
-  tr_type ~region:v.jc_var_info_region v.jc_var_info_type
+  tr_type ~region:v.vi_region v.vi_type
 
 let any_value region t =
   match t with
@@ -408,7 +408,7 @@ let tag_id_type vi = raw_tag_id_type (root_model_type vi)
 
 let memory_type mc =
   let value_type = match mc with
-    | JCmem_field fi -> tr_base_type fi.jc_field_info_type
+    | JCmem_field fi -> tr_base_type fi.fi_type
     | JCmem_plain_union _
     | JCmem_bitvector -> bitvector_type
   in
@@ -452,7 +452,7 @@ let lvar_name ~label_in_name ?label_assoc lab n =
       | LabelOld -> assert false
       | LabelPre -> n ^ "_at_Pre"
       | LabelPost -> n ^ "_at_Post"
-      | LabelName lab -> n ^ "_at_" ^ lab.label_info_final_name
+      | LabelName lab -> n ^ "_at_" ^ lab.lab_final_name
   else n
 
 let lvar ~constant ~label_in_name lab n =
@@ -466,7 +466,7 @@ let lvar ~constant ~label_in_name lab n =
     | LabelOld -> LDerefAtLabel(n,"")
     | LabelPre -> LDerefAtLabel(n,"init")
     | LabelPost -> LDeref n
-    | LabelName lab -> LDerefAtLabel(n,lab.label_info_final_name)
+    | LabelName lab -> LDerefAtLabel(n,lab.lab_final_name)
 
 (* simple variables *)
 
@@ -478,32 +478,32 @@ let var_name' e = match e.expr_node with
   | _ -> assert false
 
 let var v =
-  if v.jc_var_info_assigned
-  then deref_var v.jc_var_info_final_name
-  else plain_var v.jc_var_info_final_name
+  if v.vi_assigned
+  then deref_var v.vi_final_name
+  else plain_var v.vi_final_name
 
 let param ~type_safe v =
-  v.jc_var_info_final_name,
+  v.vi_final_name,
   if type_safe then
-    tr_base_type v.jc_var_info_type
+    tr_base_type v.vi_type
   else
-    tr_base_type ~region:v.jc_var_info_region v.jc_var_info_type
+    tr_base_type ~region:v.vi_region v.vi_type
 
 let tvar_name ~label_in_name lab v =
-  let constant = not v.jc_var_info_assigned in
+  let constant = not v.vi_assigned in
   lvar_name ~label_in_name:(label_in_name && not constant)
-    lab v.jc_var_info_final_name
+    lab v.vi_final_name
 
 
 let tvar ~label_in_name lab v =
-  let constant = not v.jc_var_info_assigned in
+  let constant = not v.vi_assigned in
   lvar ~constant ~label_in_name:(label_in_name && not constant)
-    lab v.jc_var_info_final_name
+    lab v.vi_final_name
 
 let tparam ~label_in_name lab v =
   tvar_name ~label_in_name lab v,
   tvar ~label_in_name lab v,
-  tr_base_type v.jc_var_info_type
+  tr_base_type v.vi_type
 
 let local_of_parameter (v',ty') = (var_name' v',ty')
 let effect_of_parameter (v',_ty') = var_name' v'
@@ -516,30 +516,30 @@ let mutable_memory infunction (mc,r) =
   if Region.polymorphic r then
     if Region.bitwise r then
       MemoryMap.exists (fun (_mc',r') _labs -> Region.equal r r')
-	infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+	infunction.fun_effects.fe_writes.e_memories
     else
       MemoryMap.mem (mc,r)
-	infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+	infunction.fun_effects.fe_writes.e_memories
   else true
 
 let mutable_alloc_table infunction (ac,r) =
   if Region.polymorphic r then
     if Region.bitwise r then
       AllocMap.exists (fun (_ac',r') _labs -> Region.equal r r')
-	infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_tables
+	infunction.fun_effects.fe_writes.e_alloc_tables
     else
       AllocMap.mem (ac,r)
-	infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_tables
+	infunction.fun_effects.fe_writes.e_alloc_tables
   else true
 
 let mutable_tag_table infunction (vi,r) =
   if Region.polymorphic r then
     if Region.bitwise r then
       TagMap.exists (fun (_vi',r') _labs -> Region.equal r r')
-	infunction.jc_fun_info_effects.jc_writes.jc_effect_tag_tables
+	infunction.fun_effects.fe_writes.e_tag_tables
     else
       TagMap.mem (vi,r)
-	infunction.jc_fun_info_effects.jc_writes.jc_effect_tag_tables
+	infunction.fun_effects.fe_writes.e_tag_tables
   else true
 
 let plain_memory_var (mc,r) = mk_var (memory_name (mc,r))
@@ -706,7 +706,7 @@ let rec transpose_location ~region_assoc ~param_assoc (loc,(mc,rdist)) =
 	try
 	  let rec mk_node loc = match loc#node with
 	    | JCLvar v ->
-		if v.jc_var_info_static then
+		if v.vi_static then
 		  JCLvar v
 		else
 		  begin match List.mem_assoc_eq VarOrd.equal v param_assoc with
@@ -739,7 +739,7 @@ and transpose_location_set ~region_assoc ~param_assoc locs =
     | Some rloc ->
 	let node = match locs#node with
 	  | JCLSvar v ->
-	      if v.jc_var_info_static then
+	      if v.vi_static then
 		JCLSvar v
 	      else
 		begin match List.mem_assoc_eq VarOrd.equal v param_assoc with
@@ -821,14 +821,14 @@ let write_read_separation_condition
 	      if n = n' then
 		let rw_raw_mems =
 		  MemorySet.of_list
-		    (MemoryMap.keys callee_reads.jc_effect_raw_memories
-		     @ MemoryMap.keys callee_writes.jc_effect_raw_memories)
+		    (MemoryMap.keys callee_reads.e_raw_memories
+		     @ MemoryMap.keys callee_writes.e_raw_memories)
 		in
 		let rw_precise_mems =
 		  LocationSet.of_list
-		    (LocationMap.keys callee_reads.jc_effect_precise_memories
+		    (LocationMap.keys callee_reads.e_precise_memories
 		     @
-		     LocationMap.keys callee_writes.jc_effect_precise_memories)
+		     LocationMap.keys callee_writes.e_precise_memories)
 		in
 		let loclist =
 		  transpose_location_list ~region_assoc ~param_assoc
@@ -866,14 +866,14 @@ let write_write_separation_condition
 	 (* There is a write/write interference on this memory *)
 	 let rw_raw_mems =
 	   MemorySet.of_list
-	     (MemoryMap.keys callee_reads.jc_effect_raw_memories
-	      @ MemoryMap.keys callee_writes.jc_effect_raw_memories)
+	     (MemoryMap.keys callee_reads.e_raw_memories
+	      @ MemoryMap.keys callee_writes.e_raw_memories)
 	 in
 	 let rw_precise_mems =
 	   LocationSet.of_list
-	     (LocationMap.keys callee_reads.jc_effect_precise_memories
+	     (LocationMap.keys callee_reads.e_precise_memories
 	      @
-	      LocationMap.keys callee_writes.jc_effect_precise_memories)
+	      LocationMap.keys callee_writes.e_precise_memories)
 	 in
 	 let loclist =
 	   transpose_location_list ~region_assoc ~param_assoc
@@ -909,8 +909,8 @@ let rec all_possible_memory_effects acc r ty =
 		     acc
 		   else
 		     all_possible_memory_effects
-		       (MemorySet.add mem acc) r fi.jc_field_info_type
-		) acc st.jc_struct_info_fields
+		       (MemorySet.add mem acc) r fi.fi_type
+		) acc st.si_fields
 	end
     | JCTnative _
     | JCTnull
@@ -924,12 +924,12 @@ let rewrite_effects ~type_safe ~params ef =
   let all_mems =
     List.fold_left
       (fun acc v ->
-	 all_possible_memory_effects acc v.jc_var_info_region v.jc_var_info_type
+	 all_possible_memory_effects acc v.vi_region v.vi_type
       ) MemorySet.empty params
   in
   if not type_safe then ef else
     { ef with
-	jc_effect_memories =
+	e_memories =
 	MemoryMap.fold
 	  (fun (mc,r) labs acc ->
 	     match mc with
@@ -942,7 +942,7 @@ let rewrite_effects ~type_safe ~params ef =
 			  MemoryMap.add (mc',r') labs acc
 			else acc
 		     ) all_mems acc
-	  ) ef.jc_effect_memories MemoryMap.empty
+	  ) ef.e_memories MemoryMap.empty
     }
 
 
@@ -966,7 +966,7 @@ let all_allocs_ac ac pc =
   match ac with
   | JCalloc_bitvector -> [ac]
   | JCalloc_root rt ->
-    match rt.jc_root_info_kind with
+    match rt.ri_kind with
       | Rvariant
       | RdiscrUnion -> all_allocs ~select:fully_allocated pc
       | RplainUnion -> [ac]
@@ -975,7 +975,7 @@ let all_mems_ac ac pc =
   match ac with
   | JCalloc_bitvector -> []
   | JCalloc_root rt ->
-    match rt.jc_root_info_kind with
+    match rt.ri_kind with
     | Rvariant
     | RdiscrUnion -> all_memories ~select:fully_allocated pc
     | RplainUnion -> []
@@ -984,7 +984,7 @@ let all_tags_ac ac pc =
   match ac with
   | JCalloc_bitvector -> []
   | JCalloc_root rt ->
-    match rt.jc_root_info_kind with
+    match rt.ri_kind with
       | Rvariant
       | RdiscrUnion -> all_tags ~select:fully_allocated pc
       | RplainUnion -> []
@@ -1021,7 +1021,7 @@ let map_st ~f ac pc =
   match ac with
   | JCalloc_bitvector -> []
   | JCalloc_root rt ->
-    match rt.jc_root_info_kind with
+    match rt.ri_kind with
     | Rvariant ->
       begin match pc with
       | JCtag(st, _) ->
@@ -1035,9 +1035,9 @@ let map_embedded_fields ~f ~p ac =
   map_st ac
     ~f:(fun st ->
           ListLabels.map
-            st.jc_struct_info_fields
+            st.si_fields
             ~f:(function
-                | { jc_field_info_type = JCTpointer (fpc, Some fa, Some fb) } as fi ->
+                | { fi_type = JCTpointer (fpc, Some fa, Some fb) } as fi ->
                   f (ac, dummy_region) fpc (make_select_fi fi p) fa fb
                 | _ -> []))
 
@@ -1076,7 +1076,7 @@ let make_valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
   let validity =
     let omin, omax, super_valid =
       match pc with
-      | JCtag ({ jc_struct_info_parent = Some(st, pp) }, _) ->
+      | JCtag ({ si_parent = Some(st, pp) }, _) ->
         let super_valid =
           make_valid_pred_app ~in_param ~equal
             (ac, dummy_region) (JCtag (st, pp)) (LVar p)
@@ -1084,7 +1084,7 @@ let make_valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
             (if right then Some (LVar b) else None)
         in
         LTrue, LTrue, super_valid
-      | JCtag ({ jc_struct_info_parent = None }, _)
+      | JCtag ({ si_parent = None }, _)
       | JCroot _ ->
         (if equal then make_eq else make_le) (make_offset_min ac (LVar p)) (LVar a),
         (if equal then make_eq else make_ge) (make_offset_max ac (LVar p)) (LVar b),
@@ -1119,9 +1119,9 @@ let make_fresh_pred ac pc =
   in
   let super_fresh =
     match pc with
-    | JCtag ({ jc_struct_info_parent = Some (st, pp) }, _) ->
+    | JCtag ({ si_parent = Some (st, pp) }, _) ->
       make_fresh_pred_app ~in_param:false (ac, dummy_region) (JCtag (st, pp)) (LVar p)
-    | JCtag ({ jc_struct_info_parent = None }, _)
+    | JCtag ({ si_parent = None }, _)
     | JCroot _ ->
       let alloc = generic_alloc_table_name ac in
       LPred ("alloc_fresh", [LVar alloc; LVar p])
@@ -1243,9 +1243,9 @@ let make_alloc_pred ac pc =
   let allocs =
     let super_alloc =
       match pc with
-      | JCtag ({ jc_struct_info_parent = Some (st, pp) }, _) ->
+      | JCtag ({ si_parent = Some (st, pp) }, _) ->
         make_alloc_pred_app ~in_param:false (ac, dummy_region) (JCtag (st, pp)) (LVar p)
-      | JCtag ({ jc_struct_info_parent = None }, _)
+      | JCtag ({ si_parent = None }, _)
       | JCroot _ ->
         let alloc = generic_alloc_table_name ac in
         LPred ("alloc", [LVar (old_name alloc); LVar alloc; LVar p])
@@ -1430,7 +1430,7 @@ let conv_typ_mem_parameters ~deref r pc =
 	in
 	mems
     | JCroot rt ->
-	match rt.jc_root_info_kind with
+	match rt.ri_kind with
 	  | Rvariant -> []
 	  | RdiscrUnion -> assert false (* TODO *)
 	  | RplainUnion ->
@@ -1446,7 +1446,7 @@ let make_ofbit_alloc_param_app r pc =
     | JCtag _ ->
 	make_app (alloc_of_bitvector_param_name pc) args
     | JCroot rt ->
-	match rt.jc_root_info_kind with
+	match rt.ri_kind with
 	  | Rvariant -> void
 	  | RdiscrUnion -> assert false (* TODO *)
 	  | RplainUnion -> assert false (* TODO *)
@@ -1462,7 +1462,7 @@ let make_ofbit_mem_param_app r pc =
     | JCtag _ ->
 	make_app (mem_of_bitvector_param_name pc) args
     | JCroot rt ->
-	match rt.jc_root_info_kind with
+	match rt.ri_kind with
 	  | Rvariant -> void
 	  | RdiscrUnion -> assert false (* TODO *)
 	  | RplainUnion -> assert false (* TODO *)
@@ -1478,7 +1478,7 @@ let make_tobit_alloc_param_app r pc =
     | JCtag _ ->
 	make_app (alloc_to_bitvector_param_name pc) args
     | JCroot rt ->
-	match rt.jc_root_info_kind with
+	match rt.ri_kind with
 	  | Rvariant -> void
 	  | RdiscrUnion -> assert false (* TODO *)
 	  | RplainUnion -> assert false (* TODO *)
@@ -1493,7 +1493,7 @@ let make_tobit_mem_param_app r pc =
     | JCtag _ ->
 	make_app (mem_to_bitvector_param_name pc) args
     | JCroot rt ->
-	match rt.jc_root_info_kind with
+	match rt.ri_kind with
 	  | Rvariant -> void
 	  | RdiscrUnion -> assert false (* TODO *)
 	  | RplainUnion -> assert false (* TODO *)
@@ -1502,7 +1502,7 @@ let make_tobit_mem_param_app r pc =
 
 let make_of_bitvector_app fi e' =
   (* Convert bitvector into appropriate type *)
-  match fi.jc_field_info_type with
+  match fi.fi_type with
     | JCTenum ri -> LApp(logic_enum_of_bitvector ri,[e'])
 (*     | JCTnative nty -> LApp(logic_native_of_bitvector nty,[e']) *)
     | JCTpointer(pc,_,_) ->
@@ -1569,13 +1569,13 @@ let make_conversion_params pc =
 has bitvector representation, but its bit offset (%d) is not a multiple of 8. \
 The axioms for pointer-arithmetic operations with pointers to structure %s \
 thus turn out to be considerably hard and are currently unsupported."
-                          fi.jc_field_info_name
-                          st.jc_struct_info_name
+                          fi.fi_name
+                          st.si_name
                           (field_offset fi)
-                          st.jc_struct_info_name
+                          st.si_name
 		   in
 		   let size =
-		     match fi.jc_field_info_bitsize with
+		     match fi.fi_bitsize with
 		       | Some x -> x / 8
 		       | None ->
                            Jc_typing.typing_error
@@ -1583,13 +1583,13 @@ thus turn out to be considerably hard and are currently unsupported."
                              "Field %s of structure %s \
 has bitvector representation, but its bit size is unknown. \
 Can't encode proper axioms for accessing the field."
-                          fi.jc_field_info_name
-                          st.jc_struct_info_name
-                          st.jc_struct_info_name
+                          fi.fi_name
+                          st.si_name
+                          st.si_name
 		   in
 		   let off = string_of_int off and size = string_of_int size in
 		   let posti =
-		     make_eq_pred fi.jc_field_info_type
+		     make_eq_pred fi.fi_type
 		       (LApp("select",[ mem; LVar pi ]))
 		       (make_of_bitvector_app fi
 			  (LApp("select_bytes",
@@ -1772,7 +1772,7 @@ let translate_alloc_table_effects ~region_mem_assoc alloc_effect =
 
 let alloc_table_detailed_writes ~mode ~type_safe ~callee_writes ?region_assoc
     ~region_mem_assoc =
-  let write_effects = callee_writes.jc_effect_alloc_tables in
+  let write_effects = callee_writes.e_alloc_tables in
   let write_effects =
     if type_safe then
       match mode with
@@ -1801,7 +1801,7 @@ let alloc_table_writes ~mode ~type_safe ~callee_writes ?region_assoc
 
 let alloc_table_detailed_reads ~mode ~type_safe ~callee_writes ~callee_reads
     ?region_assoc ~region_mem_assoc ~already_used =
-  let read_effects = callee_reads.jc_effect_alloc_tables in
+  let read_effects = callee_reads.e_alloc_tables in
   let read_effects =
     if type_safe then
       match mode with
@@ -1813,7 +1813,7 @@ let alloc_table_detailed_reads ~mode ~type_safe ~callee_writes ~callee_reads
   let reads =
     AllocMap.fold
       (fun (ac,distr) _labs acc ->
-	 if has_alloc_table (ac,distr) callee_writes.jc_effect_alloc_tables then
+	 if has_alloc_table (ac,distr) callee_writes.e_alloc_tables then
 	   (* Allocation table is written, thus it is already taken care of
 	      as a parameter. *)
 	   match mode with
@@ -1877,12 +1877,12 @@ let tag_table_writes ~mode ~callee_writes ?region_assoc () =
     (fun (vi,distr) _labs acc ->
        add_tag_table_argument
 	 ~mode ~no_deref:true (vi,distr) ?region_assoc acc
-    ) callee_writes.jc_effect_tag_tables []
+    ) callee_writes.e_tag_tables []
 
 let tag_table_reads ~mode ~callee_writes ~callee_reads ?region_assoc () =
   TagMap.fold
     (fun (vi,distr) _labs acc ->
-       if TagMap.mem (vi,distr) callee_writes.jc_effect_tag_tables then
+       if TagMap.mem (vi,distr) callee_writes.e_tag_tables then
 	 (* Tag table is written, thus it is already taken care of
 	    as a parameter. *)
 	 match mode with
@@ -1901,7 +1901,7 @@ let tag_table_reads ~mode ~callee_writes ~callee_reads ?region_assoc () =
 	       add_tag_table_argument
 		 ~mode ~no_deref:false (vi,distr) ?region_assoc acc
 	   | #effect_mode -> acc
-    ) callee_reads.jc_effect_tag_tables []
+    ) callee_reads.e_tag_tables []
 
 let add_memory_argument
     ~mode ~type_safe ~no_deref (mc,distr as mem) ?region_assoc acc =
@@ -1992,7 +1992,7 @@ let translate_memory_effects ~region_mem_assoc mem_effect =
 
 let memory_detailed_writes
     ~mode ~type_safe ~callee_writes ?region_assoc ~region_mem_assoc =
-  let write_effects = callee_writes.jc_effect_memories in
+  let write_effects = callee_writes.e_memories in
   let write_effects =
     if type_safe then
       match mode with
@@ -2023,7 +2023,7 @@ let memory_writes
 
 let memory_detailed_reads ~mode ~type_safe ~callee_writes ~callee_reads
     ?region_assoc ~region_mem_assoc ~already_used =
-  let read_effects = callee_reads.jc_effect_memories in
+  let read_effects = callee_reads.e_memories in
   let read_effects =
     if type_safe then
       match mode with
@@ -2032,7 +2032,7 @@ let memory_detailed_reads ~mode ~type_safe ~callee_writes ~callee_reads
 	| `MLocalEffect | `MLocal -> read_effects
     else read_effects
   in
-  let write_effects = callee_writes.jc_effect_memories in
+  let write_effects = callee_writes.e_memories in
   let write_effects =
     if type_safe then
       match mode with
@@ -2084,40 +2084,40 @@ let global_writes ~callee_writes =
     (fun v _labs acc ->
        let n,ty' = param ~type_safe:false v in
        (plain_var n,ty') :: acc
-    ) callee_writes.jc_effect_globals []
+    ) callee_writes.e_globals []
 
 let global_reads ~callee_reads =
   VarMap.fold
     (fun v _labs acc ->
        let n,ty' = param ~type_safe:false v in
        (plain_var n,ty') :: acc
-    ) callee_reads.jc_effect_globals []
+    ) callee_reads.e_globals []
 
 let local_reads ~callee_reads =
   VarMap.fold
     (fun v _labs acc ->
        let n,ty' = param ~type_safe:false v in
        (plain_var n,ty') :: acc
-    ) callee_reads.jc_effect_locals []
+    ) callee_reads.e_locals []
 
 (* Yannick: change this to avoid recovering the real type from its name
    in mutable and committed effects *)
 
 let write_mutable callee_writes =
   StringSet.fold
-    (fun v acc -> (mutable_name2 v)::acc) callee_writes.jc_effect_mutable []
+    (fun v acc -> (mutable_name2 v)::acc) callee_writes.e_mutable []
 
 let read_mutable callee_reads =
   StringSet.fold
-    (fun v acc -> (mutable_name2 v)::acc) callee_reads.jc_effect_mutable []
+    (fun v acc -> (mutable_name2 v)::acc) callee_reads.e_mutable []
 
 let write_committed callee_writes =
   StringSet.fold
-    (fun v acc -> (committed_name2 v)::acc) callee_writes.jc_effect_committed []
+    (fun v acc -> (committed_name2 v)::acc) callee_writes.e_committed []
 
 let read_committed callee_reads =
   StringSet.fold
-    (fun v acc -> (committed_name2 v)::acc) callee_reads.jc_effect_committed []
+    (fun v acc -> (committed_name2 v)::acc) callee_reads.e_committed []
 
 let make_region_assoc region_list =
   List.map (fun r -> (r,r)) region_list
@@ -2290,7 +2290,7 @@ let memory_arguments ~callee_reads ~callee_writes ~region_assoc
   let pointer_of_parameter = function
       (((mc,_distr),locr),(_v',_ty')) ->
 	let pc = match mc with
-	  | JCmem_field fi -> JCtag(fi.jc_field_info_struct,[])
+	  | JCmem_field fi -> JCtag(fi.fi_struct,[])
 	  | JCmem_plain_union vi -> JCroot vi
 	  | JCmem_bitvector -> assert false
 	in
@@ -2497,7 +2497,7 @@ let tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
 	    let param = tmemory_param ~label_in_name lab (mc,locr) in
 	    ((mc,locr), param) :: acc
 	 ) labs acc
-    ) reads.jc_effect_memories []
+    ) reads.e_memories []
 
 let tmemory_params ~label_in_name ?region_assoc ?label_assoc reads =
   List.map snd
@@ -2520,7 +2520,7 @@ let talloc_table_detailed_params
 	    let param = talloc_table_param ~label_in_name lab (ac,locr) in
 	    ((ac,locr), param) :: acc
 	 ) labs acc
-    ) reads.jc_effect_alloc_tables []
+    ) reads.e_alloc_tables []
 
 let talloc_table_params ~label_in_name ?region_assoc ?label_assoc reads =
   List.map snd
@@ -2543,7 +2543,7 @@ let ttag_table_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
 	    let param = ttag_table_param ~label_in_name lab (vi,locr) in
 	    ((vi,locr), param) :: acc
 	 ) labs acc
-    ) reads.jc_effect_tag_tables []
+    ) reads.e_tag_tables []
 
 let ttag_table_params ~label_in_name ?region_assoc ?label_assoc reads =
   List.map snd
@@ -2559,7 +2559,7 @@ let tglob_detailed_params ~label_in_name ?region_assoc:_ ?label_assoc reads =
 	    let param = tparam ~label_in_name lab v in
 	    (v, param) :: acc
 	 ) labs acc
-    ) reads.jc_effect_globals []
+    ) reads.e_globals []
 
 let tglob_params ~label_in_name ?region_assoc ?label_assoc reads =
   List.map snd
@@ -2583,24 +2583,24 @@ let tmodel_parameters ~label_in_name ?region_assoc ?label_assoc reads =
 let make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args =
   let model_params =
     tmodel_parameters ~label_in_name ~region_assoc ~label_assoc
-      f.jc_logic_info_effects
+      f.li_effects
   in
   let model_args = List.map (fun (_n,v,_ty') -> v) model_params in
   args @ model_args
 
 let make_logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
-  if Jc_options.debug then printf "logic call to %s@." f.jc_logic_info_name;
+  if Jc_options.debug then printf "logic call to %s@." f.li_name;
   let args =
     make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args
   in
-  LApp(f.jc_logic_info_final_name, args)
+  LApp(f.li_final_name, args)
 
 let make_logic_pred_call ~label_in_name ~region_assoc ~label_assoc f args =
-  if Jc_options.debug then printf "logic pred call to %s@." f.jc_logic_info_name;
+  if Jc_options.debug then printf "logic pred call to %s@." f.li_name;
   let args =
     make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args
   in
-  LPred(f.jc_logic_info_final_name, args)
+  LPred(f.li_final_name, args)
 
 
 (* *)
@@ -2609,19 +2609,19 @@ let logic_info_reads acc li =
     MemoryMap.fold
       (fun (mc,r) _ acc ->
 	 StringSet.add (memory_name(mc,r)) acc)
-      li.jc_logic_info_effects.jc_effect_memories
+      li.li_effects.e_memories
       acc
   in
   let acc =
     AllocMap.fold
       (fun (ac,r) _labs acc ->
 	 StringSet.add (alloc_table_name (ac, r)) acc)
-      li.jc_logic_info_effects.jc_effect_alloc_tables
+      li.li_effects.e_alloc_tables
       acc
   in
   TagMap.fold
     (fun v _ acc -> StringSet.add (tag_table_name v) acc)
-    li.jc_logic_info_effects.jc_effect_tag_tables
+    li.li_effects.e_tag_tables
     acc
 
 
@@ -2632,21 +2632,21 @@ let all_effects ef =
       (fun (mc,r) _labels acc ->
 	let mem = memory_name(mc,r) in
 	if Region.polymorphic r then
-(*	  if RegionList.mem r f.jc_fun_info_param_regions then
+(*	  if RegionList.mem r f.fun_param_regions then
 	    if FieldRegionMap.mem (fi,r)
-	      f.jc_fun_info_effects.jc_writes.jc_effect_memories
+	      f.fun_effects.fe_writes.e_memories
 	    then mem::acc
 	    else acc
 	  else acc*)
 	  assert false (* TODO *)
 	else mem::acc)
-      ef.jc_effect_memories
+      ef.e_memories
       []
   in
   let res =
     VarMap.fold
-      (fun v _labs acc -> v.jc_var_info_final_name::acc)
-      ef.jc_effect_globals
+      (fun v _labs acc -> v.vi_final_name::acc)
+      ef.e_globals
       res
   in
   let res =
@@ -2654,33 +2654,33 @@ let all_effects ef =
       (fun (a,r) _labs acc ->
 	let alloc = alloc_table_name(a,r) in
 	if Region.polymorphic r then
-(*	  if RegionList.mem r f.jc_fun_info_param_regions then
+(*	  if RegionList.mem r f.fun_param_regions then
 	    if AllocSet.mem (a,r)
-	      f.jc_fun_info_effects.jc_writes.jc_effect_alloc_tables
+	      f.fun_effects.fe_writes.e_alloc_tables
 	    then alloc::acc
 	    else acc
 	  else acc*)
 	  assert false (* TODO *)
 	else alloc::acc)
-      ef.jc_effect_alloc_tables
+      ef.e_alloc_tables
       res
   in
   let res =
     TagMap.fold
       (fun v _ acc -> (tag_table_name v)::acc)
-      ef.jc_effect_tag_tables
+      ef.e_tag_tables
       res
   in
   let res =
     StringSet.fold
       (fun v acc -> (mutable_name2 v)::acc)
-      ef.jc_effect_mutable
+      ef.e_mutable
       res
   in
   let res =
     StringSet.fold
       (fun v acc -> (committed_name2 v)::acc)
-      ef.jc_effect_committed
+      ef.e_committed
       res
   in
   res

@@ -60,30 +60,30 @@ let filter_alphanumeric s =
 
 let dummy_region = 
   {
-    jc_reg_variable = false;
-    jc_reg_bitwise = false;
-    jc_reg_id = 0;
-    jc_reg_name = "dummy_region";
-    jc_reg_final_name = "dummy_region";
-    jc_reg_type = JCTnull; (* Type does not matter. *)
+    r_variable = false;
+    r_bitwise = false;
+    r_id = 0;
+    r_name = "dummy_region";
+    r_final_name = "dummy_region";
+    r_type = JCTnull; (* Type does not matter. *)
   }
 
-let is_dummy_region r = r.jc_reg_id = 0
+let is_dummy_region r = r.r_id = 0
 
 module InternalRegion = struct
 
   type t = region
 
-  let equal r1 r2 = r1.jc_reg_id = r2.jc_reg_id
+  let equal r1 r2 = r1.r_id = r2.r_id
 
-  let compare r1 r2 = Pervasives.compare r1.jc_reg_id r2.jc_reg_id
+  let compare r1 r2 = Pervasives.compare r1.r_id r2.r_id
 
-  let hash r = r.jc_reg_id      
+  let hash r = r.r_id      
 
   let prefer r1 r2 = 
-    if r1.jc_reg_variable && not r2.jc_reg_variable then 1 
-    else if r2.jc_reg_variable && not r1.jc_reg_variable then -1
-    else r1.jc_reg_id - r2.jc_reg_id
+    if r1.r_variable && not r2.r_variable then 1 
+    else if r2.r_variable && not r1.r_variable then -1
+    else r1.r_id - r2.r_id
 
 end
 
@@ -226,12 +226,12 @@ struct
 
   include InternalRegion
 
-  let name r = (RegionUF.repr r).jc_reg_final_name
+  let name r = (RegionUF.repr r).r_final_name
 
   let representative = RegionUF.repr
 
   let polymorphic r = 
-    let r = RegionUF.repr r in r.jc_reg_variable
+    let r = RegionUF.repr r in r.r_variable
 
   let count = ref 1 
   let next_count () = let tmp = !count in incr count; tmp
@@ -242,12 +242,12 @@ struct
     else if not(is_pointer_type ty) then dummy_region else
       let id = next_count () in
       {
-	jc_reg_variable = false;
-	jc_reg_bitwise = false;
-	jc_reg_id = id;
-	jc_reg_name = name;
-	jc_reg_final_name = name ^ "_" ^ (string_of_int id);
-	jc_reg_type = ty;
+	r_variable = false;
+	r_bitwise = false;
+	r_id = id;
+	r_name = name;
+	r_final_name = name ^ "_" ^ (string_of_int id);
+	r_type = ty;
       }
 
   let make_var ty name =
@@ -256,22 +256,22 @@ struct
     else if not(is_pointer_type ty) then dummy_region else
       let id = next_count () in
       {
-	jc_reg_variable = true;
-	jc_reg_bitwise = false;
-	jc_reg_id = id;
-	jc_reg_name = name;
-	jc_reg_final_name = name ^ "_" ^ (string_of_int id);
-	jc_reg_type = ty;
+	r_variable = true;
+	r_bitwise = false;
+	r_id = id;
+	r_name = name;
+	r_final_name = name ^ "_" ^ (string_of_int id);
+	r_type = ty;
       }
 
   let print fmt r =
-    fprintf fmt "%s" r.jc_reg_final_name
+    fprintf fmt "%s" r.r_final_name
 
   let print_assoc fmt assocl =
     fprintf fmt "%a" (print_list comma 
       (fun fmt (r1,r2) -> fprintf fmt "%a->%a" print r1 print r2)) assocl
 
-  let bitwise r = (RegionUF.repr r).jc_reg_bitwise
+  let bitwise r = (RegionUF.repr r).r_bitwise
 
   let equal r1 r2 =
     InternalRegion.equal (RegionUF.repr r1) (RegionUF.repr r2)
@@ -287,9 +287,9 @@ struct
       if !Jc_common_options.separation_sem = SepNone then 
 	(* Potentially all pointers may be aliased *)
 	(assert (is_dummy_region rep);
-	 rep.jc_reg_bitwise <- true)
+	 rep.r_bitwise <- true)
       else
-	rep.jc_reg_bitwise <- true;
+	rep.r_bitwise <- true;
       try 
 	let t = RegionTable.find global_region_table rep in
 	begin match FieldTable.choose t with
@@ -332,7 +332,7 @@ struct
 	let rep = RegionUF.repr r in
 	if polymorphic rep then
 	  begin
-	    rep.jc_reg_variable <- false;
+	    rep.r_variable <- false;
 	    try
 	      let t = RegionTable.find global_region_table rep in
 	      FieldTable.iter (fun _fi ri -> mkconst ri) t
@@ -358,16 +358,16 @@ struct
 	) t2;
       (* Recursively make region bitwise if necessary *)
       let rep = RegionUF.repr r1 in
-      if rep1.jc_reg_bitwise || rep2.jc_reg_bitwise then
+      if rep1.r_bitwise || rep2.r_bitwise then
 	make_bitwise rep;
       (* Update with correct field table *)
       RegionTable.replace global_region_table rep t2
 
   let make_field r fi =
     let r = RegionUF.repr r in
-(*     assert (not r.jc_reg_bitwise); *)
+(*     assert (not r.r_bitwise); *)
     if !Jc_common_options.separation_sem = SepNone then dummy_region
-    else if not(is_pointer_type fi.jc_field_info_type) then dummy_region else
+    else if not(is_pointer_type fi.fi_type) then dummy_region else
       try 
 	let t = RegionTable.find global_region_table r in
 	try FieldTable.find t fi
@@ -375,11 +375,11 @@ struct
 	  let fr =
 	    if is_embedded_field fi then
 	      r
-	    else if r.jc_reg_variable then
-	      make_var fi.jc_field_info_type fi.jc_field_info_name 
+	    else if r.r_variable then
+	      make_var fi.fi_type fi.fi_name 
 	    else
-	      make_const fi.jc_field_info_type (* fi.jc_field_info_name *)
-		r.jc_reg_name
+	      make_const fi.fi_type (* fi.fi_name *)
+		r.r_name
 	  in
 	  FieldTable.replace t fi fr;
 	  fr
@@ -387,11 +387,11 @@ struct
 	let fr = 
 	  if is_embedded_field fi then
 	    r
-	  else if r.jc_reg_variable then
-	    make_var fi.jc_field_info_type fi.jc_field_info_name 
+	  else if r.r_variable then
+	    make_var fi.fi_type fi.fi_name 
 	  else
-	    make_const fi.jc_field_info_type (* fi.jc_field_info_name *)
-	      r.jc_reg_name
+	    make_const fi.fi_type (* fi.fi_name *)
+	      r.r_name
 	in
 	let t = FieldTable.create 5 in
 	FieldTable.replace t fi fr;
@@ -425,7 +425,7 @@ struct
     let assocl = 
       List.fold_left (fun acc r ->
 	if is_dummy_region r then acc 
-	else (r,Region.make_var r.jc_reg_type r.jc_reg_name) :: acc
+	else (r,Region.make_var r.r_type r.r_name) :: acc
       ) [] rls
     in
     List.iter (fun (r1,r2) ->

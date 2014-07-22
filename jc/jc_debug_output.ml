@@ -81,7 +81,7 @@ object
     | JCTderef (t, lab, fi)   ->   JCTderef (wrap t, lab, fi)
     | JCTbinary (t1, op, t2)  ->   JCTbinary (wrap t1, op, wrap t2)
     | JCTunary (op, t)        ->   JCTunary (op, wrap t)
-    | JCTapp app              ->   JCTapp { app with jc_app_args = List.map wrap app.jc_app_args }
+    | JCTapp app              ->   JCTapp { app with app_args = List.map wrap app.app_args }
     | JCTold t                ->   JCTold (wrap t)
     | JCTat (t, lab)          ->   JCTat (wrap t, lab)
     | JCToffset (ok, t, si)   ->   JCToffset (ok, wrap t, si)
@@ -131,7 +131,7 @@ object
       | JCAimplies (a1, a2) ->                JCAimplies (wrap a1, wrap a2)
       | JCAiff (a1, a2) ->                    JCAiff  (wrap a1, wrap a2)
       | JCAnot a ->                           JCAnot (wrap a)
-      | JCAapp app ->                         JCAapp { app with jc_app_args = List.map twrap app.jc_app_args }
+      | JCAapp app ->                         JCAapp { app with app_args = List.map twrap app.app_args }
       | JCAquantifier (q, vi, tl, a) ->       JCAquantifier (q, vi, List.map (List.map wrap_trigger) tl, wrap a)
       | JCAold a ->                           JCAold (wrap a)
       | JCAat (a, lab) ->                     JCAat (wrap a, lab)
@@ -204,7 +204,7 @@ object
     | JCEderef (e, fi) ->            JCEderef (wrap e, fi)
     | JCEbinary (e1, op, e2) ->      JCEbinary (wrap e1, op, wrap e2)
     | JCEunary (op, e) ->            JCEunary (op, wrap e)
-    | JCEapp c ->                    JCEapp { c with jc_call_args = List.map wrap c.jc_call_args }
+    | JCEapp c ->                    JCEapp { c with call_args = List.map wrap c.call_args }
     | JCEassign_var (v, e) ->        JCEassign_var (v, wrap e)
     | JCEassign_heap (es, fi, eo) -> JCEassign_heap (wrap es, fi, wrap eo)
     | JCEinstanceof (e, si) ->       JCEinstanceof (wrap e, si)
@@ -227,22 +227,22 @@ object
                    Option_misc.map (fun (t, io) -> twrap t, Option_misc.map iwrap io) tioo,
                    vi,
                    ListLabels.map psbl ~f:(fun (p, s, b) ->
-                     p, s, { b with jc_behavior_assumes = Option_misc.map awrap b.jc_behavior_assumes;
-                                    jc_behavior_assigns =
-                                      Option_misc.map (fun (p, ll) -> p, List.map lwrap ll) b.jc_behavior_assigns;
-                                    jc_behavior_allocates =
-                                      Option_misc.map (fun (p, ll) -> p, List.map lwrap ll) b.jc_behavior_allocates;
-                                    jc_behavior_ensures = awrap b.jc_behavior_ensures;
-                                    jc_behavior_free_ensures = awrap b.jc_behavior_free_ensures }),
+                     p, s, { b with b_assumes = Option_misc.map awrap b.b_assumes;
+                                    b_assigns =
+                                      Option_misc.map (fun (p, ll) -> p, List.map lwrap ll) b.b_assigns;
+                                    b_allocates =
+                                      Option_misc.map (fun (p, ll) -> p, List.map lwrap ll) b.b_allocates;
+                                    b_ensures = awrap b.b_ensures;
+                                    b_free_ensures = awrap b.b_free_ensures }),
                    wrap e)
     | JCEblock elist ->              JCEblock (List.map wrap elist)
     | JCEloop (la, e) ->
-      JCEloop ( { la with jc_loop_behaviors = ListLabels.map la.jc_loop_behaviors ~f:(fun (il, ao, llo) ->
+      JCEloop ( { la with loop_behaviors = ListLabels.map la.loop_behaviors ~f:(fun (il, ao, llo) ->
                                                                                  List.map iwrap il,
                                                                                  Option_misc.map awrap ao,
                                                                                  Option_misc.map (List.map lwrap) llo);
-                          jc_free_loop_invariant = awrap la.jc_free_loop_invariant;
-                          jc_loop_variant = Option_misc.map (fun (t, lio) -> twrap t, lio) la.jc_loop_variant },
+                          loop_free_invariant = awrap la.loop_free_invariant;
+                          loop_variant = Option_misc.map (fun (t, lio) -> twrap t, lio) la.loop_variant },
                 wrap e)
     | JCEreturn (ty, e) ->           JCEreturn (ty, wrap e)
     | JCEtry (e1, l, e2) ->          JCEtry (wrap e1, List.map (fun (ei, vi, e) -> ei, vi, wrap e) l, wrap e2)

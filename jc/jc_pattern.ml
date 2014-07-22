@@ -63,7 +63,7 @@ module Pattern(AM: TAssertionMaker) = struct
 	List.fold_left
 	  (fun (accnotcond, acccond, accvars) (fi, pat) ->
 	     let arg = make_select_fi fi arg in
-	     let ty = fi.jc_field_info_type in
+	     let ty = fi.fi_type in
 	     let notcond, cond, vars = pattern arg ty pat in
 	     AM.make_or accnotcond notcond,
 	     AM.make_and acccond cond,
@@ -72,8 +72,8 @@ module Pattern(AM: TAssertionMaker) = struct
 	  fpl
     | JCPvar vi ->
 	AM.make_false,
-	AM.make_eq ty (LVar vi.jc_var_info_final_name) arg,
-	[vi.jc_var_info_final_name, ty]
+	AM.make_eq ty (LVar vi.vi_final_name) arg,
+	[vi.vi_final_name, ty]
     | JCPor(p1, p2) ->
       (* typing ensures that both patterns bind the same variables *)
 	let notcond1, cond1, vars = pattern arg ty p1 in
@@ -86,8 +86,8 @@ module Pattern(AM: TAssertionMaker) = struct
 	notcond,
 	AM.make_and
 	  cond
-	  (AM.make_eq ty (LVar vi.jc_var_info_final_name) arg),
-	(vi.jc_var_info_final_name, ty)::vars
+	  (AM.make_eq ty (LVar vi.vi_final_name) arg),
+	(vi.vi_final_name, ty)::vars
     | JCPany | JCPconst JCCvoid ->
 	AM.make_false,
 	AM.make_true,

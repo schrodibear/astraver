@@ -79,7 +79,7 @@ let prop_type = simple_logic_type "prop"
 and r is a StringSet of the "reads" needed by these invariants *)
 let invariant_for_struct this st =
   let (_, invs) =
-    StringHashtblIter.find Jc_typing.structs_table st.jc_struct_info_name
+    StringHashtblIter.find Jc_typing.structs_table st.si_name
   in
   let inv =
     make_and_list
@@ -171,9 +171,9 @@ let make_bool b = LConst(Prim_bool b)
 
 (* Typing imposes non pointer fields to have the flag "rep" *)
 let field this pos fi =
-  if not fi.jc_field_info_rep then
+  if not fi.fi_rep then
     Jc_typing.typing_error pos "this term is not a rep field of %s"
-      this.jc_var_info_name
+      this.vi_name
 
 (*let rec check_rep ?(must_deref=false) this pos t =
   match t.jc_term_node with
@@ -188,7 +188,7 @@ let field this pos fi =
 	check_rep ~must_deref:true this pos t
     | _ ->
 	Jc_typing.typing_error pos "this term is not a rep field of %s"
-	  this.jc_var_info_name*)
+	  this.vi_name*)
 
 (* A pattern may hide some dereferencing. *)
 let pattern this p =
@@ -207,9 +207,9 @@ let term this t =
   Jc_iterators.ITerm.iter
     (fun t -> match t#node with
        | JCTapp app ->
-	   let id = app.jc_app_fun in
+	   let id = app.app_fun in
 	   if not (MemoryMap.is_empty
-		     id.jc_logic_info_effects.jc_effect_memories) then
+		     id.li_effects.e_memories) then
 	     Jc_typing.typing_error t#pos
 	       "this call is not allowed in structure invariant"
        | JCTderef(_, _, fi) ->
@@ -247,9 +247,9 @@ let term this t =
        | JCTsub_pointer(t1, t2) ->
        | JCTderef(t, _, fi) ->
        | JCTapp app ->
-	   let id = app.jc_app_fun in
+	   let id = app.app_fun in
 	   if not (FieldRegionMap.is_empty
-		     id.jc_logic_info_effects.jc_effect_memories) then
+		     id.li_effects.e_memories) then
 	     Jc_typing.typing_error t.jc_term_loc
 	       "this call is not allowed in structure invariant"
        | JCTderef _ ->
@@ -274,9 +274,9 @@ let rec assertion this p =
     | JCAat(p,_) -> assertion this p
     | JCAquantifier(_,_id, _, p) -> assertion this p
     | JCAapp app ->
-	let id = app.jc_app_fun in
-	if MemoryMap.is_empty id.jc_logic_info_effects.jc_effect_memories
-	then List.iter (term this) app.jc_app_args
+	let id = app.app_fun in
+	if MemoryMap.is_empty id.li_effects.e_memories
+	then List.iter (term this) app.app_args
 	else
 	  Jc_typing.typing_error p#pos
 	    "this call is not allowed in structure invariant"
@@ -302,8 +302,8 @@ let check invs =
   List.iter
     (fun (li,p) -> 
        Jc_options.lprintf
-	 "    Checking invariant: %s@." li.jc_logic_info_name;
-       match li.jc_logic_info_parameters with
+	 "    Checking invariant: %s@." li.li_name;
+       match li.li_parameters with
 	 | [this] -> assertion this p
 	 | _ -> assert false)
     invs
@@ -316,7 +316,7 @@ let rec term_memories aux t =
   Jc_iterators.fold_term 
     (fun aux t -> match t#node with
     | JCTderef(_t, _lab, fi) ->
-	let m = fi.jc_field_info_final_name in
+	let m = fi.fi_final_name in
 	StringSet.add m aux
     | _ -> aux
     ) aux t
@@ -337,7 +337,7 @@ let rec assertion_memories aux a = match a#node with
   | JCAold a
   | JCAat(a,_)
   | JCAquantifier(_,_, _, a) -> assertion_memories aux a
-  | JCAapp app -> List.fold_left term_memories aux app.jc_app_args
+  | JCAapp app -> List.fold_left term_memories aux app.app_args
   | JCAinstanceof(t, _, _ )
   | JCAfresh t
   | JCAbool_term t -> term_memories aux t
@@ -354,14 +354,14 @@ let rec assertion_memories aux a = match a#node with
 Assumes the structures whose name is in acc have already been visited
 and won't be visited again. *)
 let rec all_structures st acc =
-  if StringSet.mem st.jc_struct_info_name acc then acc else
+  if StringSet.mem st.si_name acc then acc else
     List.fold_left
       (fun acc fi ->
-	 match fi.jc_field_info_type with
+	 match fi.fi_type with
 	   | JCTpointer(JCtag(st, _), _, _) -> all_structures st acc
 	   | _ -> acc)
-      (StringSet.add st.jc_struct_info_name acc)
-      st.jc_struct_info_fields   
+      (StringSet.add st.si_name acc)
+      st.si_fields   
 
 (* Returns all memories used by the structure invariants. *)
 let struct_inv_memories acc st =
@@ -378,7 +378,7 @@ let invariant_params acc li =
     MemoryMap.fold
       (fun (mc,r) _labels acc -> 
 	 (memory_name(mc,r), memory_type mc)::acc)
-      li.jc_logic_info_effects.jc_effect_memories
+      li.li_effects.e_memories
       acc
   in
   let acc =
@@ -386,7 +386,7 @@ let invariant_params acc li =
       (fun (ac,r) _labs acc -> 
 	 (alloc_table_name (ac, r),
 	  alloc_table_type (ac))::acc)
-      li.jc_logic_info_effects.jc_effect_alloc_tables
+      li.li_effects.e_alloc_tables
       acc
   in
   let acc =
@@ -396,7 +396,7 @@ let invariant_params acc li =
 		   logic_type_name = "tag_table" }
 	 in
 	 (tag_table_name (v,r), t)::acc)
-      li.jc_logic_info_effects.jc_effect_tag_tables
+      li.li_effects.e_tag_tables
       acc
   in
     acc
@@ -404,13 +404,13 @@ let invariant_params acc li =
 (* Returns the parameters needed by the invariants of a structure, "this" not included *)
 let invariants_params acc st =
   let (_, invs) =
-    StringHashtblIter.find Jc_typing.structs_table st.jc_struct_info_name
+    StringHashtblIter.find Jc_typing.structs_table st.si_name
   in
   List.fold_left (fun acc (li, _) -> invariant_params acc li) acc invs
 
 (* Returns the structure and its parents, up to its root *)
 let rec parents acc st =
-  match st.jc_struct_info_parent with
+  match st.si_parent with
     | None -> acc
     | Some(p, _) -> parents (st::acc) p
 let parents = parents []
@@ -420,11 +420,11 @@ given its parameters *)
 let function_structures params =
   let structures = List.fold_left
     (fun acc vi ->
-       match vi.jc_var_info_type with
+       match vi.vi_type with
 	 | JCTpointer(JCtag(st, _), _, _) ->
 	     all_structures st acc
 	 | JCTpointer(JCroot vi, _, _) ->
-	     List.fold_right all_structures vi.jc_root_info_hroots acc
+	     List.fold_right all_structures vi.ri_hroots acc
 	 | _ -> acc)
     StringSet.empty
     params
@@ -444,7 +444,7 @@ let hierarchies () =
   let h =
     StringHashtblIter.fold
       (fun _ (st, _) acc ->
-         StringMap.add (root_name st) st.jc_struct_info_hroot acc)
+         StringMap.add (root_name st) st.si_hroot acc)
       Jc_typing.structs_table
       StringMap.empty
   in
@@ -460,8 +460,8 @@ let is_pointer = function
 (* Returns every rep pointer fields of a structure *)
 let rep_fields st =
   List.filter
-    (fun fi -> fi.jc_field_info_rep && is_pointer fi.jc_field_info_type)
-    st.jc_struct_info_fields
+    (fun fi -> fi.fi_rep && is_pointer fi.fi_type)
+    st.si_fields
 
 (* Returns every rep fields of a hierarchy *)
 let hierarchy_rep_fields root =
@@ -499,15 +499,15 @@ let make_assume_assocs pp mems =
 (* List of each memory m that appears in an invariant
 which can be broken by the modification of the field fi *)
 let field_assocs fi =
-  let _, invs = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_root in
+  let _, invs = Hashtbl.find Jc_typing.structs_table fi.fi_root in
   let mems = List.fold_left
     (fun aux (_, a) ->
        let amems = assertion_memories StringSet.empty a in
-       if StringSet.mem fi.jc_field_info_final_name amems then
+       if StringSet.mem fi.fi_final_name amems then
          StringSet.union amems aux
        else
 	 aux
-    ) (StringSet.singleton (mutable_name fi.jc_field_info_root)) invs in
+    ) (StringSet.singleton (mutable_name fi.fi_root)) invs in
   StringSet.elements mems
 
 (* Assume all assocs needed after a field has been modified *)
@@ -544,7 +544,7 @@ let committed_memory_type pc =
   raw_memory_type (pointer_class_model_type pc) (simple_logic_type "bool")
 
 let mutable_declaration st acc =
-  if st.jc_struct_info_parent = None then
+  if st.si_parent = None then
     let st = JCtag(st, []) in
     (* mutable_T: T tag_id *)
     Param(
@@ -564,18 +564,18 @@ let mutable_declaration st acc =
 The object must be "sufficiently unpacked", that is: its "mutable" field is
 a strict superclass of the class in which the field is defined.
   And the object must not be committed. *)
-(* assert ((st.jc_struct_info_parent <: e.mutable || e.mutable = bottom_tag) && e.committed = false) *)
+(* assert ((st.si_parent <: e.mutable || e.mutable = bottom_tag) && e.committed = false) *)
 (* Actually, the "not committed" part is meta-implied by the
 condition on mutable. *)
 let assert_mutable e fi =
-  if fi.jc_field_info_rep then
+  if fi.fi_rep then
     begin
-      let st = fi.jc_field_info_struct in
+      let st = fi.fi_struct in
       let mutable_name = mutable_name (JCtag(st, [])) in
-      (*let committed_name = committed_name st.jc_struct_info_hroot in*)
+      (*let committed_name = committed_name st.si_hroot in*)
       let e_mutable = LApp("select", [LVar mutable_name; e]) in
       (*let e_committed = LApp("select", [LVar committed_name; e]) in*)
-      let parent_tag = match st.jc_struct_info_parent with
+      let parent_tag = match st.si_parent with
 	| None -> LVar "bottom_tag"
 	| Some(parent, _) -> LVar (tag_name parent)
       in
@@ -603,14 +603,14 @@ let assert_mutable e fi =
   let this = "this" in
   let this_ty =
     { logic_type_name = "pointer";
-      logic_type_args = [simple_logic_type st.jc_struct_info_hroot] } in
+      logic_type_args = [simple_logic_type st.si_hroot] } in
 
   (* program point *)
   let pp = "program_point" in
   let pp_ty = simple_logic_type "int" in
 
   (* assoc memories with program point => not this.mutable => this.invariant *)
-  let mutable_ty = mutable_memory_type st.jc_struct_info_hroot in
+  let mutable_ty = mutable_memory_type st.si_hroot in
   let mutable_is_false =
     LPred(
       "eq",
@@ -636,10 +636,10 @@ let assert_mutable e fi =
   let axiom =
     List.fold_left (fun acc (id, ty) -> LForall(id, ty, acc))
       axiom_impl quantified_vars in
-  Axiom("axiom_"^li.jc_logic_info_name, axiom)::acc
+  Axiom("axiom_"^li.li_name, axiom)::acc
 
 let invariants_axioms st acc =
-  let _, invs = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
+  let _, invs = Hashtbl.find Jc_typing.structs_table st.si_name in
   List.fold_left (invariant_axiom st) acc invs*)
 
 (******************************************)
@@ -651,7 +651,7 @@ let hierarchy_invariants = Hashtbl.create 97
 
 (* List of each invariant that can be broken by modifying a given field *)
 let field_invariants fi =
-  if not fi.jc_field_info_rep then [] else (* small optimisation, it is not needed *)
+  if not fi.fi_rep then [] else (* small optimisation, it is not needed *)
     (* List of all structure * invariant *)
     let invs =
       StringHashtblIter.fold
@@ -663,7 +663,7 @@ let field_invariants fi =
     List.fold_left
       (fun aux ((_, (_, a)) as x) ->
 	 let amems = assertion_memories StringSet.empty a in
-	 if StringSet.mem fi.jc_field_info_final_name amems then
+	 if StringSet.mem fi.fi_final_name amems then
            x::aux
 	 else
 	 aux)
@@ -711,9 +711,9 @@ let not_mutable_implies_fields_committed this st =
   (* fields committed *)
   let fields_pc = List.fold_left
     (fun acc fi ->
-       match fi.jc_field_info_type with
+       match fi.fi_type with
 	 | JCTpointer(fi_pc, min, max) ->
-	     let n = fi.jc_field_info_final_name in
+	     let n = fi.fi_final_name in
 	     let index = "jc_index" in
 	     let committed_name = committed_name fi_pc in
 	     let fi_ac = alloc_class_of_pointer_class fi_pc in
@@ -814,9 +814,9 @@ let owner_unicity this root =
   let eq_and_com_list = List.map
     (fun fi ->
        try
-	 let name = fi.jc_field_info_final_name in
+	 let name = fi.fi_final_name in
 	 Printf.printf "***** FIELD %s *****\n%!" name;
-	 let fi_pc = type_pc fi.jc_field_info_type in
+	 let fi_pc = type_pc fi.fi_type in
 	 let committed_name = committed_name fi_pc in
 	 let this_dot_f = make_select (LVar name) (LVar this) in
 	 let x_dot_f = make_select (LVar name) (LVar x_name) in
@@ -825,12 +825,12 @@ let owner_unicity this root =
 	 let fi_ac = alloc_class_of_pointer_class fi_pc in
 	 let alloc = generic_alloc_table_name fi_ac in
 	 let omin1, omax1 = omin_omax (LVar alloc) this_dot_f
-	   (range_min fi.jc_field_info_type)
-	   (range_max fi.jc_field_info_type)
+	   (range_min fi.fi_type)
+	   (range_max fi.fi_type)
 	 in
 	 let omin2, omax2 = omin_omax (LVar alloc) x_dot_f
-	   (range_min fi.jc_field_info_type)
-	   (range_max fi.jc_field_info_type)
+	   (range_min fi.fi_type)
+	   (range_max fi.fi_type)
 	 in
 	 let range1 = make_range (LVar index1) omin1 omax1 in
 	 let range2 = make_range (LVar index2) omin2 omax2 in
@@ -864,10 +864,10 @@ let owner_unicity this root =
   (* params *)
   let params = List.map
     (fun fi ->
-       let ac = JCalloc_root (struct_root fi.jc_field_info_struct) in
-       [ fi.jc_field_info_final_name, memory_type (JCmem_field fi);
-	 committed_name (JCtag(fi.jc_field_info_hroot, [])),
-	 committed_memory_type (JCtag(fi.jc_field_info_hroot, []));
+       let ac = JCalloc_root (struct_root fi.fi_struct) in
+       [ fi.fi_final_name, memory_type (JCmem_field fi);
+	 committed_name (JCtag(fi.fi_hroot, [])),
+	 committed_memory_type (JCtag(fi.fi_hroot, []));
 	 generic_alloc_table_name ac,
 	 alloc_table_type ac ])
     reps
@@ -889,7 +889,7 @@ let make_hierarchy_global_invariant acc root =
     (fun st ->
        let _, invs =
 	 StringHashtblIter.find
-           Jc_typing.structs_table st.jc_struct_info_name
+           Jc_typing.structs_table st.si_name
        in
        List.map (fun inv -> not_mutable_implies_invariant this st inv) invs)
     structs
@@ -929,7 +929,7 @@ let make_hierarchy_global_invariant acc root =
   let params = List.sort lex2 params in
 
   (* fill hash table *)
-  Hashtbl.add hierarchy_invariants root.jc_struct_info_name params;
+  Hashtbl.add hierarchy_invariants root.si_name params;
 
   (* return the predicate *)
   match params with
@@ -968,7 +968,7 @@ let assume_field_invariants fi =
   (* keep hierarchies only once *)
   let hl = List.fold_left
     (fun acc (st, _) ->
-       StringMap.add (root_name st) st.jc_struct_info_hroot acc)
+       StringMap.add (root_name st) st.si_hroot acc)
     StringMap.empty
     invs
   in
@@ -992,7 +992,7 @@ let assume_all_invariants params =
 useful invariant for all objects that is not mutable *)
 let assume_field_invariants fi =
   (* structure in which the field is defined *)
-  let st, _ = Hashtbl.find Jc_typing.structs_table fi.jc_field_info_struct in
+  let st, _ = Hashtbl.find Jc_typing.structs_table fi.fi_struct in
   let assumes = List.map (fun inv -> forall_mutable_invariant st inv) (field_invariants fi) in (* FAUX (st n'est pas forcément la bonne structure !) *)
   let assumes = List.map (fun (params, inv) -> make_assume (List.map fst params) inv) assumes in
   List.fold_left append Void assumes
@@ -1023,13 +1023,13 @@ let assume_all_invariants params =
 let components st =
   List.fold_left
     (fun acc fi ->
-       if fi.jc_field_info_rep then
-	 match fi.jc_field_info_type with
+       if fi.fi_rep then
+	 match fi.fi_type with
 	   | JCTpointer(pc, _, _) -> (fi, pc)::acc
 	   | _ -> acc
        else acc)
     []
-    st.jc_struct_info_fields
+    st.si_fields
 
 let components_by_type st =
   let compare_pcs s t =
@@ -1066,8 +1066,8 @@ let hierarchy_committed_postcond this root fields value =
     (fun fi ->
        let this_fi = make_select_fi fi this in
        let omin, omax = omin_omax (LVar alloc) this_fi
-	 (range_min fi.jc_field_info_type)
-	 (range_max fi.jc_field_info_type)
+	 (range_min fi.fi_type)
+	 (range_max fi.fi_type)
        in
        fi, this_fi, omin, omax)
     fields
@@ -1089,7 +1089,7 @@ let hierarchy_committed_postcond this root fields value =
   (* new values for the fields in their ranges *)
   let com_values = List.map
     (fun (fi, this_fi, omin, omax) ->
-       let fi_pc = type_pc fi.jc_field_info_type in
+       let fi_pc = type_pc fi.fi_type in
        let index = "jc_index" in
        let range = make_range (LVar index) omin omax in
        let new_value = make_eq
@@ -1116,7 +1116,7 @@ let make_components_postcond this st reads writes committed =
     List.fold_left
       (fun acc (_, fields) ->
 	 List.fold_left
-	   (fun acc fi -> StringSet.add fi.jc_field_info_final_name acc)
+	   (fun acc fi -> StringSet.add fi.fi_final_name acc)
 	   acc
 	   fields)
       reads
@@ -1143,7 +1143,7 @@ let make_components_precond this st reads =
   let comps = components st in
   let reads =
     List.fold_left
-      (fun acc (fi, _) -> StringSet.add fi.jc_field_info_final_name acc)
+      (fun acc (fi, _) -> StringSet.add fi.fi_final_name acc)
       reads
       comps
   in
@@ -1154,13 +1154,13 @@ let make_components_precond this st reads =
        let committed_name = committed_name si in
        (* x.f *)
        let base_field =
-	 LApp("select", [LVar fi.jc_field_info_final_name; this])
+	 LApp("select", [LVar fi.fi_final_name; this])
        in
        (* x.f+i *)
        let this_field =
 	 LApp("shift", [ base_field; LVar index_name ])
        in
-       let fi_pc = type_pc fi.jc_field_info_type in
+       let fi_pc = type_pc fi.fi_type in
        let fi_ac = alloc_class_of_pointer_class fi_pc in
        let alloc = generic_alloc_table_name fi_ac in
        let reads = StringSet.add (generic_tag_table_name (pointer_class_root fi_pc)) reads in
@@ -1175,8 +1175,8 @@ let make_components_precond this st reads =
 	      LConst(Prim_bool false) ]))
        in
        let omin, omax = omin_omax (LVar alloc) base_field
-	 (range_min fi.jc_field_info_type)
-	 (range_max fi.jc_field_info_type)
+	 (range_min fi.fi_type)
+	 (range_max fi.fi_type)
        in
        let range = make_range (LVar index_name) omin omax in
        let valid_impl = LImpl(range, body) in
@@ -1233,7 +1233,7 @@ let pack_declaration st acc =
       []
     )
   in
-  if st.jc_struct_info_parent = None then
+  if st.si_parent = None then
     Param(
       false,
       id_no_loc (pack_name st),
@@ -1298,7 +1298,7 @@ let unpack_declaration st acc =
       []
     )
   in
-  if st.jc_struct_info_parent = None then
+  if st.si_parent = None then
     Param(
       false,
       id_no_loc ("unpack_"^(root_name st)),
@@ -1318,26 +1318,26 @@ let unpack_declaration st acc =
 (*********************************************************************)
 (*               Using a recursively-defined predicate               *)
 (*********************************************************************)
-(*let valid_inv_name st = st.jc_struct_info_name ^ "_inv"
+(*let valid_inv_name st = st.si_name ^ "_inv"
 
-let valid_inv_axiom_name st = st.jc_struct_info_name ^ "_inv_sem"
+let valid_inv_axiom_name st = st.si_name ^ "_inv_sem"
 
 let rec struct_depends st acc mem =
-  let name = st.jc_struct_info_name in
+  let name = st.si_name in
   if StringSet.mem name mem then acc, mem else
-  let acc, mem = List.fold_left (fun (acc, mem) (_, fi) -> match fi.jc_field_info_type with
+  let acc, mem = List.fold_left (fun (acc, mem) (_, fi) -> match fi.fi_type with
       | JCTpointer(st, _, _) -> struct_depends st acc mem
       | JCTnull -> assert false
       | JCTnative _ | JCTlogic _ | JCTrange _ -> acc, mem)
-    (st::acc, StringSet.add name mem) st.jc_struct_info_fields
+    (st::acc, StringSet.add name mem) st.si_fields
   in
-  match st.jc_struct_info_parent with
+  match st.si_parent with
     None -> acc, mem
   | Some pst -> struct_depends pst acc mem
 
 let struct_depends =
   let table = Hashtbl.create 97 in fun st ->
-  let name = st.jc_struct_info_name in
+  let name = st.si_name in
   try Hashtbl.find table name with Not_found ->
   let result = fst (struct_depends st [] StringSet.empty) in
   Hashtbl.add table name result;
@@ -1348,7 +1348,7 @@ let valid_inv_params st =
   let deps = struct_depends st in
   let memories = List.fold_left (fun acc st ->
     List.fold_left (fun acc (_, fi) ->
-      (fi.jc_field_info_final_name, memory_field fi)::acc) acc st.jc_struct_info_fields)
+      (fi.fi_final_name, memory_field fi)::acc) acc st.si_fields)
     [] deps in
   let params = List.fold_left invariants_params memories deps in
   let params = List.sort (fun (name1, _) (name2, _) ->
@@ -1369,7 +1369,7 @@ let tr_valid_inv st acc =
   let valid_inv_type = simple_logic_type "prop" in
   let vi_this = "???",
     { logic_type_name = "pointer" ;
-      logic_type_args = [simple_logic_type st.jc_struct_info_hroot] } in
+      logic_type_args = [simple_logic_type st.si_hroot] } in
   let logic = Logic(false, valid_inv_name st, vi_this::params,
     valid_inv_type) in
   let acc = logic::acc in
@@ -1379,24 +1379,24 @@ let tr_valid_inv st acc =
   let this_var = LVar this in
   let this_ty =
     { logic_type_name = "pointer";
-      logic_type_args = [simple_logic_type st.jc_struct_info_hroot] } in
+      logic_type_args = [simple_logic_type st.si_hroot] } in
   let fields_valid_inv = List.map (fun (_, fi) ->
-    match fi.jc_field_info_type with
+    match fi.fi_type with
     | JCTpointer(st, _, _) ->
         let params = valid_inv_params st in
         let params_var = List.map (fun (name, _) -> LVar name) params in
         LPred(valid_inv_name st,
-          LApp("select", [LVar fi.jc_field_info_final_name; this_var])::params_var)
+          LApp("select", [LVar fi.fi_final_name; this_var])::params_var)
     | JCTnull -> assert false
     | JCTnative _
     | JCTlogic _
-    | JCTrange _ -> LTrue) st.jc_struct_info_fields in
+    | JCTrange _ -> LTrue) st.si_fields in
   let params_var = List.map (fun (name, _) -> LVar name) params in
   let sem = LIff(LPred(valid_inv_name st, this_var::params_var),
     LImpl(LPred("neq", [LVar this; LVar "null"]),
       make_and (make_and_list fields_valid_inv) (invariant_for_struct this_var st))) in
   (* parent invariant *)
-  let sem = match st.jc_struct_info_parent with
+  let sem = match st.si_parent with
     None -> sem
   | Some pst ->
       let parent_params = valid_inv_params pst in
@@ -1410,20 +1410,20 @@ let tr_valid_inv st acc =
 
 let rec invariant_for_struct ?pos this si =
   let _, invs = 
-    StringHashtblIter.find Jc_typing.structs_table si.jc_struct_info_name 
+    StringHashtblIter.find Jc_typing.structs_table si.si_name 
   in
   let invs = Assertion.mkand ?pos
     ~conjuncts:(List.map 
 		  (fun (li, _) -> 
-		     let a = { jc_app_fun = li;
-			       jc_app_args = [this];
-			       jc_app_label_assoc = [];
-			       jc_app_region_assoc = [] }
+		     let a = { app_fun = li;
+			       app_args = [this];
+			       app_label_assoc = [];
+			       app_region_assoc = [] }
 		     in
 		       new assertion ?pos (JCAapp a)) invs) 
     ()
   in
-    match si.jc_struct_info_parent with
+    match si.si_parent with
       | None -> invs
       | Some(si, _) -> (* add invariants from the type hierarchy *)
 	  let this =
@@ -1448,11 +1448,11 @@ let code_function (fi, pos, fs, _sl) vil =
 	  let global_invariants =
 	    IntHashtblIter.fold
 	      (fun _ (li, _) acc -> 
-		 (* li.jc_logic_info_parameters <- vil; *)
-		 let a = { jc_app_fun = li;
-			   jc_app_args = (* vitl *)[];
-			   jc_app_label_assoc = [];
-			   jc_app_region_assoc = [] }
+		 (* li.li_parameters <- vil; *)
+		 let a = { app_fun = li;
+			   app_args = (* vitl *)[];
+			   app_label_assoc = [];
+			   app_region_assoc = [] }
 		 in
 		 (new assertion ~mark:(Jc_pervasives.new_label_name ())
 		    ~pos (JCAapp a)) :: acc)
@@ -1465,7 +1465,7 @@ let code_function (fi, pos, fs, _sl) vil =
 	  let pre_invariants,post_invariants =
 	    List.fold_left
 	      (fun (acc1,acc2) (valid,vi) ->
-		 match vi.jc_var_info_type with
+		 match vi.vi_type with
 		   | JCTpointer (JCtag (st, []), _, _) ->
 		       let inv = 
 			 invariant_for_struct ~pos
@@ -1479,12 +1479,12 @@ let code_function (fi, pos, fs, _sl) vil =
 			  ~conjuncts: [acc2; inv] ())
 		   | _ -> (acc1,acc2))
 	      (global_invariants,global_invariants)
-	      fi.jc_fun_info_parameters
+	      fi.fun_parameters
 	  in
 	  (* add invariants to the function precondition *)
-	  fs.jc_fun_requires <- 
+	  fs.fs_requires <- 
 	    Assertion.mkand ~pos 
-	    ~conjuncts:[fs.jc_fun_requires; pre_invariants] ();
+	    ~conjuncts:[fs.fs_requires; pre_invariants] ();
 	  (* add invariants to the function postcondition *)
 	  if is_purely_exceptional_fun fs then () else
 	    let safety_exists = ref false in
@@ -1492,20 +1492,20 @@ let code_function (fi, pos, fs, _sl) vil =
 	    List.iter
 	      (fun (_, s, b) ->
 		 if s = "safety" then safety_exists := true;
-		 b.jc_behavior_ensures <- 
-		   Assertion.mkand ~pos ~conjuncts:[b.jc_behavior_ensures; post] ())
-	      fs.jc_fun_behavior;
+		 b.b_ensures <- 
+		   Assertion.mkand ~pos ~conjuncts:[b.b_ensures; post] ())
+	      fs.fs_behavior;
 	    (* add the 'safety' spec if it does not exist 
 	       (it could exist e.g. from Krakatoa) *)
 	    if not !safety_exists then
 	      if Jc_options.verify_invariants_only then
-		let invariants_b = { default_behavior with jc_behavior_ensures = post } in
-		fs.jc_fun_behavior <- 
-		  (Loc.dummy_position, "invariants", invariants_b) :: fs.jc_fun_behavior;
+		let invariants_b = { default_behavior with b_ensures = post } in
+		fs.fs_behavior <- 
+		  (Loc.dummy_position, "invariants", invariants_b) :: fs.fs_behavior;
 	      else
-		let safety_b = { default_behavior with jc_behavior_ensures = post } in
-		fs.jc_fun_behavior <- 
-		  (Loc.dummy_position, "safety", safety_b) :: fs.jc_fun_behavior;
+		let safety_b = { default_behavior with b_ensures = post } in
+		fs.fs_behavior <- 
+		  (Loc.dummy_position, "safety", safety_b) :: fs.fs_behavior;
       | _ -> ()
   end;
 

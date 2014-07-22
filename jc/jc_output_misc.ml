@@ -88,7 +88,7 @@ let const fmt c =
 
 let label fmt l =
   match l with
-    | LabelName s -> fprintf fmt "%s" s.label_info_name
+    | LabelName s -> fprintf fmt "%s" s.lab_name
     | LabelHere -> fprintf fmt "Here" 
     | LabelPre -> fprintf fmt "Pre" 
     | LabelOld -> fprintf fmt "Old" 
@@ -135,18 +135,18 @@ and address_kind fmt = function
   | Addr_pointer -> fprintf fmt ""
 
 let alloc_class fmt = function
-  | JCalloc_root vi -> fprintf fmt "alloc-root(%s)" vi.jc_root_info_name
+  | JCalloc_root vi -> fprintf fmt "alloc-root(%s)" vi.ri_name
   | JCalloc_bitvector -> fprintf fmt "alloc-bitvector"
 
 let memory_class fmt = function
-  | JCmem_field fi -> fprintf fmt "mem-field(%s)" fi.jc_field_info_name
+  | JCmem_field fi -> fprintf fmt "mem-field(%s)" fi.fi_name
   | JCmem_plain_union vi -> 
-      fprintf fmt "mem-plain-union(%s)" vi.jc_root_info_name
+      fprintf fmt "mem-plain-union(%s)" vi.ri_name
   | JCmem_bitvector -> fprintf fmt "mem-bitvector"
 
 let pointer_class = function
-  | JCtag(st, _) -> "tag "^st.jc_struct_info_name
-  | JCroot vi -> "root "^vi.jc_root_info_name
+  | JCtag(st, _) -> "tag "^st.si_name
+  | JCroot vi -> "root "^vi.ri_name
 
 (*
 Local Variables: 

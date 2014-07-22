@@ -118,56 +118,56 @@ struct
   let iin =
     let pid = make_pred nin in
     let tvar = Jc_type_var.type_var_from_string ~univ:true "a_in" in
-    pid.jc_logic_info_poly_args <- [tvar];
+    pid.li_poly_args <- [tvar];
     let tvar = JCTtype_var tvar in
-    pid.jc_logic_info_parameters <- [Jc_pervasives.var tvar "x";
+    pid.li_parameters <- [Jc_pervasives.var tvar "x";
                                      Jc_pervasives.var (jc_ty tvar) "s"];
     pid
 
   let make_jc_in l =
     new assertion (JCAapp
                      {
-                       jc_app_fun = iin;
-                       jc_app_args = l;
-                       jc_app_region_assoc = [];
-                       jc_app_label_assoc = []
+                       app_fun = iin;
+                       app_args = l;
+                       app_region_assoc = [];
+                       app_label_assoc = []
                      })
 
   let idisj =
     let pid = make_pred ndisj in
     let tvar = Jc_type_var.type_var_from_string ~univ:true "a" in
-    pid.jc_logic_info_poly_args <- [tvar];
+    pid.li_poly_args <- [tvar];
     let tvar = JCTtype_var tvar in
-    pid.jc_logic_info_parameters <- [Jc_pervasives.var (jc_ty tvar) "s1";
+    pid.li_parameters <- [Jc_pervasives.var (jc_ty tvar) "s1";
                                      Jc_pervasives.var (jc_ty tvar) "s2"];
     pid
 
   let make_jc_disj l =
     new assertion (JCAapp
                      {
-                       jc_app_fun = idisj;
-                       jc_app_args = l;
-                       jc_app_region_assoc = [];
-                       jc_app_label_assoc = []
+                       app_fun = idisj;
+                       app_args = l;
+                       app_region_assoc = [];
+                       app_label_assoc = []
                      })
 
 
   let isub =
     let pid = make_pred sub_pred in
     let tvar = Jc_type_var.type_var_from_string ~univ:true "a" in
-    pid.jc_logic_info_poly_args <- [tvar];
+    pid.li_poly_args <- [tvar];
     let tvar = JCTtype_var tvar in
-    pid.jc_logic_info_parameters <- [Jc_pervasives.var (jc_ty tvar) "s1";
+    pid.li_parameters <- [Jc_pervasives.var (jc_ty tvar) "s1";
                                      Jc_pervasives.var (jc_ty tvar) "s2"];
     pid
 
   let make_jc_sub l =
     new assertion (JCAapp
                      {
-                       jc_app_fun = isub;
-                       jc_app_args = l;
-                       jc_app_region_assoc = [];
-                       jc_app_label_assoc = []
+                       app_fun = isub;
+                       app_args = l;
+                       app_region_assoc = [];
+                       app_label_assoc = []
                      })
 
 
@@ -288,26 +288,26 @@ let get_in_logic =
   let memo = Hashtbl.create 10 in
   fun f notin ->
     try
-      Hashtbl.find memo (f.jc_logic_info_tag,notin)
+      Hashtbl.find memo (f.li_tag,notin)
     with Not_found ->
-      let fin = make_logic_fun (in_name notin f.jc_logic_info_name)
+      let fin = make_logic_fun (in_name notin f.li_name)
         (NotIn.jc_ty notin) in
-      fin.jc_logic_info_result_region <- f.jc_logic_info_result_region;
-      fin.jc_logic_info_poly_args <- f.jc_logic_info_poly_args;
-      fin.jc_logic_info_parameters <- f.jc_logic_info_parameters;
-      fin.jc_logic_info_param_regions <- f.jc_logic_info_param_regions;
-      fin.jc_logic_info_effects <- f.jc_logic_info_effects;
-      fin.jc_logic_info_labels <- f.jc_logic_info_labels;
-      IntHashtblIter.add Jc_typing.logic_functions_table fin.jc_logic_info_tag
+      fin.li_result_region <- f.li_result_region;
+      fin.li_poly_args <- f.li_poly_args;
+      fin.li_parameters <- f.li_parameters;
+      fin.li_param_regions <- f.li_param_regions;
+      fin.li_effects <- f.li_effects;
+      fin.li_labels <- f.li_labels;
+      IntHashtblIter.add Jc_typing.logic_functions_table fin.li_tag
         (fin,JCNone);
-      Hashtbl.add memo (f.jc_logic_info_tag,notin) fin;
+      Hashtbl.add memo (f.li_tag,notin) fin;
       fin
 
 let app_in_logic f fparams label notin =
   let fin = get_in_logic f notin in
-  let app = {jc_app_fun = fin;
-             jc_app_args = fparams;
-             jc_app_region_assoc = [];
-             jc_app_label_assoc =
-      List.map (fun e -> (e,label)) fin.jc_logic_info_labels} in
+  let app = {app_fun = fin;
+             app_args = fparams;
+             app_region_assoc = [];
+             app_label_assoc =
+      List.map (fun e -> (e,label)) fin.li_labels} in
   new term (NotIn.jc_ty notin) (JCTapp app)

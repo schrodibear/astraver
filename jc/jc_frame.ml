@@ -58,7 +58,7 @@ open Jc_frame_notin
 (*****)
 
 let test_correct_logic f =
-  if List.length f.jc_logic_info_labels <> 1 then
+  if List.length f.li_labels <> 1 then
     failwith "Separation predicate generation :
  Logic must have only one label"
   else
@@ -69,7 +69,7 @@ let test_correct_logic f =
           | _ -> failwith "Separation predicate generation :
  Only simple memory model"         
       )
-      f.jc_logic_info_effects.jc_effect_memories
+      f.li_effects.e_memories
 
 let test_correct = function
   | `Logic (f,_,_) -> test_correct_logic f      
@@ -78,12 +78,12 @@ let test_correct = function
 let if_in_restr restr e = 
   match restr with [] -> true | _ ->
     match e with
-      | JCmem_field field -> List.mem field.jc_field_info_name restr
+      | JCmem_field field -> List.mem field.fi_name restr
       | _ ->  assert false (* checked by test_correct *)
 
 let inter_memory (m1,restr1) (m2,restr2) = 
-  let m1 = m1.jc_logic_info_effects.jc_effect_memories in
-  let m2 = m2.jc_logic_info_effects.jc_effect_memories in
+  let m1 = m1.li_effects.e_memories in
+  let m2 = m2.li_effects.e_memories in
   (*let log int m restr =
   Jc_options.lprintf "@[inter_memory %i:@[@.m : %a@.restr : %a@]@]"
     int
@@ -113,17 +113,17 @@ let inter_memory (m1,restr1) (m2,restr2) =
     m1 MemorySet.empty*)
 
 let is_same_field (mc,region) var =
-  let b1 = InternalRegion.equal region var.jc_var_info_region in
+  let b1 = InternalRegion.equal region var.vi_region in
   let b2 = match mc with
     | JCmem_field field -> 
-        Jc_typing.comparable_types field.jc_field_info_type
-          var.jc_var_info_type
+        Jc_typing.comparable_types field.fi_type
+          var.vi_type
     | _ -> false in
   b1 && b2
   
 let is_same_field_2var var1 var2 =
-  InternalRegion.equal var1.jc_var_info_region var2.jc_var_info_region
-  && var1.jc_var_info_type = var2.jc_var_info_type
+  InternalRegion.equal var1.vi_region var2.vi_region
+  && var1.vi_type = var2.vi_type
 
 let separation_between queue kind acc a b =
   match a,b with
@@ -163,7 +163,7 @@ let separation_between queue kind acc a b =
                  | `Cni, `Logic _ -> assert false (* Not Done anymore *)
                  | `Cni, `Pointer _ -> assert false (* Not Done anymore *)
              else acc)
-          finfo.jc_logic_info_effects.jc_effect_memories acc
+          finfo.li_effects.e_memories acc
     | `Pointer a, `Pointer b ->
         if is_same_field_2var a b 
         then`Diff (a,b)::acc
@@ -179,11 +179,11 @@ let rec fold_exp f acc l =
 let make_args ?(uniquify_usual=false) ?parameters f = 
   (* From tr_logic_fun_aux *)
   let lab = 
-    match f.jc_logic_info_labels with [lab] -> lab | _ -> LabelHere
+    match f.li_labels with [lab] -> lab | _ -> LabelHere
   in
   let params =
     match parameters with
-      | None -> f.jc_logic_info_parameters 
+      | None -> f.li_parameters 
       | Some params -> params in 
   let params = List.map (tparam ~label_in_name:true lab) params in  
   let params = 
@@ -191,7 +191,7 @@ let make_args ?(uniquify_usual=false) ?parameters f =
     then List.map (fun (n,v,ty) -> (n^"_JC"^(id_uniq ()),v,ty)) params
     else params in
   let model_params = 
-    tmodel_parameters ~label_in_name:true f.jc_logic_info_effects 
+    tmodel_parameters ~label_in_name:true f.li_effects 
   in
   let params = params @ model_params in
   let params = List.map (fun (n,_v,ty') -> (n,ty')) params in
@@ -199,40 +199,40 @@ let make_args ?(uniquify_usual=false) ?parameters f =
 (*
 let ft_name mem f = 
   let mem_name = memory_name mem in
-  f.jc_logic_info_final_name^mem_name^ft_suffix
+  f.li_final_name^mem_name^ft_suffix
 
 let ftpt_name mem f = 
   let mem_name = (memory_name mem)^"_elt" in  
-  f.jc_logic_info_final_name^mem_name^ft_suffix
+  f.li_final_name^mem_name^ft_suffix
 
 let notin_name mem f = 
   let mem_name = memory_name mem in  
-  f.jc_logic_info_final_name^mem_name^notin_suffix
+  f.li_final_name^mem_name^notin_suffix
 *)
 
 let in_name2 mem f = 
   let mem_name = memory_name mem in  
-  f.jc_logic_info_final_name^mem_name^in_suffix
+  f.li_final_name^mem_name^in_suffix
 
 
-let mk_tvar a = new term a.jc_var_info_type (JCTvar a)
+let mk_tvar a = new term a.vi_type (JCTvar a)
 
 let frame_between_name = "frame_between"
 
 let frame_between ftin notin labels =
   let pid = make_pred frame_between_name in
-  pid.jc_logic_info_final_name <- frame_between_name; (* ugly *)
+  pid.li_final_name <- frame_between_name; (* ugly *)
   let var = Jc_pervasives.var (NotIn.jc_ty notin) "a" in
-  pid.jc_logic_info_parameters <- [var];
-  let ef = {empty_effects with jc_effect_memories =
+  pid.li_parameters <- [var];
+  let ef = {empty_effects with e_memories =
       MemoryMap.add notin.NotIn.mem 
         (LogicLabelSet.of_list labels) MemoryMap.empty} in
-  pid.jc_logic_info_effects <- ef;
-  pid.jc_logic_info_labels <- labels;
-  let app = { jc_app_fun = pid;
-              jc_app_args = [ftin];
-              jc_app_region_assoc = [];
-              jc_app_label_assoc = List.combine labels labels} in
+  pid.li_effects <- ef;
+  pid.li_labels <- labels;
+  let app = { app_fun = pid;
+              app_args = [ftin];
+              app_region_assoc = [];
+              app_label_assoc = List.combine labels labels} in
   new assertion (JCAapp app)
 
 
@@ -241,10 +241,10 @@ let compute_predicate_framed () =
       test_correct_logic info;
       let params1 = List.map mk_tvar params1 in
       let params2 = List.map mk_tvar params2 in
-      let label1,label2 = match pi.jc_logic_info_labels with
+      let label1,label2 = match pi.li_labels with
         | [label1;label2] -> label1,label2
         | _ -> assert false in
-      let mems = info.jc_logic_info_effects.jc_effect_memories in
+      let mems = info.li_effects.e_memories in
       let apps = Jc_region.MemoryMap.fold
         (fun mem labs acc -> 
           let lab = Jc_envset.LogicLabelSet.choose labs in
@@ -254,7 +254,7 @@ let compute_predicate_framed () =
           let app2 = MyBag.make_jc_sub [app2;app] in
           match kind with
             | `Frame ->
-              let app1 = frame_between app notin pi.jc_logic_info_labels in
+              let app1 = frame_between app notin pi.li_labels in
               app2::app1::acc
             | `Sub   -> app2::acc
         ) mems [] in
@@ -266,9 +266,9 @@ let compute_predicate_framed () =
 let user_predicate_code queue id kind pred =
   let (logic,_) = IntHashtblIter.find Jc_typing.logic_functions_table id in
   Jc_options.lprintf "Generate code of %s with %i params@." 
-    logic.jc_logic_info_name (List.length pred);
+    logic.li_name (List.length pred);
   let code = fold_exp (separation_between queue kind) [] pred in
-  let lab = match logic.jc_logic_info_labels with 
+  let lab = match logic.li_labels with 
       [lab] -> lab | _ -> LabelHere in
   let trad_code = function
     | `Diff (a,b) -> 
@@ -303,13 +303,13 @@ let compute_needed_predicates () =
   (* use the call graph to add the others needed definitions*)
   while not (Queue.is_empty queue) do
     let (f,((_,mem) as e)) = Queue.pop queue in
-    let tag = f.jc_logic_info_tag in
+    let tag = f.li_tag in
     let l = Hashtbl.find_all predicates_to_generate tag in
     if not (List.mem e l) 
     then 
       begin 
         if MemoryMap.mem mem.NotIn.mem
-          f.jc_logic_info_effects.jc_effect_memories
+          f.li_effects.e_memories
         then
           begin
             begin
@@ -319,9 +319,9 @@ let compute_needed_predicates () =
             end;
             Hashtbl.add predicates_to_generate tag e;
             (* The user predicate has a particular traitement *)
-            if not (Hashtbl.mem pragma_gen_sep f.jc_logic_info_tag) then
+            if not (Hashtbl.mem pragma_gen_sep f.li_tag) then
               List.iter (fun called -> Queue.add (called,e) queue)
-                f.jc_logic_info_calls
+                f.li_calls
           end
       end;
   done;
@@ -336,27 +336,27 @@ let compute_needed_predicates () =
 
 (* let tr_logic_const vi init acc = *)
 (*   let decl = *)
-(*     Logic (false, vi.jc_var_info_final_name, [], 
-       tr_base_type vi.jc_var_info_type) :: acc *)
+(*     Logic (false, vi.vi_final_name, [], 
+       tr_base_type vi.vi_type) :: acc *)
 (*   in *)
 (*     match init with *)
 (*       | None -> decl *)
 (*       | Some(t,ty) -> *)
 (*           let t' = term ~type_safe ~global_assertion:true ~relocate:false
              LabelHere LabelHere t in *)
-(*           let vi_ty = vi.jc_var_info_type in *)
+(*           let vi_ty = vi.vi_type in *)
 (*           let t_ty = t#typ in *)
 (*           (\* eprintf "logic const: max type = %a@." print_type ty; *\) *)
 (*           let pred = *)
 (*             LPred ( *)
 (*               "eq", *)
 (*               [term_coerce Loc.dummy_position ty vi_ty t 
-                 (LVar vi.jc_var_info_name);  *)
+                 (LVar vi.vi_name);  *)
 (*                term_coerce t#pos ty t_ty t t']) *)
 (*           in *)
 (*         let ax = *)
 (*           Axiom( *)
-(*             vi.jc_var_info_final_name ^ "_value_axiom", *)
+(*             vi.vi_final_name ^ "_value_axiom", *)
 (*             bind_pattern_lets pred *)
 (*           ) *)
 (*         in *)
@@ -364,38 +364,38 @@ let compute_needed_predicates () =
 
 let fun_def f ta fa ft term_coerce params = 
   (* Function definition *)
-    match f.jc_logic_info_result_type, ta with
+    match f.li_result_type, ta with
       | None, JCAssertion a -> (* Predicate *)
           let body = fa a in
-          [Predicate(false, id_no_loc f.jc_logic_info_final_name, 
+          [Predicate(false, id_no_loc f.li_final_name, 
 		     params, body)]
       | Some ty, JCTerm t -> (* Function *)
           let ty' = tr_base_type ty in
           let t' = ft t in
 	  let t' = term_coerce t#pos ty t#typ t t' in
-          if List.mem f f.jc_logic_info_calls then
-            let logic = Logic(false, id_no_loc f.jc_logic_info_final_name, 
+          if List.mem f f.li_calls then
+            let logic = Logic(false, id_no_loc f.li_final_name, 
 			      params, ty') 
             in 
             let fstparams = List.map (fun (s,_) -> LVar s) params in
-            let app = (LApp(f.jc_logic_info_final_name,fstparams)) in
+            let app = (LApp(f.li_final_name,fstparams)) in
             let axiom =
-              Goal(KAxiom,id_no_loc (jc_axiom^f.jc_logic_info_final_name),
+              Goal(KAxiom,id_no_loc (jc_axiom^f.li_final_name),
                     make_forall_list params [[LPatT app]]
                       (make_eq app t')) in
             [logic;axiom]
           else
-            [Function(false, id_no_loc f.jc_logic_info_final_name, 
+            [Function(false, id_no_loc f.li_final_name, 
 		      params, ty', t')]
       | ty_opt, (JCNone | JCReads _) -> (* Logic *)
           let ty' = match ty_opt with
 	    | None -> simple_logic_type prop_type
 	    | Some ty -> tr_base_type ty
           in
-          [Logic(false, id_no_loc f.jc_logic_info_final_name, 
+          [Logic(false, id_no_loc f.li_final_name, 
 		 params, ty')]
       | None, JCInductive l  ->
-	  [Inductive(false, id_no_loc f.jc_logic_info_final_name, 
+	  [Inductive(false, id_no_loc f.li_final_name, 
 		     params,  
 		    List.map 
 		      (fun (id,_labels,a) ->
@@ -420,7 +420,7 @@ let gen_no_update_axioms f ta _fa _ft _term_coerce params acc =
       | JCNone -> acc 
       | JCReads pset ->
     let memory_params_reads = 
-      tmemory_detailed_params ~label_in_name:true f.jc_logic_info_effects
+      tmemory_detailed_params ~label_in_name:true f.li_effects
     in
     let params_names = List.map fst params in
     let normal_params = List.map (fun name -> LVar name) params_names in
@@ -447,19 +447,19 @@ let gen_no_update_axioms f ta _fa _ft _term_coerce params acc =
 		      ) params_names
 	   in
 	   let a = 
-             match f.jc_logic_info_result_type with
+             match f.li_result_type with
 	       | None ->
 		   LImpl(
                      sepa,
                      LIff(
-		       LPred(f.jc_logic_info_final_name,normal_params),
-		       LPred(f.jc_logic_info_final_name,update_params)))
+		       LPred(f.li_final_name,normal_params),
+		       LPred(f.li_final_name,update_params)))
 	       | Some _rety ->
 		   LImpl(
                      sepa,
                      LPred("eq",[
-			     LApp(f.jc_logic_info_final_name,normal_params);
-			     LApp(f.jc_logic_info_final_name,update_params)]))
+			     LApp(f.li_final_name,normal_params);
+			     LApp(f.li_final_name,update_params)]))
 	   in
 	   let a = 
              List.fold_left (fun a (name,ty) -> LForall(name,ty,[],a)) a params
@@ -472,7 +472,7 @@ let gen_no_update_axioms f ta _fa _ft _term_coerce params acc =
 		 a))
 	   in
 	   let name = 
-	     "no_update_" ^ f.jc_logic_info_name ^ "_" ^ string_of_int count
+	     "no_update_" ^ f.li_name ^ "_" ^ string_of_int count
 	   in
 	   count + 1, Goal(KAxiom,id_no_loc name,a) :: acc
       ) (0,acc) params)
@@ -484,7 +484,7 @@ let gen_no_assign_axioms f ta _fa _ft _term_coerce params acc =
       | JCNone -> acc 
       | JCReads pset ->
     let memory_params_reads = 
-      tmemory_detailed_params ~label_in_name:true f.jc_logic_info_effects
+      tmemory_detailed_params ~label_in_name:true f.li_effects
     in
     let params_names = List.map fst params in
     let normal_params = List.map (fun name -> LVar name) params_names in
@@ -512,19 +512,19 @@ let gen_no_assign_axioms f ta _fa _ft _term_coerce params acc =
 		      ) params_names
 	   in
 	   let a = 
-             match f.jc_logic_info_result_type with
+             match f.li_result_type with
 	       | None ->
 		   LImpl(
                      make_and sepa upda,
                      LIff(
-		       LPred(f.jc_logic_info_final_name,normal_params),
-		       LPred(f.jc_logic_info_final_name,update_params)))
+		       LPred(f.li_final_name,normal_params),
+		       LPred(f.li_final_name,update_params)))
 	       | Some _rety ->
 		   LImpl(
                      make_and sepa upda,
                      LPred("eq",[
-			     LApp(f.jc_logic_info_final_name,normal_params);
-			     LApp(f.jc_logic_info_final_name,update_params)]))
+			     LApp(f.li_final_name,normal_params);
+			     LApp(f.li_final_name,update_params)]))
 	   in
 	   let a = 
              List.fold_left (fun a (name,ty) -> LForall(name,ty,[],a)) a params
@@ -539,7 +539,7 @@ let gen_no_assign_axioms f ta _fa _ft _term_coerce params acc =
 		 a)))
 	   in
 	   let name = 
-	     "no_assign_" ^ f.jc_logic_info_name ^ "_" ^ string_of_int count
+	     "no_assign_" ^ f.li_name ^ "_" ^ string_of_int count
 	   in
 	   count + 1, Goal(KAxiom,id_no_loc name,a) :: acc
       ) (0,acc) params) (* memory_param_reads ? *)
@@ -551,7 +551,7 @@ let gen_alloc_extend_axioms f ta _fa _ft _term_coerce params acc =
       | JCNone -> acc
       | JCReads ps ->
     let alloc_params_reads = 
-      talloc_table_params ~label_in_name:true f.jc_logic_info_effects
+      talloc_table_params ~label_in_name:true f.li_effects
     in
     let params_names = List.map fst params in
     let normal_params = List.map (fun name -> LVar name) params_names in
@@ -577,19 +577,19 @@ let gen_alloc_extend_axioms f ta _fa _ft _term_coerce params acc =
 		    ) params_names
 	 in
 	 let a = 
-           match f.jc_logic_info_result_type with
+           match f.li_result_type with
 	     | None ->
 		 LImpl(
                    make_and exta valida,
                    LIff(
-		     LPred(f.jc_logic_info_final_name,normal_params),
-		     LPred(f.jc_logic_info_final_name,update_params)))
+		     LPred(f.li_final_name,normal_params),
+		     LPred(f.li_final_name,update_params)))
 	     | Some _rety ->
 		 LImpl(
                    make_and exta valida,
                    LPred("eq",[
-			   LApp(f.jc_logic_info_final_name,normal_params);
-			   LApp(f.jc_logic_info_final_name,update_params)]))
+			   LApp(f.li_final_name,normal_params);
+			   LApp(f.li_final_name,update_params)]))
 	 in
 	 let a = 
            List.fold_left (fun a (name,ty) -> LForall(name,ty,[],a)) a params
@@ -600,7 +600,7 @@ let gen_alloc_extend_axioms f ta _fa _ft _term_coerce params acc =
 	     a)
 	 in
 	 let name = 
-	   "alloc_extend_" ^ f.jc_logic_info_name ^ "_" ^ string_of_int count
+	   "alloc_extend_" ^ f.li_name ^ "_" ^ string_of_int count
 	 in
 	 count + 1, Goal(KAxiom,id_no_loc name,a) :: acc
       ) (0,acc) alloc_params_reads)
@@ -905,12 +905,12 @@ struct
   let ft_for_ft f args notin framed acc =
     let conjs = List.map 
       (fun (f,params) ->
-         (conv_app_pred notin f.jc_logic_info_name
+         (conv_app_pred notin f.li_name
             (List.map (fun (x,_) -> LVar x) params)))
       framed in
     let code = make_and_list conjs in
     let args = add_decl_args notin args in
-    let ft_name = ft_name notin f.jc_logic_info_name in
+    let ft_name = ft_name notin f.li_name in
     Predicate(false,ft_name,args,code)::acc          
 end
 *)
@@ -931,7 +931,7 @@ let tr_logic_model_params f =
   Lazy.force @@
   let open Option_monad in
   let tmodel_parameters = tmodel_parameters ~label_in_name:true in
-  default (lazy (tmodel_parameters f.jc_logic_info_effects)) begin
+  default (lazy (tmodel_parameters f.li_effects)) begin
 
       poly_mem_regions f
     |> function [] -> abort | l -> return l
@@ -939,17 +939,17 @@ let tr_logic_model_params f =
 
       MemoryMap.partition
         (fun (_, r) _ -> List.exists regions ~f:(Region.equal r))
-        f.jc_logic_info_effects.jc_effect_memories
+        f.li_effects.e_memories
     |> fun (replace, _ as r) -> if MemoryMap.is_empty replace then abort else return r
     >>= fun (replace, keep) ->
 
     (try
-      Option_misc.map (StringHashtblIter.find axiomatics_table) f.jc_logic_info_axiomatic
+      Option_misc.map (StringHashtblIter.find axiomatics_table) f.li_axiomatic
      with Not_found -> abort)
     >>= fun ax_data ->
 
       List.filter ax_data.axiomatics_decls
-        ~f:(fun (ABaxiom (_, _, _, a)) -> List.hd (occurrences [f.jc_logic_info_tag] a) <> [])
+        ~f:(fun (ABaxiom (_, _, _, a)) -> List.hd (occurrences [f.li_tag] a) <> [])
     |> function [] -> abort | l -> return l
     >>= fun ax_decls ->
 
@@ -974,7 +974,7 @@ let tr_logic_model_params f =
              mm
              empty)
        in
-       List.map ~f:(fun { jc_effect_memories = mm } -> count mm)
+       List.map ~f:(fun { e_memories = mm } -> count mm)
     %> List.fold_left ~init:LabelRegionMap.empty ~f:(LabelRegionMap.merge max)
     %> fun maxs ->
        if LabelRegionMap.compare (-) (count replace) maxs <= 0 then abort
@@ -989,8 +989,8 @@ let tr_logic_model_params f =
               let var = lvar ~label_in_name:true ~constant:true l % poly_name in
               let typ j =
                 let ri =
-                  match r.jc_reg_type with
-                  | JCTpointer (JCtag ({ jc_struct_info_root = Some ri }, _), _, _)
+                  match r.r_type with
+                  | JCTpointer (JCtag ({ si_root = Some ri }, _), _, _)
                   | JCTpointer (JCroot ri, _, _) -> ri
                   | _ -> failwith "unexpected region type in memory merging"
                 in
@@ -999,22 +999,22 @@ let tr_logic_model_params f =
               List.map ~f:(fdup3 name var typ) @@ range 0 `To (c - 1))
     |> List.flatten
     |> fun poly_params ->
-       let initial_params = tmodel_parameters { f.jc_logic_info_effects with
-                                                  jc_effect_memories = keep;
-                                                  jc_effect_globals = VarMap.empty }
+       let initial_params = tmodel_parameters { f.li_effects with
+                                                  e_memories = keep;
+                                                  e_globals = VarMap.empty }
        in
        let final_params = tmodel_parameters { empty_effects with
-                                               jc_effect_globals = f.jc_logic_info_effects.jc_effect_globals }
+                                               e_globals = f.li_effects.e_globals }
        in
        return @@ lazy (initial_params @ poly_params @ final_params)
   end
 
 let tr_params_usual_model_aux f =
     let lab = 
-      match f.jc_logic_info_labels with [lab] -> lab | _ -> LabelHere
+      match f.li_labels with [lab] -> lab | _ -> LabelHere
     in
     let usual_params =
-      List.map (tparam ~label_in_name:true lab) f.jc_logic_info_parameters
+      List.map (tparam ~label_in_name:true lab) f.li_parameters
     in
     let _3to2 = List.map (fun (n,_v,ty') -> (n,ty')) in
     let model_params = _3to2 (tr_logic_model_params f) in
@@ -1210,7 +1210,7 @@ struct
     (** which notin *)
     let ft_notin_updates =
       let todos = 
-        Hashtbl.find_all predicates_to_generate ft.jc_logic_info_tag in
+        Hashtbl.find_all predicates_to_generate ft.li_tag in
       let filter_notin acc = function
         | ((`Notin _| `Notin_pt) , mem) -> (NotIn.from_memory false mem)::acc
         | _ -> acc in
@@ -1231,7 +1231,7 @@ struct
       with Not_found -> None))::acc in
     let notin_updates = NotInSet.fold add notin_updates [] in
     (** params *)
-    let ft_name = ft.jc_logic_info_name in
+    let ft_name = ft.li_name in
     let ft_params_usual,ft_params_model = tr_params_usual_model_aux ft in
     let ft_params_usual =
       List.map (fun (x,ty) -> "_JC_ft_"^x,ty)  ft_params_usual in
@@ -1423,7 +1423,7 @@ struct
           (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;acc
 
   let notin_for_notin f args notin (ft,ft_notin) framed acc =
-    let ft_name = ft.jc_logic_info_name in
+    let ft_name = ft.li_name in
     let ft_params_usual,ft_params_model = tr_params_usual_model_aux ft in
     let ft_params_usual = 
       List.map (fun (x,ty) -> "_JC_ft_"^x,ty)  ft_params_usual in
@@ -1431,22 +1431,22 @@ struct
     let ft = (ft_name,ft_notin,
               List.map (fun (x,_) -> LVar x)
                 (ft_params_usual @ ft_params_model)) in
-    let name = (notin_name notin f.jc_logic_info_name) in
+    let name = (notin_name notin f.li_name) in
     Jc_options.lprintf "Generate logic notin_notin : %s :@." name;
     let acc = Logic(false,
                     name,
                     args,
                     NotIn.ty notin)::acc in
     let axiom_name = "axiom"^"_notin_"^(NotIn.mem_name2 notin)
-      ^f.jc_logic_info_name in
+      ^f.li_name in
     Jc_options.lprintf "Generate axiom notin : %s :@." axiom_name;
     let conjs = List.map 
       (fun (f,params) ->
-         (conv_app_pred ft notin f.jc_logic_info_name
+         (conv_app_pred ft notin f.li_name
             (List.map (fun (x,_) -> LVar x) params)))
       framed in
     let code = make_and_list conjs in
-    let conclu = conv_app_pred ft notin f.jc_logic_info_name
+    let conclu = conv_app_pred ft notin f.li_name
       (List.map (fun (x,_) -> LVar x) args) in
     let asser = make_equiv code conclu in
     let asser = make_forall_list args [] asser in
@@ -2195,7 +2195,7 @@ struct
     let var = ("jc_var",NotIn.ty_elt notin) in
     let conjs = List.map 
       (fun (f,params) ->
-         (in_interp_app var notin f.jc_logic_info_name
+         (in_interp_app var notin f.li_name
             (List.map (fun (x,_) -> LVar x) params)))
       framed in
     let code = make_and_list conjs in
@@ -2211,7 +2211,7 @@ struct
     let var = ("jc_var",NotIn.ty notin) in
     let conjs = List.map 
       (fun (f,params) ->
-         (disj_interp_app var notin f.jc_logic_info_name
+         (disj_interp_app var notin f.li_name
             (List.map (fun (x,_) -> LVar x) params)))
       framed in
     let code = make_and_list conjs in
@@ -2227,7 +2227,7 @@ struct
     let var = ("jc_var",NotIn.ty notin) in
     let conjs = List.map 
       (fun (f,params) ->
-         (sub_interp_app (`Var var) notin (`App (f.jc_logic_info_name,
+         (sub_interp_app (`Var var) notin (`App (f.li_name,
             (List.map (fun (x,_) -> LVar x) params)))))
       framed in
     let code = make_and_list conjs in
@@ -2243,7 +2243,7 @@ struct
     let var = ("jc_var",NotIn.ty notin) in
     let conjs = List.map 
       (fun (f,params) ->
-         (sub_interp_app  (`App (f.jc_logic_info_name,
+         (sub_interp_app  (`App (f.li_name,
             (List.map (fun (x,_) -> LVar x) params)))) notin (`Var var))
       framed in
     let code = make_and_list conjs in
@@ -2291,10 +2291,10 @@ let tr_params_usual_model f =
 let tr_logic_fun_aux f ta acc =
 
   if Jc_options.debug then
-    Format.printf "[interp] logic function %s@." f.jc_logic_info_final_name;
+    Format.printf "[interp] logic function %s@." f.li_final_name;
 
   let lab = 
-    match f.jc_logic_info_labels with [lab] -> lab | _ -> LabelHere
+    match f.li_labels with [lab] -> lab | _ -> LabelHere
   in     
 
   let fa = 
@@ -2323,12 +2323,12 @@ let tr_logic_fun_aux f ta acc =
   let acc =
     if Jc_options.gen_frame_rule_with_ft 
     then
-      let acc = if Hashtbl.mem pragma_gen_sep f.jc_logic_info_tag
+      let acc = if Hashtbl.mem pragma_gen_sep f.li_tag
       then begin
         (* use_predicate *)
-        let (_,which) = Hashtbl.find pragma_gen_sep f.jc_logic_info_tag in
+        let (_,which) = Hashtbl.find pragma_gen_sep f.li_tag in
         let todos =
-          Hashtbl.find_all predicates_to_generate f.jc_logic_info_tag in
+          Hashtbl.find_all predicates_to_generate f.li_tag in
         let fold acc = function
           | `Logic (f,_,params) -> (f,make_args ~parameters:params f) ::acc
           | `Pointer _ -> acc in
@@ -2338,11 +2338,11 @@ let tr_logic_fun_aux f ta acc =
           | (`In,_) -> fprintf fmt "in"
           | (`Disj,_) -> fprintf fmt "disj" in
         Jc_options.lprintf "user predicate %s asks to generate : %a@."
-          f.jc_logic_info_name (Pp.print_list Pp.comma print_todo) todos;
+          f.li_name (Pp.print_list Pp.comma print_todo) todos;
         let make_todo acc (todo,notin) =
           match todo with
             | `In ->
-              let fname = f.jc_logic_info_name in
+              let fname = f.li_name in
               let acc = 
                 InDisj.in_for_in fname args notin framed acc in
               let acc = 
@@ -2351,14 +2351,14 @@ let tr_logic_fun_aux f ta acc =
                 InDisj.sub_x_for_in fname args notin framed acc in
               acc
             | `Disj ->
-              InDisj.disj_for_in f.jc_logic_info_name args notin framed acc in
+              InDisj.disj_for_in f.li_name args notin framed acc in
         let acc = List.fold_left make_todo acc todos in
         acc
       end
       else begin 
-        let f_name = f.jc_logic_info_final_name in
+        let f_name = f.li_final_name in
         let todos = 
-          Hashtbl.find_all predicates_to_generate f.jc_logic_info_tag in
+          Hashtbl.find_all predicates_to_generate f.li_tag in
         let filter_notin acc = function
           | (`In , notin) -> notin::acc
           | _ -> acc in
@@ -2387,16 +2387,16 @@ let tr_logic_fun_aux f ta acc =
                 let acc = InDisj.define_disj notin fun_def acc  in
                 acc in
         let acc = List.fold_left make_todo acc todos in
-        let is_pred = f.jc_logic_info_result_type = None in
+        let is_pred = f.li_result_type = None in
         InDisj.def_frame f_name is_pred f_name params acc notin_updates
       end in
-      if Hashtbl.mem Jc_typing.pragma_gen_same f.jc_logic_info_tag then
-        let f_name = f.jc_logic_info_final_name in
+      if Hashtbl.mem Jc_typing.pragma_gen_same f.li_tag then
+        let f_name = f.li_final_name in
         let mirror =
-          Hashtbl.find Jc_typing.pragma_gen_same f.jc_logic_info_tag in
-        let mirror_name = mirror.jc_logic_info_final_name in
+          Hashtbl.find Jc_typing.pragma_gen_same f.li_tag in
+        let mirror_name = mirror.li_final_name in
         let todos =
-          Hashtbl.find_all predicates_to_generate mirror.jc_logic_info_tag in
+          Hashtbl.find_all predicates_to_generate mirror.li_tag in
         let filter_notin acc = function
           | (`In , notin) -> notin::acc
           | _ -> acc in
@@ -2404,7 +2404,7 @@ let tr_logic_fun_aux f ta acc =
         let notin_updates = List.fold_left filter_notin [] todos in
         Jc_options.lprintf "Frame of %s using footprint of %s@."
           f_name mirror_name;
-        let is_pred = f.jc_logic_info_result_type = None in
+        let is_pred = f.li_result_type = None in
         InDisj.def_frame f_name is_pred mirror_name params acc notin_updates
       else acc
     else acc in
@@ -2414,13 +2414,13 @@ let tr_logic_fun_aux f ta acc =
 (*   (\* full_separated axioms. *\) *)
 (*   let sep_preds =  *)
 (*     List.fold_left (fun acc vi -> *)
-(*       match vi.jc_var_info_type with *)
+(*       match vi.vi_type with *)
 (*         | JCTpointer(st,_,_) ->  *)
 (*             LPred("full_separated",[LVar "tmp"; 
-               LVar vi.jc_var_info_final_name]) *)
+               LVar vi.vi_final_name]) *)
 (*             :: acc *)
 (*         | _ -> acc *)
-(*     ) [] li.jc_logic_info_parameters *)
+(*     ) [] li.li_parameters *)
 (*   in *)
 (*   if List.length sep_preds = 0 then acc else *)
 (*     let params_names = List.map fst params_reads in *)
@@ -2434,30 +2434,30 @@ let tr_logic_fun_aux f ta acc =
 (*         ) params_names *)
 (*       in *)
 (*       let a =  *)
-(*         match li.jc_logic_info_result_type with *)
+(*         match li.li_result_type with *)
 (*           | None -> *)
 (*               LImpl( *)
 (*                 make_and_list sep_preds, *)
 (*                 LIff( *)
-(*                   LPred(li.jc_logic_info_final_name,normal_params), *)
-(*                   LPred(li.jc_logic_info_final_name,update_params))) *)
+(*                   LPred(li.li_final_name,normal_params), *)
+(*                   LPred(li.li_final_name,update_params))) *)
 (*           | Some rety -> *)
 (*               LImpl( *)
 (*                 make_and_list sep_preds, *)
 (*                 LPred("eq",[ *)
-(*                   LApp(li.jc_logic_info_final_name,normal_params); *)
-(*                   LApp(li.jc_logic_info_final_name,update_params)])) *)
+(*                   LApp(li.li_final_name,normal_params); *)
+(*                   LApp(li.li_final_name,update_params)])) *)
 (*       in *)
 (*       let a =  *)
 (*         List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) 
            a params_reads *)
 (*       in *)
 (*       let structty = match mc with  *)
-(*         | FVfield fi -> JCtag(fi.jc_field_info_struct, []) *)
+(*         | FVfield fi -> JCtag(fi.fi_struct, []) *)
 (*         | FVvariant vi -> JCvariant vi *)
 (*       in *)
 (*       let basety = match mc with *)
-(*         | FVfield fi -> tr_base_type fi.jc_field_info_type *)
+(*         | FVfield fi -> tr_base_type fi.fi_type *)
 (*         | FVvariant vi ->  *)
 (*             if integral_union vi then why_integer_type else *)
 (*               simple_logic_type (union_memory_type_name vi) *)
@@ -2470,13 +2470,13 @@ let tr_logic_fun_aux f ta acc =
 (*             a)) *)
 (*       in *)
 (*       let mcname = match mc with *)
-(*         | FVfield fi -> fi.jc_field_info_name *)
-(*         | FVvariant vi -> vi.jc_root_info_name *)
+(*         | FVfield fi -> fi.fi_name *)
+(*         | FVvariant vi -> vi.ri_name *)
 (*       in *)
 (*       Axiom( *)
-(*         "full_separated_" ^ li.jc_logic_info_name ^ "_" ^ mcname, *)
+(*         "full_separated_" ^ li.li_name ^ "_" ^ mcname, *)
 (*         a) :: acc *)
-(*     ) li.jc_logic_info_effects.jc_effect_memories acc *)
+(*     ) li.li_effects.e_memories acc *)
 
 
 let tr_logic_fun ft ta acc = tr_logic_fun_aux ft ta acc

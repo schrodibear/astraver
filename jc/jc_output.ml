@@ -132,18 +132,18 @@ let real_conversion fmt rc =
 let rec pattern fmt p =
   match p#node with
     | JCPstruct(st, lbls) ->
-	fprintf fmt "@[<hv 2>%s{@ " st.jc_struct_info_name;
+	fprintf fmt "@[<hv 2>%s{@ " st.si_name;
 	List.iter
 	  (fun (lbl, pat) ->
-	     fprintf fmt "%s = %a;@ " lbl.jc_field_info_name pattern pat)
+	     fprintf fmt "%s = %a;@ " lbl.fi_name pattern pat)
 	  lbls;
 	fprintf fmt "}@]"
     | JCPvar vi ->
-	fprintf fmt "%s" vi.jc_var_info_name
+	fprintf fmt "%s" vi.vi_name
     | JCPor(p1, p2) ->
 	fprintf fmt "(%a)@ | (%a)" pattern p1 pattern p2
     | JCPas(pat, vi) ->
-	fprintf fmt "(%a as %s)" pattern pat vi.jc_var_info_name
+	fprintf fmt "(%a as %s)" pattern pat vi.vi_name
     | JCPany ->
 	fprintf fmt "_"
     | JCPconst c ->
@@ -155,7 +155,7 @@ let rec term fmt t =
       t#mark term (new term_with ~mark:"" t)
   else
   match t#node with
-    | JCTvar vi -> fprintf fmt "%s" vi.jc_var_info_name
+    | JCTvar vi -> fprintf fmt "%s" vi.vi_name
     | JCTbinary(t1,op,t2) ->
 	fprintf fmt "@[(%a %s %a)@]" term t1 (bin_op op) term t2
     | JCTunary(op,t1) ->
@@ -164,16 +164,16 @@ let rec term fmt t =
 	fprintf fmt "@[(%a ? %a : %a)@]" term t1 term t2 term t3
     | JCTlet (vi,t1,t2) -> 
 	fprintf fmt "@[(let %s = %a in %a)@]" 
-          vi.jc_var_info_name term t1 term t2 
+          vi.vi_name term t1 term t2 
     | JCTcast (t, _, si)
     | JCTbitwise_cast (t, _, si) ->
-	fprintf fmt "(%a :> %s)" term t si.jc_struct_info_name
+	fprintf fmt "(%a :> %s)" term t si.si_name
     | JCTrange_cast (t, ei) ->
-	fprintf fmt "(%a :> %s)" term t (Option_misc.map_default (fun r -> r.jc_enum_info_name) "integer" ei)
+	fprintf fmt "(%a :> %s)" term t (Option_misc.map_default (fun r -> r.ei_name) "integer" ei)
     | JCTreal_cast (t, rc) ->
 	fprintf fmt "(%a :> %a)" term t real_conversion rc
     | JCTinstanceof (t, _, si) ->
-	fprintf fmt "(%a <: %s)" term t si.jc_struct_info_name
+	fprintf fmt "(%a <: %s)" term t si.si_name
     | JCToffset (k,t,_)->
 	fprintf fmt "@[\\offset_m%a(%a)@]" offset_kind k term t
     | JCTaddress(absolute,t) ->
@@ -183,34 +183,34 @@ let rec term fmt t =
     | JCTold t -> fprintf fmt "@[\\old(%a)@]" term t
     | JCTat(t,lab) -> fprintf fmt "@[\\at(%a,%a)@]" term t label lab
 (*
-    | JCTapp app when List.length app.jc_app_args = 1 ->
-	let op = app.jc_app_fun in
-	let t1 = List.hd app.jc_app_args in
+    | JCTapp app when List.length app.app_args = 1 ->
+	let op = app.app_fun in
+	let t1 = List.hd app.app_args in
 	begin try 
 	  ignore 
 	    (Hashtbl.find Jc_typing.enum_conversion_logic_functions_table op);
 	  (* conversion due to enumeration. Ignore it. *)
 	  term fmt t1
 	with Not_found ->
-	  fprintf fmt "%s(@[%a@])" op.jc_logic_info_name term t1
+	  fprintf fmt "%s(@[%a@])" op.li_name term t1
 	end
-    | JCTapp app when List.length app.jc_app_args = 2 ->
-	let op = app.jc_app_fun in
-	let l = app.jc_app_args in
+    | JCTapp app when List.length app.app_args = 2 ->
+	let op = app.app_fun in
+	let l = app.app_args in
 	  begin try
 	  let s = lbin_op op in
 	  fprintf fmt "@[(%a %s %a)@]" term t1 s term t2
 	with Not_found ->
-	  fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
+	  fprintf fmt "@[%s(%a)@]" op.li_name
 	    (print_list comma term) l 
 	end
 *)
     | JCTapp app ->
-	let op = app.jc_app_fun and l = app.jc_app_args in
-	fprintf fmt "%s(@[%a@])" op.jc_logic_info_name
+	let op = app.app_fun and l = app.app_args in
+	fprintf fmt "%s(@[%a@])" op.li_name
 	  (print_list comma term) l 
     | JCTderef (t, _label, fi)-> 
-	fprintf fmt "@[%a.%s@]" term t fi.jc_field_info_name	
+	fprintf fmt "@[%a.%s@]" term t fi.fi_name	
     | JCTshift (t1, t2) -> 
 	fprintf fmt "@[(%a + %a)@]" term t1 term t2
     | JCTconst c -> const fmt c
@@ -237,22 +237,22 @@ let rec assertion fmt a =
 	fprintf fmt "@[(%a ? %a : %a)@]" term t assertion a1 assertion a2
     | JCAbool_term t -> term fmt t
     | JCAinstanceof (t, _lab, st) ->
-	fprintf fmt "(%a <: %s)" term t st.jc_struct_info_name
+	fprintf fmt "(%a <: %s)" term t st.si_name
     | JCAfresh t -> fprintf fmt "\\fresh(%a)" term t
     | JCAold a -> fprintf fmt "\\old(%a)" assertion a
     | JCAat(a,lab) -> fprintf fmt "\\at(%a,%a)" assertion a label lab
     | JCAquantifier (q,vi, trigs, a)-> 
 	fprintf fmt "@[(\\%a %a %s%a;@\n%a)@]"
 	  quantifier q
-	  print_type vi.jc_var_info_type
-	  vi.jc_var_info_name
+	  print_type vi.vi_type
+	  vi.vi_name
           triggers trigs
 	  assertion a
     | JCArelation (t1, op, t2) ->
 	fprintf fmt "@[(%a %s %a)@]" term t1 (bin_op op) term t2
     | JCAapp app ->
-	 fprintf fmt "@[%s(%a)@]" app.jc_app_fun.jc_logic_info_name
-	      (print_list comma term) app.jc_app_args 
+	 fprintf fmt "@[%s(%a)@]" app.app_fun.li_name
+	      (print_list comma term) app.app_args 
     | JCAnot a1 ->
 	fprintf fmt "@[(!@ %a)@]" assertion a1
     | JCAiff (a1, a2)-> 
@@ -279,7 +279,7 @@ let rec assertion fmt a =
     | JCAeqtype _ -> assert false (* TODO *)
     | JCAsubtype _ -> assert false (* TODO *)
     | JCAlet (vi, t, p) ->
-	fprintf fmt "@[<v 2>let %s =@ %a in@ %a@]" vi.jc_var_info_name
+	fprintf fmt "@[<v 2>let %s =@ %a in@ %a@]" vi.vi_name
           term t
 	  assertion p
     | JCAmatch (t, pal) ->
@@ -299,9 +299,9 @@ and triggers fmt trigs =
 let rec location_set fmt locs = 
   match locs#node with
     | JCLSvar vi-> 
-	fprintf fmt "%s" vi.jc_var_info_name
+	fprintf fmt "%s" vi.vi_name
     | JCLSderef (locs, _, fi, _) ->
-	fprintf fmt "%a.%s" location_set locs fi.jc_field_info_name
+	fprintf fmt "%a.%s" location_set locs fi.fi_name
     | JCLSrange (locset, t1, t2) ->
 	fprintf fmt "(%a + [%a..%a])" location_set locset 
 	  (print_option term) t1 (print_option term) t2
@@ -314,11 +314,11 @@ let rec location_set fmt locs =
 let rec location fmt loc = 
   match loc#node with
     | JCLvar vi -> 
-	fprintf fmt "%s" vi.jc_var_info_name
+	fprintf fmt "%s" vi.vi_name
     | JCLderef (locs, _, fi,_) ->
-	fprintf fmt "%a.%s" location_set locs fi.jc_field_info_name
+	fprintf fmt "%a.%s" location_set locs fi.fi_name
     | JCLderef_term (t1, fi) ->
-	fprintf fmt "%a.%s" term t1 fi.jc_field_info_name
+	fprintf fmt "%a.%s" term t1 fi.fi_name
     | JCLat (loc, lab) ->
 	fprintf fmt "\\at(%a,%a)" location loc label lab
 
@@ -326,25 +326,25 @@ let behavior fmt (_loc,id,b) =
   fprintf fmt "@\n@[<v 2>behavior %s:" id;
   Option_misc.iter
     (fun a -> fprintf fmt "@\nassumes %a;" assertion a) 
-    b.jc_behavior_assumes;
+    b.b_assumes;
   Option_misc.iter
-  (fun a -> fprintf fmt "@\nthrows %s;" a.jc_exception_info_name) 
-    b.jc_behavior_throws;    
+  (fun a -> fprintf fmt "@\nthrows %s;" a.exi_name) 
+    b.b_throws;    
   Option_misc.iter 
     (fun (_,locs) -> fprintf fmt "@\nassigns %a;" 
        (print_list_or_default "\\nothing" comma location) locs)
-    b.jc_behavior_assigns;
-  fprintf fmt "@\nensures %a;@]" assertion b.jc_behavior_ensures
+    b.b_assigns;
+  fprintf fmt "@\nensures %a;@]" assertion b.b_ensures
   
 let print_spec fmt s =
-  fprintf fmt "@\n@[<v 2>  requires @[%a@];" assertion s.jc_fun_requires;
+  fprintf fmt "@\n@[<v 2>  requires @[%a@];" assertion s.fs_requires;
   Option_misc.iter 
     (fun (t,r) -> match r with
        | None -> fprintf fmt "@\n@[<v 2>  decreases @[%a@];" term t
        | Some li -> fprintf fmt "@\n@[<v 2>  decreases @[%a@] for %s;" 
-	   term t li.jc_logic_info_name) 
-    s.jc_fun_decreases;
-  List.iter (behavior fmt) (s.jc_fun_default_behavior :: s.jc_fun_behavior);
+	   term t li.li_name) 
+    s.fs_decreases;
+  List.iter (behavior fmt) (s.fs_default_behavior :: s.fs_behavior);
   fprintf fmt "@]"
 
 let call_bin_op _op =
@@ -361,24 +361,24 @@ let rec expr fmt e =
     match e#node with
       | JCEconst c -> const fmt c
       | JCEvar vi -> 
-	  fprintf fmt "%s" vi.jc_var_info_name
+	  fprintf fmt "%s" vi.vi_name
       | JCEderef(e, fi) -> 
-	  fprintf fmt "%a.%s" expr e fi.jc_field_info_name 
+	  fprintf fmt "%a.%s" expr e fi.fi_name 
       | JCEbinary(e1, op, e2) ->
 	  fprintf fmt "@[(%a %s %a)@]" expr e1 (bin_op op) expr e2
       | JCEunary(op,e1) ->
 	  fprintf fmt "@[(%s %a)@]" (unary_op op) expr e1
       | JCEassign_var(v, e) -> 
-	  fprintf fmt "(%s = %a)" v.jc_var_info_name expr e
+	  fprintf fmt "(%s = %a)" v.vi_name expr e
       | JCEassign_heap(e1, fi, e2) -> 
-	  fprintf fmt "%a.%s = %a" expr e1 fi.jc_field_info_name expr e2
+	  fprintf fmt "%a.%s = %a" expr e1 fi.fi_name expr e2
       | JCEinstanceof(e, si) ->
-	  fprintf fmt "(%a <: %s)" expr e si.jc_struct_info_name
+	  fprintf fmt "(%a <: %s)" expr e si.si_name
       | JCEcast(e, si)
       | JCEbitwise_cast(e, si) ->
-	  fprintf fmt "(%a :> %s)" expr e si.jc_struct_info_name
+	  fprintf fmt "(%a :> %s)" expr e si.si_name
       | JCErange_cast(e, ri) ->
-	  fprintf fmt "(%a :> %s)" expr e (Option_misc.map_default (fun r -> r.jc_enum_info_name) "integer" ri)
+	  fprintf fmt "(%a :> %s)" expr e (Option_misc.map_default (fun r -> r.ei_name) "integer" ri)
       | JCEreal_cast(e, rc) ->
 	  fprintf fmt "(%a :> %a)" expr e real_conversion rc
       | JCEif(e1,e2,e3) -> 
@@ -392,17 +392,17 @@ let rec expr fmt e =
       | JCEfresh(e) ->
 	  fprintf fmt "\\fresh(%a)" expr e
       | JCEalloc(e, si) ->
-	  fprintf fmt "(new %s[%a])" si.jc_struct_info_name expr e
+	  fprintf fmt "(new %s[%a])" si.si_name expr e
       | JCEfree e ->
 	  fprintf fmt "(free(%a))" expr e
       | JCEreinterpret (e, si) ->
-          fprintf fmt "(reinterpret %a as %s)" expr e si.jc_struct_info_name
+          fprintf fmt "(reinterpret %a as %s)" expr e si.si_name
       | JCElet(vi,Some e1,e2) -> 
 	  fprintf fmt "@[(let %s =@ %a@ in %a)@]" 
-	    vi.jc_var_info_name expr e1 expr e2
+	    vi.vi_name expr e1 expr e2
       | JCElet(vi,None,e2) -> 
 	  fprintf fmt "@[%a %s; %a@]"  
-	    print_type vi.jc_var_info_type vi.jc_var_info_name expr e2
+	    print_type vi.vi_type vi.vi_name expr e2
       | JCEassert(behav,asrt,a) -> 
 	  fprintf fmt "@\n%a %a%a;" 
 	    asrt_kind asrt
@@ -427,7 +427,7 @@ let rec expr fmt e =
 	    expr fs
       | JCEthrow(ei, eo) ->
 	  fprintf fmt "@\nthrow %s %a;"
-	    ei.jc_exception_info_name
+	    ei.exi_name
 	    (print_option_or_default "()" expr) eo
       | JCEpack _ ->
           fprintf fmt "pack(TODO)"
@@ -452,19 +452,19 @@ let rec expr fmt e =
 		behav
 		assertion inv))
 *)
-	    la.jc_loop_behaviors
+	    la.loop_behaviors
             (print_option 
                (fun fmt (t,r) -> 
                   match r with
                     | None -> fprintf fmt "@\nvariant %a;" term t
                     | Some r -> fprintf fmt "@\nvariant %a for %s;" term t
-                        r.jc_logic_info_name
+                        r.li_name
                ))
-            la.jc_loop_variant
+            la.loop_variant
             expr e
-      | JCEapp{ jc_call_fun = (JClogic_fun{ jc_logic_info_final_name = name }
-                | JCfun{ jc_fun_info_final_name = name });
-                jc_call_args = args } ->
+      | JCEapp{ call_fun = (JClogic_fun{ li_final_name = name }
+                | JCfun{ fun_final_name = name });
+                call_args = args } ->
           fprintf fmt "@[%s(%a)@]" name
             (print_list comma expr) args
 	
@@ -490,9 +490,9 @@ and case fmt (c,sl) =
 
 and handler fmt (ei,vio,s) =
   fprintf fmt "@\n@[<v 2>catch %s %a %a@]"
-    ei.jc_exception_info_name 
+    ei.exi_name 
     (print_option_or_default "__dummy"
-      (fun fmt vi -> fprintf fmt "%s" vi.jc_var_info_name)) vio
+      (fun fmt vi -> fprintf fmt "%s" vi.vi_name)) vio
     expr s
 
 and statements fmt l = List.iter (expr fmt) l
@@ -504,20 +504,20 @@ and block fmt b =
 
 
 let param fmt vi =
-  fprintf fmt "%a %s" print_type vi.jc_var_info_type vi.jc_var_info_name
+  fprintf fmt "%a %s" print_type vi.vi_type vi.vi_name
 
 let fun_param fmt (valid,vi) =
   fprintf fmt "%s%a %s" 
     (if valid then "" else "!")
-    print_type vi.jc_var_info_type vi.jc_var_info_name
+    print_type vi.vi_type vi.vi_name
 
 let field fmt fi =
   fprintf fmt "@\n";
-  if fi.jc_field_info_rep then
+  if fi.fi_rep then
     fprintf fmt "rep ";
   fprintf fmt "%a %s" 
-    print_type fi.jc_field_info_type fi.jc_field_info_name;
-  match fi.jc_field_info_bitsize with
+    print_type fi.fi_type fi.fi_name;
+  match fi.fi_bitsize with
     | Some bitsize ->
 	fprintf fmt ": %d;" bitsize
     | None -> 
@@ -525,7 +525,7 @@ let field fmt fi =
 
 let invariant fmt (id, vi, a) =
   fprintf fmt "@\n@[invariant %s(%s) =@ %a;@]"
-    id vi.jc_var_info_name assertion a
+    id vi.vi_name assertion a
 
 let term_or_assertion fmt = function
   | JCAssertion a -> 
@@ -666,7 +666,7 @@ let rec print_decl fmt d =
     | JCexception_def(id,ei) ->
 	fprintf fmt "@\n@[exception %s of %a@]@." id
 	  (print_option_or_default "unit" print_type)
-	  ei.jc_exception_info_type
+	  ei.exi_type
     | JClogic_const_def(ty,id,poly_args,None) ->
 	fprintf fmt "@\n@[logic %a %s%a@]@." print_type ty id 
           (print_list_delim lchevron rchevron comma type_var_info) poly_args

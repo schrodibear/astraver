@@ -634,9 +634,9 @@ let label = function
 let logic_label lab =
   let label_name s =
     LabelName {
-      label_info_name = s;
-      label_info_final_name = s;
-      times_used = 0;
+      lab_name = s;
+      lab_final_name = s;
+      lab_times_used = 0;
     }
   in
   match lab with
@@ -1384,9 +1384,9 @@ let spec _fname funspec =
       Loc.dummy_position,
       name,
       None, (* throws *)
-      Some(conjunct Loc.dummy_position b.b_assumes),
+      Some (conjunct Loc.dummy_position b.Cil_types.b_assumes),
       None, (* requires *)
-      assigns b.b_assigns,
+      assigns b.Cil_types.b_assigns,
       allocates b.b_allocation,
       locate
         (conjunct Loc.dummy_position
@@ -1399,7 +1399,7 @@ let spec _fname funspec =
   let requires =
     List.fold_right
       (fun b acc ->
-         let ass = List.map (pred $ Logic_const.pred_of_id_pred) b.b_assumes in
+         let ass = List.map (pred $ Logic_const.pred_of_id_pred) b.Cil_types.b_assumes in
          List.fold_right
            (fun req acc ->
               let impl = mkimplies ass

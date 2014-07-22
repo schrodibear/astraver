@@ -39,7 +39,7 @@ open Jc_pervasives
 let rec term acc t =
   Jc_iterators.fold_term 
     (fun acc t -> match t#node with
-    | JCTapp app -> app.jc_app_fun::acc
+    | JCTapp app -> app.app_fun::acc
     | _ -> acc
     ) acc t
 
@@ -53,7 +53,7 @@ let rec assertion acc p =
   | JCAfalse -> acc
   | JCArelation(t1,_op,t2) ->
       term (term acc t1) t2
-  | JCAapp app -> app.jc_app_fun :: (List.fold_left term acc app.jc_app_args)
+  | JCAapp app -> app.app_fun :: (List.fold_left term acc app.app_args)
   | JCAand(pl) | JCAor(pl) -> List.fold_left assertion acc pl
   | JCAimplies (p1,p2) | JCAiff(p1,p2) -> 
       assertion (assertion acc p1) p2
@@ -110,9 +110,9 @@ let loop_annot acc la =
       (fun acc (_id,inv,_assigns) -> 
 	 (* TODO : traverse assigns clause *)
 	 Option_misc.fold_left assertion acc inv)
-      acc la.jc_loop_behaviors 
+      acc la.loop_behaviors 
   in
-  match la.jc_loop_variant with
+  match la.loop_variant with
   | None -> acc
   | Some (t,None) -> term acc t
   | Some (t,Some ri) -> term (ri::acc) t
@@ -121,7 +121,7 @@ let expr =
   Jc_iterators.IExpr.fold_left 
     (fun acc e -> match e#node with  
        | JCEapp call ->
-	   let f = call.jc_call_fun in
+	   let f = call.call_fun in
 	   let (a,b)=acc in
 	   begin match f with
 	     | JCfun f -> (a,f::b)
@@ -158,31 +158,31 @@ let compute_logic_calls f t =
       | JCAssertion a -> assertion [] a 
       | JCReads _r -> 
 	  begin
-	    match f.jc_logic_info_axiomatic with
+	    match f.li_axiomatic with
 	      | None -> []
 	      | Some a -> compute_axiomatic_calls a 
 	  end
       | JCInductive l -> 
 	  List.fold_left (fun acc (_,_,a) -> assertion acc a) [] l
   in
-  f.jc_logic_info_calls <- calls
+  f.li_calls <- calls
 
 let compute_calls f _s b = 
   let (_a,b) = expr ([],[]) b in
-  f.jc_fun_info_calls <- b
+  f.fun_calls <- b
       
 module LogicCallGraph = struct 
   type t = (Jc_fenv.logic_info * Jc_fenv.term_or_assertion) IntHashtblIter.t 
   module V = struct
     type t = logic_info
-    let compare f1 f2 = Pervasives.compare f1.jc_logic_info_tag f2.jc_logic_info_tag
-    let hash f = f.jc_logic_info_tag
+    let compare f1 f2 = Pervasives.compare f1.li_tag f2.li_tag
+    let hash f = f.li_tag
     let equal f1 f2 = f1 == f2
   end
   let iter_vertex iter =
     IntHashtblIter.iter (fun _ (f,_a) -> iter f) 
   let iter_succ iter _ f =
-    List.iter iter f.jc_logic_info_calls 
+    List.iter iter f.li_calls 
   end
 
 module LogicCallComponents = Graph.Components.Make(LogicCallGraph)
@@ -191,14 +191,14 @@ module CallGraph = struct
   type t = (fun_info * Loc.position * fun_spec * expr option) IntHashtblIter.t
   module V = struct
     type t = fun_info
-    let compare f1 f2 = Pervasives.compare f1.jc_fun_info_tag f2.jc_fun_info_tag
-    let hash f = f.jc_fun_info_tag
+    let compare f1 f2 = Pervasives.compare f1.fun_tag f2.fun_tag
+    let hash f = f.fun_tag
     let equal f1 f2 = f1 == f2
   end
   let iter_vertex iter =
     IntHashtblIter.iter (fun _ (f,_loc,_spec,_b) -> iter f) 
   let iter_succ iter _ f =
-    List.iter iter f.jc_fun_info_calls 
+    List.iter iter f.fun_calls 
   end
 
 module CallComponents = Graph.Components.Make(CallGraph)
@@ -216,10 +216,10 @@ let compute_logic_components ltable =
     (fun i l -> 
        Jc_options.lprintf "Component %d:\n%a@." i
 	 (print_list newline 
-	    (fun fmt f -> fprintf fmt " %s calls: %a\n" f.jc_logic_info_name
+	    (fun fmt f -> fprintf fmt " %s calls: %a\n" f.li_name
 		 (print_list comma 
-		    (fun fmt f -> fprintf fmt "%s" f.jc_logic_info_name))
-		 f.jc_logic_info_calls))
+		    (fun fmt f -> fprintf fmt "%s" f.li_name))
+		 f.li_calls))
 	 l)
     tab_comp;
   tab_comp
@@ -235,10 +235,10 @@ let compute_components table =
     (fun i l -> 
       Jc_options.lprintf "Component %d:\n%a@." i
 	(print_list newline 
-	   (fun fmt f -> fprintf fmt " %s calls: %a\n" f.jc_fun_info_name
+	   (fun fmt f -> fprintf fmt " %s calls: %a\n" f.fun_name
 	       (print_list comma 
-		  (fun fmt f -> fprintf fmt "%s" f.jc_fun_info_name))
-	       f.jc_fun_info_calls))
+		  (fun fmt f -> fprintf fmt "%s" f.fun_name))
+	       f.fun_calls))
 	l)
     tab_comp;
   tab_comp

@@ -45,7 +45,7 @@ struct
     | JCLvar v1, JCLvar v2 -> VarOrd.compare v1 v2
     | JCLvar _v, _ -> 1
     | _, JCLvar _v -> -1
-    | _,_ -> 0
+    | _, _ -> 0
     (* TODO: complete def of Location *)
 end
 and Location : Map.OrderedType with type t = Effect.logic_info location * Memory.t = PairOrd (LocationOrd) (Memory)
@@ -54,36 +54,36 @@ and LocationMap : Map.S with type key = Location.t = Map.Make (Location)
 and Effect :
 sig
   type effect = {
-    jc_effect_alloc_tables: LogicLabelSet.t AllocMap.t;
-    jc_effect_tag_tables: LogicLabelSet.t TagMap.t;
-    jc_effect_raw_memories: LogicLabelSet.t MemoryMap.t;
-    jc_effect_precise_memories: LogicLabelSet.t LocationMap.t;
-    jc_effect_memories: LogicLabelSet.t MemoryMap.t;
-    jc_effect_globals: LogicLabelSet.t VarMap.t;
-    jc_effect_locals: LogicLabelSet.t VarMap.t;
-    jc_effect_mutable: StringSet.t;
-    jc_effect_committed: StringSet.t;
+    e_alloc_tables     : LogicLabelSet.t AllocMap.t;
+    e_tag_tables       : LogicLabelSet.t TagMap.t;
+    e_raw_memories     : LogicLabelSet.t MemoryMap.t;
+    e_precise_memories : LogicLabelSet.t LocationMap.t;
+    e_memories         : LogicLabelSet.t MemoryMap.t;
+    e_globals          : LogicLabelSet.t VarMap.t;
+    e_locals           : LogicLabelSet.t VarMap.t;
+    e_mutable          : StringSet.t;
+    e_committed        : StringSet.t;
   }
 
   type fun_effect = {
-    jc_reads : effect;
-    jc_writes : effect;
-    jc_raises : ExceptionSet.t;
+    fe_reads : effect;
+    fe_writes : effect;
+    fe_raises : ExceptionSet.t;
   }
 
   type logic_info = {
-            jc_logic_info_tag : int;
-            jc_logic_info_name : string;
-    mutable jc_logic_info_final_name : string;
-    mutable jc_logic_info_result_type : jc_type option;
-    mutable jc_logic_info_result_region : region;
-    mutable jc_logic_info_poly_args : type_var_info list;
-    mutable jc_logic_info_parameters : var_info list;
-    mutable jc_logic_info_param_regions : region list;
-    mutable jc_logic_info_effects : effect;
-    mutable jc_logic_info_calls : logic_info list;
-    mutable jc_logic_info_axiomatic : string option;
-    mutable jc_logic_info_labels : label list;
+            li_tag           : int;
+            li_name          : string;
+    mutable li_final_name    : string;
+    mutable li_result_type   : jc_type option;
+    mutable li_result_region : region;
+    mutable li_poly_args     : type_var_info list;
+    mutable li_parameters    : var_info list;
+    mutable li_param_regions : region list;
+    mutable li_effects       : effect;
+    mutable li_calls         : logic_info list;
+    mutable li_axiomatic     : string option;
+    mutable li_labels        : label list;
   }
 
   type builtin_treatment =
@@ -91,26 +91,40 @@ sig
   | TreatGenFloat of float_format
 
   type fun_info =  {
-            jc_fun_info_tag : int;
-            jc_fun_info_name : string;
-    mutable jc_fun_info_final_name : string;
-    mutable jc_fun_info_builtin_treatment : builtin_treatment;
-            jc_fun_info_result : var_info;
-            jc_fun_info_return_region : region;
+            fun_tag               : int;
+            fun_name              : string;
+    mutable fun_final_name        : string;
+    mutable fun_builtin_treatment : builtin_treatment;
+            fun_result            : var_info;
+            fun_return_region     : region;
     (* If function has a label "return_label", this is a label denoting
        the return statement of the function, to be used by static
        analysis to avoid merging contexts *)
-    mutable jc_fun_info_has_return_label : bool;
-    mutable jc_fun_info_parameters : (bool * var_info) list;
-    mutable jc_fun_info_param_regions : region list;
-    mutable jc_fun_info_calls : fun_info list;
-    mutable jc_fun_info_component : int;
-    mutable jc_fun_info_logic_apps : logic_info list;
-    mutable jc_fun_info_effects : fun_effect;
+    mutable fun_has_return_label  : bool;
+    mutable fun_parameters        : (bool * var_info) list;
+    mutable fun_param_regions     : region list;
+    mutable fun_calls             : fun_info list;
+    mutable fun_component         : int;
+    mutable fun_logic_apps        : logic_info list;
+    mutable fun_effects           : fun_effect;
   }
 end = Effect
 
 include Effect
+
+module Logic_info =
+struct
+  type t = logic_info
+  let compare li1 li2 = compare li1.li_tag li2.li_tag
+  let equal li1 li2 = li1.li_tag = li2.li_tag
+end
+
+module Fun_info =
+struct
+  type t = fun_info
+  let compare fi1 fi2 = compare fi1.fun_tag fi2.fun_tag
+  let equal fi1 fi2 = fi1.fun_tag = fi2.fun_tag
+end
 
 type app = logic_info Jc_ast.app
 type term_node = logic_info Jc_ast.term_node
@@ -128,10 +142,10 @@ type loop_annot = logic_info Jc_ast.loop_annot
 type behavior = logic_info Jc_ast.behavior
 type fun_spec = logic_info Jc_ast.fun_spec
 
-type expr_node = (logic_info,fun_info) Jc_ast.expr_node
-type expr = (logic_info,fun_info) Jc_ast.expr
-type callee = (logic_info,fun_info) Jc_ast.callee
-type call = (logic_info,fun_info) Jc_ast.call
+type expr_node = (logic_info, fun_info) Jc_ast.expr_node
+type expr = (logic_info, fun_info) Jc_ast.expr
+type callee = (logic_info, fun_info) Jc_ast.callee
+type call = (logic_info, fun_info) Jc_ast.call
 
 (*
   Local Variables:

@@ -36,13 +36,13 @@ open Jc_pervasives
 type t = type_var_info
 
 let type_var_from_string = let c = ref 0 in fun ?(univ=false) n -> incr c; 
-  { jc_type_var_info_name = n;
-    jc_type_var_info_tag = !c;
-    jc_type_var_info_univ = univ}
+  { tvi_name = n;
+    tvi_tag = !c;
+    tvi_univ = univ}
 
-let uid x = x.jc_type_var_info_tag
+let uid x = x.tvi_tag
 
-let name x = x.jc_type_var_info_name
+let name x = x.tvi_name
 
 let uname x =
   name x ^ string_of_int (uid x)
@@ -85,7 +85,7 @@ let rec substruct st = function
         let vi = struct_root st and vi' = struct_root st' in
         (vi == vi' && (root_is_union vi))
         || 
-        begin match st.jc_struct_info_parent with
+        begin match st.si_parent with
           | None -> false
           | Some(p, []) -> substruct p pc
           | Some(_p, _) -> assert false (* TODO *)
@@ -103,8 +103,8 @@ let rec dec_type ~subtype acc t1 t2 =
                | Tinteger, Treal -> true
 	       | _ -> false))
     | JCTenum ri1, JCTenum ri2 -> 
-        accorraise (subtype && Num.ge_num ri1.jc_enum_info_min ri2.jc_enum_info_min &&
-                      Num.le_num ri1.jc_enum_info_max ri2.jc_enum_info_max) 
+        accorraise (subtype && Num.ge_num ri1.ei_min ri2.ei_min &&
+                      Num.le_num ri1.ei_max ri2.ei_max) 
     | JCTenum _, JCTnative (Tinteger | Treal) ->
         accorraise subtype
     | JCTnative Tinteger, JCTenum _ -> 
@@ -119,10 +119,10 @@ let rec dec_type ~subtype acc t1 t2 =
         if s1=s2 then List.fold_left2 (dec_type ~subtype) acc l1 l2
         else raise (Not_subtype (t1,t2))
           (* No subtyping for this case, the equality is strict *)
-    | JCTtype_var {jc_type_var_info_tag = t1}, 
-        JCTtype_var {jc_type_var_info_tag = t2} when t1=t2-> acc
-    | (JCTtype_var ({jc_type_var_info_univ = false} as tvar),t) 
-    | (t,JCTtype_var ({jc_type_var_info_univ = false} as tvar)) -> (tvar,t)::acc
+    | JCTtype_var {tvi_tag = t1}, 
+        JCTtype_var {tvi_tag = t2} when t1=t2-> acc
+    | (JCTtype_var ({tvi_univ = false} as tvar),t) 
+    | (t,JCTtype_var ({tvi_univ = false} as tvar)) -> (tvar,t)::acc
     | _ -> accorraise false
 
 let rec subst_aux vmap a =
@@ -142,7 +142,7 @@ let rec occur_check tvar t =
     | _ -> false
 
 let rec add_subst env (tvar,t) = 
-  assert (not tvar.jc_type_var_info_univ);
+  assert (not tvar.tvi_univ);
   let t = subst_aux env.vmap t in
   try
     let t2 = TypeVarMap.find tvar env.vmap in
@@ -170,8 +170,8 @@ let add ?(subtype=true) env pos x y =
 let instance l =
   let aux acc e =
     (* Only universally quantified variable can be instantiate *)
-    assert e.jc_type_var_info_univ;
-    let e_fresh = (type_var_from_string ~univ:false e.jc_type_var_info_name) in
+    assert e.tvi_univ;
+    let e_fresh = (type_var_from_string ~univ:false e.tvi_name) in
     TypeVarMap.add e (JCTtype_var e_fresh) acc in
   let vmap = List.fold_left aux TypeVarMap.empty l in
   subst_aux vmap

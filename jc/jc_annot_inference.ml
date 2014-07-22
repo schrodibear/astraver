@@ -71,27 +71,27 @@ let rec replace_term_in_assertion ~source:srct ~target:trgt a =
     (fun t -> if TermOrd.equal srct t then trgt else t) a
 
 let rec replace_var_in_assertion ~source:srcv ~target:trgt a =
-  let srct = new term ~typ:srcv.jc_var_info_type (JCTvar srcv) in
+  let srct = new term ~typ:srcv.vi_type (JCTvar srcv) in
   replace_term_in_assertion srct trgt a
 
 let replace_var_by_var_in_assertion v v' a =
   replace_var_in_assertion v (new term_var v') a
 
 let forget_var_in_assertion v a =
-  let v' = newvar v.jc_var_info_type in
+  let v' = newvar v.vi_type in
   replace_var_by_var_in_assertion v v' a
 
 let unfolding_of_app app =
-  let f = app.jc_app_fun in
+  let f = app.app_fun in
   let _, term_or_assertion =
-    try IntHashtblIter.find Jc_typing.logic_functions_table f.jc_logic_info_tag
+    try IntHashtblIter.find Jc_typing.logic_functions_table f.li_tag
     with Not_found -> assert false
   in
   match term_or_assertion with
     | JCAssertion a ->
 	let a =
 	  List.fold_left2 (fun a v t -> replace_var_in_assertion v t a)
-	    a f.jc_logic_info_parameters app.jc_app_args
+	    a f.li_parameters app.app_args
 	in
 	Some a
     | _ -> None
@@ -455,7 +455,7 @@ let print_abstract_invariants fmt invs =
   fprintf fmt "@[<v 2>{@\nnormal: %a@\nexceptional: %a@\nreturn: %a@\n}@]"
     print_abstract_value invs.jc_absinv_normal
     (print_list comma (fun fmt (ei,absval) ->
-			 fprintf fmt "(%s,%a)" ei.jc_exception_info_name
+			 fprintf fmt "(%s,%a)" ei.exi_name
 			   print_abstract_value absval))
     invs.jc_absinv_exceptional
     (fun fmt returns ->
@@ -464,7 +464,7 @@ let print_abstract_invariants fmt invs =
 
 let print_modified_vars fmt posts =
   fprintf fmt "modified vars: %a"
-    (print_list comma (fun fmt vi -> fprintf fmt "%s" vi.jc_var_info_name))
+    (print_list comma (fun fmt vi -> fprintf fmt "%s" vi.vi_name))
     (VarSet.elements (List.hd posts.jc_post_modified_vars))
 
 
@@ -1501,7 +1501,7 @@ let mkconsistent a =
   let cannot_have_lower_bound t =
     match t#node with
       | JCToffset(Offset_min,_,_) -> true
-      | JCTapp app when app.jc_app_fun.jc_logic_info_name = "strlen" -> true
+      | JCTapp app when app.app_fun.li_name = "strlen" -> true
       | _ -> false
   in
   let cannot_have_upper_bound t =
@@ -2018,7 +2018,7 @@ let rec wp_expr weakpre =
 			  && mem_term_in_assertion tv a)
 		    then
 		      let bop =
-			equality_operator_of_type v.jc_var_info_type
+			equality_operator_of_type v.vi_type
 		      in
 		      let eq = new assertion (JCArelation(tv,bop,t1)) in
 		      Some (Assertion.mkand [ eq; a ] ())
@@ -2042,7 +2042,7 @@ let rec wp_expr weakpre =
 	      then
 		let a = replace_term_in_assertion tv tv1 a in
 		match Jc_effect.term_of_expr e1 with None -> Some a | Some t1 ->
-		  let bop = equality_operator_of_type v.jc_var_info_type in
+		  let bop = equality_operator_of_type v.vi_type in
 		  let eq = new assertion (JCArelation(tv1,bop,t1)) in
 		  Some (Assertion.mkand [ eq; a ] ())
 	      else Some a
@@ -2062,10 +2062,10 @@ let rec wp_expr weakpre =
 	    | None -> curposts (* TODO *)
 	    | Some t1 ->
 		let dereft =
-		  new term ~typ:fi.jc_field_info_type
+		  new term ~typ:fi.fi_type
 		    (JCTderef(t1,LabelHere,fi))
 		in
-		let v = unique_var_for_term dereft fi.jc_field_info_type in
+		let v = unique_var_for_term dereft fi.fi_type in
 		let copyv = copyvar v in
 		let tv1 = new term_var copyv in
 		let post =
@@ -2080,7 +2080,7 @@ let rec wp_expr weakpre =
 			| None -> Some a
 			| Some t2 ->
 			    let bop =
-			      equality_operator_of_type fi.jc_field_info_type
+			      equality_operator_of_type fi.fi_type
 			    in
 			    let eq = new assertion (JCArelation(tv1,bop,t2)) in
 			    Some (Assertion.mkand [ eq; a ] ())
@@ -2208,7 +2208,7 @@ let rec wp_expr weakpre =
 	      (fun (ei,_) ->
 		 not (List.exists
 			(fun (ej,_,_) ->
-			   ei.jc_exception_info_tag = ej.jc_exception_info_tag
+			   ei.exi_tag = ej.exi_tag
 			) handlers)
 	      ) curposts.jc_post_exceptional
 	  in
@@ -2225,7 +2225,7 @@ let rec wp_expr weakpre =
 	  let curposts = block_hint curposts in
 	  let loops = weakpre.jc_weakpre_loops in
 	  let loop_invariants = weakpre.jc_weakpre_loop_invariants in
-	  Hashtbl.replace loops annot.jc_loop_tag e;
+	  Hashtbl.replace loops annot.loop_tag e;
 	  let curposts = { curposts with jc_post_normal = None } in
 	  let loopposts = push_modified_vars curposts in
 	  let loopposts =
@@ -2240,7 +2240,7 @@ let rec wp_expr weakpre =
 		    match inv with
 		      | None -> acc
 		      | Some a -> a :: acc)
-		 [annot.jc_free_loop_invariant] annot.jc_loop_behaviors)
+		 [annot.loop_free_invariant] annot.loop_behaviors)
 	      ()
 	  in
 	  let post =
@@ -2253,11 +2253,11 @@ let rec wp_expr weakpre =
 		  target.jc_target_regular_invariant <- inva;
 		  target.jc_target_assertion <- infera;
 		  begin try
-		    let a = Hashtbl.find loop_invariants annot.jc_loop_tag in
-		    Hashtbl.replace loop_invariants annot.jc_loop_tag
+		    let a = Hashtbl.find loop_invariants annot.loop_tag in
+		    Hashtbl.replace loop_invariants annot.loop_tag
 		      (Assertion.mkand [a; infera] ())
 		  with Not_found ->
-		    Hashtbl.add loop_invariants annot.jc_loop_tag infera
+		    Hashtbl.add loop_invariants annot.loop_tag infera
 		  end;
 		  let inita = initialize_target loopposts target in
 		  Some inita
@@ -2328,24 +2328,24 @@ and record_wp_loop_invariants weakpre =
 	 | _ -> assert false
        in
        begin try
-	 let a = Hashtbl.find loop_invariants annot.jc_loop_tag in
+	 let a = Hashtbl.find loop_invariants annot.loop_tag in
 	 let a = simplify a in
 	   (* 	   nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms a; *)
 	   (* 	   incr nb_loop_inv; *)
 	 printf
 	  "%a@[<v 2>Inferring backward loop invariant for function %s:@\n%a@]@."
 	   Loc.report_position e#pos
-	   weakpre.jc_weakpre_function.jc_fun_info_name
+	   weakpre.jc_weakpre_function.fun_name
 	   Jc_output.assertion a;
 	 (* Register loop invariant as such *)
 	 let a = reg_annot ~pos:e#pos ~anchor:e#mark a in
-	 annot.jc_loop_behaviors <-
-	   ([], Some a, None) :: annot.jc_loop_behaviors;
+	 annot.loop_behaviors <-
+	   ([], Some a, None) :: annot.loop_behaviors;
        with Not_found -> () end
     ) weakpre.jc_weakpre_loops
 
 let wp_function targets funpre (f,pos,spec,body) =
-  if debug then printf "[wp_function] %s@." f.jc_fun_info_name;
+  if debug then printf "[wp_function] %s@." f.fun_name;
   let weakpre = {
     jc_weakpre_function = f;
     jc_weakpre_loops = Hashtbl.create 3;
@@ -2384,8 +2384,8 @@ let wp_function targets funpre (f,pos,spec,body) =
 	       let qvs =
 		 VarSet.filter
 		   (fun v ->
-		      (not (v.jc_var_info_static || v.jc_var_info_formal))
-		      || v.jc_var_info_assigned
+		      (not (v.vi_static || v.vi_formal))
+		      || v.vi_assigned
 		   ) vs
 	       in
 	       let curposts = add_modified_vars initposts qvs in
@@ -2396,7 +2396,7 @@ let wp_function targets funpre (f,pos,spec,body) =
 	     wp_expr weakpre target body initposts
        in
        match finalize_target ~is_function_level:true ~pos
-	 ~anchor:f.jc_fun_info_name posts target funpre
+	 ~anchor:f.fun_name posts target funpre
        with
 	 | None -> () (* precondition inconsistant or redundant *)
 	 | Some infera -> (* valid precondition *)
@@ -2407,10 +2407,10 @@ let wp_function targets funpre (f,pos,spec,body) =
   let inferred = simplify (Assertion.mkand !infer_req ()) in
   if Assertion.is_false inferred then () else
     begin
-      spec.jc_fun_requires <-
-	Assertion.mkand [ spec.jc_fun_requires; inferred ] ();
+      spec.fs_requires <-
+	Assertion.mkand [ spec.fs_requires; inferred ] ();
       printf "@[<v 2>Inferring precondition for function %s:@\n%a@]@."
-	f.jc_fun_info_name Jc_output.assertion inferred
+	f.fun_name Jc_output.assertion inferred
     end
 
 
@@ -2455,15 +2455,15 @@ let collect_expr_targets e =
 		     JCTbinary(offt1,(`Bsub,`Integer),t2)
 	       end
 	   | JCTapp app as tnode ->
-	       if app.jc_app_fun.jc_logic_info_name = "strlen" then
-		 let t1 = match app.jc_app_args with
+	       if app.app_fun.li_name = "strlen" then
+		 let t1 = match app.app_args with
 		   | [t1] -> t1
 		   | _ -> assert false
 		 in
 		 match destruct_pointer t1 with
 		   | None -> tnode
 		   | Some(tptr,offt) ->
-		       let app = { app with jc_app_args = [tptr] } in
+		       let app = { app with app_args = [tptr] } in
 		       let tapp = new term_with ~node:(JCTapp app) t in
 		       JCTbinary(tapp,(`Bsub,`Integer),offt)
 	       else tnode
@@ -2498,10 +2498,10 @@ let collect_expr_targets e =
   let collect_integer_overflow ei e1 =
     match Jc_effect.term_of_expr e1 with None -> [] | Some t1 ->
       let mint = new term ~typ:integer_type
-	(JCTconst (JCCinteger (Num.string_of_num ei.jc_enum_info_min)))
+	(JCTconst (JCCinteger (Num.string_of_num ei.ei_min)))
       in
       let maxt = new term ~typ:integer_type
-	(JCTconst(JCCinteger (Num.string_of_num ei.jc_enum_info_max)))
+	(JCTconst(JCCinteger (Num.string_of_num ei.ei_max)))
       in
       let mina = new assertion (JCArelation (mint, (`Ble,`Integer), t1)) in
       let maxa = new assertion (JCArelation (t1, (`Ble,`Integer), maxt)) in
@@ -2522,16 +2522,16 @@ let collect_expr_targets e =
 	  else []
       | JCEbinary(_,(`Bdiv,`Integer),e2) -> collect_zero_division e2
       | JCEapp call ->
-	  let fi = match call.jc_call_fun with
+	  let fi = match call.call_fun with
 	    | JCfun f -> f
 	    | _ -> assert false
 	  in
-	  let els = call.jc_call_args in
+	  let els = call.call_args in
 	  let _,_,fs,_ =
-            IntHashtblIter.find Jc_typing.functions_table fi.jc_fun_info_tag
+            IntHashtblIter.find Jc_typing.functions_table fi.fun_tag
           in
           (* Collect preconditions of functions called. *)
-          let reqa = fs.jc_fun_requires in
+          let reqa = fs.fs_requires in
           let reqa =
 	    List.fold_left2
 	      (fun a (_,param) arg ->
@@ -2539,9 +2539,9 @@ let collect_expr_targets e =
 		   | None -> Assertion.mktrue ()
 		   | Some targ ->
 		       replace_term_in_assertion (new term_var param) targ a
-	      ) reqa fi.jc_fun_info_parameters els
+	      ) reqa fi.fun_parameters els
           in
-	  let reqa = regionalize_assertion reqa call.jc_call_region_assoc in
+	  let reqa = regionalize_assertion reqa call.call_region_assoc in
           conjuncts reqa
       | JCEassert(_,Ahint, _a) ->
 	  (* Hints are not to be proved by abstract interpretation,
@@ -2640,7 +2640,7 @@ let collect_immediate_targets targets s =
 	  let acc = Option_misc.fold_left ite acc e1_opt in
 	  ite acc e2
       | JCEapp call ->
-	  List.fold_left ite acc call.jc_call_args
+	  List.fold_left ite acc call.call_args
       | JCEif(e1,e2,e3) ->
 	  let acc = ite acc e1 in
 	  let acc = ite acc e2 in
@@ -2752,7 +2752,7 @@ let rec backprop_expr target s curpost =
 		      match inv with
 			| None -> acc
 			| Some a -> a :: acc)
-		   [] la.jc_loop_behaviors)
+		   [] la.loop_behaviors)
 		()
 	    in
 	    if not (contradictory propa inva) then
@@ -2762,8 +2762,8 @@ let rec backprop_expr target s curpost =
 	            "%a@[<v 2>Back-propagating loop invariant@\n%a@]@."
                     Loc.report_position s#pos
                     Jc_output.assertion propa;
-	        la.jc_loop_behaviors <-
-		  ([],Some propa, None) :: la.jc_loop_behaviors
+	        la.loop_behaviors <-
+		  ([],Some propa, None) :: la.loop_behaviors
               end
 	end;
 	None
@@ -3109,9 +3109,9 @@ let keep_extern mgr fi post =
     Jc_iterators.fold_term
       (fun acc t -> match t#node with
 	 | JCTvar vi ->
-	     acc || (not vi.jc_var_info_static  &&
-		       not (vi == fi.jc_fun_info_result) &&
-		       not (List.exists (fun (_,v) -> vi == v) fi.jc_fun_info_parameters))
+	     acc || (not vi.vi_static  &&
+		       not (vi == fi.fun_result) &&
+		       not (List.exists (fun (_,v) -> vi == v) fi.fun_parameters))
 	 | _ -> acc
       ) false t
   in
@@ -3161,7 +3161,7 @@ let rec ai_inter_function_call _mgr _iai _abs _pre _fi _loc _fs _sl _el =
     (* 	   va :: acc else pre,acc  *)
     (* 	 in *)
     (*          pre,acc) *)
-    (*       (pre,[]) fi.jc_fun_info_parameters el *)
+    (*       (pre,[]) fi.fun_parameters el *)
     (*   in *)
     (*   let formal_vars = List.filter (fun v -> not (Environment.mem_var (Abstract1.env pre) v)) formal_vars in *)
     (*   let formal_vars = Array.of_list formal_vars in *)
@@ -3169,25 +3169,25 @@ let rec ai_inter_function_call _mgr _iai _abs _pre _fi _loc _fs _sl _el =
     (*   let pre = keep_extern mgr fi pre in *)
     (*   let pre = try Abstract1.change_environment mgr pre env false with _ -> assert false in *)
     (*   let function_pre =  *)
-    (*     try Hashtbl.find iai.jc_interai_function_preconditions fi.jc_fun_info_tag  *)
+    (*     try Hashtbl.find iai.jc_interai_function_preconditions fi.fun_tag  *)
     (*     with Not_found -> Abstract1.bottom mgr (Abstract1.env pre)  *)
     (*   in *)
     (*     begin *)
     (*       let old_pre = Abstract1.copy mgr function_pre in *)
     (*       let function_pre, fixpoint_reached =  *)
-    (* 	if fi.jc_fun_info_is_recursive then *)
+    (* 	if fi.fun_is_recursive then *)
     (* 	  let num =  *)
-    (* 	    try Hashtbl.find iai.jc_interai_function_nb_iterations fi.jc_fun_info_tag *)
+    (* 	    try Hashtbl.find iai.jc_interai_function_nb_iterations fi.fun_tag *)
     (* 	    with Not_found -> 0 *)
     (* 	  in *)
-    (* 	    Hashtbl.replace iai.jc_interai_function_nb_iterations fi.jc_fun_info_tag  *)
+    (* 	    Hashtbl.replace iai.jc_interai_function_nb_iterations fi.fun_tag  *)
     (* 	      (num + 1); *)
     (* 	    if num < abs.jc_absint_widening_threshold then *)
     (* 	      begin *)
     (* 		let function_pre = join mgr function_pre pre in *)
     (* 		if num = 0 then  *)
     (* 		  Hashtbl.replace iai.jc_interai_function_init_pre  *)
-    (* 		    fi.jc_fun_info_tag function_pre; *)
+    (* 		    fi.fun_tag function_pre; *)
     (* 		function_pre, false *)
     (* 	      end *)
     (* 	    else *)
@@ -3197,9 +3197,9 @@ let rec ai_inter_function_call _mgr _iai _abs _pre _fi _loc _fs _sl _el =
     (* 		  if is_eq mgr old_pre function_pre then *)
     (* 		    begin *)
     (* 		      let init_pre =  *)
-    (* 			Hashtbl.find iai.jc_interai_function_init_pre fi.jc_fun_info_tag in *)
+    (* 			Hashtbl.find iai.jc_interai_function_init_pre fi.fun_tag in *)
     (* 		      let function_pre = join mgr function_pre init_pre in *)
-    (* 			(\* Hashtbl.replace iai.jc_interai_function_preconditions fi.jc_fun_info_tag function_pre;*\) *)
+    (* 			(\* Hashtbl.replace iai.jc_interai_function_preconditions fi.fun_tag function_pre;*\) *)
     (* 			function_pre, true *)
     (* 		    end *)
     (* 		  else *)
@@ -3213,8 +3213,8 @@ let rec ai_inter_function_call _mgr _iai _abs _pre _fi _loc _fs _sl _el =
     (*       in *)
     (*       let pre_has_changed = not (is_eq mgr old_pre function_pre) in *)
     (* 	if pre_has_changed then *)
-    (* 	  Hashtbl.replace iai.jc_interai_function_preconditions fi.jc_fun_info_tag function_pre; *)
-    (* 	let inspected = List.mem fi.jc_fun_info_tag !inspected_functions in *)
+    (* 	  Hashtbl.replace iai.jc_interai_function_preconditions fi.fun_tag function_pre; *)
+    (* 	let inspected = List.mem fi.fun_tag !inspected_functions in *)
     (* 	  if not inspected || pre_has_changed then *)
     (* 	    ai_function mgr (Some iai) [] (fi, loc, fs, sl); *)
     (*     end *)
@@ -3237,13 +3237,13 @@ and ai_expr iaio abs curinvs e =
 	 * This is useful to get precise results for inner loops.
 	 * Comment those lines to gain in scaling, at the cost of precision.
 	 *)
-	Hashtbl.replace loops annot.jc_loop_tag e;
-	Hashtbl.replace loop_iterations annot.jc_loop_tag 0;
-	Hashtbl.remove loop_invariants annot.jc_loop_tag;
+	Hashtbl.replace loops annot.loop_tag e;
+	Hashtbl.replace loop_iterations annot.loop_tag 0;
+	Hashtbl.remove loop_invariants annot.loop_tag;
 	(* Set the initial value of invariants when entering the loop from
 	 * the outside.
 	 *)
-	Hashtbl.replace loop_initial_invariants annot.jc_loop_tag curinvs;
+	Hashtbl.replace loop_initial_invariants annot.loop_tag curinvs;
 	intern_ai_expr iaio abs curinvs e
     | _ -> intern_ai_expr iaio abs curinvs e
 
@@ -3309,7 +3309,7 @@ and intern_ai_expr iaio abs curinvs e =
 	  | None -> assign_heap mgr e1 fi None curinvs
 	  | Some t1 ->
 	      let dereft =
-		new term ~typ:fi.jc_field_info_type (JCTderef(t1,LabelHere,fi))
+		new term ~typ:fi.fi_type (JCTderef(t1,LabelHere,fi))
 	      in
 	      let curinvs =
 		assign_heap mgr e1 fi (Some dereft) curinvs
@@ -3334,11 +3334,11 @@ and intern_ai_expr iaio abs curinvs e =
 	join_invariants mgr trueinvs falseinvs
     | JCEreturn_void ->
 	(* For CIL, rather store return value before merge *)
-	if not abs.jc_absint_function.jc_fun_info_has_return_label then
+	if not abs.jc_absint_function.fun_has_return_label then
 	  return_abstract_value mgr postret e normal;
 	{ curinvs with jc_absinv_normal = empty_abstract_value mgr normal }
     | JCEreturn(_ty,e1) ->
-	let result = abs.jc_absint_function.jc_fun_info_result in
+	let result = abs.jc_absint_function.fun_result in
 	let resultt = new term_var result in
 	let apply_return curinvs =
 	  let curinvs = ai curinvs e1 in
@@ -3353,7 +3353,7 @@ and intern_ai_expr iaio abs curinvs e =
 	let curinvs = apply_return curinvs in
 	let normal = curinvs.jc_absinv_normal in
 	(* For CIL, rather store return value before merge *)
-	if not abs.jc_absint_function.jc_fun_info_has_return_label then
+	if not abs.jc_absint_function.fun_has_return_label then
 	  return_abstract_value mgr postret e normal;
 	{ curinvs with jc_absinv_normal = empty_abstract_value mgr normal }
     | JCEthrow(ei,e1opt) ->
@@ -3361,7 +3361,7 @@ and intern_ai_expr iaio abs curinvs e =
 	  | None -> curinvs
 	  | Some e1 -> ai curinvs e1
 	in
-	if ei.jc_exception_info_name = Jc_norm.return_label#name then
+	if ei.exi_name = Jc_norm.return_label#name then
 	  let normal = curinvs.jc_absinv_normal in
 	  return_abstract_value mgr postret e normal;
 	  { curinvs with jc_absinv_normal = empty_abstract_value mgr normal }
@@ -3383,7 +3383,7 @@ and intern_ai_expr iaio abs curinvs e =
 	    (fun (ei,_invs) ->
 	       not (List.exists
 		      (fun (ej,_vopt,_e) ->
-			 ei.jc_exception_info_tag = ej.jc_exception_info_tag
+			 ei.exi_tag = ej.exi_tag
 		      ) handlers)
 	    ) postexcl
 	in
@@ -3415,10 +3415,10 @@ and intern_ai_expr iaio abs curinvs e =
 	let loop_initial_invariants = abs.jc_absint_loop_initial_invariants in
 	let loop_iterations = abs.jc_absint_loop_iterations in
 	let num =
-	  try Hashtbl.find loop_iterations annot.jc_loop_tag
+	  try Hashtbl.find loop_iterations annot.loop_tag
 	  with Not_found -> 0
 	in
-	Hashtbl.replace loop_iterations annot.jc_loop_tag (num + 1);
+	Hashtbl.replace loop_iterations annot.loop_tag (num + 1);
 
 	if num < abs.jc_absint_widening_threshold then
 	  (* Perform one step of propagation through the loop body. *)
@@ -3428,13 +3428,13 @@ and intern_ai_expr iaio abs curinvs e =
 	  intern_ai_expr iaio abs curinvs e
 	else
 	  begin try
-	    let loopinvs = Hashtbl.find loop_invariants annot.jc_loop_tag in
+	    let loopinvs = Hashtbl.find loop_invariants annot.loop_tag in
 	    let wideninvs = widen_invariants mgr loopinvs curinvs in
 	    if eq_invariants mgr loopinvs wideninvs then
 	      begin
 		(* Fixpoint reached through widening. Perform narrowing now. *)
 		let initinvs =
-		  Hashtbl.find loop_initial_invariants annot.jc_loop_tag
+		  Hashtbl.find loop_initial_invariants annot.loop_tag
 		in
 		let wideninvs =
 		  { wideninvs with jc_absinv_exceptional = [] }
@@ -3442,7 +3442,7 @@ and intern_ai_expr iaio abs curinvs e =
 		(* TODO: be more precise on return too. *)
 		let wideninvs = ai wideninvs body in
 		let wideninvs = join_invariants mgr wideninvs initinvs in
-		Hashtbl.replace loop_invariants annot.jc_loop_tag wideninvs;
+		Hashtbl.replace loop_invariants annot.loop_tag wideninvs;
 		let wideninvs =
 		  { wideninvs with jc_absinv_exceptional =
 		      initinvs.jc_absinv_exceptional }
@@ -3460,7 +3460,7 @@ and intern_ai_expr iaio abs curinvs e =
 	    else
 	      begin
 		Hashtbl.replace
-		  loop_invariants annot.jc_loop_tag wideninvs;
+		  loop_invariants annot.loop_tag wideninvs;
 		(* Perform one step of propagation through the loop body. *)
 		let wideninvs = ai wideninvs body in
 		(* Perform fixpoint computation on the loop. *)
@@ -3479,7 +3479,7 @@ and intern_ai_expr iaio abs curinvs e =
 	      end
 	  with Not_found ->
 	    Hashtbl.replace
-	      loop_invariants annot.jc_loop_tag curinvs;
+	      loop_invariants annot.loop_tag curinvs;
 	    (* Perform one step of propagation through the loop body. *)
 	    let curinvs = ai curinvs body in
 	    (* Perform fixpoint computation on the loop. *)
@@ -3537,13 +3537,13 @@ and ai_call iaio abs curinvs vio e =
     ) targets;
 
   let call = match e#node with JCEapp call -> call | _ -> assert false in
-  let f = match call.jc_call_fun with JCfun f -> f | _ -> assert false in
-  let args = call.jc_call_args in
+  let f = match call.call_fun with JCfun f -> f | _ -> assert false in
+  let args = call.call_args in
 
   (* Compute abstract value at function call *)
   let curinvs = List.fold_left (ai_expr iaio abs) curinvs args in
   let _f, _pos, spec, _body =
-    IntHashtblIter.find Jc_typing.functions_table f.jc_fun_info_tag
+    IntHashtblIter.find Jc_typing.functions_table f.fun_tag
   in
 (*   begin match body with None -> () | Some body -> *)
 (*     if Jc_options.interprocedural then *)
@@ -3563,12 +3563,12 @@ and ai_call iaio abs curinvs vio e =
 	 match t with
 	   | None -> forget_var_in_assertion v a
 	   | Some t -> replace_var_in_assertion v t a
-      ) spec.jc_fun_requires args f.jc_fun_info_parameters
+      ) spec.fs_requires args f.fun_parameters
   in
   let curinvs = test_assertion ~propagated:true mgr pre curinvs in
 
   let compulsory_behavior b =
-    match b.jc_behavior_assumes with
+    match b.b_assumes with
       | None -> true
       | Some a when Assertion.is_true a -> true
       | _ -> false
@@ -3579,11 +3579,11 @@ and ai_call iaio abs curinvs vio e =
     List.fold_left
       (fun acc (_pos,_name,b) ->
 	 (* TODO : handle 'assumes' clauses precisely *)
-	 if b.jc_behavior_throws = None && compulsory_behavior b then
-	   Assertion.mkand [ b.jc_behavior_ensures; acc ] ()
+	 if b.b_throws = None && compulsory_behavior b then
+	   Assertion.mkand [ b.b_ensures; acc ] ()
 	 else acc
       ) (Assertion.mktrue ())
-      (spec.jc_fun_default_behavior :: spec.jc_fun_behavior)
+      (spec.fs_default_behavior :: spec.fs_behavior)
   in
 
 (*   let normal_behavior = *)
@@ -3592,7 +3592,7 @@ and ai_call iaio abs curinvs vio e =
 (*       | Some iai ->  *)
 (* 	  let inferred_post = *)
 (* 	    try *)
-(* 	      Hashtbl.find iai.jc_interai_function_postconditions f.jc_fun_info_tag *)
+(* 	      Hashtbl.find iai.jc_interai_function_postconditions f.fun_tag *)
 (* 	    with Not_found -> Abstract1.top mgr (Abstract1.env pre) *)
 (* 	  in *)
 (* 	  make_and [normal_behavior; (mkinvariant mgr inferred_post)] *)
@@ -3603,9 +3603,9 @@ and ai_call iaio abs curinvs vio e =
     match vio with
       | None -> normal_post
       | Some _v ->
-  	  let result = f.jc_fun_info_result in
+  	  let result = f.fun_result in
   	  let cstrs =
-	    Jc_typing.type_range_of_term result.jc_var_info_type
+	    Jc_typing.type_range_of_term result.vi_type
 	      (new term_var result)
   	  in
   	  Assertion.mkand [ normal_post; cstrs ] ()
@@ -3619,25 +3619,25 @@ and ai_call iaio abs curinvs vio e =
 	 match t with
 	   | None -> forget_var_in_assertion v a
 	   | Some t -> replace_var_in_assertion v t a
-      ) normal_post args f.jc_fun_info_parameters
+      ) normal_post args f.fun_parameters
   in
   let normal_post =
     match vio with
-      | None -> forget_var_in_assertion f.jc_fun_info_result normal_post
+      | None -> forget_var_in_assertion f.fun_result normal_post
       | Some v ->
-	  replace_var_by_var_in_assertion f.jc_fun_info_result v normal_post
+	  replace_var_by_var_in_assertion f.fun_result v normal_post
   in
 
 (*   let exceptional_behaviors = *)
 (*     List.fold_left *)
 (*       (fun acc (_, _, b) -> *)
 (* 	 (\* TODO : handle 'assumes' clauses correctly *\) *)
-(* 	 match b.jc_behavior_throws with *)
+(* 	 match b.b_throws with *)
 (* 	   | None -> acc  *)
 (* 	   | Some ei -> *)
-(* 	       if b.jc_behavior_assumes = None then *)
-(* 		 (ei, b.jc_behavior_ensures) :: acc else acc) *)
-(*       [] fs.jc_fun_behavior *)
+(* 	       if b.b_assumes = None then *)
+(* 		 (ei, b.b_ensures) :: acc else acc) *)
+(*       [] fs.fs_behavior *)
 (*   in *)
 (*   let exceptional_behaviors = *)
 (*     List.map *)
@@ -3648,7 +3648,7 @@ and ai_call iaio abs curinvs vio e =
 (* 	      match t with *)
 (* 		| None -> assert false *)
 (* 		| Some t -> replace_var_in_assertion vi t a) *)
-(* 	   a args f.jc_fun_info_parameters) *)
+(* 	   a args f.fun_parameters) *)
 (*       exceptional_behaviors *)
 (*   in *)
 (*   let postexcl =  *)
@@ -3667,7 +3667,7 @@ and ai_call iaio abs curinvs vio e =
 (*   else *)
 (*     begin *)
 
-  let fi_writes = f.jc_fun_info_effects.jc_writes.jc_effect_globals in
+  let fi_writes = f.fun_effects.fe_writes.e_globals in
   let vars_writes =
     VarMap.fold
       (fun vi _labs acc -> Vai.all_variables (new term_var vi) @ acc)
@@ -3691,7 +3691,7 @@ and prepare_invariant mgr abs ~pos ~what absval =
       (printf
 	 "%a@[<v 2>Inferring %s for function %s:@\n%a@]@."
 	 Loc.report_position pos what
-	 abs.jc_absint_function.jc_fun_info_name
+	 abs.jc_absint_function.fun_name
 	 Jc_output.assertion a;
        Some a)
 
@@ -3705,7 +3705,7 @@ and record_ai_loop_invariants abs =
 	 | _ -> assert false
        in
        begin try
-	 let loopinvs = Hashtbl.find loop_invariants annot.jc_loop_tag in
+	 let loopinvs = Hashtbl.find loop_invariants annot.loop_tag in
 	 (* Update loop invariant *)
 	 let loopinv =
 	   meet mgr
@@ -3720,9 +3720,9 @@ and record_ai_loop_invariants abs =
 	       (* Register loop invariant as such *)
 	       let a = reg_annot ~pos:e#pos ~anchor:e#mark a in
 	       if Jc_options.trust_ai then
-		 annot.jc_free_loop_invariant <- a
+		 annot.loop_free_invariant <- a
 	       else
-		 annot.jc_loop_behaviors <-  ([], Some a, None) :: annot.jc_loop_behaviors;
+		 annot.loop_behaviors <-  ([], Some a, None) :: annot.loop_behaviors;
        with Not_found -> () end
     ) abs.jc_absint_loops
 
@@ -3739,8 +3739,8 @@ and ai_function mgr iaio targets funpre (f,pos,spec,body) =
     let env = Environment.add env (Array.of_list globvars) [||] in
 
     (* Add \result as abstract variable in [env] if any. *)
-    let result = f.jc_fun_info_result in
-    let return_type = result.jc_var_info_type in
+    let result = f.fun_result in
+    let return_type = result.vi_type in
     let env =
       if return_type <> JCTnative Tunit then
 	let result = Vai.all_variables (new term_var result) in
@@ -3752,7 +3752,7 @@ and ai_function mgr iaio targets funpre (f,pos,spec,body) =
     let params =
       List.fold_left
 	(fun acc (_,v) -> Vai.all_variables (new term_var v) @ acc)
-	[] f.jc_fun_info_parameters
+	[] f.fun_parameters
     in
     let env = Environment.add env (Array.of_list params) [||] in
 
@@ -3782,7 +3782,7 @@ and ai_function mgr iaio targets funpre (f,pos,spec,body) =
 (*       | None -> initpre *)
 (*       | Some iai -> *)
 (* 	  let inferred_pre = *)
-(* 	    try Hashtbl.find iai.jc_interai_function_preconditions f.jc_fun_info_tag  *)
+(* 	    try Hashtbl.find iai.jc_interai_function_preconditions f.fun_tag  *)
 (* 	    with Not_found -> Abstract1.top mgr env (\* for main function *\) in *)
 (* 	  { initpre with jc_absval_regular = *)
 (* 	      meet mgr initpre.jc_absval_regular inferred_pre } *)
@@ -3800,7 +3800,7 @@ and ai_function mgr iaio targets funpre (f,pos,spec,body) =
     begin match iaio with
       | None -> record_ai_loop_invariants abs
       | Some iai ->
-	  Hashtbl.replace iai.jc_interai_function_abs f.jc_fun_info_tag abs
+	  Hashtbl.replace iai.jc_interai_function_abs f.fun_tag abs
     end;
     List.iter
       (fun target ->
@@ -3817,12 +3817,12 @@ and ai_function mgr iaio targets funpre (f,pos,spec,body) =
 (*       match iaio with *)
 (* 	| None -> initpre *)
 (* 	| Some iai -> (\* Interprocedural analysis *\)  *)
-(* 	    inspected_functions := f.jc_fun_info_tag :: !inspected_functions; *)
+(* 	    inspected_functions := f.fun_tag :: !inspected_functions; *)
 (* 	    incr nb_nodes; *)
 (* 	    (\* Take the currently inferred pre for [fi] if any *\) *)
 (* 	    try *)
 (* 	      let inferred_pre =  *)
-(* 		Hashtbl.find iai.jc_interai_function_preconditions f.jc_fun_info_tag *)
+(* 		Hashtbl.find iai.jc_interai_function_preconditions f.fun_tag *)
 (* 	      in *)
 (* 	      { initpre with jc_absval_regular = *)
 (* 		  Abstract1.copy mgr inferred_pre } *)
@@ -3836,19 +3836,19 @@ and ai_function mgr iaio targets funpre (f,pos,spec,body) =
 	body finalinvs.jc_absinv_normal;
 
     (* record the postcondition inferred *)
-    let defpos,defid,defbehav = spec.jc_fun_default_behavior in
+    let defpos,defid,defbehav = spec.fs_default_behavior in
     let known_post =
-      Assertion.mkand [ defbehav.jc_behavior_free_ensures;
-			defbehav.jc_behavior_ensures ] ()
+      Assertion.mkand [ defbehav.b_free_ensures;
+			defbehav.b_ensures ] ()
     in
     let cstrs =
       List.fold_left
  	(fun acc (_,v) ->
 	   let cstr =
-	     Jc_typing.type_range_of_term v.jc_var_info_type (new term_var v)
+	     Jc_typing.type_range_of_term v.vi_type (new term_var v)
 	   in
 	   cstr :: acc
-	) [] ((false,f.jc_fun_info_result) :: f.jc_fun_info_parameters)
+	) [] ((false,f.fun_result) :: f.fun_parameters)
     in
     let known_post = Assertion.mkand (known_post :: cstrs) () in
 
@@ -3870,31 +3870,31 @@ and ai_function mgr iaio targets funpre (f,pos,spec,body) =
     in
     let post = Assertion.mkor acc () in
     (* Register postcondition as such *)
-    let post = reg_annot ~pos ~anchor:f.jc_fun_info_name post in
+    let post = reg_annot ~pos ~anchor:f.fun_name post in
     let defbehav =
       if Jc_options.trust_ai then
-	{ defbehav with jc_behavior_free_ensures =
-	    Assertion.mkand [ defbehav.jc_behavior_free_ensures; post ] () }
+	{ defbehav with b_free_ensures =
+	    Assertion.mkand [ defbehav.b_free_ensures; post ] () }
       else
-	{ defbehav with jc_behavior_ensures =
-	    Assertion.mkand [ defbehav.jc_behavior_ensures; post ] () }
+	{ defbehav with b_ensures =
+	    Assertion.mkand [ defbehav.b_ensures; post ] () }
     in
-    spec.jc_fun_default_behavior <- defpos,defid,defbehav;
+    spec.fs_default_behavior <- defpos,defid,defbehav;
 
 (*     match iaio with  *)
 (*       | None -> () *)
 (*       | Some iai -> *)
 (* 	  let old_post =  *)
 (* 	    try *)
-(* 	      Hashtbl.find iai.jc_interai_function_postconditions f.jc_fun_info_tag *)
+(* 	      Hashtbl.find iai.jc_interai_function_postconditions f.fun_tag *)
 (* 	    with Not_found -> Abstract1.top mgr env *)
 (* 	  in *)
 (* 	  let returnabs = keep_extern mgr fi !(invs.jc_absinv_return).jc_absval_regular in *)
 (* 	  if not (is_eq mgr old_post returnabs) then *)
-(* 	    Hashtbl.replace iai.jc_interai_function_postconditions f.jc_fun_info_tag returnabs; *)
+(* 	    Hashtbl.replace iai.jc_interai_function_postconditions f.fun_tag returnabs; *)
 (* 	  let old_excep =  *)
 (* 	    try *)
-(* 	      Hashtbl.find iai.jc_interai_function_exceptional f.jc_fun_info_tag *)
+(* 	      Hashtbl.find iai.jc_interai_function_exceptional f.fun_tag *)
 (* 	    with Not_found -> [] *)
 (* 	  in *)
 (* 	  let excabsl = *)
@@ -3907,11 +3907,11 @@ and ai_function mgr iaio targets funpre (f,pos,spec,body) =
 (* 	    let annot_inferred =  *)
 (* 	      List.fold_left2 *)
 (* 		(fun acc (ei1, va1) (ei2, va2) -> *)
-(* 		   if ei1.jc_exception_info_tag <> ei2.jc_exception_info_tag || *)
+(* 		   if ei1.exi_tag <> ei2.exi_tag || *)
 (* 		     not (is_eq mgr va1 va2) then true else acc) false old_excep excabsl *)
 (* 	    in *)
 (* 	    if annot_inferred then *)
-(* 	      Hashtbl.replace iai.jc_interai_function_exceptional f.jc_fun_info_tag excabsl; *)
+(* 	      Hashtbl.replace iai.jc_interai_function_exceptional f.fun_tag excabsl; *)
 
   with Manager.Error exc ->
     Manager.print_exclog std_formatter exc;
@@ -3968,10 +3968,10 @@ let code_function (f,pos,spec,body) =
       List.fold_left
  	(fun acc (_,v) ->
 	   let cstr =
-	     Jc_typing.type_range_of_term v.jc_var_info_type (new term_var v)
+	     Jc_typing.type_range_of_term v.vi_type (new term_var v)
 	   in
 	   cstr :: acc
-	) [] f.jc_fun_info_parameters
+	) [] f.fun_parameters
     in
 (*     let consists = *)
 (*       List.fold_left *)
@@ -3980,7 +3980,7 @@ let code_function (f,pos,spec,body) =
 (* 	      but rather a consistency formula for the generated precondition, *)
 (* 	      that should not assert nullity of a parameter this way *\) *)
 (* 	   let consist = *)
-(* 	     if is_nonnull_pointer_type v.jc_var_info_type then *)
+(* 	     if is_nonnull_pointer_type v.vi_type then *)
 (* 	       let tv = new term_var v in *)
 (* 	       let st = pointer_struct tv#typ in *)
 (* 	       let tmin =  *)
@@ -3993,11 +3993,11 @@ let code_function (f,pos,spec,body) =
 (* 	     else [] *)
 (* 	   in *)
 (* 	   consist @ acc *)
-(* 	) [] f.jc_fun_info_parameters *)
+(* 	) [] f.fun_parameters *)
 (*     in *)
     let funpre =
       Assertion.mkand
-	(spec.jc_fun_requires :: spec.jc_fun_free_requires :: cstrs) ()
+	(spec.fs_requires :: spec.fs_free_requires :: cstrs) ()
     in
 (*     let funconsist = Assertion.mkand (funpre :: consists) () in *)
 
@@ -4072,45 +4072,45 @@ let rec nb_conj_atoms a = match a#node with
 
 let rec record_ai_inter_annotations mgr iai fi pos fs _sl =
   let env = Environment.make [||] [||] in
-  inspected_functions := fi.jc_fun_info_tag :: !inspected_functions;
+  inspected_functions := fi.fun_tag :: !inspected_functions;
   (* record inferred precondition for [fi] *)
   let pre =
     try
-      Hashtbl.find iai.jc_interai_function_preconditions fi.jc_fun_info_tag
+      Hashtbl.find iai.jc_interai_function_preconditions fi.fun_tag
     with Not_found -> Abstract1.top mgr env
   in
   let a = mkinvariant mgr pre in
-  let a = reg_annot ~pos ~anchor:fi.jc_fun_info_name a in
+  let a = reg_annot ~pos ~anchor:fi.fun_name a in
   nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms a;
   incr nb_fun_pre;
   if Jc_options.verbose then
     printf
       "@[<v 2>Inferring precondition for function %s@\n%a@]@."
-      fi.jc_fun_info_name Jc_output.assertion a;
-  fs.jc_fun_free_requires <- Assertion.mkand [fs.jc_fun_free_requires; a] ();
+      fi.fun_name Jc_output.assertion a;
+  fs.fs_free_requires <- Assertion.mkand [fs.fs_free_requires; a] ();
   (* record loop invariants for [fi] *)
   let abs =
     try
-      Hashtbl.find iai.jc_interai_function_abs fi.jc_fun_info_tag
+      Hashtbl.find iai.jc_interai_function_abs fi.fun_tag
     with Not_found -> assert false
   in
   record_ai_loop_invariants abs;
   (* record inferred postconditions for [fi] *)
   let post =
     try
-      Hashtbl.find iai.jc_interai_function_postconditions fi.jc_fun_info_tag
+      Hashtbl.find iai.jc_interai_function_postconditions fi.fun_tag
     with Not_found -> Abstract1.top mgr env
   in
   let returna = mkinvariant mgr post in
-  let vi_result = fi.jc_fun_info_result in
+  let vi_result = fi.fun_result in
   let post = Assertion.mkand
-    [returna; Jc_typing.type_range_of_term vi_result.jc_var_info_type
+    [returna; Jc_typing.type_range_of_term vi_result.vi_type
        (new term_var vi_result)] ()
   in
-  let normal_behavior = { default_behavior with jc_behavior_ensures = post } in
+  let normal_behavior = { default_behavior with b_ensures = post } in
   let exceptional =
     try
-      Hashtbl.find iai.jc_interai_function_exceptional fi.jc_fun_info_tag
+      Hashtbl.find iai.jc_interai_function_exceptional fi.fun_tag
     with Not_found -> []
   in
   let excl, excabsl =
@@ -4123,25 +4123,25 @@ let rec record_ai_inter_annotations mgr iai fi pos fs _sl =
        Abstract1.top mgr env else va) excabsl in
   let excal = List.map (mkinvariant mgr) excabsl in
 
-  let post = reg_annot ~pos ~anchor:fi.jc_fun_info_name post in
+  let post = reg_annot ~pos ~anchor:fi.fun_name post in
   nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms post;
   incr nb_fun_post;
-  let excal = List.map (reg_annot ~pos ~anchor:fi.jc_fun_info_name) excal in
+  let excal = List.map (reg_annot ~pos ~anchor:fi.fun_name) excal in
 
   let exc_behaviors =
     List.map2
       (fun exc va ->
 	 (Loc.dummy_position, "inferred",
 	  { default_behavior with
-	      jc_behavior_throws = Some exc;
-	      jc_behavior_ensures = va }))
+	      b_throws = Some exc;
+	      b_ensures = va }))
       excl excal
   in
   if Jc_options.verbose then
     begin
       printf
 	"@[<v 2>Inferring postcondition for function %s@\n%a@]@."
-	fi.jc_fun_info_name
+	fi.fun_name
 	Jc_output.assertion post;
       List.iter2
 	(fun exc exca ->
@@ -4149,30 +4149,30 @@ let rec record_ai_inter_annotations mgr iai fi pos fs _sl =
 	   incr nb_fun_excep_post;
 	   printf
 	     "@[<v 2>Inferring exceptional postcondition (for exception %s) for function %s@\n%a@]@."
-	     exc.jc_exception_info_name
-	     fi.jc_fun_info_name
+	     exc.exi_name
+	     fi.fun_name
 	     Jc_output.assertion exca) excl excal;
     end;
   begin
     if is_purely_exceptional_fun fs then () else
-      fs.jc_fun_behavior <-
-	(Loc.dummy_position,"inferred", normal_behavior) :: fs.jc_fun_behavior
+      fs.fs_behavior <-
+	(Loc.dummy_position,"inferred", normal_behavior) :: fs.fs_behavior
   end;
-  fs.jc_fun_behavior <- exc_behaviors @ fs.jc_fun_behavior;
+  fs.fs_behavior <- exc_behaviors @ fs.fs_behavior;
   (* iterate on the call graph *)
   List.iter
     (fun fi ->
        let fi, _, fs, slo =
 	 try
-	   IntHashtblIter.find Jc_typing.functions_table fi.jc_fun_info_tag
+	   IntHashtblIter.find Jc_typing.functions_table fi.fun_tag
 	 with Not_found -> assert false (* should never happen *)
        in
        match slo with
 	 | None -> ()
 	 | Some b ->
-	     if not (List.mem fi.jc_fun_info_tag !inspected_functions) then
+	     if not (List.mem fi.fun_tag !inspected_functions) then
 	       record_ai_inter_annotations mgr iai fi pos fs b)
-    fi.jc_fun_info_calls
+    fi.fun_calls
 
 
 let ai_interprocedural mgr (fi, loc, fs, sl) =
@@ -4223,15 +4223,15 @@ let main_function = function
 let rec is_recursive_rec fi fil =
   List.exists
     (fun fi' ->
-       inspected_functions := fi'.jc_fun_info_tag :: !inspected_functions;
-       fi.jc_fun_info_tag = fi'.jc_fun_info_tag ||
-	   (not (List.mem fi'.jc_fun_info_tag !inspected_functions) &&
-	      is_recursive_rec fi fi'.jc_fun_info_calls))
+       inspected_functions := fi'.fun_tag :: !inspected_functions;
+       fi.fun_tag = fi'.fun_tag ||
+	   (not (List.mem fi'.fun_tag !inspected_functions) &&
+	      is_recursive_rec fi fi'.fun_calls))
     fil
 
 let is_recursive fi =
   inspected_functions := [];
-  let r = is_recursive_rec fi fi.jc_fun_info_calls in
+  let r = is_recursive_rec fi fi.fun_calls in
   inspected_functions := [];
   r
 *)
