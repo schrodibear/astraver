@@ -37,4 +37,6 @@ val logic_names_overloading : (string, bool ref) Hashtbl.t
 val from_range_to_comprehension : visitor_behavior -> file -> unit
 val from_comprehension_to_range : visitor_behavior -> file -> unit
 
+val apply : file:file -> (file -> unit) -> string -> unit
+
 val rewrite : file -> unit
