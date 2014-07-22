@@ -330,15 +330,11 @@ let parent_type = Typ.Hashtbl.find parent_type
 (*****************************************************************************)
 
 let retype file =
-  if checking () then check_types file;
+  let apply = Rewrite.apply ~file in
   (* Retype int field casted to pointer. *)
-  Jessie_options.debug "Retype int field casted to pointer@.";
-  retype_int_field file;
-  if checking () then check_types file;
+  apply retype_int_field "retyping int field casted to pointer.";
   (* Organize structure types in hierarchy. *)
-  Jessie_options.debug "Organize structure types in hierarchy@.";
-  create_struct_hierarchy file;
-  if checking () then check_types file;
+  apply create_struct_hierarchy "organizing structure types in hierarchy."
 
 (*
 Local Variables:
