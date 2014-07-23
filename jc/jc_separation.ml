@@ -46,15 +46,15 @@ open Pp
 
 let in_logic_component f = List.exists (Logic_info.equal f)
 
-let in_component f = List.exists (Fun_info.equal f)
+let in_code_component f = List.exists (Fun_info.equal f)
 
 let call_regions ~pos app in_current_comp param_regions result_region params =
   let arg_regions =
     List.map
       (fun x -> x#region) @@
-       match app with
-       | `App app -> (app.app_args :> regioned list)
-       | `Call call -> (call.call_args :> regioned list)
+      match app with
+      | `App app -> (app.app_args :> regioned list)
+      | `Call call -> (call.call_args :> regioned list)
   in
   if in_current_comp then
     (* No generalization here, plain unification *)
@@ -74,7 +74,12 @@ let call_regions ~pos app in_current_comp param_regions result_region params =
       | Not_found ->
         Jc_options.jc_error
           pos
-          "Unable to complete region analysis, aborting. Consider using #pragma SeparationPolicy(none)"
+          ("Can't associate generalized region to a local one: %s (%s) in call to %s.\n" ^^
+           "Unable to complete region analysis, aborting. Consider using #pragma SeparationPolicy(none)")
+          r.r_name r.r_final_name
+          (match app with
+           | `App { app_fun = { li_name = n } }
+           | `Call { call_fun = JClogic_fun { li_name = n } | JCfun { fun_name = n } } -> n)
     in
     let param_regions = List.map (fun vi -> assoc vi.vi_region) params in
     assoc result_region, param_regions, arg_regions
@@ -98,7 +103,7 @@ let single_term comp result_region t =
         (`App app)
         (in_logic_component li comp)
         li.li_param_regions
-        result_region
+        li.li_result_region
         li.li_parameters
     in
     List.iter2 Region.unify param_regions arg_regions;
@@ -148,7 +153,7 @@ let single_location_set = ignore
 let location comp result_region =
   Jc_iterators.iter_location (single_term comp result_region) single_location single_location_set
 
-let single_expr comp logic_comp result_region e =
+let single_expr code_comp logic_comp result_region e =
   match e#node with
   | JCEbinary(e1,_,e2) | JCEif(_,e1,e2) ->
     Region.unify e1#region e2#region
@@ -172,8 +177,10 @@ let single_expr comp logic_comp result_region e =
   | JCEapp call ->
     let in_current_comp, param_regions, result_region, params =
       match call.call_fun with
-      | JClogic_fun f -> false,         f.li_param_regions,  f.li_result_region,  f.li_parameters
-      | JCfun f -> in_component f comp, f.fun_param_regions, f.fun_return_region, List.map snd f.fun_parameters
+      | JClogic_fun f ->
+        false,                         f.li_param_regions,  f.li_result_region,  f.li_parameters
+      | JCfun f ->
+        in_code_component f code_comp, f.fun_param_regions, f.fun_return_region, List.map snd f.fun_parameters
     in
     let result_region, param_regions, arg_regions =
       call_regions
@@ -185,9 +192,8 @@ let single_expr comp logic_comp result_region e =
         params
     in
     List.iter2 Region.unify param_regions arg_regions;
-    if e#typ = unit_type
-    then () (* Result of call discarded *)
-    else Region.unify result_region e#region
+    if e#typ <> unit_type then Region.unify result_region e#region
+    (* Otherwise, the result of the call is discarded *)
   | JCEreturn(_ty, e) ->
     Region.unify result_region e#region
   | JCEassert(_behav, _asrt, a) ->
@@ -209,13 +215,13 @@ let single_expr comp logic_comp result_region e =
   | JCEreturn_void    | JCEpack _       | JCEunpack _ ->
     ()
 
-let expr comp logic_comp result_region =
+let expr code_comp logic_comp result_region =
   Jc_iterators.iter_expr_and_term_and_assertion
     (single_term logic_comp result_region)
     (single_assertion logic_comp)
     single_location
     single_location_set
-    (single_expr comp logic_comp result_region)
+    (single_expr code_comp logic_comp result_region)
 
 let axiomatic_decl logic_comp d =
   match d with
@@ -249,12 +255,12 @@ let logic_function comp f =
   end;
   Option_misc.iter (axiomatic comp) f.li_axiomatic
 
-let generalize_logic_function f =
-  let param_regions = List.map (fun vi -> vi.vi_region) f.li_parameters in
-  let fun_regions = f.li_result_region :: param_regions in
-  f.li_param_regions <- RegionList.reachable fun_regions
-
 let logic_component comp =
+  let generalize_logic_function f =
+    let param_regions = List.map (fun vi -> vi.vi_region) f.li_parameters in
+    let fun_regions = f.li_result_region :: param_regions in
+    f.li_param_regions <- RegionList.reachable fun_regions
+  in
   (* Perform plain unification on component *)
   List.iter (logic_function comp) comp;
   (* Generalize regions accessed *)
@@ -262,32 +268,32 @@ let logic_component comp =
   (* Fill in association table at each call site *)
   List.iter (logic_function []) comp
 
-let unify_logic_apps =
-  let single_term acc t =
-    let eq_apps app1 app2 =
-      app1.app_fun.li_tag = app2.app_fun.li_tag &&
-      app1.app_label_assoc = app2.app_label_assoc &&
-      List.for_all2 (TermOrd.equal) app1.app_args app2.app_args
-    in
-    match t#node with
-    | JCTapp app ->
-      begin match List.mem_assoc_eq eq_apps app acc with
-      | None -> (app, t#region) :: acc
-      | Some r -> Region.unify r t#region; acc
-      end
-    | _ -> acc
-  in
-  let dummy acc _ = acc in
-  ignore % Jc_iterators.fold_funspec single_term dummy dummy dummy []
-
 let funspec comp result_region spec =
+  let unify_logic_apps_in_funspec =
+    let single_term acc t =
+      let eq_apps app1 app2 =
+        app1.app_fun.li_tag = app2.app_fun.li_tag &&
+        app1.app_label_assoc = app2.app_label_assoc &&
+        List.for_all2 (TermOrd.equal) app1.app_args app2.app_args
+      in
+      match t#node with
+      | JCTapp app ->
+        begin match List.mem_assoc_eq eq_apps app acc with
+        | None -> (app, t#region) :: acc
+        | Some r -> Region.unify r t#region; acc
+        end
+      | _ -> acc
+    in
+    let dummy acc _ = acc in
+    ignore % Jc_iterators.fold_funspec single_term dummy dummy dummy []
+  in
   Jc_iterators.iter_funspec
     (single_term comp result_region)
     (single_assertion comp)
     single_location
     single_location_set
     spec;
-  unify_logic_apps spec
+  unify_logic_apps_in_funspec spec
 
 let code_function comp f =
   let f, _, spec, body = IntHashtblIter.find Jc_typing.functions_table f.fun_tag in
@@ -296,12 +302,12 @@ let code_function comp f =
   funspec [] result_region spec;
   Option_misc.iter (expr comp [] result_region) body
 
-let generalize_code_function f =
-  let param_regions = List.map (fun (_, vi) -> vi.vi_region) f.fun_parameters in
-  let fun_regions = f.fun_return_region :: param_regions in
-  f.fun_param_regions <- RegionList.reachable fun_regions
-
 let code_component comp =
+  let generalize_code_function f =
+    let param_regions = List.map (fun (_, vi) -> vi.vi_region) f.fun_parameters in
+    let fun_regions = f.fun_return_region :: param_regions in
+    f.fun_param_regions <- RegionList.reachable fun_regions
+  in
   (* Perform plain unification on component *)
   List.iter (code_function comp) comp;
   (* Generalize regions accessed *)
@@ -325,9 +331,9 @@ let regionalize_assertion a assoc =
                   with
                   | Not_found -> rdist, rloc)
                app.app_region_assoc
-          in
-          let tnode = JCTapp { app with app_region_assoc = app_assoc } in
-          new term_with ~node:tnode t
+           in
+           let tnode = JCTapp { app with app_region_assoc = app_assoc } in
+           new term_with ~node:tnode t
          | JCTconst _      | JCTvar _     | JCTshift _
          | JCTderef _      | JCTbinary _  | JCTunary _        | JCTold _        | JCTat _        | JCToffset _
          | JCTaddress _    | JCTbase_block _
