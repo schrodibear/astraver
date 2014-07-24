@@ -927,7 +927,7 @@ end
 let tr_logic_model_params f =
   let open Jc_typing in
   let module List = ListLabels in
-  let module LabelRegionMap = PairRegionMap(LogicLabelOrd)(PairOrd(LogicLabelOrd)(InternalRegion)) in
+  let module LabelRegionMap = PairRegionMap (LogicLabelOrd) (PairOrd (LogicLabelOrd) (InternalRegion)) in
   Lazy.force @@
   let open Option_monad in
   let tmodel_parameters = tmodel_parameters ~label_in_name:true in
@@ -957,7 +957,7 @@ let tr_logic_model_params f =
         ~f:(fun decl ->
              let decl = restrict_poly_mems_in_axiomatic_decl MemoryMap.empty decl in
              let ef = axiomatic_decl_effect empty_effects decl in
-             effects_from_decl f ef empty_effects decl)
+             li_effects_from_ax_decl f ef empty_effects decl)
     |> let count mm =
          LabelRegionMap.(
            MemoryMap.fold
@@ -1010,16 +1010,16 @@ let tr_logic_model_params f =
   end
 
 let tr_params_usual_model_aux f =
-    let lab = 
-      match f.li_labels with [lab] -> lab | _ -> LabelHere
-    in
-    let usual_params =
-      List.map (tparam ~label_in_name:true lab) f.li_parameters
-    in
-    let _3to2 = List.map (fun (n,_v,ty') -> (n,ty')) in
-    let model_params = _3to2 (tr_logic_model_params f) in
-    let usual_params = _3to2 usual_params in
-    usual_params, model_params
+  let lab =
+    match f.li_labels with [lab] -> lab | _ -> LabelHere
+  in
+  let usual_params =
+    List.map (tparam ~label_in_name:true lab) f.li_parameters
+  in
+  let _3to2 = List.map (fun (n,_v,ty') -> (n,ty')) in
+  let model_params = _3to2 (tr_logic_model_params f) in
+  let usual_params = _3to2 usual_params in
+  usual_params, model_params
 
 (*
 module Def_in :

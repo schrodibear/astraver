@@ -75,15 +75,15 @@ let axiom_int_of_tag_name st = st.si_name ^ "_int"
 
 let tag_name st = st.si_name ^ "_tag"
 
-let of_pointer_address_name vi = 
+let of_pointer_address_name vi =
   vi.ri_name ^ "_of_pointer_address"
 
 let generic_tag_table_name vi =
   (root_type_name vi) ^ "_tag_table"
 
 let tag_table_name (vi,r) =
-  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
-  then 
+  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r)
+  then
     (root_type_name vi) ^ "_" ^ (Region.name r) ^ "_tag_table"
   else
     (root_type_name vi) ^ "_tag_table"
@@ -91,42 +91,42 @@ let tag_table_name (vi,r) =
 let generic_alloc_table_name ac =
   (alloc_class_name ac) ^ "_alloc_table"
 
-let alloc_table_name (ac,r) = 
-  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
-  then 
+let alloc_table_name (ac,r) =
+  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r)
+  then
     (alloc_class_name ac) ^ "_" ^ (Region.name r) ^ "_alloc_table"
   else
     (alloc_class_name ac) ^ "_alloc_table"
 
-let field_memory_name fi = 
+let field_memory_name fi =
   let rt = struct_root fi.fi_struct in
   if root_is_plain_union rt then
     rt.ri_name ^ "_fields"
   else
     fi.fi_final_name
 
-let field_region_memory_name (fi,r) = 
-  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
-  then 
+let field_region_memory_name (fi,r) =
+  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r)
+  then
     (field_memory_name fi) ^ "_" ^ (Region.name r)
   else field_memory_name fi
 
 let union_memory_name vi =
   vi.ri_name ^ "_fields"
 
-let union_region_memory_name (vi,r) = 
-  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
-  then 
+let union_region_memory_name (vi,r) =
+  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r)
+  then
     (union_memory_name vi) ^ "_" ^ (Region.name r)
   else union_memory_name vi
 
-let bitvector_region_memory_name r = 
-  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
-  then 
+let bitvector_region_memory_name r =
+  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r)
+  then
     bitvector_type_name ^ "_" ^ (Region.name r)
   else bitvector_type_name
 
-let union_memory_type_name vi = 
+let union_memory_type_name vi =
   vi.ri_name ^ "_union"
 
 let generic_memory_name mc =
@@ -139,17 +139,17 @@ let memory_name (mc,r) =
     | JCmem_bitvector -> bitvector_region_memory_name r
 
 let pointer_class_name = function
-  | JCtag(st, _) -> 
+  | JCtag(st, _) ->
       if struct_of_union st then
 	"root_" ^ (struct_root st).ri_name
       else
 	"struct_" ^ st.si_name
   | JCroot vi -> "root_" ^ vi.ri_name
 
-let valid_pred_name ~equal ~left ~right ac pc = 
+let valid_pred_name ~equal ~left ~right ac pc =
   let prefix = match ac with
-    | JCalloc_root _ -> 
-	if equal then "strict_valid" else 
+    | JCalloc_root _ ->
+	if equal then "strict_valid" else
 	  begin match left, right with
 	    | false, false -> assert false
 	    | false, true -> "right_valid"
@@ -190,8 +190,8 @@ let alloc_param_name (type t1) (type t2) : arg:(string, check_size:bool -> strin
   fun ~arg ac pc ->
   let prefix = match ac with
     | JCalloc_root _ ->
-      "alloc" ^ (match arg with Singleton -> "_singleton" | Range_0_n -> "")
-    | JCalloc_bitvector -> "alloc_bitvector"
+      "allocate" ^ (match arg with Singleton -> "_singleton" | Range_0_n -> "")
+    | JCalloc_bitvector -> "allocate_bitvector"
   in
   let n = prefix ^ "_" ^ (pointer_class_name pc) in
   match arg with
@@ -205,16 +205,16 @@ let alloc_bitvector_logic_name pc =
 let mem_bitvector_logic_name pc =
   (pointer_class_name pc) ^ "_mem_bitvector"
 
-let alloc_of_bitvector_param_name pc = 
+let alloc_of_bitvector_param_name pc =
   (pointer_class_name pc) ^ "_alloc_of_bitvector"
 
-let mem_of_bitvector_param_name pc = 
+let mem_of_bitvector_param_name pc =
   (pointer_class_name pc) ^ "_mem_of_bitvector"
 
-let alloc_to_bitvector_param_name pc = 
+let alloc_to_bitvector_param_name pc =
   (pointer_class_name pc) ^ "_alloc_to_bitvector"
 
-let mem_to_bitvector_param_name pc = 
+let mem_to_bitvector_param_name pc =
   (pointer_class_name pc) ^ "_mem_to_bitvector"
 
 let jessie_return_variable = "return"
@@ -270,7 +270,7 @@ let reinterpret_cast_name op =
   | `Split _ -> "split"
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
-End: 
+End:
 *)

@@ -156,24 +156,24 @@ let has_memory (mc,r) mem_effect =
 let print_list_assoc_label pr fmt ls =
   fprintf fmt "%a"
     (print_list comma
-       (fun fmt (k,labs) ->
-	  fprintf fmt "%a (%a)"
-	    pr k
-	    (print_list comma Jc_output_misc.label)
-	    (LogicLabelSet.elements labs))
-    ) ls
+       (fun fmt (k, labs) ->
+          fprintf fmt "%a at (%a)"
+            pr k
+            (print_list comma Jc_output_misc.label)
+            (LogicLabelSet.elements labs)))
+    ls
 
-let print_alloc_table fmt (ac,r) =
-  fprintf fmt "(%a,%a)" Jc_output_misc.alloc_class ac Region.print r
+let print_alloc_table fmt (ac, r) =
+  fprintf fmt "(%a : %a)" Region.print r Jc_output_misc.alloc_class ac
 
-let print_tag_table fmt (vi,r) =
-  fprintf fmt "(%s,%a)" vi.ri_name Region.print r
+let print_tag_table fmt (vi, r) =
+  fprintf fmt "(%a : %s)" Region.print r vi.ri_name
 
-let print_memory fmt (mc,r) =
-  fprintf fmt "(%a,%a)" Jc_output_misc.memory_class mc Region.print r
+let print_memory fmt (mc, r) =
+  fprintf fmt "(%a : %a)" Region.print r Jc_output_misc.memory_class mc
 
-let print_location fmt (loc,(mc,r)) =
-  fprintf fmt "(%a,%a)" Jc_output.location loc print_memory (mc,r)
+let print_location fmt (loc, (mc, r)) =
+  fprintf fmt "(%a at %a)" print_memory (mc, r) Jc_output.location loc
 
 let print_variable fmt v =
   fprintf fmt "%s" v.vi_name
@@ -183,13 +183,13 @@ let print_exception fmt exc =
 
 let print_effect fmt ef =
   fprintf fmt
-"@[@[ alloc_table: @[%a@]@]@\n\
-@[ tag_table: @[%a@]@]@\n\
-@[ memories: @[%a@]@]@\n\
-@[ raw memories: @[%a@]@]@\n\
-@[ precise memories: @[%a@]@]@\n\
-@[ globals: @[%a@]@]@\n\
-@[ locals: @[%a@]@]@]@."
+    ("@[@[ alloc_table: @[%a@]@]@\n" ^^
+     "@[ tag_table: @[%a@]@]@\n" ^^
+     "@[ memories: @[%a@]@]@\n" ^^
+     "@[ raw memories: @[%a@]@]@\n" ^^
+     "@[ precise memories: @[%a@]@]@\n" ^^
+     "@[ globals: @[%a@]@]@\n" ^^
+     "@[ locals: @[%a@]@]@]@.")
     (print_list_assoc_label print_alloc_table)
     (AllocMap.elements ef.e_alloc_tables)
     (print_list_assoc_label print_tag_table)
@@ -1711,7 +1711,7 @@ let behavior fef (_pos,_id,b) =
 
 
 
-let spec fef s =
+let spec s fef =
   let fef =
     List.fold_left behavior fef
       (s.fs_default_behavior :: s.fs_behavior)
@@ -1736,143 +1736,179 @@ let parameter fef v =
 (*                                 fix-point                                  *)
 (******************************************************************************)
 
-let fixpoint_reached = ref false
-
-let axiomatic_decl_effect ef d =
-  match d with
-    | Jc_typing.ABaxiom(_,_,_,a) -> assertion ef a
-
-let effects_from_app fi ax_effects acc app =
-  Jc_options.lprintf "@[Jc_effect.effects_from_app, fi = %s, app = %s@]@."
-    fi.li_name
-    app.app_fun.li_name;
-  Jc_options.lprintf "fi == app.app_fun ? %b@." (fi == app.app_fun);
-  if fi.li_tag = app.app_fun.li_tag then
-    begin
-      Jc_options.lprintf
-	"@[fi labels = @[{%a}@] ; app label_assoc = @[{%a}@]@]@."
-	(print_list comma Jc_output_misc.label)
-	fi.li_labels
-	(print_list comma
-	   (fun fmt (l1,l2) ->
-	      Format.fprintf fmt "%a -> %a"
-		Jc_output_misc.label l1
-		Jc_output_misc.label l2))
-	app.app_label_assoc;
-      ef_union
-	(ef_filter_labels app.app_label_assoc ax_effects)
-	acc
-    end
-  else
-    acc
-
-let effects_from_term_app fi ax_effects acc t =
-  match t#node with
-    | JCTapp app -> effects_from_app fi ax_effects acc app
-    | _ -> acc
-
-let effects_from_pred_app fi ax_effects acc a =
-  match a#node with
-    | JCAapp app -> effects_from_app fi ax_effects acc app
-    | _ -> acc
-
-let effects_from_assertion fi ax_effects acc a =
+let li_effects_from_assertion fi ax_effects =
+  let li_effects_from_app f acc x =
+    match f x#node with
+    | Some app when Logic_info.equal app.app_fun fi ->
+      ef_union (ef_filter_labels app.app_label_assoc ax_effects) acc
+    | Some _ | None -> acc
+  in
   Jc_iterators.fold_term_and_assertion
-    (effects_from_term_app fi ax_effects)
-    (effects_from_pred_app fi ax_effects) acc a
+    (li_effects_from_app
+      (function
+       | JCTapp app -> Some app
+       | _ -> None))
+    (li_effects_from_app
+      (function
+       | JCAapp app -> Some app
+       | _ -> None))
 
-let effects_from_decl fi ax_effects acc d =
-  match d with
-    | Jc_typing.ABaxiom(_,_,_,a) -> effects_from_assertion fi ax_effects acc a
+let axiomatic_decl_effect, li_effects_from_ax_decl =
+  let with_axiomatic_decl f acc d =
+    match d with
+    | Jc_typing.ABaxiom (_, _, _, a) -> f acc a
+  in
+  with_axiomatic_decl assertion,
+  fun fi ax_effects -> with_axiomatic_decl (li_effects_from_assertion fi ax_effects)
 
-let effects_from_axiomatic fi ax acc =
+let li_effects_from_axiomatic fi ax acc =
+  let open Jc_typing in
   try
-    let l = StringHashtblIter.find Jc_typing.axiomatics_table ax in
-    let ef = List.fold_left axiomatic_decl_effect empty_effects l.Jc_typing.axiomatics_decls in
-    List.fold_left (effects_from_decl fi ef) acc l.Jc_typing.axiomatics_decls
-  with Not_found -> assert false
+    let decls = (StringHashtblIter.find axiomatics_table ax).axiomatics_decls in
+    let ef = List.fold_left axiomatic_decl_effect empty_effects decls in
+    List.fold_left (li_effects_from_ax_decl fi ef) acc decls
+  with
+  | Not_found ->
+    Jc_options.jc_error
+      Loc.dummy_position
+      "effects_from_axiomatic: can't find axiomatic: %s" ax
+
+exception Dangling_region of region * Loc.position * effect * string * Loc.position
+
+let check_li_effects_from_axiomatic li =
+  let check_decl d =
+    let check_app ax_pos ax_name app_pos app =
+      let is_dangling =
+        let region_assoc = app.app_region_assoc in
+        fun r -> not @@ Option_misc.has_some (transpose_region ~region_assoc r)
+      in
+      ignore @@ ef_filter_by_region
+        (fun r ->
+           if is_dangling r then
+             let ef = ef_filter_by_region is_dangling li.li_effects in
+             raise @@ Dangling_region (r, app_pos, ef, ax_name, ax_pos)
+           else false)
+        li.li_effects
+    in
+    match d with
+    | Jc_typing.ABaxiom (pos, name, _, a) ->
+      let check_app = check_app pos name in
+      Jc_iterators.iter_term_and_assertion
+        (fun t -> match t#node with JCTapp app -> check_app t#pos app | _ -> ())
+        (fun a -> match a#node with JCAapp app -> check_app a#pos app | _ -> ())
+        a
+  in
+  try
+    Option_misc.iter
+      Jc_typing.(fun ax -> List.iter check_decl (StringHashtblIter.find axiomatics_table ax).axiomatics_decls)
+      li.li_axiomatic
+  with
+  | Dangling_region (r, app_pos, ef, ax_name, ax_pos) ->
+    Jc_options.jc_warning
+      app_pos
+      ("Encountered dangling region \"%s\"@[<4>@ in logic function \"%s\"@ " ^^
+       "at %a@ in axiom \"%s\"@ (defined at %a).@\n" ^^
+       "It seems the function \"%s\"@ should have an explicit reads clause specifying variable(s) of type %a.@\n" ^^
+       "The inferred side effect of the logic function is:@ %a@]")
+      r.r_name
+      li.li_name
+      Loc.gen_report_position app_pos
+      ax_name
+      Loc.gen_report_position ax_pos
+      li.li_name
+      print_type r.r_type
+      print_effect ef
+  | Not_found ->
+    Jc_options.jc_error
+      Loc.dummy_position
+      "check_effects_from_axiomatic: can't find axiomatic for function: %s" li.li_name
 
 let logic_fun_effects f =
-  let f,ta =
-    IntHashtblIter.find Jc_typing.logic_functions_table f.li_tag
-  in
+  let f, ta = IntHashtblIter.find Jc_typing.logic_functions_table f.li_tag in
   let ef = f.li_effects in
-  let ef = match ta with
+  let ef =
+    match ta with
     | JCTerm t -> term ef t
     | JCAssertion a -> assertion ef a
     | JCInductive l ->
-	let ax_effects =
-	  List.fold_left
-	    (fun ef (_id,_labels,a) -> assertion ef a) empty_effects l
-	in
-	List.fold_left (fun acc (_id,_labels,a) ->
-			  effects_from_assertion f ax_effects acc a) ef l
+      let ax_effects =
+        List.fold_left
+          (fun ef (_, _, a) -> assertion ef a)
+          empty_effects
+          l
+      in
+      List.fold_left (fun acc (_, _, a) -> li_effects_from_assertion f ax_effects acc a) ef l
     | JCNone ->
-	begin match f.li_axiomatic with
-	  | Some a ->
-	      (* axiomatic def in a *)
-	      effects_from_axiomatic f a ef
-	  | None -> assert false
-	      (* not allowed outside axiomatics *)
-	end
+      begin match f.li_axiomatic with
+        (* axiomatic def in a *)
+        | Some a ->
+          let ef = li_effects_from_axiomatic f a ef in
+          check_li_effects_from_axiomatic f;
+          ef
+        | None -> (* not allowed outside axiomatics *)
+          Jc_options.jc_error
+            Loc.dummy_position
+            "Undefined pure logic function %s declared outside axiomatic"
+            f.li_name
+      end
     | JCReads loclist ->
-	List.fold_left
-	  (fun ef loc ->
-	     let fef = location ~in_clause:Reads empty_fun_effect loc in
-	     ef_union ef fef.fe_reads
-	  ) ef loclist
+      List.fold_left
+        (fun ef loc ->
+           ef_union ef (location ~in_clause:Reads empty_fun_effect loc).fe_reads)
+        ef
+        loclist
   in
-  if same_effects ef f.li_effects then () else
-    (fixpoint_reached := false;
-     f.li_effects <- ef)
+  if same_effects ef f.li_effects then
+    `Final ef
+  else begin
+    f.li_effects <- ef;
+    `Provisional ef
+  end
 
 let fun_effects f =
-  let (f,_pos,s,e_opt) =
-    IntHashtblIter.find Jc_typing.functions_table f.fun_tag
-  in
-  let fef = f.fun_effects in
-  let fef = spec fef s in
-  let fef = Option_misc.fold_left expr fef e_opt in
-  let fef =
-    List.fold_left parameter fef (List.map snd f.fun_parameters)
-  in
-  if same_feffects fef f.fun_effects then () else
-    (fixpoint_reached := false;
-     f.fun_effects <- fef)
+  let f, _pos, s, e_opt = IntHashtblIter.find Jc_typing.functions_table f.fun_tag in
+     f.fun_effects
+  |> spec s
+  |> (fun fef -> Option_misc.fold_left expr fef e_opt)
+  |> (fun fef -> List.fold_left parameter fef @@ List.map snd f.fun_parameters)
+  |> fun fef ->
+     if same_feffects fef f.fun_effects then
+       `Final fef
+     else begin
+       f.fun_effects <- fef;
+       `Provisional fef
+     end
 
-let fun_effects f =
-  set_current_function f;
-  fun_effects f;
-  reset_current_function ()
+let finished f acc x =
+  acc &&
+  match f x with
+  | `Provisional _ -> false
+  | `Final _ -> true
+
+let rec fix f =
+  if not (f ()) then
+    fix f
 
 let logic_effects funs =
-
   List.iter (fun f -> f.li_effects <- empty_effects) funs;
-
-  fixpoint_reached := false;
-  while not !fixpoint_reached do
-    fixpoint_reached := true;
-    Jc_options.lprintf "Effects: doing one iteration...@.";
-    List.iter logic_fun_effects funs
-  done;
+  fix
+    (fun () ->
+       Jc_options.lprintf "Effects: doing one iteration@.";
+       List.fold_left (finished logic_fun_effects) true funs);
   Jc_options.lprintf "Effects: fixpoint reached@.";
   List.iter
     (fun f ->
        Jc_options.lprintf "Effects for logic function %s:@\n%a@."
-	 f.li_name print_effect f.li_effects
-    ) funs
+         f.li_name print_effect f.li_effects)
+    funs
 
 let function_effects funs =
-
   List.iter (fun f -> f.fun_effects <- empty_fun_effect) funs;
-
   let iterate () =
-    fixpoint_reached := false;
-    while not !fixpoint_reached do
-      fixpoint_reached := true;
-      Jc_options.lprintf "Effects: doing one iteration...@.";
-      List.iter fun_effects funs
-    done
+    fix
+      (fun () ->
+         Jc_options.lprintf "Effects: doing one iteration...@.";
+         List.fold_left (finished fun_effects) true funs)
   in
 
   (* Compute raw effects to bootstrap *)
@@ -1883,7 +1919,6 @@ let function_effects funs =
   iterate ();
   (* Reset mode to raw effects for individual calls *)
   current_mode := MApprox;
-
   Jc_options.lprintf "Effects: fixpoint reached@.";
 
   (* Global variables that are only read are translated into logic
@@ -1894,27 +1929,21 @@ let function_effects funs =
        let fef = f.fun_effects in
        let efr = fef.fe_reads.e_globals in
        let efw = fef.fe_writes.e_globals in
-       let ef =
-	 VarMap.filter
-	   (fun v _labs -> VarMap.mem v efw || v.vi_assigned) efr
-       in
+       let ef = VarMap.filter (fun v _labs -> VarMap.mem v efw || v.vi_assigned) efr in
        let ef = { fef.fe_reads with e_globals = ef } in
-       f.fun_effects <- { fef with fe_reads = ef }
-    ) funs;
+       f.fun_effects <- { fef with fe_reads = ef })
+    funs;
 
   List.iter
     (fun f ->
        Jc_options.lprintf
-	 "Effects for function %s:@\n\
-@[ reads: %a@]@\n\
-@[ writes: %a@]@\n\
-@[ raises: %a@]@."
-	 f.fun_name
-	 print_effect f.fun_effects.fe_reads
-	 print_effect f.fun_effects.fe_writes
-	 (print_list comma print_exception)
-	 (ExceptionSet.elements f.fun_effects.fe_raises)
-    ) funs
+         "Effects for function %s:@\n@[ reads: %a@]@\n@[ writes: %a@]@\n@[ raises: %a@]@."
+         f.fun_name
+         print_effect f.fun_effects.fe_reads
+         print_effect f.fun_effects.fe_writes
+         (print_list comma print_exception)
+         (ExceptionSet.elements f.fun_effects.fe_raises))
+    funs
 
 let is_poly_mem_param =
   function

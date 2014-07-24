@@ -36,7 +36,7 @@ open Format
 open Jc_env
 open Jc_common_options
 
-(*s The log file *)
+(* The log file *)
 
 let c = ref stdout
 
@@ -51,14 +51,15 @@ let close_log () =
   close_out !c;
   c := stdout
 
-(*s environment variables *)
+(* environment variables *)
 
 let libdir =
   try
     let v = Sys.getenv "WHYLIB" in
     lprintf "WHYLIB is set to %s@." v;
     v
-  with Not_found ->
+  with
+  | Not_found ->
     let p = Version.libdir in
     lprintf "WHYLIB is not set, using %s as default@." p;
     p
@@ -74,7 +75,7 @@ let libfiles = ref []
 let add_to_libfiles s = libfiles := s :: !libfiles
 let get_libfiles () = List.rev !libfiles
 
-(*s command-line options *)
+(* command-line options *)
 
 let parse_only = ref false
 let type_only = ref false
@@ -120,7 +121,8 @@ let version () =
   Printf.printf "This is Jessie version %s, compiled on %s
 Copyright (c) 2006-2014 - CNRS/INRIA/Univ Paris-Sud
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
-" Version.version Version.date;
+"
+    Version.version Version.date;
   exit 0
 
 let usage = "jessie [options] files"
@@ -128,76 +130,76 @@ let usage = "jessie [options] files"
 let _ =
   Arg.parse
       [ "-parse-only", Arg.Set parse_only,
-	  "  stops after parsing";
+          "  stops after parsing";
         "-type-only", Arg.Set type_only,
-	  "  stops after typing";
+          "  stops after typing";
         "-user-annot-only", Arg.Set user_annot_only,
-	  "  check only user-defined annotations (i.e. safety is assumed)";
+          "  check only user-defined annotations (i.e. safety is assumed)";
         "-print-call-graph", Arg.Set print_graph,
-	  "  stops after call graph and print call graph";
+          "  stops after call graph and print call graph";
         "-d", Arg.Set debug,
           "  debugging mode";
-	"-locs", Arg.String (fun f -> pos_files := f :: !pos_files),
-	  "  <f> reads source locations from file f" ;
+        "-locs", Arg.String (fun f -> pos_files := f :: !pos_files),
+          "  <f> reads source locations from file f" ;
         "-behavior", Arg.String (fun s -> behavior := s::!behavior),
-	  "  verify only specified behavior (safety, variant, default or user-defined behavior)";
+          "  verify only specified behavior (safety, variant, default or user-defined behavior)";
 
         "-why3ml", Arg.Set why3_backend,
           "  (experimental) produce a program in why3ml syntax" ;
 
         "-why-opt", Arg.String add_why_opt,
-	  "  <why options>  passes options to Why";
+          "  <why options>  passes options to Why";
         "-why3-opt", Arg.String add_why3_opt,
-	  "  <why options>  passes options to Why3";
-	"-v", Arg.Set verbose,
+          "  <why options>  passes options to Why3";
+        "-v", Arg.Set verbose,
           "  verbose mode";
-	"-q", Arg.Clear verbose,
+        "-q", Arg.Clear verbose,
           "  quiet mode (default)";
-(* 	"-ai", Arg.Tuple [ *)
-(* 	  Arg.String (fun s -> ai_domain := s);  *)
-(* 	  Arg.Set annot_infer], *)
-(*           "  <box,oct,pol,wp,boxwp,octwp,polwp> performs annotation inference" *)
-(*           ^ " with abstract interpretation using the Box, Octagon" *)
+(*      "-ai", Arg.Tuple [                                                          *)
+(*        Arg.String (fun s -> ai_domain := s);                                     *)
+(*        Arg.Set annot_infer],                                                     *)
+(*           "  <box,oct,pol,wp,boxwp,octwp,polwp> performs annotation inference"   *)
+(*           ^ " with abstract interpretation using the Box, Octagon"               *)
 (*           ^ " or Polyhedron domain, or with weakest preconditions or with both"; *)
         "-forall-inst-bound", Arg.Set_int forall_inst_bound,
           "  bound on the number of expressions resulting from unrolling some forall quantifiers";
-	"-main", Arg.Tuple [Arg.Set interprocedural; Arg.Set_string main],
-	  "  main function for interprocedural abstract interpretation (needs -ai <domain>)";
-	"-fast-ai", Arg.Set fast_ai,
-	  "  fast ai (needs -ai <domain> and -main <function>)";
-	"-trust-ai", Arg.Set trust_ai,
-	  "  verify inferred annotations (needs -ai <domain>)";
-	"-separation", Arg.Unit (fun () -> separation_sem := SepRegions),
-	  "  apply region-based separation on pointers";
-	"--werror", Arg.Set werror,
+        "-main", Arg.Tuple [Arg.Set interprocedural; Arg.Set_string main],
+          "  main function for interprocedural abstract interpretation (needs -ai <domain>)";
+        "-fast-ai", Arg.Set fast_ai,
+          "  fast ai (needs -ai <domain> and -main <function>)";
+        "-trust-ai", Arg.Set trust_ai,
+          "  verify inferred annotations (needs -ai <domain>)";
+        "-separation", Arg.Unit (fun () -> separation_sem := SepRegions),
+          "  apply region-based separation on pointers";
+        "--werror", Arg.Set werror,
           "  treats warnings as errors";
-	"--version", Arg.Unit version,
+        "--version", Arg.Unit version,
           "  prints version and exit";
 (*
-	"-inv-sem", Arg.String
-	  (function
-	     | "none" -> inv_sem := InvNone
-	     | "ownership" -> inv_sem := InvOwnership
-	     | "arguments" -> inv_sem := InvArguments
-	     | s -> raise (Arg.Bad ("Unknown mode: "^s))),
-	  "  <kind>  sets the semantics of invariants (available modes: none, ownership, arguments)";
+        "-inv-sem", Arg.String
+          (function
+             | "none" -> inv_sem := InvNone
+             | "ownership" -> inv_sem := InvOwnership
+             | "arguments" -> inv_sem := InvArguments
+             | s -> raise (Arg.Bad ("Unknown mode: "^s))),
+          "  <kind>  sets the semantics of invariants (available modes: none, ownership, arguments)";
 *)
-	"-all-offsets", Arg.Set verify_all_offsets,
-	  "  generate vcs for all pointer offsets";
-	"-invariants-only", Arg.Set verify_invariants_only,
-	  "  verify invariants only (Arguments policy)";
-	"-verify", Arg.String (function s -> verify := s::!verify),
-	  "  verify only these functions";
+        "-all-offsets", Arg.Set verify_all_offsets,
+          "  generate vcs for all pointer offsets";
+        "-invariants-only", Arg.Set verify_invariants_only,
+          "  verify invariants only (Arguments policy)";
+        "-verify", Arg.String (function s -> verify := s :: !verify),
+          "  verify only these functions";
         "-gen_frame_rule_with_ft", Arg.Set gen_frame_rule_with_ft,
         "Experimental : Generate frame rule for predicates and logic functions using only their definitions";
       ]
       add_file usage
 
 let () =
-  if !trust_ai && !int_model = IMmodulo then
-    (Format.eprintf "cannot trust abstract interpretation \
-in modulo integer model";
-     assert false)
+  if !trust_ai && !int_model = IMmodulo then begin
+    Format.eprintf "Cannot trust abstract interpretation in modulo integer model";
+    exit 1
+  end
 
 let usage () =
   eprintf "usage: %s@." usage;
@@ -227,39 +229,44 @@ let main = !main
 let behavior = !behavior
 
 let gen_frame_rule_with_ft = !gen_frame_rule_with_ft
-let () = if gen_frame_rule_with_ft then libfiles := "mybag.why"::!libfiles
+let () = if gen_frame_rule_with_ft then libfiles := "mybag.why" :: !libfiles
 
 let verify_behavior s =
   behavior = [] || List.mem s behavior
 
 let set_int_model im =
-  if im = IMmodulo && trust_ai then
-    (Format.eprintf "cannot trust abstract interpretation \
-in modulo integer model";
-     assert false)
-  else
+  if im = IMmodulo && trust_ai then begin
+    Format.eprintf "cannot trust abstract interpretation in modulo integer model";
+    exit 1
+  end else
     int_model := im
 
 let set_float_model fm = float_model := fm
 
 
-(*s error handling *)
+(* error handling *)
 
 exception Jc_error of Loc.position * string
 
-let jc_error l f =
-  Format.ksprintf
-    (fun s -> raise (Jc_error(l, s))) f
+let jc_error l =
+  Format.ksprintf (fun s -> raise @@ Jc_error (l, s))
+
+let jc_warning l =
+  Format.kfprintf
+    (fun _ -> eprintf "%a: [Warning]: %s@." Loc.gen_report_position l @@ flush_str_formatter ())
+    str_formatter
 
 let parsing_error l f =
   Format.ksprintf
     (fun s ->
-       let s = if s="" then s else " ("^s^")" in
-       raise (Jc_error(l, "syntax error" ^ s))) f
+       let s = if s = "" then s else " (" ^ s ^ ")" in
+       raise @@ Jc_error (l, "syntax error" ^ s))
+    f
 
-(*s pos table *)
+(* pos table *)
 
-let kind_of_ident = function
+let kind_of_ident =
+  function
   | "ArithOverflow" -> Output.ArithOverflow
   | "DownCast" -> Output.DownCast
   | "IndexBounds" -> Output.IndexBounds
@@ -276,27 +283,24 @@ let () =
     (fun f ->
        let l = Rc.from_file f in
        List.iter
-	 (fun (id,fs) ->
-	    let (f,l,b,e,k,o) =
-	      List.fold_left
-		(fun (f,l,b,e,k,o) v ->
-		   match v with
-		     | "file", Rc.RCstring f -> (f,l,b,e,k,o)
-		     | "line", Rc.RCint l -> (f,l,b,e,k,o)
-		     | "begin", Rc.RCint b -> (f,l,b,e,k,o)
-		     | "end", Rc.RCint e -> (f,l,b,e,k,o)
-		     | "kind", Rc.RCident s ->
-			 let k =
-			   try
-			     Some (kind_of_ident s)
-			   with Not_found -> None
-			 in
-			 (f,l,b,e,k,o)
-		     | _ -> (f,l,b,e,k,v::o))
-		("",0,0,0,None,[]) fs
-	    in
-	    Hashtbl.add pos_table id (f,l,b,e,k,o))
-	 l)
+         (fun (id, fs) ->
+            let f, l, b, e, k, o =
+              List.fold_left
+                (fun (f, l, b, e, k, o) v ->
+                   match v with
+                   | "file",  Rc.RCstring f -> f, l, b, e, k, o
+                   | "line",  Rc.RCint l ->    f, l, b, e, k, o
+                   | "begin", Rc.RCint b ->    f, l, b, e, k, o
+                   | "end",   Rc.RCint e ->    f, l, b, e, k, o
+                   | "kind",  Rc.RCident s ->
+                     let k = try Some (kind_of_ident s) with Not_found -> None in
+                     f, l, b, e, k, o
+                   | _ ->
+                     f, l, b, e, k, v :: o)
+                ("",0,0,0,None,[]) fs
+            in
+            Hashtbl.add pos_table id (f, l, b, e, k, o))
+         l)
     !pos_files
 
 let position_of_label name =
@@ -307,7 +311,7 @@ let position_of_label name =
     Lexing.pos_cnum = c;
   } in
   try
-    let (f,l,b,e,_k,_o) = Hashtbl.find pos_table name in
+    let f, l, b, e, _k, _o = Hashtbl.find pos_table name in
     Some (position f l b, position f l e)
   with Not_found -> None
 

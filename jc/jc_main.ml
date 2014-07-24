@@ -465,7 +465,7 @@ let main () =
       eprintf "%a: typing error: %s@." Loc.gen_report_position l s;
       exit 1
     | Jc_options.Jc_error (l, s) when not Jc_options.debug ->
-      eprintf "%a: %s@." Loc.gen_report_position l s;
+      eprintf "%a: [Error]: %s@." Loc.gen_report_position l s;
       exit 1
     | Assert_failure (f, l, c) as exn when not Jc_options.debug ->
       eprintf "%a:@." Loc.gen_report_line (f,l,c,c);

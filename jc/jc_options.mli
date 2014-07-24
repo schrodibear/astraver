@@ -34,16 +34,14 @@
 open Jc_stdlib
 open Jc_env
 
-(*s environment variables *)
+(* environment variables *)
 
 val has_floats : bool ref
 val libdir : string
-(*val float_lib : string list*)
 val get_libfiles : unit -> string list
-(*val libfiles : string list ref*)
 val add_to_libfiles : string -> unit
 
-(*s command-line options *)
+(* command-line options *)
 
 val parse_only : bool
 val type_only : bool
@@ -63,7 +61,7 @@ val behavior : string list
 val interprocedural : bool
 val main : string
 
-val files : unit -> string list 
+val files : unit -> string list
 val usage : unit -> unit
 
 val inv_sem: Jc_env.inv_sem ref
@@ -88,28 +86,29 @@ val set_int_model: int_model -> unit
 
 val set_float_model: float_model -> unit
 
-(*s The log file *)
+(* The log file *)
 
 val log : Format.formatter
 val lprintf : ('a, Format.formatter, unit) format -> 'a
 val close_log : unit -> unit
 
-(*s error handling *)
+(* error handling *)
 
 exception Jc_error of Loc.position * string
 
 val jc_error : Loc.position -> ('a, unit, string, 'b) format4 -> 'a
+val jc_warning : Loc.position -> ('a, Format.formatter, unit, unit) format4 -> 'a
 
 val parsing_error : Loc.position -> ('a, unit, string, 'b) format4 -> 'a
 
-val pos_table : 
-  (string, (string * int * int * int * Output.kind option * (string * Rc.rc_value) list)) 
+val pos_table :
+  (string, (string * int * int * int * Output.kind option * (string * Rc.rc_value) list))
      Hashtbl.t
 
 val position_of_label: string -> Loc.position option
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "make -C .. bin/jessie.byte"
-End: 
+End:
 *)

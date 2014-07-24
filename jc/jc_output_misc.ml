@@ -59,7 +59,7 @@ let string_of_annotation_policy p =
     | AnnotElimPre -> "ElimPre"
     | AnnotStrongPre -> "StrongPre"
     | AnnotWeakPre -> "WeakPre"
- 
+
 let string_of_abstract_domain p =
   match p with
     | AbsNone -> "None"
@@ -80,7 +80,7 @@ let float_suffix fmt = function
 let const fmt c =
   match c with
     | JCCinteger s -> fprintf fmt "%s" s
-    | JCCreal s -> fprintf fmt "%s" s 
+    | JCCreal s -> fprintf fmt "%s" s
     | JCCboolean b -> fprintf fmt "%B" b
     | JCCnull -> fprintf fmt "null"
     | JCCvoid -> fprintf fmt "()"
@@ -89,10 +89,10 @@ let const fmt c =
 let label fmt l =
   match l with
     | LabelName s -> fprintf fmt "%s" s.lab_name
-    | LabelHere -> fprintf fmt "Here" 
-    | LabelPre -> fprintf fmt "Pre" 
-    | LabelOld -> fprintf fmt "Old" 
-    | LabelPost -> fprintf fmt "Post" 
+    | LabelHere -> fprintf fmt "Here"
+    | LabelPre -> fprintf fmt "Pre"
+    | LabelOld -> fprintf fmt "Old"
+    | LabelPost -> fprintf fmt "Post"
 
 let rec ptype fmt t =
   match t#node with
@@ -135,13 +135,13 @@ and address_kind fmt = function
   | Addr_pointer -> fprintf fmt ""
 
 let alloc_class fmt = function
-  | JCalloc_root vi -> fprintf fmt "alloc-root(%s)" vi.ri_name
+  | JCalloc_root vi -> fprintf fmt "alloc-root \"%s\"" vi.ri_name
   | JCalloc_bitvector -> fprintf fmt "alloc-bitvector"
 
 let memory_class fmt = function
-  | JCmem_field fi -> fprintf fmt "mem-field(%s)" fi.fi_name
-  | JCmem_plain_union vi -> 
-      fprintf fmt "mem-plain-union(%s)" vi.ri_name
+  | JCmem_field fi -> fprintf fmt "mem-field \"%s\"" fi.fi_name
+  | JCmem_plain_union vi ->
+      fprintf fmt "mem-plain-union \"%s\"" vi.ri_name
   | JCmem_bitvector -> fprintf fmt "mem-bitvector"
 
 let pointer_class = function
@@ -149,7 +149,7 @@ let pointer_class = function
   | JCroot vi -> "root "^vi.ri_name
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
-End: 
+End:
 *)
