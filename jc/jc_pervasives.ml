@@ -49,6 +49,8 @@ let (%>) f g x = g (f x)
 
 let cons e l = e :: l
 
+let const r _ = r
+
 let id x = x
 
 let dup2 a = a, a
