@@ -42,3 +42,5 @@ let fold f x c = match x with None -> c | Some x -> f x c
 let fold_left f c x = match x with None -> c | Some x -> f c x
 
 let has_some = function Some _ -> true | None -> false
+
+let some x = Some x

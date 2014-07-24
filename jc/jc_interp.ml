@@ -89,25 +89,25 @@ let reg_pos sce gui =
     in
     let n, f, l, b, e, k =
       if sce.in_mark <> "" && Jc_stdlib.Hashtbl.mem Jc_options.pos_table sce.in_mark then
-	(* If source location present in input table, copy information to
-	 * output table. *)
-	let f, l, b, e, k, o = Jc_stdlib.Hashtbl.find Jc_options.pos_table sce.in_mark in
-	let n =
-	  try match List.assoc "name" o with
+        (* If source location present in input table, copy information to
+         * output table. *)
+        let f, l, b, e, k, o = Jc_stdlib.Hashtbl.find Jc_options.pos_table sce.in_mark in
+        let n =
+          try match List.assoc "name" o with
             | Rc.RCident s | Rc.RCstring s -> Some s
             | _ -> raise Not_found
-	  with Not_found -> gui.name
-	in
-	n, f, l, b, e, k
+          with Not_found -> gui.name
+        in
+        n, f, l, b, e, k
       else
         begin
-	  (* By default, refer to the Jessie source file *)
-	  let b,e = sce.pos in
-	  let f = abs_fname b.Lexing.pos_fname in
-	  let l = b.Lexing.pos_lnum in
-	  let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
-	  let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
-	  (gui.name, f, l, fc, lc, None)
+          (* By default, refer to the Jessie source file *)
+          let b,e = sce.pos in
+          let f = abs_fname b.Lexing.pos_fname in
+          let l = b.Lexing.pos_lnum in
+          let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
+          let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
+          (gui.name, f, l, fc, lc, None)
         end
     in
     (* If present, always prefer new kind *)
@@ -531,13 +531,13 @@ let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos  ty_dst t
     begin try
       match e' with
       | LConst (Prim_real x) ->
-	LApp (float_format f ^ "_of_real_exact",
+        LApp (float_format f ^ "_of_real_exact",
               [LConst (Prim_real (float_of_real f x))])
       | _ -> raise Not_found
     with
     | Not_found ->
       LApp ("round_" ^ float_format f ^ "_logic",
-	    [logic_current_rounding_mode () ; e' ])
+            [logic_current_rounding_mode () ; e' ])
     end
   | JCTnative (Tgenfloat _f), (JCTnative Tinteger | JCTenum _) ->
     term_coerce ~type_safe ~global_assertion lab pos ty_dst (JCTnative Treal) e
@@ -662,11 +662,11 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
       match e'.expr_node with
       | Cte (Prim_real x) ->
         let s = float_of_real f x in
-	make_app (float_format f  ^ "_of_real_exact")  [{ e' with expr_node = Cte (Prim_real s) }]
+        make_app (float_format f  ^ "_of_real_exact")  [{ e' with expr_node = Cte (Prim_real s) }]
       | _ -> raise Not_found
       with
       | Not_found ->
-	if check_int_overflow then
+        if check_int_overflow then
           make_guarded_app ~mark FPoverflow pos  (float_format f ^ "_of_real") [current_rounding_mode (); e']
         else
           make_app (float_format f ^ "_of_real_safe") [current_rounding_mode (); e']
@@ -716,9 +716,9 @@ let bind_pattern_lets body =
   let binds =
     List.fold_left
       (fun body bind ->
-	 match bind with
-	   | JCforall(id, ty) -> LForall(id, ty, [], body)
-	   | JClet(id, value) -> LLet(id, value, body))
+         match bind with
+           | JCforall(id, ty) -> LForall(id, ty, [], body)
+           | JClet(id, value) -> LLet(id, value, body))
       body (List.rev !pattern_lets)
   in
   pattern_lets := [];
@@ -742,7 +742,7 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
     | JCTunary(op,t1) ->
         let t1'= ft t1 in
         LApp(term_unary_op op,
-	     [ term_coerce t#pos (native_operator_type op) t1#typ t1 t1' ])
+             [ term_coerce t#pos (native_operator_type op) t1#typ t1 t1' ])
     | JCTbinary(t1,(_,(`Pointer | `Logic) as op),t2) ->
         let t1' = ft t1 in
         let t2' = ft t2 in
@@ -772,27 +772,27 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
         let t2' = ft t2 in
         TLet(vi.vi_final_name, t1', t2')
     | JCToffset(k,t1,st) ->
-	let ac = tderef_alloc_class ~type_safe t1 in
+        let ac = tderef_alloc_class ~type_safe t1 in
         let _,alloc =
-	  talloc_table_var ~label_in_name:global_assertion lab (ac,t1#region)
-	in
-	begin match ac with
-	  | JCalloc_root _ ->
+          talloc_table_var ~label_in_name:global_assertion lab (ac,t1#region)
+        in
+        begin match ac with
+          | JCalloc_root _ ->
               let f = match k with
-		| Offset_min -> "offset_min"
-		| Offset_max -> "offset_max"
+                | Offset_min -> "offset_min"
+                | Offset_max -> "offset_max"
               in
               let t1' = ft t1 in
               LApp(f,[alloc; t1' ])
-	  | JCalloc_bitvector ->
+          | JCalloc_bitvector ->
               let f = match k with
-		| Offset_min -> "offset_min_bytes"
-		| Offset_max -> "offset_max_bytes"
+                | Offset_min -> "offset_min_bytes"
+                | Offset_max -> "offset_max_bytes"
               in
               let t1' = ft t1 in
-	      let s = string_of_int (struct_size_in_bytes st) in
+              let s = string_of_int (struct_size_in_bytes st) in
               LApp(f,[ alloc; t1'; LConst(Prim_int s) ])
-	end
+        end
     | JCTaddress(Addr_absolute,t1) ->
         LApp("absolute_address",[ ft t1 ])
     | JCTaddress(Addr_pointer,t1) ->
@@ -807,7 +807,7 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
       then ft t1
       else LApp ("downcast", [ft t1; LVar (tag_name st)])
     | JCTbitwise_cast(t1,_lab,_st) ->
-	ft t1
+        ft t1
     | JCTrange_cast(t1, ri) ->
         let t1' = ft t1 in
         let to_type = Option_misc.map_default (fun e -> JCTenum e) (JCTnative Tinteger) ri in
@@ -819,90 +819,90 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
               term_coerce t1#pos real_type t1#typ t1 t1'
           | Double_to_real ->
               term_coerce t1#pos real_type t1#typ t1 t1'
-	  | Float_to_real ->
-	      term_coerce t1#pos real_type t1#typ t1 t1'
-	  | Round(f,_rm) ->
+          | Float_to_real ->
+              term_coerce t1#pos real_type t1#typ t1 t1'
+          | Round(f,_rm) ->
               term_coerce t1#pos (JCTnative (Tgenfloat f)) t1#typ t1 t1'
-	end
+        end
     | JCTderef(t1,lab',fi) ->
-	let lab = if relocate && lab' = LabelHere then lab else lab' in
-	let mc,_ufi_opt = tderef_mem_class ~type_safe t1 fi in
-	begin match mc with
-	  | JCmem_field fi' ->
-	      assert (fi.fi_tag = fi'.fi_tag);
+        let lab = if relocate && lab' = LabelHere then lab else lab' in
+        let mc,_ufi_opt = tderef_mem_class ~type_safe t1 fi in
+        begin match mc with
+          | JCmem_field fi' ->
+              assert (fi.fi_tag = fi'.fi_tag);
               let t1' = ft t1 in
               let mem =
-		tmemory_var ~label_in_name:global_assertion lab
-		  (JCmem_field fi,t1#region)
-	      in
+                tmemory_var ~label_in_name:global_assertion lab
+                  (JCmem_field fi,t1#region)
+              in
               LApp("select",[ mem; t1' ])
-	  | JCmem_plain_union vi ->
-	      let t1,off = tdestruct_union_access t1 (Some fi) in
-	      (* Retrieve bitvector *)
+          | JCmem_plain_union vi ->
+              let t1,off = tdestruct_union_access t1 (Some fi) in
+              (* Retrieve bitvector *)
               let t1' = ft t1 in
               let mem =
-		tmemory_var ~label_in_name:global_assertion lab
-		  (JCmem_plain_union vi,t1#region)
-	      in
+                tmemory_var ~label_in_name:global_assertion lab
+                  (JCmem_plain_union vi,t1#region)
+              in
               let e' = LApp("select",[ mem; t1' ]) in
-	      (* Retrieve subpart of bitvector for specific subfield *)
-	      let off = match off with
-		| Int_offset s -> s
-		| _ -> assert false (* TODO *)
-	      in
-	      let size =
-		match fi.fi_bitsize with
-		  | Some x -> x / 8
-		  | None -> assert false
-	      in
-	      let off = string_of_int off and size = string_of_int size in
-	      let e' =
-		LApp("extract_bytes",
-		     [ e'; LConst(Prim_int off); LConst(Prim_int size) ])
-	      in
-	      (* Convert bitvector into appropriate type *)
-	      begin match fi.fi_type with
-		| JCTenum ri -> LApp(logic_enum_of_bitvector ri,[e'])
-		| JCTnative Tinteger -> LApp(logic_integer_of_bitvector,[e'])
+              (* Retrieve subpart of bitvector for specific subfield *)
+              let off = match off with
+                | Int_offset s -> s
+                | _ -> assert false (* TODO *)
+              in
+              let size =
+                match fi.fi_bitsize with
+                  | Some x -> x / 8
+                  | None -> assert false
+              in
+              let off = string_of_int off and size = string_of_int size in
+              let e' =
+                LApp("extract_bytes",
+                     [ e'; LConst(Prim_int off); LConst(Prim_int size) ])
+              in
+              (* Convert bitvector into appropriate type *)
+              begin match fi.fi_type with
+                | JCTenum ri -> LApp(logic_enum_of_bitvector ri,[e'])
+                | JCTnative Tinteger -> LApp(logic_integer_of_bitvector,[e'])
                 | JCTnative _ -> assert false (* TODO ? *)
                 | JCTtype_var _ -> assert false (* TODO ? *)
                 | JCTpointer (_, _, _) -> assert false (* TODO ? *)
                 | JCTlogic _ -> assert false (* TODO ? *)
                 | JCTany -> assert false (* TODO ? *)
                 | JCTnull -> assert false (* TODO ? *)
-	      end
-	  | JCmem_bitvector ->
-	      (* Retrieve bitvector *)
+              end
+          | JCmem_bitvector ->
+              (* Retrieve bitvector *)
               let t1' = ft t1 in
-	      let mem =
-		tmemory_var ~label_in_name:global_assertion lab
-		  (JCmem_bitvector,t1#region)
-	      in
-	      let off =
-		match field_offset_in_bytes fi with
-		  | Some x -> x
-		  | None -> assert false
-	      in
-	      let size =
-		match fi.fi_bitsize with
-		  | Some x -> x / 8
-		  | None -> assert false
-	      in
-	      let off = string_of_int off and size = string_of_int size in
-	      let e' =
-		LApp("select_bytes",
-		     [ mem; t1'; LConst(Prim_int off); LConst(Prim_int size) ])
-	      in
-	      (* Convert bitvector into appropriate type *)
-	      begin match fi.fi_type with
-		| JCTenum ri -> LApp(logic_enum_of_bitvector ri,[e'])
-		| _ty -> assert false (* TODO *)
-	      end
-	end
+              let mem =
+                tmemory_var ~label_in_name:global_assertion lab
+                  (JCmem_bitvector,t1#region)
+              in
+              let off =
+                match field_offset_in_bytes fi with
+                  | Some x -> x
+                  | None -> assert false
+              in
+              let size =
+                match fi.fi_bitsize with
+                  | Some x -> x / 8
+                  | None -> assert false
+              in
+              let off = string_of_int off and size = string_of_int size in
+              let e' =
+                LApp("select_bytes",
+                     [ mem; t1'; LConst(Prim_int off); LConst(Prim_int size) ])
+              in
+              (* Convert bitvector into appropriate type *)
+              begin match fi.fi_type with
+                | JCTenum ri -> LApp(logic_enum_of_bitvector ri,[e'])
+                | _ty -> assert false (* TODO *)
+              end
+        end
     | JCTapp app ->
         let f = app.app_fun in
         let args =
-	  List.fold_right (fun arg acc -> (ft arg) :: acc) app.app_args []
+          List.fold_right (fun arg acc -> (ft arg) :: acc) app.app_args []
         in
         let args =
           try List.map2 (fun e e' -> (e,e')) app.app_args args
@@ -920,24 +920,25 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
               (List.length args);
             assert false
         in
-	let relab (lab1,lab2) =
-	  (lab1, if lab2 = LabelHere then lab else lab2)
-	in
-	let label_assoc =
-	  if relocate then
-	    (LabelHere,lab) :: List.map relab app.app_label_assoc
-	  else app.app_label_assoc
-	in
-        make_logic_fun_call ~label_in_name:global_assertion
-	  ~region_assoc:app.app_region_assoc
-	  ~label_assoc:label_assoc
-	  f args
+        let relab (lab1,lab2) =
+          (lab1, if lab2 = LabelHere then lab else lab2)
+        in
+        let label_assoc =
+          if relocate then
+            (LabelHere,lab) :: List.map relab app.app_label_assoc
+          else app.app_label_assoc
+        in
+        tr_logic_fun_call
+          ~label_in_name:global_assertion
+          ~region_assoc:app.app_region_assoc
+          ~label_assoc
+          f args
     | JCTold t1 ->
-	let lab = if relocate && oldlab = LabelHere then lab else oldlab in
-	term ~type_safe ~global_assertion ~relocate lab oldlab t1
+        let lab = if relocate && oldlab = LabelHere then lab else oldlab in
+        term ~type_safe ~global_assertion ~relocate lab oldlab t1
     | JCTat(t1,lab') ->
-	let lab = if relocate && lab' = LabelHere then lab else lab' in
-	term ~type_safe ~global_assertion ~relocate lab oldlab t1
+        let lab = if relocate && lab' = LabelHere then lab else lab' in
+        term ~type_safe ~global_assertion ~relocate lab oldlab t1
     | JCTrange(_t1,_t2) -> Jc_typing.typing_error t#pos "Unsupported range in term, sorry" (* TODO ? *)
     | JCTmatch(t, ptl) ->
         let t' = ft t in
@@ -945,7 +946,7 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
         (* if the pattern-matching is incomplete, default value is true *)
         let ptl',lets =
           pattern_list_term ft t' t#typ ptl (LConst(Prim_bool true)) in
-	concat_pattern_lets lets;
+        concat_pattern_lets lets;
         ptl'
   in
   (if t#mark <> "" then
@@ -973,8 +974,8 @@ let tag ~type_safe ~global_assertion ~relocate lab oldlab tag=
     | JCTtag st -> LVar (tag_name st)
     | JCTbottom -> LVar "bottom_tag"
     | JCTtypeof (t, _) ->
-	let t' = term ~type_safe ~global_assertion ~relocate lab oldlab t in
-	make_typeof t'
+        let t' = term ~type_safe ~global_assertion ~relocate lab oldlab t in
+        make_typeof t'
 
 let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
   let fa = assertion ~type_safe ~global_assertion ~relocate lab oldlab in
@@ -986,38 +987,38 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
     | JCAfalse -> LFalse
     | JCAif(t1,a2,a3) ->
         let t1' = ft t1 in
-	let a2' = fa a2 in
-	let a3' = fa a3 in
+        let a2' = fa a2 in
+        let a3' = fa a3 in
         LIf(t1',a2',a3')
     | JCAand al -> make_and_list (List.map fa al)
     | JCAor al -> make_or_list (List.map fa al)
     | JCAimplies(a1,a2) ->
-	let a1' = fa a1 in
-	let a2' = fa a2 in
-	make_impl a1' a2'
+        let a1' = fa a1 in
+        let a2' = fa a2 in
+        make_impl a1' a2'
     | JCAiff(a1,a2) ->
-	let a1' = fa a1 in
-	let a2' = fa a2 in
-	make_equiv a1' a2'
+        let a1' = fa a1 in
+        let a2' = fa a2 in
+        make_equiv a1' a2'
     | JCAnot a1 ->
-	let a1' = fa a1 in
-	LNot a1'
+        let a1' = fa a1 in
+        LNot a1'
     | JCArelation(t1,((`Beq | `Bneq as op),_),t2)
-	when is_base_block t1 && is_base_block t2 ->
-	let t1 =
-	  match t1#node with JCTbase_block t1' -> t1' | _ -> assert false
-	in
-	let t2 =
-	  match t2#node with JCTbase_block t2' -> t2' | _ -> assert false
-	in
+        when is_base_block t1 && is_base_block t2 ->
+        let t1 =
+          match t1#node with JCTbase_block t1' -> t1' | _ -> assert false
+        in
+        let t2 =
+          match t2#node with JCTbase_block t2' -> t2' | _ -> assert false
+        in
         let t1' = ft t1 in
         let t2' = ft t2 in
         let p = LPred("same_block", [ t1'; t2' ]) in
-	begin match op with
-	  | `Beq -> p
-	  | `Bneq -> LNot p
-	  | _ -> assert false
-	end
+        begin match op with
+          | `Beq -> p
+          | `Bneq -> LNot p
+          | _ -> assert false
+        end
     | JCArelation(t1,(_,(`Pointer | `Logic) as op),t2) ->
         let t1' = ft t1 in
         let t2' = ft t2 in
@@ -1032,7 +1033,7 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
     | JCAapp app ->
         let f = app.app_fun in
         let args =
-	  List.fold_right (fun arg acc -> (ft arg) :: acc) app.app_args []
+          List.fold_right (fun arg acc -> (ft arg) :: acc) app.app_args []
         in
         let args =
           try List.map2 (fun e e' -> (e,e')) app.app_args args
@@ -1050,19 +1051,19 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
               (List.length args);
             assert false
         in
-	let label_assoc =
-	  if relocate then
-	    let relab (lab1,lab2) =
-	      (lab1, if lab2 = LabelHere then lab else lab2)
-	    in
-	    (LabelHere,lab) :: List.map relab app.app_label_assoc
-	  else app.app_label_assoc
-	in
-        make_logic_pred_call
-	  ~label_in_name:global_assertion
-	  ~region_assoc:app.app_region_assoc
-	  ~label_assoc:label_assoc
-	  f args
+        let label_assoc =
+          if relocate then
+            let relab (lab1,lab2) =
+              (lab1, if lab2 = LabelHere then lab else lab2)
+            in
+            (LabelHere,lab) :: List.map relab app.app_label_assoc
+          else app.app_label_assoc
+        in
+        tr_logic_pred_call
+          ~label_in_name:global_assertion
+          ~region_assoc:app.app_region_assoc
+          ~label_assoc
+          f args
     | JCAquantifier(Forall,v,trigs,a1) ->
         LForall(v.vi_final_name,
                 tr_var_base_type v,
@@ -1074,28 +1075,28 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
                 triggers fa ft trigs,
                 fa a1)
     | JCAold a1 ->
-	let lab = if relocate && oldlab = LabelHere then lab else oldlab in
-	assertion ~type_safe ~global_assertion ~relocate lab oldlab a1
+        let lab = if relocate && oldlab = LabelHere then lab else oldlab in
+        assertion ~type_safe ~global_assertion ~relocate lab oldlab a1
     | JCAat(a1,lab') ->
-	let lab = if relocate && lab' = LabelHere then lab else lab' in
-	assertion ~type_safe ~global_assertion ~relocate lab oldlab a1
+        let lab = if relocate && lab' = LabelHere then lab else lab' in
+        assertion ~type_safe ~global_assertion ~relocate lab oldlab a1
     | JCAfresh t1 ->
-	let ac = tderef_alloc_class ~type_safe t1 in
-	let lab = if relocate && oldlab = LabelHere then lab else oldlab in
-	let _,alloc =
-	  talloc_table_var ~label_in_name:global_assertion lab (ac,t1#region)
-	in
+        let ac = tderef_alloc_class ~type_safe t1 in
+        let lab = if relocate && oldlab = LabelHere then lab else oldlab in
+        let _,alloc =
+          talloc_table_var ~label_in_name:global_assertion lab (ac,t1#region)
+        in
         let valid =
-	  begin match ac with
-	    | JCalloc_root _ ->
+          begin match ac with
+            | JCalloc_root _ ->
               let f = "valid" in
               let t1' = ft t1 in
               LPred(f,[alloc; t1' ])
-	    | JCalloc_bitvector ->
+            | JCalloc_bitvector ->
               let f = "valid_bytes" in
               let t1' = ft t1 in
               LPred(f,[ alloc; t1'])
-	  end
+          end
         in
         LNot valid
     | JCAbool_term t1 ->
@@ -1118,7 +1119,7 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
         let tag2' = ftag tag2 in
         LPred("subtag", [ tag1'; tag2' ])
     | JCAlet(vi,t,p) ->
-	LLet(vi.vi_final_name,ft t, fa p)
+        LLet(vi.vi_final_name,ft t, fa p)
     | JCAmatch(arg, pal) ->
         let arg' = ft arg in
         (* TODO: use a temporary variable for arg' *)
@@ -1235,10 +1236,10 @@ let rec collect_pset_locations ~type_safe ~global_assertion loc =
     | JCLderef (e, lab, _fi, _fr) ->
         pset ~type_safe ~global_assertion lab e
     | JCLderef_term (t1, _fi) ->
-	let lab = match t1#label with Some l -> l | None -> assert false in
-	LApp ("pset_singleton",[ ft lab lab t1 ])
+        let lab = match t1#label with Some l -> l | None -> assert false in
+        LApp ("pset_singleton",[ ft lab lab t1 ])
     | JCLvar _vi ->
-	LVar "pset_empty"
+        LVar "pset_empty"
     | JCLat (loc, _lab) ->
         collect_pset_locations ~type_safe ~global_assertion loc
 
@@ -1340,7 +1341,7 @@ let tr_assigns ~type_safe ?region_list before ef ?(allocates=None) locs loc =
          let ef = fef_diff (List.fold_left fef_union empty_fun_effect efs) ef in
          let wrap_in_foralls =
            List.fold_right (fun (n, _, ty) a -> LForall (n, ty, [], a)) @@
-           tmodel_parameters ~label_in_name:false ef.fe_reads
+           tr_li_model_args_3 ~label_in_name:false ef.fe_reads
          in
          make_and acc @@
          let a = LPred("not_assigns",
@@ -1379,125 +1380,125 @@ let rec const_int_term t =
   match t # node with
     | JCTconst (JCCinteger s) -> Some (Numconst.integer s)
     | JCTvar vi ->
-	begin
-	  try
-	    let _, init =
-	      Jc_stdlib.Hashtbl.find
-		Jc_typing.logic_constants_table
-		vi.vi_tag
-	    in
-	      const_int_term init
-	  with Not_found -> None
-	end
+        begin
+          try
+            let _, init =
+              Jc_stdlib.Hashtbl.find
+                Jc_typing.logic_constants_table
+                vi.vi_tag
+            in
+              const_int_term init
+          with Not_found -> None
+        end
     | JCTapp app ->
-	begin
-	  try
-	    let _, init =
-	      Jc_stdlib.Hashtbl.find
-		Jc_typing.logic_constants_table
-		app.app_fun.li_tag
-	    in
-	      const_int_term init
-	  with Not_found -> None
-	end
+        begin
+          try
+            let _, init =
+              Jc_stdlib.Hashtbl.find
+                Jc_typing.logic_constants_table
+                app.app_fun.li_tag
+            in
+              const_int_term init
+          with Not_found -> None
+        end
     | JCTunary (uop, t) ->
-	let no = const_int_term t in
-	  Option_misc.fold
-	    (fun n _ -> match uop with
-	       | `Uminus, `Integer -> Some (Num.minus_num n)
-	       | _ -> None)
-	    no None
+        let no = const_int_term t in
+          Option_misc.fold
+            (fun n _ -> match uop with
+               | `Uminus, `Integer -> Some (Num.minus_num n)
+               | _ -> None)
+            no None
     | JCTbinary (t1, bop, t2) ->
-	let no1 = const_int_term t1 in
-	let no2 = const_int_term t2 in
-	  begin match no1, no2 with
-	    | Some n1, Some n2 ->
-		begin match bop with
-		  | `Badd, `Integer -> Some (n1 +/ n2)
-		  | `Bsub, `Integer -> Some (n1 -/ n2)
-		  | `Bmul, `Integer -> Some (n1 */ n2)
-		  | `Bdiv, `Integer ->
-		      let n = n1 // n2 in
-			if Num.is_integer_num n then
-			  Some n
-			else
-			  None
-		  | `Bmod, `Integer -> Some (Num.mod_num n1 n2)
-		  | _ -> None
-		end
-	    | _ -> None
-	  end
+        let no1 = const_int_term t1 in
+        let no2 = const_int_term t2 in
+          begin match no1, no2 with
+            | Some n1, Some n2 ->
+                begin match bop with
+                  | `Badd, `Integer -> Some (n1 +/ n2)
+                  | `Bsub, `Integer -> Some (n1 -/ n2)
+                  | `Bmul, `Integer -> Some (n1 */ n2)
+                  | `Bdiv, `Integer ->
+                      let n = n1 // n2 in
+                        if Num.is_integer_num n then
+                          Some n
+                        else
+                          None
+                  | `Bmod, `Integer -> Some (Num.mod_num n1 n2)
+                  | _ -> None
+                end
+            | _ -> None
+          end
     | JCTrange_cast (t, _) -> const_int_term t
     | JCTconst _ | JCTshift _ | JCTderef _
     | JCTold _ | JCTat _
     | JCToffset _ | JCTaddress _ | JCTinstanceof _ | JCTbase_block _
     | JCTreal_cast _ | JCTif _ | JCTrange _
     | JCTcast _ | JCTmatch _ | JCTlet _ | JCTbitwise_cast _ ->
-	assert false
+        assert false
 
 let rec const_int_expr e =
   match e # node with
     | JCEconst (JCCinteger s) -> Some (Numconst.integer s)
     | JCEvar vi ->
-	begin
-	  try
-	    let _, init =
-	      Jc_stdlib.Hashtbl.find
-		Jc_typing.logic_constants_table
-		vi.vi_tag
-	    in
-	      const_int_term init
-	  with Not_found -> None
-	end
+        begin
+          try
+            let _, init =
+              Jc_stdlib.Hashtbl.find
+                Jc_typing.logic_constants_table
+                vi.vi_tag
+            in
+              const_int_term init
+          with Not_found -> None
+        end
     | JCEapp call ->
-	begin match call.call_fun with
-	  | JClogic_fun li ->
-	      begin
-		try
-		  let _, init =
-		    Jc_stdlib.Hashtbl.find
-		      Jc_typing.logic_constants_table
-		      li.li_tag
-		  in
-		    const_int_term init
-		with Not_found -> None
-	      end
-	  | JCfun _ -> None
-	end
+        begin match call.call_fun with
+          | JClogic_fun li ->
+              begin
+                try
+                  let _, init =
+                    Jc_stdlib.Hashtbl.find
+                      Jc_typing.logic_constants_table
+                      li.li_tag
+                  in
+                    const_int_term init
+                with Not_found -> None
+              end
+          | JCfun _ -> None
+        end
     | JCErange_cast (e, _) -> const_int_expr e
     | JCEunary (uop, e) ->
-	let no = const_int_expr e in
-	  Option_misc.fold
-	    (fun n _ -> match uop with
-	       | `Uminus, `Integer -> Some (Num.minus_num n)
-	       | _ -> None)
-	    no None
+        let no = const_int_expr e in
+          Option_misc.fold
+            (fun n _ -> match uop with
+               | `Uminus, `Integer -> Some (Num.minus_num n)
+               | _ -> None)
+            no None
     | JCEbinary (e1, bop, e2) ->
-	let no1 = const_int_expr e1 in
-	let no2 = const_int_expr e2 in
-	  begin match no1, no2 with
-	    | Some n1, Some n2 ->
-		begin match bop with
-		  | `Badd, `Integer -> Some (n1 +/ n2)
-		  | `Bsub, `Integer -> Some (n1 -/ n2)
-		  | `Bmul, `Integer -> Some (n1 */ n2)
-		  | `Bdiv, `Integer ->
-		      let n = n1 // n2 in
-			if Num.is_integer_num n then
-			  Some n
-			else
-			  None
-		  | `Bmod, `Integer -> Some (Num.mod_num n1 n2)
-		  | _ -> None
-		end
-	    | _ -> None
-	  end
+        let no1 = const_int_expr e1 in
+        let no2 = const_int_expr e2 in
+          begin match no1, no2 with
+            | Some n1, Some n2 ->
+                begin match bop with
+                  | `Badd, `Integer -> Some (n1 +/ n2)
+                  | `Bsub, `Integer -> Some (n1 -/ n2)
+                  | `Bmul, `Integer -> Some (n1 */ n2)
+                  | `Bdiv, `Integer ->
+                      let n = n1 // n2 in
+                        if Num.is_integer_num n then
+                          Some n
+                        else
+                          None
+                  | `Bmod, `Integer -> Some (Num.mod_num n1 n2)
+                  | _ -> None
+                end
+            | _ -> None
+          end
     | JCEderef _ | JCEoffset _ | JCEbase_block _
     | JCEaddress _ | JCElet _ | JCEassign_var _
     | JCEassign_heap _ ->
-	None
+        None
     | JCEif _ ->
-	None (* TODO *)
+        None (* TODO *)
     | JCEconst _ | JCEinstanceof _ | JCEreal_cast _
     | JCEalloc _ | JCEfree _ | JCEreinterpret _ | JCEassert _
     | JCEcontract _ | JCEblock _ | JCEloop _
@@ -1505,14 +1506,14 @@ let rec const_int_expr e =
     | JCEthrow _ | JCEpack _ | JCEunpack _
     | JCEcast _ | JCEmatch _ | JCEshift _
     | JCEbitwise_cast _ | JCEfresh _ ->
-	assert false
+        assert false
 
 let destruct_pointer e =
   let ptre, off = match e # node with
     | JCEshift (e1, e2) ->
-	e1,
-	(match const_int_expr e2 with
-	   | Some n -> Int_offset (Num.int_of_num n)
+        e1,
+        (match const_int_expr e2 with
+           | Some n -> Int_offset (Num.int_of_num n)
            | None -> Expr_offset e2)
     | _ -> e, Int_offset 0
   in
@@ -1534,59 +1535,59 @@ let old_to_pre_term =
     (fun t -> match t#node with
        | JCTold t'
        | JCTat(t',LabelOld) ->
-	   new term_with
-	     ~node:(JCTat(t',LabelPre)) t
+           new term_with
+             ~node:(JCTat(t',LabelPre)) t
        | JCTderef(t',LabelOld,fi) ->
-	   new term_with
-	     ~node:(JCTderef(t',LabelPre,fi)) t
+           new term_with
+             ~node:(JCTderef(t',LabelPre,fi)) t
        | _ -> t)
 
 let rec old_to_pre_lset lset =
   match lset#node with
     | JCLSvar _ -> lset
     | JCLSderef(lset,lab,fi,_region) ->
-	new location_set_with
+        new location_set_with
           ~typ:lset#typ
-	  ~node:(JCLSderef(old_to_pre_lset lset, old_to_pre lab, fi, lset#region))
-	  lset
+          ~node:(JCLSderef(old_to_pre_lset lset, old_to_pre lab, fi, lset#region))
+          lset
     | JCLSrange(lset,t1,t2) ->
-	new location_set_with
+        new location_set_with
           ~typ:lset#typ
-	  ~node:(JCLSrange(old_to_pre_lset lset,
-			   Option_misc.map old_to_pre_term t1,
-			   Option_misc.map old_to_pre_term t2))
-	  lset
+          ~node:(JCLSrange(old_to_pre_lset lset,
+                           Option_misc.map old_to_pre_term t1,
+                           Option_misc.map old_to_pre_term t2))
+          lset
     | JCLSrange_term(lset,t1,t2) ->
-	new location_set_with
+        new location_set_with
           ~typ:lset#typ
-	  ~node:(JCLSrange_term(old_to_pre_term lset,
-				Option_misc.map old_to_pre_term t1,
-				Option_misc.map old_to_pre_term t2))
-	  lset
+          ~node:(JCLSrange_term(old_to_pre_term lset,
+                                Option_misc.map old_to_pre_term t1,
+                                Option_misc.map old_to_pre_term t2))
+          lset
     | JCLSat(lset,lab) ->
-	new location_set_with
+        new location_set_with
           ~typ:lset#typ
-	  ~node:(JCLSat(old_to_pre_lset lset,old_to_pre lab))
-	  lset
+          ~node:(JCLSat(old_to_pre_lset lset,old_to_pre lab))
+          lset
 
 let rec old_to_pre_loc loc =
   match loc#node with
     | JCLvar _ -> loc
     | JCLat(l,lab) ->
-	new location_with
+        new location_with
           ~typ:loc#typ
-	  ~node:(JCLat(old_to_pre_loc l, old_to_pre lab))
-	  loc
+          ~node:(JCLat(old_to_pre_loc l, old_to_pre lab))
+          loc
     | JCLderef(lset,lab,fi,_region) ->
-	new location_with
+        new location_with
           ~typ:loc#typ
-	  ~node:(JCLderef(old_to_pre_lset lset,old_to_pre lab, fi, lset#region))
-	  loc
+          ~node:(JCLderef(old_to_pre_lset lset,old_to_pre lab, fi, lset#region))
+          loc
     | JCLderef_term(t1,fi) ->
-	new location_with
+        new location_with
           ~typ:loc#typ
-	  ~node:(JCLderef_term(old_to_pre_term t1,fi))
-	  loc
+          ~node:(JCLderef_term(old_to_pre_term t1,fi))
+          loc
 
 let assumption al a' =
   let ef = List.fold_left Jc_effect.assertion empty_effects al in
@@ -1700,12 +1701,12 @@ and make_upd_union mark pos off e1 fi tmp2 =
       let deref = make_deref_simple mark pos e1 fi in
       (* Replace subpart of bitvector for specific subfield *)
       let off = match off with
-	| Int_offset s -> s
-	| _ -> assert false (* TODO *)
+        | Int_offset s -> s
+        | _ -> assert false (* TODO *)
       in
       let off = string_of_int off and size = string_of_int size in
       make_app "replace_bytes"
-	[ deref; mk_expr (Cte(Prim_int off)); mk_expr (Cte(Prim_int size)); e2' ]
+        [ deref; mk_expr (Cte(Prim_int off)); mk_expr (Cte(Prim_int size)); e2' ]
   in
   let lets = [ (tmp1,e1'); (tmp2,e2') ] in
   let tmp1, lets', e' = make_upd_simple mark pos e1 fi tmp2 in
@@ -1742,10 +1743,10 @@ and make_upd_bytes mark pos e1 fi tmp2 =
       make_guarded_app ~mark PointerDeref pos "upd_bytes_"
         [ alloc; mem; mk_var tmp1;
           mk_expr (Cte(Prim_int off)); mk_expr (Cte(Prim_int size));
-	  mk_var tmp2 ]
+          mk_var tmp2 ]
     else
       make_app "safe_upd_bytes_"
-	[ mem; mk_var tmp1; mk_expr (Cte(Prim_int off));
+        [ mem; mk_var tmp1; mk_expr (Cte(Prim_int off));
           mk_expr (Cte(Prim_int size)); mk_var tmp2 ]
   in
   let lets = [ (tmp1,e1'); (tmp2,e2') ] in
@@ -1759,29 +1760,29 @@ and make_upd mark pos e1 fi e2 =
   let mc,ufi_opt = deref_mem_class ~type_safe:false e1 fi in
   match mc,ufi_opt with
     | JCmem_field fi', None ->
-	assert (fi.fi_tag = fi'.fi_tag);
-	make_upd_simple mark pos e1 fi tmp2
+        assert (fi.fi_tag = fi'.fi_tag);
+        make_upd_simple mark pos e1 fi tmp2
     | JCmem_field fi', Some ufi ->
-	assert (fi.fi_tag = fi'.fi_tag);
+        assert (fi.fi_tag = fi'.fi_tag);
         let tmp1, lets, e1' = make_upd_simple mark pos e1 fi tmp2 in
-	let mems = overlapping_union_memories ufi in
-	let ef =
-	  List.fold_left
-	    (fun ef mc -> add_memory_effect LabelHere ef (mc,e1#region))
-	    empty_effects mems
-	in
-	let write_effects =
-	  local_write_effects ~callee_reads:empty_effects ~callee_writes:ef
-	in
-	let e2' =
-	  mk_expr(BlackBox(Annot_type(LTrue, unit_type, [], write_effects, LTrue, [])) )
-	in
-	tmp1, lets, append e1' e2'
+        let mems = overlapping_union_memories ufi in
+        let ef =
+          List.fold_left
+            (fun ef mc -> add_memory_effect LabelHere ef (mc,e1#region))
+            empty_effects mems
+        in
+        let write_effects =
+          local_write_effects ~callee_reads:empty_effects ~callee_writes:ef
+        in
+        let e2' =
+          mk_expr(BlackBox(Annot_type(LTrue, unit_type, [], write_effects, LTrue, [])) )
+        in
+        tmp1, lets, append e1' e2'
     | JCmem_plain_union _vi, _ ->
-	let e1,off = destruct_union_access e1 (Some fi) in
-	make_upd_union mark pos off e1 fi tmp2
+        let e1,off = destruct_union_access e1 (Some fi) in
+        make_upd_union mark pos off e1 fi tmp2
     | JCmem_bitvector, _ ->
-	make_upd_bytes mark pos e1 fi tmp2
+        make_upd_bytes mark pos e1 fi tmp2
 
 (* Translate the heap access `e.fi'
 
@@ -1798,19 +1799,19 @@ and make_deref_simple mark pos e fi =
   let e' =
     if safety_checking() then
       match destruct_pointer e with
-	| _, Int_offset s, Some lb, Some rb when bounded lb rb s ->
+        | _, Int_offset s, Some lb, Some rb when bounded lb rb s ->
             make_app "safe_acc_"
               [ mem ; expr e ]
-	| p, (Int_offset s as off), Some lb, _ when lbounded lb s ->
+        | p, (Int_offset s as off), Some lb, _ when lbounded lb s ->
             make_guarded_app ~mark IndexBounds pos "lsafe_lbound_acc_"
               [ alloc; mem; expr p; offset off ]
-	| p, (Int_offset s as off), _, Some rb when rbounded rb s ->
+        | p, (Int_offset s as off), _, Some rb when rbounded rb s ->
             make_guarded_app ~mark IndexBounds pos "rsafe_rbound_acc_"
               [ alloc; mem; expr p; offset off ]
-	| p, Int_offset s, None, None when s = 0 ->
+        | p, Int_offset s, None, None when s = 0 ->
             make_guarded_app ~mark PointerDeref pos "acc_"
               [ alloc; mem ; expr p ]
-	| p, off, _, _ ->
+        | p, off, _, _ ->
             make_guarded_app ~mark PointerDeref pos "offset_acc_"
               [ alloc; mem ; expr p; offset off ]
     else
@@ -1862,28 +1863,28 @@ and make_deref_bytes mark pos e fi =
           mk_expr (Cte(Prim_int size)) ]
     else
       make_app "safe_acc_bytes_"
-	[ mem; expr e; mk_expr (Cte(Prim_int off));
+        [ mem; expr e; mk_expr (Cte(Prim_int off));
           mk_expr (Cte(Prim_int size)) ]
   in
   (* Convert bitvector into appropriate type *)
   match fi.fi_type with
     | JCTenum ri -> make_app (logic_enum_of_bitvector ri) [e']
     | JCTnative t ->
-	begin
-	  match t with
-	    | Treal  ->
-		unsupported pos "bit-dependent cast over real numbers"
-	    | Tgenfloat _ ->
-		unsupported pos "bit-dependent cast over floating-point values"
-	    | Tstring ->
-		unsupported pos "bit-dependent cast over strings"
-	    | Tinteger ->
-		unsupported pos "bit-dependent cast over integers"
-	    | Tboolean ->
-		unsupported pos "bit-dependent cast over booleans"
-	    | Tunit  ->
-		unsupported pos "bit-dependent cast over type unit"
-	end
+        begin
+          match t with
+            | Treal  ->
+                unsupported pos "bit-dependent cast over real numbers"
+            | Tgenfloat _ ->
+                unsupported pos "bit-dependent cast over floating-point values"
+            | Tstring ->
+                unsupported pos "bit-dependent cast over strings"
+            | Tinteger ->
+                unsupported pos "bit-dependent cast over integers"
+            | Tboolean ->
+                unsupported pos "bit-dependent cast over booleans"
+            | Tunit  ->
+                unsupported pos "bit-dependent cast over type unit"
+        end
     | JCTtype_var _ -> assert false (* TODO *)
     | JCTpointer (_, _, _) -> assert false (* TODO *)
     | JCTlogic _ -> assert false (* TODO *)
@@ -1892,8 +1893,8 @@ and make_deref_bytes mark pos e fi =
 
 (*
     | ty ->
-	Format.eprintf "%a@." print_type ty;
-	assert false (* TODO *)
+        Format.eprintf "%a@." print_type ty;
+        assert false (* TODO *)
 *)
 
 and make_deref mark pos e1 fi =
@@ -1901,12 +1902,12 @@ and make_deref mark pos e1 fi =
   let mc,_uif_opt = deref_mem_class ~type_safe:false e1 fi in
   match mc with
     | JCmem_field _ ->
-	make_deref_simple mark pos e1 fi
+        make_deref_simple mark pos e1 fi
     | JCmem_plain_union _vi ->
-	let e1,off = destruct_union_access e1 (Some fi) in
-	make_deref_union mark pos off e1 fi
+        let e1,off = destruct_union_access e1 (Some fi) in
+        make_deref_union mark pos off e1 fi
     | JCmem_bitvector ->
-	make_deref_bytes mark pos e1 fi
+        make_deref_bytes mark pos e1 fi
 
 and offset = function
   | Int_offset s -> mk_expr (Cte (Prim_int (string_of_int s)))
@@ -1925,86 +1926,86 @@ and type_assert tmp ty e =
     match ac with
       | JCalloc_root _ ->
           let f = match k with
-	    | Offset_min -> "offset_min"
-	    | Offset_max -> "offset_max"
+            | Offset_min -> "offset_min"
+            | Offset_max -> "offset_max"
           in
-	  LApp(f,[alloc; LVar tmp])
+          LApp(f,[alloc; LVar tmp])
       | JCalloc_bitvector ->
-	  let st = pointer_struct ty in
+          let st = pointer_struct ty in
           let f = match k with
-	    | Offset_min -> "offset_min_bytes"
-	    | Offset_max -> "offset_max_bytes"
+            | Offset_min -> "offset_min_bytes"
+            | Offset_max -> "offset_max_bytes"
           in
-	  let s = string_of_int (struct_size_in_bytes st) in
-	  LApp(f,[alloc; LVar tmp; LConst(Prim_int s)])
+          let s = string_of_int (struct_size_in_bytes st) in
+          LApp(f,[alloc; LVar tmp; LConst(Prim_int s)])
   in
   let a = match ty with
     | JCTpointer(_pc,n1o,n2o) ->
-	let offset_mina n =
-	  LPred ("le_int",
-		 [offset Offset_min e ty tmp;
-		  LConst (Prim_int (Num.string_of_num n))])
-	in
-	let offset_maxa n =
-	  LPred ("ge_int",
-		 [offset Offset_max e ty tmp;
-		  LConst (Prim_int (Num.string_of_num n))])
-	in
-	begin match e#typ with
-	  | JCTpointer (_si', n1o', n2o') ->
-	      begin match n1o, n2o with
-		| None, None -> LTrue
-		| Some n, None ->
-		    begin match n1o' with
-		      | Some n' when Num.le_num n' n
+        let offset_mina n =
+          LPred ("le_int",
+                 [offset Offset_min e ty tmp;
+                  LConst (Prim_int (Num.string_of_num n))])
+        in
+        let offset_maxa n =
+          LPred ("ge_int",
+                 [offset Offset_max e ty tmp;
+                  LConst (Prim_int (Num.string_of_num n))])
+        in
+        begin match e#typ with
+          | JCTpointer (_si', n1o', n2o') ->
+              begin match n1o, n2o with
+                | None, None -> LTrue
+                | Some n, None ->
+                    begin match n1o' with
+                      | Some n' when Num.le_num n' n
                           && not Jc_options.verify_all_offsets
                           -> LTrue
-		      | _ -> offset_mina n
-		    end
-		| None, Some n ->
-		    begin match n2o' with
-		      | Some n' when Num.ge_num n' n
+                      | _ -> offset_mina n
+                    end
+                | None, Some n ->
+                    begin match n2o' with
+                      | Some n' when Num.ge_num n' n
                           && not Jc_options.verify_all_offsets
                           -> LTrue
-		      | _ -> offset_maxa n
-		    end
-		| Some n1, Some n2 ->
-		    begin match n1o', n2o' with
-		      | None, None -> make_and (offset_mina n1) (offset_maxa n2)
-		      | Some n1', None ->
-			  if Num.le_num n1' n1 && not Jc_options.verify_all_offsets then
-			    offset_maxa n2
-			  else
-			    make_and (offset_mina n1) (offset_maxa n2)
-		      | None, Some n2' ->
-			  if Num.ge_num n2' n2 && not Jc_options.verify_all_offsets then
-			    offset_mina n1
-			  else
-			    make_and (offset_mina n1) (offset_maxa n2)
-		      | Some n1', Some n2' ->
-			  if Jc_options.verify_all_offsets then
-			    make_and (offset_mina n1) (offset_maxa n2)
-			  else
-			    if Num.le_num n1' n1 then
-			      if Num.ge_num n2' n2 then LTrue
+                      | _ -> offset_maxa n
+                    end
+                | Some n1, Some n2 ->
+                    begin match n1o', n2o' with
+                      | None, None -> make_and (offset_mina n1) (offset_maxa n2)
+                      | Some n1', None ->
+                          if Num.le_num n1' n1 && not Jc_options.verify_all_offsets then
+                            offset_maxa n2
+                          else
+                            make_and (offset_mina n1) (offset_maxa n2)
+                      | None, Some n2' ->
+                          if Num.ge_num n2' n2 && not Jc_options.verify_all_offsets then
+                            offset_mina n1
+                          else
+                            make_and (offset_mina n1) (offset_maxa n2)
+                      | Some n1', Some n2' ->
+                          if Jc_options.verify_all_offsets then
+                            make_and (offset_mina n1) (offset_maxa n2)
+                          else
+                            if Num.le_num n1' n1 then
+                              if Num.ge_num n2' n2 then LTrue
                               else
-				offset_maxa n2
-			    else
-			      if Num.ge_num n2' n2 then
-				offset_mina n1
+                                offset_maxa n2
+                            else
+                              if Num.ge_num n2' n2 then
+                                offset_mina n1
                               else
-				make_and (offset_mina n1) (offset_maxa n2)
-		    end
-	      end
-	  | JCTnull ->
-	      begin match n1o, n2o with
-		| None, None -> LTrue
-		| Some n, None -> offset_mina n
-		| None, Some n -> offset_maxa n
-		| Some n1, Some n2 -> make_and (offset_mina n1) (offset_maxa n2)
-	      end
-	  | _ -> LTrue
-	end
+                                make_and (offset_mina n1) (offset_maxa n2)
+                    end
+              end
+          | JCTnull ->
+              begin match n1o, n2o with
+                | None, None -> LTrue
+                | Some n, None -> offset_mina n
+                | None, Some n -> offset_maxa n
+                | Some n1, Some n2 -> make_and (offset_mina n1) (offset_maxa n2)
+              end
+          | _ -> LTrue
+        end
     | _ -> LTrue
   in
   (coerce ~check_int_overflow:(safety_checking())
@@ -2192,8 +2193,8 @@ and expr e =
         else
           make_guarded_app
             ~mark:e#mark FPoverflow e#pos
- 	    (float_operator `Uminus format)
- 	    [current_rounding_mode () ; e2' ]
+            (float_operator `Uminus format)
+            [current_rounding_mode () ; e2' ]
 
     | JCEunary(op,e1) ->
         let e1' = expr e1 in
@@ -2203,12 +2204,12 @@ and expr e =
 (*     | JCEbinary(e1,(`Bsub,`Pointer),e2) -> *)
 (*         let e1' = make_app "address" [ expr e1 ] in *)
 (*         let e2' = make_app "address" [ expr e2 ] in *)
-(* 	let st = pointer_struct e1#typ in *)
-(* 	let s = string_of_int (struct_size_in_bytes st) in *)
+(*      let st = pointer_struct e1#typ in *)
+(*      let s = string_of_int (struct_size_in_bytes st) in *)
 (*         make_app *)
-(* 	  (bin_op (`Bdiv,`Integer)) *)
-(* 	  [ make_app (bin_op (`Bsub,`Integer)) [ e1'; e2' ]; *)
-(* 	    Cte(Prim_int s) ] *)
+(*        (bin_op (`Bdiv,`Integer)) *)
+(*        [ make_app (bin_op (`Bsub,`Integer)) [ e1'; e2' ]; *)
+(*          Cte(Prim_int s) ] *)
     | JCEbinary(e1,(_,(`Pointer | `Logic) as op),e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in
@@ -2226,12 +2227,12 @@ and expr e =
         mk_expr
           (Or (make_check ~mark:e1#mark e1#pos e1', make_check ~mark:e2#mark e2#pos e2'))
     | JCEbinary(e1,(#arithmetic_op as op,(`Double|`Float|`Binary80 as format)),e2) ->
-	let e1' = expr e1 in
+        let e1' = expr e1 in
         let e2' = expr e2 in
         make_guarded_app
-	  ~mark:e#mark FPoverflow e#pos
-	  (float_operator op format)
-	  [current_rounding_mode () ; e1' ; e2' ]
+          ~mark:e#mark FPoverflow e#pos
+          (float_operator op format)
+          [current_rounding_mode () ; e1' ; e2' ]
     | JCEbinary(e1,(_,#native_operator_type as op),e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in
@@ -2239,19 +2240,19 @@ and expr e =
         let mk = match fst op with
           | `Bdiv | `Bmod -> make_guarded_app ~mark:e#mark DivByZero e#pos
           | _ -> make_app ?ty:None
-	in
+        in
         mk (bin_op op)
           [coerce ~check_int_overflow:(safety_checking())
              e1#mark e1#pos ty e1#typ e1 e1';
            coerce ~check_int_overflow:(safety_checking())
              e2#mark e2#pos ty e2#typ e2 e2']
     | JCEshift(e1,e2) ->
-	(* TODO: bitwise !!!!!!!!!!!!!!!!!!!!! *)
+        (* TODO: bitwise !!!!!!!!!!!!!!!!!!!!! *)
         let e1' = expr e1 in
         let e2' = expr e2 in
         make_app "shift"
           [e1';
-	   coerce ~check_int_overflow:(safety_checking())
+           coerce ~check_int_overflow:(safety_checking())
              e2#mark e2#pos integer_type e2#typ e2 e2']
     | JCEif(e1,e2,e3) ->
         let e1' = expr e1 in
@@ -2259,23 +2260,23 @@ and expr e =
         let e3' = expr e3 in
         mk_expr (If(make_check ~mark:e1#mark e1#pos e1',e2',e3'))
     | JCEoffset(k,e1,st) ->
-	let ac = deref_alloc_class ~type_safe:false e1 in
+        let ac = deref_alloc_class ~type_safe:false e1 in
         let alloc = alloc_table_var (ac,e1#region) in
-	begin match ac with
-	  | JCalloc_root _ ->
+        begin match ac with
+          | JCalloc_root _ ->
               let f = match k with
-		| Offset_min -> "offset_min"
-		| Offset_max -> "offset_max"
+                | Offset_min -> "offset_min"
+                | Offset_max -> "offset_max"
               in
-	      make_app f [alloc; expr e1]
-	  | JCalloc_bitvector ->
+              make_app f [alloc; expr e1]
+          | JCalloc_bitvector ->
               let f = match k with
-		| Offset_min -> "offset_min_bytes"
-		| Offset_max -> "offset_max_bytes"
+                | Offset_min -> "offset_min_bytes"
+                | Offset_max -> "offset_max_bytes"
               in
-	      let s = string_of_int (struct_size_in_bytes st) in
-	      make_app f [alloc; expr e1; mk_expr (Cte(Prim_int s))]
-	end
+              let s = string_of_int (struct_size_in_bytes st) in
+              make_app f [alloc; expr e1; mk_expr (Cte(Prim_int s))]
+        end
     | JCEaddress(Addr_absolute,e1) ->
         make_app "absolute_address" [ expr e1 ]
     | JCEaddress(Addr_pointer,e1) ->
@@ -2294,7 +2295,7 @@ and expr e =
         let e1' = expr e1 in
         make_app "downcast_" [e1'; mk_var (tag_name st)]
     | JCEbitwise_cast(e1,_st) ->
-	expr e1
+        expr e1
     | JCErange_cast(e1, ri) ->
         let e1' = expr e1 in
         let to_type = Option_misc.map_default (fun e -> JCTenum e) (JCTnative Tinteger) ri in
@@ -2309,17 +2310,17 @@ and expr e =
           | Double_to_real ->
               coerce ~check_int_overflow:(safety_checking())
                 e#mark e#pos real_type e1#typ e1 e1'
-	  | Float_to_real ->
+          | Float_to_real ->
               coerce ~check_int_overflow:(safety_checking())
                 e#mark e#pos real_type e1#typ e1 e1'
           | Round(f,_rm) ->
               coerce ~check_int_overflow:(safety_checking()
-					    (* no safe version in the full model*)
-	      || not (float_model_has_safe_functions ()))
+                                            (* no safe version in the full model*)
+              || not (float_model_has_safe_functions ()))
                 e#mark e#pos (JCTnative (Tgenfloat f)) e1#typ e1 e1'
         end
     | JCEderef(e1,fi) ->
-  	make_deref e#mark e#pos e1 fi
+        make_deref e#mark e#pos e1 fi
     | JCEalloc(e1,st) ->
         let e1' = expr e1 in
         let ac = deref_alloc_class ~type_safe:false e in
@@ -2350,177 +2351,177 @@ and expr e =
                :: args))
 
     | JCEfree e1 ->
-	let e1' = expr e1 in
-	let ac = deref_alloc_class ~type_safe:false e1 in
+        let e1' = expr e1 in
+        let ac = deref_alloc_class ~type_safe:false e1 in
         let alloc = plain_alloc_table_var (ac,e1#region) in
         if !Jc_options.inv_sem = InvOwnership then
-	  let pc = pointer_class e1#typ in
-	  let com = committed_name pc in
-	  make_app "free_parameter_ownership"
-	    [alloc; mk_var com; e1']
+          let pc = pointer_class e1#typ in
+          let com = committed_name pc in
+          make_app "free_parameter_ownership"
+            [alloc; mk_var com; e1']
         else
-	  let free_fun =
-	    if safety_checking () then "free_parameter"
-	    else "safe_free_parameter"
-	  in
-	  make_app free_fun [alloc; e1']
+          let free_fun =
+            if safety_checking () then "free_parameter"
+            else "safe_free_parameter"
+          in
+          make_app free_fun [alloc; e1']
 
     | JCEreinterpret (e, st) -> make_reinterpret e st
 
     | JCEapp call ->
-	begin match call.call_fun with
+        begin match call.call_fun with
           | JClogic_fun f ->
               let arg_types_asserts, args =
-		try match f.li_parameters with
-		  | [] -> [], []
-		  | params ->
+                try match f.li_parameters with
+                  | [] -> [], []
+                  | params ->
 (*
-		      let param_types =
-			List.map (fun v -> v.vi_type) params
-		      in
+                      let param_types =
+                        List.map (fun v -> v.vi_type) params
+                      in
 *)
-		      List.fold_right2 list_type_assert
-			params call.call_args ([],[])
-		with Invalid_argument _ -> assert false
+                      List.fold_right2 list_type_assert
+                        params call.call_args ([],[])
+                with Invalid_argument _ -> assert false
               in
-	      let param_assoc =
-		List.map2 (fun param arg -> param,arg)
-		  f.li_parameters call.call_args
-	      in
-	      let with_body =
-		try
+              let param_assoc =
+                List.map2 (fun param arg -> param,arg)
+                  f.li_parameters call.call_args
+              in
+              let with_body =
+                try
                   let _f,body =
-		    IntHashtblIter.find 
+                    IntHashtblIter.find 
                       Jc_typing.logic_functions_table
-		      f.li_tag
-		  in
-		  match body with
-		    | JCTerm _ -> true
-		    | JCNone | JCReads _ -> false
-		    | JCAssertion _ | JCInductive _ -> assert false
+                      f.li_tag
+                  in
+                  match body with
+                    | JCTerm _ -> true
+                    | JCNone | JCReads _ -> false
+                    | JCAssertion _ | JCInductive _ -> assert false
                 with Not_found -> false
-	      in
-	      let pre, fname, locals, prolog, epilog, args =
-		make_arguments
+              in
+              let pre, fname, locals, prolog, epilog, args =
+                make_arguments
                   ~callee_reads: f.li_effects
                   ~callee_writes: empty_effects
                   ~region_assoc: call.call_region_assoc
-		  ~param_assoc ~with_globals:true ~with_body
-		  f.li_final_name args
-	      in
-	      assert (pre = LTrue);
-	      assert (fname = f.li_final_name);
+                  ~param_assoc ~with_globals:true ~with_body
+                  f.li_final_name args
+              in
+              assert (pre = LTrue);
+              assert (fname = f.li_final_name);
               let call = make_logic_app fname args in
               let new_arg_types_assert =
-		List.fold_right
-		  (fun opt acc ->
-		     match opt with
+                List.fold_right
+                  (fun opt acc ->
+                     match opt with
                        | (_tmp,_e,a) -> make_and a acc)
-		  arg_types_asserts LTrue
+                  arg_types_asserts LTrue
               in
               let call =
-		if new_arg_types_assert = LTrue || not (safety_checking()) then
-		  call
-		else
-		  mk_expr (Assert(`ASSERT,new_arg_types_assert,call))
+                if new_arg_types_assert = LTrue || not (safety_checking()) then
+                  call
+                else
+                  mk_expr (Assert(`ASSERT,new_arg_types_assert,call))
               in
               let call =
-		List.fold_right
-		  (fun opt c ->
-		     match opt with
+                List.fold_right
+                  (fun opt c ->
+                     match opt with
                        | (tmp,e,_ass) -> mk_expr (Let(tmp,e,c)))
-		  arg_types_asserts call
+                  arg_types_asserts call
               in
-	      let call = append prolog call in
-	      let call =
-		if epilog.expr_node = Void then call else
-		  let tmp = tmp_var_name () in
-		  mk_expr (Let(tmp,call,append epilog (mk_var tmp)))
-	      in
+              let call = append prolog call in
+              let call =
+                if epilog.expr_node = Void then call else
+                  let tmp = tmp_var_name () in
+                  mk_expr (Let(tmp,call,append epilog (mk_var tmp)))
+              in
               define_locals ~writes:locals call
 
           | JCfun f ->
 
               let arg_types_asserts, args =
-		try match f.fun_parameters with
-		  | [] -> [], []
-		  | params ->
-		      let params =
-			List.map (fun (_,v) -> v) params
-		      in
-		      List.fold_right2 list_type_assert
-			params call.call_args ([],[])
-		with Invalid_argument _ -> assert false
+                try match f.fun_parameters with
+                  | [] -> [], []
+                  | params ->
+                      let params =
+                        List.map (fun (_,v) -> v) params
+                      in
+                      List.fold_right2 list_type_assert
+                        params call.call_args ([],[])
+                with Invalid_argument _ -> assert false
               in
-	      let args =
-		List.fold_right2
-		  (fun e e' acc ->
-		     let e' =
-		       if is_pointer_type e#typ && Region.bitwise e#region then
-			 let st = pointer_struct e#typ in
-			 let vi = struct_root st in
-			 make_app (of_pointer_address_name vi) [ e' ]
-		       else e'
-		     in
-		     e' :: acc
-		  ) call.call_args args []
-	      in
-	      let param_assoc =
-		List.map2 (fun (_,param) arg -> param,arg)
-		  f.fun_parameters call.call_args
-	      in
-	      let fname =
-		if safety_checking () then
-		  f.fun_final_name ^ "_requires"
-		else f.fun_final_name
-	      in
-	      let with_body =
-		try
-		  let _f,_loc,_s,body =
+              let args =
+                List.fold_right2
+                  (fun e e' acc ->
+                     let e' =
+                       if is_pointer_type e#typ && Region.bitwise e#region then
+                         let st = pointer_struct e#typ in
+                         let vi = struct_root st in
+                         make_app (of_pointer_address_name vi) [ e' ]
+                       else e'
+                     in
+                     e' :: acc
+                  ) call.call_args args []
+              in
+              let param_assoc =
+                List.map2 (fun (_,param) arg -> param,arg)
+                  f.fun_parameters call.call_args
+              in
+              let fname =
+                if safety_checking () then
+                  f.fun_final_name ^ "_requires"
+                else f.fun_final_name
+              in
+              let with_body =
+                try
+                  let _f,_loc,_s,body =
                     IntHashtblIter.find 
                       Jc_typing.functions_table f.fun_tag
-		  in
-		  body <> None
+                  in
+                  body <> None
                 with Not_found ->
                   (*
                     eprintf "Fatal error: tag for %s not found@." f.fun_name;
                     assert false
                   *)
                   false
-	      in
-	      let args =
-		match f.fun_builtin_treatment with
-		  | TreatNothing -> args
-		  | TreatGenFloat format ->
-		      (mk_var (float_format format))::(current_rounding_mode ())::args
-	      in
-	      let pre, fname, locals, prolog, epilog, new_args =
-		make_arguments
+              in
+              let args =
+                match f.fun_builtin_treatment with
+                  | TreatNothing -> args
+                  | TreatGenFloat format ->
+                      (mk_var (float_format format))::(current_rounding_mode ())::args
+              in
+              let pre, fname, locals, prolog, epilog, new_args =
+                make_arguments
                   ~callee_reads: f.fun_effects.fe_reads
                   ~callee_writes: f.fun_effects.fe_writes
                   ~region_assoc: call.call_region_assoc
-		  ~param_assoc ~with_globals:false ~with_body
-		  fname args
-	      in
-	      let call = make_guarded_app e#mark UserCall e#pos fname new_args in
-	      let call =
-		if is_pointer_type e#typ && Region.bitwise e#region then
-		  make_app "pointer_address" [ call ]
-		else call
-	      in
-	      (* decreases *)
+                  ~param_assoc ~with_globals:false ~with_body
+                  fname args
+              in
+              let call = make_guarded_app e#mark UserCall e#pos fname new_args in
+              let call =
+                if is_pointer_type e#typ && Region.bitwise e#region then
+                  make_app "pointer_address" [ call ]
+                else call
+              in
+              (* decreases *)
 
-	      let this_comp = f.fun_component in
-	      let current_comp = (get_current_function()).fun_component in
-	      let call =
-		if safety_checking() && this_comp = current_comp then
+              let this_comp = f.fun_component in
+              let current_comp = (get_current_function()).fun_component in
+              let call =
+                if safety_checking() && this_comp = current_comp then
                   try
-		  let cur_measure,cur_r = get_measure_for (get_current_function()) in
+                  let cur_measure,cur_r = get_measure_for (get_current_function()) in
                   let cur_measure_why =
                     term ~type_safe:true ~global_assertion:true
                       ~relocate:false LabelPre LabelPre cur_measure
                   in
-		  let this_measure,this_r = get_measure_for f in
+                  let this_measure,this_r = get_measure_for f in
                   let subst =
                     List.fold_left2
                       (fun acc (_,vi) (tmp,_,_) ->
@@ -2535,15 +2536,15 @@ and expr e =
                     term ~subst ~type_safe:true ~global_assertion:true
                       ~relocate:false LabelHere LabelHere this_measure
                   in
-		  let r,ty =
-		    assert (this_r = cur_r);
-		    match this_r with
-		      | None -> "zwf_zero", integer_type
-		      | Some li ->
+                  let r,ty =
+                    assert (this_r = cur_r);
+                    match this_r with
+                      | None -> "zwf_zero", integer_type
+                      | Some li ->
                           match li.li_parameters with
                               v1::_ -> li.li_name,v1.vi_type
                             | _ -> assert false
-		  in
+                  in
                   let this_measure_why =
                     term_coerce
                       ~type_safe:false ~global_assertion:false
@@ -2554,54 +2555,54 @@ and expr e =
                       ~type_safe:false ~global_assertion:false
                       LabelHere cur_measure#pos ty cur_measure#typ cur_measure cur_measure_why
                   in
-		  let pre =
-		    LPred(r,[this_measure_why;cur_measure_why])
-		  in
-		  make_check ~mark:e#mark ~kind:VarDecr e#pos
+                  let pre =
+                    LPred(r,[this_measure_why;cur_measure_why])
+                  in
+                  make_check ~mark:e#mark ~kind:VarDecr e#pos
                     (* Francois mardi 29 juin 2010 : `ASSERT -> `CHECK
                        if this_measure_why = 0 and cur_measure_why = 0 then this assert is not
                        false (0>0) so all the remaining goal are trivial. *)
                     (mk_expr (Assert(`CHECK,pre,call)))
                   with Exit -> call
-		else call
-	      in
-	      (* separation assertions *)
-	      let call =
-		if pre = LTrue || not (safety_checking()) then
-		  call
-		else
-		  make_check ~mark:e#mark (* ~kind:Separation *) e#pos
-		    (mk_expr (Assert(`ASSERT,pre,call)))
-	      in
+                else call
+              in
+              (* separation assertions *)
+              let call =
+                if pre = LTrue || not (safety_checking()) then
+                  call
+                else
+                  make_check ~mark:e#mark (* ~kind:Separation *) e#pos
+                    (mk_expr (Assert(`ASSERT,pre,call)))
+              in
               let arg_types_assert =
-		List.fold_right
-		  (fun opt acc ->
-		     match opt with
+                List.fold_right
+                  (fun opt acc ->
+                     match opt with
                        | (_tmp,_e,a) -> make_and a acc)
-		  arg_types_asserts LTrue
+                  arg_types_asserts LTrue
               in
               let call =
-		if arg_types_assert = LTrue || not (safety_checking()) then
-		  call
-		else
-		  make_check ~mark:e#mark ~kind:IndexBounds e#pos
-		    (mk_expr (Assert(`ASSERT,arg_types_assert,call)))
+                if arg_types_assert = LTrue || not (safety_checking()) then
+                  call
+                else
+                  make_check ~mark:e#mark ~kind:IndexBounds e#pos
+                    (mk_expr (Assert(`ASSERT,arg_types_assert,call)))
               in
               let call =
-		List.fold_right
-		  (fun opt c ->
-		     match opt with
+                List.fold_right
+                  (fun opt c ->
+                     match opt with
                        | (tmp,e,_ass) -> mk_expr (Let(tmp,e,c)))
-		  arg_types_asserts call
+                  arg_types_asserts call
               in
-	      let call = append prolog call in
-	      let call =
-		if epilog.expr_node = Void then call else
-		  let tmp = tmp_var_name () in
-		  mk_expr (Let(tmp,call,append epilog (mk_var tmp)))
-	      in
+              let call = append prolog call in
+              let call =
+                if epilog.expr_node = Void then call else
+                  let tmp = tmp_var_name () in
+                  mk_expr (Let(tmp,call,append epilog (mk_var tmp)))
+              in
               define_locals ~writes:locals call
-	end
+        end
     | JCEassign_var(v,e1) ->
 (*
         begin
@@ -2610,9 +2611,9 @@ and expr e =
             | l -> Format.eprintf "met assign_var with label %s@." l
         end;
 *)
-	let e1' = value_assigned e#mark e#pos v.vi_type e1 in
-	let e' = mk_expr (Assign(v.vi_final_name,e1')) in
-	if e#typ = Jc_pervasives.unit_type then
+        let e1' = value_assigned e#mark e#pos v.vi_type e1 in
+        let e' = mk_expr (Assign(v.vi_final_name,e1')) in
+        if e#typ = Jc_pervasives.unit_type then
           begin
 (*
             eprintf "JCEassign(%s,..) : has type unit@." v.vi_name;
@@ -2627,27 +2628,27 @@ and expr e =
             append e' (var v)
           end
     | JCEassign_heap(e1,fi,e2) ->
-	let e2' = value_assigned e#mark e#pos fi.fi_type e2 in
-	(* Define temporary variable for value assigned *)
-	let tmp2 = tmp_var_name () in
+        let e2' = value_assigned e#mark e#pos fi.fi_type e2 in
+        (* Define temporary variable for value assigned *)
+        let tmp2 = tmp_var_name () in
 (*
         eprintf "JCEassign_heap: tmp_var_name for tmp2 is %s@." tmp2;
 *)
-	let v2 = Jc_pervasives.var fi.fi_type tmp2 in
-	let e2 =
-	  new expr_with ~typ:fi.fi_type ~node:(JCEvar v2) e2
-	in
-	(* Translate assignment *)
+        let v2 = Jc_pervasives.var fi.fi_type tmp2 in
+        let e2 =
+          new expr_with ~typ:fi.fi_type ~node:(JCEvar v2) e2
+        in
+        (* Translate assignment *)
         let tmp1, lets, e' = make_upd e#mark e#pos e1 fi e2 in
         let e' =
-	  if (safety_checking()) && !Jc_options.inv_sem = InvOwnership then
+          if (safety_checking()) && !Jc_options.inv_sem = InvOwnership then
             append (assert_mutable (LVar tmp1) fi) e'
-	  else e'
-	in
-	let lets = (tmp2,e2') :: lets in
+          else e'
+        in
+        let lets = (tmp2,e2') :: lets in
         let e' =
           if e#typ = Jc_pervasives.unit_type then
-	    match e'.expr_node with
+            match e'.expr_node with
               | MultiAssign(m,p,lets',isrefa,ta,a,tmpe,e,f,l) ->
 (*
                 eprintf "multiassign for a unit type !@.";
@@ -2677,18 +2678,18 @@ and expr e =
           | None ->
               any_value v.vi_region v.vi_type
           | Some e1 ->
-	      value_assigned e#mark e#pos v.vi_type e1
-	in
-	let e2' = expr e2 in
+              value_assigned e#mark e#pos v.vi_type e1
+        in
+        let e2' = expr e2 in
         if v.vi_assigned then
-	  mk_expr (Let_ref(v.vi_final_name,e1',e2'))
+          mk_expr (Let_ref(v.vi_final_name,e1',e2'))
         else
-	  mk_expr (Let(v.vi_final_name,e1',e2'))
+          mk_expr (Let(v.vi_final_name,e1',e2'))
     | JCEreturn_void -> mk_expr (Raise(jessie_return_exception,None))
     | JCEreturn(ty,e1) ->
-	let e1' = value_assigned e#mark e#pos ty e1 in
-	let e' = mk_expr (Assign(jessie_return_variable,e1')) in
-	append e' (mk_expr (Raise(jessie_return_exception,None)))
+        let e1' = value_assigned e#mark e#pos ty e1 in
+        let e' = mk_expr (Assign(jessie_return_variable,e1')) in
+        append e' (mk_expr (Raise(jessie_return_exception,None)))
     | JCEunpack(st,e1,as_st) ->
         let e1' = expr e1 in
         make_guarded_app e#mark Unpack e#pos
@@ -2703,26 +2704,26 @@ and expr e =
           Jc_output_misc.asrt_kind asrt
           (print_list comma Jc_output.identifier) b;
 *)
-	let a' =
-	  named_assertion
-	    ~type_safe:false ~global_assertion:false ~relocate:false
-	    LabelHere LabelPre a
-	in
+        let a' =
+          named_assertion
+            ~type_safe:false ~global_assertion:false ~relocate:false
+            LabelHere LabelPre a
+        in
 (*
         Format.eprintf "assertion to check ?@.";
 *)
-	begin match asrt with
-	  | Aassert | Ahint ->
-	      if in_current_behavior b then
-		mk_expr (Assert(`ASSERT,a',void))
-	      else if in_default_behavior b then
-		assumption [ a ] a'
+        begin match asrt with
+          | Aassert | Ahint ->
+              if in_current_behavior b then
+                mk_expr (Assert(`ASSERT,a',void))
+              else if in_default_behavior b then
+                assumption [ a ] a'
               else
                 void
-	  | Aassume ->
-	      if in_current_behavior b || in_default_behavior b then
-		assumption [ a ] a'
-	      else void
+          | Aassume ->
+              if in_current_behavior b || in_default_behavior b then
+                assumption [ a ] a'
+              else void
           | Acheck ->
 (*
               (match b with
@@ -2730,120 +2731,120 @@ and expr e =
                  | b::_ -> Format.eprintf "check for behavior %s,...@." b#name);
 *)
               if in_current_behavior b then
-		mk_expr (Assert(`CHECK,a',void))
-	      else void
-	end
+                mk_expr (Assert(`CHECK,a',void))
+              else void
+        end
     | JCEloop(la,e1) ->
-	let inv,assume_from_inv =
-	  List.fold_left
-	    (fun ((invariants,assumes) as acc) (names,inv,_) ->
-	       match inv with
-		 | Some i ->
-		     if in_current_behavior names
-		     then (i::invariants,assumes)
-		     else
-		       if List.exists
-			 (fun behav -> behav#name = "default")
-			 names
-		       then
-			 (invariants,i::assumes)
-		       else
-			 (invariants,assumes)
-		 | None -> acc)
-	    ([],[])
-	    la.loop_behaviors
-	in
-        let inv' =
-	  make_and_list
-	    (List.map
-	       (named_assertion
-		  ~type_safe:false ~global_assertion:false ~relocate:false
-		  LabelHere LabelPre) inv)
-	in
-        let assume_from_inv' =
-	  make_and_list
-	    (List.map
-	       (named_assertion
-		  ~type_safe:false ~global_assertion:false ~relocate:false
-		  LabelHere LabelPre) assume_from_inv)
-	in
-	(* free invariant: trusted or not *)
-	let free_inv = la.loop_free_invariant in
-        let free_inv' =
-	  named_assertion
-	    ~type_safe:false ~global_assertion:false ~relocate:false
-	    LabelHere LabelPre free_inv
+        let inv,assume_from_inv =
+          List.fold_left
+            (fun ((invariants,assumes) as acc) (names,inv,_) ->
+               match inv with
+                 | Some i ->
+                     if in_current_behavior names
+                     then (i::invariants,assumes)
+                     else
+                       if List.exists
+                         (fun behav -> behav#name = "default")
+                         names
+                       then
+                         (invariants,i::assumes)
+                       else
+                         (invariants,assumes)
+                 | None -> acc)
+            ([],[])
+            la.loop_behaviors
         in
         let inv' =
-	  if Jc_options.trust_ai then inv' else make_and inv' free_inv'
-	in
-	(* loop assigns
+          make_and_list
+            (List.map
+               (named_assertion
+                  ~type_safe:false ~global_assertion:false ~relocate:false
+                  LabelHere LabelPre) inv)
+        in
+        let assume_from_inv' =
+          make_and_list
+            (List.map
+               (named_assertion
+                  ~type_safe:false ~global_assertion:false ~relocate:false
+                  LabelHere LabelPre) assume_from_inv)
+        in
+        (* free invariant: trusted or not *)
+        let free_inv = la.loop_free_invariant in
+        let free_inv' =
+          named_assertion
+            ~type_safe:false ~global_assertion:false ~relocate:false
+            LabelHere LabelPre free_inv
+        in
+        let inv' =
+          if Jc_options.trust_ai then inv' else make_and inv' free_inv'
+        in
+        (* loop assigns
 
-	   By default, the assigns clause for the function should be
-	   taken
+           By default, the assigns clause for the function should be
+           taken
 
-	   Yannick: wrong, as function's assigns clause does not deal
-	   with newly allocated memory, nor local variables, which may
-	   be assigned in the loop.
+           Yannick: wrong, as function's assigns clause does not deal
+           with newly allocated memory, nor local variables, which may
+           be assigned in the loop.
 
-	   Claude: it is not wrong if we take care: the implicit loop
-	   assigns generated from the function's assigns should relate
-	   the state Pre (for the function) and current state. Whereas an
-	   explicit loop assigns relates the state before entering the
-	   loop and the current state. example:
-
-
-	   int t[10];
-	   //@ assigns t[0..9]
-	   f() { int i;
-	   int u[] = new int [10];
-	   //@ loop assigns t[0..i], u[0..i]
-	   for (i=0; i < 10; i++) {
-	   t[i] = ...; u[i] = ...
-	   }
-
-	   the Why code should be
-
-	   f() { let i = ref any_int() in
-	   let u = alloc_array(10) // writes alloc
-	   in
-	   loop_init:
-	   i := 0;
-	   while (!i < 10) do
-	     invariant
-	        // from loop assigns
-	        assigns(alloc@loop_init,intP@loop_init,intP,
-	                    t[0..i] union u[0..i])
-	        and
-	        // from function's assigns
-	        assigns(alloc@,intP@,intP, t[0..9])
-	     intP := store(intP,t+!i,...);
-	     intP := store(intP,u+!i,...);
-	     i := !i + 1;
-	   done;
-
-	*)
+           Claude: it is not wrong if we take care: the implicit loop
+           assigns generated from the function's assigns should relate
+           the state Pre (for the function) and current state. Whereas an
+           explicit loop assigns relates the state before entering the
+           loop and the current state. example:
 
 
-	(* loop assigns from function's loop assigns *)
+           int t[10];
+           //@ assigns t[0..9]
+           f() { int i;
+           int u[] = new int [10];
+           //@ loop assigns t[0..i], u[0..i]
+           for (i=0; i < 10; i++) {
+           t[i] = ...; u[i] = ...
+           }
 
-	let loop_assigns_from_function =
-	  let s = get_current_spec () in
-	  List.fold_left
-	    (fun acc (_pos,id,b) ->
-	       if is_current_behavior id then
-		 match b.b_assigns with
-		   | None -> acc
-		   | Some(_pos,loclist) ->
-		       let loclist = List.map old_to_pre_loc loclist in
-		       match acc with
-			 | None -> Some loclist
-			 | Some loclist' -> Some (loclist @ loclist')
-	       else acc
-	    ) None (s.fs_default_behavior::s.fs_behavior)
-	in
+           the Why code should be
 
-	(* This is the code producing the Why invariant from the user's loop assigns
+           f() { let i = ref any_int() in
+           let u = alloc_array(10) // writes alloc
+           in
+           loop_init:
+           i := 0;
+           while (!i < 10) do
+             invariant
+                // from loop assigns
+                assigns(alloc@loop_init,intP@loop_init,intP,
+                            t[0..i] union u[0..i])
+                and
+                // from function's assigns
+                assigns(alloc@,intP@,intP, t[0..9])
+             intP := store(intP,t+!i,...);
+             intP := store(intP,u+!i,...);
+             i := !i + 1;
+           done;
+
+        *)
+
+
+        (* loop assigns from function's loop assigns *)
+
+        let loop_assigns_from_function =
+          let s = get_current_spec () in
+          List.fold_left
+            (fun acc (_pos,id,b) ->
+               if is_current_behavior id then
+                 match b.b_assigns with
+                   | None -> acc
+                   | Some(_pos,loclist) ->
+                       let loclist = List.map old_to_pre_loc loclist in
+                       match acc with
+                         | None -> Some loclist
+                         | Some loclist' -> Some (loclist @ loclist')
+               else acc
+            ) None (s.fs_default_behavior::s.fs_behavior)
+        in
+
+        (* This is the code producing the Why invariant from the user's loop assigns
 
    a loop assigns for behavior b should be
 
@@ -2860,72 +2861,72 @@ and expr e =
 *)
 
 
-	let loop_assigns =
-	  List.fold_left
-	    (fun acc (names,_inv,ass) ->
-	       match ass with
-		 | Some i ->
-		     if in_current_behavior names
-		     then
-		       match acc with
-			 | None -> Some i
-			 | Some l -> Some (i@l)
-		     else
-		       (*
-			 if List.exists
-			 (fun behav -> behav#name = "default")
-			 names
-			 then
-			 (invariants,i::assumes)
-		       else
-			 (invariants,assumes)
-		       *)
-		       acc
-		 | None -> acc)
-	    None
-	    la.loop_behaviors
-	in
+        let loop_assigns =
+          List.fold_left
+            (fun acc (names,_inv,ass) ->
+               match ass with
+                 | Some i ->
+                     if in_current_behavior names
+                     then
+                       match acc with
+                         | None -> Some i
+                         | Some l -> Some (i@l)
+                     else
+                       (*
+                         if List.exists
+                         (fun behav -> behav#name = "default")
+                         names
+                         then
+                         (invariants,i::assumes)
+                       else
+                         (invariants,assumes)
+                       *)
+                       acc
+                 | None -> acc)
+            None
+            la.loop_behaviors
+        in
 
-	let loop_label = fresh_loop_label() in
+        let loop_label = fresh_loop_label() in
 
-	let ass =
-	  tr_assigns ~type_safe:false
-	    (LabelName loop_label) infunction.fun_effects loop_assigns
-	    e#pos
-	in
+        let ass =
+          tr_assigns ~type_safe:false
+            (LabelName loop_label) infunction.fun_effects loop_assigns
+            e#pos
+        in
 
-	let ass_from_fun =
-	  tr_assigns ~type_safe:false
-	    LabelPre infunction.fun_effects loop_assigns_from_function
-	    e#pos
-	in
+        let ass_from_fun =
+          tr_assigns ~type_safe:false
+            LabelPre infunction.fun_effects loop_assigns_from_function
+            e#pos
+        in
 
         let inv' =
-	  make_and inv' (make_and (mark_assertion e#pos ass)
-			   (mark_assertion e#pos ass_from_fun))
-	in
-	(* loop body *)
+          make_and inv' (make_and (mark_assertion e#pos ass)
+                           (mark_assertion e#pos ass_from_fun))
+        in
+        (* loop body *)
         let body = expr e1 in
-	let add_assume s =
+        let add_assume s =
           let s = append (assumption assume_from_inv assume_from_inv') s in
           if Jc_options.trust_ai then
             append (assumption [ free_inv ] free_inv') s
           else s
         in
-	let body = [ add_assume body ] in
-	(* loop variant *)
-	let loop_variant =
+        let body = [ add_assume body ] in
+        (* loop variant *)
+        let loop_variant =
           match la.loop_variant with
             | Some (t,r) when variant_checking () &&
                 !Jc_options.termination_policy <> TPnever ->
-		let variant =
-		  named_term
-		    ~type_safe:false ~global_assertion:false ~relocate:false
-		    LabelHere LabelPre t
-	        in
+                let variant =
+                  named_term
+                    ~type_safe:false ~global_assertion:false ~relocate:false
+                    LabelHere LabelPre t
+                in
                 let variant,r = match r with
                   | None ->
-		      term_coerce
+                      term_coerce
                         ~type_safe:false ~global_assertion:false
                         LabelHere t#pos integer_type t#typ t variant, None
                   | Some id -> variant, Some id.li_name
@@ -2944,37 +2945,37 @@ and expr e =
         eprintf "Jc_interp.expr: adding loop label %s@." loop_label.lab_final_name;
 *)
         make_label loop_label.lab_final_name
-	  (mk_expr (While((mk_expr (Cte(Prim_bool true)),
+          (mk_expr (While((mk_expr (Cte(Prim_bool true)),
                            inv', loop_variant, body))))
 
     | JCEcontract(req,dec,vi_result,behs,e) ->
-	let r =
+        let r =
           match req with
             | Some a ->
                 assertion
-	          ~type_safe:false ~global_assertion:false ~relocate:false
-	          LabelHere LabelPre a
+                  ~type_safe:false ~global_assertion:false ~relocate:false
+                  LabelHere LabelPre a
             | _ -> LTrue
         in
         assert (dec = None);
         let ef = Jc_effect.expr Jc_pervasives.empty_fun_effect e in
-	begin match behs with
-	  | [_pos,id,b] ->
-	      assert (b.b_throws = None);
-	      assert (b.b_assumes = None);
-	      let a =
-		assertion
-		  ~type_safe:false ~global_assertion:false ~relocate:false
-		  LabelHere LabelPre b.b_ensures
-	      in
+        begin match behs with
+          | [_pos,id,b] ->
+              assert (b.b_throws = None);
+              assert (b.b_assumes = None);
+              let a =
+                assertion
+                  ~type_safe:false ~global_assertion:false ~relocate:false
+                  LabelHere LabelPre b.b_ensures
+              in
               let post = match b.b_assigns with
                 | None -> a
                 | Some(_,locs) ->
                     make_and a
-	              (tr_assigns ~type_safe:false
-	                 LabelPre
+                      (tr_assigns ~type_safe:false
+                         LabelPre
                          ef (* infunction.fun_effects*) (Some locs)
-	                 e#pos)
+                         e#pos)
               in
               if safety_checking () then
                 begin
@@ -3014,8 +3015,8 @@ and expr e =
                    mk_expr (Let(tmp,
                                 (mk_expr (Triple(true,LTrue,expr e,LTrue,[]))),
                                 (mk_expr (BlackBox(Annot_type(LTrue, tr_var_type vi_result,[], [], post, [])))))))
-	  | _ -> assert false
-	end
+          | _ -> assert false
+        end
     | JCEthrow(exc,Some e1) ->
         let e1' = expr e1 in
         mk_expr (Raise(exception_name exc,Some e1'))
@@ -3073,9 +3074,9 @@ and expr e =
         match e'.expr_node with
           | MultiAssign _ -> e'
           | _ ->
-	      (* Create dummy temporary *)
-	      let tmp = tmp_var_name () in
-	      mk_expr (Let(tmp,e',void))
+              (* Create dummy temporary *)
+              let tmp = tmp_var_name () in
+              mk_expr (Let(tmp,e',void))
       else e'
     else
       match e'.expr_node with
@@ -3183,7 +3184,7 @@ let tr_axiom loc id ~is_axiom labels a acc =
     assertion ~type_safe:false ~global_assertion:true ~relocate:false lab lab @@
       restrict_poly_mems_in_assertion ef.e_memories a
   in
-  let params = tmodel_parameters ~label_in_name:true ef in
+  let params = tr_li_model_args_3 ~label_in_name:true ef in
   let new_id = get_unique_name id in
   reg_decl
     ~out_mark:new_id
@@ -3208,7 +3209,7 @@ let tr_axiom loc id ~is_axiom labels a acc =
 let tr_axiomatic_decl acc d =
   match d with
     | Jc_typing.ABaxiom(loc,id,labels,p) ->
-	tr_axiom loc ~is_axiom:true id labels p acc
+        tr_axiom loc ~is_axiom:true id labels p acc
 
 (******************************************************************************)
 (*                                 Functions                                  *)
@@ -3219,10 +3220,10 @@ let excep_posts_for_others exc_opt excep_behaviors =
     (fun exc _bl acc ->
        match exc_opt with
          | Some exc' ->
-	     if exc.exi_tag = exc'.exi_tag then
-	       acc
-	     else
-	       (exception_name exc, LTrue) :: acc
+             if exc.exi_tag = exc'.exi_tag then
+               acc
+             else
+               (exception_name exc, LTrue) :: acc
          | None -> (exception_name exc, LTrue) :: acc
     ) excep_behaviors []
 
@@ -3235,9 +3236,9 @@ let fun_parameters ~type_safe params write_params read_params =
   in
   let params =
     List.map (fun v ->
-		let n,ty' = param ~type_safe v in
-		(n, Base_type ty')
-	     ) params
+                let n,ty' = param ~type_safe v in
+                (n, Base_type ty')
+             ) params
   in
   let params = params @ write_params @ read_params in
   match params with
@@ -3262,59 +3263,59 @@ let assume_in_precondition b pre =
   match b.b_assumes with
     | None -> pre
     | Some a ->
-	let a' =
-	  assertion ~type_safe:false ~global_assertion:false ~relocate:false
-	    LabelHere LabelHere a
-	in
-	make_and a' pre
+        let a' =
+          assertion ~type_safe:false ~global_assertion:false ~relocate:false
+            LabelHere LabelHere a
+        in
+        make_and a' pre
 
 (* Only used for external prototype, hence type-safe parameter set to true *)
 let assume_in_postcondition b post =
   match b.b_assumes with
     | None -> post
     | Some a ->
-	let a' =
-	  assertion ~type_safe:true ~global_assertion:false ~relocate:true
-	    LabelOld LabelOld a
-	in
-	make_impl a' post
+        let a' =
+          assertion ~type_safe:true ~global_assertion:false ~relocate:true
+            LabelOld LabelOld a
+        in
+        make_impl a' post
 
 let function_prototypes = Hashtbl.create 7
 
 let get_valid_pred_app ~in_param vi =
   match vi.vi_type with
     | JCTpointer (pc, n1o, n2o) ->
-	(* TODO: what about bitwise? *)
-	let v' =
+        (* TODO: what about bitwise? *)
+        let v' =
           term ~type_safe:false ~global_assertion:false ~relocate:false
-	    LabelHere LabelHere (new term_var vi)
-	in
-	  begin match n1o, n2o with
+            LabelHere LabelHere (new term_var vi)
+        in
+          begin match n1o, n2o with
             | None, None -> LTrue
-	    | Some n, None ->
-		let ac = alloc_class_of_pointer_class pc in
+            | Some n, None ->
+                let ac = alloc_class_of_pointer_class pc in
                 let a' =
-		  make_valid_pred_app ~in_param ~equal:false
-		    (ac, vi.vi_region) pc
+                  make_valid_pred_app ~in_param ~equal:false
+                    (ac, vi.vi_region) pc
                     v' (Some (const_of_num n)) None
                 in
-		  bind_pattern_lets a'
-	    | None, Some n ->
-		let ac = alloc_class_of_pointer_class pc in
+                  bind_pattern_lets a'
+            | None, Some n ->
+                let ac = alloc_class_of_pointer_class pc in
                 let a' =
-		  make_valid_pred_app ~in_param ~equal:false
-		    (ac, vi.vi_region) pc
+                  make_valid_pred_app ~in_param ~equal:false
+                    (ac, vi.vi_region) pc
                     v' None (Some (const_of_num n))
                 in
-		  bind_pattern_lets a'
+                  bind_pattern_lets a'
             | Some n1, Some n2 ->
-		let ac = alloc_class_of_pointer_class pc in
+                let ac = alloc_class_of_pointer_class pc in
                 let a' =
-		  make_valid_pred_app  ~in_param ~equal:false (ac, vi.vi_region) pc
+                  make_valid_pred_app  ~in_param ~equal:false (ac, vi.vi_region) pc
                     v' (Some (const_of_num n1)) (Some (const_of_num n2))
                 in
-		  bind_pattern_lets a'
-	  end
+                  bind_pattern_lets a'
+          end
     | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
     | JCTtype_var _ -> LTrue
 
@@ -3346,7 +3347,7 @@ let pre_tr_fun f _funpos spec _body acc =
     match spec.fs_decreases with
       | None -> ()
       | Some(t,r) ->
-	  Hashtbl.add decreases_clause_table f.fun_tag (t,r)
+          Hashtbl.add decreases_clause_table f.fun_tag (t,r)
   end;
   acc
 
@@ -3378,7 +3379,7 @@ let tr_fun f funpos spec body acc =
     Hashtbl.fold
       (fun _ (vi, _) acc ->
          let req = get_valid_pred_app vi in
-	   make_and req acc)
+           make_and req acc)
       Jc_typing.variables_table LTrue
 *)
   in
@@ -3394,10 +3395,10 @@ let tr_fun f funpos spec body acc =
       external_requires
     else
       let free_requires =
-	named_assertion ~type_safe:true ~global_assertion:false ~relocate:false
-	  LabelHere LabelHere spec.fs_free_requires
+        named_assertion ~type_safe:true ~global_assertion:false ~relocate:false
+          LabelHere LabelHere spec.fs_free_requires
       in
-	make_and external_requires free_requires
+        make_and external_requires free_requires
   in
 
   let internal_requires =
@@ -3414,7 +3415,7 @@ let tr_fun f funpos spec body acc =
     List.fold_left
       (fun acc (_,v) ->
          let req = get_valid_pred_app  ~in_param:true v in
-	   make_and req acc)
+           make_and req acc)
       internal_requires f.fun_parameters
   in
 
@@ -3430,41 +3431,41 @@ let tr_fun f funpos spec body acc =
        excep_behaviors_inferred, excep_behaviors) =
     List.fold_left
       (fun (safety,normal_inferred,normal,excep_inferred,excep) (pos,id,b) ->
-	 let make_post ~type_safe ~internal =
-	   let post =
-	     if internal && Jc_options.trust_ai then
-	       b.b_ensures
-	     else
-	       Assertion.mkand [ b.b_ensures;
-				 b.b_free_ensures ] ()
-	   in
-	   let post =
-	     named_assertion
-	       ~type_safe ~global_assertion:false ~relocate:false
-	       LabelPost LabelOld post
-	   in
+         let make_post ~type_safe ~internal =
+           let post =
+             if internal && Jc_options.trust_ai then
+               b.b_ensures
+             else
+               Assertion.mkand [ b.b_ensures;
+                                 b.b_free_ensures ] ()
+           in
+           let post =
+             named_assertion
+               ~type_safe ~global_assertion:false ~relocate:false
+               LabelPost LabelOld post
+           in
            let post = match b.b_assigns with
              | None ->
-		 Jc_options.lprintf
-		   "Jc_interp: behavior '%s' has no assigns@." id;
-		 post
+                 Jc_options.lprintf
+                   "Jc_interp: behavior '%s' has no assigns@." id;
+                 post
              | Some(assigns_pos,loclist) ->
-		 Jc_options.lprintf
-		   "Jc_interp: behavior '%s' has assigns clause with %d elements@."
-		   id (List.length loclist);
-		 let assigns_post =
+                 Jc_options.lprintf
+                   "Jc_interp: behavior '%s' has assigns clause with %d elements@."
+                   id (List.length loclist);
+                 let assigns_post =
                    mark_assertion assigns_pos
                      (tr_assigns
                         ~type_safe
-			~region_list:f.fun_param_regions
+                        ~region_list:f.fun_param_regions
                         LabelOld
                         f.fun_effects
                         ~allocates:b.b_allocates
                         (Some loclist)
                         funpos)
-		 in
-		 mark_assertion pos (make_and post assigns_post)
-	   in
+                 in
+                 mark_assertion pos (make_and post assigns_post)
+           in
            (* Add alloc_extends[except] predicates for those alloc tables modified by the function, i.e. *)
            (* listed in the f.fun_effects.fe_writes. *)
            (* We except psets of locations specified in the allocates clause i.e. b.b_allocates. *)
@@ -3477,25 +3478,25 @@ let tr_fun f funpos spec body acc =
                      tr_allocates ~type_safe f.fun_effects.fe_writes.e_alloc_tables locs
            in
            post
-	 in
-	 let internal_post = make_post ~type_safe:false ~internal:true in
-	 let external_post = make_post ~type_safe:true ~internal:false in
-	 let behav = (id,b,internal_post,external_post) in
+         in
+         let internal_post = make_post ~type_safe:false ~internal:true in
+         let external_post = make_post ~type_safe:true ~internal:false in
+         let behav = (id,b,internal_post,external_post) in
          match b.b_throws with
            | None ->
                begin match id with
                  | "safety" ->
-		     assert (b.b_assumes = None);
-		     let internal_post =
-		       make_and variables_valid_pred_apps internal_post
-		     in
-		     let external_post =
-		       make_and variables_valid_pred_apps external_post
-		     in
+                     assert (b.b_assumes = None);
+                     let internal_post =
+                       make_and variables_valid_pred_apps internal_post
+                     in
+                     let external_post =
+                       make_and variables_valid_pred_apps external_post
+                     in
                      (id, b, internal_post, external_post) :: safety,
                      normal_inferred, normal, excep_inferred, excep
                  | "inferred" ->
-		     assert (b.b_assumes = None);
+                     assert (b.b_assumes = None);
                      safety, behav :: normal_inferred,
                      (if Jc_options.trust_ai then normal else behav :: normal),
                      excep_inferred, excep
@@ -3505,14 +3506,14 @@ let tr_fun f funpos spec body acc =
                end
            | Some exc ->
                if id = "inferred" then
-		 begin
-		   assert (b.b_assumes = None);
+                 begin
+                   assert (b.b_assumes = None);
                    safety, normal_inferred, normal,
-		   ExceptionMap.add_merge
-		     List.append exc [behav] excep_inferred,
-		   if Jc_options.trust_ai then excep else
+                   ExceptionMap.add_merge
+                     List.append exc [behav] excep_inferred,
+                   if Jc_options.trust_ai then excep else
                      ExceptionMap.add_merge List.append exc [behav] excep
-		 end
+                 end
                else
                  safety, normal_inferred, normal, excep_inferred,
                  ExceptionMap.add_merge List.append exc [behav] excep)
@@ -3527,10 +3528,10 @@ let tr_fun f funpos spec body acc =
            let b =
              { default_behavior with
                  b_throws = Some exc;
-		 b_ensures = (new assertion JCAtrue); }
+                 b_ensures = (new assertion JCAtrue); }
            in
            ExceptionMap.add
-	     exc [exc.exi_name ^ "_b", b, LTrue, LTrue] acc)
+             exc [exc.exi_name ^ "_b", b, LTrue, LTrue] acc)
       f.fun_effects.fe_raises
       excep_behaviors
   in
@@ -3634,8 +3635,8 @@ let tr_fun f funpos spec body acc =
     ExceptionMap.fold
       (fun exc bl acc ->
          let a' =
-	   List.fold_right (add_postcondition ~internal:false) bl LTrue
-	 in
+           List.fold_right (add_postcondition ~internal:false) bl LTrue
+         in
          (exception_name exc, a') :: acc
       ) excep_behaviors []
   in
@@ -3644,10 +3645,10 @@ let tr_fun f funpos spec body acc =
       (fun exc bl acc ->
          let a' =
            List.fold_right
-	     (add_modif_postcondition ~internal:false assume_in_postcondition)
-	     bl LTrue
+             (add_modif_postcondition ~internal:false assume_in_postcondition)
+             bl LTrue
          in
-	 (exception_name exc, a') :: acc
+         (exception_name exc, a') :: acc
       ) excep_behaviors_inferred []
   in
 
@@ -3664,11 +3665,11 @@ let tr_fun f funpos spec body acc =
     let annot_type = (* function declaration with precondition *)
       Annot_type(external_requires, ret_type,
                  external_read_effects, external_write_effects,
-		 param_normal_post, param_excep_posts)
+                 param_normal_post, param_excep_posts)
     in
     let fun_type =
       annot_fun_parameters fparams
-	external_write_params external_read_params annot_type
+        external_write_params external_read_params annot_type
     in
     let newid = f.fun_final_name ^ "_requires" in
     Hashtbl.add function_prototypes newid fun_type;
@@ -3678,11 +3679,11 @@ let tr_fun f funpos spec body acc =
     let annot_type =
       Annot_type(LTrue, ret_type,
                  external_read_effects, external_write_effects,
-		 param_normal_post, param_excep_posts)
+                 param_normal_post, param_excep_posts)
     in
     let fun_type =
       annot_fun_parameters fparams
-	external_write_params external_read_params annot_type
+        external_write_params external_read_params annot_type
     in
     let newid = f.fun_final_name in
     Hashtbl.add function_prototypes newid fun_type;
@@ -3707,83 +3708,83 @@ let tr_fun f funpos spec body acc =
           acc (* function is not in the list of functions to verify *)
         else
           let () =
-	    printf "Generating Why function %s@." f.fun_final_name
-	  in
+            printf "Generating Why function %s@." f.fun_final_name
+          in
 
-	  (* parameters *)
-	  let params =
-	    fun_parameters ~type_safe:false fparams
-	      internal_write_params internal_read_params
-	  in
+          (* parameters *)
+          let params =
+            fun_parameters ~type_safe:false fparams
+              internal_write_params internal_read_params
+          in
 
-	  let wrap_body f spec bname body =
-	    (* rename formals after parameters are computed and before body
-	       is treated *)
-	    let list_of_refs =
-	      List.fold_right
-		(fun id bl ->
-		   if id.vi_assigned
-		   then
-		     let n = id.vi_final_name in
-		     let newn = "mutable_" ^ n in
-		     id.vi_final_name <- newn;
-		     (newn, n) :: bl
-		   else bl)
-		fparams []
-	    in
+          let wrap_body f spec bname body =
+            (* rename formals after parameters are computed and before body
+               is treated *)
+            let list_of_refs =
+              List.fold_right
+                (fun id bl ->
+                   if id.vi_assigned
+                   then
+                     let n = id.vi_final_name in
+                     let newn = "mutable_" ^ n in
+                     id.vi_final_name <- newn;
+                     (newn, n) :: bl
+                   else bl)
+                fparams []
+            in
             let body = function_body f spec bname body in
-	    let body =
-	      if !Jc_options.inv_sem = InvOwnership then
-		append (assume_all_invariants fparams) body
-	      else body
-	    in
-	    let body = define_locals body in
-	    let body = match f.fun_result.vi_type with
-	      | JCTnative Tunit ->
-		  mk_expr (Try(append body (mk_expr (Raise(jessie_return_exception,None))),
-		               jessie_return_exception, None, void))
-	      | _ ->
+            let body =
+              if !Jc_options.inv_sem = InvOwnership then
+                append (assume_all_invariants fparams) body
+              else body
+            in
+            let body = define_locals body in
+            let body = match f.fun_result.vi_type with
+              | JCTnative Tunit ->
+                  mk_expr (Try(append body (mk_expr (Raise(jessie_return_exception,None))),
+                               jessie_return_exception, None, void))
+              | _ ->
                   let result = f.fun_result in
-		  let e' = any_value
+                  let e' = any_value
                     result.vi_region result.vi_type in
-		  mk_expr (Let_ref(jessie_return_variable, e',
-			           mk_expr (Try(append body (mk_expr Absurd),
-			                        jessie_return_exception, None,
-			                        mk_expr (Deref jessie_return_variable)))))
-	    in
-	    let body = make_label "init" body in
-	    let body =
-	      List.fold_right
-		(fun (mut_id,id) e' ->
+                  mk_expr (Let_ref(jessie_return_variable, e',
+                                   mk_expr (Try(append body (mk_expr Absurd),
+                                                jessie_return_exception, None,
+                                                mk_expr (Deref jessie_return_variable)))))
+            in
+            let body = make_label "init" body in
+            let body =
+              List.fold_right
+                (fun (mut_id,id) e' ->
                    mk_expr (Let_ref(mut_id, plain_var id, e')))
-		list_of_refs body
-	    in
-	    (* FS#393: restore parameter real names *)
-	    List.iter
-	      (fun v ->
-		 let n = v.vi_final_name in
-		 if List.mem_assoc n list_of_refs then
-		   v.vi_final_name <- List.assoc n list_of_refs
-	      ) fparams;
-	    body
-	  in
+                list_of_refs body
+            in
+            (* FS#393: restore parameter real names *)
+            List.iter
+              (fun v ->
+                 let n = v.vi_final_name in
+                 if List.mem_assoc n list_of_refs then
+                   v.vi_final_name <- List.assoc n list_of_refs
+              ) fparams;
+            body
+          in
 
           (* safety behavior *)
-	  let acc =
-	    if Jc_options.verify_behavior "safety" ||
+          let acc =
+            if Jc_options.verify_behavior "safety" ||
                Jc_options.verify_behavior "variant" then
               let behav = if Jc_options.verify_behavior "safety"
                 then "safety" else "variant" in
               let safety_body = wrap_body f spec behav body in
               let newid = f.fun_name ^ "_safety" in
               reg_decl
-		~out_mark:newid
-		~in_mark:f.fun_name
-		~name:("function " ^ f.fun_name)
-		~beh:"Safety"
-		funpos;
+                ~out_mark:newid
+                ~in_mark:f.fun_name
+                ~name:("function " ^ f.fun_name)
+                ~beh:"Safety"
+                funpos;
               if is_purely_exceptional_fun spec then acc else
-		if Jc_options.verify_invariants_only then acc else
+                if Jc_options.verify_invariants_only then acc else
                   Def(
                     id_no_loc newid,
                     !Jc_options.termination_policy <> TPalways,
@@ -3794,20 +3795,20 @@ let tr_fun f funpos spec body acc =
                       safety_body,
                       internal_safety_post,
                       excep_posts_for_others None excep_behaviors)))
-		  :: acc
-	    else acc
-	  in
+                  :: acc
+            else acc
+          in
 
           (* normal behaviors *)
           let acc =
             List.fold_right
               (fun (id,b,internal_post,_) acc ->
-		 if Jc_options.verify_behavior id then
+                 if Jc_options.verify_behavior id then
                    let normal_body = wrap_body f spec id body in
                    let newid = f.fun_name ^ "_ensures_" ^ id in
                    let beh =
                      if id="default" then "default behavior" else
-		       "Behavior `"^id^"'"
+                       "Behavior `"^id^"'"
                    in
                    reg_decl
                      ~out_mark:newid
@@ -3819,13 +3820,13 @@ let tr_fun f funpos spec body acc =
                      id_no_loc newid,
                      true, (* we do not require termination *)
                      mk_expr (Fun(
-		       params,
-		       assume_in_precondition b internal_requires,
-		       normal_body,
-		       internal_post,
-		       excep_posts_for_others None excep_behaviors)))
-		   :: acc
-		 else acc
+                       params,
+                       assume_in_precondition b internal_requires,
+                       normal_body,
+                       internal_post,
+                       excep_posts_for_others None excep_behaviors)))
+                   :: acc
+                 else acc
               ) normal_behaviors acc
           in
 
@@ -3835,8 +3836,8 @@ let tr_fun f funpos spec body acc =
               (fun exc bl acc ->
                  List.fold_right
                    (fun (id,b,internal_post,_) acc ->
-		      if Jc_options.verify_behavior id then
-			let except_body = wrap_body f spec id body in
+                      if Jc_options.verify_behavior id then
+                        let except_body = wrap_body f spec id body in
                         let newid = f.fun_name ^ "_exsures_" ^ id in
                         reg_decl
                           ~out_mark:newid
@@ -3847,17 +3848,17 @@ let tr_fun f funpos spec body acc =
                         Def(id_no_loc newid,
                             true, (* we do not require termination *)
                             mk_expr (Fun(
-			      params,
-			      assume_in_precondition b internal_requires,
-			      except_body,
-			      LTrue,
-			      (exception_name exc, internal_post) ::
+                              params,
+                              assume_in_precondition b internal_requires,
+                              except_body,
+                              LTrue,
+                              (exception_name exc, internal_post) ::
                                 excep_posts_for_others (Some exc)
-				excep_behaviors)))
+                                excep_behaviors)))
                         :: acc
-		      else acc
-		   ) bl acc
-	      ) user_excep_behaviors acc
+                      else acc
+                   ) bl acc
+              ) user_excep_behaviors acc
           in
           acc
 
@@ -3871,17 +3872,17 @@ let tr_specialized_fun n fname param_name_assoc acc =
 
   let rec modif_why_type = function
     | Prod_type(n,t1,t2) ->
-	if StringMap.mem n param_name_assoc then
-	  modif_why_type t2
-	else Prod_type(n,t1,modif_why_type t2)
+        if StringMap.mem n param_name_assoc then
+          modif_why_type t2
+        else Prod_type(n,t1,modif_why_type t2)
     | Base_type b -> Base_type b
     | Ref_type(t) -> Ref_type (modif_why_type t)
     | Annot_type (pre,t,reads,writes,post,signals) ->
-	Annot_type (modif_assertion pre, modif_why_type t,
-		    modif_namelist reads,
-		    modif_namelist writes,
-		    modif_assertion post,
-		    List.map (fun (x,a) -> (x,modif_assertion a)) signals)
+        Annot_type (modif_assertion pre, modif_why_type t,
+                    modif_namelist reads,
+                    modif_namelist writes,
+                    modif_assertion post,
+                    List.map (fun (x,a) -> (x,modif_assertion a)) signals)
 
   and modif_assertion a =
     match a with
@@ -3910,27 +3911,27 @@ let tr_specialized_fun n fname param_name_assoc acc =
       | LConst(_c) -> t
       | LApp(id,l) -> LApp(id,List.map modif_term l)
       | LVar(id) ->
-	  let id = StringMap.find_or_default id id param_name_assoc in
-	  LVar id
+          let id = StringMap.find_or_default id id param_name_assoc in
+          LVar id
       | LDeref(id) ->
-	  let id = StringMap.find_or_default id id param_name_assoc in
-	  LDeref id
+          let id = StringMap.find_or_default id id param_name_assoc in
+          LDeref id
       | LDerefAtLabel(id,l) ->
-	  let id = StringMap.find_or_default id id param_name_assoc in
-	  LDerefAtLabel(id,l)
+          let id = StringMap.find_or_default id id param_name_assoc in
+          LDerefAtLabel(id,l)
       | Tnamed(n,t) -> Tnamed(n,modif_term t)
       | TIf(t1,t2,t3) ->
-	  TIf(modif_term t1,modif_term t2,modif_term t3)
+          TIf(modif_term t1,modif_term t2,modif_term t3)
       | TLet(id,t1,t2) ->
-	  let id = StringMap.find_or_default id id param_name_assoc in
-	  TLet(id,modif_term t1,modif_term t2)
+          let id = StringMap.find_or_default id id param_name_assoc in
+          TLet(id,modif_term t1,modif_term t2)
 
   and modif_namelist names =
     fst (List.fold_right
-	   (fun id (acc,set) ->
-	      let id = StringMap.find_or_default id id param_name_assoc in
-	      id :: acc, StringSet.add id set
-	   ) names ([],StringSet.empty))
+           (fun id (acc,set) ->
+              let id = StringMap.find_or_default id id param_name_assoc in
+              id :: acc, StringSet.add id set
+           ) names ([],StringSet.empty))
   in
 
   let fun_type = Hashtbl.find function_prototypes fname in
@@ -3958,15 +3959,15 @@ let tr_exception ei acc =
 (*   Logic(false,logic_bitvector_of_native nty,["",lt],bitvector_type) *)
 (*   :: Logic(false,logic_native_of_bitvector nty,["",bitvector_type],lt) *)
 (*   :: Axiom((logic_native_of_bitvector nty)^"_of_"^(logic_bitvector_of_native nty), *)
-(* 	   LForall("x",lt, *)
-(* 		   LPred(equality_op_for_type (JCTnative nty), *)
+(*         LForall("x",lt, *)
+(*                 LPred(equality_op_for_type (JCTnative nty), *)
 (*                          [LApp(logic_native_of_bitvector nty, *)
 (*                                [LApp(logic_bitvector_of_native nty,  *)
 (*                                      [LVar "x"])]); *)
 (*                           LVar "x"]))) *)
 (*   :: Axiom((logic_bitvector_of_native nty)^"_of_"^(logic_native_of_bitvector nty), *)
-(* 	   LForall("x",bitvector_type, *)
-(* 		   LPred("eq", (\* TODO: equality for bitvectors ? *\) *)
+(*         LForall("x",bitvector_type, *)
+(*                 LPred("eq", (\* TODO: equality for bitvectors ? *\) *)
 (*                          [LApp(logic_bitvector_of_native nty, *)
 (*                                [LApp(logic_native_of_bitvector nty,  *)
 (*                                      [LVar "x"])]); *)
@@ -4018,21 +4019,21 @@ let tr_enum_type ri (* to_int of_int *) acc =
   let bv_conv =
     if !Region.some_bitwise_region then
       [Logic(false,id_no_loc (logic_bitvector_of_enum ri),
-	     ["",lt],bitvector_type) ;
+             ["",lt],bitvector_type) ;
        Logic(false,id_no_loc (logic_enum_of_bitvector ri),
-	     ["",bitvector_type],lt) ;
+             ["",bitvector_type],lt) ;
        Goal(KAxiom,id_no_loc ((logic_enum_of_bitvector ri)^"_of_"^
-				(logic_bitvector_of_enum ri)),
-	    LForall("x",lt, [],
-		    LPred(equality_op_for_type (JCTenum ri),
+                                (logic_bitvector_of_enum ri)),
+            LForall("x",lt, [],
+                    LPred(equality_op_for_type (JCTenum ri),
                          [LApp(logic_enum_of_bitvector ri,
                                [LApp(logic_bitvector_of_enum ri,
                                      [LVar "x"])]);
                           LVar "x"])));
        Goal(KAxiom,id_no_loc ((logic_bitvector_of_enum ri)^"_of_"^
-				(logic_enum_of_bitvector ri)),
-	   LForall("x",bitvector_type, [],
-		   LPred("eq", (* TODO: equality for bitvectors ? *)
+                                (logic_enum_of_bitvector ri)),
+           LForall("x",bitvector_type, [],
+                   LPred("eq", (* TODO: equality for bitvectors ? *)
                          [LApp(logic_bitvector_of_enum ri,
                                [LApp(logic_enum_of_bitvector ri,
                                      [LVar "x"])]);
@@ -4206,12 +4207,12 @@ let tr_root rt acc =
     if root_is_union rt then
       (* Declarations of field memories. *)
       let acc =
-	if root_is_plain_union rt && !Jc_options.separation_sem = SepRegions
+        if root_is_plain_union rt && !Jc_options.separation_sem = SepRegions
         then acc
         else
             let mem = bitvector_type in
             Param(false,id_no_loc (union_memory_name rt),
-		  Ref_type(Base_type mem)) :: acc
+                  Ref_type(Base_type mem)) :: acc
       in
       let in_param = false in
         (* Validity parameters *)
@@ -4240,23 +4241,23 @@ let tr_root rt acc =
   let conv =
     if !Region.some_bitwise_region then
     [Logic(false,id_no_loc (logic_bitvector_of_variant rt),
-	   ["",lt],bitvector_type);
+           ["",lt],bitvector_type);
      Logic(false,id_no_loc (logic_variant_of_bitvector rt),
-	   ["",bitvector_type],lt);
+           ["",bitvector_type],lt);
      Goal(KAxiom,id_no_loc ((logic_variant_of_bitvector rt)^"_of_"^
-			      (logic_bitvector_of_variant rt)),
-	   LForall("x",lt, [],
-		   LPred(equality_op_for_type (JCTpointer (pc,None,None)),
+                              (logic_bitvector_of_variant rt)),
+           LForall("x",lt, [],
+                   LPred(equality_op_for_type (JCTpointer (pc,None,None)),
                          [LApp(logic_variant_of_bitvector rt,
-			       [LApp(logic_bitvector_of_variant rt,
+                               [LApp(logic_bitvector_of_variant rt,
                                      [LVar "x"])]);
                           LVar "x"])));
      Goal(KAxiom,id_no_loc ((logic_bitvector_of_variant rt)^"_of_"^
-			      (logic_variant_of_bitvector rt)),
-	   LForall("x",bitvector_type, [],
-		   LPred("eq", (* TODO: equality for bitvectors ? *)
+                              (logic_variant_of_bitvector rt)),
+           LForall("x",bitvector_type, [],
+                   LPred("eq", (* TODO: equality for bitvectors ? *)
                          [LApp(logic_bitvector_of_variant rt,
-			       [LApp(logic_variant_of_bitvector rt,
+                               [LApp(logic_variant_of_bitvector rt,
                                        [LVar "x"])]);
                           LVar "x"])))
     ]

@@ -223,7 +223,7 @@ struct
   let compare t1 t2 = Memory.compare t1.mem t2.mem
 
   let from_memory for_one (((mc,_distr) as m),label) =
-    let (s,_,_) = tmemory_param ~label_in_name:true label m
+    let (s,_,_) = tr_li_model_mem_arg_3 ~label_in_name:true label m
       (*memory_name (mc,distr)*) in
     if for_one
     then

@@ -560,17 +560,6 @@ let tmemory_var ~label_in_name lab (mc,r) =
   in
   lvar ~constant ~label_in_name lab mem
 
-let tmemory_param ~label_in_name lab (mc,r) =
-  let mem = memory_name (mc,r) in
-  let constant = match !current_function with
-    | None -> true
-    | Some infunction -> not (mutable_memory infunction (mc,r))
-  in
-  let n = lvar_name (* ~constant *) ~label_in_name lab mem in
-  let v = lvar ~constant ~label_in_name lab mem in
-  let ty' = memory_type mc in
-  n, v, ty'
-
 let plain_alloc_table_var (ac,r) = mk_var (alloc_table_name (ac,r))
 let deref_alloc_table_var (ac,r) = mk_expr (Deref (alloc_table_name (ac,r)))
 
@@ -590,17 +579,6 @@ let talloc_table_var ~label_in_name lab (ac,r) =
   not constant,lvar ~constant ~label_in_name lab alloc
 
 
-let talloc_table_param ~label_in_name lab (ac,r) =
-  let alloc = alloc_table_name (ac,r) in
-  let constant = match !current_function with
-    | None -> true
-    | Some infunction -> not (mutable_alloc_table infunction (ac,r))
-  in
-  let n = lvar_name (* ~constant *) ~label_in_name lab alloc in
-  let v = lvar ~constant ~label_in_name lab alloc in
-  let ty' = alloc_table_type ac in
-  n, v, ty'
-
 let plain_tag_table_var (vi,r) = mk_var (tag_table_name (vi,r))
 let deref_tag_table_var (vi,r) = mk_expr (Deref (tag_table_name (vi,r)))
 
@@ -616,18 +594,6 @@ let ttag_table_var ~label_in_name lab (vi,r) =
     | Some infunction -> not (mutable_tag_table infunction (vi,r))
   in
   lvar ~constant ~label_in_name lab tag
-
-let ttag_table_param ~label_in_name lab (vi,r) =
-  let tag = tag_table_name (vi,r) in
-  let constant = match !current_function with
-    | None -> true
-    | Some infunction -> not (mutable_tag_table infunction (vi,r))
-  in
-  let n = lvar_name (* ~constant *) ~label_in_name lab tag in
-  let v = lvar ~constant ~label_in_name lab tag in
-  let ty' = tag_table_type vi in
-  n, v, ty'
-
 
 (******************************************************************************)
 (*                           locations and separation                         *)
@@ -2481,148 +2447,115 @@ let make_arguments
   in
   pre_mems, fname, locals, prolog, epilog, args
 
-let tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
-  MemoryMap.fold
-    (fun (mc,distr) labs acc ->
-       let locr = match region_assoc with
-	 | None -> distr
-	 | Some region_assoc ->
-	     match transpose_region ~region_assoc distr with
-	       | Some r -> r
-	       | None -> failwith "Unexpected internal region in logic"
-       in
+(*******************************************************************************)
+(* Logic arguments translation                                                 *)
+(*******************************************************************************)
+
+let tr_li_model_arg_3 is_mutable get_name get_type ~label_in_name lab (c, _ as cr) =
+  let name = get_name cr in
+  let constant =
+    match !current_function with
+    | None -> true
+    | Some f -> not (is_mutable f cr)
+  in
+  lvar_name ~label_in_name lab name,
+  lvar ~constant ~label_in_name lab name,
+  get_type c
+
+let tr_li_model_mem_arg_3, tr_li_model_at_arg_3, tr_li_model_tt_arg_3 =
+  let tr = tr_li_model_arg_3 in
+  tr mutable_memory      memory_name      memory_type,
+  tr mutable_alloc_table alloc_table_name alloc_table_type,
+  tr mutable_tag_table   tag_table_name   tag_table_type
+
+let tr_li_model_args_5 fold tr_arg_3 get_map ~label_in_name ?region_assoc ?label_assoc reads =
+  let tr_region =
+    Option_misc.(
+      map_default
+        (fun ra r -> transpose_region ra r)
+        some
+        region_assoc)
+  in
+  fold
+    (fun (c, param_r) labs acc ->
        LogicLabelSet.fold
-	 (fun lab acc ->
-	    let lab = transpose_label ~label_assoc lab in
-	    let param = tmemory_param ~label_in_name lab (mc,locr) in
-	    ((mc,locr), param) :: acc
-	 ) labs acc
-    ) reads.e_memories []
+         (fun lab acc ->
+            let arg_r, param =
+              match tr_region param_r with
+              | Some arg_r -> arg_r, tr_arg_3 ~label_in_name (transpose_label ~label_assoc lab) (c, arg_r)
+              | None ->
+                Jc_options.jc_error
+                  Loc.dummy_position
+                  "Unable to translate logic function application: dangling region. See warnings above for more info."
+            in
+            ((c, arg_r), param) :: acc)
+         labs
+         acc)
+    (get_map reads)
+    []
 
-let tmemory_params ~label_in_name ?region_assoc ?label_assoc reads =
-  List.map snd
-    (tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads)
+let tr_li_model_mem_args_5, tr_li_model_at_args_5, tr_li_model_tt_args_5 =
+  let tr = tr_li_model_args_5 in
+  tr MemoryMap.fold tr_li_model_mem_arg_3 (fun e -> e.e_memories),
+  tr AllocMap.fold  tr_li_model_at_arg_3  (fun e -> e.e_alloc_tables),
+  tr TagMap.fold    tr_li_model_tt_arg_3  (fun e -> e.e_tag_tables)
 
-let talloc_table_detailed_params
-    ~label_in_name ?region_assoc ?label_assoc reads =
-  AllocMap.fold
-    (fun (ac,distr) labs acc ->
-       let locr = match region_assoc with
-	 | None -> distr
-	 | Some region_assoc ->
-	     match transpose_region ~region_assoc distr with
-	       | Some r -> r
-	       | None -> failwith "Unexpected internal region in logic"
-       in
-       LogicLabelSet.fold
-	 (fun lab acc ->
-	    let lab = transpose_label ~label_assoc lab in
-	    let param = talloc_table_param ~label_in_name lab (ac,locr) in
-	    ((ac,locr), param) :: acc
-	 ) labs acc
-    ) reads.e_alloc_tables []
+let tr_li_model_mem_args_3, tr_li_model_at_args_3, tr_li_model_tt_args_3 =
+  let f tr ~label_in_name ?region_assoc ?label_assoc reads =
+    List.map snd @@ tr ~label_in_name ?region_assoc ?label_assoc reads
+  in
+  f tr_li_model_mem_args_5,
+  f tr_li_model_at_args_5,
+  f tr_li_model_tt_args_5
 
-let talloc_table_params ~label_in_name ?region_assoc ?label_assoc reads =
-  List.map snd
-    (talloc_table_detailed_params
-       ~label_in_name ?region_assoc ?label_assoc reads)
-
-let ttag_table_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
-  TagMap.fold
-    (fun (vi,distr) labs acc ->
-       let locr = match region_assoc with
-	 | None -> distr
-	 | Some region_assoc ->
-	     match transpose_region ~region_assoc distr with
-	       | Some r -> r
-	       | None -> failwith "Unexpected internal region in logic"
-       in
-       LogicLabelSet.fold
-	 (fun lab acc ->
-	    let lab = transpose_label ~label_assoc lab in
-	    let param = ttag_table_param ~label_in_name lab (vi,locr) in
-	    ((vi,locr), param) :: acc
-	 ) labs acc
-    ) reads.e_tag_tables []
-
-let ttag_table_params ~label_in_name ?region_assoc ?label_assoc reads =
-  List.map snd
-    (ttag_table_detailed_params
-       ~label_in_name ?region_assoc ?label_assoc reads)
-
-let tglob_detailed_params ~label_in_name ?region_assoc:_ ?label_assoc reads =
+let tr_li_model_glob_args_4 ~label_in_name ?region_assoc:_ ?label_assoc reads =
   VarMap.fold
     (fun v labs acc ->
        LogicLabelSet.fold
-	 (fun lab acc ->
-	    let lab = transpose_label ~label_assoc lab in
-	    let param = tparam ~label_in_name lab v in
-	    (v, param) :: acc
-	 ) labs acc
-    ) reads.e_globals []
+         (fun lab acc ->
+            let param = tparam ~label_in_name (transpose_label ~label_assoc lab) v in
+            (v, param) :: acc)
+         labs
+         acc)
+    reads.e_globals
+    []
 
-let tglob_params ~label_in_name ?region_assoc ?label_assoc reads =
-  List.map snd
-    (tglob_detailed_params ~label_in_name ?region_assoc ?label_assoc reads)
+let tr_li_model_glob_args_3 ~label_in_name ?region_assoc ?label_assoc reads =
+  List.map snd (tr_li_model_glob_args_4 ~label_in_name ?region_assoc ?label_assoc reads)
 
-let tmodel_parameters ~label_in_name ?region_assoc ?label_assoc reads =
-  let allocs =
-    talloc_table_params ~label_in_name ?region_assoc ?label_assoc reads
-  in
-  let tags =
-    ttag_table_params ~label_in_name ?region_assoc ?label_assoc reads
-  in
-  let mems =
-    tmemory_params ~label_in_name ?region_assoc ?label_assoc reads
-  in
-  let globs =
-    tglob_params ~label_in_name ?region_assoc ?label_assoc reads
-  in
-  allocs @ tags @ mems @ globs
+let tr_li_model_args_3 ~label_in_name ?region_assoc ?label_assoc reads =
+  let tr f = f ~label_in_name ?region_assoc ?label_assoc reads in
+  tr tr_li_model_at_args_3 @
+  tr tr_li_model_tt_args_3 @
+  tr tr_li_model_mem_args_3 @
+  tr tr_li_model_glob_args_3
 
-let make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args =
-  let model_params =
-    tmodel_parameters ~label_in_name ~region_assoc ~label_assoc
-      f.li_effects
-  in
-  let model_args = List.map (fun (_n,v,_ty') -> v) model_params in
-  args @ model_args
+let tr_li_args ~label_in_name ~region_assoc ~label_assoc f args =
+  args @
+  List.map (fun (_, term, _) -> term) @@
+    tr_li_model_args_3 ~label_in_name ~region_assoc ~label_assoc f.li_effects
 
-let make_logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
+let tr_logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
   if Jc_options.debug then printf "logic call to %s@." f.li_name;
-  let args =
-    make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args
-  in
-  LApp(f.li_final_name, args)
+  let args = tr_li_args ~label_in_name ~region_assoc ~label_assoc f args in
+  LApp (f.li_final_name, args)
 
-let make_logic_pred_call ~label_in_name ~region_assoc ~label_assoc f args =
+let tr_logic_pred_call ~label_in_name ~region_assoc ~label_assoc f args =
   if Jc_options.debug then printf "logic pred call to %s@." f.li_name;
-  let args =
-    make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args
-  in
-  LPred(f.li_final_name, args)
+  let args = tr_li_args ~label_in_name ~region_assoc ~label_assoc f args in
+  LPred (f.li_final_name, args)
 
-
-(* *)
-let logic_info_reads acc li =
-  let acc =
-    MemoryMap.fold
-      (fun (mc,r) _ acc ->
-	 StringSet.add (memory_name(mc,r)) acc)
-      li.li_effects.e_memories
+let collect_li_reads acc li =
+  let add fold get_name get_map acc =
+    fold
+      (fun cr _ -> StringSet.add @@ get_name cr)
+      (get_map li.li_effects)
       acc
   in
-  let acc =
-    AllocMap.fold
-      (fun (ac,r) _labs acc ->
-	 StringSet.add (alloc_table_name (ac, r)) acc)
-      li.li_effects.e_alloc_tables
-      acc
-  in
-  TagMap.fold
-    (fun v _ acc -> StringSet.add (tag_table_name v) acc)
-    li.li_effects.e_tag_tables
-    acc
+     acc
+  |> add MemoryMap.fold memory_name      (fun e -> e.e_memories)
+  |> add AllocMap.fold  alloc_table_name (fun e -> e.e_alloc_tables)
+  |> add TagMap.fold    tag_table_name   (fun e -> e.e_tag_tables)
 
 
 (* fold all effects into a list *)
@@ -2630,16 +2563,16 @@ let all_effects ef =
   let res =
     MemoryMap.fold
       (fun (mc,r) _labels acc ->
-	let mem = memory_name(mc,r) in
-	if Region.polymorphic r then
-(*	  if RegionList.mem r f.fun_param_regions then
-	    if FieldRegionMap.mem (fi,r)
-	      f.fun_effects.fe_writes.e_memories
-	    then mem::acc
-	    else acc
-	  else acc*)
-	  assert false (* TODO *)
-	else mem::acc)
+        let mem = memory_name(mc,r) in
+        if Region.polymorphic r then
+(*        if RegionList.mem r f.fun_param_regions then
+            if FieldRegionMap.mem (fi,r)
+              f.fun_effects.fe_writes.e_memories
+            then mem::acc
+            else acc
+          else acc*)
+          assert false (* TODO *)
+        else mem::acc)
       ef.e_memories
       []
   in
@@ -2652,16 +2585,16 @@ let all_effects ef =
   let res =
     AllocMap.fold
       (fun (a,r) _labs acc ->
-	let alloc = alloc_table_name(a,r) in
-	if Region.polymorphic r then
-(*	  if RegionList.mem r f.fun_param_regions then
-	    if AllocSet.mem (a,r)
-	      f.fun_effects.fe_writes.e_alloc_tables
-	    then alloc::acc
-	    else acc
-	  else acc*)
-	  assert false (* TODO *)
-	else alloc::acc)
+        let alloc = alloc_table_name(a,r) in
+        if Region.polymorphic r then
+(*        if RegionList.mem r f.fun_param_regions then
+            if AllocSet.mem (a,r)
+              f.fun_effects.fe_writes.e_alloc_tables
+            then alloc::acc
+            else acc
+          else acc*)
+          assert false (* TODO *)
+        else alloc::acc)
       ef.e_alloc_tables
       res
   in

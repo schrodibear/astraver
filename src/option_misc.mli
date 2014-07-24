@@ -35,3 +35,4 @@ val iter : ('a -> unit) -> 'a option -> unit
 val fold : ('a -> 'b -> 'b) -> 'a option -> 'b -> 'b
 val fold_left : ('b -> 'a -> 'b) -> 'b -> 'a option -> 'b
 val has_some : 'a option -> bool
+val some : 'a -> 'a option

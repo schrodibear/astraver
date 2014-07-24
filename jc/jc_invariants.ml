@@ -83,13 +83,13 @@ let invariant_for_struct this st =
   in
   let inv =
     make_and_list
-      (List.map 
-	 (fun (li, _) -> 
-	    make_logic_pred_call ~label_in_name:false ~region_assoc:[] ~label_assoc:[] li [this]) invs)
+      (List.map
+	 (fun (li, _) ->
+	    tr_logic_pred_call ~label_in_name:false ~region_assoc:[] ~label_assoc:[] li [this]) invs)
   in
   let reads =
     List.fold_left
-      (fun acc (li, _) -> logic_info_reads acc li)
+      (fun acc (li, _) -> collect_li_reads acc li)
       StringSet.empty
       invs
   in
@@ -268,7 +268,7 @@ let rec assertion this p =
     | JCAtrue | JCAfalse -> ()
     | JCAif (_, _, _) -> assert false (* TODO *)
     | JCAinstanceof(t,_,_)
-    | JCAfresh t 
+    | JCAfresh t
     | JCAbool_term t -> term this t
     | JCAold p -> assertion this p
     | JCAat(p,_) -> assertion this p
@@ -300,7 +300,7 @@ let rec assertion this p =
 
 let check invs =
   List.iter
-    (fun (li,p) -> 
+    (fun (li,p) ->
        Jc_options.lprintf
 	 "    Checking invariant: %s@." li.li_name;
        match li.li_parameters with
@@ -312,8 +312,8 @@ let check invs =
 (* Tools for structure definitions *)
 (***********************************)
 
-let rec term_memories aux t = 
-  Jc_iterators.fold_term 
+let rec term_memories aux t =
+  Jc_iterators.fold_term
     (fun aux t -> match t#node with
     | JCTderef(_t, _lab, fi) ->
 	let m = fi.fi_final_name in
@@ -343,7 +343,7 @@ let rec assertion_memories aux a = match a#node with
   | JCAbool_term t -> term_memories aux t
   | JCAif(t, a1, a2) -> assertion_memories (assertion_memories (term_memories aux t) a1) a2
   | JCAmutable(t, _, _) -> term_memories aux t
-  | JCAeqtype(t1, t2, _) | JCAsubtype(t1, t2, _) -> 
+  | JCAeqtype(t1, t2, _) | JCAsubtype(t1, t2, _) ->
       tag_memories (tag_memories aux t2) t1
   | JCAlet(_vi,t,p) ->
       term_memories (assertion_memories aux p) t
@@ -361,7 +361,7 @@ let rec all_structures st acc =
 	   | JCTpointer(JCtag(st, _), _, _) -> all_structures st acc
 	   | _ -> acc)
       (StringSet.add st.si_name acc)
-      st.si_fields   
+      st.si_fields
 
 (* Returns all memories used by the structure invariants. *)
 let struct_inv_memories acc st =
@@ -376,14 +376,14 @@ let struct_inv_memories acc st =
 let invariant_params acc li =
   let acc =
     MemoryMap.fold
-      (fun (mc,r) _labels acc -> 
+      (fun (mc,r) _labels acc ->
 	 (memory_name(mc,r), memory_type mc)::acc)
       li.li_effects.e_memories
       acc
   in
   let acc =
     AllocMap.fold
-      (fun (ac,r) _labs acc -> 
+      (fun (ac,r) _labs acc ->
 	 (alloc_table_name (ac, r),
 	  alloc_table_type (ac))::acc)
       li.li_effects.e_alloc_tables
@@ -391,7 +391,7 @@ let invariant_params acc li =
   in
   let acc =
     TagMap.fold
-      (fun (v,r) _labels acc -> 
+      (fun (v,r) _labels acc ->
 	 let t = { logic_type_args = [root_model_type v];
 		   logic_type_name = "tag_table" }
 	 in
@@ -439,7 +439,7 @@ let hierarchy_structures h =
        if root_name st = root_name h then st::acc else acc)
     Jc_typing.structs_table
     []
-  
+
 let hierarchies () =
   let h =
     StringHashtblIter.fold
@@ -598,7 +598,7 @@ let assert_mutable e fi =
 
 (*let invariant_axiom st acc (li, a) =
   let params = invariant_params [] li in
-  
+
   (* this *)
   let this = "this" in
   let this_ty =
@@ -674,7 +674,7 @@ let field_invariants fi =
 (* (the invariant li must be declared in st) *)
 let not_mutable_implies_invariant this st (li, _) =
   let params = invariant_params [] li in
-  
+
   (* this.mutable <: st *)
   let mutable_name = mutable_name (JCtag(st, [])) in
   let mutable_io = make_subtag
@@ -683,8 +683,8 @@ let not_mutable_implies_invariant this st (li, _) =
   in
 
   (* invariant *)
-  let invariant = 
-    make_logic_pred_call ~label_in_name:false ~region_assoc:[] ~label_assoc:[] li [LVar this]
+  let invariant =
+    tr_logic_pred_call ~label_in_name:false ~region_assoc:[] ~label_assoc:[] li [LVar this]
   in
 
   (* implies *)
@@ -1136,7 +1136,7 @@ let make_components_postcond this st reads writes committed =
 	    this pc fields committed)
 	 comps)
   in
-  postcond, reads, writes  
+  postcond, reads, writes
 
 (* all components must have mutable = committed = false (for pack) *)
 let make_components_precond this st reads =
@@ -1409,18 +1409,18 @@ let tr_valid_inv st acc =
   Axiom(valid_inv_axiom_name st, sem)::acc*)
 
 let rec invariant_for_struct ?pos this si =
-  let _, invs = 
-    StringHashtblIter.find Jc_typing.structs_table si.si_name 
+  let _, invs =
+    StringHashtblIter.find Jc_typing.structs_table si.si_name
   in
   let invs = Assertion.mkand ?pos
-    ~conjuncts:(List.map 
-		  (fun (li, _) -> 
+    ~conjuncts:(List.map
+		  (fun (li, _) ->
 		     let a = { app_fun = li;
 			       app_args = [this];
 			       app_label_assoc = [];
 			       app_region_assoc = [] }
 		     in
-		       new assertion ?pos (JCAapp a)) invs) 
+		       new assertion ?pos (JCAapp a)) invs)
     ()
   in
     match si.si_parent with
@@ -1435,19 +1435,19 @@ let rec invariant_for_struct ?pos this si =
 	    Assertion.mkand ?pos
 	      ~conjuncts:[invs; (invariant_for_struct ?pos this si)]
 	      ()
-	      
+
 let code_function (fi, pos, fs, _sl) vil =
   begin
     match !Jc_common_options.inv_sem with
       | InvArguments ->  (* apply arguments invariant policy *)
 	  (* Calculate global invariants. *)
-	  let _vitl = 
-	    List.map 
-	      (fun vi -> Term.mkvar ~var:vi ()) vil 
+	  let _vitl =
+	    List.map
+	      (fun vi -> Term.mkvar ~var:vi ()) vil
 	  in
 	  let global_invariants =
 	    IntHashtblIter.fold
-	      (fun _ (li, _) acc -> 
+	      (fun _ (li, _) acc ->
 		 (* li.li_parameters <- vil; *)
 		 let a = { app_fun = li;
 			   app_args = (* vitl *)[];
@@ -1458,7 +1458,7 @@ let code_function (fi, pos, fs, _sl) vil =
 		    ~pos (JCAapp a)) :: acc)
 	      Jc_typing.global_invariants_table []
 	  in
-	  let global_invariants = 
+	  let global_invariants =
 	    Assertion.mkand ~pos ~conjuncts:global_invariants ()
 	  in
 	  (* Calculate invariants for each parameter. *)
@@ -1467,7 +1467,7 @@ let code_function (fi, pos, fs, _sl) vil =
 	      (fun (acc1,acc2) (valid,vi) ->
 		 match vi.vi_type with
 		   | JCTpointer (JCtag (st, []), _, _) ->
-		       let inv = 
+		       let inv =
 			 invariant_for_struct ~pos
 			   (Term.mkvar ~var:vi ()) st
 		       in
@@ -1482,8 +1482,8 @@ let code_function (fi, pos, fs, _sl) vil =
 	      fi.fun_parameters
 	  in
 	  (* add invariants to the function precondition *)
-	  fs.fs_requires <- 
-	    Assertion.mkand ~pos 
+	  fs.fs_requires <-
+	    Assertion.mkand ~pos
 	    ~conjuncts:[fs.fs_requires; pre_invariants] ();
 	  (* add invariants to the function postcondition *)
 	  if is_purely_exceptional_fun fs then () else
@@ -1492,26 +1492,26 @@ let code_function (fi, pos, fs, _sl) vil =
 	    List.iter
 	      (fun (_, s, b) ->
 		 if s = "safety" then safety_exists := true;
-		 b.b_ensures <- 
+		 b.b_ensures <-
 		   Assertion.mkand ~pos ~conjuncts:[b.b_ensures; post] ())
 	      fs.fs_behavior;
-	    (* add the 'safety' spec if it does not exist 
+	    (* add the 'safety' spec if it does not exist
 	       (it could exist e.g. from Krakatoa) *)
 	    if not !safety_exists then
 	      if Jc_options.verify_invariants_only then
 		let invariants_b = { default_behavior with b_ensures = post } in
-		fs.fs_behavior <- 
+		fs.fs_behavior <-
 		  (Loc.dummy_position, "invariants", invariants_b) :: fs.fs_behavior;
 	      else
 		let safety_b = { default_behavior with b_ensures = post } in
-		fs.fs_behavior <- 
+		fs.fs_behavior <-
 		  (Loc.dummy_position, "safety", safety_b) :: fs.fs_behavior;
       | _ -> ()
   end;
 
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "unset LANG; make -C .. bin/jessie.byte"
-End: 
+End:
 *)

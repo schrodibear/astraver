@@ -36,7 +36,7 @@
 val find_struct : string -> Jc_env.struct_info
 
 
-type forall_or_let = 
+type forall_or_let =
   | JCforall of string * Output.logic_type
   | JClet of string * Output.term
 
@@ -134,17 +134,18 @@ val tr_var_type : Jc_env.var_info -> Output.why_type
 
 val raw_pset_type : Output.logic_type -> Output.logic_type
 
-val raw_memory_type : 
+val raw_memory_type :
   Output.logic_type -> Output.logic_type -> Output.logic_type
 
 val memory_type : Jc_env.mem_class -> Output.logic_type
 
 val is_memory_type : Output.logic_type -> bool
 
-val tmemory_param : label_in_name:bool ->
-           Jc_env.label ->
-           Jc_envset.MemClass.t * Jc_region.RegionTable.key ->
-           string * Output.term * Output.logic_type
+val tr_li_model_mem_arg_3 :
+  label_in_name:bool ->
+  Jc_env.label ->
+  Jc_envset.MemClass.t * Jc_region.RegionTable.key ->
+  string * Output.term * Output.logic_type
 
 val deconstruct_memory_type_args : Output.logic_type -> Output.logic_type * Output.logic_type
 
@@ -172,8 +173,8 @@ val raw_tag_table_type: Output.logic_type -> Output.logic_type
 (** {1 others} *)
 
 (* horror... *)
-val ref_term : 
-  (?subst:(Output.term Jc_envset.VarMap.t) -> 
+val ref_term :
+  (?subst:(Output.term Jc_envset.VarMap.t) ->
     type_safe:bool ->
     global_assertion:bool ->
     relocate:bool ->
@@ -215,26 +216,18 @@ val tparam : label_in_name:bool ->
            Jc_env.label ->
            Jc_env.var_info -> string * Output.term * Output.logic_type
 
-val tmodel_parameters : label_in_name:bool ->
-           ?region_assoc:(Jc_region.RegionTable.key *
-                          Jc_region.RegionTable.key)
-                         list ->
-           ?label_assoc:(Jc_envset.LogicLabelSet.elt *
-                         Jc_envset.LogicLabelSet.elt)
-                        list ->
-           Jc_fenv.effect -> (string * Output.term * Output.logic_type) list
+val tr_li_model_args_3 :
+  label_in_name:bool ->
+  ?region_assoc:(Jc_region.RegionTable.key * Jc_region.RegionTable.key) list ->
+  ?label_assoc:(Jc_envset.LogicLabelSet.elt * Jc_envset.LogicLabelSet.elt) list ->
+  Jc_fenv.effect -> (string * Output.term * Output.logic_type) list
 
-val tmemory_detailed_params : label_in_name:bool ->
-           ?region_assoc:(Jc_region.RegionTable.key *
-                          Jc_region.RegionTable.key)
-                         list ->
-           ?label_assoc:(Jc_envset.LogicLabelSet.elt *
-                         Jc_envset.LogicLabelSet.elt)
-                        list ->
-           Jc_fenv.effect ->
-           ((Jc_envset.MemClass.t * Jc_region.InternalRegion.t) *
-            (string * Output.term * Output.logic_type))
-           list
+val tr_li_model_mem_args_5 :
+  label_in_name:bool ->
+  ?region_assoc:(Jc_region.RegionTable.key * Jc_region.RegionTable.key) list ->
+  ?label_assoc:(Jc_envset.LogicLabelSet.elt * Jc_envset.LogicLabelSet.elt) list ->
+  Jc_fenv.effect ->
+  ((Jc_envset.MemClass.t * Jc_region.InternalRegion.t) * (string * Output.term * Output.logic_type)) list
 
 val tag_table_var : Jc_envset.VariantOrd.t * Jc_region.RegionTable.key -> Output.expr
 
@@ -251,7 +244,7 @@ val ttag_table_var : label_in_name:bool ->
 
 val talloc_table_var : label_in_name:bool ->
   Jc_env.label ->
-  Jc_envset.AllocClass.t * Jc_region.RegionTable.key -> 
+  Jc_envset.AllocClass.t * Jc_region.RegionTable.key ->
   bool * Output.term
 
 val tmemory_var : label_in_name:bool ->
@@ -299,18 +292,15 @@ val define_locals : ?reads:(string * Output.logic_type) list ->
 
 
 
-val talloc_table_params : label_in_name:bool ->
-           ?region_assoc:(Jc_region.RegionTable.key *
-                          Jc_region.RegionTable.key)
-                         list ->
-           ?label_assoc:(Jc_envset.LogicLabelSet.elt *
-                         Jc_envset.LogicLabelSet.elt)
-                        list ->
-           Jc_fenv.effect -> (string * Output.term * Output.logic_type) list
+val tr_li_model_at_args_3 :
+  label_in_name:bool ->
+  ?region_assoc:(Jc_region.RegionTable.key * Jc_region.RegionTable.key) list ->
+  ?label_assoc:(Jc_envset.LogicLabelSet.elt * Jc_envset.LogicLabelSet.elt) list ->
+  Jc_fenv.effect -> (string * Output.term * Output.logic_type) list
 
 val root_model_type : Jc_env.root_info -> Output.logic_type
 
-val pointer_type : 
+val pointer_type :
   Jc_env.alloc_class -> Jc_env.pointer_class -> Output.logic_type
 
 val raw_pointer_type : Output.logic_type -> Output.logic_type
@@ -340,24 +330,19 @@ val make_select_committed : Jc_env.pointer_class -> Output.term -> Output.term
 
 val make_subtag_bool : Output.term -> Output.term -> Output.term
 
-val make_logic_pred_call : 
+val tr_logic_pred_call :
   label_in_name:bool ->
-  region_assoc:(Jc_region.RegionTable.key *
-                  Jc_region.RegionTable.key) list ->
-  label_assoc:(Jc_envset.LogicLabelSet.elt *
-                 Jc_envset.LogicLabelSet.elt) list ->
-  Jc_fenv.logic_info -> 
+  region_assoc:(Jc_region.RegionTable.key * Jc_region.RegionTable.key) list ->
+  label_assoc:(Jc_envset.LogicLabelSet.elt * Jc_envset.LogicLabelSet.elt) list ->
+  Jc_fenv.logic_info ->
   Output.term list -> Output.assertion
 (** call logic predicate, handling regions and labels *)
 
-val make_logic_fun_call : label_in_name:bool ->
-           region_assoc:(Jc_region.RegionTable.key *
-                         Jc_region.RegionTable.key)
-                        list ->
-           label_assoc:(Jc_envset.LogicLabelSet.elt *
-                        Jc_envset.LogicLabelSet.elt)
-                       list ->
-           Jc_fenv.logic_info -> Output.term list -> Output.term
+val tr_logic_fun_call :
+  label_in_name:bool ->
+  region_assoc:(Jc_region.RegionTable.key * Jc_region.RegionTable.key) list ->
+  label_assoc:(Jc_envset.LogicLabelSet.elt * Jc_envset.LogicLabelSet.elt) list ->
+  Jc_fenv.logic_info -> Output.term list -> Output.term
 
 val make_int_of_tag : Jc_env.struct_info -> Output.term
 
@@ -371,8 +356,7 @@ val make_instanceof_bool : Output.term -> Jc_env.struct_info -> Output.term
 
 (** {2 helpers for effects information} *)
 
-val logic_info_reads : Jc_envset.StringSet.t ->
-           Jc_fenv.logic_info -> Jc_envset.StringSet.t
+val collect_li_reads : Jc_envset.StringSet.t -> Jc_fenv.logic_info -> Jc_envset.StringSet.t
 (** effects of a predicate of logic function *)
 
 val all_effects : Jc_fenv.effect -> string list
@@ -386,13 +370,13 @@ val local_read_effects : callee_reads:Jc_fenv.effect ->
 val local_write_effects : callee_reads:Jc_fenv.effect ->
            callee_writes:Jc_fenv.effect -> string list
 
-val write_effects : 
+val write_effects :
   callee_reads:Jc_fenv.effect ->
   callee_writes:Jc_fenv.effect ->
   region_list:Jc_region.RegionTable.key list ->
   params:Jc_env.var_info list -> string list
-  
-val read_effects : 
+
+val read_effects :
   callee_reads:Jc_fenv.effect ->
   callee_writes:Jc_fenv.effect ->
   region_list:Jc_region.RegionTable.key list ->
@@ -426,5 +410,5 @@ val read_locals : region_list:Jc_region.RegionTable.key list ->
 
 (** {1 Misc} *)
 
-val specialized_functions: 
+val specialized_functions:
   (string * string Jc_envset.StringMap.t) Jc_pervasives.StringHashtblIter.t
