@@ -37,6 +37,8 @@ open Jc_fenv
 
 val (%) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
 
+val (%%) : ('a -> 'b -> 'c) -> ('d -> 'a) -> ('e -> 'b) -> 'd -> 'e -> 'c
+
 val (%>) : ('a -> 'b) -> ('b -> 'c) -> 'a -> 'c
 
 val cons : 'a -> 'a list -> 'a list

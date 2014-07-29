@@ -45,6 +45,8 @@ open Num
 
 let (%) f g x = f (g x)
 
+let (%%) f g h x y = f (g x) (h y)
+
 let (%>) f g x = g (f x)
 
 let cons e l = e :: l
