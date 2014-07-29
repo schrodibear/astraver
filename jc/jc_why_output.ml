@@ -43,7 +43,7 @@ let fprintf_constant fmttr e =
   | Prim_real f -> pr "%s" f
   | Prim_bool b -> pr "%b" b
 
-let fprintf_kind fmttr k =
+let fprintf_vc_kind fmttr k =
   fprintf fmttr "%s"
     (match k with
      | JCVCvar_decr -> "VarDecr"

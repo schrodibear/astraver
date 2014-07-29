@@ -33,7 +33,7 @@ open Format
 
 open Jc_why_output_ast
 
-val fprintf_kind : formatter -> kind -> unit
+val fprintf_vc_kind : formatter -> vc_kind -> unit
 val fprintf_logic_type : formatter -> logic_type -> unit
 val fprintf_term : formatter -> term -> unit
 val fprintf_assertion : formatter -> assertion -> unit

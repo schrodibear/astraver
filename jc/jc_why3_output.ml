@@ -261,7 +261,7 @@ let fprintf_vc_kind fmttr k =
      | JCVCfp_overflow -> "Floating-point overflow")
 
 let fprintf_vc_pos fmttr ({ Lexing.pos_fname = f;  pos_lnum = l; pos_bol = b; pos_cnum = c },
-                          { Lexing.pos_fname = f'; pos_lnum = l'; pos_cnum = c' }) =
+                          { Lexing.pos_fname = f'; pos_cnum = c' }) =
   assert (f = f');
   assert (c' >= c);
   let c = c - b and c' = c' - b in
@@ -455,7 +455,7 @@ let rec fprintf_expr_node in_app fmttr =
     pr "@[<hov 1>(%a = %a)@]" fprintf_expr e1 fprintf_expr e2
   | App({ expr_node = App ({ expr_node = Var id }, e1, _)}, e2, _) when is_why3_poly_neq id ->
     pr "@[<hov 1>(%a <> %a)@]" fprintf_expr e1 fprintf_expr e2
-  | App (e1, e2, ty) when in_app ->
+  | App (e1, e2, _) when in_app ->
     pr "@[<hov 1>%a %a@]" (fprintf_expr_gen true) e1 fprintf_expr e2
   | App (e1, e2, ty)  ->
     pr "@[<hov 1>(%a %a %a)@]"
@@ -520,7 +520,7 @@ and fprintf_expr_gen in_app fmttr e =
   in
   aux e.expr_labels
 
-and fprintf_expr  = fprintf_expr_gen false
+and fprintf_expr e = fprintf_expr_gen false e
 
 and fprintf_expr_list' ~next fmttr =
   function
@@ -529,7 +529,7 @@ and fprintf_expr_list' ~next fmttr =
     fprintf fmttr (if next then ";@ %a" else "%a") fprintf_expr e;
     fprintf_expr_list' ~next:true fmttr l
 
-and fprintf_expr_list = fprintf_expr_list' ~next:false
+and fprintf_expr_list fmttr l = fprintf_expr_list' ~next:false fmttr l
 
 
 let fprint_logic_arg fmttr (id, t) = fprintf fmttr "(%s : %a)" (why3_ident id) fprintf_logic_type t
@@ -546,7 +546,7 @@ let fprintf_why_id fmttr { why_name; why_expl; why_pos } =
   if why_expl <> "" then pr "@ \"expl:%s\"" why_expl;
   if why_pos <> Loc.dummy_position then pr "@ %a" fprintf_vc_pos why_pos
 
-let fprintf_why_decl fmttr d =
+let fprintf_why_decl fmttr =
   let pr fmt = fprintf fmttr fmt in
   let ext b = if b then "external " else "" in
   let pr_id = fprintf_why_id in
