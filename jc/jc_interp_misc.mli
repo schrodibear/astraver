@@ -29,39 +29,17 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Jc_env
+open Jc_envset
+open Jc_fenv
 
+open Jc_region
+
+open Jc_why_output_ast
 
 (** {1 Preliminaries} *)
 
-val find_struct : string -> Jc_env.struct_info
-
-
-type forall_or_let =
-  | JCforall of string * Output.logic_type
-  | JClet of string * Output.term
-
-val logic_int_of_enum : Jc_env.enum_info -> string
-val logic_enum_of_int : Jc_env.enum_info -> string
-val safe_fun_enum_of_int : Jc_env.enum_info -> string
-val fun_enum_of_int : Jc_env.enum_info -> string
-
-val logic_enum_of_bitvector : Jc_env.enum_info -> string
-val logic_bitvector_of_enum : Jc_env.enum_info -> string
-
-val mod_of_enum : Jc_env.enum_info -> string
-
-val fun_any_enum : Jc_env.enum_info -> string
-
-val logic_real_of_bitvector : string
-val logic_integer_of_bitvector : string
-val logic_bitvector_of_integer : string
-
-val logic_bitvector_of_variant : Jc_env.root_info -> string
-val logic_variant_of_bitvector : Jc_env.root_info -> string
-
-
-
-
+val find_struct : string -> struct_info
 
 (** {1 Environment} *)
 
@@ -79,336 +57,290 @@ val set_current_behavior : string -> unit
 
 val reset_current_behavior : unit -> unit
 
-val get_current_spec : unit -> Jc_fenv.fun_spec
+val get_current_spec : unit -> fun_spec
 
-val set_current_spec : Jc_fenv.fun_spec -> unit
+val set_current_spec : fun_spec -> unit
 
 val reset_current_spec : unit -> unit
 
-(*
-val get_current_fun : unit -> Jc_fenv.fun_info
+val fresh_loop_label : unit -> label_info
 
-val set_current_fun : Jc_fenv.fun_info -> unit
-
-val reset_current_fun : unit -> unit
-  *)
-val fresh_loop_label : unit -> Jc_env.label_info
-
-val fresh_reinterpret_label : unit -> Jc_env.label_info
-
+val fresh_reinterpret_label : unit -> label_info
 
 (** {1 helpers for Output module} *)
 
-val make_subtag : Output.term -> Output.term -> Output.assertion
+val make_subtag : term -> term -> assertion
 
-val make_eq : Output.term -> Output.term -> Output.assertion
+val make_eq : term -> term -> assertion
 (** builds eq(t1,t2) *)
 
-val make_select: Output.term -> Output.term -> Output.term
+val make_select: term -> term -> term
 (** builds select(t1,t2) *)
 
-val make_or_term : Output.term -> Output.term -> Output.term
+val make_or_term : term -> term -> term
 
-val make_and_term : Output.term -> Output.term -> Output.term
+val make_and_term : term -> term -> term
 
-val make_not_term : Output.term -> Output.term
+val make_not_term : term -> term
 
-val make_eq_term : Jc_env.jc_type -> Output.term -> Output.term -> Output.term
+val make_eq_term : jc_type -> term -> term -> term
 
-val make_eq_pred : Jc_env.jc_type -> Output.term -> Output.term -> Output.assertion
+val make_eq_pred : jc_type -> term -> term -> assertion
 
-
-val make_if_term : Output.term -> Output.term -> Output.term -> Output.term
+val make_if_term : term -> term -> term -> term
 
 (** {1 Types} *)
 
-val why_unit_type : Output.logic_type
-val why_integer_type : Output.logic_type
+val why_unit_type : logic_type
 
-val tr_base_type : ?region:Jc_region.RegionTable.key ->
-           Jc_env.jc_type -> Output.logic_type
+val why_integer_type : logic_type
 
-val tr_var_base_type : Jc_env.var_info -> Output.logic_type
+val tr_base_type : ?region:RegionTable.key -> jc_type -> logic_type
 
-val tr_var_type : Jc_env.var_info -> Output.why_type
+val tr_var_base_type : var_info -> logic_type
 
-val raw_pset_type : Output.logic_type -> Output.logic_type
+val tr_var_type : var_info -> why_type
 
-val raw_memory_type :
-  Output.logic_type -> Output.logic_type -> Output.logic_type
+val raw_pset_type : logic_type -> logic_type
 
-val memory_type : Jc_env.mem_class -> Output.logic_type
+val raw_memory_type : logic_type -> logic_type -> logic_type
 
-val is_memory_type : Output.logic_type -> bool
+val memory_type : mem_class -> logic_type
+
+val is_memory_type : logic_type -> bool
 
 val tr_li_model_mem_arg_3 :
-  label_in_name:bool ->
-  Jc_env.label ->
-  Jc_envset.MemClass.t * Jc_region.RegionTable.key ->
-  string * Output.term * Output.logic_type
+  label_in_name:bool -> label -> MemClass.t * RegionTable.key -> string * term * logic_type
 
-val deconstruct_memory_type_args : Output.logic_type -> Output.logic_type * Output.logic_type
+val deconstruct_memory_type_args : logic_type -> logic_type * logic_type
 
-val pointer_class_model_type : Jc_env.pointer_class -> Output.logic_type
+val pointer_class_model_type : pointer_class -> logic_type
 
-val tag_id_type : Jc_env.root_info -> Output.logic_type
+val tag_id_type : root_info -> logic_type
 
-val tag_table_type : Jc_env.root_info -> Output.logic_type
+val tag_table_type : root_info -> logic_type
 
-val raw_alloc_table_type : Output.logic_type -> Output.logic_type
+val raw_alloc_table_type : logic_type -> logic_type
 
-val alloc_table_type : Jc_env.alloc_class -> Output.logic_type
+val alloc_table_type : alloc_class -> logic_type
 
-val is_alloc_table_type : Output.logic_type -> bool
+val is_alloc_table_type : logic_type -> bool
 
-val raw_tag_table_type: Output.logic_type -> Output.logic_type
-
+val raw_tag_table_type: logic_type -> logic_type
 
 (**  {1 Variables} *)
-
-
-
-
 
 (** {1 others} *)
 
 (* horror... *)
 val ref_term :
-  (?subst:(Output.term Jc_envset.VarMap.t) ->
+  (?subst:(term VarMap.t) ->
     type_safe:bool ->
     global_assertion:bool ->
     relocate:bool ->
-    Jc_env.label -> Jc_env.label -> Jc_fenv.term -> Output.term)
+    label -> label -> Jc_fenv.term -> term)
   ref
 
-val any_value : Jc_env.region -> Jc_env.jc_type -> Output.expr
+val any_value : region -> jc_type -> expr
 
-val eq_of_enum : Jc_env.enum_info -> string
+val make_valid_pred :
+  in_param:bool -> equal:bool -> ?left:bool -> ?right:bool -> alloc_class -> pointer_class -> why_decl
 
-val make_valid_pred : in_param:bool -> equal:bool ->
-           ?left:bool ->
-           ?right:bool ->
-           Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
-
-val make_fresh_pred : Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
+val make_fresh_pred : alloc_class -> pointer_class -> why_decl
 
 val make_instanceof_pred :
-  arg:(Output.assertion, _, Output.term -> Output.term -> Output.assertion, [`Range_l_r | `Singleton], _, _) Jc_env.arg ->
-    Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
+  arg:(assertion, _, term -> term -> assertion, [`Range_l_r | `Singleton], _, _) arg ->
+    alloc_class -> pointer_class -> why_decl
 
-val make_alloc_pred : Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
+val make_alloc_pred : alloc_class -> pointer_class -> why_decl
 
-val make_valid_pred_app : in_param:bool -> equal:bool ->
-           Jc_env.alloc_class * Jc_region.RegionTable.key ->
-           Jc_env.pointer_class ->
-           Output.term ->
-           Output.term option -> Output.term option -> Output.assertion
+val make_valid_pred_app :
+  in_param:bool -> equal:bool ->
+  alloc_class * RegionTable.key -> pointer_class -> term -> term option -> term option -> assertion
 
 val make_alloc_param :
-   arg:(Output.why_decl, check_size:bool -> Output.why_decl, _, [`Range_0_n | `Singleton], _, 'r) Jc_env.arg ->
-     Jc_env.alloc_class -> Jc_env.pointer_class -> 'r
+   arg:(why_decl, check_size:bool -> why_decl, _, [`Range_0_n | `Singleton], _, 'r) arg ->
+     alloc_class -> pointer_class -> 'r
 
-val make_conversion_params : Jc_env.pointer_class -> Output.why_decl list
+val make_conversion_params : pointer_class -> why_decl list
 
-val param : type_safe:bool -> Jc_env.var_info -> string * Output.logic_type
+val param : type_safe:bool -> var_info -> string * logic_type
 
-val tparam : label_in_name:bool ->
-           Jc_env.label ->
-           Jc_env.var_info -> string * Output.term * Output.logic_type
+val tparam : label_in_name:bool -> label -> var_info -> string * term * logic_type
 
 val tr_li_model_args_3 :
   label_in_name:bool ->
-  ?region_assoc:(Jc_region.RegionTable.key * Jc_region.RegionTable.key) list ->
-  ?label_assoc:(Jc_envset.LogicLabelSet.elt * Jc_envset.LogicLabelSet.elt) list ->
-  Jc_fenv.effect -> (string * Output.term * Output.logic_type) list
+  ?region_assoc:(RegionTable.key * RegionTable.key) list ->
+  ?label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->
+  effect -> (string * term * logic_type) list
 
 val tr_li_model_mem_args_5 :
   label_in_name:bool ->
-  ?region_assoc:(Jc_region.RegionTable.key * Jc_region.RegionTable.key) list ->
-  ?label_assoc:(Jc_envset.LogicLabelSet.elt * Jc_envset.LogicLabelSet.elt) list ->
-  Jc_fenv.effect ->
-  ((Jc_envset.MemClass.t * Jc_region.InternalRegion.t) * (string * Output.term * Output.logic_type)) list
+  ?region_assoc:(RegionTable.key * RegionTable.key) list ->
+  ?label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->
+  effect ->
+  ((MemClass.t * InternalRegion.t) * (string * term * logic_type)) list
 
-val tag_table_var : Jc_envset.VariantOrd.t * Jc_region.RegionTable.key -> Output.expr
+val tag_table_var : VariantOrd.t * RegionTable.key -> expr
 
-val tvar : label_in_name:bool ->
-           Jc_env.label -> Jc_env.var_info -> Output.term
+val tvar : label_in_name:bool -> label -> var_info -> term
 
-val var: Jc_env.var_info -> Output.expr
+val var: var_info -> expr
 
-val plain_var : string -> Output.expr
+val plain_var : string -> expr
 
-val ttag_table_var : label_in_name:bool ->
-           Jc_env.label ->
-           Jc_envset.VariantOrd.t * Jc_region.RegionTable.key -> Output.term
+val ttag_table_var : label_in_name:bool -> label -> VariantOrd.t * RegionTable.key -> term
 
-val talloc_table_var : label_in_name:bool ->
-  Jc_env.label ->
-  Jc_envset.AllocClass.t * Jc_region.RegionTable.key ->
-  bool * Output.term
+val talloc_table_var : label_in_name:bool -> label -> AllocClass.t * RegionTable.key -> bool * term
 
-val tmemory_var : label_in_name:bool ->
-           Jc_env.label ->
-           Jc_envset.MemClass.t * Jc_region.RegionTable.key -> Output.term
+val tmemory_var : label_in_name:bool -> label -> MemClass.t * RegionTable.key -> term
 
-val lvar : constant:bool ->
-           label_in_name:bool -> Jc_env.label -> string -> Output.term
+val lvar : constant:bool -> label_in_name:bool -> label -> string -> term
 
-val lvar_name : label_in_name:bool -> ?label_assoc:(Jc_env.label * Jc_env.label) list -> Jc_env.label -> string -> string
+val lvar_name : label_in_name:bool -> ?label_assoc:(label * label) list -> label -> string -> string
 
-val plain_memory_var : Jc_env.mem_class * Jc_region.RegionTable.key -> Output.expr
+val plain_memory_var : mem_class * RegionTable.key -> expr
 
-val memory_var : ?test_current_function:bool ->
-           Jc_envset.MemClass.t * Jc_region.RegionTable.key -> Output.expr
+val memory_var : ?test_current_function:bool -> MemClass.t * RegionTable.key -> expr
 
-val alloc_table_var : ?test_current_function:bool ->
-           Jc_envset.AllocClass.t * Jc_region.RegionTable.key -> Output.expr
+val alloc_table_var : ?test_current_function:bool -> AllocClass.t * RegionTable.key -> expr
 
-val plain_alloc_table_var : Jc_env.alloc_class * Jc_region.RegionTable.key -> Output.expr
+val plain_alloc_table_var : alloc_class * RegionTable.key -> expr
 
-val alloc_arguments : Jc_env.alloc_class * Jc_region.RegionTable.key ->
-           Jc_env.pointer_class -> Output.expr list
+val alloc_arguments : alloc_class * RegionTable.key -> pointer_class -> expr list
 
-val plain_tag_table_var : Jc_env.root_info * Jc_region.RegionTable.key -> Output.expr
+val plain_tag_table_var : root_info * RegionTable.key -> expr
 
-val make_arguments : callee_reads:Jc_fenv.effect ->
-           callee_writes:Jc_fenv.effect ->
-           region_assoc:(Jc_region.RegionTable.key *
-                         Jc_region.RegionTable.key)
-                        list ->
-           param_assoc:(Jc_envset.VarOrd.t * ('a, 'b) Jc_ast.expr) list ->
-           with_globals:bool ->
-           with_body:bool ->
-           string ->
-           Output.expr list ->
-           Output.assertion * string *
-           (Jc_envset.StringSet.elt * Output.logic_type) list * Output.expr *
-           Output.expr * Output.expr list
+val make_arguments :
+  callee_reads:effect ->
+  callee_writes:effect ->
+  region_assoc:(RegionTable.key * RegionTable.key) list ->
+  param_assoc:(VarOrd.t * ('a, 'b) Jc_ast.expr) list ->
+  with_globals:bool ->
+  with_body:bool ->
+  string ->
+  expr list ->
+  assertion * string * (StringSet.elt * logic_type) list * expr * expr * expr list
 
-val define_locals : ?reads:(string * Output.logic_type) list ->
-           ?writes:(string * Output.logic_type) list ->
-           Output.expr -> Output.expr
-
-
+val define_locals :
+  ?reads:(string * logic_type) list ->
+  ?writes:(string * logic_type) list ->
+  expr -> expr
 
 
 val tr_li_model_at_args_3 :
   label_in_name:bool ->
-  ?region_assoc:(Jc_region.RegionTable.key * Jc_region.RegionTable.key) list ->
-  ?label_assoc:(Jc_envset.LogicLabelSet.elt * Jc_envset.LogicLabelSet.elt) list ->
-  Jc_fenv.effect -> (string * Output.term * Output.logic_type) list
+  ?region_assoc:(RegionTable.key * RegionTable.key) list ->
+  ?label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->
+  effect -> (string * term * logic_type) list
 
-val root_model_type : Jc_env.root_info -> Output.logic_type
+val root_model_type : root_info -> logic_type
 
-val pointer_type :
-  Jc_env.alloc_class -> Jc_env.pointer_class -> Output.logic_type
+val pointer_type : alloc_class -> pointer_class -> logic_type
 
-val raw_pointer_type : Output.logic_type -> Output.logic_type
+val raw_pointer_type : logic_type -> logic_type
 
-val bitvector_type : Output.logic_type
-
-val logic_field_of_union : Jc_env.field_info -> string
-
-val logic_union_of_field : Jc_env.field_info -> string
+val bitvector_type : logic_type
 
 (** {2 building output terms} *)
 
-val const_of_num :  Num.num -> Output.term
-val const_of_int :  int -> Output.term
+val const_of_num :  Num.num -> term
 
-val const : Jc_ast.const -> Output.constant
+val const_of_int :  int -> term
+
+val const : Jc_ast.const -> constant
 (** constant *)
 
+val make_select : term -> term -> term
 
-val make_select : Output.term -> Output.term -> Output.term
-
-val make_select_fi : Jc_env.field_info -> Output.term -> Output.term
+val make_select_fi : field_info -> term -> term
 (** dereferencing, builds select(f.name,t) *)
 
-val make_select_committed : Jc_env.pointer_class -> Output.term -> Output.term
+val make_select_committed : pointer_class -> term -> term
 (** builds select("committed",t) *)
 
-val make_subtag_bool : Output.term -> Output.term -> Output.term
+val make_subtag_bool : term -> term -> term
 
 val tr_logic_pred_call :
   label_in_name:bool ->
-  region_assoc:(Jc_region.RegionTable.key * Jc_region.RegionTable.key) list ->
-  label_assoc:(Jc_envset.LogicLabelSet.elt * Jc_envset.LogicLabelSet.elt) list ->
-  Jc_fenv.logic_info ->
-  Output.term list -> Output.assertion
+  region_assoc:(RegionTable.key * RegionTable.key) list ->
+  label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->
+  logic_info ->
+  term list -> assertion
 (** call logic predicate, handling regions and labels *)
 
 val tr_logic_fun_call :
   label_in_name:bool ->
-  region_assoc:(Jc_region.RegionTable.key * Jc_region.RegionTable.key) list ->
-  label_assoc:(Jc_envset.LogicLabelSet.elt * Jc_envset.LogicLabelSet.elt) list ->
-  Jc_fenv.logic_info -> Output.term list -> Output.term
+  region_assoc:(RegionTable.key * RegionTable.key) list ->
+  label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->
+  logic_info -> term list -> term
 
-val make_int_of_tag : Jc_env.struct_info -> Output.term
+val make_int_of_tag : struct_info -> term
 
-val make_typeof : Output.term -> Output.term
+val make_typeof : term -> term
 (** typeof expression in logic *)
 
-val make_instanceof : Output.term -> Jc_env.struct_info -> Output.assertion
+val make_instanceof : term -> struct_info -> assertion
 
-val make_instanceof_bool : Output.term -> Jc_env.struct_info -> Output.term
-
+val make_instanceof_bool : term -> struct_info -> term
 
 (** {2 helpers for effects information} *)
 
-val collect_li_reads : Jc_envset.StringSet.t -> Jc_fenv.logic_info -> Jc_envset.StringSet.t
+val collect_li_reads : StringSet.t -> logic_info -> StringSet.t
 (** effects of a predicate of logic function *)
 
-val all_effects : Jc_fenv.effect -> string list
+val all_effects : effect -> string list
 
+val location_list' : term list -> term
 
-val location_list' : Output.term list -> Output.term
+val local_read_effects : callee_reads:effect -> callee_writes:effect -> string list
 
-val local_read_effects : callee_reads:Jc_fenv.effect ->
-           callee_writes:Jc_fenv.effect -> string list
-
-val local_write_effects : callee_reads:Jc_fenv.effect ->
-           callee_writes:Jc_fenv.effect -> string list
+val local_write_effects : callee_reads:effect -> callee_writes:effect -> string list
 
 val write_effects :
-  callee_reads:Jc_fenv.effect ->
-  callee_writes:Jc_fenv.effect ->
-  region_list:Jc_region.RegionTable.key list ->
-  params:Jc_env.var_info list -> string list
+  callee_reads:effect ->
+  callee_writes:effect ->
+  region_list:RegionTable.key list ->
+  params:var_info list -> string list
 
 val read_effects :
-  callee_reads:Jc_fenv.effect ->
-  callee_writes:Jc_fenv.effect ->
-  region_list:Jc_region.RegionTable.key list ->
-  params:Jc_env.var_info list -> string list
+  callee_reads:effect ->
+  callee_writes:effect ->
+  region_list:RegionTable.key list ->
+  params:var_info list -> string list
 
-val write_parameters :  type_safe:bool ->
-           region_list:Jc_region.RegionTable.key list ->
-           callee_reads:Jc_fenv.effect ->
-           callee_writes:Jc_fenv.effect ->
-           params:Jc_env.var_info list -> (string * Output.logic_type) list
+val write_parameters :
+  type_safe:bool ->
+  region_list:RegionTable.key list ->
+  callee_reads:effect ->
+  callee_writes:effect ->
+  params:var_info list ->
+  (string * logic_type) list
 
-val read_parameters : type_safe:bool ->
-           region_list:Jc_region.RegionTable.key list ->
-           callee_reads:Jc_fenv.effect ->
-           callee_writes:Jc_fenv.effect ->
-           params:Jc_env.var_info list ->
-           already_used:Jc_envset.StringSet.elt list ->
-           (string * Output.logic_type) list
+val read_parameters :
+  type_safe:bool ->
+  region_list:RegionTable.key list ->
+  callee_reads:effect ->
+  callee_writes:effect ->
+  params:var_info list ->
+  already_used:StringSet.elt list ->
+  (string * logic_type) list
 
-val write_locals : region_list:Jc_region.RegionTable.key list ->
-           callee_reads:Jc_fenv.effect ->
-           callee_writes:Jc_fenv.effect ->
-           params:Jc_env.var_info list -> (string * Output.logic_type) list
+val write_locals :
+  region_list:RegionTable.key list ->
+  callee_reads:effect ->
+  callee_writes:effect ->
+  params:var_info list ->
+  (string * logic_type) list
 
-val read_locals : region_list:Jc_region.RegionTable.key list ->
-           callee_reads:Jc_fenv.effect ->
-           callee_writes:Jc_fenv.effect ->
-           params:Jc_env.var_info list -> (string * Output.logic_type) list
-
+val read_locals :
+  region_list:RegionTable.key list ->
+  callee_reads:effect ->
+  callee_writes:effect ->
+  params:var_info list ->
+  (string * logic_type) list
 
 
 (** {1 Misc} *)
 
-val specialized_functions:
-  (string * string Jc_envset.StringMap.t) Jc_pervasives.StringHashtblIter.t
+val specialized_functions : (string * string StringMap.t) Jc_pervasives.StringHashtblIter.t

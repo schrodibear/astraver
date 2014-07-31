@@ -29,8 +29,6 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
-
 open Jc_stdlib
 open Jc_env
 
@@ -49,7 +47,8 @@ val print_graph : bool
 val debug : bool
 val verbose : bool
 val werror : bool
-val why3_backend : bool
+module type Backend = module type of Jc_why_output
+val backend : (module Backend)
 val why_opt : string
 val why3_opt : string
 

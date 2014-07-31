@@ -29,13 +29,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
-
 open Jc_env
 open Jc_ast
 open Jc_region
 open Jc_pervasives
-open Output
+open Jc_why_output_ast
 
 let alloc_table_type_name = "alloc_table"
 let tag_table_type_name = "tag_table"
@@ -45,8 +43,7 @@ let memory_type_name = "memory"
 let tag_id_type_name = "tag_id"
 let bitvector_type_name = "bitvector"
 
-let simple_logic_type s =
-  { logic_type_name = s; logic_type_args = [] }
+let simple_logic_type s = { lt_name = s; lt_args = [] }
 
 let root_type_name vi = vi.ri_name
 
@@ -141,21 +138,21 @@ let memory_name (mc,r) =
 let pointer_class_name = function
   | JCtag(st, _) ->
       if struct_of_union st then
-	"root_" ^ (struct_root st).ri_name
+        "root_" ^ (struct_root st).ri_name
       else
-	"struct_" ^ st.si_name
+        "struct_" ^ st.si_name
   | JCroot vi -> "root_" ^ vi.ri_name
 
 let valid_pred_name ~equal ~left ~right ac pc =
   let prefix = match ac with
     | JCalloc_root _ ->
-	if equal then "strict_valid" else
-	  begin match left, right with
-	    | false, false -> assert false
-	    | false, true -> "right_valid"
-	    | true, false -> "left_valid"
-	    | true, true -> "valid"
-	  end
+        if equal then "strict_valid" else
+          begin match left, right with
+            | false, false -> assert false
+            | false, true -> "right_valid"
+            | true, false -> "left_valid"
+            | true, true -> "valid"
+          end
     | JCalloc_bitvector -> "valid_bitvector" (* TODO ? *)
   in
   prefix ^ "_" ^ (pointer_class_name pc)
@@ -268,6 +265,44 @@ let reinterpret_cast_name op =
   | `Retain -> "retain"
   | `Merge _ -> "merge"
   | `Split _ -> "split"
+
+let logic_enum_of_int_name ri = ri.ei_name ^ "_of_integer"
+let safe_fun_enum_of_int_name ri = "safe_" ^ ri.ei_name ^ "_of_integer_"
+let fun_enum_of_int_name ri = ri.ei_name ^ "_of_integer_"
+let logic_int_of_enum_name ri = "integer_of_" ^ ri.ei_name
+let mod_of_enum_name ri = "mod_" ^ ri.ei_name ^ "_of_integer"
+let fun_any_enum_name ri = "any_" ^ ri.ei_name
+let eq_of_enum_name ri = "eq_" ^ ri.ei_name
+
+let logic_bitvector_of_enum_name ri = "bitvector_of_" ^ ri.ei_name
+let logic_enum_of_bitvector_name ri = ri.ei_name  ^ "_of_bitvector"
+
+let logic_integer_of_bitvector_name = "integer_of_bitvector"
+let logic_bitvector_of_integer_name = "bitvector_of_integer"
+let logic_real_of_bitvector_name = "real_of_bitvector"
+
+let native_name =
+  function
+  | Tunit -> "unit"
+  | Tboolean -> "boolean"
+  | Tinteger -> "integer"
+  | Treal -> "real"
+  | Tgenfloat `Double -> "double"
+  | Tgenfloat `Float -> "single"
+  | Tgenfloat `Binary80 -> "binary80"
+  | Tstring -> "string"
+
+let logic_bitvector_of_variant_name vi = "bitvector_of_" ^ vi.ri_name
+let logic_variant_of_bitvector_name vi = vi.ri_name ^ "_of_bitvector"
+
+let logic_union_of_field_name fi = "bitvector_of_" ^ fi.fi_name
+let logic_field_of_union_name fi = fi.fi_name ^ "_of_bitvector"
+
+let why_name_of_format =
+  function
+  | `Float -> "Single"
+  | `Double -> "Double"
+  | `Binary80 -> "Binary80"
 
 (*
 Local Variables:

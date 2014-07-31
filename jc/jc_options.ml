@@ -89,7 +89,9 @@ let verify_invariants_only = ref false
 let verify = ref []
 let behavior = ref []
 
-let why3_backend = ref false
+module type Backend = module type of Jc_why_output
+
+let backend = ref (module Jc_why_output : Backend)
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 let add_why3_opt s = why3_opt := !why3_opt ^ " " ^ s
@@ -144,7 +146,7 @@ let _ =
         "-behavior", Arg.String (fun s -> behavior := s::!behavior),
           "  verify only specified behavior (safety, variant, default or user-defined behavior)";
 
-        "-why3ml", Arg.Set why3_backend,
+        "-why3ml", Arg.Bool (function true -> backend := (module Jc_why3_output) | false -> ()),
           "  (experimental) produce a program in why3ml syntax" ;
 
         "-why-opt", Arg.String add_why_opt,
@@ -212,7 +214,7 @@ let print_graph = !print_graph
 let debug = !debug
 let verbose = !verbose
 let werror = !werror
-let why3_backend = !why3_backend
+let backend = !backend
 let why_opt = !why_opt
 let why3_opt = !why3_opt
 let inv_sem = inv_sem
@@ -297,7 +299,7 @@ let () =
                      f, l, b, e, k, o
                    | _ ->
                      f, l, b, e, k, v :: o)
-                ("",0,0,0,None,[]) fs
+                ("", 0, 0, 0, None, []) fs
             in
             Hashtbl.add pos_table id (f, l, b, e, k, o))
          l)
