@@ -56,10 +56,10 @@ type vc_kind =
   | JCVCunpack
   | JCVCfp_overflow
 
-type vc = {
-  vc_kind     : vc_kind;
-  vc_behavior : string;
-  vc_pos      : Loc.position
+type why_label = {
+  l_kind     : vc_kind option;
+  l_behavior : string;
+  l_pos      : Jc_position.t
 }
 
 type term =
@@ -68,7 +68,7 @@ type term =
   | LVar of string  (** immutable logic var *)
   | LDeref of string (** [!r] *)
   | LDerefAtLabel of string * string  (** [(at !x L)] *)
-  | TNamed of vc * term
+  | TLabeled of why_label * term
   | TIf of term * term * term
   | TLet of string * term * term
 
@@ -84,7 +84,7 @@ type assertion =
   | LForall of string * logic_type * trigger list list * assertion (** [forall x : t. a] *)
   | LExists of string * logic_type * trigger list list * assertion (** [exists x : t. a] *)
   | LPred of string * term list
-  | LNamed of vc * assertion
+  | LLabeled of why_label * assertion
 
 and trigger =
   | LPatP of assertion
@@ -131,7 +131,7 @@ type expr_node =
   | Assert of assert_kind * assertion * expr
   | BlackBox of why_type
   | Absurd
-  | Named of vc * expr
+  | Labeled of why_label * expr
 
 and expr = {
   expr_labels     : string list;
@@ -141,7 +141,7 @@ and expr = {
 type why_id = {
   why_name : string;
   why_expl : string;
-  why_pos  : Loc.position
+  why_pos  : Jc_position.t
 }
 
 type goal_kind = KAxiom | KLemma | KGoal

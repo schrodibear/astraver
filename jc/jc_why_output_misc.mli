@@ -39,7 +39,10 @@ val is_prop : logic_type -> bool
 (* Terms *)
 val match_term : (string * term) list -> term -> term -> (string * term) list
 val make_var : string -> term
-val make_positioned : kind:vc_kind -> ?behavior:string -> pos:Loc.position -> term -> term
+
+val make_positioned : Jc_position.t -> ?behavior:string -> ?kind:vc_kind -> term -> term
+val make_located : Loc.floc -> ?behavior:string -> ?kind:vc_kind -> term -> term
+val make_positioned_lex : Loc.position -> ?behavior:string -> ?kind:vc_kind -> term -> term
 
 (* Assertions *)
 val make_or : assertion -> assertion -> assertion
@@ -55,7 +58,9 @@ val is_not_true : assertion -> bool
 
 val assertion_of_term : term -> assertion
 
-val mk_positioned : kind:vc_kind -> ?behavior:string -> pos:Loc.position -> assertion -> assertion
+val mk_positioned : Jc_position.t -> ?behavior:string -> ?kind:vc_kind -> assertion -> assertion
+val mk_located : Loc.floc -> ?behavior:string -> ?kind:vc_kind -> assertion -> assertion
+val mk_positioned_lex : Loc.position -> ?behavior:string -> ?kind:vc_kind -> assertion -> assertion
 
 (* Why types *)
 val int_type : why_type
@@ -72,6 +77,11 @@ val make_and_expr : expr -> expr -> expr
 val make_app : ?ty:why_type -> string -> expr list -> expr
 val make_logic_app : ?ty:why_type -> string -> expr list -> expr
 val make_app_e : ?ty:why_type -> expr -> expr list -> expr
+
+val make_positioned_e : Jc_position.t -> ?behavior:string -> ?kind:vc_kind -> expr -> expr
+val make_located_e : Loc.floc -> ?behavior:string -> ?kind:vc_kind -> expr -> expr
+val make_positioned_lex_e : Loc.position -> ?behavior:string -> ?kind:vc_kind -> expr -> expr
+
 (** [make_label l e] adds label [l] to [e]
     In the case of a block, add it to the first instruction of the block, if there
     is one. *)

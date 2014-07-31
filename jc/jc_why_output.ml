@@ -58,21 +58,14 @@ let fprintf_vc_kind fmttr k =
      | JCVCarith_overflow -> "ArithOverflow"
      | JCVCfp_overflow -> "FPOverflow")
 
-let add_vc, add_why_id =
-  let why_loc_of_pos (b, e) =
-      let open Lexing in
-      abs_fname b.pos_fname,
-      b.pos_lnum,
-      b.pos_cnum - b.pos_bol,
-      e.pos_cnum - b.pos_bol
-  in
-  (fun { vc_kind; vc_behavior; vc_pos } ->
-    let f, l, fc, lc = why_loc_of_pos vc_pos in
+let add_why_label, add_why_id =
+  (fun { l_kind; l_behavior; l_pos } ->
+    let f, l, fc, lc = Jc_position.to_loc l_pos in
     let mark = Jc_pervasives.new_label_name () in
-    why_reg_pos mark (Some vc_kind, None, (if vc_behavior <> "" then Some vc_behavior else None), f, l, fc, lc);
+    why_reg_pos mark (l_kind, None, (if l_behavior <> "" then Some l_behavior else None), f, l, fc, lc);
     mark),
   fun { why_name; why_expl; why_pos } ->
-    let f, l, fc, lc = why_loc_of_pos why_pos in
+    let f, l, fc, lc = Jc_position.to_loc why_pos in
     why_reg_pos why_name (None, Some why_expl, None, f, l, fc, lc)
 
 let rec fprintf_logic_type fmttr t =
@@ -108,8 +101,8 @@ let rec fprintf_term fmttr t =
   | LVar id -> pr "%s" id
   | LDeref id -> pr "%s" id
   | LDerefAtLabel (id, l) -> pr "%s@@%s" id l
-  | TNamed (vc, t) ->
-    pr "(%s : %a)" (add_vc vc) fprintf_term t
+  | TLabeled (l, t) ->
+    pr "(%s : %a)" (add_why_label l) fprintf_term t
   | TIf (t1, t2, t3) ->
     pr "@[<hov 1>(if %a@ then %a@ else %a)@]"
       fprintf_term t1 fprintf_term t2 fprintf_term t3
@@ -173,7 +166,7 @@ and fprintf_assertion fmttr a =
     List.iter (pr ",@ %a" fprintf_term) tl;
     pr ")@]"
   | LPred (id, []) -> pr "%s" id
-  | LNamed (vc, a) -> pr "@[(%s:@ %a)@]" (add_vc vc) fprintf_assertion a
+  | LLabeled (l, a) -> pr "@[(%s:@ %a)@]" (add_why_label l) fprintf_assertion a
 
 and fprintf_triggers fmt trigs =
   let pat fmt = function
@@ -312,7 +305,7 @@ let rec fprintf_expr_node fmttr e =
   | BlackBox t ->
     pr "@[<hov 0>[ %a ]@]" (fprintf_type ~need_colon:false false) t
   | Absurd -> pr "@[<hov 0>absurd@ @]"
-  | Named (_vc, e) -> fprintf_expr fmttr e
+  | Labeled (_l, e) -> fprintf_expr fmttr e
 
 and fprintf_expr fmttr e =
   let pr fmt = fprintf fmttr fmt in

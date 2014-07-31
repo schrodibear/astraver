@@ -64,7 +64,7 @@ let rec iter_term f t =
   | LDeref id
   | LDerefAtLabel (id, _) ->
     f id
-  | TNamed (_, t) -> iter_term f t
+  | TLabeled (_, t) -> iter_term f t
   | TIf (t1, t2, t3) ->
     iter_term f t1;
     iter_term f t2;
@@ -83,34 +83,43 @@ let rec match_term acc t1 t2 =
 
 let make_var s = LVar s
 
-let make_positioned ~kind:vc_kind ?behavior:(vc_behavior="default") ~pos:vc_pos t =
-  TNamed ({ vc_kind; vc_behavior; vc_pos }, t)
+let positioned f l_pos ?behavior:(l_behavior = "default") ?kind:l_kind =
+  f { l_kind; l_behavior; l_pos }
+
+let make_positioned = positioned @@ fun l t -> TLabeled (l, t)
+
+let make_located = make_positioned % Jc_position.of_loc
+
+let make_positioned_lex  = make_positioned % Jc_position.of_pos
 
 (*******************************************************************************)
 (* Assertions                                                                  *)
 (*******************************************************************************)
 
-let rec unname a =
+let rec unlabel a =
   match a with
-  | LNamed (_, a) -> unname a
+  | LLabeled (_, a) -> unlabel a
   | _ -> a
 
-let mk_positioned ~kind:vc_kind ?behavior:(vc_behavior="default") ~pos:vc_pos a =
-  LNamed ({ vc_kind; vc_behavior; vc_pos }, a)
+let mk_positioned = positioned @@ fun l a -> LLabeled (l, a)
+
+let mk_located = mk_positioned % Jc_position.of_loc
+
+let mk_positioned_lex = mk_positioned % Jc_position.of_pos
 
 let is_not_true a =
-  match unname a with
+  match unlabel a with
   | LTrue -> false
   | _ -> true
 
 let make_not a1 =
-  match unname a1 with
+  match unlabel a1 with
   | LTrue -> LFalse
   | LFalse -> LTrue
   | _ -> LNot a1
 
 let make_or a1 a2 =
-  match unname a1, unname a2 with
+  match unlabel a1, unlabel a2 with
   | LTrue, _ -> LTrue
   | _, LTrue -> LTrue
   | LFalse, _ -> a2
@@ -118,7 +127,7 @@ let make_or a1 a2 =
   | _, _ -> LOr (a1, a2)
 
 let make_and a1 a2 =
-  match unname a1, unname a2 with
+  match unlabel a1, unlabel a2 with
   | LTrue, _ -> a2
   | _, LTrue -> a1
   | LFalse, _ -> LFalse
@@ -142,7 +151,7 @@ let rec make_forall_list l triggers assertion =
   | (s, ty) :: l -> LForall (s, ty, [], make_forall_list l triggers assertion)
 
 let make_impl a1 a2 =
-  match unname a1, unname a2 with
+  match unlabel a1, unlabel a2 with
   | LTrue, _ -> a2
   | _, LTrue -> LTrue
   | LFalse, _ -> LTrue
@@ -155,7 +164,7 @@ let rec make_impl_list conclu =
   | a :: l -> LImpl (a, make_impl_list conclu l)
 
 let make_equiv a1 a2 =
-  match unname a1, unname a2 with
+  match unlabel a1, unlabel a2 with
   | LTrue, _ -> a2
   | _, LTrue -> a1
   | LFalse, _ -> make_not a2
@@ -197,7 +206,7 @@ let rec iter_assertion f a =
   | LPred (id, l) ->
     f id;
     List.iter (iter_term f) l
-  | LNamed (_, a) ->
+  | LLabeled (_, a) ->
     iter_assertion f a
 
 and iter_triggers f trigs =
@@ -316,7 +325,7 @@ let rec iter_expr f e =
   | Assert (_, p, e) ->
     iter_assertion f p;
     iter_expr f e
-  | Named (_, e) -> iter_expr f e
+  | Labeled (_, e) -> iter_expr f e
   | BlackBox ty -> iter_why_type f ty
   | Absurd -> ()
 
@@ -341,7 +350,7 @@ let make_app_rec ~logic f l =
   let rec make_rec accu =
     function
     | [] -> accu
-    | e::r -> make_rec (mk_expr (App (accu, e, None))) r
+    | e :: r -> make_rec (mk_expr (App (accu, e, None))) r
   in
   match l with
   | [] when logic -> make_rec f []
@@ -377,10 +386,15 @@ let make_while cond inv var e =
 
 let make_label label e =
   assert (String.length label > 0);
-  assert (label.[0] <> '_');
   { e with expr_labels = label :: e.expr_labels }
 
 let make_pre pre e =  mk_expr @@ Triple (false, pre, e, LTrue, [])
+
+let make_positioned_e = positioned @@ fun l e -> mk_expr @@ Labeled (l, e)
+
+let make_located_e = make_positioned_e % Jc_position.of_loc
+
+let make_positioned_lex_e = make_positioned_e % Jc_position.of_pos
 
 let make_block labels l =
   match l with
@@ -404,11 +418,11 @@ let rec append' e1 e2 =
     [make_block e1.expr_labels @@ concat l1 e2]
   | _, Block l2 ->
     begin match e1.expr_labels, e2.expr_labels with
-      | [], [] -> e1 :: l2
-      | labels1, [] ->
-        [make_block labels1 @@ { e1 with expr_labels = [] } :: l2]
-      | labels1, _ ->
-        [make_block labels1 @@ { e1 with expr_labels = [] } :: [e2]]
+    | [], [] -> e1 :: l2
+    | labels1, [] ->
+      [make_block labels1 @@ { e1 with expr_labels = [] } :: l2]
+    | labels1, _ ->
+      [make_block labels1 @@ { e1 with expr_labels = [] } :: [e2]]
     end
   | _ when e1.expr_labels = [] -> e1 :: [e2]
   | _ ->
@@ -428,7 +442,7 @@ let append e1 e2 =
 (* Declarations                                                                *)
 (*******************************************************************************)
 
-let id_no_loc s = { why_name = s; why_expl = ""; why_pos = Loc.dummy_position }
+let id_no_loc s = { why_name = s; why_expl = ""; why_pos = Jc_position.dummy }
 
 let get_why_id d =
   match d with
@@ -487,9 +501,9 @@ let rec do_topo decl_map iter_fun output_fun id d =
     d.state <- `DONE
 
 let compare_ids
-    { why_name = id1; why_pos = { pos_lnum = l1 }, _ }
-    { why_name = id2; why_pos = { pos_lnum = l2 }, _ } =
-  let c = compare l1 l2 in
+    { why_name = id1; why_pos = pos1 }
+    { why_name = id2; why_pos = pos2 } =
+  let c = Jc_position.compare pos1 pos2 in
   if c = 0 then compare id1 id2 else c
 
 let build_map get_id decl_list =

@@ -260,19 +260,30 @@ let fprintf_vc_kind fmttr k =
      | JCVCarith_overflow -> "Arithmetic overflow"
      | JCVCfp_overflow -> "Floating-point overflow")
 
-let fprintf_vc_pos fmttr ({ Lexing.pos_fname = f;  pos_lnum = l; pos_bol = b; pos_cnum = c },
-                          { Lexing.pos_fname = f'; pos_cnum = c' }) =
-  assert (f = f');
-  assert (c' >= c);
-  let c = c - b and c' = c' - b in
-  fprintf fmttr "#\"%s\" %d %d %d#" f l (max c 0) (max c' 0)
+let fprintf_jc_position fmttr pos =
+  let f, l, b, e as loc = Jc_position.to_loc pos in
+  if loc <> Loc.dummy_floc then
+    fprintf fmttr "#\"%s\" %d %d %d#" f l b e
 
-let fprintf_vc fmttr { vc_kind; vc_behavior; vc_pos } =
+let fprintf_why_label fmttr { l_kind; l_behavior; l_pos } =
   let pr fmt = fprintf fmttr fmt in
-  pr "\"expl:%a" fprintf_vc_kind vc_kind;
-  if vc_behavior <> "default" then pr ", behavior %s" vc_behavior;
-  pr "\"";
-  if vc_pos <> Loc.dummy_position then pr "@ %a" fprintf_vc_pos vc_pos
+  let with_behavior =
+    match l_behavior with
+    | "default" | "" -> ignore
+    | b -> fun f -> f b
+  in
+  let space = if not (Jc_position.is_dummy l_pos) then pr "@ " in
+  begin match l_kind with
+  | Some vc_kind ->
+    pr "\"expl:%a" fprintf_vc_kind vc_kind;
+    with_behavior @@ pr ", behavior %s";
+    pr "\"";
+    space
+  | None ->
+    with_behavior @@ (fun b -> pr "\"for behavior %s\"" b; space);
+  end;
+  fprintf_jc_position fmttr l_pos;
+  space
 
 let lt_name t =
   match t.lt_name with
@@ -315,8 +326,8 @@ let rec fprintf_term fmttr =
     pr "(old !%s)" (why3_ident id)
   | LDerefAtLabel (id, l) ->
     pr "(at !%s '%s)" (why3_ident id) (why3_constr l)
-  | TNamed (vc, t) ->
-    pr "(%a %a)" fprintf_vc vc fprintf_term t
+  | TLabeled (l, t) ->
+    pr "(%a%a)" fprintf_why_label l fprintf_term t
   | TIf (t1, t2, t3) ->
     pr "@[<hov 1>(if %a@ then %a@ else %a)@]"
       fprintf_assertion (assertion_of_term t1) fprintf_term t2 fprintf_term t3
@@ -363,8 +374,8 @@ and fprintf_assertion fmttr =
     List.iter (pr "@ %a" fprintf_term) tl;
     pr ")@]"
   | LPred (id, []) -> pr "%s" (why3_ident id)
-  | LNamed (vc, a) ->
-    pr "@[(%a@ %a)@]" fprintf_vc vc fprintf_assertion a
+  | LLabeled (l, a) ->
+    pr "@[(%a%a)@]" fprintf_why_label l fprintf_assertion a
 
 and fprintf_triggers fmt trigs =
   let pat fmt =
@@ -506,7 +517,7 @@ let rec fprintf_expr_node in_app fmttr =
   | BlackBox t ->
     pr "@[<hov 0>any %a @]" (fprintf_type ~need_colon:false false) t
   | Absurd -> pr "@[<hov 0>absurd@ @]"
-  | Named (vc, e) -> pr "@[(%a %a)@]" fprintf_vc vc fprintf_expr e
+  | Labeled (l, e) -> pr "@[(%a%a)@]" fprintf_why_label l fprintf_expr e
 
 and fprintf_expr_gen in_app fmttr e =
   let pr fmt = fprintf fmttr fmt in
@@ -544,7 +555,7 @@ let fprintf_why_id fmttr { why_name; why_expl; why_pos } =
   let pr fmt = fprintf fmttr fmt in
   pr "%s" why_name;
   if why_expl <> "" then pr "@ \"expl:%s\"" why_expl;
-  if why_pos <> Loc.dummy_position then pr "@ %a" fprintf_vc_pos why_pos
+  if not (Jc_position.is_dummy why_pos) then pr "@ %a" fprintf_jc_position why_pos
 
 let fprintf_why_decl fmttr =
   let pr fmt = fprintf fmttr fmt in
