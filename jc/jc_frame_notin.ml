@@ -46,7 +46,8 @@ open Jc_interp_misc
 open Jc_invariants
 open Jc_pattern
 
-open Output
+open Jc_why_output_ast
+open Jc_why_output_misc
 open Format
 open Pp
 
@@ -107,12 +108,12 @@ struct
   let jc_ty ty = JCTlogic (mybag_suffix,[ty])
 
 
-  let ty ty = { logic_type_name = mybag_suffix;
-                logic_type_args = [ty]
-              }
-
+  let ty ty =
+    { lt_name = mybag_suffix;
+      lt_args = [ty] }
+  
   let ty_elt = function
-    | {logic_type_args = [ty]} -> ty
+    | { lt_args = [ty] } -> ty
     | _ -> assert false
 
   let iin =
@@ -188,7 +189,9 @@ struct
     let c = compare (num e1) (num e2) in
     if c <> 0 then c else compare e1 e2
 
-  let print fmt : elt_set -> unit = function
+  let print fmt : elt_set -> unit =
+    let module Output = (val Jc_options.backend) in
+    function
     | `Empty -> fprintf fmt "empty"
     | `All -> fprintf fmt "all"
     | `MyBag s -> fprintf fmt "mybag(%a)" Output.fprintf_term s

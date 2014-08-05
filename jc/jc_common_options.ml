@@ -43,7 +43,7 @@ let inv_sem = ref InvNone
 let separation_sem = ref SepNone
 
 (*
-  Local Variables: 
+  Local Variables:
   compile-command: "unset LANG; make -C .. bin/jessie.byte"
-  End: 
+  End:
 *)

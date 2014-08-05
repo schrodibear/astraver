@@ -6,7 +6,7 @@ use import int.Int
 predicate zwf_zero (a : int) (b : int) = 0 <= a /\ a < b
 
 (*****************************************************************************)
-(* pointers, allocation, validity                                            *)
+(* Pointers, allocation, validity                                            *)
 (*****************************************************************************)
 
 type alloc_table 't
@@ -103,7 +103,7 @@ axiom sub_pointer_neg:
   forall p q : pointer 't. sub_pointer p q = - sub_pointer q p
 
 (*****************************************************************************)
-(* heap memories, select and store                                           *)
+(* Heap memories, select and store                                           *)
 (*****************************************************************************)
 
 use map.Map
@@ -114,7 +114,7 @@ function select (m : memory 't 'v) (p : pointer 't) : 'v = Map.get m p
 function store (m : memory 't 'v) (p : pointer 't) (v : 'v) : memory 't 'v = Map.set m p v
 
 (*****************************************************************************)
-(* memory locations, not_assigns predicate, separation                       *)
+(* Memory locations, not_assigns predicate, separation                       *)
 (*****************************************************************************)
 
 type pset 't
@@ -204,54 +204,65 @@ axiom in_pset_union:
   forall s2 : pset 't.
     in_pset p (pset_union s1 s2) <-> in_pset p s1 \/ in_pset p s2
 
-predicate not_assigns
-  (a : alloc_table 't) (m1 : memory 't 'v) (m2 : memory 't 'v ) (l : pset 't) =
-    forall p:pointer 't.
-      not in_pset p l -> select m2 p = select m1 p
+predicate not_assigns (m1 : memory 't 'v) (m2 : memory 't 'v ) (l : pset 't) =
+  forall p : pointer 't.
+    not in_pset p l -> select m2 p = select m1 p
 
 axiom not_assigns_refl:
-  forall a : alloc_table 't.
   forall m : memory 't 'v.
   forall l : pset 't.
-    not_assigns a m m l
+    not_assigns m m l
 
 axiom not_assigns_trans:
-  forall a : alloc_table 't.
   forall m1 : memory 't 'v.
   forall m2 : memory 't 'v.
   forall m3 : memory 't 'v.
-  forall l : pset 't [not_assigns a m1 m2 l, not_assigns a m1 m3 l].
-    not_assigns a m1 m2 l ->
-    not_assigns a m2 m3 l ->
-    not_assigns a m1 m3 l
+  forall l : pset 't [not_assigns m1 m2 l, not_assigns m1 m3 l].
+    not_assigns m1 m2 l ->
+    not_assigns m2 m3 l ->
+    not_assigns m1 m3 l
 
 (*****************************************************************************)
-(* lattice of structures                                                     *)
+(* Lattice of structures                                                     *)
 (*****************************************************************************)
 
-(*****
-typeof gives the dynamic type of an object.
-
-parenttag is defined by axioms in jc_interp, and defines the hierarchy.
-  parenttag(t1, t2) <-> t2 is the immediate superclass of t1
-
-subtag is axiomatized from parenttag, and is the reflexive, transitive
-  closure of parenttag.
-
-subtag_ is the same as subtag but for booleans.
-
-instanceof is defined from typeof and subtag.
-
-int_of_tag gives a different integer to each tags to differenciate them.
-*****)
-
-type tag_table 't (* TO BE DELETED! *)
+(*****************************************************************************)
+(* typeof gives the dynamic type of an object.                               *)
+(*                                                                           *)
+(* parenttag is defined by axioms in jc_interp, and defines the hierarchy.   *)
+(*   parenttag(t1, t2) <-> t2 is the immediate superclass of t1              *)
+(*                                                                           *)
+(* subtag is axiomatized from parenttag, and is the reflexive, transitive    *)
+(*   closure of parenttag.                                                   *)
+(*                                                                           *)
+(*  subtag_ is the same as subtag but for booleans.                          *)
+(*                                                                           *)
+(*  instanceof is defined from typeof and subtag.                            *)
+(*                                                                           *)
+(*  int_of_tag gives a different integer to each tags to differenciate them. *)
+(*****************************************************************************)
 
 type tag_id 't
 
+type tag_table 't = Map.map (pointer 't) (tag_id 't)
+
+function select_tag (t : tag_table 't) (p : pointer 't) : tag_id 't = Map.get t p
+function store_tag (t : tag_table 't) (p : pointer 't) (s : tag_id 't) : tag_table 't = Map.set t p s
+
+function store_tags (tag_table 't) (pointer 't) (tag_id 't) : tag_table 't
+
+axiom store_tags:
+  forall t : tag_table 't.
+    forall p : pointer 't.
+      forall s : tag_id 't [store_tags t p s].
+        forall p' : pointer 't [select_tag (store_tags t p s) p'].
+          let in_pset_all = in_pset p' (pset_all (pset_singleton p) in
+          let result = select_tag (store_tags t p s) p' in
+          (in_pset_all -> result = s) /\ (not in_pset_all -> result = select_tag t p)
+
 function int_of_tag (tag_id 't) : int
 
-function typeof (pointer 't) : tag_id 't
+function typeof (t : tag_table 't) (p : pointer 't) : tag_id 't = select_tag t p
 
 function cast_factor (tag_id 't) (tag_id 't) : int
 
@@ -276,29 +287,35 @@ axiom subtag_parent:
   forall t3: (tag_id 't).
     subtag t1 t2 -> parenttag t2 t3 -> subtag t1 t3
 
-predicate instanceof (p : pointer 't) (s : tag_id 't) =
-  subtag (typeof p) s
+predicate instanceof (t : tag_table 't) (p : pointer 't) (s : tag_id 't) =
+  subtag (typeof t p) s
 
 function instanceof_bool (p : pointer 't) (s : tag_id 't) : bool =
   if instanceof p s then True else False
 
-function downcast (pointer 't) (tag_id 't) : pointer 't
+function downcast (tag_table 't) (pointer 't) (tag_id 't) : pointer 't
 
 axiom downcast_reduce:
-  forall p : pointer 't.
-    forall s2 : tag_id 't [downcast p s2].
-      forall s1 : tag_id 't [downcast (downcast p s1) s2].
-        cast_factor s1 s2 <> 0 -> downcast (downcast p s1) s2 = downcast p s2
+  forall t : tag_table 't.
+    forall p : pointer 't.
+      forall s2 : tag_id 't [downcast t p s2].
+        forall s1 : tag_id 't [downcast t (downcast t p s1) s2].
+          cast_factor s1 s2 <> 0 -> downcast t (downcast t p s1) s2 = downcast t p s2
 
 axiom downcast_instanceof:
+  forall t : tag_table 't.
   forall p : pointer 't.
-  forall s : tag_id 't.
-   instanceof p s -> downcast p s = p
+  forall s : tag_id 't [instanceof t p s | downcast t p s].
+   instanceof t p s -> downcast t p s = p
 
-axiom instanceof_downcast:
+axiom typeof_sidecast:
+  forall t : tag_table 't.
   forall p : pointer 't.
-  forall s : tag_id 't.
-   instanceof (downcast p s) s
+  forall s1 : tag_id 't.
+  forall s2 : tag_id 't [typeof t (downcast t p s2)].
+    cast_factor s1 s2 <> 0 ->
+    typeof t p s1 ->
+    typeof t (downcast t p s2) s2
 
 function bottom_tag: tag_id 'a
 
@@ -349,6 +366,15 @@ predicate reinterpret_cast_retain
   (forall i : int [shift p i | shift ps i]. downcast (shift p i) s = shift ps i) /\
   offset_min a2 ps = offset_min a1 p /\
   offset_max a2 ps = offset_max a1 p
+
+predicate not_assigns_tags (t1 : tag_table 't) (t2 : tag_table 't) (l : pset 't) =
+  forall p:pointer 't.
+    not in_pset p l -> select_tag t2 p = select_tag t1 p
+
+axiom not_assigns_tags_refl:
+  forall t : tag_table 't.
+  forall l : pset 't.
+    not_assigns t t l
 
 (*****************************************************************************)
 (* bitwise operations                                                        *)

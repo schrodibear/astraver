@@ -47,7 +47,8 @@ open Jc_iterators
 open Jc_interp_misc
 open Jc_struct_tools
 
-open Output
+open Jc_why_output_ast
+open Jc_why_output_misc
 
 (* other modifications for this extension can be found in:
      ast, typing, norm, interp: about pack / unpack, and mutable
@@ -84,8 +85,8 @@ let invariant_for_struct this st =
   let inv =
     make_and_list
       (List.map
-	 (fun (li, _) ->
-	    tr_logic_pred_call ~label_in_name:false ~region_assoc:[] ~label_assoc:[] li [this]) invs)
+         (fun (li, _) ->
+            tr_logic_pred_call ~label_in_name:false ~region_assoc:[] ~label_assoc:[] li [this]) invs)
   in
   let reads =
     List.fold_left
@@ -179,23 +180,23 @@ let field this pos fi =
   match t.jc_term_node with
     | JCTvar vi when vi == this && not must_deref -> ()
     | JCTderef (t, lab, fi) ->
-	field fi this pos;
-	check_rep ~must_deref:false this pos t
+        field fi this pos;
+        check_rep ~must_deref:false this pos t
     | JCTcast (t, _, _) -> assert false (* TODO *)
     | JCTshift (t, _) ->
-	(* t must not be this, but might be a field of this if it is a table *)
-	(* (? TODO) *)
-	check_rep ~must_deref:true this pos t
+        (* t must not be this, but might be a field of this if it is a table *)
+        (* (? TODO) *)
+        check_rep ~must_deref:true this pos t
     | _ ->
-	Jc_typing.typing_error pos "this term is not a rep field of %s"
-	  this.vi_name*)
+        Jc_typing.typing_error pos "this term is not a rep field of %s"
+          this.vi_name*)
 
 (* A pattern may hide some dereferencing. *)
 let pattern this p =
   Jc_iterators.iter_pattern
     (fun p -> match p#node with
        | JCPstruct(_, fipl) ->
-	   List.iter (field this p#pos) (List.map fst fipl)
+           List.iter (field this p#pos) (List.map fst fipl)
        | _ -> ())
     p
 
@@ -207,15 +208,15 @@ let term this t =
   Jc_iterators.ITerm.iter
     (fun t -> match t#node with
        | JCTapp app ->
-	   let id = app.app_fun in
-	   if not (MemoryMap.is_empty
-		     id.li_effects.e_memories) then
-	     Jc_typing.typing_error t#pos
-	       "this call is not allowed in structure invariant"
+           let id = app.app_fun in
+           if not (MemoryMap.is_empty
+                     id.li_effects.e_memories) then
+             Jc_typing.typing_error t#pos
+               "this call is not allowed in structure invariant"
        | JCTderef(_, _, fi) ->
-	   field this t#pos fi
+           field this t#pos fi
        | JCTmatch(_, ptl) ->
-	   List.iter (pattern this) (List.map fst ptl)
+           List.iter (pattern this) (List.map fst ptl)
        | _ -> ())
     t
 
@@ -227,8 +228,8 @@ let term this t =
        | JCTrange(None, None) -> ()
        | JCTbinary(t1, _, t2)
        | JCTrange(Some t1, Some t2) ->
-	   term this t1;
-	   term this t2
+           term this t1;
+           term this t2
        | JCTunary(_, t)
        | JCTold t
        | JCTat(t, _)
@@ -237,23 +238,23 @@ let term this t =
        | JCTcast(t, _, _)
        | JCTrange(Some t, None)
        | JCTrange(None, Some t) ->
-	   term this t
+           term this t
        | JCTif(t1, t2, t3) ->
-	   term this t1
-	   term this t2
-	   term this t3
+           term this t1
+           term this t2
+           term this t3
        | JCTmatch of term * (pattern * term) list
        | JCTshift(t1, t2) ->
        | JCTsub_pointer(t1, t2) ->
        | JCTderef(t, _, fi) ->
        | JCTapp app ->
-	   let id = app.app_fun in
-	   if not (FieldRegionMap.is_empty
-		     id.li_effects.e_memories) then
-	     Jc_typing.typing_error t.jc_term_loc
-	       "this call is not allowed in structure invariant"
+           let id = app.app_fun in
+           if not (FieldRegionMap.is_empty
+                     id.li_effects.e_memories) then
+             Jc_typing.typing_error t.jc_term_loc
+               "this call is not allowed in structure invariant"
        | JCTderef _ ->
-	   check_rep this t.jc_term_loc t
+           check_rep this t.jc_term_loc t
        | _ -> ()
     ) t*)
 
@@ -274,38 +275,38 @@ let rec assertion this p =
     | JCAat(p,_) -> assertion this p
     | JCAquantifier(_,_id, _, p) -> assertion this p
     | JCAapp app ->
-	let id = app.app_fun in
-	if MemoryMap.is_empty id.li_effects.e_memories
-	then List.iter (term this) app.app_args
-	else
-	  Jc_typing.typing_error p#pos
-	    "this call is not allowed in structure invariant"
+        let id = app.app_fun in
+        if MemoryMap.is_empty id.li_effects.e_memories
+        then List.iter (term this) app.app_args
+        else
+          Jc_typing.typing_error p#pos
+            "this call is not allowed in structure invariant"
     | JCAnot p -> assertion this p
     | JCAiff (p1, p2)
     | JCAimplies (p1, p2) -> assertion this p1; assertion this p2
     | JCArelation (t1,_, t2) -> term this t1; term this t2
     | JCAand l | JCAor l -> List.iter (assertion this) l
     | JCAmutable _ ->
-	Jc_typing.typing_error p#pos
-	  "\\mutable is not allowed in structure invariant"
+        Jc_typing.typing_error p#pos
+          "\\mutable is not allowed in structure invariant"
     | JCAeqtype(t1, t2, _) | JCAsubtype(t1, t2, _) ->
-	tag this t1;
-	tag this t2
+        tag this t1;
+        tag this t2
     | JCAlet(_vi,t, p) ->
-	term this t;
-	assertion this p
+        term this t;
+        assertion this p
     | JCAmatch(t, pal) ->
-	term this t;
-	List.iter (fun (_, a) -> assertion this a) pal
+        term this t;
+        List.iter (fun (_, a) -> assertion this a) pal
 
 let check invs =
   List.iter
     (fun (li,p) ->
        Jc_options.lprintf
-	 "    Checking invariant: %s@." li.li_name;
+         "    Checking invariant: %s@." li.li_name;
        match li.li_parameters with
-	 | [this] -> assertion this p
-	 | _ -> assert false)
+         | [this] -> assertion this p
+         | _ -> assert false)
     invs
 
 (***********************************)
@@ -316,8 +317,8 @@ let rec term_memories aux t =
   Jc_iterators.fold_term
     (fun aux t -> match t#node with
     | JCTderef(_t, _lab, fi) ->
-	let m = fi.fi_final_name in
-	StringSet.add m aux
+        let m = fi.fi_final_name in
+        StringSet.add m aux
     | _ -> aux
     ) aux t
 
@@ -357,9 +358,9 @@ let rec all_structures st acc =
   if StringSet.mem st.si_name acc then acc else
     List.fold_left
       (fun acc fi ->
-	 match fi.fi_type with
-	   | JCTpointer(JCtag(st, _), _, _) -> all_structures st acc
-	   | _ -> acc)
+         match fi.fi_type with
+           | JCTpointer(JCtag(st, _), _, _) -> all_structures st acc
+           | _ -> acc)
       (StringSet.add st.si_name acc)
       st.si_fields
 
@@ -377,25 +378,26 @@ let invariant_params acc li =
   let acc =
     MemoryMap.fold
       (fun (mc,r) _labels acc ->
-	 (memory_name(mc,r), memory_type mc)::acc)
+         (memory_name(mc,r), memory_type mc)::acc)
       li.li_effects.e_memories
       acc
   in
   let acc =
     AllocMap.fold
       (fun (ac,r) _labs acc ->
-	 (alloc_table_name (ac, r),
-	  alloc_table_type (ac))::acc)
+         (alloc_table_name (ac, r),
+          alloc_table_type (ac))::acc)
       li.li_effects.e_alloc_tables
       acc
   in
   let acc =
     TagMap.fold
       (fun (v,r) _labels acc ->
-	 let t = { logic_type_args = [root_model_type v];
-		   logic_type_name = "tag_table" }
-	 in
-	 (tag_table_name (v,r), t)::acc)
+         let t =
+           { lt_args = [root_model_type v];
+             lt_name = "tag_table" }
+         in
+         (tag_table_name (v,r), t)::acc)
       li.li_effects.e_tag_tables
       acc
   in
@@ -421,11 +423,11 @@ let function_structures params =
   let structures = List.fold_left
     (fun acc vi ->
        match vi.vi_type with
-	 | JCTpointer(JCtag(st, _), _, _) ->
-	     all_structures st acc
-	 | JCTpointer(JCroot vi, _, _) ->
-	     List.fold_right all_structures vi.ri_hroots acc
-	 | _ -> acc)
+         | JCTpointer(JCtag(st, _), _, _) ->
+             all_structures st acc
+         | JCTpointer(JCroot vi, _, _) ->
+             List.fold_right all_structures vi.ri_hroots acc
+         | _ -> acc)
     StringSet.empty
     params
   in
@@ -506,7 +508,7 @@ let field_assocs fi =
        if StringSet.mem fi.fi_final_name amems then
          StringSet.union amems aux
        else
-	 aux
+         aux
     ) (StringSet.singleton (mutable_name fi.fi_root)) invs in
   StringSet.elements mems
 
@@ -576,15 +578,15 @@ let assert_mutable e fi =
       let e_mutable = LApp("select", [LVar mutable_name; e]) in
       (*let e_committed = LApp("select", [LVar committed_name; e]) in*)
       let parent_tag = match st.si_parent with
-	| None -> LVar "bottom_tag"
-	| Some(parent, _) -> LVar (tag_name parent)
+        | None -> LVar "bottom_tag"
+        | Some(parent, _) -> LVar (tag_name parent)
       in
       let sub = make_subtag parent_tag e_mutable in
       (*let not_committed =
-	LPred(
-	  "eq",
-	  [ e_committed;
-	    LConst (Prim_bool false) ])
+        LPred(
+          "eq",
+          [ e_committed;
+            LConst (Prim_bool false) ])
       in
       Assert(`ASSERT,make_and sub not_committed, Void)*)
       mk_expr (Assert(`ASSERT,sub, void))
@@ -615,7 +617,7 @@ let assert_mutable e fi =
     LPred(
       "eq",
       [ LConst(Prim_bool false);
-	LApp("select", [LVar "mutable"; LVar this]) ]) in
+        LApp("select", [LVar "mutable"; LVar this]) ]) in
   let assoc_memories = StringSet.fold
     (fun mem acc ->
        LPred("assoc", [LVar pp; LVar mem])::acc)
@@ -662,11 +664,11 @@ let field_invariants fi =
     (* Only keep the invariants which uses the field *)
     List.fold_left
       (fun aux ((_, (_, a)) as x) ->
-	 let amems = assertion_memories StringSet.empty a in
-	 if StringSet.mem fi.fi_final_name amems then
+         let amems = assertion_memories StringSet.empty a in
+         if StringSet.mem fi.fi_final_name amems then
            x::aux
-	 else
-	 aux)
+         else
+         aux)
       []
       invs
 
@@ -712,31 +714,31 @@ let not_mutable_implies_fields_committed this st =
   let fields_pc = List.fold_left
     (fun acc fi ->
        match fi.fi_type with
-	 | JCTpointer(fi_pc, min, max) ->
-	     let n = fi.fi_final_name in
-	     let index = "jc_index" in
-	     let committed_name = committed_name fi_pc in
-	     let fi_ac = alloc_class_of_pointer_class fi_pc in
-	     let alloc = generic_alloc_table_name fi_ac in
-	     let params =
-	       [ n, memory_type (JCmem_field fi);
-		 committed_name, committed_memory_type fi_pc;
-		 alloc, alloc_table_type fi_ac; ]
-	     in
-	     let this_fi = make_select (LVar n) (LVar this) in
-	     let f = make_shift this_fi (LVar index) in
-	     let eq = make_eq (make_select_committed fi_pc f)
-	       (make_bool true)
-	     in
-	     let omin, omax = omin_omax (LVar alloc) this_fi min max in
-	     let range = make_range (LVar index) omin omax in
-	     let pred =
-	       LForall(
-		 index, simple_logic_type "int", [],
-		 LImpl(range, eq))
-	     in
-	     (params, pred)::acc
-	 | _ -> acc)
+         | JCTpointer(fi_pc, min, max) ->
+             let n = fi.fi_final_name in
+             let index = "jc_index" in
+             let committed_name = committed_name fi_pc in
+             let fi_ac = alloc_class_of_pointer_class fi_pc in
+             let alloc = generic_alloc_table_name fi_ac in
+             let params =
+               [ n, memory_type (JCmem_field fi);
+                 committed_name, committed_memory_type fi_pc;
+                 alloc, alloc_table_type fi_ac; ]
+             in
+             let this_fi = make_select (LVar n) (LVar this) in
+             let f = make_shift this_fi (LVar index) in
+             let eq = make_eq (make_select_committed fi_pc f)
+               (make_bool true)
+             in
+             let omin, omax = omin_omax (LVar alloc) this_fi min max in
+             let range = make_range (LVar index) omin omax in
+             let pred =
+               LForall(
+                 index, simple_logic_type "int", [],
+                 LImpl(range, eq))
+             in
+             (params, pred)::acc
+         | _ -> acc)
     [] fields
   in
   let params, coms = List.flatten (List.map fst fields_pc),
@@ -765,9 +767,9 @@ let committed_implies_fully_packed this root =
   let com = LPred(
     "eq",
     [ LApp(
-	"select",
-	[ LVar committed_name;
-	  LVar this ]);
+        "select",
+        [ LVar committed_name;
+          LVar this ]);
       LConst(Prim_bool true) ])
   in
 
@@ -814,39 +816,39 @@ let owner_unicity this root =
   let eq_and_com_list = List.map
     (fun fi ->
        try
-	 let name = fi.fi_final_name in
-	 Printf.printf "***** FIELD %s *****\n%!" name;
-	 let fi_pc = type_pc fi.fi_type in
-	 let committed_name = committed_name fi_pc in
-	 let this_dot_f = make_select (LVar name) (LVar this) in
-	 let x_dot_f = make_select (LVar name) (LVar x_name) in
+         let name = fi.fi_final_name in
+         Printf.printf "***** FIELD %s *****\n%!" name;
+         let fi_pc = type_pc fi.fi_type in
+         let committed_name = committed_name fi_pc in
+         let this_dot_f = make_select (LVar name) (LVar this) in
+         let x_dot_f = make_select (LVar name) (LVar x_name) in
 
-	 (* indexes, ranges *)
-	 let fi_ac = alloc_class_of_pointer_class fi_pc in
-	 let alloc = generic_alloc_table_name fi_ac in
-	 let omin1, omax1 = omin_omax (LVar alloc) this_dot_f
-	   (range_min fi.fi_type)
-	   (range_max fi.fi_type)
-	 in
-	 let omin2, omax2 = omin_omax (LVar alloc) x_dot_f
-	   (range_min fi.fi_type)
-	   (range_max fi.fi_type)
-	 in
-	 let range1 = make_range (LVar index1) omin1 omax1 in
-	 let range2 = make_range (LVar index2) omin2 omax2 in
-	 let shift1 = make_shift this_dot_f (LVar index1) in
-	 let shift2 = make_shift this_dot_f (LVar index2) in
+         (* indexes, ranges *)
+         let fi_ac = alloc_class_of_pointer_class fi_pc in
+         let alloc = generic_alloc_table_name fi_ac in
+         let omin1, omax1 = omin_omax (LVar alloc) this_dot_f
+           (range_min fi.fi_type)
+           (range_max fi.fi_type)
+         in
+         let omin2, omax2 = omin_omax (LVar alloc) x_dot_f
+           (range_min fi.fi_type)
+           (range_max fi.fi_type)
+         in
+         let range1 = make_range (LVar index1) omin1 omax1 in
+         let range2 = make_range (LVar index2) omin2 omax2 in
+         let shift1 = make_shift this_dot_f (LVar index1) in
+         let shift2 = make_shift this_dot_f (LVar index2) in
 
-	 let eq = make_eq shift1 shift2 in
+         let eq = make_eq shift1 shift2 in
 
-	 let com = make_eq
-	   (make_select (LVar committed_name) shift1)
-	   (make_bool true)
-	 in
+         let com = make_eq
+           (make_select (LVar committed_name) shift1)
+           (make_bool true)
+         in
 
-	 make_and_list [ range1; range2; eq; com ]
+         make_and_list [ range1; range2; eq; com ]
        with Failure "type_structure" ->
-	 LFalse)
+         LFalse)
     reps
   in
   let big_or = make_or_list eq_and_com_list in
@@ -857,8 +859,8 @@ let owner_unicity this root =
     LForall(
       index1, simple_logic_type "int", [],
       LForall(
-	index2, simple_logic_type "int", [],
-	LForall(x_name, x_type, [], impl)))
+        index2, simple_logic_type "int", [],
+        LForall(x_name, x_type, [], impl)))
   in
 
   (* params *)
@@ -866,10 +868,10 @@ let owner_unicity this root =
     (fun fi ->
        let ac = JCalloc_root (struct_root fi.fi_struct) in
        [ fi.fi_final_name, memory_type (JCmem_field fi);
-	 committed_name (JCtag(fi.fi_hroot, [])),
-	 committed_memory_type (JCtag(fi.fi_hroot, []));
-	 generic_alloc_table_name ac,
-	 alloc_table_type ac ])
+         committed_name (JCtag(fi.fi_hroot, [])),
+         committed_memory_type (JCtag(fi.fi_hroot, []));
+         generic_alloc_table_name ac,
+         alloc_table_type ac ])
     reps
   in
   let params = List.flatten params in
@@ -888,7 +890,7 @@ let make_hierarchy_global_invariant acc root =
   let mut_inv = List.map
     (fun st ->
        let _, invs =
-	 StringHashtblIter.find
+         StringHashtblIter.find
            Jc_typing.structs_table st.si_name
        in
        List.map (fun inv -> not_mutable_implies_invariant this st inv) invs)
@@ -935,7 +937,7 @@ let make_hierarchy_global_invariant acc root =
   match params with
     | [] -> acc (* Not supposed to happen though *)
     | _ -> Predicate(false, id_no_loc (hierarchy_invariant_name root),
-		     params, body)::acc
+                     params, body)::acc
 
 let make_global_invariants acc =
   let h = hierarchies () in
@@ -947,16 +949,16 @@ let assume_global_invariant st =
       Hashtbl.find hierarchy_invariants (root_name st)
     with Not_found ->
       failwith
-	("Jc_invariants.assume_global_invariant: "^
-	   (root_name st)^" not found")
+        ("Jc_invariants.assume_global_invariant: "^
+           (root_name st)^" not found")
   in
   match params with
     | [] -> void
     | _ ->
-	let reads = List.map fst params in
-	let params = List.map (fun (n, _) -> LVar n) params in
-	let inv = LPred(hierarchy_invariant_name st, params) in
-	make_assume reads inv
+        let reads = List.map fst params in
+        let params = List.map (fun (n, _) -> LVar n) params in
+        let inv = LPred(hierarchy_invariant_name st, params) in
+        make_assume reads inv
 
 let assume_global_invariants hl =
   List.fold_left append void (List.map assume_global_invariant hl)
@@ -1024,9 +1026,9 @@ let components st =
   List.fold_left
     (fun acc fi ->
        if fi.fi_rep then
-	 match fi.fi_type with
-	   | JCTpointer(pc, _, _) -> (fi, pc)::acc
-	   | _ -> acc
+         match fi.fi_type with
+           | JCTpointer(pc, _, _) -> (fi, pc)::acc
+           | _ -> acc
        else acc)
     []
     st.si_fields
@@ -1043,10 +1045,10 @@ let components_by_type st =
   let rec part prev acc = function
     | [] -> [prev, acc]
     | (fi, si)::tl ->
-	if compare_pcs si prev = 0 then
-	  part prev (fi::acc) tl
-	else
-	  (prev, acc)::(part si [fi] tl)
+        if compare_pcs si prev = 0 then
+          part prev (fi::acc) tl
+        else
+          (prev, acc)::(part si [fi] tl)
   in
   let part = function
     | [] -> []
@@ -1066,8 +1068,8 @@ let hierarchy_committed_postcond this root fields value =
     (fun fi ->
        let this_fi = make_select_fi fi this in
        let omin, omax = omin_omax (LVar alloc) this_fi
-	 (range_min fi.fi_type)
-	 (range_max fi.fi_type)
+         (range_min fi.fi_type)
+         (range_max fi.fi_type)
        in
        fi, this_fi, omin, omax)
     fields
@@ -1093,9 +1095,9 @@ let hierarchy_committed_postcond this root fields value =
        let index = "jc_index" in
        let range = make_range (LVar index) omin omax in
        let new_value = make_eq
-	 (make_select_committed fi_pc
-	    (make_shift this_fi (LVar index)))
-	 (LConst(Prim_bool value))
+         (make_select_committed fi_pc
+            (make_shift this_fi (LVar index)))
+         (LConst(Prim_bool value))
        in
        LForall(index, simple_logic_type "int", [], LImpl(range, new_value)))
     fields
@@ -1115,10 +1117,10 @@ let make_components_postcond this st reads writes committed =
   let reads =
     List.fold_left
       (fun acc (_, fields) ->
-	 List.fold_left
-	   (fun acc fi -> StringSet.add fi.fi_final_name acc)
-	   acc
-	   fields)
+         List.fold_left
+           (fun acc fi -> StringSet.add fi.fi_final_name acc)
+           acc
+           fields)
       reads
       comps
   in
@@ -1132,9 +1134,9 @@ let make_components_postcond this st reads writes committed =
     make_and_list
       (* for each hierarchy... *)
       (List.map
-	 (fun (pc, fields) -> hierarchy_committed_postcond
-	    this pc fields committed)
-	 comps)
+         (fun (pc, fields) -> hierarchy_committed_postcond
+            this pc fields committed)
+         comps)
   in
   postcond, reads, writes
 
@@ -1154,11 +1156,11 @@ let make_components_precond this st reads =
        let committed_name = committed_name si in
        (* x.f *)
        let base_field =
-	 LApp("select", [LVar fi.fi_final_name; this])
+         LApp("select", [LVar fi.fi_final_name; this])
        in
        (* x.f+i *)
        let this_field =
-	 LApp("shift", [ base_field; LVar index_name ])
+         LApp("shift", [ base_field; LVar index_name ])
        in
        let fi_pc = type_pc fi.fi_type in
        let fi_ac = alloc_class_of_pointer_class fi_pc in
@@ -1168,15 +1170,15 @@ let make_components_precond this st reads =
        let reads = StringSet.add mutable_name reads in
        (* pre-condition: forall i, valid(x.f+i) => fp(x.f+i) /\ not committed(x.f+i) *)
        let body = make_and
-	 (fully_packed fi_pc this_field)
-	 (LPred(
-	    "eq",
-	    [ LApp("select", [LVar committed_name; this_field]);
-	      LConst(Prim_bool false) ]))
+         (fully_packed fi_pc this_field)
+         (LPred(
+            "eq",
+            [ LApp("select", [LVar committed_name; this_field]);
+              LConst(Prim_bool false) ]))
        in
        let omin, omax = omin_omax (LVar alloc) base_field
-	 (range_min fi.fi_type)
-	 (range_max fi.fi_type)
+         (range_min fi.fi_type)
+         (range_max fi.fi_type)
        in
        let range = make_range (LVar index_name) omin omax in
        let valid_impl = LImpl(range, body) in
@@ -1204,9 +1206,9 @@ let pack_declaration st acc =
   let requires =
     make_and_list [
       (LPred(
-	 "parenttag",
-	 [ LVar tag;
-	   LApp("select", [LVar mutable_name; LVar this]) ]));
+         "parenttag",
+         [ LVar tag;
+           LApp("select", [LVar mutable_name; LVar this]) ]));
       inv;
       components_pre
     ]
@@ -1214,13 +1216,13 @@ let pack_declaration st acc =
   let ensures =
     make_and
       (LPred(
-	 "eq",
-	 [ LVar mutable_name;
-	   LApp(
-	     "store",
-	     [ LDerefAtLabel(mutable_name, "");
-	       LVar this;
-	       LVar tag ])]))
+         "eq",
+         [ LVar mutable_name;
+           LApp(
+             "store",
+             [ LDerefAtLabel(mutable_name, "");
+               LVar this;
+               LVar tag ])]))
       components_post
   in
   let annot_type =
@@ -1238,13 +1240,13 @@ let pack_declaration st acc =
       false,
       id_no_loc (pack_name st),
       Prod_type(
-	this,
-	Base_type this_type,
-	Prod_type(
-	  tag,
-	  Base_type tag_type,
-	  annot_type
-	)
+        this,
+        Base_type this_type,
+        Prod_type(
+          tag,
+          Base_type tag_type,
+          annot_type
+        )
       )
     )::acc
   else
@@ -1268,24 +1270,24 @@ let unpack_declaration st acc =
     (* unpack this as tag: requires parenttag(this.mutable, tag) and not this.committed *)
     make_and
       (LPred(
-	 "parenttag",
-	 [ LApp("select", [LVar mutable_name; LVar this]);
-	   LVar tag ]))
+         "parenttag",
+         [ LApp("select", [LVar mutable_name; LVar this]);
+           LVar tag ]))
       (LPred(
-	 "eq",
-	 [ LConst(Prim_bool false);
-	   LApp("select", [LVar committed_name; LVar this]) ]))
+         "eq",
+         [ LConst(Prim_bool false);
+           LApp("select", [LVar committed_name; LVar this]) ]))
   in
   let ensures =
     make_and
       (LPred(
-	 "eq",
-	 [ LDeref mutable_name;
-	   LApp(
-	     "store",
-	     [ LDerefAtLabel(mutable_name, "");
-	       LVar this;
-	       LVar tag ])]))
+         "eq",
+         [ LDeref mutable_name;
+           LApp(
+             "store",
+             [ LDerefAtLabel(mutable_name, "");
+               LVar this;
+               LVar tag ])]))
       components_post
   in
   let annot_type =
@@ -1303,13 +1305,13 @@ let unpack_declaration st acc =
       false,
       id_no_loc ("unpack_"^(root_name st)),
       Prod_type(
-	this,
-	Base_type this_type,
-	Prod_type(
-	  tag,
-	  Base_type tag_type,
-	  annot_type
-	)
+        this,
+        Base_type this_type,
+        Prod_type(
+          tag,
+          Base_type tag_type,
+          annot_type
+        )
       )
     )::acc
   else
@@ -1414,98 +1416,98 @@ let rec invariant_for_struct ?pos this si =
   in
   let invs = Assertion.mkand ?pos
     ~conjuncts:(List.map
-		  (fun (li, _) ->
-		     let a = { app_fun = li;
-			       app_args = [this];
-			       app_label_assoc = [];
-			       app_region_assoc = [] }
-		     in
-		       new assertion ?pos (JCAapp a)) invs)
+                  (fun (li, _) ->
+                     let a = { app_fun = li;
+                               app_args = [this];
+                               app_label_assoc = [];
+                               app_region_assoc = [] }
+                     in
+                       new assertion ?pos (JCAapp a)) invs)
     ()
   in
     match si.si_parent with
       | None -> invs
       | Some(si, _) -> (* add invariants from the type hierarchy *)
-	  let this =
-	    match this#typ with
-	      | JCTpointer (_, a, b) ->
-		  new term_with ~typ:(JCTpointer (JCtag(si, []), a, b)) this
-	      | _ -> assert false (* never happen *)
-	  in
-	    Assertion.mkand ?pos
-	      ~conjuncts:[invs; (invariant_for_struct ?pos this si)]
-	      ()
+          let this =
+            match this#typ with
+              | JCTpointer (_, a, b) ->
+                  new term_with ~typ:(JCTpointer (JCtag(si, []), a, b)) this
+              | _ -> assert false (* never happen *)
+          in
+            Assertion.mkand ?pos
+              ~conjuncts:[invs; (invariant_for_struct ?pos this si)]
+              ()
 
 let code_function (fi, pos, fs, _sl) vil =
   begin
     match !Jc_common_options.inv_sem with
       | InvArguments ->  (* apply arguments invariant policy *)
-	  (* Calculate global invariants. *)
-	  let _vitl =
-	    List.map
-	      (fun vi -> Term.mkvar ~var:vi ()) vil
-	  in
-	  let global_invariants =
-	    IntHashtblIter.fold
-	      (fun _ (li, _) acc ->
-		 (* li.li_parameters <- vil; *)
-		 let a = { app_fun = li;
-			   app_args = (* vitl *)[];
-			   app_label_assoc = [];
-			   app_region_assoc = [] }
-		 in
-		 (new assertion ~mark:(Jc_pervasives.new_label_name ())
-		    ~pos (JCAapp a)) :: acc)
-	      Jc_typing.global_invariants_table []
-	  in
-	  let global_invariants =
-	    Assertion.mkand ~pos ~conjuncts:global_invariants ()
-	  in
-	  (* Calculate invariants for each parameter. *)
-	  let pre_invariants,post_invariants =
-	    List.fold_left
-	      (fun (acc1,acc2) (valid,vi) ->
-		 match vi.vi_type with
-		   | JCTpointer (JCtag (st, []), _, _) ->
-		       let inv =
-			 invariant_for_struct ~pos
-			   (Term.mkvar ~var:vi ()) st
-		       in
-		       ((if valid then
-			   Assertion.mkand ~pos
-			     ~conjuncts: [acc1; inv] ()
-			 else acc1),
-			Assertion.mkand ~pos
-			  ~conjuncts: [acc2; inv] ())
-		   | _ -> (acc1,acc2))
-	      (global_invariants,global_invariants)
-	      fi.fun_parameters
-	  in
-	  (* add invariants to the function precondition *)
-	  fs.fs_requires <-
-	    Assertion.mkand ~pos
-	    ~conjuncts:[fs.fs_requires; pre_invariants] ();
-	  (* add invariants to the function postcondition *)
-	  if is_purely_exceptional_fun fs then () else
-	    let safety_exists = ref false in
-	    let post = post_invariants in
-	    List.iter
-	      (fun (_, s, b) ->
-		 if s = "safety" then safety_exists := true;
-		 b.b_ensures <-
-		   Assertion.mkand ~pos ~conjuncts:[b.b_ensures; post] ())
-	      fs.fs_behavior;
-	    (* add the 'safety' spec if it does not exist
-	       (it could exist e.g. from Krakatoa) *)
-	    if not !safety_exists then
-	      if Jc_options.verify_invariants_only then
-		let invariants_b = { default_behavior with b_ensures = post } in
-		fs.fs_behavior <-
-		  (Loc.dummy_position, "invariants", invariants_b) :: fs.fs_behavior;
-	      else
-		let safety_b = { default_behavior with b_ensures = post } in
-		fs.fs_behavior <-
-		  (Loc.dummy_position, "safety", safety_b) :: fs.fs_behavior;
+          (* Calculate global invariants. *)
+          let _vitl =
+            List.map
+              (fun vi -> Term.mkvar ~var:vi ()) vil
+          in
+          let global_invariants =
+            IntHashtblIter.fold
+              (fun _ (li, _) acc ->
+                 (* li.li_parameters <- vil; *)
+                 let a = { app_fun = li;
+                           app_args = (* vitl *)[];
+                           app_label_assoc = [];
+                           app_region_assoc = [] }
+                 in
+                 (new assertion ~mark:(Jc_pervasives.new_label_name ())
+                    ~pos (JCAapp a)) :: acc)
+              Jc_typing.global_invariants_table []
+          in
+          let global_invariants =
+            Assertion.mkand ~pos ~conjuncts:global_invariants ()
+          in
+          (* Calculate invariants for each parameter. *)
+          let pre_invariants,post_invariants =
+            List.fold_left
+              (fun (acc1,acc2) (valid,vi) ->
+                 match vi.vi_type with
+                   | JCTpointer (JCtag (st, []), _, _) ->
+                       let inv =
+                         invariant_for_struct ~pos
+                           (Term.mkvar ~var:vi ()) st
+                       in
+                       ((if valid then
+                           Assertion.mkand ~pos
+                             ~conjuncts: [acc1; inv] ()
+                         else acc1),
+                        Assertion.mkand ~pos
+                          ~conjuncts: [acc2; inv] ())
+                   | _ -> (acc1,acc2))
+              (global_invariants,global_invariants)
+              fi.fun_parameters
+          in
+          (* add invariants to the function precondition *)
+          fs.fs_requires <-
+            Assertion.mkand ~pos
+            ~conjuncts:[fs.fs_requires; pre_invariants] ();
+          (* add invariants to the function postcondition *)
+          if is_purely_exceptional_fun fs then () else
+            let safety_exists = ref false in
+            let post = post_invariants in
+            List.iter
+              (fun (_, s, b) ->
+                 if s = "safety" then safety_exists := true;
+                 b.b_ensures <-
+                   Assertion.mkand ~pos ~conjuncts:[b.b_ensures; post] ())
+              fs.fs_behavior;
+            (* add the 'safety' spec if it does not exist
+               (it could exist e.g. from Krakatoa) *)
+            if not !safety_exists then
+              if Jc_options.verify_invariants_only then
+                let invariants_b = { default_behavior with b_ensures = post } in
+                fs.fs_behavior <-
+                  (Loc.dummy_position, "invariants", invariants_b) :: fs.fs_behavior;
+              else
+                let safety_b = { default_behavior with b_ensures = post } in
+                fs.fs_behavior <-
+                  (Loc.dummy_position, "safety", safety_b) :: fs.fs_behavior;
       | _ -> ()
   end;
 

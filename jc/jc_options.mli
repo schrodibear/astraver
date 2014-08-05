@@ -101,7 +101,7 @@ val jc_warning : Loc.position -> ('a, Format.formatter, unit, unit) format4 -> '
 val parsing_error : Loc.position -> ('a, unit, string, 'b) format4 -> 'a
 
 val pos_table :
-  (string, (string * int * int * int * Output.kind option * (string * Rc.rc_value) list))
+  (string, (string * int * int * int * Jc_why_output_ast.vc_kind option * (string * Rc.rc_value) list))
      Hashtbl.t
 
 val position_of_label: string -> Loc.position option

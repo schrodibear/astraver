@@ -280,7 +280,7 @@ bin/top: $(CMO)
 
 
 # jessie
-JCCML_EXPORT = src/why3_kw.ml jc/output.ml \
+JCCML_EXPORT = src/why3_kw.ml \
 	jc/jc_common_options.ml jc/jc_stdlib.ml \
 	jc/jc_envset.ml jc/jc_region.ml jc/jc_fenv.ml \
 	jc/jc_constructors.ml \
@@ -288,7 +288,7 @@ JCCML_EXPORT = src/why3_kw.ml jc/output.ml \
 	jc/jc_output_misc.ml jc/jc_poutput.ml jc/jc_output.ml jc/jc_noutput.ml
 JCCMO_EXPORT = $(CMO_EXPORT) $(JCCML_EXPORT:.ml=.cmo)
 JCCMX_EXPORT = $(JCCMO_EXPORT:.cmo=.cmx)
-JCCMI_EXPORT = jc/jc_ast.cmi jc/jc_env.cmi jc/jc.cmi $(JCCMO_EXPORT:.cmo=.cmi)
+JCCMI_EXPORT = jc/jc_why_output_ast.mli jc/jc_ast.cmi jc/jc_env.cmi jc/jc.cmi $(JCCMO_EXPORT:.cmo=.cmi)
 
 JCCMO = src/version.cmo \
 	@ATPCMO@ $(JCCMO_EXPORT) \
@@ -302,6 +302,8 @@ JCCMO = src/version.cmo \
 	jc/jc_callgraph.cmo \
 	jc/jc_effect.cmo \
 	jc/jc_ai.cmo \
+	jc/jc_why_output.cmo \
+	jc/jc_why3_output.cmo \
 	jc/jc_interp_misc.cmo jc/jc_invariants.cmo \
 	jc/jc_pattern.cmo \
 	jc/jc_frame_notin.cmo \
@@ -365,12 +367,12 @@ endif
 # CAUTION! NEVER ADD jc/jc_options.cmo INTO THIS LIST
 KCMO = src/lib.cmo src/version.cmo \
 	src/loc.cmo src/pp.cmo src/option_misc.cmo \
-	src/why3_kw.cmo jc/output.cmo jc/jc_stdlib.cmo \
+	src/why3_kw.cmo jc/jc_stdlib.cmo \
 	jc/jc_envset.cmo jc/jc_common_options.cmo \
 	jc/jc_region.cmo jc/jc_fenv.cmo jc/numconst.cmo jc/jc_constructors.cmo \
 	jc/jc_pervasives.cmo jc/jc_name.cmo \
 	jc/jc_iterators.cmo jc/jc_type_var.cmo jc/jc_output_misc.cmo \
-	jc/jc_poutput.cmo jc/jc_output.cmo jc/jc_noutput.cmo jc/output.cmo \
+	jc/jc_poutput.cmo jc/jc_output.cmo jc/jc_noutput.cmo \
 	java/java_options.cmo java/java_pervasives.cmo \
 	java/java_abstract.cmo \
 	java/java_parser.cmo java/java_lexer.cmo java/java_syntax.cmo \

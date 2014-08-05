@@ -255,7 +255,8 @@ let fprintf_vc_kind fmttr k =
      | JCVCalloc_size -> "Allocation size"
      | JCVCuser_call n -> "Precondition for " ^ n
      | JCVCpointer_deref -> "Pointer dereference"
-     | JCVCindex_bounds -> "Index bounds"
+     | JCVCpointer_deref_bounds -> "Bounded pointer dereference"
+     | JCVCpointer_shift -> "Pointer shift"
      | JCVCdowncast -> "Downcast"
      | JCVCarith_overflow -> "Arithmetic overflow"
      | JCVCfp_overflow -> "Floating-point overflow")

@@ -53,7 +53,8 @@ let fprintf_vc_kind fmttr k =
      | JCVCalloc_size -> "AllocSize"
      | JCVCuser_call _ -> "UserCall"
      | JCVCpointer_deref -> "PointerDeref"
-     | JCVCindex_bounds -> "IndexBounds"
+     | JCVCpointer_deref_bounds -> "IndexBounds"
+     | JCVCpointer_shift -> "PointerShift"
      | JCVCdowncast -> "DownCast"
      | JCVCarith_overflow -> "ArithOverflow"
      | JCVCfp_overflow -> "FPOverflow")

@@ -47,8 +47,9 @@ type vc_kind =
   | JCVCvar_decr
   | JCVCarith_overflow
   | JCVCdowncast
-  | JCVCindex_bounds
   | JCVCpointer_deref
+  | JCVCpointer_deref_bounds
+  | JCVCpointer_shift
   | JCVCuser_call of string
   | JCVCdiv_by_zero
   | JCVCalloc_size

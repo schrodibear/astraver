@@ -268,16 +268,18 @@ let parsing_error l f =
 (* pos table *)
 
 let kind_of_ident =
+  let open Jc_why_output_ast in
   function
-  | "ArithOverflow" -> Output.ArithOverflow
-  | "DownCast" -> Output.DownCast
-  | "IndexBounds" -> Output.IndexBounds
-  | "PointerDeref" -> Output.PointerDeref
-  | "UserCall" -> Output.UserCall
-  | "DivByZero" -> Output.DivByZero
-  | "AllocSize" -> Output.AllocSize
-  | "Pack" ->  Output.Pack
-  | "Unpack" -> Output.Unpack
+  | "ArithOverflow" -> JCVCarith_overflow
+  | "DownCast" -> JCVCdowncast
+  | "IndexBounds" -> JCVCpointer_deref_bounds
+  | "PointerDeref" -> JCVCpointer_deref
+  | "PointerShift" -> JCVCpointer_shift
+  | "UserCall" -> JCVCuser_call "?"
+  | "DivByZero" -> JCVCdiv_by_zero
+  | "AllocSize" -> JCVCalloc_size
+  | "Pack" ->  JCVCpack
+  | "Unpack" -> JCVCunpack
   | _ -> raise Not_found
 
 let () =

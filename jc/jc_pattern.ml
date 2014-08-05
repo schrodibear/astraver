@@ -34,9 +34,11 @@ open Jc_name
 open Jc_ast
 open Jc_env
 open Jc_interp_misc
-open Output
+open Jc_why_output_ast
+open Jc_why_output_misc
 
-module type TAssertionMaker = sig
+module type TAssertionMaker =
+sig
   type t
   val make_subtag: term -> struct_info -> t
   val make_or: t -> t -> t
@@ -47,7 +49,8 @@ module type TAssertionMaker = sig
   val make_eq: jc_type -> term -> term -> t
 end
 
-module Pattern(AM: TAssertionMaker) = struct
+module Pattern (AM: TAssertionMaker) =
+struct
   (** [pattern arg ty pat] translates the pattern [pat] applied to the term
     [arg] which have a [jc_type] of [ty].
     Returns [notcond, cond, vars] where:
@@ -59,48 +62,49 @@ module Pattern(AM: TAssertionMaker) = struct
       [ty] its [jc_type]. *)
   let rec pattern arg ty pat = match pat#node with
     | JCPstruct(st, fpl) ->
-	let subtag = AM.make_subtag arg st in
-	List.fold_left
-	  (fun (accnotcond, acccond, accvars) (fi, pat) ->
-	     let arg = make_select_fi fi arg in
-	     let ty = fi.fi_type in
-	     let notcond, cond, vars = pattern arg ty pat in
-	     AM.make_or accnotcond notcond,
-	     AM.make_and acccond cond,
-	     accvars @ vars)
-	  (AM.make_not subtag, subtag, [])
-	  fpl
+        let subtag = AM.make_subtag arg st in
+        List.fold_left
+          (fun (accnotcond, acccond, accvars) (fi, pat) ->
+             let arg = make_select_fi fi arg in
+             let ty = fi.fi_type in
+             let notcond, cond, vars = pattern arg ty pat in
+             AM.make_or accnotcond notcond,
+             AM.make_and acccond cond,
+             accvars @ vars)
+          (AM.make_not subtag, subtag, [])
+          fpl
     | JCPvar vi ->
-	AM.make_false,
-	AM.make_eq ty (LVar vi.vi_final_name) arg,
-	[vi.vi_final_name, ty]
+        AM.make_false,
+        AM.make_eq ty (LVar vi.vi_final_name) arg,
+        [vi.vi_final_name, ty]
     | JCPor(p1, p2) ->
       (* typing ensures that both patterns bind the same variables *)
-	let notcond1, cond1, vars = pattern arg ty p1 in
-	let notcond2, cond2, _ = pattern arg ty p2 in
-	AM.make_and notcond1 notcond2,
-	AM.make_or cond1 cond2,
-	vars
+        let notcond1, cond1, vars = pattern arg ty p1 in
+        let notcond2, cond2, _ = pattern arg ty p2 in
+        AM.make_and notcond1 notcond2,
+        AM.make_or cond1 cond2,
+        vars
     | JCPas(p, vi) ->
-	let notcond, cond, vars = pattern arg ty p in
-	notcond,
-	AM.make_and
-	  cond
-	  (AM.make_eq ty (LVar vi.vi_final_name) arg),
-	(vi.vi_final_name, ty)::vars
+        let notcond, cond, vars = pattern arg ty p in
+        notcond,
+        AM.make_and
+          cond
+          (AM.make_eq ty (LVar vi.vi_final_name) arg),
+        (vi.vi_final_name, ty)::vars
     | JCPany | JCPconst JCCvoid ->
-	AM.make_false,
-	AM.make_true,
-	[]
+        AM.make_false,
+        AM.make_true,
+        []
     | JCPconst c ->
-	let eq = AM.make_eq ty arg (LConst (const c)) in
-	AM.make_not eq,
-	eq,
-	[]
+        let eq = AM.make_eq ty arg (LConst (const c)) in
+        AM.make_not eq,
+        eq,
+        []
 end
 
-module MakeAssertion = struct
-  type t = Output.assertion
+module MakeAssertion =
+struct
+  type t = assertion
 
   let make_subtag x st = make_instanceof x st
   let make_or a b = LOr(a, b)
@@ -110,10 +114,11 @@ module MakeAssertion = struct
   let make_true = LTrue
   let make_eq _ = make_eq
 end
-module PatternAssertion = Pattern(MakeAssertion)
+module PatternAssertion = Pattern (MakeAssertion)
 
-module MakeTerm = struct
-  type t = Output.term
+module MakeTerm =
+struct
+  type t = term
 
   let make_subtag x st = make_instanceof_bool x st
   let make_or = make_or_term
@@ -123,10 +128,10 @@ module MakeTerm = struct
   let make_true = LConst(Prim_bool false)
   let make_eq = make_eq_term
 end
-module PatternTerm = Pattern(MakeTerm)
+module PatternTerm = Pattern (MakeTerm)
 
 let make_blackbox_annot pre ty reads writes post exn_posts =
-  mk_expr(BlackBox(Annot_type(pre, ty, reads, writes, post, exn_posts)))
+  mk_expr (BlackBox (Annot_type (pre, ty, reads, writes, post, exn_posts)))
 
 let pattern_list_expr translate_body arg region ty pbl =
   List.fold_left
@@ -134,17 +139,17 @@ let pattern_list_expr translate_body arg region ty pbl =
        let notcond, cond, vars = PatternAssertion.pattern arg ty pat in
        let body = translate_body body in
        let reads =
-	 let ef = Jc_effect.pattern empty_effects (*LabelHere region*) pat in
-	 all_effects ef
+         let ef = Jc_effect.pattern empty_effects (*LabelHere region*) pat in
+         all_effects ef
        in
        let writes = List.map fst vars in
        let post = LIf(LVar "result", cond, notcond) in
        let bbox = make_blackbox_annot LTrue bool_type reads writes post [] in
        let branch = List.fold_left
-	 (fun acc (name, ty) ->
+         (fun acc (name, ty) ->
            mk_expr (Let_ref(name, any_value region ty, acc)))
          (mk_expr (If(bbox, body, accbody)))
-	 vars
+         vars
        in
        branch)
     (mk_expr Absurd)
@@ -160,8 +165,8 @@ let pattern_list_term translate_body arg ty pbl default =
        let body = translate_body body in
        let body = make_if_term cond body accbody in
        let lets = List.map
-	 (fun (n, ty) -> JCforall(n, tr_base_type ty))
-	 vars
+         (fun (n, ty) -> `Forall (n, tr_base_type ty))
+         vars
        in
        body, lets)
     (default, [])
@@ -174,10 +179,10 @@ let pattern_list_assertion translate_body arg ty pbl default =
        let notcond, cond, vars = PatternAssertion.pattern arg ty pat in
        let body = translate_body body in
        let case =
-	 List.fold_left
-	   (fun acc (n, ty) -> LForall(n, tr_base_type ty, [], acc))
-	   (LImpl(cond, body))
-	   vars
+         List.fold_left
+           (fun acc (n, ty) -> LForall(n, tr_base_type ty, [], acc))
+           (LImpl(cond, body))
+           vars
        in
        let full_case = LImpl(accnotcond, case) in
        LAnd(accbody, full_case), LAnd(accnotcond, notcond))
@@ -185,7 +190,7 @@ let pattern_list_assertion translate_body arg ty pbl default =
     pbl
 
 (*
-  Local Variables: 
+  Local Variables:
   compile-command: "unset LANG; make -j -C .. bin/jessie.byte"
   End:
 *)
