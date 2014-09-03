@@ -40,6 +40,8 @@ open Jc_pervasives
 
 open Format
 
+module Output = (val Jc_options.backend)
+
 let parse_file f =
   try
     let c = open_in f in
@@ -408,37 +410,7 @@ let main () =
     let decls = pop_decls () in
 
     (* output phase 1: produce Why file *)
-    if Jc_options.why3_backend then begin
-      Jc_options.lprintf "Produce Why3ml file@.";
-      Pp.print_in_file
-        (fun fmt -> fprintf fmt "%a@."
-            (Output.fprintf_why_decls ~why3:true
-               ~use_floats:!Jc_options.has_floats
-               ~float_model:!Jc_options.float_model)
-            decls)
-        (filename ^ ".mlw");
-      (* not used by why3, but useful for debugging traceability *)
-      let cout_locs,fmt_locs =
-        Pp.open_file_and_formatter (Lib.file_subdir "." (filename ^ ".loc"))
-      in
-      Output.my_print_locs fmt_locs;
-      Pp.close_file_and_formatter (cout_locs,fmt_locs);
-    end else begin
-      Jc_options.lprintf "Produce Why file@.";
-      Pp.print_in_file
-        (fun fmt -> fprintf fmt "%a@."
-            (Output.fprintf_why_decls ~why3:false
-               ~use_floats:!Jc_options.has_floats
-               ~float_model:!Jc_options.float_model)
-            decls)
-        (Lib.file_subdir "why" (filename ^ ".why"));
-
-      (* output phase 2: produce locs file *)
-      Jc_options.lprintf "Produce locs file@.";
-      let cout_locs, fmt_locs = Pp.open_file_and_formatter (Lib.file_subdir "." (filename ^ ".loc")) in
-      Output.my_print_locs fmt_locs;
-      Pp.close_file_and_formatter (cout_locs,fmt_locs);
-    end;
+    Output.print_to_file ~float_model:!Jc_options.float_model filename decls;
 
     (* output phase 3: produce makefile *)
     Jc_options.lprintf "Produce makefile@.";

@@ -146,7 +146,7 @@ let _ =
         "-behavior", Arg.String (fun s -> behavior := s::!behavior),
           "  verify only specified behavior (safety, variant, default or user-defined behavior)";
 
-        "-why3ml", Arg.Bool (function true -> backend := (module Jc_why3_output) | false -> ()),
+        "-why3ml", Arg.Unit (fun () -> backend := (module Jc_why3_output)),
           "  (experimental) produce a program in why3ml syntax" ;
 
         "-why-opt", Arg.String add_why_opt,

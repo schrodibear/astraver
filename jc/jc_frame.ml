@@ -47,7 +47,10 @@ open Jc_interp_misc
 open Jc_invariants
 open Jc_pattern
 
-open Output
+open Jc_why_output_ast
+open Jc_why_output_misc
+module Output = (val Jc_options.backend)
+
 open Format
 open Pp
 
@@ -623,7 +626,7 @@ let push_not e =
     | LForall (s,ty,tll,a) -> LForall(s,ty,tll,pos a)
     | LExists (s,ty,tll,a) -> LExists(s,ty,tll,pos a)
     | LPred _ as a -> a
-    | LNamed (s,a) -> LNamed(s,pos a)
+    | LLabeled (l, a) -> LLabeled (l, pos a)
   and neg = function
     | LTrue -> LFalse
     | LFalse -> LTrue
@@ -634,14 +637,14 @@ let push_not e =
     | LForall (s,ty,tll,a) -> LExists(s,ty,tll,neg a)
     | LExists (s,ty,tll,a) -> LForall(s,ty,tll,neg a)
     | LPred _ as a -> LNot a
-    | LNamed (s,a) -> LNamed(s,neg a)
+    | LLabeled (l, a) -> LLabeled (l, neg a)
   and trad f = function
     | LImpl(a,b) -> f (LOr(LNot a,b))
     | LIff(a,b) -> trad f (LAnd (LImpl(a,b),LImpl(b,a)))
     | LIf(_t,_a,_b) -> assert false (* How to trad this? t is a term *)
     | LLet _ -> assert false (* More difficult *)
     | LTrue | LFalse |LAnd _ |LOr _ | LNot _
-    | LForall _ | LExists _ | LPred _ | LNamed _ -> assert false in
+    | LForall _ | LExists _ | LPred _ | LLabeled _ -> assert false in
   pos e
 
 (*module Def_ft_pred :
@@ -1470,11 +1473,11 @@ sig
   val define_sub_x : define
   val define_sub   : define
 
-  val def_frame_in :  string -> NotIn.t -> (string * Output.logic_type) list ->
-    Output.why_decl list -> NotIn.t list -> Output.why_decl list
+  val def_frame_in :  string -> NotIn.t -> (string * logic_type) list ->
+    why_decl list -> NotIn.t list -> why_decl list
   val def_frame : string -> bool -> string ->
-    (string * Output.logic_type) list ->
-    Output.why_decl list -> NotIn.t list -> Output.why_decl list
+    (string * logic_type) list ->
+    why_decl list -> NotIn.t list -> why_decl list
 
   type for_in = string -> (string * logic_type) list ->
     NotIn.t -> (Jc_fenv.logic_info * (string * logic_type) list) list ->
@@ -1488,11 +1491,13 @@ sig
 end =
 struct
 
-  type define = NotIn.t ->
-    Output.why_decl list ->
-    Output.why_decl list -> Output.why_decl list
+  type define =
+    NotIn.t ->
+    why_decl list ->
+    why_decl list -> why_decl list
 
-  type for_in = string -> (string * logic_type) list ->
+  type for_in =
+    string -> (string * logic_type) list ->
     NotIn.t -> (Jc_fenv.logic_info * (string * logic_type) list) list ->
     why_decl list -> why_decl list
 
@@ -1502,7 +1507,7 @@ struct
   let rec term_extract_application acc e =
     match e with
       | LConst _ | LVar _ | LDeref _ | LDerefAtLabel _ -> acc
-      | Tnamed (_,t) -> term_extract_application acc t
+      | TLabeled (_, t) -> term_extract_application acc t
       | LApp (s,lt) -> (trad_app s lt)::
           (List.fold_left term_extract_application acc lt)
       | TIf _ -> assert false
@@ -1548,7 +1553,7 @@ struct
       | LApp (s,lt) -> List.fold_left (fun acc e -> make_or acc (fnT e))
         (interp s lt) lt
       | LVar _ -> LFalse
-      | Tnamed (_,t) -> term_interp_or interp t
+      | TLabeled (_,t) -> term_interp_or interp t
       | LDerefAtLabel _ ->
         failwith "Not implemented, how to do that? Show me the example!!! thx"
       | _ -> failwith "Not implemented"
@@ -1563,7 +1568,7 @@ struct
       | LApp (s,lt) -> List.fold_left (fun acc e -> make_and acc (fnT e))
         (interp s lt) lt
       | LVar _ -> LTrue
-      | Tnamed (_,t) -> term_interp_and interp t
+      | TLabeled (_,t) -> term_interp_and interp t
       | LDerefAtLabel _ ->
         failwith "Not implemented, how to do that? Show me the example!!! thx"
       | _ -> failwith "Not implemented"
@@ -1697,7 +1702,7 @@ struct
         (* Devrait peut-être utiliser la vrai transformation
            d'inductif en 1 unique axiom*)
       | [Inductive (_,f_name,params,l)] ->
-        let name = (in_name notin f_name.name) in
+        let name = (in_name notin f_name.why_name) in
         Jc_options.lprintf "Define logic in : %s :@." name;
         (* let acc = Logic(false, name, params, NotIn.ty notin)::acc in *)
         let var = ("jc_var",NotIn.ty_elt notin) in
@@ -1718,17 +1723,17 @@ struct
         let l = List.fold_left gen_case [] l in
         let var = ((fst var)^tmp_suffix,snd var) in
         let lt = List.map (fun (s,ty) -> (s^tmp_suffix,ty)) params in
-        let pred = in_interp_app var notin f_name.name
+        let pred = in_interp_app var notin f_name.why_name
           (List.map (fun x -> LVar (fst x)) lt) in
           inductive_to_axioms ("In"^name) pred (var::lt) l acc
       | [Function (_,f_name,params,_,term)] ->
-          let name = in_name notin f_name.name in
+          let name = in_name notin f_name.why_name in
           Jc_options.lprintf "Generate logic notin (fun): %s :@." name;
           let acc = Logic(false,
-                          {f_name with name = name},
+                          {f_name with why_name = name},
                           params,
                           NotIn.ty notin)::acc in
-          let axiom_name = "axiom"^"_in_"^(NotIn.mem_name2 notin)^f_name.name in
+          let axiom_name = "axiom"^"_in_"^(NotIn.mem_name2 notin)^f_name.why_name in
           Jc_options.lprintf "Generate axiom notin : %s :@." axiom_name;
           let var = ("jc_var",NotIn.ty_elt notin) in
           let interp s lt =
@@ -1736,7 +1741,7 @@ struct
             then in_interp_app var notin s lt
             else LFalse in
           let asser = term_interp_or interp term in
-          let conclu = in_interp_app var notin f_name.name
+          let conclu = in_interp_app var notin f_name.why_name
             (List.map (fun (x,_) -> LVar x) params) in
           let asser = make_equiv asser conclu in
           let params = var::params in
@@ -1753,14 +1758,14 @@ struct
           let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
           define_In notin ta_conv acc
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
-          (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;assert false
+          (Pp.print_list Pp.newline Output.fprintf_why_decl) ta_conv;assert false
 
   let rec define_disj notin ta_conv acc =
     match ta_conv with
       (* Devrait peut-être utiliser la vrai transformation
          d'inductif en 1 unique axiom*)
       | [Inductive (_,f_name,params,l)] ->
-        let name = (in_name notin f_name.name) in
+        let name = (in_name notin f_name.why_name) in
         let var = ("jc_var",NotIn.ty notin) in
         let gen_case acc (ident,assertion) =
           let effects = inductive_extract_effect assertion in
@@ -1778,11 +1783,11 @@ struct
         let l = List.fold_left gen_case [] l in
         let var = ((fst var)^tmp_suffix,snd var) in
         let lt = List.map (fun (s,ty) -> (s^tmp_suffix,ty)) params in
-        let pred = disj_interp_app var notin f_name.name
+        let pred = disj_interp_app var notin f_name.why_name
           (List.map (fun s -> LVar (fst s)) lt) in
         inductive_to_axioms ("disj"^name) pred (var::lt) l acc
       | [Function (_,f_name,params,_,term)] ->
-        let axiom_name = "axiom"^"_disj_"^(NotIn.mem_name2 notin)^f_name.name in
+        let axiom_name = "axiom"^"_disj_"^(NotIn.mem_name2 notin)^f_name.why_name in
         Jc_options.lprintf "Generate axiom disj : %s :@." axiom_name;
         let var = ("jc_var",NotIn.ty notin) in
         let interp s lt =
@@ -1790,7 +1795,7 @@ struct
           then disj_interp_app var notin s lt
           else LTrue in
         let asser = term_interp_and interp term in
-        let conclu = disj_interp_app var notin f_name.name
+        let conclu = disj_interp_app var notin f_name.why_name
           (List.map (fun (x,_) -> LVar x) params) in
         let asser = make_equiv asser conclu in
         let params = var::params in
@@ -1807,7 +1812,7 @@ struct
           let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
           define_disj notin ta_conv acc
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
-          (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;assert false
+          (Pp.print_list Pp.newline Output.fprintf_why_decl) ta_conv;assert false
 
   let rec add_triggers tr = function
     | LForall(vn,vt,[],(LForall _ as t)) -> LForall(vn,vt,[],add_triggers tr t)
@@ -1819,7 +1824,7 @@ struct
         (* Devrait peut-être utiliser la vrai transformation
            d'inductif en 1 unique axiom*)
       | [Inductive (_,f_name,_,l)] ->
-        let name = (in_name notin f_name.name) in
+        let name = (in_name notin f_name.why_name) in
         Jc_options.lprintf "Define logic in : %s :@." name;
         (* let acc = Logic(false, name, params, NotIn.ty notin)::acc in *)
         let var = ("jc_mem", notin.NotIn.ty_mem) in
@@ -1842,17 +1847,17 @@ struct
           List.fold_left rewrite acc effects in
         let l = List.fold_left gen_case [] l in
         let constr acc (ident,assertion) =
-          Goal(KAxiom,id_no_loc (frame_between_name^f_name.name^ident),
+          Goal(KAxiom,id_no_loc (frame_between_name^f_name.why_name^ident),
 	       assertion)::acc in
         List.fold_left constr acc l
       | [Function (_,f_name,params,_,term)] ->
-          let name = in_name notin f_name.name in
+          let name = in_name notin f_name.why_name in
           Jc_options.lprintf "Generate logic notin (fun): %s :@." name;
           let acc = Logic(false,
-                          {f_name with name = name},
+                          {f_name with why_name = name},
                           params,
                           NotIn.ty notin)::acc in
-          let axiom_name = "axiom"^"_in_"^(NotIn.mem_name2 notin)^f_name.name in
+          let axiom_name = "axiom"^"_in_"^(NotIn.mem_name2 notin)^f_name.why_name in
           Jc_options.lprintf "Generate axiom notin : %s :@." axiom_name;
           let var = ("jc_mem",NotIn.ty notin) in
           let interp s lt =
@@ -1860,7 +1865,7 @@ struct
             then frame_between_interp_app var notin s lt
             else LFalse in
           let asser = term_interp_or interp term in
-          let conclu = frame_between_interp_app var notin f_name.name
+          let conclu = frame_between_interp_app var notin f_name.why_name
             (List.map (fun (x,_) -> LVar x) params) in
           let asser = make_equiv asser conclu in
           let params = var::params in
@@ -1877,7 +1882,7 @@ struct
           let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
           define_frame_between notin ta_conv acc
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
-          (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;assert false
+          (Pp.print_list Pp.newline Output.fprintf_why_decl) ta_conv;assert false
 
 
   let rec define_sub notin ta_conv acc =
@@ -1885,7 +1890,7 @@ struct
         (* Devrait peut-être utiliser la vrai transformation
            d'inductif en 1 unique axiom*)
       | [Inductive (_,f_name,_,l)] ->
-        let name = (in_name notin f_name.name) in
+        let name = (in_name notin f_name.why_name) in
         let var = ("jc_var",NotIn.ty notin) in
         let gen_case acc (ident,assertion) =
           let effects = inductive_extract_effect assertion in
@@ -1909,13 +1914,13 @@ struct
         let acc = List.fold_left constr acc l in
         acc
       | [Function (_,f_name,params,_,term)] ->
-          let name = in_name notin f_name.name in
+          let name = in_name notin f_name.why_name in
           Jc_options.lprintf "Generate logic notin (fun): %s :@." name;
           let acc = Logic(false,
                           id_no_loc name,
                           params,
                           NotIn.ty notin)::acc in
-          let axiom_name = "axiom"^"_in_"^(NotIn.mem_name2 notin)^f_name.name in
+          let axiom_name = "axiom"^"_in_"^(NotIn.mem_name2 notin)^f_name.why_name in
           Jc_options.lprintf "Generate axiom notin : %s :@." axiom_name;
           let var = ("jc_var",NotIn.ty_elt notin) in
           let interp s lt =
@@ -1923,7 +1928,7 @@ struct
             then in_interp_app var notin s lt
             else LFalse in
           let asser = term_interp_or interp term in
-          let conclu = in_interp_app var notin f_name.name
+          let conclu = in_interp_app var notin f_name.why_name
             (List.map (fun (x,_) -> LVar x) params) in
           let asser = make_equiv asser conclu in
           let params = var::params in
@@ -1940,14 +1945,14 @@ struct
           let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
           define_sub notin ta_conv acc
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
-          (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;assert false
+          (Pp.print_list Pp.newline Output.fprintf_why_decl) ta_conv;assert false
 
   let rec define_x_sub notin ta_conv acc =
     match ta_conv with
         (* Devrait peut-être utiliser la vrai transformation
            d'inductif en 1 unique axiom*)
       | [Inductive (_,f_name,_,l)] ->
-        let name = (in_name notin f_name.name) in
+        let name = (in_name notin f_name.why_name) in
         Jc_options.lprintf "Define logic in : %s :@." name;
         (* let acc = Logic(false, name, params, NotIn.ty notin)::acc in *)
         let var = ("jc_var",NotIn.ty notin) in
@@ -1974,13 +1979,13 @@ struct
         let acc = List.fold_left constr acc l in
         acc
       | [Function (_,f_name,params,_,term)] ->
-          let name = in_name notin f_name.name in
+          let name = in_name notin f_name.why_name in
           Jc_options.lprintf "Generate logic notin (fun): %s :@." name;
           let acc = Logic(false,
-                          {f_name with name = name},
+                          {f_name with why_name = name},
                           params,
                           NotIn.ty notin)::acc in
-          let axiom_name = "axiom"^"_in_"^(NotIn.mem_name2 notin)^f_name.name in
+          let axiom_name = "axiom"^"_in_"^(NotIn.mem_name2 notin)^f_name.why_name in
           Jc_options.lprintf "Generate axiom notin : %s :@." axiom_name;
           let var = ("jc_var",NotIn.ty_elt notin) in
           let interp s lt =
@@ -1988,7 +1993,7 @@ struct
             then in_interp_app var notin s lt
             else LFalse in
           let asser = term_interp_or interp term in
-          let conclu = in_interp_app var notin f_name.name
+          let conclu = in_interp_app var notin f_name.why_name
             (List.map (fun (x,_) -> LVar x) params) in
           let asser = make_equiv asser conclu in
           let params = var::params in
@@ -2005,14 +2010,14 @@ struct
           let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
           define_x_sub notin ta_conv acc
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
-          (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;assert false
+          (Pp.print_list Pp.newline Output.fprintf_why_decl) ta_conv;assert false
 
   let rec define_sub_x notin ta_conv acc =
     match ta_conv with
       (* Devrait peut-être utiliser la vrai transformation
          d'inductif en 1 unique axiom*)
       | [Inductive (_,f_name,_,l)] ->
-        let name = (in_name notin f_name.name) in
+        let name = (in_name notin f_name.why_name) in
         let var = ("jc_var",NotIn.ty notin) in
         let gen_case acc (ident,assertion) =
           let effects = inductive_extract_effect assertion in
@@ -2034,7 +2039,7 @@ struct
         let acc = List.fold_left constr acc l in
         acc
       | [Function (_,f_name,params,_,term)] ->
-        let axiom_name = "axiom"^"_disj_"^(NotIn.mem_name2 notin)^f_name.name in
+        let axiom_name = "axiom"^"_disj_"^(NotIn.mem_name2 notin)^f_name.why_name in
         Jc_options.lprintf "Generate axiom disj : %s :@." axiom_name;
         let var = ("jc_var",NotIn.ty notin) in
         let interp s lt =
@@ -2042,7 +2047,7 @@ struct
           then disj_interp_app var notin s lt
           else LTrue in
         let asser = term_interp_and interp term in
-        let conclu = disj_interp_app var notin f_name.name
+        let conclu = disj_interp_app var notin f_name.why_name
           (List.map (fun (x,_) -> LVar x) params) in
         let asser = make_equiv asser conclu in
         let params = var::params in
@@ -2059,7 +2064,7 @@ struct
           let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
           define_sub_x notin ta_conv acc
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
-          (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;assert false
+          (Pp.print_list Pp.newline Output.fprintf_why_decl) ta_conv;assert false
 
   let gen axiom_name f_name gen_framed in_update params framed_params =
     (* frame for one update *)
@@ -2264,7 +2269,7 @@ let lemma_disjoint_cases ta_conv acc =
         | LForall (s,ty,_,f) ->
           LForall(s,ty,[],link_by_implication args cases f)
         | LImpl(f1,f2) -> LImpl(f1,link_by_implication args cases f2)
-        | LPred(s,lt) when f_name.name = s ->
+        | LPred(s,lt) when f_name.why_name = s ->
           let equalities = List.map2 (fun (a1,_) a2 -> make_eq (LVar a1) a2)
             args lt in
           LImpl (make_and_list equalities,each_case args cases)
@@ -2274,10 +2279,10 @@ let lemma_disjoint_cases ta_conv acc =
         | (_,assertion)::cases -> link_by_implication args cases assertion in
       let args = List.map (fun (s,ty) -> (s^tmp_suffix,ty)) params in
       let condition = make_forall_list args [] (each_case args l) in
-      let goal_name = f_name.name^"_disjoint_case" in
+      let goal_name = f_name.why_name^"_disjoint_case" in
       Goal(KGoal,id_no_loc goal_name,condition)::acc
     | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
-      (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;assert false
+      (Pp.print_list Pp.newline Output.fprintf_why_decl) ta_conv;assert false
 
 
 

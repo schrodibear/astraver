@@ -325,17 +325,16 @@ let normalize_locvardecl pos elist =
 	    | JCPEdecl(ty,name,initopt) ->
 		[mklet_nodecl ~pos:e#pos ~typ:ty ~var:name ?init:initopt
                    ~body:(mkblock ~pos ~exprs:acc ()) ()]
-	    | JCPElabel(lab, e1) ->
+	    | JCPElabel (lab, _e1) ->
 		(* the scope of lab is indeed extended to the end of that block, so that e.g.
 		   { (L: e1); ... ; assert ... \at(x,L) ... }
-
 		   is valid
 		*)
 		[mklabel
                   ~pos:e#pos
                   ~label:lab
 		  (* CAUTION ! shouldn't we recurse normalize on e1 ??? *)
-                  ~expr:(mkblock ~pos ~exprs:(e1::acc) ())
+                  ~expr:(mkblock ~pos ~exprs:(e::acc) ())
 		  ()]
 		(*
                 begin match e1#node with

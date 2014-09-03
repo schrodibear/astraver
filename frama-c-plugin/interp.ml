@@ -94,7 +94,7 @@ let mkdecl dnode pos = new decl ~pos dnode
 (*****************************************************************************)
 
 let reg_position ?id ?kind ?name pos =
-  Output.old_reg_pos "_C" ?id ?kind ?name (Loc.extract pos)
+  Jc_why_output_misc.jc_reg_pos "_C" ?id ?kind ?name (Loc.extract pos)
 
 (* [locate] should be called on every Jessie expression which we would like to
  * locate in the original source program.
@@ -1925,8 +1925,8 @@ let keep_only_declared_nb_of_arguments vi l =
   else l
 
 let instruction = function
-  | Set(lv,e,pos) ->
-      let enode = JCPEassign(lval pos lv,expr e) in
+  | Set (lv, e, pos) ->
+      let enode = JCPEassign (lval pos lv, expr e) in
       (locate (mkexpr enode pos))#node
 
   | Call(None,{enode = Lval(Var v,NoOffset)},eargs,pos) ->

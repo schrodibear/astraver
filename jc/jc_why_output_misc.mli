@@ -111,3 +111,10 @@ val why_print_locs : (formatter -> vc_kind -> unit) -> formatter -> unit
 (* Jc *.loc files *)
 val jc_reg_pos : string -> ?id:string -> ?kind:vc_kind -> ?name:string -> ?formula:string -> Loc.floc -> string
 val jc_print_pos : (formatter -> vc_kind -> unit) -> formatter -> unit
+
+(* ML file output *)
+val print_to_file:
+  (string -> string) ->
+  (formatter -> vc_kind -> unit) ->
+  (?float_model:Jc_env.float_model -> formatter -> why_decl list -> unit) ->
+  ?float_model:Jc_env.float_model -> string -> why_decl list -> unit

@@ -277,12 +277,12 @@ val tr_logic_fun_call :
 
 val make_int_of_tag : struct_info -> term
 
-val make_typeof : term -> term
+val make_typeof : struct_info -> region -> term -> term
 (** typeof expression in logic *)
 
-val make_instanceof : term -> struct_info -> assertion
+val make_instanceof : term -> term -> struct_info -> assertion
 
-val make_instanceof_bool : term -> struct_info -> term
+val make_instanceof_bool : term -> term -> struct_info -> term
 
 (** {2 helpers for effects information} *)
 

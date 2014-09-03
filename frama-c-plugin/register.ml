@@ -230,7 +230,9 @@ let run () =
 
     (* locname is 'file.cloc' *)
     let locname = basename ^ ".cloc" in
-    Pp.print_in_file Output.old_print_pos (Filename.concat jessie_subdir locname);
+    Pp.print_in_file
+      (Jc_why_output_misc.jc_print_pos Jc_why_output.fprintf_vc_kind)
+      (Filename.concat jessie_subdir locname);
     Jessie_options.feedback "File %s/%s written." jessie_subdir locname;
 
     if Jessie_options.GenOnly.get () then () else

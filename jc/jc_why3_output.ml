@@ -257,6 +257,8 @@ let fprintf_vc_kind fmttr k =
      | JCVCpointer_deref -> "Pointer dereference"
      | JCVCpointer_deref_bounds -> "Bounded pointer dereference"
      | JCVCpointer_shift -> "Pointer shift"
+     | JCVCseparation -> "Separation assertion"
+     | JCVCindex_bounds -> "Pointer index bounds"
      | JCVCdowncast -> "Downcast"
      | JCVCarith_overflow -> "Arithmetic overflow"
      | JCVCfp_overflow -> "Floating-point overflow")
@@ -273,18 +275,18 @@ let fprintf_why_label fmttr { l_kind; l_behavior; l_pos } =
     | "default" | "" -> ignore
     | b -> fun f -> f b
   in
-  let space = if not (Jc_position.is_dummy l_pos) then pr "@ " in
+  let space = if not (Jc_position.is_dummy l_pos) then fun () -> pr "@ " else ignore in
+  fprintf_jc_position fmttr l_pos;
+  space ();
   begin match l_kind with
   | Some vc_kind ->
     pr "\"expl:%a" fprintf_vc_kind vc_kind;
     with_behavior @@ pr ", behavior %s";
     pr "\"";
-    space
+    space ()
   | None ->
-    with_behavior @@ (fun b -> pr "\"for behavior %s\"" b; space);
-  end;
-  fprintf_jc_position fmttr l_pos;
-  space
+    with_behavior @@ (fun b -> pr "\"for behavior %s\"" b; space ())
+  end
 
 let lt_name t =
   match t.lt_name with
@@ -481,20 +483,21 @@ let rec fprintf_expr_node in_app fmttr =
     pr "@[<hov 1>try@ %a@ with@ %s ->@ %a end@]" fprintf_expr e1 exc fprintf_expr e2
   | Try (e1, exc, Some id, e2) ->
     pr "@[<hov 1>try@ %a@ with@ %s %s ->@ %a end@]" fprintf_expr e1 exc id fprintf_expr e2
-  | Fun (params, pre, body, post, signals) ->
+  | Fun (params, pre, body, post, diverges, signals) ->
     pr "@[<hov 1>fun @[";
     List.iter (fun (x, t) -> pr "(%s : %a) " (why3_id x) (fprintf_type ~need_colon:false false) t) params;
-    pr "@]->@ @[<hov 0>requires { %a  }@ " fprintf_assertion pre;
+    pr "@]->@ @[<hov 0>requires { %a }@ " fprintf_assertion pre;
     begin match signals with
-    | [] -> pr "@[<hov 2>ensures { %a }@]@]" fprintf_assertion post
+    | [] -> pr "@[<hov 2>ensures { %a }@]@]@ " fprintf_assertion post
     | l ->
-      pr "@[<hov 2> ensures { %a@ } %a @]"
+      pr "@[<hov 2> ensures { %a@ }@ %a@]@ "
         fprintf_assertion post
         (print_list alt @@
          fun _ (e, r) ->
          pr "@[<hov 2>raises { %s result ->@ %a }@]" e fprintf_assertion r)
         l
     end;
+    if diverges then pr "diverges@ ";
     pr "%a@]@ " fprintf_expr body
   | Triple (_, pre, e, LTrue, []) ->
     pr "@[<hov 0>(assert { %a };@ (%a))@]" fprintf_assertion pre fprintf_expr e
@@ -526,7 +529,7 @@ and fprintf_expr_gen in_app fmttr e =
     function
     | [] -> fprintf_expr_node in_app fmttr e.expr_node
     | s :: l ->
-      pr "@[<hov 0>('%s@ " @@ why3_constr s;
+      pr "@[<hov 0>('%s:@ " @@ why3_constr s;
       aux l;
       pr ")@]"
   in
@@ -555,8 +558,8 @@ let string_of_goal_kind =
 let fprintf_why_id fmttr { why_name; why_expl; why_pos } =
   let pr fmt = fprintf fmttr fmt in
   pr "%s" why_name;
-  if why_expl <> "" then pr "@ \"expl:%s\"" why_expl;
-  if not (Jc_position.is_dummy why_pos) then pr "@ %a" fprintf_jc_position why_pos
+  if not (Jc_position.is_dummy why_pos) then pr "@ %a" fprintf_jc_position why_pos;
+  if why_expl <> "" then pr "@ \"expl:%s\"" why_expl
 
 let fprintf_why_decl fmttr =
   let pr fmt = fprintf fmttr fmt in
@@ -582,10 +585,9 @@ let fprintf_why_decl fmttr =
       (string_of_goal_kind k)
       pr_id id
       fprintf_assertion p
-  | Def (id, diverges, e)  ->
-    pr "@[<hov 1>let %a%s@ =@ %a@]@.@."
+  | Def (id, e)  ->
+    pr "@[<hov 1>let %a@ =@ %a@]@.@."
       pr_id id
-      (if diverges then " diverges" else "")
       fprintf_expr e
   | Predicate (b, id, args, p) ->
     pr "@[<hov 1>%spredicate %a %a =@ %a@]@.@."
@@ -624,7 +626,7 @@ and import = true
 
 let fprintf_why3_imports ?float_model fmttr d =
   let pr = pr_use fmttr in
-  pr         true "int.Int";
+  pr ~import true "int.Int";
   pr         true "bool.Bool";
   pr         d.why3_IntMinMax         ~as_:"IntMinMax"  "int.MinMax";
   pr         d.why3_ComputerDivision                    "int.ComputerDivision";
@@ -703,3 +705,4 @@ let fprintf_why_decls ?float_model fmttr decls =
   output_decls get_why_id iter_why_decl (fprintf_why_decl fmttr) defs;
   pr "end@\n@\n"
 
+let print_to_file = print_to_file (fun f -> f ^ ".mlw") fprintf_vc_kind fprintf_why_decls

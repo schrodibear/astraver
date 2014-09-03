@@ -256,7 +256,7 @@ axiom store_tags:
     forall p : pointer 't.
       forall s : tag_id 't [store_tags t p s].
         forall p' : pointer 't [select_tag (store_tags t p s) p'].
-          let in_pset_all = in_pset p' (pset_all (pset_singleton p) in
+          let in_pset_all = if in_pset p' (pset_all (pset_singleton p)) then True else False in
           let result = select_tag (store_tags t p s) p' in
           (in_pset_all -> result = s) /\ (not in_pset_all -> result = select_tag t p)
 
@@ -290,8 +290,8 @@ axiom subtag_parent:
 predicate instanceof (t : tag_table 't) (p : pointer 't) (s : tag_id 't) =
   subtag (typeof t p) s
 
-function instanceof_bool (p : pointer 't) (s : tag_id 't) : bool =
-  if instanceof p s then True else False
+function instanceof_bool (t : tag_table 't) (p : pointer 't) (s : tag_id 't) : bool =
+  if instanceof t p s then True else False
 
 function downcast (tag_table 't) (pointer 't) (tag_id 't) : pointer 't
 
@@ -314,8 +314,8 @@ axiom typeof_sidecast:
   forall s1 : tag_id 't.
   forall s2 : tag_id 't [typeof t (downcast t p s2)].
     cast_factor s1 s2 <> 0 ->
-    typeof t p s1 ->
-    typeof t (downcast t p s2) s2
+    typeof t p = s1 ->
+    typeof t (downcast t p s2) = s2
 
 function bottom_tag: tag_id 'a
 
@@ -334,36 +334,39 @@ axiom root_subtag:
 use import int.ComputerDivision
 
 predicate reinterpret_cast_merge
+      (t : tag_table 't)
       (a1 : alloc_table 't)
       (a2 : alloc_table 't)
       (p : pointer 't)
       (s : tag_id 't)
       (c : int) =
-  let ps = downcast p s in
-  (forall i : int [shift p i | shift ps (div i c)]. mod i c = 0 -> downcast (shift p i) s = shift ps (div i c)) /\
-  (forall i : int [shift ps i | shift p (i * c)]. downcast (shift p (i * c)) s = shift ps i) /\
+  let ps = downcast t p s in
+  (forall i : int [shift p i | shift ps (div i c)]. mod i c = 0 -> downcast t (shift p i) s = shift ps (div i c)) /\
+  (forall i : int [shift ps i | shift p (i * c)]. downcast t (shift p (i * c)) s = shift ps i) /\
   offset_min a2 ps = div (offset_min a1 p) c /\
   offset_max a2 ps = div (offset_max a1 p + 1) c - 1
 
 predicate reinterpret_cast_split
+      (t : tag_table 't)
       (a1 : alloc_table 't)
       (a2 : alloc_table 't)
       (p : pointer 't)
       (s : tag_id 't)
       (c : int) =
-  let ps = downcast p s in
-  (forall i : int [shift p i | shift ps (i * c)]. downcast (shift p i) s = shift ps (i * c)) /\
-  (forall i : int [shift ps i | shift p (div i c)]. mod i c = 0 -> downcast (shift p (div i c)) s = shift ps i) /\
+  let ps = downcast t p s in
+  (forall i : int [shift p i | shift ps (i * c)]. downcast t (shift p i) s = shift ps (i * c)) /\
+  (forall i : int [shift ps i | shift p (div i c)]. mod i c = 0 -> downcast t (shift p (div i c)) s = shift ps i) /\
   offset_min a2 ps = c * offset_min a1 p /\
   offset_max a2 ps = c * (offset_max a1 p + 1) - 1
 
 predicate reinterpret_cast_retain
+      (t : tag_table 't)
       (a1 : alloc_table 't)
       (a2 : alloc_table 't)
       (p : pointer 't)
       (s : tag_id 't) =
-  let ps = downcast p s in
-  (forall i : int [shift p i | shift ps i]. downcast (shift p i) s = shift ps i) /\
+  let ps = downcast t p s in
+  (forall i : int [shift p i | shift ps i]. downcast t (shift p i) s = shift ps i) /\
   offset_min a2 ps = offset_min a1 p /\
   offset_max a2 ps = offset_max a1 p
 

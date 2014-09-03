@@ -40,3 +40,5 @@ val fprintf_assertion : formatter -> assertion -> unit
 val fprintf_expr : formatter -> expr -> unit
 val fprintf_why_decl : formatter -> why_decl -> unit
 val fprintf_why_decls : ?float_model:Jc_env.float_model -> Format.formatter -> why_decl list -> unit
+
+val print_to_file : ?float_model:Jc_env.float_model -> string -> why_decl list -> unit

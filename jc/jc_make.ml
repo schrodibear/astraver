@@ -224,10 +224,10 @@ let generic full f targets =
        out "\t why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";
 
        out "why3ide: %s@\n" why3ml_target;
-       out "\t why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";
+       out "\t why3 ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";
 
        out "why3replay: %s@\n" why3ml_target;
-       out "\t why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";
+       out "\t why3 replay $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";
 
        out "-include %s.depend@\n@\n" f;
        out "depend: %a@\n" (print_files coq_v) targets;

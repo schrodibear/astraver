@@ -312,7 +312,7 @@ let rec iter_expr f e =
   | Try (e1, _exc, _id, e2) ->
     iter_expr f e1;
     iter_expr f e2
-  | Fun (_params, pre, body, post, signals) ->
+  | Fun (_params, pre, body, post, _diverges, signals) ->
     iter_assertion f pre;
     iter_expr f body;
     iter_assertion f post;
@@ -448,7 +448,7 @@ let get_why_id d =
   match d with
   | Param (_, id, _)
   | Logic (_, id, _, _)
-  | Def (id, _, _)
+  | Def (id, _)
   | Goal (_, id, _)
   | Predicate (_, id, _, _)
   | Function (_, id, _, _, _)
@@ -459,7 +459,7 @@ let get_why_id d =
 let iter_why_decl f d =
   match d with
   | Param (_, _, t) -> iter_why_type f t
-  | Def (_id, _, t) -> iter_expr f t
+  | Def (_id, t) -> iter_expr f t
   | Logic (_, _id, args, t) ->
     List.iter (fun (_, t) -> iter_logic_type f t) args;
     iter_logic_type f t
@@ -606,3 +606,16 @@ let jc_reg_pos, jc_print_pos =
           pr "begin = %d@\n" fc;
           pr "end = %d@\n@\n" lc)
        jc_pos_table
+
+(*******************************************************************************)
+(* Why/Why3 ML file output                                                     *)
+(*******************************************************************************)
+
+let print_to_file ext fprintf_kind fprintf_why_decls ?float_model filename decls =
+  Pp.print_in_file
+    (fun fmt -> fprintf fmt "%a@." (fprintf_why_decls ?float_model) decls) @@
+    ext filename;
+  (* not used by why3, but useful for debugging traceability *)
+  let cout_locs, fmt_locs = Pp.open_file_and_formatter @@ Lib.file_subdir "." (filename ^ ".loc") in
+  why_print_locs fprintf_kind fmt_locs;
+  Pp.close_file_and_formatter (cout_locs, fmt_locs)

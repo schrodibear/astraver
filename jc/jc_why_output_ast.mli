@@ -50,6 +50,8 @@ type vc_kind =
   | JCVCpointer_deref
   | JCVCpointer_deref_bounds
   | JCVCpointer_shift
+  | JCVCseparation
+  | JCVCindex_bounds
   | JCVCuser_call of string
   | JCVCdiv_by_zero
   | JCVCalloc_size
@@ -127,7 +129,8 @@ type expr_node =
   | App of expr * expr * why_type option
   | Raise of string * expr option
   | Try of expr * string * string option * expr
-  | Fun of (string * why_type) list * assertion * expr * assertion * ((string * assertion) list)
+  | Fun of (string * why_type) list * assertion * expr * assertion * bool * ((string * assertion) list)
+           (** params * pre * body * post * diverges * signals *)
   | Triple of opaque * assertion * expr * assertion * ((string * assertion) list)
   | Assert of assert_kind * assertion * expr
   | BlackBox of why_type
@@ -149,7 +152,7 @@ type goal_kind = KAxiom | KLemma | KGoal
 
 type why_decl =
   | Param of bool * why_id * why_type  (** parameter in why *)
-  | Def of why_id * bool * (** "diverges" flag *) expr (** global let in why *)
+  | Def of why_id * expr (** global let in why *)
   | Logic of bool * why_id * (string * logic_type) list * logic_type  (** logic decl in why *)
   | Predicate of bool * why_id * (string * logic_type) list * assertion
   | Inductive of bool * why_id * (string * logic_type) list * (string * assertion) list (** inductive definition *)

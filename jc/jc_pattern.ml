@@ -106,7 +106,8 @@ module MakeAssertion =
 struct
   type t = assertion
 
-  let make_subtag x st = make_instanceof x st
+  let make_subtag x st =
+    make_subtag (make_typeof st Jc_region.dummy_region x) (LVar (tag_name st))
   let make_or a b = LOr(a, b)
   let make_and a b = LAnd(a, b)
   let make_not a = LNot a
@@ -120,7 +121,8 @@ module MakeTerm =
 struct
   type t = term
 
-  let make_subtag x st = make_instanceof_bool x st
+  let make_subtag x st =
+    make_subtag_bool (make_typeof st Jc_region.dummy_region x) (LVar (tag_name st))
   let make_or = make_or_term
   let make_and = make_and_term
   let make_not = make_not_term

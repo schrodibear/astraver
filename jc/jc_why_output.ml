@@ -55,6 +55,8 @@ let fprintf_vc_kind fmttr k =
      | JCVCpointer_deref -> "PointerDeref"
      | JCVCpointer_deref_bounds -> "IndexBounds"
      | JCVCpointer_shift -> "PointerShift"
+     | JCVCseparation -> "Separation"
+     | JCVCindex_bounds -> "IndexBounds"
      | JCVCdowncast -> "DownCast"
      | JCVCarith_overflow -> "ArithOverflow"
      | JCVCfp_overflow -> "FPOverflow")
@@ -266,7 +268,7 @@ let rec fprintf_expr_node fmttr e =
   | Try (e1, exc, Some id, e2) ->
     pr "@[<hov 1>try@ %a@ with@ %s %s ->@ %a end@]"
       fprintf_expr e1 exc id fprintf_expr e2
-  | Fun (params, pre, body, post, signals) ->
+  | Fun (params, pre, body, post, _, signals) ->
     pr "@[<hov 1>fun @[";
     List.iter
       (fun (x, t) ->
@@ -366,7 +368,7 @@ let fprintf_why_decl fmttr d =
       (string_of_goal_kind k)
       (name id)
       fprintf_assertion p
-  | Def (id, _, e) ->
+  | Def (id, e) ->
     pr "@[<hov 1>let %s =@ %a@]@.@."
       (name id) fprintf_expr e
   | Predicate (b, id, args, p) ->
@@ -407,3 +409,5 @@ let fprintf_why_decls ?float_model:_ fmttr decls =
   pr others;
   pr params;
   pr defs
+
+let print_to_file = print_to_file (fun f -> Lib.file_subdir "why" (f ^ ".why")) fprintf_vc_kind fprintf_why_decls

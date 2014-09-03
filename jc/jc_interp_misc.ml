@@ -135,8 +135,8 @@ let make_select_fi fi =
 let make_select_committed pc =
   make_select (LVar (committed_name pc))
 
-let make_typeof x =
-  LApp ("typeof", [x])
+let make_typeof st r x =
+  LApp ("typeof", [LVar (tag_table_name (struct_root st, r)); x])
 
 let make_subtag t u =
   LPred ("subtag", [t; u])
@@ -144,11 +144,11 @@ let make_subtag t u =
 let make_subtag_bool t u =
   LApp ("subtag_bool", [t; u])
 
-let make_instanceof p st =
-  LPred ("instanceof", [p; LVar (tag_name st)])
+let make_instanceof t p st =
+  LPred ("instanceof", [t; p; LVar (tag_name st)])
 
-let make_instanceof_bool p st =
-  LApp ("instanceof_bool", [p; LVar (tag_name st)])
+let make_instanceof_bool t p st =
+  LApp ("instanceof_bool", [t; p; LVar (tag_name st)])
 
 let make_offset_min ac p =
   LApp ("offset_min", [LVar (generic_alloc_table_name ac); p])
@@ -875,8 +875,16 @@ let allocs ac pc (type t) : (t, region -> in_param:bool -> label -> term list, (
   function
   | In_app ->
     fun r ~in_param lab ->
-    map (fun ac -> deref_if_needed ~in_param lab @@ talloc_table_var ~label_in_name:false LabelHere (ac, r))
+    map @@ fun ac -> deref_if_needed ~in_param lab @@ talloc_table_var ~label_in_name:false LabelHere (ac, r)
   | In_pred -> map (fdup2 generic_alloc_table_name alloc_table_type)
+
+let tags ac pc (type t) : (t, region -> in_param:bool -> label -> term list, (string * logic_type) list) where -> t =
+  let map f = List.map f (all_tags_ac ac pc) in
+  function
+  | In_app ->
+    fun r ~in_param lab ->
+    map @@ fun ac -> deref_if_needed ~in_param lab @@ (false, ttag_table_var ~label_in_name:false LabelHere (ac, r))
+  | In_pred -> map @@ fdup2 (tag_table_name % fun ac -> ac, dummy_region) tag_table_type
 
 let map_st ~f ac pc =
   match ac with
@@ -1017,9 +1025,9 @@ let get_l = function L_R (l, _) -> l
 let get_r = function L_R (_, r) -> r
 
 let make_instanceof_pred_app (type t1) (type t2) :
-  arg:(assertion, _, term -> term -> assertion, _, t1, t2) arg -> _ -> _ -> _ -> t2 =
-  fun ~arg (ac, r) pc p ->
-  let params = mems ac pc In_app r in
+  arg:(assertion, _, term -> term -> assertion, _, t1, t2) arg -> in_param:_ -> _ -> _ -> _ -> t2 =
+  fun ~arg ~in_param (ac, r) pc p ->
+  let params = tags ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r in
   match arg with
   | Singleton -> LPred (instanceof_pred_name ~arg ac pc, p :: params)
   | Range_l_r -> fun l r -> LPred (instanceof_pred_name ~arg ac pc, p :: l :: r :: params)
@@ -1039,9 +1047,14 @@ let make_instanceof_pred (type t1) (type t2) : arg : (assertion, _, term -> term
       | Singleton -> []
       | Range_l_r -> List.map (fun a -> a, why_integer_type) [get_l l_r; get_r l_r]
     in
-    p :: l_r @ mems ac pc In_pred
+    p :: l_r @ tags ac pc In_pred @ mems ac pc In_pred
   in
-  let self_instanceof p = map_st ac pc ~f:(fun st -> [LPred ("instanceof", [p; LVar (tag_name st)])]) in
+  let self_instanceof p =
+    map_st ac pc
+      ~f:(fun st ->
+          let tag = generic_tag_table_name (struct_root st) in
+          [LPred ("instanceof", [LVar tag; p; LVar (tag_name st)])])
+  in
   let fields_instanceof p =
     List.flatten @@
       map_embedded_fields ac pc ~p
@@ -1049,7 +1062,7 @@ let make_instanceof_pred (type t1) (type t2) : arg : (assertion, _, term -> term
               let open Num in
               if r -/ l >=/ Int 0 && l -/ r <=/ Int Jc_options.forall_inst_bound then
                 let instanceof p =
-                  make_instanceof_pred_app ~arg:Singleton acr pc p
+                  make_instanceof_pred_app ~arg:Singleton ~in_param:false acr pc p
                 in
                 instanceof p ::
                   (  range ~-1 `Downto (int_of_num l) @ range 1 `To (int_of_num r)
@@ -1057,7 +1070,7 @@ let make_instanceof_pred (type t1) (type t2) : arg : (assertion, _, term -> term
               else
                 let r = r +/ Int 1 in
                 let l, r = map_pair const_of_num (l, r) in
-                [make_instanceof_pred_app ~arg:Range_l_r acr pc p l r])
+                [make_instanceof_pred_app ~arg:Range_l_r ~in_param:false acr pc p l r])
   in
   match arg with
   | Singleton ->
@@ -1167,7 +1180,7 @@ let make_alloc_param (type t1) (type t2) :
   let lresult = LVar "result" in
   (* postcondition *)
   let instanceof_post =
-    let f = make_instanceof_pred_app (ac, dummy_region) pc lresult in
+    let f = make_instanceof_pred_app ~in_param:true (ac, dummy_region) pc lresult in
     let f =
       match arg with
       | Singleton -> fun _ -> [f ~arg:Singleton]

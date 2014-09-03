@@ -169,15 +169,13 @@ endif
 
 all: all-without-frama-c-plugin .depend $(JESSIE_PLUGIN_BEST)
 
-all-without-frama-c-plugin: $(BINARY) $(WHYCONFIG) check $(JESSIE) $(KRAKATOA) coq-@COQ@ pvs-@PVS@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB) $(REGTEST)
+all-without-frama-c-plugin: check $(JESSIE) coq-@COQ@ pvs-@PVS@ $(JCLIB) $(REGTEST)
 
 # refrain parallel make (-j nn) from starting ocaml compilation too early
 *.cm*: .depend
 
-opt: bin/why.opt bin/gwhy.opt bin/jessie.opt bin/krakatoa.opt \
-	$(JESSIE_PLUGIN_OPT)
-byte: bin/why.byte bin/gwhy.byte bin/jessie.byte bin/krakatoa.byte \
-	$(JESSIE_PLUGIN_BYTE)
+opt:  bin/jessie.opt $(JESSIE_PLUGIN_OPT)
+byte: bin/jessie.byte $(JESSIE_PLUGIN_BYTE)
 
 .PHONY: check
 
@@ -285,10 +283,14 @@ JCCML_EXPORT = src/why3_kw.ml \
 	jc/jc_envset.ml jc/jc_region.ml jc/jc_fenv.ml \
 	jc/jc_constructors.ml \
 	jc/jc_pervasives.ml jc/jc_iterators.ml jc/jc_type_var.ml \
+	jc/jc_position.ml \
+	jc/jc_why_output_misc.ml \
+	jc/jc_why_output.ml \
+	jc/jc_why3_output.ml \
 	jc/jc_output_misc.ml jc/jc_poutput.ml jc/jc_output.ml jc/jc_noutput.ml
 JCCMO_EXPORT = $(CMO_EXPORT) $(JCCML_EXPORT:.ml=.cmo)
 JCCMX_EXPORT = $(JCCMO_EXPORT:.cmo=.cmx)
-JCCMI_EXPORT = jc/jc_why_output_ast.mli jc/jc_ast.cmi jc/jc_env.cmi jc/jc.cmi $(JCCMO_EXPORT:.cmo=.cmi)
+JCCMI_EXPORT = jc/jc_position.mli jc/jc_why_output_ast.mli jc/jc_ast.cmi jc/jc_env.cmi jc/jc.cmi $(JCCMO_EXPORT:.cmo=.cmi)
 
 JCCMO = src/version.cmo \
 	@ATPCMO@ $(JCCMO_EXPORT) \
@@ -302,8 +304,6 @@ JCCMO = src/version.cmo \
 	jc/jc_callgraph.cmo \
 	jc/jc_effect.cmo \
 	jc/jc_ai.cmo \
-	jc/jc_why_output.cmo \
-	jc/jc_why3_output.cmo \
 	jc/jc_interp_misc.cmo jc/jc_invariants.cmo \
 	jc/jc_pattern.cmo \
 	jc/jc_frame_notin.cmo \

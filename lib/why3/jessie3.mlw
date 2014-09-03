@@ -363,22 +363,22 @@ val safe_sub_pointer_ (p : pointer 't) (q : pointer 't) : int
 
 (* pointer comparison *)
 
-val eq_pointer (p : pointer 't) (q: pointer 't) : bool
+val eq_pointer (a : alloc_table 't) (p : pointer 't) (q : pointer 't) : bool
 
   requires { "expl:pointer equality" (same_block p q \/ valid a p /\ valid a q) }
-  ensures  { result = True <--> p = q }
+  ensures  { result = True <-> p = q }
 
-val safe_eq_pointer (p: pointer 't) (q: pointer 't) : bool
+val safe_eq_pointer (p : pointer 't) (q : pointer 't) : bool
   requires { true }
-  ensures  { result = True <--> p = q }
+  ensures  { result = True <-> p = q }
 
-val neq_pointer (p: pointer 't) (q: pointer 't) : bool
+val neq_pointer (a : alloc_table 't) (p : pointer 't) (q : pointer 't) : bool
   requires { "expl:pointer inequality" (same_block p q \/ valid a p /\ valid a q) }
-  ensures  { result = True <--> p <> q }
+  ensures  { result = True <-> p <> q }
 
-val safe_neq_pointer (p: pointer 't) (q: pointer 't) : bool
+val safe_neq_pointer (p : pointer 't) (q : pointer 't) : bool
   requires { true }
-  ensures  { result = True <--> p<>q }
+  ensures  { result = True <-> p<>q }
 
 (*****************************************************************************)
 (* access and update side-effect functions                                   *)
@@ -396,7 +396,7 @@ val offset_acc_ (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v)
 
 (* safe access (checks tag id) *)
 val safe_acc_requires_ (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) : 'v
-  requires { "expl:type" instanceof tag p s }
+  requires { "expl:Correct type" instanceof tag p s }
   ensures  { result = select m p }
 
 (* safe access *)
@@ -441,14 +441,14 @@ val rsafe_rbound_acc_ (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 
 
 (* normal update *)
 val upd_ (alloc : alloc_table 't) (tag : tag_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (v : 'v) :  unit
-  requires { "expl:validity" (offset_min alloc p <= 0 <= offset_max alloc p) /\ "expl:type" instanceof tag p s }
+  requires { "expl:Update" ("expl:Left valid" offset_min alloc p <= 0) /\ ("expl:Right valid" 0 <= offset_max alloc p) /\ ("expl:Correct type" instanceof tag p s) }
   reads { m }
   writes { m }
   ensures { !m = store (old !m) p v }
 
 (* offset update *)
 val offset_upd_ (alloc : alloc_table 't) (tag: tag_table 't) (m: ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int) (v : 'v) : unit
-  requires { "expl:validity" (offset_min alloc p <= off /\ off <= offset_max alloc p) /\ "expl:type" instanceof tag p s }
+  requires { "expl:Offset update"("expl:Left valid" offset_min alloc p <= off) /\ ("expl:Right valid" off <= offset_max alloc p) /\ ("expl:Correct type" instanceof tag p s) }
   reads    { m }
   writes   { m }
   ensures  { !m = store (old !m) (shift p off) v }
@@ -496,7 +496,7 @@ val rbound_upd_ (alloc : alloc_table 't) (tag : tag_table 't) (m : ref (memory '
   ensures  { !m = store (old !m) (shift p off) v }
 
 (* right bounded update with safe right bound *)
-val rsafe_rbound_upd_ (alloc : alloc_table 't) (t : tag_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int) (v : 'v) :  unit
+val rsafe_rbound_upd_ (alloc : alloc_table 't) (tag : tag_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int) (v : 'v) :  unit
   reads { m }
   writes { m }
   requires { "expl:validity" (offset_min alloc p <= off) /\ "expl:type" instanceof tag p s }
@@ -504,15 +504,15 @@ val rsafe_rbound_upd_ (alloc : alloc_table 't) (t : tag_table 't) (m : ref (memo
 
 val instanceof_ (t : tag_table 't) (p : pointer 't) (s: tag_id 't) : bool
   requires { true }
-  ensures  { result = True <--> instanceof t p s }
+  ensures  { result = True <-> instanceof t p s }
 
 val downcast_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) :  pointer 't
   requires { "expl:up/downcast or reinterpret" (instanceof t p s \/ cast_factor (typeof t p) s <> 0) }
-  ensures  { result = downcast p s }
+  ensures  { result = downcast t p s }
 
-val safe_downcast_ (p : pointer 't) (s : tag_id 't) : pointer 't
+val safe_downcast_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) : pointer 't
   requires { true }
-  ensures  { result = downcast p s }
+  ensures  { result = downcast t p s }
 
 val shift_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) (off : int) : pointer 't
   requires { "expl:type" typeof t p = s }
@@ -555,11 +555,12 @@ val safe_free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
 
 let free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
   writes { a }
-  requires { "expl:null or valid" (p = null (* allowed, see man 3 free *) \/ offset_min !a p = 0 /\ offset_max !a p >= 0) } =
+  requires { "expl:Free" (("expl:Null" p = null) (* allowed, see man 3 free *) \/ ("expl:Valid" offset_min !a p = 0 /\ offset_max !a p >= 0)) } =
   safe_free_parameter a p
 
 val safe_reinterpret_parameter
       (a : ref (alloc_table 't))
+      (t : tag_table 't)
       (s1 : tag_id 't)
       (s2 : tag_id 't)
       (m : ref (memory 't 'v))
@@ -567,23 +568,24 @@ val safe_reinterpret_parameter
       unit
   writes { a, m }
   ensures  { let pset_old = pset_all (pset_singleton p) in
-             let ps = downcast p s2 in
+             let ps = downcast t p s2 in
              let pset_new = pset_all (pset_singleton ps) in
              alloc_same_except (old !a) !a (pset_union pset_old pset_new) /\
              alloc_fresh (old !a) ps /\
              alloc_fresh !a p /\
-             not_assigns (old !a) (old !m) !m pset_new }
+             not_assigns (old !m) !m pset_new }
 
 let reinterpret_parameter
       (a : ref (alloc_table 't))
+      (t : tag_table 't)
       (s1 : tag_id 't)
       (s2 : tag_id 't)
       (m : ref (memory 't 'v))
       (p : pointer 't) :
       unit
   writes { a, m }
-  requires { "expl:type" (forall p' : pointer' t. in_pset p' (pset_all (pset_singleton p)) -> typeof p s1) /\
+  requires { "expl:type" (forall p' : pointer 't. in_pset p' (pset_all (pset_singleton p)) -> typeof t p = s1) /\
              "expl:validity" (offset_min !a p <= offset_max !a p) } =
-  safe_reinterpret_parameter a s1 s2 m p
+  safe_reinterpret_parameter a t s1 s2 m p
 
 end
