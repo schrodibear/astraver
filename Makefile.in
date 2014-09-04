@@ -763,22 +763,7 @@ BINARYFILES = $(BINARY) $(WHYCONFIG) $(JESSIE) $(KRAKATOA) \
 # enforces the compilation of gwhy, even when lablgtk2 is not installed
 install-binary:
 	mkdir -p $(BINDIR)
-	cp -f $(BINARY) $(BINDIR)/why$(EXE)
-	cp -f $(WHYCONFIG) $(BINDIR)/why-config$(EXE)
 	cp -f $(JESSIE) $(BINDIR)/jessie$(EXE)
-	cp -f $(KRAKATOA) $(BINDIR)/krakatoa$(EXE)
-	cp -f bin/gwhy.sh $(BINDIR)/gwhy
-	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
-	cp -f $(DP) $(BINDIR)/why-dp$(EXE)
-	cp -f $(CPULIMIT) $(BINDIR)/why-cpulimit$(EXE)
-	cp -f $(RVMERGE) $(BINDIR)/rv_merge$(EXE)
-	cp -f $(WHYOBFUSCATOR) $(BINDIR)/why-obfuscator$(EXE)
-	cp -f $(WHYSTAT) $(BINDIR)/why-stat$(EXE)
-	cp -f $(TOOLSTAT) $(BINDIR)/tool-stat$(EXE)
-	cp -f $(SIMPLIFY2WHY) $(BINDIR)/simplify2why$(EXE)
-	if test -f bin/gwhy.$(OCAMLBEST); then \
-		cp -f bin/gwhy.$(OCAMLBEST) $(BINDIR)/gwhy-bin$(EXE); \
-	fi
 
 install-lib: $(JCLIB) lib/why3/why3.conf
 	mkdir -p $(LIBDIR)/why/why
