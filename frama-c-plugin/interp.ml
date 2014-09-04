@@ -556,7 +556,7 @@ let strip_float_suffix s =
 let logic_const pos = function
   | Integer(_,Some s) -> JCPEconst (JCCinteger s)
   | Integer(n,None) -> JCPEconst (JCCinteger (Integer.to_string n))
-  | LStr _ | LWStr _ -> 
+  | LStr _ | LWStr _ ->
     Common.unsupported "string literals in logic"
   | LChr c -> JCPEconst (JCCinteger(string_of_int (Char.code c)))
   | LReal { r_literal = s } -> JCPEconst (JCCreal (strip_float_suffix s))
@@ -712,10 +712,10 @@ and terms ?(in_zone=false) t =
       let label_here = LogicLabel (None, "Here") in
       let f, offset_kind = match tnode with
         | Toffset_max _ -> (fun x -> {t with term_node = Toffset_max (label_here, x)}), Offset_max
-        | Toffset_min _ -> (fun x -> {t with term_node = Toffset_min (label_here, x)}), Offset_min 
+        | Toffset_min _ -> (fun x -> {t with term_node = Toffset_min (label_here, x)}), Offset_min
         | _ -> assert false
       in
-      let label_name = match lab with 
+      let label_name = match lab with
         | LogicLabel (_, lab) -> lab
         | StmtLabel sref -> label (List.hd (filter_out is_case_label !sref.labels))
       in
@@ -1019,8 +1019,8 @@ and terms ?(in_zone=false) t =
     | Trange(low,high) -> [JCPErange(opt_map term low,opt_map term high)]
     | Tunion l ->
         List.map (fun x -> x#node) (List.flatten (List.map terms l))
-    | Tcomprehension _ -> Common.unsupported "sets by comprehension" 
-    | Tinter _ -> Common.unsupported " set intersection" 
+    | Tcomprehension _ -> Common.unsupported "sets by comprehension"
+    | Tinter _ -> Common.unsupported " set intersection"
     | Tempty_set -> []
     | TLogic_coerce(Lreal,t) -> List.map (fun x -> x#node) (coerce_floats t)
     | TLogic_coerce(_,t) -> List.map (fun x -> x#node) (terms t)
@@ -1380,16 +1380,21 @@ let spec _fname funspec =
             Format.eprintf "FreeAlloc(%d,%d)@." (List.length l1) (List.length l2)
     end;
 *)
+    let loc =
+      function
+      | [] -> Loc.dummy_position
+      | ip :: _ -> ip.ip_loc
+    in
     JCCbehavior(
-      Loc.dummy_position,
+      loc b.Cil_types.b_assumes,
       name,
       None, (* throws *)
-      Some (conjunct Loc.dummy_position b.Cil_types.b_assumes),
+      Some (conjunct (loc b.Cil_types.b_assumes) b.Cil_types.b_assumes),
       None, (* requires *)
       assigns b.Cil_types.b_assigns,
       allocates b.b_allocation,
       locate
-        (conjunct Loc.dummy_position
+        (conjunct (loc @@ List.map snd b.b_post_cond)
            (Extlib.filter_map
               (function (Normal,_) -> true
                  | (Exits | Returns | Breaks | Continues),_ -> false)
@@ -1963,7 +1968,7 @@ let instruction = function
           let arg =
             try
               if is_malloc_function v then as_singleton eargs
-              else if is_kmalloc_function v then 
+              else if is_kmalloc_function v then
                 match eargs with [ arg; _ ] -> arg | _ -> raise Exit
               else (* realloc *)
                 match eargs with [ _; arg ] -> arg | _ -> raise Exit
