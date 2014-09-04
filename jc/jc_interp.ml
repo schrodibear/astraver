@@ -434,7 +434,7 @@ let float_of_real f x =
     | `Double, "0.1" -> "0x1.999999999999ap-4"
     | _ -> raise Not_found
 
-let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos  ty_dst ty_src e e' =
+let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src e e' =
   let rec aux a b =
     match a, b with
     | JCTlogic (t, tl), JCTlogic (u, ul) when t = u -> List.for_all2 aux tl ul
@@ -506,7 +506,8 @@ let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos  ty_dst t
   | JCTpointer(pc1, _, _), JCTpointer (JCtag (st2, _), _, _)
     when Jc_typing.substruct st2 pc1 -> e'
   | JCTpointer (JCtag (st1, _), _, _), JCTpointer _ ->
-    LApp ("downcast", [e'; LVar (tag_name st1)])
+    let tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st1, e#region) in
+    LApp ("downcast", [tag; e'; LVar (tag_name st1)])
   |  _ ->
      unsupported
        pos
@@ -641,7 +642,8 @@ let rec coerce ~check_int_overflow ~e ty_dst ty_src e1 e1' =
     let downcast_fun =
       if safety_checking () then "downcast_" else "safe_downcast_"
     in
-    make_app downcast_fun [e1'; mk_var (tag_name st1)]
+    let tag = tag_table_var (struct_root st1, e#region) in
+    make_app downcast_fun [tag; e1'; mk_var (tag_name st1)]
   | _ ->
     unsupported
       e#pos
@@ -733,12 +735,17 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
       LApp ("address", [ft t1])
     | JCTbase_block t1 ->
       LApp ("base_block", [ft t1])
-    | JCTinstanceof (t1, _, st) ->
-      LApp ("instanceof", [ft t1; LVar (tag_name st)])
-    | JCTcast (t1, _, st) ->
+    | JCTinstanceof (t1, lab', st) ->
+      let lab = if relocate && lab' = LabelHere then lab else lab' in
+      let tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
+      LApp ("instanceof", [tag; ft t1; LVar (tag_name st)])
+    | JCTcast (t1, lab', st) ->
       if struct_of_union st
       then ft t1
-      else LApp ("downcast", [ft t1; LVar (tag_name st)])
+      else
+        let lab = if relocate && lab' = LabelHere then lab else lab' in
+        let tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
+        LApp ("downcast", [tag; ft t1; LVar (tag_name st)])
     | JCTbitwise_cast (t1, _lab, _st) -> ft t1
     | JCTrange_cast (t1, ri) ->
       let to_type = Option_misc.map_default (fun e -> JCTenum e) (JCTnative Tinteger) ri in
@@ -965,8 +972,10 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
       LNot valid
     | JCAbool_term t1 ->
       LPred ("eq", [ft t1; LConst (Prim_bool true)])
-    | JCAinstanceof (t1, _, st) ->
-      LPred ("instanceof", [ft t1; LVar (tag_name st)])
+    | JCAinstanceof (t1, lab', st) ->
+      let lab = if relocate && lab' = LabelHere then lab else lab' in
+      let tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
+      LPred ("instanceof", [tag; ft t1; LVar (tag_name st)])
     | JCAmutable(te, st, ta) ->
       let te' = ft te in
       let tag = ftag ta in
@@ -1140,7 +1149,7 @@ let tr_assigns ~e ~type_safe ?region_list before ef ?(allocates=None) locs =
                         location_set_with_node ls @@
                           JCLSrange_term (
                             new term ~pos:l#pos ~typ ~label:LabelHere ~region:r @@
-                              JCTcast (Term.mkvar v (), LabelHere, st),
+                              JCTcast (Term.mkvar ~region:r ~var:v (), LabelHere, st),
                             None,
                             None),
                         LabelHere,
@@ -1173,8 +1182,6 @@ let tr_assigns ~e ~type_safe ?region_list before ef ?(allocates=None) locs =
     MemoryMap.fold
       (fun (mc, r) pes acc ->
          let v = memory_name (mc, r) in
-         let ac = alloc_class_of_mem_class mc in
-         let _, alloc = talloc_table_var ~label_in_name:false before (ac, r) in
          let ps, efs = List.split pes in
          let ef =
            fef_filter_by_region
@@ -1190,8 +1197,7 @@ let tr_assigns ~e ~type_safe ?region_list before ef ?(allocates=None) locs =
          in
          make_and acc @@
          let a = LPred("not_assigns",
-                       [alloc;
-                        lvar ~constant:false (* <<- CHANGE THIS *) ~label_in_name:false before v;
+                       [lvar ~constant:false (* <<- CHANGE THIS *) ~label_in_name:false before v;
                         LDeref v;
                         location_list' ps])
          in
@@ -1668,9 +1674,9 @@ and make_deref_simple ~e e1 fi =
       make_vc_app_e ~e ~kind:JCVCpointer_deref_bounds "rsafe_rbound_acc_"
         [tag; alloc; mem; expr p; tag_id; offset off]
     | p, Int_offset s, None, None when s = 0 ->
-      make_vc_app_e ~e ~kind:JCVCpointer_deref "acc_"  [tag; alloc; mem; expr p; tag_id]
+      make_vc_app_e ~e ~kind:JCVCpointer_deref "acc_"  [alloc; tag; mem; expr p; tag_id]
     | p, off, _, _ ->
-      make_vc_app_e ~e ~kind:JCVCpointer_deref "offset_acc_" [tag; alloc; mem ; expr p; tag_id; offset off]
+      make_vc_app_e ~e ~kind:JCVCpointer_deref "offset_acc_" [alloc; tag; mem ; expr p; tag_id; offset off]
   else
     make_app "safe_acc_" [mem; expr e1]
 
@@ -1881,16 +1887,18 @@ and make_reinterpret e st =
   (* call to [safe]_reinterpret_parameter *)
   let call_parameter =
     let alloc = plain_alloc_table_var (ac, e#region) in
+    let tag = tag_table_var (struct_root st, e#region) in
     let mem_to = plain_memory_var (mc_to, e#region) in
     make_label before.lab_final_name @@
       match !Jc_options.inv_sem with
       | InvOwnership -> unsupported e#pos "reinterpret .. as construct is not supported when inv_sem = InvOwnership"
       | InvNone | InvArguments ->
-        make_app (reinterpret_parameter_name ~safety_checking) [alloc; mk_var s_from; mk_var s_to; mem_to; expr e]
+        make_app (reinterpret_parameter_name ~safety_checking) [alloc; tag; mk_var s_from; mk_var s_to; mem_to; expr e]
   in
 
   (* Let's now switch to terms and assume predicates instead of calling params... *)
   let before = LabelName before in
+  let tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, e#region) in
   let alloc = alloc_table_name (ac, e#region) in
   let at = lvar ~constant:false ~label_in_name:false in
   (* reinterpretation kind (operation):
@@ -1922,7 +1930,7 @@ and make_reinterpret e st =
   in
 
   let alloc_assumption =
-    let app l = LPred (reinterpret_cast_name op, [at before alloc; at LabelHere alloc; e'; LVar s_to] @ l) in
+    let app l = LPred (reinterpret_cast_name op, [tag; at before alloc; at LabelHere alloc; e'; LVar s_to] @ l) in
     match op with
     | `Retain -> app []
     | `Merge c | `Split c -> app [const_of_int c]
@@ -1992,7 +2000,7 @@ and make_reinterpret e st =
                       else
                         pred_app))
     in
-    LLet (p, e', LLet (ps, LApp ("downcast", [e'; LVar s_to]), make_and_list assumptions))
+    LLet (p, e', LLet (ps, LApp ("downcast", [tag; e'; LVar s_to]), make_and_list assumptions))
   in
 
   let cast_factor_assumption =
@@ -2858,7 +2866,7 @@ let make_old_style_update_no_shift ~e alloc tmpp mem b1 b2 tmp2 =
   else
     make_app "safe_upd_" [mk_var mem; mk_var tmpp; mk_var tmp2]
 
-let make_not_assigns talloc mem t l =
+let make_not_assigns mem t l =
   let l = List.map (fun (i, _, _, _) -> i) l in
   let l = List.sort Pervasives.compare l in
   let rec merge l acc =
@@ -2893,7 +2901,7 @@ let make_not_assigns talloc mem t l =
     (pset_of_interval i)
     l
   in
-  LPred ("not_assigns", [talloc; LDerefAtLabel(mem, ""); LDeref mem; pset])
+  LPred ("not_assigns", [LDerefAtLabel(mem, ""); LDeref mem; pset])
 
 (*****************************)
 (* axioms, lemmas, goals     *)
