@@ -287,6 +287,22 @@ axiom subtag_parent:
   forall t3: (tag_id 't).
     subtag t1 t2 -> parenttag t2 t3 -> subtag t1 t3
 
+use import int.ComputerDivision
+
+axiom cast_factor_trans:
+  forall t1 : (tag_id 't).
+    forall t2 : (tag_id 't).
+      forall t3 : (tag_id 't).
+        let c12 = cast_factor t1 t2 in
+        let c23 = cast_factor t2 t3 in
+        let c13 = cast_factor t1 t3 in
+        (c12 > 0 /\ c23 > 0 -> c13 = c12 * c23) /\
+        (c12 > 0 /\ c23 < 0 /\ c12 > (-c23) /\ mod c12 (- c23) = 0 -> c13 = div c12 (- c23)) /\
+        (c12 > 0 /\ c23 < 0 /\ c12 < (-c23) /\ mod (- c23) c12 = 0 -> c13 = - (div (- c23) c12)) /\
+        (c12 < 0 /\ c23 > 0 /\ c23 > (- c12) /\ mod c23 (- c12) = 0 -> c13 = div c23 (- c12)) /\
+        (c12 < 0 /\ c23 > 0 /\ c23 < (- c12) /\ mod (- c12) c23 = 0 -> c13 = - (div (- c12) c23)) /\
+        (c12 < 0 /\ c23 < 0 -> c13 = c12 * c23)
+
 predicate instanceof (t : tag_table 't) (p : pointer 't) (s : tag_id 't) =
   subtag (typeof t p) s
 
@@ -330,8 +346,6 @@ axiom root_subtag:
   forall b: tag_id 't.
   forall c: tag_id 't.
     root_tag(a) -> root_tag(b) -> a <> b -> subtag c a -> not (subtag c b)
-
-use import int.ComputerDivision
 
 predicate reinterpret_cast_merge
       (t : tag_table 't)
