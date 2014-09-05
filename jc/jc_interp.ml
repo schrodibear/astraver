@@ -1868,38 +1868,40 @@ and value_assigned ~e ty e1 =
   then mk_expr @@ Let (tmp, e1, mk_expr @@ Assert (`ASSERT, a, mk_var tmp))
   else e1
 
-and make_reinterpret e st =
+and make_reinterpret ~e e1 st =
   let get_fi st =
     match st.si_fields with
     | [fi] -> fi
-    | _ -> unsupported e#pos "reinterpretation for structure with several fields"
+    | _ -> unsupported e1#pos "reinterpretation for structure with several fields"
   in
   let s_from, fi_from = (* src. subtag & field info *)
-    match e#typ with
+    match e1#typ with
     | JCTpointer (JCtag (st, _), _, _) -> tag_name st, get_fi st
-    | _ -> unsupported e#pos "reinterpretation for a root pointer or a non-pointer"
+    | _ -> unsupported e1#pos "reinterpretation for a root pointer or a non-pointer"
   in
   let s_to, fi_to = tag_name st, get_fi st in (* dest. subtag & field_info *)
-  let ac = deref_alloc_class ~type_safe:false e in
-  let mc_from, mc_to = map_pair (fst % deref_mem_class ~type_safe:false e) (fi_from, fi_to) in
+  let ac = deref_alloc_class ~type_safe:false e1 in
+  let mc_from, mc_to = map_pair (fst % deref_mem_class ~type_safe:false e1) (fi_from, fi_to) in
   let before = fresh_reinterpret_label () in
 
   (* call to [safe]_reinterpret_parameter *)
   let call_parameter =
-    let alloc = plain_alloc_table_var (ac, e#region) in
-    let tag = tag_table_var (struct_root st, e#region) in
-    let mem_to = plain_memory_var (mc_to, e#region) in
+    let alloc = plain_alloc_table_var (ac, e1#region) in
+    let tag = tag_table_var (struct_root st, e1#region) in
+    let mem_to = plain_memory_var (mc_to, e1#region) in
     make_label before.lab_final_name @@
       match !Jc_options.inv_sem with
-      | InvOwnership -> unsupported e#pos "reinterpret .. as construct is not supported when inv_sem = InvOwnership"
+      | InvOwnership -> unsupported e1#pos "reinterpret .. as construct is not supported when inv_sem = InvOwnership"
       | InvNone | InvArguments ->
-        make_app (reinterpret_parameter_name ~safety_checking) [alloc; tag; mk_var s_from; mk_var s_to; mem_to; expr e]
+        make_positioned_lex_e ~e @@
+          make_app (reinterpret_parameter_name ~safety_checking)
+                   [alloc; tag; mk_var s_from; mk_var s_to; mem_to; expr e1]
   in
 
   (* Let's now switch to terms and assume predicates instead of calling params... *)
   let before = LabelName before in
-  let tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, e#region) in
-  let alloc = alloc_table_name (ac, e#region) in
+  let tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, e1#region) in
+  let alloc = alloc_table_name (ac, e1#region) in
   let at = lvar ~constant:false ~label_in_name:false in
   (* reinterpretation kind (operation):
      merging (e.g. char -> int) / splitting (e.g. int -> char) / plain (e.g. int -> long) *)
@@ -1908,7 +1910,7 @@ and make_reinterpret e st =
       map_pair
         (function
          | { fi_bitsize = Some s } -> s
-         | _ -> unsupported e#pos "reinterpretation for field with no bitsize specified")
+         | _ -> unsupported e1#pos "reinterpretation for field with no bitsize specified")
         (fi_from, fi_to)
     in
     match compare from_bitsize to_bitsize with
@@ -1923,10 +1925,10 @@ and make_reinterpret e st =
       ~relocate:false
       LabelHere
       before @@
-        match term_of_expr e with
+        match term_of_expr e1 with
         | Some e -> e
         | None ->
-          unsupported e#pos "the argument for reinterpret .. as should be an expression without side effects"
+          unsupported e1#pos "the argument for reinterpret .. as should be an expression without side effects"
   in
 
   let alloc_assumption =
@@ -1950,7 +1952,7 @@ and make_reinterpret e st =
     in
     let deref (where, p) ?boff offs =
       let mem =
-        let old_mem, new_mem = map_pair (fun mc -> memory_name (mc, e#region)) (mc_from, mc_to) in
+        let old_mem, new_mem = map_pair (fun mc -> memory_name (mc, e1#region)) (mc_from, mc_to) in
         function
         | `Old -> at before old_mem
         | `New -> at LabelHere new_mem
@@ -1968,7 +1970,7 @@ and make_reinterpret e st =
       let enum_name =
         function
         | { fi_type = JCTenum { ei_name = name } } -> name
-        | _ -> unsupported e#pos "reinterpretation for structure with a non-enum field"
+        | _ -> unsupported e1#pos "reinterpretation for structure with a non-enum field"
       in
       let from_name, to_name = map_pair enum_name (fi_from, fi_to) in
       [from_name ^ "_as_" ^ to_name; to_name ^ "_as_" ^ from_name]
@@ -2213,7 +2215,7 @@ and expr e =
           else "safe_free_parameter"
         in
         make_app free_fun [alloc; e1']
-    | JCEreinterpret (e, st) -> make_reinterpret e st
+    | JCEreinterpret (e1, st) -> make_reinterpret ~e e1 st
     | JCEapp call ->
       begin match call.call_fun with
       | JClogic_fun f ->
