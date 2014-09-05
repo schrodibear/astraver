@@ -1053,7 +1053,7 @@ let make_instanceof_pred (type t1) (type t2) : arg : (assertion, _, term -> term
     map_st ac pc
       ~f:(fun st ->
           let tag = generic_tag_table_name (struct_root st) in
-          [LPred ("instanceof", [LVar tag; p; LVar (tag_name st)])])
+          [LPred ("eq", [LApp ("typeof", [LVar tag; p]); LVar (tag_name st)])])
   in
   let fields_instanceof p =
     List.flatten @@
