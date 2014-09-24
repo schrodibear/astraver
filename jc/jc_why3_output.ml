@@ -260,9 +260,10 @@ let fprintf_vc_kind fmttr k =
      | JCVCpointer_shift -> "Pointer shift"
      | JCVCseparation -> "Separation assertion"
      | JCVCindex_bounds -> "Pointer index bounds"
-     | JCVCdowncast -> "Downcast"
+     | JCVCdowncast -> "Pointer cast"
      | JCVCarith_overflow -> "Arithmetic overflow"
-     | JCVCfp_overflow -> "Floating-point overflow")
+     | JCVCfp_overflow -> "Floating-point overflow"
+     | JCVCpre c -> c)
 
 let fprintf_jc_position fmttr pos =
   let f, l, b, e as loc = Jc_position.to_loc pos in
@@ -585,16 +586,17 @@ let string_of_goal_kind =
   | KLemma -> "lemma"
   | KGoal -> "goal"
 
-let fprintf_why_id fmttr { why_name; why_expl; why_pos } =
+let fprintf_why_id ?(constr=false) fmttr { why_name; why_expl; why_pos } =
   let pr fmt = fprintf fmttr fmt in
-  pr "%s" why_name;
+  pr "%s" @@ (if not constr then why3_ident else why3_constr) why_name;
   if not (Jc_position.is_dummy why_pos) then pr "@ %a" fprintf_jc_position why_pos;
   if why_expl <> "" then pr "@ \"expl:%s\"" why_expl
 
 let fprintf_why_decl fmttr =
   let pr fmt = fprintf fmttr fmt in
   let ext b = if b then "external " else "" in
-  let pr_id = fprintf_why_id in
+  let pr_id = fprintf_why_id ~constr:false
+  and pr_constr = fprintf_why_id ~constr:true in
   let pr_args = print_list space @@ fun fmt (_id, t) -> fprintf_logic_type fmt t in
   function
   | Param (b, id, t)  ->
@@ -635,15 +637,15 @@ let fprintf_why_decl fmttr =
   | Type (id, [])  ->
     pr "@[type %s@]@.@." (why3_ident id.why_name)
   | Type (id, [t]) ->
-    pr "@[type '%s %s@]@.@." t id.why_name
+    pr "@[type '%s %s@]@.@." t (why3_ident id.why_name)
   | Type (id, t :: l) ->
     pr "@[type ('%s" t;
     List.iter (pr ", '%s") l;
-    pr ") %s@]@.@." id.why_name
+    pr ") %s@]@.@." (why3_ident id.why_name)
   | Exception (id, None) ->
-    pr "@[exception %a@]@.@." pr_id id
+    pr "@[exception %a@]@.@." pr_constr id
   | Exception (id, Some t) ->
-    pr "@[exception %a %a@]@.@." pr_id id fprintf_logic_type t
+    pr "@[exception %a %a@]@.@." pr_constr id fprintf_logic_type t
 
 (* Drop optional parameters to satisfy common output interface *)
 let fprintf_term fmt = fprintf_term fmt

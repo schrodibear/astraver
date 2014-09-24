@@ -1006,13 +1006,13 @@ and triggers fa ft trigs =
   in
   List.map (List.map pat) trigs
 
-let mark_assertion ~e a =
+let mark_assertion ~e ?kind a =
   match a with
   | LLabeled _ -> a
-  | _ -> mk_positioned_lex e a
+  | _ -> mk_positioned_lex ~e ?kind a
 
-let named_assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
-  mark_assertion ~e:a @@
+let named_assertion ~type_safe ~global_assertion ?kind ~relocate lab oldlab a =
+  mark_assertion ~e:a ?kind @@
     assertion ~type_safe ~global_assertion ~relocate lab oldlab a
 
 (******************************************************************************)
@@ -1666,7 +1666,7 @@ and make_deref_simple ~e e1 fi =
     let tag_id = mk_var (tag_name fi.fi_struct) in
     match destruct_pointer e1 with
     | _, Int_offset s, Some lb, Some rb when bounded lb rb s ->
-      make_vc_app_e ~e ~kind:JCVCpointer_deref "safe_acc_requires_" [tag; mem; expr e1; tag_id]
+      make_vc_app_e ~e ~kind:JCVCpointer_deref "safe_acc_requires_" [mem; expr e1]
     | p, (Int_offset s as off), Some lb, _ when lbounded lb s ->
       make_vc_app_e ~e ~kind:JCVCpointer_deref_bounds "lsafe_lbound_acc_"
         [tag; alloc; mem; expr p; tag_id; offset off]
@@ -2042,7 +2042,20 @@ and expr e =
            (native_operator_type op)
            e1#typ
            e1 @@
-           expr e1]
+         expr e1]
+    | JCEbinary (e1, ((`Beq | `Bneq), `Pointer as op), e2) when safety_checking () ->
+      let is_null e = e#node = JCEconst JCCnull in
+      if is_null e1 && is_null e2 then
+        mk_expr @@ Cte (const @@ JCCboolean true)
+      else
+        let dummy e1 e2 = if is_null e1 then e2 else e1 in
+        let e1, e1', e2, e2' = dummy e1 e2, expr e1, dummy e2 e1, expr e2 in
+        let at1, at2 =
+          let ac1, ac2 = map_pair (deref_alloc_class ~type_safe:false) (e1, e2) in
+          map_pair alloc_table_var ((ac1, e1#region), (ac2, e2#region))
+        in
+        make_positioned_lex_e ~e @@
+          make_app (bin_op op) [at1; at2; e1'; e2']
     | JCEbinary (e1, (_, (`Pointer | `Logic) as op), e2) ->
       make_app (bin_op op) [expr e1; expr e2]
     | JCEbinary (e1, (`Bland, _), e2) ->
@@ -3128,7 +3141,8 @@ let tr_fun f funpos spec body acc =
   (* precondition for calling the function and extra one for analyzing it *)
 
   let external_requires =
-    named_assertion ~type_safe:true ~global_assertion:false ~relocate:false
+    let kind = JCVCpre (if Option_misc.has_some body then "Internal" else "External") in
+    named_assertion ~type_safe:true ~global_assertion:false ~kind ~relocate:false
       LabelHere LabelHere spec.fs_requires
   in
   let external_requires =
@@ -3720,15 +3734,18 @@ let tr_exception ei acc =
 let range_of_enum ri =
   Num.add_num (Num.sub_num ri.ei_max ri.ei_min) (Num.Int 1)
 
-let tr_enum_type ri (* to_int of_int *) acc =
+let tr_enum_type =
+  let dummy = new assertion JCAtrue in
+  fun ri (* to_int of_int *) acc ->
   let name = ri.ei_name in
   let min = Num.string_of_num ri.ei_min in
   let max = Num.string_of_num ri.ei_max in
   let width = Num.string_of_num (range_of_enum ri) in
   let lt = simple_logic_type name in
   let in_bounds x =
-    LAnd(LPred("le_int",[LConst(Prim_int min); x]),
-         LPred("le_int",[x; LConst(Prim_int max)]))
+    mk_positioned_lex ~e:dummy ~kind:(JCVCpre ("Bounded " ^ name)) @@
+      LAnd(LPred("le_int",[LConst(Prim_int min); x]),
+           LPred("le_int",[x; LConst(Prim_int max)]))
   in
   let safe_of_int_type =
     let post =

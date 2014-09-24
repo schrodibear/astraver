@@ -58,6 +58,7 @@ type vc_kind =
   | JCVCpack
   | JCVCunpack
   | JCVCfp_overflow
+  | JCVCpre of string
 
 type why_label = {
   l_kind     : vc_kind option;

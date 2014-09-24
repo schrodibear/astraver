@@ -353,7 +353,7 @@ use import int.Int
 use import jessie3theories.Jessie_memory_model
 use import ref.Ref
 
-val sub_pointer_ (a : alloc_table 't) (p : pointer 't) (q : pointer 't) : int
+val sub_pointer_ (p : pointer 't) (q : pointer 't) : int
   requires { "expl:Pointer difference" same_block p q }
   ensures  { result = sub_pointer p q }
 
@@ -363,18 +363,22 @@ val safe_sub_pointer_ (p : pointer 't) (q : pointer 't) : int
 
 (* pointer comparison *)
 
-val eq_pointer (a : alloc_table 't) (p : pointer 't) (q : pointer 't) : bool
+val eq_pointer (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) (q : pointer 't) : bool
   requires { "expl:Pointer equality"
-              ("expl:Same block" same_block p q) \/ ("expl:Both valid" valid a p /\ valid a q) }
+               ("expl:Same block" same_block p q) \/
+               ("expl:Is null" p = null \/ q = null) \/
+               ("expl:Both valid" valid a1 p /\ valid a2 q) }
   ensures  { result = True <-> p = q }
 
 val safe_eq_pointer (p : pointer 't) (q : pointer 't) : bool
   requires { true }
   ensures  { result = True <-> p = q }
 
-val neq_pointer (a : alloc_table 't) (p : pointer 't) (q : pointer 't) : bool
+val neq_pointer (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) (q : pointer 't) : bool
   requires { "expl:Pointer inequality"
-               ("expl:Same block" same_block p q) \/ ("expl:Both valid" valid a p /\ valid a q) }
+               ("expl:Same block" same_block p q) \/
+               ("expl:Is not null" p = null \/ q = null) \/
+               ("expl:Both valid" valid a1 p /\ valid a2 q) }
   ensures  { result = True <-> p <> q }
 
 val safe_neq_pointer (p : pointer 't) (q : pointer 't) : bool
@@ -387,8 +391,7 @@ val safe_neq_pointer (p : pointer 't) (q : pointer 't) : bool
 
 (* normal access *)
 val acc_ (alloc : alloc_table 't) (m : memory 't 'v) (p : pointer 't) : 'v
-  requires { "expl:Dereference"
-               ("expl:Validity" offset_min alloc p <= 0 <= offset_max alloc p) }
+  requires { "expl:Validity" offset_min alloc p <= 0 <= offset_max alloc p }
   ensures  { result = select m p }
 
 (* offset access *)
@@ -400,9 +403,9 @@ val offset_acc_
                                      ("expl:Non-zero offset" typeof tag p = s))) }
   ensures  { result = select m (shift p off) }
 
-(* safe access (checks tag id) -- for unions *)
-val safe_acc_requires_ (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) : 'v
-  requires { "expl:Correct type" instanceof tag p s }
+(* safe access (statically proven safe) *)
+val safe_acc_requires_  (m : memory 't 'v) (p : pointer 't)  : 'v
+  requires { "expl:Valid bounded access" true }
   ensures  { result = select m p }
 
 (* safe access *)
@@ -574,7 +577,8 @@ val instanceof_ (t : tag_table 't) (p : pointer 't) (s: tag_id 't) : bool
   ensures  { result = True <-> instanceof t p s }
 
 val downcast_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) :  pointer 't
-  requires { "expl:Cast" ("expl:Up/downcast" instanceof t p s) \/ ("expl:Reinterpret cast" cast_factor (typeof t p) s <> 0) }
+  requires { "expl:Prefix or reinterpret"
+             ("expl:Up/downcast" instanceof t p s) \/ ("expl:Reinterpret cast" cast_factor (typeof t p) s <> 0) }
   ensures  { result = downcast t p s }
 
 val safe_downcast_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) : pointer 't
@@ -622,8 +626,9 @@ val safe_free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
 
 let free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
   writes { a }
-  requires { "expl:Free" (("expl:Null" p = null) (* allowed, see man 3 free *) \/
-                          ("expl:Valid" offset_min !a p = 0 /\ offset_max !a p >= 0)) } =
+  requires { "expl:Deallocation"
+               (("expl:Null" p = null) (* allowed, see man 3 free *) \/
+                ("expl:Valid" offset_min !a p = 0 /\ offset_max !a p >= 0)) } =
   safe_free_parameter a p
 
 val safe_reinterpret_parameter

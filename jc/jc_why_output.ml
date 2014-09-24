@@ -59,7 +59,8 @@ let fprintf_vc_kind fmttr k =
      | JCVCindex_bounds -> "IndexBounds"
      | JCVCdowncast -> "DownCast"
      | JCVCarith_overflow -> "ArithOverflow"
-     | JCVCfp_overflow -> "FPOverflow")
+     | JCVCfp_overflow -> "FPOverflow"
+     | JCVCpre _ -> "Precondition")
 
 let add_why_label, add_why_id =
   (fun { l_kind; l_behavior; l_pos } ->
