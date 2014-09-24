@@ -1521,7 +1521,7 @@ let rec make_upd_simple ~e e1 fi tmp2 =
       if off = Int_offset 0
       then
         make_vc_app_e ~e ~kind:JCVCpointer_deref "upd_" @@
-          [alloc; tag; mk_var mem; mk_var tmpp; tag_id; mk_var tmp2]
+          [alloc; mk_var mem; mk_var tmpp; mk_var tmp2]
       else
         make_vc_app_e ~e ~kind:JCVCpointer_deref "offset_upd_" @@
           [alloc; tag; mk_var mem; mk_var tmpp; tag_id; mk_var tmpi; mk_var tmp2]
@@ -1674,7 +1674,7 @@ and make_deref_simple ~e e1 fi =
       make_vc_app_e ~e ~kind:JCVCpointer_deref_bounds "rsafe_rbound_acc_"
         [tag; alloc; mem; expr p; tag_id; offset off]
     | p, Int_offset s, None, None when s = 0 ->
-      make_vc_app_e ~e ~kind:JCVCpointer_deref "acc_"  [alloc; tag; mem; expr p; tag_id]
+      make_vc_app_e ~e ~kind:JCVCpointer_deref "acc_"  [alloc; mem; expr p]
     | p, off, _, _ ->
       make_vc_app_e ~e ~kind:JCVCpointer_deref "offset_acc_" [alloc; tag; mem ; expr p; tag_id; offset off]
   else
@@ -2015,12 +2015,12 @@ and make_reinterpret ~e e1 st =
     LPred ("eq_int", [LApp (cast_factor_name, [LVar s_from; LVar s_to]); const_of_int c])
   in
 
-  let assumption =
+  let ensures_assumption =
     mk_expr @@ Assert (`ASSUME, alloc_assumption,
-      mk_expr @@ Assert (`ASSUME, memory_assumption,
-        mk_expr @@ Assert (`ASSUME, cast_factor_assumption, void)))
+      mk_expr @@ Assert (`ASSUME, memory_assumption, void))
   in
-  append call_parameter assumption
+  append (mk_expr @@ Assert (`ASSUME, cast_factor_assumption, void)) @@
+    append call_parameter ensures_assumption
 
 and expr e =
   let infunction = get_current_function () in
@@ -3057,12 +3057,22 @@ let tr_allocates ~type_safe alloc_tables locs =
       (fun loc -> alloc_table_name (lderef_alloc_class ~type_safe loc, loc#region), loc)
       locs
   in
-  let alloc_same at =
-    let at = alloc_table_name at in
-    let args = [LDerefAtLabel (at, ""); LDeref at] in
+  let alloc_frame acr =
+    let tt =
+      let rir =
+        match acr with
+        | JCalloc_root ri, r -> ri, r
+        | JCalloc_bitvector, _ ->
+          let pos = List.fold_left (fun _ l -> l#pos) Loc.dummy_position locs in
+          unsupported pos "Frame allocates is not implemented for bitvector regions"
+      in
+      tag_table_name rir
+    in
+    let at = alloc_table_name acr in
+    let args = [LDerefAtLabel (at, ""); LDeref at; LDeref tt] in
     let to_pset = pset ~type_safe ~global_assertion:false LabelHere % location_set_all_of_location in
     match List.fold_left (fun acc (at', loc) -> if at = at' then loc :: acc else acc) [] at_locs with
-      | [] -> LPred ("alloc_same_except", args @ [LVar "pset_empty"])
+      | [] -> LPred ("alloc_frame", args @ [LVar "pset_empty"])
       | loc :: locs ->
           let pset =
             List.fold_left
@@ -3070,9 +3080,9 @@ let tr_allocates ~type_safe alloc_tables locs =
               (to_pset loc)
               locs
           in
-          LPred ("alloc_same_except", args @ [pset])
+          LPred ("alloc_frame", args @ [pset])
   in
-  AllocMap.fold (fun at _ acc -> make_and acc (alloc_same at)) alloc_tables LTrue
+  AllocMap.fold (fun at _ acc -> make_and acc (alloc_frame at)) alloc_tables LTrue
 
 let pre_tr_fun f _funpos spec _body acc =
   begin

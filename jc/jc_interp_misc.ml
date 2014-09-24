@@ -978,29 +978,31 @@ let make_valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
 (* Freshness *)
 
 let make_fresh_pred_app ~in_param (ac, r) pc p =
-  let params = allocs ac pc In_app r ~in_param LabelOld @ mems ac pc In_app r in
+  let params = tags ac pc In_app r ~in_param LabelOld @ mems ac pc In_app r in
   LPred (fresh_pred_name ac pc, p :: params)
 
 let make_fresh_pred ac pc =
   let p = "p" in
   let params =
     let p = p, pointer_type ac pc in
-    p :: allocs ac pc In_pred @ mems ac pc In_pred
+    p :: tags ac pc In_pred @ mems ac pc In_pred
   in
   let super_fresh =
     match pc with
     | JCtag ({ si_parent = Some (st, pp) }, _) ->
-      make_fresh_pred_app ~in_param:false (ac, dummy_region) (JCtag (st, pp)) (LVar p)
+      [make_fresh_pred_app ~in_param:false (ac, dummy_region) (JCtag (st, pp)) (LVar p)]
     | JCtag ({ si_parent = None }, _)
     | JCroot _ ->
-      let alloc = generic_alloc_table_name ac in
-      LPred ("alloc_fresh", [LVar alloc; LVar p])
+      map_st ac pc
+        ~f:(fun st ->
+            let tag = generic_tag_table_name (struct_root st) in
+            [LPred ("alloc_fresh", [LVar tag; LVar p])])
   in
   let fields_fresh p =
     List.flatten @@
       map_embedded_fields ac pc ~p ~f:(fun acr pc p _ _ -> [make_fresh_pred_app ~in_param:false acr pc p])
   in
-  let freshness = make_and_list @@ super_fresh :: fields_fresh (LVar p) in
+  let freshness = make_and_list @@ super_fresh @ fields_fresh (LVar p) in
   Predicate (false, id_no_loc (fresh_pred_name ac pc), params, freshness)
 
 (* Instanceof *)

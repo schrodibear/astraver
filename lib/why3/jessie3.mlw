@@ -354,8 +354,7 @@ use import jessie3theories.Jessie_memory_model
 use import ref.Ref
 
 val sub_pointer_ (a : alloc_table 't) (p : pointer 't) (q : pointer 't) : int
-  requires { "expl:Pointer difference"
-             ("expl:Same block" same_block p q) \/ ("expl:Both valid" valid a p /\ valid a q) }
+  requires { "expl:Pointer difference" same_block p q }
   ensures  { result = sub_pointer p q }
 
 val safe_sub_pointer_ (p : pointer 't) (q : pointer 't) : int
@@ -366,7 +365,7 @@ val safe_sub_pointer_ (p : pointer 't) (q : pointer 't) : int
 
 val eq_pointer (a : alloc_table 't) (p : pointer 't) (q : pointer 't) : bool
   requires { "expl:Pointer equality"
-               ("expl:Same block" same_block p q) \/ ("expl:Both valid" valid a p /\ valid a q) }
+              ("expl:Same block" same_block p q) \/ ("expl:Both valid" valid a p /\ valid a q) }
   ensures  { result = True <-> p = q }
 
 val safe_eq_pointer (p : pointer 't) (q : pointer 't) : bool
@@ -387,20 +386,21 @@ val safe_neq_pointer (p : pointer 't) (q : pointer 't) : bool
 (*****************************************************************************)
 
 (* normal access *)
-val acc_ (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) : 'v
+val acc_ (alloc : alloc_table 't) (m : memory 't 'v) (p : pointer 't) : 'v
   requires { "expl:Dereference"
-               ("expl:Validity" offset_min alloc p <= 0 <= offset_max alloc p) /\
-               ("expl:Correct type" instanceof tag p s) }
+               ("expl:Validity" offset_min alloc p <= 0 <= offset_max alloc p) }
   ensures  { result = select m p }
 
 (* offset access *)
-val offset_acc_ (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v)  (p : pointer 't) (s : tag_id 't) (off : int) :  'v
+val offset_acc_
+    (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v)  (p : pointer 't) (s : tag_id 't) (off : int) :  'v
   requires { "expl:Dereference by offset"
                ("expl:Validity" offset_min alloc p <= off <= offset_max alloc p) /\
-               ("expl:Correct type" instanceof tag p s) }
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   ensures  { result = select m (shift p off) }
 
-(* safe access (checks tag id) *)
+(* safe access (checks tag id) -- for unions *)
 val safe_acc_requires_ (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) : 'v
   requires { "expl:Correct type" instanceof tag p s }
   ensures  { result = select m p }
@@ -411,58 +411,87 @@ val safe_acc_ (m : memory 't 'v) (p : pointer 't) : 'v
   ensures  { result = select m p }
 
 (* bounded access *)
-val bound_acc_ (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) (lb : int) (rb : int) : 'v
+val bound_acc_
+    (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) (lb : int) (rb : int) : 'v
   requires { "expl:Bounded pointer dereference"
                ("expl:Validity" lb <= off <= rb) /\
-               ("expl:Correct type" instanceof tag p s) }
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   ensures  { result = select m (shift p off) }
 
 (* bounded access with safe left bound *)
-val lsafe_bound_acc_ (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) (rb : int) : 'v
+val lsafe_bound_acc_
+    (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) (rb : int) : 'v
   requires { "expl:Bounded pointer dereference"
-             ("expl:Validity" off <= rb) /\ ("expl:Correct type" instanceof tag p s) }
+               ("expl:Validity" off <= rb) /\
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   ensures  { result = select m (shift p off) }
 
 (* bounded access with safe right bound *)
-val rsafe_bound_acc_ (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) (lb : int) : 'v
+val rsafe_bound_acc_
+    (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) (lb : int) : 'v
   requires { "expl:Bounded pointer dereference"
-             ("expl:Validity" lb <= off) /\ ("expl:Correct type" instanceof tag p s) }
+               ("expl:Validity" lb <= off) /\
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   ensures  { result = select m (shift p off) }
 
 (* left bounded access *)
-val lbound_acc_ (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) (lb : int) : 'v
+val lbound_acc_
+    (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't)
+    (off : int) (lb : int) : 'v
   requires { "expl:Bounded pointer dereference"
-             ("expl:Validity" lb <= off <= offset_max alloc p) /\ ("expl:Correct type" instanceof tag p s) }
+               ("expl:Validity" lb <= off <= offset_max alloc p) /\
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   ensures  { result = select m (shift p off) }
 
 (* left bounded access with safe left bound *)
-val lsafe_lbound_acc_ (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) : 'v
+val lsafe_lbound_acc_
+    (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) : 'v
   requires { "expl:Bounded pointer dereference"
-             ("expl:Validity" off <= offset_max alloc p) /\ ("expl:Correct type" instanceof tag p s) }
+               ("expl:Validity" off <= offset_max alloc p) /\
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   ensures  { result = select m (shift p off) }
 
 (* right bounded access *)
-val rbound_acc_ (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) (rb : int) :  'v
+val rbound_acc_
+    (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't)
+    (off : int) (rb : int) :  'v
   requires { "expl:Bounded pointer dereference"
-             ("expl:Validity" offset_min alloc p <= off <= rb) /\ ("expl:Correct type" instanceof tag p s) }
+               ("expl:Validity" offset_min alloc p <= off <= rb) /\
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   ensures  { result = select m (shift p off) }
 
 (* right bounded access with safe right bound *)
-val rsafe_rbound_acc_ (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) :  'v
+val rsafe_rbound_acc_
+    (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) :  'v
   requires { "expl:Bounded pointer dereference"
-             ("expl:Validity" offset_min alloc p <= off) /\ ("expl:Correct type" instanceof tag p s) }
+               ("expl:Validity" offset_min alloc p <= off) /\
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   ensures  { result = select m (shift p off) }
 
 (* normal update *)
-val upd_ (alloc : alloc_table 't) (tag : tag_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (v : 'v) :  unit
-  requires { "expl:Assignment" ("expl:Left valid" offset_min alloc p <= 0) /\ ("expl:Right valid" 0 <= offset_max alloc p) /\ ("expl:Correct type" instanceof tag p s) }
+val upd_
+    (alloc : alloc_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (v : 'v) :  unit
+  requires { "expl:Assignment"
+               ("expl:Left valid" offset_min alloc p <= 0) /\ ("expl:Right valid" 0 <= offset_max alloc p) }
   reads { m }
   writes { m }
   ensures { !m = store (old !m) p v }
 
 (* offset update *)
-val offset_upd_ (alloc : alloc_table 't) (tag: tag_table 't) (m: ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int) (v : 'v) : unit
-  requires { "expl:Assignment with offset" ("expl:Left valid" offset_min alloc p <= off) /\ ("expl:Right valid" off <= offset_max alloc p) /\ ("expl:Correct type" instanceof tag p s) }
+val offset_upd_
+    (alloc : alloc_table 't) (tag: tag_table 't) (m: ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int)
+    (v : 'v) : unit
+  requires { "expl:Assignment with offset"
+               ("expl:Left valid" offset_min alloc p <= off) /\ ("expl:Right valid" off <= offset_max alloc p) /\
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   reads    { m }
   writes   { m }
   ensures  { !m = store (old !m) (shift p off) v }
@@ -475,27 +504,39 @@ val safe_upd_ (m : ref (memory 't 'v)) (p : pointer 't) (v : 'v) : unit
   ensures  { !m = store (old !m) p v }
 
 (* bounded update *)
-val bound_upd_ (tag : tag_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int) (lb : int) (rb : int) (v : 'v) : unit
+val bound_upd_
+    (tag : tag_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int) (lb : int)
+    (rb : int) (v : 'v) : unit
   requires { "expl:Assignment"
-             ("expl:Validity" lb <= off /\ off <= rb) /\ ("expl:Corrrect type" instanceof tag p s) }
+               ("expl:Validity" lb <= off /\ off <= rb) /\
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   reads { m }
   writes { m }
   ensures  { !m = store (old !m) (shift p off) v }
 
 (* bounded update with safe right bound *)
-val rsafe_bound_upd_ (tag : tag_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int) (lb : int) (v : 'v) : unit
+val rsafe_bound_upd_
+    (tag : tag_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int) (lb : int)
+    (v : 'v) : unit
   requires { "expl:Assignment"
-             ("expl:Validity" lb <= off) /\ ("expl:Correct type" instanceof tag p s) }
+               ("expl:Validity" lb <= off) /\
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   reads { m }
   writes { m }
   ensures  { !m = store (old !m) (shift p off) v }
 
 (* left bounded update *)
-val lbound_upd_ (alloc : alloc_table 't) (tag : tag_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int) (lb : int) (v : 'v) :  unit
+val lbound_upd_
+    (alloc : alloc_table 't) (tag : tag_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int)
+    (lb : int) (v : 'v) : unit
   reads { m }
   writes { m }
   requires { "expl:Assignment"
-             ("expl:Validity" lb <= off /\ off <= offset_max alloc p) /\ ("expl:Correct type" instanceof tag p s) }
+               ("expl:Validity" lb <= off /\ off <= offset_max alloc p) /\
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   ensures  { !m = store (old !m) (shift p off) v }
 
 (* left bounded update with safe left bound *)
@@ -503,7 +544,9 @@ val lsafe_lbound_upd_ (alloc : alloc_table 't) (tag : tag_table 't) (m : ref (me
   reads { m }
   writes { m }
   requires { "expl:Assignment"
-             ("expl:Validity" off <= offset_max alloc p) /\ ("expl:Correct type" instanceof tag p s) }
+               ("expl:Validity" off <= offset_max alloc p) /\
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   ensures  { !m = store (old !m) (shift p off) v }
 
 (* right bounded update *)
@@ -511,7 +554,9 @@ val rbound_upd_ (alloc : alloc_table 't) (tag : tag_table 't) (m : ref (memory '
   reads { m }
   writes { m }
   requires { "expl:Assignment"
-             ("expl:Validity" offset_min alloc p <= off /\ off <= rb) /\ ("expl:Correct type" instanceof tag p s) }
+               ("expl:Validity" offset_min alloc p <= off /\ off <= rb) /\
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   ensures  { !m = store (old !m) (shift p off) v }
 
 (* right bounded update with safe right bound *)
@@ -519,7 +564,9 @@ val rsafe_rbound_upd_ (alloc : alloc_table 't) (tag : tag_table 't) (m : ref (me
   reads { m }
   writes { m }
   requires { "expl:Assignment"
-             ("expl:Validity" offset_min alloc p <= off) /\ ("expl:Correct type" instanceof tag p s) }
+               ("expl:Validity" offset_min alloc p <= off) /\
+               ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                     ("expl:Non-zero offset" typeof tag p = s))) }
   ensures  { !m = store (old !m) (shift p off) v }
 
 val instanceof_ (t : tag_table 't) (p : pointer 't) (s: tag_id 't) : bool
@@ -570,12 +617,12 @@ val safe_free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
   writes { a }
   ensures  { (p = null -> !a = (old !a)) /\
              (p <> null ->
-               free (old !a) !a p /\
-               alloc_fresh !a p) }
+              offset_max !a p < offset_min !a p) }
 
 let free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
   writes { a }
-  requires { "expl:Free" (("expl:Null" p = null) (* allowed, see man 3 free *) \/ ("expl:Valid" offset_min !a p = 0 /\ offset_max !a p >= 0)) } =
+  requires { "expl:Free" (("expl:Null" p = null) (* allowed, see man 3 free *) \/
+                          ("expl:Valid" offset_min !a p = 0 /\ offset_max !a p >= 0)) } =
   safe_free_parameter a p
 
 val safe_reinterpret_parameter
@@ -590,10 +637,10 @@ val safe_reinterpret_parameter
   ensures  { let pset_old = pset_all (pset_singleton p) in
              let ps = downcast t p s2 in
              let pset_new = pset_all (pset_singleton ps) in
-             alloc_same_except (old !a) !a (pset_union pset_old pset_new) /\
-             alloc_fresh (old !a) ps /\
-             alloc_fresh !a p /\
+             alloc_same_except (old !a) !a (pset_reinterpret_all t pset_old) /\
              not_assigns (old !m) !m pset_new }
+
+use import int.ComputerDivision
 
 let reinterpret_parameter
       (a : ref (alloc_table 't))
@@ -605,8 +652,11 @@ let reinterpret_parameter
       unit
   writes { a, m }
   requires { "expl:Reinterpret cast"
-               ("expl:Correct type" forall p' : pointer 't. in_pset p' (pset_all (pset_singleton p)) -> typeof t p = s1)
-             /\ ("expl:Validity" (offset_min !a p <= offset_max !a p)) } =
+               ("expl:Correct type" typeof t (shift p (offset_min !a p - 1)) = s1)
+             /\ ("expl:Validity" (offset_min !a p <= offset_max !a p))
+             /\  ("expl:Valid cast" ("expl:Split" cast_factor s1 s2 > 0) \/
+                  ("expl:Join" mod (offset_max !a p - offset_min !a p + 1) (- cast_factor s1 s2) = 0))
+           } =
   safe_reinterpret_parameter a t s1 s2 m p
 
 end

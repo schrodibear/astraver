@@ -67,6 +67,21 @@ use import bool.Bool
 function eq_pointer_bool (p1 : pointer 't) (p2 : pointer 't) : bool = if p1 = p2 then True else False
 function neq_pointer_bool (p1 : pointer 't) (p2 : pointer 't) : bool = if p1 <> p2 then True else False
 
+axiom same_block_refl:
+  forall p : pointer 't.
+    same_block p p
+
+axiom same_block_symm:
+  forall p : pointer 't.
+    forall q : pointer 't.
+      same_block p q <-> same_block q p
+
+axiom same_block_trans:
+  forall p : pointer 't.
+    forall q : pointer 't.
+      forall r : pointer 't.
+        same_block p q /\ same_block q r -> same_block p r
+
 axiom same_block_shift_right:
   forall p : pointer 't. forall q : pointer 't. forall i : int
   [same_block p (shift q i)].
@@ -140,7 +155,7 @@ axiom in_pset_empty:
 axiom in_pset_singleton:
   forall p : pointer 't.
   forall q : pointer 't.
-    in_pset p (pset_singleton q) <-> p=q
+    in_pset p (pset_singleton q) <-> p = q
 
 axiom in_pset_deref:
   forall p : pointer 'v.
@@ -159,8 +174,8 @@ axiom in_pset_all:
   forall p : pointer 't.
   forall q : pset 't.
     in_pset p (pset_all q) <->
-        exists i : int. exists r : pointer 't.
-          in_pset r q /\ p = shift r i
+      exists r : pointer 't.
+        in_pset r q /\ same_block p r 
 
 axiom in_pset_all_singleton:
   forall p : pointer 't.
@@ -246,29 +261,40 @@ type tag_id 't
 
 type tag_table 't = Map.map (pointer 't) (tag_id 't)
 
-function select_tag (t : tag_table 't) (p : pointer 't) : tag_id 't = Map.get t p
+function tag (t : tag_table 't) (p : pointer 't) : tag_id 't = Map.get t p
+
 function store_tag (t : tag_table 't) (p : pointer 't) (s : tag_id 't) : tag_table 't = Map.set t p s
 
 function store_tags (tag_table 't) (pointer 't) (tag_id 't) : tag_table 't
+
+function store_struct_tag (t : tag_table 't) (p : pointer 't) (s : tag_id 't) : tag_table 't = store_tags t p s
 
 axiom store_tags:
   forall t : tag_table 't.
     forall p : pointer 't.
       forall s : tag_id 't [store_tags t p s].
-        forall p' : pointer 't [select_tag (store_tags t p s) p'].
-          let in_pset_all = if in_pset p' (pset_all (pset_singleton p)) then True else False in
-          let result = select_tag (store_tags t p s) p' in
-          (in_pset_all -> result = s) /\ (not in_pset_all -> result = select_tag t p)
+        forall q : pointer 't [tag (store_tags t p s) q].
+          let result = tag (store_tags t p s) q in
+          (same_block p q -> result = s) /\ (not (same_block p q) -> result = tag t q)
+
+(* ATTENTION: holds only for structures, MUST be modified when union support is back *)
+axiom struct_block_tag:
+  forall t : tag_table 't.
+    forall p : pointer 't [tag t p].
+      forall q : pointer 't [tag t q].
+        same_block p q -> tag t p = tag t q
 
 function int_of_tag (tag_id 't) : int
 
-function typeof (t : tag_table 't) (p : pointer 't) : tag_id 't = select_tag t p
-
-function cast_factor (tag_id 't) (tag_id 't) : int
+function typeof (t : tag_table 't) (p : pointer 't) : tag_id 't = tag t p
 
 predicate parenttag (tag_id 't) (tag_id 't)
 
 predicate subtag (tag_id 't) (tag_id 't)
+
+(* The function \phi i.e. <> 0 iff reinterpretation is allowed, > 0 - split, < 0 - join *)
+
+function cast_factor (tag_id 't) (tag_id 't) : int
 
 function subtag_bool (tag_id 't) (tag_id 't) : bool
 
@@ -301,7 +327,7 @@ axiom cast_factor_trans:
         (c12 > 0 /\ c23 < 0 /\ c12 < (-c23) /\ mod (- c23) c12 = 0 -> c13 = - (div (- c23) c12)) /\
         (c12 < 0 /\ c23 > 0 /\ c23 > (- c12) /\ mod c23 (- c12) = 0 -> c13 = div c23 (- c12)) /\
         (c12 < 0 /\ c23 > 0 /\ c23 < (- c12) /\ mod (- c12) c23 = 0 -> c13 = - (div (- c12) c23)) /\
-        (c12 < 0 /\ c23 < 0 -> c13 = c12 * c23)
+        (c12 < 0 /\ c23 < 0 -> c13 = (- c12) * c23)
 
 predicate instanceof (t : tag_table 't) (p : pointer 't) (s : tag_id 't) =
   subtag (typeof t p) s
@@ -310,6 +336,22 @@ function instanceof_bool (t : tag_table 't) (p : pointer 't) (s : tag_id 't) : b
   if instanceof t p s then True else False
 
 function downcast (tag_table 't) (pointer 't) (tag_id 't) : pointer 't
+
+function pset_reinterpret_all (tag_table 't) (pset 't) : pset 't (* (t * )l(..) *)
+
+axiom in_pset_in_pset_reinterpret_all:
+  forall q : pset 't.
+    forall t : tag_table 't [pset_reinterpret_all t q].
+      forall p : pointer 't [in_pset p (pset_reinterpret_all t q) | in_pset p q].
+        not in_pset p (pset_reinterpret_all t q) -> not in_pset p q
+
+axiom in_pset_downcast_in_pset_reinterpret_all:
+  forall q : pointer 't [pset_all (pset_singleton q)].
+    forall t : tag_table 't [pset_reinterpret_all t (pset_all (pset_singleton q))].
+      forall p : pointer 't [in_pset p (pset_reinterpret_all t (pset_all (pset_singleton q)))].
+        not in_pset p (pset_reinterpret_all t (pset_all (pset_singleton q))) ->
+        forall s : tag_id 't [pset_all (pset_singleton (downcast t q s))].
+          not in_pset p (pset_reinterpret_all t (pset_all (pset_singleton (downcast t q s))))
 
 axiom downcast_reduce:
   forall t : tag_table 't.
@@ -345,7 +387,7 @@ axiom root_subtag:
   forall a: tag_id 't.
   forall b: tag_id 't.
   forall c: tag_id 't.
-    root_tag(a) -> root_tag(b) -> a <> b -> subtag c a -> not (subtag c b)
+    root_tag a -> root_tag b -> a <> b -> subtag c a -> not (subtag c b)
 
 predicate reinterpret_cast_merge
       (t : tag_table 't)
@@ -385,13 +427,13 @@ predicate reinterpret_cast_retain
   offset_max a2 ps = offset_max a1 p
 
 predicate not_assigns_tags (t1 : tag_table 't) (t2 : tag_table 't) (l : pset 't) =
-  forall p:pointer 't.
-    not in_pset p l -> select_tag t2 p = select_tag t1 p
+  forall p : pointer 't.
+    not in_pset p l -> typeof t2 p = typeof t1 p
 
 axiom not_assigns_tags_refl:
   forall t : tag_table 't.
   forall l : pset 't.
-    not_assigns t t l
+    not_assigns_tags t t l
 
 (*****************************************************************************)
 (* bitwise operations                                                        *)
@@ -736,17 +778,20 @@ axiom lsr_divide:
 (* dynamic allocation/deallocation                                           *)
 (*****************************************************************************)
 
-predicate alloc_fresh (a : alloc_table 't) (p : pointer 't) =
-  offset_max a p < offset_min a p /\
-  forall p' : pointer 't. in_pset p' (pset_all (pset_singleton p)) -> not valid a p' (* excess condition *)
+predicate alloc_fresh (t : tag_table 't) (p : pointer 't) =
+  typeof t p = bottom_tag
 
 predicate alloc_same_except (a1 : alloc_table 't) (a2 : alloc_table 't) (l : pset 't) =
-  forall p: pointer 't [valid a1 p | valid a2 p | in_pset p l | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
-    not in_pset p l -> (valid a1 p -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p) /\
-                       (not valid a1 p -> not valid a2 p)
+  forall p: pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+    not in_pset p l ->
+      offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
 
-predicate alloc (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) =
-  alloc_same_except a1 a2 (pset_all (pset_singleton p))
+predicate alloc_frame (a1 : alloc_table 't) (a2 : alloc_table 't) (t2 : tag_table 't) (l : pset 't) =
+  forall p: pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+    not in_pset p (pset_reinterpret_all t2 l) ->
+        offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
+
+predicate alloc (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) = alloc_same_except a1 a2 (pset_all (pset_singleton p))
 
 predicate free (a1 : alloc_table 't) (a2 : alloc_table 't) ( p : pointer 't) = alloc a1 a2 p
 
