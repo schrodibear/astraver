@@ -229,6 +229,9 @@ let generic full f targets =
        out "why3replay: %s@\n" why3ml_target;
        out "\t why3 replay $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";
 
+       out "why3autoreplay: %s@\n" why3ml_target;
+       out "\t why3 replay -q --obsolete-only $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";
+
        out "-include %s.depend@\n@\n" f;
        out "depend: %a@\n" (print_files coq_v) targets;
        out "\t-$(COQDEP) -I coq coq/%s*_why.v > %s.depend@\n@\n" f f;
