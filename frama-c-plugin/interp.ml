@@ -105,10 +105,11 @@ let locate ?pos e =
    *)
   let rec dopos ~toplevel e =
     (* Generate (and store) a label associated to this source location *)
-    let pos = match pos with
+    let pos =
+      match pos with
       | None -> e#pos
       | Some pos ->
-          if is_unknown_location e#pos then pos else e#pos
+        if is_unknown_location e#pos then pos else e#pos
     in
     let lab = reg_position pos in
     let e = match e#node with
@@ -126,17 +127,18 @@ let locate ?pos e =
                 let e2 = dopos ~toplevel:false e2 in
                 mkexpr (JCPEbinary(e1,`Bland,e2)) pos
           end
-      | _ -> e
-    in
-    (* Do not generate a label for every intermediate conjunct *)
-    match e#node with
-      | JCPEbinary(_e1,`Bland,_e2) when not toplevel -> e
+        | _ -> e
+      in
+      (* Do not generate a label for every intermediate conjunct *)
+      match e#node with
+      | JCPEbinary (_e1,`Bland,_e2) when not toplevel -> e
       | _ ->
-          (* Label the expression accordingly *)
-          mkexpr (JCPElabel(lab,e)) pos
+      (* Label the expression accordingly *)
+        mkexpr (JCPElabel (lab, e)) pos
+    else
+      e
   in
   dopos ~toplevel:true e
-
 
 (*****************************************************************************)
 (* Cil to Jessie translation of operators                                    *)
@@ -1361,7 +1363,7 @@ let spec _fname funspec =
       | (Exits | Returns | Breaks | Continues),_ -> false
   in
   let behavior b =
-    if List.exists (not $ is_normal_postcond) b.b_post_cond then
+    if List.exists (not % is_normal_postcond) b.b_post_cond then
       warn_once "abrupt clause(s) ignored";
     let name =
       if b.b_name = Cil.default_behavior_name then
@@ -1370,16 +1372,6 @@ let spec _fname funspec =
         name_of_default_behavior ^ "_jessie"
       else b.b_name
     in
-(*    Format.eprintf "[spec] function %s, producing behavior '%s' from behavior '%s'@." fname name b.b_name;
-    Format.eprintf "b_allocation = ";
-    begin
-      match b.b_allocation with
-        | FreeAllocAny ->
-            Format.eprintf "FreeAllocAny@."
-        | FreeAlloc(l1,l2) ->
-            Format.eprintf "FreeAlloc(%d,%d)@." (List.length l1) (List.length l2)
-    end;
-*)
     let loc =
       function
       | [] -> Loc.dummy_position

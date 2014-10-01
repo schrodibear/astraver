@@ -846,7 +846,7 @@ class spec_refreshing_vsitor = object
     DoChildrenPost refresh_spec
 end
 
-class type_substituting_visitor _type = 
+class type_substituting_visitor _type =
 object
   method vtype : 'a -> 'a visitAction = fun t ->
     if not (is_pattern_type t) then DoChildren
@@ -864,7 +864,7 @@ object(self)
 
   method private virtual vlogic_var_renaming : logic_var -> logic_var visitAction
 
-  method vlogic_var_decl : 'a -> 'a visitAction = fun ({ lv_name; lv_origin } as lv) -> 
+  method vlogic_var_decl : 'a -> 'a visitAction = fun ({ lv_name; lv_origin } as lv) ->
     if self#has_changed lv then
       DoChildren
     else if lv_name = get_specialized_name lv_name then
@@ -947,7 +947,7 @@ class specialize_blockfuns_visitor =
         (spec, fvinfo, argvinfos, loc)
       | _ -> fatal "Can't specialize user-defined block function: %a" Printer.pp_funspec spec
   in
-  let is_block_function = function 
+  let is_block_function = function
     | { fundec = Declaration (_, _, _, ({ Lexing.pos_fname }, _)) } ->
         Filename.basename pos_fname = blockfuns_include_file_name
     | _ -> false
@@ -1134,12 +1134,12 @@ class composite_expanding_visitor =
               term_node = TLval (addTermOffsetLval offset tlv);
               term_type = Ctype ty }
         | Tat (t, lab) -> tat ~loc (add_term_offset ty offset t, lab)
-        | TCastE (_, ({ term_type } as t)) 
+        | TCastE (_, ({ term_type } as t))
           when term_type = Linteger || term_type = Lreal ||
-               isIntegralType (ctype ~force:false term_type) || 
+               isIntegralType (ctype ~force:false term_type) ||
                isFloatingType (ctype ~force:false term_type) ->
-            { t with term_node = 
-              TCastE (ty, if isIntegralType ty then tinteger ~loc 0 
+            { t with term_node =
+              TCastE (ty, if isIntegralType ty then tinteger ~loc 0
                           else if isFloatingType ty then treal_zero ()
                           else if isPointerType ty then term ~loc Tnull (Ctype ty)
                           else t) }
@@ -1173,7 +1173,7 @@ class composite_expanding_visitor =
   let predicate_of_equality_list loc lst =
     Logic_const.(pands @@ List.map (unamed ~loc) lst).content
   in
-  let is_term_to_expand { term_type } = 
+  let is_term_to_expand { term_type } =
     let t = ctype ~force:false term_type in
     isStructOrUnionType t || isArrayType t
   in
@@ -1325,7 +1325,7 @@ object(self)
           funspec.spec_behavior <-
             (let open! Logic_const in
             [mk_behavior
-              ~requires:[new_predicate @@ pands @@ List.map (fun lv -> pvalid ~loc (here_label, tvar ~loc lv)) outs]
+             ~requires:[new_predicate @@ pands @@ List.map (fun lv -> pvalid ~loc (here_label, tvar ~loc lv)) outs]
               ~assigns:(if has_mem_clob then
                           warning "The inline assembly includes memory clobber, but no side effect is assumed!";
                         let to_terms = List.map @@ tvar ~loc in
@@ -1546,7 +1546,7 @@ class dummy_struct_definer = object(self)
     DoChildren
 
   method! vglob_aux = function
-   | GCompTagDecl (ci, _) -> 
+   | GCompTagDecl (ci, _) ->
        ignore (self#vcompinfo ci);
        DoChildren
    | _ -> DoChildren
