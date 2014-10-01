@@ -201,10 +201,10 @@ object(self)
           let size = constant_expr (array_size v.vtype) in
           (* Schedule for allocation *)
           allocvarset := Set_vi.add v !allocvarset;
-          mkTRefArray (elemty, size, []);
+          mkTRefArray (elemty, size, [])
         end else
           (* Plain pointer type to array with zero size *)
-          TPtr (v.vtype, []);
+          TPtr (v.vtype, [])
       in
       attach_globaction (fun () -> v.vtype <- newty);
       (* Create a "straw" variable for this variable, with the correct type *)

@@ -292,7 +292,7 @@ class replaceStringConstants =
   (* Functions to build and attach an invariant for each string constant. The actual invariant generation is
    * postponed until finding the corresponding proxy with the __invariant attribute.
    *)
-  let content_inv ~loc s tv =
+  let content_inv ~loc s lv =
     let content =
       match s with
       | `String s -> List.map (Logic_const.tinteger ~loc % int_of_char) (string_explode s @ ['\000'])
@@ -302,7 +302,14 @@ class replaceStringConstants =
       pands @@
         ListLabels.mapi content
           ~f:(fun i c ->
-                let el = term ~loc (TLval (TMem tv, TIndex (tinteger ~loc i, TNoOffset))) (Ctype charType) in
+                let lval =
+                  match lv.lv_type with
+                  | Ctype (TArray _) -> TVar lv, TIndex (tinteger ~loc i, TNoOffset)
+                  | Ctype (TPtr _) as lt ->
+                    TMem (term ~loc (TBinOp (PlusPI, tvar ~loc lv, tinteger ~loc i)) lt), TNoOffset
+                  | _ -> fatal "Wrong type of string literal proxy %a" Printer.pp_logic_var lv
+                in
+                let el = term ~loc (TLval lval) (Ctype charType) in
                   prel ~loc (Req, el, c)))
   in
   let attach_invariant name loc p =
@@ -341,7 +348,7 @@ class replaceStringConstants =
         Logic_const.prel ~loc:vi'.vdecl (Req, tv', term_of_var vi);
       if content then
         (* Define an invariant on the contents of the string *)
-        let content_inv = content_inv ~loc s tv' in
+        let content_inv = content_inv ~loc s @@ cvar_to_lvar vi' in
         attach_invariant ("contents_of_" ^ vi.vname) vi.vdecl content_inv
     in
     (match s with `String s -> memo_string s | `Wstring ws -> memo_wstring ws)
@@ -498,7 +505,7 @@ object(self)
               ("contents_of_" ^ vi'.vname)
                 vi'.vdecl @@
                   content_inv ~loc s @@
-                    term_of_var vi'
+                    cvar_to_lvar vi'
         in
         (match s with `String s -> memo_string s | `Wstring ws -> memo_wstring ws)
           self#current_func
@@ -586,10 +593,12 @@ object
       SkipChildren
 end
 
-let replace_string_constants file =
+let replace_string_constants =
   let first_pass_visitor = new replaceStringConstants in
-  visit_and_update_globals (first_pass_visitor :> frama_c_visitor) file;
-  visit_and_update_globals (new literal_proxy_visitor first_pass_visitor) file
+  do_and_update_globals
+    (fun file ->
+      visitFramacFile (first_pass_visitor :> frama_c_visitor) file;
+      visitFramacFile (new literal_proxy_visitor first_pass_visitor) file)
 
 (*****************************************************************************)
 (* Put all global initializations in the [globinit] file.                    *)
