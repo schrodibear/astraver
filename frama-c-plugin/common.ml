@@ -137,7 +137,7 @@ let promote_argument_type arg_type =
   | (TFun _) as t -> TPtr(t,[])
   | TComp(ci,_,_) -> TComp(ci,{ scache = Not_Computed },[])
   | TEnum(ei,_) -> TEnum(ei,[])
-  | TBuiltin_va_list _ -> 
+  | TBuiltin_va_list _ ->
     Jessie_options.fatal ~current:true "implicit prototype cannot have variadic arguments"
   | TNamed _ -> assert false (* unrollType *)
 
@@ -183,7 +183,7 @@ let min_value_of_integral_type ?bitsize ty =
     | TInt(ik,_attr) ->
 	min_of (isSigned ik) (size_in_bytes ik)
     | TEnum (e,_) when e.ekind = IBool -> Integer.zero
-    | TEnum (e,_) -> 
+    | TEnum (e,_) ->
       let ik = e.ekind in
       min_of (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
@@ -207,7 +207,7 @@ let max_value_of_integral_type ?bitsize ty =
     | TInt(ik,_attr) ->
 	max_of (isSigned ik) (size_in_bytes ik)
     | TEnum (e,_) when e.ekind=IBool -> Integer.one
-    | TEnum (e,_) -> 
+    | TEnum (e,_) ->
       let ik = e.ekind in
       max_of (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
@@ -604,7 +604,7 @@ let detach_globinits file =
 *)
 
 let detach_globals file =
-  file.globals <- !globals @ file.globals;
+  file.globals <- (List.rev !globals) @ file.globals;
   List.iter
     (function GVar(v,init,_) -> Globals.Vars.add v init | _ -> ()) !globals;
   globals := []
@@ -945,7 +945,7 @@ let empty_term_env =
     vars = Varinfo.Map.empty }
 
 let merge_term_env env1 env2 =
-  { term_lhosts = Varinfo.Map.fold Varinfo.Map.add env1.term_lhosts 
+  { term_lhosts = Varinfo.Map.fold Varinfo.Map.add env1.term_lhosts
 	env2.term_lhosts;
     terms = Varinfo.Map.fold Varinfo.Map.add env1.terms env2.terms;
     vars = Varinfo.Map.fold Varinfo.Map.add env1.vars env2.vars }
@@ -973,7 +973,7 @@ let add_opaque_term_lhost lhost env =
 let add_opaque_result ty env =
   let pv = makePseudoVar ty in
   let env =
-    { env with term_lhosts = 
+    { env with term_lhosts =
 	Varinfo.Map.add pv (TResult ty) env.term_lhosts; }
   in
   Var pv, env
@@ -1071,7 +1071,7 @@ and force_term_offset_to_offset = function
       Field(fi,off), env
   | TModel _ ->
       (*
-        Kernel.fatal 
+        Kernel.fatal
         "Logic_interp.force_term_offset_to_offset \
         does not support model fields"
       *)
@@ -1757,7 +1757,7 @@ module Trie = struct
 
     (*s Then a trie is just a tree-like structure, where a possible
         information is stored at the node (['a option]) and where the sons
-        are given by a map from type [key] to sub-tries, so of type 
+        are given by a map from type [key] to sub-tries, so of type
         ['a t M.t]. The empty trie is just the empty map. *)
 
     type key = M.key
@@ -1802,7 +1802,7 @@ module Trie = struct
       ins (l, t)
 
     (*s When removing a binding, we take care of not leaving bindings to empty
-        sub-tries in the nodes. Therefore, we test wether the result [t'] of 
+        sub-tries in the nodes. Therefore, we test wether the result [t'] of
         the recursive call is the empty trie [empty]: if so, we just remove
         the branching with [M.remove]; otherwise, we modify it with [M.add]. *)
 
@@ -1820,7 +1820,7 @@ module Trie = struct
         [M.mapi], [M.iter] and [M.fold]. For the last three of them,
         we have to remember the path from the root, as an extra argument
         [revp]. Since elements are pushed in reverse order in [revp],
-        we have to reverse it with [List.rev] when the actual binding 
+        we have to reverse it with [List.rev] when the actual binding
         has to be passed to function [f]. *)
 
     let rec map f =
