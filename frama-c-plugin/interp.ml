@@ -111,21 +111,24 @@ let locate ?pos e =
       | Some pos ->
         if is_unknown_location e#pos then pos else e#pos
     in
-    let lab = reg_position pos in
-    let e = match e#node with
-      | JCPEbinary(e1,`Bland,e2) ->
-          begin match e1#node,e2#node with
-            | JCPElabel _,JCPElabel _ -> e (* already labelled *)
-            | JCPElabel _,_ -> (* [e1] already labelled *)
-                let e2 = dopos ~toplevel:false e2 in
-                mkexpr (JCPEbinary(e1,`Bland,e2)) pos
-            | _,JCPElabel _ -> (* [e2] already labelled *)
-                let e1 = dopos ~toplevel:false e1 in
-                mkexpr (JCPEbinary(e1,`Bland,e2)) pos
-            | _,_ -> (* none already labelled *)
-                let e1 = dopos ~toplevel:false e1 in
-                let e2 = dopos ~toplevel:false e2 in
-                mkexpr (JCPEbinary(e1,`Bland,e2)) pos
+    (* Don't register unknown locations *)
+    if not (is_unknown_location pos) then
+      let lab = reg_position pos in
+      let e =
+        match e#node with
+        | JCPEbinary (e1, `Bland, e2) ->
+          begin match e1#node, e2#node with
+          | JCPElabel _, JCPElabel _ -> e (* already labelled *)
+          | JCPElabel _, _ -> (* [e1] already labelled *)
+            let e2 = dopos ~toplevel:false e2 in
+            mkexpr (JCPEbinary (e1, `Bland, e2)) pos
+          | _, JCPElabel _ -> (* [e2] already labelled *)
+            let e1 = dopos ~toplevel:false e1 in
+            mkexpr (JCPEbinary (e1, `Bland, e2)) pos
+          | _,_ -> (* none already labelled *)
+            let e1 = dopos ~toplevel:false e1 in
+            let e2 = dopos ~toplevel:false e2 in
+            mkexpr (JCPEbinary (e1, `Bland, e2)) pos
           end
         | _ -> e
       in
@@ -1396,16 +1399,18 @@ let spec _fname funspec =
   let requires =
     List.fold_right
       (fun b acc ->
-         let ass = List.map (pred $ Logic_const.pred_of_id_pred) b.Cil_types.b_assumes in
+         let ass = List.map (pred % Logic_const.pred_of_id_pred) b.Cil_types.b_assumes in
          List.fold_right
            (fun req acc ->
-              let impl = mkimplies ass
-                (pred (Logic_const.pred_of_id_pred req))
-                  Loc.dummy_position in
+              let impl =
+                mkimplies
+                  ass
+                  (pred (Logic_const.pred_of_id_pred req))
+                  req.ip_loc
+              in
               JCCrequires(locate impl) :: acc)
            b.b_requires
-           acc
-      )
+           acc)
       funspec.spec_behavior
       []
   in
