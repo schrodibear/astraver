@@ -253,20 +253,37 @@ object(self)
          *  let ast = mkalloc_array_statement v elemty (array_size ty) loc in
          *  attach_globinit ast;
          *)
-         (* Define a global validity invariant *)
-        let p =
-          Logic_const.pvalid_range
-            ~loc:v.vdecl
-            (label_here,
-             variable_term v.vdecl (cvar_to_lvar v),
-             constant_term v.vdecl Integer.zero,
-             constant_term v.vdecl (Integer.pred size))
+        (* Define global validity and instanceof invariants *)
+        let invariants =
+          let invariants =
+            let open Logic_const in
+            let lv = cvar_to_lvar v in
+            let loc = v.vdecl in
+            ["valid_",
+             pvalid_range
+               ~loc
+               (label_here,
+                tvar ~loc lv ,
+                tinteger ~loc 0,
+                tint ~loc @@ Integer.pred size);
+             "typeof_",
+             let tag_ltype = Ltype ({lt_name = "typetag"; lt_params = []; lt_def = None; }, []) in
+             prel
+               ~loc:v.vdecl
+               (Req,
+                term ~loc (Ttypeof (tvar ~loc lv)) tag_ltype,
+                term ~loc (Ttype (TPtr (element_type ty, [Attr ("const", [])]))) tag_ltype)]
+          in
+          List.map
+            (fun (prefix, body) ->
+               let globinv = Cil_const.make_logic_info (unique_logic_name (prefix ^ v.vname)) in
+               globinv.l_labels <- [label_here];
+               globinv.l_body <- LBpred body;
+               attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
+               GAnnot (Dinvariant (globinv, v.vdecl), v.vdecl))
+            invariants
         in
-        let globinv = Cil_const.make_logic_info (unique_logic_name ("valid_" ^ v.vname)) in
-        globinv.l_labels <- [label_here];
-        globinv.l_body <- LBpred p;
-        attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
-        ChangeTo [g; GAnnot (Dinvariant (globinv, v.vdecl), v.vdecl)]
+        ChangeTo (g :: invariants)
       else DoChildren
     | GVarDecl _ | GFun _ | GAnnot _ -> DoChildren
     | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _

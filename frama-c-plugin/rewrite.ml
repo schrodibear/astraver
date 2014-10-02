@@ -377,7 +377,7 @@ class replaceStringConstants =
    See bts0284.c
     List.iter attach_globinit b.bstmts;
 *)
-    attach_global (GVar(v,{init=Some init},CurrentLoc.get ()));
+    attach_global (GVar (v, {init=Some init}, CurrentLoc.get ()));
 
     (* Define a global string invariant *)
     begin try
@@ -410,17 +410,17 @@ class replaceStringConstants =
       match wcslen.l_type with Some t -> t | None -> assert false
     in
     let pstring =
-      Papp(validstring,[],[variable_term v.vdecl (cvar_to_lvar v)])
+      Papp (validstring, [], [variable_term v.vdecl (cvar_to_lvar v)])
     in
     let tv = term_of_var v in
     let strsize =
       match s with
-      | `Wstring _ -> mkterm (Tapp(wcslen,[],[tv])) wcslen_type v.vdecl
-      | `String _ -> mkterm (Tapp(strlen,[],[tv])) strlen_type v.vdecl
+      | `Wstring _ -> mkterm (Tapp (wcslen, [], [tv])) wcslen_type v.vdecl
+      | `String _ -> mkterm (Tapp (strlen, [], [tv])) strlen_type v.vdecl
     in
     let size = constant_term v.vdecl (Integer.of_int size) in
-    let psize = Prel(Req,strsize,size) in
-    let p = Pand(predicate v.vdecl pstring,predicate v.vdecl psize) in
+    let psize = Prel (Req, strsize, size) in
+    let p = Pand (predicate v.vdecl pstring, predicate v.vdecl psize) in
 
     attach_invariant ("validity_of_" ^ v.vname) v.vdecl (predicate v.vdecl p);
     with Exit -> ()
