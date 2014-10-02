@@ -4,7 +4,7 @@ DIR=$(dirname $(readlink -f $0))
 
 ocamlc -c -I "$DIR/../src/" -o "$DIR/jc_debug_output.cmo" "$DIR/jc_debug_output.ml"
 
-make -C $DIR/.. byte
+make -C $DIR/.. -j 5 byte
 
 SCRIPT='load_printer nums.cma
 load_printer pp.cmo
