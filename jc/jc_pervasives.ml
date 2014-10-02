@@ -67,6 +67,10 @@ let map_pair f (a, b) = f a, f b
 
 let map_pair2 f g (a, b) = f a, g b
 
+let fold_left_pair f init (a, b) = f (f init a) b
+
+let fold_right_pair f (a, b) init = f a (f b init)
+
 let uncurry f (a, b) = f a b
 
 let curry f a b = f (a, b)

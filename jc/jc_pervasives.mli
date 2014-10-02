@@ -57,6 +57,10 @@ val map_pair : ('a -> 'b) -> 'a * 'a -> 'b * 'b
 
 val map_pair2 : ('a -> 'b) -> ('c -> 'd) -> 'a * 'c -> 'b * 'd
 
+val fold_left_pair : ('a -> 'b -> 'a) -> 'a -> 'b * 'b -> 'a
+
+val fold_right_pair : ('b -> 'a -> 'a) -> 'b * 'b -> 'a -> 'a
+
 val curry : ('a * 'b -> 'c) -> 'a ->  'b -> 'c
 
 val uncurry : ('a -> 'b -> 'c) -> ('a * 'b) -> 'c
