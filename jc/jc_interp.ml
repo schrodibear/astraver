@@ -3945,16 +3945,19 @@ let tr_memory (mc,r) acc =
     false,id_no_loc (memory_name(mc,r)),
     Ref_type(Base_type(memory_type mc))) :: acc
 
-let tr_alloc_table (pc,r) acc =
-  Param(
-    false,id_no_loc (alloc_table_name(pc,r)),
-    Ref_type(Base_type(alloc_table_type pc))) :: acc
+let tr_alloc_table (pc, r) acc =
+  Param (
+    false,
+    id_no_loc @@ alloc_table_name (pc, r),
+    Ref_type (Base_type (alloc_table_type pc)))
+  :: acc
 
-let tr_tag_table (rt,r) acc =
-  Param(
-    false,id_no_loc (tag_table_name(rt,r)),
-    Ref_type(Base_type(tag_table_type rt))) :: acc
-
+let tr_tag_table (rt, r) acc =
+  Param (
+    false,
+    id_no_loc @@ tag_table_name (rt, r),
+    Ref_type (Base_type (tag_table_type rt)))
+  :: acc
 
 (******************************************************************************)
 (*                                  Roots                                     *)
@@ -4044,7 +4047,7 @@ let tr_root rt acc =
           lt_args = [root_model_type rt];
         }))
   in
-  let type_def = Type(id_no_loc (root_type_name rt), []) in
+  let type_def = Type (id_no_loc (root_type_name rt), []) in
   (* Axiom: the variant can only have the given tags *)
   let axiom_variant_has_tag =
     let v = "x" in
