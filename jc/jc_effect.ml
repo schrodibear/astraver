@@ -304,16 +304,16 @@ let ef_assoc ?label_assoc ~region_assoc ~region_mem_assoc ef =
 	     match transpose_region ~region_assoc distr with
 	       | None -> acc
 	       | Some locr ->
-		   let allocs =
-		     transpose_alloc_table ~region_mem_assoc (ac,distr)
-		   in
+             let allocs = transpose_alloc_table ~region_mem_assoc (ac, distr) in
 		   AllocSet.fold
 		     (fun (ac,_r) acc ->
 			if not (Region.polymorphic locr) then
 			  add_constant_alloc_table (ac,locr);
-			AllocMap.add (ac,locr) labs acc
-		     ) allocs acc
-	  ) ef.e_alloc_tables AllocMap.empty;
+                  AllocMap.add (ac, locr) labs acc)
+               allocs
+               acc)
+        ef.e_alloc_tables
+        AllocMap.empty;
       e_tag_tables =
         TagMap.fold
 	  (fun (vi,distr) labs acc ->
@@ -321,16 +321,16 @@ let ef_assoc ?label_assoc ~region_assoc ~region_mem_assoc ef =
 	     match transpose_region ~region_assoc distr with
 	       | None -> acc
 	       | Some locr ->
-		   let tags =
-		     transpose_tag_table ~region_mem_assoc (vi,distr)
-		   in
+                 let tags = transpose_tag_table ~region_mem_assoc (vi, distr) in
 		   TagSet.fold
 		     (fun (vi,_r) acc ->
 			if not (Region.polymorphic locr) then
 			  add_constant_tag_table (vi,locr);
-			TagMap.add (vi,locr) labs acc
-		     ) tags acc
-	  ) ef.e_tag_tables TagMap.empty;
+                      TagMap.add (vi, locr) labs acc)
+                   tags
+                   acc)
+          ef.e_tag_tables
+          TagMap.empty;
       e_raw_memories =
         MemoryMap.fold
 	  (fun (mc,distr) labs acc ->
@@ -1235,10 +1235,17 @@ let single_assertion ef a =
     | JCAmatch(_t,pal) ->
 	true,
 	List.fold_left pattern ef (List.map fst pal)
+    | JCAeqtype (tag1, tag2, _) ->
+      let add_tag_effect ef tag =
+        match tag#node with
+        | JCTtypeof (t, st) ->  add_tag_effect lab ef (struct_root st, t#region)
+        | JCTtag _ | JCTbottom -> ef
+      in
+      true, fold_left_pair add_tag_effect ef (tag1, tag2)
     | JCAtrue | JCAfalse | JCAif _ | JCAbool_term _ | JCAnot _
     | JCAold _ | JCAat _ | JCAquantifier _ | JCArelation _
     | JCAand _ | JCAor _ | JCAiff _ | JCAimplies _
-    | JCAeqtype _ | JCAsubtype _ ->
+    | JCAsubtype _ ->
 	true, ef
 
 let assertion ef a =
