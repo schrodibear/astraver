@@ -2303,8 +2303,8 @@ let try_builtin_fun_or_pred ltyp_opt name labels params body f =
   let int = "int" in
   let compl = "complement_to_u" in
   let bits = "\\(8\\|16\\|32\\|64\\)" in
+  let int_from_bitsize_u = integral_type_from_bitsize_u in
   let matches, group = Str.((fun r -> string_match r name 0), fun n -> matched_group n name) in
-  let int_from_bitsize_u (s, u) = TInt (intKindForSize (s lsr 3) u, []) in
   let equal_int_types t1 t2 =
     let open Logic_utils in
     if map_pair (isLogicType @@ fun _ -> true) (t1, t2) = (true, true)
@@ -2954,8 +2954,12 @@ let memory_reinterpretation_predicates get_compinfo () =
         (part_bitsize, whole_bitsize)
     in
     let integral_type name = mktype (JCPTidentifier (name, [])) in
-    let add_u s = if s.[0] <> 'u' then "u" ^ s else s in
-    let del_u s = if s.[0] = 'u' then Str.string_after s 1 else s in
+    let add_u, del_u =
+      let ensure_result f s = let s = f s in add_integral_type_by_name s; s in
+      let add_u s = if s.[0] <> 'u' then "u" ^ s else s in
+      let del_u s = if s.[0] = 'u' then Str.string_after s 1 else s in
+      ensure_result add_u, ensure_result del_u
+    in
     let guard_declarations ~name bodies =
       if Hashtbl.mem val_cast_pred_memo name then (name, [])
       else (
@@ -3162,14 +3166,20 @@ let file f =
                        [mkdecl (JCDlogic_type (name_of_padding_type, []))
                           Loc.dummy_position]))
     Loc.dummy_position
-  (* Define all integral types as enumerated types in Jessie *)
-  :: integral_types ()
+  ::
+  (* This predicate generator has a side effect, i.e. it can add new (unsigned) integral types as used. *)
+  (* So we call it before translating the integral types. *)
+  let reinterpretation_predicates =
+    if has_some (get_compinfo voidType)
+    then memory_reinterpretation_predicates get_compinfo ()
+    else []
+  in
+ (* Define all integral types as enumerated types in Jessie *)
+  integral_types ()
   (* Define conversion functions and identity axiom for back
      and forth conversion *)
   @ type_conversions ()
-  @ (if has_some (get_compinfo voidType)
-     then memory_reinterpretation_predicates get_compinfo ()
-     else [])
+  @ reinterpretation_predicates
   @ globals'
 
 (* Translate pragmas separately as their is no declaration for pragmas in

@@ -101,6 +101,12 @@ val max_value_of_integral_type :
 val min_value_of_integral_type :
   ?bitsize:int -> Cil_types.typ -> Integer.t
 
+val integral_type_from_bitsize_u : int * bool -> Cil_types.typ
+
+(* add an integral type as used by its name,
+   raises [Not_found] when the name provided is not recognized (should be valid "u?int[0-9]+" *)
+val add_integral_type_by_name : string -> unit
+
 (* iter over existing integral types in alphabetical order. *)
 val iter_integral_types: (string -> Cil_types.typ -> int option -> unit) -> unit
 

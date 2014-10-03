@@ -248,6 +248,28 @@ let name_of_integral_type ?bitsize ty =
     | TEnum ({ekind = ik},_) -> name_it (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
 
+let integral_type_from_bitsize_u (s, u) = TInt (intKindForSize (s lsr 3) u, [])
+
+let add_integral_type_by_name =
+  let int_type_regexp =
+    let u = "\\(u?\\)" in
+    let int = "int" in
+    let bits = "\\(8\\|16\\|32\\|64\\)" in
+    Str.regexp @@ u ^ int ^ bits
+  in
+  fun name ->
+  let matches, group = Str.(string_match int_type_regexp name 0, fun n -> matched_group n name) in
+  if matches &&
+     let bitsize = int_of_string (group 2)
+     and unsigned = group 1 <> "" in
+     let typ = integral_type_from_bitsize_u (bitsize, unsigned) in
+     name = name_of_integral_type ~bitsize typ
+     (* Here the type is added to the table as side effect *)
+  then
+    Integral_types_iterator.add name
+  else
+    raise Not_found
+
 let iter_integral_types f =
   let apply s =
     try
@@ -520,9 +542,9 @@ let string_explode s =
   next [] (String.length s - 1)
 
 let string_implode ls =
-  let s = String.create (List.length ls) in
-  ignore (List.fold_left (fun i c -> s.[i] <- c; i + 1) 0 ls);
-  s
+  let s = Bytes.create (List.length ls) in
+  ignore (List.fold_left (fun i c -> Bytes.set s i c; i + 1) 0 ls);
+  Bytes.to_string s
 
 let filter_alphanumeric s assoc default =
   let is_alphanum c =
