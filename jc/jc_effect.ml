@@ -1238,7 +1238,7 @@ let single_assertion ef a =
     | JCAeqtype (tag1, tag2, _) ->
       let add_tag_effect ef tag =
         match tag#node with
-        | JCTtypeof (t, st) ->  add_tag_effect lab ef (struct_root st, t#region)
+        | JCTtypeof (t, st) -> add_tag_effect lab ef (struct_root st, t#region)
         | JCTtag _ | JCTbottom -> ef
       in
       true, fold_left_pair add_tag_effect ef (tag1, tag2)
@@ -1499,6 +1499,14 @@ let rec expr fef e =
        | JCEinstanceof(e,st) ->
            true,
            add_tag_reads LabelHere fef (struct_root st,e#region)
+       | JCEshift (e1, _) ->
+           true,
+           let st =
+             match e1#typ with
+             | JCTpointer (JCtag (st, _), _, _) -> st
+             | _ -> Jc_typing.typing_error e1#pos "Shifting of a non-pointer"
+           in
+           add_tag_reads LabelHere fef (struct_root st, e#region)
        | JCEalloc(_e1,st) ->
            let pc = JCtag(st,[]) in
            let ac = deref_alloc_class ~type_safe:true e in
@@ -1681,7 +1689,7 @@ let rec expr fef e =
            true,
            { fef with fe_reads = ef_union fef.fe_reads pef }
        | JCEloop _ | JCElet _ | JCEassert _ | JCEcontract _ | JCEblock _
-       | JCEconst _  | JCEshift _ | JCEif _ | JCErange_cast _
+       | JCEconst _  | JCEif _ | JCErange_cast _
        | JCEreal_cast _ | JCEunary _ | JCEaddress _ | JCEbinary _
        | JCEreturn_void  | JCEreturn _ | JCEbitwise_cast _ | JCEbase_block _ | JCEfresh _ ->
            true, fef
