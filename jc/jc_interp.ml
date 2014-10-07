@@ -29,6 +29,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Jc_stdlib
 
 open Jc_env
 open Jc_envset
@@ -922,7 +923,7 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
     | JCAapp app ->
       let f = app.app_fun in
       let args =
-           List.fold_right (fun arg -> cons (ft arg)) app.app_args []
+           List.fold_right (fun arg -> List.cons (ft arg)) app.app_args []
         |> List.map2 (fun e e' -> (e, e')) app.app_args
         |> List.map2 (fun v (t,t') -> term_coerce t#pos v.vi_type t#typ t t') f.li_parameters
       in
@@ -1985,7 +1986,7 @@ and make_reinterpret ~e e1 st =
         | `Retain -> split 1
         | `Split c -> split c
       in
-      let dparts boff = List.map (dpart ?boff) (range 0 `To (c - 1)) in
+      let dparts boff = List.map (dpart ?boff) (List.range 0 `To (c - 1)) in
       ListLabels.map pred_names
         ~f:(fun pred_name ->
           make_and

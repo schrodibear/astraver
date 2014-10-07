@@ -526,7 +526,7 @@ let talloc_table_var ~label_in_name lab (ac, r) =
     | None -> true
     | Some infunction -> not (mutable_alloc_table infunction (ac, r))
   in
-  not constant,lvar ~constant ~label_in_name lab alloc
+  not constant, lvar ~constant ~label_in_name lab alloc
 
 
 let plain_tag_table_var (vi, r) = mk_var @@ tag_table_name (vi, r)
@@ -915,8 +915,8 @@ let map_embedded_fields ~f ~p ac =
 let make_valid_pred_app ~in_param ~equal (ac, r) pc p ao bo =
   let params =
        allocs ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r
-    |> Option_misc.fold cons bo
-    |> Option_misc.fold cons ao
+    |> Option_misc.fold List.cons bo
+    |> Option_misc.fold List.cons ao
   in
   LPred (valid_pred_name ~equal ~left:(ao <> None) ~right:(bo <> None) ac pc, p :: params)
 
@@ -940,8 +940,8 @@ let make_valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
     let b = b, why_integer_type in
     p :: (
          allocs ac pc In_pred @ mems ac pc In_pred
-      |> (if right then cons b else id)
-      |> if left then cons a else id)
+      |> (if right then List.cons b else id)
+      |> if left then List.cons a else id)
   in
   let validity =
     let omin, omax, super_valid =
@@ -1060,14 +1060,14 @@ let make_instanceof_pred (type t1) (type t2) : arg : (assertion, _, term -> term
   let fields_instanceof p =
     List.flatten @@
       map_embedded_fields ac pc ~p
-        ~f:(fun acr pc p l r ->
+        ~f:(fun ~acr ~pc ~p ~l ~r ->
               let open Num in
               if r -/ l >=/ Int 0 && l -/ r <=/ Int Jc_options.forall_inst_bound then
                 let instanceof p =
                   make_instanceof_pred_app ~arg:Singleton ~in_param:false acr pc p
                 in
                 instanceof p ::
-                  (  range ~-1 `Downto (int_of_num l) @ range 1 `To (int_of_num r)
+                  (  List.(range ~-1 `Downto (int_of_num l) @ range 1 `To (int_of_num r))
                   |> List.map @@ fun i -> instanceof @@ LApp ("shift", [p; const_of_int i]))
               else
                 let r = r +/ Int 1 in

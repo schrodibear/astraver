@@ -999,7 +999,7 @@ let tr_logic_model_params f =
                 in
                 raw_memory_type (root_model_type ri) (logic_type_var @@ "a" ^ string_of_int i ^ "_" ^ string_of_int j)
               in
-              List.map ~f:(fdup3 name var typ) @@ range 0 `To (c - 1))
+              List.map ~f:(fdup3 name var typ) @@ Jc_stdlib.List.range 0 `To (c - 1))
     |> List.flatten
     |> fun poly_params ->
        let initial_params = tr_li_model_args_3  { f.li_effects with

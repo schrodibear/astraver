@@ -29,8 +29,6 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
-
 open Jc_stdlib
 open Jc_env
 open Jc_envset
@@ -43,102 +41,11 @@ open Jc_constructors
 open Format
 open Num
 
-let (%) f g x = f (g x)
-
-let (%%) f g h x y = f (g x) (h y)
-
-let (%>) f g x = g (f x)
-
-let cons e l = e :: l
-
-let const r _ = r
-
-let id x = x
-
-let dup2 a = a, a
-
-let fdup2 f g x = f x, g x
-
-let map_fst f (a, b) = f a, b
-
-let map_snd f (a, b) = a, f b
-
-let map_pair f (a, b) = f a, f b
-
-let map_pair2 f g (a, b) = f a, g b
-
-let fold_left_pair f init (a, b) = f (f init a) b
-
-let fold_right_pair f (a, b) init = f a (f b init)
-
-let uncurry f (a, b) = f a b
-
-let curry f a b = f (a, b)
-
-let swap (a, b) = b, a
-
-let fdup3 f g h x = f x, g x, h x
-
-let range i dir j =
-  try
-    let op =
-      match dir with
-      | `To ->
-        if i <= j then pred
-                  else raise Exit
-      | `Downto ->
-        if i >= j then succ
-                  else raise Exit
-    in
-    let rec loop acc k =
-      if i = k then
-        k :: acc
-      else
-        loop (k :: acc) (op k)
-    in
-     loop [] j
-  with Exit -> []
-
-module type MONAD_DEF = sig
-  type 'a m
-  val return : 'a -> 'a m
-  val bind : 'a m -> ('a -> 'b m) -> 'b m
-end
-
-module type MONAD = sig
-  include MONAD_DEF
-  val (>>=) : 'a m -> ('a -> 'b m) -> 'b m
-  val (>>) : 'a m -> 'b m -> 'b m
-end
-
-module Monad (M : MONAD_DEF) = struct
-  include M
-  let (>>=) = M.bind
-  let (>>) m1 m2 = M.bind m1 (fun _ -> m2)
-end
-
-module Option_monad = struct
-  include Monad (struct
-      type 'a m = 'a option
-      let bind m f =
-        match m with
-        | Some v -> f v
-        | None -> None
-      let return v = Some v
-    end)
-
-  let abort = None
-  let default v m =
-    match m with
-    | Some v -> v
-    | None -> v
-end
-
 exception Error of Loc.position * string
 
 let error l =
   Format.kfprintf
-    (fun _fmt -> raise (Error(l, flush_str_formatter())))
+    (fun _fmt -> raise (Error (l, flush_str_formatter ())))
     str_formatter
 
 let zero = Num.Int 0
@@ -171,21 +78,24 @@ let operator_of_native t =
   | Tgenfloat f -> operator_of_format f
   | Tstring -> assert false
 
-let operator_of_type = function
+let operator_of_type =
+  function
   | JCTnative n -> operator_of_native n
   | JCTenum _ -> `Integer
   | JCTlogic _ -> `Logic
   | JCTany | JCTtype_var _ -> assert false (* TODO? *)
   | JCTnull | JCTpointer _ -> `Pointer
 
-let eq_operator_of_type = function
+let eq_operator_of_type =
+  function
   | JCTnative n -> operator_of_native n
   | JCTenum _ | JCTlogic _ -> `Logic
   | JCTany | JCTtype_var _ -> assert false (* TODO? *)
   | JCTnull | JCTpointer _ -> `Pointer
 
 let new_label_name =
-  let label_name_counter = ref 0 in function () ->
+  let label_name_counter = ref 0 in
+  fun () ->
     incr label_name_counter;
     "JC_" ^ string_of_int !label_name_counter
 
@@ -197,70 +107,67 @@ let field_root_name fi =
 
 let string_of_format f =
   match f with
-    | `Double -> "double"
-    | `Float -> "float"
-    | `Binary80 -> "binary80"
+  | `Double -> "double"
+  | `Float -> "float"
+  | `Binary80 -> "binary80"
 
 let string_of_native t =
   match t with
-    | Tunit -> "unit"
-    | Tinteger -> "integer"
-    | Treal -> "real"
-    | Tgenfloat f -> string_of_format f
-    | Tboolean -> "boolean"
-    | Tstring -> "string"
+  | Tunit -> "unit"
+  | Tinteger -> "integer"
+  | Treal -> "real"
+  | Tgenfloat f -> string_of_format f
+  | Tboolean -> "boolean"
+  | Tstring -> "string"
 
 let print_type_var fmt v = fprintf fmt "(var_%s_%d)" v.tvi_name v.tvi_tag
 
 let rec print_type fmt t =
   match t with
-    | JCTnative n -> fprintf fmt "%s" (string_of_native n)
-    | JCTlogic (s,l) -> fprintf fmt "%s%a" s (Pp.print_list_delim Pp.lchevron Pp.rchevron Pp.comma print_type) l
-    | JCTenum ri -> fprintf fmt "%s" ri.ei_name
-    | JCTpointer(pc, ao, bo) ->
-        begin match pc with
-          | JCtag({ si_name = name }, [])
-          | JCroot { ri_name = name } ->
-              fprintf fmt "%s" name
-          | JCtag({ si_name = name }, params) ->
-              fprintf fmt "%s<%a>" name
-                (Pp.print_list Pp.comma print_type) params
-        end;
-	begin match ao, bo with
-	  | None, None ->
-	      fprintf fmt "[..]"
-	  | Some a, None ->
-	      fprintf fmt "[%s..]" (Num.string_of_num a)
-	  | None, Some b ->
-	      fprintf fmt "[..%s]" (Num.string_of_num b)
-	  | Some a, Some b ->
-	      if Num.eq_num a b then
-		fprintf fmt "[%s]" (Num.string_of_num a)
-	      else
-		fprintf fmt "[%s..%s]"
-		  (Num.string_of_num a) (Num.string_of_num b)
-	end
+  | JCTnative n -> fprintf fmt "%s" (string_of_native n)
+  | JCTlogic (s,l) -> fprintf fmt "%s%a" s (Pp.print_list_delim Pp.lchevron Pp.rchevron Pp.comma print_type) l
+  | JCTenum ri -> fprintf fmt "%s" ri.ei_name
+  | JCTpointer(pc, ao, bo) ->
+    begin match pc with
+    | JCtag({ si_name = name }, [])
+    | JCroot { ri_name = name } ->
+      fprintf fmt "%s" name
+    | JCtag({ si_name = name }, params) ->
+      fprintf fmt "%s<%a>" name
+        (Pp.print_list Pp.comma print_type) params
+    end;
+    begin match ao, bo with
+    | None, None ->
+      fprintf fmt "[..]"
+    | Some a, None ->
+      fprintf fmt "[%s..]" (Num.string_of_num a)
+    | None, Some b ->
+      fprintf fmt "[..%s]" (Num.string_of_num b)
+    | Some a, Some b ->
+      if Num.eq_num a b then
+	fprintf fmt "[%s]" (Num.string_of_num a)
+      else
+	fprintf fmt "[%s..%s]" (Num.string_of_num a) (Num.string_of_num b)
+    end
     | JCTnull -> fprintf fmt "(nulltype)"
     | JCTany -> fprintf fmt "(anytype)"
     | JCTtype_var v -> print_type_var fmt v
 
 let num_of_constant _loc c =
-    match c with
-      | JCCinteger n ->
-	  (try Num.num_of_string n
-	   with _ -> assert false)
-      | _ -> invalid_arg ""
+  match c with
+  | JCCinteger n -> Num.num_of_string n
+  | _ -> invalid_arg "num_of_constant"
 
 let zero = Num.num_of_int 0
 let minus_one = Num.num_of_int (-1)
 
 let rec location_set_region locs =
   match locs#node with
-    | JCLSvar vi -> vi.vi_region
-    | JCLSderef(_,_,_,r) -> r
-    | JCLSrange(ls,_,_) -> location_set_region ls
-    | JCLSrange_term(t1,_,_) -> t1#region
-    | JCLSat(ls,_) -> location_set_region ls
+  | JCLSvar vi -> vi.vi_region
+  | JCLSderef (_, _, _, r) -> r
+  | JCLSrange (ls, _, _) -> location_set_region ls
+  | JCLSrange_term (t1, _, _) -> t1#region
+  | JCLSat (ls, _) -> location_set_region ls
 
 type location =
   | JCLvar of var_info

@@ -30,6 +30,7 @@
 (**************************************************************************)
 
 open Jc_name
+open Jc_stdlib
 open Jc_pervasives
 open Jc_env
 open Jc_envset

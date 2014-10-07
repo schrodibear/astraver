@@ -29,7 +29,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_pervasives
+open Jc_stdlib
 open Jc_ast
 open Jc_constructors
 

@@ -35,64 +35,6 @@ open Jc_envset
 open Jc_ast
 open Jc_fenv
 
-val (%) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
-
-val (%%) : ('a -> 'b -> 'c) -> ('d -> 'a) -> ('e -> 'b) -> 'd -> 'e -> 'c
-
-val (%>) : ('a -> 'b) -> ('b -> 'c) -> 'a -> 'c
-
-val cons : 'a -> 'a list -> 'a list
-
-val const : 'a -> 'b -> 'a
-
-val dup2 : 'a -> 'a * 'a
-
-val fdup2 : ('a -> 'b) -> ('a -> 'c) -> 'a -> 'b * 'c
-
-val map_fst : ('a -> 'c) -> 'a * 'b -> 'c * 'b
-
-val map_snd : ('b -> 'c) -> 'a * 'b -> 'a * 'c
-
-val map_pair : ('a -> 'b) -> 'a * 'a -> 'b * 'b
-
-val map_pair2 : ('a -> 'b) -> ('c -> 'd) -> 'a * 'c -> 'b * 'd
-
-val fold_left_pair : ('a -> 'b -> 'a) -> 'a -> 'b * 'b -> 'a
-
-val fold_right_pair : ('b -> 'a -> 'a) -> 'b * 'b -> 'a -> 'a
-
-val curry : ('a * 'b -> 'c) -> 'a ->  'b -> 'c
-
-val uncurry : ('a -> 'b -> 'c) -> ('a * 'b) -> 'c
-
-val swap : 'a * 'b -> 'b * 'a
-
-val fdup3 : ('a -> 'b) -> ('a -> 'c) -> ('a -> 'd) -> 'a -> 'b * 'c * 'd
-
-val range : int -> [< `Downto | `To ] -> int -> int list
-
-val id: 'a -> 'a
-
-module type MONAD_DEF = sig
-  type 'a m
-  val return : 'a -> 'a m
-  val bind : 'a m -> ('a -> 'b m) -> 'b m
-end
-
-module type MONAD = sig
-  include MONAD_DEF
-  val (>>=) : 'a m -> ('a -> 'b m) -> 'b m
-  val (>>) : 'a m -> 'b m -> 'b m
-end
-
-module Monad (M : MONAD_DEF) : MONAD
-
-module Option_monad : sig
-  include MONAD with type 'a m = 'a option
-  val abort : 'a option
-  val default : 'a -> 'a m -> 'a
-end
-
 (*
 exception Error of Loc.position * string
 
@@ -112,9 +54,9 @@ val new_label_name: unit -> string
 
 (* types *)
 
-val operator_of_native: native_type -> [> native_operator_type] 
-val operator_of_type: jc_type -> [> operator_type] 
-val eq_operator_of_type: jc_type -> [> operator_type] 
+val operator_of_native: native_type -> [> native_operator_type]
+val operator_of_type: jc_type -> [> operator_type]
+val eq_operator_of_type: jc_type -> [> operator_type]
 
 val integer_type : Jc_env.jc_type
 val boolean_type : Jc_env.jc_type
@@ -151,15 +93,14 @@ val num_of_constant : 'a -> const -> Num.num
 
 (* environment infos *)
 
-val var : ?unique:bool -> ?static:bool -> ?formal:bool -> 
-  Jc_env.jc_type -> string -> Jc_env.var_info
+val var : ?unique:bool -> ?static:bool -> ?formal:bool -> Jc_env.jc_type -> string -> Jc_env.var_info
 val copyvar : Jc_env.var_info -> Jc_env.var_info
 
 val tmp_var_name : unit -> string
 val newvar : Jc_env.jc_type -> Jc_env.var_info
 val newrefvar : Jc_env.jc_type -> Jc_env.var_info
 
-val exception_info :  
+val exception_info :
   Jc_env.jc_type option -> string -> Jc_env.exception_info
 
 val make_fun_info : string -> Jc_env.jc_type -> Jc_fenv.fun_info
@@ -249,7 +190,7 @@ sig
   val create: int -> 'a t
   val add: 'a t -> string -> 'a -> unit
   val replace: 'a t -> string -> 'a -> unit
-  val find: 'a t -> string -> 'a 
+  val find: 'a t -> string -> 'a
   val fold: (string -> 'a -> 'b -> 'b) -> 'a t -> 'b -> 'b
   val iter: (string -> 'a -> unit) -> 'a t -> unit
 end
@@ -260,7 +201,7 @@ sig
   val create: int -> 'a t
   val add: 'a t -> int -> 'a -> unit
   val replace: 'a t -> int -> 'a -> unit
-  val find: 'a t -> int -> 'a 
+  val find: 'a t -> int -> 'a
   val fold: (int -> 'a -> 'b -> 'b) -> 'a t -> 'b -> 'b
   val iter: (int -> 'a -> unit) -> 'a t -> unit
 end

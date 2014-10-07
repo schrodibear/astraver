@@ -32,7 +32,7 @@
 open Format
 open Pp
 
-open Jc_pervasives
+open Jc_stdlib
 open Jc_envset
 
 open Jc_why_output_ast
