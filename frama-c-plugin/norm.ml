@@ -771,7 +771,7 @@ object(self)
 (*                 ChangeTo { s with skind = skind; } *)
 (*             | _ -> assert false (\* Should not be possible *\) *)
       let lv = Var (the !return_var), NoOffset in
-      let ret = mkStmt @@ Return (Some (Cabs2cil.mkAddrOfAndMark loc lv), loc) in
+      let ret = mkStmt (Return (Some (Cabs2cil.mkAddrOfAndMark loc lv), loc)) in
       let assigns = expand_assign lv e (typeOf e) loc in
       let assigns = List.map (fun i -> mkStmt (Instr i)) assigns in
       let block = Block (mkBlock @@ assigns @ [ret]) in
@@ -857,7 +857,7 @@ let expand_struct_assign file =
 (*****************************************************************************)
 
 class embed_first_substructs_visitor =
-  let subfield_name ci fi = unique_name @@ ci.cname ^ "_" ^ fi.fname in
+  let subfield_name ci fi = unique_name (ci.cname ^ "_" ^ fi.fname) in
   let is_embedded, embed_first_substruct, get_field  =
     let module FI = Cil_datatype.Fieldinfo in
     let module FH = FI.Hashtbl in

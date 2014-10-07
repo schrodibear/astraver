@@ -340,7 +340,7 @@ class replaceStringConstants =
       | `Wstring _ -> unique_name "__wstring_"
     in
     let vi =
-      makeGlobalVar name (array_type @@ match s with `String _ -> charType | `Wstring _ -> theMachine.wcharType)
+      makeGlobalVar name (array_type (match s with `String _ -> charType | `Wstring _ -> theMachine.wcharType))
     in
     let attach_invariants ?(content=false) vi' =
       let tv' = term_of_var vi' in
@@ -821,14 +821,14 @@ class kzalloc_expanding_visitor = object
         stmt.skind <-
           Block
             (mkBlock
-              [mkStmt @@ Instr (Call (lv_opt, evar ~loc:eloc vi_kmalloc, args, loc));
-               mkStmt @@
+              [mkStmt (Instr (Call (lv_opt, evar ~loc:eloc vi_kmalloc, args, loc)));
+               mkStmt (
                  If
                    (mkBinOp ~loc Ne lv z,
                     mkBlock
-                     [mkStmt @@ Instr (Call (None, evar ~loc:eloc vi_memset, [lv; z; size], loc))],
-                    mkBlock [mkStmt @@ Instr (Skip loc)],
-                    loc)]);
+                     [mkStmt (Instr (Call (None, evar ~loc:eloc vi_memset, [lv; z; size], loc)))],
+                    mkBlock [mkStmt (Instr (Skip loc))],
+                    loc))]);
         SkipChildren
     | _ -> SkipChildren
 end
@@ -1310,7 +1310,7 @@ object(self)
     let params = ins @ outs in
     let ret_typ = if int then intType else voidType in
     let attrs = attrs @ List.map (fun a -> Attr (a, [])) ["static"; "inline"] in
-    let fname = unique_name @@ "inline_asm" ^ (if int then "_goto" else "") in
+    let fname = unique_name ("inline_asm" ^ (if int then "_goto" else "")) in
     let f = makeGlobalVar ~generated:true fname @@ TFun (ret_typ, Some params, false, attrs) in
     new_globals <- GVarDecl (empty_funspec (), f, loc) :: new_globals;
     Globals.Functions.replace_by_declaration (empty_funspec ()) f loc;
@@ -1375,10 +1375,10 @@ object(self)
               let labeled lab ({ labels } as stmt) = stmt.labels <- lab :: labels; stmt in
               let cases =
                 let rec loop acc n = function
-                  | [] -> List.rev @@ (labeled (Default loc) @@ mkStmtOneInstr ~valid_sid:true @@ Skip loc) :: acc
+                  | [] -> List.rev @@ (labeled (Default loc) @@ mkStmtOneInstr ~valid_sid:true (Skip loc)) :: acc
                   | sref :: srefs ->
                       loop
-                        ((labeled (Case (integer ~loc @@ n, loc)) @@ mkStmt @@ Goto (sref, loc)) :: acc)
+                        ((labeled (Case (integer ~loc @@ n, loc)) @@ mkStmt (Goto (sref, loc))) :: acc)
                         (n + 1)
                         srefs
                 in
@@ -1438,7 +1438,7 @@ class fp_eliminating_visitor =
       try
         cast_addr0 @@ Hashtbl.find new_vis vi
       with Not_found ->
-        let name = unique_name @@ "dummy_place_of_" ^ vi.vname in
+        let name = unique_name ("dummy_place_of_" ^ vi.vname) in
         let typ = array_type ~length:(integer ~loc:vi.vdecl 16) charType in
         let vi' = makeGlobalVar ~generated:true name typ in
         attach_global @@ GVar (vi', { init = None }, vi.vdecl);
@@ -1493,7 +1493,7 @@ object(self)
                 | _ -> acc)
               []
             |> filter_map
-                 (fun (_, ts') -> List.(length ts = length ts' && not @@ exists2 need_cast ts ts'))
+                 (fun (_, ts') -> List.(length ts = length ts' && not @@ exists2 (need_cast ~force:false) ts ts'))
                  (fun (vi, _) -> vi, intro_var ~loc vi)
           in
           let kf = the self#current_kf in
@@ -1512,17 +1512,17 @@ object(self)
                   let s' = ListLabels.fold_left2
                     eqs vis
                     ~init:(let vi = makeTempVar fundec ~name:"unreachable" intType in
-                           let s = mkStmtOneInstr ~valid_sid:true @@
-                                     Set ((Var vi, NoOffset), mkBinOp ~loc Div z z, loc)
+                           let s = mkStmtOneInstr ~valid_sid:true
+                                     (Set ((Var vi, NoOffset), mkBinOp ~loc Div z z, loc))
                            in
                            Annotations.add_assert jessie_emitter ~kf s @@ Logic_const.pfalse;
                            s)
                     ~f:(fun acc eq vi ->
-                          mkStmt @@
+                          mkStmt (
                             If (eq,
-                                mkBlock [mkStmtOneInstr ~valid_sid:true @@ Call (lv_opt, evar ~loc vi, args, loc)],
+                                mkBlock [mkStmtOneInstr ~valid_sid:true (Call (lv_opt, evar ~loc vi, args, loc))],
                                 mkBlock [acc],
-                                loc))
+                                loc)))
                   in
                   s.skind <- s'.skind);
                 s

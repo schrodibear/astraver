@@ -186,7 +186,7 @@ let add_hcast { State.fields } typ exp =
 
 (* Helper function to extract functions occurring as variables
    and mark first structure fields used in hierarchical casts. *)
-let do_expr_post f do_not_touch ?state e =
+let do_expr_post ?state f do_not_touch e =
   if !do_not_touch = Some e.eid then (do_not_touch := None; e)
   else match e.enode with
   | Lval (Var vi, NoOffset) | AddrOf (Var vi, NoOffset)
@@ -252,7 +252,7 @@ object
                   :: List.map (fun vi -> vi.vtype) (get_formals kf))
               in
               List.(length types = length types' &&
-                    not @@ exists2 need_cast types types')
+                    not @@ exists2 (need_cast ~force:false) types types')
             then (vi, Some kf) :: acc
             else acc)
           [];

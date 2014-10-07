@@ -703,7 +703,7 @@ and terms ?(in_zone=false) t =
         [JCPEconst (JCCboolean (d.ctor_name = "\\true"))]
 
     | TDataCons(ctor,args) ->
-        let args = List.map terms args in
+        let args = List.map (terms ~in_zone) args in
         let args =
           List.fold_right (product (fun x y -> x::y)) args [[]]
         in
@@ -856,7 +856,7 @@ and terms ?(in_zone=false) t =
               let z = Some (tinteger ~loc:t1.term_loc 0) in
               trange ~loc:t1.term_loc (z, z))
           in
-          List.map (fun t -> t#node) @@ terms @@
+          List.map (fun t -> t#node) @@ terms
           { t with term_node= TCastE (ty,
                                       { t' with term_node =
                                                 TLval (TMem { t1 with term_node =
@@ -1023,7 +1023,8 @@ and terms ?(in_zone=false) t =
 
     | Trange(low,high) -> [JCPErange(opt_map term low,opt_map term high)]
     | Tunion l ->
-        List.map (fun x -> x#node) (List.flatten (List.map terms l))
+      let terms t = terms t in
+      List.map (fun x -> x#node) (List.flatten (List.map terms l))
     | Tcomprehension _ -> Common.unsupported "sets by comprehension"
     | Tinter _ -> Common.unsupported " set intersection"
     | Tempty_set -> []
@@ -1567,7 +1568,7 @@ let code_annot pos ((acc_assert_before,contract) as acc) a =
         in
         let _, typ = map_pair (uncurry @@ check_supported_type) (("from", from_type), ("to", typ)) in
         if typ = wrapper_name voidType then unsupported "reinterpretation to void *"
-        else push @@ locate @@ PExpr.mkreinterpret ~expr:(term t) ~typ ~pos ()
+        else push @@ locate (PExpr.mkreinterpret ~expr:(term t) ~typ ~pos ())
       | _ -> unsupported "unrecognized term in Jessie pragma: %a (only :> is recognized)" Printer.pp_term t
       end
     | APragma _ -> acc (* just ignored *)
@@ -2088,7 +2089,7 @@ let instruction = function
   | Skip _pos -> JCPEconst JCCvoid
 
   | Code_annot ({ annot_content = APragma (Jessie_pragma _) } as ca, loc) ->
-    (locate @@ List.hd @@ fst @@ code_annot loc ([], None) ca)#node
+    (locate (List.hd @@ fst @@ code_annot loc ([], None) ca))#node
 
   | Code_annot _ -> Common.unsupported ~current:true "code annotation"
 

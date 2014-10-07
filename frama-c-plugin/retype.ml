@@ -319,7 +319,7 @@ let create_struct_hierarchy file =
                    types)
          in
          Queue.add root q;
-         let rec bfs ty =
+         let bfs ty =
            List.iter
              (fun ty' ->
                 match cmp_subtype ty ty' with
