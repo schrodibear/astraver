@@ -107,7 +107,6 @@ let retype_int_field file =
   visitFramacFile (new collect_int_field_visitor cast_field_to_type) file;
   visitFramacFile (new retype_int_field_visitor cast_field_to_type) file
 
-
 (*****************************************************************************)
 (* Organize structure types in hierarchy.                                    *)
 (*****************************************************************************)
@@ -193,64 +192,89 @@ end
 module Field_elem = struct include Fieldinfo let prefer _ _ = 1 end
 module FieldUF = Union_find (Field_elem) (S) (H)
 
-let add_field_representant fi1 fi2 =
-  FieldUF.unify fi1 fi2
+let add_field_representant fi1 fi2 = FieldUF.unify fi1 fi2
 
 module Type_elem = struct include Typ let prefer _ _ = 0 end
 module TypeUF = Union_find (Type_elem) (Typ.Set) (Typ.Hashtbl)
 
-let parent_type = Typ.Hashtbl.create 17
-
-let add_inheritance_relation ty parentty =
-  if not @@ Typ.equal ty parentty then begin
-    Typ.Hashtbl.replace parent_type ty parentty;
-    TypeUF.unify ty parentty
-  end
-
-let rec subtype ty parentty =
-  Typ.equal ty parentty ||
-  try
-    subtype (Typ.Hashtbl.find parent_type ty) parentty
-  with Not_found -> false
+let add_inheritance_relation ty parentty = TypeUF.unify ty parentty
 
 let same_fields fi1 fi2 =
   let norm = typeRemoveAttributes [embedded_attr_name] in
   fi1.forig_name = fi2.forig_name &&
   Typ.equal (norm fi1.ftype) (norm fi2.ftype)
 
+let struct_fields_exn ty =
+  match unrollType ty with
+  | TComp (compinfo, _, _) -> compinfo.cfields
+  | t -> fatal "struct_fields: non-composite type %a" Printer.pp_typ t
+
+let cmp_subtype =
+  let cache =
+    let module H = Datatype.Pair_with_collections (Typ) (Typ) (struct let module_name = "type_pair" end) in
+    let module H = H.Hashtbl in
+    let h = H.create 25 in
+    fun f ty1 ty2 ->
+      try H.find h (ty1, ty2)
+      with Not_found ->
+        let r = f ty1 ty2 in
+        H.replace h (ty1, ty2) r;
+        H.replace h (ty2, ty1) (match r with `supertype -> `subtype | `subtype -> `supertype | n -> n);
+        r
+  in
+  cache @@ fun ty1 ty2 ->
+  let ty1_fields, ty2_fields = map_pair struct_fields_exn (ty1, ty2) in
+  let ty1_length, ty2_length = map_pair List.length (ty1_fields, ty2_fields) in
+  let min_length = min ty1_length ty2_length in
+  let prefix_length =
+    try
+      List.fold_left2
+        (fun len ch_fi par_fi ->
+           if same_fields ch_fi par_fi then len + 1
+           else raise Exit)
+        0
+        (take min_length ty1_fields)
+        (take min_length ty2_fields)
+    with
+    | Exit -> 0
+  in
+  if ty1_length < ty2_length && prefix_length = ty1_length then
+    `supertype
+  else if ty2_length < ty1_length && prefix_length = ty2_length then
+    `subtype
+  else if ty1_length = ty2_length && ty2_length = prefix_length && prefix_length > 0 then
+    let ty1_n_embedded_attrs, ty2_n_embedded_attrs =
+      map_pair
+        List.(length % filterAttributes embedded_attr_name % (fun fi -> fi.fattr) % hd)
+        (ty1_fields, ty2_fields)
+    in
+    if ty1_n_embedded_attrs < ty2_n_embedded_attrs then
+      `supertype
+    else if ty2_n_embedded_attrs < ty1_n_embedded_attrs then
+      `subtype
+    else
+      `neither
+  else
+    `neither
+
 class struct_hierarchy_builder =
   let unify_type_hierarchies ty1 ty2 =
     (* Extract info from types *)
-    let compinfo1 = match unrollType (pointed_type ty1) with
+    let compinfo_of_ty_exn ty =
+      match unrollType (pointed_type ty) with
       | TComp (compinfo, _, _) -> compinfo
       | t -> fatal "unify_type_hierarchies: non-composite type %a" Printer.pp_typ t
     in
-    let sty1 = TComp (compinfo1, empty_size_cache (), []) in
-    let fields1 = compinfo1.cfields in
-    let compinfo2 = match unrollType (pointed_type ty2) with
-      | TComp (compinfo, _ ,_) -> compinfo
-      | t -> fatal "unify_type_hierarchies: non-composite type %a" Printer.pp_typ t
-    in
-    let fields2 = compinfo2.cfields in
-    let sty2 = TComp (compinfo2, empty_size_cache (), []) in
+    let ty1, ty2 = map_pair (fun ty -> TComp (compinfo_of_ty_exn ty, empty_size_cache (), [])) (ty1, ty2) in
     (* Compare types *)
-    let minlen = min (List.length fields1) (List.length fields2) in
-    let prefix, complete =
-      List.fold_left2
-        (fun (acc, compl) f1 f2 ->
-          if compl && same_fields f1 f2 then f1 :: acc, compl
-                                        else acc, false)
-        ([], true)
-        (take minlen fields1) (take minlen fields2)
-    in
-    let prefix = List.rev prefix in
-    if complete then
-      if List.length prefix = List.length fields1 then
-        (* [ty2] subtype of [ty1] *)
-        add_inheritance_relation sty2 sty1
-      else
-        (* [ty1] subtype of [ty2] *)
-        add_inheritance_relation sty1 sty2
+    match cmp_subtype ty1 ty2 with
+    | `supertype ->
+      (* [ty2] subtype of [ty1] *)
+      add_inheritance_relation ty2 ty1
+    | `subtype ->
+      (* [ty1] subtype of [ty2] *)
+      add_inheritance_relation ty1 ty2
+    | `neither -> ()
   in
 object (self)
 
@@ -258,7 +282,7 @@ object (self)
 
   method! vexpr e =
     match e.enode with
-    | CastE (ty,e) when isPointerType ty ->
+    | CastE (ty, e) when isPointerType ty ->
       let ety = typeOf (stripCastsAndInfo e) in
       if isPointerType ety then
         unify_type_hierarchies ty ety;
@@ -273,55 +297,51 @@ object (self)
     | _ -> DoChildren
 end
 
+let parent_type = Typ.Hashtbl.create 17
+
+let add_inheritance_relation ty parentty = Typ.Hashtbl.replace parent_type ty parentty
+
 let create_struct_hierarchy file =
-  let struct_fields ty =
-    match unrollType ty with
-    | TComp (compinfo, _, _) -> compinfo.cfields
-    | t -> fatal "struct_fields: non-composite type %a" Printer.pp_typ t
-  in
-  let num_fields ty = List.length (struct_fields ty) in
-  let compare_num_fields ty1 ty2 = num_fields ty1 - num_fields ty2 in
-  let subtype ty1 ty2 =
-    let fields1, fields2 = map_pair struct_fields (ty1, ty2) in
-    let len1, len2 = map_pair List.length (fields1, fields2) in
-    len1 > len2 &&
-    List.fold_left2
-      (fun eq fi1 fi2 -> eq && same_fields fi1 fi2)
-      true
-      (take len2 fields1)
-      fields2
-  in
   let compute_hierarchy () =
     let module H = Typ.Hashtbl in
     let classes = TypeUF.classes () in
     List.iter
-      (fun cls ->
-        let types = Typ.Set.elements cls in
-        let types = List.sort compare_num_fields types in
-        let root, types = List.(fdup2 hd tl types) in
-        (* First element is new root *)
-        H.remove parent_type root;
-        List.iter
-          (fun ty ->
-            add_inheritance_relation ty root;
-            List.iter
-              (fun party ->
-                if subtype ty party then
-                  add_inheritance_relation ty party)
-              types)
-          types)
-      classes;
-    H.iter
-      (fun ty party ->
-        let fields1 = struct_fields ty in
-        let fields2 = struct_fields party in
-        let num2 = List.length fields2 in
-        let subfields1 = take num2 fields1 in
-        List.iter2 add_field_representant subfields1 fields2)
-      parent_type
+      (fun clss ->
+         let types = Typ.Set.elements clss in
+         let q = Queue.create () in
+         let root =
+           List.(fold_left
+                   (fun acc ty ->
+                      match cmp_subtype acc ty with
+                      | `subtype -> ty
+                      | `supertype | `neither -> acc)
+                   (hd types)
+                   types)
+         in
+         Queue.add root q;
+         let rec bfs ty =
+           List.iter
+             (fun ty' ->
+                match cmp_subtype ty ty' with
+                | `supertype ->
+                  add_inheritance_relation ty' ty;
+                  let ty_fields, parentty_fields = map_pair struct_fields_exn (ty', ty) in
+                  List.iter2 add_field_representant (take (List.length parentty_fields) ty_fields) parentty_fields;
+                  Queue.add ty' q
+                | _ -> ())
+             types
+         in
+         while not (Queue.is_empty q) do bfs @@ Queue.pop q done)
+      classes
   in
   visitFramacFile (new struct_hierarchy_builder) file;
   compute_hierarchy ()
+
+let rec subtype ty parentty =
+  Typ.equal ty parentty ||
+  try
+    subtype (Typ.Hashtbl.find parent_type ty) parentty
+  with Not_found -> false
 
 let parent_type = Typ.Hashtbl.find parent_type
 
