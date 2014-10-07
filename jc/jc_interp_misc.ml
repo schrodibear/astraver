@@ -135,8 +135,8 @@ let make_select_fi fi =
 let make_select_committed pc =
   make_select (LVar (committed_name pc))
 
-let make_typeof st r x =
-  LApp ("typeof", [LVar (tag_table_name (struct_root st, r)); x])
+let make_typeof t x =
+  LApp ("typeof", [t; x])
 
 let make_subtag t u =
   LPred ("subtag", [t; u])
@@ -544,7 +544,7 @@ let ttag_table_var ~label_in_name lab (vi,r) =
     | None -> true
     | Some infunction -> not (mutable_tag_table infunction (vi,r))
   in
-  lvar ~constant ~label_in_name lab tag
+  not constant, lvar ~constant ~label_in_name lab tag
 
 (******************************************************************************)
 (*                           locations and separation                         *)
@@ -883,7 +883,7 @@ let tags ac pc (type t) : (t, region -> in_param:bool -> label -> term list, (st
   function
   | In_app ->
     fun r ~in_param lab ->
-    map @@ fun ac -> deref_if_needed ~in_param lab @@ (false, ttag_table_var ~label_in_name:false LabelHere (ac, r))
+    map @@ fun ac -> deref_if_needed ~in_param lab @@ ttag_table_var ~label_in_name:false LabelHere (ac, r)
   | In_pred -> map @@ fdup2 (tag_table_name % fun ac -> ac, dummy_region) tag_table_type
 
 let map_st ~f ac pc =
@@ -907,7 +907,7 @@ let map_embedded_fields ~f ~p ac =
             st.si_fields
             ~f:(function
                 | { fi_type = JCTpointer (fpc, Some fa, Some fb) } as fi ->
-                  f (ac, dummy_region) fpc (make_select_fi fi p) fa fb
+                  f ~acr:(alloc_class_of_pointer_class fpc, dummy_region) ~pc:fpc ~p:(make_select_fi fi p) ~l:fa ~r:fb
                 | _ -> []))
 
 (* Validity *)
@@ -963,10 +963,10 @@ let make_valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
     let fields_valid =
       List.flatten @@
         map_embedded_fields ac pc ~p:(LVar p)
-          ~f:(fun acr fpc p fa fb ->
-                [make_valid_pred_app ~in_param ~equal acr fpc p
-                  (if left then Some (const_of_num fa) else None)
-                  (if right then Some (const_of_num fb) else None)])
+          ~f:(fun ~acr ~pc ~p ~l ~r ->
+                [make_valid_pred_app ~in_param ~equal acr pc p
+                  (if left then Some (const_of_num l) else None)
+                  (if right then Some (const_of_num r) else None)])
     in
     let validity = super_valid :: fields_valid in
     let validity = if right then omax :: validity else validity in
@@ -977,33 +977,46 @@ let make_valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
 
 (* Freshness *)
 
-let make_fresh_pred_app ~in_param (ac, r) pc p =
-  let params = tags ac pc In_app r ~in_param LabelOld @ mems ac pc In_app r in
-  LPred (fresh_pred_name ac pc, p :: params)
+let make_fresh_pred_app ~for_ ~in_param (ac, r) pc p =
+  let params =
+    (match for_ with `alloc_tables -> allocs | `tag_tables -> tags) ac pc In_app r ~in_param LabelOld
+    @ mems ac pc In_app r
+  in
+  LPred (fresh_pred_name ~for_ ac pc, p :: params)
 
-let make_fresh_pred ac pc =
+let make_fresh_pred ~for_ ac pc =
   let p = "p" in
   let params =
     let p = p, pointer_type ac pc in
-    p :: tags ac pc In_pred @ mems ac pc In_pred
+    let tables =
+      match for_ with
+      | `alloc_tables -> allocs
+      | `tag_tables -> tags
+    in
+    p :: tables ac pc In_pred @ mems ac pc In_pred
   in
   let super_fresh =
     match pc with
     | JCtag ({ si_parent = Some (st, pp) }, _) ->
-      [make_fresh_pred_app ~in_param:false (ac, dummy_region) (JCtag (st, pp)) (LVar p)]
+      [make_fresh_pred_app ~for_ ~in_param:false (ac, dummy_region) (JCtag (st, pp)) (LVar p)]
     | JCtag ({ si_parent = None }, _)
     | JCroot _ ->
       map_st ac pc
         ~f:(fun st ->
-            let tag = generic_tag_table_name (struct_root st) in
-            [LPred ("alloc_fresh", [LVar tag; LVar p])])
+            let predicate, table =
+              match for_ with
+              | `alloc_tables -> "alloc_fresh", generic_alloc_table_name ac
+              | `tag_tables -> "tag_fresh", generic_tag_table_name (struct_root st)
+            in
+            [LPred (predicate, [LVar table; LVar p])])
   in
   let fields_fresh p =
     List.flatten @@
-      map_embedded_fields ac pc ~p ~f:(fun acr pc p _ _ -> [make_fresh_pred_app ~in_param:false acr pc p])
+      map_embedded_fields ac pc ~p
+        ~f:(fun ~acr ~pc ~p ~l:_ ~r:_ -> [make_fresh_pred_app ~for_ ~in_param:false acr pc p])
   in
   let freshness = make_and_list @@ super_fresh @ fields_fresh (LVar p) in
-  Predicate (false, id_no_loc (fresh_pred_name ac pc), params, freshness)
+  Predicate (false, id_no_loc (fresh_pred_name ~for_ ac pc), params, freshness)
 
 (* Instanceof *)
 
@@ -1080,63 +1093,108 @@ let make_instanceof_pred (type t1) (type t2) : arg : (assertion, _, term -> term
     Predicate (false, id_no_loc (instanceof_pred_name ~arg ac pc), params, instanceof)
   | Range_l_r ->
     let instanceof =
-      make_forall_offset_in_range (LVar p) (LVar (get_l l_r)) (LVar (get_r l_r))
-        ~f:(fun p -> self_instanceof p @ fields_instanceof p)
+      let instanceof p = self_instanceof p @ fields_instanceof p in
+      make_and_list @@
+        instanceof (LVar p) @
+        [make_forall_offset_in_range (LVar p) (LVar (get_l l_r)) (LVar (get_r l_r))
+          ~f:(fun p -> instanceof p)]
     in
     Predicate (false, id_no_loc (instanceof_pred_name ~arg ac pc), params, instanceof)
 
 (* Alloc *)
 
-let make_alloc_pred_app ~in_param (ac, r) pc p =
+let make_frame_pred_app ~for_ ~in_param (ac, r) pc p =
   let params =
-    let allocs =
-      List.flatten @@
-        ListLabels.map
-          (all_allocs_ac ac pc)
-          ~f:(fun ac ->
-                if in_param then
-                  let at = talloc_table_var ~label_in_name:false LabelHere (ac, r) in
-                  let deref = deref_if_needed ~in_param:true in
-                  [deref LabelOld at; deref LabelHere at]
-                else
-                  let at = generic_alloc_table_name ac in
-                  [LVar (old_name at); LVar at])
+    let tables =
+      let map ~f l = List.(flatten @@ map f l) in
+      let tables_for ~tx_table_var ~generic_x_table_name xc =
+        if in_param then
+          let xt = tx_table_var ~label_in_name:false LabelHere (xc, r) in
+          let deref = deref_if_needed ~in_param:true in
+          [deref LabelOld xt; deref LabelHere xt]
+        else
+          let xt = generic_x_table_name xc in
+          [LVar (old_name xt); LVar xt]
+      in
+      match for_ with
+      | `alloc_tables ->
+        map (all_allocs_ac ac pc)
+          ~f:(tables_for ~tx_table_var:talloc_table_var ~generic_x_table_name:generic_alloc_table_name)
+      | `tag_tables ->
+        map (all_tags_ac ac pc)
+          ~f:(tables_for ~tx_table_var:ttag_table_var ~generic_x_table_name:generic_tag_table_name)
     in
-    allocs @ mems ac pc In_app r
+    tables @ mems ac pc In_app r
   in
-  LPred (alloc_pred_name ac pc, p :: params)
+  LPred (frame_pred_name ~for_ ac pc, p :: params)
 
-let make_alloc_pred ac pc =
+let make_frame_pred ~for_ ac pc =
   let p = "p" in
   let params =
-    let allocs =
-      List.flatten @@
-        ListLabels.map
-          (all_allocs_ac ac pc)
-          ~f:((fun at -> [map_fst old_name at; at]) % fdup2 generic_alloc_table_name alloc_table_type)
+    let tables =
+      let map  ~f l = List.(flatten @@ map f l) in
+      let tables_for ~generic_x_table_name ~x_table_type =
+          (fun name_type -> [map_fst old_name name_type; name_type])
+        % fdup2 generic_x_table_name x_table_type
+      in
+      match for_ with
+      | `alloc_tables ->
+        map (all_allocs_ac ac pc)
+          ~f:(tables_for ~generic_x_table_name:generic_alloc_table_name ~x_table_type:alloc_table_type)
+      | `tag_tables ->
+        map (all_tags_ac ac pc)
+          ~f:(tables_for ~generic_x_table_name:generic_tag_table_name ~x_table_type:tag_table_type)
     in
-    [p, pointer_type ac pc] @ allocs @ mems ac pc In_pred
+    [p, pointer_type ac pc] @ tables @ mems ac pc In_pred
   in
-  let allocs =
-    let super_alloc =
-      match pc with
-      | JCtag ({ si_parent = Some (st, pp) }, _) ->
-        make_alloc_pred_app ~in_param:false (ac, dummy_region) (JCtag (st, pp)) (LVar p)
-      | JCtag ({ si_parent = None }, _)
-      | JCroot _ ->
-        let alloc = generic_alloc_table_name ac in
-        LPred ("alloc", [LVar (old_name alloc); LVar alloc; LVar p])
+  let frame =
+    let assc =
+      let p = LVar p in
+      let generic_x_table_name ac =
+        match for_ with
+        | `alloc_tables -> generic_alloc_table_name ac
+        | `tag_tables ->
+          match ac with
+          | JCalloc_bitvector ->
+            Jc_options.jc_error Loc.dummy_position "Unsupported alloc_struct frame conditions for bitvector regions"
+          | JCalloc_root ri ->
+            generic_tag_table_name ri
+      in
+      let assoc ac p = generic_x_table_name ac, p in
+      let rec frame ac pc p =
+        assoc ac p ::
+        (List.flatten @@
+          map_embedded_fields ac pc ~p
+            ~f:(fun ~acr:(ac, _) ~pc ~p ~l ~r ->
+                if Num.(l <=/ r) then frame ac pc p else []))
+      in
+      frame ac pc p
     in
-    let fields_allocs =
-      List.flatten @@
-        map_embedded_fields ac pc ~p:(LVar p)
-          ~f:(fun acr pc p l r ->
-                if Num.(l <=/ r) then [make_alloc_pred_app ~in_param:false acr pc p]
-                                 else [])
-    in
-    make_and_list @@ super_alloc :: fields_allocs
+    let cmp (a1, _) (a2, _) = compare a1 a2 in
+    List.(group_consecutive (fun x -> cmp x %> (=) 0) @@ sort cmp assc) |>
+    (let make_predicates pred xt p =
+      let tables = [LVar (old_name xt); LVar xt] in
+      [LPred ((match for_ with `alloc_tables -> "alloc"  | `tag_tables -> "tag") ^ "_extends", tables);
+       LPred (pred, tables @ [p])]
+     in
+     List.map
+       (function
+         | [xt, p] ->
+           let f = match for_ with `alloc_tables -> "alloc" | `tag_tables -> "alloc_tag" in
+           make_predicates f xt p
+         | (xt, p) :: ps ->
+           let f = (match for_ with `alloc_tables -> "alloc" | `tag_tables -> "tag") ^ "_same_except" in
+           make_predicates f xt @@
+           let pset_all_singleton p = LApp ("pset_all", [LApp ("pset_singleton", [p])]) in
+              List.fold_left
+                (fun acc (_, p) -> LApp ("pset_union", [acc; pset_all_singleton p]))
+                (pset_all_singleton p)
+                ps
+        | _ -> assert false (* group_consecutive doesn't return [[]], it instead returns just [] *)))
+    |> List.flatten
+    |> make_and_list
   in
-  Predicate (false, id_no_loc (alloc_pred_name ac pc), params, allocs)
+  Predicate (false, id_no_loc (frame_pred_name ~for_ ac pc), params, frame)
 
 (* Allocation *)
 
@@ -1208,8 +1266,10 @@ let make_alloc_param (type t1) (type t2) :
           match arg with
           | Singleton -> f @@ Some (const_of_int 0)
           | Range_0_n -> f @@ Some (LApp ("sub_int", [LVar (get_n n); const_of_int 1])));
-         make_alloc_pred_app ~in_param:true (ac, dummy_region) pc lresult;
-         make_fresh_pred_app ~in_param:true (ac, dummy_region) pc lresult]
+         make_frame_pred_app ~for_:`alloc_tables ~in_param:true (ac, dummy_region) pc lresult;
+         make_frame_pred_app ~for_:`tag_tables ~in_param:true (ac, dummy_region) pc lresult;
+         make_fresh_pred_app ~for_:`alloc_tables ~in_param:true (ac, dummy_region) pc lresult;
+         make_fresh_pred_app ~for_:`tag_tables ~in_param:true (ac, dummy_region) pc lresult]
         @ instanceof_post),
       (* no exceptional post *)
       [])

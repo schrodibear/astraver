@@ -624,12 +624,15 @@ val safe_free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
               free (old !a) !a p /\
               offset_max !a p < offset_min !a p) }
 
-let free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
+val free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
   writes { a }
   requires { "expl:Deallocation"
                (("expl:Null" p = null) (* allowed, see man 3 free *) \/
-                ("expl:Valid" offset_min !a p = 0 /\ offset_max !a p >= 0)) } =
-  safe_free_parameter a p
+                ("expl:Valid" offset_min !a p = 0 /\ offset_max !a p >= 0)) }
+  ensures  { (p = null -> !a = (old !a)) /\
+             (p <> null ->
+              free (old !a) !a p /\
+              offset_max !a p < offset_min !a p) }
 
 val safe_reinterpret_parameter
       (a : ref (alloc_table 't))
@@ -648,7 +651,7 @@ val safe_reinterpret_parameter
 
 use import int.ComputerDivision
 
-let reinterpret_parameter
+val reinterpret_parameter
       (a : ref (alloc_table 't))
       (t : tag_table 't)
       (s1 : tag_id 't)
@@ -662,7 +665,11 @@ let reinterpret_parameter
              /\ ("expl:Validity" (offset_min !a p <= offset_max !a p))
              /\  ("expl:Valid cast" ("expl:Split" cast_factor s1 s2 > 0) \/
                   ("expl:Join" mod (offset_max !a p - offset_min !a p + 1) (- cast_factor s1 s2) = 0))
-           } =
-  safe_reinterpret_parameter a t s1 s2 m p
+           }
+  ensures  { let pset_old = pset_all (pset_singleton p) in
+             let ps = downcast t p s2 in
+             let pset_new = pset_all (pset_singleton ps) in
+             alloc_same_except (old !a) !a (pset_reinterpret_all t pset_old) /\
+             not_assigns (old !m) !m pset_new }
 
 end

@@ -386,10 +386,14 @@ let tr_struct st acc =
           make_valid_pred ~in_param ~equal:false ~right:false ac pc;
           make_valid_pred ~in_param ~equal:false ~left:false ac pc;
 
-          make_fresh_pred ac pc;
           make_instanceof_pred ~arg:Range_l_r ac pc;
           make_instanceof_pred ~arg:Singleton ac pc;
-          make_alloc_pred ac pc;
+
+          make_fresh_pred ~for_:`alloc_tables ac pc;
+          make_fresh_pred ~for_:`tag_tables ac pc;
+
+          make_frame_pred ~for_:`alloc_tables ac pc;
+          make_frame_pred ~for_:`tag_tables ac pc;
 
           (* Allocation parameters *)
           make_alloc_param ~arg:Singleton ac pc;
@@ -507,7 +511,7 @@ let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty
   | JCTpointer(pc1, _, _), JCTpointer (JCtag (st2, _), _, _)
     when Jc_typing.substruct st2 pc1 -> e'
   | JCTpointer (JCtag (st1, _), _, _), JCTpointer _ ->
-    let tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st1, e#region) in
+    let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st1, e#region) in
     LApp ("downcast", [tag; e'; LVar (tag_name st1)])
   |  _ ->
      unsupported
@@ -738,14 +742,14 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
       LApp ("base_block", [ft t1])
     | JCTinstanceof (t1, lab', st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
-      let tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
+      let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
       LApp ("instanceof", [tag; ft t1; LVar (tag_name st)])
     | JCTcast (t1, lab', st) ->
       if struct_of_union st
       then ft t1
       else
         let lab = if relocate && lab' = LabelHere then lab else lab' in
-        let tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
+        let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
         LApp ("downcast", [tag; ft t1; LVar (tag_name st)])
     | JCTbitwise_cast (t1, _lab, _st) -> ft t1
     | JCTrange_cast (t1, ri) ->
@@ -875,13 +879,14 @@ let named_term ~type_safe ~global_assertion ~relocate lab oldlab t =
 (*                                assertions                                  *)
 (******************************************************************************)
 
-let tag ~type_safe ~global_assertion ~relocate lab oldlab tag=
+let tag ~type_safe ~global_assertion ~relocate lab oldlab tag =
   match tag#node with
   | JCTtag st -> LVar (tag_name st)
   | JCTbottom -> LVar "bottom_tag"
   | JCTtypeof (t, st) ->
     let t' = term ~type_safe ~global_assertion ~relocate lab oldlab t in
-    make_typeof st t#region t'
+    let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t#region) in
+    make_typeof tag t'
 
 let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
   let f f = f ~type_safe ~global_assertion ~relocate lab oldlab in
@@ -975,7 +980,7 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
       LPred ("eq", [ft t1; LConst (Prim_bool true)])
     | JCAinstanceof (t1, lab', st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
-      let tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
+      let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
       LPred ("instanceof", [tag; ft t1; LVar (tag_name st)])
     | JCAmutable(te, st, ta) ->
       let te' = ft te in
@@ -1901,7 +1906,7 @@ and make_reinterpret ~e e1 st =
 
   (* Let's now switch to terms and assume predicates instead of calling params... *)
   let before = LabelName before in
-  let tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, e1#region) in
+  let _, tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, e1#region) in
   let alloc = alloc_table_name (ac, e1#region) in
   let at = lvar ~constant:false ~label_in_name:false in
   (* reinterpretation kind (operation):

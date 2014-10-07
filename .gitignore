@@ -104,7 +104,6 @@
 /jc/jc_lexer.ml
 /jc/jc_parser.ml
 /jc/jc_parser.mli
-/jc/jc_stdlib.ml
 /jc/numconst.ml
 
 /c/cconst.ml

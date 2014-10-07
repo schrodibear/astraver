@@ -157,10 +157,15 @@ let valid_pred_name ~equal ~left ~right ac pc =
   in
   prefix ^ "_" ^ (pointer_class_name pc)
 
-let fresh_pred_name ac pc =
+let fresh_pred_name ~for_ ac pc =
+  let for_ =
+    match for_ with
+    | `alloc_tables -> "alloc"
+    | `tag_tables -> "tag"
+  in
   let prefix =
     match ac with
-    | JCalloc_root _ -> "fresh"
+    | JCalloc_root _ -> "fresh_" ^ for_
     | JCalloc_bitvector -> "fresh_bitvector" (* TODO *)
   in
   prefix ^ "_" ^ (pointer_class_name pc)
@@ -175,11 +180,16 @@ let instanceof_pred_name (type t1) (type t2) (type t3) (type t4) (type t5) : arg
   in
   prefix ^ "_" ^ (pointer_class_name pc)
 
-let alloc_pred_name ac pc =
+let frame_pred_name ~for_ ac pc =
+  let for_ =
+    match for_ with
+    | `alloc_tables -> "alloc"
+    | `tag_tables -> "tag"
+  in
   let prefix =
     match ac with
-    | JCalloc_root _ -> "alloc"
-    | JCalloc_bitvector -> "alloc_bitvector" (* TODO *)
+    | JCalloc_root _ -> "frame_" ^ for_
+    | JCalloc_bitvector -> "frame_" ^ for_ ^ "_bitvector" (* TODO *)
   in
   prefix ^ "_" ^ (pointer_class_name pc)
 

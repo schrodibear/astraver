@@ -107,7 +107,8 @@ struct
   type t = assertion
 
   let make_subtag x st =
-    make_subtag (make_typeof st Jc_region.dummy_region x) (LVar (tag_name st))
+    let _, tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, Jc_region.dummy_region) in
+    make_subtag (make_typeof tag x) (LVar (tag_name st))
   let make_or a b = LOr(a, b)
   let make_and a b = LAnd(a, b)
   let make_not a = LNot a
@@ -122,7 +123,8 @@ struct
   type t = term
 
   let make_subtag x st =
-    make_subtag_bool (make_typeof st Jc_region.dummy_region x) (LVar (tag_name st))
+    let _, tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, Jc_region.dummy_region) in
+    make_subtag_bool (make_typeof tag x) (LVar (tag_name st))
   let make_or = make_or_term
   let make_and = make_and_term
   let make_not = make_not_term

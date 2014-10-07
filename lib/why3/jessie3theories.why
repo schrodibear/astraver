@@ -297,6 +297,16 @@ function typeof (t : tag_table 't) (p : pointer 't) : tag_id 't = tag t p
 
 predicate parenttag (tag_id 't) (tag_id 't)
 
+axiom proper_parenttag:
+  forall t1: tag_id 't.
+    forall t2: tag_id 't [parenttag t1 t2].
+      parenttag t1 t2 -> t1 <> t2
+
+axiom int_of_parent_tag:
+  forall t1: tag_id 't.
+    forall t2: tag_id 't [parenttag t1 t2].
+      parenttag t1 t2 -> int_of_tag t1 > int_of_tag t2
+
 predicate subtag (tag_id 't) (tag_id 't)
 
 (* The function \phi i.e. <> 0 iff reinterpretation is allowed, > 0 - split, < 0 - join *)
@@ -446,15 +456,6 @@ predicate reinterpret_cast_retain
   (forall i : int [shift p i | shift ps i]. downcast t (shift p i) s = shift ps i) /\
   offset_min a2 ps = offset_min a1 p /\
   offset_max a2 ps = offset_max a1 p
-
-predicate not_assigns_tags (t1 : tag_table 't) (t2 : tag_table 't) (l : pset 't) =
-  forall p : pointer 't.
-    not in_pset p l -> typeof t2 p = typeof t1 p
-
-axiom not_assigns_tags_refl:
-  forall t : tag_table 't.
-  forall l : pset 't.
-    not_assigns_tags t t l
 
 (*****************************************************************************)
 (* bitwise operations                                                        *)
@@ -799,16 +800,26 @@ axiom lsr_divide:
 (* dynamic allocation/deallocation                                           *)
 (*****************************************************************************)
 
-predicate alloc_fresh (t : tag_table 't) (p : pointer 't) =
+predicate allocable (a : alloc_table 't) (p : pointer 't) =
+  offset_max a p  = -1 < offset_min a p = 0
+
+predicate freeable (a : alloc_table 't) (p : pointer 't) =
+  offset_min a p = 0 <= offset_max a p
+
+predicate tag_fresh (t : tag_table 't) (p : pointer 't) =
   typeof t p = bottom_tag
+
+predicate alloc_fresh (a : alloc_table 't) (p : pointer 't) =
+  allocable a p
+
+predicate alloc_extends (a1 : alloc_table 't) (a2 : alloc_table 't) =
+  forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+    valid a1 p -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
 
 predicate alloc_same_except (a1 : alloc_table 't) (a2 : alloc_table 't) (l : pset 't) =
   forall p: pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
     not in_pset p l ->
       offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
-
-predicate alloc_frame (a1 : alloc_table 't) (a2 : alloc_table 't) (t2 : tag_table 't) (l : pset 't) =
-  alloc_same_except a1 a2 (pset_reinterpret_all t2 l)
 
 axiom alloc_same_except_included:
   forall a1 : alloc_table 't.
@@ -828,8 +839,34 @@ axiom alloc_same_except_trans:
           alloc_same_except a2 a3 l ->
           alloc_same_except a1 a3 l
 
-predicate alloc (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) = alloc_same_except a1 a2 (pset_all (pset_singleton p))
+predicate alloc_frame (a1 : alloc_table 't) (a2 : alloc_table 't) (t2 : tag_table 't) (l : pset 't) =
+  alloc_same_except a1 a2 (pset_reinterpret_all t2 l)
 
-predicate free (a1 : alloc_table 't) (a2 : alloc_table 't) ( p : pointer 't) = alloc a1 a2 p
+predicate alloc (a1 : alloc_table 't) (a2 : alloc_table 't) (q : pointer 't) =
+  forall p: pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+    not same_block p q ->
+      offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
+
+predicate tag_extends (t1 : tag_table 't) (t2 : tag_table 't) =
+  forall p : pointer 't.
+    tag t1 p <> bottom_tag -> tag t2 p = tag t1 p
+
+predicate tag_same_except (t1 : tag_table 't) (t2 : tag_table 't) (l : pset 't) =
+  forall p : pointer 't.
+    tag t1 p <> bottom_tag -> tag t2 p = tag t1 p
+
+axiom tag_same_except_refl:
+  forall t : tag_table 't.
+  forall l : pset 't.
+    tag_same_except t t l
+
+predicate alloc_tag (t1 : tag_table 't) (t2 : tag_table 't) (q : pointer 't) =
+  forall p : pointer 't.
+    tag t1 p <> bottom_tag -> tag t2 p = tag t1 p
+
+predicate tag_frame (t1 : tag_table 't) (t2 : tag_table 't) (l : pset 't) =
+  tag_same_except t1 t2 (pset_reinterpret_all t2 l)
+
+predicate free (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) = alloc a1 a2 p
 
 end

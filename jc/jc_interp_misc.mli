@@ -146,13 +146,13 @@ val any_value : region -> jc_type -> expr
 val make_valid_pred :
   in_param:bool -> equal:bool -> ?left:bool -> ?right:bool -> alloc_class -> pointer_class -> why_decl
 
-val make_fresh_pred : alloc_class -> pointer_class -> why_decl
+val make_fresh_pred : for_:[`alloc_tables | `tag_tables] -> alloc_class -> pointer_class -> why_decl
 
 val make_instanceof_pred :
   arg:(assertion, _, term -> term -> assertion, [`Range_l_r | `Singleton], _, _) arg ->
     alloc_class -> pointer_class -> why_decl
 
-val make_alloc_pred : alloc_class -> pointer_class -> why_decl
+val make_frame_pred : for_:[`alloc_tables | `tag_tables] ->alloc_class -> pointer_class -> why_decl
 
 val make_valid_pred_app :
   in_param:bool -> equal:bool ->
@@ -189,7 +189,7 @@ val var: var_info -> expr
 
 val plain_var : string -> expr
 
-val ttag_table_var : label_in_name:bool -> label -> VariantOrd.t * RegionTable.key -> term
+val ttag_table_var : label_in_name:bool -> label -> VariantOrd.t * RegionTable.key -> bool * term
 
 val talloc_table_var : label_in_name:bool -> label -> AllocClass.t * RegionTable.key -> bool * term
 
@@ -277,7 +277,7 @@ val tr_logic_fun_call :
 
 val make_int_of_tag : struct_info -> term
 
-val make_typeof : struct_info -> region -> term -> term
+val make_typeof : term -> term -> term
 (** typeof expression in logic *)
 
 val make_instanceof : term -> term -> struct_info -> assertion
