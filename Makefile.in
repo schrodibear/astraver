@@ -118,48 +118,16 @@ PVSLIB = $(DESTDIR)@PVSLIB@
 GENERATED = src/version.ml src/rc.ml src/xml.ml \
 	    src/lexer.ml src/parser.mli \
             src/parser.ml src/linenum.ml \
-            jc/numconst.ml jc/jc_stdlib.ml \
+            jc/numconst.ml \
 	    jc/jc_lexer.ml jc/jc_parser.mli jc/jc_parser.ml \
-	    jc/jc_ai.ml \
-	    java/java_parser.mli java/java_parser.ml java/java_lexer.ml \
-	    ml/parsing/parser.mli ml/parsing/parser.ml ml/parsing/lexer.ml \
-	    ml/parsing/linenum.ml \
-	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
-	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml c/cconst.ml \
-	    intf/hilight.ml intf/whyhilight.ml \
-	    intf/tagsplit.ml intf/config.ml \
-	    tools/why2html.ml  tools/cvcl_split.ml \
-	    tools/simplify_split.ml tools/smtlib_split.ml tools/rv_split.ml \
-	    tools/zenon_split.ml tools/ergo_split.ml \
-	    tools/simplify_lexer.ml tools/simplify_parser.mli \
-	    tools/simplify_parser.ml \
-	    tools/toolstat_lex.ml \
-	    tools/toolstat_pars.ml tools/toolstat_pars.mli \
-	    mix/mix_lexer.ml mix/mix_parser.mli mix/mix_parser.ml \
-	    lib/why3/why3.conf
+	    jc/jc_ai.ml
 
 
 # main targets
 ##############
 
-BINARY=bin/why.$(OCAMLBEST)
-WHYCONFIG=bin/why-config.$(OCAMLBEST)
 JESSIE=bin/jessie.$(OCAMLBEST)
-KRAKATOA=bin/krakatoa.$(OCAMLBEST)
-JESSICA=bin/jessica.$(OCAMLBEST)
-STATICBINARY=bin/why.static
-WHY2HTML=bin/why2html.$(OCAMLBEST)
-RVMERGE=bin/rv_merge.$(OCAMLBEST)
-DP=bin/why-dp.$(OCAMLBEST)
-CPULIMIT=bin/why-cpulimit
-WHYOBFUSCATOR=bin/why-obfuscator.$(OCAMLBEST)
-WHYSTAT=bin/why-stat.$(OCAMLBEST)
-TOOLSTAT=bin/tool-stat.$(OCAMLBEST)
-SIMPLIFY2WHY=bin/simplify2why.$(OCAMLBEST)
 REGTEST=regtest.$(OCAMLBEST)
-
-TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR) \
-      $(SIMPLIFY2WHY) $(WHYSTAT) $(TOOLSTAT)
 
 ifeq ($(OCAMLBEST),opt)
 JCLIB=jc/jc.cmo jc/jc.cmx jc/jc.o
@@ -169,7 +137,7 @@ endif
 
 all: all-without-frama-c-plugin .depend $(JESSIE_PLUGIN_BEST)
 
-all-without-frama-c-plugin: check $(JESSIE) coq-@COQ@ pvs-@PVS@ $(JCLIB) $(REGTEST)
+all-without-frama-c-plugin: $(JESSIE) coq-@COQ@ pvs-@PVS@ $(JCLIB) $(REGTEST)
 
 # refrain parallel make (-j nn) from starting ocaml compilation too early
 *.cm*: .depend
@@ -185,34 +153,11 @@ WHYLIBS=lib/why/bool.why lib/why/integer.why lib/why/divisions.why \
 	lib/why/mybag.why \
 	lib/why/mix.why \
 	lib/why/floats_common.why lib/why/floats_strict.why \
-	lib/why/floats_full.why lib/why/floats_multi_rounding.why 
+	lib/why/floats_full.why lib/why/floats_multi_rounding.why
 
 
 
 PRELUDE=lib/why/prelude.why $(WHYLIBS)
-
-# sanity check: the prelude files do typecheck
-check: $(BINARY) $(PRELUDE)
-	WHYLIB=lib $(BINARY) --no-pervasives -tc lib/why/prelude.why
-	for f in $(WHYLIBS) ; do \
-		WHYLIB=lib $(BINARY) -tc $$f; \
-	done
-
-#lib/coq/float_common_Gappa_why.v: lib/why/floats_common.why
-#	WHYLIB=lib $(BINARY) -tc -output $@ $<
-
-# why-config
-WHYCONFIGCMO = src/rc.cmo src/version.cmo tools/dpConfig.cmo tools/whyConfig.cmo
-WHYCONFIGCMX = $(WHYCONFIGCMO:.cmo=.cmx)
-
-bin/why-config.opt: $(WHYCONFIGCMX)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
-	$(STRIP) $@
-
-bin/why-config.byte: $(WHYCONFIGCMO)
-	# $(if $(QUIET),@echo 'Linking  $@' &&)
-	$(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma $^
-
 
 # why
 CMO_EXPORT =  src/lib.cmo src/rc.cmo src/loc.cmo \
@@ -221,61 +166,6 @@ CMO_EXPORT =  src/lib.cmo src/rc.cmo src/loc.cmo \
 	   src/parser.cmo src/lexer.cmo src/report.cmo \
            src/explain.cmo 	\
 	   src/xml.cmo src/project.cmo
-
-CMO = src/lib.cmo src/rc.cmo tools/dpConfig.cmo \
-      src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
-	   src/ident.cmo src/print_real.cmo  \
-	   src/effect.cmo src/pp.cmo src/option_misc.cmo src/misc.cmo 	\
-	   src/parser.cmo src/lexer.cmo src/report.cmo \
-           src/env.cmo src/mapenv.cmo src/rename.cmo src/explain.cmo src/util.cmo \
-           src/ltyping.cmo src/typing.cmo src/wp.cmo src/fastwp.cmo \
-           src/monad.cmo src/mlize.cmo src/red.cmo src/vcg.cmo \
-	   src/predDefExpansor.cmo src/encoding_mono_inst.cmo \
-	   src/encoding_rec.cmo src/encoding_pred.cmo src/encoding_strat.cmo \
-	   src/encoding_mono.cmo src/monomorph.cmo src/encoding.cmo \
-	   src/pvs.cmo src/hol4.cmo src/gappa.cmo \
-	   src/holl.cmo src/harvey.cmo src/simplify.cmo  \
-           src/regen.cmo src/mizar.cmo src/smtlib.cmo src/coq.cmo \
-	   src/zenon.cmo src/z3.cmo src/cvcl.cmo tools/calldp.cmo \
-	   src/xml.cmo src/project.cmo \
-	   src/why3_kw.cmo src/why3.cmo src/pretty.cmo  \
-           src/unionfind.cmo src/theoryreducer.cmo \
-           src/theory_filtering.cmo src/hypotheses_filtering.cmo \
-           src/dispatcher.cmo src/isabelle.cmo src/ocaml.cmo  \
-	   src/main.cmo
-CMX      = $(CMO:.cmo=.cmx)
-
-bin/why.opt: $(CMX) src/why.cmx
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa nums.cmxa graph.cmxa $^
-	$(STRIP) $@
-
-bin/why.byte: $(CMO) src/why.cmo
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma nums.cma graph.cma $^
-
-bin/why.static: $(CMX) src/why.cmx
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa nums.cmxa graph.cmxa $^
-	$(STRIP) $@
-
-bin/top: $(CMO)
-	ocamlmktop $(BFLAGS) -o $@ str.cma $^
-
-# world-why-web
-# WWEBCMO = src/lib.cmo src/rc.cmo src/version.cmo src/options.cmo src/loc.cmo\
-# 	 src/ident.cmo  src/effect.cmo src/pp.cmo \
-# 	src/option_misc.cmo\
-# 	src/misc.cmo src/parser.cmo src/lexer.cmo src/report.cmo\
-# 	 src/env.cmo src/rename.cmo src/explain.cmo src/util.cmo src/xml.cmo\
-# 	src/project.cmo src/pretty.cmo src/wserver.cmo src/whyweb.cmo
-# WWEBCMX = $(WWEBCMO:.cmo=.cmx)
-
-# src/wserver.ml: src/wserver.ml4
-# 	camlp4r pa_ifdef.cmo pr_o.cmo -DUNIX -DNOFORK  -impl $^ -o $@
-
-# bin/whyweb.opt: $(WWEBCMX)
-# 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) \
-# 	      $(OFLAGS) -thread -o $@ str.cmxa unix.cmxa threads.cmxa $^
-# 	$(STRIP)    $@
-
 
 # jessie
 JCCML_EXPORT = src/why3_kw.ml \
@@ -312,15 +202,6 @@ JCCMO = src/version.cmo \
 	jc/jc_make.cmo jc/jc_main.cmo
 JCCMX = $(JCCMO:.cmo=.cmx)
 
-jc/jc_stdlib.ml: jc/jc_stdlib_lt312.ml jc/jc_stdlib_ge312.ml jc/jc_stdlib_ge40.ml
-	rm -f $@
-	case $(OCAMLVERSION) in \
-         3.0*|3.10*|3.11*) cp jc/jc_stdlib_lt312.ml $@ ;; \
-         3.12*) cp jc/jc_stdlib_ge312.ml $@ ;; \
-         4.0*) cp jc/jc_stdlib_ge40.ml $@ ;; \
-        esac
-	chmod -w $@
-
 $(JCCMX_EXPORT): OFLAGS:=$(OFLAGS) -for-pack Jc
 
 atp/atp.cmx:
@@ -349,11 +230,11 @@ bin/jessie.byte: $(JCCMO)
 # Frama-C plugin for Jessie
 ifeq ($(FRAMACPLUGIN),yes)
 JESSIE_PLUGIN_PATH=frama-c-plugin
-$(JESSIE_PLUGIN_BYTE): jc/jc.cmo $(JCCMO) $(CMO)
+$(JESSIE_PLUGIN_BYTE): jc/jc.cmo $(JCCMO)
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) Jessie.cma
 
-$(JESSIE_PLUGIN_OPT): $(JCLIB) $(JCCMX) $(CMX)
+$(JESSIE_PLUGIN_OPT): $(JCLIB) $(JCCMX)
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH)
 
@@ -363,195 +244,6 @@ clean::
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) clean
 endif
 
-# krakatoa
-# CAUTION! NEVER ADD jc/jc_options.cmo INTO THIS LIST
-KCMO = src/lib.cmo src/version.cmo \
-	src/loc.cmo src/pp.cmo src/option_misc.cmo \
-	src/why3_kw.cmo jc/jc_stdlib.cmo \
-	jc/jc_envset.cmo jc/jc_common_options.cmo \
-	jc/jc_region.cmo jc/jc_fenv.cmo jc/numconst.cmo jc/jc_constructors.cmo \
-	jc/jc_pervasives.cmo jc/jc_name.cmo \
-	jc/jc_iterators.cmo jc/jc_type_var.cmo jc/jc_output_misc.cmo \
-	jc/jc_poutput.cmo jc/jc_output.cmo jc/jc_noutput.cmo \
-	java/java_options.cmo java/java_pervasives.cmo \
-	java/java_abstract.cmo \
-	java/java_parser.cmo java/java_lexer.cmo java/java_syntax.cmo \
-	java/java_typing.cmo java/java_callgraph.cmo \
-	java/java_analysis.cmo java/java_interp.cmo \
-	java/java_main.cmo
-KCMX = $(KCMO:.cmo=.cmx)
-
-bin/krakatoa.opt: $(KCMX)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ \
-		unix.cmxa nums.cmxa graph.cmxa $^
-	$(STRIP)    $@
-
-bin/krakatoa.byte: $(KCMO)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
-	 	 unix.cma nums.cma graph.cma $^
-
-
-# jessica
-
-JESSICACMO = ml/ml_misc.cmo ml/ml_options.cmo ml/ml_pervasives.cmo \
-	ml/ml_env.cmo ml/ml_constant.cmo ml/ml_type.cmo ml/ml_pattern.cmo \
-	ml/ml_interp.cmo ml/ml_main.cmo
-JESSICACMI = ml/ml_options.cmi ml/ml_env.cmi ml/ml_pattern.cmi
-
-JESSICACMX = $(JESSICACMO:.cmo=.cmx)
-MLCMO = src/loc.cmo src/pp.cmo src/option_misc.cmo jc/jc_stdlib.cmo \
-	jc/jc_envset.cmo jc/jc_common_options.cmo \
-	jc/jc_region.cmo jc/jc_fenv.cmo jc/numconst.cmo jc/jc_constructors.cmo \
-	jc/jc_pervasives.cmo jc/jc_name.cmo \
-	jc/jc_iterators.cmo jc/jc_output_misc.cmo \
-	jc/jc_poutput.cmo jc/jc_output.cmo jc/jc_noutput.cmo \
-	$(JESSICACMO)
-MLCMX = $(MLCMO:.cmo=.cmx)
-
-# The following files must be compiled with different includes and with the
-# -for-pack option
-OCAMLCMO = ml/utils/config.cmo ml/utils/clflags.cmo \
-	ml/utils/misc.cmo ml/utils/terminfo.cmo ml/utils/warnings.cmo \
-	ml/utils/consistbl.cmo ml/utils/tbl.cmo \
-	ml/parsing/linenum.cmo ml/parsing/location.cmo \
-	ml/parsing/syntaxerr.cmo \
-	ml/parsing/longident.cmo ml/parsing/parser.cmo ml/parsing/lexer.cmo \
-	ml/typing/ident.cmo ml/typing/path.cmo ml/typing/types.cmo \
-	ml/typing/oprint.cmo ml/typing/btype.cmo ml/typing/predef.cmo \
-	ml/typing/datarepr.cmo ml/typing/subst.cmo ml/typing/env.cmo \
-	ml/typing/primitive.cmo ml/typing/ctype.cmo ml/typing/printtyp.cmo \
-	ml/typing/includeclass.cmo ml/typing/parmatch.cmo \
-	ml/typing/stypes.cmo ml/typing/typedtree.cmo \
-	ml/typing/includecore.cmo ml/typing/typetexp.cmo ml/typing/mtype.cmo \
-	ml/typing/typedecl.cmo ml/typing/unused_var.cmo \
-	ml/typing/typecore.cmo ml/typing/typeclass.cmo \
-	ml/typing/includemod.cmo ml/typing/typemod.cmo
-OCAMLCMINOIMPL = ml/parsing/asttypes.cmi ml/parsing/parsetree.cmi \
-	ml/typing/outcometree.cmi
-OCAMLCMI = $(OCAMLCMINOIMPL) ml/utils/config.cmi ml/utils/clflags.cmi \
-	ml/utils/misc.cmi ml/utils/terminfo.cmi ml/utils/warnings.cmi \
-	ml/utils/consistbl.cmi ml/utils/tbl.cmi \
-	ml/parsing/linenum.cmi ml/parsing/location.cmi ml/parsing/parser.cmi \
-	ml/parsing/lexer.cmi ml/parsing/longident.cmi ml/parsing/syntaxerr.cmi \
-	ml/typing/btype.cmi ml/typing/ctype.cmi ml/typing/datarepr.cmi \
-	ml/typing/env.cmi ml/typing/ident.cmi ml/typing/includeclass.cmi \
-	ml/typing/includecore.cmi ml/typing/includemod.cmi ml/typing/mtype.cmi \
-	ml/typing/oprint.cmi ml/typing/parmatch.cmi \
-	ml/typing/path.cmi ml/typing/predef.cmi ml/typing/primitive.cmi \
-	ml/typing/printtyp.cmi ml/typing/stypes.cmi ml/typing/subst.cmi \
-	ml/typing/typeclass.cmi ml/typing/typecore.cmi ml/typing/typedecl.cmi \
-	ml/typing/typedtree.cmi ml/typing/typemod.cmi ml/typing/types.cmi \
-	ml/typing/typetexp.cmi ml/typing/unused_var.cmi
-OCAMLCMX = $(OCAMLCMO:.cmo=.cmx)
-
-MLINCLUDES = -I ml/utils -I ml/parsing -I ml/typing
-
-# The following dependencies are not found by ocamldep because there is no
-# file ml/ml_ocaml.ml or ml/ml_ocaml.mli.
-$(JESSICACMO): ml/ml_ocaml.cmo
-$(JESSICACMX): ml/ml_ocaml.cmx
-$(JESSICACMI): ml/ml_ocaml.cmo
-
-ml/parsing/%.cmi: ml/parsing/%.mli
-	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
-		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/parsing/$*.mli
-
-ml/parsing/%.cmx: ml/parsing/%.ml
-	$(if $(QUIET),@echo 'Ocamlopt $@' &&) \
-		$(OCAMLOPT) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/parsing/$*.ml
-
-ml/parsing/%.cmo: ml/parsing/%.ml
-	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
-		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/parsing/$*.ml
-
-ml/typing/%.cmi: ml/typing/%.mli
-	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
-		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/typing/$*.mli
-
-ml/typing/%.cmx: ml/typing/%.ml
-	$(if $(QUIET),@echo 'Ocamlopt $@' &&) \
-		$(OCAMLOPT) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/typing/$*.ml
-
-ml/typing/%.cmo: ml/typing/%.ml
-	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
-		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/typing/$*.ml
-
-ml/utils/%.cmi: ml/utils/%.mli
-	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
-		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/utils/$*.mli
-
-ml/utils/%.cmx: ml/utils/%.ml
-	$(if $(QUIET),@echo 'Ocamlopt $@' &&) \
-		$(OCAMLOPT) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/utils/$*.ml
-
-ml/utils/%.cmo: ml/utils/%.ml
-	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
-		$(OCAMLC) -c $(MLINCLUDES) -for-pack Ml_ocaml ml/utils/$*.ml
-
-ml/ml_ocaml.cmx: $(OCAMLCMINOIMPL) $(OCAMLCMX)
-	$(if $(QUIET),@echo 'Ocamlopt $@' &&) \
-		$(OCAMLOPT) -c $(MLINCLUDES) -pack -o $@ $^
-
-ml/ml_ocaml.cmo: $(OCAMLCMINOIMPL) $(OCAMLCMO)
-	$(if $(QUIET),@echo 'Ocamlc   $@' &&) \
-		$(OCAMLC) -c $(MLINCLUDES) -pack -o $@ $^
-
-bin/jessica.opt: ml/ml_ocaml.cmx $(MLCMX)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ \
-		unix.cmxa nums.cmxa graph.cmxa $^
-	$(STRIP)    $@
-
-bin/jessica.byte: ml/ml_ocaml.cmo $(MLCMO)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ \
-	 	 unix.cma nums.cma graph.cma $^
-
-
-# demixify
-
-MIXCMO=src/pp.cmo mix/mix_parser.cmo mix/mix_lexer.cmo mix/mix_cfg.cmo \
-       mix/mix_seq.cmo mix/mix_interp.cmo mix/mix_main.cmo
-MIXCMX = $(MIXCMO:.cmo=.cmx)
-
-bin/demixify.opt: $(MIXCMX)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ $^
-	$(STRIP)    $@
-
-bin/demixify.byte: $(MIXCMO)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ $^
-
-# graphical interface
-WVCMO = $(CMO) intf/navig.cmo intf/hilight.cmo intf/viewer.cmo
-WVCMX = $(WVCMO:.cmo=.cmx)
-
-bin/why-viewer.opt: $(WVCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa gramlib.cmxa str.cmxa lablgtk.cmxa $^
-	$(STRIP) $@
-
-bin/why-viewer.byte: $(WVCMO)
-	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma lablgtk.cma $^
-
-# graphical interface
-GCMO = $(CMO) intf/colors.cmo intf/tags.cmo intf/tools.cmo intf/tagsplit.cmo\
-	      intf/astprinter.cmo intf/astnprinter.cmo intf/astpprinter.cmo\
-	      intf/model.cmo intf/cache.cmo intf/gConfig.cmo intf/hilight.cmo\
-	      intf/whyhilight.cmo intf/pprinter.cmo intf/preferences.cmo intf/stat.cmo
-GCMX = $(GCMO:.cmo=.cmx)
-
-gwhy-yes: bin/gwhy.$(OCAMLBEST)
-gwhy-no:
-gwhy: bin/gwhy.$(OCAMLBEST)
-
-bin/gwhy.opt: $(GCMX)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa nums.cmxa str.cmxa graph.cmxa lablgtk.cmxa gtkThread.cmx $^
-	$(STRIP)    $@
-
-bin/gwhy.static: $(GCMX)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa threads.cmxa nums.cmxa str.cmxa graph.cmxa lablgtk.cmxa gtkThread.cmx $^
-	$(STRIP)    $@
-
-bin/gwhy.byte: $(GCMO)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma nums.cma graph.cma lablgtk.cma threads.cma gtkThread.cmo $^
-
 # tools
 regtest.opt: tools/regtest.ml
 	$(OCAMLOPT) $(OFLAGS) -thread -o $@ unix.cmxa str.cmxa threads.cmxa $^
@@ -559,77 +251,6 @@ regtest.opt: tools/regtest.ml
 regtest.byte: tools/regtest.ml
 	$(OCAMLC) $(BFLAGS) -thread -o $@ unix.cma str.cma threads.cma $^
 
-bin/why2html.byte: tools/why2html.ml
-	$(OCAMLC) $(BFLAGS) -o $@ $^
-
-bin/why2html.opt: tools/why2html.ml
-	$(OCAMLOPT) $(OFLAGS) -o $@ $^
-
-SIMPLIFYTOWHYCMO=src/ident.cmo src/pp.cmo \
-                 tools/simplify_parser.cmo tools/simplify_lexer.cmo \
-                 tools/simplify_towhy.cmo
-SIMPLIFYTOWHYCMX = $(SIMPLIFYTOWHYCMO:.cmo=.cmx)
-
-bin/simplify2why.byte: $(SIMPLIFYTOWHYCMO)
-	$(OCAMLC) $(BFLAGS) -o $@ $^
-
-bin/simplify2why.opt: $(SIMPLIFYTOWHYCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ $^
-
-DPCMO =  src/lib.cmo tools/cvcl_split.cmo tools/simplify_split.cmo tools/smtlib_split.cmo\
-        tools/zenon_split.cmo tools/ergo_split.cmo tools/rv_split.cmo \
-        src/rc.cmo tools/dpConfig.cmo src/version.cmo \
-	tools/calldp.cmo tools/dp.cmo
-DPCMX = $(DPCMO:.cmo=.cmx)
-
-bin/why-dp.byte: $(DPCMO)
-	$(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma $^
-
-bin/why-dp.opt: $(DPCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
-
-bin/why-cpulimit: tools/@CPULIMIT@.c
-	$(CC) -o $@ $^
-
-bin/rv_merge.byte: tools/rv_merge.ml
-	$(OCAMLC) $(BFLAGS) -o $@ $^
-
-bin/rv_merge.opt: tools/rv_merge.ml
-	$(OCAMLOPT) $(OFLAGS) -o $@ $^
-
-OBFCMO=src/pp.cmo src/loc.cmo src/ident.cmo  \
-       src/parser.cmo src/lexer.cmo src/print_real.cmo \
-	tools/obfuscator.cmo
-OBFCMX=$(OBFCMO:.cmo=.cmx)
-
-bin/why-obfuscator.byte: $(OBFCMO)
-	$(OCAMLC) $(BFLAGS) -o $@ nums.cma $^
-
-bin/why-obfuscator.opt: $(OBFCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ nums.cmxa $^
-
-STATCMO=src/pp.cmo src/loc.cmo src/ident.cmo  \
-        src/parser.cmo src/lexer.cmo tools/whystat.cmo
-STATCMX=$(STATCMO:.cmo=.cmx)
-
-bin/why-stat.byte: $(STATCMO)
-	$(OCAMLC) $(BFLAGS) -o $@ $^
-
-bin/why-stat.opt: $(STATCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ $^
-
-TOOLCMO=src/loc.cmo src/pp.cmo tools/toolstat_pars.cmo \
-	tools/toolstat_lex.cmo tools/toolstat.cmo
-TOOLCMX=$(TOOLCMO:.cmo=.cmx)
-
-bin/tool-stat.byte: $(TOOLCMO)
-	$(OCAMLC) $(BFLAGS) -o $@ $^
-
-bin/tool-stat.opt: $(TOOLCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ $^
-
-bin/cadlog.opt: src/version.cmx c/cversion.cmx tools/cadlog.cmx
-	$(OCAMLOPT) unix.cmxa -o $@ $^
 
 static:: $(STATICBINARY)
 
@@ -638,22 +259,6 @@ LIBWHY3=$(LIBDIR)/why
 else
 LIBWHY3=$(PWD)/lib
 endif
-
-lib/why3/why3.conf: Makefile
-	printf "[main]\n" > $@
-	printf "loadpath=\"$(LIBWHY3)/why3\"\n" >> $@
-	printf "\n" >> $@
-	printf "[prover_modifiers]\n" >> $@
-	printf "name=\"Coq\"\n" >> $@
-	printf "option=\"-R $(LIBWHY3)/coq Why\"\n" >> $@
-	printf "driver=\"$(LIBWHY3)/why3/coq.drv\"\n" >> $@
-	printf "\n"  >> $@
-	printf "[editor_modifiers coqide]\n" >> $@
-	printf "option=\"-R $(LIBWHY3)/coq Why\"\n" >> $@
-	printf "\n"  >> $@
-	printf "[editor_modifiers proofgeneral-coq]\n" >> $@
-	printf "option=\"--eval \\\\\"(setq coq-load-path (cons '(\\\\\\\\\\\\\"$(LIBWHY3)/coq\\\\\\\\\\\\\" \\\\\\\\\\\\\"Why\\\\\\\\\\\\\") coq-load-path))\\\\\"\"\n"  >> $@
-
 
 ########
 # COQ
@@ -695,7 +300,6 @@ bench:: $(BINARY) $(WHYVO)
 	cd bench; sh ./bench "../$(BINARY)"
 	make -C bench fastwp.bench.ergo
 	make -C examples ergo
-	#cd bench/provers; sh ./bench "../../$(BINARY)"
 
 JCBENCHLOG=jessie-bench-`date +%d-%m-%y`.log
 
@@ -714,12 +318,6 @@ jc-ai-bench:: $(JESSIE) bin/cadlog.opt
 
 JAVABENCHLOG=krakatoa-bench-`date +%d-%m-%y`.log
 
-java-bench:: $(KRAKATOA) bin/cadlog.opt
-	(cd bench/java; sh ./bench 2>&1) | bin/cadlog.opt -java $(JAVABENCHLOG)
-
-ml-bench:: $(JESSICA) $(JESSIE)
-	make -C bench/ml -f Makefile good.bench
-
 bench-pvs:: $(BINARY) $(WHYVO)
 	cd bench; sh ./bench "../$(BINARY) --valid" pvs
 
@@ -737,18 +335,6 @@ examples:: $(BINARY) $(WHYVO)
 # debugging
 
 db debug: bin/why.byte src/logic.cmo
-
-#src/logic.ml: src/logic.mli
-#	cp -f $^ $@
-
-# java APIs
-#################
-
-java_api:
-	(cd lib/java_api ; for i in java/lang/*.java; do \
-		mkdir -p `dirname ../distr_java_api/$$i` ; \
-		echo "Generating $$i" ; \
-		KRAKATOALIB=.. ../../$(KRAKATOA) -abstract ../distr_java_api/$$i $$i || break ; done)
 
 # installation
 ##############
@@ -875,26 +461,11 @@ doc/manual.ps: doc/manual.tex doc/version.tex
 #	echo '\newcommand{\jessieversion}'"{$(JCVERSION)}" >> $@
 #	echo '\newcommand{\krakatoaversion}'"{$(KVERSION)}" >> $@
 
-doc/manual.html: doc/manual.tex doc/version.tex
-	make -C doc manual.html
-
-doc/krakatoa.pdf: doc/krakatoa.tex doc/version.tex
-	make -C doc krakatoa.pdf
-
-doc/krakatoa.html: doc/krakatoa.tex doc/version.tex
-	make -C doc krakatoa.html
-
 doc/jessie.pdf: doc/jessie.tex doc/version.tex
 	make -C doc jessie.pdf
 
 doc/jessie.html: doc/jessie.tex doc/version.tex
 	make -C doc jessie.html
-
-doc/main.pdf: doc/main.tex doc/version.tex
-	make -C doc main.pdf
-
-doc/main.html: doc/main.tex doc/version.tex
-	make -C doc main.html
 
 
 # API HTML DOC
@@ -1050,7 +621,7 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 
 # ne pas distribuer ces tests-la	frama-c-plugin/tests/jessie/*.c
 
-distrib export: source export-doc export-www export-examples 
+distrib export: source export-doc export-www export-examples
 
 export-www:
 	echo "<#def version>$(VERSION)</#def>" > $(WWWSRC)/version.prehtml
@@ -1087,10 +658,6 @@ export-doc: $(DOC) export-krakatoa-doc
 	cp doc/manual.ps doc/manual.html $(WWW)/manual
 	cp doc/logic_syntax.bnf $(WWW)/manual
 	(cd $(WWW)/manual; hacha manual.html)
-
-export-krakatoa-doc:
-	cp doc/krakatoa.pdf doc/krakatoa.html doc/*.png $(WWWKRAKATOA)
-	cp doc/jessie.pdf doc/jessie.html $(WWWKRAKATOA)
 
 OSTYPE  ?= linux
 
