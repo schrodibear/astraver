@@ -44,8 +44,8 @@ PLUGIN_NAME:=Jessie
 PLUGIN_CMO:= jessie_config jessie_options jessie_integer common extractor rewrite \
              retype norm interp register
 PLUGIN_HAS_MLI:=yes
-PLUGIN_BFLAGS:=$(JESSIE_INCLUDES)
-PLUGIN_OFLAGS:=$(JESSIE_INCLUDES)
+PLUGIN_BFLAGS:=$(JESSIE_INCLUDES) -w -48
+PLUGIN_OFLAGS:=$(JESSIE_INCLUDES) -w -48
 PLUGIN_EXTRA_BYTE+=$(JCCMO)
 PLUGIN_EXTRA_OPT+=$(JCCMX)
 #PLUGIN_DEPFLAGS:=$(JESSIE_INCLUDES)
@@ -113,7 +113,7 @@ $(WHY_DISTRIB)/%: $(WHY_DISTRIB)/Makefile $(WHY_DISTRIB)/.depend
 
 PLUGIN_GENERATED_LIST+=$(JESSIE_HOME_DIR)/jessie_config.ml
 
-RESOURCES   ?= jessie_spec_prolog.h 
+RESOURCES   ?= jessie_spec_prolog.h
 
 install::
 	$(MKDIR) $(FRAMAC_DATADIR)/jessie

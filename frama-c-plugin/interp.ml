@@ -1023,7 +1023,6 @@ and terms ?(in_zone=false) t =
 
     | Trange(low,high) -> [JCPErange(opt_map term low,opt_map term high)]
     | Tunion l ->
-      let terms t = terms t in
       List.map (fun x -> x#node) (List.flatten (List.map terms l))
     | Tcomprehension _ -> Common.unsupported "sets by comprehension"
     | Tinter _ -> Common.unsupported " set intersection"
