@@ -314,7 +314,7 @@ let is_why3_poly_eq, is_why3_poly_neq =
 
 let why3_builtin_locals = StringSet.singleton "result"
 
-let rec fprintf_term ?(locals = why3_builtin_locals) fmttr =
+let rec fprintf_term ~locals fmttr =
   let pr fmt = fprintf fmttr fmt in
   let fprintf_term = fprintf_term ~locals
   and fprintf_assertion = fprintf_assertion ~locals
@@ -331,10 +331,10 @@ let rec fprintf_term ?(locals = why3_builtin_locals) fmttr =
     pr ")@]"
   | LApp (id, []) -> pr "%s" (why3_ident id)
   | LVar id -> pr "%s" (why3_ident id)
-  | LDeref id when not (StringSet.mem id locals) ->
-    pr "!%s" (why3_ident id)
-  | LDeref id ->
+  | LDeref id | LDerefAtLabel (id, _) when StringSet.mem id locals ->
     pr "%s" (why3_ident id)
+  | LDeref id ->
+    pr "!%s" (why3_ident id)
   | LDerefAtLabel (id, "") ->
     pr "(old !%s)" (why3_ident id)
   | LDerefAtLabel (id, l) ->
@@ -348,7 +348,7 @@ let rec fprintf_term ?(locals = why3_builtin_locals) fmttr =
     pr "@[<hov 1>(let %s@ = %a@ in %a)@]"
       v fprintf_term t1 fprintf_term t2
 
-and fprintf_assertion ?(locals = why3_builtin_locals) fmttr =
+and fprintf_assertion ~locals fmttr =
   let pr fmt = fprintf fmttr fmt in
   let fprintf_term = fprintf_term ~locals
   and fprintf_assertion = fprintf_assertion ~locals
@@ -394,7 +394,7 @@ and fprintf_assertion ?(locals = why3_builtin_locals) fmttr =
   | LLabeled (l, a) ->
     pr "@[(%a%a)@]" fprintf_why_label l fprintf_assertion a
 
-and fprintf_triggers ?(locals = why3_builtin_locals) fmttr trigs =
+and fprintf_triggers ~locals fmttr trigs =
   let fprintf_term = fprintf_term ~locals
   and fprintf_assertion = fprintf_assertion ~locals
   in
@@ -405,7 +405,7 @@ and fprintf_triggers ?(locals = why3_builtin_locals) fmttr trigs =
   in
   print_list_delim lsquare rsquare alt (print_list comma pat) fmttr trigs
 
-let rec fprintf_type ?(locals = why3_builtin_locals) ~need_colon anon fmttr t =
+let rec fprintf_type ~locals ~need_colon anon fmttr t =
   let pr fmt = fprintf fmttr fmt in
   let fprintf_assertion = fprintf_assertion ~locals in
   let pt = fprintf_type ~locals ~need_colon:false anon in
@@ -417,7 +417,7 @@ let rec fprintf_type ?(locals = why3_builtin_locals) ~need_colon anon fmttr t =
   match t with
   | Prod_type (id, t1, t2) ->
     let id = if id = "" || anon then "_anonymous" else id in
-    pr "@[<hov 1>(%s : %a)@ %a@]" (why3_ident id) pt t1 (fprintf_type ~need_colon anon) t2
+    pr "@[<hov 1>(%s : %a)@ %a@]" (why3_ident id) pt t1 (fprintf_type ~locals ~need_colon anon) t2
   | Base_type t -> fprintf_logic_type fmttr t
   | Ref_type t -> pr "ref %a" pt t
   | Annot_type (p, t, reads, writes, q, signals) ->
@@ -442,7 +442,7 @@ let rec fprintf_type ?(locals = why3_builtin_locals) ~need_colon anon fmttr t =
         List.iter (fun (e, r) -> pr "@[<hov 2>raises { %s result ->@ %a }@]@]" e fprintf_assertion r) l
     end
 
-let fprintf_variant ?(locals = why3_builtin_locals) fmttr =
+let fprintf_variant ~locals fmttr =
   let pr fmt = fprintf fmttr fmt in
   function
   | None -> ()
@@ -452,14 +452,31 @@ let fprintf_variant ?(locals = why3_builtin_locals) fmttr =
 
 let rec fprintf_expr_node ~locals in_app fmttr =
   let pr fmt = fprintf fmttr fmt in
-  let fprintf_assertion_locals = fprintf_assertion
-  and fprintf_expr_locals = fprintf_expr
+  let pr_fun params pre body post diverges signals =
+    let locals = List.fold_right (function _, Ref_type _ -> id | x, _ -> StringSet.add x) params locals in
+    let fprintf_assertion = fprintf_assertion ~locals in
+    pr "@[<hov 1>fun @[";
+    List.iter (fun (x, t) -> pr "(%s : %a) " (why3_id x) (fprintf_type ~locals ~need_colon:false false) t) params;
+    pr "@]->@ @[<hov 0>requires { %a }@ " fprintf_assertion pre;
+    begin match signals with
+    | [] -> pr "@[<hov 2>ensures { %a }@]@]@ " fprintf_assertion post
+    | l ->
+      pr "@[<hov 2> ensures { %a@ }@ %a@]@ "
+        fprintf_assertion post
+        (print_list alt @@
+         fun _ (e, r) ->
+         pr "@[<hov 2>raises { %s result ->@ %a }@]" e fprintf_assertion r)
+        l
+    end;
+    if diverges then pr "diverges@ ";
+    pr "%a@]@ " (fprintf_expr ~locals) body
   in
   let fprintf_assertion = fprintf_assertion ~locals
+  and fprintf_type = fprintf_type ~locals
+  and fprintf_variant = fprintf_variant ~locals
   and fprintf_expr = fprintf_expr ~locals
   and fprintf_expr_gen = fprintf_expr_gen ~locals
   and fprintf_expr_list = fprintf_expr_list ~locals
-  and fprintf_variant = fprintf_variant ~locals
   in
   function
   | Cte c -> fprintf_constant fmttr c
@@ -511,25 +528,7 @@ let rec fprintf_expr_node ~locals in_app fmttr =
   | Try (e1, exc, Some id, e2) ->
     pr "@[<hov 1>try@ %a@ with@ %s %s ->@ %a end@]" fprintf_expr e1 exc id fprintf_expr e2
   | Fun (params, pre, body, post, diverges, signals) ->
-    let locals = List.fold_right (function _, Ref_type _ -> id | x, _ -> StringSet.add x) params locals in
-    let fprintf_assertion = fprintf_assertion_locals ~locals
-    and fprintf_expr = fprintf_expr_locals ~locals
-    in
-    pr "@[<hov 1>fun @[";
-    List.iter (fun (x, t) -> pr "(%s : %a) " (why3_id x) (fprintf_type ~need_colon:false false) t) params;
-    pr "@]->@ @[<hov 0>requires { %a }@ " fprintf_assertion pre;
-    begin match signals with
-    | [] -> pr "@[<hov 2>ensures { %a }@]@]@ " fprintf_assertion post
-    | l ->
-      pr "@[<hov 2> ensures { %a@ }@ %a@]@ "
-        fprintf_assertion post
-        (print_list alt @@
-         fun _ (e, r) ->
-         pr "@[<hov 2>raises { %s result ->@ %a }@]" e fprintf_assertion r)
-        l
-    end;
-    if diverges then pr "diverges@ ";
-    pr "%a@]@ " fprintf_expr body
+    pr_fun params pre body post diverges signals
   | Triple (_, pre, e, LTrue, []) ->
     pr "@[<hov 0>(assert { %a };@ (%a))@]" fprintf_assertion pre fprintf_expr e
   | Triple (true, pre, e, post, exceps) ->
@@ -566,7 +565,7 @@ and fprintf_expr_gen ~locals in_app fmttr e =
   in
   aux e.expr_labels
 
-and fprintf_expr ?(locals = why3_builtin_locals) e = fprintf_expr_gen ~locals false e
+and fprintf_expr ~locals e = fprintf_expr_gen ~locals false e
 
 and fprintf_expr_list' ~locals ~next fmttr =
   function
@@ -575,7 +574,7 @@ and fprintf_expr_list' ~locals ~next fmttr =
     fprintf fmttr (if next then ";@ %a" else "%a") (fprintf_expr ~locals) e;
     fprintf_expr_list' ~locals ~next:true fmttr l
 
-and fprintf_expr_list ?(locals = why3_builtin_locals) fmttr l = fprintf_expr_list' ~locals ~next:false fmttr l
+and fprintf_expr_list ~locals fmttr l = fprintf_expr_list' ~locals ~next:false fmttr l
 
 
 let fprint_logic_arg fmttr (id, t) = fprintf fmttr "(%s : %a)" (why3_ident id) fprintf_logic_type t
@@ -586,7 +585,7 @@ let string_of_goal_kind =
   | KLemma -> "lemma"
   | KGoal -> "goal"
 
-let fprintf_why_id ?(constr=false) fmttr { why_name; why_expl; why_pos } =
+let fprintf_why_id ?(constr = false) fmttr { why_name; why_expl; why_pos } =
   let pr fmt = fprintf fmttr fmt in
   pr "%s" @@ (if not constr then why3_ident else why3_constr) why_name;
   if not (Jc_position.is_dummy why_pos) then pr "@ %a" fprintf_jc_position why_pos;
@@ -598,9 +597,24 @@ let fprintf_why_decl fmttr =
   let pr_id = fprintf_why_id ~constr:false
   and pr_constr = fprintf_why_id ~constr:true in
   let pr_args = print_list space @@ fun fmt (_id, t) -> fprintf_logic_type fmt t in
+  let fprintf_global_assertion = fprintf_assertion ~locals:why3_builtin_locals in
+  let fprintf_global_expr = fprintf_expr ~locals:why3_builtin_locals in
   function
   | Param (b, id, t)  ->
-    pr "@[<hov 1>%sval %a@ %a@]@.@." (ext b) pr_id id (fprintf_type ~need_colon:true false) t
+    let locals =
+      let rec collect_locals ~locals =
+        function
+        | Base_type _ | Ref_type _ -> locals
+        | Prod_type (id, t1, t2) ->
+          begin match t1 with
+          | Ref_type _ -> collect_locals ~locals t2
+          | Base_type _ | Prod_type _ | Annot_type _ -> collect_locals ~locals:(StringSet.add id locals) t2
+          end
+        | Annot_type (_, t, _, _, _, _) -> collect_locals ~locals t
+      in
+      collect_locals ~locals:why3_builtin_locals t
+    in
+    pr "@[<hov 1>%sval %a@ %a@]@.@." (ext b) pr_id id (fprintf_type ~locals ~need_colon:true false) t
   | Logic (b, id, args, t) when is_prop t ->
     pr "@[<hov 1>%spredicate %a %a @.@."
       (ext b) pr_id id pr_args args
@@ -611,16 +625,16 @@ let fprintf_why_decl fmttr =
     pr "@[<hov 1>%sinductive %a @[%a@] =@\n@[<v 0>%a@]@\n@."
       (ext b)
       pr_id id pr_args args
-      (print_list newline @@ fun _ (id, a) -> pr "| %s: @[%a@]" id (fprintf_assertion ?locals:None) a) cases
+      (print_list newline @@ fun _ (id, a) -> pr "| %s: @[%a@]" id fprintf_global_assertion a) cases
   | Goal (k, id, p)  ->
     pr "@[<hov 1>%s %a :@ %a@]@.@."
       (string_of_goal_kind k)
       pr_id id
-      (fprintf_assertion ?locals:None) p
+      fprintf_global_assertion p
   | Def (id, e)  ->
     pr "@[<hov 1>let %a@ =@ %a@]@.@."
       pr_id id
-      (fprintf_expr ?locals:None) e
+      fprintf_global_expr e
   | Predicate (b, id, args, p) ->
     pr "@[<hov 1>%spredicate %a %a =@ %a@]@.@."
       (ext b)
@@ -647,12 +661,13 @@ let fprintf_why_decl fmttr =
   | Exception (id, Some t) ->
     pr "@[exception %a %a@]@.@." pr_constr id fprintf_logic_type t
 
-(* Drop optional parameters to satisfy common output interface *)
-let fprintf_term fmt = fprintf_term fmt
-let fprintf_assertion fmt = fprintf_assertion fmt
-let fprintf_expr fmt = fprintf_expr fmt
+(* Drop auxiliary arguments to satisfy common output interface *)
+let globalize f = f ~locals:why3_builtin_locals
+let fprintf_term = globalize fprintf_term
+let fprintf_assertion = globalize fprintf_assertion
+let fprintf_expr = globalize fprintf_expr
 
-let pr_use fmttr f ?(import=false) ?as_ s =
+let pr_use fmttr f ?(import = false) ?as_ s =
   let pr fmt = fprintf fmttr fmt in
   if f then begin
     pr "use %s%s" (if import then "import " else "") s;
