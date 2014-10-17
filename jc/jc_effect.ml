@@ -123,7 +123,7 @@ let transpose_tag_table ~region_mem_assoc (vi,r) =
       (* Translate bitwise tag table into typed ones *)
       let mems = MemorySet.find_region r region_mem_assoc in
       MemorySet.fold (fun (mc,r) acc ->
-                       let vi = variant_of_mem_class mc in
+                       let vi = root_info_of_mem_class mc in
                        TagSet.add (vi,r) acc
                      ) mems TagSet.empty
     with Not_found ->
@@ -1585,26 +1585,30 @@ let rec expr fef e =
              end
            | None -> error "(destination type has no root)"
          in
-         let fef =
-           let ac =
-             check_equal (module AllocClass) (alloc_class_of_pointer_class pc) @@ deref_alloc_class ~type_safe:true e
+         let ac =
+           check_equal (module AllocClass) (alloc_class_of_pointer_class pc) @@
+             deref_alloc_class ~type_safe:true e |>
+           check_equal (module AllocClass) @@
+             check_singleton "embedded fields" @@
+               all_allocs ~select:fully_allocated pc
+         in
+         let ri = check_singleton "nested subtype" @@ all_tags ~select:fully_allocated pc in
+         let fi1, fi2 =
+           let st1 =
+             match e#typ with
+             | JCTpointer (JCtag (st, _), _, _) -> st
+             | _ -> error "for a root pointer or a non-pointer"
            in
-           let ac =
-             check_equal (module AllocClass) ac @@
-               check_singleton "embedded fields" @@ all_allocs ~select:fully_allocated pc
-           in
-           add_alloc_writes LabelHere fef (ac, e#region)
+           map_pair (check_singleton "several fields") (st1.si_fields, st.si_fields)
          in
-         let fef =
-           let ri = check_singleton "nested subtype" @@ all_tags ~select:fully_allocated pc in
-           add_tag_writes LabelHere fef (ri, e#region)
-         in
-         let fef =
-           let fi = check_singleton "several fields" @@ st.si_fields in
-           if not @@ is_integral_type fi.fi_type then error "for non-integral field";
-           add_memory_writes LabelHere fef (JCmem_field fi, e#region)
-         in
-         true, fef
+         if not (is_integral_type fi1.fi_type && is_integral_type fi2.fi_type) then error "for non-integral field";
+         let (|.>) fef (f, xc) = f LabelHere fef (xc, e#region) in
+         fef |.>
+         (add_alloc_writes, ac) |.>
+         (add_tag_writes, ri) |.>
+         (add_memory_reads, JCmem_field fi1) |.>
+         (add_memory_writes, JCmem_field fi2) |>
+         fdup2 (const true) id
        | JCEpack(st,e,_st) ->
            (* Assert the invariants of the structure
               => need the reads of the invariants *)
