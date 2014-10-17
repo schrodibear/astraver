@@ -27,6 +27,12 @@ load_printer jc_debug_output.cmo
 load_printer jc_noutput.cmo
 load_printer rc.cmo
 load_printer version.cmo
+load_printer lib.cmo
+load_printer jc_position.cmo
+load_printer jc_why_output_misc.cmo
+load_printer why3_kw.cmo
+load_printer jc_why3_output.cmo
+load_printer jc_why_output.cmo
 load_printer jc_options.cmo
 load_printer jc_norm.cmo
 load_printer jc_name.cmo
@@ -38,6 +44,7 @@ install_printer Jc_effect.print_effect
 install_printer Jc_debug_output.expr
 install_printer Jc_debug_output.assertion
 install_printer Jc_debug_output.term
+install_printer Jc_debug_output.string_set
 set print_depth 3
 '
 rlwrap -P "$SCRIPT" ocamldebug -I "$DIR/../src/" -I "$DIR" $DIR/../bin/jessie.byte $@
