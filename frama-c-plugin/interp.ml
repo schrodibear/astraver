@@ -1034,12 +1034,15 @@ and terms ?(in_zone=false) t =
   List.map (flip mkexpr t.term_loc) enode
 
 and tag t =
-  let tag_node = match t.term_node with
+  let tag_node =
+    match t.term_node with
     | Ttypeof t -> JCPTtypeof (term t)
     | Ttype ty ->
-        let id = mkidentifier (get_struct_name (pointed_type ty)) t.term_loc in
-        JCPTtag id
-    | _ -> assert false (* Not a tag *)
+      let id = mkidentifier (get_struct_name (pointed_type ty)) t.term_loc in
+      JCPTtag id
+    | _ ->
+      (* Not a tag *)
+      unsupported "can't inerpret this term as tag: %a" Printer.pp_term t
   in
   mktag tag_node t.term_loc
 
@@ -1292,25 +1295,35 @@ and pred p =
         in
         (mkconjunct elist p.loc)#node
 
-    | Pvalid_read _ -> Common.unsupported "\\valid_read operator"
+    | Pvalid_read _ -> unsupported "\\valid_read predicate is unsupported"
 
     | Pfresh (_lab1,_lab2,t,_) ->
       (* TODO: take into account size *)
       JCPEfresh(term t)
 
-    | Pallocable _ -> Common.unsupported "\\allocable operator"
+    | Pallocable _ -> unsupported "\\allocable predicate is unsupported"
 
-    | Pfreeable _ -> Common.unsupported "\\freeable operator"
+    | Pfreeable _ -> unsupported "\\freeable predicate is unsupported"
 
+    | Psubtype ({term_node = Ttypeof t}, {term_node = Ttype ty})
+      when isPointerType ty ->
+      JCPEinstanceof (term t, get_struct_name (pointed_type ty))
 
-    | Psubtype({term_node = Ttypeof t},{term_node = Ttype ty}) ->
-        JCPEinstanceof(term t, get_struct_name (pointed_type ty))
+    | Psubtype (_, {term_node = Ttype ty})
+    | Psubtype ({term_node = Ttype ty}, _)
+      when not (isPointerType ty) ->
+      unsupported "Subtyping relation (<:) is only suported for pointer types (here: \\type(%a))" Printer.pp_typ ty
 
-    | Psubtype(_t1,_t2) -> Common.unsupported "subtype"
+    | Psubtype ({term_node = Ttype ty1}, {term_node = Ttype ty2})
+      when not (isPointerType ty1) || not (isPointerType ty2) ->
+      unsupported "Subtyping relation (<:) is only suported for pointer types"
 
-    | Pseparated(_seps) -> Common.unsupported "\\separated operator"
+    | Psubtype (t1, t2) ->
+      JCPEsubtype (tag t1, tag t2)
 
-    | Pinitialized _ -> Common.unsupported "\\initialized operator"
+    | Pseparated(_seps) -> Common.unsupported "\\separated predicate is unsupported"
+
+    | Pinitialized _ -> Common.unsupported "\\initialized predicate is unsupported"
 
   in
   mkexpr enode p.loc
@@ -1568,7 +1581,10 @@ let code_annot pos ((acc_assert_before,contract) as acc) a =
         let _, typ = map_pair (uncurry @@ check_supported_type) (("from", from_type), ("to", typ)) in
         if typ = wrapper_name voidType then unsupported "reinterpretation to void *"
         else push @@ locate (PExpr.mkreinterpret ~expr:(term t) ~typ ~pos ())
-      | _ -> unsupported "unrecognized term in Jessie pragma: %a (only :> is recognized)" Printer.pp_term t
+      | _ ->
+        unsupported
+          "unrecognized term in Jessie pragma (only :> is recognized):@ %a@. Note that :> binds tighter than typecasts."
+          Printer.pp_term t
       end
     | APragma _ -> acc (* just ignored *)
     | AAssigns (_, _) -> acc (* should be handled elsewhere *)
