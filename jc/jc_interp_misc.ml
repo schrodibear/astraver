@@ -138,6 +138,9 @@ let make_select_committed pc =
 let make_typeof t x =
   LApp ("typeof", [t; x])
 
+let make_typeeq t x st =
+  LPred ("eq", [make_typeof t x; LVar (tag_name st)])
+
 let make_subtag t u =
   LPred ("subtag", [t; u])
 
@@ -598,17 +601,16 @@ and location_set ~type_safe ~global_assertion lab locs =
     LApp ("pset_all", [LApp ("pset_singleton", [ft locs])])
   | JCLSat (locs, _lab) -> flocs locs
 
-let rec location_list' =
+let rec pset_union_of_list =
   function
   | [] -> LVar "pset_empty"
   | [e'] -> e'
-  | e' :: el' -> LApp ("pset_union", [e'; location_list' el'])
+  | e' :: el' -> LApp ("pset_union", [e'; pset_union_of_list el'])
 
-let separation_condition loclist loclist' =
+let separation_condition loclist1 loclist2 =
   let floc = location ~type_safe:false ~global_assertion:false LabelHere in
-  let pset = location_list' (List.map floc loclist) in
-  let pset' = location_list' (List.map floc loclist') in
-  LPred ("pset_disjoint", [pset; pset'])
+  let pset1, pset2 = map_pair (pset_union_of_list % List.map floc) (loclist1, loclist2) in
+  LPred ("pset_disjoint", [pset1; pset2])
 
 type memory_effect = RawMemory of Memory.t | PreciseMemory of Location.t
 
@@ -1039,15 +1041,16 @@ let get_l = function L_R (l, _) -> l
 
 let get_r = function L_R (_, r) -> r
 
-let make_instanceof_pred_app (type t1) (type t2) :
+let make_instanceof_pred_app ~exact (type t1) (type t2) :
   arg:(assertion, _, term -> term -> assertion, _, t1, t2) arg -> in_param:_ -> _ -> _ -> _ -> t2 =
   fun ~arg ~in_param (ac, r) pc p ->
   let params = tags ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r in
   match arg with
-  | Singleton -> LPred (instanceof_pred_name ~arg ac pc, p :: params)
-  | Range_l_r -> fun l r -> LPred (instanceof_pred_name ~arg ac pc, p :: l :: r :: params)
+  | Singleton -> LPred (instanceof_pred_name ~exact ~arg ac pc, p :: params)
+  | Range_l_r -> fun l r -> LPred (instanceof_pred_name ~exact ~arg ac pc, p :: l :: r :: params)
 
-let make_instanceof_pred (type t1) (type t2) : arg : (assertion, _, term -> term -> assertion, _, t1, t2) arg -> _ =
+let make_instanceof_pred ~exact
+    (type t1) (type t2) : arg : (assertion, _, term -> term -> assertion, _, t1, t2) arg -> _ =
   fun ~arg ac pc ->
   let p = "p" in
   let l_r : (t1, _) param =
@@ -1064,11 +1067,12 @@ let make_instanceof_pred (type t1) (type t2) : arg : (assertion, _, term -> term
     in
     p :: l_r @ tags ac pc In_pred @ mems ac pc In_pred
   in
+  let pred_name = if exact then "eq" else "subtag" in
   let self_instanceof p =
     map_st ac pc
       ~f:(fun st ->
           let tag = generic_tag_table_name (struct_root st) in
-          [LPred ("eq", [LApp ("typeof", [LVar tag; p]); LVar (tag_name st)])])
+          [LPred (pred_name, [make_typeof (LVar tag) p; LVar (tag_name st)])])
   in
   let fields_instanceof p =
     List.flatten @@
@@ -1077,7 +1081,7 @@ let make_instanceof_pred (type t1) (type t2) : arg : (assertion, _, term -> term
               let open Num in
               if r -/ l >=/ Int 0 && l -/ r <=/ Int Jc_options.forall_inst_bound then
                 let instanceof p =
-                  make_instanceof_pred_app ~arg:Singleton ~in_param:false acr pc p
+                  make_instanceof_pred_app ~exact ~arg:Singleton ~in_param:false acr pc p
                 in
                 instanceof p ::
                   (  List.(range ~-1 `Downto (int_of_num l) @ range 1 `To (int_of_num r))
@@ -1085,12 +1089,12 @@ let make_instanceof_pred (type t1) (type t2) : arg : (assertion, _, term -> term
               else
                 let r = r +/ Int 1 in
                 let l, r = map_pair const_of_num (l, r) in
-                [make_instanceof_pred_app ~arg:Range_l_r ~in_param:false acr pc p l r])
+                [make_instanceof_pred_app ~exact ~arg:Range_l_r ~in_param:false acr pc p l r])
   in
   match arg with
   | Singleton ->
     let instanceof = make_and_list @@ self_instanceof (LVar p) @ fields_instanceof (LVar p) in
-    Predicate (false, id_no_loc (instanceof_pred_name ~arg ac pc), params, instanceof)
+    Predicate (false, id_no_loc (instanceof_pred_name ~exact ~arg ac pc), params, instanceof)
   | Range_l_r ->
     let instanceof =
       let instanceof p = self_instanceof p @ fields_instanceof p in
@@ -1099,7 +1103,7 @@ let make_instanceof_pred (type t1) (type t2) : arg : (assertion, _, term -> term
         [make_forall_offset_in_range (LVar p) (LVar (get_l l_r)) (LVar (get_r l_r))
           ~f:(fun p -> instanceof p)]
     in
-    Predicate (false, id_no_loc (instanceof_pred_name ~arg ac pc), params, instanceof)
+    Predicate (false, id_no_loc (instanceof_pred_name ~exact ~arg ac pc), params, instanceof)
 
 (* Alloc *)
 
@@ -1240,7 +1244,7 @@ let make_alloc_param (type t1) (type t2) :
   let lresult = LVar "result" in
   (* postcondition *)
   let instanceof_post =
-    let f = make_instanceof_pred_app ~in_param:true (ac, dummy_region) pc lresult in
+    let f ~arg = make_instanceof_pred_app ~exact:true ~arg ~in_param:true (ac, dummy_region) pc lresult in
     let f =
       match arg with
       | Singleton -> fun _ -> [f ~arg:Singleton]

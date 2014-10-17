@@ -149,8 +149,15 @@ val make_valid_pred :
 val make_fresh_pred : for_:[`alloc_tables | `tag_tables] -> alloc_class -> pointer_class -> why_decl
 
 val make_instanceof_pred :
+  exact:bool ->
   arg:(assertion, _, term -> term -> assertion, [`Range_l_r | `Singleton], _, _) arg ->
-    alloc_class -> pointer_class -> why_decl
+  alloc_class -> pointer_class -> why_decl
+
+val make_instanceof_pred_app :
+  exact:bool ->
+  arg:(assertion, _, term -> term -> assertion, [ `Range_l_r | `Singleton ], _, 'r) arg ->
+  in_param:bool ->
+  alloc_class * region -> pointer_class -> term -> 'r
 
 val make_frame_pred : for_:[`alloc_tables | `tag_tables] ->alloc_class -> pointer_class -> why_decl
 
@@ -282,6 +289,8 @@ val make_typeof : term -> term -> term
 
 val make_instanceof : term -> term -> struct_info -> assertion
 
+val make_typeeq : term -> term -> struct_info -> assertion
+
 val make_instanceof_bool : term -> term -> struct_info -> term
 
 (** {2 helpers for effects information} *)
@@ -291,7 +300,7 @@ val collect_li_reads : StringSet.t -> logic_info -> StringSet.t
 
 val all_effects : effect -> string list
 
-val location_list' : term list -> term
+val pset_union_of_list : term list -> term
 
 val local_read_effects : callee_reads:effect -> callee_writes:effect -> string list
 
