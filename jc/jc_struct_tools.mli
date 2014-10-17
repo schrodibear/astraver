@@ -37,10 +37,10 @@ val alloc_class_of_mem_class: mem_class -> alloc_class
 (** Convert class or pointer to class of allocation. *)
 val alloc_class_of_pointer_class: pointer_class -> alloc_class
 
-(** Convert a class of allocation into the corresponding variant. *)
-val variant_of_alloc_class: alloc_class -> root_info
+(** Convert a class of allocation into the corresponding root info. *)
+val root_info_of_alloc_class: alloc_class -> root_info
 
-val variant_of_mem_class: mem_class -> root_info
+val root_info_of_mem_class: mem_class -> root_info
 
 (** Return whether a field is embedded or not. *)
 val embedded_field: field_info -> bool
@@ -70,7 +70,7 @@ val fully_allocated: field_info -> bool
 (** Return all the memories used by a structure, i.e.: its fields,
 the fields of its ancestors, and recursively the fields of its fields.
 The "select" argument can be used to ignore specific fields. *)
-val all_memories: 
+val all_memories:
   ?select:(field_info -> bool) -> pointer_class -> mem_class list
 
 (** Return all the variants used by a structure, i.e.: the type of all
@@ -79,16 +79,16 @@ val all_types: ?select:(field_info -> bool) -> pointer_class ->
   root_info list
 
 (** Return all the classes of allocation used by a structure *)
-val all_allocs: 
+val all_allocs:
   ?select:(field_info -> bool) -> pointer_class -> alloc_class list
 
 (** Return all the variant info used by a structure *)
-val all_tags: 
+val all_tags:
   ?select:(field_info -> bool) -> pointer_class -> root_info list
 
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
-End: 
+End:
 *)

@@ -35,20 +35,24 @@ open Jc_pervasives
 open Jc_env
 open Jc_envset
 
-let alloc_class_of_mem_class = function
+let alloc_class_of_mem_class =
+  function
   | JCmem_field fi -> JCalloc_root (struct_root fi.fi_struct)
   | JCmem_plain_union vi -> JCalloc_root vi
   | JCmem_bitvector -> JCalloc_bitvector
 
-let alloc_class_of_pointer_class = function
-  | JCtag(st,_) -> JCalloc_root (struct_root st)
+let alloc_class_of_pointer_class =
+  function
+  | JCtag (st, _) -> JCalloc_root (struct_root st)
   | JCroot vi -> JCalloc_root vi
 
-let variant_of_alloc_class = function
+let root_info_of_alloc_class = function
   | JCalloc_root vi -> vi
-  | JCalloc_bitvector -> assert false (* no variant *)
+  | JCalloc_bitvector ->
+    (* no variant *)
+    failwith "root_info_of_alloc_class: bitvector regions have no roots"
 
-let variant_of_mem_class = variant_of_alloc_class % alloc_class_of_mem_class
+let root_info_of_mem_class = root_info_of_alloc_class % alloc_class_of_mem_class
 
 (* keep the pointers only and return their pointer_class *)
 let fields_pointer_class =
@@ -65,25 +69,25 @@ let embedded_field fi =
     | _ -> false
 
 (* TODO !!!!!!!!!!!!!
-   add fields of parent 
+   add fields of parent
 *)
 
 let field_offset fi =
   let st = fi.fi_struct in
-  let off,counting = 
+  let off,counting =
     List.fold_left (fun (off,counting) fi' ->
 		      if counting then
 			if fi.fi_tag = fi'.fi_tag then
 			  off,false
 			else
-			  off + (match fi'.fi_bitsize 
+			  off + (match fi'.fi_bitsize
 				 with Some v -> v
 				   | None -> assert false)
 				   , counting
 		      else
 			off,counting
 		   ) (0,true) st.si_fields
-  in 
+  in
   assert (not counting);
   off
 
@@ -93,7 +97,7 @@ let field_offset_in_bytes fi =
 
 let field_type_has_bitvector_representation fi =
   match fi.fi_type with
-    | JCTenum _ 
+    | JCTenum _
     | JCTpointer _ -> true
     | JCTnative _
     | JCTlogic _
@@ -111,14 +115,14 @@ let struct_fields st =
   aux [] st
 
 let struct_has_size st =
-  not (List.exists 
-	 (fun fi -> fi.fi_bitsize = None) 
+  not (List.exists
+	 (fun fi -> fi.fi_bitsize = None)
 	 (struct_fields st))
 
 let struct_size st =
   match List.rev st.si_fields with
     | [] -> 0
-    | last_fi::_ -> 
+    | last_fi::_ ->
 	match last_fi.fi_bitsize with
 	  | None -> assert false
 	  | Some fi_siz -> field_offset last_fi + fi_siz
@@ -146,7 +150,7 @@ let rec all_memories select forbidden acc pc =
 	  let fields = List.filter select (all_fields pc) in
 	  let mems = List.map (fun fi -> JCmem_field fi) fields in
 	  (* add the fields to our list *)
-	  let acc = 
+	  let acc =
 	    List.fold_left
 	      (fun acc mc -> StringMap.add (memory_class_name mc) mc acc)
 	      acc mems
@@ -225,16 +229,16 @@ let rec all_allocs select forbidden acc pc =
 	let ac = JCalloc_root rt in
 	let acc = StringMap.add (alloc_class_name ac) ac acc in
 	match rt.ri_kind with
-	  | Rvariant 
+	  | Rvariant
 	  | RplainUnion -> acc
-	  | RdiscrUnion -> 
+	  | RdiscrUnion ->
 	      List.fold_left
 		(all_allocs select forbidden) acc
 		(List.map (fun st -> JCtag(st,[])) rt.ri_hroots)
 
 let all_allocs ?(select = fun _ -> true) pc =
   Jc_options.lprintf "all_allocs(%s):@." (Jc_output_misc.pointer_class pc);
-  let map = 
+  let map =
     all_allocs select StringSet.empty StringMap.empty pc
   in
   let list = List.rev (StringMap.fold (fun _ ty acc -> ty::acc) map []) in
@@ -258,7 +262,7 @@ let rec all_tags select forbidden acc pc =
 
 let all_tags ?(select = fun _ -> true) pc =
   Jc_options.lprintf "all_tags(%s):@." (Jc_output_misc.pointer_class pc);
-  let map = 
+  let map =
     all_tags select StringSet.empty StringMap.empty pc
   in
   let list = List.rev (StringMap.fold (fun _ ty acc -> ty::acc) map []) in
@@ -267,8 +271,7 @@ let all_tags ?(select = fun _ -> true) pc =
 
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
-End: 
+End:
 *)
-
