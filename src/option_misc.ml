@@ -29,8 +29,6 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
-
 let map f = function None -> None | Some x -> Some (f x)
 
 let map_default f d = function None -> d | Some x -> f x
@@ -44,3 +42,5 @@ let fold_left f c x = match x with None -> c | Some x -> f c x
 let has_some = function Some _ -> true | None -> false
 
 let some x = Some x
+
+let get = function Some x -> x | None -> raise (Invalid_argument "Option_misc.get")
