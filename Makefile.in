@@ -120,7 +120,8 @@ GENERATED = src/version.ml src/rc.ml src/xml.ml \
             src/parser.ml src/linenum.ml \
             jc/numconst.ml \
 	    jc/jc_lexer.ml jc/jc_parser.mli jc/jc_parser.ml \
-	    jc/jc_ai.ml
+	    jc/jc_ai.ml \
+            lib/why3/why3.conf
 
 
 # main targets
@@ -259,6 +260,21 @@ LIBWHY3=$(LIBDIR)/why
 else
 LIBWHY3=$(PWD)/lib
 endif
+
+lib/why3/why3.conf: Makefile
+	printf "[main]\n" > $@
+	printf "loadpath=\"$(LIBWHY3)/why3\"\n" >> $@
+	printf "\n" >> $@
+	printf "[prover_modifiers]\n" >> $@
+	printf "name=\"Coq\"\n" >> $@
+	printf "option=\"-R $(LIBWHY3)/coq Why\"\n" >> $@
+	printf "driver=\"$(LIBWHY3)/why3/coq.drv\"\n" >> $@
+	printf "\n"  >> $@
+	printf "[editor_modifiers coqide]\n" >> $@
+	printf "option=\"-R $(LIBWHY3)/coq Why\"\n" >> $@
+	printf "\n"  >> $@
+	printf "[editor_modifiers proofgeneral-coq]\n" >> $@
+	printf "option=\"--eval \\\\\"(setq coq-load-path (cons '(\\\\\\\\\\\\\"$(LIBWHY3)/coq\\\\\\\\\\\\\" \\\\\\\\\\\\\"Why\\\\\\\\\\\\\") coq-load-path))\\\\\"\"\n"  >> $@
 
 ########
 # COQ
