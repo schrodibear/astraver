@@ -309,7 +309,7 @@ let rec fprintf_logic_type fmttr t =
       l
 
 let is_why3_poly_eq, is_why3_poly_neq =
-  let eqs = ["eq_int"; "eq_bool"; "eq_real"; "eq_int_"; "eq_bool_"; "eq_real_"] in
+  let eqs = ["eq_int"; "eq_bool"; "eq_real"; "eq_int_"; "eq_bool_"; "eq_real_"; "eq_int_bool"; "eq_pointer_bool"] in
   ListLabels.(mem ~set:eqs, mem ~set:(List.map ((^) "n") eqs))
 
 let why3_builtin_locals = StringSet.singleton "result"
