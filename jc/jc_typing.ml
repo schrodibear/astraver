@@ -2392,26 +2392,30 @@ used as an assertion, not as a term" pi.li_name
               unit_type, te1#region, JCEpack(st, te1, as_t)
           | _ -> typing_error e#pos "only structures can be packed"
         end
-    | JCNEunpack(e1, t) ->
-        let te1 = fe e1 in
-        begin match te1#typ with
-          | JCTpointer(JCtag(st, []), _, _) ->
-              let from_t = match t with
-                | Some t -> find_struct_info t#pos t#name
-                | None ->
-                    let rec res = {
-                      si_params = [];
-                      si_name = "bottom";
-                      si_parent = None;
-                      si_hroot = res;
-                      si_fields = [];
-                      si_root = None;
-                    }
-                    in res
-              in
-              unit_type, te1#region, JCEunpack(st, te1, from_t)
-          | _ -> typing_error e#pos "only structures can be unpacked"
-        end
+    | JCNEunpack (e1, t) ->
+      let te1 = fe e1 in
+      begin match te1#typ with
+      | JCTpointer (JCtag(st, []), _, _) ->
+        let from_t =
+          match t with
+          | Some t -> find_struct_info t#pos t#name
+          | None ->
+            let rec res =
+              {
+                si_params = [];
+                si_name = "bottom";
+                si_parent = None;
+                si_final = false;
+                si_hroot = res;
+                si_fields = [];
+                si_root = None;
+              }
+            in
+            res
+        in
+        unit_type, te1#region, JCEunpack (st, te1, from_t)
+      | _ -> typing_error e#pos "only structures can be unpacked"
+      end
     | JCNEmatch(arg, pel) ->
         let targ = fe arg in
         let rty, tpel = match pel with
@@ -3528,20 +3532,24 @@ of an invariant policy";
 let decl ~only_types d =
   ignore (decl_aux ~only_types ~axiomatic:None [] d)
 
-let declare_struct_info d = match d#node with
-  | JCDtag(id, _, parent, _, _) ->
-      let rec si = {
+let declare_struct_info d =
+  match d#node with
+  | JCDtag (id, _, parent, _, _) ->
+    let rec si =
+      {
         si_params = [];
         si_name = id;
         si_fields = [];
         si_parent = None;
+        si_final = true;
         si_hroot = si;
         si_root = None;
-      } in
-      StringHashtblIter.add structs_table id (si, []);
-      (* declare the "mutable" field (if needed) *)
-      if parent = None && !Jc_common_options.inv_sem = InvOwnership then
-        create_mutable_field si
+      }
+    in
+    StringHashtblIter.add structs_table id (si, []);
+    (* declare the "mutable" field (if needed) *)
+    if parent = None && !Jc_common_options.inv_sem = InvOwnership then
+      create_mutable_field si
   | _ -> ()
 
 let rec declare_function d =
@@ -3567,11 +3575,13 @@ let declare_variable d = match d#node with
       add_vardecl (ty,id)
   | _ -> ()
 
-let compute_struct_info_parent d = match d#node with
-  | JCDtag(id, _, Some(parent, _), _, _) ->
-      let si, _ = StringHashtblIter.find structs_table id in
-      let psi = find_struct_info d#pos parent in
-      si.si_parent <- Some(psi, [])
+let compute_struct_info_parent d =
+  match d#node with
+  | JCDtag (id, _, Some (parent, _), _, _) ->
+    let si, _ = StringHashtblIter.find structs_table id in
+    let psi = find_struct_info d#pos parent in
+    psi.si_final <- false;
+    si.si_parent <- Some (psi, [])
   | _ -> ()
 
 let fixpoint_struct_info_roots () =

@@ -87,8 +87,8 @@ and struct_info = {
   mutable si_parent : (struct_info * jc_type list) option;
   mutable si_hroot  : struct_info;
   mutable si_fields : field_info list;
-  mutable si_root   : root_info option;
-        (* only valid for root structures *)
+  mutable si_root   : root_info option; (* only valid for root structures *)
+  mutable si_final  : bool;
 }
 
 and root_info = {
