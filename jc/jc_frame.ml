@@ -569,7 +569,7 @@ let gen_alloc_extend_axioms f ta _fa _ft _term_coerce params acc =
 	     (collect_pset_locations ~type_safe:false ~global_assertion:true)
              ps
 	 in
-	 let ps = location_list' ps in
+	 let ps = pset_union_of_list ps in
 	 let valida =
 	   LPred("valid_pset",[LVar n; ps])
 	 in

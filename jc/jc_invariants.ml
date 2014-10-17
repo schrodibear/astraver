@@ -149,7 +149,7 @@ let pset_singleton p =
   LApp("pset_singleton", [ p ])
 
 let pset_union a b =
-  LApp("pset_union", [ a; b ])
+  LApp("pset_union", [a; b])
 
 let pset_union_list = function
   | [] -> LVar "pset_empty"

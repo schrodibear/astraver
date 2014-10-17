@@ -20,18 +20,21 @@ function offset_min (alloc_table 't) (pointer 't) : int
 (* shortcuts *)
 
 predicate valid (a : alloc_table 't) (p : pointer 't) =
-  offset_min a p <= 0 /\ offset_max a p >= 0
-
-predicate same_block (p : pointer 't) (q : pointer 't)
+  offset_min a p <= 0 <= offset_max a p
 
 (* pointer arithmetic *)
 
+predicate same_block (p : pointer 't) (q : pointer 't)
 function sub_pointer (pointer 't) (pointer 't) : int
 function shift (pointer 't) int : pointer 't
 
 (* null pointer*)
 
 function null : pointer 't
+
+axiom null_pointer:
+  forall a : alloc_table 't.
+    offset_max a null = -2 < offset_min a null = 0
 
 (* shift *)
 
@@ -54,18 +57,7 @@ axiom neq_shift:
   forall p : pointer 't. forall i : int. forall j : int [shift p i, shift p j].
     i <> j -> shift p i <> shift p j
 
-(* null *)
-
-axiom null_pointer:
-  forall a : alloc_table 't.
-    offset_max a null < offset_min a null
-
 use import bool.Bool
-
-(* special functions for constructing terms where predicates are actually needed (but only terms allowed) *)
-
-function eq_pointer_bool (p1 : pointer 't) (p2 : pointer 't) : bool = if p1 = p2 then True else False
-function neq_pointer_bool (p1 : pointer 't) (p2 : pointer 't) : bool = if p1 <> p2 then True else False
 
 axiom same_block_refl:
   forall p : pointer 't.
@@ -182,7 +174,7 @@ axiom in_pset_all:
   forall q : pset 't.
     in_pset p (pset_all q) <->
       exists r : pointer 't.
-        in_pset r q /\ same_block p r 
+        in_pset r q /\ same_block p r
 
 axiom in_pset_all_singleton:
   forall p : pointer 't.
@@ -226,23 +218,61 @@ axiom in_pset_union:
   forall s2 : pset 't.
     in_pset p (pset_union s1 s2) <-> in_pset p s1 \/ in_pset p s2
 
-predicate not_assigns (m1 : memory 't 'v) (m2 : memory 't 'v ) (l : pset 't) =
+axiom in_pset_union_singleton:
+  forall p1 : pointer 't [pset_singleton p1].
+    forall p2 : pointer 't [pset_singleton p2, pset_union (pset_singleton p1) (pset_singleton p2)].
+      forall p : pointer 't [in_pset p (pset_union (pset_singleton p1) (pset_singleton p2))].
+        in_pset p (pset_union (pset_singleton p1) (pset_singleton p2)) <->
+          (p = p1 \/ p = p2)
+
+axiom in_pset_union_all_singleton:
+  forall p1 : pointer 't [pset_all (pset_singleton p1)].
+    forall p2 : pointer 't [pset_all (pset_singleton p2), pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2))].
+      forall p : pointer 't [in_pset p (pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2)))].
+        in_pset p (pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2))) <->
+          same_block p p1 \/ same_block p p2
+
+(*****************************************************************************)
+(* Memory frame conditions                                                   *)
+(*****************************************************************************)
+
+predicate not_assigns (a1 : alloc_table 't) (a2 : alloc_table 't) (m1 : memory 't 'v) (m2 : memory 't 'v ) (l : pset 't) =
   forall p : pointer 't.
-    not in_pset p l -> select m2 p = select m1 p
+    valid a1 p /\ valid a2 p ->
+      not in_pset p l ->
+        select m2 p = select m1 p
 
 axiom not_assigns_refl:
-  forall m : memory 't 'v.
-  forall l : pset 't.
-    not_assigns m m l
+  forall a1 : alloc_table 't.
+    forall a2 : alloc_table 't.
+      forall m : memory 't 'v.
+        forall l : pset 't.
+          not_assigns a1 a2 m m l
 
 axiom not_assigns_trans:
+  forall a1 : alloc_table 't.
+    forall a2 : alloc_table 't.
+      forall m1 : memory 't 'v.
+        forall m2 : memory 't 'v.
+          forall m3 : memory 't 'v.
+            forall l : pset 't [not_assigns a1 a2 m1 m2 l, not_assigns a1 a2 m2 m3 l | not_assigns a1 a2 m1 m3 l].
+              not_assigns a1 a2 m1 m2 l ->
+              not_assigns a1 a2 m2 m3 l ->
+              not_assigns a1 a2 m1 m3 l
+
+predicate not_assigns_strong (m1 : memory 't 'v) (m2 : memory 't 'v ) (l : pset 't) =
+  forall p : pointer 't.
+    not in_pset p l ->
+      select m2 p = select m1 p
+
+axiom not_assigns_strong:
   forall m1 : memory 't 'v.
-  forall m2 : memory 't 'v.
-  forall m3 : memory 't 'v.
-  forall l : pset 't [not_assigns m1 m2 l, not_assigns m1 m3 l].
-    not_assigns m1 m2 l ->
-    not_assigns m2 m3 l ->
-    not_assigns m1 m3 l
+    forall m2 : memory 't 'v.
+      forall l : pset 't [not_assigns_strong m1 m2 l].
+        not_assigns_strong m1 m2 l ->
+          forall a1 : alloc_table 't.
+            forall a2 : alloc_table 't [not_assigns a1 a2 m1 m2 l].
+              not_assigns a1 a2 m1 m2 l
 
 (*****************************************************************************)
 (* Lattice of structures                                                     *)
@@ -283,13 +313,6 @@ axiom store_tags:
         forall q : pointer 't [tag (store_tags t p s) q].
           let result = tag (store_tags t p s) q in
           (same_block p q -> result = s) /\ (not (same_block p q) -> result = tag t q)
-
-(* ATTENTION: holds only for structures, MUST be modified when union support is back *)
-axiom struct_block_tag:
-  forall t : tag_table 't.
-    forall p : pointer 't [tag t p].
-      forall q : pointer 't [tag t q].
-        same_block p q -> tag t p = tag t q
 
 function int_of_tag (tag_id 't) : int
 
@@ -353,36 +376,6 @@ function instanceof_bool (t : tag_table 't) (p : pointer 't) (s : tag_id 't) : b
   if instanceof t p s then True else False
 
 function downcast (tag_table 't) (pointer 't) (tag_id 't) : pointer 't
-
-function pset_reinterpret_all (tag_table 't) (pset 't) : pset 't (* (t * )l(..) *)
-
-axiom in_pset_in_pset_reinterpret_all:
-  forall q : pset 't.
-    forall t : tag_table 't [pset_reinterpret_all t q].
-      forall p : pointer 't [in_pset p (pset_reinterpret_all t q) | in_pset p q].
-        not in_pset p (pset_reinterpret_all t q) -> not in_pset p q
-
-axiom in_pset_downcast_in_pset_reinterpret_all:
-  forall q : pointer 't [pset_all (pset_singleton q)].
-    forall t : tag_table 't [pset_reinterpret_all t (pset_all (pset_singleton q))].
-      forall p : pointer 't [in_pset p (pset_reinterpret_all t (pset_all (pset_singleton q)))].
-        not in_pset p (pset_reinterpret_all t (pset_all (pset_singleton q))) ->
-        forall s : tag_id 't [pset_all (pset_singleton (downcast t q s))].
-          not in_pset p (pset_reinterpret_all t (pset_all (pset_singleton (downcast t q s))))
-
-axiom pset_all_inclued_in_pset_reinterpret_all:
-  forall q : pset 't.
-    forall t : tag_table 't [pset_reinterpret_all t q].
-      pset_included q (pset_reinterpret_all t q)
-
-axiom pset_reinterpret_all_downcast_equiv:
-  forall p : pointer 't.
-    forall t : tag_table 't [pset_reinterpret_all t (pset_all (pset_singleton p))].
-      forall s : tag_id 't [pset_reinterpret_all t (pset_all (pset_singleton (downcast t p s)))].
-        pset_included (pset_reinterpret_all t (pset_all (pset_singleton p)))
-                      (pset_reinterpret_all t (pset_all (pset_singleton (downcast t p s)))) /\
-        pset_included (pset_reinterpret_all t (pset_all (pset_singleton (downcast t p s))))
-                      (pset_reinterpret_all t (pset_all (pset_singleton p)))
 
 axiom downcast_reduce:
   forall t : tag_table 't.
@@ -801,10 +794,13 @@ axiom lsr_divide:
 (*****************************************************************************)
 
 predicate allocable (a : alloc_table 't) (p : pointer 't) =
-  offset_max a p  = -1 < offset_min a p = 0
+  offset_max a p = -1 < offset_min a p = 0
 
 predicate freeable (a : alloc_table 't) (p : pointer 't) =
   offset_min a p = 0 <= offset_max a p
+
+predicate allocated (a : alloc_table 't) (p : pointer 't) =
+  offset_min a p <= offset_max a p
 
 predicate tag_fresh (t : tag_table 't) (p : pointer 't) =
   typeof t p = bottom_tag
@@ -812,9 +808,116 @@ predicate tag_fresh (t : tag_table 't) (p : pointer 't) =
 predicate alloc_fresh (a : alloc_table 't) (p : pointer 't) =
   allocable a p
 
+axiom alloc_fresh_not_same_block:
+  forall p1 : pointer 't.
+    forall p2 : pointer 't [same_block p1 p2].
+      forall a : alloc_table 't [allocable a p1, freeable a p2].
+        allocable a p1 /\ freeable a p2 ->
+         not same_block p1 p2
+
+axiom tag_fresh_not_same_block:
+  forall p1 : pointer 't.
+    forall p2 : pointer 't [same_block p1 p2].
+      forall t : tag_table 't [typeof t p1 = bottom_tag, typeof t p2 <> bottom_tag].
+        typeof t p1 = bottom_tag /\ typeof t p2 <> bottom_tag ->
+           not same_block p1 p2
+
 predicate alloc_extends (a1 : alloc_table 't) (a2 : alloc_table 't) =
   forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
     valid a1 p -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
+
+function alloc_block (a : alloc_table 't) : alloc_table 't
+
+function alloc_block_pointer (a : alloc_table 't) : pointer 't
+
+function alloc_block_size (a : alloc_table 't) : int
+
+axiom alloc_block:
+  forall a : alloc_table 't [alloc_block a].
+    forall q : pointer 't [offset_min (alloc_block a) q | offset_min a q | offset_max (alloc_block a) q | offset_max a q].
+      (not same_block q (alloc_block_pointer a) ->
+        offset_min (alloc_block a) q = offset_min a q /\
+        offset_max (alloc_block a) q = offset_max a q) /\
+      (same_block q (alloc_block_pointer a) ->
+        offset_min (alloc_block a) q = 0 - sub_pointer q (alloc_block_pointer a) /\
+        offset_max (alloc_block a) q = (alloc_block_size a) - 1 - sub_pointer q (alloc_block_pointer a))
+
+
+function free_block (a : alloc_table 't) : alloc_table 't
+
+function free_block_pointer (a : alloc_table 't) : pointer 't
+
+axiom free_block:
+  forall a : alloc_table 't [free_block a].
+    forall q : pointer 't [offset_min (free_block a) q | offset_min a q | offset_max (free_block a) q | offset_max a q].
+      (not same_block q (free_block_pointer a)  ->
+        offset_min (free_block a) q = offset_min a q /\
+        offset_max (free_block a) q = offset_max a q) /\
+      (same_block q (free_block_pointer a) ->
+        offset_min (free_block a) q = 0 - sub_pointer q (free_block_pointer a) /\
+        offset_max (free_block a) q = -1 - sub_pointer q (free_block_pointer a))
+
+function switch_blocks (a : alloc_table 't) : alloc_table 't
+
+function switch_blocks_free_pointer (a : alloc_table 't) : pointer 't
+
+function switch_blocks_alloc_pointer (a : alloc_table 't) : pointer 't
+
+function switch_blocks_alloc_size (a : alloc_table 't) : int
+
+axiom switch_blocks:
+  forall a : alloc_table 't [switch_blocks a].
+    forall r : pointer 't [offset_min (switch_blocks a) r | offset_min a r | offset_max (switch_blocks a) r | offset_max a r].
+      (not same_block r (switch_blocks_free_pointer a) /\ not same_block r (switch_blocks_alloc_pointer a) ->
+        offset_min (switch_blocks a) r = offset_min a r /\
+        offset_max (switch_blocks a) r = offset_max a r) /\
+      (same_block r (switch_blocks_free_pointer a) ->
+        offset_min (switch_blocks a) r = 0 - sub_pointer r (switch_blocks_free_pointer a) /\
+        offset_max (switch_blocks a) r = -1 - sub_pointer r (switch_blocks_free_pointer a)) /\
+      (same_block r (switch_blocks_alloc_pointer a) ->
+        offset_min (switch_blocks a) r = 0 - sub_pointer r (switch_blocks_alloc_pointer a) /\
+        offset_max (switch_blocks a) r = (switch_blocks_alloc_size a) - 1 - sub_pointer r (switch_blocks_alloc_pointer a))
+
+function rmem (m : memory 't 'v1) : memory 't 'v2
+
+function rfactor (m : memory 't 'v) : int
+
+function rpointer_new (m : memory 't 'v) (p : pointer 't) : pointer 't
+
+function pset_reinterpret (m : memory 't 'v) (l : pset 't) : pset 't
+
+axiom pset_reinterpret_empty:
+  forall m : memory 't 'v.
+    pset_reinterpret m pset_empty = pset_empty
+
+axiom pset_reinterpret_pset_range:
+  forall m : memory 't 'v.
+    forall p : pointer 't.
+      forall a, b : int.
+        (rfactor m > 0 ->
+          pset_reinterpret m (pset_range (pset_singleton p) a b) =
+          pset_range (pset_singleton (rpointer_new m p)) (a * rfactor m) ((b + 1) * rfactor m - 1)) /\
+        (rfactor m < 0 /\ mod a (rfactor m) = 0 /\ mod (b + 1) (rfactor m) = 0 ->
+          pset_reinterpret m (pset_range (pset_singleton p)a b) =
+          pset_range (pset_singleton (rpointer_new m p)) (div a (rfactor m)) ((div (b + 1) (rfactor  m)) - 1)) /\
+        (rfactor m = 0 ->
+          pset_reinterpret m (pset_range (pset_singleton p) a b) =
+          pset_range (pset_singleton (rpointer_new m p)) a b)
+
+axiom pset_reinterpret_pset_union_distrib:
+  forall m : memory 't 'v.
+    forall l1, l2 : pset 't.
+      pset_reinterpret m (pset_union l1 l2) = pset_union (pset_reinterpret m l1) (pset_reinterpret m l2)
+
+axiom rmem_not_assigns:
+  forall m1 : memory 't 'v1 [rmem m1 : memory 't 'v2].
+    forall m3 : memory 't 'v2 [rmem m3 : memory 't 'v1].
+      forall a1, a2 : alloc_table 't.
+        forall l : pset 't [not_assigns a1 a2 (rmem m1) m3 l | not_assigns a1 a2 m1 (rmem m3) l].
+          (not_assigns a1 a2 (rmem m1) m3 l <->
+           not_assigns a1 a2 m1 (rmem m3) (pset_reinterpret m3 l)) /\
+          (not_assigns a1 a2 (rmem m1) m3 (pset_reinterpret m1 l) <->
+           not_assigns a1 a2 m1 (rmem m3) l)
 
 predicate alloc_same_except (a1 : alloc_table 't) (a2 : alloc_table 't) (l : pset 't) =
   forall p: pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
@@ -839,9 +942,6 @@ axiom alloc_same_except_trans:
           alloc_same_except a2 a3 l ->
           alloc_same_except a1 a3 l
 
-predicate alloc_frame (a1 : alloc_table 't) (a2 : alloc_table 't) (t2 : tag_table 't) (l : pset 't) =
-  alloc_same_except a1 a2 (pset_reinterpret_all t2 l)
-
 predicate alloc (a1 : alloc_table 't) (a2 : alloc_table 't) (q : pointer 't) =
   forall p: pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
     not same_block p q ->
@@ -863,9 +963,6 @@ axiom tag_same_except_refl:
 predicate alloc_tag (t1 : tag_table 't) (t2 : tag_table 't) (q : pointer 't) =
   forall p : pointer 't.
     tag t1 p <> bottom_tag -> tag t2 p = tag t1 p
-
-predicate tag_frame (t1 : tag_table 't) (t2 : tag_table 't) (l : pset 't) =
-  tag_same_except t1 t2 (pset_reinterpret_all t2 l)
 
 predicate free (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) = alloc a1 a2 p
 
