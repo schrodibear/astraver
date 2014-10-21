@@ -54,9 +54,9 @@
     | "Old" -> LabelOld
     | "Here" -> LabelHere
     | "Post" -> LabelPost
-    | _ -> 
-	LabelName { 
-	  lab_name = s; 
+    | _ ->
+	LabelName {
+	  lab_name = s;
 	  lab_final_name = s;
 	  lab_times_used = 0;
 	}
@@ -72,7 +72,7 @@
 
 %token <string> IDENTIFIER
 %token <Jc_ast.const> CONSTANT
-%token <string> STRING_LITERAL 
+%token <string> STRING_LITERAL
 %token NULL
 
 /* ( ) () { } [ ] .. ... */
@@ -83,7 +83,7 @@
 
 /* - -- + ++ * / % */
 %token MINUS MINUSMINUS PLUS PLUSPLUS STAR SLASH PERCENT
- 
+
 /* = <= >= > < == != <: :> */
 %token EQ LTEQ GTEQ GT LT EQEQ BANGEQ LTCOLON COLONGT
 
@@ -103,7 +103,7 @@
 %token ABSTRACT PACK UNPACK ASSERT ASSUME HINT CHECK
 
 /* type invariant logic axiomatic with variant and axiom tag */
-%token TYPE INVARIANT LOGIC PREDICATE AXIOMATIC WITH VARIANT 
+%token TYPE INVARIANT LOGIC PREDICATE AXIOMATIC WITH VARIANT
 %token AND AXIOM LEMMA TAG
 
 /* integer boolean real double unit void rep */
@@ -162,11 +162,11 @@
 
 %nonassoc RETURN ASSERT ASSUME THROW HINT precwhile CHECK
 %nonassoc COLON
-%nonassoc PRECFORALL 
+%nonassoc PRECFORALL
 /* <=> */
 %right LTEQEQGT
 /* => */
-%right EQEQGT 
+%right EQEQGT
 %left QUESTION ASSIGNOP
 %left BARBAR
 %left AMPAMP
@@ -190,16 +190,16 @@
 /* a file is a sequence of declarations */
 /****************************************/
 
-file: 
-| decl file 
+file:
+| decl file
     { $1::$2 }
 | tag_and_type_decl file
     { let tag, ty = $1 in tag::ty::$2 }
-| EOF 
+| EOF
     { [] }
 ;
 
-decl: 
+decl:
 | variable_definition
     { $1 }
 | function_definition
@@ -218,7 +218,7 @@ decl:
     { $1 }
 | logic_definition
     { $1 }
-| pragma_gen_sep 
+| pragma_gen_sep
     { $1 }
 /*
 | error
@@ -228,7 +228,7 @@ decl:
 
 
 /*******************/
-/* type definition */	      
+/* type definition */
 /*******************/
 
 type_definition:
@@ -247,7 +247,7 @@ type_definition:
 ;
 
 int_constant:
-| CONSTANT 
+| CONSTANT
     { num_of_constant (pos_i 1)$1 }
 | MINUS CONSTANT
     { Num.minus_num (num_of_constant (pos_i 2) $2) }
@@ -326,7 +326,7 @@ field_modifier:
     { (true,false) }
 | ABSTRACT
     { (true,true) }
-;        
+;
 
 invariant:
 | INVARIANT identifier LPAR IDENTIFIER RPAR EQ expression SEMICOLON
@@ -362,13 +362,13 @@ parameters:
 | LPAR RPAR
     { [] }
 | LPAR parameter_comma_list RPAR
-    { $2 } 
+    { $2 }
 ;
 
-parameter_comma_list: 
-| parameter_declaration 
+parameter_comma_list:
+| parameter_declaration
     { [$1] }
-| parameter_declaration COMMA parameter_comma_list 
+| parameter_declaration COMMA parameter_comma_list
     { $1 :: $3 }
 ;
 
@@ -393,7 +393,7 @@ type_expr:
     { locate (JCPTnative (Tgenfloat `Float)) }
 | UNIT
     { locate (JCPTnative Tunit) }
-| IDENTIFIER 
+| IDENTIFIER
     { locate (JCPTidentifier ($1,[])) }
 | IDENTIFIER  LT type_parameters GT
     { locate (JCPTidentifier ($1,$3)) }
@@ -437,9 +437,9 @@ type_parameters:
 ;
 
 function_specification:
-| /* epsilon */ 
+| /* epsilon */
     { [] }
-| spec_clause function_specification 
+| spec_clause function_specification
     { $1::$2 }
 ;
 
@@ -494,9 +494,9 @@ assigns_opt:
 
 assigns:
 | ASSIGNS argument_expression_list SEMICOLON
-    { Some(pos_i 2,$2) }
+    { Some (pos_i 2, $2) }
 | ASSIGNS BSNOTHING SEMICOLON
-    { Some (pos_i 2,[]) }
+    { Some (pos_i 2, []) }
 ;
 
 allocates_opt:
@@ -508,13 +508,13 @@ allocates_opt:
 
 allocates:
 | ALLOCATES argument_expression_list SEMICOLON
-    { Some(pos_i 2,$2) }
+    { Some (pos_i 2, $2) }
 | ALLOCATES BSNOTHING SEMICOLON
-    { Some (pos_i 2,[]) }
+    { Some (pos_i 2, []) }
 ;
 
 reads:
-| 
+|
     { JCnone }
 | READS argument_expression_list SEMICOLON
     { JCreads $2 }
@@ -522,7 +522,7 @@ reads:
     { JCreads [] }
 ;
 
-function_definition: 
+function_definition:
 | type_expr identifier parameters function_specification compound_expr
     { locate (JCDfun($1, $2, $3, $4, Some $5)) }
 | type_expr identifier parameters function_specification SEMICOLON
@@ -565,77 +565,77 @@ exception_definition:
 /* expressions */
 /***************/
 
-primary_expression: 
-| IDENTIFIER 
+primary_expression:
+| IDENTIFIER
     { locate (JCPEvar $1) }
 | BSRESULT
     { locate (JCPEvar "\\result") }
-| CONSTANT 
+| CONSTANT
     { locate (JCPEconst $1) }
-| LPARRPAR 
+| LPARRPAR
     { locate (JCPEconst JCCvoid) }
-| NULL 
+| NULL
     { locate (JCPEconst JCCnull) }
-| STRING_LITERAL 
+| STRING_LITERAL
     { locate (JCPEconst (JCCstring $1)) }
 | LPAR expression COLONGT type_expr RPAR
     { locate (JCPEcast($2, $4)) }
 | LPAR expression AS type_expr RPAR
     { locate (JCPEreinterpret_cast ($2, $4)) }
-| LPAR expression RPAR 
+| LPAR expression RPAR
     { $2 }
 | LPAR IDENTIFIER COLON expression RPAR
     { locate (JCPElabel($2,$4)) }
 ;
 
-postfix_expression: 
-| primary_expression 
+postfix_expression:
+| primary_expression
     { $1 }
-| IDENTIFIER label_binders LPAR argument_expression_list_opt RPAR 
+| IDENTIFIER label_binders LPAR argument_expression_list_opt RPAR
     { locate (JCPEapp($1, $2, $4)) }
-| IDENTIFIER label_binders LPARRPAR 
+| IDENTIFIER label_binders LPARRPAR
     { locate (JCPEapp($1, $2, [])) }
-| BSFRESH LPAR expression RPAR 
+| BSFRESH LPAR expression RPAR
     { locate (JCPEfresh($3)) }
-| BSOLD LPAR expression RPAR 
+| BSOLD LPAR expression RPAR
     { locate (JCPEold($3)) }
-| BSAT LPAR expression COMMA IDENTIFIER RPAR 
+| BSAT LPAR expression COMMA IDENTIFIER RPAR
     { locate (JCPEat($3,label $5)) }
-| BSOFFSET_MAX LPAR expression RPAR 
+| BSOFFSET_MAX LPAR expression RPAR
     { locate (JCPEoffset(Offset_max,$3)) }
-| BSOFFSET_MIN LPAR expression RPAR 
+| BSOFFSET_MIN LPAR expression RPAR
     { locate (JCPEoffset(Offset_min,$3)) }
-| BSADDRESS LPAR expression RPAR 
+| BSADDRESS LPAR expression RPAR
     { locate (JCPEaddress(Addr_pointer,$3)) }
-| BSABSOLUTE_ADDRESS LPAR expression RPAR 
+| BSABSOLUTE_ADDRESS LPAR expression RPAR
     { locate (JCPEaddress(Addr_absolute,$3)) }
-| BSBASE_BLOCK LPAR expression RPAR 
+| BSBASE_BLOCK LPAR expression RPAR
     { locate (JCPEbase_block($3)) }
 | postfix_expression DOT IDENTIFIER
     { locate (JCPEderef ($1, $3)) }
-| postfix_expression PLUSPLUS 
+| postfix_expression PLUSPLUS
     { locate (JCPEunary (`Upostfix_inc, $1)) }
 | postfix_expression MINUSMINUS
     { locate (JCPEunary (`Upostfix_dec, $1)) }
-| PLUSPLUS postfix_expression 
+| PLUSPLUS postfix_expression
     { locate (JCPEunary (`Uprefix_inc, $2)) }
-| MINUSMINUS postfix_expression 
+| MINUSMINUS postfix_expression
     { locate (JCPEunary (`Uprefix_dec, $2)) }
 | PLUS postfix_expression %prec UPLUS
     { locate (JCPEunary (`Uplus, $2)) }
 | MINUS postfix_expression %prec UMINUS
     { locate (JCPEunary (`Uminus, $2)) }
-| TILDE postfix_expression 
+| TILDE postfix_expression
     { locate (JCPEunary (`Ubw_not, $2)) }
-| EXCLAM postfix_expression 
+| EXCLAM postfix_expression
     { locate (JCPEunary (`Unot, $2)) }
 | LSQUARE expression DOTDOT expression RSQUARE
     { locate (JCPErange(Some $2,Some $4)) }
-| LSQUARE DOTDOT expression RSQUARE 
+| LSQUARE DOTDOT expression RSQUARE
     { locate (JCPErange(None,Some $3)) }
-| LSQUARE expression DOTDOT RSQUARE 
+| LSQUARE expression DOTDOT RSQUARE
     { locate (JCPErange(Some $2,None)) }
-| LSQUARE DOTDOT RSQUARE 
+| LSQUARE DOTDOT RSQUARE
     { locate (JCPErange(None,None)) }
 ;
 
@@ -649,55 +649,55 @@ label_list_end:
 | COMMA IDENTIFIER label_list_end { (label $2)::$3 }
 ;
 
-argument_expression_list: 
-| expression 
+argument_expression_list:
+| expression
     { [$1] }
-| expression COMMA argument_expression_list 
+| expression COMMA argument_expression_list
     { $1::$3 }
 ;
 
-argument_expression_list_opt: 
+argument_expression_list_opt:
 | /* $\varepsilon$ */
     { [] }
-| argument_expression_list 
+| argument_expression_list
     { $1 }
 ;
 
 
-multiplicative_expression: 
-| postfix_expression 
+multiplicative_expression:
+| postfix_expression
     { $1 }
-| multiplicative_expression STAR postfix_expression 
+| multiplicative_expression STAR postfix_expression
     { locate (JCPEbinary ($1, `Bmul, $3)) }
-| multiplicative_expression SLASH postfix_expression 
+| multiplicative_expression SLASH postfix_expression
     { locate (JCPEbinary ($1, `Bdiv, $3)) }
-| multiplicative_expression PERCENT postfix_expression 
+| multiplicative_expression PERCENT postfix_expression
     { locate (JCPEbinary ($1, `Bmod, $3)) }
 ;
 
-additive_expression: 
-| multiplicative_expression 
+additive_expression:
+| multiplicative_expression
     { $1 }
-| additive_expression PLUS multiplicative_expression 
+| additive_expression PLUS multiplicative_expression
     { locate (JCPEbinary ($1, `Badd, $3)) }
-| additive_expression MINUS multiplicative_expression 
+| additive_expression MINUS multiplicative_expression
     { locate (JCPEbinary ($1, `Bsub, $3)) }
-| additive_expression AT multiplicative_expression 
+| additive_expression AT multiplicative_expression
     { locate (JCPEbinary ($1, `Bconcat, $3)) }
 ;
 
-shift_expression: 
-| additive_expression 
+shift_expression:
+| additive_expression
     { $1 }
-| shift_expression LSHIFT additive_expression 
+| shift_expression LSHIFT additive_expression
     { locate (JCPEbinary ($1, `Bshift_left, $3)) }
-| shift_expression LRSHIFT additive_expression 
+| shift_expression LRSHIFT additive_expression
     { locate (JCPEbinary ($1, `Blogical_shift_right, $3)) }
-| shift_expression ARSHIFT additive_expression 
+| shift_expression ARSHIFT additive_expression
     { locate (JCPEbinary ($1, `Barith_shift_right, $3)) }
 ;
 
-assignment_operator: 
+assignment_operator:
 | EQ { `Aeq }
 | PLUSEQ { `Aadd }
 | MINUSEQ { `Asub }
@@ -714,30 +714,30 @@ assignment_operator:
 ;
 
 
-expression: 
+expression:
 | compound_expr
     { $1 }
 | ASSERT FOR identifier_list COLON expression %prec FOR
     { locate (JCPEassert($3,Aassert,$5)) }
-| ASSERT expression 
+| ASSERT expression
     { locate (JCPEassert([],Aassert,$2)) }
 | HINT FOR identifier_list COLON expression %prec FOR
     { locate (JCPEassert($3,Ahint,$5)) }
-| HINT expression 
+| HINT expression
     { locate (JCPEassert([],Ahint,$2)) }
 | ASSUME FOR identifier_list COLON expression %prec FOR
     { locate (JCPEassert($3,Aassume,$5)) }
-| ASSUME expression 
+| ASSUME expression
     { locate (JCPEassert([],Aassume,$2)) }
 | CHECK FOR identifier_list COLON expression %prec FOR
     { locate (JCPEassert($3,Acheck,$5)) }
-| CHECK expression 
+| CHECK expression
     { locate (JCPEassert([],Acheck,$2)) }
 | requires behavior compound_expr
-    { locate (JCPEcontract($1,None,[$2],$3)) } 
-| iteration_expression 
+    { locate (JCPEcontract($1,None,[$2],$3)) }
+| iteration_expression
     { $1 }
-| jump_expression 
+| jump_expression
     { $1 }
 | declaration
     { $1 }
@@ -746,7 +746,7 @@ expression:
 */
 | pack_expression { $1 }
 | exception_expression { $1 }
-| shift_expression 
+| shift_expression
     { $1 }
 | SWITCH LPAR expression RPAR LBRACE switch_block RBRACE
     { locate (JCPEswitch ($3, $6)) }
@@ -757,7 +757,7 @@ expression:
     { locate (JCPEfree $3) }
 | REINTERPRET expression AS IDENTIFIER
     { locate (JCPEreinterpret ($2, $4)) }
-| expression LT expression 
+| expression LT expression
     { locate (JCPEbinary ($1, `Blt, $3)) }
 | expression GT expression
     { locate (JCPEbinary ($1, `Bgt, $3)) }
@@ -767,19 +767,19 @@ expression:
     { locate (JCPEbinary ($1, `Bge, $3)) }
 | expression LTCOLON IDENTIFIER
     { locate (JCPEinstanceof($1, $3)) }
-| expression EQEQ expression 
+| expression EQEQ expression
     { locate (JCPEbinary ($1, `Beq, $3)) }
-| expression BANGEQ expression 
+| expression BANGEQ expression
     { locate (JCPEbinary ($1, `Bneq, $3)) }
-| expression AMP expression 
+| expression AMP expression
     { locate (JCPEbinary ($1, `Bbw_and, $3)) }
-| expression HAT expression 
+| expression HAT expression
     { locate (JCPEbinary ($1, `Bbw_xor, $3)) }
 | expression PIPE expression
     { locate (JCPEbinary ($1, `Bbw_or, $3)) }
-| expression AMPAMP expression 
+| expression AMPAMP expression
     { locate (JCPEbinary($1, `Bland, $3)) }
-| expression BARBAR expression 
+| expression BARBAR expression
     { locate (JCPEbinary($1, `Blor, $3)) }
 | IF expression THEN expression ELSE expression
     { locate (JCPEif ($2, $4, $6)) }
@@ -807,10 +807,10 @@ expression:
 *)
       in locate a }
 
-| BSFORALL type_expr identifier_list triggers SEMICOLON expression 
+| BSFORALL type_expr identifier_list triggers SEMICOLON expression
     %prec PRECFORALL
     { locate (JCPEquantifier(Forall,$2,$3,$4,$6)) }
-| BSEXISTS type_expr identifier_list triggers SEMICOLON expression 
+| BSEXISTS type_expr identifier_list triggers SEMICOLON expression
     %prec PRECFORALL
     { locate (JCPEquantifier(Exists,$2,$3,$4,$6)) }
 | expression EQEQGT expression
@@ -839,10 +839,10 @@ tag:
     { locate (JCPTtypeof $3) }
 ;
 
-identifier_list: 
-| identifier 
+identifier_list:
+| identifier
     { [$1] }
-| identifier COMMA identifier_list 
+| identifier COMMA identifier_list
     { $1 :: $3 }
 ;
 
@@ -872,7 +872,7 @@ trigger:
 /****************/
 
 
-declaration: 
+declaration:
 | VAR type_expr IDENTIFIER
     { locate (JCPEdecl($2, $3, None)) }
 | VAR type_expr IDENTIFIER EQ expression
@@ -889,19 +889,19 @@ compound_expr:
     { locate (JCPEblock $2) }
 ;
 
-expression_list: 
+expression_list:
 | expression SEMICOLON
     { [$1] }
 | expression
     { [$1] }
-| expression SEMICOLON expression_list 
+| expression SEMICOLON expression_list
     { $1 :: $3 }
 ;
 
-switch_block: 
+switch_block:
 | /* $\varepsilon$ */
     { [] }
-| switch_labels 
+| switch_labels
     { [($1, locate (JCPEblock []))] }
 | switch_labels expression_list switch_block
     { ($1, locate (JCPEblock $2))::$3 }
@@ -921,17 +921,17 @@ switch_label:
     { None }
 ;
 
-iteration_expression: 
+iteration_expression:
 | loop_annot WHILE LPAR expression RPAR expression %prec precwhile
-    { let (i,v) = $1 in 
+    { let (i,v) = $1 in
       locate (JCPEwhile ($4, i, v, $6)) }
 | loop_annot DO expression WHILE LPAR expression RPAR
     { assert false (* TODO locate (JCPEdowhile ($1, $3, $6)) *) }
-| loop_annot FOR LPAR argument_expression_list_opt SEMICOLON expression SEMICOLON 
+| loop_annot FOR LPAR argument_expression_list_opt SEMICOLON expression SEMICOLON
     argument_expression_list_opt RPAR expression %prec precwhile
-    { let (i,v) = $1 in 
+    { let (i,v) = $1 in
       (*
-	let i = match i with 
+	let i = match i with
 	| [] -> locate (JCPEconst(JCCboolean true))
 	| [_,p] -> p
 	|  _ -> assert false
@@ -971,7 +971,7 @@ loop_annot:
     { ($2, None) }
 ;
 
-jump_expression: 
+jump_expression:
 | GOTO identifier
     { locate (JCPEgoto $2#name) }
 /*
@@ -994,7 +994,7 @@ pack_expression:
     { locate (JCPEunpack ($3, None)) }
 ;
 
-catch_expression: 
+catch_expression:
 | CATCH identifier IDENTIFIER expression
     { ($2, $3, $4) }
 ;
@@ -1002,7 +1002,7 @@ catch_expression:
 catch_expression_list:
 | catch_expression
     { [$1] }
-| catch_expression catch_expression_list 
+| catch_expression catch_expression_list
     { $1 :: $2 }
 ;
 
@@ -1059,7 +1059,7 @@ logic_definition:
     { let p = lparams $5 in
       locate (JCDlogic(None, $2, $3 ,$4 , p, JCinductive $7)) }
 | AXIOMATIC IDENTIFIER LBRACE logic_declarations RBRACE
-    { locate (JCDaxiomatic($2,$4)) } 
+    { locate (JCDaxiomatic($2,$4)) }
 | LEMMA IDENTIFIER logic_type_arg label_binders COLON expression
     { locate( JCDlemma($2,false,$3,$4,$6)) }
 ;
@@ -1088,7 +1088,7 @@ logic_declaration:
 | LOGIC TYPE IDENTIFIER logic_type_arg
     { locate (JCDlogic_type($3,$4)) }
 /* remove this comment if removed from logic_definition
-| LOGIC type_expr IDENTIFIER 
+| LOGIC type_expr IDENTIFIER
     { locate (JCDlogic(Some $2, $3, [], [], JCnone)) }
 */
 | PREDICATE IDENTIFIER logic_type_arg label_binders parameters reads
@@ -1125,11 +1125,11 @@ pattern:
     { locate (JCPPas($1, $3)) }
 | UNDERSCORE
     { locate JCPPany }
-| CONSTANT 
+| CONSTANT
     { locate (JCPPconst $1) }
-| LPARRPAR 
+| LPARRPAR
     { locate (JCPPconst JCCvoid) }
-| NULL 
+| NULL
     { locate (JCPPconst JCCnull) }
 ;
 
@@ -1178,14 +1178,14 @@ type_expr_parameters:
 | LPAR RPAR
     { [] }
 | LPAR type_expr_comma_list RPAR
-    { $2 } 
+    { $2 }
 ;
 
 type_expr_restreint:
 |type_expr {$1,[]}
 |type_expr PIPE LPAR type_parameter_names RPAR {$1,$4}
 
-type_expr_comma_list: 
+type_expr_comma_list:
 | type_expr_restreint
     { [$1] }
 | type_expr_restreint COMMA type_expr_comma_list
@@ -1193,7 +1193,7 @@ type_expr_comma_list:
 ;
 
 /*
-Local Variables: 
+Local Variables:
 compile-command: "LC_ALL=C make -C .. byte"
-End: 
+End:
 */
