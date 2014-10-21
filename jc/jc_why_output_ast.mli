@@ -59,6 +59,8 @@ type vc_kind =
   | JCVCunpack
   | JCVCfp_overflow
   | JCVCpre of string
+  | JCVCassigns
+  | JCVCallocates
 
 type why_label = {
   l_kind     : vc_kind option;

@@ -263,7 +263,9 @@ let fprintf_vc_kind fmttr k =
      | JCVCdowncast -> "Pointer cast"
      | JCVCarith_overflow -> "Arithmetic overflow"
      | JCVCfp_overflow -> "Floating-point overflow"
-     | JCVCpre c -> c)
+     | JCVCpre c -> c
+     | JCVCassigns -> "Assigns clause"
+     | JCVCallocates -> "Allocates clause")
 
 let fprintf_jc_position fmttr pos =
   let f, l, b, e as loc = Jc_position.to_loc pos in

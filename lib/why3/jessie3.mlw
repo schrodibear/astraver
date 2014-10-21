@@ -576,7 +576,7 @@ val safe_free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
   ensures  { (p = null -> !a = (old !a)) /\
              (p <> null ->
               free (old !a) !a p /\
-              offset_max !a p < offset_min !a p) }
+              allocable !a p) }
 
 val free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
   writes { a }

@@ -986,17 +986,7 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
       let ac = tderef_alloc_class ~type_safe t1 in
       let lab = if relocate && oldlab = LabelHere then lab else oldlab in
       let _, alloc = talloc_table_var ~label_in_name:global_assertion lab (ac, t1#region) in
-      let valid =
-        begin match ac with
-        | JCalloc_root _ ->
-          let f = "valid" in
-          LPred (f, [alloc; ft t1])
-        | JCalloc_bitvector ->
-          let f = "valid_bytes" in
-          LPred (f,[ alloc; ft t1])
-        end
-      in
-      LNot valid
+      LPred ("allocable", [alloc; ft t1])
     | JCAbool_term t1 ->
       LPred ("eq", [ft t1; LConst (Prim_bool true)])
     | JCAinstanceof (t1, lab', st) ->
@@ -1135,10 +1125,11 @@ let writes_region ?region_list (_, r) =
   (* passed as argument and counted as effect *)
   Option_misc.map_default (RegionList.mem r) true region_list
 
-let tr_assigns ~e ~type_safe ?region_list before ef =
+let tr_assigns ~type_safe ?region_list before ef =
   function
   | None -> LTrue
-  | Some locs ->
+  | Some (pos, locs) ->
+    let e = (new assertion ~pos JCAtrue :> < mark : _; pos : _ > ) in
     let refs =
       VarMap.fold
         (fun v _labs m -> StringMap.add v.vi_final_name false m)
@@ -1171,7 +1162,7 @@ let tr_assigns ~e ~type_safe ?region_list before ef =
       (fun v p acc ->
          if p then acc else
            let at = lvar ~constant:false ~label_in_name:false in
-           make_and acc (LPred("eq", [at LabelPost v; at before v])))
+           make_and acc (LPred ("eq", [at LabelPost v; at before v])))
       refs
     |>
     MemoryMap.fold
@@ -1186,9 +1177,15 @@ let tr_assigns ~e ~type_safe ?region_list before ef =
          in
          let ps, _ = List.split pes in
          make_and acc @@
-           mk_positioned_lex ~e @@
-               LPred("not_assigns", args @ [pset_union_of_list ps]))
+           mk_positioned_lex ~e ~kind:JCVCassigns @@
+               LPred ("not_assigns", args @ [pset_union_of_list ps]))
       mems
+
+let tr_loop_assigns ~type_safe ?region_list before ef =
+  let tr_assigns = tr_assigns ~type_safe ?region_list before ef in
+  function
+  | Some locs -> tr_assigns @@ Some (Loc.dummy_position, locs)
+  | None -> LTrue
 
 let reads ~type_safe ~global_assertion locs (mc,r) =
   let _refs, mems =
@@ -2651,11 +2648,11 @@ and expr e =
                if is_current_behavior id then
                  match b.b_assigns with
                  | None -> acc
-                 | Some (_pos, loclist) ->
+                 | Some (pos, loclist) ->
                    let loclist = List.map old_to_pre_loc loclist in
                    match acc with
-                   | None -> Some loclist
-                   | Some loclist' -> Some (loclist @ loclist')
+                   | None -> Some (pos, loclist)
+                   | Some (pos, loclist') -> Some (pos, loclist @ loclist')
                else acc)
             None
             (s.fs_default_behavior::s.fs_behavior)
@@ -2704,8 +2701,7 @@ and expr e =
         let loop_label = fresh_loop_label() in
 
         let ass =
-          tr_assigns
-            ~e
+          tr_loop_assigns
             ~type_safe:false
             (LabelName loop_label)
             infunction.fun_effects
@@ -2714,7 +2710,6 @@ and expr e =
 
         let ass_from_fun =
           tr_assigns
-            ~e
             ~type_safe:false
             LabelPre
             infunction.fun_effects
@@ -2786,15 +2781,12 @@ and expr e =
               LabelHere LabelPre b.b_ensures
           in
           let post =
-            match b.b_assigns with
-            | None -> a
-            | Some (_, locs) ->
-              make_and a @@
-                tr_assigns
-                  ~e
-                  ~type_safe:false
-                  LabelPre
-                  ef (* infunction.fun_effects*) (Some locs)
+            make_and a @@
+              tr_assigns
+                ~type_safe:false
+                LabelPre
+                ef (* infunction.fun_effects*)
+                b.b_assigns
           in
           if safety_checking () then  begin
             let tmp = tmp_var_name () in
@@ -3075,49 +3067,55 @@ let assume_in_postcondition b post =
 
 let function_prototypes = Hashtbl.create 7
 
-let get_valid_pred_app ~in_param all_effects vi =
-  match vi.vi_type with
-    | JCTpointer (pc, n1o, n2o)
-      when AllocMap.mem (alloc_class_of_pointer_class pc, vi.vi_region) all_effects.e_alloc_tables ->
-        (* TODO: what about bitwise? *)
-        let v' =
-          term ~type_safe:false ~global_assertion:false ~relocate:false
-            LabelHere LabelHere (new term_var vi)
-        in
-          begin match n1o, n2o with
-            | None, None -> LTrue
-            | Some n, None ->
-                let ac = alloc_class_of_pointer_class pc in
-                let a' =
-                  make_valid_pred_app ~in_param ~equal:false
-                    (ac, vi.vi_region) pc
-                    v' (Some (const_of_num n)) None
-                in
-                  bind_pattern_lets a'
-            | None, Some n ->
-                let ac = alloc_class_of_pointer_class pc in
-                let a' =
-                  make_valid_pred_app ~in_param ~equal:false
-                    (ac, vi.vi_region) pc
-                    v' None (Some (const_of_num n))
-                in
-                  bind_pattern_lets a'
-            | Some n1, Some n2 ->
-                let ac = alloc_class_of_pointer_class pc in
-                let a' =
-                  make_valid_pred_app  ~in_param ~equal:false (ac, vi.vi_region) pc
-                    v' (Some (const_of_num n1)) (Some (const_of_num n2))
-                in
-                  bind_pattern_lets a'
-          end
-    | JCTpointer _
-    | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
-    | JCTtype_var _ -> LTrue
+let make_valid_pred_app_vi ~in_param all_effects (* vi *) =
+  function
+  | { vi_type = JCTpointer (pc, lo, ro); vi_region } as vi
+    when AllocMap.mem (alloc_class_of_pointer_class pc, vi.vi_region) all_effects.e_alloc_tables ->
+    (* TODO: what about bitwise? *)
+    let v = tvar ~label_in_name:false LabelHere vi in
+    begin match lo, ro with
+    | None, None -> LTrue
+    | Some n, None ->
+      let ac = alloc_class_of_pointer_class pc in
+      make_valid_pred_app ~in_param ~equal:false (ac, vi_region) pc v (Some (const_of_num n)) None
+    | None, Some n ->
+      let ac = alloc_class_of_pointer_class pc in
+      make_valid_pred_app ~in_param ~equal:false (ac, vi_region) pc v None (Some (const_of_num n))
+    | Some n1, Some n2 ->
+      let ac = alloc_class_of_pointer_class pc in
+      make_valid_pred_app  ~in_param ~equal:false (ac, vi_region) pc v
+        (Some (const_of_num n1)) (Some (const_of_num n2))
+    end
+  |  _ -> LTrue
+
+let make_instanceof_pred_app_vi ~in_param all_effects (* vi *) =
+  function
+  | { vi_type = JCTpointer (pc, lo, ro) as vi_type; vi_region } as vi
+    when
+      AllocMap.mem (alloc_class_of_pointer_class pc, vi.vi_region) all_effects.e_alloc_tables &&
+      TagMap.mem (pointer_class_root pc, vi_region) all_effects.e_tag_tables ->
+    let ac = alloc_class_of_pointer_class pc in
+    let si = pointer_struct vi_type in
+    let v = tvar ~label_in_name:false LabelHere vi in
+    let pre, (l, r) =
+      let _, at = talloc_table_var ~label_in_name:false LabelHere (ac, vi_region) in
+      LPred ("allocated", [at; v]),
+      map_pair
+        (function Some n, _ -> const_of_num n | None, f -> LApp (f, [at; v]))
+        ((lo, "offset_min"), (ro, "offset_max"))
+    in
+    LImpl (pre,
+           make_instanceof_pred_app ~exact:si.si_final ~in_param (ac, vi_region) pc v ~arg:Range_l_r l r)
+  | _ -> LTrue
 
 let tr_allocates ~type_safe ?region_list ef =
   function
   | None -> LTrue
-  | Some locs ->
+  | Some (pos, locs) ->
+    let mk_positioned =
+      let e = (new assertion ~pos JCAtrue :> < mark : _; pos : _ > ) in
+      mk_positioned_lex ~e ~kind:JCVCallocates
+    in
     let alloc_frame =
       let at_locs =
         List.map
@@ -3140,7 +3138,8 @@ let tr_allocates ~type_safe ?region_list ef =
       AllocMap.keys |>
       List.filter (writes_region ?region_list) |>
       List.map alloc_same_except |>
-      make_and_list
+      make_and_list |>
+      mk_positioned
     in
     let tag_frame =
       let tag_extends pcr =
@@ -3154,25 +3153,10 @@ let tr_allocates ~type_safe ?region_list ef =
       TagMap.keys |>
       List.filter (writes_region ?region_list) |>
       List.map tag_extends |>
-      make_and_list
+      make_and_list |>
+      mk_positioned
     in
-    make_and alloc_frame tag_frame
-
-let typesafety_precondition all_effects =
-  function
-  | { vi_type = JCTpointer (pc, lo, ro) as vi_type; vi_region } as v
-    when TagMap.mem (pointer_class_root pc, vi_region) all_effects.e_tag_tables ->
-    let ac = alloc_class_of_pointer_class pc in
-    let si = pointer_struct vi_type in
-    let v = tvar ~label_in_name:false LabelHere v in
-    let l, r =
-      let _, at = talloc_table_var ~label_in_name:false LabelHere (ac, vi_region) in
-      map_pair
-        (function Some n, _ -> const_of_num n | None, f -> LApp (f, [at; v]))
-        ((lo, "offset_min"), (ro, "offset_max"))
-    in
-    make_instanceof_pred_app ~exact:si.si_final ~in_param:true (ac, vi_region) pc v ~arg:Range_l_r l r
-  | _ -> LTrue
+    mk_positioned @@ make_and alloc_frame tag_frame
 
 let pre_tr_fun f _funpos spec _body acc =
   begin
@@ -3245,10 +3229,12 @@ let tr_fun f funpos spec body acc =
   let internal_requires = make_and internal_requires free_requires in
   let internal_requires =
     List.fold_left
-      (fun acc (_, v) ->
+      (fun acc (_, vi) ->
          let argument_req =
            let all_effects = ef_union f.fun_effects.fe_reads f.fun_effects.fe_writes in
-           make_and (get_valid_pred_app ~in_param:true all_effects v) (typesafety_precondition all_effects v)
+           make_and
+             (make_valid_pred_app_vi ~in_param:true all_effects vi)
+             (make_instanceof_pred_app_vi ~in_param:true all_effects vi)
          in
          make_and argument_req acc)
       internal_requires
@@ -3266,57 +3252,44 @@ let tr_fun f funpos spec body acc =
        normal_behaviors_inferred, normal_behaviors,
        excep_behaviors_inferred, excep_behaviors) =
     List.fold_left
-      (fun (safety, normal_inferred, normal, excep_inferred, excep) (pos, id, b) ->
+      (fun (safety, normal_inferred, normal, excep_inferred, excep) (_pos, id, b) ->
          let make_post ~type_safe ~internal =
-           let post =
-             if internal && Jc_options.trust_ai then
+           (if internal && Jc_options.trust_ai then
                b.b_ensures
-             else
-               Assertion.mkand [ b.b_ensures;
-                                 b.b_free_ensures ] ()
-           in
-           let post =
-             named_assertion
-               ~type_safe ~global_assertion:false ~relocate:false
-               LabelPost LabelOld post
-           in
-           let dummy = new expr ~typ:JCTnull ~pos @@ JCEconst (JCCvoid) in
-           let post = match b.b_assigns with
-             | None ->
-               Jc_options.lprintf "Jc_interp: behavior '%s' has no assigns@." id;
-               post
-             | Some (assigns_pos, loclist) ->
-               Jc_options.lprintf "Jc_interp: behavior '%s' has assigns clause with %d elements@."
-                 id (List.length loclist);
-               let assigns_post =
-                 let dummy = new expr_with ~pos:assigns_pos dummy in
-                 mark_assertion ~e:dummy @@
-                   tr_assigns
-                     ~e:dummy
-                     ~type_safe
-                     ~region_list:f.fun_param_regions
-                     LabelOld
-                     f.fun_effects
-                     (Some loclist)
-               in
-               mark_assertion ~e:dummy (make_and post assigns_post)
-           in
+            else
+              Assertion.mkand
+                [b.b_ensures;
+                 b.b_free_ensures]
+                ())
+           |>
+           named_assertion ~type_safe ~global_assertion:false ~relocate:false LabelPost LabelOld |>
+           make_and @@
+             tr_assigns
+               ~type_safe
+               ~region_list:f.fun_param_regions
+               LabelOld
+               f.fun_effects
+               b.b_assigns
+           |>
            (* Add alloc_extends[except] predicates for those alloc tables modified by the function, i.e. *)
            (* listed in the f.fun_effects.fe_writes. *)
            (* We except psets of locations specified in the allocates clause i.e. b.b_allocates. *)
            (* IMPORTANT: We should add the predicates BOTH to the external and internal postconditions, *)
            (* otherwise safety might be violated. *)
-           let post = match b.b_allocates with
-               | None -> post
-               | Some (pos', locs) ->
-                   mark_assertion ~e:dummy @@ make_and post @@ mark_assertion ~e:(new expr_with ~pos:pos' dummy) @@
-                   tr_allocates
-                     ~type_safe
-                     ~region_list:f.fun_param_regions
-                     f.fun_effects
-                     (Some locs)
-           in
-           post
+           make_and @@
+             tr_allocates
+               ~type_safe
+               ~region_list:f.fun_param_regions
+               f.fun_effects
+               b.b_allocates
+           |>
+           make_and @@
+             if not internal && id = "safety" then
+               let all_effects = ef_union f.fun_effects.fe_reads f.fun_effects.fe_writes in
+               make_and
+                 (make_valid_pred_app_vi ~in_param:true all_effects f.fun_result)
+                 (make_instanceof_pred_app_vi ~in_param:true all_effects f.fun_result)
+             else LTrue
          in
          let internal_post = make_post ~type_safe:false ~internal:true in
          let external_post = make_post ~type_safe:true ~internal:false in
@@ -4114,22 +4087,6 @@ let tr_root =
             :: acc)
          []
          ri.ri_hroots
-    |>
-    List.cons
-      (* Axiom: the variant can only have the given tags *)
-      (let v = "x" in
-       let tag_table = generic_tag_table_name ri in
-       let has_single_final_hroot =
-         if List.length ri.ri_hroots = 1 then (List.hd ri.ri_hroots).si_final else false
-       in
-       Goal (KAxiom, id_no_loc (root_axiom_on_tags_name ri),
-           LForall (v, pointer_type (JCalloc_root ri) (JCroot ri), [],
-                    LForall (tag_table, tag_table_type ri, [],
-                             make_or_list @@
-                               List.map
-                                 ((if not has_single_final_hroot then make_instanceof else make_typeeq)
-                                   (LVar tag_table) @@ LVar v)
-                                 ri.ri_hroots))))
     |> List.append
       (if not (root_is_union ri) then
         [Goal (KAxiom, id_no_loc (ri.ri_name ^ "_whole_block_tag"),
