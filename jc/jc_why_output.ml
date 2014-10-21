@@ -62,7 +62,11 @@ let fprintf_vc_kind fmttr k =
      | JCVCfp_overflow -> "FPOverflow"
      | JCVCpre _ -> "Precondition"
      | JCVCassigns -> "AssignsClause"
-     | JCVCallocates -> "AllocatesClause")
+     | JCVCallocates -> "AllocatesClause"
+     | JCVCensures -> "EnsuresClause"
+     | JCVCassertion _ -> "UserAssertion"
+     | JCVCcheck _ -> "Check"
+     | JCVCpost -> "Postcondition")
 
 let add_why_label, add_why_id =
   (fun { l_kind; l_behavior; l_pos } ->
@@ -414,3 +418,9 @@ let fprintf_why_decls ?float_model:_ fmttr decls =
   pr defs
 
 let print_to_file = print_to_file (fun f -> Lib.file_subdir "why" (f ^ ".why")) fprintf_vc_kind fprintf_why_decls
+
+(*
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_why_output.ml"
+  End:
+*)

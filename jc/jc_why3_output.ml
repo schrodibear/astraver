@@ -265,7 +265,12 @@ let fprintf_vc_kind fmttr k =
      | JCVCfp_overflow -> "Floating-point overflow"
      | JCVCpre c -> c
      | JCVCassigns -> "Assigns clause"
-     | JCVCallocates -> "Allocates clause")
+     | JCVCallocates -> "Allocates clause"
+     | JCVCensures -> "Ensures clause"
+     | JCVCassertion pos -> Printf.sprintf "Assertion in line %d" @@ Jc_position.line pos
+     | JCVCcheck "" -> "Check"
+     | JCVCcheck s -> String.capitalize s ^ " check"
+     | JCVCpost -> "Postcondition")
 
 let fprintf_jc_position fmttr pos =
   let f, l, b, e as loc = Jc_position.to_loc pos in
@@ -760,3 +765,9 @@ let fprintf_why_decls ?float_model fmttr decls =
   pr "end@\n@\n"
 
 let print_to_file = print_to_file (fun f -> f ^ ".mlw") fprintf_vc_kind fprintf_why_decls
+
+(*
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_why3_output.ml"
+  End:
+*)

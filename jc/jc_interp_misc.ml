@@ -2580,7 +2580,7 @@ let all_effects ef =
 
 
 (*
-Local Variables:
-compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
-End:
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_interp_misc.ml"
+  End:
 *)

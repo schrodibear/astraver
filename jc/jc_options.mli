@@ -107,7 +107,7 @@ val pos_table :
 val position_of_label: string -> Loc.position option
 
 (*
-Local Variables:
-compile-command: "make -C .. bin/jessie.byte"
-End:
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_options.mli"
+  End:
 *)

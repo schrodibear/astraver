@@ -118,3 +118,9 @@ val print_to_file:
   (formatter -> vc_kind -> unit) ->
   (?float_model:Jc_env.float_model -> formatter -> why_decl list -> unit) ->
   ?float_model:Jc_env.float_model -> string -> why_decl list -> unit
+
+(*
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_why_output_misc.mli"
+  End:
+*)

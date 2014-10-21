@@ -30,3 +30,9 @@
 (**************************************************************************)
 
 include module type of Jc_why_output
+
+(*
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_why3_output.mli"
+  End:
+*)

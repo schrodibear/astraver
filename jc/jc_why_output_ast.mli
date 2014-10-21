@@ -61,6 +61,10 @@ type vc_kind =
   | JCVCpre of string
   | JCVCassigns
   | JCVCallocates
+  | JCVCensures
+  | JCVCassertion of Jc_position.t
+  | JCVCcheck of string
+  | JCVCpost
 
 type why_label = {
   l_kind     : vc_kind option;
@@ -163,3 +167,9 @@ type why_decl =
   | Function of bool * why_id * (string * logic_type) list * logic_type * term
   | Type of why_id * string list
   | Exception of why_id * logic_type option
+
+(*
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . jc_why_output_ast.mli"
+  End:
+*)

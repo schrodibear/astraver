@@ -619,3 +619,9 @@ let print_to_file ext fprintf_kind fprintf_why_decls ?float_model filename decls
   let cout_locs, fmt_locs = Pp.open_file_and_formatter @@ Lib.file_subdir "." (filename ^ ".loc") in
   why_print_locs fprintf_kind fmt_locs;
   Pp.close_file_and_formatter (cout_locs, fmt_locs)
+
+(*
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_why_output_misc.ml"
+  End:
+*)

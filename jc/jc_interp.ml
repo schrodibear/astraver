@@ -1023,10 +1023,26 @@ and triggers fa ft trigs =
   in
   List.map (List.map pat) trigs
 
-let mark_assertion ~e ?kind a =
+let rec mark_assertion ~e ?kind a =
+  let mark_assertion = mark_assertion ~e ?kind in
+  let mark_assertion' =
+    function
+    | LLabeled ({ l_kind; l_pos } as l, a) ->
+      LLabeled ({ l with
+                  l_kind = if l_kind = None then kind else l_kind;
+                  l_pos = if Jc_position.is_dummy l_pos then lookup_pos e else l_pos },
+                a)
+      | a -> mk_positioned_lex ~e ?kind a
+  in
   match a with
-  | LLabeled _ -> a
-  | _ -> mk_positioned_lex ~e ?kind a
+  | LAnd (a1, a2) ->
+    mark_assertion' (LAnd (mark_assertion a1, mark_assertion a2))
+  | LLet (v, a1, a2) ->
+    LLet (v, a1, mark_assertion a2)
+  | LLabeled (l, a) ->
+    mark_assertion' (LLabeled (l, mark_assertion a))
+  | _ ->
+    mark_assertion' a
 
 let named_assertion ~type_safe ~global_assertion ?kind ~relocate lab oldlab a =
   mark_assertion ~e:a ?kind @@
@@ -1162,7 +1178,8 @@ let tr_assigns ~type_safe ?region_list before ef =
       (fun v p acc ->
          if p then acc else
            let at = lvar ~constant:false ~label_in_name:false in
-           make_and acc (LPred ("eq", [at LabelPost v; at before v])))
+           make_and acc @@
+             mk_positioned_lex ~e ~kind:JCVCassigns @@ LPred ("eq", [at LabelPost v; at before v]))
       refs
     |>
     MemoryMap.fold
@@ -2534,8 +2551,21 @@ and expr e =
         [e1'; mk_var @@ tag_name from_st]
     | JCEassert (b, asrt, a) ->
       let a' =
+        let kind =
+          match asrt with
+          | Aassert | Ahint when in_current_behavior b ->
+            Some (JCVCassertion (lookup_pos a))
+          | Acheck when in_current_behavior b ->
+            Some
+              (JCVCcheck
+                (match a#mark with
+                | "disjoint_behaviors" -> "behavior disjointness"
+                | "complete_behaviors" -> "behavior completeness"
+                | _ -> ""))
+          | _ -> None
+        in
         named_assertion
-          ~type_safe:false ~global_assertion:false ~relocate:false
+          ~type_safe:false ~global_assertion:false ?kind ~relocate:false
           LabelHere LabelPre a
       in
       begin match asrt with
@@ -3262,7 +3292,7 @@ let tr_fun f funpos spec body acc =
                  b.b_free_ensures]
                 ())
            |>
-           named_assertion ~type_safe ~global_assertion:false ~relocate:false LabelPost LabelOld |>
+           named_assertion ~type_safe ~global_assertion:false ~kind:JCVCensures ~relocate:false LabelPost LabelOld |>
            make_and @@
              tr_assigns
                ~type_safe
@@ -3636,7 +3666,10 @@ let tr_fun f funpos spec body acc =
                          params,
                          assume_in_precondition b internal_requires,
                          normal_body,
-                         internal_post,
+                         mk_positioned_lex
+                           ~e:(new assertion JCAtrue :> < mark : _; pos: _ >)
+                           ~kind:JCVCpost
+                           internal_post,
                          false (* Why3 would otherwise give errors for non-recursive definitions *),
                          excep_posts_for_others None excep_behaviors))
                    :: acc

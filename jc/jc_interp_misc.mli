@@ -353,3 +353,9 @@ val read_locals :
 (** {1 Misc} *)
 
 val specialized_functions : (string * string StringMap.t) Jc_pervasives.StringHashtblIter.t
+
+(*
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_interp_misc.mli"
+  End:
+*)

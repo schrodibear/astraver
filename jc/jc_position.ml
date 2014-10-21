@@ -53,9 +53,19 @@ let to_loc (f, l, b, n as pos) =
   if pos <> dummy_position then f, l, b, b + n - 1
   else Loc.dummy_floc
 
+let file (f, _, _, _) = f
+
+let line (_, l, _, _) = l
+
 let compare (f1, l1, b1, n1) (f2, l2, b2, n2) =
   let (||=) acc r = if acc <> 0 then acc else r
   and (=?=) = compare in
   f1 =?= f2 ||= l1 =?= l2 ||= b1 =?= b2 ||= n1 =?= n2
 
 let equal pos1 pos2 = compare pos1 pos2 = 0
+
+(*
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_position.ml"
+  End:
+*)

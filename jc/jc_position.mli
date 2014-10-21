@@ -40,6 +40,14 @@ val of_pos : Lexing.position * Lexing.position -> t
 val of_loc : string * int * int * int -> t
 
 val to_loc : t -> string  * int * int * int
+val file : t -> string
+val line : t -> int
 
 val equal : t -> t -> bool
 val compare : t -> t -> int
+
+(*
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . jc_position.mli"
+  End:
+*)
