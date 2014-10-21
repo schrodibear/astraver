@@ -1513,7 +1513,7 @@ let code_function (fi, pos, fs, _sl) vil =
 
 
 (*
-Local Variables:
-compile-command: "unset LANG; make -C .. bin/jessie.byte"
-End:
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_invariants.ml"
+  End:
 *)

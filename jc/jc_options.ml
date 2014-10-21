@@ -321,7 +321,7 @@ let position_of_label name =
 
 
 (*
-Local Variables:
-compile-command: "unset LANG; make -C .. bin/jessie.byte"
-End:
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_options.ml"
+  End:
 *)

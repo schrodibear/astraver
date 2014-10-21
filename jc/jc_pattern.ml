@@ -195,6 +195,6 @@ let pattern_list_assertion translate_body arg ty pbl default =
 
 (*
   Local Variables:
-  compile-command: "unset LANG; make -j -C .. bin/jessie.byte"
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_pattern.ml"
   End:
 *)

@@ -2020,7 +2020,7 @@ let restrict_poly_mems_in_axiomatic_decl mm =
   Jc_typing.(fun (ABaxiom (pos, name, ls, a)) -> ABaxiom (pos, name, ls, restrict_poly_mems_in_assertion mm a))
 
 (*
-Local Variables:
-compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
-End:
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_effect.ml"
+  End:
 *)

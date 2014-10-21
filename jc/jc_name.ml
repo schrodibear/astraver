@@ -328,7 +328,7 @@ let why_name_of_format =
   | `Binary80 -> "Binary80"
 
 (*
-Local Variables:
-compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
-End:
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_name.ml"
+  End:
 *)
