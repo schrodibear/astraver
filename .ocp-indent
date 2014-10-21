@@ -1,0 +1,4 @@
+# Don't indent twice
+max_indent = 2
+# Don't indent begin match
+strict_with = auto
