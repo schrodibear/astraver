@@ -503,10 +503,13 @@ let gen_no_assign_axioms f ta _fa _ft _term_coerce params acc =
 	   let pset =
 	     reads ~type_safe:false ~global_assertion:true pset (mc,r)
 	   in
-	   let sepa = LPred("pset_disjoint",[LVar "tmp";pset]) in
+	   let sepa = LPred ("pset_disjoint", [LVar "tmp"; pset]) in
 	   let upda =
-	     LPred("not_assigns",[LVar "tmpalloc"; LVar (fst param);
-				  LVar "tmpmem"; LVar "tmp"])
+             LPred ("not_assigns", [LVar "tmpalloc_pre";
+                                    LVar "tmpalloc_post";
+                                    LVar (fst param);
+			            LVar "tmpmem";
+                                    LVar "tmp"])
 	   in
 	   let update_params =
              List.map (fun name ->
@@ -517,29 +520,23 @@ let gen_no_assign_axioms f ta _fa _ft _term_coerce params acc =
 	   let a =
              match f.li_result_type with
 	       | None ->
-		   LImpl(
-                     make_and sepa upda,
-                     LIff(
-		       LPred(f.li_final_name,normal_params),
-		       LPred(f.li_final_name,update_params)))
+		   LImpl (make_and sepa upda,
+                     LIff (LPred(f.li_final_name, normal_params),
+                           LPred(f.li_final_name, update_params)))
 	       | Some _rety ->
-		   LImpl(
-                     make_and sepa upda,
-                     LPred("eq",[
-			     LApp(f.li_final_name,normal_params);
-			     LApp(f.li_final_name,update_params)]))
+		   LImpl (make_and sepa upda,
+                     LPred ("eq", [LApp (f.li_final_name, normal_params);
+			           LApp (f.li_final_name, update_params)]))
 	   in
 	   let a =
-             List.fold_left (fun a (name,ty) -> LForall(name,ty,[],a)) a params
+             List.fold_left (fun a (name, ty) -> LForall(name, ty, [], a)) a params
 	   in
 	   let a =
-             LForall(
-	       "tmp",raw_pset_type zonety,[],
-               LForall(
-		 "tmpmem",paramty,[],
-		 LForall(
-		   "tmpalloc",raw_alloc_table_type zonety,[],
-		 a)))
+             LForall ("tmp", raw_pset_type zonety, [],
+               LForall ("tmpmem", paramty, [],
+	         LForall ("tmpalloc_pre", raw_alloc_table_type zonety, [],
+                   LForall ("tmpalloc_post", raw_alloc_table_type zonety, [],
+                             a))))
 	   in
 	   let name =
 	     "no_assign_" ^ f.li_name ^ "_" ^ string_of_int count
