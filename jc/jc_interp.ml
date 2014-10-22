@@ -2869,9 +2869,9 @@ and expr e =
   in
   (* Ideally, only labels used in logical annotations should be kept *)
   let lab = e#mark in
-    if lab = ""
-    then e'
-    else make_label e#mark e'
+  (if lab = ""
+   then e'
+   else make_label e#mark e')
   |> fun e' ->
      if e#typ = Jc_pervasives.unit_type then
        if
