@@ -65,6 +65,8 @@ type vc_kind =
   | JCVCassertion of Jc_position.t
   | JCVCcheck of string
   | JCVCpost
+  | JCVCglobal_invariant of string
+  | JCVCrequires
 
 type why_label = {
   l_kind     : vc_kind option;

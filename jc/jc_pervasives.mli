@@ -202,6 +202,7 @@ sig
   val add: 'a t -> int -> 'a -> unit
   val replace: 'a t -> int -> 'a -> unit
   val find: 'a t -> int -> 'a
+  val mem: 'a t -> int -> bool
   val fold: (int -> 'a -> 'b -> 'b) -> 'a t -> 'b -> 'b
   val iter: (int -> 'a -> unit) -> 'a t -> unit
 end

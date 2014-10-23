@@ -966,6 +966,10 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
         ~region_assoc:app.app_region_assoc
         ~label_assoc
         f args
+      |>
+      if IntHashtblIter.mem Jc_typing.global_invariants_table app.app_fun.li_tag then
+        mk_positioned_lex ~e:a ?behavior:None ~kind:(JCVCglobal_invariant app.app_fun.li_name)
+      else id
     | JCAquantifier (Forall, v, trigs, a1) ->
       LForall (v.vi_final_name,
                tr_var_base_type v,
@@ -1023,8 +1027,7 @@ and triggers fa ft trigs =
   in
   List.map (List.map pat) trigs
 
-let rec mark_assertion ~e ?kind a =
-  let mark_assertion = mark_assertion ~e ?kind in
+let rec mark_assertion ?(recursively=true) ~e ?kind a =
   let mark_assertion' =
     function
     | LLabeled ({ l_kind; l_pos } as l, a) ->
@@ -1032,20 +1035,25 @@ let rec mark_assertion ~e ?kind a =
                   l_kind = if l_kind = None then kind else l_kind;
                   l_pos = if Jc_position.is_dummy l_pos then lookup_pos e else l_pos },
                 a)
-      | a -> mk_positioned_lex ~e ?kind a
+    | a -> mk_positioned_lex ~e ?kind a
   in
-  match a with
-  | LAnd (a1, a2) ->
-    mark_assertion' (LAnd (mark_assertion a1, mark_assertion a2))
-  | LLet (v, a1, a2) ->
-    LLet (v, a1, mark_assertion a2)
-  | LLabeled (l, a) ->
-    mark_assertion' (LLabeled (l, mark_assertion a))
-  | _ ->
-    mark_assertion' a
+  if not recursively then mark_assertion' a
+  else
+    let mark_assertion = mark_assertion ~e ?kind in
+    match a with
+    | LAnd (a1, a2) ->
+      mark_assertion' (LAnd (mark_assertion a1, mark_assertion a2))
+    | LLet (v, a1, a2) ->
+      LLet (v, a1, mark_assertion a2)
+    | LLabeled (l, (LAnd _ as a)) | LLabeled (l, (LLet _ as a)) ->
+      mark_assertion' (LLabeled (l, mark_assertion a))
+    | LLabeled (_, (LLabeled _ as a)) ->
+      mark_assertion a
+    | _ ->
+      mark_assertion' a
 
-let named_assertion ~type_safe ~global_assertion ?kind ~relocate lab oldlab a =
-  mark_assertion ~e:a ?kind @@
+let named_assertion ~type_safe ~global_assertion ?kind ?mark_recursively ~relocate lab oldlab a =
+  mark_assertion ?recursively:mark_recursively ~e:a ?kind @@
     assertion ~type_safe ~global_assertion ~relocate lab oldlab a
 
 (******************************************************************************)
@@ -3175,8 +3183,8 @@ let tr_allocates ~type_safe ?region_list ef =
       AllocMap.keys |>
       List.filter (writes_region ?region_list) |>
       List.map alloc_same_except |>
-      make_and_list |>
-      mk_positioned
+      List.map mk_positioned |>
+      make_and_list
     in
     let tag_frame =
       let tag_extends pcr =
@@ -3190,8 +3198,8 @@ let tr_allocates ~type_safe ?region_list ef =
       TagMap.keys |>
       List.filter (writes_region ?region_list) |>
       List.map tag_extends |>
-      make_and_list |>
-      mk_positioned
+      List.map mk_positioned |>
+      make_and_list
     in
     mk_positioned @@ make_and alloc_frame tag_frame
 
@@ -3240,8 +3248,11 @@ let tr_fun f funpos spec body acc =
 
   let external_requires =
     let kind = JCVCpre (if Option_misc.has_some body then "Internal" else "External") in
-    named_assertion ~type_safe:true ~global_assertion:false ~kind ~relocate:false
-      LabelHere LabelHere spec.fs_requires
+    mk_positioned_lex
+      ~e:(new assertion JCAtrue :> < mark : _; pos: _ >)
+      ~kind @@
+      named_assertion ~type_safe:true ~global_assertion:false ~kind:JCVCrequires ~relocate:false
+        LabelHere LabelHere spec.fs_requires
   in
   let external_requires =
     if Jc_options.trust_ai then
@@ -3512,9 +3523,13 @@ let tr_fun f funpos spec body acc =
   let param_excep_posts = excep_posts @ excep_posts_inferred in
   let acc =
     let annot_type = (* function declaration with precondition *)
-      Annot_type(external_requires, ret_type,
-                 external_read_effects, external_write_effects,
-                 param_normal_post, param_excep_posts)
+      Annot_type (
+        external_requires,
+        ret_type,
+        external_read_effects,
+        external_write_effects,
+        param_normal_post,
+        param_excep_posts)
     in
     let fun_type =
       annot_fun_parameters fparams
@@ -3645,7 +3660,10 @@ let tr_fun f funpos spec body acc =
                     params,
                     internal_requires,
                     safety_body,
-                    internal_safety_post,
+                    mk_positioned_lex
+                      ~e:(new assertion JCAtrue :> < mark : _; pos: _ >)
+                      ~kind:JCVCpost
+                      internal_safety_post,
                     false (* we require termination proofs, also Why3 now checks possible divergence *),
                     excep_posts_for_others None excep_behaviors))
                 :: acc

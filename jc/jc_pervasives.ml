@@ -1185,6 +1185,7 @@ struct
     Hashtbl.replace tbl x infos;
     keys:=IntSet.add x !keys
   let find (tbl,_) x = Hashtbl.find tbl x
+  let mem (tbl, _) x = Hashtbl.mem tbl x
   let fold f (tbl,keys) init =
     let apply s acc =
       try

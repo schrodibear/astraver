@@ -270,7 +270,9 @@ let fprintf_vc_kind fmttr k =
      | JCVCassertion pos -> Printf.sprintf "Assertion in line %d" @@ Jc_position.line pos
      | JCVCcheck "" -> "Check"
      | JCVCcheck s -> String.capitalize s ^ " check"
-     | JCVCpost -> "Postcondition")
+     | JCVCpost -> "Postcondition"
+     | JCVCglobal_invariant s -> "Global invariant " ^ s
+     | JCVCrequires -> "Requires clause")
 
 let fprintf_jc_position fmttr pos =
   let f, l, b, e as loc = Jc_position.to_loc pos in

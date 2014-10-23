@@ -66,7 +66,9 @@ let fprintf_vc_kind fmttr k =
      | JCVCensures -> "EnsuresClause"
      | JCVCassertion _ -> "UserAssertion"
      | JCVCcheck _ -> "Check"
-     | JCVCpost -> "Postcondition")
+     | JCVCpost -> "Postcondition"
+     | JCVCglobal_invariant _ -> "GlobalInvariant"
+     | JCVCrequires -> "RequiresClause")
 
 let add_why_label, add_why_id =
   (fun { l_kind; l_behavior; l_pos } ->
