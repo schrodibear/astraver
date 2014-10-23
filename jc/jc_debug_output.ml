@@ -1,6 +1,7 @@
 open Jc_env
 open Jc_fenv
 open Jc_ast
+open Jc_stdlib
 open Jc_pervasives
 open Jc_constructors
 
@@ -255,8 +256,16 @@ end
 
 let ewrap : expr -> expr = new expr_wrapper expr_dummy
 
-let expr fmt e = Jc_output.expr fmt @@ ewrap e
-let term fmt t = Jc_output.term fmt @@ twrap t
-let assertion fmt a = Jc_output.assertion fmt @@ awrap a
+let expr fmt = Jc_output.expr fmt % ewrap
+let term fmt = Jc_output.term fmt % twrap
+let assertion fmt = Jc_output.assertion fmt % awrap
+let location fmt = Jc_output.location fmt % lwrap
+let location_set fmt = Jc_output.location_set fmt % lswrap
 
 let string_set fmt ss = Format.fprintf fmt "%a" Pp.(print_list comma string) @@ Jc_envset.StringSet.elements ss
+
+(*
+  Local Variables:
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_debug_output.ml"
+  End:
+*)

@@ -45,6 +45,8 @@ install_printer Jc_debug_output.expr
 install_printer Jc_debug_output.assertion
 install_printer Jc_debug_output.term
 install_printer Jc_debug_output.string_set
+install_printer Jc_debug_output.location
+install_printer Jc_debug_output.location_set
 set print_depth 3
 '
 rlwrap -P "$SCRIPT" ocamldebug -I "$DIR/../src/" -I "$DIR" $DIR/../bin/jessie.byte $@
