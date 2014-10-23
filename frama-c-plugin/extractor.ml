@@ -473,7 +473,7 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } = object
     | GEnumTag (ei, _) | GEnumTagDecl (ei, _) when Set.mem enums ei ->
       SkipChildren
     | GVarDecl (_, vi, _) | GVar (vi, _, _) | GFun ( { svar = vi }, _)
-      when Set.mem vars vi ->
+      when Set.mem vars vi || vi.vghost ->
       SkipChildren
     | GPragma _ -> SkipChildren
     | GText _ -> SkipChildren
