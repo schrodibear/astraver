@@ -1595,8 +1595,21 @@ let rec location_set env e =
   in ty,r,locs
 
 let rec location env e =
-  let ty,r,loc_node = match e#node with
-    | JCNElabel(_l, _e) ->
+  let deref_location_set_exn ls f =
+    let t, tr, tls = location_set env ls in
+    let fi = find_field e#pos t f false in
+    let fr = Region.make_field tr fi in
+    fi.fi_type, fr, JCLderef (tls, get_label e, fi, fr)
+  in
+  let deref_term_exn t f =
+    let t1 = term env t in
+    let fi = find_field e#pos t1#typ f false in
+    let fr = Region.make_field t1#region fi in
+    fi.fi_type, fr, JCLderef_term (t1, fi)
+  in
+  let ty, r, loc_node =
+    match e#node with
+    | JCNElabel (_l, _e) ->
         assert false (* TODO *)
     | JCNEvar id ->
         let vi =
@@ -1605,18 +1618,27 @@ let rec location env e =
               typing_error e#pos "unbound identifier %s" id
         in
         vi.vi_type, vi.vi_region, JCLvar vi
-    | JCNEderef(ls, f) ->
-	begin try
-          let t, tr, tls = location_set env ls in
-          let fi = find_field e#pos t f false in
-          let fr = Region.make_field tr fi in
-          fi.fi_type, fr, JCLderef(tls, get_label e, fi, fr)
-	with Typing_error _ ->
-          let t1 = term env ls in
-          let fi = find_field e#pos t1#typ f false in
-          let fr = Region.make_field t1#region fi in
-          fi.fi_type, fr, JCLderef_term(t1, fi)
-	end
+    | JCNEderef (ls, f)
+      when
+        (match ls#node with
+         | JCNEbinary (_, `Badd, off)
+           when
+             (match off#node with
+              | JCNErange _ -> true
+              | _ -> false) ->
+           true
+         | _ -> false) ->
+      begin try
+        deref_location_set_exn ls f
+      with Typing_error _ ->
+        deref_term_exn ls f
+      end
+    | JCNEderef (t, f) ->
+      begin try
+        deref_term_exn t f
+      with Typing_error _ ->
+        deref_location_set_exn t f
+      end
     | JCNEat(e, lab) ->
         let t, tr, tl = location env e in
         t, tr, JCLat(tl, lab)

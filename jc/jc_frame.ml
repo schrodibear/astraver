@@ -563,7 +563,7 @@ let gen_alloc_extend_axioms f ta _fa _ft _term_coerce params acc =
 	 in
 	 let ps =
 	   List.map
-	     (collect_pset_locations ~type_safe:false ~global_assertion:true)
+	     (collect_pset_locations ~type_safe:false ~global_assertion:true LabelPost)
              ps
 	 in
 	 let ps = pset_union_of_list ps in
@@ -604,6 +604,7 @@ let gen_alloc_extend_axioms f ta _fa _ft _term_coerce params acc =
 	 in
 	 count + 1, Goal(KAxiom,id_no_loc name,a) :: acc
       ) (0,acc) alloc_params_reads)
+
 
 let reduce f = function
   | [] -> assert false

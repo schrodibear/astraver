@@ -1116,20 +1116,24 @@ let rec collect_locations ~type_safe ~global_assertion ~in_clause before (refs, 
   | JCLat (loc, _lab) ->
     collect_locations ~type_safe ~global_assertion ~in_clause before (refs, mems) loc
 
-let rec collect_pset_locations ~type_safe ~global_assertion loc =
+let rec collect_pset_locations ~type_safe ~global_assertion lab loc =
   let ft = term ~type_safe ~global_assertion ~relocate:false in
   match loc#node with
-  | JCLderef (e, lab, _fi, _fr) ->
-    pset ~type_safe ~global_assertion lab e
-  | JCLderef_term (t1, _fi) ->
-    let lab = match t1#label with Some l -> l | None -> failwith "collect_pset_locations: no label in term" in
-    LApp ("pset_singleton", [ft lab lab t1])
-  | JCLvar _vi -> LVar "pset_empty"
-  | JCLat (loc, _lab) ->
-    collect_pset_locations ~type_safe ~global_assertion loc
-
-let location_set_all_of_location loc =
-  location_set_with_node loc @@ JCLSrange_term (term_of_location loc, None, None)
+  | JCLderef (e, lab, fi, _fr) ->
+    let m = tmemory_var ~label_in_name:global_assertion lab (JCmem_field fi, e#region) in
+    LApp ("pset_deref", [m; pset ~type_safe ~global_assertion lab e])
+  | JCLderef_term (t1, fi) ->
+    let lab = match t1#label with Some l -> l | None -> lab in
+    let m = tmemory_var ~label_in_name:global_assertion lab (JCmem_field fi, t1#region) in
+    LApp ("pset_deref", [m; LApp ("pset_singleton", [ft lab lab t1])])
+  | JCLvar ({ vi_type = JCTpointer _ } as vi)  ->
+    LApp ("pset_singleton", [tvar ~label_in_name:global_assertion lab vi])
+  | JCLvar vi ->
+    Jc_options.jc_warning loc#pos "Non-pointer variable `%s' found as location in pointer-set context, ignoring"
+      vi.vi_name;
+    LVar "pset_empty"
+  | JCLat (loc, lab) ->
+    collect_pset_locations ~type_safe ~global_assertion lab loc
 
 let writes_region ?region_list (_, r) =
   (* More exact apprixmation (at least fixes both previously encountered bugs): *)
@@ -3160,7 +3164,10 @@ let tr_allocates ~type_safe ?region_list ef =
         | locs ->
           let pset =
             pset_union_of_list @@
-            List.map (pset ~type_safe ~global_assertion:false LabelHere % location_set_all_of_location) locs
+              List.map
+                (fun ls -> LApp ("pset_all",
+                                 [collect_pset_locations ~type_safe ~global_assertion:false LabelPost ls]))
+                locs
           in
           LPred ("alloc_same_except", args @ [pset])
       in

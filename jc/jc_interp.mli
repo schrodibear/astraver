@@ -45,7 +45,9 @@ val reads :
 val collect_pset_locations :
   type_safe:bool ->
   global_assertion:bool ->
-  Jc_fenv.logic_info Jc_ast.location -> term
+  Jc_env.label ->
+  Jc_fenv.logic_info Jc_ast.location ->
+  term
 
 (** {2 types} *)
 
