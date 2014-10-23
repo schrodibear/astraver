@@ -575,6 +575,9 @@ val safe_free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
   writes { a }
   ensures  { (p = null -> !a = (old !a)) /\
              (p <> null ->
+              alloc_same_except (old !a) !a (pset_all (pset_singleton p)) /\
+              !a = free_block (old !a) /\
+              free_block_pointer !a = p /\
               free (old !a) !a p /\
               allocable !a p) }
 
@@ -585,6 +588,9 @@ val free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
                 ("expl:Valid" offset_min !a p = 0 /\ offset_max !a p >= 0)) }
   ensures  { (p = null -> !a = (old !a)) /\
              (p <> null ->
+              alloc_same_except (old !a) !a (pset_all (pset_singleton p)) /\
+              !a = free_block (old !a) /\
+              free_block_pointer !a = p /\
               free (old !a) !a p /\
               allocable !a p) }
 
