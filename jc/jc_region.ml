@@ -47,7 +47,7 @@ let string_explode s =
 let string_implode ls =
   let s = Bytes.create (List.length ls) in
   ignore (List.fold_left (fun i c -> Bytes.set s i c; i + 1) 0 ls);
-  s
+  Bytes.unsafe_to_string s
 
 let filter_alphanumeric s =
   let alphanum c =

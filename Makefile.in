@@ -64,8 +64,8 @@ OCAMLVERSION = @OCAMLVERSION@
 CAMLP4   = @CAMLP4O@
 
 INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I ml
-BFLAGS   = -w Z -warn-error A -dtypes -bin-annot -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@
-OFLAGS   = -w Z -warn-error A -dtypes -bin-annot $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@
+BFLAGS   = -w Z -warn-error A -dtypes -bin-annot -short-paths -strict-formats -safe-string -no-alias-deps -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@
+OFLAGS   = -w Z -warn-error A -dtypes -bin-annot -short-paths -strict-formats -safe-string -no-alias-deps $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@
 
 LCFLAGS = -L/usr/lib -L/usr/local/lib/ocaml
 
