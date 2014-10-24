@@ -286,17 +286,15 @@ let fprintf_why_label fmttr { l_kind; l_behavior; l_pos } =
     | "default" | "" -> ignore
     | b -> fun f -> f b
   in
-  let space = if not (Jc_position.is_dummy l_pos) then fun () -> pr "@ " else ignore in
   fprintf_jc_position fmttr l_pos;
-  space ();
+  if not (Jc_position.is_dummy l_pos) then pr "@ ";
   begin match l_kind with
   | Some vc_kind ->
     pr "\"expl:%a" fprintf_vc_kind vc_kind;
     with_behavior @@ pr ", behavior %s";
-    pr "\"";
-    space ()
+    pr "\"@ ";
   | None ->
-    with_behavior @@ (fun b -> pr "\"for behavior %s\"" b; space ())
+    with_behavior @@ (fun b -> pr "\"for behavior %s\"@ " b)
   end
 
 let lt_name t =
@@ -309,10 +307,10 @@ let rec fprintf_logic_type fmttr t =
   let pr fmt = fprintf fmttr fmt in
   match t.lt_args with
   | [] -> pr "%s" (lt_name t)
-  | [x] -> pr "(%s %a)" (lt_name t) fprintf_logic_type x
+  | [x] -> pr "(%s@ %a)" (lt_name t) fprintf_logic_type x
   | l ->
     pr
-      "(%s %a)"
+      "(%s@ %a)"
       (lt_name t)
       (print_list space fprintf_logic_type)
       l
@@ -330,10 +328,10 @@ let rec fprintf_term ~locals fmttr =
   in
   function
   | LConst c -> fprintf_constant fmttr c
-  | LApp ("eq_pointer", [t1; t2]) ->
-    pr "@[(%a = %a)@]" fprintf_term t1 fprintf_term t2
-  | LApp ("ne_pointer", [t1; t2]) ->
-    pr "@[(%a <> %a)@]" fprintf_term t1 fprintf_term t2
+  | LApp (id, [t1; t2]) when id = "eq" || is_why3_poly_eq id ->
+    pr "@[(%a@ =@ %a)@]" fprintf_term t1 fprintf_term t2
+  | LApp (id, [t1; t2]) when id = "neq" || is_why3_poly_neq id ->
+    pr "@[(%a@ <>@ %a)@]" fprintf_term t1 fprintf_term t2
   | LApp (id, t :: tl) ->
     pr "@[(%s@ %a" (why3_ident id) fprintf_term t;
     List.iter (pr "@ %a" fprintf_term) tl;
@@ -345,16 +343,16 @@ let rec fprintf_term ~locals fmttr =
   | LDeref id ->
     pr "!%s" (why3_ident id)
   | LDerefAtLabel (id, "") ->
-    pr "(old !%s)" (why3_ident id)
+    pr "(old@ !%s)" (why3_ident id)
   | LDerefAtLabel (id, l) ->
-    pr "(at !%s '%s)" (why3_ident id) (why3_constr l)
+    pr "(at@ !%s@ '%s)" (why3_ident id) (why3_constr l)
   | TLabeled (l, t) ->
     pr "(%a%a)" fprintf_why_label l fprintf_term t
   | TIf (t1, t2, t3) ->
-    pr "@[<hov 1>(if %a@ then %a@ else %a)@]"
+    pr "@[<hov 1>(if@ %a@ then@ %a@ else@ %a)@]"
       fprintf_assertion (assertion_of_term t1) fprintf_term t2 fprintf_term t3
   | TLet (v, t1, t2) ->
-    pr "@[<hov 1>(let %s@ = %a@ in %a)@]"
+    pr "@[<hov 1>(let@ %s@ =@ %a@ in@ %a)@]"
       v fprintf_term t1 fprintf_term t2
 
 and fprintf_assertion ~locals fmttr =
@@ -367,34 +365,34 @@ and fprintf_assertion ~locals fmttr =
   | LTrue -> pr "true"
   | LFalse -> pr "false"
   | LAnd (a1, a2) ->
-    pr "@[(%a@ /\\ %a)@]" fprintf_assertion a1 fprintf_assertion a2
+    pr "@[(%a@ /\\@ %a)@]" fprintf_assertion a1 fprintf_assertion a2
   | LOr (a1, a2) ->
-    pr "@[(%a@ \\/ %a)@]" fprintf_assertion a1 fprintf_assertion a2
+    pr "@[(%a@ \\/@ %a)@]" fprintf_assertion a1 fprintf_assertion a2
   | LIff (a1, a2) ->
-    pr "@[(%a@ <-> %a)@]" fprintf_assertion a1 fprintf_assertion a2
-  | LNot a1 -> pr "@[(not %a)@]" fprintf_assertion a1
+    pr "@[(%a@ <->@ %a)@]" fprintf_assertion a1 fprintf_assertion a2
+  | LNot a1 -> pr "@[(not@ %a)@]" fprintf_assertion a1
   | LImpl (a1, a2) ->
-    pr "@[<hov 1>(%a ->@ %a)@]" fprintf_assertion a1 fprintf_assertion a2
+    pr "@[<hov 1>(%a@ ->@ %a)@]" fprintf_assertion a1 fprintf_assertion a2
   | LIf (t, a1, a2) ->
-    pr "@[<hov 1>(if %a@ = True@ then %a@ else %a)@]"
+    pr "@[<hov 1>(if@ %a@ =@ True@ then@ %a@ else@ %a)@]"
       fprintf_term t fprintf_assertion a1 fprintf_assertion a2
   | LLet (id, t, a) ->
-    pr "@[<hov 1>(let @[<hov 1>%s =@ %a in@]@ %a)@]"
+    pr "@[<hov 1>(let@ @[<hov 1>%s@ =@ %a@ in@]@ %a)@]"
       id fprintf_term t fprintf_assertion a
   | LForall (id, t, trigs, a) ->
     pr "@[<hov 1>(forall@ %s:@,%a@,%a@,.@ %a)@]"
       (why3_ident id) fprintf_logic_type t fprintf_triggers trigs fprintf_assertion a
   | LExists (id, t, trigs, a) ->
-    pr "@[<hov 1>(exists %s:%a%a.@ %a)@]"
+    pr "@[<hov 1>(exists@ %s:%a%a.@ %a)@]"
       id fprintf_logic_type t fprintf_triggers trigs fprintf_assertion a
   | LPred ("le", [t1; t2]) ->
-    pr "@[(%a <= %a)@]" fprintf_term t1 fprintf_term t2
+    pr "@[(%a@ <=@ %a)@]" fprintf_term t1 fprintf_term t2
   | LPred ("ge", [t1; t2]) ->
-    pr "@[(%a >= %a)@]"  fprintf_term t1 fprintf_term t2
+    pr "@[(%a@ >=@ %a)@]"  fprintf_term t1 fprintf_term t2
   | LPred (id, [t1; t2]) when id = "eq" || is_why3_poly_eq id ->
-    pr "@[(%a = %a)@]" fprintf_term t1 fprintf_term t2
+    pr "@[(%a@ =@ %a)@]" fprintf_term t1 fprintf_term t2
   | LPred (id, [t1; t2]) when id = "neq" || is_why3_poly_neq id ->
-    pr "@[(%a <> %a)@]" fprintf_term t1 fprintf_term t2
+    pr "@[(%a@ <>@ %a)@]" fprintf_term t1 fprintf_term t2
   | LPred (id, t :: tl) ->
     pr "@[(%s@ %a" (why3_ident id) fprintf_term t;
     List.iter (pr "@ %a" fprintf_term) tl;
@@ -420,35 +418,35 @@ let rec fprintf_type ~locals ~need_colon anon fmttr t =
   let pt = fprintf_type ~locals ~need_colon:false anon in
   begin match t with
     | Prod_type _ -> ()
-    | _ when need_colon -> pr ": "
+    | _ when need_colon -> pr ":@ "
     | _ -> ()
   end;
   match t with
   | Prod_type (id, t1, t2) ->
     let id = if id = "" || anon then "_anonymous" else id in
-    pr "@[<hov 1>(%s : %a)@ %a@]" (why3_ident id) pt t1 (fprintf_type ~locals ~need_colon anon) t2
+    pr "@[<hov 1>(%s@ :@ %a)@ %a@]" (why3_ident id) pt t1 (fprintf_type ~locals ~need_colon anon) t2
   | Base_type t -> fprintf_logic_type fmttr t
-  | Ref_type t -> pr "ref %a" pt t
+  | Ref_type t -> pr "ref@ %a" pt t
   | Annot_type (p, t, reads, writes, q, signals) ->
     pr "%a@ " pt t;
-    pr "@[@[<hov 2>requires { %a }@]@ " fprintf_assertion p;
+    pr "@[@[<hov 2>requires@ {@ %a@ }@]@ " fprintf_assertion p;
     let print_ids = print_list comma @@ fun _ -> pr "%s" % why3_ident in
     begin match List.sort compare reads with
     | [] -> ()
     | reads ->
-      pr "reads@ { %a } @ " print_ids reads
+      pr "reads@ {@ %a@ }@ " print_ids reads
     end;
     begin match List.sort compare writes with
       | [] -> ()
       | writes ->
-        pr "writes@ { %a }@ " print_ids writes
+        pr "writes@ {@ %a@ }@ " print_ids writes
     end;
-    pr "@[<hov 2> ensures { %a@ }@]" fprintf_assertion q;
+    pr "@[<hov 2>ensures@ {@ %a@ }@]" fprintf_assertion q;
     begin match signals with
       | [] -> pr "@]"
       | l ->
         pr "@ ";
-        List.iter (fun (e, r) -> pr "@[<hov 2>raises { %s result ->@ %a }@]@]" e fprintf_assertion r) l
+        List.iter (fun (e, r) -> pr "@[<hov 2>raises@ {@ %s@ result@ ->@ %a@ }@]@]" e fprintf_assertion r) l
     end
 
 let fprintf_variant ~locals fmttr =
@@ -456,29 +454,29 @@ let fprintf_variant ~locals fmttr =
   function
   | None -> ()
   | Some (t, r_opt) ->
-    pr "variant { %a }" (fprintf_term ~locals) t;
-    Option_misc.iter (pr " with %s") r_opt
+    pr "variant@ {@ %a@ }" (fprintf_term ~locals) t;
+    Option_misc.iter (pr "@ with@ %s") r_opt
 
 let rec fprintf_expr_node ~locals in_app fmttr =
   let pr fmt = fprintf fmttr fmt in
   let pr_fun params pre body post diverges signals =
     let locals = List.fold_right (function _, Ref_type _ -> id | x, _ -> StringSet.add x) params locals in
     let fprintf_assertion = fprintf_assertion ~locals in
-    pr "@[<hov 1>fun @[";
-    List.iter (fun (x, t) -> pr "(%s : %a) " (why3_id x) (fprintf_type ~locals ~need_colon:false false) t) params;
-    pr "@]->@ @[<hov 0>requires { %a }@ " fprintf_assertion pre;
+    pr "@[<hov 1>fun@ @[";
+    List.iter (fun (x, t) -> pr "(%s@ :@ %a)@ " (why3_id x) (fprintf_type ~locals ~need_colon:false false) t) params;
+    pr "@]@ ->@ @[<hov 0>requires@ {@ %a@ }@ " fprintf_assertion pre;
     begin match signals with
-    | [] -> pr "@[<hov 2>ensures { %a }@]@]@ " fprintf_assertion post
+    | [] -> pr "@[<hov 2>ensures@ {@ %a@ }@]@]@ " fprintf_assertion post
     | l ->
-      pr "@[<hov 2> ensures { %a@ }@ %a@]@ "
+      pr "@[<hov 2>ensures@ {@ %a@ }@ %a@]@ "
         fprintf_assertion post
         (print_list alt @@
          fun _ (e, r) ->
-         pr "@[<hov 2>raises { %s result ->@ %a }@]" e fprintf_assertion r)
+         pr "@[<hov 2>raises@ {@ %s@ result@ ->@ %a@ }@]" e fprintf_assertion r)
         l
     end;
     if diverges then pr "diverges@ ";
-    pr "%a@]@ " (fprintf_expr ~locals) body
+    pr "%a@]" (fprintf_expr ~locals) body
   in
   let fprintf_assertion = fprintf_assertion ~locals
   and fprintf_type = fprintf_type ~locals
@@ -490,13 +488,13 @@ let rec fprintf_expr_node ~locals in_app fmttr =
   function
   | Cte c -> fprintf_constant fmttr c
   | Var id ->  pr "%s" (why3_param id)
-  | And (e1, e2) -> pr "@[(%a && %a)@]" fprintf_expr e1 fprintf_expr e2
-  | Or (e1, e2) -> pr "@[(%a || %a)@]" fprintf_expr e1 fprintf_expr e2
-  | Not e1 -> pr "@[(not %a)@]" fprintf_expr e1
+  | And (e1, e2) -> pr "@[(%a@ &&@ %a)@]" fprintf_expr e1 fprintf_expr e2
+  | Or (e1, e2) -> pr "@[(%a@ ||@ %a)@]" fprintf_expr e1 fprintf_expr e2
+  | Not e1 -> pr "@[(not@ %a)@]" fprintf_expr e1
   | Void -> pr "()"
   | Deref id -> pr "!%s" (why3_id id)
   | If (e1, e2, e3) ->
-    pr "@[<hov 0>(if %a@ @[<hov 1>then@ %a@]@ @[<hov 1>else@ %a@])@]"
+    pr "@[<hov 0>(if@ %a@ @[<hov 1>then@ %a@]@ @[<hov 1>else@ %a@])@]"
       fprintf_expr e1 fprintf_expr e2 fprintf_expr e3
   | While({ expr_node = Cte (Prim_bool true) }, inv, var, e2) ->
     pr
@@ -506,26 +504,26 @@ let rec fprintf_expr_node ~locals in_app fmttr =
       fprintf_expr_list e2
   | While (e1, inv, var, e2) ->
     pr
-      "@[<hov 0>while %a do@ @[<hov 1>@[<hov 2>@[<hov 2>invariant@ { %a }@]@ @[<hov 2>%a@]@]@ %a@]@ done@]"
+      "@[<hov 0>while@ %a@ do@ @[<hov 1>@[<hov 2>@[<hov 2>invariant@ { %a }@]@ @[<hov 2>%a@]@]@ %a@]@ done@]"
       fprintf_expr e1
       fprintf_assertion inv
       fprintf_variant var
       fprintf_expr_list e2
   | Block [] -> pr "void"
-  | Block el -> pr "@[<hov 0>begin@ @[<hov 1>  %a@]@ end@]" fprintf_expr_list el
-  | Assign (id, e) -> pr "@[<hov 1>(%s := %a)@]" (why3_id id) fprintf_expr e
+  | Block el -> pr "@[<hov 0>begin@ @[<hov 1>%a@]@ end@]" fprintf_expr_list el
+  | Assign (id, e) -> pr "@[<hov 1>(%s@ :=@ %a)@]" (why3_id id) fprintf_expr e
   | Let (id, e1, e2) ->
-    pr "@[<hov 0>(let %s =@ %a in@ %a)@]" (why3_id id) fprintf_expr e1 fprintf_expr e2
+    pr "@[<hov 0>(let@ %s@ =@ %a@ in@ %a)@]" (why3_id id) fprintf_expr e1 fprintf_expr e2
   | Let_ref (id, e1, e2) ->
-    pr "@[<hov 0>(let %s =@ ref %a in@ %a)@]" (why3_id id) fprintf_expr e1 fprintf_expr e2
+    pr "@[<hov 0>(let@ %s@ =@ ref@ %a@ in@ %a)@]" (why3_id id) fprintf_expr e1 fprintf_expr e2
   | App ({ expr_node = App ({ expr_node = Var id }, e1, _) }, e2, _) when  is_why3_poly_eq id ->
-    pr "@[<hov 1>(%a = %a)@]" fprintf_expr e1 fprintf_expr e2
+    pr "@[<hov 1>(%a@ =@ %a)@]" fprintf_expr e1 fprintf_expr e2
   | App({ expr_node = App ({ expr_node = Var id }, e1, _)}, e2, _) when is_why3_poly_neq id ->
-    pr "@[<hov 1>(%a <> %a)@]" fprintf_expr e1 fprintf_expr e2
+    pr "@[<hov 1>(%a@ <>@ %a)@]" fprintf_expr e1 fprintf_expr e2
   | App (e1, e2, _) when in_app ->
-    pr "@[<hov 1>%a %a@]" (fprintf_expr_gen true) e1 fprintf_expr e2
+    pr "@[<hov 1>%a@ %a@]" (fprintf_expr_gen true) e1 fprintf_expr e2
   | App (e1, e2, ty)  ->
-    pr "@[<hov 1>(%a %a %a)@]"
+    pr "@[<hov 1>(%a@ %a@ %a)@]"
       (fprintf_expr_gen true) e1 fprintf_expr e2
       (Pp.print_option @@ fprintf_type ~need_colon:true false) ty
   | Raise (id, None) ->
@@ -533,32 +531,32 @@ let rec fprintf_expr_node ~locals in_app fmttr =
   | Raise (id, Some e) ->
     pr "@[<hov 1>(raise@ (%s@ %a))@]" id fprintf_expr e
   | Try (e1, exc, None, e2) ->
-    pr "@[<hov 1>try@ %a@ with@ %s ->@ %a end@]" fprintf_expr e1 exc fprintf_expr e2
+    pr "@[<hov 1>try@ %a@ with@ %s@ ->@ %a@ end@]" fprintf_expr e1 exc fprintf_expr e2
   | Try (e1, exc, Some id, e2) ->
-    pr "@[<hov 1>try@ %a@ with@ %s %s ->@ %a end@]" fprintf_expr e1 exc id fprintf_expr e2
+    pr "@[<hov 1>try@ %a@ with@ %s@ %s@ ->@ %a@ end@]" fprintf_expr e1 exc id fprintf_expr e2
   | Fun (params, pre, body, post, diverges, signals) ->
     pr_fun params pre body post diverges signals
   | Triple (_, pre, e, LTrue, []) ->
-    pr "@[<hov 0>(assert { %a };@ (%a))@]" fprintf_assertion pre fprintf_expr e
+    pr "@[<hov 0>(assert@ {@ %a@ };@ (%a))@]" fprintf_assertion pre fprintf_expr e
   | Triple (true, pre, e, post, exceps) ->
-    pr "@[<hov 0>(assert { %a };@ " fprintf_assertion pre;
-    pr "abstract@ ensures {@ %a }@ " fprintf_assertion post;
-    List.iter (fun (e, r) -> pr "@[<hov 2>raises { %s ->@ %a }@]" e fprintf_assertion r) exceps;
+    pr "@[<hov 0>(assert@ {@ %a@ };@ " fprintf_assertion pre;
+    pr "abstract@ ensures@ {@ %a@ }@ " fprintf_assertion post;
+    List.iter (fun (e, r) -> pr "@[<hov 2>raises@ {@ %s@ ->@ %a@ }@]" e fprintf_assertion r) exceps;
     pr "@ %a@ end)@]" fprintf_expr e
   | Triple (false, pre, e, post, exceps) ->
-    pr "@[<hov 0>(assert { %a };@ " fprintf_assertion pre;
+    pr "@[<hov 0>(assert@ {@ %a@ };@ " fprintf_assertion pre;
     begin match exceps with
     | [] ->
-      pr "let _ = %a in assert { %a }" fprintf_expr e fprintf_assertion post
+      pr "let@ _@ =@ %a@ in@ assert@ {@ %a@ }" fprintf_expr e fprintf_assertion post
     | _ -> failwith "fprintf_expr_node: unsupported non-empty exceps clause in Hoare triple" (* TODO *)
     end;
     pr ")@]"
   | Assert (k, p, e) ->
-    pr "@[<hov 0>(%s@ { %a };@ %a)@]"
+    pr "@[<hov 0>(%s@ {@ %a@ };@ %a)@]"
       (match k with `ASSERT -> "assert" | `ASSUME -> "assume" | `CHECK -> "check")
       fprintf_assertion p fprintf_expr e
   | BlackBox t ->
-    pr "@[<hov 0>any %a @]" (fprintf_type ~need_colon:false false) t
+    pr "@[<hov 0>any@ %a@ @]" (fprintf_type ~need_colon:false false) t
   | Absurd -> pr "@[<hov 0>absurd@ @]"
   | Labeled (l, e) -> pr "@[(%a%a)@]" fprintf_why_label l fprintf_expr e
 
@@ -586,7 +584,7 @@ and fprintf_expr_list' ~locals ~next fmttr =
 and fprintf_expr_list ~locals fmttr l = fprintf_expr_list' ~locals ~next:false fmttr l
 
 
-let fprint_logic_arg fmttr (id, t) = fprintf fmttr "(%s : %a)" (why3_ident id) fprintf_logic_type t
+let fprint_logic_arg fmttr (id, t) = fprintf fmttr "(%s@ :@ %a)" (why3_ident id) fprintf_logic_type t
 
 let string_of_goal_kind =
   function
@@ -602,7 +600,7 @@ let fprintf_why_id ?(constr = false) fmttr { why_name; why_expl; why_pos } =
 
 let fprintf_why_decl fmttr =
   let pr fmt = fprintf fmttr fmt in
-  let ext b = if b then "external " else "" in
+  let ext b = if b then "external@ " else "" in
   let pr_id = fprintf_why_id ~constr:false
   and pr_constr = fprintf_why_id ~constr:true in
   let pr_args = print_list space @@ fun fmt (_id, t) -> fprintf_logic_type fmt t in
@@ -623,52 +621,52 @@ let fprintf_why_decl fmttr =
       in
       collect_locals ~locals:why3_builtin_locals t
     in
-    pr "@[<hov 1>%sval %a@ %a@]@.@." (ext b) pr_id id (fprintf_type ~locals ~need_colon:true false) t
+    pr "@[<hov 1>%sval@ %a@ %a@]@.@." (ext b) pr_id id (fprintf_type ~locals ~need_colon:true false) t
   | Logic (b, id, args, t) when is_prop t ->
-    pr "@[<hov 1>%spredicate %a %a @.@."
+    pr "@[<hov 1>%spredicate@ %a@ %a@ @.@."
       (ext b) pr_id id pr_args args
   | Logic (b, id, args, t) ->
-    pr "@[<hov 1>%sfunction %a %a : %a@.@."
+    pr "@[<hov 1>%sfunction@ %a@ %a@ :@ %a@.@."
       (ext b) pr_id id  pr_args args fprintf_logic_type t
   | Inductive (b, id, args, cases) ->
-    pr "@[<hov 1>%sinductive %a @[%a@] =@\n@[<v 0>%a@]@\n@."
+    pr "@[<hov 1>%sinductive@ %a@ @[%a@]@ =@\n@[<v 0>%a@]@\n@."
       (ext b)
       pr_id id pr_args args
-      (print_list newline @@ fun _ (id, a) -> pr "| %s: @[%a@]" id fprintf_global_assertion a) cases
+      (print_list newline @@ fun _ (id, a) -> pr "|@ %s:@ @[%a@]" id fprintf_global_assertion a) cases
   | Goal (k, id, p)  ->
-    pr "@[<hov 1>%s %a :@ %a@]@.@."
+    pr "@[<hov 1>%s@ %a@ :@ %a@]@.@."
       (string_of_goal_kind k)
       pr_id id
       fprintf_global_assertion p
   | Def (id, e)  ->
-    pr "@[<hov 1>let %a@ =@ %a@]@.@."
+    pr "@[<hov 1>let@ %a@ =@ %a@]@.@."
       pr_id id
       fprintf_global_expr e
   | Predicate (b, id, args, p) ->
-    pr "@[<hov 1>%spredicate %a %a =@ %a@]@.@."
+    pr "@[<hov 1>%spredicate@ %a@ %a@ =@ %a@]@.@."
       (ext b)
       pr_id id
       (print_list space fprint_logic_arg) args
       (fprintf_assertion ~locals:(List.fold_right (StringSet.add % fst) args why3_builtin_locals)) p
   | Function (b, id, args, t, e) ->
-    pr "@[<hov 1>%sfunction %a %a : %a =@ %a@]@.@."
+    pr "@[<hov 1>%sfunction@ %a@ %a@ :@ %a =@ %a@]@.@."
       (ext b)
       pr_id id
       (print_list space fprint_logic_arg) args
       fprintf_logic_type t
       (fprintf_term ~locals:(List.fold_right (StringSet.add % fst) args why3_builtin_locals)) e
   | Type (id, [])  ->
-    pr "@[type %s@]@.@." (why3_ident id.why_name)
+    pr "@[type@ %s@]@.@." (why3_ident id.why_name)
   | Type (id, [t]) ->
-    pr "@[type '%s %s@]@.@." t (why3_ident id.why_name)
+    pr "@[type@ '%s@ %s@]@.@." t (why3_ident id.why_name)
   | Type (id, t :: l) ->
-    pr "@[type ('%s" t;
-    List.iter (pr ", '%s") l;
-    pr ") %s@]@.@." (why3_ident id.why_name)
+    pr "@[type@ ('%s" t;
+    List.iter (pr ",@ '%s") l;
+    pr ")@ %s@]@.@." (why3_ident id.why_name)
   | Exception (id, None) ->
-    pr "@[exception %a@]@.@." pr_constr id
+    pr "@[exception@ %a@]@.@." pr_constr id
   | Exception (id, Some t) ->
-    pr "@[exception %a %a@]@.@." pr_constr id fprintf_logic_type t
+    pr "@[exception@ %a@ %a@]@.@." pr_constr id fprintf_logic_type t
 
 (* Drop auxiliary arguments to satisfy common output interface *)
 let globalize f = f ~locals:why3_builtin_locals

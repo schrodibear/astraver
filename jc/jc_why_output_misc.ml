@@ -544,7 +544,7 @@ let rec fprintf_comma_string_list fmttr =
   function
   | [] -> ()
   | x :: l ->
-    fprintf fmttr ", %s" x;
+    fprintf fmttr ",@ %s" x;
     fprintf_comma_string_list fmttr l
 
 (*******************************************************************************)
