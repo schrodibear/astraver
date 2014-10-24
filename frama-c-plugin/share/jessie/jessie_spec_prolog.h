@@ -42,9 +42,7 @@ typedef char _type;
   @      n % (sizeof (_type)) == 0 &&
   @      \let _n = n / sizeof (_type);
   @      \valid{L1}(((_type *) p1)+(0 .. _n - 1)) && \valid{L2}(((_type *) p2)+(0 .. _n - 1)) &&
-  @      (\base_addr{L1}(p1) != \base_addr{L2}(p2) ||
-  @       \offset_max{L1}(p1) < \offset_min{L2}(p2) ||
-  @       \offset_max{L2}(p2) < \offset_min{L1}(p1));
+  @      (\base_addr{L1}(p1) != \base_addr{L2}(p2) || \separated(p1+(0.._n-1), p2) && \separated(p2+(0.._n-1), p1));
   @ }
   @ */
 
