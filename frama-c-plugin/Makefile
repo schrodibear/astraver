@@ -44,8 +44,8 @@ PLUGIN_NAME:=Jessie
 PLUGIN_CMO:= jessie_config jessie_options jessie_integer common extractor rewrite \
              retype norm interp register
 PLUGIN_HAS_MLI:=yes
-PLUGIN_BFLAGS:=$(JESSIE_INCLUDES) -w -48
-PLUGIN_OFLAGS:=$(JESSIE_INCLUDES) -w -48
+PLUGIN_BFLAGS:=$(JESSIE_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
+PLUGIN_OFLAGS:=$(JESSIE_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
 PLUGIN_EXTRA_BYTE+=$(JCCMO)
 PLUGIN_EXTRA_OPT+=$(JCCMX)
 #PLUGIN_DEPFLAGS:=$(JESSIE_INCLUDES)
