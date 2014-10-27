@@ -1607,6 +1607,13 @@ let rec location env e =
     let fr = Region.make_field t1#region fi in
     fi.fi_type, fr, JCLderef_term (t1, fi)
   in
+  let rec has_range ls =
+    match ls#node with
+    | JCNErange _ -> true
+    | JCNEbinary (ls, `Badd, off) -> has_range off || has_range ls
+    | JCNEderef (ls, _) -> has_range ls
+    | _ -> false
+  in
   let ty, r, loc_node =
     match e#node with
     | JCNElabel (_l, _e) ->
@@ -1619,15 +1626,7 @@ let rec location env e =
         in
         vi.vi_type, vi.vi_region, JCLvar vi
     | JCNEderef (ls, f)
-      when
-        (match ls#node with
-         | JCNEbinary (_, `Badd, off)
-           when
-             (match off#node with
-              | JCNErange _ -> true
-              | _ -> false) ->
-           true
-         | _ -> false) ->
+      when has_range ls ->
       begin try
         deref_location_set_exn ls f
       with Typing_error _ ->
