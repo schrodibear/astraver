@@ -608,38 +608,10 @@ let replace_string_constants =
 let gather_initialization file =
   do_and_update_globals
     (fun _ ->
-      Globals.Vars.iter (fun v iinfo ->
-	let _s = match iinfo.init with
-	  | Some ie ->
-	      let b =
-                Cabs2cil.blockInit
-                  ~ghost:v.vghost (Var v, NoOffset) ie v.vtype in
-	      b.bstmts
-	  | None ->
-	      if bitsSizeOf v.vtype lsr 3 < 100 then
-		(* Enforce zero-initialization of global variables *)
-		let ie =
-                  makeZeroInit ~loc:Cil_datatype.Location.unknown v.vtype
-                in
-		let b =
-                  Cabs2cil.blockInit
-                    ~ghost:v.vghost (Var v, NoOffset) ie v.vtype
-                in
-		b.bstmts
-	      else
-		(* FS#253: Big data structure, do not initialize individually.
-		 * When casts to low-level are supported, call here [memset]
-		 * or equivalent to zero the memory.
-		 *)
-		[]
-	in
-	(* Too big currently, postpone until useful *)
-(*
-	ignore s;
-  	List.iter attach_globinit s;
-*)
-	iinfo.init <- None
-      )) file
+       Globals.Vars.iter (fun _v iinfo ->
+	 (* Too big currently, postpone until useful *)
+	 iinfo.init <- None))
+    file
 
 class copy_spec_specialize_memset =
 object(self)
