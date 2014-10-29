@@ -153,6 +153,14 @@ val mkStructSingleton :
   ?padding:int ->
   string -> string -> Cil_types.typ -> Cil_types.compinfo
 
+val padding_attr_name : string
+val wrapper_attr_name : string
+val padding_field : ?fsize_in_bits:int -> Cil_types.compinfo -> Cil_types.fieldinfo
+val size_of_composite : Cil_types.compinfo -> int option
+val fix_size_of_composite : ?original_size:int -> Cil_types.compinfo -> unit
+val retaining_size_of_composite : Cil_types.compinfo -> (Cil_types.compinfo -> 'a) -> 'a
+val proper_fields : Cil_types.compinfo -> Cil_types.fieldinfo list
+
 val malloc_function : ?kernel:bool -> unit -> Cil_types.varinfo
 val free_function : unit -> Cil_types.varinfo
 

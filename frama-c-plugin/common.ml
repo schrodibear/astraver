@@ -291,6 +291,10 @@ let fold_integral_types f init =
 let embedded_attr_name = "embedded_from"
 let noembed_attr_name = "noembed"
 
+let padding_attr_name = "padding"
+
+let wrapper_attr_name = "wrapper"
+
 (* Reference type *)
 
 (* We introduce a reference type, that is different from the C pointer or
@@ -382,13 +386,9 @@ let mkStructSingleton ?(padding=0) stname finame fitype =
 open! Jessie_integer
 
 let bits_sizeof ty =
-  let rec rec_size ?(top_size=false) ty =
+  let size ty =
     match unrollType ty with
-      | TPtr _ ->
-	  if is_reference_type ty && not top_size then
-            rec_size (pointed_type ty) * (reference_size ty)
-	  else
-	    Int64.of_int (bitsSizeOf ty)
+      | TPtr _ -> Int64.of_int (bitsSizeOf ty)
       | TArray _ -> assert false (* Removed by translation *)
       | TFun _ -> unsupported "Function pointer type %a not allowed" Printer.pp_typ ty
       | TNamed _ -> assert false (* Removed by call to [unrollType] *)
@@ -410,7 +410,7 @@ let bits_sizeof ty =
       | TEnum _ | TVoid _ | TInt _ | TFloat _ | TBuiltin_va_list _ ->
 	  Int64.of_int (bitsSizeOf ty)
   in
-  rec_size ~top_size:true ty
+  size ty
 
 (* Come back to normal 31 bits integers *)
 open! Pervasives
@@ -584,6 +584,67 @@ let name_of_hint_assertion = "hint"
 (* let name_of_safety_behavior = "safety" *)
 
 let name_of_default_behavior = "default"
+
+let size_of_composite ci =
+  if ci.cdefined then
+    Some (bitsSizeOf @@ TComp (ci, empty_size_cache (), []))
+  else
+    None
+
+let padding_field =
+  let padding_type = intType in
+  fun ?fsize_in_bits ci ->
+  { fcomp = ci;
+    forig_name = "";
+    fname = unique_name "padding";
+    ftype = padding_type;
+    fbitfield = fsize_in_bits;
+    fattr = [Attr ("const", []); Attr (padding_attr_name, [])];
+    floc = Cil_datatype.Location.unknown;
+    faddrof = false;
+    fsize_in_bits;
+    foffset_in_bits = None;
+    fpadding_in_bits = None }
+
+let fix_size_of_composite ?original_size ci =
+  let current_size = size_of_composite ci in
+  match original_size, current_size with
+  | Some original_size, Some current_size ->
+    List.iter (fun fi -> fi.foffset_in_bits <- None) ci.cfields;
+    if current_size < original_size then
+      ci.cfields <- ci.cfields @ [padding_field ~fsize_in_bits:(original_size - current_size) ci]
+    else if current_size > original_size then
+      let remaining_size_fix =
+        List.fold_left
+          (fun size_fix fi ->
+             if size_fix > 0 &&
+                not (hasAttribute embedded_attr_name fi.fattr) &&
+                hasAttribute padding_attr_name fi.fattr
+             then
+               let bitsize =
+                 match fi.fsize_in_bits with
+                 | Some s -> s
+                 | None -> failwith "fix_size_of_composite: invalid padding field"
+               in
+               let available_fix = min size_fix bitsize in
+               fi.fsize_in_bits <- Some (bitsize - available_fix);
+               fi.fbitfield <- fi.fsize_in_bits;
+               size_fix - available_fix
+             else
+               size_fix)
+          (current_size - original_size)
+          (List.rev ci.cfields)
+      in
+      assert (remaining_size_fix = 0)
+  | _ -> ()
+
+let retaining_size_of_composite ci f =
+  let original_size = size_of_composite ci in
+  let result = f ci in
+  fix_size_of_composite ?original_size ci;
+  result
+
+let proper_fields ci = List.filter (fun fi -> not @@ hasAttribute padding_attr_name fi.fattr) ci.cfields
 
 (*****************************************************************************)
 (* Visitors                                                                  *)

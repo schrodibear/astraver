@@ -574,7 +574,7 @@ class struct_assign_expander () =
         in
         expand_assign newlv newe fi.ftype loc
       in
-      List.(flatten @@ map field mcomp.cfields)
+      List.(flatten @@ map field @@ proper_fields mcomp)
     | TArray _ ->
       let elem i =
         let cste = constant_expr i in
@@ -610,11 +610,11 @@ class struct_assign_expander () =
         let newlv = addOffsetLval (Field (fi, NoOffset)) lv in
         expand newlv fi.ftype loc
       in
-      List.(flatten @@ map field mcomp.cfields)
+      List.(flatten @@ map field @@ proper_fields mcomp)
     | TArray _ ->
       let elem i =
         let cste = constant_expr i in
-        let newlv = addOffsetLval (Index(cste,NoOffset)) lv in
+        let newlv = addOffsetLval (Index (cste, NoOffset)) lv in
         expand newlv (direct_element_type ty) loc
       in
       let rec all_elem acc i =
@@ -648,7 +648,7 @@ object(self)
       fvi.vtype <- TFun (rt, params, isva, a)
     in
     function
-    | GVarDecl(_spec,v,_attr) ->
+    | GVarDecl (_spec, v, _attr) ->
       if isFunctionType v.vtype && not v.vdefined then retype_func v;
       DoChildren
     | GFun _
@@ -666,7 +666,7 @@ object(self)
           new_exp ~loc:v.vdecl @@
             Lval
               (mkMem
-                 (new_exp ~loc:v.vdecl @@ Lval(Var newv,NoOffset)) NoOffset)
+                 (new_exp ~loc:v.vdecl @@ Lval (Var newv, NoOffset)) NoOffset)
         in
         let copy = mkassign_statement (Var v, NoOffset) rhs v.vdecl in
         add_pending_statement ~beginning:true copy;
@@ -889,37 +889,24 @@ class embed_first_substructs_visitor =
              fi')
           ci'.cfields
       in
-      ci.cfields <- cfields' @ cfields;
+      (retaining_size_of_composite ci @@ fun ci ->
+       ci.cfields <- cfields' @ cfields);
       FH.replace embedded_fields efi true),
     fun efi -> FH.(find (find field_map efi))
   in
-  let do_offs =
+  let do_lval =
     function
-    | Field (fi, Field (fi', NoOffset)) as offs when is_embedded fi ->
+    | Mem { enode = Lval (Mem _ as lhost, Field (fi, NoOffset)) }, Field (fi', NoOffset) as lval when is_embedded fi ->
       begin try
-        Field (get_field fi fi', NoOffset)
+        lhost, Field (get_field fi fi', NoOffset)
       with
-      | Not_found -> offs (* Possible when address of an embedded field is taken *)
+      | Not_found -> lval
       end
-    | off -> off
+    | lval -> lval
   in
   let do_expr e =
     match e.enode with
-    | AddrOf (host, off) ->
-      let off =
-        visitFramacOffset
-          (object
-            inherit frama_c_inplace
-            method! voffs _ =
-              DoChildrenPost
-                (function
-                 | Field (fi, offs) when is_embedded fi ->
-                   offs
-                 | off -> off)
-          end)
-          off
-      in
-      mkCast ~force:true ~e:(mkAddrOf ~loc:e.eloc (host, off)) ~newt:(typeOf e)
+    | Lval (Mem e, Field (fi, NoOffset)) when is_embedded fi -> e
     | _ -> e
   in
 object
@@ -927,8 +914,13 @@ object
 
   method! vcompinfo ci =
     match ci.cfields with
-    | { ftype; fattr } :: _ when isStructOrUnionType ftype && not (hasAttribute noembed_attr_name fattr) ->
-      begin match unrollType ftype with
+    | { ftype; fattr } :: _ when
+        is_reference_type ftype &&
+        reference_size ftype = Int64.one &&
+        isStructOrUnionType (pointed_type ftype) &&
+        not (hasAttribute wrapper_attr_name @@ typeAttrs @@ pointed_type ftype) &&
+        not (hasAttribute noembed_attr_name fattr) ->
+      begin match unrollType (pointed_type ftype) with
       | TComp (ci', _, _) when ci'.cstruct ->
         embed_first_substruct ci ci';
         SkipChildren
@@ -936,8 +928,8 @@ object
       end
     | _ -> SkipChildren
 
-  method! voffs _ = DoChildrenPost do_offs
-  method! vterm_offset = do_on_term_offset (None, Some do_offs)
+  method! vlval _ = DoChildrenPost do_lval
+  method! vterm_lval = do_on_term_lval (None, Some do_lval)
 
   method! vexpr _ = DoChildrenPost do_expr
   method! vterm = do_on_term (None, Some do_expr)
@@ -1387,6 +1379,7 @@ object
     | GFun _ -> DoChildren
     | GAnnot _ -> DoChildren
     | GCompTag(compinfo,_loc) ->
+      retaining_size_of_composite compinfo @@ fun compinfo ->
       List.iter retype_field compinfo.cfields;
       SkipChildren
     | GType _ | GCompTagDecl _ | GEnumTagDecl _ | GEnumTag _
@@ -1603,6 +1596,7 @@ object
 (*                   fi.ftype <- TPtr(element_type fi.ftype,[]) *)
         end
       in
+      retaining_size_of_composite compinfo @@ fun compinfo ->
       List.iter field compinfo.cfields;
       SkipChildren
     | GFun _ | GAnnot _ | GVar _ | GVarDecl _ -> DoChildren
@@ -1648,11 +1642,17 @@ class base_retyping_visitor =
     let wrapper_name = name ^ "P" in
     let field_name = name ^ "M" in
     let compinfo =
-      if isVoidType ty then mkStructEmpty wrapper_name
+      if isVoidType ty
+      then { (mkStructEmpty wrapper_name) with cdefined = true }
       else mkStructSingleton wrapper_name field_name ty
     in
     let tdef = GCompTag (compinfo, Cil_datatype.Location.unknown) in
-    let tdecl = TComp (compinfo,empty_size_cache () ,[]) in
+    let tattrs =
+      if isStructOrUnionType ty || isVoidType ty
+      then []
+      else [Attr (wrapper_attr_name, [])]
+    in
+    let tdecl = TComp (compinfo, empty_size_cache (), tattrs) in
     attach_global tdef;
     tdef, tdecl
   in
@@ -1670,7 +1670,7 @@ object(self)
     with
     | Not_found ->
       (* Construct a new wrapper for this type *)
-      let wrapper_def,wrapper_type = new_wrapper_for_type_no_sharing ty in
+      let wrapper_def, wrapper_type = new_wrapper_for_type_no_sharing ty in
       Htbl_ty.replace type_wrappers ty wrapper_type;
       auto_type_wrappers := Set_ty.add wrapper_type !auto_type_wrappers;
       (* Treat newly constructed type *)
@@ -1689,7 +1689,7 @@ object(self)
    *)
   method private wrap_type_if_needed ty =
     match ty with
-    | TPtr(_elemty, attr) ->
+    | TPtr (_elemty, attr) ->
       (* Do not use [_elemty] directly but rather [pointed_type ty] in order
        * to get to the array element in references, i.e. pointers to arrays.
        *)
@@ -1718,7 +1718,7 @@ object(self)
       else if isStructOrUnionType elemty then
         None
       else
-        Some (TArray (self#new_wrapper_for_type elemty, len, size ,attr))
+        Some (TArray (self#new_wrapper_for_type elemty, len, size, attr))
     | TFun _ -> None
     | TNamed (typeinfo, _attr) ->
       begin match self#wrap_type_if_needed typeinfo.ttype with
@@ -1727,13 +1727,14 @@ object(self)
         Some ty
       | None -> None
       end
-    | TComp(compinfo,_,_) ->
+    | TComp (compinfo, _, _) ->
       let field fi =
         match self#wrap_type_if_needed fi.ftype with
         | Some newtyp ->
           fi.ftype <- newtyp
         | None -> ()
       in
+      retaining_size_of_composite compinfo @@ fun compinfo ->
       List.iter field compinfo.cfields;
       None
     | TVoid _ | TInt _ | TFloat _ | TEnum _ | TBuiltin_va_list _ -> None
@@ -1748,8 +1749,8 @@ object(self)
       | Some newtyp ->
         let newfi = get_unique_field (pointed_type newtyp) in
         let newlv = Mem e, Field (newfi, NoOffset) in
-               (* Check new left-value is well-typed. *)
-(*                 begin try ignore (typeOfLval newlv) with _ -> assert false end; *)
+        (* Check new left-value is well-typed. *)
+        (* begin try ignore (typeOfLval newlv) with _ -> assert false end; *)
         newlv
       | None -> lv
       end
@@ -1922,9 +1923,9 @@ object
 
   method! vglob_aux = function
   | GCompTag (compinfo,_) as g when not compinfo.cstruct ->
-    let fields = compinfo.cfields in
     let field fi = new_field_type fi in
-    let fty = List.map field fields in
+    retaining_size_of_composite compinfo @@ fun compinfo ->
+    let fty = List.map field (proper_fields compinfo) in
     ChangeTo (g :: fty)
   | GFun _ | GAnnot _ | GVar _ | GVarDecl _ -> DoChildren
   | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
@@ -1972,6 +1973,115 @@ end
 
 let remove_array_address file = visitFramacFile (new array_address_remover) file
 
+module H = Cil_datatype.Fieldinfo.Hashtbl
+module S = Cil_datatype.Fieldinfo.Set
+
+(*****************************************************************************)
+(* Retype int field used as pointer.                                         *)
+(*****************************************************************************)
+
+class collect_int_field_visitor (cast_field_to_type : typ H.t) =
+object
+
+  inherit frama_c_inplace
+
+  method! vexpr e =
+    match e.enode with
+    | CastE (ty, e) ->
+      if isPointerType ty then
+        begin match (stripCastsAndInfo e).enode with
+        | Lval (_host, off) ->
+          begin match lastOffset off with
+          | Field (fi, _) when isIntegralType fi.ftype && bits_sizeof ty = bits_sizeof fi.ftype ->
+            H.replace cast_field_to_type fi fi.ftype
+          | _ -> ()
+          end
+        | _ -> ()
+        end;
+      DoChildren
+    | _ -> DoChildren
+end
+
+class retype_int_field_visitor (cast_field_to_type : typ H.t) =
+  let postaction_expr e =
+    match e.enode with
+    | Lval (_host, off) ->
+      begin match lastOffset off with
+      | Field(fi, _) ->
+        begin try
+          new_exp ~loc:e.eloc @@ CastE (H.find cast_field_to_type fi, e)
+        with
+        | Not_found -> e
+        end
+      | _ -> e
+      end
+    | _ -> e
+  in
+object
+
+  inherit frama_c_inplace
+
+  method! vglob_aux = function
+    | GCompTag (compinfo, _) ->
+        let fields = compinfo.cfields in
+        let field fi =
+          if H.mem cast_field_to_type fi then
+            fi.ftype <- TPtr (!Common.struct_type_for_void, [])
+        in
+        retaining_size_of_composite compinfo @@ fun _ ->
+        List.iter field fields;
+        DoChildren
+    | _ -> DoChildren
+
+  method! vterm = do_on_term (None, Some postaction_expr)
+end
+
+let retype_int_field file =
+  let cast_field_to_type = H.create 17 in
+  visitFramacFile (new collect_int_field_visitor cast_field_to_type) file;
+  visitFramacFile (new retype_int_field_visitor cast_field_to_type) file
+
+(*****************************************************************************)
+(* Fill offset/size information in fields                                    *)
+(*****************************************************************************)
+
+class fillOffsetSizeInFields =
+object
+
+  inherit Visitor.frama_c_inplace
+
+  method! vglob_aux = function
+    | GCompTag (compinfo, _loc) ->
+      let basety = TComp (compinfo,empty_size_cache () ,[]) in
+      let field fi nextoff =
+        let size_in_bits =
+          match fi.fbitfield with
+          | Some siz -> siz
+          | None -> bitsSizeOf fi.ftype
+        in
+        let offset_in_bits = fst (bitsOffset basety (Field (fi, NoOffset))) in
+        let padding_in_bits = nextoff - (offset_in_bits + size_in_bits) in
+        assert (padding_in_bits >= 0);
+        fi.fsize_in_bits <- Some size_in_bits;
+        fi.foffset_in_bits <- Some offset_in_bits;
+        fi.fpadding_in_bits <- Some padding_in_bits;
+        if compinfo.cstruct then
+          offset_in_bits
+        else nextoff (* union type *)
+      in
+      begin try
+        ignore (List.fold_right field compinfo.cfields (bitsSizeOf basety))
+      with
+      | SizeOfError _ -> ()
+      end;
+        SkipChildren
+    | _ -> SkipChildren
+
+end
+
+let fill_offset_size_in_fields file =
+  let visitor = new fillOffsetSizeInFields in
+  visitFramacFile visitor file
 
 (*****************************************************************************)
 (* Normalize the C file for Jessie translation.                              *)
@@ -1990,8 +2100,6 @@ let normalize file =
   (* Expand structure copying through parameter, return or assignment. *)
   (* order: before [retype_address_taken], before [retype_struct_variables] *)
   apply expand_struct_assign "expanding structure copying";
-  (* Embed fields of first fist substructures *)
-  apply embed_first_substructs "embedding fields of first substructures";
   (* Rewrite char * into void * in successive casts. *)
   apply rewrite_side_casts "rewriting type char* into void* in successive casts";
   (* Retype variables of structure type. *)
@@ -2004,6 +2112,8 @@ let normalize file =
      retype_address_taken] may recreate structure assignments. *)
   (* order: after [retype_address_taken] *)
   apply expand_struct_assign "expanding structure copying through assignment";
+  (* Fill offset/size information in fields *)
+  apply fill_offset_size_in_fields "filling offset/size information in fields";
   (* Translate union fields into structures. *)
   apply translate_unions  "translate union fields into structures";
   (* Retype fields of type structure and array. *)
@@ -2019,6 +2129,12 @@ let normalize file =
   (* Retype pointers to base types. *)
   (* order: after [retype_fields] *)
   apply retype_base_pointer "retyping pointers to base types";
+  (* Retype int field casted to pointer. *)
+  apply retype_int_field "retyping int field casted to pointer.";
+  (* Embed fields of first fist substructures *)
+  apply embed_first_substructs "embedding fields of first substructures";
+  (* Fill offset/size information in fields *)
+  apply fill_offset_size_in_fields "filling offset/size information in fields";
   (* Remove useless casts. *)
   apply remove_useless_casts "removng useless casts"
 

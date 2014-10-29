@@ -173,45 +173,6 @@ let rename_entities file =
 
 
 (*****************************************************************************)
-(* Fill offset/size information in fields                                    *)
-(*****************************************************************************)
-
-class fillOffsetSizeInFields =
-object
-
-  inherit Visitor.frama_c_inplace
-
-  method! vglob_aux = function
-    | GCompTag(compinfo,_loc) ->
-	let basety = TComp(compinfo,empty_size_cache () ,[]) in
-	let field fi nextoff =
-	  let size_in_bits =
-	    match fi.fbitfield with
-	      | Some siz -> siz
-	      | None -> bitsSizeOf fi.ftype
-	  in
-	  let offset_in_bits = fst (bitsOffset basety (Field(fi,NoOffset))) in
-	  let padding_in_bits = nextoff - (offset_in_bits + size_in_bits) in
-	  assert (padding_in_bits >= 0);
-	  fi.fsize_in_bits <- Some size_in_bits;
-	  fi.foffset_in_bits <- Some offset_in_bits;
-	  fi.fpadding_in_bits <- Some padding_in_bits;
-	  if compinfo.cstruct then
-	    offset_in_bits
-	  else nextoff (* union type *)
-	in
-	ignore(List.fold_right field compinfo.cfields (bitsSizeOf basety));
-	SkipChildren
-    | _ -> SkipChildren
-
-end
-
-let fill_offset_size_in_fields file =
-  let visitor = new fillOffsetSizeInFields in
-  visitFramacFile visitor file
-
-
-(*****************************************************************************)
 (* Replace addrof array with startof.                                        *)
 (*****************************************************************************)
 
@@ -1128,12 +1089,12 @@ class composite_expanding_visitor =
         | _ -> unsupported "Don't know hot to expand term node: %a" Printer.pp_term t
     in
     match unrollType ty with
-      | TComp ({ cfields }, _, _) ->
+      | TComp (ci, _, _) ->
           let do_field ({ ftype } as f) =
             let shift = add_term_offset ftype (`Field f) in
             expand_equality ftype (shift t1) (shift t2)
           in
-          List.flatten @@ List.map do_field cfields
+          List.flatten @@ List.map do_field (proper_fields ci)
       | TArray (telem, _, _, _) as ty ->
           let do_elem i =
             let shift = add_term_offset telem (`Index i) in
@@ -3238,8 +3199,6 @@ let rewrite file =
      sharing among logic variables.
   *)
   apply rename_entities "renaming entities";
-  (* Fill offset/size information in fields *)
-  apply fill_offset_size_in_fields "filling offset/size information in fields";
   (* Replace addrof array with startof. *)
   apply replace_addrof_array "replacing addrof array with startof";
   (* Replace string constants by global variables. *)

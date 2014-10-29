@@ -44,70 +44,6 @@ module H = Fieldinfo.Hashtbl
 module S = Fieldinfo.Set
 
 (*****************************************************************************)
-(* Retype int field used as pointer.                                         *)
-(*****************************************************************************)
-
-class collect_int_field_visitor (cast_field_to_type : typ H.t) =
-object
-
-  inherit frama_c_inplace
-
-  method! vexpr e =
-    match e.enode with
-    | CastE (ty, e) ->
-      if isPointerType ty then
-        begin match (stripCastsAndInfo e).enode with
-        | Lval (_host, off) ->
-          begin match lastOffset off with
-          | Field (fi, _) when isIntegralType fi.ftype && bits_sizeof ty = bits_sizeof fi.ftype ->
-            H.replace cast_field_to_type fi fi.ftype
-          | _ -> ()
-          end
-        | _ -> ()
-        end;
-      DoChildren
-    | _ -> DoChildren
-end
-
-class retype_int_field_visitor (cast_field_to_type : typ H.t) =
-  let postaction_expr e =
-    match e.enode with
-    | Lval (_host, off) ->
-      begin match lastOffset off with
-      | Field(fi, _) ->
-        begin try
-          new_exp ~loc:e.eloc @@ CastE (H.find cast_field_to_type fi, e)
-        with
-        | Not_found -> e
-        end
-      | _ -> e
-      end
-    | _ -> e
-  in
-object
-
-  inherit frama_c_inplace
-
-  method! vglob_aux = function
-    | GCompTag (compinfo, _) ->
-        let fields = compinfo.cfields in
-        let field fi =
-          if H.mem cast_field_to_type fi then
-            fi.ftype <- TPtr (!Common.struct_type_for_void, [])
-        in
-        List.iter field fields;
-        DoChildren
-    | _ -> DoChildren
-
-  method! vterm = do_on_term (None, Some postaction_expr)
-end
-
-let retype_int_field file =
-  let cast_field_to_type = H.create 17 in
-  visitFramacFile (new collect_int_field_visitor cast_field_to_type) file;
-  visitFramacFile (new retype_int_field_visitor cast_field_to_type) file
-
-(*****************************************************************************)
 (* Organize structure types in hierarchy.                                    *)
 (*****************************************************************************)
 
@@ -206,7 +142,9 @@ let same_fields fi1 fi2 =
 
 let struct_fields_exn ty =
   match unrollType ty with
-  | TComp (compinfo, _, _) -> compinfo.cfields
+  | TComp (compinfo, _, _) ->
+    List.filter (fun fi -> not @@ hasAttribute padding_attr_name fi.fattr) compinfo.cfields |>
+    begin function [] when compinfo.cfields <> [] -> [List.hd compinfo.cfields] | fields -> fields end
   | t -> fatal "struct_fields: non-composite type %a" Printer.pp_typ t
 
 let cmp_subtype =
@@ -337,13 +275,19 @@ let create_struct_hierarchy file =
   visitFramacFile (new struct_hierarchy_builder) file;
   compute_hierarchy ()
 
-let rec subtype ty parentty =
-  Typ.equal ty parentty ||
-  try
-    subtype (Typ.Hashtbl.find parent_type ty) parentty
-  with Not_found -> false
+let subtype ty parentty =
+  let rec subtype ty parentty =
+    Typ.equal ty parentty ||
+    try
+      subtype (Typ.Hashtbl.find parent_type ty) parentty
+    with Not_found -> false
+  in
+  let ty, parentty = map_pair typeDeepDropAllAttributes (ty, parentty) in
+  subtype ty parentty
 
-let parent_type = Typ.Hashtbl.find parent_type
+let parent_type =
+  typeDeepDropAllAttributes %>
+  Typ.Hashtbl.find parent_type
 
 (*****************************************************************************)
 (* Retype the C file for Jessie translation.                                 *)
@@ -351,8 +295,6 @@ let parent_type = Typ.Hashtbl.find parent_type
 
 let retype file =
   let apply = Rewrite.apply ~file in
-  (* Retype int field casted to pointer. *)
-  apply retype_int_field "retyping int field casted to pointer.";
   (* Organize structure types in hierarchy. *)
   apply create_struct_hierarchy "organizing structure types in hierarchy."
 

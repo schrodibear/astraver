@@ -421,20 +421,8 @@ let collect file =
   done with Exit -> () end;
   { Result. types; comps; fields; enums; vars; dcomps }
 
-let dummy_field ci =
-  { fcomp = ci;
-    forig_name = "";
-    fname = "dummy";
-    ftype = intType;
-    fbitfield = None;
-    fattr = [Attr ("const", [])];
-    floc = Cil_datatype.Location.unknown;
-    faddrof = false;
-    fsize_in_bits = None;
-    foffset_in_bits = None;
-    fpadding_in_bits = None }
-
-class extractor { Result. types; comps; fields; enums; vars; dcomps } = object
+class extractor { Result. types; comps; fields; enums; vars; dcomps } =
+object
   inherit frama_c_inplace
 
   method! vtype =
@@ -444,19 +432,22 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } = object
     | _ -> DoChildren
 
   method! vglob_aux =
-    let dummy_if_empty ci =
+    let dummy_if_empty ?original_size ci =
       function
-      | [] -> [dummy_field ci]
+      | [] -> [padding_field ?fsize_in_bits:original_size ci]
       | l -> l
     in
     function
     | GType (ti, _) when Set.mem types ti -> SkipChildren
     | GCompTag (ci, _) | GCompTagDecl (ci, _) when Set.mem comps ci ->
+      retaining_size_of_composite ci @@ fun ci ->
+      let original_size = size_of_composite ci in
       let is_old_parent =
         let old_parent = try Some (List.hd ci.cfields) with Failure "hd" -> None in
         fun fi -> may_map ~dft:false ((==) fi) old_parent
       in
-      ci.cfields <- dummy_if_empty ci (List.filter (fun fi -> fi.faddrof || Set.mem fields fi) ci.cfields);
+      ci.cfields <-
+        dummy_if_empty ?original_size ci (List.filter (fun fi -> fi.faddrof || Set.mem fields fi) ci.cfields);
       ListLabels.iteri ci.cfields
         ~f:(fun i fi ->
              if i == 0 && isStructOrUnionType fi.ftype && not (is_old_parent fi) then
@@ -466,9 +457,10 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } = object
              fi.fpadding_in_bits <- None);
       SkipChildren
     | GCompTag (ci, _) | GCompTagDecl (ci, _) when Set.mem dcomps ci ->
+      let original_size = size_of_composite ci in
       (* The composite is dummy i.e. only used as an abstract type, so *)
       (* its precise contents isn't matter. *)
-      ci.cfields <- dummy_if_empty ci [];
+      ci.cfields <- dummy_if_empty ?original_size ci [];
       SkipChildren
     | GEnumTag (ei, _) | GEnumTagDecl (ei, _) when Set.mem enums ei ->
       SkipChildren

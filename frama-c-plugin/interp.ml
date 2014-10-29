@@ -2599,23 +2599,23 @@ let global vardefs g =
   let dnodes = match g with
     | GType _ -> [] (* No typedef in Jessie *)
 
-    | GCompTag(compinfo,pos) when compinfo.cstruct -> (* struct type *)
-        let field fi =
-          let this =
-            default_field_modifiers,
-            ctype ?bitsize:fi.fsize_in_bits fi.ftype,
-            fi.fname, fi.fsize_in_bits
-          in
-          let padding_size =
-            match fi.fpadding_in_bits with None -> assert false | Some i -> i
-          in
-          if padding_size = 0 then [this] else
-            let padding =
-              default_field_modifiers,
-              type_of_padding, unique_name "padding", fi.fpadding_in_bits
-            in
-            [this;padding]
+    | GCompTag (compinfo, pos) when compinfo.cstruct -> (* struct type *)
+      let field fi =
+        let add_padding size acc =
+          if Pervasives.(size > 0) then
+            acc @ [default_field_modifiers, type_of_padding, unique_name "padding", Some size]
+          else acc
         in
+        if hasAttribute padding_attr_name fi.fattr then
+          opt_fold add_padding fi.fsize_in_bits [] |>
+          opt_fold add_padding fi.fpadding_in_bits
+        else
+          opt_fold add_padding fi.fpadding_in_bits @@
+          [default_field_modifiers,
+           ctype ?bitsize:fi.fsize_in_bits fi.ftype,
+           fi.fname,
+           fi.fsize_in_bits]
+      in
         let model_field mi =
           default_field_modifiers,
             ltype mi.mi_field_type,
@@ -2625,7 +2625,7 @@ let global vardefs g =
           List.fold_right
             (fun fi acc ->
                let repfi = Retype.FieldUF.repr fi in
-               if Fieldinfo.equal fi repfi then
+               if Fieldinfo.equal fi repfi && not (hasAttribute embedded_attr_name fi.fattr) then
                  field fi @ acc
                else acc)
             compinfo.cfields []
@@ -2657,7 +2657,7 @@ let global vardefs g =
             ]
         end
 
-    | GCompTag(compinfo,pos) -> (* union type *)
+    | GCompTag (compinfo, pos) -> (* union type *)
         assert (not compinfo.cstruct);
         let field fi =
           let ty = pointed_type fi.ftype in
@@ -2688,7 +2688,7 @@ let global vardefs g =
              type_of_padding, unique_name "padding", Some union_size]
         in
         let union_tag = JCDtag(compinfo.cname,[],None,padding,[]) in
-        let fields = List.map field compinfo.cfields in
+        let fields = List.map field (proper_fields compinfo) in
         (*let rec has_pointer ty =
           match unrollType ty with
             | TComp(compinfo,_,_) ->
