@@ -826,57 +826,35 @@ predicate alloc_extends (a1 : alloc_table 't) (a2 : alloc_table 't) =
   forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
     valid a1 p -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
 
-function alloc_block (a : alloc_table 't) : alloc_table 't
+predicate alloc_block (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) (n : int) =
+  forall q : pointer 't [offset_min a2 q | offset_min a1 q | offset_max a1 q | offset_max a1 q].
+      (not same_block q p ->
+        offset_min a2 q = offset_min a1 q /\
+        offset_max a2 q = offset_max a1 q) /\
+      (same_block q p ->
+        offset_min a2 q = 0 - sub_pointer q p /\
+        offset_max a2 q = n - 1 - sub_pointer q p)
 
-function alloc_block_pointer (a : alloc_table 't) : pointer 't
+predicate free_block (a1: alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) =
+  forall q : pointer 't [offset_min a2 q | offset_min a1 q | offset_max a2 q | offset_max a1 q].
+      (not same_block q p  ->
+        offset_min a2 q = offset_min a1 q /\
+        offset_max a2 q = offset_max a1 q) /\
+      (same_block q p ->
+        offset_min a2 q = 0 - sub_pointer q p /\
+        offset_max a2 q = -1 - sub_pointer q p)
 
-function alloc_block_size (a : alloc_table 't) : int
-
-axiom alloc_block:
-  forall a : alloc_table 't [alloc_block a].
-    forall q : pointer 't [offset_min (alloc_block a) q | offset_min a q | offset_max (alloc_block a) q | offset_max a q].
-      (not same_block q (alloc_block_pointer a) ->
-        offset_min (alloc_block a) q = offset_min a q /\
-        offset_max (alloc_block a) q = offset_max a q) /\
-      (same_block q (alloc_block_pointer a) ->
-        offset_min (alloc_block a) q = 0 - sub_pointer q (alloc_block_pointer a) /\
-        offset_max (alloc_block a) q = (alloc_block_size a) - 1 - sub_pointer q (alloc_block_pointer a))
-
-
-function free_block (a : alloc_table 't) : alloc_table 't
-
-function free_block_pointer (a : alloc_table 't) : pointer 't
-
-axiom free_block:
-  forall a : alloc_table 't [free_block a].
-    forall q : pointer 't [offset_min (free_block a) q | offset_min a q | offset_max (free_block a) q | offset_max a q].
-      (not same_block q (free_block_pointer a)  ->
-        offset_min (free_block a) q = offset_min a q /\
-        offset_max (free_block a) q = offset_max a q) /\
-      (same_block q (free_block_pointer a) ->
-        offset_min (free_block a) q = 0 - sub_pointer q (free_block_pointer a) /\
-        offset_max (free_block a) q = -1 - sub_pointer q (free_block_pointer a))
-
-function switch_blocks (a : alloc_table 't) : alloc_table 't
-
-function switch_blocks_free_pointer (a : alloc_table 't) : pointer 't
-
-function switch_blocks_alloc_pointer (a : alloc_table 't) : pointer 't
-
-function switch_blocks_alloc_size (a : alloc_table 't) : int
-
-axiom switch_blocks:
-  forall a : alloc_table 't [switch_blocks a].
-    forall r : pointer 't [offset_min (switch_blocks a) r | offset_min a r | offset_max (switch_blocks a) r | offset_max a r].
-      (not same_block r (switch_blocks_free_pointer a) /\ not same_block r (switch_blocks_alloc_pointer a) ->
-        offset_min (switch_blocks a) r = offset_min a r /\
-        offset_max (switch_blocks a) r = offset_max a r) /\
-      (same_block r (switch_blocks_free_pointer a) ->
-        offset_min (switch_blocks a) r = 0 - sub_pointer r (switch_blocks_free_pointer a) /\
-        offset_max (switch_blocks a) r = -1 - sub_pointer r (switch_blocks_free_pointer a)) /\
-      (same_block r (switch_blocks_alloc_pointer a) ->
-        offset_min (switch_blocks a) r = 0 - sub_pointer r (switch_blocks_alloc_pointer a) /\
-        offset_max (switch_blocks a) r = (switch_blocks_alloc_size a) - 1 - sub_pointer r (switch_blocks_alloc_pointer a))
+predicate switch_blocks (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) (q : pointer 't) (n : int) =
+  forall r : pointer 't [offset_min a2 r | offset_min a1 r | offset_max a2 r | offset_max a1 r].
+      (not same_block r p /\ not same_block r q ->
+        offset_min a2 r = offset_min a1 r /\
+        offset_max a2 r = offset_max a1 r) /\
+      (same_block r p ->
+        offset_min a2 r = 0 - sub_pointer r p /\
+        offset_max a2 r = -1 - sub_pointer r p) /\
+      (same_block r q ->
+        offset_min a2 r = 0 - sub_pointer r q /\
+        offset_max a2 r = n - 1 - sub_pointer r q)
 
 function rmem (m : memory 't 'v1) : memory 't 'v2
 
@@ -942,9 +920,9 @@ axiom alloc_same_except_trans:
           alloc_same_except a2 a3 l ->
           alloc_same_except a1 a3 l
 
-predicate alloc (a1 : alloc_table 't) (a2 : alloc_table 't) (q : pointer 't) =
-  forall p: pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
-    not same_block p q ->
+predicate alloc_blockset (a1 : alloc_table 't) (a2 : alloc_table 't) (q : pset 't) =
+  forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+    (forall r : pointer 't. in_pset r q -> not same_block p r) ->
       offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
 
 predicate tag_extends (t1 : tag_table 't) (t2 : tag_table 't) =
@@ -960,10 +938,12 @@ axiom tag_same_except_refl:
   forall l : pset 't.
     tag_same_except t t l
 
-predicate alloc_tag (t1 : tag_table 't) (t2 : tag_table 't) (q : pointer 't) =
-  forall p : pointer 't.
+predicate alloc_tag_blockset (t1 : tag_table 't) (t2 : tag_table 't) (q : pset 't) =
+  forall p : pointer 't [tag t1 p | tag t2 p].
     tag t1 p <> bottom_tag -> tag t2 p = tag t1 p
 
-predicate free (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) = alloc a1 a2 p
+predicate alloc_tag_block (t1 : tag_table 't) (t2 : tag_table 't) (p : pointer 't) (n : int) = tag_extends t1 t2
+
+predicate free_blockset (a1 : alloc_table 't) (a2 : alloc_table 't) (q : pset 't) = alloc_blockset a1 a2 q
 
 end

@@ -575,10 +575,7 @@ val safe_free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
   writes { a }
   ensures  { (p = null -> !a = (old !a)) /\
              (p <> null ->
-              alloc_same_except (old !a) !a (pset_all (pset_singleton p)) /\
-              !a = free_block (old !a) /\
-              free_block_pointer !a = p /\
-              free (old !a) !a p /\
+              free_block (old !a) !a p /\
               allocable !a p) }
 
 val free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
@@ -588,10 +585,7 @@ val free_parameter (a : ref (alloc_table 't)) (p : pointer 't) : unit
                 ("expl:Valid" offset_min !a p = 0 /\ offset_max !a p >= 0)) }
   ensures  { (p = null -> !a = (old !a)) /\
              (p <> null ->
-              alloc_same_except (old !a) !a (pset_all (pset_singleton p)) /\
-              !a = free_block (old !a) /\
-              free_block_pointer !a = p /\
-              free (old !a) !a p /\
+              free_block (old !a) !a p /\
               allocable !a p) }
 
 val safe_reinterpret_parameter
@@ -603,19 +597,11 @@ val safe_reinterpret_parameter
       (p : pointer 't) :
       unit
   writes { a, m }
-  ensures  { let pset_old = pset_all (pset_singleton p) in
+  ensures  { let pset_old = pset_singleton p in
              let ps = downcast t p s2 in
-             let pset_new = pset_all (pset_singleton ps) in
-             alloc_same_except (old !a) !a (pset_union pset_old pset_new) /\
-             let a' = free_block (old !a) in
-             !a = alloc_block a' /\
-             free_block_pointer (old !a) = p /\
-             alloc_block_pointer a' = ps /\
-             alloc_block_size a' = (offset_max !a ps) + 1 /\
-             !a = switch_blocks (old !a) /\
-             switch_blocks_free_pointer (old !a) = p /\
-             switch_blocks_alloc_pointer (old !a) = ps /\
-             switch_blocks_alloc_size (old !a) = (offset_max !a ps) + 1 /\
+             let pset_new = pset_singleton ps in
+             alloc_blockset (old !a) !a (pset_union pset_old pset_new) /\
+             switch_blocks (old !a) !a p ps (offset_max !a ps + 1) /\
              alloc_fresh (old !a) ps /\
              allocable !a p /\
              let pset_range_new =
@@ -640,19 +626,11 @@ val reinterpret_parameter
              /\  ("expl:Valid cast" ("expl:Split" cast_factor s1 s2 > 0) \/
                   ("expl:Join" mod (offset_max !a p - offset_min !a p + 1) (- cast_factor s1 s2) = 0))
            }
-  ensures  { let pset_old = pset_all (pset_singleton p) in
+  ensures  { let pset_old = pset_singleton p in
              let ps = downcast t p s2 in
-             let pset_new = pset_all (pset_singleton ps) in
-             alloc_same_except (old !a) !a (pset_union pset_old pset_new) /\
-             let a' = free_block (old !a) in
-             !a = alloc_block a' /\
-             free_block_pointer (old !a) = p /\
-             alloc_block_pointer a' = ps /\
-             alloc_block_size a' = (offset_max !a ps) + 1 /\
-             !a = switch_blocks (old !a) /\
-             switch_blocks_free_pointer (old !a) = p /\
-             switch_blocks_alloc_pointer (old !a) = ps /\
-             switch_blocks_alloc_size (old !a) = (offset_max !a ps) + 1 /\
+             let pset_new = pset_singleton ps in
+             alloc_blockset (old !a) !a (pset_union pset_old pset_new) /\
+             switch_blocks (old !a) !a p ps (offset_max !a ps + 1) /\
              alloc_fresh (old !a) ps /\
              allocable !a p /\
              let pset_range_new =

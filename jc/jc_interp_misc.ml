@@ -966,7 +966,7 @@ let make_valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
       List.flatten @@
         map_embedded_fields ac pc ~p:(LVar p)
           ~f:(fun ~acr ~pc ~p ~l ~r ->
-                [make_valid_pred_app ~in_param ~equal acr pc p
+                [make_valid_pred_app ~in_param ~equal:false acr pc p
                   (if left then Some (const_of_num l) else None)
                   (if right then Some (const_of_num r) else None)])
     in
@@ -1107,7 +1107,7 @@ let make_instanceof_pred ~exact
 
 (* Alloc *)
 
-let make_frame_pred_app ~for_ ~in_param (ac, r) pc p =
+let make_frame_pred_app ~for_ ~in_param (ac, r) pc p n =
   let params =
     let tables =
       let map ~f l = List.(flatten @@ map f l) in
@@ -1130,10 +1130,11 @@ let make_frame_pred_app ~for_ ~in_param (ac, r) pc p =
     in
     tables @ mems ac pc In_app r
   in
-  LPred (frame_pred_name ~for_ ac pc, p :: params)
+  LPred (frame_pred_name ~for_ ac pc, p :: n :: params)
 
 let make_frame_pred ~for_ ac pc =
   let p = "p" in
+  let n = "n" in
   let params =
     let tables =
       let map  ~f l = List.(flatten @@ map f l) in
@@ -1149,11 +1150,12 @@ let make_frame_pred ~for_ ac pc =
         map (all_tags_ac ac pc)
           ~f:(tables_for ~generic_x_table_name:generic_tag_table_name ~x_table_type:tag_table_type)
     in
-    [p, pointer_type ac pc] @ tables @ mems ac pc In_pred
+    [p, pointer_type ac pc; n, why_integer_type] @ tables @ mems ac pc In_pred
   in
   let frame =
     let assc =
       let p = LVar p in
+      let n = LVar n in
       let generic_x_table_name ac =
         match for_ with
         | `alloc_tables -> generic_alloc_table_name ac
@@ -1164,7 +1166,7 @@ let make_frame_pred ~for_ ac pc =
           | JCalloc_root ri ->
             generic_tag_table_name ri
       in
-      let assoc ac p = generic_x_table_name ac, p in
+      let assoc ac p = generic_x_table_name ac, p, None in
       let rec frame ac pc p =
         assoc ac p ::
         (List.flatten @@
@@ -1172,28 +1174,29 @@ let make_frame_pred ~for_ ac pc =
             ~f:(fun ~acr:(ac, _) ~pc ~p ~l ~r ->
                 if Num.(l <=/ r) then frame ac pc p else []))
       in
-      frame ac pc p
+      frame ac pc p |>
+      fun l -> List.(let xt, p, _ = hd l in (xt, p, Some n) :: tl l)
     in
-    let cmp (a1, _) (a2, _) = compare a1 a2 in
+    let cmp (a1, _, _) (a2, _, _) = compare a1 a2 in
     List.(group_consecutive (fun x -> cmp x %> (=) 0) @@ sort cmp assc) |>
-    (let make_predicates pred xt p =
+    (let make_predicates pred xt args =
       let tables = [LVar (old_name xt); LVar xt] in
       [LPred ((match for_ with `alloc_tables -> "alloc"  | `tag_tables -> "tag") ^ "_extends", tables);
-       LPred (pred, tables @ [p])]
+       LPred (pred, tables @ args)]
      in
      List.map
        (function
-         | [xt, p] ->
-           let f = match for_ with `alloc_tables -> "alloc" | `tag_tables -> "alloc_tag" in
-           make_predicates f xt p
-         | (xt, p) :: ps ->
-           let f = (match for_ with `alloc_tables -> "alloc" | `tag_tables -> "tag") ^ "_same_except" in
-           make_predicates f xt @@
-           let pset_all_singleton p = LApp ("pset_all", [LApp ("pset_singleton", [p])]) in
+         | [xt, p, Some n] ->
+           let f = match for_ with `alloc_tables -> "alloc_block" | `tag_tables -> "alloc_tag_block" in
+           make_predicates f xt [p; n]
+         | (xt, p, _) :: ps ->
+           let f = "alloc" ^ (match for_ with `alloc_tables -> "" | `tag_tables -> "_tag") ^ "_blockset" in
+           make_predicates f xt
+             [let pset_singleton p = LApp ("pset_singleton", [p]) in
               List.fold_left
-                (fun acc (_, p) -> LApp ("pset_union", [acc; pset_all_singleton p]))
-                (pset_all_singleton p)
-                ps
+                (fun acc (_, p, _) -> LApp ("pset_union", [acc; pset_singleton p]))
+                (pset_singleton p)
+                ps]
         | _ -> assert false (* group_consecutive doesn't return [[]], it instead returns just [] *)))
     |> List.flatten
     |> make_and_list
@@ -1263,15 +1266,16 @@ let make_alloc_param (type t1) (type t2) :
       [], write_effects,
       (* normal post *)
       make_and_list (
-        [(* [valid_st(result, 0, n-1, alloc ...)] *)
-         (let f =
-            make_valid_pred_app ~in_param:true ~equal:true (ac,dummy_region) pc lresult (Some (const_of_int 0))
-          in
+        (* [valid_st(result, 0, n-1, alloc ...)] *)
+        let rbound, size =
           match arg with
-          | Singleton -> f @@ Some (const_of_int 0)
-          | Range_0_n -> f @@ Some (LApp ("sub_int", [LVar (get_n n); const_of_int 1])));
-         make_frame_pred_app ~for_:`alloc_tables ~in_param:true (ac, dummy_region) pc lresult;
-         make_frame_pred_app ~for_:`tag_tables ~in_param:true (ac, dummy_region) pc lresult;
+          | Singleton -> map_pair const_of_int (0, 1)
+          | Range_0_n -> LApp ("sub_int", [LVar (get_n n); const_of_int 1]), LVar (get_n n)
+        in
+        [make_valid_pred_app ~in_param:true ~equal:true (ac, dummy_region) pc lresult
+           (Some (const_of_int 0)) (Some rbound);
+         make_frame_pred_app ~for_:`alloc_tables ~in_param:true (ac, dummy_region) pc lresult size;
+         make_frame_pred_app ~for_:`tag_tables ~in_param:true (ac, dummy_region) pc lresult size;
          make_fresh_pred_app ~for_:`alloc_tables ~in_param:true (ac, dummy_region) pc lresult;
          make_fresh_pred_app ~for_:`tag_tables ~in_param:true (ac, dummy_region) pc lresult]
         @ instanceof_post),
