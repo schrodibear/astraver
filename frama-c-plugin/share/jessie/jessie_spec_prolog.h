@@ -53,6 +53,7 @@ typedef char _type;
   @          \valid(((_type *) src)+(0 .. _n - 1)) &&
   @          separated__type{Pre, Pre}((_type *) dest,(_type *) src, n);
   @ assigns ((_type *) dest)[0 .. (n / sizeof (_type)) - 1] \from ((_type *) src)[0 .. (n / sizeof (_type)) - 1];
+  @ allocates \nothing;
   @ ensures memcmp__type{Here, Here}((_type *) dest, (_type *) src, n) && \result == dest;
   @*/
 extern _type *memcpy__type(_type *restrict dest, const _type *restrict src, size_t n);
@@ -63,6 +64,7 @@ extern _type *memcpy__type(_type *restrict dest, const _type *restrict src, size
   @          \valid(((_type *) dest)+(0 .. _n - 1)) &&
   @          \valid(((_type *) src)+(0 .. _n - 1));
   @ assigns ((_type *) dest)[0 .. (n / sizeof (_type)) - 1] \from ((_type *) src)[0 .. (n / sizeof (_type)) - 1];
+  @ allocates \nothing;
   @ ensures memcmp__type{Here, Pre}((_type *) dest, (_type *) src, n) && \result == dest;
   @*/
 extern _type *memmove__type(_type *dest, const _type *src, size_t n);
@@ -73,6 +75,7 @@ extern _type *memmove__type(_type *dest, const _type *src, size_t n);
   @          \valid(((_type *) dest)+(0 .. _n - 1)) &&
   @          \valid(((_type *) src)+(0 .. _n - 1));
   @ assigns \nothing;
+  @ allocates \nothing;
   @ ensures \result == 0 <==> memcmp__type{Here, Here}((_type *) dest, (_type *) src, n);
   @*/
 extern int memcmp__type(const _type *dest, const _type *src, size_t n);
@@ -82,6 +85,7 @@ extern int memcmp__type(const _type *dest, const _type *src, size_t n);
   @          \let _n = n / sizeof (_type);
   @          \valid(((_type *) dest)+(0 .. _n - 1));
   @ assigns ((_type *) dest)[0 .. (n / sizeof (_type)) - 1] \from val;
+  @ allocates \nothing;
   @ ensures \let _n = n / sizeof (_type);
   @           val == 0 ==> \forall integer k; 0 <= k < _n ==> dest[k] == (_type) (unsigned  char) val;
   @*/
