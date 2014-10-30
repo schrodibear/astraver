@@ -2616,46 +2616,50 @@ let global vardefs g =
            fi.fname,
            fi.fsize_in_bits]
       in
-        let model_field mi =
-          default_field_modifiers,
-            ltype mi.mi_field_type,
-            mi.mi_name, None
-        in
-        let fields =
-          List.fold_right
-            (fun fi acc ->
-               let repfi = Retype.FieldUF.repr fi in
-               if Fieldinfo.equal fi repfi && not (hasAttribute embedded_attr_name fi.fattr) then
-                 field fi @ acc
-               else acc)
-            compinfo.cfields []
-        in
-        let fields =
-          List.fold_right
-            (fun mi acc -> model_field mi :: acc)
-            (Norm.model_fields compinfo) fields
-        in
-        let _parent = None in
-(*           find_or_none (Hashtbl.find Norm.type_to_parent_type) compinfo.cname *)
-(*         in *)
-        let ty = TComp(compinfo, empty_size_cache (), []) in
-        begin try
-          let parentty = Retype.parent_type ty in
-          let parent = get_struct_name parentty in
-          [
-            JCDtag(compinfo.cname,[],Some (parent,[]),fields,[])
-          ]
+      let model_field mi =
+        default_field_modifiers,
+        ltype mi.mi_field_type,
+        mi.mi_name,
+        None
+      in
+      let ty = TComp (compinfo, empty_size_cache (), []) in
+      let fields =
+        List.fold_right
+          (fun fi acc ->
+             let repfi = Retype.FieldUF.repr fi in
+             let is_embedded_padding =
+               (* Padding fields (always at the end) are not taken into account in inheritance relation,
+                  therefore they are representants of themselves anyway *)
+               hasAttribute embedded_attr_name fi.fattr && hasAttribute padding_attr_name fi.fattr
+             in
+             let parentty = Retype.parent_type ty in
+             if Fieldinfo.equal fi repfi && (not is_embedded_padding || not @@ has_some parentty)
+             then
+               field fi @ acc
+             else
+               acc)
+          compinfo.cfields
+          []
+      in
+      let fields =
+        List.fold_right
+          (fun mi acc -> model_field mi :: acc)
+          (Norm.model_fields compinfo)
+          fields
+      in
+      begin match Retype.parent_type ty with
+      | Some parentty ->
+        let parent = get_struct_name parentty in
+        [JCDtag (compinfo.cname, [], Some (parent,[]), fields, [])]
+      | None ->
+        try
+          ignore (Typ.Hashtbl.find Norm.generated_union_types ty);
+          [JCDtag (compinfo.cname, [], None, fields, [])]
         with Not_found ->
-          try
-            ignore(Typ.Hashtbl.find Norm.generated_union_types ty);
-            [JCDtag(compinfo.cname,[],None,fields,[])]
-          with Not_found ->
-            let id = mkidentifier compinfo.cname pos in
-            [
-              JCDtag(compinfo.cname,[],None,fields,[]);
-              JCDvariant_type(compinfo.cname,[id])
-            ]
-        end
+          let id = mkidentifier compinfo.cname pos in
+          [JCDtag (compinfo.cname, [], None, fields, []);
+           JCDvariant_type (compinfo.cname, [id])]
+      end
 
     | GCompTag (compinfo, pos) -> (* union type *)
         assert (not compinfo.cstruct);
@@ -3122,10 +3126,9 @@ let memory_reinterpretation_predicates get_compinfo () =
       let is_void_subtype =
         let ci_opt = get_compinfo ty in
         has_some ci_opt &&
-        try
-          get_struct_name @@ Retype.parent_type @@ TComp (the ci_opt, empty_size_cache (), [])
-            = wrapper_name voidType
-        with Not_found -> false
+        match Retype.parent_type @@ TComp (the ci_opt, empty_size_cache (), []) with
+        | Some parentty -> get_struct_name parentty = wrapper_name voidType
+        | None -> false
       in
       let acc =
         match is_void_subtype, bitsize with

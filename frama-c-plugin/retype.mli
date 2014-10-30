@@ -40,6 +40,6 @@ val same_fields : fieldinfo -> fieldinfo -> bool
 
 val subtype : typ -> typ -> bool
 
-val parent_type : typ -> typ
+val parent_type : typ -> typ option
 
 val retype : file -> unit

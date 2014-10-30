@@ -198,12 +198,12 @@ let cmp_subtype =
 class struct_hierarchy_builder =
   let unify_type_hierarchies ty1 ty2 =
     (* Extract info from types *)
-    let compinfo_of_ty_exn ty =
+    let comp_ty_of_ty_exn ty =
       match unrollType (pointed_type ty) with
-      | TComp (compinfo, _, _) -> compinfo
+      | TComp (ci, _, _) -> typeDeepDropAllAttributes @@ TComp (ci, empty_size_cache (), [])
       | t -> fatal "unify_type_hierarchies: non-composite type %a" Printer.pp_typ t
     in
-    let ty1, ty2 = map_pair (fun ty -> TComp (compinfo_of_ty_exn ty, empty_size_cache (), [])) (ty1, ty2) in
+    let ty1, ty2 = map_pair comp_ty_of_ty_exn (ty1, ty2) in
     (* Compare types *)
     match cmp_subtype ty1 ty2 with
     | `supertype ->
@@ -285,9 +285,9 @@ let subtype ty parentty =
   let ty, parentty = map_pair typeDeepDropAllAttributes (ty, parentty) in
   subtype ty parentty
 
-let parent_type =
-  typeDeepDropAllAttributes %>
-  Typ.Hashtbl.find parent_type
+let parent_type ty =
+  try Some (Typ.Hashtbl.find parent_type @@ typeDeepDropAllAttributes ty)
+  with Not_found -> None
 
 (*****************************************************************************)
 (* Retype the C file for Jessie translation.                                 *)
