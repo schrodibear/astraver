@@ -145,7 +145,7 @@ class array_variables_retyping_visitor =
       let strawv = Htbl_vi.find var_to_strawvar v in
       begin match lift_offset ty off with
       | Index (ie, NoOffset) ->
-        let ptrty = TPtr(element_type ty, []) in
+        let ptrty = TPtr (element_type ty, []) in
         new_exp ~loc @@ BinOp (PlusPI, new_exp ~loc @@ Lval (Var strawv, NoOffset), ie, ptrty)
       | NoOffset -> unsupported "this instance of the address operator cannot be handled"
       | Index _ | Field _ ->
@@ -160,7 +160,7 @@ class array_variables_retyping_visitor =
         let rec findtype ty =
           function
           | NoOffset -> ty
-          | Index(_, roff) ->
+          | Index (_, roff) ->
             findtype (direct_element_type ty) roff
           | Field _ -> raise Not_found
         in
@@ -483,7 +483,7 @@ object
     (* Renormalize the term tree. *)
     let postaction_term t =
       match t.term_node with
-      | TAddrOf(TMem t, TNoOffset) -> t
+      | TAddrOf (TMem t, TNoOffset) -> t
       | _ -> t
     in
     ChangeDoChildrenPost (preaction_term t, postaction_term)
@@ -840,7 +840,7 @@ object(self)
     (* Renormalize the term tree. *)
     let postaction t =
       match t.term_node with
-      | TAddrOf(TMem t,TNoOffset) -> t
+      | TAddrOf (TMem t,TNoOffset) -> t
       | _ -> t
     in
     ChangeDoChildrenPost (t, postaction)
@@ -865,76 +865,110 @@ class embed_first_substructs_visitor =
     let field_map = FH.create 10 in
     (fun efi -> try FH.find embedded_fields efi with Not_found -> false),
     (fun ci ci' ->
-      let efi, cfields = List.(hd ci.cfields, tl ci.cfields) in
-      let cfields' =
-        List.map
-          (fun fi ->
-             let fi' =
-               { fi with
-                 fcomp = ci;
-                 fname = subfield_name ci' fi;
-                 fattr =
-                   addAttribute (Attr (embedded_attr_name,
-                                       [AStr efi.forig_name; AStr (compFullName ci'); AStr fi.forig_name])) fi.fattr }
-             in
-             let fs =
-               try FH.find field_map efi
-               with
-               | Not_found ->
-                 let fs = FH.create 10 in
-                 FH.replace field_map efi fs;
-                 fs
-             in
-             FH.replace fs fi fi';
-             fi')
-          ci'.cfields
-      in
-      (retaining_size_of_composite ci @@ fun ci ->
-       ci.cfields <- cfields' @ cfields);
-      FH.replace embedded_fields efi true),
+       let efi, cfields = List.(hd ci.cfields, tl ci.cfields) in
+       let cfields' =
+         List.map
+           (fun fi ->
+              let fi' =
+                { fi with
+                  fcomp = ci;
+                  fname = subfield_name ci' fi;
+                  fattr =
+                    addAttribute (Attr (embedded_attr_name,
+                                        [AStr efi.forig_name; AStr (compFullName ci'); AStr fi.forig_name])) fi.fattr }
+              in
+              let fs =
+                try FH.find field_map efi
+                with
+                | Not_found ->
+                  let fs = FH.create 10 in
+                  FH.replace field_map efi fs;
+                  fs
+              in
+              FH.replace fs fi fi';
+              fi')
+           ci'.cfields
+       in
+       (retaining_size_of_composite ci @@ fun ci ->
+        ci.cfields <- cfields' @ cfields);
+       FH.replace embedded_fields efi true),
     fun efi -> FH.(find (find field_map efi))
   in
-  let do_lval =
-    function
-    | Mem { enode = Lval (Mem _ as lhost, Field (fi, NoOffset)) }, Field (fi', NoOffset) as lval when is_embedded fi ->
-      begin try
-        lhost, Field (get_field fi fi', NoOffset)
-      with
-      | Not_found -> lval
-      end
-    | lval -> lval
-  in
-  let do_expr e =
-    match e.enode with
-    | Lval (Mem e, Field (fi, NoOffset)) when is_embedded fi -> e
-    | _ -> e
-  in
-object
-  inherit frama_c_inplace
+  object
+    inherit frama_c_inplace
 
-  method! vcompinfo ci =
-    match ci.cfields with
-    | { ftype; fattr } :: _ when
-        is_reference_type ftype &&
-        reference_size ftype = Int64.one &&
-        isStructOrUnionType (pointed_type ftype) &&
-        not (hasAttribute wrapper_attr_name @@ typeAttrs @@ pointed_type ftype) &&
-        not (hasAttribute noembed_attr_name fattr) ->
-      begin match unrollType (pointed_type ftype) with
-      | TComp (ci', _, _) when ci'.cstruct ->
-        embed_first_substruct ci ci';
-        SkipChildren
+    method! vcompinfo ci =
+      match ci.cfields with
+      | { ftype; fattr } :: _ when
+          is_reference_type ftype &&
+          reference_size ftype = Int64.one &&
+          isStructOrUnionType (pointed_type ftype) &&
+          not (hasAttribute wrapper_attr_name @@ typeAttrs @@ pointed_type ftype) &&
+          not (hasAttribute noembed_attr_name fattr) ->
+        begin match unrollType (pointed_type ftype) with
+        | TComp (ci', _, _) when ci'.cstruct ->
+          embed_first_substruct ci ci';
+          SkipChildren
+        | _ -> SkipChildren
+        end
       | _ -> SkipChildren
-      end
-    | _ -> SkipChildren
 
-  method! vlval _ = DoChildrenPost do_lval
-  method! vterm_lval = do_on_term_lval (None, Some do_lval)
+    (* Here we have to use two distinct methods for terms and expressions because terms have types attached and
+       so the part corresponding to { enode = ... } would be packed in a dummy environment variable (by do_on_term)
+       and would be missed during the matching otherwise *)
 
-  method! vexpr _ = DoChildrenPost do_expr
-  method! vterm = do_on_term (None, Some do_expr)
+    method! vlval lval =
+      let rec do_lval =
+        function
+        | Mem { enode = Lval (Mem _ as lhost, Field (fi, NoOffset)) }, Field (fi', NoOffset) as lval
+          when is_embedded fi ->
+          begin try
+            do_lval (lhost, Field (get_field fi fi', NoOffset))
+          with Not_found ->
+            lval
+          end
+        | lval -> lval
+      in
+      ChangeDoChildrenPost (do_lval lval, id)
 
-end
+    method! vterm_lval tlval =
+      let rec do_term_lval =
+        function
+        | TMem { term_node = TLval (TMem _ as tlhost, TField (fi, TNoOffset)) }, TField (fi', TNoOffset) as tlval
+          when is_embedded fi ->
+          begin try
+            do_term_lval (tlhost, TField (get_field fi fi', TNoOffset))
+          with Not_found ->
+            tlval
+          end
+        | tlval -> tlval
+      in
+      ChangeDoChildrenPost (do_term_lval tlval, id)
+
+    method! vexpr _ =
+      DoChildrenPost
+        (visitFramacExpr
+           (object
+             inherit frama_c_inplace
+
+             method! vexpr e =
+               match e.enode with
+               | Lval (Mem e, Field (fi, NoOffset)) when is_embedded fi -> ChangeTo e
+               | _ -> DoChildren
+           end))
+
+    method! vterm _ =
+      DoChildrenPost
+        (visitFramacTerm
+           (object
+             inherit frama_c_inplace
+
+             method! vterm t =
+               match t.term_node with
+               | TLval (TMem t, TField (fi, TNoOffset)) when is_embedded fi -> ChangeTo t
+               | _ -> DoChildren
+           end))
+  end
 
 let embed_first_substructs = visitFramacFile (new embed_first_substructs_visitor)
 
@@ -1182,7 +1216,7 @@ object(self)
     (* Renormalize the expression tree. *)
     let postaction e =
       match e.enode with
-      | AddrOf (Mem e,NoOffset) -> e
+      | AddrOf (Mem e, NoOffset) -> e
       | _ -> e
     in
     ChangeDoChildrenPost (e, postaction)
@@ -1191,7 +1225,7 @@ object(self)
     (* Renormalize the term tree. *)
     let postaction t =
       match t.term_node with
-      | TAddrOf(TMem t,TNoOffset) -> t
+      | TAddrOf (TMem t, TNoOffset) -> t
       | _ -> t
     in
     ChangeDoChildrenPost (t, postaction)
@@ -1570,7 +1604,7 @@ class fields_retyping_visitor =
     | AddrOf (Mem _e, Index (_ie, Field (_, NoOffset)) as lv)
     | StartOf (Mem _e, Index (_ie, Field (_, NoOffset)) as lv) ->
       new_exp ~loc:e.eloc (Lval lv)
-    | AddrOf(Mem _e, Index(_ie, _)) | StartOf (Mem _e, Index(_ie, _)) ->
+    | AddrOf (Mem _e, Index (_ie, _)) | StartOf (Mem _e, Index (_ie, _)) ->
       fatal "unexpected index: %a" Printer.pp_exp e
     | _ -> e
   in
@@ -1961,7 +1995,7 @@ object
   method! vterm t =
     let preaction t =
       match t.term_node with
-      | TAddrOf(TMem ptrt,TIndex(it,TNoOffset)) ->
+      | TAddrOf (TMem ptrt, TIndex (it, TNoOffset)) ->
         { t with term_node = TBinOp (PlusPI, ptrt, it) }
       | _ -> t
     in

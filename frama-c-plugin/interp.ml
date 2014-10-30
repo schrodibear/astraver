@@ -2650,7 +2650,7 @@ let global vardefs g =
       begin match Retype.parent_type ty with
       | Some parentty ->
         let parent = get_struct_name parentty in
-        [JCDtag (compinfo.cname, [], Some (parent,[]), fields, [])]
+        [JCDtag (compinfo.cname, [], Some (parent, []), fields, [])]
       | None ->
         try
           ignore (Typ.Hashtbl.find Norm.generated_union_types ty);
