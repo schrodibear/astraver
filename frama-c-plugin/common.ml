@@ -72,6 +72,64 @@ let warn_once =
       warn_general "%s" s
     end
 
+(* Lists *)
+
+let rec drop n lst =
+  if n <= 0 then lst
+  else
+    match lst with
+    | [] -> []
+    | _ :: xs -> drop (n - 1) xs
+
+let take n lst =
+  let rec take acc n =
+    function
+    | x :: xs when n > 0 -> take (x :: acc) (n - 1) xs
+    | _ -> List.rev acc
+  in
+  take [] n lst
+
+let range i dir j =
+  let op =
+    match dir with
+    | `To ->
+      if i <= j then pred
+      else invalid_arg (Printf.sprintf "Common.range %d `To %d" i j)
+    | `Downto ->
+      if i >= j then succ
+      else invalid_arg (Printf.sprintf "Common.range %d `Downto %d" i j)
+  in
+  let rec loop acc k =
+    if i = k then
+      k :: acc
+    else
+      loop (k :: acc) (op k)
+  in
+  loop [] j
+
+(* Tuples *)
+
+let fdup2 f g x = f x, g x
+
+let map_fst f (a, b) = f a, b
+
+let map_snd f (a, b) = a, f b
+
+let map_pair f (a, b) = f a, f b
+
+let uncurry f (a, b) = f a b
+
+let flip = swap
+
+let swap (a, b) = b, a
+
+let predicate loc p =
+  {
+    name = [];
+    loc = loc;
+    content = p;
+  }
+
 (*****************************************************************************)
 (* Options                                                                   *)
 (*****************************************************************************)
@@ -635,7 +693,42 @@ let fix_size_of_composite ?original_size ci =
           (current_size - original_size)
           (List.rev ci.cfields)
       in
-      assert (remaining_size_fix = 0)
+      if (remaining_size_fix > 0) then
+        let composite_name = compFullName ci in
+        let original_name = if ci.corig_name <> "" then ci.corig_name else "<anonymous>" in
+        let original_size, current_size = map_pair (fun s -> s lsr 3) (original_size, current_size) in
+        let pointer_size = theMachine.theMachine.sizeof_ptr in
+        let empty_members =
+          List.flatten @@
+          List.map
+            (fun { ftype } ->
+               let check_type ty =
+                 let ci = get_struct_info @@ unrollType ty in
+                 if size_of_composite ci = Some 0 then [ci] else []
+               in
+               if isStructOrUnionType ftype then
+                 check_type ftype
+               else if is_reference_type ftype && isStructOrUnionType (pointed_type ftype) then
+                 check_type (pointed_type ftype)
+               else [])
+            ci.cfields
+          |>
+          function
+          | [] -> "."
+          | empty_members ->
+            Printf.sprintf " or to one of its empty composite members (i.e. %s)"
+              (String.concat ", " @@ List.map compFullName empty_members)
+        in
+        unsupported "Couldn't maintain the size of %s (%s, size is %d). \
+                     The size has grown to %d during the last transformation, \
+                     but there's no padding (or unused fields) to use for shrinking. \
+                     One possible cause of the problem \
+                     is structure or array-to-pointer retyping, where the size of the retyped structure/array \
+                     was initially less than the size of a pointer (%d). \
+                     One possible solution is to add one or several unused fields to the %s%s"
+          composite_name original_name original_size current_size pointer_size composite_name empty_members
+      else
+        assert (remaining_size_fix = 0)
   | _ -> ()
 
 let retaining_size_of_composite ci f =
@@ -1725,64 +1818,6 @@ let mkfree v loc =
   Call(None,callee,[arg],loc)
 
 let mkfree_statement v loc = mkStmt (Instr(mkfree v loc))
-
-(* Lists *)
-
-let rec drop n lst =
-  if n <= 0 then lst
-  else
-    match lst with
-    | [] -> []
-    | _ :: xs -> drop (n - 1) xs
-
-let take n lst =
-  let rec take acc n =
-    function
-    | x :: xs when n > 0 -> take (x :: acc) (n - 1) xs
-    | _ -> List.rev acc
-  in
-  take [] n lst
-
-let range i dir j =
-  let op =
-    match dir with
-    | `To ->
-      if i <= j then pred
-      else invalid_arg (Printf.sprintf "Common.range %d `To %d" i j)
-    | `Downto ->
-      if i >= j then succ
-      else invalid_arg (Printf.sprintf "Common.range %d `Downto %d" i j)
-  in
-  let rec loop acc k =
-    if i = k then
-      k :: acc
-    else
-      loop (k :: acc) (op k)
-  in
-  loop [] j
-
-(* Tuples *)
-
-let fdup2 f g x = f x, g x
-
-let map_fst f (a, b) = f a, b
-
-let map_snd f (a, b) = a, f b
-
-let map_pair f (a, b) = f a, f b
-
-let uncurry f (a, b) = f a b
-
-let flip = swap
-
-let swap (a, b) = b, a
-
-let predicate loc p =
-  {
-    name = [];
-    loc = loc;
-    content = p;
-  }
 
 (*****************************************************************************)
 (* Trie data structure (by Jean-Christophe Filliatre)                        *)
