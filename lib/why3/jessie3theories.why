@@ -461,7 +461,8 @@ function bw_and int int : int
 
 (* Yannick: added for CVE-2003-0161-min-ok *)
 axiom bw_and_not_null:
-  forall a: int. forall b: int. bw_and a b <> 0 -> a <> 0 /\ b <> 0
+  forall a: int. forall b: int [bw_and a b].
+    bw_and a b <> 0 -> a <> 0 /\ b <> 0
 
 function bw_xor int int : int
 
@@ -509,22 +510,33 @@ axiom pow2_definition:
   pow2 31 = 2147483648
 
 axiom bw_or_plus:
-  forall a: int. forall b: int [bw_or a b, a + b].
+  forall a: int. forall b: int [bw_or a b, bw_and a b, a + b].
     a >= 0 /\ b >= 0 /\ bw_and a b = 0 -> bw_or a b = a + b
 
-predicate bw_set (pos: int) (n: int) = bw_and (pow2 pos) n <> 0
+predicate bw_set (pos: int) (n: int)
+
+axiom bw_set:
+  forall pos, n: int.
+    pos >= 0 /\ n >= 0 ->
+      bw_set pos n <-> bw_and (pow2 pos) n <> 0
 
 axiom pow2_bw_set:
-  forall n: int. forall m: int [bw_set n (pow2 m)]. bw_set n (pow2 m) <-> n = m
+  forall n: int. forall m: int [bw_set n (pow2 m)].
+    n >= 0 /\ m >= 0 ->
+      bw_set n (pow2 m) <-> n = m
 
 axiom zero_bw_set:
-  forall n: int [bw_set n 0]. not (bw_set n 0)
+  forall n: int [bw_set n 0]. n >= 0 -> not (bw_set n 0)
 
 axiom zero_bw_set_iff1:
-  forall a: int. forall n: int [bw_set n a]. a = 0 -> not (bw_set n a)
+  forall a: int. forall n: int [bw_set n a].
+    a = 0 /\ n >= 0 ->
+      not (bw_set n a)
 
 axiom zero_bw_set_iff2:
-  forall a: int. forall n: int [bw_set n a]. bw_set n a -> a <> 0
+  forall a: int. forall n: int [bw_set n a].
+    a >= 0 /\ n >= 0 /\ bw_set n a ->
+      a <> 0
 
 axiom bw_and_self:
   forall a: int [bw_and a a].
@@ -537,21 +549,20 @@ axiom bw_or_self:
 axiom bw_and_definition:
   forall n: int. forall a: int. forall b: int
     [bw_and a b, bw_set n (bw_and a b), bw_set n a, bw_set n b].
+    n >= 0 /\ a >= 0 /\ b >= 0 ->
       bw_set n (bw_and a b) <-> bw_set n a /\ bw_set n b
 
 axiom bw_or_definition:
   forall n: int. forall a: int. forall b: int
     [bw_or a b, bw_set n (bw_or a b), bw_set n a, bw_set n b].
+    n >= 0 /\ a >= 0 /\ b >= 0 ->
       bw_set n (bw_or a b) <-> bw_set n a \/ bw_set n b
 
 axiom bw_xor_definition:
   forall n: int. forall a: int. forall b: int
     [bw_xor a b, bw_set n (bw_xor a b), bw_set n a, bw_set n b].
+    n >= 0 /\ a >= 0 /\ b >= 0 ->
       bw_set n (bw_xor a b) <-> not (bw_set n a <-> bw_set n b)
-
-axiom bw_compl_definition:
-  forall n: int. forall a: int [bw_compl a, bw_set n (bw_compl a), bw_set n a].
-     bw_set n (bw_compl a) <-> not (bw_set n a)
 
 axiom bw_and_assoc:
   forall a: int. forall b: int. forall c: int [bw_and (bw_and a b) c, bw_and a (bw_and b c)].
@@ -604,17 +615,6 @@ function min_char : int = -128
 function min_short : int = -32768
 function min_int : int = -2147483648
 function min_long : int = -9223372036854775808
-
-axiom bw_compl_nooverflow_signed:
-  forall a : int [bw_compl a].
-      (min_char <= a /\ a <= max_char ->
-        min_char <= bw_compl a /\ bw_compl a <= max_char) /\
-      (min_short <= a /\ a <= max_short ->
-        min_short <= bw_compl a /\ bw_compl a <= max_short) /\
-      (min_int <= a /\ a <= max_int ->
-        min_int <= bw_compl a /\ bw_compl a <= max_int) /\
-      (min_long <= a /\ a <= max_long ->
-        min_long <= bw_compl a /\ bw_compl a <= max_long)
 
 axiom bw_or_nooverflow_signed:
   forall a : int.
@@ -740,12 +740,12 @@ axiom lsr_of_lsl_identity_on_positive:
 axiom lsl_definition:
   forall m: int. forall a: int [lsl a m]. forall n: int
     [bw_set n (lsl a m), bw_set (n - m) a, n < m].
-      m >= 0 -> not (bw_set n (lsl a m)) <-> not (bw_set (n - m) a) \/ n < m
+      m >= 0 /\ a >= 0 /\ n >= 0 -> not (bw_set n (lsl a m)) <-> not (bw_set (n - m) a) \/ n < m
 
 axiom lsr_definition:
   forall m: int. forall a: int [lsr a m]. forall n: int
     [bw_set n (lsr a m), bw_set (n + m) a].
-      m >= 0 -> bw_set n (lsr a m) <-> bw_set (n + m) a
+      m >= 0 /\ a >= 0 /\ n >= 0 -> bw_set n (lsr a m) <-> bw_set (n + m) a
 
 axiom lsl_induction:
   forall a: int.
@@ -781,13 +781,13 @@ axiom lsl_init:
   forall a: int [lsl a 1 | a * 2]. a >= 0 -> lsl a 1 = a * 2
 
 axiom lsl_multiply:
-  forall a: int. forall n: int [lsl a n | a * pow2 n]. a >= 0 -> lsl a n = a * pow2 n
+  forall a: int. forall n: int [lsl a n | a * pow2 n]. a >= 0 /\ n >= 0 -> lsl a n = a * pow2 n
 
 axiom lsr_init:
   forall a: int [lsr a 1 | div a 2]. a >= 0 -> lsr a 1 = div a 2
 
 axiom lsr_divide:
-  forall a: int. forall n: int [lsr a n | div a (pow2 n)]. a >= 0 -> lsr a n = div a (pow2 n)
+  forall a: int. forall n: int [lsr a n | div a (pow2 n)]. a >= 0 /\ n >= 0 -> lsr a n = div a (pow2 n)
 
 (*****************************************************************************)
 (* dynamic allocation/deallocation                                           *)
