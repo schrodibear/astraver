@@ -374,7 +374,7 @@ and fprintf_assertion ~locals fmttr =
   | LImpl (a1, a2) ->
     pr "@[<hov 1>(%a@ ->@ %a)@]" fprintf_assertion a1 fprintf_assertion a2
   | LIf (t, a1, a2) ->
-    pr "@[<hov 1>(if@ %a@ =@ True@ then@ %a@ else@ %a)@]"
+    pr "@[<hov 1>(if@ %a@ then@ %a@ else@ %a)@]"
       fprintf_term t fprintf_assertion a1 fprintf_assertion a2
   | LLet (id, t, a) ->
     pr "@[<hov 1>(let@ @[<hov 1>%s@ =@ %a@ in@]@ %a)@]"
