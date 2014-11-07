@@ -2252,13 +2252,29 @@ let rec statement s =
         in
         JCPEwhile(true_expr,behs,variant,block bl)
 
-    | Block bl ->
-        JCPEblock(statement_list bl.bstmts)
+    | Block blk ->
+      let inlined_stmt =
+        match blk.bstmts with
+        | [] -> None
+        | [ { skind = Instr _ | Return _ | Goto _ | Break _ | Continue _ | Block _ } as s' ] ->
+          begin match blk.bstmts, blk.battrs, blk.blocals with
+          | _ :: _ :: _, _, _ | _, _, _ :: _ | _, _ :: _, _ -> None
+          | _, _, _ when not (Annotations.has_code_annot s) ->
+            s'.labels <- s.labels @ s'.labels;
+            Some s'
+          | _ -> None
+          end
+        | _ -> None
+      in
+      begin match inlined_stmt with
+      | None -> JCPEblock (statement_list blk.bstmts)
+      | Some s -> (statement s)#node
+      end
 
     | UnspecifiedSequence seq ->
-        (* [VP] TODO: take into account undefined behavior tied to the
-          effects of the statements... *)
-        JCPEblock(statement_list (List.map (fun (x,_,_,_,_) -> x) seq))
+      (* [VP] TODO:
+         take into account undefined behavior tied to the effects of the statements... *)
+      JCPEblock (statement_list (List.map (fun (x, _, _, _, _) -> x) seq))
 
     | TryFinally _ | TryExcept _ | AsmGoto _ -> assert false
   in
@@ -2298,7 +2314,24 @@ let rec statement s =
   in
   List.fold_left (fun s lab -> mkexpr (JCPElabel(label lab,s)) pos) s labels
 
-and statement_list slist = List.rev (List.rev_map statement slist)
+and statement_list slist =
+  let rec rev_map ?(accu = []) =
+    let rec has_last_return =
+      function
+      | [] -> false
+      | [{ skind = Return _ }] -> true
+      | [{ skind = Block { bstmts }}] -> has_last_return bstmts
+      | _ :: l -> has_last_return l
+    in
+    function
+    | [] -> accu
+    | [{ skind = Block { bstmts }} as s] when has_last_return bstmts ->
+      let start = List.hd bstmts in
+      start.labels <- s.labels @ start.labels;
+      rev_map ~accu bstmts
+    | a :: l -> rev_map ~accu:(statement a :: accu) l
+  in
+  List.rev (rev_map slist)
 
 and block bl =
   match bl.bstmts with
