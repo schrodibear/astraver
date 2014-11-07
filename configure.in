@@ -64,7 +64,7 @@
 
 # check for one particular file of the sources
 # ADAPT THE FOLLOWING LINE TO YOUR SOURCES!
-AC_INIT(src/monad.mli)
+AC_INIT(jc/jc_interp.ml)
 
 # verbosemake feature
 

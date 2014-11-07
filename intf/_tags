@@ -1,1 +1,0 @@
-<**/*.{mli,ml,cmo,cmx,byte,native}>: pkg_threads, pkg_lablgtk2

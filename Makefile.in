@@ -63,7 +63,7 @@ OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 CAMLP4   = @CAMLP4O@
 
-INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I ml
+INCLUDES = -I src -I jc
 BFLAGS   = -w Z -warn-error A -dtypes -bin-annot -short-paths -strict-formats -safe-string -no-alias-deps -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@
 OFLAGS   = -w Z -warn-error A -dtypes -bin-annot -short-paths -strict-formats -safe-string -no-alias-deps $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@
 
@@ -244,14 +244,6 @@ install:
 clean::
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) clean
 endif
-
-# tools
-regtest.opt: tools/regtest.ml
-	$(OCAMLOPT) $(OFLAGS) -thread -o $@ unix.cmxa str.cmxa threads.cmxa $^
-
-regtest.byte: tools/regtest.ml
-	$(OCAMLC) $(BFLAGS) -thread -o $@ unix.cma str.cma threads.cma $^
-
 
 static:: $(STATICBINARY)
 
@@ -579,10 +571,10 @@ tags:
 	      "--regex=/module[ \t]+\([^ \t]+\)/\1/"
 
 otags:
-	otags src/*.mli src/*.ml c/*.mli c/*.ml intf/*.mli intf/*.ml
+	otags src/*.mli src/*.ml
 
 wc:
-	ocamlwc -p src/*.ml* jc/*.ml* c/*.ml* intf/*.ml* tools/*.ml* java/*.ml*
+	ocamlwc -p src/*.ml* jc/*.ml*
 
 # distrib
 #########
@@ -717,16 +709,7 @@ configure: configure.in
 
 clean::
 	rm -f src/*.cm[iox] src/*.o src/*~ src/*.annot src/*.output
-	rm -f c/*.cm[iox] c/*.o c/*~ c/*.annot c/*.output
-	rm -f intf/*.cm[iox] intf/*.o intf/*~ intf/*.annot
-	rm -f tools/*.cm[iox] tools/*.o tools/*~ tools/*.annot
 	rm -f jc/*.cm[iox] jc/*.o jc/*~ jc/*.annot jc/*.output
-	rm -f java/*.cm[iox] java/*.o java/*~ java/*.annot java/*.output
-	rm -f ml/*.cm[iox] ml/*.o ml/*~ ml/*.annot
-	rm -f ml/parsing/*.cm[iox] ml/parsing/*.o ml/parsing/*~ \
-		ml/parsing/*.annot ml/parsing/*.output
-	rm -f ml/utils/*.cm[iox] ml/utils/*.o ml/utils/*~ ml/utils/*.annot
-	rm -f ml/typing/*.cm[iox] ml/typing/*.o ml/typing/*~ ml/typing/*.annot
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
 	rm -f bin/jessie.opt bin/jessie.byte
 	rm -f bin/jessica.opt bin/jessica.byte
@@ -756,8 +739,7 @@ coq-clean::
 .PHONY: depend
 .depend depend: $(GENERATED)
 	rm -f .depend
-	$(OCAMLDEP) -slash $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml c/*.mli c/*.ml java/*.mli java/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml mix/*.mli mix/*.ml ml/*.ml ml/*.mli > .depend
-	$(OCAMLDEP) -slash $(MLINCLUDES) ml/parsing/*.ml ml/parsing/*.mli ml/typing/*.ml ml/typing/*.mli ml/utils/*.ml ml/utils/*.mli >> .depend
+	$(OCAMLDEP) -slash $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml > .depend
 ifeq ($(FRAMACPLUGIN),yes)
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
 endif

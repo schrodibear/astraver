@@ -1,5 +1,0 @@
-The directories: parsing,  typing and utils are copied  from the OCaml
-source (some CVS snapshot of the 3.11 of the 28/11/07).
-
-Some modifications will  be done to the parser (and  the AST the typer
-because as a consequence) to handle annotations.
