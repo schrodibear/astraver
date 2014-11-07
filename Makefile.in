@@ -85,8 +85,6 @@ endif
 
 enable_local=@enable_local@
 
-ATPLIB = -I atp
-
 COQC7  = @COQC7@
 COQC8  = @COQC8@
 COQDEP = @COQDEP@
@@ -128,7 +126,6 @@ GENERATED = src/version.ml src/rc.ml src/xml.ml \
 ##############
 
 JESSIE=bin/jessie.$(OCAMLBEST)
-REGTEST=regtest.$(OCAMLBEST)
 
 ifeq ($(OCAMLBEST),opt)
 JCLIB=jc/jc.cmo jc/jc.cmx jc/jc.o
@@ -138,7 +135,7 @@ endif
 
 all: all-without-frama-c-plugin .depend $(JESSIE_PLUGIN_BEST)
 
-all-without-frama-c-plugin: $(JESSIE) coq-@COQ@ pvs-@PVS@ $(JCLIB) $(REGTEST)
+all-without-frama-c-plugin: $(JESSIE) coq-@COQ@ pvs-@PVS@ $(JCLIB)
 
 # refrain parallel make (-j nn) from starting ocaml compilation too early
 *.cm*: .depend
@@ -184,7 +181,7 @@ JCCMX_EXPORT = $(JCCMO_EXPORT:.cmo=.cmx)
 JCCMI_EXPORT = jc/jc_position.mli jc/jc_why_output_ast.mli jc/jc_ast.cmi jc/jc_env.cmi jc/jc.cmi $(JCCMO_EXPORT:.cmo=.cmi)
 
 JCCMO = src/version.cmo \
-	@ATPCMO@ $(JCCMO_EXPORT) \
+	$(JCCMO_EXPORT) \
 	jc/jc_options.cmo \
 	jc/jc_name.cmo \
 	jc/jc_struct_tools.cmo \
@@ -205,12 +202,6 @@ JCCMX = $(JCCMO:.cmo=.cmx)
 
 $(JCCMX_EXPORT): OFLAGS:=$(OFLAGS) -for-pack Jc
 
-atp/atp.cmx:
-	make -C atp atp.cmx
-
-atp/atp.cmo:
-	make -C atp atp.cmo
-
 jc/jc.cmi jc/jc.cmo: $(JCCMO_EXPORT)
 	$(OCAMLC) $(BFLAGS) -pack -o jc/jc.cmo src/ast.cmi $^
 
@@ -220,12 +211,12 @@ jc/jc.cmx jc/jc.o: $(JCCMX_EXPORT)
 ppc: jc/jc.cmi jc/jc.cmo jc/jc.cmx
 
 bin/jessie.opt: $(JCCMX)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) $(APRONLIB) $(APRONLIBS) $(ATPLIB) -o $@ \
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) $(APRONLIB) $(APRONLIBS)  -o $@ \
 		unix.cmxa str.cmxa nums.cmxa graph.cmxa $^
 	$(STRIP)    $@
 
 bin/jessie.byte: $(JCCMO)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) $(APRONLIB) $(APRONBYTLIBS) $(ATPLIB) -o $@ \
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) $(APRONLIB) $(APRONBYTLIBS) -o $@ \
 		unix.cma str.cma nums.cma graph.cma $^
 
 # Frama-C plugin for Jessie
@@ -367,8 +358,6 @@ install-lib: $(JCLIB) lib/why3/why3.conf
 	cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/jessie3theories.why lib/why3/jessie3.mlw lib/why3/jessie3_integer.why $(LIBDIR)/why/why3
 	mkdir -p $(LIBDIR)/jessie
 	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
-	cd lib; cp -rf java_api $(LIBDIR)/why
-	cd lib; cp -rf javacard_api $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/why/images
 	cp -f lib/images/*.png $(LIBDIR)/why/images
 	mkdir -p $(LIBDIR)/why/emacs
@@ -508,19 +497,19 @@ apidoc: $(OCAMLDOCSRC)
 .SUFFIXES: .mli .ml .cmi .cmo .cmx .mll .mly .v .vo .ml4
 
 .mli.cmi:
-	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) $(ATPLIB) -c $(BFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) -c $(BFLAGS) $<
 
 .ml.cmi:
-	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) $(ATPLIB) -c $(BFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) -c $(BFLAGS) $<
 
 .ml.cmo:
-	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) $(ATPLIB) -c $(BFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) -c $(BFLAGS) $<
 
 .ml.o:
-	$(OCAMLOPT) $(APRONLIB) $(ATPLIB) -c $(OFLAGS) $<
+	$(OCAMLOPT) $(APRONLIB) -c $(OFLAGS) $<
 
 .ml.cmx:
-	$(if $(QUIET),@echo 'Ocamlopt $<' &&) $(OCAMLOPT) $(APRONLIB) $(ATPLIB) -c $(OFLAGS) $<
+	$(if $(QUIET),@echo 'Ocamlopt $<' &&) $(OCAMLOPT) $(APRONLIB) -c $(OFLAGS) $<
 
 .mll.ml:
 	$(OCAMLLEX) $<
@@ -603,7 +592,6 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
         bench/c/bench bench/c/bench-files bench/c/*/*.c bench/c/*/*/*.c \
 	bench/jc/bench bench/jc/good/*.jc \
 	bench/java/bench bench/java/*/*.java bench/provers/*.mlw \
-	tests/regtest.sh \
 	tests/java/*.java tests/java/coq/*.v \
 	tests/java/result/README tests/java/oracle/*.oracle \
 	tests/c/*.c tests/c/*/coq/*.v \
@@ -620,8 +608,7 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 	lib/javacard_api/javacardx/crypto/*.java \
 	lib/javacard_api/com/sun/javacard/impl/*.java \
 	lib/images/*.png \
-	atp/*.ml atp/LICENSE.txt atp/Makefile atp/Mk_ml_file \
-        frama-c-plugin/Makefile frama-c-plugin/configure \
+	frama-c-plugin/Makefile frama-c-plugin/configure \
 	frama-c-plugin/*.ml* frama-c-plugin/share/jessie/*.h
 
 #	ocamlgraph/configure.in ocamlgraph/configure ocamlgraph/.depend \
@@ -722,7 +709,6 @@ clean::
 	rm -f bin/why-cpulimit
 	rm -f lib/coq*/*.vo lib/coq*/*~
 	rm -f $(GENERATED)
-	make -C atp clean
 	make -C doc clean
 	if test -d examples-v7; then \
 		make -C examples-v7 clean ; \
