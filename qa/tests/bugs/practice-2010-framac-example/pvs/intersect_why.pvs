@@ -1,0 +1,4042 @@
+intersect_why: THEORY
+BEGIN
+
+  IMPORTING why@jessie
+  IMPORTING jessie_why
+
+
+  %% DO NOT EDIT BELOW THIS LINE
+
+  charP: TYPE+;
+
+  int32: TYPE+;
+
+  int8: TYPE+;
+
+  intP: TYPE+;
+
+  int_set: TYPE+;
+
+  padding: TYPE+;
+
+  uint32: TYPE+;
+
+  voidP: TYPE+;
+
+  %% Why logic intset
+  intset: [pointer[intP], int, memory[intP, int32] -> int_set]
+
+  %% Why logic empty_int_set
+  empty_int_set: int_set
+
+  %% Why logic add_int_set
+  add_int_set: [int_set, int32 -> int_set]
+
+  %% Why axiom _jc_axiom_intset
+  why___jc_axiom_intset: AXIOM
+    (FORALL (s_8: pointer[intP]):
+    (FORALL (n_1: int):
+    (FORALL (intP_intM_s_8_1_at_L: memory[intP, int32]):
+    intset(s_8, n_1, intP_intM_s_8_1_at_L) =
+    (IF eq_int_bool(n_1, 0) THEN empty_int_set
+     ELSE add_int_set(intset(s_8, n_1 - 1, intP_intM_s_8_1_at_L),
+                      select[int32,
+                      intP](intP_intM_s_8_1_at_L, shift[intP](s_8, n_1 - 1)))
+     ENDIF))))
+
+  alloc_extends_struct_charP(old_charP_alloc_table:alloc_table[charP],
+                             charP_alloc_table:alloc_table[charP]) : bool =
+    alloc_extends[charP](old_charP_alloc_table, charP_alloc_table)
+
+  alloc_extends_struct_intP(old_intP_alloc_table:alloc_table[intP],
+                            intP_alloc_table:alloc_table[intP]) : bool =
+    alloc_extends[intP](old_intP_alloc_table, intP_alloc_table)
+
+  alloc_extends_struct_voidP(old_voidP_alloc_table:alloc_table[voidP],
+                             voidP_alloc_table:alloc_table[voidP]) : bool =
+    alloc_extends[voidP](old_voidP_alloc_table, voidP_alloc_table)
+
+  %% Why logic charP_tag
+  charP_tag: tag_id[charP]
+
+  %% Why axiom charP_int
+  charP_int: AXIOM int_of_tag[charP](charP_tag) = 1
+
+  %% Why axiom charP_parenttag_bottom
+  charP_parenttag_bottom: AXIOM
+    parenttag[charP](charP_tag, bottom_tag[charP])
+
+  %% Why axiom charP_tags
+  charP_tags: AXIOM
+    (FORALL (x: pointer[charP]):
+    (FORALL (charP_tag_table: tag_table[charP]):
+    instanceof[charP](charP_tag_table, x, charP_tag)))
+
+  %% Why logic integer_of_int32
+  integer_of_int32: [int32 -> int]
+
+  eq_int32(x:int32, y:int32) : bool =
+    integer_of_int32(x) = integer_of_int32(y)
+
+  %% Why logic integer_of_int8
+  integer_of_int8: [int8 -> int]
+
+  eq_int8(x:int8, y:int8) : bool = integer_of_int8(x) = integer_of_int8(y)
+
+  %% Why logic integer_of_uint32
+  integer_of_uint32: [uint32 -> int]
+
+  eq_uint32(x:uint32, y:uint32) : bool =
+    integer_of_uint32(x) = integer_of_uint32(y)
+
+  fresh_singleton_struct_charP(p:pointer[charP],
+                               charP_alloc_table:alloc_table[charP]) : bool =
+    alloc_fresh[charP](charP_alloc_table, p, 1) AND
+    NOT valid[charP](charP_alloc_table, p)
+
+  fresh_singleton_struct_intP(p:pointer[intP],
+                              intP_alloc_table:alloc_table[intP]) : bool =
+    alloc_fresh[intP](intP_alloc_table, p, 1) AND
+    NOT valid[intP](intP_alloc_table, p)
+
+  fresh_singleton_struct_voidP(p:pointer[voidP],
+                               voidP_alloc_table:alloc_table[voidP]) : bool =
+    alloc_fresh[voidP](voidP_alloc_table, p, 1) AND
+    NOT valid[voidP](voidP_alloc_table, p)
+
+  fresh_struct_charP(p:pointer[charP], n:int,
+                     charP_alloc_table:alloc_table[charP]) : bool =
+    alloc_fresh[charP](charP_alloc_table, p, n) AND
+    (FORALL (i: int): (0 >= i AND i < n IMPLIES True))
+
+  fresh_struct_intP(p:pointer[intP], n:int,
+                    intP_alloc_table:alloc_table[intP]) : bool =
+    alloc_fresh[intP](intP_alloc_table, p, n) AND
+    (FORALL (i: int): (0 >= i AND i < n IMPLIES True))
+
+  fresh_struct_voidP(p:pointer[voidP], n:int,
+                     voidP_alloc_table:alloc_table[voidP]) : bool =
+    alloc_fresh[voidP](voidP_alloc_table, p, n) AND
+    (FORALL (i: int): (0 >= i AND i < n IMPLIES True))
+
+  instanceof_singleton_struct_charP(p:pointer[charP],
+                                    charP_tag_table:tag_table[charP]) : bool =
+    instanceof[charP](charP_tag_table, p, charP_tag)
+
+  %% Why logic intP_tag
+  intP_tag: tag_id[intP]
+
+  instanceof_singleton_struct_intP(p:pointer[intP],
+                                   intP_tag_table:tag_table[intP]) : bool =
+    instanceof[intP](intP_tag_table, p, intP_tag)
+
+  %% Why logic voidP_tag
+  voidP_tag: tag_id[voidP]
+
+  instanceof_singleton_struct_voidP(p:pointer[voidP],
+                                    voidP_tag_table:tag_table[voidP]) : bool =
+    instanceof[voidP](voidP_tag_table, p, voidP_tag)
+
+  instanceof_struct_charP(p:pointer[charP], l:int, r:int,
+                          charP_tag_table:tag_table[charP]) : bool =
+    (FORALL (i: int):
+    (l >= i AND i < r IMPLIES
+    instanceof[charP](charP_tag_table, shift[charP](p, i), charP_tag)))
+
+  instanceof_struct_intP(p:pointer[intP], l:int, r:int,
+                         intP_tag_table:tag_table[intP]) : bool =
+    (FORALL (i: int):
+    (l >= i AND i < r IMPLIES
+    instanceof[intP](intP_tag_table, shift[intP](p, i), intP_tag)))
+
+  instanceof_struct_voidP(p:pointer[voidP], l:int, r:int,
+                          voidP_tag_table:tag_table[voidP]) : bool =
+    (FORALL (i: int):
+    (l >= i AND i < r IMPLIES
+    instanceof[voidP](voidP_tag_table, shift[voidP](p, i), voidP_tag)))
+
+  %% Why logic int32_of_integer
+  int32_of_integer: [int -> int32]
+
+  %% Why axiom int32_coerce
+  int32_coerce: AXIOM
+    (FORALL (x: int):
+    (-2147483648 <= x AND x <= 2147483647 IMPLIES
+    integer_of_int32(int32_of_integer(x)) = x))
+
+  %% Why axiom int32_extensionality
+  int32_extensionality: AXIOM
+    (FORALL (x: int32):
+    (FORALL (y: int32):
+    (integer_of_int32(x) = integer_of_int32(y) IMPLIES x = y)))
+
+  %% Why axiom int32_range
+  int32_range: AXIOM
+    (FORALL (x: int32): -2147483648 <= integer_of_int32(x) AND
+    integer_of_int32(x) <= 2147483647)
+
+  %% Why logic int8_of_integer
+  int8_of_integer: [int -> int8]
+
+  %% Why axiom int8_coerce
+  int8_coerce: AXIOM
+    (FORALL (x: int):
+    (-128 <= x AND x <= 127 IMPLIES integer_of_int8(int8_of_integer(x)) = x))
+
+  %% Why axiom int8_extensionality
+  int8_extensionality: AXIOM
+    (FORALL (x: int8):
+    (FORALL (y: int8):
+    (integer_of_int8(x) = integer_of_int8(y) IMPLIES x = y)))
+
+  %% Why axiom int8_range
+  int8_range: AXIOM
+    (FORALL (x: int8): -128 <= integer_of_int8(x) AND
+    integer_of_int8(x) <= 127)
+
+  %% Why axiom intP_int
+  intP_int: AXIOM int_of_tag[intP](intP_tag) = 1
+
+  %% Why axiom intP_parenttag_bottom
+  intP_parenttag_bottom: AXIOM parenttag[intP](intP_tag, bottom_tag[intP])
+
+  %% Why axiom intP_tags
+  intP_tags: AXIOM
+    (FORALL (x: pointer[intP]):
+    (FORALL (intP_tag_table: tag_table[intP]):
+    instanceof[intP](intP_tag_table, x, intP_tag)))
+
+  %% Why logic intersect_int_set
+  intersect_int_set: [int_set, int_set -> int_set]
+
+  %% Why logic size_int_set
+  size_int_set: [int_set -> int]
+
+  is_intset(s_10:pointer[intP], n_2:int, intP_intM_s_10_2_at_L:memory[intP,
+            int32]) : bool =
+    size_int_set(intset(s_10, n_2, intP_intM_s_10_2_at_L)) = n_2
+
+  %% Why logic isin_int_set
+  isin_int_set: [int_set, int32 -> bool]
+
+  left_valid_struct_charP(p:pointer[charP], a:int,
+                          charP_alloc_table:alloc_table[charP]) : bool =
+    offset_min[charP](charP_alloc_table, p) <= a
+
+  left_valid_struct_intP(p:pointer[intP], a:int,
+                         intP_alloc_table:alloc_table[intP]) : bool =
+    offset_min[intP](intP_alloc_table, p) <= a
+
+  left_valid_struct_voidP(p:pointer[voidP], a:int,
+                          voidP_alloc_table:alloc_table[voidP]) : bool =
+    offset_min[voidP](voidP_alloc_table, p) <= a
+
+  right_valid_struct_charP(p:pointer[charP], b:int,
+                           charP_alloc_table:alloc_table[charP]) : bool =
+    offset_max[charP](charP_alloc_table, p) >= b
+
+  right_valid_struct_intP(p:pointer[intP], b:int,
+                          intP_alloc_table:alloc_table[intP]) : bool =
+    offset_max[intP](intP_alloc_table, p) >= b
+
+  right_valid_struct_voidP(p:pointer[voidP], b:int,
+                           voidP_alloc_table:alloc_table[voidP]) : bool =
+    offset_max[voidP](voidP_alloc_table, p) >= b
+
+  strict_valid_root_charP(p:pointer[charP], a:int, b:int,
+                          charP_alloc_table:alloc_table[charP]) : bool =
+    offset_min[charP](charP_alloc_table, p) = a AND
+    offset_max[charP](charP_alloc_table, p) = b
+
+  strict_valid_root_intP(p:pointer[intP], a:int, b:int,
+                         intP_alloc_table:alloc_table[intP]) : bool =
+    offset_min[intP](intP_alloc_table, p) = a AND
+    offset_max[intP](intP_alloc_table, p) = b
+
+  strict_valid_root_voidP(p:pointer[voidP], a:int, b:int,
+                          voidP_alloc_table:alloc_table[voidP]) : bool =
+    offset_min[voidP](voidP_alloc_table, p) = a AND
+    offset_max[voidP](voidP_alloc_table, p) = b
+
+  strict_valid_struct_charP(p:pointer[charP], a:int, b:int,
+                            charP_alloc_table:alloc_table[charP]) : bool =
+    offset_min[charP](charP_alloc_table, p) = a AND
+    offset_max[charP](charP_alloc_table, p) = b
+
+  strict_valid_struct_intP(p:pointer[intP], a:int, b:int,
+                           intP_alloc_table:alloc_table[intP]) : bool =
+    offset_min[intP](intP_alloc_table, p) = a AND
+    offset_max[intP](intP_alloc_table, p) = b
+
+  strict_valid_struct_voidP(p:pointer[voidP], a:int, b:int,
+                            voidP_alloc_table:alloc_table[voidP]) : bool =
+    offset_min[voidP](voidP_alloc_table, p) = a AND
+    offset_max[voidP](voidP_alloc_table, p) = b
+
+  %% Why logic uint32_of_integer
+  uint32_of_integer: [int -> uint32]
+
+  %% Why axiom uint32_coerce
+  uint32_coerce: AXIOM
+    (FORALL (x: int):
+    (0 <= x AND x <= 4294967295 IMPLIES
+    integer_of_uint32(uint32_of_integer(x)) = x))
+
+  %% Why axiom uint32_extensionality
+  uint32_extensionality: AXIOM
+    (FORALL (x: uint32):
+    (FORALL (y: uint32):
+    (integer_of_uint32(x) = integer_of_uint32(y) IMPLIES x = y)))
+
+  %% Why axiom uint32_range
+  uint32_range: AXIOM
+    (FORALL (x: uint32): 0 <= integer_of_uint32(x) AND
+    integer_of_uint32(x) <= 4294967295)
+
+  umin(n1:uint32, n2:uint32) : uint32 =
+    (IF (integer_of_uint32(n1) < integer_of_uint32(n2)) THEN n1 ELSE n2 ENDIF)
+
+  valid_root_charP(p:pointer[charP], a:int, b:int,
+                   charP_alloc_table:alloc_table[charP]) : bool =
+    offset_min[charP](charP_alloc_table, p) <= a AND
+    offset_max[charP](charP_alloc_table, p) >= b
+
+  valid_root_intP(p:pointer[intP], a:int, b:int,
+                  intP_alloc_table:alloc_table[intP]) : bool =
+    offset_min[intP](intP_alloc_table, p) <= a AND
+    offset_max[intP](intP_alloc_table, p) >= b
+
+  valid_root_voidP(p:pointer[voidP], a:int, b:int,
+                   voidP_alloc_table:alloc_table[voidP]) : bool =
+    offset_min[voidP](voidP_alloc_table, p) <= a AND
+    offset_max[voidP](voidP_alloc_table, p) >= b
+
+  valid_struct_charP(p:pointer[charP], a:int, b:int,
+                     charP_alloc_table:alloc_table[charP]) : bool =
+    offset_min[charP](charP_alloc_table, p) <= a AND
+    offset_max[charP](charP_alloc_table, p) >= b
+
+  valid_struct_intP(p:pointer[intP], a:int, b:int,
+                    intP_alloc_table:alloc_table[intP]) : bool =
+    offset_min[intP](intP_alloc_table, p) <= a AND
+    offset_max[intP](intP_alloc_table, p) >= b
+
+  valid_struct_voidP(p:pointer[voidP], a:int, b:int,
+                     voidP_alloc_table:alloc_table[voidP]) : bool =
+    offset_min[voidP](voidP_alloc_table, p) <= a AND
+    offset_max[voidP](voidP_alloc_table, p) >= b
+
+  %% Why axiom voidP_int
+  voidP_int: AXIOM int_of_tag[voidP](voidP_tag) = 1
+
+  %% Why axiom voidP_parenttag_bottom
+  voidP_parenttag_bottom: AXIOM
+    parenttag[voidP](voidP_tag, bottom_tag[voidP])
+
+  %% Why axiom voidP_tags
+  voidP_tags: AXIOM
+    (FORALL (x: pointer[voidP]):
+    (FORALL (voidP_tag_table: tag_table[voidP]):
+    instanceof[voidP](voidP_tag_table, x, voidP_tag)))
+
+  %% Why axiom add2_set
+  add2_set: AXIOM
+    (FORALL (s_1: int_set):
+    (FORALL (i_1: int32):
+    add_int_set(add_int_set(s_1, i_1), i_1) = add_int_set(s_1, i_1)))
+
+  %% Why axiom add_int_set_trans
+  add_int_set_trans: AXIOM
+    (FORALL (s_2: int_set):
+    (FORALL (i_2: int32):
+    (FORALL (j: int32):
+    add_int_set(add_int_set(s_2, i_2), j) =
+    add_int_set(add_int_set(s_2, j), i_2))))
+
+  %% Why axiom isin_empty_set
+  isin_empty_set: AXIOM
+    (FORALL (i_3: int32): isin_int_set(empty_int_set, i_3) = false)
+
+  %% Why axiom isin_add_int_set1
+  isin_add_int_set1: AXIOM
+    (FORALL (s_3: int_set):
+    (FORALL (i_4: int32): isin_int_set(add_int_set(s_3, i_4), i_4) = true))
+
+  %% Why axiom isin_add_int_set2
+  isin_add_int_set2: AXIOM
+    (FORALL (s_4: int_set):
+    (FORALL (i_5: int32):
+    (FORALL (j_0: int32):
+    (integer_of_int32(i_5) /= integer_of_int32(j_0) IMPLIES
+    isin_int_set(add_int_set(s_4, i_5), j_0) = isin_int_set(s_4, j_0)))))
+
+  %% Why axiom intersect_com
+  intersect_com: AXIOM
+    (FORALL (s1_1_0: int_set):
+    (FORALL (s2_0_0: int_set):
+    intersect_int_set(s1_1_0, s2_0_0) = intersect_int_set(s2_0_0, s1_1_0)))
+
+  %% Why axiom intersect_trans
+  intersect_trans: AXIOM
+    (FORALL (s1_2: int_set):
+    (FORALL (s2_1_0: int_set):
+    (FORALL (s3: int_set):
+    intersect_int_set(s1_2, intersect_int_set(s2_1_0, s3)) =
+    intersect_int_set(intersect_int_set(s1_2, s2_1_0), s3))))
+
+  %% Why axiom intersect_def0
+  intersect_def0: AXIOM
+    (FORALL (s_5: int_set):
+    intersect_int_set(empty_int_set, s_5) = empty_int_set)
+
+  %% Why axiom intersect_def
+  intersect_def: AXIOM
+    (FORALL (s1_3: int_set):
+    (FORALL (s2_2: int_set):
+    (FORALL (i_6: int32):
+    (isin_int_set(s1_3, i_6) = true AND isin_int_set(s2_2, i_6) = true IFF
+    isin_int_set(intersect_int_set(s1_3, s2_2), i_6) = true))))
+
+  %% Why axiom size_int_set_def0
+  size_int_set_def0: AXIOM size_int_set(empty_int_set) = 0
+
+  %% Why axiom size_int_set_def1
+  size_int_set_def1: AXIOM
+    (FORALL (s_6: int_set):
+    (FORALL (e: int32):
+    (isin_int_set(s_6, e) = true IMPLIES
+    size_int_set(add_int_set(s_6, e)) = size_int_set(s_6))))
+
+  %% Why axiom size_int_set_def2
+  size_int_set_def2: AXIOM
+    (FORALL (s_7: int_set):
+    (FORALL (e_0: int32):
+    (NOT isin_int_set(s_7, e_0) = true IMPLIES
+    size_int_set(add_int_set(s_7, e_0)) = size_int_set(s_7) + 1)))
+
+  % Why obligation from file "intersect.c", line 58, characters 4-158: 
+  intset_intersect_prop: LEMMA
+    (FORALL (s1_4: int_set):
+    (FORALL (s2_3: int_set):
+    size_int_set(intersect_int_set(s1_4, s2_3)) <=
+    int_min(size_int_set(s1_4), size_int_set(s2_3))))
+
+  % Why obligation from file "intersect.c", line 69, characters 4-84: 
+  intset0: LEMMA
+    (FORALL (intP_intM_s_9_6_at_L: memory[intP, int32]):
+    (FORALL (s_9: pointer[intP]):
+    intset(s_9, 0, intP_intM_s_9_6_at_L) = empty_int_set))
+
+  % Why obligation from file "intersect.c", line 75, characters 4-73: 
+  is_intset0: LEMMA
+    (FORALL (intP_intM_s_11_7_at_L: memory[intP, int32]):
+    (FORALL (s_11: pointer[intP]): is_intset(s_11, 0, intP_intM_s_11_7_at_L)))
+
+  % Why obligation from file "intersect.c", line 79, characters 4-73: 
+  is_intset1: LEMMA
+    (FORALL (intP_intM_s_12_8_at_L: memory[intP, int32]):
+    (FORALL (s_12: pointer[intP]): is_intset(s_12, 1, intP_intM_s_12_8_at_L)))
+
+  % Why obligation from file "intersect.c", line 83, characters 4-159: 
+  is_intset_new: LEMMA
+    (FORALL (intP_intM_s_13_9_at_L: memory[intP, int32]):
+    (FORALL (s_13: pointer[intP]):
+    (FORALL (n_3: int):
+    (is_intset(s_13, n_3, intP_intM_s_13_9_at_L) AND
+    NOT isin_int_set(intset(s_13, n_3, intP_intM_s_13_9_at_L), select[int32,
+                     intP](intP_intM_s_13_9_at_L, shift[intP](s_13, n_3))) =
+        true IMPLIES
+    is_intset(s_13, n_3 + 1, intP_intM_s_13_9_at_L)))))
+
+  % Why obligation from file "intersect.c", line 88, characters 4-122: 
+  is_intset_sub: LEMMA
+    (FORALL (intP_intM_s_14_10_at_L: memory[intP, int32]):
+    (FORALL (s_14: pointer[intP]):
+    (FORALL (n_4: int):
+    (FORALL (m: int):
+    (is_intset(s_14, n_4, intP_intM_s_14_10_at_L) AND (0 <= m AND
+    m <= n_4) IMPLIES is_intset(s_14, m, intP_intM_s_14_10_at_L))))))
+
+  % Why obligation from file "intersect.c", line 92, characters 4-202: 
+  is_intset_ex: LEMMA
+    (FORALL (intP_intM_s_15_11_at_L: memory[intP, int32]):
+    (FORALL (s_15: pointer[intP]):
+    (FORALL (n_5: int):
+    (is_intset(s_15, n_5, intP_intM_s_15_11_at_L) IFF
+    (FORALL (i_7: int):
+    (FORALL (j_1: int):
+    (0 <= i_7 AND (i_7 < n_5 AND (0 <= j_1 AND (j_1 < n_5 AND
+    i_7 /= j_1))) IMPLIES
+    integer_of_int32(select[int32,
+                     intP](intP_intM_s_15_11_at_L, shift[intP](s_15, i_7))) /=
+    integer_of_int32(select[int32,
+                     intP](intP_intM_s_15_11_at_L, shift[intP](s_15, j_1))))))))))
+
+  % Why obligation from file "intersect.c", line 98, characters 4-170: 
+  isin_int_set_ex: LEMMA
+    (FORALL (intP_intM_s_16_12_at_L: memory[intP, int32]):
+    (FORALL (s_16: pointer[intP]):
+    (FORALL (n_6: int):
+    (FORALL (a: int32):
+    (isin_int_set(intset(s_16, n_6, intP_intM_s_16_12_at_L), a) = true IFF
+    (EXISTS (i_8: int): 0 <= i_8 AND (i_8 < n_6 AND
+     integer_of_int32(select[int32,
+                      intP](intP_intM_s_16_12_at_L, shift[intP](s_16, i_8))) =
+     integer_of_int32(a))))))))
+
+  % Why obligation from file "intersect.c", line 103, characters 4-684: 
+  intersect_ex: LEMMA
+    (FORALL (intP_intM_r_15_at_L3: memory[intP, int32]):
+    (FORALL (intP_intM_s2_4_14_at_L2: memory[intP, int32]):
+    (FORALL (intP_intM_s1_5_13_at_L1: memory[intP, int32]):
+    (FORALL (s1_5: pointer[intP]):
+    (FORALL (s2_4: pointer[intP]):
+    (FORALL (r: pointer[intP]):
+    (FORALL (n1_0_0: int):
+    (FORALL (n2_0_0: int):
+    (FORALL (k_0: int):
+    (intset(r, k_0, intP_intM_r_15_at_L3) =
+     intersect_int_set(intset(s1_5, n1_0_0, intP_intM_s1_5_13_at_L1),
+                       intset(s2_4, n2_0_0, intP_intM_s2_4_14_at_L2)) IFF
+    (FORALL (i_9: int):
+    (0 <= i_9 AND i_9 < k_0 IMPLIES
+    (EXISTS (j1: int):
+     (EXISTS (j2: int): 0 <= j1 AND (j1 < n1_0_0 AND (0 <= j2 AND
+      (j2 < n2_0_0 AND
+      (integer_of_int32(select[int32,
+                        intP](intP_intM_r_15_at_L3, shift[intP](r, i_9))) =
+       integer_of_int32(select[int32,
+                        intP](intP_intM_s1_5_13_at_L1, shift[intP](s1_5, j1))) AND
+      integer_of_int32(select[int32,
+                       intP](intP_intM_r_15_at_L3, shift[intP](r, i_9))) =
+      integer_of_int32(select[int32,
+                       intP](intP_intM_s2_4_14_at_L2, shift[intP](s2_4, j2))))))))))) AND
+    (FORALL (j1_0: int):
+    (FORALL (j2_0: int):
+    (0 <= j1_0 AND (j1_0 < n1_0_0 AND (0 <= j2_0 AND (j2_0 < n2_0_0 AND
+    integer_of_int32(select[int32,
+                     intP](intP_intM_s1_5_13_at_L1, shift[intP](s1_5, j1_0))) =
+    integer_of_int32(select[int32,
+                     intP](intP_intM_s2_4_14_at_L2, shift[intP](s2_4, j2_0)))))) IMPLIES
+    (EXISTS (i_10: int): 0 <= i_10 AND (i_10 < k_0 AND
+     integer_of_int32(select[int32,
+                      intP](intP_intM_s1_5_13_at_L1, shift[intP](s1_5, j1_0))) =
+     integer_of_int32(select[int32,
+                      intP](intP_intM_r_15_at_L3, shift[intP](r, i_10))))))))))))))))))
+
+  % Why obligation from file "intersect.c", line 117, characters 4-310: 
+  intset_intersect_len: LEMMA
+    (FORALL (intP_intM_r_0_18_at_L3: memory[intP, int32]):
+    (FORALL (intP_intM_s2_5_17_at_L2: memory[intP, int32]):
+    (FORALL (intP_intM_s1_6_16_at_L1: memory[intP, int32]):
+    (FORALL (s1_6: pointer[intP]):
+    (FORALL (s2_5: pointer[intP]):
+    (FORALL (r_0: pointer[intP]):
+    (FORALL (n1_1: int):
+    (FORALL (n2_1: int):
+    (FORALL (k_1: int):
+    (is_intset(s1_6, n1_1, intP_intM_s1_6_16_at_L1) AND
+    (is_intset(s2_5, n2_1, intP_intM_s2_5_17_at_L2) AND
+    (is_intset(r_0, k_1, intP_intM_r_0_18_at_L3) AND
+    intset(r_0, k_1, intP_intM_r_0_18_at_L3) =
+    intersect_int_set(intset(s1_6, n1_1, intP_intM_s1_6_16_at_L1),
+                      intset(s2_5, n2_1, intP_intM_s2_5_17_at_L2)))) IMPLIES
+    k_1 <= int_min(n1_1, n2_1)))))))))))
+
+  % Why obligation from file "intersect.c", line 143, characters 9-15: 
+  intersect_ensures_default_po_1: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    0 <= integer_of_uint32(i_11)
+
+  % Why obligation from file "intersect.c", line 143, characters 14-21: 
+  intersect_ensures_default_po_2: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    integer_of_uint32(i_11) <= integer_of_uint32(n1_0)
+
+  % Why obligation from file "intersect.c", line 144, characters 8-77: 
+  intersect_ensures_default_po_3: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    intset(result_0, integer_of_uint32(k), intP_intM_result_5) =
+    intersect_int_set(intset(set1, integer_of_uint32(i_11), intP_intM_set1_3),
+                      intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4))
+
+  % Why obligation from file "intersect.c", line 145, characters 8-27: 
+  intersect_ensures_default_po_4: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    is_intset(result_0, integer_of_uint32(k), intP_intM_result_5)
+
+  % Why obligation from file "intersect.c", line 152, characters 11-17: 
+  intersect_ensures_default_po_5: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    0 <= integer_of_uint32(j_2)
+
+  % Why obligation from file "intersect.c", line 152, characters 16-23: 
+  intersect_ensures_default_po_6: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    integer_of_uint32(j_2) <= integer_of_uint32(n2_0)
+
+  % Why obligation from file "intersect.c", line 153, characters 10-79: 
+  intersect_ensures_default_po_7: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+    intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                             intP_intM_set1_3),
+                      intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4))
+
+  % Why obligation from file "intersect.c", line 154, characters 10-29: 
+  intersect_ensures_default_po_8: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)
+
+  % Why obligation from file "intersect.c", line 155, characters 10-47: 
+  intersect_ensures_default_po_9: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true
+
+  % Why obligation from file "intersect.c", line 143, characters 9-15: 
+  intersect_ensures_default_po_10: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) = integer_of_int32(result3) IMPLIES
+    FORALL (result4: int32) :
+    result4 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    FORALL (intP_intM_result_5_2: memory[intP,
+    int32]) :
+    intP_intM_result_5_2 = store[intP,
+    int32](intP_intM_result_5_1,
+           shift[intP](result_0, integer_of_uint32(k1)), result4) IMPLIES
+    FORALL (result5: uint32) :
+    integer_of_uint32(result5) = integer_of_uint32(k1) + 1 IMPLIES
+    FORALL (k2: uint32) :
+    k2 = result5 IMPLIES
+    FORALL (result6: uint32) :
+    integer_of_uint32(result6) = integer_of_uint32(i_11_0) + 1 IMPLIES
+    FORALL (i_11_1: uint32) :
+    i_11_1 = result6 IMPLIES
+    0 <= integer_of_uint32(i_11_1)
+
+  % Why obligation from file "intersect.c", line 143, characters 14-21: 
+  intersect_ensures_default_po_11: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) = integer_of_int32(result3) IMPLIES
+    FORALL (result4: int32) :
+    result4 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    FORALL (intP_intM_result_5_2: memory[intP,
+    int32]) :
+    intP_intM_result_5_2 = store[intP,
+    int32](intP_intM_result_5_1,
+           shift[intP](result_0, integer_of_uint32(k1)), result4) IMPLIES
+    FORALL (result5: uint32) :
+    integer_of_uint32(result5) = integer_of_uint32(k1) + 1 IMPLIES
+    FORALL (k2: uint32) :
+    k2 = result5 IMPLIES
+    FORALL (result6: uint32) :
+    integer_of_uint32(result6) = integer_of_uint32(i_11_0) + 1 IMPLIES
+    FORALL (i_11_1: uint32) :
+    i_11_1 = result6 IMPLIES
+    integer_of_uint32(i_11_1) <= integer_of_uint32(n1_0)
+
+  % Why obligation from file "intersect.c", line 144, characters 8-77: 
+  intersect_ensures_default_po_12: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) = integer_of_int32(result3) IMPLIES
+    FORALL (result4: int32) :
+    result4 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    FORALL (intP_intM_result_5_2: memory[intP,
+    int32]) :
+    intP_intM_result_5_2 = store[intP,
+    int32](intP_intM_result_5_1,
+           shift[intP](result_0, integer_of_uint32(k1)), result4) IMPLIES
+    FORALL (result5: uint32) :
+    integer_of_uint32(result5) = integer_of_uint32(k1) + 1 IMPLIES
+    FORALL (k2: uint32) :
+    k2 = result5 IMPLIES
+    FORALL (result6: uint32) :
+    integer_of_uint32(result6) = integer_of_uint32(i_11_0) + 1 IMPLIES
+    FORALL (i_11_1: uint32) :
+    i_11_1 = result6 IMPLIES
+    intset(result_0, integer_of_uint32(k2), intP_intM_result_5_2) =
+    intersect_int_set(intset(set1, integer_of_uint32(i_11_1),
+                             intP_intM_set1_3),
+                      intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4))
+
+  % Why obligation from file "intersect.c", line 145, characters 8-27: 
+  intersect_ensures_default_po_13: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) = integer_of_int32(result3) IMPLIES
+    FORALL (result4: int32) :
+    result4 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    FORALL (intP_intM_result_5_2: memory[intP,
+    int32]) :
+    intP_intM_result_5_2 = store[intP,
+    int32](intP_intM_result_5_1,
+           shift[intP](result_0, integer_of_uint32(k1)), result4) IMPLIES
+    FORALL (result5: uint32) :
+    integer_of_uint32(result5) = integer_of_uint32(k1) + 1 IMPLIES
+    FORALL (k2: uint32) :
+    k2 = result5 IMPLIES
+    FORALL (result6: uint32) :
+    integer_of_uint32(result6) = integer_of_uint32(i_11_0) + 1 IMPLIES
+    FORALL (i_11_1: uint32) :
+    i_11_1 = result6 IMPLIES
+    is_intset(result_0, integer_of_uint32(k2), intP_intM_result_5_2)
+
+  % Why obligation from file "intersect.c", line 152, characters 11-17: 
+  intersect_ensures_default_po_14: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) /= integer_of_int32(result3) IMPLIES
+    FORALL (result4: uint32) :
+    integer_of_uint32(result4) = integer_of_uint32(j_2_0) + 1 IMPLIES
+    FORALL (j_2_1: uint32) :
+    j_2_1 = result4 IMPLIES
+    0 <= integer_of_uint32(j_2_1)
+
+  % Why obligation from file "intersect.c", line 152, characters 16-23: 
+  intersect_ensures_default_po_15: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) /= integer_of_int32(result3) IMPLIES
+    FORALL (result4: uint32) :
+    integer_of_uint32(result4) = integer_of_uint32(j_2_0) + 1 IMPLIES
+    FORALL (j_2_1: uint32) :
+    j_2_1 = result4 IMPLIES
+    integer_of_uint32(j_2_1) <= integer_of_uint32(n2_0)
+
+  % Why obligation from file "intersect.c", line 153, characters 10-79: 
+  intersect_ensures_default_po_16: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) /= integer_of_int32(result3) IMPLIES
+    FORALL (result4: uint32) :
+    integer_of_uint32(result4) = integer_of_uint32(j_2_0) + 1 IMPLIES
+    FORALL (j_2_1: uint32) :
+    j_2_1 = result4 IMPLIES
+    intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+    intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                             intP_intM_set1_3),
+                      intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4))
+
+  % Why obligation from file "intersect.c", line 154, characters 10-29: 
+  intersect_ensures_default_po_17: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) /= integer_of_int32(result3) IMPLIES
+    FORALL (result4: uint32) :
+    integer_of_uint32(result4) = integer_of_uint32(j_2_0) + 1 IMPLIES
+    FORALL (j_2_1: uint32) :
+    j_2_1 = result4 IMPLIES
+    is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1)
+
+  % Why obligation from file "intersect.c", line 155, characters 10-47: 
+  intersect_ensures_default_po_18: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) /= integer_of_int32(result3) IMPLIES
+    FORALL (result4: uint32) :
+    integer_of_uint32(result4) = integer_of_uint32(j_2_0) + 1 IMPLIES
+    FORALL (j_2_1: uint32) :
+    j_2_1 = result4 IMPLIES
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_1), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true
+
+  % Why obligation from file "intersect.c", line 143, characters 9-15: 
+  intersect_ensures_default_po_19: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) >= integer_of_uint32(n2_0) IMPLIES
+    FORALL (result2: uint32) :
+    integer_of_uint32(result2) = integer_of_uint32(i_11_0) + 1 IMPLIES
+    FORALL (i_11_1: uint32) :
+    i_11_1 = result2 IMPLIES
+    0 <= integer_of_uint32(i_11_1)
+
+  % Why obligation from file "intersect.c", line 143, characters 14-21: 
+  intersect_ensures_default_po_20: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) >= integer_of_uint32(n2_0) IMPLIES
+    FORALL (result2: uint32) :
+    integer_of_uint32(result2) = integer_of_uint32(i_11_0) + 1 IMPLIES
+    FORALL (i_11_1: uint32) :
+    i_11_1 = result2 IMPLIES
+    integer_of_uint32(i_11_1) <= integer_of_uint32(n1_0)
+
+  % Why obligation from file "intersect.c", line 144, characters 8-77: 
+  intersect_ensures_default_po_21: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) >= integer_of_uint32(n2_0) IMPLIES
+    FORALL (result2: uint32) :
+    integer_of_uint32(result2) = integer_of_uint32(i_11_0) + 1 IMPLIES
+    FORALL (i_11_1: uint32) :
+    i_11_1 = result2 IMPLIES
+    intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+    intersect_int_set(intset(set1, integer_of_uint32(i_11_1),
+                             intP_intM_set1_3),
+                      intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4))
+
+  % Why obligation from file "intersect.c", line 145, characters 8-27: 
+  intersect_ensures_default_po_22: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) >= integer_of_uint32(n2_0) IMPLIES
+    FORALL (result2: uint32) :
+    integer_of_uint32(result2) = integer_of_uint32(i_11_0) + 1 IMPLIES
+    FORALL (i_11_1: uint32) :
+    i_11_1 = result2 IMPLIES
+    is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_1)
+
+  % Why obligation from file "intersect.c", line 134, characters 12-104: 
+  intersect_ensures_default_po_23: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) >= integer_of_uint32(n1_0) IMPLIES
+    FORALL (return: uint32) :
+    return = k0 IMPLIES
+    intset(result_0, integer_of_uint32(return), intP_intM_result_5_0) =
+    intersect_int_set(intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3),
+                      intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4))
+
+  % Why obligation from file "intersect.c", line 135, characters 12-37: 
+  intersect_ensures_default_po_24: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5_0)))) IMPLIES
+    integer_of_uint32(i_11_0) >= integer_of_uint32(n1_0) IMPLIES
+    FORALL (return: uint32) :
+    return = k0 IMPLIES
+    is_intset(result_0, integer_of_uint32(return), intP_intM_result_5_0)
+
+  % Why obligation from file "intersect.c", line 160, characters 10-17: 
+  intersect_safety_po_1: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0)
+
+  % Why obligation from file "intersect.c", line 160, characters 10-17: 
+  intersect_safety_po_2: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1)
+
+  % Why obligation from file "intersect.c", line 160, characters 21-28: 
+  intersect_safety_po_3: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_set2_4_alloc_table, set2) <=
+    integer_of_uint32(j_2_0)
+
+  % Why obligation from file "intersect.c", line 160, characters 21-28: 
+  intersect_safety_po_4: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    integer_of_uint32(j_2_0) <=
+    offset_max[intP](intP_set2_4_alloc_table, set2)
+
+  % Why obligation from file "intersect.jc", line 302, characters 37-140: 
+  intersect_safety_po_5: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_set2_4_alloc_table, set2) <=
+    integer_of_uint32(j_2_0) AND
+    integer_of_uint32(j_2_0) <=
+    offset_max[intP](intP_set2_4_alloc_table, set2) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) = integer_of_int32(result3) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result4: int32) :
+    result4 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_result_5_alloc_table, result_0) <=
+    integer_of_uint32(k1)
+
+  % Why obligation from file "intersect.jc", line 302, characters 37-140: 
+  intersect_safety_po_6: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_set2_4_alloc_table, set2) <=
+    integer_of_uint32(j_2_0) AND
+    integer_of_uint32(j_2_0) <=
+    offset_max[intP](intP_set2_4_alloc_table, set2) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) = integer_of_int32(result3) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result4: int32) :
+    result4 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    integer_of_uint32(k1) <=
+    offset_max[intP](intP_result_5_alloc_table, result_0)
+
+  % Why obligation from file "intersect.c", line 163, characters 8-11: 
+  intersect_safety_po_7: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_set2_4_alloc_table, set2) <=
+    integer_of_uint32(j_2_0) AND
+    integer_of_uint32(j_2_0) <=
+    offset_max[intP](intP_set2_4_alloc_table, set2) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) = integer_of_int32(result3) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result4: int32) :
+    result4 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_result_5_alloc_table, result_0) <=
+    integer_of_uint32(k1) AND
+    integer_of_uint32(k1) <=
+    offset_max[intP](intP_result_5_alloc_table, result_0) IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    intP_intM_result_5_1 = store[intP,
+    int32](intP_intM_result_5_0,
+           shift[intP](result_0, integer_of_uint32(k1)), result4) IMPLIES
+    0 <= integer_of_uint32(k1) + 1
+
+  % Why obligation from file "intersect.c", line 163, characters 8-11: 
+  intersect_safety_po_8: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_set2_4_alloc_table, set2) <=
+    integer_of_uint32(j_2_0) AND
+    integer_of_uint32(j_2_0) <=
+    offset_max[intP](intP_set2_4_alloc_table, set2) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) = integer_of_int32(result3) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result4: int32) :
+    result4 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_result_5_alloc_table, result_0) <=
+    integer_of_uint32(k1) AND
+    integer_of_uint32(k1) <=
+    offset_max[intP](intP_result_5_alloc_table, result_0) IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    intP_intM_result_5_1 = store[intP,
+    int32](intP_intM_result_5_0,
+           shift[intP](result_0, integer_of_uint32(k1)), result4) IMPLIES
+    integer_of_uint32(k1) + 1 <= 4294967295
+
+  % Why obligation from file "intersect.c", line 148, characters 22-25: 
+  intersect_safety_po_9: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_set2_4_alloc_table, set2) <=
+    integer_of_uint32(j_2_0) AND
+    integer_of_uint32(j_2_0) <=
+    offset_max[intP](intP_set2_4_alloc_table, set2) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) = integer_of_int32(result3) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result4: int32) :
+    result4 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_result_5_alloc_table, result_0) <=
+    integer_of_uint32(k1) AND
+    integer_of_uint32(k1) <=
+    offset_max[intP](intP_result_5_alloc_table, result_0) IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    intP_intM_result_5_1 = store[intP,
+    int32](intP_intM_result_5_0,
+           shift[intP](result_0, integer_of_uint32(k1)), result4) IMPLIES
+    0 <= integer_of_uint32(k1) + 1 AND
+    integer_of_uint32(k1) + 1 <= 4294967295 IMPLIES
+    FORALL (result5: uint32) :
+    integer_of_uint32(result5) = integer_of_uint32(k1) + 1 IMPLIES
+    FORALL (k2: uint32) :
+    k2 = result5 IMPLIES
+    0 <= integer_of_uint32(i_11_0) + 1
+
+  % Why obligation from file "intersect.c", line 148, characters 22-25: 
+  intersect_safety_po_10: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_set2_4_alloc_table, set2) <=
+    integer_of_uint32(j_2_0) AND
+    integer_of_uint32(j_2_0) <=
+    offset_max[intP](intP_set2_4_alloc_table, set2) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) = integer_of_int32(result3) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result4: int32) :
+    result4 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_result_5_alloc_table, result_0) <=
+    integer_of_uint32(k1) AND
+    integer_of_uint32(k1) <=
+    offset_max[intP](intP_result_5_alloc_table, result_0) IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    intP_intM_result_5_1 = store[intP,
+    int32](intP_intM_result_5_0,
+           shift[intP](result_0, integer_of_uint32(k1)), result4) IMPLIES
+    0 <= integer_of_uint32(k1) + 1 AND
+    integer_of_uint32(k1) + 1 <= 4294967295 IMPLIES
+    FORALL (result5: uint32) :
+    integer_of_uint32(result5) = integer_of_uint32(k1) + 1 IMPLIES
+    FORALL (k2: uint32) :
+    k2 = result5 IMPLIES
+    integer_of_uint32(i_11_0) + 1 <= 4294967295
+
+  % Why obligation from file "intersect.c", line 146, characters 19-25: 
+  intersect_safety_po_11: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_set2_4_alloc_table, set2) <=
+    integer_of_uint32(j_2_0) AND
+    integer_of_uint32(j_2_0) <=
+    offset_max[intP](intP_set2_4_alloc_table, set2) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) = integer_of_int32(result3) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result4: int32) :
+    result4 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_result_5_alloc_table, result_0) <=
+    integer_of_uint32(k1) AND
+    integer_of_uint32(k1) <=
+    offset_max[intP](intP_result_5_alloc_table, result_0) IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    intP_intM_result_5_1 = store[intP,
+    int32](intP_intM_result_5_0,
+           shift[intP](result_0, integer_of_uint32(k1)), result4) IMPLIES
+    0 <= integer_of_uint32(k1) + 1 AND
+    integer_of_uint32(k1) + 1 <= 4294967295 IMPLIES
+    FORALL (result5: uint32) :
+    integer_of_uint32(result5) = integer_of_uint32(k1) + 1 IMPLIES
+    FORALL (k2: uint32) :
+    k2 = result5 IMPLIES
+    0 <= integer_of_uint32(i_11_0) + 1 AND
+    integer_of_uint32(i_11_0) + 1 <= 4294967295 IMPLIES
+    FORALL (result6: uint32) :
+    integer_of_uint32(result6) = integer_of_uint32(i_11_0) + 1 IMPLIES
+    FORALL (i_11_1: uint32) :
+    i_11_1 = result6 IMPLIES
+    0 <= (integer_of_uint32(n1_0) - integer_of_uint32(i_11_0))
+
+  % Why obligation from file "intersect.c", line 146, characters 19-25: 
+  intersect_safety_po_12: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_set2_4_alloc_table, set2) <=
+    integer_of_uint32(j_2_0) AND
+    integer_of_uint32(j_2_0) <=
+    offset_max[intP](intP_set2_4_alloc_table, set2) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) = integer_of_int32(result3) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result4: int32) :
+    result4 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_result_5_alloc_table, result_0) <=
+    integer_of_uint32(k1) AND
+    integer_of_uint32(k1) <=
+    offset_max[intP](intP_result_5_alloc_table, result_0) IMPLIES
+    FORALL (intP_intM_result_5_1: memory[intP,
+    int32]) :
+    intP_intM_result_5_1 = store[intP,
+    int32](intP_intM_result_5_0,
+           shift[intP](result_0, integer_of_uint32(k1)), result4) IMPLIES
+    0 <= integer_of_uint32(k1) + 1 AND
+    integer_of_uint32(k1) + 1 <= 4294967295 IMPLIES
+    FORALL (result5: uint32) :
+    integer_of_uint32(result5) = integer_of_uint32(k1) + 1 IMPLIES
+    FORALL (k2: uint32) :
+    k2 = result5 IMPLIES
+    0 <= integer_of_uint32(i_11_0) + 1 AND
+    integer_of_uint32(i_11_0) + 1 <= 4294967295 IMPLIES
+    FORALL (result6: uint32) :
+    integer_of_uint32(result6) = integer_of_uint32(i_11_0) + 1 IMPLIES
+    FORALL (i_11_1: uint32) :
+    i_11_1 = result6 IMPLIES
+    (integer_of_uint32(n1_0) - integer_of_uint32(i_11_1)) <
+    (integer_of_uint32(n1_0) - integer_of_uint32(i_11_0))
+
+  % Why obligation from file "intersect.c", line 158, characters 24-27: 
+  intersect_safety_po_13: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_set2_4_alloc_table, set2) <=
+    integer_of_uint32(j_2_0) AND
+    integer_of_uint32(j_2_0) <=
+    offset_max[intP](intP_set2_4_alloc_table, set2) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) /= integer_of_int32(result3) IMPLIES
+    0 <= integer_of_uint32(j_2_0) + 1
+
+  % Why obligation from file "intersect.c", line 158, characters 24-27: 
+  intersect_safety_po_14: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_set2_4_alloc_table, set2) <=
+    integer_of_uint32(j_2_0) AND
+    integer_of_uint32(j_2_0) <=
+    offset_max[intP](intP_set2_4_alloc_table, set2) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) /= integer_of_int32(result3) IMPLIES
+    integer_of_uint32(j_2_0) + 1 <= 4294967295
+
+  % Why obligation from file "intersect.c", line 156, characters 21-27: 
+  intersect_safety_po_15: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_set2_4_alloc_table, set2) <=
+    integer_of_uint32(j_2_0) AND
+    integer_of_uint32(j_2_0) <=
+    offset_max[intP](intP_set2_4_alloc_table, set2) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) /= integer_of_int32(result3) IMPLIES
+    0 <= integer_of_uint32(j_2_0) + 1 AND
+    integer_of_uint32(j_2_0) + 1 <= 4294967295 IMPLIES
+    FORALL (result4: uint32) :
+    integer_of_uint32(result4) = integer_of_uint32(j_2_0) + 1 IMPLIES
+    FORALL (j_2_1: uint32) :
+    j_2_1 = result4 IMPLIES
+    0 <= (integer_of_uint32(n2_0) - integer_of_uint32(j_2_0))
+
+  % Why obligation from file "intersect.c", line 156, characters 21-27: 
+  intersect_safety_po_16: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) < integer_of_uint32(n2_0) IMPLIES
+    offset_min[intP](intP_set1_3_alloc_table, set1) <=
+    integer_of_uint32(i_11_0) AND
+    integer_of_uint32(i_11_0) <=
+    offset_max[intP](intP_set1_3_alloc_table, set1) IMPLIES
+    FORALL (result2: int32) :
+    result2 = select[int32,
+    intP](intP_intM_set1_3, shift[intP](set1, integer_of_uint32(i_11_0))) IMPLIES
+    offset_min[intP](intP_set2_4_alloc_table, set2) <=
+    integer_of_uint32(j_2_0) AND
+    integer_of_uint32(j_2_0) <=
+    offset_max[intP](intP_set2_4_alloc_table, set2) IMPLIES
+    FORALL (result3: int32) :
+    result3 = select[int32,
+    intP](intP_intM_set2_4, shift[intP](set2, integer_of_uint32(j_2_0))) IMPLIES
+    integer_of_int32(result2) /= integer_of_int32(result3) IMPLIES
+    0 <= integer_of_uint32(j_2_0) + 1 AND
+    integer_of_uint32(j_2_0) + 1 <= 4294967295 IMPLIES
+    FORALL (result4: uint32) :
+    integer_of_uint32(result4) = integer_of_uint32(j_2_0) + 1 IMPLIES
+    FORALL (j_2_1: uint32) :
+    j_2_1 = result4 IMPLIES
+    (integer_of_uint32(n2_0) - integer_of_uint32(j_2_1)) <
+    (integer_of_uint32(n2_0) - integer_of_uint32(j_2_0))
+
+  % Why obligation from file "intersect.c", line 148, characters 22-25: 
+  intersect_safety_po_17: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) >= integer_of_uint32(n2_0) IMPLIES
+    0 <= integer_of_uint32(i_11_0) + 1
+
+  % Why obligation from file "intersect.c", line 148, characters 22-25: 
+  intersect_safety_po_18: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) >= integer_of_uint32(n2_0) IMPLIES
+    integer_of_uint32(i_11_0) + 1 <= 4294967295
+
+  % Why obligation from file "intersect.c", line 146, characters 19-25: 
+  intersect_safety_po_19: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) >= integer_of_uint32(n2_0) IMPLIES
+    0 <= integer_of_uint32(i_11_0) + 1 AND
+    integer_of_uint32(i_11_0) + 1 <= 4294967295 IMPLIES
+    FORALL (result2: uint32) :
+    integer_of_uint32(result2) = integer_of_uint32(i_11_0) + 1 IMPLIES
+    FORALL (i_11_1: uint32) :
+    i_11_1 = result2 IMPLIES
+    0 <= (integer_of_uint32(n1_0) - integer_of_uint32(i_11_0))
+
+  % Why obligation from file "intersect.c", line 146, characters 19-25: 
+  intersect_safety_po_20: LEMMA
+    FORALL (set1: pointer[intP]) :
+    FORALL (n1_0: uint32) :
+    FORALL (set2: pointer[intP]) :
+    FORALL (n2_0: uint32) :
+    FORALL (result_0: pointer[intP]) :
+    FORALL (intP_set1_3_alloc_table: alloc_table[intP]) :
+    FORALL (intP_set2_4_alloc_table: alloc_table[intP]) :
+    FORALL (intP_result_5_alloc_table: alloc_table[intP]) :
+    FORALL (intP_intM_set1_3: memory[intP,
+    int32]) :
+    FORALL (intP_intM_set2_4: memory[intP,
+    int32]) :
+    (offset_min[intP](intP_set1_3_alloc_table, set1) <= 0 AND
+    (offset_max[intP](intP_set1_3_alloc_table, set1) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (offset_min[intP](intP_set2_4_alloc_table, set2) <= 0 AND
+    (offset_max[intP](intP_set2_4_alloc_table, set2) >=
+     integer_of_uint32(n2_0) - 1 AND
+    (offset_min[intP](intP_result_5_alloc_table, result_0) <= 0 AND
+    (offset_max[intP](intP_result_5_alloc_table, result_0) >=
+     integer_of_uint32(n1_0) - 1 AND
+    (NOT same_block[intP](set1, result_0) AND
+    (NOT same_block[intP](set2, result_0) AND
+    (is_intset(set1, integer_of_uint32(n1_0), intP_intM_set1_3) AND
+    is_intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)))))))))) IMPLIES
+    FORALL (result: uint32) :
+    integer_of_uint32(result) = 0 IMPLIES
+    FORALL (k: uint32) :
+    k = result IMPLIES
+    FORALL (result0: uint32) :
+    integer_of_uint32(result0) = 0 IMPLIES
+    FORALL (i_11: uint32) :
+    i_11 = result0 IMPLIES
+    FORALL (i_11_0: uint32) :
+    FORALL (intP_intM_result_5: memory[intP,
+    int32]) :
+    FORALL (k0: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) <= integer_of_uint32(n1_0) AND
+    (intset(result_0, integer_of_uint32(k0), intP_intM_result_5) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    is_intset(result_0, integer_of_uint32(k0), intP_intM_result_5)))) IMPLIES
+    integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) IMPLIES
+    FORALL (result1: uint32) :
+    integer_of_uint32(result1) = 0 IMPLIES
+    FORALL (j_2: uint32) :
+    j_2 = result1 IMPLIES
+    FORALL (intP_intM_result_5_0: memory[intP,
+    int32]) :
+    FORALL (j_2_0: uint32) :
+    FORALL (k1: uint32) :
+    True IMPLIES
+    (0 <= integer_of_uint32(i_11_0) AND
+    (integer_of_uint32(i_11_0) < integer_of_uint32(n1_0) AND
+    (0 <= integer_of_uint32(j_2_0) AND
+    (integer_of_uint32(j_2_0) <= integer_of_uint32(n2_0) AND
+    (intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) =
+     intersect_int_set(intset(set1, integer_of_uint32(i_11_0),
+                              intP_intM_set1_3),
+                       intset(set2, integer_of_uint32(n2_0), intP_intM_set2_4)) AND
+    (is_intset(result_0, integer_of_uint32(k1), intP_intM_result_5_0) AND
+    NOT isin_int_set(intset(set2, integer_of_uint32(j_2_0), intP_intM_set2_4),
+                     select[int32,
+                     intP](intP_intM_set1_3,
+                           shift[intP](set1, integer_of_uint32(i_11_0)))) =
+        true)))))) IMPLIES
+    integer_of_uint32(j_2_0) >= integer_of_uint32(n2_0) IMPLIES
+    0 <= integer_of_uint32(i_11_0) + 1 AND
+    integer_of_uint32(i_11_0) + 1 <= 4294967295 IMPLIES
+    FORALL (result2: uint32) :
+    integer_of_uint32(result2) = integer_of_uint32(i_11_0) + 1 IMPLIES
+    FORALL (i_11_1: uint32) :
+    i_11_1 = result2 IMPLIES
+    (integer_of_uint32(n1_0) - integer_of_uint32(i_11_1)) <
+    (integer_of_uint32(n1_0) - integer_of_uint32(i_11_0))
+
+END intersect_why
+

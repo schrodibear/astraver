@@ -165,3 +165,16 @@
 .paths
 .project
 .settings
+
+# Test output files
+*.jessie
+*.loc
+*.cloc
+*.jc
+*.mlw
+*.makefile
+
+*.out
+*.err
+
+*.exe
