@@ -119,8 +119,11 @@ let term comp result_region = Jc_iterators.iter_term (single_term comp result_re
 
 let single_assertion comp a =
   match a#node with
-  | JCArelation(t1, (_, `Pointer), t2) ->
-    Region.unify t1#region t2#region
+  | JCArelation (t1, (_, `Pointer), t2) ->
+    begin match t1#node, t2#node with
+    | JCTbase_block _, JCTbase_block _ -> ()
+    | _ -> Region.unify t1#region t2#region
+    end
   | JCArelation _ -> ()
   | JCAapp app ->
     let li = app.app_fun in

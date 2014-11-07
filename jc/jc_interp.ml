@@ -760,7 +760,12 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
     | JCTaddress (Addr_pointer, t1) ->
       LApp ("address", [ft t1])
     | JCTbase_block t1 ->
-      LApp ("base_block", [ft t1])
+      let t1' = ft t1 in
+      let _, alloc =
+        let ac = tderef_alloc_class ~type_safe t1 in
+        talloc_table_var ~label_in_name:global_assertion lab (ac, t1#region)
+      in
+      LApp ("shift", [t1'; LApp ("offset_min", [alloc; t1'])])
     | JCTinstanceof (t1, lab', st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
       let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in

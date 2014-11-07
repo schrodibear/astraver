@@ -1106,7 +1106,7 @@ used as an assertion, not as a term" pi.li_name
     | JCNEbase_block(e1) ->
         let te1 = ft e1 in
         if is_pointer_type te1#typ then
-	  JCTnull, dummy_region, JCTbase_block(te1)
+	  te1#typ, te1#region, JCTbase_block(te1)
 	else
           not_the_good_type te1#pos te1#typ "pointer expected"
           (*typing_error e#pos "pointer expected"*)
