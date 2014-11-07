@@ -221,7 +221,7 @@ object (self)
   method! vexpr e =
     match e.enode with
     | CastE (ty, e) when isPointerType ty ->
-      let ety = typeOf (stripCastsAndInfo e) in
+      let ety = typeOf (stripInfo e) in
       if isPointerType ety then
         unify_type_hierarchies ty ety;
       DoChildren
