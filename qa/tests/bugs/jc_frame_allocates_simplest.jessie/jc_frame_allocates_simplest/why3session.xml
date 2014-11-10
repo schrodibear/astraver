@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
+<file name="../jc_frame_allocates_simplest.mlw" expanded="true">
+<theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_program" sum="5c4b7363f627dc7818949564cfdfb9ec" expanded="true">
+ <goal name="WP_parameter fobj_ensures_default" expl="Function fobj, default behavior" expanded="true">
+ <proof prover="0"><result status="valid" time="0.27"/></proof>
+ </goal>
+ <goal name="WP_parameter fobj_safety" expl="Function fobj, safety" expanded="true">
+ <proof prover="0"><result status="timeout" time="4.99"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

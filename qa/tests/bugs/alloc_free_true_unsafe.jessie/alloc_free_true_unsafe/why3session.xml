@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="CVC3" version="2.4.1" timelimit="5" memlimit="1000"/>
+<prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
+<prover id="2" name="CVC4 FULL" version="1.4" timelimit="5" memlimit="1000"/>
+<prover id="3" name="Z3" version="4.3.2" timelimit="5" memlimit="1000"/>
+<prover id="4" name="Alt-Ergo" version="0.95.2" timelimit="5" memlimit="1000"/>
+<file name="../alloc_free_true_unsafe.mlw" expanded="true">
+<theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_program" sum="64a89e529f97ceebaa9e2523ad92a52a" expanded="true">
+ <goal name="WP_parameter pack_in_struct_ensures_default" expl="Function pack_in_struct, default behavior" expanded="true">
+ <proof prover="0"><result status="timeout" time="4.98"/></proof>
+ <proof prover="1"><result status="timeout" time="4.99"/></proof>
+ <proof prover="3"><result status="timeout" time="4.99"/></proof>
+ <proof prover="4"><result status="timeout" time="4.96"/></proof>
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter pack_in_struct_ensures_default.1" expl="1. Postcondition (Ensures clause)" expanded="true">
+  <proof prover="1"><result status="timeout" time="4.99"/></proof>
+  <transf name="split_goal_wp" expanded="true">
+   <goal name="WP_parameter pack_in_struct_ensures_default.1.1" expl="1. Ensures clause">
+   <proof prover="0"><result status="valid" time="0.06"/></proof>
+   </goal>
+   <goal name="WP_parameter pack_in_struct_ensures_default.1.2" expl="2. Ensures clause">
+   <proof prover="0"><result status="valid" time="0.10"/></proof>
+   </goal>
+   <goal name="WP_parameter pack_in_struct_ensures_default.1.3" expl="3. Ensures clause">
+   <proof prover="0"><result status="valid" time="0.06"/></proof>
+   </goal>
+   <goal name="WP_parameter pack_in_struct_ensures_default.1.4" expl="4. Ensures clause" expanded="true">
+   <proof prover="0"><result status="timeout" time="4.98"/></proof>
+   <proof prover="1"><result status="timeout" time="4.97"/></proof>
+   <proof prover="2"><result status="timeout" time="4.98"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter pack_in_struct_safety" expl="Function pack_in_struct, safety" expanded="true">
+ <proof prover="1"><result status="valid" time="0.11"/></proof>
+ </goal>
+ <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
+ <proof prover="1"><result status="valid" time="0.09"/></proof>
+ </goal>
+ <goal name="WP_parameter main_safety" expl="Function main, safety" expanded="true">
+ <proof prover="1"><result status="valid" time="0.08"/></proof>
+ </goal>
+ <goal name="WP_parameter get_a_and_free_ensures_default" expl="Function get_a_and_free, default behavior" expanded="true">
+ <proof prover="1"><result status="valid" time="0.07"/></proof>
+ </goal>
+ <goal name="WP_parameter get_a_and_free_safety" expl="Function get_a_and_free, safety" expanded="true">
+ <proof prover="1"><result status="valid" time="0.10"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

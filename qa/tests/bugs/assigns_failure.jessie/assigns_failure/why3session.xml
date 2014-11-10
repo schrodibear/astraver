@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
+<file name="../assigns_failure.mlw" expanded="true">
+<theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_program" sum="9bb70354b136a0baab49ce464e397342" expanded="true">
+ <goal name="WP_parameter zeroValues_ensures_default" expl="Function zeroValues, default behavior" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter zeroValues_ensures_default.1" expl="1. loop invariant init" expanded="true">
+  <transf name="split_goal_wp" expanded="true">
+   <goal name="WP_parameter zeroValues_ensures_default.1.1" expl="1.">
+   <proof prover="0"><result status="valid" time="0.12"/></proof>
+   </goal>
+   <goal name="WP_parameter zeroValues_ensures_default.1.2" expl="2. Assigns clause">
+   <proof prover="0"><result status="valid" time="0.15"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="WP_parameter zeroValues_ensures_default.2" expl="2. loop invariant preservation" expanded="true">
+  <proof prover="0"><result status="valid" time="0.22"/></proof>
+  </goal>
+  <goal name="WP_parameter zeroValues_ensures_default.3" expl="3. Postcondition (Assigns clause)">
+  <proof prover="0"><result status="valid" time="0.13"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter zeroValues_safety" expl="Function zeroValues, safety" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter zeroValues_safety.1" expl="1. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.11"/></proof>
+  </goal>
+  <goal name="WP_parameter zeroValues_safety.2" expl="2. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.12"/></proof>
+  </goal>
+  <goal name="WP_parameter zeroValues_safety.3" expl="3. Pointer dereference (Assignment with offset)" expanded="true">
+  <proof prover="0"><result status="valid" time="0.16"/></proof>
+  </goal>
+  <goal name="WP_parameter zeroValues_safety.4" expl="4. Arithmetic overflow (Bounded int32)">
+  <proof prover="0"><result status="valid" time="0.16"/></proof>
+  </goal>
+  <goal name="WP_parameter zeroValues_safety.5" expl="5. loop variant decrease" expanded="true">
+  <proof prover="0"><result status="valid" time="0.14"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

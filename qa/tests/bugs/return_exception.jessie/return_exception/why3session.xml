@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="CVC3" version="2.4.1" timelimit="5" memlimit="1000"/>
+<prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
+<prover id="2" name="Alt-Ergo" version="0.95.2" timelimit="5" memlimit="1000"/>
+<prover id="3" name="MathSAT5" version="5.2.10" timelimit="5" memlimit="1000"/>
+<file name="../return_exception.mlw" expanded="true">
+<theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_program" sum="7930cbaf59ba8b08bf73f184d2cfad49" expanded="true">
+ <goal name="WP_parameter test06_ensures_default" expl="Function test06, default behavior" expanded="true">
+ <proof prover="1"><result status="timeout" time="4.98"/></proof>
+ <transf name="inline_goal" expanded="true">
+  <goal name="WP_parameter test06_ensures_default.1" expl="1." expanded="true">
+  <proof prover="0"><result status="timeout" time="4.98"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter test06_safety" expl="Function test06, safety" expanded="true">
+ <proof prover="1"><result status="valid" time="0.08"/></proof>
+ </goal>
+ <goal name="WP_parameter test05_ensures_default" expl="Function test05, default behavior" expanded="true">
+ <proof prover="1"><result status="valid" time="0.08"/></proof>
+ </goal>
+ <goal name="WP_parameter test05_safety" expl="Function test05, safety" expanded="true">
+ <proof prover="1"><result status="valid" time="0.08"/></proof>
+ </goal>
+ <goal name="WP_parameter test04_ensures_default" expl="Function test04, default behavior" expanded="true">
+ <proof prover="0"><result status="timeout" time="4.99"/></proof>
+ <proof prover="1"><result status="timeout" time="4.97"/></proof>
+ <transf name="inline_goal" expanded="true">
+  <goal name="WP_parameter test04_ensures_default.1" expl="1." expanded="true">
+  <proof prover="0"><result status="timeout" time="4.99"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter test04_safety" expl="Function test04, safety" expanded="true">
+ <proof prover="0"><result status="valid" time="0.08"/></proof>
+ <proof prover="1"><result status="timeout" time="4.97"/></proof>
+ </goal>
+ <goal name="WP_parameter test03_ensures_default" expl="Function test03, default behavior" expanded="true">
+ <proof prover="1"><result status="valid" time="0.11"/></proof>
+ </goal>
+ <goal name="WP_parameter test03_safety" expl="Function test03, safety" expanded="true">
+ <proof prover="1"><result status="valid" time="0.16"/></proof>
+ </goal>
+ <goal name="WP_parameter test02_ensures_default" expl="Function test02, default behavior" expanded="true">
+ <proof prover="1"><result status="valid" time="0.19"/></proof>
+ </goal>
+ <goal name="WP_parameter test02_safety" expl="Function test02, safety" expanded="true">
+ <proof prover="1"><result status="valid" time="0.19"/></proof>
+ </goal>
+ <goal name="WP_parameter test01_ensures_default" expl="Function test01, default behavior" expanded="true">
+ <proof prover="1"><result status="timeout" time="4.97"/></proof>
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter test01_ensures_default.1" expl="1. Postcondition (Ensures clause)" expanded="true">
+  <transf name="inline_goal" expanded="true">
+   <goal name="WP_parameter test01_ensures_default.1.1" expl="1. Postcondition (Ensures clause)">
+   <proof prover="0"><result status="valid" time="0.06"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter test01_safety" expl="Function test01, safety" expanded="true">
+ <proof prover="1"><result status="valid" time="0.15"/></proof>
+ </goal>
+ <goal name="WP_parameter lemma_0_ensures_default" expl="Function lemma_0, default behavior" expanded="true">
+ <proof prover="1"><result status="valid" time="0.18"/></proof>
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter lemma_0_ensures_default.1" expl="1. Postcondition (Ensures clause)" expanded="true">
+  <proof prover="1"><result status="valid" time="0.10"/></proof>
+  <proof prover="2" edited="return_exception-Jessie_program-WP_parameter_lemma_0_ensures_default_1.why" obsolete="true"><undone/></proof>
+  </goal>
+  <goal name="WP_parameter lemma_0_ensures_default.2" expl="2. Postcondition (Ensures clause)" expanded="true">
+  <proof prover="3" edited="return_exception-Jessie_program-WP_parameter_lemma_0_ensures_default_1.smt2" obsolete="true"><undone/></proof>
+  </goal>
+  <goal name="WP_parameter lemma_0_ensures_default.3" expl="3. Postcondition (Ensures clause)">
+  </goal>
+  <goal name="WP_parameter lemma_0_ensures_default.4" expl="4. Postcondition (Ensures clause)">
+  </goal>
+  <goal name="WP_parameter lemma_0_ensures_default.5" expl="5. Postcondition (Ensures clause)">
+  <proof prover="0"><result status="valid" time="0.06"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter lemma_0_safety" expl="Function lemma_0, safety" expanded="true">
+ <proof prover="1"><result status="valid" time="0.16"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

@@ -167,11 +167,11 @@
 .settings
 
 # Test output files
-*.jessie
 *.loc
 *.cloc
 *.jc
 *.mlw
+jessie.log
 *.makefile
 
 *.out

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="CVC3" version="2.4.1" timelimit="5" memlimit="4000"/>
+<prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="4000"/>
+<prover id="2" name="Z3" version="4.3.2" timelimit="5" memlimit="1000"/>
+<file name="../jc_enum_mismatch.mlw" expanded="true">
+<theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_program" sum="e7af985b08ea503a13bf08a8ff628b71" expanded="true">
+ <goal name="WP_parameter pdpl_get_new_ensures_FAIL" expl="Function pdpl_get_new, behavior FAIL" expanded="true">
+ <proof prover="0" timelimit="54"><result status="valid" time="0.28"/></proof>
+ <proof prover="1" timelimit="54"><result status="valid" time="0.32"/></proof>
+ </goal>
+ <goal name="WP_parameter pdpl_get_new_ensures_OK" expl="Function pdpl_get_new, behavior OK" expanded="true">
+ <proof prover="0" timelimit="54"><result status="valid" time="0.53"/></proof>
+ <proof prover="1" timelimit="54"><result status="valid" time="0.37"/></proof>
+ </goal>
+ <goal name="WP_parameter pdpl_get_new_ensures_default" expl="Function pdpl_get_new, default behavior" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter pdpl_get_new_ensures_default.1" expl="1. Postcondition">
+  <proof prover="0" timelimit="54"><result status="valid" time="0.26"/></proof>
+  <proof prover="1" timelimit="54"><result status="valid" time="0.43"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.2" expl="2. Postcondition" expanded="true">
+  <transf name="split_goal_wp" expanded="true">
+   <goal name="WP_parameter pdpl_get_new_ensures_default.2.1" expl="1. Assigns clause" expanded="true">
+   <transf name="inline_goal" expanded="true">
+    <goal name="WP_parameter pdpl_get_new_ensures_default.2.1.1" expl="1. Assigns clause" expanded="true">
+    <transf name="simplify_trivial_quantification" expanded="true">
+     <goal name="WP_parameter pdpl_get_new_ensures_default.2.1.1.1" expl="1." expanded="true">
+     <proof prover="0" memlimit="1000"><result status="valid" time="0.14"/></proof>
+     <proof prover="1" memlimit="1000"><result status="valid" time="0.33"/></proof>
+     <proof prover="2"><result status="valid" time="0.08"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.2.2" expl="2. Assigns clause">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.49"/></proof>
+   <proof prover="1" memlimit="1000"><result status="valid" time="0.51"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.2.3" expl="3. Assigns clause">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.48"/></proof>
+   <proof prover="1" memlimit="1000"><result status="valid" time="0.52"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.2.4" expl="4. Assigns clause">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.48"/></proof>
+   <proof prover="1" memlimit="1000"><result status="valid" time="0.51"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.2.5" expl="5. Assigns clause">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.49"/></proof>
+   <proof prover="1" memlimit="1000"><result status="valid" time="0.50"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.2.6" expl="6. Assigns clause">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.48"/></proof>
+   <proof prover="1" memlimit="1000"><result status="valid" time="0.50"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.2.7" expl="7. Assigns clause">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.42"/></proof>
+   <proof prover="1" memlimit="1000"><result status="valid" time="0.48"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.2.8" expl="8. Assigns clause">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.42"/></proof>
+   <proof prover="1" memlimit="1000"><result status="valid" time="0.47"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.2.9" expl="9. Assigns clause">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.48"/></proof>
+   <proof prover="1" memlimit="1000"><result status="valid" time="0.38"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.2.10" expl="10. Assigns clause">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.45"/></proof>
+   <proof prover="1" memlimit="1000"><result status="valid" time="0.41"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.2.11" expl="11. Assigns clause">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.43"/></proof>
+   <proof prover="1" memlimit="1000"><result status="valid" time="0.48"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.2.12" expl="12. Assigns clause">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.37"/></proof>
+   <proof prover="1" memlimit="1000"><result status="valid" time="0.44"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.3" expl="3. Postcondition">
+  <proof prover="0" timelimit="54"><result status="valid" time="0.15"/></proof>
+  <proof prover="1" timelimit="54"><result status="valid" time="0.42"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.4" expl="4. Postcondition">
+  <proof prover="0" timelimit="54"><result status="valid" time="0.28"/></proof>
+  <proof prover="1" timelimit="54"><result status="valid" time="0.44"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter pdpl_get_new_safety" expl="Function pdpl_get_new, safety" expanded="true">
+ <proof prover="0" timelimit="54"><result status="valid" time="0.61"/></proof>
+ <proof prover="1" timelimit="54"><result status="valid" time="0.42"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="CVC3" version="2.4.1" timelimit="5" memlimit="1000"/>
+<prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
+<file name="../global_invariant.mlw" expanded="true">
+<theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_program" sum="2f674665406d4b07802e19cf7daf2f8f" expanded="true">
+ <goal name="WP_parameter f_ensures_default" expl="Function f, default behavior" expanded="true">
+ <proof prover="0"><result status="timeout" time="5.00"/></proof>
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter f_ensures_default.1" expl="1. Assertion in line 17">
+  <proof prover="1"><result status="valid" time="0.06"/></proof>
+  </goal>
+  <goal name="WP_parameter f_ensures_default.2" expl="2. Assertion in line 18" expanded="true">
+  <proof prover="1"><result status="timeout" time="5.00"/></proof>
+  </goal>
+  <goal name="WP_parameter f_ensures_default.3" expl="3. Assertion in line 19">
+  <proof prover="1"><result status="valid" time="0.22"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter f_safety" expl="Function f, safety" expanded="true">
+ <proof prover="1"><result status="valid" time="0.23"/></proof>
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter f_safety.1" expl="1. Pointer index bounds">
+  <proof prover="1"><result status="valid" time="0.12"/></proof>
+  </goal>
+  <goal name="WP_parameter f_safety.2" expl="2. Precondition for g (External. Global invariant inv1)">
+  <proof prover="1"><result status="valid" time="0.07"/></proof>
+  </goal>
+  <goal name="WP_parameter f_safety.3" expl="3. Deallocation">
+  <proof prover="1"><result status="valid" time="0.13"/></proof>
+  </goal>
+  <goal name="WP_parameter f_safety.4" expl="4. Postcondition (Global invariant inv1)">
+  <proof prover="1"><result status="valid" time="0.07"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

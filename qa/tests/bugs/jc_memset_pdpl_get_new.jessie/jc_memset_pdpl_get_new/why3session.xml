@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="CVC4" version="1.4" timelimit="5" memlimit="4000"/>
+<prover id="1" name="Alt-Ergo" version="0.95.2" timelimit="54" memlimit="4000"/>
+<file name="../jc_memset_pdpl_get_new.mlw" expanded="true">
+<theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_program" sum="b7d8dc751eea84e7428d4f0d17c987d4" expanded="true">
+ <goal name="WP_parameter pdpl_get_new_ensures_FAILURE" expl="Function pdpl_get_new, behavior FAILURE" expanded="true">
+ <proof prover="1"><result status="valid" time="1.83"/></proof>
+ </goal>
+ <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS" expl="Function pdpl_get_new, behavior SUCCESS" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.1" expl="1. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.2" expl="2. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.3" expl="3. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4" expl="4. Postcondition (Ensures clause)" expanded="true">
+  <transf name="split_goal_wp" expanded="true">
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.1" expl="1. Postcondition (Ensures clause)">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.42"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.2" expl="2. Postcondition (Ensures clause)">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.49"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.3" expl="3. Postcondition (Ensures clause)">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.48"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.4" expl="4. Postcondition (Ensures clause)" expanded="true">
+   <transf name="inline_goal" expanded="true">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.4.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.59"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.5" expl="5. Postcondition (Ensures clause)" expanded="true">
+   <transf name="inline_goal" expanded="true">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.5.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.63"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.6" expl="6. Postcondition (Ensures clause)" expanded="true">
+   <transf name="inline_goal" expanded="true">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.6.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.61"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.7" expl="7. Postcondition (Ensures clause)" expanded="true">
+   <transf name="inline_goal" expanded="true">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.7.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.65"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.8" expl="8. Postcondition (Ensures clause)">
+   <proof prover="0" memlimit="1000"><result status="valid" time="3.61"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.9" expl="9. Postcondition (Ensures clause)" expanded="true">
+   <transf name="inline_goal" expanded="true">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.9.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.62"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.10" expl="10. Postcondition (Ensures clause)">
+   <proof prover="0" memlimit="1000"><result status="valid" time="3.54"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.11" expl="11. Postcondition (Ensures clause)" expanded="true">
+   <transf name="inline_goal" expanded="true">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.11.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.63"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.12" expl="12. Postcondition (Ensures clause)">
+   <proof prover="0" memlimit="1000"><result status="valid" time="3.61"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.13" expl="13. Postcondition (Ensures clause)" expanded="true">
+   <transf name="inline_goal" expanded="true">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.13.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.61"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4.14" expl="14. Postcondition (Ensures clause)">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.30"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.5" expl="5. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.03"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6" expl="6. Postcondition (Ensures clause)">
+  <transf name="split_goal_wp">
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.1" expl="1. Postcondition (Ensures clause)">
+   <proof prover="1"><result status="valid" time="0.03"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.2" expl="2. Postcondition (Ensures clause)">
+   <transf name="inline_goal">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.2.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.25"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.3" expl="3. Postcondition (Ensures clause)">
+   <proof prover="1"><result status="valid" time="0.04"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.4" expl="4. Postcondition (Ensures clause)">
+   <transf name="inline_goal">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.4.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.26"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.5" expl="5. Postcondition (Ensures clause)">
+   <transf name="inline_goal">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.5.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.27"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.6" expl="6. Postcondition (Ensures clause)">
+   <transf name="inline_goal">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.6.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.26"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.7" expl="7. Postcondition (Ensures clause)">
+   <transf name="inline_goal">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.7.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.26"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.8" expl="8. Postcondition (Ensures clause)">
+   <proof prover="1"><result status="valid" time="0.04"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.9" expl="9. Postcondition (Ensures clause)">
+   <transf name="inline_goal">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.9.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.26"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.10" expl="10. Postcondition (Ensures clause)">
+   <transf name="inline_goal">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.10.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.27"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.11" expl="11. Postcondition (Ensures clause)">
+   <transf name="inline_goal">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.11.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.25"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.12" expl="12. Postcondition (Ensures clause)">
+   <proof prover="1"><result status="valid" time="0.03"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.13" expl="13. Postcondition (Ensures clause)">
+   <transf name="inline_goal">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.13.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.26"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.14" expl="14. Postcondition (Ensures clause)">
+   <transf name="inline_goal">
+    <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.6.14.1" expl="1. Postcondition (Ensures clause)">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.26"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.7" expl="7. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.8" expl="8. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.9" expl="9. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.10" expl="10. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.11" expl="11. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.12" expl="12. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.05"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.13" expl="13. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.14" expl="14. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.15" expl="15. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.16" expl="16. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter pdpl_get_new_ensures_default" expl="Function pdpl_get_new, default behavior" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter pdpl_get_new_ensures_default.1" expl="1. Postcondition">
+  <proof prover="1"><result status="valid" time="0.11"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.2" expl="2. Postcondition">
+  <proof prover="1"><result status="valid" time="0.11"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.3" expl="3. Postcondition">
+  <proof prover="1"><result status="valid" time="0.10"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.4" expl="4. Postcondition">
+  <transf name="split_goal_wp">
+   <goal name="WP_parameter pdpl_get_new_ensures_default.4.1" expl="1. Assigns clause">
+   <transf name="inline_goal">
+    <goal name="WP_parameter pdpl_get_new_ensures_default.4.1.1" expl="1. Assigns clause">
+    <proof prover="0" memlimit="1000"><result status="valid" time="0.55"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.4.2" expl="2. Assigns clause">
+   <proof prover="1"><result status="valid" time="0.58"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.4.3" expl="3. Assigns clause">
+   <proof prover="1"><result status="valid" time="0.59"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.4.4" expl="4. Assigns clause">
+   <proof prover="1"><result status="valid" time="0.59"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.4.5" expl="5. Assigns clause">
+   <proof prover="1"><result status="valid" time="0.56"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.4.6" expl="6. Assigns clause">
+   <proof prover="1"><result status="valid" time="0.57"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.4.7" expl="7. Assigns clause">
+   <proof prover="1"><result status="valid" time="0.59"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.4.8" expl="8. Assigns clause">
+   <proof prover="1"><result status="valid" time="0.58"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.4.9" expl="9. Assigns clause">
+   <proof prover="1"><result status="valid" time="0.59"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.4.10" expl="10. Assigns clause">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.76"/></proof>
+   <proof prover="1"><result status="valid" time="0.56"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.4.11" expl="11. Assigns clause">
+   <proof prover="0" memlimit="1000"><result status="valid" time="0.74"/></proof>
+   <proof prover="1"><result status="valid" time="0.56"/></proof>
+   </goal>
+   <goal name="WP_parameter pdpl_get_new_ensures_default.4.12" expl="12. Assigns clause">
+   <proof prover="1"><result status="valid" time="0.08"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.5" expl="5. Postcondition">
+  <proof prover="0" timelimit="54"><result status="valid" time="0.40"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.6" expl="6. Postcondition">
+  <proof prover="0" timelimit="54"><result status="valid" time="0.37"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.7" expl="7. Postcondition">
+  <proof prover="0" timelimit="54"><result status="valid" time="0.35"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.8" expl="8. Postcondition">
+  <proof prover="0" timelimit="54"><result status="valid" time="0.37"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.9" expl="9. Postcondition">
+  <proof prover="1"><result status="valid" time="0.08"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.10" expl="10. Postcondition">
+  <proof prover="1"><result status="valid" time="0.08"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.11" expl="11. Postcondition">
+  <proof prover="1"><result status="valid" time="0.06"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.12" expl="12. Postcondition">
+  <proof prover="1"><result status="valid" time="0.09"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.13" expl="13. Postcondition">
+  <proof prover="0" timelimit="54"><result status="valid" time="0.35"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.14" expl="14. Postcondition">
+  <proof prover="0" timelimit="54"><result status="valid" time="0.33"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.15" expl="15. Postcondition">
+  <proof prover="0" timelimit="54"><result status="valid" time="0.31"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpl_get_new_ensures_default.16" expl="16. Postcondition">
+  <proof prover="0" timelimit="54"><result status="valid" time="0.33"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter pdpl_get_new_safety" expl="Function pdpl_get_new, safety">
+ <proof prover="1"><result status="valid" time="4.29"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

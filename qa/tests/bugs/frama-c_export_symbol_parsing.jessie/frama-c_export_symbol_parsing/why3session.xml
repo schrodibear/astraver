@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+ <file
+  name="../frama-c_export_symbol_parsing.mlw"
+  verified="false"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   locfile="../frama-c_export_symbol_parsing.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Jessie_program"
+   locfile="../frama-c_export_symbol_parsing.mlw"
+   loclnum="378" loccnumb="7" loccnume="21"
+   verified="false"
+   expanded="true">
+   <goal
+    name="WP_parameter test_ensures_default"
+    locfile="../../frama-c_export_symbol_parsing.i"
+    loclnum="6" loccnumb="4" loccnume="8"
+    expl="VC for test_ensures_default"
+    sum="dc9d6095c6895d64e11d5db44e67f2e0"
+    proved="false"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Function test, default behavior"/>
+    <label
+     name="expl:VC for test_ensures_default"/>
+   </goal>
+   <goal
+    name="WP_parameter test_safety"
+    locfile="../../frama-c_export_symbol_parsing.i"
+    loclnum="6" loccnumb="4" loccnume="8"
+    expl="VC for test_safety"
+    sum="708a3fc71254b0f97ade73378621f397"
+    proved="false"
+    expanded="true"
+    shape="avalid_dummy_place_of_test_0V1Aavalid___kstrtab_testV2Aavalid___ksymtab_testV0Iainfix =V5V4FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIavalid_dummy_place_of_test_0V1Aavalid___kstrtab_testV2Aavalid___ksymtab_testV0F">
+    <label
+     name="expl:Function test, Safety"/>
+    <label
+     name="expl:VC for test_safety"/>
+   </goal>
+  </theory>
+ </file>
+</why3session>

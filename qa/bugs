@@ -37,3 +37,5 @@ tests/bugs/predicates.c
 tests/bugs/triangles_goto.c
 tests/bugs/dummy_region_unify.c
 tests/bugs/assigns_failure.c
+tests/bugs/jc_allocates_bug.c
+tests/bugs/jc_frees_bug.c

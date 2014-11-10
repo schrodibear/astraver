@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="CVC3" version="2.4.1" timelimit="5" memlimit="1000"/>
+<prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
+<file name="../jc_casts_in_locations2.mlw" expanded="true">
+<theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_program" sum="b606ad099038fb9754c91fddbd4b49d5" expanded="true">
+ <goal name="WP_parameter simple_not_assigns_union_correct_ensures_default" expl="Function simple_not_assigns_union_correct, default behavior">
+ <proof prover="0"><result status="valid" time="0.06"/></proof>
+ </goal>
+ <goal name="WP_parameter simple_not_assigns_union_correct_safety" expl="Function simple_not_assigns_union_correct, safety">
+ <proof prover="0"><result status="valid" time="0.08"/></proof>
+ </goal>
+ <goal name="WP_parameter simple_not_assigns_field_wrong_ensures_default" expl="Function simple_not_assigns_field_wrong, default behavior" expanded="true">
+ <proof prover="0"><result status="timeout" time="4.97"/></proof>
+ <proof prover="1"><result status="timeout" time="4.99"/></proof>
+ </goal>
+ <goal name="WP_parameter simple_not_assigns_field_wrong_safety" expl="Function simple_not_assigns_field_wrong, safety">
+ <proof prover="0"><result status="valid" time="0.11"/></proof>
+ </goal>
+ <goal name="WP_parameter simple_not_assigns_field_ensures_default" expl="Function simple_not_assigns_field, default behavior">
+ <proof prover="0"><result status="valid" time="0.19"/></proof>
+ </goal>
+ <goal name="WP_parameter simple_not_assigns_field_safety" expl="Function simple_not_assigns_field, safety">
+ <proof prover="0"><result status="valid" time="0.06"/></proof>
+ </goal>
+ <goal name="WP_parameter simple_not_assigns_field_correct_ensures_default" expl="Function simple_not_assigns_field_correct, default behavior">
+ <proof prover="0"><result status="valid" time="0.07"/></proof>
+ </goal>
+ <goal name="WP_parameter simple_not_assigns_field_correct_safety" expl="Function simple_not_assigns_field_correct, safety">
+ <proof prover="0"><result status="valid" time="0.06"/></proof>
+ </goal>
+ <goal name="WP_parameter simple_assigns_field_ensures_default" expl="Function simple_assigns_field, default behavior" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter simple_assigns_field_ensures_default.1" expl="1. Assertion in line 38" expanded="true">
+  <transf name="inline_goal" expanded="true">
+   <goal name="WP_parameter simple_assigns_field_ensures_default.1.1" expl="1. Assertion in line 38" expanded="true">
+   <transf name="split_goal_wp" expanded="true">
+    <goal name="WP_parameter simple_assigns_field_ensures_default.1.1.1" expl="1. Assertion in line 38">
+    <proof prover="0"><result status="valid" time="0.19"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="WP_parameter simple_assigns_field_ensures_default.2" expl="2. Postcondition" expanded="true">
+  <proof prover="1"><result status="valid" time="0.27"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter simple_assigns_field_safety" expl="Function simple_assigns_field, safety" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter simple_assigns_field_safety.1" expl="1. Pointer cast (Prefix or reinterpret)">
+  <proof prover="0"><result status="valid" time="0.08"/></proof>
+  </goal>
+  <goal name="WP_parameter simple_assigns_field_safety.2" expl="2. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.08"/></proof>
+  </goal>
+  <goal name="WP_parameter simple_assigns_field_safety.3" expl="3. Pointer cast (Prefix or reinterpret)">
+  <proof prover="0"><result status="valid" time="0.18"/></proof>
+  </goal>
+  <goal name="WP_parameter simple_assigns_field_safety.4" expl="4. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.08"/></proof>
+  </goal>
+  <goal name="WP_parameter simple_assigns_field_safety.5" expl="5. Pointer cast (Prefix or reinterpret)">
+  <proof prover="0"><result status="valid" time="0.18"/></proof>
+  </goal>
+  <goal name="WP_parameter simple_assigns_field_safety.6" expl="6. Pointer dereference (Assignment)">
+  <proof prover="0"><result status="valid" time="0.08"/></proof>
+  </goal>
+  <goal name="WP_parameter simple_assigns_field_safety.7" expl="7. Postcondition (Ensures clause)">
+  <proof prover="0"><result status="valid" time="0.08"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter assigns_nested_wrong_ensures_default" expl="Function assigns_nested_wrong, default behavior" expanded="true">
+ <proof prover="0"><result status="timeout" time="4.98"/></proof>
+ <proof prover="1"><result status="timeout" time="4.98"/></proof>
+ </goal>
+ <goal name="WP_parameter assigns_nested_wrong_safety" expl="Function assigns_nested_wrong, safety">
+ <proof prover="0"><result status="valid" time="0.21"/></proof>
+ </goal>
+ <goal name="WP_parameter assigns_nested_loop_ensures_default" expl="Function assigns_nested_loop, default behavior">
+ <proof prover="0"><result status="valid" time="0.99"/></proof>
+ </goal>
+ <goal name="WP_parameter assigns_nested_loop_safety" expl="Function assigns_nested_loop, safety">
+ <transf name="split_goal_wp">
+  <goal name="WP_parameter assigns_nested_loop_safety.1" expl="1. Pointer cast (Prefix or reinterpret)">
+  <proof prover="0"><result status="valid" time="0.12"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop_safety.2" expl="2. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop_safety.3" expl="3. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.12"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop_safety.4" expl="4. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.22"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop_safety.5" expl="5. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop_safety.6" expl="6. Arithmetic overflow (Bounded int32)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop_safety.7" expl="7. Pointer dereference (Assignment)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop_safety.8" expl="8. Pointer dereference (Assignment)">
+  <proof prover="0"><result status="valid" time="0.22"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop_safety.9" expl="9. Pointer dereference (Assignment)">
+  <proof prover="0"><result status="valid" time="0.19"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop_safety.10" expl="10. Pointer dereference (Assignment)">
+  <proof prover="0"><result status="valid" time="0.23"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop_safety.11" expl="11. loop variant decrease">
+  <proof prover="0"><result status="valid" time="0.22"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop_safety.12" expl="12. Postcondition (Ensures clause)">
+  <proof prover="0"><result status="valid" time="0.19"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter assigns_nested_loop2_ensures_default" expl="Function assigns_nested_loop2, default behavior">
+ <transf name="split_goal_wp">
+  <goal name="WP_parameter assigns_nested_loop2_ensures_default.1" expl="1. loop invariant init">
+  <proof prover="0"><result status="valid" time="0.24"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_ensures_default.2" expl="2. loop invariant preservation">
+  <proof prover="0"><result status="valid" time="0.84"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_ensures_default.3" expl="3. Postcondition">
+  <transf name="split_goal_wp">
+   <goal name="WP_parameter assigns_nested_loop2_ensures_default.3.1" expl="1. Assigns clause">
+   <proof prover="0"><result status="valid" time="0.81"/></proof>
+   </goal>
+   <goal name="WP_parameter assigns_nested_loop2_ensures_default.3.2" expl="2. Assigns clause">
+   <proof prover="0"><result status="valid" time="0.23"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter assigns_nested_loop2_safety" expl="Function assigns_nested_loop2, safety">
+ <transf name="split_goal_wp">
+  <goal name="WP_parameter assigns_nested_loop2_safety.1" expl="1. Pointer cast (Prefix or reinterpret)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.2" expl="2. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.3" expl="3. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.4" expl="4. Pointer cast (Prefix or reinterpret)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.5" expl="5. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.19"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.6" expl="6. Arithmetic overflow (Bounded int32)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.7" expl="7. Pointer cast (Prefix or reinterpret)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.8" expl="8. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.9" expl="9. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.19"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.10" expl="10. Pointer cast (Prefix or reinterpret)">
+  <proof prover="0"><result status="valid" time="0.19"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.11" expl="11. Pointer dereference (Assignment)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.12" expl="12. Pointer cast (Prefix or reinterpret)">
+  <proof prover="0"><result status="valid" time="0.19"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.13" expl="13. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.14" expl="14. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.19"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.15" expl="15. Pointer cast (Prefix or reinterpret)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.16" expl="16. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.17" expl="17. Pointer cast (Prefix or reinterpret)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.18" expl="18. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.19"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.19" expl="19. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.22"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.20" expl="20. Pointer cast (Prefix or reinterpret)">
+  <proof prover="0"><result status="valid" time="0.19"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.21" expl="21. Pointer dereference (Assignment)">
+  <proof prover="0"><result status="valid" time="0.19"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.22" expl="22. loop variant decrease">
+  <proof prover="0"><result status="valid" time="0.23"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_loop2_safety.23" expl="23. Postcondition (Ensures clause)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter assigns_nested_ensures_default" expl="Function assigns_nested, default behavior">
+ <transf name="split_goal_wp">
+  <goal name="WP_parameter assigns_nested_ensures_default.1" expl="1. Postcondition">
+  <transf name="inline_goal">
+   <goal name="WP_parameter assigns_nested_ensures_default.1.1" expl="1. Postcondition">
+   <transf name="split_goal_wp">
+    <goal name="WP_parameter assigns_nested_ensures_default.1.1.1" expl="1. Assigns clause">
+    <proof prover="0"><result status="valid" time="0.18"/></proof>
+    </goal>
+    <goal name="WP_parameter assigns_nested_ensures_default.1.1.2" expl="2. Assigns clause">
+    <proof prover="0"><result status="valid" time="0.12"/></proof>
+    </goal>
+    <goal name="WP_parameter assigns_nested_ensures_default.1.1.3" expl="3. Assigns clause">
+    <proof prover="0"><result status="valid" time="0.29"/></proof>
+    </goal>
+    <goal name="WP_parameter assigns_nested_ensures_default.1.1.4" expl="4. Assigns clause">
+    <proof prover="0"><result status="valid" time="0.18"/></proof>
+    </goal>
+    <goal name="WP_parameter assigns_nested_ensures_default.1.1.5" expl="5. Assigns clause">
+    <proof prover="0"><result status="valid" time="0.28"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter assigns_nested_safety" expl="Function assigns_nested, safety">
+ <transf name="split_goal_wp">
+  <goal name="WP_parameter assigns_nested_safety.1" expl="1. Pointer cast (Prefix or reinterpret)">
+  <proof prover="0"><result status="valid" time="0.08"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_safety.2" expl="2. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_safety.3" expl="3. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_safety.4" expl="4. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.19"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_safety.5" expl="5. Pointer dereference (Assignment)">
+  <proof prover="0"><result status="valid" time="0.19"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_safety.6" expl="6. Pointer dereference (Assignment)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_safety.7" expl="7. Pointer dereference (Assignment)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_safety.8" expl="8. Pointer dereference (Assignment)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  </goal>
+  <goal name="WP_parameter assigns_nested_safety.9" expl="9. Postcondition (Ensures clause)">
+  <proof prover="0"><result status="valid" time="0.22"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter assigns_nested_correct_ensures_default" expl="Function assigns_nested_correct, default behavior">
+ <proof prover="0"><result status="valid" time="0.06"/></proof>
+ </goal>
+ <goal name="WP_parameter assigns_nested_correct_safety" expl="Function assigns_nested_correct, safety">
+ <proof prover="0"><result status="valid" time="0.07"/></proof>
+ </goal>
+ <goal name="WP_parameter assigns_nested_correct2_ensures_default" expl="Function assigns_nested_correct2, default behavior">
+ <proof prover="0"><result status="valid" time="0.23"/></proof>
+ </goal>
+ <goal name="WP_parameter assigns_nested_correct2_safety" expl="Function assigns_nested_correct2, safety">
+ <proof prover="0"><result status="valid" time="0.07"/></proof>
+ </goal>
+ <goal name="WP_parameter assigns_nested3_ensures_default" expl="Function assigns_nested3, default behavior">
+ <transf name="split_goal_wp">
+  <goal name="WP_parameter assigns_nested3_ensures_default.1" expl="1. Postcondition">
+  <transf name="inline_goal">
+   <goal name="WP_parameter assigns_nested3_ensures_default.1.1" expl="1. Postcondition">
+   <transf name="split_goal_wp">
+    <goal name="WP_parameter assigns_nested3_ensures_default.1.1.1" expl="1. Assigns clause">
+    <proof prover="0"><result status="valid" time="0.27"/></proof>
+    </goal>
+    <goal name="WP_parameter assigns_nested3_ensures_default.1.1.2" expl="2. Assigns clause">
+    <proof prover="0"><result status="valid" time="0.27"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter assigns_nested3_safety" expl="Function assigns_nested3, safety">
+ <proof prover="0"><result status="valid" time="0.21"/></proof>
+ </goal>
+ <goal name="WP_parameter assigns_nested2_ensures_default" expl="Function assigns_nested2, default behavior">
+ <proof prover="0"><result status="valid" time="0.21"/></proof>
+ </goal>
+ <goal name="WP_parameter assigns_nested2_safety" expl="Function assigns_nested2, safety">
+ <proof prover="0"><result status="valid" time="0.06"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

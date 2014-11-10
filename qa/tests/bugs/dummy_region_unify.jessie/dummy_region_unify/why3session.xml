@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="CVC3" version="2.4.1" timelimit="30" memlimit="1000"/>
+<prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
+<prover id="2" name="CVC4 FULL" version="1.4" timelimit="30" memlimit="1000"/>
+<file name="../dummy_region_unify.mlw" expanded="true">
+<theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_program" sum="d7acb765e9fb8082bd574885470050df" expanded="true">
+ <goal name="WP_parameter ggg_ensures_default" expl="Function ggg, default behavior" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter ggg_ensures_default.1" expl="1. Assertion in line 13">
+  <proof prover="1"><result status="valid" time="0.17"/></proof>
+  </goal>
+  <goal name="WP_parameter ggg_ensures_default.2" expl="2. Assertion in line 15">
+  <proof prover="1"><result status="valid" time="0.11"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter ggg_safety" expl="Function ggg, safety" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter ggg_safety.1" expl="1. Allocation size (precondition)">
+  <proof prover="1"><result status="valid" time="0.06"/></proof>
+  </goal>
+  <goal name="WP_parameter ggg_safety.2" expl="2. Pointer index bounds">
+  <proof prover="1"><result status="valid" time="0.10"/></proof>
+  </goal>
+  <goal name="WP_parameter ggg_safety.3" expl="3. Reinterpret cast">
+  <proof prover="1"><result status="valid" time="0.12"/></proof>
+  </goal>
+  <goal name="WP_parameter ggg_safety.4" expl="4. Pointer cast (Prefix or reinterpret)">
+  <proof prover="1"><result status="valid" time="0.14"/></proof>
+  </goal>
+  <goal name="WP_parameter ggg_safety.5" expl="5. Reinterpret cast">
+  <proof prover="1"><result status="valid" time="0.70"/></proof>
+  </goal>
+  <goal name="WP_parameter ggg_safety.6" expl="6. Precondition for fff (Requires clause. Internal)">
+  <proof prover="1"><result status="valid" time="0.26"/></proof>
+  </goal>
+  <goal name="WP_parameter ggg_safety.7" expl="7. Deallocation">
+  <proof prover="1"><result status="valid" time="0.69"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter fff_ensures_default" expl="Function fff, default behavior" expanded="true">
+ <proof prover="1"><result status="valid" time="0.06"/></proof>
+ </goal>
+ <goal name="WP_parameter fff_safety" expl="Function fff, safety" expanded="true">
+ <proof prover="0"><result status="timeout" time="29.87"/></proof>
+ <proof prover="1" timelimit="30"><result status="timeout" time="29.93"/></proof>
+ <proof prover="2"><result status="timeout" time="29.89"/></proof>
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter fff_safety.1" expl="1. Arithmetic overflow (Bounded int32)" expanded="true">
+  <proof prover="1" timelimit="30"><result status="timeout" time="29.88"/></proof>
+  </goal>
+  <goal name="WP_parameter fff_safety.2" expl="2. Pointer dereference (Assignment with offset)" expanded="true">
+  <proof prover="1" timelimit="30"><result status="timeout" time="29.94"/></proof>
+  <transf name="split_goal_wp" expanded="true">
+   <goal name="WP_parameter fff_safety.2.1" expl="1. Left valid">
+   <proof prover="1" timelimit="30"><undone/></proof>
+   </goal>
+   <goal name="WP_parameter fff_safety.2.2" expl="2. Right valid">
+   <proof prover="1" timelimit="30"><result status="valid" time="0.09"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

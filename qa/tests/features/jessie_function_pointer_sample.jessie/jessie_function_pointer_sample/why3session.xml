@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="CVC3" version="2.4.1" timelimit="5" memlimit="1000"/>
+<prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
+<file name="../jessie_function_pointer_sample.mlw" expanded="true">
+<theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_program" sum="5571075770dd64e2c763b707e990444e" expanded="true">
+ <goal name="WP_parameter caller_ensures_default" expl="Function caller, default behavior" expanded="true">
+ <proof prover="0"><result status="valid" time="0.22"/></proof>
+ </goal>
+ <goal name="WP_parameter caller_safety" expl="Function caller, safety" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter caller_safety.1" expl="1. Pointer cast (Prefix or reinterpret)">
+  <proof prover="0"><result status="valid" time="0.22"/></proof>
+  <proof prover="1"><result status="valid" time="0.31"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.2" expl="2. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.17"/></proof>
+  <proof prover="1"><result status="valid" time="0.25"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.3" expl="3. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.18"/></proof>
+  <proof prover="1"><result status="valid" time="0.24"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.4" expl="4. Pointer equality">
+  <transf name="split_goal_wp">
+   <goal name="WP_parameter caller_safety.4.1" expl="1. Pointer equality">
+   <proof prover="0"><result status="valid" time="0.20"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="WP_parameter caller_safety.5" expl="5. Precondition for dummy_callback1 (External. Requires clause)">
+  <proof prover="0"><result status="valid" time="0.25"/></proof>
+  <proof prover="1"><result status="valid" time="0.30"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.6" expl="6. Postcondition (Ensures clause)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  <proof prover="1"><result status="valid" time="0.31"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.7" expl="7. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.8" expl="8. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  <proof prover="1"><result status="valid" time="0.29"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.9" expl="9. Pointer equality">
+  <proof prover="0"><result status="valid" time="0.33"/></proof>
+  <proof prover="1"><result status="valid" time="0.32"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.10" expl="10. Precondition for dummy_callback3 (External. Requires clause)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  <proof prover="1"><result status="valid" time="0.30"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.11" expl="11. Postcondition (Ensures clause)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  <proof prover="1"><result status="valid" time="0.30"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.12" expl="12. Postcondition (Ensures clause)">
+  <proof prover="0"><result status="valid" time="0.23"/></proof>
+  <proof prover="1"><result status="valid" time="0.31"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.13" expl="13. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.19"/></proof>
+  <proof prover="1"><result status="valid" time="0.18"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.14" expl="14. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.19"/></proof>
+  <proof prover="1"><result status="valid" time="0.27"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.15" expl="15. Pointer equality">
+  <transf name="split_goal_wp">
+   <goal name="WP_parameter caller_safety.15.1" expl="1. Pointer equality">
+   <proof prover="0"><result status="valid" time="0.20"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="WP_parameter caller_safety.16" expl="16. Precondition for dummy_callback2 (External. Requires clause)">
+  <proof prover="0"><result status="valid" time="0.26"/></proof>
+  <proof prover="1"><result status="valid" time="0.32"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.17" expl="17. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="valid" time="0.29"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.18" expl="18. Pointer dereference (Validity)" expanded="true">
+  <proof prover="0"><result status="valid" time="0.10"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.19" expl="19. Pointer dereference (Validity)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  <proof prover="1"><result status="valid" time="0.30"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.20" expl="20. Pointer equality">
+  <proof prover="0"><result status="valid" time="0.30"/></proof>
+  <proof prover="1"><result status="valid" time="0.33"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.21" expl="21. Precondition for dummy_callback3 (External. Requires clause)">
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  <proof prover="1"><result status="valid" time="0.29"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.22" expl="22. Postcondition (Ensures clause)">
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  <proof prover="1"><result status="valid" time="0.30"/></proof>
+  </goal>
+  <goal name="WP_parameter caller_safety.23" expl="23. Postcondition (Ensures clause)">
+  <proof prover="0"><result status="valid" time="0.23"/></proof>
+  <proof prover="1"><result status="valid" time="0.31"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

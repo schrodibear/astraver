@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="CVC3" version="2.4.1" timelimit="45" memlimit="1000"/>
+<prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
+<prover id="2" name="Vampire" version="3.0" timelimit="45" memlimit="1000"/>
+<prover id="3" name="CVC4 FULL" version="1.4" timelimit="5" memlimit="1000"/>
+<prover id="4" name="Eprover" version="1.8-001" timelimit="45" memlimit="1000"/>
+<file name="../predicates.mlw" expanded="true">
+<theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_program" sum="19d51eeafa800827597ee95b17203ead" expanded="true">
+ <goal name="WP_parameter a_ensures_default" expl="Function a, default behavior" expanded="true">
+ <proof prover="0"><result status="unknown" time="0.14"/></proof>
+ <proof prover="1" timelimit="45"><result status="timeout" time="44.80"/></proof>
+ <proof prover="2"><result status="unknown" time="89.85"/></proof>
+ <proof prover="3" timelimit="45"><result status="timeout" time="44.79"/></proof>
+ <proof prover="4"><result status="outofmemory" time="24.71"/></proof>
+ </goal>
+ <goal name="WP_parameter a_safety" expl="Function a, safety" expanded="true">
+ <proof prover="1"><result status="valid" time="0.06"/></proof>
+ <proof prover="3"><result status="valid" time="0.08"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>
