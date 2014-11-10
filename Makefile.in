@@ -687,8 +687,10 @@ configure: configure.in
 ##################
 
 clean::
-	rm -f src/*.cm[iox] src/*.o src/*~ src/*.annot src/*.output
-	rm -f jc/*.cm[iox] jc/*.o jc/*~ jc/*.annot jc/*.output
+	rm -f .depend
+	rm -f .depend.coq
+	rm -f src/*.cm[ioxt] src/*.cmti src/*.o src/*~ src/*.annot src/*.output
+	rm -f jc/*.cm[ioxt] jc/*.cmti jc/*.o jc/*~ jc/*.annot jc/*.output
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
 	rm -f bin/jessie.opt bin/jessie.byte
 	rm -f bin/jessica.opt bin/jessica.byte
@@ -699,7 +701,7 @@ clean::
 	rm -f bin/why2html.opt bin/why2html.byte
 	rm -f bin/why-dp.opt bin/why-dp.byte
 	rm -f bin/why-cpulimit
-	rm -f lib/coq*/*.vo lib/coq*/*~
+	rm -f lib/coq*/*.vo lib/coq*/*.glob lib/coq*/*~
 	rm -f $(GENERATED)
 	make -C doc clean
 	if test -d examples-v7; then \
