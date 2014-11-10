@@ -1580,10 +1580,11 @@ let code_annot pos ((acc_assert_before,contract) as acc) a =
               Some cname
             | _ -> None
           in
+          let t = if isArrayType t then TPtr (element_type t, []) else t in
           match isPointerType t, lazy (integral_struct_name @@ pointed_type t) with
-            | false, _ | true, lazy None ->
-              unsupported "reinterpretation %s what is not a pointer to an integer (%a)" s Printer.pp_typ t
-            | true, lazy (Some s) -> s
+          | false, _ | true, lazy None ->
+            unsupported "reinterpretation %s what is not a pointer to an integer (%a)" s Printer.pp_typ t
+          | true, lazy (Some s) -> s
         in
         let _, typ = map_pair (uncurry @@ check_supported_type) (("from", from_type), ("to", typ)) in
         if typ = wrapper_name voidType then unsupported "reinterpretation to void *"
