@@ -8,12 +8,12 @@
 <file name="../jessie_parsec_bug.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="5eac81c0316d494d0768bfb5ee0b08cd" expanded="true">
+<theory name="Jessie_program" sum="0eb460880442fbe1f84c43cfd91cad03" expanded="true">
  <goal name="WP_parameter pdpl_put_ensures_default" expl="Function pdpl_put, default behavior" expanded="true">
  <proof prover="1" timelimit="54"><result status="valid" time="0.19"/></proof>
  </goal>
  <goal name="WP_parameter pdpl_put_safety" expl="Function pdpl_put, safety" expanded="true">
- <proof prover="1" timelimit="54"><result status="valid" time="0.19"/></proof>
+ <proof prover="1" timelimit="54"><result status="valid" time="0.35"/></proof>
  </goal>
  <goal name="WP_parameter pdpl_get_new_ensures_FAILURE" expl="Function pdpl_get_new, behavior FAILURE" expanded="true">
  <proof prover="1" timelimit="54"><result status="valid" time="0.23"/></proof>
@@ -75,7 +75,7 @@
   </transf>
   </goal>
   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.2" expl="2. Postcondition (Ensures clause)">
-  <proof prover="1" memlimit="1000"><result status="valid" time="0.13"/></proof>
+  <proof prover="1" memlimit="1000"><result status="valid" time="0.28"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.3" expl="3. Postcondition (Ensures clause)">
   <proof prover="1" memlimit="1000"><result status="valid" time="0.25"/></proof>
@@ -177,7 +177,7 @@
  <proof prover="1" timelimit="54"><result status="valid" time="0.20"/></proof>
  </goal>
  <goal name="WP_parameter pdp_roles_size_safety" expl="Function pdp_roles_size, safety" expanded="true">
- <proof prover="1" memlimit="1000"><result status="timeout" time="53.79"/></proof>
+ <proof prover="1" memlimit="1000"><result status="timeout" time="4.96"/></proof>
  </goal>
  <goal name="WP_parameter _pdpl_raw_size_ensures_default" expl="Function _pdpl_raw_size, default behavior" expanded="true">
  <transf name="inline_goal" expanded="true">
@@ -188,7 +188,7 @@
  </transf>
  </goal>
  <goal name="WP_parameter _pdpl_raw_size_safety" expl="Function _pdpl_raw_size, safety" expanded="true">
- <proof prover="1" memlimit="1000"><result status="timeout" time="53.83"/></proof>
+ <proof prover="1" memlimit="1000"><result status="timeout" time="4.95"/></proof>
  </goal>
 </theory>
 </file>

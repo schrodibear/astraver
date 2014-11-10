@@ -2,19 +2,19 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="4">
-<prover id="0" name="CVC3" version="2.4.1" timelimit="30" memlimit="1000"/>
+<prover id="0" name="CVC3" version="2.4.1" timelimit="48" memlimit="1000"/>
 <prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
-<prover id="2" name="CVC4 FULL" version="1.4" timelimit="30" memlimit="1000"/>
+<prover id="2" name="CVC4 FULL" version="1.4" timelimit="48" memlimit="1000"/>
 <file name="../dummy_region_unify.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="d7acb765e9fb8082bd574885470050df" expanded="true">
+<theory name="Jessie_program" sum="e3d80f16157ed837100928046975bae3" expanded="true">
  <goal name="WP_parameter ggg_ensures_default" expl="Function ggg, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
-  <goal name="WP_parameter ggg_ensures_default.1" expl="1. Assertion in line 13">
+  <goal name="WP_parameter ggg_ensures_default.1" expl="1. Assertion in line 21">
   <proof prover="1"><result status="valid" time="0.17"/></proof>
   </goal>
-  <goal name="WP_parameter ggg_ensures_default.2" expl="2. Assertion in line 15">
+  <goal name="WP_parameter ggg_ensures_default.2" expl="2. Assertion in line 23">
   <proof prover="1"><result status="valid" time="0.11"/></proof>
   </goal>
  </transf>
@@ -37,7 +37,7 @@
   <proof prover="1"><result status="valid" time="0.70"/></proof>
   </goal>
   <goal name="WP_parameter ggg_safety.6" expl="6. Precondition for fff (Requires clause. Internal)">
-  <proof prover="1"><result status="valid" time="0.26"/></proof>
+  <proof prover="1"><result status="valid" time="0.13"/></proof>
   </goal>
   <goal name="WP_parameter ggg_safety.7" expl="7. Deallocation">
   <proof prover="1"><result status="valid" time="0.69"/></proof>
@@ -48,25 +48,34 @@
  <proof prover="1"><result status="valid" time="0.06"/></proof>
  </goal>
  <goal name="WP_parameter fff_safety" expl="Function fff, safety" expanded="true">
- <proof prover="0"><result status="timeout" time="29.87"/></proof>
- <proof prover="1" timelimit="30"><result status="timeout" time="29.93"/></proof>
- <proof prover="2"><result status="timeout" time="29.89"/></proof>
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter fff_safety.1" expl="1. Arithmetic overflow (Bounded int32)" expanded="true">
-  <proof prover="1" timelimit="30"><result status="timeout" time="29.88"/></proof>
+  <proof prover="0"><result status="timeout" time="47.80"/></proof>
+  <proof prover="1" timelimit="48"><result status="timeout" time="47.74"/></proof>
+  <proof prover="2"><result status="timeout" time="47.73"/></proof>
   </goal>
   <goal name="WP_parameter fff_safety.2" expl="2. Pointer dereference (Assignment with offset)" expanded="true">
-  <proof prover="1" timelimit="30"><result status="timeout" time="29.94"/></proof>
   <transf name="split_goal_wp" expanded="true">
-   <goal name="WP_parameter fff_safety.2.1" expl="1. Left valid">
-   <proof prover="1" timelimit="30"><undone/></proof>
+   <goal name="WP_parameter fff_safety.2.1" expl="1. Left valid" expanded="true">
+   <proof prover="0"><result status="outofmemory" time="6.47"/></proof>
+   <proof prover="1" timelimit="48"><result status="timeout" time="47.65"/></proof>
+   <proof prover="2"><result status="timeout" time="47.73"/></proof>
    </goal>
-   <goal name="WP_parameter fff_safety.2.2" expl="2. Right valid">
-   <proof prover="1" timelimit="30"><result status="valid" time="0.09"/></proof>
+   <goal name="WP_parameter fff_safety.2.2" expl="2. Right valid" expanded="true">
+   <proof prover="0"><result status="outofmemory" time="6.47"/></proof>
+   <proof prover="1" timelimit="48"><result status="timeout" time="29.82"/></proof>
+   <proof prover="2"><result status="timeout" time="47.75"/></proof>
    </goal>
   </transf>
   </goal>
  </transf>
+ </goal>
+ <goal name="WP_parameter fff_correct_ensures_default" expl="Function fff_correct, default behavior" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+ </transf>
+ </goal>
+ <goal name="WP_parameter fff_correct_safety" expl="Function fff_correct, safety" expanded="true">
+ <proof prover="1"><result status="valid" time="0.11"/></proof>
  </goal>
 </theory>
 </file>

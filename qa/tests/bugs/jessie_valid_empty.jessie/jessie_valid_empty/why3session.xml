@@ -5,8 +5,14 @@
 <file name="../jessie_valid_empty.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="81d1d88d3fbc4291041cbf12da2471f9" expanded="true">
+<theory name="Jessie_program" sum="58f614131bfb807ae91f3a10c810dc57" expanded="true">
  <goal name="WP_parameter f_ensures_default" expl="Function f, default behavior" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter f_ensures_default.1" expl="1. Assertion in line 4">
+  </goal>
+  <goal name="WP_parameter f_ensures_default.2" expl="2. Assertion in line 5">
+  </goal>
+ </transf>
  </goal>
  <goal name="WP_parameter f_safety" expl="Function f, safety" expanded="true">
  </goal>

@@ -7,7 +7,7 @@
 <file name="../kzalloc_parsec.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="fea94729474142284e405aa811d12395" expanded="true">
+<theory name="Jessie_program" sum="7c78172791744d2519911748956856a3" expanded="true">
  <goal name="WP_parameter pdpl_get_new_ensures_FAILURE" expl="Function pdpl_get_new, behavior FAILURE" expanded="true">
  <proof prover="0"><result status="valid" time="0.44"/></proof>
  </goal>
@@ -23,7 +23,7 @@
   <proof prover="0"><result status="valid" time="0.44"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.4" expl="4. Postcondition (Ensures clause)">
-  <proof prover="0"><result status="valid" time="45.28"/></proof>
+  <proof prover="0"><result status="valid" time="73.98"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_ensures_SUCCESS.5" expl="5. Postcondition (Ensures clause)">
   <proof prover="0"><result status="valid" time="0.26"/></proof>
@@ -139,10 +139,10 @@
    <proof prover="0"><result status="valid" time="0.42"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.1.9" expl="9. Assigns clause" expanded="true">
-   <proof prover="0"><result status="valid" time="0.22"/></proof>
+   <proof prover="0"><result status="valid" time="0.36"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.1.10" expl="10. Assigns clause">
-   <proof prover="0"><result status="valid" time="0.22"/></proof>
+   <proof prover="0"><result status="valid" time="0.37"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.1.11" expl="11. Assigns clause">
    <proof prover="0"><result status="valid" time="0.40"/></proof>
@@ -162,13 +162,13 @@
    </transf>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.2.2" expl="2. Assigns clause">
-   <proof prover="0"><result status="valid" time="0.23"/></proof>
+   <proof prover="0"><result status="valid" time="0.37"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.2.3" expl="3. Assigns clause">
-   <proof prover="0"><result status="valid" time="0.20"/></proof>
+   <proof prover="0"><result status="valid" time="0.36"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.2.4" expl="4. Assigns clause">
-   <proof prover="0"><result status="valid" time="0.22"/></proof>
+   <proof prover="0"><result status="valid" time="0.37"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.2.5" expl="5. Assigns clause">
    <proof prover="0"><result status="valid" time="0.26"/></proof>
@@ -177,19 +177,19 @@
    <proof prover="0"><result status="valid" time="0.41"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.2.7" expl="7. Assigns clause">
-   <proof prover="0"><result status="valid" time="0.22"/></proof>
+   <proof prover="0"><result status="valid" time="0.38"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.2.8" expl="8. Assigns clause">
-   <proof prover="0"><result status="valid" time="0.24"/></proof>
+   <proof prover="0"><result status="valid" time="0.38"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.2.9" expl="9. Assigns clause">
-   <proof prover="0"><result status="valid" time="0.22"/></proof>
+   <proof prover="0"><result status="valid" time="0.38"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.2.10" expl="10. Assigns clause">
-   <proof prover="0"><result status="valid" time="0.21"/></proof>
+   <proof prover="0"><result status="valid" time="0.38"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.2.11" expl="11. Assigns clause">
-   <proof prover="0"><result status="valid" time="0.21"/></proof>
+   <proof prover="0"><result status="valid" time="0.38"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.2.12" expl="12. Assigns clause">
    <proof prover="0"><result status="valid" time="0.25"/></proof>
@@ -197,12 +197,12 @@
   </transf>
   </goal>
   <goal name="WP_parameter pdpl_get_new_ensures_default.3" expl="3. Postcondition">
-  <proof prover="0"><result status="valid" time="0.25"/></proof>
+  <proof prover="0"><result status="valid" time="0.39"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_ensures_default.4" expl="4. Postcondition" expanded="true">
   <transf name="split_goal_wp" expanded="true">
    <goal name="WP_parameter pdpl_get_new_ensures_default.4.1" expl="1. Assigns clause">
-   <proof prover="1"><result status="valid" time="14.40"/></proof>
+   <proof prover="1"><result status="valid" time="23.52"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.4.2" expl="2. Assigns clause">
    <proof prover="1"><result status="valid" time="0.54"/></proof>
@@ -214,7 +214,7 @@
    <proof prover="1"><result status="valid" time="0.55"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.4.5" expl="5. Assigns clause">
-   <proof prover="1"><result status="valid" time="0.38"/></proof>
+   <proof prover="1"><result status="valid" time="0.55"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.4.6" expl="6. Assigns clause">
    <proof prover="1"><result status="valid" time="0.57"/></proof>
@@ -223,7 +223,7 @@
    <proof prover="1"><result status="valid" time="0.56"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.4.8" expl="8. Assigns clause">
-   <proof prover="1"><result status="valid" time="0.37"/></proof>
+   <proof prover="1"><result status="valid" time="0.56"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.4.9" expl="9. Assigns clause">
    <proof prover="1"><result status="valid" time="0.44"/></proof>
@@ -258,7 +258,7 @@
   <proof prover="0"><result status="valid" time="0.30"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_ensures_default.11" expl="11. Postcondition">
-  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  <proof prover="0"><result status="valid" time="0.35"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_ensures_default.12" expl="12. Postcondition" expanded="true">
   <transf name="split_goal_wp" expanded="true">
@@ -269,13 +269,13 @@
    <proof prover="0"><result status="valid" time="0.32"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.12.3" expl="3. Assigns clause">
-   <proof prover="0"><result status="valid" time="0.20"/></proof>
+   <proof prover="0"><result status="valid" time="0.34"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.12.4" expl="4. Assigns clause">
    <proof prover="0"><result status="valid" time="0.23"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.12.5" expl="5. Assigns clause">
-   <proof prover="0"><result status="valid" time="0.21"/></proof>
+   <proof prover="0"><result status="valid" time="0.34"/></proof>
    </goal>
    <goal name="WP_parameter pdpl_get_new_ensures_default.12.6" expl="6. Assigns clause">
    <proof prover="0"><result status="valid" time="0.33"/></proof>
@@ -307,7 +307,7 @@
   <proof prover="0"><result status="valid" time="0.30"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_ensures_default.15" expl="15. Postcondition">
-  <proof prover="0"><result status="valid" time="0.17"/></proof>
+  <proof prover="0"><result status="valid" time="0.29"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_ensures_default.16" expl="16. Postcondition">
   <proof prover="0"><result status="valid" time="0.32"/></proof>
@@ -320,28 +320,28 @@
   <proof prover="0"><result status="valid" time="0.13"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.2" expl="2. Precondition for memset_PDPL_T_0 (Requires clause. External)">
-  <proof prover="0"><result status="valid" time="0.27"/></proof>
+  <proof prover="0"><result status="valid" time="0.28"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.3" expl="3. Pointer inequality">
   <proof prover="0"><result status="valid" time="0.32"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.4" expl="4. Pointer inequality">
-  <proof prover="0"><result status="valid" time="0.18"/></proof>
+  <proof prover="0"><result status="valid" time="0.30"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.5" expl="5. Pointer dereference (Validity)">
-  <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.23"/></proof>
+  <proof prover="0"><result status="valid" time="0.42"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.6" expl="6. Precondition for atomic_set (Requires clause. External)">
-  <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.26"/></proof>
+  <proof prover="0"><result status="valid" time="0.41"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.7" expl="7. Pointer inequality">
   <proof prover="0"><result status="valid" time="0.32"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.8" expl="8. Pointer dereference (Validity)">
-  <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.22"/></proof>
+  <proof prover="0"><result status="valid" time="0.45"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.9" expl="9. Precondition for atomic_set (Requires clause. External)">
-  <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.47"/></proof>
+  <proof prover="0"><result status="valid" time="0.49"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.10" expl="10. Pointer inequality">
   <proof prover="0"><result status="valid" time="0.10"/></proof>
@@ -368,7 +368,7 @@
   <proof prover="0"><result status="valid" time="0.10"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.18" expl="18. Precondition for memset_PDPL_T_0 (Requires clause. External)">
-  <proof prover="0"><result status="valid" time="0.13"/></proof>
+  <proof prover="0"><result status="valid" time="0.27"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.19" expl="19. Pointer inequality">
   <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.23"/></proof>
@@ -377,19 +377,19 @@
   <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.16"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.21" expl="21. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.23"/></proof>
+  <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.38"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.22" expl="22. Precondition for atomic_set (Requires clause. External)">
-  <proof prover="0"><result status="valid" time="0.25"/></proof>
+  <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.47"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.23" expl="23. Pointer inequality">
   <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.28"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.24" expl="24. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.23"/></proof>
+  <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.37"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.25" expl="25. Precondition for atomic_set (Requires clause. External)">
-  <proof prover="0"><result status="valid" time="0.24"/></proof>
+  <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.26"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_get_new_safety.26" expl="26. Pointer inequality">
   <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.09"/></proof>

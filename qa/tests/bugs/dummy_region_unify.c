@@ -4,6 +4,14 @@ void fff(int *p, int n) {
 	p[n-1] = 0;
 }
 
+/*@ requires n >= 0 && \valid(p + (0..n-1));
+ */
+void fff_correct(int *p, int n) {
+  if (n > 0)
+	p[n-1] = 0;
+}
+
+
 void ggg(void) {
 
 	int p[1000];
