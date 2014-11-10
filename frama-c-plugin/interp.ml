@@ -1245,30 +1245,37 @@ and pred p =
 
     | Pat(p,lab) -> JCPEat(pred p,logic_label lab)
 
-    | Pvalid(_lab,
-             { term_node = TBinOp(PlusPI,t1,
-                                  {term_node = Trange (t2,t3)})}) ->
+    | Pvalid (_lab,
+              { term_node = TBinOp (PlusPI, t1,
+                                    {term_node = Trange (start, stop)})}) ->
         let e1 = terms t1 in
         let mk_one_pred e1 =
-          match t2,t3 with
-            | None,None -> true_expr
-            | Some t2,None ->
-                let e2 = term t2 in
-                let eoffmin = mkexpr (JCPEoffset(Offset_min,e1)) p.loc in
-                mkexpr (JCPEbinary(eoffmin,`Ble,e2)) p.loc
-            | None, Some t3 ->
-                let e3 = term t3 in
-                let eoffmax = mkexpr (JCPEoffset(Offset_max,e1)) p.loc in
-                mkexpr (JCPEbinary(eoffmax,`Bge,e3)) p.loc
-            | Some t2,Some t3 ->
-                let e2 = term t2 in
-                let e3 = term t3 in
-                let eoffmin = mkexpr (JCPEoffset(Offset_min,e1)) p.loc in
-                let emin = mkexpr (JCPEbinary(eoffmin,`Ble,e2)) p.loc in
-                let eoffmax = mkexpr (JCPEoffset(Offset_max,e1)) p.loc in
-                let emax = mkexpr (JCPEbinary(eoffmax,`Bge,e3)) p.loc in
-                mkconjunct [emin; emax] p.loc
-        in (mkconjunct (List.map mk_one_pred e1) p.loc)#node
+          let mk_valid_in_range ~guarded ~start ~stop =
+            let start, stop = map_pair term (start, stop) in
+            let eoffmin = mkexpr (JCPEoffset (Offset_min, e1)) p.loc in
+            let emin = mkexpr (JCPEbinary (eoffmin, `Ble, start)) p.loc in
+            let eoffmax = mkexpr (JCPEoffset (Offset_max, e1)) p.loc in
+            let emax = mkexpr (JCPEbinary (eoffmax, `Bge, stop)) p.loc in
+            let result = mkconjunct [emin; emax] p.loc in
+            if not guarded then
+              result
+            else
+              let cond = mkexpr (JCPEbinary (start, `Ble, stop)) p.loc in
+              mkexpr (JCPEif (cond, result, true_expr)) p.loc
+          in
+          match start, stop with
+          | None, _
+          | _, None -> false_expr
+          | Some ({ term_node = TConst (Integer (a, _))} as start),
+            Some ({ term_node = TConst (Integer (b, _))} as stop) ->
+            if Integer.le a b then
+              mk_valid_in_range ~guarded:false ~start ~stop
+            else
+              true_expr
+          | Some start, Some stop ->
+            mk_valid_in_range ~guarded:true ~start ~stop
+        in
+        (mkconjunct (List.map mk_one_pred e1) p.loc)#node
 
     | Pvalid(_lab,{ term_node = TBinOp(PlusPI,t1,t2)}) ->
         let e1 = terms t1 in
