@@ -37,7 +37,7 @@ include
        let help = "translation to Why/Jessie"
      end)
 
-module ProjectName =
+module Project_name =
   EmptyString
     (struct
        let option_name = "-jessie-project-name"
@@ -55,17 +55,19 @@ module Behavior =
      end)
 
 module Analysis =
-  False(struct
-	  let option_name = "-jessie"
-	  let help = "perform C to Jessie translation"
-	end)
+  False
+    (struct
+      let option_name = "-jessie"
+      let help = "perform C to Jessie translation"
+    end)
 
-module ForceAdHocNormalization =
-  False(struct
-          let option_name = "-jessie-adhoc-normalization"
-          let help =
-            "enforce code normalization in a mode suitable for Jessie plugin."
-        end)
+module Force_ad_hoc_normalization =
+  False
+    (struct
+      let option_name = "-jessie-adhoc-normalization"
+      let help =
+        "enforce code normalization in a mode suitable for Jessie plugin."
+    end)
 
 let () =
   (* [JS 2009/10/04]
@@ -75,7 +77,7 @@ let () =
      setting int-model on the command-line is obsolete, so what is this
      code for ?
   *)
-  ForceAdHocNormalization.add_set_hook
+  Force_ad_hoc_normalization.add_set_hook
     (fun _ b ->
        if b then begin
 	 Kernel.SimplifyCfg.on ();
@@ -86,25 +88,26 @@ let () =
 	 Cabs2cil.setDoAlternateConditional ();
        end);
   State_dependency_graph.add_dependencies
-    ~from:ForceAdHocNormalization.self
+    ~from:Force_ad_hoc_normalization.self
     [ Kernel.SimplifyCfg.self;
       Kernel.KeepSwitch.self;
       Kernel.Constfold.self;
       Kernel.PreprocessAnnot.self ]
 
 let () =
-  Analysis.add_set_hook (fun _ b -> ForceAdHocNormalization.set b);
+  Analysis.add_set_hook (fun _ b -> Force_ad_hoc_normalization.set b);
   State_dependency_graph.add_dependencies
-    ~from:Analysis.self [ ForceAdHocNormalization.self ]
+    ~from:Analysis.self [Force_ad_hoc_normalization.self]
 
-module JcOpt =
-  StringSet(struct
-	      let option_name = "-jessie-jc-opt"
-	      let arg_name = ""
-	      let help = "give an option to Jc (e.g., -jessie-jc-opt=\"-trust-ai\")"
-	    end)
+module Jc_opt =
+  StringSet
+    (struct
+      let option_name = "-jessie-jc-opt"
+      let arg_name = ""
+      let help = "give an option to Jc (e.g., -jessie-jc-opt=\"-trust-ai\")"
+    end)
 
-module WhyOpt =
+module Why_opt =
   StringSet
     (struct
        let option_name = "-jessie-why-opt"
@@ -112,7 +115,7 @@ module WhyOpt =
        let help = "give an option to Why (e.g., -jessie-why-opt=\"-fast-wp\")"
      end)
 
-module Why3Opt =
+module Why3_opt =
   StringSet
     (struct
        let option_name = "-jessie-why3-opt"
@@ -120,13 +123,14 @@ module Why3Opt =
        let help = "give an option to Why3 (e.g., -jessie-why3-opt=\"--debug fast-wp\")"
      end)
 
-module GenOnly =
-  False(struct
-	  let option_name = "-jessie-gen-only"
-	  let help = "only generates jessie code (for developer use)"
-	end)
+module Gen_only =
+  False
+    (struct
+      let option_name = "-jessie-gen-only"
+      let help = "only generates jessie code (for developer use)"
+    end)
 
-module InferAnnot =
+module Infer_annot =
   EmptyString
     (struct
        let option_name = "-jessie-infer-annot"
@@ -134,7 +138,7 @@ module InferAnnot =
        let help = "infer function annotations (inv, pre, spre, wpre)"
      end)
 
-module CpuLimit =
+module Cpu_limit =
   Zero
     (struct
        let option_name = "-jessie-cpu-limit"
@@ -142,7 +146,7 @@ module CpuLimit =
        let help = "set the time limit in sec. for the analysis"
      end)
 
-module AbsDomain =
+module Abs_domain =
   String
     (struct
        let option_name = "-jessie-abstract-domain"
@@ -160,7 +164,7 @@ module Atp =
        let help = "use given automated theorem prover, among `alt-ergo', `cvc3', `simplify', `vampire', `yices' and `z3'. Use `goals' to simply generate goals in Why syntax."
      end)
 
-module HintLevel =
+module Hint_level =
   Zero
     (struct
        let option_name = "-jessie-hint-level"
@@ -168,7 +172,7 @@ module HintLevel =
        let help = "level of hints, i.e. assertions to help the proof (e.g. for string usage)"
      end)
 
-module SpecBlockFuncs =
+module Specialize =
   True
     (struct
       let option_name = "-jessie-specialize"
@@ -182,7 +186,7 @@ module Extract =
       let help = "process only explicitly annotated functions with their dependencies"
      end)
 
-module FlatVararg =
+module Flat_vararg =
   False
     (struct
       let option_name = "-jessie-flat-vararg"

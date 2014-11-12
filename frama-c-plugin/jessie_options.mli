@@ -31,21 +31,21 @@
 
 include Plugin.S
 
-module ProjectName: Parameter_sig.String
+module Project_name: Parameter_sig.String
 module Behavior: Parameter_sig.String
 module Analysis: Parameter_sig.Bool
-module WhyOpt: Parameter_sig.String_set
-module Why3Opt: Parameter_sig.String_set
-module JcOpt: Parameter_sig.String_set
-module GenOnly: Parameter_sig.Bool
-module InferAnnot: Parameter_sig.String
-module AbsDomain: Parameter_sig.String
+module Why_opt: Parameter_sig.String_set
+module Why3_opt: Parameter_sig.String_set
+module Jc_opt: Parameter_sig.String_set
+module Gen_only: Parameter_sig.Bool
+module Infer_annot: Parameter_sig.String
+module Abs_domain: Parameter_sig.String
 module Atp: Parameter_sig.String
-module CpuLimit: Parameter_sig.Int
-module HintLevel: Parameter_sig.Int
-module SpecBlockFuncs : Parameter_sig.Bool
+module Cpu_limit: Parameter_sig.Int
+module Hint_level: Parameter_sig.Int
+module Specialize : Parameter_sig.Bool
 module Extract : Parameter_sig.Bool
-module FlatVararg : Parameter_sig.Bool
+module Flat_vararg : Parameter_sig.Bool
 
 (*
 Local Variables:
