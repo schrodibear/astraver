@@ -267,7 +267,11 @@ let fprintf_vc_kind fmttr k =
      | JCVCassigns -> "Assigns clause"
      | JCVCallocates -> "Allocates clause"
      | JCVCensures -> "Ensures clause"
-     | JCVCassertion pos -> Printf.sprintf "Assertion in line %d" @@ Jc_position.line pos
+     | JCVCassertion pos ->
+       begin match Jc_position.line pos with
+       | Some l -> Printf.sprintf "Assertion in line %d" l
+       | None -> Printf.sprintf "Assertion"
+       end
      | JCVCcheck "" -> "Check"
      | JCVCcheck s -> String.capitalize s ^ " check"
      | JCVCpost -> "Postcondition"
