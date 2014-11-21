@@ -2407,6 +2407,7 @@ and expr e =
             let current_comp = (get_current_function ()).fun_component in
             if safety_checking () && this_comp = current_comp then
              try
+               f.fun_may_diverge <- true;
                let cur_measure, cur_r = get_measure_for @@ get_current_function () in
                let cur_measure_why =
                  term
@@ -2600,6 +2601,7 @@ and expr e =
         | Acheck -> void
       end
     | JCEloop (la, e1) ->
+        infunction.fun_may_diverge <- true;
         let inv, assume_from_inv =
           List.fold_left
             (fun ((invariants, assumes) as acc) (names, inv,_) ->
@@ -3701,7 +3703,7 @@ let tr_fun f funpos spec body acc =
                            ~e:(new assertion JCAtrue :> < mark : _; pos: _ >)
                            ~kind:JCVCpost
                            internal_post,
-                         false (* Why3 would otherwise give errors for non-recursive definitions *),
+                         f.fun_may_diverge, (* Adding `diverges' clause for recursive and looping functions *)
                          excep_posts_for_others None excep_behaviors))
                    :: acc
                  else acc
