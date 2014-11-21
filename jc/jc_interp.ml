@@ -2822,6 +2822,7 @@ and expr e =
         in
         assert (dec = None);
         let ef = Jc_effect.expr Jc_pervasives.empty_fun_effect e in
+        let before = fresh_statement_label () in
         begin match behs with
         | [_pos, id, b] ->
           assert (b.b_throws = None);
@@ -2829,35 +2830,37 @@ and expr e =
           let a =
             assertion
               ~type_safe:false ~global_assertion:false ~relocate:false
-              LabelHere LabelPre b.b_ensures
+              LabelHere (LabelName before) b.b_ensures
           in
           let post =
             make_and a @@
               tr_assigns
                 ~type_safe:false
-                LabelPre
+                (LabelName before)
                 ef (* infunction.fun_effects*)
                 b.b_assigns
           in
+          let label = make_label before.lab_final_name in
           if safety_checking () then  begin
             let tmp = tmp_var_name () in
+            label @@
             mk_expr @@
               Let (tmp,
-                   mk_expr @@ Triple (true, r, expr e, LTrue,[]),
+                   mk_expr @@ Triple (true, r, expr e, LTrue, []),
                    append
                      (mk_expr @@
                         BlackBox (Annot_type (LTrue, unit_type, [], [], post, []))) @@
                      (mk_expr @@ Var tmp))
           end else if is_current_behavior id then
             if r = LTrue
-            then mk_expr @@ Triple (true, LTrue, expr e, post, [])
+            then label @@ mk_expr @@ Triple (true, LTrue, expr e, post, [])
             else
               append
-                (mk_expr @@ BlackBox (Annot_type (LTrue, unit_type, [], [], r, []))) @@
+                (label @@ mk_expr @@ BlackBox (Annot_type (LTrue, unit_type, [], [], r, []))) @@
                 mk_expr @@ Triple (true, LTrue, expr e, post, [])
           else
             append
-              (mk_expr @@ BlackBox (Annot_type (LTrue, unit_type, [], [], r, []))) @@
+              (label @@ mk_expr @@ BlackBox (Annot_type (LTrue, unit_type, [], [], r, []))) @@
               let tmp = tmp_var_name () in
                mk_expr @@
                  Let (tmp,

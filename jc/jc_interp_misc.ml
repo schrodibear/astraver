@@ -217,6 +217,7 @@ let make_label_counter prefix =
 
 let fresh_loop_label = make_label_counter "loop_"
 let fresh_reinterpret_label = make_label_counter "l__before_reinterpret_"
+let fresh_statement_label = make_label_counter "l__before_statement_"
 
 (******************************************************************************)
 (*                                   types                                    *)

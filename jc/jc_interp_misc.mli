@@ -67,6 +67,8 @@ val fresh_loop_label : unit -> label_info
 
 val fresh_reinterpret_label : unit -> label_info
 
+val fresh_statement_label : unit -> label_info
+
 (** {1 helpers for Output module} *)
 
 val make_subtag : term -> term -> assertion
