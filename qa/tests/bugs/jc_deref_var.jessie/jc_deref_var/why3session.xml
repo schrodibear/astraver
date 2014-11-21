@@ -6,17 +6,17 @@
 <file name="../jc_deref_var.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="1cc124dc8b0a0580362b831108bba517" expanded="true">
- <goal name="WP_parameter f2_ensures_default" expl="Function f2, default behavior" expanded="true">
- <proof prover="0"><result status="timeout" time="4.97"/></proof>
- </goal>
- <goal name="WP_parameter f2_safety" expl="Function f2, safety" expanded="true">
- <proof prover="0"><result status="valid" time="0.06"/></proof>
- </goal>
+<theory name="Jessie_program" sum="6357c2af0fd877578ddb518250fc3c67" expanded="true">
  <goal name="WP_parameter f1_ensures_default" expl="Function f1, default behavior" expanded="true">
  <proof prover="0"><result status="timeout" time="4.97"/></proof>
  </goal>
  <goal name="WP_parameter f1_safety" expl="Function f1, safety" expanded="true">
+ <proof prover="0"><result status="valid" time="0.06"/></proof>
+ </goal>
+ <goal name="WP_parameter f2_ensures_default" expl="Function f2, default behavior" expanded="true">
+ <proof prover="0"><result status="timeout" time="4.97"/></proof>
+ </goal>
+ <goal name="WP_parameter f2_safety" expl="Function f2, safety" expanded="true">
  <proof prover="0"><result status="valid" time="0.06"/></proof>
  </goal>
 </theory>

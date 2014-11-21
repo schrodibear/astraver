@@ -6,7 +6,7 @@
 <file name="../test_stdlib.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="b3f06da61d8606849b8241b78dd092c0" expanded="true">
+<theory name="Jessie_program" sum="40c09c2ca8974d70014578223c8f7344" expanded="true">
  <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="0.05"/></proof>
  </goal>

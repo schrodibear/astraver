@@ -9,18 +9,12 @@
 <file name="../alloc_free_false_safe.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="246a484213703b1ac12156f0cc9b3335" expanded="true">
+<theory name="Jessie_program" sum="75fb192d035cb0fa872b2423eb112136" expanded="true">
  <goal name="WP_parameter pack_in_struct_ensures_default" expl="Function pack_in_struct, default behavior" expanded="true">
  <proof prover="1"><result status="valid" time="0.12"/></proof>
  </goal>
  <goal name="WP_parameter pack_in_struct_safety" expl="Function pack_in_struct, safety" expanded="true">
  <proof prover="1"><result status="valid" time="0.10"/></proof>
- </goal>
- <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
- <proof prover="1"><result status="valid" time="0.08"/></proof>
- </goal>
- <goal name="WP_parameter main_safety" expl="Function main, safety" expanded="true">
- <proof prover="1"><result status="valid" time="0.09"/></proof>
  </goal>
  <goal name="WP_parameter get_a_and_free_ensures_default" expl="Function get_a_and_free, default behavior" expanded="true">
  <proof prover="1"><result status="valid" time="0.07"/></proof>
@@ -30,6 +24,12 @@
  <proof prover="1" timelimit="37"><result status="timeout" time="36.85"/></proof>
  <proof prover="2"><result status="timeout" time="36.87"/></proof>
  <proof prover="3"><result status="unknown" time="0.05"/></proof>
+ </goal>
+ <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
+ <proof prover="1"><result status="valid" time="0.08"/></proof>
+ </goal>
+ <goal name="WP_parameter main_safety" expl="Function main, safety" expanded="true">
+ <proof prover="1"><result status="valid" time="0.09"/></proof>
  </goal>
 </theory>
 </file>

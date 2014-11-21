@@ -4,7 +4,7 @@
 <why3session shape_version="4">
 <prover id="0" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
 <file name="../jc_interp_bool_eq.mlw" expanded="true">
-<theory name="Jessie_model" sum="213f64faff6c29f6b5784d1f40151c7d" expanded="true">
+<theory name="Jessie_model" sum="05ee1e0e232b36ba18e03588bd9daba0" expanded="true">
  <goal name="always_true" expl="Lemma always_true" expanded="true">
  <proof prover="0"><result status="valid" time="0.06"/></proof>
  </goal>
