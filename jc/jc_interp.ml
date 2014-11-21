@@ -1196,7 +1196,7 @@ let tr_assigns ~type_safe ?region_list before ef =
          if p then acc else
            let at = lvar ~constant:false ~label_in_name:false in
            make_and acc @@
-             mk_positioned_lex ~e ~kind:JCVCassigns @@ LPred ("eq", [at LabelPost v; at before v]))
+             mk_positioned_lex ~e ~kind:JCVCassigns @@ LPred ("eq", [at LabelHere v; at before v]))
       refs
     |>
     MemoryMap.fold
@@ -1204,10 +1204,11 @@ let tr_assigns ~type_safe ?region_list before ef =
          let args =
            let mem = memory_name (mc, r) in
            let at = alloc_table_name (alloc_class_of_mem_class mc, r) in
-           [LDerefAtLabel (at, "");
-            LDeref at;
-            lvar ~constant:false ~label_in_name:false before mem;
-            LDeref mem]
+           let lvar_at = lvar ~constant:false ~label_in_name:false in
+           [lvar_at before at;
+            lvar_at LabelHere at;
+            lvar_at before mem;
+            lvar_at LabelHere mem]
          in
          let ps, _ = List.split pes in
          make_and acc @@
