@@ -6,7 +6,7 @@
 <file name="../jessie_function_pointer_sample2.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="36c3f8ac941ce58dfd53098f8abce88a" expanded="true">
+<theory name="Jessie_program" sum="77e7ab39d1cc122f664f0f7c7c95d806" expanded="true">
  <goal name="WP_parameter caller_ensures_default" expl="Function caller, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="0.26"/></proof>
  </goal>

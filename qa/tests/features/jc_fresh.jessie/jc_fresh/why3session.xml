@@ -10,14 +10,14 @@
 <file name="../jc_fresh.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="6fc7d162cd7162c3b4650c6b40d4e53a" expanded="true">
+<theory name="Jessie_program" sum="a3226422d0c195673b46d21f2144f86d" expanded="true">
  <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter main_ensures_default.1" expl="1. Assertion in line 6" expanded="true">
   <proof prover="1"><result status="valid" time="0.10"/></proof>
   <proof prover="2"><result status="valid" time="0.10"/></proof>
   <proof prover="3"><result status="valid" time="0.03"/></proof>
-  <proof prover="4" edited="jc_fresh-Jessie_program-WP_parameter_main_ensures_default_1.why"><result status="valid" time="0.04"/></proof>
+  <proof prover="4"><result status="valid" time="0.04"/></proof>
   </goal>
  </transf>
  </goal>
@@ -37,7 +37,7 @@
   <proof prover="4" timelimit="31"><result status="valid" time="0.10"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.4" expl="4. Deallocation" expanded="true">
-  <proof prover="1"><result status="valid" time="0.33"/></proof>
+  <proof prover="1"><result status="valid" time="0.16"/></proof>
   </goal>
  </transf>
  </goal>

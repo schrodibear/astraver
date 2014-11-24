@@ -6,7 +6,19 @@
 <file name="../jessie_string_literals.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="f3afa0619fd97a41cf27431d38a03d2f" expanded="true">
+<theory name="Jessie_program" sum="b95f4605c3e6d8a74317a45bea1ad0f9" expanded="true">
+ <goal name="WP_parameter f1_ensures_default" expl="Function f1, default behavior" expanded="true">
+ <proof prover="0"><result status="valid" time="1.61"/></proof>
+ </goal>
+ <goal name="WP_parameter f1_safety" expl="Function f1, safety" expanded="true">
+ <proof prover="0"><result status="valid" time="0.21"/></proof>
+ </goal>
+ <goal name="WP_parameter f2_ensures_default" expl="Function f2, default behavior" expanded="true">
+ <proof prover="0"><result status="valid" time="0.09"/></proof>
+ </goal>
+ <goal name="WP_parameter f2_safety" expl="Function f2, safety" expanded="true">
+ <proof prover="0"><result status="valid" time="1.62"/></proof>
+ </goal>
  <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="1.69"/></proof>
  </goal>
@@ -16,16 +28,16 @@
   <proof prover="0"><result status="valid" time="0.34"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.2" expl="2. Pointer cast (Prefix or reinterpret)">
-  <proof prover="0"><result status="valid" time="1.67"/></proof>
+  <proof prover="0"><result status="valid" time="1.72"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.3" expl="3. Pointer dereference (Assignment)">
   <proof prover="0"><result status="valid" time="0.36"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.4" expl="4. Pointer cast (Prefix or reinterpret)">
-  <proof prover="0"><result status="valid" time="1.72"/></proof>
+  <proof prover="0"><result status="valid" time="1.67"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.5" expl="5. Pointer dereference (Assignment)">
-  <proof prover="0"><result status="valid" time="1.70"/></proof>
+  <proof prover="0"><result status="valid" time="1.67"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.6" expl="6. Precondition for printf (External. Requires clause)">
   <proof prover="0"><result status="valid" time="0.22"/></proof>
@@ -37,18 +49,6 @@
   <proof prover="0"><result status="valid" time="0.30"/></proof>
   </goal>
  </transf>
- </goal>
- <goal name="WP_parameter f2_ensures_default" expl="Function f2, default behavior" expanded="true">
- <proof prover="0"><result status="valid" time="0.09"/></proof>
- </goal>
- <goal name="WP_parameter f2_safety" expl="Function f2, safety" expanded="true">
- <proof prover="0"><result status="valid" time="1.62"/></proof>
- </goal>
- <goal name="WP_parameter f1_ensures_default" expl="Function f1, default behavior" expanded="true">
- <proof prover="0"><result status="valid" time="1.61"/></proof>
- </goal>
- <goal name="WP_parameter f1_safety" expl="Function f1, safety" expanded="true">
- <proof prover="0"><result status="valid" time="0.21"/></proof>
  </goal>
 </theory>
 </file>

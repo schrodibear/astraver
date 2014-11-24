@@ -7,13 +7,13 @@
 <file name="../jessie_extract_test1.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="d2eddf65d43de19e81f2e3edcb53be0c" expanded="true">
+<theory name="Jessie_program" sum="46df1d8b17d6300c85e6a2424ae1b831" expanded="true">
  <goal name="WP_parameter main2_ensures_default" expl="Function main2, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="0.13"/></proof>
  </goal>
  <goal name="WP_parameter main2_safety" expl="Function main2, safety" expanded="true">
  <proof prover="0"><result status="valid" time="0.10"/></proof>
- <proof prover="1" edited="jessie_extract_test1-Jessie_program-WP_parameter_main2_safety_1.why"><result status="valid" time="0.05"/></proof>
+ <proof prover="1"><result status="valid" time="0.04"/></proof>
  </goal>
 </theory>
 </file>

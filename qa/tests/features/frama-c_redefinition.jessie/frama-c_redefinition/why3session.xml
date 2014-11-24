@@ -7,7 +7,18 @@
 <file name="../frama-c_redefinition.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="33fe2c47917085a266c844b8b762eaa7" expanded="true">
+<theory name="Jessie_program" sum="b03615dd1c0b4dc80e9e46287f4a52c9" expanded="true">
+ <goal name="WP_parameter f_ensures_default" expl="Function f, default behavior" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter f_ensures_default.1" expl="1." expanded="true">
+  <proof prover="0"><result status="unknown" time="2.78"/></proof>
+  <proof prover="1"><result status="timeout" time="5.00"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter f_safety" expl="Function f, safety" expanded="true">
+ <proof prover="1"><result status="valid" time="0.20"/></proof>
+ </goal>
  <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
  <proof prover="1"><result status="valid" time="0.05"/></proof>
  </goal>
@@ -18,20 +29,9 @@
   <proof prover="1"><result status="valid" time="0.13"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.2" expl="2. Deallocation">
-  <proof prover="1"><result status="valid" time="0.12"/></proof>
+  <proof prover="1"><result status="valid" time="0.24"/></proof>
   </goal>
  </transf>
- </goal>
- <goal name="WP_parameter f_ensures_default" expl="Function f, default behavior" expanded="true">
- <transf name="split_goal_wp" expanded="true">
-  <goal name="WP_parameter f_ensures_default.1" expl="1." expanded="true">
-  <proof prover="0"><result status="unknown" time="2.38"/></proof>
-  <proof prover="1"><result status="timeout" time="5.00"/></proof>
-  </goal>
- </transf>
- </goal>
- <goal name="WP_parameter f_safety" expl="Function f, safety" expanded="true">
- <proof prover="1"><result status="valid" time="0.20"/></proof>
  </goal>
 </theory>
 </file>
