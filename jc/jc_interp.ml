@@ -2408,7 +2408,6 @@ and expr e =
             let current_comp = (get_current_function ()).fun_component in
             if safety_checking () && this_comp = current_comp then
              try
-               f.fun_may_diverge <- true;
                let cur_measure, cur_r = get_measure_for @@ get_current_function () in
                let cur_measure_why =
                  term
