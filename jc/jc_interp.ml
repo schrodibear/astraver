@@ -1196,7 +1196,7 @@ let tr_assigns ~type_safe ?region_list before ef =
          if p then acc else
            let at = lvar ~constant:false ~label_in_name:false in
            make_and acc @@
-             mk_positioned_lex ~e ~kind:JCVCassigns @@ LPred ("eq", [at LabelPost v; at before v]))
+             mk_positioned_lex ~e ~kind:JCVCassigns @@ LPred ("eq", [at LabelHere v; at before v]))
       refs
     |>
     MemoryMap.fold
@@ -1204,10 +1204,11 @@ let tr_assigns ~type_safe ?region_list before ef =
          let args =
            let mem = memory_name (mc, r) in
            let at = alloc_table_name (alloc_class_of_mem_class mc, r) in
-           [LDerefAtLabel (at, "");
-            LDeref at;
-            lvar ~constant:false ~label_in_name:false before mem;
-            LDeref mem]
+           let lvar_at = lvar ~constant:false ~label_in_name:false in
+           [lvar_at before at;
+            lvar_at LabelHere at;
+            lvar_at before mem;
+            lvar_at LabelHere mem]
          in
          let ps, _ = List.split pes in
          make_and acc @@
@@ -2600,6 +2601,7 @@ and expr e =
         | Acheck -> void
       end
     | JCEloop (la, e1) ->
+        infunction.fun_may_diverge <- true;
         let inv, assume_from_inv =
           List.fold_left
             (fun ((invariants, assumes) as acc) (names, inv,_) ->
@@ -2819,6 +2821,7 @@ and expr e =
         in
         assert (dec = None);
         let ef = Jc_effect.expr Jc_pervasives.empty_fun_effect e in
+        let before = fresh_statement_label () in
         begin match behs with
         | [_pos, id, b] ->
           assert (b.b_throws = None);
@@ -2826,35 +2829,37 @@ and expr e =
           let a =
             assertion
               ~type_safe:false ~global_assertion:false ~relocate:false
-              LabelHere LabelPre b.b_ensures
+              LabelHere (LabelName before) b.b_ensures
           in
           let post =
             make_and a @@
               tr_assigns
                 ~type_safe:false
-                LabelPre
+                (LabelName before)
                 ef (* infunction.fun_effects*)
                 b.b_assigns
           in
+          let label = make_label before.lab_final_name in
           if safety_checking () then  begin
             let tmp = tmp_var_name () in
+            label @@
             mk_expr @@
               Let (tmp,
-                   mk_expr @@ Triple (true, r, expr e, LTrue,[]),
+                   mk_expr @@ Triple (true, r, expr e, LTrue, []),
                    append
                      (mk_expr @@
                         BlackBox (Annot_type (LTrue, unit_type, [], [], post, []))) @@
                      (mk_expr @@ Var tmp))
           end else if is_current_behavior id then
             if r = LTrue
-            then mk_expr @@ Triple (true, LTrue, expr e, post, [])
+            then label @@ mk_expr @@ Triple (true, LTrue, expr e, post, [])
             else
               append
-                (mk_expr @@ BlackBox (Annot_type (LTrue, unit_type, [], [], r, []))) @@
+                (label @@ mk_expr @@ BlackBox (Annot_type (LTrue, unit_type, [], [], r, []))) @@
                 mk_expr @@ Triple (true, LTrue, expr e, post, [])
           else
             append
-              (mk_expr @@ BlackBox (Annot_type (LTrue, unit_type, [], [], r, []))) @@
+              (label @@ mk_expr @@ BlackBox (Annot_type (LTrue, unit_type, [], [], r, []))) @@
               let tmp = tmp_var_name () in
                mk_expr @@
                  Let (tmp,
@@ -3701,7 +3706,7 @@ let tr_fun f funpos spec body acc =
                            ~e:(new assertion JCAtrue :> < mark : _; pos: _ >)
                            ~kind:JCVCpost
                            internal_post,
-                         false (* Why3 would otherwise give errors for non-recursive definitions *),
+                         f.fun_may_diverge, (* Adding `diverges' clause for recursive and looping functions *)
                          excep_posts_for_others None excep_behaviors))
                    :: acc
                  else acc

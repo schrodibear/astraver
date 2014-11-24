@@ -385,6 +385,7 @@ let make_fun_info name ty =
     fun_param_regions = [];
     fun_calls = [];
     fun_component = -1;
+    fun_may_diverge = false;
     fun_logic_apps = [];
     fun_effects = empty_fun_effect;
   }

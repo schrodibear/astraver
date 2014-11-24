@@ -6,7 +6,13 @@
 <file name="../jessie_interp_bool.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="6a6b77b6d484d1e1ad1aef45f678f02f" expanded="true">
+<theory name="Jessie_program" sum="a5984cac3e20387a6640a0e2149f40af" expanded="true">
+ <goal name="WP_parameter btest_ensures_default" expl="Function btest, default behavior" expanded="true">
+ <proof prover="0"><result status="valid" time="0.06"/></proof>
+ </goal>
+ <goal name="WP_parameter btest_safety" expl="Function btest, safety" expanded="true">
+ <proof prover="0"><result status="valid" time="0.06"/></proof>
+ </goal>
  <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
  <proof prover="0"><result status="timeout" time="5.00"/></proof>
  <transf name="split_goal_wp" expanded="true">
@@ -20,12 +26,6 @@
  </goal>
  <goal name="WP_parameter main_safety" expl="Function main, safety" expanded="true">
  <proof prover="0"><result status="valid" time="0.24"/></proof>
- </goal>
- <goal name="WP_parameter btest_ensures_default" expl="Function btest, default behavior" expanded="true">
- <proof prover="0"><result status="valid" time="0.06"/></proof>
- </goal>
- <goal name="WP_parameter btest_safety" expl="Function btest, safety" expanded="true">
- <proof prover="0"><result status="valid" time="0.06"/></proof>
  </goal>
 </theory>
 </file>

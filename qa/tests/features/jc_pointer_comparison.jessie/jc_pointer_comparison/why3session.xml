@@ -9,7 +9,7 @@
 <file name="../jc_pointer_comparison.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="e9f951ca1b8c8cdd4a5edb733759ad4d" expanded="true">
+<theory name="Jessie_program" sum="829fa2cd2b0c2d1ed78426411fc5fc13" expanded="true">
  <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter main_ensures_default.1" expl="1. Assertion in line 39">
@@ -179,19 +179,19 @@
   <proof prover="1" timelimit="45"><result status="valid" time="0.37"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.6" expl="6. Pointer dereference (Assignment)">
-  <proof prover="1" timelimit="45"><result status="valid" time="39.11"/></proof>
+  <proof prover="1" timelimit="45"><result status="valid" time="42.71"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.7" expl="7. Pointer dereference (Validity)">
-  <proof prover="1" timelimit="45"><result status="valid" time="0.67"/></proof>
+  <proof prover="1" timelimit="45"><result status="valid" time="0.69"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.8" expl="8. Pointer dereference (Assignment)">
   <proof prover="1" timelimit="45"><result status="valid" time="0.72"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.9" expl="9. Pointer dereference (Validity)">
-  <proof prover="1" timelimit="45"><result status="valid" time="30.77"/></proof>
+  <proof prover="1" timelimit="45"><result status="valid" time="32.72"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.10" expl="10. Pointer dereference (Assignment)">
-  <proof prover="1" timelimit="45"><result status="valid" time="43.04"/></proof>
+  <proof prover="1" timelimit="45"><result status="valid" time="43.83"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.11" expl="11. Deallocation">
   <proof prover="1" timelimit="45"><result status="valid" time="0.15"/></proof>

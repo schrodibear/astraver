@@ -105,6 +105,7 @@ sig
     mutable fun_param_regions     : region list;
     mutable fun_calls             : fun_info list;
     mutable fun_component         : int;
+    mutable fun_may_diverge       : bool;
     mutable fun_logic_apps        : logic_info list;
     mutable fun_effects           : fun_effect;
   }

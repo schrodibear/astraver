@@ -10,16 +10,16 @@
 <file name="../embed_first_substructs.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="9619896d622eda252db6be8d60145787" expanded="true">
+<theory name="Jessie_program" sum="088a626a04299652c1beec22ce1df2ba" expanded="true">
  <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter main_ensures_default.1" expl="1. Assertion in line 43">
-  <proof prover="1"><result status="valid" time="0.90"/></proof>
+  <proof prover="1"><result status="valid" time="0.56"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.2" expl="2. Assertion in line 44" expanded="true">
-  <proof prover="0"><result status="valid" time="9.18"/></proof>
+  <proof prover="0"><result status="valid" time="5.42"/></proof>
   <proof prover="1"><result status="valid" time="1.03"/></proof>
-  <proof prover="4" timelimit="54"><result status="valid" time="22.93"/></proof>
+  <proof prover="4" timelimit="54"><result status="valid" time="12.98"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.3" expl="3. Assertion in line 45" expanded="true">
   <proof prover="1"><result status="valid" time="0.55"/></proof>
@@ -29,7 +29,7 @@
   <proof prover="1" timelimit="46"><result status="timeout" time="45.85"/></proof>
   <proof prover="2"><result status="timeout" time="45.86"/></proof>
   <proof prover="3"><result status="timeout" time="45.72"/></proof>
-  <proof prover="4" memlimit="1000" edited="embed_first_substructs-Jessie_program-WP_parameter_main_ensures_default_2.why"><result status="timeout" time="45.82"/></proof>
+  <proof prover="4" memlimit="1000"><result status="timeout" time="45.77"/></proof>
   </goal>
  </transf>
  </goal>
@@ -46,22 +46,22 @@
   <proof prover="1"><result status="valid" time="0.28"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.4" expl="4. Pointer dereference (Assignment)">
-  <proof prover="1"><result status="valid" time="0.51"/></proof>
-  </goal>
-  <goal name="WP_parameter main_safety.5" expl="5. Pointer dereference (Assignment)">
-  <proof prover="1"><result status="valid" time="0.51"/></proof>
-  </goal>
-  <goal name="WP_parameter main_safety.6" expl="6. Pointer dereference (Assignment)">
   <proof prover="1"><result status="valid" time="0.24"/></proof>
   </goal>
-  <goal name="WP_parameter main_safety.7" expl="7. Pointer dereference (Assignment)">
-  <proof prover="1"><result status="valid" time="0.50"/></proof>
-  </goal>
-  <goal name="WP_parameter main_safety.8" expl="8. Pointer dereference (Valid bounded access. Correct type)">
+  <goal name="WP_parameter main_safety.5" expl="5. Pointer dereference (Assignment)">
   <proof prover="1"><result status="valid" time="0.28"/></proof>
   </goal>
-  <goal name="WP_parameter main_safety.9" expl="9. Pointer dereference (Assignment)">
+  <goal name="WP_parameter main_safety.6" expl="6. Pointer dereference (Assignment)">
+  <proof prover="1"><result status="valid" time="0.25"/></proof>
+  </goal>
+  <goal name="WP_parameter main_safety.7" expl="7. Pointer dereference (Assignment)">
   <proof prover="1"><result status="valid" time="0.34"/></proof>
+  </goal>
+  <goal name="WP_parameter main_safety.8" expl="8. Pointer dereference (Valid bounded access. Correct type)">
+  <proof prover="1"><result status="valid" time="0.29"/></proof>
+  </goal>
+  <goal name="WP_parameter main_safety.9" expl="9. Pointer dereference (Assignment)">
+  <proof prover="1"><result status="valid" time="0.27"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.10" expl="10. Pointer dereference (Assignment)">
   <proof prover="1"><result status="valid" time="0.35"/></proof>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="CVC3" version="2.4.1" timelimit="5" memlimit="1000"/>
+<prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
+<file name="../jc_local_allocation_ref_bug.mlw" expanded="true">
+<theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_program" sum="f30f3e97a7e47333a3de2764a54433a4" expanded="true">
+ <goal name="WP_parameter has_value_ensures_default" expl="Function has_value, default behavior" expanded="true">
+ <proof prover="0"><result status="timeout" time="4.97"/></proof>
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter has_value_ensures_default.1" expl="1. loop invariant init">
+  <proof prover="1"><result status="valid" time="0.15"/></proof>
+  </goal>
+  <goal name="WP_parameter has_value_ensures_default.2" expl="2. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="timeout" time="4.98"/></proof>
+  </goal>
+  <goal name="WP_parameter has_value_ensures_default.3" expl="3. loop invariant preservation">
+  <proof prover="1"><result status="valid" time="0.17"/></proof>
+  </goal>
+  <goal name="WP_parameter has_value_ensures_default.4" expl="4. Postcondition (Ensures clause)">
+  <proof prover="1"><result status="timeout" time="4.98"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter has_value_safety" expl="Function has_value, safety" expanded="true">
+ <proof prover="0"><result status="valid" time="0.92"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

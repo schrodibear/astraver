@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
+<file name="../jc_loop_assigns_positive.mlw" expanded="true">
+<theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_program" sum="8a95909c913c11fa71826e149c632c4a" expanded="true">
+ <goal name="WP_parameter strange_loop_ensures_default" expl="Function strange_loop, default behavior" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter strange_loop_ensures_default.1" expl="1. loop invariant init">
+  <proof prover="0"><result status="valid" time="0.16"/></proof>
+  </goal>
+  <goal name="WP_parameter strange_loop_ensures_default.2" expl="2.">
+  <proof prover="0"><result status="valid" time="0.14"/></proof>
+  </goal>
+  <goal name="WP_parameter strange_loop_ensures_default.3" expl="3. loop invariant preservation" expanded="true">
+  <transf name="split_goal_wp" expanded="true">
+   <goal name="WP_parameter strange_loop_ensures_default.3.1" expl="1.">
+   <proof prover="0"><result status="valid" time="0.28"/></proof>
+   </goal>
+   <goal name="WP_parameter strange_loop_ensures_default.3.2" expl="2.">
+   <proof prover="0"><result status="valid" time="0.12"/></proof>
+   </goal>
+   <goal name="WP_parameter strange_loop_ensures_default.3.3" expl="3.">
+   <proof prover="0"><result status="valid" time="0.12"/></proof>
+   </goal>
+   <goal name="WP_parameter strange_loop_ensures_default.3.4" expl="4. Assigns clause">
+   <proof prover="0"><result status="valid" time="0.23"/></proof>
+   </goal>
+   <goal name="WP_parameter strange_loop_ensures_default.3.5" expl="5. Assigns clause">
+   <proof prover="0"><result status="valid" time="0.17"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="WP_parameter strange_loop_ensures_default.4" expl="4. Postcondition">
+  <proof prover="0"><result status="valid" time="0.16"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter strange_loop_safety" expl="Function strange_loop, safety" expanded="true">
+ <proof prover="0"><result status="valid" time="0.13"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

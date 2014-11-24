@@ -6,7 +6,7 @@
 <file name="../free_in_parsec.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="1f5c604df8042dcd577e555ccc981d16" expanded="true">
+<theory name="Jessie_program" sum="05bc60589ab7b06a3e0560dce417e1a4" expanded="true">
  <goal name="WP_parameter pdpl_put_ensures_default" expl="Function pdpl_put, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter pdpl_put_ensures_default.1" expl="1. Postcondition">
@@ -47,37 +47,37 @@
   <proof prover="0"><result status="valid" time="0.22"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.3" expl="3. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.25"/></proof>
+  <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.26"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.4" expl="4. Pointer inequality">
   <proof prover="0"><result status="valid" time="0.18"/></proof>
   </goal>
-  <goal name="WP_parameter pdpl_put_safety.5" expl="5. Pointer dereference (Validity)" expanded="true">
+  <goal name="WP_parameter pdpl_put_safety.5" expl="5. Pointer dereference (Validity)">
   <proof prover="0"><result status="valid" time="0.25"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.6" expl="6. Deallocation">
   <proof prover="0"><result status="valid" time="0.28"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.7" expl="7. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.25"/></proof>
+  <proof prover="0"><result status="valid" time="0.24"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.8" expl="8. Pointer inequality">
   <proof prover="0"><result status="valid" time="0.18"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.9" expl="9. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.24"/></proof>
+  <proof prover="0"><result status="valid" time="0.25"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.10" expl="10. Deallocation">
   <proof prover="0"><result status="valid" time="0.26"/></proof>
   </goal>
-  <goal name="WP_parameter pdpl_put_safety.11" expl="11. Pointer dereference (Validity)">
+  <goal name="WP_parameter pdpl_put_safety.11" expl="11. Pointer dereference (Validity)" expanded="true">
   <proof prover="0"><result status="valid" time="0.25"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.12" expl="12. Pointer inequality">
   <proof prover="0"><result status="valid" time="0.18"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.13" expl="13. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.26"/></proof>
+  <proof prover="0"><result status="valid" time="0.27"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.14" expl="14. Deallocation">
   <proof prover="0"><result status="valid" time="0.25"/></proof>
@@ -89,13 +89,13 @@
   <proof prover="0"><result status="valid" time="0.25"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.17" expl="17. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.24"/></proof>
+  <proof prover="0"><result status="valid" time="0.25"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.18" expl="18. Pointer inequality">
   <proof prover="0"><result status="valid" time="0.19"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.19" expl="19. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.25"/></proof>
+  <proof prover="0"><result status="valid" time="0.24"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.20" expl="20. Deallocation">
   <proof prover="0"><result status="valid" time="0.26"/></proof>
@@ -107,25 +107,25 @@
   <proof prover="0"><result status="valid" time="0.25"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.23" expl="23. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.27"/></proof>
+  <proof prover="0"><result status="valid" time="0.26"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.24" expl="24. Pointer inequality">
   <proof prover="0"><result status="valid" time="0.18"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.25" expl="25. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.25"/></proof>
+  <proof prover="0"><result status="valid" time="0.26"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.26" expl="26. Deallocation">
   <proof prover="0"><result status="valid" time="0.25"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.27" expl="27. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.26"/></proof>
+  <proof prover="0"><result status="valid" time="0.25"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.28" expl="28. Pointer inequality">
   <proof prover="0"><result status="valid" time="0.19"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.29" expl="29. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.26"/></proof>
+  <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.26"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.30" expl="30. Deallocation">
   <proof prover="0"><result status="valid" time="0.25"/></proof>
@@ -137,13 +137,13 @@
   <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.17"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.33" expl="33. Pointer dereference (Validity)">
-  <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.26"/></proof>
+  <proof prover="0"><result status="valid" time="0.26"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.34" expl="34. Pointer inequality">
   <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.10"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.35" expl="35. Pointer dereference (Validity)">
-  <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.26"/></proof>
+  <proof prover="0"><result status="valid" time="0.25"/></proof>
   </goal>
   <goal name="WP_parameter pdpl_put_safety.36" expl="36. Deallocation">
   <proof prover="0" timelimit="5" memlimit="1000"><result status="valid" time="0.26"/></proof>

@@ -39,3 +39,10 @@ tests/bugs/dummy_region_unify.c
 tests/bugs/assigns_failure.c
 tests/bugs/jc_allocates_bug.c
 tests/bugs/jc_frees_bug.c
+tests/bugs/jc_loop_assigns_positive.c
+tests/bugs/jc_loop_assigns_negative.c
+tests/bugs/jc_loop_assigns_negative2.c
+tests/bugs/jc_assigns_local_region_negative.c
+tests/bugs/jc_assigns_local_region_positive.c
+tests/bugs/jc_statement_simple_contract_positive.c
+tests/bugs/jc_local_allocation_ref_bug.c

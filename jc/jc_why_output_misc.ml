@@ -406,7 +406,10 @@ let make_block labels l =
     but also to remove unneeded block
 
     The principle is to push e2 inside e1 such that every labels visible for
-    the last instruction (not a block) of e1 can be visible for e2 *)
+    the last instruction (not a block) of e1 can be visible for e2
+
+    This function should actually be called PREPEND (or CONS).
+*)
 let rec append' e1 e2 =
   match e1.expr_node, e2.expr_node with
   | Void, _ ->  [e2]

@@ -8,7 +8,7 @@
 <file name="../frama-c___builtin_types_compatible.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="404fc607ae9b638ea60839ea6c3c7d27" expanded="true">
+<theory name="Jessie_program" sum="7e77001d624bb8d553ade0f28343d06c" expanded="true">
  <goal name="WP_parameter copy_highpage_ensures_default" expl="Function copy_highpage, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter copy_highpage_ensures_default.1" expl="1. Assertion in line 24">

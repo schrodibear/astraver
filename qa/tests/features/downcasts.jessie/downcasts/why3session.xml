@@ -7,7 +7,19 @@
 <file name="../downcasts.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="5d60b3190b2e39eda18fb847ae03fdf1" expanded="true">
+<theory name="Jessie_program" sum="c6b706e190fa0a006e5337dbd0997459" expanded="true">
+ <goal name="WP_parameter acc_ensures_default" expl="Function acc, default behavior" expanded="true">
+ <proof prover="1"><result status="valid" time="0.05"/></proof>
+ </goal>
+ <goal name="WP_parameter acc_safety" expl="Function acc, safety">
+ <proof prover="1"><result status="timeout" time="4.98"/></proof>
+ </goal>
+ <goal name="WP_parameter acc2_ensures_default" expl="Function acc2, default behavior" expanded="true">
+ <proof prover="1"><result status="valid" time="0.05"/></proof>
+ </goal>
+ <goal name="WP_parameter acc2_safety" expl="Function acc2, safety" expanded="true">
+ <proof prover="1"><result status="timeout" time="5.00"/></proof>
+ </goal>
  <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter main_ensures_default.1" expl="1. Postcondition" expanded="true">
@@ -39,18 +51,6 @@
   <proof prover="0"><result status="valid" time="0.06"/></proof>
   </goal>
  </transf>
- </goal>
- <goal name="WP_parameter acc_ensures_default" expl="Function acc, default behavior" expanded="true">
- <proof prover="1"><result status="valid" time="0.05"/></proof>
- </goal>
- <goal name="WP_parameter acc_safety" expl="Function acc, safety">
- <proof prover="1"><result status="timeout" time="4.98"/></proof>
- </goal>
- <goal name="WP_parameter acc2_ensures_default" expl="Function acc2, default behavior" expanded="true">
- <proof prover="1"><result status="valid" time="0.05"/></proof>
- </goal>
- <goal name="WP_parameter acc2_safety" expl="Function acc2, safety" expanded="true">
- <proof prover="1"><result status="timeout" time="5.00"/></proof>
  </goal>
 </theory>
 </file>

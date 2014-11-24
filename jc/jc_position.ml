@@ -29,9 +29,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
-type t = string * int * int * int
+type t = (string * int * int * int) option
 
-let dummy_position = "", 1, 0, 0
+let dummy_position = None
 
 let dummy = dummy_position
 
@@ -40,27 +40,39 @@ let is_dummy = (=) dummy
 let of_pos ({ Lexing.pos_fname = f1; pos_lnum = l1; pos_bol = b1; pos_cnum = c1 },
             { Lexing.pos_fname = f2; pos_lnum = l2; pos_bol = b2; pos_cnum = c2 } as pos) =
   if f1 = f2 && l1 >= 1 && l2 >= 1 && l2 >= l1 && c1 - b1 >= 0 && c2 - b2 >= 0 && c2 >= c1 then
-    f1, l1, c1 - b1, c2 - c1 + 1
+    Some (f1, l1, c1 - b1, c2 - c1 + 1)
   else if pos = Lexing.(dummy_pos, dummy_pos) then dummy_position
   else invalid_arg "Jc_position.of_pos"
 
 let of_loc (f, l, b, e as loc) =
-  if e >= b then f, l, b, e - b + 1
+  if e >= b then Some (f, l, b, e - b + 1)
   else if loc = Loc.dummy_floc then dummy_position
   else invalid_arg "Jc_position.of_loc"
 
-let to_loc (f, l, b, n as pos) =
-  if pos <> dummy_position then f, l, b, b + n - 1
-  else Loc.dummy_floc
+let to_loc =
+  function
+  | Some (f, l, b, n) ->
+    f, l, b, b + n - 1
+  | None -> Loc.dummy_floc
 
-let file (f, _, _, _) = f
+let file =
+  function
+  | Some (f, _, _, _) -> Some f
+  | None -> None
 
-let line (_, l, _, _) = l
+let line =
+  function
+  | Some (_, l, _, _) -> Some l
+  | None -> None
 
-let compare (f1, l1, b1, n1) (f2, l2, b2, n2) =
-  let (||=) acc r = if acc <> 0 then acc else r
-  and (=?=) = compare in
-  f1 =?= f2 ||= l1 =?= l2 ||= b1 =?= b2 ||= n1 =?= n2
+let compare pos1 pos2 =
+  match pos1, pos2 with
+  | None, _ -> 1
+  | _, None -> -1
+  | Some (f1, l1, b1, n1), Some (f2, l2, b2, n2) ->
+    let (||) acc r = if acc <> 0 then acc else r
+    and (=?=) = compare in
+    f1 =?= f2 || l1 =?= l2 || b1 =?= b2 || n1 =?= n2
 
 let equal pos1 pos2 = compare pos1 pos2 = 0
 

@@ -267,7 +267,11 @@ let fprintf_vc_kind fmttr k =
      | JCVCassigns -> "Assigns clause"
      | JCVCallocates -> "Allocates clause"
      | JCVCensures -> "Ensures clause"
-     | JCVCassertion pos -> Printf.sprintf "Assertion in line %d" @@ Jc_position.line pos
+     | JCVCassertion pos ->
+       begin match Jc_position.line pos with
+       | Some l -> Printf.sprintf "Assertion in line %d" l
+       | None -> Printf.sprintf "Assertion"
+       end
      | JCVCcheck "" -> "Check"
      | JCVCcheck s -> String.capitalize s ^ " check"
      | JCVCpost -> "Postcondition"
@@ -478,6 +482,11 @@ let rec fprintf_expr_node ~locals in_app fmttr =
     if diverges then pr "diverges@ ";
     pr "%a@]" (fprintf_expr ~locals) body
   in
+  let pr_let id e1 e2 =
+    let locals = StringSet.add id locals in
+    let fprintf_expr = fprintf_expr ~locals in
+    pr "@[<hov 0>(let@ %s@ =@ %a@ in@ %a)@]" (why3_id id) fprintf_expr e1 fprintf_expr e2
+  in
   let fprintf_assertion = fprintf_assertion ~locals
   and fprintf_type = fprintf_type ~locals
   and fprintf_variant = fprintf_variant ~locals
@@ -513,7 +522,7 @@ let rec fprintf_expr_node ~locals in_app fmttr =
   | Block el -> pr "@[<hov 0>begin@ @[<hov 1>%a@]@ end@]" fprintf_expr_list el
   | Assign (id, e) -> pr "@[<hov 1>(%s@ :=@ %a)@]" (why3_id id) fprintf_expr e
   | Let (id, e1, e2) ->
-    pr "@[<hov 0>(let@ %s@ =@ %a@ in@ %a)@]" (why3_id id) fprintf_expr e1 fprintf_expr e2
+    pr_let id e1 e2
   | Let_ref (id, e1, e2) ->
     pr "@[<hov 0>(let@ %s@ =@ ref@ %a@ in@ %a)@]" (why3_id id) fprintf_expr e1 fprintf_expr e2
   | App ({ expr_node = App ({ expr_node = Var id }, e1, _) }, e2, _) when  is_why3_poly_eq id ->

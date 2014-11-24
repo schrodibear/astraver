@@ -6,24 +6,24 @@
 <file name="../alloc_free.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="227eb59789077f848bd4b90ebdf5dd16" expanded="true">
+<theory name="Jessie_program" sum="00de669175d8eb6f1fc2dec9e540f0f2" expanded="true">
  <goal name="WP_parameter pack_in_struct_ensures_default" expl="Function pack_in_struct, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="0.11"/></proof>
  </goal>
  <goal name="WP_parameter pack_in_struct_safety" expl="Function pack_in_struct, safety" expanded="true">
  <proof prover="0"><result status="valid" time="0.10"/></proof>
  </goal>
- <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
- <proof prover="0"><result status="valid" time="0.10"/></proof>
- </goal>
- <goal name="WP_parameter main_safety" expl="Function main, safety" expanded="true">
- <proof prover="0"><result status="valid" time="0.09"/></proof>
- </goal>
  <goal name="WP_parameter get_a_and_free_ensures_default" expl="Function get_a_and_free, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="0.09"/></proof>
  </goal>
  <goal name="WP_parameter get_a_and_free_safety" expl="Function get_a_and_free, safety" expanded="true">
  <proof prover="0"><result status="valid" time="0.08"/></proof>
+ </goal>
+ <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
+ <proof prover="0"><result status="valid" time="0.10"/></proof>
+ </goal>
+ <goal name="WP_parameter main_safety" expl="Function main, safety" expanded="true">
+ <proof prover="0"><result status="valid" time="0.09"/></proof>
  </goal>
 </theory>
 </file>

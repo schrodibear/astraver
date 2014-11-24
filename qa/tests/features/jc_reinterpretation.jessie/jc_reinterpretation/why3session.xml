@@ -7,7 +7,7 @@
 <file name="../jc_reinterpretation.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="ca0094682adf910dd2092b0d57aa37da" expanded="true">
+<theory name="Jessie_program" sum="9c598cefeebc370c2b7bdd47798c8d54" expanded="true">
  <goal name="WP_parameter f_ensures_default" expl="Function f, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter f_ensures_default.1" expl="1. Postcondition" expanded="true">
@@ -15,8 +15,8 @@
    <goal name="WP_parameter f_ensures_default.1.1" expl="1. Allocates clause" expanded="true">
    <transf name="inline_goal" expanded="true">
     <goal name="WP_parameter f_ensures_default.1.1.1" expl="1. Allocates clause" expanded="true">
-    <proof prover="0" timelimit="26"><result status="valid" time="3.20"/></proof>
-    <proof prover="1"><result status="valid" time="6.92"/></proof>
+    <proof prover="0" timelimit="26"><result status="valid" time="4.25"/></proof>
+    <proof prover="1"><result status="valid" time="8.00"/></proof>
     </goal>
    </transf>
    </goal>

@@ -513,6 +513,12 @@ axiom bw_or_plus:
   forall a: int. forall b: int [bw_or a b, bw_and a b, a + b].
     a >= 0 /\ b >= 0 /\ bw_and a b = 0 -> bw_or a b = a + b
 
+axiom bw_and_mod:
+  forall a, m: int [bw_and a m | mod a (m + 1)].
+    a >= 0 && m >= 0 ->
+      (exists k: int. m + 1 = pow2 k) ->
+        bw_and a m = mod a (m + 1)
+
 predicate bw_set (pos: int) (n: int)
 
 axiom bw_set:
