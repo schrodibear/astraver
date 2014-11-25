@@ -47,7 +47,7 @@ struct
   let jessie =
     Emitter.create
       "jessie"
-      [Emitter.Funspec; Emitter.Code_annot ]
+      [Emitter.Funspec; Emitter.Code_annot]
       ~correctness:[Jessie_options.Behavior.parameter; Jessie_options.Infer_annot.parameter]
       ~tuning:[]
 end
@@ -910,45 +910,50 @@ struct
   struct
     type t = predicate
 
-    let rec of_exp_exn e =
-      let pnode =
-        match (stripInfo e).enode with
-        | Info _ -> Console.fatal "Ast.Predicate.of_exp_exn: Info is unsupported: %a" Printer.pp_exp e
-        | Const c ->
-          begin match possible_value_of_integral_const c with
-          | Some i -> if Integer.equal i Integer.zero then Pfalse else Ptrue
-          | None -> Console.fatal "Ast.Predicate.of_exp_exn: couldn't handle the constant: %a" Printer.pp_exp e
-          end
-        | UnOp (LNot, e, _) -> Pnot (of_exp_exn e)
-        | BinOp (LAnd, e1, e2, _) ->
-          Pand (of_exp_exn e1, of_exp_exn e2)
-        | BinOp (LOr, e1, e2, _) ->
-          Por (of_exp_exn e1, of_exp_exn e2)
-        | BinOp (op, e1, e2, _) ->
-          let rel =
-            match op with
-            | Lt -> Rlt
-            | Gt -> Rgt
-            | Le -> Rle
-            | Ge -> Rge
-            | Eq -> Req
-            | Ne -> Rneq
-            | _ -> Console.fatal "Ast.Predicate.of_exp_exn: couldn't handle binop: %a" Printer.pp_binop op
-          in
-          Prel (rel, Term.of_exp e1, Term.of_exp e2)
-        | Lval _ | CastE _ | AddrOf _ | StartOf _ | UnOp _
-        | SizeOf _ | SizeOfE _ | SizeOfStr _ | AlignOf _ | AlignOfE _ ->
-        Console.fatal "Ast.Predicate.of_exp_exn: non-predicate expression: %a" Printer.pp_exp e
-      in
-      { name = []; loc = e.eloc; content = pnode }
+    module Named =
+    struct
+      type t = predicate named
+
+      let rec of_exp_exn e =
+        let pnode =
+          match (stripInfo e).enode with
+          | Info _ -> Console.fatal "Ast.Predicate.of_exp_exn: Info is unsupported: %a" Printer.pp_exp e
+          | Const c ->
+            begin match possible_value_of_integral_const c with
+            | Some i -> if Integer.equal i Integer.zero then Pfalse else Ptrue
+            | None -> Console.fatal "Ast.Predicate.of_exp_exn: couldn't handle the constant: %a" Printer.pp_exp e
+            end
+          | UnOp (LNot, e, _) -> Pnot (of_exp_exn e)
+          | BinOp (LAnd, e1, e2, _) ->
+            Pand (of_exp_exn e1, of_exp_exn e2)
+          | BinOp (LOr, e1, e2, _) ->
+            Por (of_exp_exn e1, of_exp_exn e2)
+          | BinOp (op, e1, e2, _) ->
+            let rel =
+              match op with
+              | Lt -> Rlt
+              | Gt -> Rgt
+              | Le -> Rle
+              | Ge -> Rge
+              | Eq -> Req
+              | Ne -> Rneq
+              | _ -> Console.fatal "Ast.Predicate.of_exp_exn: couldn't handle binop: %a" Printer.pp_binop op
+            in
+            Prel (rel, Term.of_exp e1, Term.of_exp e2)
+          | Lval _ | CastE _ | AddrOf _ | StartOf _ | UnOp _
+          | SizeOf _ | SizeOfE _ | SizeOfStr _ | AlignOf _ | AlignOfE _ ->
+            Console.fatal "Ast.Predicate.of_exp_exn: non-predicate expression: %a" Printer.pp_exp e
+        in
+        { name = []; loc = e.eloc; content = pnode }
+    end
   end
 
-  module Code_annot =
+  module Code_annotation =
   struct
-    type t = (term, predicate named, identified_predicate, identified_term) code_annot
+    type t = code_annotation
 
     let of_exp_exn e =
-      Logic_const.new_code_annotation (AAssert ([], Predicate.of_exp_exn e))
+      Logic_const.new_code_annotation (AAssert ([], Predicate.Named.of_exp_exn e))
   end
 
   module Offset =
@@ -1060,6 +1065,19 @@ struct
 
   module Logic_c_type =
   struct
+    type t = logic_type
+
+    let of_logic_type =
+      function
+      | Ctype _
+      | Ltype ({ lt_name = "set" }, [_]) as ty -> Some ty
+      | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ -> None
+
+    let of_logic_type_exn t =
+      of_logic_type t |>
+      function
+      | Some ty -> ty
+      | None -> Console.fatal "Logic_c_type.of_logic_type_exn: not a logic c type: %a" Printer.pp_logic_type t
 
     let rec map_default ~default f =
       function
@@ -1186,7 +1204,13 @@ struct
 
         type t = compinfo
 
-      (* Wrappers on [mkCompInfo] that update size/offset of fields *)
+        let of_ci ci = if ci.cstruct then Some ci else None
+
+        let of_ci_exn ci =
+          if ci.cstruct then ci
+          else Console.fatal "Ci.Struct.of_ci_exn: not a struct compinfo: %s" (compFullName ci)
+
+        (* Wrappers on [mkCompInfo] that update size/offset of fields *)
 
         let empty stname =
           mkCompInfo true stname (fun _ -> []) []

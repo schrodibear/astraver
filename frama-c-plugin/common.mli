@@ -1,5 +1,7 @@
+open Cil
 open Cil_types
 open Cil_datatype
+open Visitor
 
 open Format
 
@@ -34,8 +36,7 @@ sig
   include module type of String
   val explode : t -> char list
   val implode : char list -> t
-  val filter_alphanumeric :
-    assoc:(char * char) list -> default:char -> t -> t
+  val filter_alphanumeric : assoc:(char * char) list -> default:char -> t -> t
 end
 
 module Tuple :
@@ -125,10 +126,10 @@ module Framac :
 sig
   module Ast = Ast
   module Type = Type
-  module Vi = Cil_datatype.Varinfo
+  module Vi = Varinfo
 end
 
-val mkStmt : ?ghost:bool -> Cil_types.stmtkind -> Cil_types.stmt
+val mkStmt : ?ghost:bool -> stmtkind -> stmt
 
 module Name :
 sig
@@ -209,7 +210,7 @@ module Ast :
 sig
   module Named :
   sig
-    type 'a t = 'a Cil_types.named
+    type 'a t = 'a named
     val mk : ?name:string list -> loc:Location.t -> 'a -> 'a t
   end
 
@@ -224,14 +225,14 @@ sig
   sig
     type var
     type func
-    type 'a t = private Cil_types.varinfo
+    type 'a t = private varinfo
 
     module Function :
     sig
       type t = var Vi.t
 
-      val of_varinfo : Cil_types.varinfo -> t option
-      val of_varinfo_exn : Cil_types.varinfo -> t
+      val of_varinfo : varinfo -> t option
+      val of_varinfo_exn : varinfo -> t
 
       val is_assert : t -> bool
       val is_free : t -> bool
@@ -248,76 +249,75 @@ sig
     module Variable :
     sig
       type t = func Vi.t
-      val of_varinfo : Cil_types.varinfo -> t option
-      val of_varinfo_exn : Cil_types.varinfo -> t
+      val of_varinfo : varinfo -> t option
+      val of_varinfo_exn : varinfo -> t
     end
   end
 
   module Term :
   sig
-    type t = Cil_types.term
+    type t = term
     val is_base_addr : t -> bool
-    val mk :
-      ?name:string list ->
-      typ:Cil_types.logic_type ->
-      loc:Lexing.position * Lexing.position -> Cil_types.term_node -> t
-    val of_var : Cil_types.varinfo -> t
-    val typ_of_logic_c_type : Cil_types.logic_type -> Cil_types.typ
+    val mk : ?name:string list -> typ:logic_type -> loc:Lexing.position * Lexing.position -> term_node -> t
+    val of_var : varinfo -> t
+    val typ_of_logic_c_type : logic_type -> typ
+
     module Env :
     sig
       type t
     end
 
     val to_exp_env : t -> Exp.t * Env.t
-    val lval_to_lval_env : Cil_types.term_lval -> Cil_types.lval * Env.t
-    val lhost_to_lhost_env : Cil_types.term_lhost -> Cil_types.lhost * Env.t
-    val offset_to_offset_env : Cil_types.term_offset -> Cil_types.offset * Env.t
+    val lval_to_lval_env : term_lval -> lval * Env.t
+    val lhost_to_lhost_env : term_lhost -> lhost * Env.t
+    val offset_to_offset_env : term_offset -> offset * Env.t
     val of_exp_env : Exp.t * Env.t -> t
-    val offset_of_offset_env : Cil_types.offset * Env.t -> Cil_types.term_offset
-    val lhost_of_lhost_env : Cil_types.lhost * Env.t -> Cil_types.term_lhost
-    val lval_of_lval_env : Cil_types.lval * Env.t -> Cil_types.term_lval
+    val offset_of_offset_env : offset * Env.t -> term_offset
+    val lhost_of_lhost_env : lhost * Env.t -> term_lhost
+    val lval_of_lval_env : lval * Env.t -> term_lval
     val of_exp : Exp.t -> t
-    val offset_of_offset : Cil_types.offset -> Cil_types.term_offset
-    val lhost_of_lhost : Cil_types.lhost -> Cil_types.term_lhost
-    val lval_of_lval : Cil_types.lval -> Cil_types.term_lval
+    val offset_of_offset : offset -> term_offset
+    val lhost_of_lhost : lhost -> term_lhost
+    val lval_of_lval : lval -> term_lval
   end
 
   module Predicate :
   sig
-    type t = Cil_types.predicate
-    val of_exp_exn : Exp.t -> t Named.t
+    type t = predicate
+    module Named :
+    sig
+      type t = predicate named
+      val of_exp_exn : Exp.t -> t
+    end
   end
 
-  module Code_annot :
+  module Code_annotation :
   sig
-    type t =
-      (Term.t, Predicate.t Named.t, Cil_types.identified_predicate,
-       Cil_types.identified_term)
-        Cil_types.code_annot
-    val of_exp_exn : Exp.t -> Cil_types.code_annotation
+    type t = code_annotation
+    val of_exp_exn : Exp.t -> code_annotation
   end
 
   module Offset :
   sig
-    type t = Cil_types.offset
+    type t = offset
     val is_last : t -> bool
-    val flatten : typ:Cil_types.typ -> t -> t
+    val flatten : typ:typ -> t -> t
   end
 
   module Instr :
   sig
-    type t = Cil_types.instr
-    val alloc_singleton : lvar:Cil_types.varinfo -> typ:Cil_types.typ -> loc:Location.t -> t
-    val alloc_array : lvar:Cil_types.varinfo -> typ:Cil_types.typ -> size:int64 -> loc:Location.t -> t
-    val free : loc:Location.t -> Cil_types.varinfo -> t
+    type t = instr
+    val alloc_singleton : lvar:varinfo -> typ:typ -> loc:Location.t -> t
+    val alloc_array : lvar:varinfo -> typ:typ -> size:int64 -> loc:Location.t -> t
+    val free : loc:Location.t -> varinfo -> t
   end
 
   module Stmt :
   sig
-    type t = Cil_types.stmt
-    val alloc_singleton : lvar:Cil_types.varinfo -> typ:Cil_types.typ -> loc:Location.t -> t
-    val alloc_array : lvar:Cil_types.varinfo -> typ:Cil_types.typ -> size:int64 -> loc:Location.t -> t
-    val free : loc:Location.t -> Cil_types.varinfo -> t
+    type t = stmt
+    val alloc_singleton : lvar:varinfo -> typ:typ -> loc:Location.t -> t
+    val alloc_array : lvar:varinfo -> typ:typ -> size:int64 -> loc:Location.t -> t
+    val free : loc:Location.t -> varinfo -> t
   end
 end
 
@@ -326,37 +326,39 @@ sig
   type composite
   type integral
   type ref
-  type 'a t = private Cil_types.typ
+  type 'a t = private typ
 
-  val almost_integer_type : Cil_types.typ
-  val struct_type_for_void : Cil_types.typ
+  val almost_integer_type : typ
+  val struct_type_for_void : typ
     module Logic_c_type :
     sig
-      val map_default :
-        default:'a -> (Cil_types.typ -> 'a) -> Cil_types.logic_type -> 'a
-      val map : (Cil_types.typ -> 'a) -> Cil_types.logic_type -> 'a
+      type t = private logic_type
+      val of_logic_type : logic_type -> t option
+      val of_logic_type_exn : logic_type -> t
+      val map_default : default:'a -> (typ -> 'a) -> logic_type -> 'a
+      val map : (typ -> 'a) -> t -> 'a
     end
 
     module Ref :
     sig
       type t = ref Type.t
-      val singleton : msg:'a -> Cil_types.typ -> t
-      val array : Cil_types.typ * Cil_types.exp * Cil_types.attributes -> t
+      val singleton : msg:'a -> typ -> t
+      val array : typ * exp * attributes -> t
       val size : t -> int64
-      val is_ref : Cil_types.typ -> bool
-      val is_array_ref : Cil_types.typ -> bool
-      val of_array_exn : Cil_types.typ -> t
+      val is_ref : typ -> bool
+      val is_array_ref : typ -> bool
+      val of_array_exn : typ -> t
     end
 
     module rec Composite :
     sig
       type t = composite Type.t
 
-      val of_typ : Cil_types.typ -> t option
-      val of_typ_exn : Cil_types.typ -> t
-      val unique_field_exn : t -> Cil_types.fieldinfo
+      val of_typ : typ -> t option
+      val of_typ_exn : typ -> t
+      val unique_field_exn : t -> fieldinfo
       val compinfo_cname : t -> string
-      val compinfo : t -> Cil_types.compinfo
+      val compinfo : t -> compinfo
 
       module Ci :
       sig
@@ -364,33 +366,35 @@ sig
 
         module Struct :
         sig
-          type t = compinfo
+          type t = private compinfo
 
-          val empty : string -> Cil_types.compinfo
-          val singleton : ?padding:int -> string -> string -> Cil_types.typ -> Cil_types.compinfo
+          val of_ci : compinfo -> t option
+          val of_ci_exn : compinfo -> t
+          val empty : string -> t
+          val singleton : ?padding:int -> string -> string -> typ -> t
         end
 
-        val size : Cil_types.compinfo -> int option
-        val padding_field : ?fsize_in_bits:int -> Cil_types.compinfo -> Cil_types.fieldinfo
-        val fix_size : ?original_size:int -> Cil_types.compinfo -> unit
-        val proper_fields : Cil_types.compinfo -> Cil_types.fieldinfo list
+        val size : compinfo -> int option
+        val padding_field : ?fsize_in_bits:int -> compinfo -> fieldinfo
+        val fix_size : ?original_size:int -> compinfo -> unit
+        val proper_fields : compinfo -> fieldinfo list
       end
     end
 
-    val promote_argument_type : Cil_types.typ -> Cil_types.typ
-    val size_in_bits_exn : Cil_types.typ -> int64
+    val promote_argument_type : typ -> typ
+    val size_in_bits_exn : typ -> int64
 
     module Integral :
     sig
       type t = integral Type.t
 
-      val of_typ : Cil_types.typ -> t option
-      val of_typ_exn : Cil_types.typ -> t
+      val of_typ : typ -> t option
+      val of_typ_exn : typ -> t
 
       module IKind :
       sig
         type t = ikind
-        val size_in_bytes : Cil_types.ikind -> int
+        val size_in_bytes : ikind -> int
       end
 
       val size_in_bytes : t -> int
@@ -411,40 +415,40 @@ end
 
 module Do :
 sig
-  val retaining_size_of_composite : Cil_types.compinfo -> (Cil_types.compinfo -> 'a) -> 'a
+  val retaining_size_of_composite : compinfo -> (compinfo -> 'a) -> 'a
 
   type 'a attach = 'a
     constraint 'a =
       < globaction : (unit -> unit) -> unit;
-      global : Cil_types.global -> unit; .. >
+        global : global -> unit; .. >
 
-  type attaching_action = { perform : 'a. attach:'a attach -> Cil_types.file -> unit }
+  type attaching_action = { perform : 'a. attach:'a attach -> file -> unit }
 
-  val attaching_globs : attaching_action -> Cil_types.file -> unit
+  val attaching_globs : attaching_action -> file -> unit
 
   val on_term_offset :
-    ?pre:(Cil_types.offset -> Cil_types.offset) ->
-    ?post:(Cil_types.offset -> Cil_types.offset) ->
-    Cil_types.term_offset -> Cil_types.term_offset Cil.visitAction
+    ?pre:(offset -> offset) ->
+    ?post:(offset -> offset) ->
+    term_offset -> term_offset visitAction
 
   val on_term_lval :
-    ?pre:(Cil_types.lval -> Cil_types.lval) ->
-    ?post:(Cil_types.lval -> Cil_types.lval) ->
-    Cil_types.term_lval -> Cil_types.term_lval Cil.visitAction
+    ?pre:(lval -> lval) ->
+    ?post:(lval -> lval) ->
+    term_lval -> term_lval visitAction
 
   val on_term :
-    ?pre:(Cil_types.exp -> Cil_types.exp) ->
-    ?post:(Cil_types.exp -> Cil_types.exp) ->
-    Cil_types.term -> Cil_types.term Cil.visitAction
+    ?pre:(exp -> exp) ->
+    ?post:(exp -> exp) ->
+    term -> term visitAction
 end
 
 module Visit :
 sig
   type insert
 
-  val prepending : Cil_types.stmt list -> insert
-  val appending : Cil_types.stmt list -> insert
-  val inserting : before:Cil_types.stmt list -> after:Cil_types.stmt list -> insert
+  val prepending : stmt list -> insert
+  val appending : stmt list -> insert
+  val inserting : before:stmt list -> after:stmt list -> insert
 
   val inserting_nothing : insert
 
@@ -463,7 +467,7 @@ sig
 
   type ('a, 'result, 'visit_action) context =
     | Local : ('a, 'a * insert, 'a Local.visit_action) context
-    | Global : ('a, 'a, 'a Cil.visitAction) context
+    | Global : ('a, 'a, 'a visitAction) context
 
   module Fundec :
   sig
@@ -478,154 +482,109 @@ sig
       | ChangeDoChildrenPost of 'a * ('a -> 'a * insert)
   end
 
-  val wrap : ('a, 'b, 'c) context -> 'a Cil.visitAction -> 'c
+  val wrap : ('a, 'b, 'c) context -> 'a visitAction -> 'c
 
   type ('a, 'r, 'v) visitor_method = ('a, 'r, 'v) context -> 'a -> 'v
 
   class frama_c_inplace_inserting :
     object
-      val super : Visitor.frama_c_inplace
-      method behavior : Cil.visitor_behavior
-      method current_func : Cil_types.fundec option
-      method current_kf : Cil_types.kernel_function option
-      method current_kinstr : Cil_types.kinstr
-      method current_stmt : Cil_types.stmt option
+      val super : frama_c_inplace
+      method behavior : visitor_behavior
+      method current_func : fundec option
+      method current_kf : kernel_function option
+      method current_kinstr : kinstr
+      method current_stmt : stmt option
       method fill_global_tables : unit
-      method frama_c_plain_copy : Visitor.frama_c_visitor
+      method frama_c_plain_copy : frama_c_visitor
       method get_filling_actions : (unit -> unit) Queue.t
-      method plain_copy_visitor : Cil.cilVisitor
-      method pop_stmt : Cil_types.stmt -> unit
+      method plain_copy_visitor : cilVisitor
+      method pop_stmt : stmt -> unit
       method project : Project_skeleton.t option
-      method push_stmt : Cil_types.stmt -> unit
-      method queueInstr : Cil_types.instr list -> unit
+      method push_stmt : stmt -> unit
+      method queueInstr : instr list -> unit
       method reset_current_func : unit -> unit
       method reset_current_kf : unit -> unit
-      method set_current_func : Cil_types.fundec -> unit
-      method set_current_kf : Cil_types.kernel_function -> unit
-      method unqueueInstr : unit -> Cil_types.instr list
-      method vallocates :
-          (Cil_types.identified_term list, 'a, 'b) visitor_method
-      method vallocation :
-        (Cil_types.identified_term Cil_types.allocation, 'a, 'b)
-          visitor_method
-      method vannotation :
-        Cil_types.global_annotation ->
-        Cil_types.global_annotation Cil.visitAction
-      method vassigns :
-        (Cil_types.identified_term Cil_types.assigns, 'a, 'b)
-          visitor_method
-      method vattr :
-        (Cil_types.attribute list, 'a, 'b) context ->
-        Cil_types.attribute list -> 'b
-      method vattrparam : (Cil_types.attrparam, 'a, 'b) visitor_method
-      method vbehavior : (Cil_types.funbehavior, 'a, 'b) visitor_method
-      method vblock : Cil_types.block -> Cil_types.block Local.visit_action
-      method vcode_annot :
-          Cil_types.code_annotation ->
-          Cil_types.code_annotation Local.visit_action
-      method vcompinfo :
-        Cil_types.compinfo -> Cil_types.compinfo Cil.visitAction
-      method vdeps :
-        (Cil_types.identified_term Cil_types.deps, 'a, 'b) visitor_method
-      method venuminfo :
-        Cil_types.enuminfo -> Cil_types.enuminfo Cil.visitAction
-      method venumitem :
-        Cil_types.enumitem -> Cil_types.enumitem Cil.visitAction
-      method vexpr : (Cil_types.exp, 'a, 'b) visitor_method
-      method vfieldinfo :
-        Cil_types.fieldinfo -> Cil_types.fieldinfo Cil.visitAction
-      method vfile : Cil_types.file -> Cil_types.file Cil.visitAction
-      method vfrees :
-        (Cil_types.identified_term list, 'a, 'b) visitor_method
-      method vfrom :
-        (Cil_types.identified_term Cil_types.from, 'a, 'b) visitor_method
-      method vfunc :
-        Cil_types.fundec -> Cil_types.fundec Fundec.visit_action
-      method vglob :
-        Cil_types.global -> Cil_types.global list Cil.visitAction
-      method vglob_aux :
-        Cil_types.global -> Cil_types.global list Cil.visitAction
-      method videntified_predicate :
-        (Cil_types.identified_predicate, 'a, 'b) visitor_method
-      method videntified_term :
-        (Cil_types.identified_term, 'a, 'b) visitor_method
-      method vimpact_pragma :
-        (Cil_types.term Cil_types.impact_pragma, 'a, 'b) visitor_method
-      method vinit :
-        (Cil_types.init, 'a, 'b) context ->
-        Cil_types.varinfo -> Cil_types.offset -> Cil_types.init -> 'b
-      method vinitoffs : (Cil_types.offset, 'a, 'b) visitor_method
-      method vinst :
-        Cil_types.instr -> Cil_types.instr list Local.visit_action
-      method vjessie_pragma :
-        Cil_types.term Cil_types.jessie_pragma ->
-        Cil_types.term Cil_types.jessie_pragma Local.visit_action
-      method vlogic_ctor_info_decl :
-        Cil_types.logic_ctor_info ->
-        Cil_types.logic_ctor_info Cil.visitAction
-      method vlogic_ctor_info_use :
-        (Cil_types.logic_ctor_info, 'a, 'b) visitor_method
-      method vlogic_info_decl :
-        Cil_types.logic_info -> Cil_types.logic_info Cil.visitAction
-      method vlogic_info_use :
-        (Cil_types.logic_info, 'a, 'b) visitor_method
-      method vlogic_label : (Cil_types.logic_label, 'a, 'b) visitor_method
-      method vlogic_type : (Cil_types.logic_type, 'a, 'b) visitor_method
-      method vlogic_type_def :
-        Cil_types.logic_type_def ->
-        Cil_types.logic_type_def Cil.visitAction
-      method vlogic_type_info_decl :
-        Cil_types.logic_type_info ->
-        Cil_types.logic_type_info Cil.visitAction
-      method vlogic_type_info_use :
-        (Cil_types.logic_type_info, 'a, 'b) visitor_method
-      method vlogic_var_decl : (Cil_types.logic_var, 'a, 'b) visitor_method
-      method vlogic_var_use : (Cil_types.logic_var, 'a, 'b) visitor_method
-      method vloop_pragma :
-        Cil_types.term Cil_types.loop_pragma ->
-        Cil_types.term Cil_types.loop_pragma Local.visit_action
-      method vlval : (Cil_types.lval, 'a, 'b) visitor_method
-      method vmodel_info :
-        Cil_types.model_info -> Cil_types.model_info Cil.visitAction
-      method voffs : (Cil_types.offset, 'a, 'b) visitor_method
-      method vpredicate : (Cil_types.predicate, 'a, 'b) visitor_method
-      method vpredicate_named :
-        (Cil_types.predicate Cil_types.named, 'a, 'b) visitor_method
-      method vquantifiers : (Cil_types.quantifiers, 'a, 'b) visitor_method
-      method vslice_pragma :
-        (Cil_types.term Cil_types.slice_pragma, 'a, 'b) visitor_method
-      method vspec : (Cil_types.funspec, 'a, 'b) visitor_method
-      method vstmt : Cil_types.stmt -> Cil_types.stmt Local.visit_action
-      method vstmt_aux :
-        Cil_types.stmt -> Cil_types.stmt Local.visit_action
-      method vterm : (Cil_types.term, 'a, 'b) visitor_method
-      method vterm_lhost : (Cil_types.term_lhost, 'a, 'b) visitor_method
-      method vterm_lval : (Cil_types.term_lval, 'a, 'b) visitor_method
-      method vterm_node : (Cil_types.term_node, 'a, 'b) visitor_method
-      method vterm_offset : (Cil_types.term_offset, 'a, 'b) visitor_method
-      method vtype : (Cil_types.typ, 'a, 'b) visitor_method
-      method vvdec : (Cil_types.varinfo, 'a, 'b) visitor_method
-      method vvrbl : (Cil_types.varinfo, 'a, 'b) visitor_method
+      method set_current_func : fundec -> unit
+      method set_current_kf : kernel_function -> unit
+      method unqueueInstr : unit -> instr list
+      method vallocates : (identified_term list, 'a, 'b) visitor_method
+      method vallocation : (identified_term allocation, 'a, 'b) visitor_method
+      method vannotation :  global_annotation -> global_annotation visitAction
+      method vassigns : (identified_term assigns, 'a, 'b) visitor_method
+      method vattr : (attribute list, 'a, 'b) context -> attribute list -> 'b
+      method vattrparam : (attrparam, 'a, 'b) visitor_method
+      method vbehavior : (funbehavior, 'a, 'b) visitor_method
+      method vblock : block -> block Local.visit_action
+      method vcode_annot : code_annotation -> code_annotation Local.visit_action
+      method vcompinfo : compinfo -> compinfo visitAction
+      method vdeps : (identified_term deps, 'a, 'b) visitor_method
+      method venuminfo : enuminfo -> enuminfo visitAction
+      method venumitem : enumitem -> enumitem visitAction
+      method vexpr : (exp, 'a, 'b) visitor_method
+      method vfieldinfo : fieldinfo -> fieldinfo visitAction
+      method vfile : file -> file visitAction
+      method vfrees : (identified_term list, 'a, 'b) visitor_method
+      method vfrom : (identified_term from, 'a, 'b) visitor_method
+      method vfunc : fundec -> fundec Fundec.visit_action
+      method vglob : global -> global list visitAction
+      method vglob_aux : global -> global list Cil.visitAction
+      method videntified_predicate : (identified_predicate, 'a, 'b) visitor_method
+      method videntified_term : (identified_term, 'a, 'b) visitor_method
+      method vimpact_pragma : (term impact_pragma, 'a, 'b) visitor_method
+      method vinit : (init, 'a, 'b) context -> varinfo -> offset -> init -> 'b
+      method vinitoffs : (offset, 'a, 'b) visitor_method
+      method vinst : instr -> instr list Local.visit_action
+      method vjessie_pragma : term jessie_pragma -> term jessie_pragma Local.visit_action
+      method vlogic_ctor_info_decl : logic_ctor_info -> logic_ctor_info visitAction
+      method vlogic_ctor_info_use : (logic_ctor_info, 'a, 'b) visitor_method
+      method vlogic_info_decl : logic_info -> logic_info visitAction
+      method vlogic_info_use : (logic_info, 'a, 'b) visitor_method
+      method vlogic_label : (logic_label, 'a, 'b) visitor_method
+      method vlogic_type : (logic_type, 'a, 'b) visitor_method
+      method vlogic_type_def : logic_type_def -> logic_type_def visitAction
+      method vlogic_type_info_decl : logic_type_info -> logic_type_info visitAction
+      method vlogic_type_info_use : (logic_type_info, 'a, 'b) visitor_method
+      method vlogic_var_decl : (logic_var, 'a, 'b) visitor_method
+      method vlogic_var_use : (logic_var, 'a, 'b) visitor_method
+      method vloop_pragma : term loop_pragma -> term loop_pragma Local.visit_action
+      method vlval : (lval, 'a, 'b) visitor_method
+      method vmodel_info : model_info -> model_info visitAction
+      method voffs : (offset, 'a, 'b) visitor_method
+      method vpredicate : (predicate, 'a, 'b) visitor_method
+      method vpredicate_named : (predicate named, 'a, 'b) visitor_method
+      method vquantifiers : (quantifiers, 'a, 'b) visitor_method
+      method vslice_pragma : (term slice_pragma, 'a, 'b) visitor_method
+      method vspec : (funspec, 'a, 'b) visitor_method
+      method vstmt : stmt -> stmt Local.visit_action
+      method vstmt_aux : stmt -> stmt Local.visit_action
+      method vterm : (term, 'a, 'b) visitor_method
+      method vterm_lhost : (term_lhost, 'a, 'b) visitor_method
+      method vterm_lval : (term_lval, 'a, 'b) visitor_method
+      method vterm_node : (term_node, 'a, 'b) visitor_method
+      method vterm_offset : (term_offset, 'a, 'b) visitor_method
+      method vtype : (typ, 'a, 'b) visitor_method
+      method vvdec : (varinfo, 'a, 'b) visitor_method
+      method vvrbl : (varinfo, 'a, 'b) visitor_method
     end
 
-  class proxy_frama_c_visitor : #frama_c_inplace_inserting -> Visitor.frama_c_visitor
+  class proxy_frama_c_visitor : #frama_c_inplace_inserting -> frama_c_visitor
 
-  type attaching_visitor = {  mk : 'a. attach:'a Do.attach -> Visitor.frama_c_visitor }
+  type attaching_visitor = {  mk : 'a. attach:'a Do.attach -> frama_c_visitor }
 
-  val attaching_globs : attaching_visitor -> Cil_types.file -> unit
+  val attaching_globs : attaching_visitor -> file -> unit
 
   val inserting_statements : #frama_c_inplace_inserting -> file -> unit
 
   type 'a signal = 'a constraint 'a = < change : unit; .. >
 
-  type fixpoint_visitor = { mk : 'a. signal:'a signal -> Visitor.frama_c_visitor }
+  type fixpoint_visitor = { mk : 'a. signal:'a signal -> frama_c_visitor }
 
-  val until_convergence : fixpoint_visitor -> Cil_types.file -> unit
+  val until_convergence : fixpoint_visitor -> file -> unit
 end
 
 module Debug :
 sig
-  val check_exp_types : Cil_types.file -> unit
+  val check_exp_types : file -> unit
 end
 
 module Trie :
