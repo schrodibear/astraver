@@ -158,18 +158,18 @@ let location comp result_region =
 
 let single_expr code_comp logic_comp result_region e =
   match e#node with
-  | JCEbinary(e1,_,e2) | JCEif(_,e1,e2) ->
+  | JCEbinary (e1, _, e2) | JCEif(_, e1, e2) ->
     Region.unify e1#region e2#region
-  | JCEmatch(_, (_, e1) :: rem) ->
+  | JCEmatch (_, (_, e1) :: rem) ->
     List.iter (fun (_, e2) -> Region.unify e1#region e2#region) rem
-  | JCEmatch(_, []) -> ()
-  | JCElet(vi, Some e, _)
+  | JCEmatch (_, []) -> ()
+  | JCElet (vi, Some e, _)
   | JCEassign_var (vi, e) ->
     Region.unify vi.vi_region e#region
   | JCEassign_heap (e1, fi, e2) ->
     let fr = Region.make_field e1#region fi in
     Region.unify fr e2#region
-  | JCEthrow(exi, _) ->
+  | JCEthrow (exi, _) ->
     begin match exi.exi_type with
     | Some ty when is_pointer_type ty ->
       Jc_options.jc_error
@@ -197,9 +197,9 @@ let single_expr code_comp logic_comp result_region e =
     List.iter2 Region.unify param_regions arg_regions;
     if e#typ <> unit_type then Region.unify result_region e#region
     (* Otherwise, the result of the call is discarded *)
-  | JCEreturn(_ty, e) ->
+  | JCEreturn (_ty, e) ->
     Region.unify result_region e#region
-  | JCEassert(_behav, _asrt, a) ->
+  | JCEassert (_behav, _asrt, a) ->
     assertion logic_comp result_region a
   | JCEcontract (req, None, _vi_result, _behs, _e) ->
     (* TODO: decreases, behaviors, etc. *)
