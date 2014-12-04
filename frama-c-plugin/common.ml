@@ -57,6 +57,7 @@ exception Unsupported of string
 module Console =
 struct
   let fatal fmt = Jessie_options.fatal ~current:true fmt
+  let error fmt = Jessie_options.error ~current:true fmt
   let unsupported fmt =
     Jessie_options.with_failure
       (fun evt ->
@@ -78,6 +79,32 @@ end
 module List =
 struct
   include List
+
+  type 'a t = 'a list
+
+  let rev_filter_map l ~f =
+    let rec loop l accum =
+      match l with
+      | [] -> accum
+      | hd :: tl ->
+        match f hd with
+        | Some x -> loop tl (x :: accum)
+        | None   -> loop tl accum
+    in
+    loop l []
+
+  let filter_map l ~f = List.rev (rev_filter_map l ~f)
+
+  let find_map t ~f =
+    let rec loop =
+      function
+      | [] -> None
+      | x :: l ->
+        match f x with
+        | None -> loop l
+        | Some _ as r -> r
+    in
+    loop t
 
   let rec drop n lst =
     if n <= 0 then lst
@@ -148,10 +175,10 @@ struct
   struct
     type ('a, 'b) t = 'a * 'b
 
-    let fdup2 f g x = f x, g x
-    let map1 f (a, b) = f a, b
-    let map2 f (a, b) = a, f b
-    let map f (a, b) = f a, f b
+    let fdup2 ~f ~g x = f x, g x
+    let map1 ~f (a, b) = f a, b
+    let map2 ~f (a, b) = a, f b
+    let map ~f (a, b) = f a, f b
     let swap (a, b) = b, a
   end
 end
@@ -173,10 +200,10 @@ let (%) = Fn.compose
 
 let (%>) = Fn.pipe_compose
 
-let fdup2 = Pair.fdup2
-let map_fst = Pair.map1
-let map_snd = Pair.map2
-let map_pair = Pair.map
+let fdup2 f g = Pair.fdup2 ~f ~g
+let map_fst f = Pair.map1 ~f
+let map_snd f = Pair.map2 ~f
+let map_pair f = Pair.map ~f
 let swap = Pair.swap
 
 module Monad_def =
@@ -220,6 +247,23 @@ struct
     | Some x -> x
     | None -> default
 
+  let value_exn ~exn =
+    function
+    | Some x -> x
+    | None -> raise exn
+
+  let value_fatal ~in_ =
+    function
+    | Some x -> x
+    | None -> Console.fatal "Tried to get some value from None in %s" in_
+
+  let compare ~cmp a b =
+    match a, b with
+    | Some a, Some b -> cmp a b
+    | None, Some _ -> -1
+    | Some _, None -> 1
+    | None, None -> 0
+
   include
     (Monad.Make_subst
        (struct
@@ -232,6 +276,30 @@ struct
        end))
 
   let abort = None
+  let map ~f =
+    function
+    | None -> None
+    | Some x -> Some (f x)
+
+  let map_default ~default ~f =
+    function
+    | None -> default
+    | Some x -> f x
+
+  let fold ~init ~f =
+    function
+    | Some x -> f init x
+    | None -> init
+
+  let iter ~f =
+    function
+    | None -> ()
+    | Some x -> f x
+
+  let is_some =
+    function
+    | Some _ -> true
+    | None -> false
 end
 
 let (|?) xo default = Option.value ~default xo
@@ -269,6 +337,7 @@ struct
         let padding = "padding"
         let wrapper = "wrapper"
         let arraylen = "arraylen"
+        let string_declspec = "valid_string"
       end
 
       module Predicate =
@@ -282,7 +351,6 @@ struct
         let strlen = "strlen"
         let wcslen = "wcslen"
         let nondet_int = "jessie_nondet_int"
-        let string_declspec = "valid_string"
       end
 
       module Function =
@@ -664,13 +732,21 @@ struct
 
         let add_term env t =
           (* Precise the type when possible *)
-          let ty = match t.term_type with Ctype ty -> ty | _ -> voidType in
+          let ty =
+            match t.term_type with
+            | Ctype ty -> ty
+            | _ -> voidType
+          in
           let v = makePseudoVar ty in
           let env = { env with terms = Varinfo.Map.add v t env.terms } in
           Lval (Var v, NoOffset), env
 
         let add_var env v =
-          let ty = match v.lv_type with Ctype ty -> ty | _ -> assert false in
+          let ty =
+            match v.lv_type with
+            | Ctype ty -> ty
+            | _ -> Console.fatal "Ast.Term.Env.add_var: not a C-typed var: %a" Printer.pp_logic_var v
+          in
           let pv = makePseudoVar ty in
           let env = { env with vars = Varinfo.Map.add pv v env.vars } in
           Var pv, env
@@ -917,7 +993,8 @@ struct
       let rec of_exp_exn e =
         let pnode =
           match (stripInfo e).enode with
-          | Info _ -> Console.fatal "Ast.Predicate.of_exp_exn: Info is unsupported: %a" Printer.pp_exp e
+          | Info _ ->
+            Console.fatal "Ast.Predicate.of_exp_exn: Info is unsupported (shoud not happen): %a" Printer.pp_exp e
           | Const c ->
             begin match possible_value_of_integral_const c with
             | Some i -> if Integer.equal i Integer.zero then Pfalse else Ptrue
@@ -1059,10 +1136,6 @@ struct
   type 'a t = typ
   type 'a t' = 'a t
 
-  (* Type for ghost variables until integer is a valid type for ghosts. *)
-  let almost_integer_type = TInt (ILongLong, [])
-  let struct_type_for_void = voidType
-
   module Logic_c_type =
   struct
     type t = logic_type
@@ -1079,16 +1152,16 @@ struct
       | Some ty -> ty
       | None -> Console.fatal "Logic_c_type.of_logic_type_exn: not a logic c type: %a" Printer.pp_logic_type t
 
-    let rec map_default ~default f =
+    let rec map_default ~default ~f =
       function
       | Ctype typ -> f typ
-      | Ltype ({ lt_name = "set" }, [t]) -> map_default ~default f t
+      | Ltype ({ lt_name = "set" }, [t]) -> map_default ~default ~f t
       | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ -> default
 
-    let rec map f =
+    let rec map ~f =
       function
       | Ctype typ -> f typ
-      | Ltype ({ lt_name = "set" }, [t]) -> map f t
+      | Ltype ({ lt_name = "set" }, [t]) -> map ~f t
       | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ as ty ->
         Console.fatal "map_logic_c_type_exn: unexpected non-C type: %a" Printer.pp_logic_type ty
   end
@@ -1316,6 +1389,11 @@ struct
 
       let proper_fields ci = List.filter (fun fi -> not @@ hasAttribute Name.Of.Attr.padding fi.fattr) ci.cfields
     end
+
+    module Struct =
+    struct
+      let void () = Console.fatal "Type.Composite.Struct.void: called before normalization"
+    end
   end
 
   let promote_argument_type arg_type =
@@ -1373,13 +1451,16 @@ struct
       | TEnum _ -> ty
       | _ -> invalid_arg "Type.Integral.of_typ_exn: non-integral type"
 
+    (* Type for ghost variables until integer is a valid type for ghosts. *)
+    let almost_unbound = TInt (ILongLong, [])
+
     module IKind =
     struct
       type t = ikind
 
       let size_in_bytes =
         function
-        | IBool -> assert false
+        | IBool -> Console.unsupported "Type.Integral.IKind.size_in_bytes: IBool"
         | IChar | ISChar | IUChar -> 1 (* Cil assumes char is one byte *)
         | IInt | IUInt -> theMachine.theMachine.sizeof_int
         | IShort | IUShort -> theMachine.theMachine.sizeof_short
@@ -1568,6 +1649,8 @@ struct
   let appending after = { before = []; after }
   let inserting ~before ~after = { before; after }
   let inserting_nothing = { before = []; after = [] }
+  let do_nothing x = x, inserting_nothing
+  let of_action f x = f x, inserting_nothing
 
   module Local =
     struct
@@ -1580,6 +1663,17 @@ struct
         | ChangeTo of 'a * insert
         | ChangeToPost of 'a * ('a -> 'a * insert) * insert
         | ChangeDoChildrenPost of 'a * ('a -> 'a * insert) * insert
+
+      let of_visit_action =
+        function[@warning "-42"]
+        | Cil.SkipChildren -> SkipChildren inserting_nothing
+        | DoChildren -> DoChildren inserting_nothing
+        | DoChildrenPost f -> DoChildrenPost (of_action f, inserting_nothing)
+        | JustCopy -> JustCopy inserting_nothing
+        | JustCopyPost f -> JustCopyPost (of_action f, inserting_nothing)
+        | ChangeTo x -> ChangeTo (x, inserting_nothing)
+        | ChangeToPost (x, f) -> ChangeToPost (x, of_action f, inserting_nothing)
+        | ChangeDoChildrenPost (x, f) -> ChangeDoChildrenPost (x, of_action f, inserting_nothing)
     end
 
   (* 'result parameter is added to the context type in order ro allow visitor method definitions like the following:
@@ -1597,7 +1691,7 @@ struct
    *)
 
   type ('a, 'result, 'visit_action) context =
-    | Local : ('a, ('a * insert) as 'result, 'a Local.visit_action) context
+    | Local : fundec -> ('a, ('a * insert) as 'result, 'a Local.visit_action) context
     | Global : ('a, 'a, 'a visitAction) context
 
   open Local
@@ -1613,6 +1707,17 @@ struct
         | ChangeTo of 'a
         | ChangeToPost of 'a * ('a -> 'a * insert)
         | ChangeDoChildrenPost of 'a * ('a -> 'a * insert)
+
+      let of_visit_action =
+        function[@warning "-42"]
+        | Cil.SkipChildren -> SkipChildren inserting_nothing
+        | DoChildren -> DoChildren inserting_nothing
+        | DoChildrenPost f -> DoChildrenPost (of_action f, inserting_nothing)
+        | JustCopy -> JustCopy inserting_nothing
+        | JustCopyPost f -> JustCopyPost (of_action f, inserting_nothing)
+        | ChangeTo x -> ChangeTo x
+        | ChangeToPost (x, f) -> ChangeToPost (x, of_action f)
+        | ChangeDoChildrenPost (x, f) -> ChangeDoChildrenPost (x, of_action f)
     end
 
   let wrap
@@ -1621,25 +1726,14 @@ struct
       (type visit_action) :
       (a, result, visit_action) context -> a visitAction -> visit_action =
     function
-    | Local ->
-      let wrap = fun f x -> f x, inserting_nothing in
-      (function[@warning "-42"]
-        | SkipChildren -> SkipChildren (inserting_nothing)
-        | DoChildren -> DoChildren (inserting_nothing)
-        | DoChildrenPost f -> DoChildrenPost (wrap f, inserting_nothing)
-        | JustCopy -> JustCopy (inserting_nothing)
-        | JustCopyPost f -> JustCopyPost (wrap f, inserting_nothing)
-        | ChangeTo x -> ChangeTo (x, inserting_nothing)
-        | ChangeToPost (x, f) -> ChangeToPost (x, wrap f, inserting_nothing)
-        | ChangeDoChildrenPost (x, f) -> ChangeDoChildrenPost (x, wrap f, inserting_nothing))
+    | Local _ -> Local.of_visit_action
     | Global -> Fn.id
-
 
   type ('a, 'r, 'v) visitor_method = ('a, 'r, 'v) context -> 'a -> 'v
 
   class frama_c_inplace_inserting =
     let do_children = fun context _ -> wrap context Cil.DoChildren in
-    let do_children_local = fun _ -> Local.DoChildren inserting_nothing in
+    let do_children_local = fun (_ : fundec) _ -> Local.DoChildren inserting_nothing in
     object
       val super = new frama_c_inplace
 
@@ -1662,16 +1756,16 @@ struct
       method vfile = super#vfile
       method vglob_aux = super#vglob_aux
 
-      method vstmt_aux : stmt -> stmt Local.visit_action = do_children_local
+      method vstmt_aux : fundec -> stmt -> stmt Local.visit_action = do_children_local
 
-      method vblock : block -> block Local.visit_action = do_children_local
+      method vblock : fundec -> block -> block Local.visit_action = do_children_local
       method vvrbl : 'a 'b. (varinfo, 'a, 'b) visitor_method = do_children
       method vvdec : 'a 'b. (varinfo, 'a, 'b) visitor_method = do_children
       method vexpr: 'a 'b. (exp, 'a, 'b) visitor_method = do_children
       method vlval : 'a 'b. (lval, 'a, 'b) visitor_method = do_children
       method voffs : 'a 'b. (offset, 'a, 'b) visitor_method  = do_children
       method vinitoffs : 'a 'b. (offset, 'a, 'b) visitor_method = do_children
-      method vinst : instr -> instr list Local.visit_action = do_children_local
+      method vinst : fundec -> instr -> instr list Local.visit_action = do_children_local
       method vinit : 'a 'b. (init, 'a, 'b) context -> varinfo -> offset -> init -> 'b =
         fun context _ _ _ -> wrap context Cil.DoChildren
       method vtype : 'a 'b. (typ, 'a, 'b) visitor_method = do_children
@@ -1696,13 +1790,13 @@ struct
       method vbehavior : 'a 'b. (funbehavior, 'a, 'b) visitor_method = do_children
       method vspec : 'a 'b. (funspec, 'a, 'b) visitor_method = do_children
       method vassigns : 'a 'b. (identified_term assigns, 'a, 'b) visitor_method = do_children
-      method vloop_pragma : term loop_pragma -> term loop_pragma Local.visit_action = do_children_local
+      method vloop_pragma : fundec -> term loop_pragma -> term loop_pragma Local.visit_action = do_children_local
       method vslice_pragma : 'a 'b. (term slice_pragma, 'a, 'b) visitor_method = do_children
-      method vjessie_pragma : term jessie_pragma -> term jessie_pragma Local.visit_action = do_children_local
+      method vjessie_pragma : fundec -> term jessie_pragma -> term jessie_pragma Local.visit_action = do_children_local
       method vimpact_pragma : 'a 'b. (term impact_pragma, 'a, 'b) visitor_method = do_children
       method vdeps : 'a 'b. (identified_term deps, 'a, 'b) visitor_method = do_children
       method vfrom : 'a 'b. (identified_term from, 'a, 'b) visitor_method = do_children
-      method vcode_annot : code_annotation -> code_annotation Local.visit_action = do_children_local
+      method vcode_annot : fundec -> code_annotation -> code_annotation Local.visit_action = do_children_local
       method vannotation = super#vannotation
 
       method behavior = super#behavior
@@ -1725,12 +1819,14 @@ struct
       method vlogic_type_def = super#vlogic_type_def
       method vlogic_type_info_decl = super#vlogic_type_info_decl
       method vlogic_type_info_use : 'a 'b. (logic_type_info, 'a, 'b) visitor_method = do_children
-      method vstmt : stmt -> stmt Local.visit_action = do_children_local
+      method vstmt : fundec -> stmt -> stmt Local.visit_action = do_children_local
 
       method vallocates : 'a 'b. (identified_term list, 'a, 'b) visitor_method = do_children
       method vallocation : 'a 'b. (identified_term allocation, 'a, 'b) visitor_method = do_children
       method vfrees : 'a 'b. (identified_term list, 'a, 'b) visitor_method = do_children
     end
+
+  type 'a visitor_function = { visit: 'r 'v. ('a, 'r, 'v) visitor_method }
 
   class proxy_frama_c_visitor (visitor : #frama_c_inplace_inserting) : frama_c_visitor =
     let insert, before, after =
@@ -1742,29 +1838,31 @@ struct
       fun () -> let result = !pending_after in pending_after := []; result
     in
     let post f = fun x -> let result, i = f x in insert i; result in
-    let cond : 'a 'b. ('a -> 'b Local.visit_action) -> ('a -> 'b visitAction) -> 'a -> 'b visitAction =
-      fun a b x ->
-      let unwrap =
-        function[@warning "-42"]
-        | SkipChildren i -> insert i; Cil.SkipChildren
-        | DoChildren i -> insert i;  DoChildren
-        | DoChildrenPost (f, i) -> insert i; DoChildrenPost (post f)
-        | JustCopy i -> insert i; JustCopy
-        | JustCopyPost (f, i) -> insert i; JustCopyPost (post f)
-        | ChangeTo (x, i) -> insert i; ChangeTo x
-        | ChangeToPost (a, f, i) -> insert i; Cil.ChangeToPost (a, post f)
-        | ChangeDoChildrenPost (a, f, i) -> insert i; Cil.ChangeDoChildrenPost (a, post f)
-      in
-      if has_some visitor#current_func then
-        unwrap (a x)
-      else
-        b x
+    let unwrap =
+      function[@warning "-42"]
+      | SkipChildren i -> insert i; Cil.SkipChildren
+      | DoChildren i -> insert i;  DoChildren
+      | DoChildrenPost (f, i) -> insert i; DoChildrenPost (post f)
+      | JustCopy i -> insert i; JustCopy
+      | JustCopyPost (f, i) -> insert i; JustCopyPost (post f)
+      | ChangeTo (x, i) -> insert i; ChangeTo x
+      | ChangeToPost (a, f, i) -> insert i; Cil.ChangeToPost (a, post f)
+      | ChangeDoChildrenPost (a, f, i) -> insert i; Cil.ChangeDoChildrenPost (a, post f)
     in
-    let always_local : 'a 'b.  'a -> 'b visitAction =
-      fun _ -> Console.fatal "unexpectedly visited global AST node as local"
+    let cond { visit } x =
+      match visitor#current_func with
+      | Some fundec -> unwrap (visit (Local fundec) x)
+      | None -> visit Global x
     in
-    let always_global : 'a 'b. 'a -> 'b visit_action =
-      fun _ -> Console.fatal "unexpectedly visited local AST node as global"
+    let local visit x =
+      match visitor#current_func with
+      | Some fundec -> unwrap (visit fundec x)
+      | None -> Console.fatal "unexpectedly visited global AST node as local"
+    in
+    let global visit x =
+      match visitor#current_func with
+      | Some _ -> Console.fatal "unexpectedly visited local AST node as global"
+      | None -> visit x
     in
     let insert_pending_statements f =
       f.sbody.bstmts <- List.rev_append (before ()) f.sbody.bstmts;
@@ -1798,9 +1896,9 @@ struct
       method get_filling_actions = visitor#get_filling_actions
       method fill_global_tables = visitor#fill_global_tables
 
-      method videntified_term = cond (visitor#videntified_term Local) (visitor#videntified_term Global)
-      method videntified_predicate = cond (visitor#videntified_predicate Local) (visitor#videntified_predicate Global)
-      method vlogic_label = cond (visitor#vlogic_label Local) (visitor#vlogic_label Global)
+      method videntified_term = cond { visit = fun c -> visitor#videntified_term c }
+      method videntified_predicate = cond { visit = fun c -> visitor#videntified_predicate c }
+      method vlogic_label = cond { visit = fun c -> visitor#vlogic_label c}
 
       (* Modify visitor on functions so that it prepends/postpends statements *)
       method vfunc f =
@@ -1826,47 +1924,46 @@ struct
       (* Methods introduced by the Frama-C visitor *)
       method vfile = visitor#vfile
       method vglob_aux = visitor#vglob_aux
-      method vstmt_aux = cond visitor#vstmt_aux always_local
+      method vstmt_aux = local visitor#vstmt_aux
 
       (* Methods from Cil visitor for coding constructs *)
-      method vblock = cond visitor#vblock always_local
-      method vvrbl = cond (visitor#vvrbl Local) (visitor#vvrbl Global)
-      method vvdec = cond (visitor#vvdec Local) (visitor#vvdec Global)
-      method vexpr = cond (visitor#vexpr Local) (visitor#vexpr Global)
-      method vlval = cond (visitor#vlval Local) (visitor#vlval Global)
-      method voffs = cond (visitor#voffs Local) (visitor#voffs Global)
-      method vinitoffs = cond (visitor#vinitoffs Local) (visitor#vinitoffs Global)
-      method vinst = cond visitor#vinst always_local
-      method vinit vi off =
-        cond (visitor#vinit Local vi off) (visitor#vinit Global vi off)
-      method vtype = cond (visitor#vtype Local) (visitor#vtype Global)
-      method vattr a = cond (visitor#vattr Local) (visitor#vattr Global) [a]
-      method vattrparam = cond (visitor#vattrparam Local) (visitor#vattrparam Global)
+      method vblock = local visitor#vblock
+      method vvrbl = cond { visit = fun c -> visitor#vvrbl c }
+      method vvdec = cond { visit = fun c -> visitor#vvdec c }
+      method vexpr = cond { visit = fun c -> visitor#vexpr c }
+      method vlval = cond { visit = fun c -> visitor#vlval c }
+      method voffs = cond { visit = fun c -> visitor#voffs c }
+      method vinitoffs = cond { visit = fun c -> visitor#vinitoffs c }
+      method vinst = local visitor#vinst
+      method vinit vi off = cond { visit = fun c -> visitor#vinit c vi off }
+      method vtype = cond { visit = fun c -> visitor#vtype c }
+      method vattr a = cond { visit = fun c -> visitor#vattr c } [a]
+      method vattrparam = cond { visit = fun c -> visitor#vattrparam c }
 
       (* Methods from Cil visitor for logic constructs *)
-      method vlogic_type = cond (visitor#vlogic_type Local) (visitor#vlogic_type Global)
-      method vterm = cond (visitor#vterm Local) (visitor#vterm Global)
-      method vterm_node = cond (visitor#vterm_node Local) (visitor#vterm_node Global)
-      method vterm_lval = cond (visitor#vterm_lval Local) (visitor#vterm_lval Global)
-      method vterm_lhost = cond (visitor#vterm_lhost Local) (visitor#vterm_lhost Global)
-      method vterm_offset = cond (visitor#vterm_offset Local) (visitor#vterm_offset Global)
-      method vlogic_info_decl = cond always_global visitor#vlogic_info_decl
-      method vlogic_info_use = cond (visitor#vlogic_info_use Local) (visitor#vlogic_info_use Global)
-      method vlogic_var_decl = cond (visitor#vlogic_var_decl Local) (visitor#vlogic_var_decl Global)
-      method vlogic_var_use = cond (visitor#vlogic_var_use Local) (visitor#vlogic_var_use Global)
-      method vquantifiers = cond (visitor#vquantifiers Local) (visitor#vquantifiers Global)
-      method vpredicate = cond (visitor#vpredicate Local) (visitor#vpredicate Global)
-      method vpredicate_named = cond (visitor#vpredicate_named Local) (visitor#vpredicate_named Global)
-      method vmodel_info = cond always_global visitor#vmodel_info
-      method vbehavior = cond always_global (visitor#vbehavior Global)
-      method vspec = cond (visitor#vspec Local) (visitor#vspec Global)
-      method vassigns = cond (visitor#vassigns Local) (visitor#vassigns Global)
-      method vloop_pragma = cond visitor#vloop_pragma always_local
-      method vslice_pragma = cond (visitor#vslice_pragma Local) (visitor#vslice_pragma Global)
-      method vjessie_pragma = cond visitor#vjessie_pragma always_local
-      method vdeps = cond (visitor#vdeps Local) (visitor#vdeps Global)
-      method vcode_annot = cond visitor#vcode_annot always_local
-      method vannotation = cond always_global visitor#vannotation
+      method vlogic_type = cond { visit = fun c -> visitor#vlogic_type c }
+      method vterm = cond { visit = fun c -> visitor#vterm c }
+      method vterm_node = cond { visit = fun c -> visitor#vterm_node c }
+      method vterm_lval = cond { visit = fun c -> visitor#vterm_lval c }
+      method vterm_lhost = cond { visit = fun c -> visitor#vterm_lhost c }
+      method vterm_offset = cond { visit = fun c -> visitor#vterm_offset c }
+      method vlogic_info_decl = global visitor#vlogic_info_decl
+      method vlogic_info_use = cond { visit = fun c -> visitor#vlogic_info_use c }
+      method vlogic_var_decl = cond { visit = fun c -> visitor#vlogic_var_decl c }
+      method vlogic_var_use = cond { visit = fun c -> visitor#vlogic_var_use c }
+      method vquantifiers = cond { visit = fun c -> visitor#vquantifiers c }
+      method vpredicate = cond { visit = fun c -> visitor#vpredicate c }
+      method vpredicate_named = cond { visit = fun c -> visitor#vpredicate_named c }
+      method vmodel_info = global visitor#vmodel_info
+      method vbehavior = global (visitor#vbehavior Global)
+      method vspec = cond { visit = fun c -> visitor#vspec c }
+      method vassigns = cond { visit = fun c -> visitor#vassigns c }
+      method vloop_pragma = local visitor#vloop_pragma
+      method vslice_pragma = cond { visit = fun c -> visitor#vslice_pragma c }
+      method vjessie_pragma = local visitor#vjessie_pragma
+      method vdeps = cond { visit = fun c -> visitor#vdeps c }
+      method vcode_annot = local visitor#vcode_annot
+      method vannotation = global visitor#vannotation
 
       method behavior = visitor#behavior
       method project = visitor#project
@@ -1876,29 +1973,29 @@ struct
       method reset_current_func = visitor#reset_current_func
       method reset_current_kf = visitor#reset_current_kf
       method unqueueInstr = visitor#unqueueInstr
-      method vcompinfo = cond always_global visitor#vcompinfo
-      method venuminfo = cond always_global visitor#venuminfo
-      method venumitem = cond always_global visitor#venumitem
-      method vfieldinfo = cond always_global visitor#vfieldinfo
-      method vfrom = cond (visitor#vfrom Local) (visitor#vfrom Global)
+      method vcompinfo = global visitor#vcompinfo
+      method venuminfo = global visitor#venuminfo
+      method venumitem = global visitor#venumitem
+      method vfieldinfo = global visitor#vfieldinfo
+      method vfrom = cond { visit = fun c -> visitor#vfrom c }
       method vglob = visitor#vglob
-      method vimpact_pragma = cond (visitor#vimpact_pragma Local) (visitor#vimpact_pragma Global)
-      method vlogic_ctor_info_decl = cond always_global visitor#vlogic_ctor_info_decl
-      method vlogic_ctor_info_use = cond (visitor#vlogic_ctor_info_use Local) (visitor#vlogic_ctor_info_use Global)
-      method vlogic_type_def = cond always_global visitor#vlogic_type_def
-      method vlogic_type_info_decl = cond always_global visitor#vlogic_type_info_decl
-      method vlogic_type_info_use = cond (visitor#vlogic_type_info_use Local) (visitor#vlogic_type_info_use Global)
-      method vstmt = cond visitor#vstmt always_local
+      method vimpact_pragma = cond { visit = fun c -> visitor#vimpact_pragma c }
+      method vlogic_ctor_info_decl = global visitor#vlogic_ctor_info_decl
+      method vlogic_ctor_info_use = cond { visit = fun c -> visitor#vlogic_ctor_info_use c }
+      method vlogic_type_def = global visitor#vlogic_type_def
+      method vlogic_type_info_decl = global visitor#vlogic_type_info_decl
+      method vlogic_type_info_use = cond { visit = fun c -> visitor#vlogic_type_info_use c }
+      method vstmt = local visitor#vstmt
 
-      method vallocates = cond (visitor#vallocates Local) (visitor#vallocates Global)
-      method vallocation = cond (visitor#vallocation Local) (visitor#vallocation Global)
-      method vfrees = cond (visitor#vfrees Local) (visitor#vfrees Global)
+      method vallocates = cond { visit = fun c -> visitor#vallocates c }
+      method vallocation = cond { visit = fun c -> visitor#vallocation c }
+      method vfrees = cond { visit = fun c -> visitor#vfrees c }
     end
 
-  type attaching_visitor = { mk : 'a. attach:'a Do.attach -> frama_c_visitor }
+  type 'a attaching_visitor = { mk : 'b. attach:'b Do.attach -> (#frama_c_visitor as 'a) }
 
   let attaching_globs visitor file =
-    let perform ~attach = visitFramacFile @@ visitor.mk attach in
+    let perform ~attach = visitFramacFile @@ (visitor.mk attach :> frama_c_visitor) in
     Do.attaching_globs { Do.perform } file
 
   let inserting_statements visitor file =
@@ -1910,7 +2007,7 @@ struct
       ..
     > as 'a)
 
-  type fixpoint_visitor = { mk : 'a. signal:'a signal -> frama_c_visitor }
+  type 'a fixpoint_visitor = { mk : 'b. signal:'b signal -> (#frama_c_visitor as 'a) }
 
   let until_convergence visitor file =
     let changed = ref false in
@@ -1921,14 +2018,13 @@ struct
       signal_ref, (fun () -> signal_ref := prohibited), fun () -> signal_ref := signal
     in
     let refresh () = changed := false in
-    let visitor = visitor.mk ~signal:(object method change = !signal () end) in
+    let visitor = (visitor.mk ~signal:(object method change = !signal () end) :> frama_c_visitor) in
     while (prohibit (); not !changed) do
       refresh ();
       allow ();
       visitFramacFile visitor file
     done
 end
-
 
 module Debug =
   struct

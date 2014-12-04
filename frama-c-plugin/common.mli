@@ -16,6 +16,7 @@ exception Unsupported of string
 module Console :
 sig
   val fatal : ('a, formatter, unit, 'b) format4 -> 'a
+  val error : ('a, formatter, unit) format -> 'a
   val unsupported : ('a, formatter, unit, 'b) format4 -> 'a
   val warning : ('a, formatter, unit) format -> 'a
   val general_warning : ('a, formatter, unit) format -> 'a
@@ -26,9 +27,13 @@ end
 module List :
 sig
   include module type of List
-  val drop : int -> 'a list -> 'a list
-  val take : int -> 'a list -> 'a list
-  val range : int -> [< `Downto | `To ] -> int -> int list
+  type 'a t = 'a list
+  val rev_filter_map : 'a t -> f:('a -> 'b option) -> 'b t
+  val filter_map : 'a t -> f:('a -> 'b option) -> 'b t
+  val find_map : 'a t -> f:('a -> 'b option) -> 'b option
+  val drop : int -> 'a t -> 'a t
+  val take : int -> 'a t -> 'a t
+  val range : int -> [< `Downto | `To ] -> int -> int t
 end
 
 module String :
@@ -44,10 +49,10 @@ sig
   module T2 :
   sig
     type ('a, 'b) t = 'a * 'b
-    val fdup2 : ('a -> 'b) -> ('a -> 'c) -> 'a -> 'b * 'c
-    val map1 : ('a -> 'b) -> 'a * 'c -> 'b * 'c
-    val map2 : ('a -> 'b) -> 'c * 'a -> 'c * 'b
-    val map : ('a -> 'b) -> 'a * 'a -> 'b * 'b
+    val fdup2 : f:('a -> 'b) -> g:('a -> 'c) -> 'a -> 'b * 'c
+    val map1 : f:('a -> 'b) -> 'a * 'c -> 'b * 'c
+    val map2 : f:('a -> 'b) -> 'c * 'a -> 'c * 'b
+    val map : f:('a -> 'b) -> 'a * 'a -> 'b * 'b
     val swap : 'a * 'b -> 'b * 'a
   end
 end
@@ -104,8 +109,16 @@ sig
   include Monad.S with type 'a m := 'a option
 
   val value : default:'a -> 'a option -> 'a
+  val value_exn : exn:exn -> 'a option -> 'a
+  val value_fatal : in_:string -> 'a option -> 'a
+  val compare : cmp:('a -> 'b -> int) -> 'a option -> 'b option -> int
 
   val abort : 'a option
+  val map : f:('a -> 'b) -> 'a option -> 'b option
+  val map_default : default:'b -> f:('a -> 'b) -> 'a option -> 'b
+  val fold : init:'b -> f:('b -> 'a -> 'b) -> 'a option -> 'b
+  val iter : f:('a -> unit) -> 'a option -> unit
+  val is_some : 'a option -> bool
 end
 
 val ( |? ) : 'a option -> 'a -> 'a
@@ -142,6 +155,7 @@ sig
       val padding : string
       val wrapper : string
       val arraylen : string
+      val string_declspec : string
     end
 
     module Predicate :
@@ -155,7 +169,6 @@ sig
       val strlen : string
       val wcslen : string
       val nondet_int : string
-      val string_declspec : string
     end
 
     module Function :
@@ -175,8 +188,8 @@ sig
       val blockfuns_include : string
     end
 
-    val typ : Cil_types.typ -> string
-    val logic_type : Cil_types.logic_type -> string
+    val typ : typ -> string
+    val logic_type : logic_type -> string
 
     module Logic_type :
     sig
@@ -216,7 +229,7 @@ sig
 
   module Exp :
   sig
-    type t = Cil_types.exp
+    type t = exp
     val const : ?loc:Location.t -> Integer.t -> t
     val dummy_info : t -> t
   end
@@ -229,7 +242,7 @@ sig
 
     module Function :
     sig
-      type t = var Vi.t
+      type t = func Vi.t
 
       val of_varinfo : varinfo -> t option
       val of_varinfo_exn : varinfo -> t
@@ -248,7 +261,7 @@ sig
 
     module Variable :
     sig
-      type t = func Vi.t
+      type t = var Vi.t
       val of_varinfo : varinfo -> t option
       val of_varinfo_exn : varinfo -> t
     end
@@ -328,89 +341,94 @@ sig
   type ref
   type 'a t = private typ
 
-  val almost_integer_type : typ
-  val struct_type_for_void : typ
-    module Logic_c_type :
+  module Logic_c_type :
+  sig
+    type t = private logic_type
+    val of_logic_type : logic_type -> t option
+    val of_logic_type_exn : logic_type -> t
+    val map_default : default:'a -> f:(typ -> 'a) -> logic_type -> 'a
+    val map : f:(typ -> 'a) -> t -> 'a
+  end
+
+  module Ref :
+  sig
+    type t = ref Type.t
+    val singleton : msg:'a -> typ -> t
+    val array : typ * exp * attributes -> t
+    val size : t -> int64
+    val is_ref : typ -> bool
+    val is_array_ref : typ -> bool
+    val of_array_exn : typ -> t
+  end
+
+  module rec Composite :
+  sig
+    type t = composite Type.t
+
+    val of_typ : typ -> t option
+    val of_typ_exn : typ -> t
+    val unique_field_exn : t -> fieldinfo
+    val compinfo_cname : t -> string
+    val compinfo : t -> compinfo
+
+    module Ci :
     sig
-      type t = private logic_type
-      val of_logic_type : logic_type -> t option
-      val of_logic_type_exn : logic_type -> t
-      val map_default : default:'a -> (typ -> 'a) -> logic_type -> 'a
-      val map : (typ -> 'a) -> t -> 'a
-    end
+      type t = compinfo
 
-    module Ref :
-    sig
-      type t = ref Type.t
-      val singleton : msg:'a -> typ -> t
-      val array : typ * exp * attributes -> t
-      val size : t -> int64
-      val is_ref : typ -> bool
-      val is_array_ref : typ -> bool
-      val of_array_exn : typ -> t
-    end
-
-    module rec Composite :
-    sig
-      type t = composite Type.t
-
-      val of_typ : typ -> t option
-      val of_typ_exn : typ -> t
-      val unique_field_exn : t -> fieldinfo
-      val compinfo_cname : t -> string
-      val compinfo : t -> compinfo
-
-      module Ci :
+      module Struct :
       sig
-        type t = compinfo
+        type t = private compinfo
 
-        module Struct :
-        sig
-          type t = private compinfo
-
-          val of_ci : compinfo -> t option
-          val of_ci_exn : compinfo -> t
-          val empty : string -> t
-          val singleton : ?padding:int -> string -> string -> typ -> t
-        end
-
-        val size : compinfo -> int option
-        val padding_field : ?fsize_in_bits:int -> compinfo -> fieldinfo
-        val fix_size : ?original_size:int -> compinfo -> unit
-        val proper_fields : compinfo -> fieldinfo list
-      end
-    end
-
-    val promote_argument_type : typ -> typ
-    val size_in_bits_exn : typ -> int64
-
-    module Integral :
-    sig
-      type t = integral Type.t
-
-      val of_typ : typ -> t option
-      val of_typ_exn : typ -> t
-
-      module IKind :
-      sig
-        type t = ikind
-        val size_in_bytes : ikind -> int
+        val of_ci : compinfo -> t option
+        val of_ci_exn : compinfo -> t
+        val empty : string -> t
+        val singleton : ?padding:int -> string -> string -> typ -> t
       end
 
-      val size_in_bytes : t -> int
-      val size_in_bits : t -> int
-
-      val min_value : ?bitsize:int -> t -> Integer.t
-      val max_value : ?bitsize:int -> t -> Integer.t
-
-      module All : State_builder.Hashtbl with type key := string and type data = t * int option
-
-      val name : ?bitsize:int -> t -> string
-      val of_bitsize_u : int * bool -> t
-      val add_by_name : string -> unit
-      val iter_all : (string -> All.data -> unit) -> unit
-      val fold_all : (string -> All.data -> 'c -> 'c) -> 'c -> 'c
+      val size : compinfo -> int option
+      val padding_field : ?fsize_in_bits:int -> compinfo -> fieldinfo
+      val fix_size : ?original_size:int -> compinfo -> unit
+      val proper_fields : compinfo -> fieldinfo list
     end
+
+    module Struct :
+    sig
+      val void : unit -> typ
+    end
+  end
+
+  val promote_argument_type : typ -> typ
+  val size_in_bits_exn : typ -> int64
+
+  module Integral :
+  sig
+    type t = integral Type.t
+
+    val of_typ : typ -> t option
+    val of_typ_exn : typ -> t
+
+    val almost_unbound : t
+
+    module IKind :
+    sig
+      type t = ikind
+      val size_in_bytes : ikind -> int
+    end
+
+    val size_in_bytes : t -> int
+    val size_in_bits : t -> int
+
+    val min_value : ?bitsize:int -> t -> Integer.t
+    val max_value : ?bitsize:int -> t -> Integer.t
+
+    module All : State_builder.Hashtbl with type key := string and type data = t * int option
+
+    val name : ?bitsize:int -> t -> string
+    val of_bitsize_u : int * bool -> t
+    val add_by_name : string -> unit
+    val iter_all : (string -> All.data -> unit) -> unit
+    val fold_all : (string -> All.data -> 'c -> 'c) -> 'c -> 'c
+  end
 end
 
 module Do :
@@ -451,6 +469,8 @@ sig
   val inserting : before:stmt list -> after:stmt list -> insert
 
   val inserting_nothing : insert
+  val do_nothing : 'a -> 'a * insert
+  val of_action : ('a -> 'a) -> ('a -> 'a * insert)
 
   module Local :
   sig
@@ -463,10 +483,12 @@ sig
       | ChangeTo of 'a * insert
       | ChangeToPost of 'a * ('a -> 'a * insert) * insert
       | ChangeDoChildrenPost of 'a * ('a -> 'a * insert) * insert
+
+    val of_visit_action : 'a visitAction -> 'a visit_action
   end
 
   type ('a, 'result, 'visit_action) context =
-    | Local : ('a, 'a * insert, 'a Local.visit_action) context
+    | Local : fundec -> ('a, 'a * insert, 'a Local.visit_action) context
     | Global : ('a, 'a, 'a visitAction) context
 
   module Fundec :
@@ -480,6 +502,8 @@ sig
       | ChangeTo of 'a
       | ChangeToPost of 'a * ('a -> 'a * insert)
       | ChangeDoChildrenPost of 'a * ('a -> 'a * insert)
+
+    val of_visit_action : 'a visitAction -> 'a visit_action
   end
 
   val wrap : ('a, 'b, 'c) context -> 'a visitAction -> 'c
@@ -514,8 +538,8 @@ sig
       method vattr : (attribute list, 'a, 'b) context -> attribute list -> 'b
       method vattrparam : (attrparam, 'a, 'b) visitor_method
       method vbehavior : (funbehavior, 'a, 'b) visitor_method
-      method vblock : block -> block Local.visit_action
-      method vcode_annot : code_annotation -> code_annotation Local.visit_action
+      method vblock : fundec -> block -> block Local.visit_action
+      method vcode_annot : fundec -> code_annotation -> code_annotation Local.visit_action
       method vcompinfo : compinfo -> compinfo visitAction
       method vdeps : (identified_term deps, 'a, 'b) visitor_method
       method venuminfo : enuminfo -> enuminfo visitAction
@@ -533,8 +557,8 @@ sig
       method vimpact_pragma : (term impact_pragma, 'a, 'b) visitor_method
       method vinit : (init, 'a, 'b) context -> varinfo -> offset -> init -> 'b
       method vinitoffs : (offset, 'a, 'b) visitor_method
-      method vinst : instr -> instr list Local.visit_action
-      method vjessie_pragma : term jessie_pragma -> term jessie_pragma Local.visit_action
+      method vinst : fundec -> instr -> instr list Local.visit_action
+      method vjessie_pragma : fundec -> term jessie_pragma -> term jessie_pragma Local.visit_action
       method vlogic_ctor_info_decl : logic_ctor_info -> logic_ctor_info visitAction
       method vlogic_ctor_info_use : (logic_ctor_info, 'a, 'b) visitor_method
       method vlogic_info_decl : logic_info -> logic_info visitAction
@@ -546,7 +570,7 @@ sig
       method vlogic_type_info_use : (logic_type_info, 'a, 'b) visitor_method
       method vlogic_var_decl : (logic_var, 'a, 'b) visitor_method
       method vlogic_var_use : (logic_var, 'a, 'b) visitor_method
-      method vloop_pragma : term loop_pragma -> term loop_pragma Local.visit_action
+      method vloop_pragma : fundec -> term loop_pragma -> term loop_pragma Local.visit_action
       method vlval : (lval, 'a, 'b) visitor_method
       method vmodel_info : model_info -> model_info visitAction
       method voffs : (offset, 'a, 'b) visitor_method
@@ -555,8 +579,8 @@ sig
       method vquantifiers : (quantifiers, 'a, 'b) visitor_method
       method vslice_pragma : (term slice_pragma, 'a, 'b) visitor_method
       method vspec : (funspec, 'a, 'b) visitor_method
-      method vstmt : stmt -> stmt Local.visit_action
-      method vstmt_aux : stmt -> stmt Local.visit_action
+      method vstmt : fundec -> stmt -> stmt Local.visit_action
+      method vstmt_aux : fundec -> stmt -> stmt Local.visit_action
       method vterm : (term, 'a, 'b) visitor_method
       method vterm_lhost : (term_lhost, 'a, 'b) visitor_method
       method vterm_lval : (term_lval, 'a, 'b) visitor_method
@@ -569,17 +593,17 @@ sig
 
   class proxy_frama_c_visitor : #frama_c_inplace_inserting -> frama_c_visitor
 
-  type attaching_visitor = {  mk : 'a. attach:'a Do.attach -> frama_c_visitor }
-
-  val attaching_globs : attaching_visitor -> file -> unit
-
   val inserting_statements : #frama_c_inplace_inserting -> file -> unit
+
+  type 'a attaching_visitor = { mk : 'b. attach:'b Do.attach -> (#frama_c_visitor as 'a) }
+
+  val attaching_globs : 'a attaching_visitor -> file -> unit
 
   type 'a signal = 'a constraint 'a = < change : unit; .. >
 
-  type fixpoint_visitor = { mk : 'a. signal:'a signal -> frama_c_visitor }
+  type 'a fixpoint_visitor = { mk : 'b. signal:'b signal -> (#frama_c_visitor as 'a) }
 
-  val until_convergence : fixpoint_visitor -> file -> unit
+  val until_convergence : 'a fixpoint_visitor -> file -> unit
 end
 
 module Debug :
@@ -632,5 +656,5 @@ sig
   module Make : functor (M : Map) -> S with type key = M.key
 end
 
-module StringTrie : Trie.S with type key := char
-module Int64Trie : Trie.S with type key := int64
+module StringTrie : Trie.S with type key = char
+module Int64Trie : Trie.S with type key = int64

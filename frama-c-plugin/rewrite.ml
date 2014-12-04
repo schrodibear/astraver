@@ -30,17 +30,14 @@
 (**************************************************************************)
 
 (* Import from Cil *)
-open Cabs
-open! Cil_types
+open Cil_types
 open Cil
 open Cil_datatype
 open Ast_info
-open Extlib
-
 open Visitor
 
 (* Utility functions *)
-open! Common
+open Common
 
 (*****************************************************************************)
 (* Adds a default behavior for all functions                                 *)
@@ -50,7 +47,7 @@ let add_default_behaviors () =
   Globals.Functions.iter @@
     fun kf ->
       if not (List.exists is_default_behavior @@ Annotations.behaviors kf) then begin
-        Annotations.add_behaviors jessie_emitter kf [mk_behavior ()];
+        Annotations.add_behaviors Emitters.jessie kf [mk_behavior ()];
         (* ensures that default behavior will be correctly populated *)
         ignore (Annotations.behaviors kf)
       end
@@ -59,153 +56,115 @@ let add_default_behaviors () =
 (* Rename entities to avoid conflicts with Jessie predefined names.          *)
 (*****************************************************************************)
 
-class renameEntities
-  (add_variable : varinfo -> unit) (add_logic_variable : logic_var -> unit) =
-  let types = Typ.Hashtbl.create 17 in
-  let add_field fi =
-    fi.fname <- unique_name ~force:true fi.fname
+class renaming_visitor add_variable add_logic_variable =
+  let add_ci =
+    let module H = Compinfo.Hashtbl in
+    let cis = H.create 17 in
+    fun ci ->
+    if not (H.mem cis ci)
+    then
+      ci.cname <- Name.unique ~force:true ci.cname;
+      List.iter (fun fi -> fi.fname <- Name.unique ~force:true fi.fname) ci.cfields;
+      H.add cis ci ()
   in
-  let add_type ty =
-    if Typ.Hashtbl.mem types ty then () else
-      let compinfo = get_struct_info ty in
-      compinfo.cname <- unique_name ~force:true compinfo.cname;
-      List.iter add_field compinfo.cfields;
-      Typ.Hashtbl.add types ty ()
-  in
-object
+  object
+    inherit frama_c_inplace
 
-  inherit Visitor.frama_c_inplace
+    method! vfunc f =
+      List.iter add_variable f.slocals;
+      DoChildren
 
-  method! vfunc f =
-    List.iter add_variable f.slocals;
-    DoChildren
+    method! vglob_aux =
+      function
+      | GCompTag (ci, _loc)
+      | GCompTagDecl(ci, _loc) ->
+        add_ci ci;
+        SkipChildren
+      | GVarDecl _ | GVar _ | GFun _ | GAnnot _ | GType _
+      | GEnumTagDecl _ | GEnumTag _ | GAsm _ | GPragma _ | GText _ ->
+        DoChildren
 
-  method! vglob_aux = function
-    | GCompTag(compinfo,_loc)
-    | GCompTagDecl(compinfo,_loc) ->
-	add_type (TComp(compinfo,empty_size_cache (),[]));
-	SkipChildren
-    | GVarDecl _ | GVar _ | GFun _ | GAnnot _ | GType _
-    | GEnumTagDecl _ | GEnumTag _ | GAsm _ | GPragma _ | GText _ ->
-	DoChildren
+    method! vlogic_var_decl lv = add_logic_variable lv; DoChildren
 
-  method! vlogic_var_decl lv = add_logic_variable lv; DoChildren
-
-  method! vlogic_var_use v =
-    let postaction v =
-      (* Restore consistency between C variable name and logical name *)
-      Extlib.may (fun cv -> v.lv_name <- cv.vname) v.lv_origin; v
-    in
-    ChangeDoChildrenPost(v,postaction)
-end
+    method! vlogic_var_use v =
+      let postaction v =
+        (* Restore consistency between C variable name and logical name *)
+        Option.iter v.lv_origin ~f:(fun cv -> v.lv_name <- cv.vname);
+        v
+      in
+      ChangeDoChildrenPost (v, postaction)
+  end
 
 let logic_names_overloading = Hashtbl.create 257
 
 let rename_entities file =
   let add_variable v =
-    let s = unique_name v.vname in
+    let s = Name.unique v.vname in
     v.vname <- s;
     match v.vlogic_var_assoc with
-      | None -> ()
-      | Some lv -> lv.lv_name <- v.vname
+    | None -> ()
+    | Some lv -> lv.lv_name <- v.vname
   in
   let add_logic_variable v =
     match v.lv_origin with
-        None -> (* pure logic variable *)
-          v.lv_name <- unique_logic_name v.lv_name
-      | Some _ -> () (* we take care of that in the C world *)
+    | None -> (* pure logic variable *)
+      v.lv_name <- Name.Logic.unique v.lv_name
+    | Some _ -> () (* we take care of that in the C world *)
   in
   Globals.Vars.iter (fun v _init -> add_variable v);
   Globals.Functions.iter
     (fun kf ->
        add_variable (Globals.Functions.get_vi kf);
        List.iter add_variable (Globals.Functions.get_params kf));
-(* [VP 2011-08-22] replace_all has disappeared from kernel's API, but
-   it appears that info in Globals.Annotations is not used by Jessie. *)
-(*  Globals.Annotations.replace_all
-    (fun annot gen ->
-       let rec replace_annot annot = match annot with
-	 | Dfun_or_pred _ -> annot
-	 | Dvolatile _ -> annot
-         | Daxiomatic(id, l, loc) ->
-             Daxiomatic(id, List.map replace_annot l,loc)
-	 | Dtype(infos,loc) ->
-	     Dtype({ infos with
-                       lt_name = unique_logic_name infos.lt_name;
-                       lt_def =
-                       opt_map
-                         (function
-                              | LTsum cons ->
-                                  LTsum(
-                                    List.map
-                                      (fun x ->
-                                         { x with ctor_name =
-                                             unique_logic_name x.ctor_name})
-                                      cons)
-                              | (LTsyn _) as def -> def)
-                         infos.lt_def;},
-                   loc
-                  )
-	 | Dlemma(name,is_axiom,labels,poly,property,loc) ->
-	     Dlemma(unique_logic_name name,is_axiom,labels,poly,property,loc)
-         | Dmodel_annot _ -> annot
-	 | Dtype_annot _ | Dinvariant _ ->
-	     (* Useful ? harmless ?
-		info.l_name <- unique_logic_name info.l_name;
-	     *)
-	     annot
-       in replace_annot annot,gen
-    );
-*)
   (* preprocess of renaming logic functions  *)
   Logic_env.Logic_info.iter
     (fun name _li ->
        try
-	 let x = Hashtbl.find logic_names_overloading name in
-	 x := true
+         let x = Hashtbl.find logic_names_overloading name in
+         x := true
        with
-	   Not_found ->
-	     Hashtbl.add logic_names_overloading name (ref false)
-    );
-
-  let visitor = new renameEntities (add_variable) (add_logic_variable) in
-  visitFramacFile visitor file
+       | Not_found ->
+         Hashtbl.add logic_names_overloading name (ref false));
+  visitFramacFile (new renaming_visitor add_variable add_logic_variable) file
 
 
 (*****************************************************************************)
 (* Replace addrof array with startof.                                        *)
 (*****************************************************************************)
 
-class replaceAddrofArray =
-object
+class array_addrof_to_startof_visitor =
+  object
+    inherit frama_c_inplace
 
-  inherit Visitor.frama_c_inplace
+    method! vexpr e =
+      match e.enode with
+      | AddrOf lv when isArrayType (typeOfLval lv) ->
+        ChangeDoChildrenPost (new_exp ~loc:e.eloc (StartOf lv), fun x -> x)
+      | _ -> DoChildren
 
-  method! vexpr e = match e.enode with
-    | AddrOf lv ->
-	if isArrayType(typeOfLval lv) then
-	  ChangeDoChildrenPost (new_exp ~loc:e.eloc (StartOf lv), fun x -> x)
-	else DoChildren
-    | _ -> DoChildren
-
-  method! vterm t = match t.term_node with
-    | TAddrOf tlv ->
-	let ty = force_app_term_type pointed_type t.term_type in
-	if isArrayType ty then
-	  let t' = { t with
-	    term_node = TStartOf tlv;
-	    term_type = Ctype (element_type ty);
-	  } in
-	  ChangeDoChildrenPost (t', fun x -> x)
-	else DoChildren
-    | _ -> DoChildren
-
-end
+    method! vterm t =
+      match t.term_node with
+      | TAddrOf tlv ->
+        begin match Type.Logic_c_type.of_logic_type t.term_type with
+        | Some lct ->
+          let ty = Type.Logic_c_type.map ~f:pointed_type lct in
+          if isArrayType ty then
+            ChangeDoChildrenPost (
+              {
+                t with
+                term_node = TStartOf tlv;
+                term_type = Ctype (element_type ty);
+              },
+              Fn.id)
+          else
+            DoChildren
+        | _ -> DoChildren
+        end
+      | _ -> DoChildren
+  end
 
 let replace_addrof_array file =
-  let visitor = new replaceAddrofArray in
-  visit_and_update_globals visitor file
-
+  visitFramacFile (new array_addrof_to_startof_visitor) file
 
 (*****************************************************************************)
 (* Replace string constants by global variables.                             *)
@@ -214,14 +173,14 @@ let replace_addrof_array file =
 (* WARNING: C99 doesn't specify whether string literals with the same contents (values) should be merged *)
 (*          (i.e. stored within the same char array).                                                    *)
 (*          Therefore such optimizations must NOT be implemented.                                        *)
-class replaceStringConstants =
+class string_constants_visitor ~attach =
 
   let (memo_string, find_strings), (memo_wstring, find_wstrings) =
     let module ScopeMap =
       Map.Make
         (struct
           type t = fundec option
-          let compare = opt_compare Fundec.compare
+          let compare = Option.compare ~cmp:Fundec.compare
          end)
     in
     let memo_find (type a) (type b) (module Trie : Trie.S with type key = a) (explode : b -> a list) =
@@ -236,18 +195,18 @@ class replaceStringConstants =
             ScopeMap.(add scope ((loc, vi)::try find scope scope_map with Not_found -> []) scope_map)
       in
       let find_strings ?scope prefix =
-        Trie.find_all !strings (explode prefix)
-        |>
-         (match scope with
+        Trie.find_all !strings (explode prefix) |>
+        (match scope with
           | Some scope -> List.map (fun map -> try ScopeMap.find scope map with Not_found -> [])
           | None -> List.(flatten % map (map snd % ScopeMap.bindings)))
-        |> List.flatten
-        |> List.sort (fun (l1, _) (l2, _) -> Location.compare l1 l2)
-        |> List.map snd
+        |>
+        List.flatten |>
+        List.sort (fun (l1, _) (l2, _) -> Location.compare l1 l2) |>
+        List.map snd
       in
       memo_string, find_strings
     in
-    memo_find (module StringTrie) string_explode, memo_find (module Int64Trie) id
+    memo_find (module StringTrie) String.explode, memo_find (module Int64Trie) Fn.id
   in
 
   (* Functions to build and attach an invariant for each string constant. The actual invariant generation is
@@ -256,38 +215,39 @@ class replaceStringConstants =
   let content_inv ~loc s lv =
     let content =
       match s with
-      | `String s -> List.map (Logic_const.tinteger ~loc % int_of_char) (string_explode s @ ['\000'])
+      | `String s -> List.map (Logic_const.tinteger ~loc % int_of_char) (String.explode s @ ['\000'])
       | `Wstring ws -> List.map (Logic_const.tint ~loc % Integer.of_int64) (ws @ [0x0L])
     in
     Logic_const.(
       pands @@
         ListLabels.mapi content
           ~f:(fun i c ->
-                let lval =
-                  match lv.lv_type with
-                  | Ctype (TArray _) -> TVar lv, TIndex (tinteger ~loc i, TNoOffset)
-                  | Ctype (TPtr _) as lt ->
-                    TMem (term ~loc (TBinOp (PlusPI, tvar ~loc lv, tinteger ~loc i)) lt), TNoOffset
-                  | _ -> fatal "Wrong type of string literal proxy %a" Printer.pp_logic_var lv
-                in
-                let el = term ~loc (TLval lval) (Ctype charType) in
-                  prel ~loc (Req, el, c)))
+            let lval =
+              match lv.lv_type with
+              | Ctype (TArray _) -> TVar lv, TIndex (tinteger ~loc i, TNoOffset)
+              | Ctype (TPtr _) as lt ->
+                TMem (term ~loc (TBinOp (PlusPI, tvar ~loc lv, tinteger ~loc i)) lt), TNoOffset
+              | _ -> Console.fatal "Wrong type of string literal proxy %a" Printer.pp_logic_var lv
+            in
+            let el = term ~loc (TLval lval) (Ctype charType) in
+            prel ~loc (Req, el, c)))
   in
   let attach_invariant name loc p =
-    let globinv = Cil_const.make_logic_info (unique_logic_name name) in
+    let globinv = Cil_const.make_logic_info (Name.Logic.unique name) in
     globinv.l_labels <- [LogicLabel (None, "Here")];
     globinv.l_body <- LBpred p;
-    attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
-    attach_global (GAnnot(Dinvariant (globinv, loc), loc))
+    attach#globaction (fun () -> Logic_utils.add_logic_function globinv);
+    attach#global (GAnnot (Dinvariant (globinv, loc), loc))
   in
 
   (* Use the Cil translation on initializers. First translate to primitive
    * AST to later apply translation in [blockInitializer].
    *)
   let string_cabs_init expr_loc =
+    let open Cabs in
     function
-    | `String s -> SINGLE_INIT ({ expr_node = CONSTANT (CONST_STRING (s, None)); expr_loc })
-    | `Wstring ws -> SINGLE_INIT ({ expr_node = CONSTANT (CONST_WSTRING (ws, None)); expr_loc })
+    | `String s -> SINGLE_INIT { expr_node = CONSTANT (CONST_STRING (s, None)); expr_loc }
+    | `Wstring ws -> SINGLE_INIT { expr_node = CONSTANT (CONST_WSTRING (ws, None)); expr_loc }
   in
 
   (* Name of variable should be as close as possible to the string it
@@ -297,16 +257,16 @@ class replaceStringConstants =
   let string_var s fundec_opt loc =
     let name =
       match s with
-      | `String s -> unique_name ("__string_" ^ filter_alphanumeric s [] '_')
-      | `Wstring _ -> unique_name "__wstring_"
+      | `String s -> Name.unique ("__string_" ^ String.filter_alphanumeric ~assoc:[] ~default:'_' s)
+      | `Wstring _ -> Name.unique "__wstring_"
     in
     let vi =
       makeGlobalVar name (array_type (match s with `String _ -> charType | `Wstring _ -> theMachine.wcharType))
     in
     let attach_invariants ?(content=false) vi' =
-      let tv' = term_of_var vi' in
+      let tv' = Ast.Term.of_var vi' in
       attach_invariant ("proxy_" ^ vi'.vname ^ "_for_" ^ vi.vname) vi'.vdecl @@
-        Logic_const.prel ~loc:vi'.vdecl (Req, tv', term_of_var vi);
+        Logic_const.prel ~loc:vi'.vdecl (Req, tv', Ast.Term.of_var vi);
       if content then
         (* Define an invariant on the contents of the string *)
         let content_inv = content_inv ~loc s @@ cvar_to_lvar vi' in
@@ -338,34 +298,34 @@ class replaceStringConstants =
    See bts0284.c
     List.iter attach_globinit b.bstmts;
 *)
-    attach_global (GVar (v, {init=Some init}, CurrentLoc.get ()));
+    attach#global (GVar (v, {init=Some init}, CurrentLoc.get ()));
 
     (* Define a global string invariant *)
     begin try
     let validstring =
       match
         Logic_env.find_all_logic_functions
-	  (match s with
-	   | `Wstring _ -> name_of_valid_wstring
-	   | `String _ -> name_of_valid_string)
+          (match s with
+           | `Wstring _ -> Name.Of.Predicate.valid_wstring
+           | `String _ -> Name.Of.Predicate.valid_string)
       with
-	| [i] -> i
-	| _  -> raise Exit
+        | [i] -> i
+        | _  -> raise Exit
     in
     let strlen =
-      match Logic_env.find_all_logic_functions name_of_strlen
+      match Logic_env.find_all_logic_functions Name.Of.Logic_function.strlen
       with
-	| [i] -> i
-	| _  -> raise Exit
+        | [i] -> i
+        | _  -> raise Exit
     in
     let strlen_type =
       match strlen.l_type with Some t -> t | None -> assert false
     in
     let wcslen =
-      match Logic_env.find_all_logic_functions name_of_wcslen
+      match Logic_env.find_all_logic_functions Name.Of.Logic_function.wcslen
       with
-	| [i] -> i
-	| _  -> raise Exit
+        | [i] -> i
+        | _  -> raise Exit
     in
     let wcslen_type =
       match wcslen.l_type with Some t -> t | None -> assert false
@@ -373,193 +333,199 @@ class replaceStringConstants =
     let pstring =
       Papp (validstring, [], [variable_term v.vdecl (cvar_to_lvar v)])
     in
-    let tv = term_of_var v in
+    let tv = Ast.Term.of_var v in
     let strsize =
       match s with
-      | `Wstring _ -> mkterm (Tapp (wcslen, [], [tv])) wcslen_type v.vdecl
-      | `String _ -> mkterm (Tapp (strlen, [], [tv])) strlen_type v.vdecl
+      | `Wstring _ -> Ast.Term.mk ~typ:wcslen_type ~loc:v.vdecl @@ Tapp (wcslen, [], [tv])
+      | `String _ -> Ast.Term.mk ~typ:strlen_type ~loc:v.vdecl @@ Tapp (strlen, [], [tv])
     in
     let size = constant_term v.vdecl (Integer.of_int size) in
     let psize = Prel (Req, strsize, size) in
-    let p = Pand (predicate v.vdecl pstring, predicate v.vdecl psize) in
+    let p = Pand (Ast.Named.mk ~loc:v.vdecl pstring, Ast.Named.mk ~loc:v.vdecl psize) in
 
-    attach_invariant ("validity_of_" ^ v.vname) v.vdecl (predicate v.vdecl p);
+    attach_invariant ("validity_of_" ^ v.vname) v.vdecl (Ast.Named.mk ~loc:v.vdecl p);
     with Exit -> ()
     end;
     v
   in
-object(self)
+  object(self)
 
-  inherit Visitor.frama_c_inplace
+    inherit Visitor.frama_c_inplace
 
-  method find_strings = find_strings
+    method find_strings = find_strings
 
-  method find_wstrings = find_wstrings
+    method find_wstrings = find_wstrings
 
-  method literal_attr_name = "literal"
+    method literal_attr_name = "literal"
 
-  method is_literal_proxy vi =
-    vi.vghost && vi.vglob && (vi.vstorage = Static || vi.vstorage = NoStorage) &&
-    (isCharPtrType vi.vtype ||
-     isPointerType vi.vtype && not (need_cast (pointed_type vi.vtype) theMachine.wcharType)) &&
-    hasAttribute "const" (typeAttr vi.vtype) &&
-    hasAttribute "const" (typeAttr @@ pointed_type vi.vtype) &&
-    hasAttribute self#literal_attr_name vi.vattr
+    method is_literal_proxy vi =
+      vi.vghost && vi.vglob && (vi.vstorage = Static || vi.vstorage = NoStorage) &&
+      (isCharPtrType vi.vtype ||
+       isPointerType vi.vtype && not (need_cast (pointed_type vi.vtype) theMachine.wcharType)) &&
+      hasAttribute "const" (typeAttr vi.vtype) &&
+      hasAttribute "const" (typeAttr @@ pointed_type vi.vtype) &&
+      hasAttribute self#literal_attr_name vi.vattr
 
-  method! vinit vi _ _ =
-    if self#is_literal_proxy vi then
-      SkipChildren
-    else
-      DoChildren
-
-  method! vexpr e = match e.enode with
-    | Const(CStr s) ->
-	let v = make_glob self#current_func e.eloc (`String s) in
-	ChangeTo (new_exp ~loc:e.eloc (StartOf(Var v, NoOffset)))
-    | Const(CWStr ws) ->
-	let v = make_glob self#current_func e.eloc (`Wstring ws) in
-	ChangeTo (new_exp ~loc:e.eloc (StartOf(Var v, NoOffset)))
-    | _ -> DoChildren
-
-  method! vglob_aux = function
-    | GVar(v,{init=Some(SingleInit({enode = Const _}))},_) ->
-	if isArrayType v.vtype then
-	  (* Avoid creating an array for holding the initializer for another
-	   * array. This initializer is later cut into individual
-	   * initialization statements in [gather_initialization].
-	   *)
-	  SkipChildren
-	else
-	  DoChildren
-    | GVar (_, { init = Some (CompoundInit (TArray (_, _, _, _), lst)) }, loc) ->
-      let content =
-        ListLabels.mapi lst
-          ~f:(fun i pair ->
-                match pair with
-                | Index ({ enode = Const (CInt64 (i', _, _)) }, NoOffset),
-                  SingleInit ({ enode = Const (CChr _ | CInt64 _ as c)
-                                      | CastE (_, { enode = Const (CChr _ | CInt64 _ as c) }) } as e)
-                  when i = Integer.to_int i' ->
-                  let c =
-                    match c with
-                    | CInt64 (c, _, _) when isCharType (typeOf e) -> CChr (Char.chr @@ Integer.to_int c)
-                    | _ -> c
-                  in
-                  Some c
-                | _ -> None)
-      in
-      let content = take (List.length content - 1) content in
-      (try
-        let s =
-          match List.hd content with
-          | Some (CChr _) ->
-            `String (string_implode @@ List.map (function Some (CChr c) -> c | _ -> raise @@ Failure "s") content)
-          | Some (CInt64 _) ->
-            `Wstring
-              (ListLabels.map content
-               ~f:(function Some (CInt64 (i, _, _)) -> Integer.to_int64 i | _ -> raise @@ Failure "s"))
-          | _ -> raise @@ Failure "s"
-        in
-        let attach_invariants ?(content=false) vi' =
-          if content then
-            attach_invariant
-              ("contents_of_" ^ vi'.vname)
-                vi'.vdecl @@
-                  content_inv ~loc s @@
-                    cvar_to_lvar vi'
-        in
-        (match s with `String s -> memo_string s | `Wstring ws -> memo_wstring ws)
-          self#current_func
-          loc
-          (None, attach_invariants);
+    method! vinit vi _ _ =
+      if self#is_literal_proxy vi then
+        SkipChildren
+      else
         DoChildren
-      with
-      | Failure "hd" | Failure "s" -> DoChildren)
-    | _ -> DoChildren
+
+    method! vexpr e = match e.enode with
+      | Const(CStr s) ->
+        let v = make_glob self#current_func e.eloc (`String s) in
+        ChangeTo (new_exp ~loc:e.eloc (StartOf(Var v, NoOffset)))
+      | Const(CWStr ws) ->
+        let v = make_glob self#current_func e.eloc (`Wstring ws) in
+        ChangeTo (new_exp ~loc:e.eloc (StartOf(Var v, NoOffset)))
+      | _ -> DoChildren
+
+    method! vglob_aux = function
+      | GVar (v, { init = Some (SingleInit {enode = Const _}) }, _) ->
+        if isArrayType v.vtype then
+          (* Avoid creating an array for holding the initializer for another
+           * array. This initializer is later cut into individual
+           * initialization statements in [gather_initialization].
+          *)
+          SkipChildren
+        else
+          DoChildren
+      | GVar (_, { init = Some (CompoundInit (TArray (_, _, _, _), lst)) }, loc) ->
+        let content =
+          ListLabels.mapi lst
+            ~f:(fun i pair ->
+              match pair with
+              | Index ({ enode = Const (CInt64 (i', _, _)) }, NoOffset),
+                SingleInit ({ enode = Const (CChr _ | CInt64 _ as c)
+                                    | CastE (_, { enode = Const (CChr _ | CInt64 _ as c) }) } as e)
+                when i = Integer.to_int i' ->
+                let c =
+                  match c with
+                  | CInt64 (c, _, _) when isCharType (typeOf e) -> CChr (Char.chr @@ Integer.to_int c)
+                  | _ -> c
+                in
+                Some c
+              | _ -> None)
+        in
+        let content = List.take (List.length content - 1) content in
+        (try
+           let s =
+             match List.hd content with
+             | Some (CChr _) ->
+               `String (String.implode @@ List.map (function Some (CChr c) -> c | _ -> raise @@ Failure "s") content)
+             | Some (CInt64 _) ->
+               `Wstring
+                 (ListLabels.map content
+                    ~f:(function Some (CInt64 (i, _, _)) -> Integer.to_int64 i | _ -> raise @@ Failure "s"))
+             | _ -> raise @@ Failure "s"
+           in
+           let attach_invariants ?(content=false) vi' =
+             if content then
+               attach_invariant
+                 ("contents_of_" ^ vi'.vname)
+                 vi'.vdecl @@
+               content_inv ~loc s @@
+               cvar_to_lvar vi'
+           in
+           (match s with `String s -> memo_string s | `Wstring ws -> memo_wstring ws)
+             self#current_func
+             loc
+             (None, attach_invariants);
+           DoChildren
+         with
+         | Failure "hd" | Failure "s" -> DoChildren)
+      | _ -> DoChildren
 
 end
 
-class literal_proxy_visitor (first_pass_visitor : replaceStringConstants) =
-object
+class literal_proxy_visitor (first_pass_visitor : string_constants_visitor) =
+  object
 
-  inherit frama_c_inplace
+    inherit frama_c_inplace
 
-  method! vinit vi off init =
-    if first_pass_visitor#is_literal_proxy vi then
-      let attrparams = findAttribute first_pass_visitor#literal_attr_name vi.vattr in
-      let s, scope, idx =
-        match off, init with
-        | NoOffset,
-          SingleInit { enode = Const const | CastE (_, { enode = Const const }) } ->
-          let s =
-            match const with
-            | CStr s ->
-              let s =
-                if Str.last_chars s 3 = "..." then
-                  Str.first_chars s (String.length s - 3)
-               else s
-              in
-              `String s
-            | CWStr ws ->
-              let ws =
-                if take 3 (List.rev ws) = [0x2EL; 0x2EL; 0x2EL] then
-                  List.(rev @@ drop 3 @@ rev ws)
-                else ws
-              in
-              `Wstring ws
-            | _ -> fatal "Unrecognized literal proxy initializer: %a" Printer.pp_constant const
-          in
-          let conv_int i = Some (Integer.to_int i) in
-          (match attrparams with
-           | [AInt i] -> s, Some None, conv_int i
-           | ACons (f, []) :: aps ->
-             (try
-               s,
-               Some (Some (Kernel_function.get_definition @@ Globals.Functions.find_by_name f)),
-               (match aps with
-                | [AInt i] -> conv_int i
-                | [] -> None
-                | _ -> fatal "Invalid argument in proxy literal attribute: %a" Printer.pp_attributes vi.vattr)
+    method! vinit vi off init =
+      if first_pass_visitor#is_literal_proxy vi then
+        let attrparams = findAttribute first_pass_visitor#literal_attr_name vi.vattr in
+        let s, scope, idx =
+          match off, init with
+          | NoOffset,
+            SingleInit { enode = Const const | CastE (_, { enode = Const const }) } ->
+            let s =
+              match const with
+              | CStr s ->
+                let s =
+                  if Str.last_chars s 3 = "..." then
+                    Str.first_chars s (String.length s - 3)
+                  else s
+                in
+                `String s
+              | CWStr ws ->
+                let ws =
+                  if List.take 3 (List.rev ws) = [0x2EL; 0x2EL; 0x2EL] then
+                    List.(rev @@ drop 3 @@ rev ws)
+                  else ws
+                in
+                `Wstring ws
+              | _ -> Console.fatal "Unrecognized literal proxy initializer: %a" Printer.pp_constant const
+            in
+            let conv_int i = Some (Integer.to_int i) in
+            (match attrparams with
+             | [AInt i] -> s, Some None, conv_int i
+             | ACons (f, []) :: aps ->
+               (try
+                  s,
+                  Some (Some (Kernel_function.get_definition @@ Globals.Functions.find_by_name f)),
+                  (match aps with
+                   | [AInt i] -> conv_int i
+                   | [] -> None
+                   | _ -> Console.fatal "Invalid argument in proxy literal attribute: %a" Printer.pp_attributes vi.vattr)
+                with
+                | Not_found | Kernel_function.No_Definition ->
+                  Console.fatal
+                    "Invalid function name %s in literal proxy specification: %a" f Printer.pp_attributes vi.vattr)
+             | [] -> s, None, None
+             | _ -> Console.fatal "Invalid literal proxy attribute specification: %a" Printer.pp_attributes vi.vattr)
+          | _ -> Console.fatal "Unrecognized literal proxy specification for variable %a" Printer.pp_varinfo vi
+        in
+        let vis =
+          match s with
+          | `String s -> first_pass_visitor#find_strings ?scope s
+          | `Wstring ws -> first_pass_visitor#find_wstrings ?scope ws
+        in
+        let vis =
+          Option.fold
+            idx
+            ~init:vis
+            ~f:(fun vis i ->
+              try
+                [List.nth vis i]
               with
-              | Not_found | Kernel_function.No_Definition ->
-                fatal "Invalid function name %s in literal proxy specification: %a" f Printer.pp_attributes vi.vattr)
-          | [] -> s, None, None
-          | _ -> fatal "Invalid literal proxy attribute specification: %a" Printer.pp_attributes vi.vattr)
-        | _ -> fatal "Unrecognized literal proxy specification for variable %a" Printer.pp_varinfo vi
-      in
-      let vis =
-        match s with
-        | `String s -> first_pass_visitor#find_strings ?scope s
-        | `Wstring ws -> first_pass_visitor#find_wstrings ?scope ws
-      in
-      let vis =
-        opt_fold
-          (fun i vis ->
-            try [List.nth vis i]
-            with
-            | Failure "nth"
-            | Invalid_argument "List.nth" -> fatal "Invalid string literal index: %a" Printer.pp_attributes vi.vattr)
-          idx
-          vis
-      in
-      match vis with
-      | [vi'_opt, attach_invs] ->
-        attach_invs ~content:(hasAttribute "invariant" vi.vattr) vi;
-        (match vi'_opt with
-         | Some vi' -> ChangeTo (SingleInit (mkAddrOfVi vi'))
-         | None -> (Globals.Vars.find vi).init <- None; SkipChildren)
-      | [] -> fatal "No matching literals found for proxy specification (variable %a)" Printer.pp_varinfo vi
-      | _ -> fatal "Ambiguous literal proxy specification for variable %a" Printer.pp_varinfo vi
-    else
-      SkipChildren
-end
+              | Failure "nth"
+              | Invalid_argument "List.nth" ->
+                Console.fatal "Invalid string literal index: %a" Printer.pp_attributes vi.vattr)
+        in
+        match vis with
+        | [vi'_opt, attach_invs] ->
+          attach_invs ~content:(hasAttribute "invariant" vi.vattr) vi;
+          (match vi'_opt with
+           | Some vi' -> ChangeTo (SingleInit (mkAddrOfVi vi'))
+           | None -> (Globals.Vars.find vi).init <- None; SkipChildren)
+        | [] -> Console.fatal "No matching literals found for proxy specification (variable %a)" Printer.pp_varinfo vi
+        | _ -> Console.fatal "Ambiguous literal proxy specification for variable %a" Printer.pp_varinfo vi
+      else
+        SkipChildren
+  end
 
 let replace_string_constants =
-  let first_pass_visitor = new replaceStringConstants in
-  do_and_update_globals
-    (fun file ->
-      visitFramacFile (first_pass_visitor :> frama_c_visitor) file;
-      visitFramacFile (new literal_proxy_visitor first_pass_visitor) file)
+  Do.attaching_globs
+    {
+      Do.perform =
+        fun ~attach file ->
+          let first_pass_visitor = new string_constants_visitor attach in
+          visitFramacFile (first_pass_visitor :> frama_c_visitor) file;
+          visitFramacFile (new literal_proxy_visitor first_pass_visitor) file
+    }
 
 (*****************************************************************************)
 (* Put all global initializations in the [globinit] file.                    *)
@@ -567,163 +533,165 @@ let replace_string_constants =
 (*****************************************************************************)
 
 let gather_initialization file =
-  do_and_update_globals
-    (fun _ ->
-       Globals.Vars.iter (fun _v iinfo ->
-	 (* Too big currently, postpone until useful *)
-	 iinfo.init <- None))
-    file
+  Globals.Vars.iter
+    (fun _v iinfo ->
+       (* Too big currently, postpone until useful *)
+       iinfo.init <- None)
 
 class copy_spec_specialize_memset =
-object(self)
-  inherit Visitor.frama_c_copy (Project.current())
-  method private has_changed lv =
-    (Cil.get_original_logic_var self#behavior lv) != lv
+  object(self)
+    inherit frama_c_copy (Project.current())
+    method private has_changed lv =
+      (get_original_logic_var self#behavior lv) != lv
 
-  method! vlogic_var_use lv =
-    if self#has_changed lv then DoChildren (* Already visited *)
-    else begin
-      match lv.lv_origin with
+    method! vlogic_var_use lv =
+      if self#has_changed lv then
+        DoChildren (* Already visited *)
+      else
+        begin match lv.lv_origin with
         | Some v when not v.vglob -> (* Don't change global references *)
-            let v' = Cil_const.copy_with_new_vid v in
-            v'.vformal <- true;
-            (match Cil.unrollType v.vtype with
-              | TArray _ as t -> v'.vtype <- TPtr(t,[])
-              | _ -> ());
-            v'.vlogic_var_assoc <- None; (* reset association. *)
-            let lv' = Cil.cvar_to_lvar v' in
-            Cil.set_logic_var self#behavior lv lv';
-            Cil.set_orig_logic_var self#behavior lv' lv;
-            Cil.set_varinfo self#behavior v v';
-            Cil.set_orig_varinfo self#behavior v' v;
-            ChangeTo lv'
-        | Some _ | None -> DoChildren
-    end
+          let v' = Cil_const.copy_with_new_vid v in
+          v'.vformal <- true;
+          begin match Cil.unrollType v.vtype with
+           | TArray _ as t -> v'.vtype <- TPtr (t, [])
+           | _ -> ()
+          end;
+          v'.vlogic_var_assoc <- None; (* reset association. *)
+          let lv' = Cil.cvar_to_lvar v' in
+          set_logic_var self#behavior lv lv';
+          set_orig_logic_var self#behavior lv' lv;
+          set_varinfo self#behavior v v';
+          set_orig_varinfo self#behavior v' v;
+          ChangeTo lv'
+        | Some _
+        | None -> DoChildren
+        end
 
-  method! vterm t =
-    let post_action t =
-      let loc = t.term_loc in
-      match t.term_node with
+    method! vterm t =
+      let post_action t =
+        let loc = t.term_loc in
+        match t.term_node with
         | TStartOf (TVar lv, TNoOffset) ->
-            if self#has_changed lv then begin
-              (* Original was an array, and is now a pointer to an array.
-                 Update term accordingly*)
-              let base = Logic_const.tvar ~loc lv in
-              let tmem = (TMem base,TNoOffset) in
-              Logic_const.term
-                ~loc (TStartOf tmem) (Cil.typeOfTermLval tmem)
-            end else t
+          if self#has_changed lv then begin
+            (* Original was an array, and is now a pointer to an array.
+               Update term accordingly *)
+            let base = Logic_const.tvar ~loc lv in
+            let tmem = (TMem base,TNoOffset) in
+            Logic_const.term ~loc (TStartOf tmem) (Cil.typeOfTermLval tmem)
+          end else
+            t
         | TLval (TVar lv, (TIndex _ as idx)) ->
-            if self#has_changed lv then begin
-                (* Change array access into pointer shift. *)
-              let base = Logic_const.tvar ~loc lv in
-              let tmem = TMem base, idx in
-              Logic_const.term ~loc (TLval tmem) t.term_type
-            end else t
-        | _ -> t
-    in ChangeDoChildrenPost(t,post_action)
+          if self#has_changed lv then begin
+            (* Change array access into pointer shift. *)
+            let base = Logic_const.tvar ~loc lv in
+            let tmem = TMem base, idx in
+            Logic_const.term ~loc (TLval tmem) t.term_type
+          end else
+            t
+      | _ -> t
+      in
+      ChangeDoChildrenPost (t, post_action)
 
-  method! vspec s =
-    let refresh_deps = function
-      | FromAny -> FromAny
-      | From locs -> From (List.map Logic_const.refresh_identified_term locs)
-    in
-    let refresh_froms (loc,deps) =
-      (Logic_const.refresh_identified_term loc, refresh_deps deps)
-    in
-    let refresh_assigns = function
-      | WritesAny -> WritesAny
-      | Writes (writes) -> Writes (List.map refresh_froms writes)
-    in
-    let refresh_allocates = function
-      | FreeAllocAny -> FreeAllocAny
-      | FreeAlloc (free,alloc) ->
+    method! vspec s =
+      let refresh_deps =
+        function
+        | FromAny -> FromAny
+        | From locs -> From (List.map Logic_const.refresh_identified_term locs)
+      in
+      let refresh_froms (loc, deps) =
+        (Logic_const.refresh_identified_term loc, refresh_deps deps)
+      in
+      let refresh_assigns =
+        function
+        | WritesAny -> WritesAny
+        | Writes (writes) -> Writes (List.map refresh_froms writes)
+      in
+      let refresh_allocates =
+        function
+        | FreeAllocAny -> FreeAllocAny
+        | FreeAlloc (free,alloc) ->
           FreeAlloc (List.map Logic_const.refresh_identified_term free,
                      List.map Logic_const.refresh_identified_term alloc)
-    in
-    let refresh_extended e =
-      List.map (fun (s,i,p) -> (s,i,List.map Logic_const.refresh_predicate p)) e
-    in
-    let refresh_behavior b =
-      let requires = List.map Logic_const.refresh_predicate b.b_requires in
-      let assumes = List.map Logic_const.refresh_predicate b.b_assumes in
-      let post_cond =
-        List.map
-          (fun (k,p) -> (k,Logic_const.refresh_predicate p)) b.b_post_cond
       in
-      let assigns = refresh_assigns b.b_assigns in
-      let allocation = Some (refresh_allocates b.b_allocation) in
-      let extended = refresh_extended b.b_extended in
-      Cil.mk_behavior
-        ~assumes ~requires ~post_cond ~assigns ~allocation ~extended ()
-    in
-    let refresh s =
-      let bhvs = List.map refresh_behavior s.spec_behavior in
-      s.spec_behavior <- bhvs;
-      s
-    in
-    ChangeDoChildrenPost(s,refresh)
-end
+      let refresh_extended e =
+        List.map (fun (s,i,p) -> (s,i,List.map Logic_const.refresh_predicate p)) e
+      in
+      let refresh_behavior b =
+        let requires = List.map Logic_const.refresh_predicate b.b_requires in
+        let assumes = List.map Logic_const.refresh_predicate b.b_assumes in
+        let post_cond =
+          List.map
+            (fun (k, p) -> (k, Logic_const.refresh_predicate p)) b.b_post_cond
+        in
+        let assigns = refresh_assigns b.b_assigns in
+        let allocation = Some (refresh_allocates b.b_allocation) in
+        let extended = refresh_extended b.b_extended in
+        mk_behavior ~assumes ~requires ~post_cond ~assigns ~allocation ~extended ()
+      in
+      let refresh s =
+        let bhvs = List.map refresh_behavior s.spec_behavior in
+        s.spec_behavior <- bhvs;
+        s
+      in
+      ChangeDoChildrenPost (s, refresh)
+  end
 
 let copy_spec_specialize_memset s =
   let vis = new copy_spec_specialize_memset in
   let s' = Visitor.visitFramacFunspec vis s in
-  let args =
-    Cil.fold_visitor_varinfo
-      vis#behavior (fun oldv newv acc -> (oldv,newv)::acc) []
-  in
-  args,s'
+  let args = fold_visitor_varinfo vis#behavior (fun oldv newv acc -> (oldv,newv)::acc) [] in
+  args, s'
 
 class specialize_memset =
-object
-  inherit Visitor.frama_c_inplace
-  val mutable my_globals = []
-  method! vstmt_aux s =
-    match Annotations.code_annot ~filter:Logic_utils.is_contract s with
-      | [ annot ] ->
-          (match annot.annot_content with
-             | AStmtSpec
-                (_,({ spec_behavior =
-                    [ { b_name = "Frama_C_implicit_init" }]} as spec))
-              ->
-                let loc = Cil_datatype.Stmt.loc s in
-                let mk_actual v =
-                  match Cil.unrollType v.vtype with
-                    | TArray _ ->
-                        Cil.new_exp ~loc (StartOf (Cil.var v))
-                    | _ -> Cil.evar ~loc v
-                in
-                let prms, spec = copy_spec_specialize_memset spec in
-                let (actuals,formals) = List.split prms in
-                let actuals = List.map mk_actual actuals in
-                let arg_type =
-                  List.map (fun v -> v.vname, v.vtype, []) formals in
-                let f =
-                  Cil.makeGlobalVar
-                    (Common.unique_name "implicit_init")
-                    (TFun (TVoid [], Some arg_type, false, []))
-                in
-                 Cil.unsafeSetFormalsDecl f formals;
-                my_globals <-
-                  GVarDecl(Cil.empty_funspec(),f,loc) :: my_globals;
-                Globals.Functions.replace_by_declaration spec f loc;
-                let kf = Globals.Functions.get f in
-                Annotations.register_funspec ~emitter:Common.jessie_emitter kf;
-                let my_instr = Call(None,Cil.evar ~loc f,actuals,loc) in
-                s.skind <- Instr my_instr;
-                SkipChildren
-            | _ -> DoChildren)
+  object
+    inherit frama_c_inplace
+    val mutable my_globals = []
+    method! vstmt_aux s =
+      match Annotations.code_annot ~filter:Logic_utils.is_contract s with
+      | [annot] ->
+        (match annot.annot_content with
+         | AStmtSpec
+             (_, ({ spec_behavior = [{ b_name = "Frama_C_implicit_init" }]} as spec)) ->
+           let loc = Stmt.loc s in
+           let mk_actual v =
+             match unrollType v.vtype with
+             | TArray _ ->
+               new_exp ~loc (StartOf (Cil.var v))
+             | _ -> evar ~loc v
+           in
+           let prms, spec = copy_spec_specialize_memset spec in
+           let (actuals, formals) = List.split prms in
+           let actuals = List.map mk_actual actuals in
+           let arg_type = List.map (fun v -> v.vname, v.vtype, []) formals in
+           let f =
+             makeGlobalVar
+               (Name.unique "implicit_init")
+               (TFun (TVoid [], Some arg_type, false, []))
+           in
+           unsafeSetFormalsDecl f formals;
+           my_globals <- GVarDecl(empty_funspec (), f, loc) :: my_globals;
+           Globals.Functions.replace_by_declaration spec f loc;
+           let kf = Globals.Functions.get f in
+           Annotations.register_funspec ~emitter:Emitters.jessie kf;
+           let my_instr = Call (None, evar ~loc f, actuals, loc) in
+           s.skind <- Instr my_instr;
+           SkipChildren
+         | _ -> DoChildren)
       | _ -> DoChildren
 
   method! vglob_aux _ =
-    let add_specialized g = let s = my_globals in my_globals <- []; s @ g in
+    let add_specialized g =
+      let s = my_globals in
+      my_globals <- [];
+      s @ g
+    in
     DoChildrenPost add_specialized
 end
 
 let specialize_memset file =
   visitFramacFile (new specialize_memset) file;
   (* We may have introduced new globals: clear the last_decl table. *)
-  Ast.clear_last_decl ()
+  Framac.Ast.clear_last_decl ()
 
 (*****************************************************************************)
 (* Specification and specialization for memcpy and other block functions.    *)
@@ -733,165 +701,180 @@ let specialize_memset file =
 (* Support for kzalloc as kmalloc+memset                                     *)
 (*****************************************************************************)
 
-class kzalloc_expanding_visitor = object
-  inherit frama_c_inplace
+class kzalloc_expanding_visitor =
+  object
+    inherit frama_c_inplace
 
-  method! vstmt stmt =
-    match stmt.skind with
-    | Instr (Call ((Some lv as lv_opt), { enode = Lval (Var fv, NoOffset); eloc }, ([size; _] as args), loc))
-      when is_kzalloc_function fv ->
+    method! vstmt stmt =
+      match stmt.skind with
+      | Instr (Call (Some lv as lv_opt, { enode = Lval (Var fv, NoOffset); eloc }, ([size; _] as args), loc))
+        when isFunctionType fv.vtype && fv.vname = Name.Of.Function.kzalloc ->
         let get_function name =
-          try Kernel_function.get_vi (Globals.Functions.find_by_name name)
-          with Not_found ->
-            unsupported ("Using kzalloc without declared %s prototype. " ^^
-                         "Please provide a declaration for %s with minimal specification (will be ignored)")
-                        name name
+          try
+            Kernel_function.get_vi (Globals.Functions.find_by_name name)
+          with
+          | Not_found ->
+            Console.unsupported
+              ("Using kzalloc without declared %s prototype. \
+                Please provide a declaration for %s with minimal specification (will be ignored)")
+              name name
         in
-        let vi_kmalloc = get_function name_of_kmalloc in
+        let vi_kmalloc = get_function Name.Of.Function.kmalloc in
         let vi_memset = get_function "memset" in
         let lv = new_exp ~loc (Lval lv) in
         let z = zero ~loc in
         stmt.skind <-
           Block
             (mkBlock
-              [mkStmt (Instr (Call (lv_opt, evar ~loc:eloc vi_kmalloc, args, loc)));
-               mkStmt (
-                 If
-                   (mkBinOp ~loc Ne lv z,
-                    mkBlock
-                     [mkStmt (Instr (Call (None, evar ~loc:eloc vi_memset, [lv; z; size], loc)))],
-                    mkBlock [mkStmt (Instr (Skip loc))],
-                    loc))]);
+               [mkStmt (Instr (Call (lv_opt, evar ~loc:eloc vi_kmalloc, args, loc)));
+                mkStmt (
+                  If
+                    (mkBinOp ~loc Ne lv z,
+                     mkBlock
+                       [mkStmt (Instr (Call (None, evar ~loc:eloc vi_memset, [lv; z; size], loc)))],
+                     mkBlock [mkStmt (Instr (Skip loc))],
+                     loc))]);
         SkipChildren
-    | _ -> SkipChildren
-end
+      | _ -> SkipChildren
+  end
 
-let expand_kzallocs file = visitFramacFile (new kzalloc_expanding_visitor) file;
-
-module Option_misc = Jc.Option_misc
+let expand_kzallocs file = visitFramacFile (new kzalloc_expanding_visitor) file
 
 let get_specialized_name (*_type*) (*original_name*) =
   let type_regexp = Str.regexp_string "_type" in
-  fun _type -> Str.replace_first type_regexp (type_name _type)
+  fun typ ->
+    Str.replace_first type_regexp (Name.Of.typ typ)
 
-let is_pattern_type = function
+let is_pattern_type =
+  function
   | TNamed ({ torig_name = "_type"; ttype = TInt (_, []) }, _) -> true
   | _ -> false
 
-class spec_refreshing_vsitor = object
-  method vspec : 'a -> 'a visitAction = fun _ ->
-    let refresh_spec s =
-      match Logic_const.(refresh_code_annotation @@ new_code_annotation @@ AStmtSpec ([], s)).annot_content with
-        | AStmtSpec (_, s) -> s
-        | _ -> assert false
+class spec_refreshing_vsitor =
+  object
+    method vspec : 'a -> 'a visitAction = fun _ ->
+      let refresh_spec s =
+        match Logic_const.(refresh_code_annotation @@ new_code_annotation @@ AStmtSpec ([], s)) with
+        | { annot_content = AStmtSpec (_, s) } -> s
+        | a -> Console.fatal "Unexpectedly refreshed AStmtSpec to something else: %a" Printer.pp_code_annotation a
     in
     DoChildrenPost refresh_spec
-end
+  end
 
-class type_substituting_visitor _type =
-object
-  method vtype : 'a -> 'a visitAction = fun t ->
-    if not (is_pattern_type t) then DoChildren
-    else ChangeTo (typeAddAttributes (typeAttrs t) _type)
-end
+class type_substituting_visitor typ =
+  object
+    method vtype : 'a -> 'a visitAction =
+      fun t ->
+        if not (is_pattern_type t) then
+          DoChildren
+        else
+          ChangeTo (typeAddAttributes (typeAttrs t) typ)
+  end
 
-class virtual logic_var_visitor _type =
-  let get_specialized_name = get_specialized_name _type in
-object(self)
-  method virtual behavior : visitor_behavior
+class virtual logic_var_visitor typ =
+  let get_specialized_name = get_specialized_name typ in
+  object(self)
+    method virtual behavior : visitor_behavior
 
-  method private has_changed lv = (get_original_logic_var self#behavior lv) != lv
+    method private has_changed lv = (get_original_logic_var self#behavior lv) != lv
 
-  method private virtual vlogic_var_copying : logic_var -> logic_var visitAction
+    method private virtual vlogic_var_copying : logic_var -> logic_var visitAction
 
-  method private virtual vlogic_var_renaming : logic_var -> logic_var visitAction
+    method private virtual vlogic_var_renaming : logic_var -> logic_var visitAction
 
-  method vlogic_var_decl : 'a -> 'a visitAction = fun ({ lv_name; lv_origin } as lv) ->
-    if self#has_changed lv then
-      DoChildren
-    else if lv_name = get_specialized_name lv_name then
-      self#vlogic_var_copying lv
-    else
-      match lv_origin with
-        | None -> self#vlogic_var_renaming lv
-        | Some vi -> fatal "Can't handle logic variable with origin: %a" Printer.pp_varinfo vi
+    method vlogic_var_decl : 'a -> 'a visitAction =
+      fun ({ lv_name; lv_origin } as lv) ->
+        if self#has_changed lv then
+          DoChildren
+        else if lv_name = get_specialized_name lv_name then
+          self#vlogic_var_copying lv
+        else
+          match lv_origin with
+          | None -> self#vlogic_var_renaming lv
+          | Some vi -> Console.fatal "Can't handle logic variable with origin: %a" Printer.pp_varinfo vi
 
-  method vlogic_var_use = self#vlogic_var_decl
-end
+    method vlogic_var_use = self#vlogic_var_decl
+  end
 
-class virtual logic_var_specializing_visitor update_logic_info _type =
-  let update_logic_info = update_logic_info _type in
-object(self)
-  inherit logic_var_visitor _type
+class virtual logic_var_specializing_visitor update_logic_info typ =
+  let update_logic_info = update_logic_info typ in
+  object(self)
+    inherit logic_var_visitor typ
 
-  method private vlogic_var_copying ({ lv_name; lv_type } as lv) =
-    let lv' = Cil_const.make_logic_var_global lv_name lv_type in
-    set_logic_var self#behavior lv lv';
-    set_orig_logic_var self#behavior lv' lv;
-    ChangeTo lv'
+    method private vlogic_var_copying ({ lv_name; lv_type } as lv) =
+      let lv' = Cil_const.make_logic_var_global lv_name lv_type in
+      set_logic_var self#behavior lv lv';
+      set_orig_logic_var self#behavior lv' lv;
+      ChangeTo lv'
 
-  method private vlogic_var_renaming ({ lv_name } as lv) =
-    match Logic_env.find_all_logic_functions lv_name with
+    method private vlogic_var_renaming ({ lv_name } as lv) =
+      match Logic_env.find_all_logic_functions lv_name with
       | [ li ] ->
-          let { l_var_info = lv' } as li' = update_logic_info li in
-          set_logic_info self#behavior li li';
-          set_orig_logic_info self#behavior li' li;
-          set_logic_var self#behavior lv lv';
-          set_orig_logic_var self#behavior lv' lv;
-          ChangeTo lv'
-     | [] -> fatal "Can't find logic_info for logic variable: %s" lv_name
-     | _ -> fatal "Ambiguous logic_info for logic variable: %s" lv_name
-end
+        let { l_var_info = lv' } as li' = update_logic_info li in
+        set_logic_info self#behavior li li';
+        set_orig_logic_info self#behavior li' li;
+        set_logic_var self#behavior lv lv';
+        set_orig_logic_var self#behavior lv' lv;
+        ChangeTo lv'
+      | [] -> Console.fatal "Can't find logic_info for logic variable: %s" lv_name
+      | _ -> Console.fatal "Ambiguous logic_info for logic variable: %s" lv_name
+  end
 
-class virtual logic_var_renaming_visitor _type =
-  let get_specialized_name = get_specialized_name _type in
-object(self)
-  inherit logic_var_visitor _type
+class virtual logic_var_renaming_visitor typ =
+  let get_specialized_name = get_specialized_name typ in
+  object(self)
+    inherit logic_var_visitor typ
 
-  method private vlogic_var_copying _ = DoChildren
+    method private vlogic_var_copying _ = DoChildren
 
-  method private vlogic_var_renaming ({ lv_name; lv_type } as lv) =
-    let lv_name' = get_specialized_name lv_name in
-    let lv' = Cil_const.make_logic_var_global lv_name' lv_type in
-    set_logic_var self#behavior lv lv';
-    set_orig_logic_var self#behavior lv' lv;
-    ChangeTo lv'
-end
+    method private vlogic_var_renaming ({ lv_name; lv_type } as lv) =
+      let lv_name' = get_specialized_name lv_name in
+      let lv' = Cil_const.make_logic_var_global lv_name' lv_type in
+      set_logic_var self#behavior lv lv';
+      set_orig_logic_var self#behavior lv' lv;
+      ChangeTo lv'
+  end
 
 class specialize_blockfuns_visitor =
-  let specialize_logic_info _type (*logic_info*) =
+  let specialize_logic_info typ (*logic_info*) =
     let visitor = object
       inherit frama_c_inplace
-      inherit! type_substituting_visitor _type
-      inherit! logic_var_renaming_visitor _type
+      inherit! type_substituting_visitor typ
+      inherit! logic_var_renaming_visitor typ
     end in
     fun logic_info ->
       let logic_info' = visitFramacLogicInfo (new frama_c_copy @@ Project.current ()) logic_info in
       visitFramacLogicInfo visitor logic_info'
   in
-  let specialize_blockfun update_logic_info _type (*kernel_function*) =
-    let visitor = object
-      inherit frama_c_copy (Project.current ())
-      inherit! spec_refreshing_vsitor
-      inherit! type_substituting_visitor _type
-      inherit! logic_var_specializing_visitor update_logic_info _type
-    end in
-    fun { fundec; spec } -> match fundec with
+  let specialize_blockfun update_logic_info typ (*kernel_function*) =
+    let visitor =
+      object
+        inherit frama_c_copy (Project.current ())
+        inherit! spec_refreshing_vsitor
+        inherit! type_substituting_visitor typ
+        inherit! logic_var_specializing_visitor update_logic_info typ
+      end
+    in
+    fun { fundec; spec } ->
+      match fundec with
       | Declaration (spec, fvinfo, Some argvinfos, loc) ->
         let spec = visitFramacFunspec visitor spec in
         let fvinfo = visitFramacVarDecl visitor fvinfo in
-        let argvinfos = ListLabels.map argvinfos ~f:(fun vi ->
-          let vi = visitFramacVarDecl visitor vi in
-          vi.vlogic_var_assoc <- Option_misc.map (get_logic_var visitor#behavior) vi.vlogic_var_assoc;
-          Option_misc.iter (fun lv -> lv.lv_origin <- Some vi) vi.vlogic_var_assoc;
-          vi)
+        let argvinfos =
+          ListLabels.map
+            argvinfos
+            ~f:(fun vi ->
+              let vi = visitFramacVarDecl visitor vi in
+              vi.vlogic_var_assoc <- Option.map vi.vlogic_var_assoc ~f:(get_logic_var visitor#behavior);
+              Option.iter vi.vlogic_var_assoc ~f:(fun lv -> lv.lv_origin <- Some vi);
+              vi)
         in
         (spec, fvinfo, argvinfos, loc)
-      | _ -> fatal "Can't specialize user-defined block function: %a" Printer.pp_funspec spec
+      | _ -> Console.fatal "Can't specialize user-defined block function: %a" Printer.pp_funspec spec
   in
   let is_block_function = function
     | { fundec = Declaration (_, _, _, ({ Lexing.pos_fname }, _)) } ->
-        Filename.basename pos_fname = blockfuns_include_file_name
+        Filename.basename pos_fname = Name.Of.File.blockfuns_include
     | _ -> false
   in
   let match_arg_types ftype tl_opt tacts =
@@ -914,96 +897,109 @@ class specialize_blockfuns_visitor =
                        tf
             end else
               let ta = if isPointerType ta then pointed_type ta else ta in
-              if Option_misc.map_default (fun _type -> not (need_cast ta _type)) true !_type_ref then begin
-                if not (has_some !_type_ref) then _type_ref := Some ta;
+              if Option.map_default !_type_ref ~default:true ~f:(fun typ -> not (need_cast ta typ)) then begin
+                if not (Option.is_some !_type_ref) then _type_ref := Some ta;
                 true
               end else
                 false
           in
           if
-            List.for_all id @@
-              (Option_misc.map_default (matches ~tf:rtype) true tl_opt) ::
+            List.for_all Fn.id @@
+              (Option.map_default tl_opt ~default:true ~f:(matches ~tf:rtype)) ::
               List.map2 (fun (_, tf, _) ta -> matches ~tf ta) formals tacts
           then !_type_ref
           else None
-      | TFun _ -> fatal "Can't specialize the function by its return type: %a" Printer.pp_typ ftype
-      | _ -> fatal "%a is not a function type, can't check if the signature matches" Printer.pp_typ ftype
+      | TFun _ -> Console.fatal "Can't specialize the function by its return type: %a" Printer.pp_typ ftype
+      | _ -> Console.fatal "%a is not a function type, can't check if the signature matches" Printer.pp_typ ftype
   in
-object(self)
-  inherit frama_c_inplace
+  object(self)
+    inherit frama_c_inplace
 
-  val mutable new_globals = []
-  val mutable introduced_globals = []
+    val mutable new_globals = []
+    val mutable introduced_globals = []
 
-  method private update_logic_info _type (*li*) =
-    let get_specialized_name = get_specialized_name _type in
-    let rec match_global_with_lvar_name name = function
-      | GAnnot (Dfun_or_pred ({ l_var_info={ lv_name } }, _), _) -> lv_name = name
-      | GAnnot (Daxiomatic (_, lst, loc), _) ->
-          List.exists (match_global_with_lvar_name name) (List.map (fun ga -> GAnnot (ga, loc)) lst)
-      | _ -> false
-    in
-    fun ({ l_var_info={ lv_name } } as li) ->
-    try
-      let match_global = match_global_with_lvar_name (get_specialized_name lv_name) in
-      let rec find_li = function
-        | GAnnot (Dfun_or_pred (li, _), _) -> li
+    method private update_logic_info typ (*li*) =
+      let get_specialized_name = get_specialized_name typ in
+      let rec match_global_with_lvar_name name = function
+        | GAnnot (Dfun_or_pred ({ l_var_info={ lv_name } }, _), _) -> lv_name = name
         | GAnnot (Daxiomatic (_, lst, loc), _) ->
-            find_li (List.find match_global (List.map (fun ga -> GAnnot (ga, loc)) lst))
-        | _ -> assert false
+          List.exists (match_global_with_lvar_name name) (List.map (fun ga -> GAnnot (ga, loc)) lst)
+        | _ -> false
       in
-      find_li (List.find match_global @@ new_globals @ introduced_globals)
-    with Not_found ->
-      let match_global = match_global_with_lvar_name lv_name in
-      let axiomatic_opt =
-        Annotations.fold_global
-          (fun _ g acc -> if match_global @@ GAnnot (g, Location.unknown) then Some g else acc)
-          None
-      in
-      let specialize_logic_info = specialize_logic_info _type in
-      begin match axiomatic_opt with
-        | Some Daxiomatic (name, lst, _) ->
+      fun ({ l_var_info={ lv_name } } as li) ->
+        try
+          let match_global = match_global_with_lvar_name (get_specialized_name lv_name) in
+          let rec find_li =
+            function
+            | GAnnot (Dfun_or_pred (li, _), _) -> li
+            | GAnnot (Daxiomatic (_, lst, loc), _) ->
+              find_li (List.find match_global (List.map (fun ga -> GAnnot (ga, loc)) lst))
+            | _ -> assert false
+          in
+          find_li (List.find match_global @@ new_globals @ introduced_globals)
+        with
+        | Not_found ->
+          let match_global = match_global_with_lvar_name lv_name in
+          let axiomatic_opt =
+            Annotations.fold_global
+              (fun _ g acc -> if match_global @@ GAnnot (g, Location.unknown) then Some g else acc)
+              None
+          in
+          let specialize_logic_info = specialize_logic_info typ in
+          begin match axiomatic_opt with
+          | Some Daxiomatic (name, lst, _) ->
             let name = get_specialized_name name in
-            let lst = ListLabels.map lst ~f:(function
-              | Dfun_or_pred (li, loc) ->
-                  let li = specialize_logic_info li in
-                  Dfun_or_pred (li, loc)
-              | _ -> fatal "Can't specialize unknown logic info in axiomatic: %s" name)
+            let lst =
+              ListLabels.map
+                lst
+                ~f:(function
+                  | Dfun_or_pred (li, loc) ->
+                    let li = specialize_logic_info li in
+                    Dfun_or_pred (li, loc)
+                  | _ -> Console.fatal "Can't specialize unknown logic info in axiomatic: %s" name)
             in
             let g = Daxiomatic (name, lst, Location.unknown) in
             new_globals <- GAnnot (g, CurrentLoc.get ()) :: new_globals;
-            Annotations.add_global jessie_emitter g;
-            self#update_logic_info _type li
-        | Some _ -> fatal "Logic info (predicate, function, ...) specialization outside axiomatics is not supported: %s"
-                          lv_name
-        | None -> fatal "Can't find global logic info (predicate, function, ..): %s" lv_name
-      end
+            Annotations.add_global Emitters.jessie g;
+            self#update_logic_info typ li
+          | Some _ ->
+            Console.fatal
+              "Logic info (predicate, function, ...) specialization outside axiomatics is not supported: %s"
+              lv_name
+          | None ->
+            Console.fatal "Can't find global logic info (predicate, function, ..): %s" lv_name
+          end
 
-  method private find_specialized_function fname =
-    try
-      let fdecl = ListLabels.find (new_globals @ introduced_globals) ~f:(function
-        | GVarDecl (_, { vname }, _) -> vname = fname
-        | _ -> false)
-      in
-      match fdecl with
+    method private find_specialized_function fname =
+      try
+        let fdecl =
+          ListLabels.find
+            (new_globals @ introduced_globals)
+            ~f:(function
+              | GVarDecl (_, { vname }, _) -> vname = fname
+              | _ -> false)
+        in
+        match fdecl with
         | GVarDecl (_, f, _) -> Some f
         | _ -> assert false
-    with Not_found -> None
+      with
+      | Not_found -> None
 
-  method private specialize_function kf fname _type =
-    let spec, fvinfo, argvinfos, loc = specialize_blockfun (self#update_logic_info) _type kf in
-    let f = makeGlobalVar fname fvinfo.vtype in
-    f.vstorage <- fvinfo.vstorage;
-    f.vattr <- fvinfo.vattr;
-    unsafeSetFormalsDecl f argvinfos;
-    new_globals <- GVarDecl(empty_funspec (), f, loc) :: new_globals;
-    Globals.Functions.replace_by_declaration spec f loc;
-    let kernel_function = Globals.Functions.get f in
-    Annotations.register_funspec ~emitter:jessie_emitter kernel_function;
-    f
+    method private specialize_function kf fname typ =
+      let spec, fvinfo, argvinfos, loc = specialize_blockfun (self#update_logic_info) typ kf in
+      let f = makeGlobalVar fname fvinfo.vtype in
+      f.vstorage <- fvinfo.vstorage;
+      f.vattr <- fvinfo.vattr;
+      unsafeSetFormalsDecl f argvinfos;
+      new_globals <- GVarDecl(empty_funspec (), f, loc) :: new_globals;
+      Globals.Functions.replace_by_declaration spec f loc;
+      let kernel_function = Globals.Functions.get f in
+      Annotations.register_funspec ~emitter:Emitters.jessie kernel_function;
+      f
 
-  method! vstmt_aux = function
-    | { skind = Instr (Call (lval_opt, { enode = Lval (Var fvar, NoOffset) }, args , loc)) } as stmt ->
+    method! vstmt_aux =
+      function
+      | { skind = Instr (Call (lval_opt, { enode = Lval (Var fvar, NoOffset) }, args , loc)) } as stmt ->
         begin try
           let fpatt = Globals.Functions.find_by_name (fvar.vname ^ "__type") in
           if is_block_function fpatt then
@@ -1014,44 +1010,45 @@ object(self)
             in
             let strip_void_ptr_casts e = if isVoidPtrType @@ typeOf e then strip_cast e else e in
             let args = List.map strip_void_ptr_casts args in
-            let lval_type_opt = Option_misc.map typeOfLval lval_opt in
+            let lval_type_opt = Option.map lval_opt ~f:typeOfLval in
             let arg_types =  List.map typeOf args in
             let fvtype = match fpatt.fundec with
               | Declaration (_, { vtype }, _ ,_) -> vtype
               | _ -> assert false (* is_block_function == true *)
             in
             match match_arg_types fvtype lval_type_opt arg_types with
-              | Some _type ->
-                let f =
-                  let fname = fvar.vname ^ "_" ^ type_name _type in
-                  match self#find_specialized_function fname with
-                    | Some f -> f
-                    | None ->
-                        if fname <> unique_name fname then
-                          fatal "Can't introduce specialized function due to name conflict: %s" fname;
-                        self#specialize_function fpatt fname _type
-                in
-                stmt.skind <- Instr (Call (lval_opt, Cil.evar ~loc f, args, loc));
-                SkipChildren
-              | _ -> fatal "Can't specialize %s applied (or assigned) to arguments (or lvalue) of incorrect types: %a"
-                           fvar.vname Printer.pp_stmt stmt
+            | Some typ ->
+              let f =
+                let fname = fvar.vname ^ "_" ^ Name.Of.typ typ in
+                match self#find_specialized_function fname with
+                | Some f -> f
+                | None ->
+                  if fname <> Name.unique fname then
+                    Console.fatal "Can't introduce specialized function due to name conflict: %s" fname;
+                  self#specialize_function fpatt fname typ
+              in
+              stmt.skind <- Instr (Call (lval_opt, Cil.evar ~loc f, args, loc));
+              SkipChildren
+            | _ ->
+              Console.fatal "Can't specialize %s applied (or assigned) to arguments (or lvalue) of incorrect types: %a"
+                fvar.vname Printer.pp_stmt stmt
           else DoChildren
         with Not_found -> DoChildren
         end
-    | _ -> DoChildren
+      | _ -> DoChildren
 
-  method! vglob_aux _ =
-    DoChildrenPost (fun globals ->
-      introduced_globals <- new_globals @ introduced_globals;
-      let saved_globals = new_globals in
-      new_globals <-[];
-      saved_globals @ globals)
-end
+    method! vglob_aux _ =
+      DoChildrenPost (fun globals ->
+        introduced_globals <- new_globals @ introduced_globals;
+        let saved_globals = new_globals in
+        new_globals <-[];
+        saved_globals @ globals)
+  end
 
 let specialize_blockfuns file =
   visitFramacFile (new specialize_blockfuns_visitor) file;
   (* We may have introduced new globals: clear the last_decl table. *)
-  Ast.clear_last_decl ()
+  Framac.Ast.clear_last_decl ()
 
 (*****************************************************************************)
 (* Extending `assigns' clauses and equalities for composite types.           *)
@@ -1067,50 +1064,55 @@ class composite_expanding_visitor =
     let rec add_term_offset ty offset ({ term_node; term_loc=loc } as t) =
       let open! Logic_const in
       match term_node with
-        | TLval tlv ->
-            let offset = match offset with
-              | `Field f -> TField (f, TNoOffset)
-              | `Index i -> TIndex (tinteger ~loc i, TNoOffset)
-            in
-            { t with
-              term_node = TLval (addTermOffsetLval offset tlv);
-              term_type = Ctype ty }
-        | Tat (t, lab) -> tat ~loc (add_term_offset ty offset t, lab)
-        | TCastE (_, ({ term_type } as t))
-          when term_type = Linteger || term_type = Lreal ||
-               isIntegralType (ctype ~force:false term_type) ||
-               isFloatingType (ctype ~force:false term_type) ->
-            { t with term_node =
-              TCastE (ty, if isIntegralType ty then tinteger ~loc 0
-                          else if isFloatingType ty then treal_zero ()
-                          else if isPointerType ty then term ~loc Tnull (Ctype ty)
-                          else t) }
-        | TConst _ -> t
-        | _ -> unsupported "Don't know hot to expand term node: %a" Printer.pp_term t
+      | TLval tlv ->
+        let offset = match offset with
+          | `Field f -> TField (f, TNoOffset)
+          | `Index i -> TIndex (tinteger ~loc i, TNoOffset)
+        in
+        {
+          t with
+          term_node = TLval (addTermOffsetLval offset tlv);
+          term_type = Ctype ty
+        }
+      | Tat (t, lab) -> tat ~loc (add_term_offset ty offset t, lab)
+      | TCastE (_, ({ term_type } as t))
+        when term_type = Linteger || term_type = Lreal ||
+             isIntegralType (ctype ~force:false term_type) ||
+             isFloatingType (ctype ~force:false term_type) ->
+        {
+          t with term_node =
+                   TCastE (ty, if isIntegralType ty then tinteger ~loc 0
+                           else if isFloatingType ty then treal_zero ()
+                           else if isPointerType ty then term ~loc Tnull (Ctype ty)
+                           else t) }
+      | TConst _ -> t
+      | _ -> Console.unsupported "Don't know hot to expand term node: %a" Printer.pp_term t
     in
     match unrollType ty with
-      | TComp (ci, _, _) ->
-          let do_field ({ ftype } as f) =
-            let shift = add_term_offset ftype (`Field f) in
-            expand_equality ftype (shift t1) (shift t2)
-          in
-          List.flatten @@ List.map do_field (proper_fields ci)
-      | TArray (telem, _, _, _) as ty ->
-          let do_elem i =
-            let shift = add_term_offset telem (`Index i) in
-            expand_equality telem (shift t1) (shift t2)
-          in
-          let rec do_elems acc i =
-            if i <= 0 then acc
-            else do_elems (do_elem (i - 1) @ acc) (i - 1)
-          in
-          assert (not @@ is_reference_type ty);
-          do_elems [] @@ Integer.to_int (direct_array_size ty)
-      | _ -> [Prel (Req, t1, t2)]
+    | TComp (ci, _, _) ->
+      let do_field ({ ftype } as f) =
+        let shift = add_term_offset ftype (`Field f) in
+        expand_equality ftype (shift t1) (shift t2)
+      in
+      List.flatten @@ List.map do_field (Type.Composite.Ci.proper_fields ci)
+    | TArray (telem, _, _, _) as ty ->
+      let do_elem i =
+        let shift = add_term_offset telem (`Index i) in
+        expand_equality telem (shift t1) (shift t2)
+      in
+      let rec do_elems acc i =
+        if i <= 0 then acc
+        else do_elems (do_elem (i - 1) @ acc) (i - 1)
+      in
+      assert (not @@ Type.Ref.is_ref ty);
+      do_elems [] @@ Integer.to_int (direct_array_size ty)
+    | _ -> [Prel (Req, t1, t2)]
   in
-  let identified_term_list_of_equality_list = List.map (function
-    | Prel (Req, t, { term_node = TConst _}) -> Logic_const.new_identified_term t
-    | _ -> assert false)
+  let identified_term_list_of_equality_list =
+    List.map
+      (function
+        | Prel (Req, t, { term_node = TConst _}) -> Logic_const.new_identified_term t
+        | _ -> assert false)
   in
   let predicate_of_equality_list loc lst =
     Logic_const.(pands @@ List.map (unamed ~loc) lst).content
@@ -1122,34 +1124,36 @@ class composite_expanding_visitor =
   let expand_identified_term_list lst =
     let dummy_term = Logic_const.tinteger 0 in
     let (to_expand, to_prepend) = ListLabels.partition lst ~f:(fun { it_content } -> is_term_to_expand it_content) in
-    to_expand
-    |> List.map (fun { it_content = { term_type } as t } -> expand_equality (ctype term_type) t dummy_term)
-    |> List.flatten
-    |> identified_term_list_of_equality_list
-    |> fun expanded -> to_prepend @ expanded
+    to_expand |>
+    List.map (fun { it_content = { term_type } as t } -> expand_equality (ctype term_type) t dummy_term) |>
+    List.flatten |>
+    identified_term_list_of_equality_list |>
+    fun expanded -> to_prepend @ expanded
   in
-object
-  method vdeps = function
-    | FromAny -> DoChildren
-    | From lst -> ChangeTo (From (expand_identified_term_list lst))
+  object
+    method vdeps =
+      function
+      | FromAny -> DoChildren
+      | From lst -> ChangeTo (From (expand_identified_term_list lst))
 
-  method vassigns = function
-    | WritesAny -> DoChildren
-    | Writes lst ->
+    method vassigns =
+      function
+      | WritesAny -> DoChildren
+      | Writes lst ->
         let lst = List.flatten @@ ListLabels.map lst ~f:(function
           | { it_content = { term_type = ty1 } } as it1,
             From [ { it_content = {term_type = ty2 } } as it2]
             when Logic_utils.is_same_type ty1 ty2 ->
-              List.map2
-                (fun it1 it2 -> it1, From [it2])
-                (expand_identified_term_list [it1])
-                (expand_identified_term_list [it2])
+            List.map2
+              (fun it1 it2 -> it1, From [it2])
+              (expand_identified_term_list [it1])
+              (expand_identified_term_list [it2])
           | it1, from -> List.map (fun it -> it, from) @@ expand_identified_term_list [it1])
         in
         ChangeTo (Writes lst)
 
-  method vpredicate = function
-    | Prel (Req, ({ term_loc; term_type=ty1 } as t1), ({ term_type=ty2 } as t2)) ->
+    method vpredicate = function
+      | Prel (Req, ({ term_loc; term_type=ty1 } as t1), ({ term_type=ty2 } as t2)) ->
         let expand1 = is_term_to_expand t1 and expand2 = is_term_to_expand t2 in
         if expand1 && expand2 && Logic_utils.is_same_type ty1 ty2 || not (expand1 = expand2) then
           let result = predicate_of_equality_list term_loc @@ expand_equality (ctype ty1) t1 t2 in
@@ -1159,21 +1163,21 @@ object
           in
           let st1 = stripTermCasts t1 and st2 = stripTermCasts t2 in
           match st1 == t1, st2 == t2 with
-            | true, true -> ChangeTo result
-            | false, true -> ChangeTo (eq_implies_result st1 @@ tinteger ~loc:term_loc 0)
-            | true, false -> ChangeTo (eq_implies_result st2 @@ tinteger ~loc:term_loc 0)
-            | _ -> unsupported "Don't know how to expand equality: %a = %a" Printer.pp_term t1 Printer.pp_term t2
+          | true, true -> ChangeTo result
+          | false, true -> ChangeTo (eq_implies_result st1 @@ tinteger ~loc:term_loc 0)
+          | true, false -> ChangeTo (eq_implies_result st2 @@ tinteger ~loc:term_loc 0)
+          | _ -> Console.unsupported "Don't know how to expand equality: %a = %a" Printer.pp_term t1 Printer.pp_term t2
         else
           DoChildren
-    | _ -> DoChildren
-end
+      | _ -> DoChildren
+  end
 
 let expand_composites =
   visitFramacFile
     (object
       inherit frama_c_inplace
       inherit! composite_expanding_visitor
-     end)
+    end)
 
 (*****************************************************************************)
 (* Fold constants to avoid incorrect sizeofs.                                *)
@@ -1185,10 +1189,10 @@ let fold_constants_in_terms =
       inherit frama_c_inplace
       method! vterm t =
         ChangeTo (
-             force_term_to_exp t
-          |> map_fst (map_under_info @@ visitCilExpr @@ constFoldVisitor true)
-          |> uncurry force_back_exp_to_term % swap)
-     end)
+          Ast.Term.to_exp_env t |>
+          map_fst (map_under_info @@ visitCilExpr @@ constFoldVisitor true) |>
+          Ast.Term.of_exp_env)
+    end)
 
 (*****************************************************************************)
 (* Replace inine assembly with undefined function calls.                     *)
@@ -1198,11 +1202,11 @@ class asms_to_functions_visitor =
   let mkAddrOf ~loc lv =
     let rec set_flag =
       function
-        | Var vi, NoOffset -> vi.vaddrof <- true
-        | _, Field (fi, NoOffset) -> fi.faddrof <- true
-        | vi, Field (_, offset) -> set_flag (vi, offset)
-        | vi, Index (_, offset) -> set_flag (vi, offset)
-        | Mem _, _ -> ()
+      | Var vi, NoOffset -> vi.vaddrof <- true
+      | _, Field (fi, NoOffset) -> fi.faddrof <- true
+      | vi, Field (_, offset) -> set_flag (vi, offset)
+      | vi, Index (_, offset) -> set_flag (vi, offset)
+      | Mem _, _ -> ()
     in
     set_flag lv;
     mkAddrOf ~loc lv
@@ -1212,64 +1216,65 @@ class asms_to_functions_visitor =
     let thrd (_, _, e) = e in
     List.map thrd ins @ List.map (fun trpl -> exp_of_lval ~loc ~addr:true @@ thrd trpl) outs
   in
-object(self)
-  inherit frama_c_inplace
+  object(self)
+    inherit frama_c_inplace
 
-  val mutable new_globals = []
+    val mutable new_globals = []
 
-  method! vglob_aux =
-    let f g = let r = new_globals in new_globals <- []; r @ g in
-    function
+    method! vglob_aux =
+      let f g = let r = new_globals in new_globals <- []; r @ g in
+      function
       | GAsm _ ->
-          warning "Ignoring global inline assembly, which can potentially have side effects!";
-          ChangeToPost ([], f)
+        Console.warning "Ignoring global inline assembly, which can potentially have side effects!";
+        ChangeToPost ([], f)
       | _ -> DoChildrenPost f
 
-  method private introduce_function ?(int=false) attrs outs ins clobs loc =
-    let to_param pkind i (name_opt, _, e) =
-      let typ = typeOf e in
-      let ret name = match pkind with
-        | `Input ->  unique_name name, typ, []
-        | `Output -> unique_name name, TPtr (typ, [Attr ("const", [])]), []
-      in
-      match name_opt with
+    method private introduce_function ?(int=false) attrs outs ins clobs loc =
+      let to_param pkind i (name_opt, _, e) =
+        let typ = typeOf e in
+        let ret name =
+          match pkind with
+          | `Input ->  Name.unique name, typ, []
+          | `Output -> Name.unique name, TPtr (typ, [Attr ("const", [])]), []
+        in
+        match name_opt with
         | Some name -> ret name
         | None -> match e.enode with
           | Lval (Var { vname }, _) -> ret vname
           | _ -> ret @@ (match pkind with `Input -> "in" | `Output -> "out") ^ string_of_int i
-    in
-    let to_oparam i (name_opt, constr, lval) = to_param `Output i (name_opt, constr, exp_of_lval ~loc lval) in
-    let ins = List.mapi (to_param `Input) ins and outs = List.mapi to_oparam outs in
-    let params = ins @ outs in
-    let ret_typ = if int then intType else voidType in
-    let attrs = attrs @ List.map (fun a -> Attr (a, [])) ["static"; "inline"] in
-    let fname = unique_name ("inline_asm" ^ (if int then "_goto" else "")) in
-    let f = makeGlobalVar ~generated:true fname @@ TFun (ret_typ, Some params, false, attrs) in
-    new_globals <- GVarDecl (empty_funspec (), f, loc) :: new_globals;
-    Globals.Functions.replace_by_declaration (empty_funspec ()) f loc;
-    (* We've created a new undefined unspecified function. Now let's specify it: *)
-    let { fundec } as kf = Globals.Functions.get f in
-    match fundec with
+      in
+      let to_oparam i (name_opt, constr, lval) = to_param `Output i (name_opt, constr, exp_of_lval ~loc lval) in
+      let ins = List.mapi (to_param `Input) ins and outs = List.mapi to_oparam outs in
+      let params = ins @ outs in
+      let ret_typ = if int then intType else voidType in
+      let attrs = attrs @ List.map (fun a -> Attr (a, [])) ["static"; "inline"] in
+      let fname = Name.unique ("inline_asm" ^ (if int then "_goto" else "")) in
+      let f = makeGlobalVar ~generated:true fname @@ TFun (ret_typ, Some params, false, attrs) in
+      new_globals <- GVarDecl (empty_funspec (), f, loc) :: new_globals;
+      Globals.Functions.replace_by_declaration (empty_funspec ()) f loc;
+      (* We've created a new undefined unspecified function. Now let's specify it: *)
+      let { fundec } as kf = Globals.Functions.get f in
+      match fundec with
       | Declaration (funspec, _, Some args, loc) ->
-          let get_vars = List.map @@ fun (name, typ, _) ->
-            let vi = List.find (fun { vname } -> vname = name) @@ args in
-            let result = Cil_const.make_logic_var_formal name (Ctype typ) in
-            vi.vlogic_var_assoc <- Some result;
-            result.lv_origin <- Some vi;
-            result
-          in
-          let reads_any = ListLabels.exists ins ~f:(fun (_, typ, _)  ->
-            isPointerType typ || isStructOrUnionType typ || isArrayType typ)
-          in
-          let out_types = List.map (fun (_, typ, _) -> typ) outs in
-          let ins = get_vars ins and outs = get_vars outs in
-          let has_mem_clob = List.exists ((=) "memory") clobs in
-          funspec.spec_behavior <-
-            (let open! Logic_const in
-            [mk_behavior
-             ~requires:[new_predicate @@ pands @@ List.map (fun lv -> pvalid ~loc (here_label, tvar ~loc lv)) outs]
+        let get_vars = List.map @@ fun (name, typ, _) ->
+          let vi = List.find (fun { vname } -> vname = name) @@ args in
+          let result = Cil_const.make_logic_var_formal name (Ctype typ) in
+          vi.vlogic_var_assoc <- Some result;
+          result.lv_origin <- Some vi;
+          result
+        in
+        let reads_any = ListLabels.exists ins ~f:(fun (_, typ, _)  ->
+          isPointerType typ || isStructOrUnionType typ || isArrayType typ)
+        in
+        let out_types = List.map (fun (_, typ, _) -> typ) outs in
+        let ins = get_vars ins and outs = get_vars outs in
+        let has_mem_clob = List.exists ((=) "memory") clobs in
+        funspec.spec_behavior <-
+          (let open! Logic_const in
+           [mk_behavior
+              ~requires:[new_predicate @@ pands @@ List.map (fun lv -> pvalid ~loc (here_label, tvar ~loc lv)) outs]
               ~assigns:(if has_mem_clob then
-                          warning "The inline assembly includes memory clobber, but no side effect is assumed!";
+                          Console.warning "The inline assembly includes memory clobber, but no side effect is assumed!";
                         let to_terms = List.map @@ tvar ~loc in
                         let outs from =
                           let outs =
@@ -1280,86 +1285,91 @@ object(self)
                           Writes (List.map (fun t -> new_identified_term t, from) outs)
                         in
                         if reads_any then begin
-                          warning ("The inline assembly takes pointer, array or composite argument, so " ^^
-                                   "over-approximating data dependencies in assigns clause with FromAny");
+                          Console.warning ("The inline assembly takes pointer, array or composite argument, so \
+                                            over-approximating data dependencies in assigns clause with FromAny");
                           outs FromAny
                         end else
                           outs (From (List.map new_identified_term @@ to_terms ins)))
               ()]);
-          Annotations.register_funspec ~emitter:jessie_emitter kf;
-          f
-      | Declaration (_, _, None, _) -> fatal "Generated dummy function has somehow lost its arguments"
-      | Definition _ -> fatal "Generated dummy function was somehow unexpectedly defined"
+        Annotations.register_funspec ~emitter:Emitters.jessie kf;
+        f
+      | Declaration (_, _, None, _) -> Console.fatal "Generated dummy function has somehow lost its arguments"
+      | Definition _ -> Console.fatal "Generated dummy function was somehow unexpectedly defined"
 
-  method! vinst = function
-    | Asm (attrs, _, outs, ins, clobs, [], loc) ->
+    method! vinst =
+      function
+      | Asm (attrs, _, outs, ins, clobs, [], loc) ->
         let f = self#introduce_function attrs outs ins clobs loc in
         ChangeTo [Call (None, evar ~loc f, to_args ~loc ins outs, loc)]
-    | Asm _ -> fatal "Unsupported representation for asm goto (use AsmGoto statement instead of Asm instruction)"
-    | _ -> DoChildren
+      | Asm _ ->
+        Console.fatal "Unsupported representation for asm goto (use AsmGoto statement instead of Asm instruction)"
+      | _ -> DoChildren
 
-  method! vstmt_aux = function
-    | { skind = AsmGoto (attrs, _, outs, ins, clobs, stmts, loc) } as s ->
+    method! vstmt_aux =
+      function
+      | { skind = AsmGoto (attrs, _, outs, ins, clobs, stmts, loc) } as s ->
         let f = self#introduce_function ~int:true attrs outs ins clobs loc in
         begin match self#current_func with
-          | Some fundec ->
-              let aux = makeLocalVar fundec ~generated:true (unique_name "inline_asm_goto_aux") intType in
-              self#queueInstr [Call (Some (var aux), evar ~loc f, to_args ~loc ins outs, loc)];
-              let labeled lab ({ labels } as stmt) = stmt.labels <- lab :: labels; stmt in
-              let cases =
-                let rec loop acc n = function
-                  | [] -> List.rev @@ (labeled (Default loc) @@ mkStmtOneInstr ~valid_sid:true (Skip loc)) :: acc
-                  | sref :: srefs ->
-                      loop
-                        ((labeled (Case (integer ~loc @@ n, loc)) @@ mkStmt (Goto (sref, loc))) :: acc)
-                        (n + 1)
-                        srefs
-                in
-                loop [] 0 stmts
-              in
-              s.skind <- Switch (evar aux, mkBlock cases, cases, loc);
-              SkipChildren
-          | None -> fatal "Can't introduce local auxiliary variable outside function body"
+        | Some fundec ->
+          let aux = makeLocalVar fundec ~generated:true (Name.unique "inline_asm_goto_aux") intType in
+          self#queueInstr [Call (Some (var aux), evar ~loc f, to_args ~loc ins outs, loc)];
+          let labeled lab ({ labels } as stmt) = stmt.labels <- lab :: labels; stmt in
+          let cases =
+            let rec loop acc n =
+              function
+              | [] -> List.rev @@ (labeled (Default loc) @@ mkStmtOneInstr ~valid_sid:true (Skip loc)) :: acc
+              | sref :: srefs ->
+                loop
+                  ((labeled (Case (integer ~loc @@ n, loc)) @@ mkStmt (Goto (sref, loc))) :: acc)
+                  (n + 1)
+                  srefs
+            in
+            loop [] 0 stmts
+          in
+          s.skind <- Switch (evar aux, mkBlock cases, cases, loc);
+          SkipChildren
+        | None -> Console.fatal "Can't introduce local auxiliary variable outside function body"
         end
-    | _ -> DoChildren
-
-end
+      | _ -> DoChildren
+  end
 
 let asms_to_functions file =
   visitFramacFile (new asms_to_functions_visitor) file;
   (* We may have introduced new globals: clear the last_decl table. *)
-  Ast.clear_last_decl ()
+  Framac.Ast.clear_last_decl ()
 
 (*****************************************************************************)
 (* Rewrite function pointers into void* and fp calls into if statements.     *)
 (*****************************************************************************)
 
 class fptr_to_pvoid_visitor =
-object
-  inherit frama_c_inplace
+  object
+    inherit frama_c_inplace
 
-  method! vtype t =
-    match unrollTypeDeep t with
+    method! vtype t =
+      match unrollTypeDeep t with
       | TPtr (TFun _, _) | TArray (TFun _, _, _, _) -> ChangeTo voidConstPtrType
       | _ -> DoChildren
 
-  method! vlogic_type = function
-    | Ctype t -> begin match unrollTypeDeep t with
+    method! vlogic_type =
+      function
+      | Ctype t ->
+        begin match unrollTypeDeep t with
         | TFun _ | TPtr (TFun _, _) | TArray (TFun _, _, _, _) -> ChangeTo (Ctype voidConstPtrType)
         | _ -> DoChildren
-      end
-    | _ -> DoChildren
-end
+        end
+      | _ -> DoChildren
+  end
 
-class fp_eliminating_visitor =
-  let fatal_offset = fatal "Encountered function type with offset: %a" Printer.pp_exp in
-  let fatal_transform = fatal "Unexpectedly transformed function call to something else: %a" Printer.pp_stmt in
+class fp_eliminating_visitor ~attach =
+  let fatal_offset = Console.fatal "Encountered function type with offset: %a" Printer.pp_exp in
+  let fatal_transform = Console.fatal "Unexpectedly transformed function call to something else: %a" Printer.pp_stmt in
   let do_not_touch = ref None in
   let do_expr_pre e =
     match e.enode with
-      | Lval (Mem e, NoOffset) when isFunctionType @@ typeOf e -> e
-      | Lval (Mem e', _) when isFunctionType @@ typeOf e' -> fatal_offset e
-      | _ -> e
+    | Lval (Mem e, NoOffset) when isFunctionType @@ typeOf e -> e
+    | Lval (Mem e', _) when isFunctionType @@ typeOf e' -> fatal_offset e
+    | _ -> e
   in
   let intro_var =
     let module Hashtbl = Cil_datatype.Varinfo.Hashtbl in
@@ -1370,11 +1380,12 @@ class fp_eliminating_visitor =
       in
       try
         cast_addr0 @@ Hashtbl.find new_vis vi
-      with Not_found ->
-        let name = unique_name ("dummy_place_of_" ^ vi.vname) in
+      with
+      | Not_found ->
+        let name = Name.unique ("dummy_place_of_" ^ vi.vname) in
         let typ = array_type ~length:(integer ~loc:vi.vdecl 16) charType in
         let vi' = makeGlobalVar ~generated:true name typ in
-        attach_global @@ GVar (vi', { init = None }, vi.vdecl);
+        attach#global @@ GVar (vi', { init = None }, vi.vdecl);
         vi'.vdecl <- vi.vdecl;
         vi.vaddrof <- true;
         vi'.vaddrof <- true;
@@ -1382,121 +1393,137 @@ class fp_eliminating_visitor =
         cast_addr0 vi'
   in
   let do_expr_post e =
-    if !do_not_touch = Some e.eid then (do_not_touch := None; e)
-    else match e.enode with
+    if !do_not_touch = Some e.eid then begin
+      do_not_touch := None;
+      e
+    end else
+      match e.enode with
       | Lval (Var vi, NoOffset) | AddrOf (Var vi, NoOffset) when isFunctionType vi.vtype -> intro_var ~loc:e.eloc vi
       | Lval (Var vi, _) | AddrOf (Var vi, _) when isFunctionType vi.vtype -> fatal_offset e
       | _ -> e
   in
-object(self)
-  inherit frama_c_inplace
+  object(self)
+    inherit frama_c_inplace
 
-  method! vexpr e = ChangeDoChildrenPost (do_expr_pre e, do_expr_post)
+    method! vexpr e = ChangeDoChildrenPost (do_expr_pre e, do_expr_post)
 
-  method! vterm = do_on_term (Some do_expr_pre, Some do_expr_post)
+    method! vterm = Do.on_term ~pre:do_expr_pre ~post:do_expr_post
 
-  method! vstmt_aux s =
-    match s.skind with
+    method! vstmt_aux s =
+      match s.skind with
       | Instr (Call (_, ({ enode = Lval (Var { vtype }, NoOffset) } as f), _, _)) when isFunctionType vtype ->
-          do_not_touch := Some f.eid;
-          DoChildren
+        do_not_touch := Some f.eid;
+        DoChildren
       | Instr (Call (_, ({ enode = Lval (Var { vtype }, _) } as e), _, _)) when isFunctionType vtype ->
-          fatal_offset e
+        fatal_offset e
       | Instr (Call (_, f, _, _)) ->
-          let types t = match unrollType t with
-            | TFun (rt, ao, _, _) -> rt :: (List.map (fun (_, t, _) -> t) @@ opt_conv [] ao)
-            | t -> fatal "Non-function (%a) called as function: %a" Printer.pp_typ t Printer.pp_exp f
-          in
-          let norm, ts =
-            let t = typeOf f in
-            if isPointerType t then id, types @@ pointed_type t
+        let types t =
+          match unrollType t with
+          | TFun (rt, ao, _, _) -> rt :: (List.map (fun (_, t, _) -> t) @@ Option.value ~default:[] ao)
+          | t -> Console.fatal "Non-function (%a) called as function: %a" Printer.pp_typ t Printer.pp_exp f
+        in
+        let norm, ts =
+          let t = typeOf f in
+          if isPointerType t then
+            Fn.id, types @@ pointed_type t
+          else
+            (function
+              | { enode = Lval (Mem e, _) } -> e
+              | _ -> Console.fatal ("Expression of function type which is not a function \
+                                     nor a function pointer dereference: %a") Printer.pp_exp f),
+            types t
+        in
+        let candidates ~loc =
+          Globals.Functions.fold
+          (fun kf acc -> match kf.fundec with
+            | Definition ( { svar = { vtype; vaddrof=true } as vi }, _)
+            | Declaration (_, ({ vtype; vaddrof=true } as vi), _, _) when isFunctionType vtype ->
+              (vi, types vtype) :: acc
+            | _ -> acc)
+          []
+        |>
+        List.filter_map
+          ~f:(fun (vi, ts') ->
+            if List.(length ts = length ts' && not @@ exists2 (need_cast ~force:false) ts ts') then
+              Some (vi, intro_var ~loc vi)
             else
-              (function
-                | { enode = Lval (Mem e, _) } -> e
-                | _ -> fatal ("Expression of function type which is not a function " ^^
-                              "nor a function pointer dereference: %a") Printer.pp_exp f),
-              types t
-          in
-          let candidates ~loc =
-            Globals.Functions.fold
-              (fun kf acc -> match kf.fundec with
-                | Definition ( { svar = { vtype; vaddrof=true } as vi }, _)
-                | Declaration (_, ({ vtype; vaddrof=true } as vi), _, _) when isFunctionType vtype ->
-                    (vi, types vtype) :: acc
-                | _ -> acc)
-              []
-            |> filter_map
-                 (fun (_, ts') -> List.(length ts = length ts' && not @@ exists2 (need_cast ~force:false) ts ts'))
-                 (fun (vi, _) -> vi, intro_var ~loc vi)
-          in
-          let kf = the self#current_kf in
-          let fundec = the self#current_func in
-          let f = function
-            | { skind = Instr (Call (lv_opt, f, args, loc)) } as s ->
-                attach_globaction (fun () ->
-                  let vis, addrs = List.split @@ candidates ~loc in
-                  let z = zero ~loc in
-                  let eqs =
-                    let f = norm f in
-                    List.map (fun e -> new_exp ~loc @@ BinOp (Eq, f, e, intType)) addrs
+              None)
+      in
+      let kf = Option.value_fatal ~in_:"fp_eliminating_visitor:vstmt_aux:current_kf" self#current_kf in
+      let fundec = Option.value_fatal ~in_:"fp_eliminating_visitor:vstmt_aux:current_func" self#current_func in
+      let f =
+        function
+        | { skind = Instr (Call (lv_opt, f, args, loc)) } as s ->
+          attach#globaction (fun () ->
+            let vis, addrs = List.split @@ candidates ~loc in
+            let z = zero ~loc in
+            let eqs =
+              let f = norm f in
+              List.map (fun e -> new_exp ~loc @@ BinOp (Eq, f, e, intType)) addrs
                   in
-                  Annotations.add_assert jessie_emitter ~kf s @@
-                    force_exp_to_predicate @@ List.fold_left (mkBinOp ~loc LOr) z eqs;
-                  let s' = ListLabels.fold_left2
-                    eqs vis
-                    ~init:(let vi = makeTempVar fundec ~name:"unreachable" intType in
-                           let s = mkStmtOneInstr ~valid_sid:true
-                                     (Set ((Var vi, NoOffset), mkBinOp ~loc Div z z, loc))
-                           in
-                           Annotations.add_assert jessie_emitter ~kf s @@ Logic_const.pfalse;
-                           s)
-                    ~f:(fun acc eq vi ->
+                  Annotations.add_assert Emitters.jessie ~kf s @@
+                    Ast.Predicate.Named.of_exp_exn @@
+                      List.fold_left (mkBinOp ~loc LOr) z eqs;
+                  let s' =
+                    ListLabels.fold_left2
+                      eqs vis
+                      ~init:(let vi = makeTempVar fundec ~name:"unreachable" intType in
+                             let s =
+                               mkStmtOneInstr
+                                 ~valid_sid:true
+                                 (Set ((Var vi, NoOffset), mkBinOp ~loc Div z z, loc))
+                             in
+                             Annotations.add_assert Emitters.jessie ~kf s @@ Logic_const.pfalse;
+                             s)
+                      ~f:(fun acc eq vi ->
                           mkStmt (
-                            If (eq,
-                                mkBlock [mkStmtOneInstr ~valid_sid:true (Call (lv_opt, evar ~loc vi, args, loc))],
-                                mkBlock [acc],
-                                loc)))
+                          If (eq,
+                              mkBlock [mkStmtOneInstr ~valid_sid:true (Call (lv_opt, evar ~loc vi, args, loc))],
+                              mkBlock [acc],
+                              loc)))
                   in
                   s.skind <- s'.skind);
-                s
-            | s -> fatal_transform s
-          in
-          DoChildrenPost f
+          s
+        | s -> fatal_transform s
+      in
+      DoChildrenPost f
       | _ -> DoChildren
-end
+  end
 
 let eliminate_fps file =
-  visit_and_update_globals (new fp_eliminating_visitor) file;
+  (Visit.attaching_globs { Visit.mk = new fp_eliminating_visitor } file)[@warning "-42"];
   visitFramacFile (new fptr_to_pvoid_visitor) file;
-  Ast.clear_last_decl ()
+  Framac.Ast.clear_last_decl ()
 
 (*****************************************************************************)
 (*  Add dummy definitions for structures only used in pointer types.         *)
 (*****************************************************************************)
 
-class dummy_struct_definer = object(self)
-  inherit frama_c_inplace
+class dummy_struct_definer ~attach =
+  object(self)
+    inherit frama_c_inplace
 
-  method! vcompinfo ci =
-    if ci.cdefined = false && ci.cfields = [] then begin
-      Jessie_options.warning
-        "Defining dummy composite tag for %s in extract mode (enabled by -jessie-extract)"
-        (compFullName ci);
-      attach_global @@ GCompTag (ci, Location.unknown);
-      ci.cdefined <- true
-    end;
-    DoChildren
+    method! vcompinfo ci =
+      if ci.cdefined = false && ci.cfields = [] then begin
+        Jessie_options.warning
+          "Defining dummy composite tag for %s in extract mode (enabled by -jessie-extract)"
+          (compFullName ci);
+        attach#global @@ GCompTag (ci, Location.unknown);
+        ci.cdefined <- true
+      end;
+      DoChildren
 
-  method! vglob_aux = function
-   | GCompTagDecl (ci, _) ->
-       ignore (self#vcompinfo ci);
-       DoChildren
-   | _ -> DoChildren
-end
+    method! vglob_aux =
+      function
+      | GCompTagDecl (ci, _) ->
+        ignore (self#vcompinfo ci);
+        DoChildren
+      | _ -> DoChildren
+  end
 
 let define_dummy_structs file =
-  visit_and_update_globals (new dummy_struct_definer) file;
-  Ast.clear_last_decl ()
+  (Visit.attaching_globs { Visit.mk = new dummy_struct_definer } file)[@warning "-42"];
+  Framac.Ast.clear_last_decl ()
 
 (*****************************************************************************)
 (* Rewrite va_list into void *                                               *)
@@ -1506,7 +1533,7 @@ class va_list_rewriter () =
   let va_list_name = "va_list" in
   let const = Attr ("const", []) in
   let const_type = typeAddAttributes [const] in
-  let flat = Jessie_options.FlatVararg.get () in
+  let flat = Config.Flat_vararg.get () in
   let va_list_type =
     if not flat then
       TPtr (const_type voidPtrType, [])
@@ -1529,140 +1556,148 @@ class va_list_rewriter () =
     | ("va_list", t, _) :: _ when unrollType t == va_list_type -> true
     | _ -> false
   in
-object(self)
-  inherit frama_c_inplace
+  object(self)
+    inherit frama_c_inplace
 
-  method! vtype t =
-    match unrollType t with
-    | TBuiltin_va_list _ -> ChangeTo va_list_type
-    | TFun (rt, args_opt, true, attrs) ->
-      let va_arg = va_list_name, va_list_type, [] in
-      ChangeDoChildrenPost (TFun (rt, Some (opt_conv [] args_opt @ [va_arg]), false, attrs), id)
-    | _ -> DoChildren
+    method! vtype t =
+      match unrollType t with
+      | TBuiltin_va_list _ -> ChangeTo va_list_type
+      | TFun (rt, args_opt, true, attrs) ->
+        let va_arg = va_list_name, va_list_type, [] in
+        ChangeDoChildrenPost (TFun (rt, Some (Option.value ~default:[] args_opt @ [va_arg]), false, attrs), Fn.id)
+      | _ -> DoChildren
 
-  method! vvdec { vtype; vdefined } =
-    match unrollType vtype, vdefined with
-    | TFun (_, _, true, _), false ->
+    method! vvdec { vtype; vdefined } =
+      match unrollType vtype, vdefined with
+      | TFun (_, _, true, _), false ->
+        DoChildrenPost
+          (fun vi ->
+             let va_list = makeVarinfo ~generated:true false true va_list_name va_list_type in
+             let formals = getFormalsDecl vi @ [va_list] in
+             unsafeSetFormalsDecl vi formals;
+             let kf = Globals.Functions.get vi in
+             Globals.Functions.replace_by_declaration (Annotations.funspec kf) vi (Kernel_function.get_location kf);
+             (* Important invariant, because Jessie doesn't care about function signature matching *)
+             assert (List.length formals = List.length Globals.Functions.(get_params (get vi)));
+             vi)
+      | _ -> DoChildren
+
+    method! vfunc ({ svar } as fundec) =
+      match unrollType svar.vtype with
+      | TFun (_, _, true, _) ->
+        let ftype = svar.vtype in
+        ignore (makeFormalVar fundec va_list_name va_list_type);
+        svar.vtype <- ftype; (* Will be rewritten again by vtype in the child *)
+        DoChildren
+      | _ -> DoChildren
+
+    method! vinst _ =
       DoChildrenPost
-        (fun vi ->
-          let va_list = makeVarinfo ~generated:true false true va_list_name va_list_type in
-          let formals = getFormalsDecl vi @ [va_list] in
-          unsafeSetFormalsDecl vi formals;
-          let kf = Globals.Functions.get vi in
-          Globals.Functions.replace_by_declaration (Annotations.funspec kf) vi (Kernel_function.get_location kf);
-          (* Important invariant, because Jessie doesn't care about function signature matching *)
-          assert (List.length formals = List.length Globals.Functions.(get_params (get vi)));
-          vi)
-    | _ -> DoChildren
+        (function
+          | [Call (None,
+                   { enode = Lval (Var { vname = "__builtin_va_start" }, NoOffset) },
+                   [{ enode = Lval ((Var va_list, NoOffset) as lva_list) }],
+                   loc)]
+            when unrollType va_list.vtype == va_list_type ->
+            let current_func =
+              Option.value_fatal ~in_:"va_list_rewriter:vinst:current_func" self#current_func
+            in
+            begin
+              match List.rev current_func.sformals with
+              | va_list' :: _
+                when va_list'.vname = va_list_name &&
+                     unrollType va_list'.vtype == va_list_type ->
+                [Set (lva_list, evar ~loc va_list', loc)]
+              | _ -> Console.fatal "Illegal call to %s: can't find necessary formals" va_start_name
+            end
+          | [Call (_, { enode = Lval (Var { vname = "__builtin_va_start" }, _) }, _, _)] ->
+            Console.fatal "Illegal call to %s: wrong arguments or lvalue is present" va_start_name
 
-  method! vfunc ({ svar } as fundec) =
-    match unrollType svar.vtype with
-    | TFun (_, _, true, _) ->
-      let ftype = svar.vtype in
-      ignore (makeFormalVar fundec va_list_name va_list_type);
-      svar.vtype <- ftype; (* Will be rewritten again by vtype in the child *)
-      DoChildren
-    | _ -> DoChildren
-
-  method! vinst _ =
-    DoChildrenPost
-      (function
-      | [Call (None,
-               { enode = Lval (Var { vname = "__builtin_va_start" }, NoOffset) },
-               [{ enode = Lval ((Var va_list, NoOffset) as lva_list) }],
-               loc)]
-        when unrollType va_list.vtype == va_list_type ->
-        begin match List.rev (the self#current_func).sformals with
-        | va_list' :: _
-          when va_list'.vname = va_list_name &&
-               unrollType va_list'.vtype == va_list_type ->
-          [Set (lva_list, evar ~loc va_list', loc)]
-        | _ -> fatal "Illegal call to %s: can't find necessary formals" va_start_name
-        end
-      | [Call (_, { enode = Lval (Var { vname = "__builtin_va_start" }, _) }, _, _)] ->
-        fatal "Illegal call to %s: wrong arguments or lvalue is present" va_start_name
-
-      | [Call (None,
+          | [Call (None,
                { enode = Lval (Var { vname = "__builtin_va_arg" }, NoOffset) },
-               [({ enode = Lval ((Var va_list, NoOffset) as lva_list) } as eva_list); { enode = SizeOf t }; elval],
-               loc)]
-        when unrollType va_list.vtype == va_list_type ->
-        let lval =
-          match (stripCasts elval).enode with
-          | AddrOf lval -> lval
-          | _ -> fatal "Illegal call to %s: unrecognized internal representation of lval" va_arg_name
-        in
-        if not flat then
-          let eva_arg_addr =
-            mkCastT
-              ~force:false
-              ~e:(new_exp ~loc @@ Lval (mkMem ~addr:(mkAddrOrStartOf ~loc lva_list) ~off:NoOffset))
-              ~oldt:va_list_type
-              ~newt:(const_ptr t)
-          in
-          [Set (lval, new_exp ~loc @@ Lval (mkMem ~addr:eva_arg_addr ~off:NoOffset), loc);
-           Set (lva_list, increm eva_list 1, loc)]
-        else
-          let eva_list = mkCastT ~force:false ~e:eva_list ~oldt:va_list_type ~newt:(const_ptr t) in
-          [Set (lval, new_exp ~loc (Lval (Mem eva_list, NoOffset)), loc);
-           Set (lva_list, mkBinOp ~loc PlusPI eva_list (one ~loc), loc)]
-      | [Call ( _, { enode = Lval (Var { vname = "__builtin_va_arg" }, _) }, _, _)] ->
-        fatal "Illegal call to %s: wrong arguments or lvalue is absent" va_arg_name
+                   [({ enode = Lval ((Var va_list, NoOffset) as lva_list) } as eva_list); { enode = SizeOf t }; elval],
+                   loc)]
+            when unrollType va_list.vtype == va_list_type ->
+            let lval =
+              match (stripCasts elval).enode with
+              | AddrOf lval -> lval
+              | _ -> Console.fatal "Illegal call to %s: unrecognized internal representation of lval" va_arg_name
+            in
+            if not flat then
+              let eva_arg_addr =
+                mkCastT
+                  ~force:false
+                  ~e:(new_exp ~loc @@ Lval (mkMem ~addr:(mkAddrOrStartOf ~loc lva_list) ~off:NoOffset))
+                  ~oldt:va_list_type
+                  ~newt:(const_ptr t)
+              in
+              [Set (lval, new_exp ~loc @@ Lval (mkMem ~addr:eva_arg_addr ~off:NoOffset), loc);
+               Set (lva_list, increm eva_list 1, loc)]
+            else
+              let eva_list = mkCastT ~force:false ~e:eva_list ~oldt:va_list_type ~newt:(const_ptr t) in
+              [Set (lval, new_exp ~loc (Lval (Mem eva_list, NoOffset)), loc);
+               Set (lva_list, mkBinOp ~loc PlusPI eva_list (one ~loc), loc)]
+          | [Call ( _, { enode = Lval (Var { vname = "__builtin_va_arg" }, _) }, _, _)] ->
+            Console.fatal "Illegal call to %s: wrong arguments or lvalue is absent" va_arg_name
 
-      | [Call (None,
-               { enode = Lval (Var { vname = "__builtin_va_end" } , NoOffset) },
-               [{ enode = Lval (Var va_list, NoOffset) }],
-               _)]
-        when unrollType va_list.vtype == va_list_type ->
-        []
-      | [Call (_, { enode = Lval (Var { vname = "__builtin_va_end" }, _) }, _, _)] ->
-        fatal "Illegal call to %s: wrong arguments or lvalue is present" va_end_name
+          | [Call (None,
+                   { enode = Lval (Var { vname = "__builtin_va_end" } , NoOffset) },
+                   [{ enode = Lval (Var va_list, NoOffset) }],
+                   _)]
+            when unrollType va_list.vtype == va_list_type ->
+            []
+          | [Call (_, { enode = Lval (Var { vname = "__builtin_va_end" }, _) }, _, _)] ->
+            Console.fatal "Illegal call to %s: wrong arguments or lvalue is present" va_end_name
 
-      | [Call (None,
-               { enode = Lval (Var { vname = "va_copy" | "__va_vopy" | "__builtin_va_copy" }, NoOffset) },
-               [{ enode = Lval ((Var vi_dst, NoOffset) as lva_dst) }; { enode = Lval (Var vi_src, NoOffset)} as va_src],
-               loc)]
-        when unrollType vi_dst.vtype == va_list_type &&
-             unrollType vi_src.vtype == va_list_type ->
-        [Set (lva_dst, va_src, loc)]
-      | [Call (_, { enode = Lval (Var { vname = "va_copy" | "__va_vopy" | "__builtin_va_copy" }, NoOffset) }, _, _)] ->
-        fatal "Illegal call to %s: wrong arguments or lvalue is present" va_copy_name
+          | [Call (None,
+                   { enode = Lval (Var { vname = "va_copy" | "__va_vopy" | "__builtin_va_copy" }, NoOffset) },
+                   [{ enode = Lval ((Var vi_dst, NoOffset) as lva_dst) };
+                    { enode = Lval (Var vi_src, NoOffset)} as va_src],
+                   loc)]
+            when unrollType vi_dst.vtype == va_list_type &&
+                 unrollType vi_src.vtype == va_list_type ->
+            [Set (lva_dst, va_src, loc)]
+          | [Call (_,
+                   { enode = Lval (Var { vname = "va_copy" | "__va_vopy" | "__builtin_va_copy" }, NoOffset) }, _, _)] ->
+            Console.fatal "Illegal call to %s: wrong arguments or lvalue is present" va_copy_name
 
-      | [Call (lv_opt, ({ enode = Lval (Var { vtype = TFun (_, Some formals, false, _) }, NoOffset) } as f), args, loc)]
-        when va_list_in formals ->
-        let nformals = List.length formals - 1 in
-        let actuals = drop nformals args in
-        let current_func = the self#current_func in
-        let vtmp = makeTempVar current_func ~name:"va_list" (va_list_var_type ~loc (List.length actuals)) in
-        if not flat then
-          let assignments =
-            List.flatten @@
-              ListLabels.mapi
-                actuals
-                ~f:(fun i a ->
+          | [Call (lv_opt,
+                   ({ enode = Lval (Var { vtype = TFun (_, Some formals, false, _) }, NoOffset) } as f), args, loc)]
+            when va_list_in formals ->
+            let nformals = List.length formals - 1 in
+            let actuals = List.drop nformals args in
+            let current_func = Option.value_fatal ~in_:"va_list_rewriter:current_func" self#current_func in
+            let vtmp = makeTempVar current_func ~name:"va_list" (va_list_var_type ~loc (List.length actuals)) in
+            if not flat then
+              let assignments =
+                List.flatten @@
+                  ListLabels.mapi
+                    actuals
+                    ~f:(fun i a ->
                       let va_arg_lval = Var vtmp, Index (integer ~loc i, NoOffset) in
-                      let va_arg_type = promote_argument_type (typeOf a) in
+                      let va_arg_type = Type.promote_argument_type (typeOf a) in
                       let va_arg_addr =
                         mkCast ~force:false ~e:(new_exp ~loc (Lval va_arg_lval)) ~newt:(TPtr (va_arg_type, []))
                       in
                       let atmp = makeTempVar current_func ~name:"va_arg" (TPtr (va_arg_type, [])) in
                       [Call (Some (var atmp),
-                             evar ~loc (malloc_function ()),
+                             evar ~loc (Ast.Vi.Function.malloc () :> varinfo),
                              [sizeOf ~loc va_arg_type],
                              loc);
                        Set (va_arg_lval, evar atmp, loc);
                        Set (mkMem ~addr:va_arg_addr ~off:NoOffset, a, loc)])
           in
-          assignments @ [Call (lv_opt, f, take nformals args @ [mkAddrOrStartOf ~loc (var vtmp)], loc)]
+          assignments @ [Call (lv_opt, f, List.take nformals args @ [mkAddrOrStartOf ~loc (var vtmp)], loc)]
         else
           let init =
-            Call (Some (var vtmp), evar ~loc (malloc_function ()), [integer ~loc (List.length actuals)], loc)
+            Call (Some (var vtmp), evar ~loc (Ast.Vi.Function.malloc () :> varinfo),
+                  [integer ~loc (List.length actuals)], loc)
           in
           let assignments =
             List.rev_map2
               (fun e a -> Set ((Mem (constFold false e), NoOffset), a, loc))
               (ListLabels.fold_left
-                 List.(map (fun e -> promote_argument_type (typeOf e)) actuals)
+                 List.(map (fun e -> Type.promote_argument_type (typeOf e)) actuals)
                  ~init:[]
                  ~f:(fun acc t ->
                       match acc with
@@ -1672,10 +1707,10 @@ object(self)
                       | [] -> [mkCastT ~force:false ~e:(evar ~loc vtmp) ~oldt:va_list_type ~newt:(const_ptr t)]))
               (List.rev actuals)
           in
-          [init] @ assignments @ [Call (lv_opt, f, take nformals args @ [evar ~loc vtmp], loc)]
+          [init] @ assignments @ [Call (lv_opt, f, List.take nformals args @ [evar ~loc vtmp], loc)]
       | [Call (_, { enode = Lval (Var { vtype = TFun (_, Some formals, _, _) }, off) }, _, _)]
         when va_list_in formals ->
-        fatal "Variadic function called with some offset in function lvalue: %a" Printer.pp_offset off
+        Console.fatal "Variadic function called with some offset in function lvalue: %a" Printer.pp_offset off
 
       | i -> i)
 
@@ -1687,114 +1722,118 @@ object(self)
     | GVarDecl(_, { vname = "__builtin_va_copy" }, _) ->
       ChangeTo []
     | _ -> DoChildren
-end
+  end
 
 let rewrite_va_lists file =
   visitFramacFile (new va_list_rewriter ()) file;
-  Ast.clear_last_decl ()
+  Framac.Ast.clear_last_decl ()
 
 (*****************************************************************************)
 (* Rewrite comparison of pointers into difference of pointers.               *)
 (*****************************************************************************)
 
-class rewritePointerCompare =
-  let preaction_expr e = match e.enode with
+class pointer_comparison_rewriter =
+  let preaction_expr e =
+    match e.enode with
     | BinOp((Lt | Gt | Le | Ge | Eq | Ne as op),e1,e2,ty)
-	when isPointerType (typeOf e1) && not (is_null_expr e2) ->
-	new_exp ~loc:e.eloc
+        when isPointerType (typeOf e1) && not (is_null_expr e2) ->
+        new_exp ~loc:e.eloc
           (BinOp(op,
                  new_exp ~loc:e.eloc
-                   (BinOp(MinusPP,e1,e2,theMachine.ptrdiffType)),
-	         constant_expr Integer.zero,ty))
+                   (BinOp (MinusPP, e1, e2, theMachine.ptrdiffType)),
+                 Ast.Exp.const Integer.zero, ty))
     | _ -> e
   in
-object
+  object
 
-  inherit Visitor.frama_c_inplace
+    inherit frama_c_inplace
 
-  method! vexpr e =
-    ChangeDoChildrenPost (preaction_expr e, fun x -> x)
+    method! vexpr e =
+      ChangeDoChildrenPost (preaction_expr e, fun x -> x)
 
-  method! vterm =
-    do_on_term (Some preaction_expr,None)
+    method! vterm t = Do.on_term ~pre:preaction_expr t
 
-  method! vpredicate = function
-    | Prel(rel,t1,t2)
-	when app_term_type isPointerType false t1.term_type
-	  && not (is_null_term t1 || is_null_term t2
-		  || is_base_addr t1 || is_base_addr t2) ->
-	let loc = range_loc t1.term_loc t2.term_loc in
-	let tsub = {
-	  term_node = TBinOp(MinusPP,t1,t2);
-	  term_type = Ctype theMachine.ptrdiffType;
-	  term_loc = loc;
-	  term_name = [];
-	} in
-	let p = Prel(rel,tsub,constant_term loc Integer.zero) in
-	ChangeDoChildrenPost (p, fun x -> x)
-    | _ -> DoChildren
-
-end
+    method! vpredicate =
+      function
+      | Prel (rel, t1, t2)
+        when
+          Type.Logic_c_type.map_default ~default:false ~f:isPointerType t1.term_type
+          && not (is_null_term t1 || is_null_term t2
+                  || Ast.Term.is_base_addr t1 || Ast.Term.is_base_addr t2) ->
+        let loc = range_loc t1.term_loc t2.term_loc in
+        let tsub =
+          {
+            term_node = TBinOp (MinusPP, t1, t2);
+            term_type = Ctype theMachine.ptrdiffType;
+            term_loc = loc;
+            term_name = [];
+          }
+        in
+        let p = Prel (rel, tsub,constant_term loc Integer.zero) in
+        ChangeDoChildrenPost (p, fun x -> x)
+      | _ -> DoChildren
+  end
 
 let rewrite_pointer_compare file =
-  let visitor = new rewritePointerCompare in
+  let visitor = new pointer_comparison_rewriter in
   visitFramacFile visitor file
-
 
 (*****************************************************************************)
 (* Rewrite cursor pointers into offsets from base pointers.                  *)
 (*****************************************************************************)
 
 (* Recognize the sum of a pointer variable and an integer offset *)
-let rec destruct_pointer e = match (stripInfo e).enode with
-  | Lval(Var v,NoOffset) | StartOf(Var v,NoOffset) | AddrOf(Var v,NoOffset) ->
-      Some(v,None)
-  | StartOf(Var v,Index(i,NoOffset)) | AddrOf(Var v,Index(i,NoOffset)) ->
-      Some(v,Some i)
-  | BinOp((PlusPI | IndexPI | MinusPI as op),e1,e2,_) ->
-      begin match destruct_pointer e1 with
-	| None -> None
-	| Some(v,None) ->
-	    begin match op with
-	      | PlusPI | IndexPI -> Some(v,Some e2)
-	      | MinusPI ->
-                  Some(v,
-                       Some(new_exp ~loc:e.eloc (UnOp(Neg,e2,typeOf e2))))
-	      | _ -> assert false
-	    end
-	| Some(v,Some off) ->
-	    begin match op with
-	      | PlusPI | IndexPI ->
-                  Some(v,
-                       Some(new_exp ~loc:e.eloc
-                              (BinOp(PlusA,off,e2,typeOf e2))))
-	      | MinusPI ->
-                  Some(v,
-                       Some(new_exp ~loc:e.eloc
-                              (BinOp(MinusA,off,e2,typeOf e2))))
-	      | _ -> assert false
-	    end
+let rec destruct_pointer e =
+  match (stripInfo e).enode with
+  | Lval (Var v, NoOffset)
+  | StartOf (Var v, NoOffset)
+  | AddrOf (Var v, NoOffset) ->
+    Some (v, None)
+  | StartOf (Var v, Index (i, NoOffset))
+  | AddrOf (Var v, Index (i, NoOffset)) ->
+    Some (v, Some i)
+  | BinOp ((PlusPI | IndexPI | MinusPI as op), e1, e2, _) ->
+    begin match destruct_pointer e1 with
+    | None -> None
+    | Some (v, None) ->
+      begin match op with
+      | PlusPI
+      | IndexPI -> Some (v, Some e2)
+      | MinusPI ->
+        Some (v, Some (new_exp ~loc:e.eloc (UnOp (Neg, e2, typeOf e2))))
+      | _ -> assert false
       end
-  | CastE(ty,e) ->
-      let ety = typeOf e in
-      if isPointerType ty && isPointerType ety
-	&&
-          Cil_datatype.Typ.equal
-          (Cil.typeDeepDropAttributes ["const"; "volatile"]
-             (unrollType (pointed_type ty)))
-          (Cil.typeDeepDropAttributes ["const"; "volatile"]
-             (unrollType (pointed_type ety)))
-      then
-	destruct_pointer e
-      else None
+    | Some(v,Some off) ->
+      begin match op with
+      | PlusPI | IndexPI ->
+        Some (v, Some (new_exp ~loc:e.eloc (BinOp(PlusA,off,e2,typeOf e2))))
+      | MinusPI ->
+        Some (v, Some (new_exp ~loc:e.eloc (BinOp(MinusA,off,e2,typeOf e2))))
+      | _ -> assert false
+      end
+    end
+  | CastE (ty, e) ->
+    let ety = typeOf e in
+    if isPointerType ty && isPointerType ety &&
+       Typ.equal
+         (typeDeepDropAttributes ["const"; "volatile"]
+            (unrollType (pointed_type ty)))
+         (typeDeepDropAttributes ["const"; "volatile"]
+            (unrollType (pointed_type ety)))
+    then
+      destruct_pointer e
+    else
+      None
   | _ -> None
 
-class collectCursorPointers
-  (cursor_to_base : varinfo Cil_datatype.Varinfo.Hashtbl.t) (* local variable to base *)
-  (formal_to_base : varinfo Cil_datatype.Varinfo.Hashtbl.t) (* formal variable to base *)
-  (assigned_vars : Cil_datatype.Varinfo.Set.t ref) (* variable is assigned (for formals) *)
-  (ignore_vars : Cil_datatype.Varinfo.Set.t ref) (* ignore info on these variables *) =
+module S = Cil_datatype.Varinfo.Set
+module H = Cil_datatype.Varinfo.Hashtbl
 
+class cursor_pointers_collector ~signal
+  (cursor_to_base : varinfo H.t) (* local variable to base *)
+  (formal_to_base : varinfo H.t) (* formal variable to base *)
+  (assigned_vars : S.t ref) (* variable is assigned (for formals) *)
+  (ignore_vars : S.t ref) (* ignore info on these variables *) =
   let curFundec : fundec ref = ref (emptyFunction "@dummy@") in
 
   let candidate_var v =
@@ -1803,620 +1842,671 @@ class collectCursorPointers
   in
   (* Variable should not be translated as base or cursor *)
   let add_ignore_vars v =
-    if not (Cil_datatype.Varinfo.Set.mem v !ignore_vars) then
-      begin
-	ignore_vars := Cil_datatype.Varinfo.Set.add v !ignore_vars; signal_change ()
-      end
+    if not (S.mem v !ignore_vars) then begin
+      ignore_vars := S.add v !ignore_vars;
+      signal#change
+    end
   in
   (* Variable [v] used as cursor on base [vb] *)
   let add_cursor_to_base v vb =
     try
-      let vb2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
-      if not (Cil_datatype.Varinfo.equal vb vb2) then add_ignore_vars v
-    with Not_found ->
-      Cil_datatype.Varinfo.Hashtbl.add cursor_to_base v vb; signal_change ()
+      let vb2 = H.find cursor_to_base v in
+      if not (Varinfo.equal vb vb2) then add_ignore_vars v
+    with
+    | Not_found ->
+      H.add cursor_to_base v vb;
+      signal#change
   in
   (* Variable [v] assigned *)
   let add_assigned_vars v =
-    if not (Cil_datatype.Varinfo.Set.mem v !assigned_vars) then
-      begin
-	assigned_vars := Cil_datatype.Varinfo.Set.add v !assigned_vars; signal_change ()
-      end
+    if not (S.mem v !assigned_vars) then begin
+      assigned_vars := S.add v !assigned_vars;
+      signal#change
+    end
   in
 
   (* Interpret difference of pointers as a hint that one is an cursor
    * of the other. *)
   let preaction_expr x =
     begin match x.enode with
-      | BinOp(MinusPP,e1,e2,_) when isPointerType (typeOf e1) ->
-	  begin match destruct_pointer e1,destruct_pointer e2 with
-	    | Some(v1,_),Some(v2,_) ->
-		begin try
-		  let vb1 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v1 in
-		  let vb2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v2 in
-		  if not (Cil_datatype.Varinfo.equal vb1 vb2)
-		    && vb1.vformal && vb2.vformal then
-		      (* One formal is an offset from the other.
-			 Choose the first one in the list of parameters
-			 as base. *)
-		      let vbbase,vboff =
-			match
-			  List.fold_left
-			    (fun acc v ->
-			       match acc with Some _ -> acc | None ->
-		      		 if Cil_datatype.Varinfo.equal v vb1 then
-				   Some(vb1,vb2)
-				 else if Cil_datatype.Varinfo.equal v vb2 then
-				   Some(vb2,vb1)
-				 else None
-			    ) None !curFundec.sformals
-			with None -> assert false | Some pair -> pair
-		      in
-		      Cil_datatype.Varinfo.Hashtbl.add formal_to_base vboff vbbase
-		  else ()
-		with Not_found -> () end
-	    | _ -> ()
-	  end
+    | BinOp (MinusPP, e1, e2, _) when isPointerType (typeOf e1) ->
+      begin match destruct_pointer e1, destruct_pointer e2 with
+      | Some (v1, _), Some (v2, _) ->
+        begin try
+          let vb1 = H.find cursor_to_base v1 in
+          let vb2 = H.find cursor_to_base v2 in
+          if not (Varinfo.equal vb1 vb2) &&
+             vb1.vformal && vb2.vformal then
+            (* One formal is an offset from the other.
+               Choose the first one in the list of parameters
+               as base. *)
+            let vbbase, vboff =
+              Option.value_fatal ~in_:"cursor_pointers_collector:preaction_exp" @@
+              List.find_map
+                !curFundec.sformals
+                ~f:(fun v ->
+                   if Varinfo.equal v vb1 then Some (vb1, vb2)
+                   else if Varinfo.equal v vb2 then Some (vb2, vb1)
+                   else None)
+            in
+            H.add formal_to_base vboff vbbase
+          else ()
+        with
+        | Not_found -> ()
+        end
       | _ -> ()
-    end; x
+      end
+    | _ -> ()
+    end;
+    x
   in
-object
+  object
 
-  inherit Visitor.frama_c_inplace
+    inherit frama_c_inplace
 
-  method! vfunc f =
-    curFundec := f;
-    (* For simplicity, consider formals as self-cursors initially.
-     * This is the way we declare bases (in the image of [cursor_to_base]).
-     *)
-    let formal v =
-      if candidate_var v then add_cursor_to_base v v
-    in
-    let local v =
-      (* Consider local arrays as candidate base pointers *)
-      if isArrayType v.vtype then formal v
-    in
-    List.iter formal f.sformals;
-    List.iter local f.slocals;
-    DoChildren
+    method! vfunc f =
+      curFundec := f;
+      (* For simplicity, consider formals as self-cursors initially.
+       * This is the way we declare bases (in the image of [cursor_to_base]).
+      *)
+      let formal v = if candidate_var v then add_cursor_to_base v v in
+      let local v =
+        (* Consider local arrays as candidate base pointers *)
+        if isArrayType v.vtype then formal v
+      in
+      List.iter formal f.sformals;
+      List.iter local f.slocals;
+      DoChildren
 
-  method! vinst = function
-    | Set((Var v,NoOffset),e,_loc) ->
-	if candidate_var v then
-	  begin
-	    add_assigned_vars v;
-	    match destruct_pointer e with
-	      | None -> add_ignore_vars v
-	      | Some(v2,_offset) ->
-		  if Cil_datatype.Varinfo.Set.mem v2 !ignore_vars then add_ignore_vars v
-		  else try
-		    let vb2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v2 in
-		    try
-		      let vb = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
-		      if not (Cil_datatype.Varinfo.equal vb vb2) then
-			add_ignore_vars v
-		    with Not_found -> add_cursor_to_base v vb2
-		  with Not_found -> add_ignore_vars v
-	  end;
-	DoChildren
-    | Set _ -> DoChildren
-    | Call(Some(Var v,NoOffset),_f,_args,_loc) ->
-	if candidate_var v then
-	  begin
-	    add_assigned_vars v; add_ignore_vars v
-	  end;
-	DoChildren
-    | Call _ -> DoChildren
-    | Asm _ | Skip _ -> SkipChildren
-    | Code_annot _ -> assert false
+    method! vinst =
+      function
+      | Set ((Var v, NoOffset), e, _loc) ->
+        if candidate_var v then begin
+          add_assigned_vars v;
+          match destruct_pointer e with
+          | None -> add_ignore_vars v
+          | Some (v2, _offset) ->
+            if S.mem v2 !ignore_vars then add_ignore_vars v
+            else
+              try
+                let vb2 = H.find cursor_to_base v2 in
+                begin try
+                  let vb = H.find cursor_to_base v in
+                  if not (Varinfo.equal vb vb2) then
+                    add_ignore_vars v
+                with
+                | Not_found -> add_cursor_to_base v vb2
+                end
+              with
+              | Not_found -> add_ignore_vars v
+        end;
+        DoChildren
+      | Set _ -> DoChildren
+      | Call (Some (Var v, NoOffset), _f, _args, _loc) ->
+        if candidate_var v then begin
+          add_assigned_vars v;
+          add_ignore_vars v
+        end;
+        DoChildren
+      | Call _ -> DoChildren
+      | Asm _ | Skip _ -> SkipChildren
+      | Code_annot _ -> assert false
 
-  method! vexpr e =
-    ignore(preaction_expr e); DoChildren
+    method! vexpr e =
+      ignore (preaction_expr e);
+      DoChildren
 
-  method! vterm = do_on_term (Some preaction_expr, None)
+    method! vterm t = Do.on_term ~pre:preaction_expr t
+  end
 
-end
-
-class rewriteCursorPointers
-  (cursor_to_base : varinfo Cil_datatype.Varinfo.Hashtbl.t)
-  (formal_to_base : varinfo Cil_datatype.Varinfo.Hashtbl.t)
-  (assigned_vars : Cil_datatype.Varinfo.Set.t) =
+class cursor_pointers_rewriter
+  (cursor_to_base : varinfo H.t)
+  (formal_to_base : varinfo H.t)
+  (assigned_vars : S.t) =
 
   (* Correspondance between cursor variables and offset variables *)
-  let cursor_to_offset : varinfo Cil_datatype.Varinfo.Hashtbl.t = Cil_datatype.Varinfo.Hashtbl.create 0 in
+  let cursor_to_offset : varinfo H.t = H.create 0 in
 
   (* Function [expr_offset] may raise exception [Not_found] if
    * no offset needed.
    *)
   let expr_offset v =
-    let loc = Cil_const.CurrentLoc.get () in
+    let loc = CurrentLoc.get () in
     if v.vformal then
-      let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
+      let voff = H.find cursor_to_offset v in
       new_exp ~loc (Lval(Var voff,NoOffset))
     else
-      let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
-      let vb = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
-      if Cil_datatype.Varinfo.Hashtbl.mem formal_to_base vb then
-	let voff2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset vb in
-	new_exp ~loc
-          (BinOp(PlusA,
-                 new_exp ~loc (Lval(Var voff,NoOffset)),
-                 new_exp ~loc (Lval(Var voff2,NoOffset)),
-	         theMachine.ptrdiffType))
-      else new_exp ~loc (Lval(Var voff,NoOffset))
+      let voff = H.find cursor_to_offset v in
+      let vb = H.find cursor_to_base v in
+      if H.mem formal_to_base vb then
+        let voff2 = H.find cursor_to_offset vb in
+        new_exp ~loc
+          (BinOp (PlusA,
+                  new_exp ~loc (Lval (Var voff, NoOffset)),
+                  new_exp ~loc (Lval (Var voff2, NoOffset)),
+                  theMachine.ptrdiffType))
+      else
+        new_exp ~loc (Lval (Var voff, NoOffset))
   in
   (* Find basis for variable [v] *)
   let var_base v =
-    if Cil_datatype.Varinfo.Hashtbl.mem cursor_to_offset v then
+    if H.mem cursor_to_offset v then
       if v.vformal then
-	try Cil_datatype.Varinfo.Hashtbl.find formal_to_base v
-	with Not_found -> v (* self-base *)
+        try H.find formal_to_base v
+        with Not_found -> v (* self-base *)
       else
-	let vb = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
-	try Cil_datatype.Varinfo.Hashtbl.find formal_to_base vb
-	with Not_found -> vb
+        let vb = H.find cursor_to_base v in
+        try H.find formal_to_base vb
+        with Not_found -> vb
     else
       raise Not_found
   in
   let lval_base vb =
-    let loc = Cil_const.CurrentLoc.get () in
+    let loc = CurrentLoc.get () in
     if isArrayType vb.vtype then
-      new_exp ~loc (StartOf(Var vb,NoOffset))
+      new_exp ~loc (StartOf (Var vb, NoOffset))
     else
-      new_exp ~loc (Lval(Var vb,NoOffset))
+      new_exp ~loc (Lval (Var vb, NoOffset))
   in
-  let preaction_expr e = match e.enode with
-    | BinOp(MinusPP,e1,e2,_) ->
-        begin try match destruct_pointer e1,destruct_pointer e2 with
-          | None,_ | _,None -> e
-          | Some(v1,offopt1),Some(v2,offopt2) ->
-	      let vb1 = try var_base v1 with Not_found -> v1 in
-	      let vb2 = try var_base v2 with Not_found -> v2 in
-              if Cil_datatype.Varinfo.equal vb1 vb2 then
-	        let v1offopt =
-		  try Some(expr_offset v1) with Not_found -> None in
-	        let v2offopt =
-		  try Some(expr_offset v2) with Not_found -> None in
-                let offopt1 = match v1offopt,offopt1 with
-                  | None,None -> None
-                  | Some off,None | None,Some off -> Some off
-                  | Some off1,Some off2 ->
-                      Some
-                        (new_exp ~loc:e.eloc
-                           (BinOp(PlusA,off1,off2,theMachine.ptrdiffType)))
-                in
-                let offopt2 = match v2offopt,offopt2 with
-                  | None,None -> None
-                  | Some off,None | None,Some off -> Some off
-                  | Some off1,Some off2 ->
-                      Some
-                        (new_exp ~loc:e.eloc
-                           (BinOp(PlusA,off1,off2,theMachine.ptrdiffType)))
-                in
-                match offopt1,offopt2 with
-                  | Some off1,Some off2 ->
-		      new_exp ~loc:e.eloc
-                        (BinOp(MinusA,off1,off2,theMachine.ptrdiffType))
-                  | Some off1,None ->
-		      off1
-                  | None,Some off2 ->
-	              new_exp ~loc:e.eloc
-                        (UnOp(Neg,off2,theMachine.ptrdiffType))
-                  | None,None ->
-		      constant_expr Integer.zero
-              else e
-	with Not_found -> e end
+  let preaction_expr e =
+    match e.enode with
+    | BinOp (MinusPP, e1, e2, _) ->
+      begin try match destruct_pointer e1, destruct_pointer e2 with
+        | None, _
+        | _, None -> e
+        | Some (v1, offopt1), Some(v2, offopt2) ->
+          let vb1 = try var_base v1 with Not_found -> v1 in
+          let vb2 = try var_base v2 with Not_found -> v2 in
+          if Varinfo.equal vb1 vb2 then
+            let v1offopt = try Some (expr_offset v1) with Not_found -> None in
+            let v2offopt = try Some (expr_offset v2) with Not_found -> None in
+            let offopt1 =
+              match v1offopt,offopt1 with
+              | None, None -> None
+              | Some off, None
+              | None, Some off -> Some off
+              | Some off1, Some off2 ->
+                Some (new_exp ~loc:e.eloc @@ BinOp (PlusA, off1, off2, theMachine.ptrdiffType))
+            in
+            let offopt2 =
+              match v2offopt,offopt2 with
+              | None, None -> None
+              | Some off, None
+              | None, Some off -> Some off
+              | Some off1, Some off2 ->
+                Some (new_exp ~loc:e.eloc @@ BinOp (PlusA, off1, off2, theMachine.ptrdiffType))
+            in
+            match offopt1,offopt2 with
+            | Some off1, Some off2 ->
+              new_exp ~loc:e.eloc @@ BinOp (MinusA, off1, off2, theMachine.ptrdiffType)
+            | Some off1, None ->
+              off1
+            | None, Some off2 ->
+              new_exp ~loc:e.eloc @@ UnOp (Neg, off2, theMachine.ptrdiffType)
+            | None, None ->
+              Ast.Exp.const Integer.zero
+          else
+            e
+      with
+      | Not_found -> e
+      end
     | _ -> e
   in
-  let postaction_expr e = match e.enode with
-    | Lval(Var v,NoOffset) ->
-	begin try
-	  (* Both [var_base] and [expr_offset] can raise [Not_found],
-	   * the second one only on local array variables.
-	   *)
-	  let vb = var_base v in
-	  new_exp ~loc:e.eloc
-            (BinOp(PlusPI,lval_base vb,expr_offset v,v.vtype))
-	with Not_found -> e end
+  let postaction_expr e =
+    match e.enode with
+    | Lval (Var v,NoOffset) ->
+      begin try
+        (* Both [var_base] and [expr_offset] can raise [Not_found],
+           * the second one only on local array variables.
+           *)
+        let vb = var_base v in
+        new_exp ~loc:e.eloc @@ BinOp (PlusPI, lval_base vb, expr_offset v, v.vtype)
+      with
+      | Not_found -> e
+      end
     | _ -> e
   in
-object
+  object
 
-  inherit Visitor.frama_c_inplace
+    inherit Visit.frama_c_inplace_inserting
 
-  method! vfunc f =
-    let local v =
-      if Cil_datatype.Varinfo.Hashtbl.mem cursor_to_base v && not (isArrayType v.vtype) then
-	let name = unique_name ("__jc_off_" ^ v.vname) in
-	let voff = makeLocalVar f ~insert:true name almost_integer_type in
-	Cil_datatype.Varinfo.Hashtbl.add cursor_to_offset v voff
-    in
-    let formal v =
-      if Cil_datatype.Varinfo.Hashtbl.mem formal_to_base v then
-	(* Formal is a cursor of another formal *)
-	begin
-	  local v; (* Create an offset variable for this formal *)
-	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
-	  let vb = Cil_datatype.Varinfo.Hashtbl.find formal_to_base v in
+    method! vfunc f =
+      let open Visit in
+      let local v =
+        if H.mem cursor_to_base v && not (isArrayType v.vtype) then
+        let name = Name.unique ("__jc_off_" ^ v.vname) in
+        let voff = makeLocalVar f ~insert:true name (Type.Integral.almost_unbound :> typ) in
+        H.add cursor_to_offset v voff
+      in
+      let formal acc v =
+        if H.mem formal_to_base v then begin
+        (* Formal is a cursor of another formal *)
+          local v; (* Create an offset variable for this formal *)
+          let voff = H.find cursor_to_offset v in
+          let vb = H.find formal_to_base v in
           let loc = CurrentLoc.get () in
-	  let initst =
-	    mkStmt(
-	      Instr(
-                Set((Var voff,NoOffset),
-	            new_exp ~loc:(CurrentLoc.get())
-                      (BinOp (MinusPP,
-                              new_exp ~loc (Lval(Var v,NoOffset)),
-                              lval_base vb,
-		              theMachine.ptrdiffType)),
-		    loc)))
-	  in
-	  add_pending_statement ~beginning:true initst
-	end
-      else if Cil_datatype.Varinfo.Hashtbl.mem cursor_to_base v
-	&& Cil_datatype.Varinfo.Set.mem v assigned_vars then
-	(* Formal is assigned and still a self-base, an offset is needed *)
-	begin
-	  local v; (* Create an offset variable for this formal *)
-	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
-	  let initst =
-	    mkStmt(Instr(Set((Var voff,NoOffset),
-			     constant_expr Integer.zero,
-			     CurrentLoc.get ())))
-	  in
-	  add_pending_statement ~beginning:true initst
-	end
-      else ()
-    in
-    List.iter formal f.sformals;
-    List.iter local f.slocals;
-    DoChildren
+          mkStmt (
+            Instr (
+              Set ((Var voff, NoOffset),
+                   new_exp ~loc:(CurrentLoc.get())
+                     (BinOp (MinusPP,
+                             new_exp ~loc (Lval (Var v, NoOffset)),
+                             lval_base vb,
+                             theMachine.ptrdiffType)),
+                   loc)))
+          :: acc
+        end else if H.mem cursor_to_base v &&
+                    S.mem v assigned_vars then begin
+        (* Formal is assigned and still a self-base, an offset is needed *)
+          local v; (* Create an offset variable for this formal *)
+          let voff = H.find cursor_to_offset v in
+          mkStmt (Instr (Set ((Var voff, NoOffset),
+                              Ast.Exp.const Integer.zero,
+                              CurrentLoc.get ())))
+          :: acc
+        end else
+          acc
+      in
+      let prelude =
+        List.fold_left formal [] f.sformals
+      in
+      List.iter local f.slocals;
+      Fundec.DoChildren (prepending prelude)
 
-  method! vinst = function
-    | Set((Var v,NoOffset),e,loc) ->
-	if v.vformal then
-	  begin try
-	    let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
-	    (* At this point, [e] must be a pointer whose destruction through
-	     * [destruct_pointer] does not return None.
-	     *)
-	    let eoff = match destruct_pointer e with
-	      | None -> assert false
-	      | Some(v2,Some e) ->
-		  begin try
-                    new_exp ~loc:e.eloc
-                      (BinOp(PlusA,expr_offset v2,e,almost_integer_type))
-		  with Not_found -> assert false end
-	      | Some(v2,None) ->
-		  begin try expr_offset v2
-		  with Not_found -> assert false end
-	    in
-	    ChangeDoChildrenPost
-	      ([Set((Var voff,NoOffset),eoff,loc)], fun x -> x)
-	  with Not_found -> DoChildren end
-	else
-	  (* local variable *)
-	  begin try
-	    let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
-	    (* At this point, [e] must be a pointer whose destruction through
-	     * [destruct_pointer] does not return None.
-	     *)
-	    let eoff = match destruct_pointer e with
-	      | None -> assert false
-	      | Some(v2,Some e) ->
-		  begin try
-                    new_exp ~loc:e.eloc
-                      (BinOp(PlusA,expr_offset v2,e,almost_integer_type))
-		  with Not_found -> e end
-	      | Some(v2,None) ->
-		  begin try expr_offset v2
-		  with Not_found -> constant_expr Integer.zero end
-	    in
-	    ChangeDoChildrenPost
-	      ([Set((Var voff,NoOffset),eoff,loc)], fun x -> x)
-	  with Not_found -> DoChildren end
-    | _ -> DoChildren
+    method! vinst _ =
+      let open Visit in
+      function
+      | Set ((Var v, NoOffset), e, loc) ->
+        if v.vformal then
+          begin try
+            let voff = H.find cursor_to_offset v in
+            (* At this point, [e] must be a pointer whose destruction through
+             * [destruct_pointer] does not return None.
+             *)
+            let eoff =
+              match destruct_pointer e with
+              | None -> assert false
+              | Some (v2, Some e) ->
+                begin try
+                  new_exp ~loc:e.eloc (BinOp (PlusA, expr_offset v2, e, (Type.Integral.almost_unbound :> typ)))
+                with
+                | Not_found -> assert false
+                end
+              | Some (v2, None) ->
+                begin try
+                  expr_offset v2
+                with
+                | Not_found -> assert false
+                end
+            in
+            Local.ChangeDoChildrenPost ([Set ((Var voff, NoOffset), eoff, loc)], do_nothing, inserting_nothing)
+          with
+          | Not_found -> Local.DoChildren inserting_nothing
+          end
+        else
+          (* local variable *)
+          begin try
+            let voff = H.find cursor_to_offset v in
+            (* At this point, [e] must be a pointer whose destruction through
+             * [destruct_pointer] does not return None.
+             *)
+            let eoff =
+              match destruct_pointer e with
+              | None -> assert false
+              | Some (v2, Some e) ->
+                begin try
+                  new_exp ~loc:e.eloc (BinOp (PlusA, expr_offset v2, e, (Type.Integral.almost_unbound :> typ)))
+                with
+                | Not_found -> e
+                end
+              | Some (v2, None) ->
+                begin try
+                  expr_offset v2
+                with
+                | Not_found -> Ast.Exp.const Integer.zero
+                end
+            in
+            Local.ChangeDoChildrenPost ([Set ((Var voff, NoOffset), eoff, loc)], do_nothing, inserting_nothing)
+          with
+          | Not_found -> Local.DoChildren inserting_nothing
+          end
+      | _ -> Local.DoChildren inserting_nothing
 
-  method! vexpr e =
-    ChangeDoChildrenPost (preaction_expr e, postaction_expr)
+    method! vexpr (type result) (type visit_action) : (exp, result, visit_action) Visit.context -> exp -> visit_action =
+      let open Visit in
+      function
+      | Local _ -> fun e -> Local.ChangeDoChildrenPost (preaction_expr e, of_action postaction_expr, inserting_nothing)
+      | Global -> fun _ -> DoChildren
 
-  method! vterm =
-    do_on_term (Some preaction_expr,Some postaction_expr)
+    method! vterm
+        (type result) (type visit_action) : (term, result, visit_action) Visit.context -> term -> visit_action =
+      let open Visit in
+      function
+      | Local _ -> Local.of_visit_action % Do.on_term ~pre:preaction_expr ~post:postaction_expr
+      | Global -> fun _ -> DoChildren
 
-  method! vspec _sp =
+    method! vspec
+        (type result) (type visit_action) : (funspec, result, visit_action) Visit.context -> funspec -> visit_action =
     (* Do not modify the function contract, where offset variables
      * are not known *)
-    SkipChildren
-
+    let open  Visit in
+    function
+    | Local _ -> fun _ -> Local.SkipChildren inserting_nothing
+    | Global -> fun _ -> SkipChildren
 end
 
 let rewrite_cursor_pointers file =
   (* Variables to communicate between the collecting visitor and
    * the rewriting one. *)
-  let cursor_to_base = Cil_datatype.Varinfo.Hashtbl.create 0 in
-  let formal_to_base = Cil_datatype.Varinfo.Hashtbl.create 0 in
-  let assigned_vars = ref Cil_datatype.Varinfo.Set.empty in
-  let ignore_vars = ref Cil_datatype.Varinfo.Set.empty in
+  let cursor_to_base = H.create 0 in
+  let formal_to_base = H.create 0 in
+  let assigned_vars = ref S.empty in
+  let ignore_vars = ref S.empty in
 
   (* Collect the cursor variables and their base *)
-  let visitor =
-    new collectCursorPointers
-      cursor_to_base formal_to_base assigned_vars ignore_vars
-  in
-  visit_until_convergence visitor file;
+  Visit.until_convergence
+    { Visit.mk = new cursor_pointers_collector cursor_to_base formal_to_base assigned_vars ignore_vars }
+    file;
 
   (* Normalize the information *)
   let rec transitive_basis v =
-    try transitive_basis (Cil_datatype.Varinfo.Hashtbl.find formal_to_base v)
+    try transitive_basis (H.find formal_to_base v)
     with Not_found -> v
   in
-  Cil_datatype.Varinfo.Hashtbl.iter
-    (fun v _ -> Cil_datatype.Varinfo.Hashtbl.add formal_to_base v (transitive_basis v))
+  H.iter
+    (fun v _ -> H.add formal_to_base v (transitive_basis v))
     formal_to_base;
-  Cil_datatype.Varinfo.Set.iter
-    (fun v -> Cil_datatype.Varinfo.Hashtbl.remove cursor_to_base v) !ignore_vars;
-  Cil_datatype.Varinfo.Hashtbl.iter
-    (fun v vb -> if Cil_datatype.Varinfo.Set.mem vb !ignore_vars then
-      Cil_datatype.Varinfo.Hashtbl.remove cursor_to_base v) cursor_to_base;
-  Cil_datatype.Varinfo.Hashtbl.iter
-    (fun v vb -> if Cil_datatype.Varinfo.Set.mem vb !ignore_vars then
-      Cil_datatype.Varinfo.Hashtbl.remove formal_to_base v) formal_to_base;
+  S.iter (fun v -> H.remove cursor_to_base v) !ignore_vars;
+  H.iter
+    (fun v vb ->
+       if S.mem vb !ignore_vars then
+         H.remove cursor_to_base v)
+    cursor_to_base;
+  H.iter
+    (fun v vb ->
+       if S.mem vb !ignore_vars then
+         H.remove formal_to_base v)
+    formal_to_base;
 
   (* Rewrite cursor variables as offsets from their base variable *)
-  let visitor =
-    new rewriteCursorPointers
-      cursor_to_base formal_to_base !assigned_vars
-  in
-  visitFramacFile (visit_and_push_statements_visitor visitor) file
-
+  Visit.inserting_statements
+    (new cursor_pointers_rewriter cursor_to_base formal_to_base !assigned_vars)
+    file
 
 (*****************************************************************************)
 (* Rewrite cursor integers into offsets from base integers.                  *)
 (*****************************************************************************)
 
 (* Recognize the sum of an integer variable and an integer offset *)
-let rec destruct_integer e = match e.enode with
-  | Lval(Var v,NoOffset) -> Some(v,None)
-  | BinOp((PlusA | MinusA as op),e1,e2,_) ->
-      begin match destruct_integer e1 with
-	| None -> None
-	| Some(v,None) ->
-	    begin match op with
-	      | PlusA -> Some(v,Some e2)
-	      | MinusA ->
-                  Some(v,
-                       Some(new_exp ~loc:e.eloc
-                              (UnOp(Neg,e2,almost_integer_type))))
-	      | _ -> assert false
-	    end
-	| Some(v,Some off) ->
-	    begin match op with
-	      | PlusA ->
-                  Some(v,
-                       Some(new_exp ~loc:e.eloc
-                              (BinOp(PlusA,off,e2,almost_integer_type))))
-	      | MinusA ->
-                  Some(v,
-                       Some(new_exp ~loc:e.eloc
-                              (BinOp(MinusA,off,e2,almost_integer_type))))
-	      | _ -> assert false
-	    end
+let rec destruct_integer e =
+  match e.enode with
+  | Lval (Var v, NoOffset) -> Some (v, None)
+  | BinOp ((PlusA | MinusA as op), e1, e2, _) ->
+    let integer = (Type.Integral.almost_unbound :> typ) in
+    begin match destruct_integer e1 with
+    | None -> None
+    | Some (v, None) ->
+      begin match op with
+      | PlusA -> Some(v,Some e2)
+      | MinusA ->
+        Some (v, Some (new_exp ~loc:e.eloc (UnOp (Neg, e2, integer))))
+      | _ -> assert false
       end
-  | CastE(ty,e) ->
-      let ety = typeOf e in
-      if isIntegralType ty && isIntegralType ety then
-	destruct_integer e
-      else None
+    | Some (v, Some off) ->
+      begin match op with
+      | PlusA ->
+        Some(v, Some (new_exp ~loc:e.eloc (BinOp (PlusA, off, e2, integer))))
+      | MinusA ->
+        Some(v, Some (new_exp ~loc:e.eloc (BinOp (MinusA, off, e2, integer))))
+      | _ -> assert false
+      end
+    end
+  | CastE (ty, e) ->
+    let ety = typeOf e in
+    if isIntegralType ty && isIntegralType ety then
+      destruct_integer e
+    else
+      None
   | _ -> None
 
-class collectCursorIntegers
-  (cursor_to_base : varinfo Cil_datatype.Varinfo.Hashtbl.t) (* local variable to base *)
-  (assigned_vars : Cil_datatype.Varinfo.Set.t ref) (* variable is assigned (for formals) *)
-  (ignore_vars : Cil_datatype.Varinfo.Set.t ref) (* ignore info on these variables *) =
+class cursor_integers_collector ~signal
+  (cursor_to_base : varinfo H.t) (* local variable to base *)
+  (assigned_vars : S.t ref) (* variable is assigned (for formals) *)
+  (ignore_vars : S.t ref) (* ignore info on these variables *) =
 
-  let candidate_var v =
-    not v.vglob && (isIntegralType v.vtype && not v.vaddrof)
-  in
+  let candidate_var v = not v.vglob && (isIntegralType v.vtype && not v.vaddrof) in
   (* Variable should not be translated as base or cursor *)
   let add_ignore_vars v =
-    if not (Cil_datatype.Varinfo.Set.mem v !ignore_vars) then
-      begin
-	ignore_vars := Cil_datatype.Varinfo.Set.add v !ignore_vars; signal_change ()
-      end
+    if not (S.mem v !ignore_vars) then begin
+      ignore_vars := S.add v !ignore_vars;
+      signal#change
+    end
   in
   (* Variable [v] used as cursor on base [vb] *)
   let add_cursor_to_base v vb =
     try
-      let vb2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
-      if not (Cil_datatype.Varinfo.equal vb vb2) then add_ignore_vars v
-    with Not_found ->
-      Cil_datatype.Varinfo.Hashtbl.add cursor_to_base v vb; signal_change ()
+      let vb2 = H.find cursor_to_base v in
+      if not (Varinfo.equal vb vb2) then
+        add_ignore_vars v
+    with
+    | Not_found ->
+      H.add cursor_to_base v vb;
+      signal#change
   in
   (* Variable [v] assigned *)
   let add_assigned_vars v =
-    if not (Cil_datatype.Varinfo.Set.mem v !assigned_vars) then
-      begin
-	assigned_vars := Cil_datatype.Varinfo.Set.add v !assigned_vars; signal_change ()
-      end
+    if not (S.mem v !assigned_vars) then begin
+      assigned_vars := S.add v !assigned_vars;
+      signal#change
+    end
   in
-object
+  object
 
-  inherit Visitor.frama_c_inplace
+    inherit frama_c_inplace
 
-  method! vfunc f =
-    (* For simplicity, consider formals as self-cursors initially.
-     * This is the way we declare bases (in the image of [cursor_to_base]).
-     *)
-    let formal v =
-      if candidate_var v then add_cursor_to_base v v
-    in
-    List.iter formal f.sformals;
-    DoChildren
+    method! vfunc f =
+      (* For simplicity, consider formals as self-cursors initially.
+       * This is the way we declare bases (in the image of [cursor_to_base]).
+      *)
+      let formal v = if candidate_var v then add_cursor_to_base v v in
+      List.iter formal f.sformals;
+      DoChildren
 
-  method! vinst = function
-    | Set((Var v,NoOffset),e,_loc) ->
-	if candidate_var v then
-	  begin
-	    add_assigned_vars v;
-	    match destruct_integer e with
-	      | None -> add_ignore_vars v
-	      | Some(v2,_offset) ->
-		  if Cil_datatype.Varinfo.Set.mem v2 !ignore_vars then add_ignore_vars v
-		  else try
-		    let vb2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v2 in
-		    try
-		      let vb = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
-		      if not (Cil_datatype.Varinfo.equal vb vb2) then
-			add_ignore_vars v
-		    with Not_found -> add_cursor_to_base v vb2
-		  with Not_found -> add_ignore_vars v
-	  end;
-	SkipChildren
+    method! vinst =
+      function
+      | Set ((Var v, NoOffset), e, _loc) ->
+        if candidate_var v then begin
+          add_assigned_vars v;
+          match destruct_integer e with
+          | None -> add_ignore_vars v
+          | Some(v2,_offset) ->
+            if S.mem v2 !ignore_vars then
+              add_ignore_vars v
+            else
+              try
+                let vb2 = H.find cursor_to_base v2 in
+                begin try
+                  let vb = H.find cursor_to_base v in
+                  if not (Varinfo.equal vb vb2) then
+                    add_ignore_vars v
+                with
+                | Not_found -> add_cursor_to_base v vb2
+                end
+              with
+              | Not_found -> add_ignore_vars v
+          end;
+        SkipChildren
     | Set _ -> SkipChildren
-    | Call(Some(Var v,NoOffset),_f,_args,_loc) ->
-	if candidate_var v then
-	  begin
-	    add_assigned_vars v; add_ignore_vars v
-	  end;
-	SkipChildren
+    | Call (Some (Var v, NoOffset), _f, _args, _loc) ->
+      if candidate_var v then begin
+        add_assigned_vars v;
+        add_ignore_vars v
+      end;
+      SkipChildren
     | Call _ -> SkipChildren
-    | Asm _ | Skip _ -> SkipChildren
+    | Asm _
+    | Skip _ -> SkipChildren
     | Code_annot _ -> assert false
-
 end
 
-class rewriteCursorIntegers
-  (cursor_to_base : varinfo Cil_datatype.Varinfo.Hashtbl.t)
-  (assigned_vars : Cil_datatype.Varinfo.Set.t) =
+class cursor_integers_rewriter
+  (cursor_to_base : varinfo H.t)
+  (assigned_vars : S.t) =
 
   (* Correspondance between cursor variables and offset variables *)
-  let cursor_to_offset : varinfo Cil_datatype.Varinfo.Hashtbl.t = Cil_datatype.Varinfo.Hashtbl.create 0 in
+  let cursor_to_offset : varinfo H.t = H.create 0 in
 
-  let postaction_expr e = match e.enode with
-    | Lval(Var v,NoOffset) ->
-	begin try
-	  let vb = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
-	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
-	  new_exp ~loc:e.eloc
+  let postaction_expr e =
+    match e.enode with
+    | Lval (Var v, NoOffset) ->
+        begin try
+          let vb = H.find cursor_to_base v in
+          let voff = H.find cursor_to_offset v in
+          new_exp ~loc:e.eloc
             (BinOp(PlusA,
                    new_exp ~loc:e.eloc (Lval(Var vb,NoOffset)),
                    new_exp ~loc:e.eloc (Lval(Var voff,NoOffset)),
                    v.vtype))
-	with Not_found -> e end
+      with
+      | Not_found -> e
+      end
     | _ -> e
   in
-  let postaction_term t = match t.term_node with
-    | TLval(TVar { lv_origin = Some v },TNoOffset) ->
-	begin try
-	  let vb = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
-	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
-	  let vt1 = term_of_var vb in
-	  let vt2 = term_of_var voff in
-	  let addt =
-	    mkterm (TBinOp(PlusA,vt1,vt2)) Linteger t.term_loc
-	  in
-	  mkterm (TCastE(v.vtype,addt)) t.term_type t.term_loc
-	with Not_found -> t end
+  let postaction_term t =
+    match t.term_node with
+    | TLval (TVar { lv_origin = Some v }, TNoOffset) ->
+        begin try
+          let vb = H.find cursor_to_base v in
+          let voff = H.find cursor_to_offset v in
+          let vt1 = Ast.Term.of_var vb in
+          let vt2 = Ast.Term.of_var voff in
+          let addt =
+            Ast.Term.mk ~loc:t.term_loc ~typ:Linteger @@ TBinOp (PlusA, vt1, vt2)
+          in
+          Ast.Term.mk ~loc:t.term_loc ~typ:t.term_type @@ TCastE(v.vtype, addt)
+      with
+      | Not_found -> t
+      end
     | _ -> t
   in
-object
+  object
 
-  inherit Visitor.frama_c_inplace
+    inherit Visit.frama_c_inplace_inserting
 
-  method! vfunc f =
-    let local v =
-      if Cil_datatype.Varinfo.Hashtbl.mem cursor_to_base v then
-	let name = unique_name ("__jc_off_" ^ v.vname) in
-	let voff = makeLocalVar f ~insert:true name almost_integer_type in
-	Cil_datatype.Varinfo.Hashtbl.add cursor_to_offset v voff
-    in
-    let formal v =
-      if Cil_datatype.Varinfo.Hashtbl.mem cursor_to_base v
-	&& Cil_datatype.Varinfo.Set.mem v assigned_vars then
-	  (* Formal is assigned and still a self-base, an offset is needed *)
-	  begin
-	  local v; (* Create an offset variable for this formal *)
-	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
-	  let initst =
-	    mkStmt(Instr(Set((Var voff,NoOffset),
-			     constant_expr Integer.zero,
-			     CurrentLoc.get ())))
-	  in
-	  add_pending_statement ~beginning:true initst
-	  end
-      else ()
-    in
-    List.iter formal f.sformals;
-    List.iter local f.slocals;
-    DoChildren
+    method! vfunc f =
+      let open Visit in
+      let local v =
+        if H.mem cursor_to_base v then
+          let name = Name.unique ("__jc_off_" ^ v.vname) in
+          let voff = makeLocalVar f ~insert:true name (Type.Integral.almost_unbound :> typ) in
+          H.add cursor_to_offset v voff
+      in
+      let formal acc v =
+        if H.mem cursor_to_base v &&
+           S.mem v assigned_vars then begin
+          (* Formal is assigned and still a self-base, an offset is needed *)
+          local v; (* Create an offset variable for this formal *)
+          let voff = H.find cursor_to_offset v in
+          mkStmt (
+            Instr (
+              Set ((Var voff, NoOffset),
+                   Ast.Exp.const Integer.zero,
+                   CurrentLoc.get ())))
+          :: acc
+        end else
+          acc
+      in
+      let prelude =
+        List.fold_left formal [] f.sformals
+      in
+      List.iter local f.slocals;
+      Fundec.DoChildren (prepending prelude)
 
-  method! vinst = function
-    | Set((Var v,NoOffset),e,loc) ->
-	begin try
-	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
-	  (* At this point, [e] must be an integer whose destruction through
-	   * [destruct_integer] does not return None.
-	   *)
-	  let eoff = match destruct_integer e with
-	    | None -> assert false
-	    | Some(v2,Some e) ->
-		begin try
-		  let voff2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v2 in
-		  new_exp ~loc:e.eloc
-                    (BinOp(PlusA,
-                           new_exp ~loc:e.eloc (Lval(Var voff2,NoOffset)),
-                           e,
-                           almost_integer_type))
-		with Not_found -> e end
-	    | Some(v2,None) ->
-		begin try
-		  let voff2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v2 in
-		  new_exp ~loc (Lval(Var voff2,NoOffset))
-		with Not_found -> constant_expr Integer.zero end
-	  in
-	  ChangeDoChildrenPost
-	    ([Set((Var voff,NoOffset),eoff,loc)], fun x -> x)
-	with Not_found -> DoChildren end
-    | _ -> DoChildren
+    method! vinst _ =
+      let open Visit in
+      function
+      | Set ((Var v, NoOffset), e, loc) ->
+        begin try
+          let voff = H.find cursor_to_offset v in
+          (* At this point, [e] must be an integer whose destruction through
+           * [destruct_integer] does not return None.
+           *)
+          let eoff =
+            match destruct_integer e with
+            | None -> assert false
+            | Some (v2, Some e) ->
+              begin try
+                let voff2 = H.find cursor_to_offset v2 in
+                new_exp ~loc:e.eloc @@
+                  BinOp (PlusA,
+                         new_exp ~loc:e.eloc @@ Lval(Var voff2, NoOffset),
+                         e,
+                         (Type.Integral.almost_unbound :> typ))
+              with
+              | Not_found -> e
+              end
+            | Some (v2, None) ->
+              begin try
+                let voff2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v2 in
+                new_exp ~loc (Lval(Var voff2,NoOffset))
+              with
+              | Not_found ->
+                Ast.Exp.const Integer.zero
+              end
+          in
+          Local.ChangeDoChildrenPost ([Set ((Var voff, NoOffset), eoff, loc)], do_nothing, inserting_nothing)
+        with
+        | Not_found ->
+          Local.DoChildren inserting_nothing
+        end
+    | _ -> Local.DoChildren inserting_nothing
 
-  method! vexpr e =
-    ChangeDoChildrenPost (e,postaction_expr)
+  method! vexpr (type result) (type visit_action) : (exp, result, visit_action) Visit.context -> exp -> visit_action =
+    let open Visit in
+    function
+    | Local _ -> fun e -> Local.ChangeDoChildrenPost (e, of_action postaction_expr, inserting_nothing)
+    | Global -> fun _ -> DoChildren
 
-  method! vterm t =
-    ChangeDoChildrenPost (t,postaction_term)
+  method! vterm (type result) (type visit_action) : (term, result, visit_action) Visit.context -> term -> visit_action =
+    let open Visit in
+    function
+    | Local _ -> fun t -> Local.ChangeDoChildrenPost (t, of_action postaction_term, inserting_nothing)
+    | Global -> fun _ -> DoChildren
 
-  method! vspec _sp =
-    (* Do not modify the function contract, where offset variables
-     * are not known *)
-    SkipChildren
+  method! vspec
+      (type result) (type visit_action) : (funspec, result, visit_action) Visit.context -> funspec -> visit_action =
+    let open Visit in
+    function
+    | Local _ ->
+      (* Do not modify the function contract, where offset variables
+       * are not known *)
+      fun _ -> Local.SkipChildren inserting_nothing
+    | Global -> fun _ -> SkipChildren
 
 end
 
 let rewrite_cursor_integers file =
   (* Variables to communicate between the collecting visitor and
    * the rewriting one. *)
-  let cursor_to_base = Cil_datatype.Varinfo.Hashtbl.create 0 in
-  let assigned_vars = ref Cil_datatype.Varinfo.Set.empty in
-  let ignore_vars = ref Cil_datatype.Varinfo.Set.empty in
+  let cursor_to_base = H.create 0 in
+  let assigned_vars = ref S.empty in
+  let ignore_vars = ref S.empty in
 
   (* Collect the cursor variables and their base *)
-  let visitor =
-    new collectCursorIntegers
-      cursor_to_base assigned_vars ignore_vars
-  in
-  visit_until_convergence visitor file;
+  Visit.until_convergence { Visit.mk = new cursor_integers_collector cursor_to_base assigned_vars ignore_vars } file;
 
   (* Normalize the information *)
-  Cil_datatype.Varinfo.Set.iter
-    (fun v -> Cil_datatype.Varinfo.Hashtbl.remove cursor_to_base v) !ignore_vars;
-  Cil_datatype.Varinfo.Hashtbl.iter
-    (fun v vb -> if Cil_datatype.Varinfo.Set.mem vb !ignore_vars then
-      Cil_datatype.Varinfo.Hashtbl.remove cursor_to_base v) cursor_to_base;
+  S.iter (fun v -> H.remove cursor_to_base v) !ignore_vars;
+  H.iter
+    (fun v vb ->
+       if S.mem vb !ignore_vars then
+         H.remove cursor_to_base v)
+    cursor_to_base;
 
   (* Rewrite cursor variables as offsets from their base variable *)
-  let visitor =
-    new rewriteCursorIntegers cursor_to_base !assigned_vars
-  in
-  visitFramacFile (visit_and_push_statements_visitor visitor) file
+  Visit.inserting_statements
+    (new cursor_integers_rewriter cursor_to_base !assigned_vars)
+    file
 
 
 (*****************************************************************************)
@@ -2426,436 +2516,401 @@ let rewrite_cursor_integers file =
 (* All annotations are added as hints, by no means they should be trusted
    blindly, but they can be used if they are also proved *)
 
-class annotateCodeStrlen(strlen : logic_info) =
+class strlen_annotator (strlen : logic_info) =
 
   (* Store correspondance from temporaries to the corresponding string access *)
 
-  let temps = Cil_datatype.Varinfo.Hashtbl.create 17 in
+  let temps = H.create 17 in
 
   (* Recognize access or test of string *)
 
   (* TODO: extend applicability of [destruct_string_access]. *)
-  let lval_destruct_string_access ~through_tmp = function
-    | Mem e, NoOffset when isCharPtrType(typeOf e) ->
-	begin match destruct_pointer e with
-	  | None -> None
-	  | Some(v,Some off) -> Some(v,off)
-	  | Some(v,None) -> Some(v,constant_expr Integer.zero)
-	end
+  let lval_destruct_string_access ~through_tmp =
+    function
+    | Mem e, NoOffset when isCharPtrType (typeOf e) ->
+      begin match destruct_pointer e with
+      | None -> None
+      | Some (v, Some off) -> Some (v, off)
+      | Some (v, None) -> Some (v, Ast.Exp.const Integer.zero)
+      end
     | Var v, off ->
-	if isCharPtrType v.vtype then
-	  match off with
-	    | Index(i,NoOffset) -> Some (v,i)
-	    | NoOffset
-	    | Index _
-	    | Field _ -> None
-	else if isCharArrayType v.vtype then
-	  match off with
-	    | Index(i,NoOffset) -> Some (v,i)
-	    | NoOffset
-	    | Index _
-	    | Field _ -> None
-	else if through_tmp then
-	  try Some(Cil_datatype.Varinfo.Hashtbl.find temps v) with Not_found -> None
-	else None
+      if isCharPtrType v.vtype then
+        match off with
+        | Index (i, NoOffset) -> Some (v, i)
+        | NoOffset
+        | Index _
+        | Field _ -> None
+      else
+      if isCharArrayType v.vtype then
+        match off with
+        | Index (i, NoOffset) -> Some (v, i)
+        | NoOffset
+        | Index _
+        | Field _ -> None
+      else if through_tmp then
+        try
+          Some (H.find temps v)
+        with
+        | Not_found -> None
+      else
+        None
     | _ -> None
   in
   let rec destruct_string_access ?(through_tmp=false) ?(through_cast=false) e =
     match e.enode with
-      | Lval lv -> lval_destruct_string_access ~through_tmp lv
-      | CastE(_,e) ->
-	  if through_cast then
-	    destruct_string_access ~through_tmp ~through_cast e
-	  else None
-      | _ -> None
+    | Lval lv -> lval_destruct_string_access ~through_tmp lv
+    | CastE (_, e) ->
+      if through_cast then
+        destruct_string_access ~through_tmp ~through_cast e
+      else None
+    | _ -> None
   in
   let destruct_string_test ?(neg=false) e =
-    let rec aux ~neg e = match e.enode with
-      | UnOp(LNot,e,_) -> aux ~neg:(not neg) e
-      | BinOp(Ne,e1,e2,_) when is_null_expr e2 -> aux ~neg e1
-      | BinOp(Ne,e2,e1,_) when is_null_expr e2 -> aux ~neg e1
-      | BinOp(Eq,e1,e2,_) when is_null_expr e2 -> aux ~neg:(not neg) e1
-      | BinOp(Eq,e2,e1,_) when is_null_expr e2 -> aux ~neg:(not neg) e1
+    let rec aux ~neg e =
+      match e.enode with
+      | UnOp (LNot, e, _) -> aux ~neg:(not neg) e
+      | BinOp (Ne, e1, e2, _) when is_null_expr e2 -> aux ~neg e1
+      | BinOp (Ne, e2, e1, _) when is_null_expr e2 -> aux ~neg e1
+      | BinOp (Eq, e1, e2, _) when is_null_expr e2 -> aux ~neg:(not neg) e1
+      | BinOp (Eq, e2, e1, _) when is_null_expr e2 -> aux ~neg:(not neg) e1
       | _ ->
-	  match
-            destruct_string_access ~through_tmp:true ~through_cast:true e
-	  with
-	    | Some(v,off) -> Some(neg,v,off)
-	    | None -> None
-    in match e.enode with
-      | BinOp(Eq,e1,e2,_) when is_non_null_expr e2 -> false, aux ~neg e1
-      | BinOp(Eq,e2,e1,_) when is_non_null_expr e2 -> false, aux ~neg e1
-      | _ -> true, aux ~neg e
+        match destruct_string_access ~through_tmp:true ~through_cast:true e with
+        | Some (v, off) -> Some (neg, v, off)
+        | None -> None
+    in
+    match e.enode with
+    | BinOp (Eq, e1, e2, _) when is_non_null_expr e2 -> false, aux ~neg e1
+    | BinOp (Eq, e2, e1, _) when is_non_null_expr e2 -> false, aux ~neg e1
+    | _ -> true, aux ~neg e
   in
 
   (* Generate appropriate assertion *)
 
   let strlen_type =
-    match strlen.l_type with Some t -> t | None -> assert false
+    match strlen.l_type with
+    | Some t -> t
+    | None -> assert false
   in
 
   let within_bounds ~strict v off =
     let rel1 =
       Logic_const.new_predicate (Logic_const.prel (Rle,lzero(),off))
     in
-    let tv = term_of_var v in
-    let app2 = mkterm (Tapp(strlen,[],[tv])) strlen_type  v.vdecl in
+    let tv = Ast.Term.of_var v in
+    let app2 = Ast.Term.mk ~loc:v.vdecl ~typ:strlen_type @@ Tapp (strlen, [], [tv]) in
     let op = if strict then Rlt else Rle in
-    let rel2 =
-      Logic_const.new_predicate (Logic_const.prel (op,off,app2))
-    in
+    let rel2 = Logic_const.(new_predicate @@ prel (op, off, app2)) in
     let app =
-      Logic_const.new_predicate
-	(Logic_const.pand (Logic_const.pred_of_id_pred rel1,
-			   Logic_const.pred_of_id_pred rel2))
+      Logic_const.(new_predicate @@
+                   pand (pred_of_id_pred rel1,
+                         pred_of_id_pred rel2))
     in
-    Logic_const.pred_of_id_pred
-      { app with ip_name = [ name_of_hint_assertion ] }
+    Logic_const.pred_of_id_pred { app with ip_name = [ Name.Of.Jc_specific.hint ] }
   in
   let reach_upper_bound ~loose v off =
-    let tv = term_of_var v in
-    let app = mkterm (Tapp(strlen,[],[tv])) strlen_type v.vdecl in
+    let tv = Ast.Term.of_var v in
+    let app = Ast.Term.mk ~loc:v.vdecl ~typ:strlen_type @@ Tapp (strlen, [], [tv]) in
     let op = if loose then Rle else Req in
-    let rel =
-      Logic_const.new_predicate (Logic_const.prel (op,app,off))
-    in
-    Logic_const.pred_of_id_pred
-      { rel with ip_name = [ name_of_hint_assertion ] }
+    let rel = Logic_const.(new_predicate @@ Logic_const.prel (op, app, off)) in
+    Logic_const.pred_of_id_pred { rel with ip_name = [ Name.Of.Jc_specific.hint ] }
   in
-object(self)
+  object(self)
 
-  inherit Visitor.frama_c_inplace
+    inherit frama_c_inplace
 
-  method! vexpr e =
-    begin match destruct_string_access e with None -> () | Some(v,off) ->
-      if hasAttribute name_of_string_declspec (typeAttrs v.vtype) then
-	(* A string should be accessed within its bounds *)
-	let off = Common.force_exp_to_term off in
-	let app = within_bounds ~strict:false v off in
-	let cur_stmt = the self#current_stmt in
-        let kf = the self#current_kf in
-	Annotations.add_assert Common.jessie_emitter ~kf cur_stmt app
-    end;
-    DoChildren
+    method! vexpr e =
+      begin match destruct_string_access e with
+      | None -> ()
+      | Some (v, off) ->
+        if hasAttribute Name.Of.Attr.string_declspec (typeAttrs v.vtype) then
+          (* A string should be accessed within its bounds *)
+          let off = Ast.Term.of_exp off in
+          let app = within_bounds ~strict:false v off in
+          let cur_stmt = Option.value_fatal ~in_:"strlen_annotator:vexpr:current_stmt" self#current_stmt in
+          let kf = Option.value_fatal ~in_:"strlen_annotator:vexpr:current_kf" self#current_kf in
+          Annotations.add_assert Emitters.jessie ~kf cur_stmt app
+      end;
+      DoChildren
 
-  method! vstmt_aux s =
-    let preaction s = match s.skind with
-      | If(e,tbl,fbl,_loc) ->
-	  begin match destruct_string_test e with _,None -> ()
-	    | test_to_null,Some(neg,v,off) ->
-		if hasAttribute name_of_string_declspec (typeAttrs v.vtype)
-		then
-		  (* A string should be tested within its bounds, and
-		     depending on the result, the offset is either before
-		     or equal to the length of the string *)
-		  let off = Common.force_exp_to_term off in
-		  let rel1 = within_bounds ~strict:true v off in
-		  let supst = mkStmt(Instr(Skip(CurrentLoc.get()))) in
-                  let kf = the self#current_kf in
-		  Annotations.add_assert Common.jessie_emitter ~kf supst rel1;
-		  let rel2 = reach_upper_bound ~loose:false v off in
-		  let eqst = mkStmt(Instr(Skip(CurrentLoc.get()))) in
-		  Annotations.add_assert Common.jessie_emitter ~kf eqst rel2;
+    method! vstmt_aux s =
+      let preaction s =
+        match s.skind with
+        | If (e, tbl, fbl, _loc) ->
+          begin match destruct_string_test e with
+          | _, None -> ()
+          | test_to_null, Some (neg, v, off) ->
+            if hasAttribute Name.Of.Attr.string_declspec (typeAttrs v.vtype) then
+              (* A string should be tested within its bounds, and
+                 depending on the result, the offset is either before
+                 or equal to the length of the string *)
+              let off = Ast.Term.of_exp off in
+              let rel1 = within_bounds ~strict:true v off in
+              let supst = mkStmt @@ Instr (Skip (CurrentLoc.get())) in
+              let kf = Option.value_fatal ~in_:"strlen_annotator:vstmt_aux:current_kf" self#current_kf in
+              Annotations.add_assert Emitters.jessie ~kf supst rel1;
+              let rel2 = reach_upper_bound ~loose:false v off in
+              let eqst = mkStmt @@ Instr (Skip (CurrentLoc.get())) in
+              Annotations.add_assert Emitters.jessie ~kf eqst rel2;
 
-		  (* Rather add skip statement as blocks may be empty *)
-		  if neg then
-		    begin
-		      fbl.bstmts <- supst :: fbl.bstmts;
-		      if test_to_null then tbl.bstmts <- eqst :: tbl.bstmts
-		    end
-		  else
-		    begin
-		      tbl.bstmts <- supst :: tbl.bstmts;
-		      if test_to_null then fbl.bstmts <- eqst :: fbl.bstmts
-		    end
-	  end; s
-      | Instr(Set(lv,e,loc)) when is_null_expr e ->
-	  if Jessie_options.HintLevel.get () > 1 then
-	    match lval_destruct_string_access ~through_tmp:true lv with
-	      | None -> ()
-	      | Some(v,off) ->
-		  let off = Common.force_exp_to_term off in
-		  (* Help ATP with proving the bound on [strlen(v)] by
-		     asserting the obvious equality *)
-		  let lv' = Common.force_lval_to_term_lval lv in
-		  let e' = Common.force_exp_to_term e in
-		  let lvt = mkterm (TLval lv') strlen_type loc in
-		  let rel =
-		    Logic_const.new_predicate (Logic_const.prel (Req,lvt,e'))
-		  in
-		  let prel =
-		    Logic_const.pred_of_id_pred
-		      { rel with ip_name = [ name_of_hint_assertion ] }
-		  in
-                  let kf = the self#current_kf in
-		  Annotations.add_assert Common.jessie_emitter ~kf s prel;
-		  (* If setting a character to zero in a buffer, this should
-		     be the new length of a string *)
-		  let rel = reach_upper_bound ~loose:true v off in
-		  Annotations.add_assert Common.jessie_emitter ~kf s rel
-	  else ();
-	  s
-      | Instr(Set((Var v1,NoOffset),e,_loc)) ->
-	  begin match
-	    destruct_string_access ~through_tmp:true ~through_cast:true e
-	  with
-	    | None -> ()
-	    | Some(v2,off) -> Cil_datatype.Varinfo.Hashtbl.add temps v1 (v2,off)
-	  end; s
-      | _ -> s
-    in
-    ChangeDoChildrenPost(preaction s,fun x -> x)
+              (* Rather add skip statement as blocks may be empty *)
+              if neg then begin
+                fbl.bstmts <- supst :: fbl.bstmts;
+                if test_to_null then tbl.bstmts <- eqst :: tbl.bstmts
+              end else begin
+                tbl.bstmts <- supst :: tbl.bstmts;
+                if test_to_null then fbl.bstmts <- eqst :: fbl.bstmts
+              end
+          end;
+          s
+        | Instr (Set (lv, e, loc)) when is_null_expr e ->
+          if Config.Hint_level.get () > 1 then
+            match lval_destruct_string_access ~through_tmp:true lv with
+            | None -> ()
+            | Some (v, off) ->
+              let off = Ast.Term.of_exp off in
+              (* Help ATP with proving the bound on [strlen(v)] by
+                 asserting the obvious equality *)
+              let lv' = Ast.Term.lval_of_lval lv in
+              let e' = Ast.Term.of_exp e in
+              let lvt = Ast.Term.mk ~loc:loc ~typ:strlen_type @@ TLval lv' in
+              let rel = Logic_const.(new_predicate @@ prel (Req, lvt, e')) in
+              let prel = Logic_const.pred_of_id_pred { rel with ip_name = [ Name.Of.Jc_specific.hint ] } in
+              let kf = Option.value_fatal ~in_:"strlen_annotator:vstmt_aux:current_kf" self#current_kf in
+              Annotations.add_assert Emitters.jessie ~kf s prel;
+              (* If setting a character to zero in a buffer, this should
+                 be the new length of a string *)
+              let rel = reach_upper_bound ~loose:true v off in
+              Annotations.add_assert Emitters.jessie ~kf s rel
+          else
+            ();
+          s
+        | Instr (Set ((Var v1, NoOffset), e, _loc)) ->
+          begin match
+            destruct_string_access ~through_tmp:true ~through_cast:true e
+          with
+          | None -> ()
+          | Some (v2, off) -> Varinfo.Hashtbl.add temps v1 (v2, off)
+          end;
+          s
+        | _ -> s
+      in
+      ChangeDoChildrenPost (preaction s, Fn.id)
+  end
 
- end
-
-let annotate_code_strlen file =
+let annotate_strlen file =
   try
     let strlen =
-      match Logic_env.find_all_logic_functions name_of_strlen with
-	| [i] -> i
-	| _  -> assert false
+      match Logic_env.find_all_logic_functions Name.Of.Logic_function.strlen with
+      | [i] -> i
+      | _  -> assert false
     in
-    let visitor = new annotateCodeStrlen strlen in
-    visitFramacFile visitor file
-  with Not_found -> assert false
-
+    visitFramacFile (new strlen_annotator strlen) file
+  with
+  | Not_found -> assert false
 
 (*****************************************************************************)
 (* Annotate code with overflow checks.                                       *)
 (*****************************************************************************)
 
-class annotateOverflow =
-object(self)
+class overflow_annotator =
+  object(self)
 
-  inherit Visitor.frama_c_inplace
+    inherit frama_c_inplace
 
-  method! vexpr e =
-    match e.enode with
-    | BinOp((Shiftlt | Shiftrt as op),e1,e2,_ty) ->
-        let kf = the self#current_kf in
-	let cur_stmt = the self#current_stmt in
-	let is_left_shift = match op with Shiftlt -> true | _ -> false in
-	let ty1 = typeOf e1 in
-	(* Ideally, should strip only casts introduced by the compiler, not
-	 * user casts. Since this information is not available, be
-	 * conservative here.
-	 *)
-	let e1' = stripCastsButLastInfo e1 in
-	let e2' = stripCastsButLastInfo e2 in
-	(* Check that signed shift has a positive right operand *)
-	if isSignedInteger ty1 then
-	  begin match possible_value_of_integral_expr e2' with
-	    | Some i when Integer.ge i Integer.zero -> ()
-	    | _ ->
-		let check =
-                  new_exp ~loc:e.eloc (BinOp(Ge,e2',
-                                             constant_expr Integer.zero,
-                                             intType))
-                in
-		let check = Common.force_exp_to_predicate check in
-		Annotations.add_assert Common.jessie_emitter ~kf cur_stmt check
-	  end
-	else ();
-	(* Check that shift has not too big a right operand. *)
-	let max_right = Integer.of_int (integral_type_size_in_bits ty1) in
-	begin match possible_value_of_integral_expr e2' with
-	  | Some i when Integer.lt i max_right -> ()
-	  | _ ->
-	      let max_right = constant_expr max_right in
-	      let check =
-                new_exp ~loc:e.eloc (BinOp(Lt,e2',max_right,intType)) in
-	      let check = Common.force_exp_to_predicate check
-	      in
-	      Annotations.add_assert Common.jessie_emitter ~kf cur_stmt check
-	end;
-	(* Check that signed left shift has a positive left operand *)
-	if is_left_shift && isSignedInteger ty1 then
-	  begin match possible_value_of_integral_expr e1' with
-	    | Some i when Integer.ge i Integer.zero -> ()
-	    | _ ->
-		let check =
-                  new_exp ~loc:e.eloc
-                    (BinOp(Ge,e1',constant_expr Integer.zero,intType)) in
-		let check = Common.force_exp_to_predicate check
-		in
-		Annotations.add_assert Common.jessie_emitter ~kf cur_stmt check
-	  end
-	else ();
-	(* Check that signed left shift has not a left operand that is bigger
-	 * than the maximal value for the type right shifted by its right
-	 * operand.
-	 *)
-	if is_left_shift && isSignedInteger ty1 then
-	  let max_int = max_value_of_integral_type ty1 in
-	  begin match possible_value_of_integral_expr e2' with
-	    | Some i when Integer.ge i Integer.zero &&
-                Integer.lt i (Integer.of_int 64) ->
-		let max_left = constant_expr (Integer.shift_right max_int i)
-                in
-		let check =
-                  new_exp ~loc:e.eloc (BinOp(Le,e1',max_left,intType))
-                in
-		let check = Common.force_exp_to_predicate check in
-		Annotations.add_assert Common.jessie_emitter ~kf cur_stmt check
-	    | _ ->
-		let max_int = constant_expr max_int in
-		let max_left =
-                  new_exp ~loc:e.eloc (BinOp(Shiftrt,max_int,e2',intType))
-                in
-		let check = new_exp ~loc:e.eloc
-                  (BinOp(Le,e1',max_left,intType))
-                in
-		let check = Common.force_exp_to_predicate check in
-		Annotations.add_assert Common.jessie_emitter ~kf cur_stmt check
-	  end
-	else ();
-	DoChildren
-    | _ -> DoChildren
+    method! vexpr e =
+      match e.enode with
+      | BinOp ((Shiftlt | Shiftrt as op), e1, e2, _ty) ->
+        let kf = Option.value_fatal ~in_:"overflow_annotator:vexpr:current_kf" self#current_kf in
+        let cur_stmt = Option.value_fatal ~in_:"overflow_annotator:vexpr:current_stmt" self#current_stmt in
+        let is_left_shift =
+          match op with
+          |  Shiftlt -> true
+          | _ -> false
+        in
+        let ty1 =
+          match Type.Integral.of_typ (typeOf e1) with
+          | Some ty1 -> ty1
+          | None ->
+            Console.unsupported
+              "The left operand of the shift operation has non-integral type \
+               -- can't annotate with overflow checks: %a : %a"
+              Printer.pp_exp e1 Printer.pp_typ (typeOf e1)
+        in
+        (* Ideally, should strip only casts introduced by the compiler, not
+         * user casts. Since this information is not available, be
+         * conservative here.
+        *)
+        let e1', e2' = map_pair stripCastsButLastInfo (e1, e2) in
+        let add_assert enode =
+          new_exp ~loc:e.eloc enode |>
+          Ast.Predicate.Named.of_exp_exn |>
+          Annotations.add_assert Emitters.jessie ~kf cur_stmt
+        in
+        (* Check that signed shift has a positive right operand *)
+        if isSignedInteger (ty1 :> typ) then
+          begin match possible_value_of_integral_expr e2' with
+          | Some i when Integer.(ge i zero) -> ()
+          | _ -> add_assert @@ BinOp (Ge, e2', Ast.Exp.const Integer.zero, intType)
+          end;
+        (* Check that shift has not too big a right operand. *)
+        let max_right = Integer.of_int (Type.Integral.size_in_bits ty1) in
+        begin match possible_value_of_integral_expr e2' with
+        | Some i when Integer.lt i max_right -> ()
+        | _ ->
+          let max_right = constant_expr ~loc:e1.eloc max_right in
+          add_assert @@ BinOp(Lt, e2', max_right, intType)
+        end;
+        (* Check that signed left shift has a positive left operand *)
+        if is_left_shift && isSignedInteger (ty1 :> typ) then
+          begin match possible_value_of_integral_expr e1' with
+          | Some i when Integer.(ge i zero) -> ()
+          | _ -> add_assert @@ BinOp (Ge, e1', Ast.Exp.const Integer.zero, intType)
+          end;
+        (* Check that signed left shift has not a left operand that is bigger
+         * than the maximal value for the type right shifted by its right
+         * operand.
+        *)
+        if is_left_shift && isSignedInteger (ty1 :> typ) then begin
+          let max_int = Type.Integral.max_value ty1 in
+          match possible_value_of_integral_expr e2' with
+          | Some i when Integer.(ge i zero &&
+                                 lt i (of_int 64)) ->
+            let max_left = constant_expr ~loc:e2.eloc (Integer.shift_right max_int i) in
+            add_assert @@ BinOp (Le, e1', max_left, intType)
+          | _ ->
+            let max_int = constant_expr ~loc:e2.eloc max_int in
+            let max_left = new_exp ~loc:e.eloc @@ BinOp (Shiftrt, max_int, e2', intType) in
+            add_assert @@ BinOp (Le, e1', max_left, intType)
+        end;
+        DoChildren
+      | _ -> DoChildren
+  end
 
-end
-
-let annotate_overflow file =
-  let visitor = new annotateOverflow in
-  visitFramacFile visitor file
+let annotate_overflow file = visitFramacFile (new overflow_annotator) file
 
 (* Jessie/Why has trouble with Pre labels inside function contracts. *)
-class rewritePreOld : Visitor.frama_c_visitor =
-object(self)
-  inherit Visitor.frama_c_inplace
-  val mutable rep_lab = Logic_const.pre_label
+class pre_old_rewriter =
+  object (self)
+
+    inherit frama_c_inplace
+
+    val mutable rep_lab = Logic_const.pre_label
+
     method! vbehavior b =
       rep_lab <- Logic_const.here_label;
-      let requires =
-        Visitor.visitFramacPredicates
-          (self:>Visitor.frama_c_visitor) b.b_requires
-      in
-      let assumes =
-        Visitor.visitFramacPredicates
-          (self:>Visitor.frama_c_visitor) b.b_assumes
-      in
+      let requires = visitFramacPredicates (self :> frama_c_visitor) b.b_requires in
+      let assumes = visitFramacPredicates (self :> frama_c_visitor) b.b_assumes in
       let allocation =
         match b.b_allocation with
-          | FreeAllocAny -> FreeAllocAny
-          | FreeAlloc(free,alloc) ->
-              rep_lab <- Logic_const.here_label;
-              let free =
-                List.map
-                  (Visitor.visitFramacIdTerm
-                     (self:>Visitor.frama_c_visitor))
-                  free
-              in
-              rep_lab <- Logic_const.old_label;
-              let alloc =
-                List.map
-                  (Visitor.visitFramacIdTerm
-                     (self:>Visitor.frama_c_visitor))
-                  alloc
-              in
-              FreeAlloc(free,alloc)
+        | FreeAllocAny -> FreeAllocAny
+        | FreeAlloc (free, alloc) ->
+          rep_lab <- Logic_const.here_label;
+          let free =
+            List.map
+              (visitFramacIdTerm (self :> frama_c_visitor))
+              free
+          in
+          rep_lab <- Logic_const.old_label;
+          let alloc =
+            List.map
+              (visitFramacIdTerm (self:> frama_c_visitor))
+              alloc
+          in
+          FreeAlloc (free, alloc)
       in
       (* VP: 2012-09-20: signature of Cil.mk_behavior is utterly broken.
          We'll have to live with that for Oxygen, but this will change as
          soon as possible. *)
       let allocation = Some allocation in
       rep_lab <- Logic_const.old_label;
-      let assigns =
-        Visitor.visitFramacAssigns
-          (self:>Visitor.frama_c_visitor) b.b_assigns
-      in
+      let assigns = visitFramacAssigns (self :> frama_c_visitor) b.b_assigns in
       let post_cond =
-        Cil.mapNoCopy
-          (fun (k,p as e) ->
-            let p' =
-              Visitor.visitFramacIdPredicate
-                (self:>Visitor.frama_c_visitor) p
-            in
+        mapNoCopy
+          (fun (k, p as e) ->
+            let p' = visitFramacIdPredicate (self :> frama_c_visitor) p in
             if p != p' then (k,p') else e)
           b.b_post_cond
       in
       rep_lab <- Logic_const.pre_label;
       let name = b.b_name in
-      let b = Cil.mk_behavior
-        ~name ~requires ~assumes ~assigns ~allocation ~post_cond () in
+      let b = mk_behavior ~name ~requires ~assumes ~assigns ~allocation ~post_cond () in
       ChangeTo b
 
   method! vlogic_label l =
-    if Cil_datatype.Logic_label.equal l Logic_const.pre_label
-       && self#current_kinstr = Kglobal (* Do not rewrite Pre in stmt annot. *)
+    if Logic_label.equal l Logic_const.pre_label &&
+       self#current_kinstr = Kglobal (* Do not rewrite Pre in stmt annot. *)
     then
       ChangeTo rep_lab
+    else if Logic_label.equal l Logic_const.post_label then
+      ChangeTo Logic_const.here_label
     else
-      if Cil_datatype.Logic_label.equal l Logic_const.post_label
-      then
-        ChangeTo Logic_const.here_label
-      else
-        DoChildren
+      DoChildren
 end
 
-let rewrite_pre_old file =
-  let visitor = new rewritePreOld in
-  visitFramacFile visitor file
+let rewrite_pre_old = visitFramacFile (new pre_old_rewriter)
 
-class remove_unsupported: Visitor.frama_c_visitor =
+class unsupported_remover: frama_c_visitor =
 object
-  inherit Visitor.frama_c_inplace
+  inherit frama_c_inplace
   method! vpredicate =
     function
-      | Pseparated _ ->
-          Jessie_options.warning ~once:true
-            "\\separated is not supported by Jessie. This predicate will be \
-             ignored";
-          ChangeTo Ptrue
-      | _ -> DoChildren
+    | Pseparated _ ->
+      Jessie_options.warning ~once:true
+        "\\separated is not supported by Jessie. This predicate will be \
+         ignored";
+      ChangeTo Ptrue
+    | _ -> DoChildren
 end
 
-let remove_unsupported file =
-  let visitor = new remove_unsupported in
-  visitFramacFile visitor file
+let remove_unsupported = visitFramacFile (new unsupported_remover)
 
 (*****************************************************************************)
 (* Rewrite comprehensions into ranges (and back)                             *)
 (*****************************************************************************)
 
-let rec add_range vi t1opt t2opt = ranges := (vi,t1opt,t2opt) :: !ranges
-and no_range_offset = function
-TNoOffset -> true
-  | TField(_,offs) | TModel(_,offs) -> no_range_offset offs
-  | TIndex({term_type = Ltype ({ lt_name = "set"},[_])},_) -> false
-  | TIndex(_,offs) -> no_range_offset offs
+let rec add_range vi t1opt t2opt = ranges := (vi, t1opt, t2opt) :: !ranges
+and no_range_offset =
+  function
+  | TNoOffset -> true
+  | TField (_, offs) | TModel (_, offs) -> no_range_offset offs
+  | TIndex ( { term_type = Ltype ({ lt_name = "set"}, [_]) }, _) -> false
+  | TIndex (_, offs) -> no_range_offset offs
 and make_comprehension ts =
-  let ts = match ts.term_node with
-      TLval(ts',offs) when no_range_offset offs ->
-        (match ts' with
-        | TMem { term_type = Ltype ({lt_name = "set"},[_])} -> ts
-        | TMem _ | TVar _ | TResult _ ->
-          { ts with term_type = Logic_const.type_of_element ts.term_type}
-        )
+  let ts =
+    match ts.term_node with
+    | TLval (ts', offs) when no_range_offset offs ->
+      begin match ts' with
+      | TMem { term_type = Ltype ({lt_name = "set"}, [_])} -> ts
+      | TMem _ | TVar _ | TResult _ ->
+        { ts with term_type = Logic_const.type_of_element ts.term_type}
+      end
     | _ -> ts
   in
   let loc = ts.term_loc in
   let ts =
     List.fold_left
-      (fun ts (v,t1opt,t2opt) ->
+      (fun ts (v, t1opt, t2opt) ->
          let vt = variable_term loc v in
-         let popt = match t1opt,t2opt with
-           | None,None -> None
-           | Some t1,None -> Some(predicate t1.term_loc (Prel(Rle,t1,vt)))
-           | None,Some t2 -> Some(predicate t2.term_loc (Prel(Rle,vt,t2)))
-           | Some t1,Some t2 ->
-               let p1 = predicate t1.term_loc (Prel(Rle,t1,vt)) in
-               let p2 = predicate t2.term_loc (Prel(Rle,vt,t2)) in
-               let loc = (fst t1.term_loc, snd t2.term_loc) in
-               Some(predicate loc (Pand(p1,p2)))
+         let popt =
+           match t1opt, t2opt with
+           | None, None -> None
+           | Some t1, None -> Some (Ast.Named.mk ~loc:t1.term_loc @@ Prel (Rle, t1, vt))
+           | None, Some t2 -> Some (Ast.Named.mk ~loc:t2.term_loc @@ Prel (Rle, vt, t2))
+           | Some t1, Some t2 ->
+             let p1 = Ast.Named.mk ~loc:t1.term_loc @@ Prel (Rle, t1, vt) in
+             let p2 = Ast.Named.mk ~loc:t2.term_loc @@ Prel (Rle, vt, t2) in
+             let loc = fst t1.term_loc, snd t2.term_loc in
+             Some (Ast.Named.mk ~loc @@ Pand (p1, p2))
          in
          (* NB: no need to update the type, as it is already
             a set of terms (for well-formed terms at least) *)
-         { ts with term_node = Tcomprehension(ts,[v],popt) }
-      ) ts !ranges
+         { ts with term_node = Tcomprehension (ts, [v], popt) })
+      ts
+      !ranges
   in
   ranges := [];
   ts
 and ranges = ref []
-
 
 class fromRangeToComprehension behavior = object
 
@@ -3111,12 +3166,11 @@ let declare_jessie_nondet_int file =
         | Var vi, NoOffset ->
             if not @@ isPointerType vi.vtype then begin
               try
-                match (List.hd (the self#current_stmt).succs).skind with
+                match (List.hd (Option.value_exn ~exn:Exit self#current_stmt).succs).skind with
                 | Instr (Set (_, { enode = CastE (t, _) }, _)) when isPointerType t ->
                   vi.vtype <- t
                 | _ -> raise Exit
               with
-                | Invalid_argument "Extlib.the"
                 | Failure "hd"
                 | Exit ->
                   (* Cannot use Common.unsupported with ~source due to argument erasure *)

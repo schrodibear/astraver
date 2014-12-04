@@ -215,7 +215,7 @@ object
 
   method! vexpr _ = DoChildrenPost do_expr_post
 
-  method! vterm = Common.do_on_term (None, Some do_expr_post)
+  method! vterm t = Do.on_term ~post:do_expr_post t
 
   method! vvrbl vi =
     add_var_if_global vi;
@@ -265,11 +265,11 @@ object
 
   method! vlval _ = DoChildrenPost do_lval
 
-  method! vterm_lval = Common.do_on_term_lval (None, Some do_lval)
+  method! vterm_lval lv = Do.on_term_lval ~post:do_lval lv
 
   method! voffs _ = DoChildrenPost do_offset
 
-  method! vterm_offset = Common.do_on_term_offset (None, Some do_offset)
+  method! vterm_offset off = Do.on_term_offset ~post:do_offset off
 end
 
 (* Visit all anotation in the file, add necessary types and variables. *)
@@ -286,7 +286,7 @@ object(self)
   (* in the relevant functions visitor. *)
   method! vvdec _ = SkipChildren
 
-  method! vterm = Common.do_on_term (None, Some do_expr_post)
+  method! vterm t = Do.on_term ~post:do_expr_post t
 
   method! vmodel_info { mi_base_type } =
     add_from_type mi_base_type;
@@ -313,12 +313,9 @@ object(self)
 
   method! vlogic_var_use = self#vlogic_var_decl
 
-  method! vterm_lval =
-    Common.do_on_term_lval
-      (None, Some (fun lv -> add_from_type (typeOfLval lv); lv))
+  method! vterm_lval lv = Do.on_term_lval ~post:(fun lv -> add_from_type (typeOfLval lv); lv) lv
 
-  method! vterm_offset =
-    Common.do_on_term_offset (None, Some (add_field state))
+  method! vterm_offset off = Do.on_term_offset ~post:(add_field state) off
 end
 
 class fun_vaddrof_visitor =
@@ -330,7 +327,7 @@ object
 
   method! vexpr _ = DoChildrenPost (do_expr_post)
 
-  method! vterm = Common.do_on_term (None, Some do_expr_post)
+  method! vterm t = Do.on_term ~post:do_expr_post t
 
   method! vstmt_aux s =
     match s.skind with
@@ -434,14 +431,14 @@ object
   method! vglob_aux =
     let dummy_if_empty ?original_size ci =
       function
-      | [] -> [padding_field ?fsize_in_bits:original_size ci]
+      | [] -> [Type.Composite.Ci.padding_field ?fsize_in_bits:original_size ci]
       | l -> l
     in
     function
     | GType (ti, _) when Set.mem types ti -> SkipChildren
     | GCompTag (ci, _) | GCompTagDecl (ci, _) when Set.mem comps ci ->
-      retaining_size_of_composite ci @@ fun ci ->
-      let original_size = size_of_composite ci in
+      Do.retaining_size_of_composite ci @@ fun ci ->
+      let original_size = Type.Composite.Ci.size ci in
       let is_old_parent =
         let old_parent = try Some (List.hd ci.cfields) with Failure "hd" -> None in
         fun fi -> may_map ~dft:false ((==) fi) old_parent
@@ -451,13 +448,13 @@ object
       ListLabels.iteri ci.cfields
         ~f:(fun i fi ->
              if i == 0 && isStructOrUnionType fi.ftype && not (is_old_parent fi) then
-                fi.fattr <- addAttribute (Attr (noembed_attr_name, [])) fi.fattr;
+                fi.fattr <- addAttribute (Attr (Name.Of.Attr.noembed, [])) fi.fattr;
              fi.fsize_in_bits <- None;
              fi.foffset_in_bits <- None;
              fi.fpadding_in_bits <- None);
       SkipChildren
     | GCompTag (ci, _) | GCompTagDecl (ci, _) when Set.mem dcomps ci ->
-      let original_size = size_of_composite ci in
+      let original_size = Type.Composite.Ci.size ci in
       (* The composite is dummy i.e. only used as an abstract type, so *)
       (* its precise contents isn't matter. *)
       ci.cfields <- dummy_if_empty ?original_size ci [];
@@ -477,4 +474,4 @@ let extract file =
   visitFramacFile (new extractor (collect file)) file;
   (* The following removes some Frama-C builtins from the tables (??) *)
   (*Ast.mark_as_changed ();*)
-  Ast.compute ()
+  Framac.Ast.compute ()
