@@ -136,16 +136,16 @@ module TypeUF = Union_find (Type_elem) (Typ.Set) (Typ.Hashtbl)
 let add_inheritance_relation ty parentty = TypeUF.unify ty parentty
 
 let same_fields fi1 fi2 =
-  let norm = typeRemoveAttributes [embedded_attr_name] in
+  let norm = typeRemoveAttributes [Name.Of.Attr.embedded] in
   fi1.forig_name = fi2.forig_name &&
   Typ.equal (norm fi1.ftype) (norm fi2.ftype)
 
 let struct_fields_exn ty =
   match unrollType ty with
   | TComp (compinfo, _, _) ->
-    List.filter (fun fi -> not @@ hasAttribute padding_attr_name fi.fattr) compinfo.cfields |>
+    List.filter (fun fi -> not @@ hasAttribute Name.Of.Attr.padding fi.fattr) compinfo.cfields |>
     begin function [] when compinfo.cfields <> [] -> [List.hd compinfo.cfields] | fields -> fields end
-  | t -> fatal "struct_fields: non-composite type %a" Printer.pp_typ t
+  | t -> Console.fatal "struct_fields: non-composite type %a" Printer.pp_typ t
 
 let cmp_subtype =
   let cache =
@@ -171,8 +171,8 @@ let cmp_subtype =
            if same_fields ch_fi par_fi then len + 1
            else raise Exit)
         0
-        (take min_length ty1_fields)
-        (take min_length ty2_fields)
+        (List.take min_length ty1_fields)
+        (List.take min_length ty2_fields)
     with
     | Exit -> 0
   in
@@ -183,7 +183,7 @@ let cmp_subtype =
   else if ty1_length = ty2_length && ty2_length = prefix_length && prefix_length > 0 then
     let ty1_n_embedded_attrs, ty2_n_embedded_attrs =
       map_pair
-        List.(length % filterAttributes embedded_attr_name % (fun fi -> fi.fattr) % hd)
+        List.(length % filterAttributes Name.Of.Attr.embedded % (fun fi -> fi.fattr) % hd)
         (ty1_fields, ty2_fields)
     in
     if ty1_n_embedded_attrs < ty2_n_embedded_attrs then
@@ -201,7 +201,7 @@ class struct_hierarchy_builder =
     let comp_ty_of_ty_exn ty =
       match unrollType (pointed_type ty) with
       | TComp (ci, _, _) -> typeDeepDropAllAttributes @@ TComp (ci, empty_size_cache (), [])
-      | t -> fatal "unify_type_hierarchies: non-composite type %a" Printer.pp_typ t
+      | t -> Console.fatal "unify_type_hierarchies: non-composite type %a" Printer.pp_typ t
     in
     let ty1, ty2 = map_pair comp_ty_of_ty_exn (ty1, ty2) in
     (* Compare types *)
@@ -230,7 +230,7 @@ object (self)
   method! vterm t =
     match t.term_node with
     | TCastE _ ->
-      ignore @@ self#vexpr @@ stripInfo @@ fst @@ force_term_to_exp t;
+      ignore @@ self#vexpr @@ stripInfo @@ fst @@ Ast.Term.to_exp_env t;
       DoChildren
     | _ -> DoChildren
 end
@@ -264,7 +264,7 @@ let create_struct_hierarchy file =
                 | `supertype ->
                   add_inheritance_relation ty' ty;
                   let ty_fields, parentty_fields = map_pair struct_fields_exn (ty', ty) in
-                  List.iter2 add_field_representant (take (List.length parentty_fields) ty_fields) parentty_fields;
+                  List.iter2 add_field_representant List.(take (length parentty_fields) ty_fields) parentty_fields;
                   Queue.add ty' q
                 | _ -> ())
              types

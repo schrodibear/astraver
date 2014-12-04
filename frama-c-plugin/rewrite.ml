@@ -350,7 +350,7 @@ class string_constants_visitor ~attach =
   in
   object(self)
 
-    inherit Visitor.frama_c_inplace
+    inherit frama_c_inplace
 
     method find_strings = find_strings
 
@@ -532,7 +532,7 @@ let replace_string_constants =
 (* Replace global compound initializations by equivalent statements.         *)
 (*****************************************************************************)
 
-let gather_initialization file =
+let gather_initialization _ =
   Globals.Vars.iter
     (fun _v iinfo ->
        (* Too big currently, postpone until useful *)
@@ -552,12 +552,12 @@ class copy_spec_specialize_memset =
         | Some v when not v.vglob -> (* Don't change global references *)
           let v' = Cil_const.copy_with_new_vid v in
           v'.vformal <- true;
-          begin match Cil.unrollType v.vtype with
+          begin match unrollType v.vtype with
            | TArray _ as t -> v'.vtype <- TPtr (t, [])
            | _ -> ()
           end;
           v'.vlogic_var_assoc <- None; (* reset association. *)
-          let lv' = Cil.cvar_to_lvar v' in
+          let lv' = cvar_to_lvar v' in
           set_logic_var self#behavior lv lv';
           set_orig_logic_var self#behavior lv' lv;
           set_varinfo self#behavior v v';
@@ -577,7 +577,7 @@ class copy_spec_specialize_memset =
                Update term accordingly *)
             let base = Logic_const.tvar ~loc lv in
             let tmem = (TMem base,TNoOffset) in
-            Logic_const.term ~loc (TStartOf tmem) (Cil.typeOfTermLval tmem)
+            Logic_const.term ~loc (TStartOf tmem) (typeOfTermLval tmem)
           end else
             t
         | TLval (TVar lv, (TIndex _ as idx)) ->
@@ -638,7 +638,7 @@ class copy_spec_specialize_memset =
 
 let copy_spec_specialize_memset s =
   let vis = new copy_spec_specialize_memset in
-  let s' = Visitor.visitFramacFunspec vis s in
+  let s' = visitFramacFunspec vis s in
   let args = fold_visitor_varinfo vis#behavior (fun oldv newv acc -> (oldv,newv)::acc) [] in
   args, s'
 
@@ -656,7 +656,7 @@ class specialize_memset =
            let mk_actual v =
              match unrollType v.vtype with
              | TArray _ ->
-               new_exp ~loc (StartOf (Cil.var v))
+               new_exp ~loc (StartOf (var v))
              | _ -> evar ~loc v
            in
            let prms, spec = copy_spec_specialize_memset spec in
@@ -1027,7 +1027,7 @@ class specialize_blockfuns_visitor =
                     Console.fatal "Can't introduce specialized function due to name conflict: %s" fname;
                   self#specialize_function fpatt fname typ
               in
-              stmt.skind <- Instr (Call (lval_opt, Cil.evar ~loc f, args, loc));
+              stmt.skind <- Instr (Call (lval_opt, evar ~loc f, args, loc));
               SkipChildren
             | _ ->
               Console.fatal "Can't specialize %s applied (or assigned) to arguments (or lvalue) of incorrect types: %a"
@@ -1372,7 +1372,7 @@ class fp_eliminating_visitor ~attach =
     | _ -> e
   in
   let intro_var =
-    let module Hashtbl = Cil_datatype.Varinfo.Hashtbl in
+    let module Hashtbl = Varinfo.Hashtbl in
     let new_vis = Hashtbl.create 10 in
     fun ~loc vi ->
       let cast_addr0 vi =
@@ -1826,8 +1826,8 @@ let rec destruct_pointer e =
       None
   | _ -> None
 
-module S = Cil_datatype.Varinfo.Set
-module H = Cil_datatype.Varinfo.Hashtbl
+module S = Varinfo.Set
+module H = Varinfo.Hashtbl
 
 class cursor_pointers_collector ~signal
   (cursor_to_base : varinfo H.t) (* local variable to base *)
@@ -2447,7 +2447,7 @@ class cursor_integers_rewriter
               end
             | Some (v2, None) ->
               begin try
-                let voff2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v2 in
+                let voff2 = H.find cursor_to_offset v2 in
                 new_exp ~loc (Lval(Var voff2,NoOffset))
               with
               | Not_found ->
@@ -2912,93 +2912,104 @@ and make_comprehension ts =
   ts
 and ranges = ref []
 
-class fromRangeToComprehension behavior = object
+class range_to_comprehension_visitor behavior =
+  object
 
-  inherit Visitor.generic_frama_c_visitor behavior
+  inherit generic_frama_c_visitor behavior
 
-  method! vterm ts = match ts.term_type with
-    | Ltype ({ lt_name = "set"},[_]) ->
-      ChangeDoChildrenPost(ts, make_comprehension)
+  method! vterm ts =
+    match ts.term_type with
+    | Ltype ({ lt_name = "set" }, [_]) ->
+      ChangeDoChildrenPost (ts, make_comprehension)
     | _ -> DoChildren
 
-  method! vterm_offset tsoff = match tsoff with
-    | TIndex ({ term_node =Trange(t1opt,t2opt)} as t,tsoff') ->
-        let v = make_temp_logic_var Linteger in
-        add_range v t1opt t2opt;
-        let vt = variable_term t.term_loc v in
-        ChangeDoChildrenPost (TIndex(vt,tsoff'), fun x -> x)
-    | TNoOffset | TIndex _ | TField _ | TModel _ -> DoChildren
+  method! vterm_offset tsoff =
+    match tsoff with
+    | TIndex ({ term_node = Trange (t1opt, t2opt) } as t, tsoff') ->
+      let v = make_temp_logic_var Linteger in
+      add_range v t1opt t2opt;
+      let vt = variable_term t.term_loc v in
+      ChangeDoChildrenPost (TIndex (vt, tsoff'), Fn.id)
+    | TNoOffset
+    | TIndex _
+    | TField _
+    | TModel _ -> DoChildren
 
 end
 
 let from_range_to_comprehension behavior file =
-  visitFramacFile (new fromRangeToComprehension behavior) file
+  visitFramacFile (new range_to_comprehension_visitor behavior) file
 
-class fromComprehensionToRange behavior =
+class comprehension_to_range_visitor behavior =
   let ranges = Logic_var.Hashtbl.create 17 in
   let add_range vi t1opt t2opt =
-    Logic_var.Hashtbl.add ranges vi (t1opt,t2opt)
+    Logic_var.Hashtbl.add ranges vi (t1opt, t2opt)
   in
   let index_variables_of_term ts =
     let vars = ref Logic_var.Set.empty in
-    ignore
-      (visitCilTerm
-         (object
-           inherit nopCilVisitor
-           method! vterm = function
-           | { term_node =
-               TBinOp(PlusPI,_ts,{term_node=TLval(TVar v,TNoOffset)})} ->
-             vars := Logic_var.Set.add v !vars;
-             DoChildren
-           | _ -> DoChildren
-           method! vterm_offset = function
-           | TIndex({term_node=TLval(TVar v,TNoOffset)},_tsoff) ->
-             vars := Logic_var.Set.add v !vars;
-             DoChildren
-           | _ -> DoChildren
-          end)
-        ts);
+    ignore @@
+      visitCilTerm
+        (object
+          inherit nopCilVisitor
+          method! vterm =
+            function
+            | { term_node = TBinOp (PlusPI, _ts, { term_node = TLval (TVar v, TNoOffset)}) } ->
+              vars := Logic_var.Set.add v !vars;
+              DoChildren
+            | _ -> DoChildren
+
+          method! vterm_offset =
+            function
+            | TIndex ({ term_node = TLval (TVar v, TNoOffset) },_tsoff) ->
+              vars := Logic_var.Set.add v !vars;
+              DoChildren
+            | _ -> DoChildren
+        end)
+        ts;
     !vars
   in
   let bounds_of_variable v popt =
-    let error () =
-      Kernel.fatal "Cannot identify bounds for variable %s" v.lv_name
-    in
+    let error () = Kernel.fatal "Cannot identify bounds for variable %s" v.lv_name in
     let rec bounds p =
       match p.content with
-      | Prel(Rle, {term_node = TLval(TVar v',TNoOffset)}, t)
-          when Logic_var.equal v v' ->
+      | Prel (Rle, { term_node = TLval (TVar v', TNoOffset) }, t)
+        when Logic_var.equal v v' ->
         None, Some t
-      | Prel(Rle, t, {term_node = TLval(TVar v',TNoOffset)})
-          when Logic_var.equal v v' ->
+      | Prel (Rle, t, { term_node = TLval (TVar v', TNoOffset) })
+        when Logic_var.equal v v' ->
         Some t, None
-      | Pand(p1,p2) ->
+      | Pand (p1, p2) ->
         begin match bounds p1, bounds p2 with
-        | (Some t1, None),(None, Some t2) | (None, Some t2),(Some t1, None) ->
+        | (Some t1, None), (None, Some t2)
+        | (None, Some t2), (Some t1, None) ->
           Some t1, Some t2
         | _ -> error ()
         end
       | _ -> error ()
     in
-    match popt with None -> None, None | Some p -> bounds p
+    match popt with
+    | None -> None, None
+    | Some p -> bounds p
   in
-object(self)
+  object(self)
 
-  inherit Visitor.generic_frama_c_visitor behavior
+    inherit generic_frama_c_visitor behavior
 
-  val mutable has_set_type = false
+    val mutable has_set_type = false
 
-  method private propagate_set_type t =
-    if has_set_type then
-      { t with term_type = Logic_const.make_set_type t.term_type }
-    else t
+    method private propagate_set_type t =
+      if has_set_type then
+        { t with term_type = Logic_const.make_set_type t.term_type }
+      else
+        t
 
-  method! vterm t = match t.term_node with
-    | Tcomprehension(ts,[v],popt) ->
+    method! vterm t =
+      match t.term_node with
+      | Tcomprehension (ts, [v], popt) ->
         let index_vars = index_variables_of_term ts in
         (* Only accept for now comprehension on index variables *)
         if Logic_var.Set.mem v index_vars then begin
-          let t1opt,t2opt = bounds_of_variable v popt in
+          let t1opt, t2opt = bounds_of_variable v popt in
           add_range v t1opt t2opt;
           has_set_type <- false;
           ChangeTo (visitCilTerm (self :> cilVisitor) ts)
@@ -3006,211 +3017,239 @@ object(self)
           has_set_type <- false;
           DoChildren
         end
-    | TBinOp(PlusPI,base,{term_node=TLval(TVar v,TNoOffset)}) ->
-          begin try
-            let low,high = Logic_var.Hashtbl.find ranges v in
-            let range = Logic_const.trange (low,high) in
-            let res =
-            { t with
-                term_node = TBinOp(PlusPI,base,range);
-                term_type = Logic_const.make_set_type t.term_type }
-            in
-            ChangeDoChildrenPost (res, fun x -> has_set_type <- true; x)
-          with Not_found -> DoChildren end
+    | TBinOp (PlusPI, base, { term_node = TLval (TVar v, TNoOffset) }) ->
+      begin try
+        let low, high = Logic_var.Hashtbl.find ranges v in
+        let range = Logic_const.trange (low,high) in
+        let res =
+          {
+            t with
+            term_node = TBinOp (PlusPI, base,range);
+            term_type = Logic_const.make_set_type t.term_type
+          }
+        in
+        ChangeDoChildrenPost (res, fun x -> has_set_type <- true; x)
+      with
+      | Not_found -> DoChildren
+      end
 
-    | TBinOp(bop,t1,t2) ->
-        has_set_type <- false;
-        let t1' = visitCilTerm (self:>Cil.cilVisitor) t1 in
+    | TBinOp (bop, t1, t2) ->
+      has_set_type <- false;
+      let t1' = visitCilTerm (self :> cilVisitor) t1 in
+      let has_set_type1 = has_set_type in
+      let t2' = visitCilTerm (self :> cilVisitor) t2 in
+      has_set_type <- has_set_type || has_set_type1;
+      if t1 != t1' || t2 != t2' || has_set_type then
+        ChangeTo (self#propagate_set_type { t with term_node = TBinOp (bop, t1', t2') })
+      else
+        SkipChildren
+
+    | Tapp (f, prms, args) ->
+      has_set_type <- false;
+      let visit t =
         let has_set_type1 = has_set_type in
-        let t2' = visitCilTerm (self:>Cil.cilVisitor) t2 in
-        has_set_type <- has_set_type || has_set_type1;
-        if t1 != t1' || t2 != t2' || has_set_type then
-          ChangeTo
-            (self#propagate_set_type { t with term_node = TBinOp(bop,t1',t2')})
-        else SkipChildren
-    | Tapp(f,prms,args) ->
+        let res = visitCilTerm (self :> cilVisitor) t in
+        has_set_type <- has_set_type || has_set_type1; res
+      in
+      let args' = mapNoCopy visit args in
+      if args != args' || has_set_type then
+        ChangeTo (self#propagate_set_type { t with term_node = Tapp (f, prms, args') })
+      else
+        SkipChildren
+
+    | TDataCons (c, args) ->
         has_set_type <- false;
         let visit t =
           let has_set_type1 = has_set_type in
-          let res = visitCilTerm (self:>cilVisitor) t in
+          let res = visitCilTerm (self :> cilVisitor) t in
           has_set_type <- has_set_type || has_set_type1; res
         in
         let args' = mapNoCopy visit args in
         if args != args' || has_set_type then
-          ChangeTo
-            (self#propagate_set_type { t with term_node = Tapp(f,prms,args') })
-        else SkipChildren
-     | TDataCons(c,args) ->
-        has_set_type <- false;
-        let visit t =
-          let has_set_type1 = has_set_type in
-          let res = visitCilTerm (self:>cilVisitor) t in
-          has_set_type <- has_set_type || has_set_type1; res
-        in
-        let args' = mapNoCopy visit args in
-        if args != args' || has_set_type then
-          ChangeTo
-            (self#propagate_set_type { t with term_node = TDataCons(c,args') })
-        else SkipChildren
-     | Tif (t1,t2,t3) ->
-        has_set_type <- false;
-        let t1' = visitCilTerm (self:>Cil.cilVisitor) t1 in
+          ChangeTo (self#propagate_set_type { t with term_node = TDataCons (c, args') })
+        else
+          SkipChildren
+
+    | Tif (t1, t2, t3) ->
+      has_set_type <- false;
+      let t1' = visitCilTerm (self :> cilVisitor) t1 in
+      let has_set_type1 = has_set_type in
+      let t2' = visitCilTerm (self :> cilVisitor) t2 in
+      let has_set_type1 = has_set_type || has_set_type1 in
+      let t3' = visitCilTerm (self :> cilVisitor) t3 in
+      has_set_type <- has_set_type || has_set_type1;
+      if t1 != t1' || t2 != t2' || t3!=t3' || has_set_type then
+        ChangeTo (self#propagate_set_type { t with term_node = Tif (t1', t2', t3') })
+      else
+        SkipChildren
+
+    | TCoerceE (t1, t2) ->
+      has_set_type <- false;
+      let t1' = visitCilTerm (self :> cilVisitor) t1 in
+      let has_set_type1 = has_set_type in
+      let t2' = visitCilTerm (self :> cilVisitor) t2 in
+      has_set_type <- has_set_type || has_set_type1;
+      if t1 != t1' || t2 != t2' || has_set_type then
+        ChangeTo (self#propagate_set_type { t with term_node = TCoerceE (t1', t2')})
+      else
+        SkipChildren
+
+    | Tunion l ->
+      has_set_type <- false;
+      let visit t =
         let has_set_type1 = has_set_type in
-        let t2' = visitCilTerm (self:>Cil.cilVisitor) t2 in
-        let has_set_type1 = has_set_type || has_set_type1 in
-        let t3' = visitCilTerm (self:>Cil.cilVisitor) t3 in
-        has_set_type <- has_set_type || has_set_type1;
-        if t1 != t1' || t2 != t2' || t3!=t3' || has_set_type then
-          ChangeTo
-            (self#propagate_set_type { t with term_node = Tif(t1',t2',t3')})
-        else SkipChildren
-     | TCoerceE(t1,t2) ->
-        has_set_type <- false;
-        let t1' = visitCilTerm (self:>Cil.cilVisitor) t1 in
-        let has_set_type1 = has_set_type in
-        let t2' = visitCilTerm (self:>Cil.cilVisitor) t2 in
-        has_set_type <- has_set_type || has_set_type1;
-        if t1 != t1' || t2 != t2' || has_set_type then
-          ChangeTo
-            (self#propagate_set_type { t with term_node = TCoerceE(t1',t2')})
-        else SkipChildren
-     | Tunion l ->
-       has_set_type <- false;
-        let visit t =
-          let has_set_type1 = has_set_type in
-          let res = visitCilTerm (self:>cilVisitor) t in
-          has_set_type <- has_set_type || has_set_type1; res
-        in
-        let l' = mapNoCopy visit l in
-        if l != l' || has_set_type then
-          ChangeTo
-             (self#propagate_set_type { t with term_node = Tunion l' })
-        else SkipChildren
+        let res = visitCilTerm (self :> cilVisitor) t in
+        has_set_type <- has_set_type || has_set_type1; res
+      in
+      let l' = mapNoCopy visit l in
+      if l != l' || has_set_type then
+        ChangeTo (self#propagate_set_type { t with term_node = Tunion l' })
+      else
+        SkipChildren
+
      | Tinter l ->
        has_set_type <- false;
-        let visit t =
-          let has_set_type1 = has_set_type in
-          let res = visitCilTerm (self:>cilVisitor) t in
-          has_set_type <- has_set_type || has_set_type1; res
-        in
-        let l' = mapNoCopy visit l in
-        if l != l' || has_set_type then
-          ChangeTo
-            (self#propagate_set_type { t with term_node = Tinter l' })
-        else SkipChildren
-     | Trange(t1,t2) ->
-        has_set_type <- false;
-        let t1' = optMapNoCopy (visitCilTerm (self:>Cil.cilVisitor)) t1 in
-        let has_set_type1 = has_set_type in
-        let t2' = optMapNoCopy (visitCilTerm (self:>Cil.cilVisitor)) t2 in
-        has_set_type <- has_set_type || has_set_type1;
-        if t1 != t1' || t2 != t2' || has_set_type then
-          ChangeTo
-            (self#propagate_set_type { t with term_node = Trange(t1',t2')})
-        else SkipChildren
+       let visit t =
+         let has_set_type1 = has_set_type in
+         let res = visitCilTerm (self :> cilVisitor) t in
+         has_set_type <- has_set_type || has_set_type1; res
+       in
+       let l' = mapNoCopy visit l in
+       if l != l' || has_set_type then
+         ChangeTo (self#propagate_set_type { t with term_node = Tinter l' })
+       else
+         SkipChildren
+
+     | Trange (t1, t2) ->
+       has_set_type <- false;
+       let t1' = optMapNoCopy (visitCilTerm (self :> cilVisitor)) t1 in
+       let has_set_type1 = has_set_type in
+       let t2' = optMapNoCopy (visitCilTerm (self :> cilVisitor)) t2 in
+       has_set_type <- has_set_type || has_set_type1;
+       if t1 != t1' || t2 != t2' || has_set_type then
+         ChangeTo (self#propagate_set_type { t with term_node = Trange (t1', t2')})
+       else
+         SkipChildren
      | _ ->
-         has_set_type <- false;
-         ChangeDoChildrenPost (t,self#propagate_set_type)
+       has_set_type <- false;
+       ChangeDoChildrenPost (t, self#propagate_set_type)
 
-  method! vterm_lval (lh,lo) =
-    let lh' = visitCilTermLhost (self:>Cil.cilVisitor) lh in
+  method! vterm_lval (lh, lo) =
+    let lh' = visitCilTermLhost (self :> cilVisitor) lh in
     let has_set_type1 = has_set_type in
-    let lo' = visitCilTermOffset (self :> Cil.cilVisitor) lo in
+    let lo' = visitCilTermOffset (self :> cilVisitor) lo in
     has_set_type <- has_set_type || has_set_type1;
-    if lh' != lh || lo' != lo then ChangeTo (lh',lo') else SkipChildren
+    if lh' != lh || lo' != lo then
+      ChangeTo (lh', lo')
+    else
+      SkipChildren
 
-  method! vterm_lhost = function
+  method! vterm_lhost =
+    function
     | TVar v ->
-        if Logic_var.Hashtbl.mem ranges v then begin
-          Format.eprintf "vterm_lhost: Found: v = %s@." v.lv_name;
-          assert false
-        end;
-        DoChildren
+      if Logic_var.Hashtbl.mem ranges v then begin
+        Format.eprintf "vterm_lhost: Found: v = %s@." v.lv_name;
+        assert false
+      end;
+      DoChildren
     | _ -> DoChildren
 
   method! vterm_offset off =
     match off with
-      | TIndex({term_node=TLval(TVar v,TNoOffset)} as idx,off') ->
-          begin try
-            let t1opt,t2opt = Logic_var.Hashtbl.find ranges v in
-            let trange = Trange(t1opt,t2opt) in
-            let toff =
-              TIndex
-                ({ idx with
-                  term_node = trange;
-                  term_type = Logic_const.make_set_type idx.term_type },
-                 off')
-            in
-            ChangeDoChildrenPost (toff, fun x -> x)
-          with Not_found ->
-            DoChildren end
-      | TIndex _ | TNoOffset | TField _ | TModel _ ->
-          DoChildren
-
+    | TIndex ({ term_node = TLval (TVar v, TNoOffset) } as idx, off') ->
+      begin try
+        let t1opt, t2opt = Logic_var.Hashtbl.find ranges v in
+        let trange = Trange (t1opt, t2opt) in
+        let toff =
+          TIndex
+            ({
+              idx with
+              term_node = trange;
+              term_type = Logic_const.make_set_type idx.term_type
+            },
+              off')
+        in
+        ChangeDoChildrenPost (toff, Fn.id)
+      with
+      | Not_found ->
+        DoChildren
+      end
+    | TIndex _ | TNoOffset | TField _ | TModel _ ->
+      DoChildren
 end
 
 let from_comprehension_to_range behavior file =
-  let visitor = new fromComprehensionToRange behavior in
-  Visitor.visitFramacFile visitor file
+  visitFramacFile (new comprehension_to_range_visitor behavior) file
 
 (****************************************************************************)
 (* Add jessie_nondet_int () function for kmalloc.                           *)
 (****************************************************************************)
 
 let declare_jessie_nondet_int file =
-  visit_and_update_globals
-    (object(self)
-      inherit frama_c_inplace
+  begin[@warning "-42"]
+      Visit.attaching_globs
+      {
+        Visit.mk = fun ~attach ->
+          object(self)
+            inherit frama_c_inplace
 
-      method private fix_vartype ~loc:(source, _) = function
-        | Var vi, NoOffset ->
-            if not @@ isPointerType vi.vtype then begin
-              try
-                match (List.hd (Option.value_exn ~exn:Exit self#current_stmt).succs).skind with
-                | Instr (Set (_, { enode = CastE (t, _) }, _)) when isPointerType t ->
-                  vi.vtype <- t
-                | _ -> raise Exit
-              with
-                | Failure "hd"
-                | Exit ->
-                  (* Cannot use Common.unsupported with ~source due to argument erasure *)
-                  Jessie_options.with_failure
-                    (fun evt -> raise (Unsupported evt.Log.evt_message))
-                    ~current:true
-                    ~source
-                    "unable to recognize type of the allocation";
-            end
-        | _ -> ()
+            method private fix_vartype ~loc:(source, _) =
+              function
+              | Var vi, NoOffset ->
+                if not (isPointerType vi.vtype) then
+                  begin try
+                    match (List.hd (Option.value_exn ~exn:Exit self#current_stmt).succs).skind with
+                    | Instr (Set (_, { enode = CastE (t, _) }, _)) when isPointerType t ->
+                      vi.vtype <- t
+                    | _ -> raise Exit
+                  with
+                  | Failure "hd"
+                  | Exit ->
+                    (* Cannot use Common.unsupported with ~source due to argument erasure *)
+                    Jessie_options.with_failure
+                      (fun evt -> raise (Unsupported evt.Log.evt_message))
+                      ~current:true
+                      ~source
+                      "unable to recognize type of the allocation";
+                  end
+              | _ -> ()
 
-      val mutable f_opt = None
-      method! vinst =
-        function
-        | Call (Some lv, { enode = Lval (Var v, NoOffset) }, _, loc)
-          when (is_kmalloc_function v || is_kzalloc_function v) && f_opt = None ->
-          (* Add the declaration for kmalloc if it's absent: prevents return type to be implicitly treated as int *)
-          ignore @@ malloc_function ~kernel:true ();
-          name_of_nondet_int := unique_name !name_of_nondet_int;
-          let t = intType in
-          f_opt <-
-            Some (makeGlobalVar ~generated:true !name_of_nondet_int @@
-              TFun (t, Some [], false, [Attr ("extern", []); Attr ("const", [])]));
-          let fspec = empty_funspec () in
-          fspec.spec_behavior <-
-            [mk_behavior ~assigns:(Writes [Logic_const.(new_identified_term (tresult t), FromAny)]) ()];
-          let f = the f_opt in
-          attach_global @@ GVarDecl (fspec, f, Location.unknown);
-          Globals.Functions.replace_by_declaration fspec f Location.unknown;
-          Annotations.register_funspec ~emitter:jessie_emitter (Globals.Functions.get f);
-          self#fix_vartype ~loc lv;
-          SkipChildren
-        | Call (Some lv, { enode = Lval (Var v, NoOffset) }, _, loc)
-          when is_malloc_function v || is_kmalloc_function v || is_kzalloc_function v ||
-               is_realloc_function v ->
-          self#fix_vartype ~loc lv;
-          SkipChildren
-        | _ -> SkipChildren
-     end)
-    file
+            val mutable f_opt = None
+
+            method! vinst =
+              function
+              | Call (Some lv, { enode = Lval (Var vi, NoOffset) }, _, loc) ->
+                begin match Ast.Vi.Function.of_varinfo vi with
+                | Some vi
+                  when Ast.Vi.Function.(is_kmalloc vi || is_kzalloc vi) && f_opt = None ->
+                (* Add the declaration for kmalloc if it's absent:
+                   prevents return type to be implicitly treated as int *)
+                  ignore (Ast.Vi.Function.malloc ~kernel:true () :> varinfo);
+                  let f =
+                    makeGlobalVar ~generated:true Name.Of.Logic_function.nondet_int @@
+                      TFun (intType, Some [], false, [Attr ("extern", []); Attr ("const", [])])
+                  in
+                  f_opt <- Some f;
+                  let fspec = empty_funspec () in
+                  fspec.spec_behavior <-
+                    [mk_behavior ~assigns:(Writes [Logic_const.(new_identified_term (tresult intType), FromAny)]) ()];
+                  attach#global @@ GVarDecl (fspec, f, Location.unknown);
+                  Globals.Functions.replace_by_declaration fspec f Location.unknown;
+                  Annotations.register_funspec ~emitter:Emitters.jessie (Globals.Functions.get f);
+                  self#fix_vartype ~loc lv;
+                  SkipChildren
+                | Some vi
+                  when Ast.Vi.Function.(is_malloc vi || is_kmalloc vi || is_kzalloc vi || is_realloc vi) ->
+                  self#fix_vartype ~loc lv;
+                  SkipChildren
+                | Some _
+                | None -> SkipChildren
+                end
+              | _ -> SkipChildren
+          end
+      }
+      file
+  end
 
 (*****************************************************************************)
 (* Rewrite the C file for Jessie translation.                                *)
@@ -3219,11 +3258,11 @@ let declare_jessie_nondet_int file =
 let apply ~file f msg =
   Jessie_options.debug "Applying transformation: %s" msg;
   f file;
-  if checking () then check_types file
+  Debug.check_exp_types file
 
 let rewrite file =
   let apply = apply ~file in
-  let open Jessie_options in
+  let open Config in
   (* Insert declarations for kmalloc and jessie_nondet_int if necessary *)
   apply declare_jessie_nondet_int "inserting declaration for jessie_nondet_int (if necessary)";
   (* Add definitions for undefined composite tags in extract mode. *)
@@ -3236,7 +3275,7 @@ let rewrite file =
   (* Replace inline assembly with undefined function calls (and switches) *)
   apply asms_to_functions "replacing inline assembly with undefined function calls";
   (* Specialize block functions e.g. memcpy. *)
-  if SpecBlockFuncs.get () then begin
+  if Specialize.get () then begin
     apply expand_kzallocs "expanding kzallocs to kmalloc+memset";
     apply specialize_blockfuns "using specialized versions for block functions (e.g. memcpy)";
   end;
@@ -3262,19 +3301,19 @@ let rewrite file =
   (* Replace global compound initializations by equivalent statements. *)
   apply specialize_memset "using specialized versions of Frama_C_memset";
   (* Rewrite comparison of pointers into difference of pointers. *)
-  if InferAnnot.get () <> "" then
+  if Infer_annot.get () <> "" then
     apply rewrite_pointer_compare "rewriting comparison of pointers into difference of pointers";
   apply rewrite_pre_old "rewriting Pre as Old in funspecs";
   (* Rewrite cursor pointers into offsets from base pointers. *)
   (* order: after [rewrite_pointer_compare] *)
-  if InferAnnot.get () <> "" then
+  if Infer_annot.get () <> "" then begin
     apply rewrite_cursor_pointers "rewriting cursor pointers into offsets from base pointers";
-  (* Rewrite cursor integers into offsets from base integers. *)
-  if InferAnnot.get () <> "" then
+    (* Rewrite cursor integers into offsets from base integers. *)
     apply rewrite_cursor_integers "rewriting cursor integers into offsets from base integers";
-  (* Annotate code with strlen. *)
-  if HintLevel.get () > 0 then
-    apply annotate_code_strlen "annotating code with strlen";
+    (* Annotate code with strlen. *)
+  end;
+  if Hint_level.get () > 0 then
+    apply annotate_strlen "annotating code with strlen";
   (* Annotate code with overflow checks. *)
   apply annotate_overflow "annotating code with overflow checks";
   apply remove_unsupported "checking if there are unsupported predicates"
