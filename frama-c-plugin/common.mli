@@ -348,13 +348,15 @@ sig
     val of_logic_type_exn : logic_type -> t
     val map_default : default:'a -> f:(typ -> 'a) -> logic_type -> 'a
     val map : f:(typ -> 'a) -> t -> 'a
+    val get : t -> typ
+    val typ : logic_type -> typ option
   end
 
   module Ref :
   sig
     type t = ref Type.t
     val singleton : msg:'a -> typ -> t
-    val array : typ * exp * attributes -> t
+    val array : size:exp -> ?attr:attributes -> typ -> t
     val size : t -> int64
     val is_ref : typ -> bool
     val is_array_ref : typ -> bool
@@ -464,6 +466,10 @@ module Visit :
 sig
   type insert
 
+  val prepend : insert -> stmt -> insert
+  val append : insert -> stmt -> insert
+  val insert : insert -> before:stmt -> after:stmt -> insert
+
   val prepending : stmt list -> insert
   val appending : stmt list -> insert
   val inserting : before:stmt list -> after:stmt list -> insert
@@ -506,7 +512,7 @@ sig
     val of_visit_action : 'a visitAction -> 'a visit_action
   end
 
-  val wrap : ('a, 'b, 'c) context -> 'a visitAction -> 'c
+  val of_visit_action : ('a, 'b, 'c) context -> 'a visitAction -> 'c
 
   type ('a, 'r, 'v) visitor_method = ('a, 'r, 'v) context -> 'a -> 'v
 
@@ -593,11 +599,19 @@ sig
 
   class proxy_frama_c_visitor : #frama_c_inplace_inserting -> frama_c_visitor
 
+  val to_frama_c_visitor : #frama_c_inplace_inserting -> frama_c_visitor
+
+  val to_cil_visitor : #frama_c_inplace_inserting -> cilVisitor
+
   val inserting_statements : #frama_c_inplace_inserting -> file -> unit
 
   type 'a attaching_visitor = { mk : 'b. attach:'b Do.attach -> (#frama_c_visitor as 'a) }
 
   val attaching_globs : 'a attaching_visitor -> file -> unit
+
+  type 'a inserting_attaching_visitor = { mk : 'b. attach:'b Do.attach -> (#frama_c_inplace_inserting as 'a) }
+
+  val inserting_statements_and_attaching_globs : 'a inserting_attaching_visitor -> file -> unit
 
   type 'a signal = 'a constraint 'a = < change : unit; .. >
 

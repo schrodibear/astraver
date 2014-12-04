@@ -2172,27 +2172,12 @@ class cursor_pointers_rewriter
           end
       | _ -> Local.DoChildren inserting_nothing
 
-    method! vexpr (type result) (type visit_action) : (exp, result, visit_action) Visit.context -> exp -> visit_action =
-      let open Visit in
-      function
-      | Local _ -> fun e -> Local.ChangeDoChildrenPost (preaction_expr e, of_action postaction_expr, inserting_nothing)
-      | Global -> fun _ -> DoChildren
+    method! vexpr context e =
+      Visit.of_visit_action context @@ ChangeDoChildrenPost (preaction_expr e, postaction_expr)
 
-    method! vterm
-        (type result) (type visit_action) : (term, result, visit_action) Visit.context -> term -> visit_action =
-      let open Visit in
-      function
-      | Local _ -> Local.of_visit_action % Do.on_term ~pre:preaction_expr ~post:postaction_expr
-      | Global -> fun _ -> DoChildren
+    method! vterm context = Visit.of_visit_action context % Do.on_term ~pre:preaction_expr ~post:postaction_expr
 
-    method! vspec
-        (type result) (type visit_action) : (funspec, result, visit_action) Visit.context -> funspec -> visit_action =
-    (* Do not modify the function contract, where offset variables
-     * are not known *)
-    let open  Visit in
-    function
-    | Local _ -> fun _ -> Local.SkipChildren inserting_nothing
-    | Global -> fun _ -> SkipChildren
+    method! vspec context _ = Visit.of_visit_action context SkipChildren
 end
 
 let rewrite_cursor_pointers file =
@@ -2363,10 +2348,10 @@ class cursor_integers_rewriter
           let vb = H.find cursor_to_base v in
           let voff = H.find cursor_to_offset v in
           new_exp ~loc:e.eloc
-            (BinOp(PlusA,
-                   new_exp ~loc:e.eloc (Lval(Var vb,NoOffset)),
-                   new_exp ~loc:e.eloc (Lval(Var voff,NoOffset)),
-                   v.vtype))
+            (BinOp (PlusA,
+                    new_exp ~loc:e.eloc (Lval (Var vb, NoOffset)),
+                    new_exp ~loc:e.eloc (Lval (Var voff, NoOffset)),
+                    v.vtype))
       with
       | Not_found -> e
       end
@@ -2383,7 +2368,7 @@ class cursor_integers_rewriter
           let addt =
             Ast.Term.mk ~loc:t.term_loc ~typ:Linteger @@ TBinOp (PlusA, vt1, vt2)
           in
-          Ast.Term.mk ~loc:t.term_loc ~typ:t.term_type @@ TCastE(v.vtype, addt)
+          Ast.Term.mk ~loc:t.term_loc ~typ:t.term_type @@ TCastE (v.vtype, addt)
       with
       | Not_found -> t
       end
@@ -2459,30 +2444,15 @@ class cursor_integers_rewriter
         | Not_found ->
           Local.DoChildren inserting_nothing
         end
-    | _ -> Local.DoChildren inserting_nothing
+      | _ -> Local.DoChildren inserting_nothing
 
-  method! vexpr (type result) (type visit_action) : (exp, result, visit_action) Visit.context -> exp -> visit_action =
-    let open Visit in
-    function
-    | Local _ -> fun e -> Local.ChangeDoChildrenPost (e, of_action postaction_expr, inserting_nothing)
-    | Global -> fun _ -> DoChildren
+    method! vexpr context e =
+      Visit.of_visit_action context @@ ChangeDoChildrenPost (e, postaction_expr)
 
-  method! vterm (type result) (type visit_action) : (term, result, visit_action) Visit.context -> term -> visit_action =
-    let open Visit in
-    function
-    | Local _ -> fun t -> Local.ChangeDoChildrenPost (t, of_action postaction_term, inserting_nothing)
-    | Global -> fun _ -> DoChildren
+    method! vterm context t =
+      Visit.of_visit_action context @@ ChangeDoChildrenPost (t, postaction_term)
 
-  method! vspec
-      (type result) (type visit_action) : (funspec, result, visit_action) Visit.context -> funspec -> visit_action =
-    let open Visit in
-    function
-    | Local _ ->
-      (* Do not modify the function contract, where offset variables
-       * are not known *)
-      fun _ -> Local.SkipChildren inserting_nothing
-    | Global -> fun _ -> SkipChildren
-
+    method! vspec context _ = Visit.of_visit_action context SkipChildren
 end
 
 let rewrite_cursor_integers file =

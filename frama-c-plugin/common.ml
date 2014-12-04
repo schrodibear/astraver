@@ -1164,6 +1164,10 @@ struct
       | Ltype ({ lt_name = "set" }, [t]) -> map ~f t
       | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ as ty ->
         Console.fatal "map_logic_c_type_exn: unexpected non-C type: %a" Printer.pp_logic_type ty
+
+    let get = map ~f:Fn.id
+
+    let typ = Option.map ~f:get % of_logic_type
   end
 
   module Ref =
@@ -1201,13 +1205,13 @@ struct
        * element everywhere.  *)
       TPtr (elemty, attr)
 
-    let array (elemty, size, attr) =
+    let array ~size ?(attr=[]) typ =
       (* Check the array size is of a correct form *)
       ignore (lenOfArray64 (Some size));
       let siz = expToAttrParam size in
       let attr = addAttribute (Attr (Name.Of.Attr.arraylen, [siz])) attr in
       (* Make the underlying type an array so that indexing it is still valid C. *)
-      TPtr (TArray (elemty, Some size, empty_size_cache (), []), attr)
+      TPtr (TArray (typ, Some size, empty_size_cache (), []), attr)
 
     let size ty =
       match findAttribute Name.Of.Attr.arraylen (typeAttrs ty) with
@@ -1223,9 +1227,9 @@ struct
     let of_array_exn ty =
       let rec reftype ty =
         if isArrayType ty then
-          let elty = reftype (direct_element_type ty) in
+          let typ = reftype (direct_element_type ty) in
           let size = Ast.Exp.const (direct_array_size ty) in
-          array (elty, size, [])
+          array ~size typ
         else ty
       in
       if not (isArrayType ty) then
@@ -1645,6 +1649,11 @@ struct
       after : stmt list
     }
 
+  let prepend ({ before } as acc) stmt = { acc with before = stmt :: before }
+  let append ({ after } as acc) stmt = { acc with after = stmt :: after }
+  let insert { before = befores; after = afters } ~before ~after =
+    { before = before :: befores; after = after :: afters }
+
   let prepending before = { before; after = [] }
   let appending after = { before = []; after }
   let inserting ~before ~after = { before; after }
@@ -1720,7 +1729,7 @@ struct
         | ChangeDoChildrenPost (x, f) -> ChangeDoChildrenPost (x, of_action f)
     end
 
-  let wrap
+  let of_visit_action
       (type a)
       (type result)
       (type visit_action) :
@@ -1732,7 +1741,7 @@ struct
   type ('a, 'r, 'v) visitor_method = ('a, 'r, 'v) context -> 'a -> 'v
 
   class frama_c_inplace_inserting =
-    let do_children = fun context _ -> wrap context Cil.DoChildren in
+    let do_children = fun context _ -> of_visit_action context Cil.DoChildren in
     let do_children_local = fun (_ : fundec) _ -> Local.DoChildren inserting_nothing in
     object
       val super = new frama_c_inplace
@@ -1767,7 +1776,7 @@ struct
       method vinitoffs : 'a 'b. (offset, 'a, 'b) visitor_method = do_children
       method vinst : fundec -> instr -> instr list Local.visit_action = do_children_local
       method vinit : 'a 'b. (init, 'a, 'b) context -> varinfo -> offset -> init -> 'b =
-        fun context _ _ _ -> wrap context Cil.DoChildren
+        fun context _ _ _ -> of_visit_action context Cil.DoChildren
       method vtype : 'a 'b. (typ, 'a, 'b) visitor_method = do_children
       method vattr : 'a 'b. (attribute list, 'a, 'b) context -> attribute list -> 'b  = do_children
       method vattrparam : 'a 'b. (attrparam, 'a, 'b) visitor_method = do_children
@@ -1998,8 +2007,20 @@ struct
     let perform ~attach = visitFramacFile @@ (visitor.mk attach :> frama_c_visitor) in
     Do.attaching_globs { Do.perform } file
 
+  let to_frama_c_visitor = new proxy_frama_c_visitor
+
+  let to_cil_visitor visitor = (new proxy_frama_c_visitor visitor :> cilVisitor)
+
   let inserting_statements visitor file =
     visitFramacFile (new proxy_frama_c_visitor visitor) file
+
+  type 'a inserting_attaching_visitor = { mk : 'b. attach:'b Do.attach -> (#frama_c_inplace_inserting as 'a) }
+
+  let inserting_statements_and_attaching_globs visitor file =
+    let perform ~attach =
+      visitFramacFile @@ new proxy_frama_c_visitor @@ visitor.mk attach
+    in
+    Do.attaching_globs { Do.perform } file
 
   type 'a signal =
     (<

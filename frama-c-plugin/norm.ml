@@ -72,7 +72,7 @@ module Htbl_lv = Cil_datatype.Logic_var.Hashtbl
  * E.g. in example array.c, "\valid_index(t, 1)" for "t" being typed as
  * "int t[3][3]", should be transformed into "\valid_range(t, 3, 5)".
  *)
-class array_variables_retyping_visitor =
+class array_variables_retyping_visitor ~attach =
 
   (* Variables originally of array type *)
   let varset = ref Set_vi.empty in
@@ -107,10 +107,11 @@ class array_variables_retyping_visitor =
     | Var v when Set_vi.mem v !varset ->
       let strawv = Htbl_vi.find var_to_strawvar v in
       let loc = Cil_const.CurrentLoc.get () in
-      let host = Mem (mkInfo @@ new_exp ~loc @@ Lval (Var strawv, NoOffset)) in
-      let off = lift_offset (Htbl_vi.find var_to_array_type v) off in
+      let host = Mem (Ast.Exp.dummy_info @@ new_exp ~loc @@ Lval (Var strawv, NoOffset)) in
+      let off = Ast.Offset.flatten ~typ:(Htbl_vi.find var_to_array_type v) off in
       host, off
-    | Var _ | Mem _ -> lv (* For terms, also corresponds to the case for Result *)
+    | Var _
+    | Mem _ -> lv (* For terms, also corresponds to the case for Result *)
   in
 
   let postaction_lval (host, off as lv) =
@@ -129,25 +130,25 @@ class array_variables_retyping_visitor =
     let loc = e.eloc in
     match e.enode with
     | StartOf (Var v, off) when Set_vi.mem v !varset ->
-      let ty = Htbl_vi.find var_to_array_type v in
+      let typ = Htbl_vi.find var_to_array_type v in
       let strawv = Htbl_vi.find var_to_strawvar v in
-      begin match lift_offset ty off with
+      begin match Ast.Offset.flatten ~typ off with
       | NoOffset -> new_exp ~loc @@ Lval (Var strawv, NoOffset)
       | Index (ie, NoOffset) ->
-        let ptrty = TPtr (element_type ty, []) in
+        let ptrty = TPtr (element_type typ, []) in
         new_exp ~loc @@ BinOp (PlusPI, new_exp ~loc @@ Lval (Var strawv, NoOffset), ie, ptrty)
       | Index _ | Field _ ->
         (* Field with address taken treated separately *)
         new_exp ~loc @@ StartOf (Mem (new_exp ~loc @@ Lval (Var strawv, NoOffset)), off)
       end
     | AddrOf (Var v, off) when Set_vi.mem v !varset ->
-      let ty = Htbl_vi.find var_to_array_type v in
+      let typ = Htbl_vi.find var_to_array_type v in
       let strawv = Htbl_vi.find var_to_strawvar v in
-      begin match lift_offset ty off with
+      begin match Ast.Offset.flatten typ  off with
       | Index (ie, NoOffset) ->
-        let ptrty = TPtr (element_type ty, []) in
+        let ptrty = TPtr (element_type typ , []) in
         new_exp ~loc @@ BinOp (PlusPI, new_exp ~loc @@ Lval (Var strawv, NoOffset), ie, ptrty)
-      | NoOffset -> unsupported "this instance of the address operator cannot be handled"
+      | NoOffset -> Console.unsupported "this instance of the address operator cannot be handled"
       | Index _ | Field _ ->
         (* Field with address taken treated separately *)
         new_exp ~loc @@ AddrOf (Mem (new_exp ~loc @@ Lval (Var strawv, NoOffset)), off)
@@ -173,156 +174,171 @@ class array_variables_retyping_visitor =
         let subty = direct_element_type ty in
         if isArrayType subty then
           let siz = array_size subty in
-          let e2 = new_exp ~loc:e2.eloc @@ BinOp (Mult, e2, constant_expr siz, intType) in
+          let e2 = new_exp ~loc:e2.eloc @@ BinOp (Mult, e2, Ast.Exp.const siz, intType) in
           new_exp ~loc @@ BinOp (PlusPI, e1, e2, opty)
-        else e
+        else
+          e
       | _ -> e
       end
     | _ -> e
   in
-object(self)
+  object(self)
 
-  inherit frama_c_inplace
+    inherit Visit.frama_c_inplace_inserting
 
-  method! vvdec v =
-    if isArrayType v.vtype && not (Set_vi.mem v !varset) then begin
-      if v.vformal then
-        fatal "vvdec: unexpected array formal parameter (should have been retyped to pointer?): %s" v.vname;
-      Htbl_vi.add var_to_array_type v v.vtype;
-      let elemty = element_type v.vtype in
-      (* Store information that variable was originally of array type *)
-      varset := Set_vi.add v !varset;
-      (* Change the variable type *)
-      let newty =
-        if Integer.(gt (array_size v.vtype) zero) then begin
-          (* Change the type into "reference" type, that behaves almost like
-           * a pointer, except validity is ensured.
-           *)
-          let size = constant_expr (array_size v.vtype) in
-          (* Schedule for allocation *)
-          allocvarset := Set_vi.add v !allocvarset;
-          mkTRefArray (elemty, size, [])
-        end else
-          (* Plain pointer type to array with zero size *)
-          TPtr (v.vtype, [])
-      in
-      attach_globaction (fun () -> v.vtype <- newty);
-      (* Create a "straw" variable for this variable, with the correct type *)
-      let strawv = makePseudoVar newty in
-      Htbl_vi.add var_to_strawvar v strawv;
-      Htbl_vi.add strawvar_to_var strawv v
-    end;
-    DoChildren
-
-  method! vlogic_var_decl lv =
-    if not (Htbl_lv.mem lvar_to_strawlvar lv) && app_term_type isArrayType false lv.lv_type then begin
-      Htbl_lv.add lvar_to_array_type lv @@ force_app_term_type id lv.lv_type;
-      let elemty = force_app_term_type element_type lv.lv_type in
-      lvarset := Set_lv.add lv !lvarset;
-      let newty =
-        if Integer.(gt (force_app_term_type array_size lv.lv_type) zero) then begin
-          let size = constant_expr (force_app_term_type array_size lv.lv_type) in
-          alloclvarset := Set_lv.add lv !alloclvarset;
-          mkTRefArray (elemty, size, [])
-        end else
-          TPtr (elemty, [])
-      in
-      attach_globaction (fun () -> lv.lv_type <- Ctype newty);
-      let strawlv =
-        match lv.lv_origin with
-        | None -> make_temp_logic_var (Ctype newty)
-        | Some v -> cvar_to_lvar (Htbl_vi.find var_to_strawvar v)
-      in
-      Htbl_lv.add lvar_to_strawlvar lv strawlv;
-      Htbl_lv.add strawlvar_to_lvar strawlv lv
-    end;
-    DoChildren
-
-  method! vglob_aux g =
-    match g with
-    | GVar (v, _init, _loc) ->
-      (* Make sure variable declaration is treated before definition *)
-      ignore @@ visitCilVarDecl (self :> cilVisitor) v;
-      if Set_vi.mem v !allocvarset then
-        (* Allocate memory for new reference variable *)
-        let ty = Htbl_vi.find var_to_array_type v in
-        let size = array_size ty in
-        (* Disabled: anyway, it is useless to generate code for that,
-         * a post-condition should be generated instead (bts0284)
-         *  let elemty = element_type ty in
-         *  let ast = mkalloc_array_statement v elemty (array_size ty) loc in
-         *  attach_globinit ast;
-         *)
-        (* Define global validity and instanceof invariants *)
-        let invariants =
-          let invariants =
-            let open Logic_const in
-            let lv = cvar_to_lvar v in
-            let loc = v.vdecl in
-            ["valid_",
-             pvalid_range
-               ~loc
-               (label_here,
-                tvar ~loc lv ,
-                tinteger ~loc 0,
-                tint ~loc @@ Integer.pred size);
-             "typeof_",
-             let tag_ltype = Ltype ({lt_name = "typetag"; lt_params = []; lt_def = None; }, []) in
-             prel
-               ~loc:v.vdecl
-               (Req,
-                term ~loc (Ttypeof (tvar ~loc lv)) tag_ltype,
-                term ~loc (Ttype (TPtr (element_type ty, [Attr ("const", [])]))) tag_ltype)]
-          in
-          List.map
-            (fun (prefix, body) ->
-               let globinv = Cil_const.make_logic_info (unique_logic_name (prefix ^ v.vname)) in
-               globinv.l_labels <- [label_here];
-               globinv.l_body <- LBpred body;
-               attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
-               GAnnot (Dinvariant (globinv, v.vdecl), v.vdecl))
-            invariants
+    method! vvdec context v =
+      if isArrayType v.vtype && not (Set_vi.mem v !varset) then begin
+        if v.vformal then
+          Console.fatal "vvdec: unexpected array formal parameter (should have been retyped to pointer?): %s" v.vname;
+        Htbl_vi.add var_to_array_type v v.vtype;
+        let elemty = element_type v.vtype in
+        (* Store information that variable was originally of array type *)
+        varset := Set_vi.add v !varset;
+        (* Change the variable type *)
+        let newty =
+          if Integer.(gt (array_size v.vtype) zero) then begin
+            (* Change the type into "reference" type, that behaves almost like
+             * a pointer, except validity is ensured.
+             *)
+            let size = constant_expr ~loc:v.vdecl (array_size v.vtype) in
+            (* Schedule for allocation *)
+            allocvarset := Set_vi.add v !allocvarset;
+            (Type.Ref.array ~size elemty :> typ)
+          end else
+            (* Plain pointer type to array with zero size *)
+            TPtr (v.vtype, [])
         in
-        ChangeTo (g :: invariants)
-      else DoChildren
-    | GVarDecl _ | GFun _ | GAnnot _ -> DoChildren
-    | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
-    | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
+        attach#globaction (fun () -> v.vtype <- newty);
+        (* Create a "straw" variable for this variable, with the correct type *)
+        let strawv = makePseudoVar newty in
+        Htbl_vi.add var_to_strawvar v strawv;
+        Htbl_vi.add strawvar_to_var strawv v
+      end;
+      Visit.of_visit_action context DoChildren
 
-  method! vfunc f =
-    (* First change type of local array variables *)
-    List.iter (ignore % visitCilVarDecl (self :> cilVisitor)) f.slocals;
-    List.iter (ignore % visitCilVarDecl (self :> cilVisitor)) f.sformals;
-    (* Then allocate/deallocate memory for those that need it *)
-    List.iter
-      (fun v ->
+    method! vlogic_var_decl context lv =
+      if not (Htbl_lv.mem lvar_to_strawlvar lv) then begin
+        match Type.Logic_c_type.typ lv.lv_type with
+        | Some typ when isArrayType typ ->
+          Htbl_lv.add lvar_to_array_type lv typ;
+          let elemty = element_type typ in
+          lvarset := Set_lv.add lv !lvarset;
+          let newty =
+            if Integer.(gt (array_size typ) zero) then begin
+              let size = Ast.Exp.const (array_size typ) in
+              alloclvarset := Set_lv.add lv !alloclvarset;
+              (Type.Ref.array ~size elemty :> typ)
+            end else
+              TPtr (elemty, [])
+          in
+          attach#globaction (fun () -> lv.lv_type <- Ctype newty);
+          let strawlv =
+            match lv.lv_origin with
+            | None -> make_temp_logic_var (Ctype newty)
+            | Some v -> cvar_to_lvar (Htbl_vi.find var_to_strawvar v)
+          in
+          Htbl_lv.add lvar_to_strawlvar lv strawlv;
+          Htbl_lv.add strawlvar_to_lvar strawlv lv
+        | Some _
+        | None -> ()
+      end;
+      Visit.of_visit_action context DoChildren
+
+    method! vglob_aux g =
+      match g with
+      | GVar (v, _init, _loc) ->
+        (* Make sure variable declaration is treated before definition *)
+        ignore @@ visitCilVarDecl (Visit.to_cil_visitor self) v;
         if Set_vi.mem v !allocvarset then
+          (* Allocate memory for new reference variable *)
           let ty = Htbl_vi.find var_to_array_type v in
-          let elemty = element_type ty in
-          let ast = mkalloc_array_statement v elemty (Integer.to_int64 (array_size ty)) v.vdecl in
-          add_pending_statement ~beginning:true ast;
-          let fst = mkfree_statement v v.vdecl in
-          add_pending_statement ~beginning:false fst)
-      f.slocals;
-    DoChildren
+          let size = array_size ty in
+          (* Disabled: anyway, it is useless to generate code for that,
+           * a post-condition should be generated instead (bts0284)
+           *  let elemty = element_type ty in
+           *  let ast = mkalloc_array_statement v elemty (array_size ty) loc in
+           *  attach_globinit ast;
+          *)
+          (* Define global validity and instanceof invariants *)
+          let invariants =
+            let invariants =
+              let open Logic_const in
+              let lv = cvar_to_lvar v in
+              let loc = v.vdecl in
+              ["valid_",
+               pvalid_range
+                 ~loc
+                 (label_here,
+                  tvar ~loc lv ,
+                  tinteger ~loc 0,
+                  tint ~loc @@ Integer.pred size);
+               "typeof_",
+               let tag_ltype = Ltype ({lt_name = "typetag"; lt_params = []; lt_def = None; }, []) in
+               prel
+                 ~loc:v.vdecl
+                 (Req,
+                  term ~loc (Ttypeof (tvar ~loc lv)) tag_ltype,
+                  term ~loc (Ttype (TPtr (element_type ty, [Attr ("const", [])]))) tag_ltype)]
+            in
+            List.map
+              (fun (prefix, body) ->
+                 let globinv = Cil_const.make_logic_info (Name.Logic.unique (prefix ^ v.vname)) in
+                 globinv.l_labels <- [label_here];
+                 globinv.l_body <- LBpred body;
+                 attach#globaction (fun () -> Logic_utils.add_logic_function globinv);
+                 GAnnot (Dinvariant (globinv, v.vdecl), v.vdecl))
+              invariants
+          in
+          ChangeTo (g :: invariants)
+        else
+          DoChildren
+      | GVarDecl _ | GFun _ | GAnnot _ -> DoChildren
+      | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
+      | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
 
-  method! vlval lv = ChangeDoChildrenPost (preaction_lval lv, postaction_lval)
+    method! vfunc f =
+      let open Visit in
+      (* First change type of local array variables *)
+      List.iter (ignore % visitCilVarDecl (to_cil_visitor self)) f.slocals;
+      List.iter (ignore % visitCilVarDecl (to_cil_visitor self)) f.sformals;
+      (* Then allocate/deallocate memory for those that need it *)
+      let inserting_pending =
+        List.fold_left
+          (fun pending v ->
+             if Set_vi.mem v !allocvarset then
+               let ty = Htbl_vi.find var_to_array_type v in
+               let elemty = element_type ty in
+               let before =
+                 Ast.Stmt.alloc_array ~lvar:v ~typ:elemty ~size:(Integer.to_int64 (array_size ty)) ~loc:v.vdecl
+               in
+               let after = Ast.Stmt.free ~loc:v.vdecl v in
+               insert pending ~before ~after
+             else
+               pending)
+          inserting_nothing
+          f.slocals
+      in
+      Fundec.DoChildren inserting_pending
 
-  method! vterm_lval lv = do_on_term_lval (Some preaction_lval, Some postaction_lval) lv
+    method! vlval context lv =
+      Visit.of_visit_action context @@ ChangeDoChildrenPost (preaction_lval lv, postaction_lval)
 
-  method! vexpr e = ChangeDoChildrenPost (preaction_expr e, id)
+    method! vterm_lval context =
+      Visit.of_visit_action context % Do.on_term_lval ~pre:preaction_lval ~post:postaction_lval
 
-  method! vterm = do_on_term (Some preaction_expr, None)
+    method! vexpr context e =
+      Visit.of_visit_action context @@ ChangeDoChildrenPost (preaction_expr e, id)
 
+    method! vterm context t = Visit.of_visit_action context @@ Do.on_term ~pre:preaction_expr t
 end
 
 let retype_array_variables file =
   (* Enforce the prototype of malloc to exist before visiting anything.
    * It might be useful for allocation pointers from arrays
    *)
-  ignore (malloc_function ());
-  ignore (free_function ());
-  visit_and_push_statements visit_and_update_globals (new array_variables_retyping_visitor) file
+  ignore (Ast.Vi.Function.malloc ());
+  ignore (Ast.Vi.Function.free ());
+  Visit.inserting_statements_and_attaching_globs { Visit.mk = new array_variables_retyping_visitor } file
 
 (*****************************************************************************)
 (* Retype logic functions/predicates with structure parameters or return.    *)
@@ -351,7 +367,7 @@ class logic_functions_retyping_visitor =
     | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ -> ()
     | Ctype ty ->
       if isStructOrUnionType ty then
-        unsupported "Jessie plugin does not support struct or union as parameter to logic functions. Please use a pointer instead."
+        Console.unsupported "Jessie plugin does not support struct or union as parameter to logic functions. Please use a pointer instead."
        (*
           if isStructOrUnionType ty then
             begin
@@ -390,7 +406,7 @@ class logic_functions_retyping_visitor =
           TMem tlval
         | _ ->
           (* result type of C function must be a C type*)
-          fatal
+          Console.fatal
             "postaction_term_lval: result of a C function is not a C type %a"
             Printer.pp_logic_type !new_result_type
         end
@@ -413,7 +429,7 @@ class logic_functions_retyping_visitor =
           term_type = Ctype (mkTRef ty "Norm.vterm") }
       | _ ->
         (* Should not be possible *)
-        fatal
+        Console.fatal
           "preaction_term_arg: direct struct or union passed as something different from lvalue: %a"
           Printer.pp_term arg
       end
@@ -463,7 +479,7 @@ object
         | TComp (ci, _, _) ->
           let l = try Hashtbl.find model_fields_table ci.ckey with Not_found -> [] in
           Hashtbl.replace model_fields_table ci.ckey (mi :: l)
-        | _ -> unsupported "model field only on structures"
+        | _ -> Console.unsupported "model field only on structures"
         end;
         DoChildren (* FIXME: correct ? *)
       | Dcustom_annot _ -> DoChildren (* FIXME: correct ? *)
@@ -568,7 +584,7 @@ class struct_assign_expander () =
           | _ ->
             (* Other possibilities like [CastE] should have been
                transformed at this point. *)
-            fatal
+            Console.fatal
               "unrecognized untransformed expression occurred during struct assignment expansion (for field %s): %a"
               fi.fname Printer.pp_exp e
         in
@@ -586,7 +602,7 @@ class struct_assign_expander () =
           | _ ->
             (* Other possibilities like [CastE] should have been
                transformed at this point. *)
-            fatal
+            Console.fatal
               "unrecognized untransformed expression occurred during struct assignment expansion (for element %s): %a"
               (Integer.to_string i) Printer.pp_exp e
         in
@@ -598,7 +614,7 @@ class struct_assign_expander () =
         else acc
       in
       if is_reference_type ty then
-        fatal "array assignment expansion called on a reference type: %a: %a" Printer.pp_exp e Printer.pp_typ ty;
+        Console.fatal "array assignment expansion called on a reference type: %a: %a" Printer.pp_exp e Printer.pp_typ ty;
       all_elem [] @@ Integer.pred (direct_array_size ty)
     | _ -> [Set (lv, e, loc)]
   in
@@ -623,7 +639,7 @@ class struct_assign_expander () =
         else acc
       in
       if is_reference_type ty then
-        fatal "array expansion called on a reference type: %a: %a" Printer.pp_lval lv Printer.pp_typ ty;
+        Console.fatal "array expansion called on a reference type: %a: %a" Printer.pp_lval lv Printer.pp_typ ty;
       all_elem [] @@ Integer.pred (direct_array_size ty)
     | _ -> [lv]
   in
@@ -727,7 +743,7 @@ object(self)
       | Tlambda _ | TDataCons _ | Tbase_addr _ | TBinOp _ | TUnOp _
       | Tblock_length _ | TCoerce _ | TCoerceE _ | TUpdate _
       | Ttypeof _ | Ttype _ | Tlet _ | Toffset _ | Toffset_max _ | Toffset_min _ ->
-        fatal "unexpected term in assigns clause: %a" Printer.pp_term t
+        Console.fatal "unexpected term in assigns clause: %a" Printer.pp_term t
     in
     let zone idts =
       List.map Logic_const.new_identified_term (term idts.it_content)
@@ -795,7 +811,7 @@ object(self)
               | Lval lv -> Cabs2cil.mkAddrOfAndMark loc lv
               | _ ->
                 (* Should not be possible *)
-                fatal
+                Console.fatal
                   "vinst: direct struct or union passed as something different from lvalue: %a: %a"
                   Printer.pp_exp arg Printer.pp_typ (typeOf arg)
             else arg)
@@ -831,7 +847,7 @@ object(self)
           ChangeTo [call]
       end
     | Asm _ | Skip _ -> SkipChildren
-    | Code_annot _ -> fatal "code annotation: shold have been removed in register.ml"
+    | Code_annot _ -> Console.fatal "code annotation: shold have been removed in register.ml"
 
   method! vterm_lval tlv =
     ChangeDoChildrenPost (tlv, postaction_term_lval)
@@ -990,7 +1006,7 @@ object
       DoChildrenPost
         (function
          | { enode = BinOp (op, e1, e2, _); eloc } -> mkBinOp ~loc:eloc op e1 e2
-         | e -> fatal "vexpr: unexpected transformation of BinOp to: %a" Printer.pp_exp e)
+         | e -> Console.fatal "vexpr: unexpected transformation of BinOp to: %a" Printer.pp_exp e)
     | UnOp (op, ( { eloc } as e), typ) when isCharPtrType typ ->
         ChangeDoChildrenPost (new_exp ~loc:eloc (UnOp (op, e, void_ptr_with_attrs typ)), id)
     | _ -> DoChildren
@@ -1016,7 +1032,7 @@ class side_cast_rewriter =
   let struct_fields t =
     match unrollType t with
     | TComp (compinfo, _, _) -> compinfo.cfields
-    | t -> fatal "struct_fields: expected composite type, got: %a" Printer.pp_typ t
+    | t -> Console.fatal "struct_fields: expected composite type, got: %a" Printer.pp_typ t
   in
   let pointed_type t =
     match unrollType t with
@@ -1184,7 +1200,7 @@ object(self)
           attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
           [g; GAnnot (Dinvariant (globinv, v.vdecl), v.vdecl)]
         | [GVar _] -> [g]
-        | _ -> fatal "transformed variable to somethig else during normalization: %a" Printer.pp_global g
+        | _ -> Console.fatal "transformed variable to somethig else during normalization: %a" Printer.pp_global g
       in
       ChangeDoChildrenPost ([g], postaction)
     | GVarDecl _ | GFun _ | GAnnot _ -> DoChildren
@@ -1288,7 +1304,7 @@ class addrof_retyping_visitor =
     if retypable_var v then begin
       v.vtype <- mkTRef v.vtype "Norm.retype_var";
       if not  (isPointerType v.vtype) then
-        fatal "retypable var should be of pointer type (retype_var): %s" v.vname;
+        Console.fatal "retypable var should be of pointer type (retype_var): %s" v.vname;
       varset := Set_vi.add v !varset
     end
   in
@@ -1302,7 +1318,7 @@ class addrof_retyping_visitor =
     if retypable_field fi then begin
       fi.ftype <- mkTRef fi.ftype "Norm.retype_field";
       if not  (isPointerType fi.ftype) then
-        fatal "retypable field should be of pointer type (retype_field): %s" fi.fname;
+        Console.fatal "retypable field should be of pointer type (retype_field): %s" fi.fname;
       fieldset := Set_fi.add fi !fieldset
     end
   in
@@ -1312,7 +1328,7 @@ class addrof_retyping_visitor =
       match host with
       | Var v when Set_vi.mem v !varset ->
         if not (isPointerType v.vtype) then
-          fatal "retypable var should be of pointer type (postaction_lval): %s" v.vname;
+          Console.fatal "retypable var should be of pointer type (postaction_lval): %s" v.vname;
         Mem (mkInfo @@
              new_exp ~loc:(Cil_const.CurrentLoc.get ()) @@ Lval (Var v, NoOffset))
 
@@ -1324,7 +1340,7 @@ class addrof_retyping_visitor =
     match lastOffset off with
     | Field (fi, _) when Set_fi.mem fi !fieldset ->
         if not  (isPointerType fi.ftype) then
-          fatal "retypable field should be of pointer type (postaction_lval): %s" fi.fname;
+          Console.fatal "retypable field should be of pointer type (postaction_lval): %s" fi.fname;
         mkMem (mkInfo (new_exp ~loc:(Cil_const.CurrentLoc.get ()) @@ Lval (host, off))) NoOffset
     | _ -> host, off
   in
@@ -1357,35 +1373,35 @@ class addrof_retyping_visitor =
   let postaction_expr e =
     match e.enode with
     | AddrOf (Var v, NoOffset) ->
-      fatal  "address of a function: should have been eliminated before: %s" v.vname
+      Console.fatal  "address of a function: should have been eliminated before: %s" v.vname
       (* Host should have been turned into [Mem] *)
     | AddrOf (Mem e1, NoOffset) -> e1
     | AddrOf (_host, off) ->
       begin match lastOffset off with
       | Field (fi, _) when Set_fi.mem fi !fieldset ->
-        fatal "postaction_expr: should have been turned into [Mem] with NoOffset: %a: %s" Printer.pp_exp e fi.fname
+        Console.fatal "postaction_expr: should have been turned into [Mem] with NoOffset: %a: %s" Printer.pp_exp e fi.fname
       | Index _ | Field _-> e
       | NoOffset ->
         (* Should be unreachable *)
-        fatal "postaction_expr: NoOffset encountered where should be unreachable: %a" Printer.pp_exp e
+        Console.fatal "postaction_expr: NoOffset encountered where should be unreachable: %a" Printer.pp_exp e
       end
     | _ -> e
   in
   let postaction_term t =
     match t.term_node with
     | TAddrOf ((TVar _ | TResult _), TNoOffset) ->
-      fatal "postaction_term: unexpected term: %a" Printer.pp_term t
+      Console.fatal "postaction_term: unexpected term: %a" Printer.pp_term t
     | TAddrOf (TMem t1, TNoOffset) -> t1
     | TAddrOf (_, off) ->
       begin match Logic_const.lastTermOffset off with
       | TField (fi, _) when Set_fi.mem fi !fieldset ->
-        fatal "postaction_term: unexpected term offset: %a: %a" Printer.pp_term t Printer.pp_term_offset off
+        Console.fatal "postaction_term: unexpected term offset: %a: %a" Printer.pp_term t Printer.pp_term_offset off
       | TField _ -> t
-      | TModel _ -> unsupported "model field"
+      | TModel _ -> Console.unsupported "model field"
       | TIndex _ -> t
       | TNoOffset ->
         (* unreachable *)
-        fatal "postaction_term: NoOffset encountered where should be unreachable: %a" Printer.pp_term t
+        Console.fatal "postaction_term: NoOffset encountered where should be unreachable: %a" Printer.pp_term t
       end
     | _ -> t
   in
@@ -1537,7 +1553,7 @@ class fields_retyping_visitor =
       | Index (_idx, NoOffset) as off -> [off]
       | Index (idx, (Index _ as off)) ->
         if !flatten_multi_dim_array then
-          fatal
+          Console.fatal
             "postaction_lval: the following index is incompatible with multi-dim array flattening: %a %a"
             Printer.pp_exp idx Printer.pp_offset off;
         Index (idx, NoOffset) :: offset_list off
@@ -1573,13 +1589,13 @@ class fields_retyping_visitor =
          function
          | NoOffset ->
            (* should not occur *)
-           fatal "lift_offset: unexpected NoOffset"
+           Console.fatal "lift_offset: unexpected NoOffset"
          | Field (_, _)
          | Index (_, Field (_ ,_))
          | Index(_, NoOffset) as nextoff ->
            Mem (mkInfo @@ new_exp ~loc:(Cil_const.CurrentLoc.get ()) @@ Lval curlv), nextoff
          | Index (_, Index _) ->
-           fatal "lift_offset: unexpected index")
+           Console.fatal "lift_offset: unexpected index")
       initlv
       initlist
   in
@@ -1590,7 +1606,7 @@ class fields_retyping_visitor =
     | AddrOf (Mem e, NoOffset) | StartOf (Mem e, NoOffset) -> e
     | AddrOf (Mem _e, Field (_fi, off) as lv)
     | StartOf (Mem _e, Field (_fi, off) as lv) ->
-      if off <> NoOffset then fatal "postaction_expr: unexpected NoOffset: %a" Printer.pp_exp e;
+      if off <> NoOffset then Console.fatal "postaction_expr: unexpected NoOffset: %a" Printer.pp_exp e;
       (* Only possibility is that field is of structure or union type,
        * otherwise [retype_address_taken] would have taken care of it.
        * Do not check it though, because type was modified in place.
@@ -1605,7 +1621,7 @@ class fields_retyping_visitor =
     | StartOf (Mem _e, Index (_ie, Field (_, NoOffset)) as lv) ->
       new_exp ~loc:e.eloc (Lval lv)
     | AddrOf (Mem _e, Index (_ie, _)) | StartOf (Mem _e, Index (_ie, _)) ->
-      fatal "unexpected index: %a" Printer.pp_exp e
+      Console.fatal "unexpected index: %a" Printer.pp_exp e
     | _ -> e
   in
 object
@@ -1736,7 +1752,7 @@ object(self)
         (* Do not lose the information that this type is a reference *)
         let size = constant_expr (Integer.of_int64 (reference_size ty)) in
         if !flatten_multi_dim_array && is_reference_type elemty then
-          fatal "failed to flatten multi-dim array: %a" Printer.pp_typ ty;
+          Console.fatal "failed to flatten multi-dim array: %a" Printer.pp_typ ty;
         Some (mkTRefArray (self#new_wrapper_for_type elemty, size, []))
        end else if is_reference_type ty then
         (* Do not lose the information that this type is a reference *)
@@ -1777,7 +1793,7 @@ object(self)
     match lv with
     | Var _, NoOffset -> lv
     | Var _, _ ->
-      unsupported "cannot handle this lvalue: %a" Printer.pp_lval lv
+      Console.unsupported "cannot handle this lvalue: %a" Printer.pp_lval lv
     | Mem e, NoOffset ->
       begin match self#wrap_type_if_needed (typeOf e) with
       | Some newtyp ->
@@ -1889,7 +1905,7 @@ class useless_casts_remover =
           if isPointerType tty then pointed_type tty
           else element_type tty
         | ty ->
-          fatal "preaction_term: not a pointer type: %a" Printer.pp_logic_type ty
+          Console.fatal "preaction_term: not a pointer type: %a" Printer.pp_logic_type ty
       in
       if Cil_datatype.Typ.equal pty ptty then
         if Logic_utils.isLogicPointerType t.term_type then
@@ -1899,7 +1915,7 @@ class useless_casts_remover =
           | TLval lv -> Logic_const.term (TStartOf lv) (Ctype ty)
           | TStartOf _ -> t
           | _ ->
-            fatal
+            Console.fatal
               "preaction_term: unexpected array expression casted into pointer: %a"
               Printer.pp_term t
         end
