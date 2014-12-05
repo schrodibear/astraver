@@ -42,8 +42,7 @@ open Jc
 (* Utility functions *)
 open Common
 
-
-let std_include = Filename.concat Config.datadir "jessie"
+let std_include = Filename.concat Framac.Config.datadir "jessie"
 
 (*
 let prolog_h_name = Filename.concat std_include "jessie_prolog.h"
@@ -60,8 +59,8 @@ let treat_integer_model () =
     Kernel.CppExtraArgs.add ("-D JESSIE_EXACT_INT_MODEL")
 
 let treat_jessie_spec_prolog () =
-  if Jessie_options.SpecBlockFuncs.get () then
-    let spec_prolog_h_name = Filename.concat std_include blockfuns_include_file_name in
+  if Jessie_options.Specialize.get () then
+    let spec_prolog_h_name = Filename.concat std_include Name.Of.File.blockfuns_include in
     Kernel.CppExtraArgs.append_before ["-include " ^ spec_prolog_h_name]
 
 let () =
@@ -71,35 +70,31 @@ let () =
   (* Extension -- support for specialized memcpy() versions. *)
   List.iter Cmdline.run_after_configuring_stage [treat_integer_model; treat_jessie_spec_prolog]
 
-(*
-let treat_jessie_no_prolog () =
-  Kernel.CppExtraArgs.add ("-D JESSIE_NO_PROLOG")
-*)
-
 let steal_globals () =
-  let vis = object
-    inherit Visitor.frama_c_inplace
-    method! vglob_aux g =
-      match g with
+  let vis =
+    object
+      inherit Visitor.frama_c_inplace
+      method! vglob_aux g =
+        match g with
         | GAnnot (a,_) ->
-            Annotations.remove_global (Annotations.emitter_of_global a) a;
-            Annotations.unsafe_add_global Common.jessie_emitter a;
-            (* SkipChildren is not good, as Annotations.remove_global has
-               removed it from AST: we have to re-insert it...
+          Annotations.remove_global (Annotations.emitter_of_global a) a;
+          Annotations.unsafe_add_global Emitters.jessie a;
+          (* SkipChildren is not good, as Annotations.remove_global has
+             removed it from AST: we have to re-insert it...
             *)
-            ChangeTo [g]
+          ChangeTo [g]
         | _ -> SkipChildren
-  end
+    end
   in
   Visitor.visitFramacFile vis (FCAst.get())
 
 let steal_annots () =
-  let emitter=Common.jessie_emitter in
+  let emitter = Emitters.jessie in
   let l =
     Annotations.fold_all_code_annot
       (fun stmt e ca acc ->
-        Annotations.remove_code_annot e stmt ca;
-        (stmt,ca)::acc)
+         Annotations.remove_code_annot e stmt ca;
+        (stmt, ca) :: acc)
       []
   in
   List.iter (fun (stmt,ca) -> Annotations.add_code_annot emitter stmt ca) l;
@@ -115,7 +110,7 @@ let apply_if_dir_exist name f =
 
 let run () =
   if Jessie_config.jessie_local then begin
-    let whylib = String.escaped (Filename.concat Config.datadir "why") in
+    let whylib = String.escaped (Filename.concat Framac.Config.datadir "why") in
     (try ignore (Unix.getenv "WHYLIB")
        (* don't mess needlessly with user settings *)
      with Not_found ->
@@ -139,31 +134,29 @@ let run () =
     (* Enforce the prototype of malloc to exist before visiting anything.
      * It might be useful for allocation pointers from arrays
      *)
-    ignore (Common.malloc_function ());
-    ignore (Common.free_function ());
+    ignore (Ast.Vi.Function.malloc ());
+    ignore (Ast.Vi.Function.free ());
     Jessie_options.debug  "After malloc and free";
-    if checking () then check_types file;
+    Debug.check_exp_types file;
     steal_annots ();
     Jessie_options.debug "After steal_annots";
-    if checking () then check_types file;
+    Debug.check_exp_types file;
     (* Extract relevant globals *)
     if Jessie_options.Extract.get () then begin
       Jessie_options.debug "Extract relevant globals";
       Extractor.extract file;
-      if checking () then check_types file
+      Debug.check_exp_types file
     end;
     (* Rewrite ranges in logic annotations by comprehesion *)
     Jessie_options.debug "from range to comprehension";
     Rewrite.from_range_to_comprehension
       (Cil.inplace_visit ()) file;
-    if checking () then check_types file;
+    Debug.check_exp_types file;
 
     (* Phase 2: C-level rewriting to facilitate analysis *)
 
     Rewrite.rewrite file;
-    if checking () then check_types file;
-
-    if Jessie_options.debug_atleast 1 then print_to_stdout file;
+    Debug.check_exp_types file;
 
     (* Phase 3: Caduceus-like normalization that rewrites C-level AST into
      * Jessie-like AST, still in Cil (in order to use Cil visitors)
@@ -171,14 +164,14 @@ let run () =
 
     Norm.normalize file;
     Retype.retype file;
-    if checking () then check_types file;
+    Debug.check_exp_types file;
 
     (* Phase 4: various postprocessing steps, still on Cil AST *)
 
     (* Rewrite ranges back in logic annotations *)
     Rewrite.from_comprehension_to_range (Cil.inplace_visit ()) file;
 
-    if Jessie_options.debug_atleast 1 then print_to_stdout file;
+    Debug.check_exp_types  file;
 
     (* Phase 5: C to Jessie translation, should be quite straighforward at this
      * stage (after normalization)
@@ -196,7 +189,7 @@ let run () =
 	(Jessie_options.error "Jessie subprocess failed: %s" cmd; raise Exit)
     in
 
-    let projname = Jessie_options.ProjectName.get () in
+    let projname = Jessie_options.Project_name.get () in
     let projname =
       if projname <> "" then projname else
 	match Kernel.Files.get() with
@@ -235,13 +228,13 @@ let run () =
       (Filename.concat jessie_subdir locname);
     Jessie_options.feedback "File %s/%s written." jessie_subdir locname;
 
-    if Jessie_options.GenOnly.get () then () else
+    if not @@ Jessie_options.Gen_only.get () then
 
       (* Phase 8: call Jessie to Why translation *)
 
       let why_opt =
 	let res = ref "" in
-	Jessie_options.WhyOpt.iter
+	Jessie_options.Why_opt.iter
 	  (fun s ->
 	     res := Format.sprintf "%s%s-why-opt %S"
 	       !res
@@ -251,7 +244,7 @@ let run () =
       in
       let why3_opt =
 	let res = ref "" in
-	Jessie_options.Why3Opt.iter
+	Jessie_options.Why3_opt.iter
 	  (fun s ->
 	     res := Format.sprintf "%s%s-why3-opt %S"
 	       !res
@@ -259,7 +252,7 @@ let run () =
 	       s);
 	!res
       in
-      let jc_opt = Jessie_options.JcOpt.get_set ~sep:" " () in
+      let jc_opt = Jessie_options.Jc_opt.get_set ~sep:" " () in
       let debug_opt = if Jessie_options.debug_atleast 1 then " -d " else " " in
       let behav_opt =
 	if Jessie_options.Behavior.get () <> "" then
@@ -284,25 +277,24 @@ let run () =
           else " jessie "
       in
       let timeout =
-	if Jessie_options.CpuLimit.get () <> 0 then
+	if Jessie_options.Cpu_limit.get () <> 0 then
           if Jessie_options.Atp.get () = "gui" then
 	    begin
               Jessie_options.error "Jessie: option -jessie-cpu-limit requires to set also -jessie-atp";
               raise Exit
             end
           else
-	    ("TIMEOUT=" ^ (string_of_int (Jessie_options.CpuLimit.get ()))
-             ^ " ")
+	    ("TIMEOUT=" ^ (string_of_int (Jessie_options.Cpu_limit.get ())) ^ " ")
 	else ""
       in
-      let rec make_command = function
+      let rec make_command =
+        function
 	| [] -> ""
-	| [ a ] -> a
-	| a::cmd -> a ^ " " ^ make_command cmd
+	| [a] -> a
+	| a :: cmd -> a ^ " " ^ make_command cmd
       in
       Jessie_options.feedback "Calling Jessie tool in subdir %s" jessie_subdir;
       Sys.chdir jessie_subdir;
-
 
       let atp = Jessie_options.Atp.get () in
       let jessie_opt =
@@ -341,16 +333,16 @@ let run () =
 let run_and_catch_error () =
   try run ()
   with
-    | Unsupported _ ->
-	Jessie_options.error "Unsupported feature(s).@\n\
-           Jessie plugin can not be used on your code."
-    | Log.FeatureRequest (_,s) ->
-	Jessie_options.error "Unimplemented feature: %s." s
+  | Unsupported _ ->
+    Jessie_options.error "Unsupported feature(s).@\n\
+                          Jessie plugin can not be used on your code."
+  | Log.FeatureRequest (_,s) ->
+    Jessie_options.error "Unimplemented feature: %s." s
     | SizeOfError (s, _) when Str.(string_match (regexp "abstract type '\\(.*\\)'") s 0) ->
-        Jessie_options.error
-          ~current:true
-          "Can't compute the size of an undeclared composite type '%s'"
-          (Str.matched_group 1 s)
+      Jessie_options.error
+        ~current:true
+        "Can't compute the size of an undeclared composite type '%s'"
+        (Str.matched_group 1 s)
 
 let run_and_catch_error =
   Dynamic.register

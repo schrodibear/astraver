@@ -130,17 +130,18 @@ sig
   val is_unknown : Lexing.position * 'a -> bool
 end
 
-module Config :
-sig
-  include module type of Jessie_options
-  val flatten_multi_dim_arrays : bool
-end
-
 module Framac :
 sig
   module Ast = Ast
   module Type = Type
   module Vi = Varinfo
+  module Config = Config
+end
+
+module Config :
+sig
+  include module type of Jessie_options
+  val flatten_multi_dim_arrays : bool
 end
 
 val mkStmt : ?ghost:bool -> stmtkind -> stmt
@@ -358,7 +359,7 @@ sig
   sig
     type t = ref Type.t
     val singleton : msg:'a -> typ -> t
-    val array : size:exp -> ?attr:attributes -> typ -> t
+    val array : size:exp -> ?attrs:attributes -> typ -> t
     val size : t -> int64
     val of_typ : typ -> t option
     val of_typ_exn : typ -> t
@@ -426,6 +427,9 @@ sig
       type t = ikind
       val size_in_bytes : ikind -> int
     end
+
+    val int : ?attrs:attributes -> ikind -> t
+    val is_signed : t -> bool
 
     val size_in_bytes : t -> int
     val size_in_bits : t -> int

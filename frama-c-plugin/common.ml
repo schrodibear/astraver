@@ -318,17 +318,18 @@ struct
   let is_unknown loc = (fst loc).Lexing.pos_lnum = 0
 end
 
-module Config =
-struct
-  include Jessie_options
-  let flatten_multi_dim_arrays = false
-end
-
 module Framac =
 struct
   module Ast = Ast
   module Type = Type
   module Vi = Varinfo
+  module Config = Config
+end
+
+module Config =
+struct
+  include Jessie_options
+  let flatten_multi_dim_arrays = false
 end
 
 (* Redefine statement constructor of CIL to create them with valid sid *)
@@ -1215,13 +1216,13 @@ struct
        * element everywhere.  *)
       TPtr (elemty, attr)
 
-    let array ~size ?(attr=[]) typ =
+    let array ~size ?(attrs=[]) typ =
       (* Check the array size is of a correct form *)
       ignore (lenOfArray64 (Some size));
       let siz = expToAttrParam size in
-      let attr = addAttribute (Attr (Name.Of.Attr.arraylen, [siz])) attr in
+      let attrs = addAttribute (Attr (Name.Of.Attr.arraylen, [siz])) attrs in
       (* Make the underlying type an array so that indexing it is still valid C. *)
-      TPtr (TArray (typ, Some size, empty_size_cache (), []), attr)
+      TPtr (TArray (typ, Some size, empty_size_cache (), []), attrs)
 
     let size ty =
       match findAttribute Name.Of.Attr.arraylen (typeAttrs ty) with
@@ -1524,6 +1525,10 @@ struct
         | ILong | IULong -> theMachine.theMachine.sizeof_long
         | ILongLong | IULongLong -> theMachine.theMachine.sizeof_longlong
     end
+
+    let int ?(attrs=[]) ikind = TInt (ikind, attrs)
+
+    let is_signed = isSignedInteger
 
     let size_in_bytes ty =
       match unrollType ty with
