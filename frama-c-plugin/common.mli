@@ -31,6 +31,7 @@ sig
   val rev_filter_map : 'a t -> f:('a -> 'b option) -> 'b t
   val filter_map : 'a t -> f:('a -> 'b option) -> 'b t
   val find_map : 'a t -> f:('a -> 'b option) -> 'b option
+  val split3 : ('a * 'b * 'c) list -> 'a list * 'b list * 'c list
   val drop : int -> 'a t -> 'a t
   val take : int -> 'a t -> 'a t
   val range : int -> [< `Downto | `To ] -> int -> int t
@@ -358,6 +359,8 @@ sig
     val singleton : msg:'a -> typ -> t
     val array : size:exp -> ?attr:attributes -> typ -> t
     val size : t -> int64
+    val of_typ : typ -> t option
+    val of_typ_exn : typ -> t
     val is_ref : typ -> bool
     val is_array_ref : typ -> bool
     val of_array_exn : typ -> t
@@ -490,7 +493,7 @@ sig
       | ChangeToPost of 'a * ('a -> 'a * insert) * insert
       | ChangeDoChildrenPost of 'a * ('a -> 'a * insert) * insert
 
-    val of_visit_action : 'a visitAction -> 'a visit_action
+    val to_visit_action : 'a visitAction -> 'a visit_action
   end
 
   type ('a, 'result, 'visit_action) context =
@@ -509,12 +512,12 @@ sig
       | ChangeToPost of 'a * ('a -> 'a * insert)
       | ChangeDoChildrenPost of 'a * ('a -> 'a * insert)
 
-    val of_visit_action : 'a visitAction -> 'a visit_action
+    val to_visit_action : 'a visitAction -> 'a visit_action
   end
 
-  val of_visit_action : ('a, 'b, 'c) context -> 'a visitAction -> 'c
+  val to_visit_action : 'a visitAction -> ('a, 'b, 'c) context -> 'c
 
-  type ('a, 'r, 'v) visitor_method = ('a, 'r, 'v) context -> 'a -> 'v
+  type ('a, 'r, 'v) visitor_method = 'a -> ('a, 'r, 'v) context -> 'v
 
   class frama_c_inplace_inserting :
     object
@@ -541,11 +544,11 @@ sig
       method vallocation : (identified_term allocation, 'a, 'b) visitor_method
       method vannotation :  global_annotation -> global_annotation visitAction
       method vassigns : (identified_term assigns, 'a, 'b) visitor_method
-      method vattr : (attribute list, 'a, 'b) context -> attribute list -> 'b
+      method vattr : attribute list -> (attribute list, 'a, 'b) context -> 'b
       method vattrparam : (attrparam, 'a, 'b) visitor_method
       method vbehavior : (funbehavior, 'a, 'b) visitor_method
-      method vblock : fundec -> block -> block Local.visit_action
-      method vcode_annot : fundec -> code_annotation -> code_annotation Local.visit_action
+      method vblock : block -> fundec -> block Local.visit_action
+      method vcode_annot : code_annotation -> fundec -> code_annotation Local.visit_action
       method vcompinfo : compinfo -> compinfo visitAction
       method vdeps : (identified_term deps, 'a, 'b) visitor_method
       method venuminfo : enuminfo -> enuminfo visitAction
@@ -561,10 +564,10 @@ sig
       method videntified_predicate : (identified_predicate, 'a, 'b) visitor_method
       method videntified_term : (identified_term, 'a, 'b) visitor_method
       method vimpact_pragma : (term impact_pragma, 'a, 'b) visitor_method
-      method vinit : (init, 'a, 'b) context -> varinfo -> offset -> init -> 'b
+      method vinit : varinfo -> offset -> init -> (init, 'a, 'b) context -> 'b
       method vinitoffs : (offset, 'a, 'b) visitor_method
-      method vinst : fundec -> instr -> instr list Local.visit_action
-      method vjessie_pragma : fundec -> term jessie_pragma -> term jessie_pragma Local.visit_action
+      method vinst : instr -> fundec -> instr list Local.visit_action
+      method vjessie_pragma : term jessie_pragma -> fundec -> term jessie_pragma Local.visit_action
       method vlogic_ctor_info_decl : logic_ctor_info -> logic_ctor_info visitAction
       method vlogic_ctor_info_use : (logic_ctor_info, 'a, 'b) visitor_method
       method vlogic_info_decl : logic_info -> logic_info visitAction
@@ -576,7 +579,7 @@ sig
       method vlogic_type_info_use : (logic_type_info, 'a, 'b) visitor_method
       method vlogic_var_decl : (logic_var, 'a, 'b) visitor_method
       method vlogic_var_use : (logic_var, 'a, 'b) visitor_method
-      method vloop_pragma : fundec -> term loop_pragma -> term loop_pragma Local.visit_action
+      method vloop_pragma : term loop_pragma -> fundec -> term loop_pragma Local.visit_action
       method vlval : (lval, 'a, 'b) visitor_method
       method vmodel_info : model_info -> model_info visitAction
       method voffs : (offset, 'a, 'b) visitor_method
@@ -585,8 +588,8 @@ sig
       method vquantifiers : (quantifiers, 'a, 'b) visitor_method
       method vslice_pragma : (term slice_pragma, 'a, 'b) visitor_method
       method vspec : (funspec, 'a, 'b) visitor_method
-      method vstmt : fundec -> stmt -> stmt Local.visit_action
-      method vstmt_aux : fundec -> stmt -> stmt Local.visit_action
+      method vstmt : stmt -> fundec -> stmt Local.visit_action
+      method vstmt_aux : stmt -> fundec -> stmt Local.visit_action
       method vterm : (term, 'a, 'b) visitor_method
       method vterm_lhost : (term_lhost, 'a, 'b) visitor_method
       method vterm_lval : (term_lval, 'a, 'b) visitor_method

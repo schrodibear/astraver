@@ -186,7 +186,7 @@ class array_variables_retyping_visitor ~attach =
 
     inherit Visit.frama_c_inplace_inserting
 
-    method! vvdec context v =
+    method! vvdec v =
       if isArrayType v.vtype && not (Set_vi.mem v !varset) then begin
         if v.vformal then
           Console.fatal "vvdec: unexpected array formal parameter (should have been retyped to pointer?): %s" v.vname;
@@ -214,9 +214,9 @@ class array_variables_retyping_visitor ~attach =
         Htbl_vi.add var_to_strawvar v strawv;
         Htbl_vi.add strawvar_to_var strawv v
       end;
-      Visit.of_visit_action context DoChildren
+      Visit.to_visit_action DoChildren
 
-    method! vlogic_var_decl context lv =
+    method! vlogic_var_decl lv =
       if not (Htbl_lv.mem lvar_to_strawlvar lv) then begin
         match Type.Logic_c_type.typ lv.lv_type with
         | Some typ when isArrayType typ ->
@@ -242,7 +242,7 @@ class array_variables_retyping_visitor ~attach =
         | Some _
         | None -> ()
       end;
-      Visit.of_visit_action context DoChildren
+      Visit.to_visit_action DoChildren
 
     method! vglob_aux g =
       match g with
@@ -320,25 +320,22 @@ class array_variables_retyping_visitor ~attach =
       in
       Fundec.DoChildren inserting_pending
 
-    method! vlval context lv =
-      Visit.of_visit_action context @@ ChangeDoChildrenPost (preaction_lval lv, postaction_lval)
+    method! vlval lv = Visit.to_visit_action @@ ChangeDoChildrenPost (preaction_lval lv, postaction_lval)
 
-    method! vterm_lval context =
-      Visit.of_visit_action context % Do.on_term_lval ~pre:preaction_lval ~post:postaction_lval
+    method! vterm_lval = Visit.to_visit_action % Do.on_term_lval ~pre:preaction_lval ~post:postaction_lval
 
-    method! vexpr context e =
-      Visit.of_visit_action context @@ ChangeDoChildrenPost (preaction_expr e, id)
+    method! vexpr e = Visit.to_visit_action @@ ChangeDoChildrenPost (preaction_expr e, id)
 
-    method! vterm context t = Visit.of_visit_action context @@ Do.on_term ~pre:preaction_expr t
+    method! vterm t = Visit.to_visit_action @@ Do.on_term ~pre:preaction_expr t
 end
 
-let retype_array_variables file =
+let retype_array_variables =
   (* Enforce the prototype of malloc to exist before visiting anything.
    * It might be useful for allocation pointers from arrays
    *)
   ignore (Ast.Vi.Function.malloc ());
   ignore (Ast.Vi.Function.free ());
-  Visit.inserting_statements_and_attaching_globs { Visit.mk = new array_variables_retyping_visitor } file
+  (Visit.inserting_statements_and_attaching_globs { Visit.mk = new array_variables_retyping_visitor })[@warning "-42"]
 
 (*****************************************************************************)
 (* Retype logic functions/predicates with structure parameters or return.    *)
@@ -367,7 +364,8 @@ class logic_functions_retyping_visitor =
     | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ -> ()
     | Ctype ty ->
       if isStructOrUnionType ty then
-        Console.unsupported "Jessie plugin does not support struct or union as parameter to logic functions. Please use a pointer instead."
+        Console.unsupported "Jessie plugin does not support struct or union as parameter to logic functions. \
+                             Please use a pointer instead."
        (*
           if isStructOrUnionType ty then
             begin
@@ -395,7 +393,7 @@ class logic_functions_retyping_visitor =
           var lv;
         if Set_lv.mem lv !varset then
           let tlval =
-            mkterm (TLval (host, TNoOffset)) lv.lv_type (Cil_const.CurrentLoc.get ())
+            Ast.Term.mk ~typ:lv.lv_type ~loc:(CurrentLoc.get ()) @@ TLval (host, TNoOffset)
           in
           TMem tlval
         else host
@@ -424,9 +422,11 @@ class logic_functions_retyping_visitor =
          * be translated back to dereference when treating
          * left-values. This is why we add a normalization
          * in [postaction_term]. *)
-        { arg with
+        {
+          arg with
           term_node = TAddrOf lv;
-          term_type = Ctype (mkTRef ty "Norm.vterm") }
+          term_type = Ctype (Type.Ref.singleton ty ~msg:"Norm.vterm" :> typ)
+        }
       | _ ->
         (* Should not be possible *)
         Console.fatal
@@ -445,7 +445,7 @@ object
       match ty with
       | Ctype rt when isStructOrUnionType rt ->
         change_result_type := true;
-        let ty = Ctype (mkTRef rt "Norm.vannotation") in
+        let ty = Ctype (Type.Ref.singleton rt ~msg:"Norm.vannotation" :> typ) in
         new_result_type := ty;
         ty
       | Ctype _ | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ -> ty
@@ -467,7 +467,7 @@ object
           this_name := (List.hd annot.l_profile).lv_name;
           let annot = { annot with
                         l_profile = [{ (List.hd annot.l_profile) with
-                                       lv_type = Ctype (mkTRef ty "Norm.annot, Dtype_annot")}]}
+                                       lv_type = Ctype (Type.Ref.singleton ty ~msg:"Norm.annot, Dtype_annot" :> typ)}]}
           in
           ChangeDoChildrenPost (Dtype_annot (annot, loc), fun x -> change_this_type := false; x)
         | Ctype _ | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ -> DoChildren
@@ -561,7 +561,7 @@ class struct_assign_expander () =
             let newlv = cvar_to_lvar newv in
             (* Type of [newv] is set at that point. *)
             let tlval =
-              mkterm (TLval (TVar newlv, TNoOffset)) (Ctype newv.vtype) (Cil_const.CurrentLoc.get ())
+              Ast.Term.mk ~typ:(Ctype newv.vtype) ~loc:(Cil_const.CurrentLoc.get ()) @@ TLval (TVar newlv, TNoOffset)
             in
             TMem tlval
           with
@@ -590,10 +590,10 @@ class struct_assign_expander () =
         in
         expand_assign newlv newe fi.ftype loc
       in
-      List.(flatten @@ map field @@ proper_fields mcomp)
+      List.(flatten @@ map field @@ Type.Composite.Ci.proper_fields mcomp)
     | TArray _ ->
       let elem i =
-        let cste = constant_expr i in
+        let cste = Ast.Exp.const i in
         let newlv = addOffsetLval (Index (cste, NoOffset)) lv in
         let newe =
           match e.enode with
@@ -613,8 +613,9 @@ class struct_assign_expander () =
           all_elem (elem i @ acc) (Integer.pred i)
         else acc
       in
-      if is_reference_type ty then
-        Console.fatal "array assignment expansion called on a reference type: %a: %a" Printer.pp_exp e Printer.pp_typ ty;
+      if Type.Ref.is_ref ty then
+        Console.fatal
+          "array assignment expansion called on a reference type: %a: %a" Printer.pp_exp e Printer.pp_typ ty;
       all_elem [] @@ Integer.pred (direct_array_size ty)
     | _ -> [Set (lv, e, loc)]
   in
@@ -626,10 +627,10 @@ class struct_assign_expander () =
         let newlv = addOffsetLval (Field (fi, NoOffset)) lv in
         expand newlv fi.ftype loc
       in
-      List.(flatten @@ map field @@ proper_fields mcomp)
+      List.(flatten @@ map field @@ Type.Composite.Ci.proper_fields mcomp)
     | TArray _ ->
       let elem i =
-        let cste = constant_expr i in
+        let cste = Ast.Exp.const i in
         let newlv = addOffsetLval (Index (cste, NoOffset)) lv in
         expand newlv (direct_element_type ty) loc
       in
@@ -638,7 +639,7 @@ class struct_assign_expander () =
           all_elem (elem i @ acc) (Integer.pred i)
         else acc
       in
-      if is_reference_type ty then
+      if Type.Ref.is_ref ty then
         Console.fatal "array expansion called on a reference type: %a: %a" Printer.pp_lval lv Printer.pp_typ ty;
       all_elem [] @@ Integer.pred (direct_array_size ty)
     | _ -> [lv]
@@ -646,12 +647,12 @@ class struct_assign_expander () =
 
 object(self)
 
-  inherit frama_c_inplace
+  inherit Visit.frama_c_inplace_inserting
 
   method! vglob_aux =
     let retype_func fvi =
       let formal (n, ty, a) =
-        let ty = if isStructOrUnionType ty then mkTRef ty "Norm.vglob_aux" else ty in
+        let ty = if isStructOrUnionType ty then (Type.Ref.singleton ty ~msg:"Norm.vglob_aux" :> typ) else ty in
         n, ty, a
       in
       let rt, params, isva, a = splitFunctionTypeVI fvi in
@@ -660,7 +661,7 @@ object(self)
         | None -> None
         | Some p -> Some (List.map formal p)
       in
-      let rt = if isStructOrUnionType rt then mkTRef rt "Norm.vglob_aux(2)" else rt in
+      let rt = if isStructOrUnionType rt then (Type.Ref.singleton rt ~msg:"Norm.vglob_aux(2)" :> typ) else rt in
       fvi.vtype <- TFun (rt, params, isva, a)
     in
     function
@@ -673,10 +674,11 @@ object(self)
     | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
 
   method! vfunc f =
+    let open Visit in
     let var v =
       if isStructOrUnionType v.vtype then
-        let newv = copyVarinfo v @@ unique_name ("v_" ^ v.vname) in
-        newv.vtype <- mkTRef newv.vtype "Norm.vfunc";
+        let newv = copyVarinfo v @@ Name.unique ("v_" ^ v.vname) in
+        newv.vtype <- (Type.Ref.singleton newv.vtype ~msg:"Norm.vfunc" :> typ);
         v.vformal <- false;
         let rhs =
           new_exp ~loc:v.vdecl @@
@@ -685,16 +687,15 @@ object(self)
                  (new_exp ~loc:v.vdecl @@ Lval (Var newv, NoOffset)) NoOffset)
         in
         let copy = mkassign_statement (Var v, NoOffset) rhs v.vdecl in
-        add_pending_statement ~beginning:true copy;
         pairs := (v, newv) :: !pairs;
-        [v], newv
+        [v], newv, [copy]
       else
-        [], v
+        [], v, []
     in
     (* Insert copy statements. *)
-    let locvl, formvl = List.(split @@ map var f.sformals) in
+    let locvl, formvl, prelude = List.(split3 @@ map var f.sformals) in
     (* Set locals and formals. *)
-    let locvl = List.flatten locvl in
+    let locvl, prelude = List.(flatten locvl, flatten prelude) in
     f.slocals <- locvl @ f.slocals;
     setFormals f formvl;
     (* Add local variable for return *)
@@ -706,19 +707,20 @@ object(self)
     else
       return_var := None;
     (* Change return type. *)
-    new_return_type := if isStructOrUnionType rt then Some (mkTRef rt "Norm.vfunc(3)") else None;
-    let rt = if isStructOrUnionType rt then mkTRef rt "Norm.vfunc(4)" else rt in
+    new_return_type :=
+      if isStructOrUnionType rt then Some (Type.Ref.singleton rt ~msg:"Norm.vfunc(3)" :> typ) else None;
+    let rt = if isStructOrUnionType rt then (Type.Ref.singleton rt ~msg:"Norm.vfunc(4)" :> typ) else rt in
     setReturnType f rt;
-    DoChildren
+    Fundec.DoChildren (prepending prelude)
 
   method! vbehavior b =
     let lval loc lv = expand lv (typeOfLval lv) loc in
     let term t =
       match t.term_node with
       | TLval tlv ->
-        let lv, env = force_term_lval_to_lval tlv in
+        let lv, env = Ast.Term.lval_to_lval_env tlv in
         let lvlist = lval t.term_loc lv in
-        let tslvlist = List.map (force_back_lval_to_term_lval env) lvlist in
+        let tslvlist = List.map (fun l -> Ast.Term.lval_of_lval_env (l, env)) lvlist in
         List.map
           (fun tslv ->
              Logic_const.term ~loc:t.term_loc (TLval tslv) t.term_type)
@@ -775,9 +777,11 @@ object(self)
         ~allocation:(Some b.b_allocation)
         ()
     in
-    ChangeDoChildrenPost (new_bhv, id)
+    Visit.to_visit_action @@ ChangeDoChildrenPost (new_bhv, id)
 
-  method! vstmt_aux s =
+  method! vstmt_aux s _ =
+    let open Visit in
+    Local.to_visit_action @@
     match s.skind with
     | Return (Some e, loc) when isStructOrUnionType (typeOf e) ->
       (* Type of [e] has not been changed by retyping formals and return. *)
@@ -795,8 +799,9 @@ object(self)
     | Return (Some _, _) -> SkipChildren
     | _ -> DoChildren
 
-  method! vinst =
-    function
+  method! vinst instr context =
+    Visit.Local.to_visit_action @@
+    match instr with
     | Set (lv, e, loc) when isStructOrUnionType (typeOf e) ->
       (* Type of [e] has not been changed by retyping formals and return. *)
       ChangeTo (expand_assign lv e (typeOf e) loc)
@@ -829,7 +834,7 @@ object(self)
         let lvty = typeOfLval lv in
         if isStructOrUnionType lvty then
           let tmpv =
-            makeTempVar (the self#current_func) (mkTRef lvty "Norm.vinst")
+            makeTempVar (the self#current_func) (Type.Ref.singleton lvty ~msg:"Norm.vinst" :> typ)
           in
           let tmplv = Var tmpv, NoOffset in
           let call = Call (Some tmplv, callee, args, loc) in
@@ -840,17 +845,16 @@ object(self)
                   (new_exp ~loc @@ Lval (Var tmpv, NoOffset)) NoOffset)
           in
           let assign = mkassign lv deref loc in
-          let free = mkfree tmpv loc in
+          let free = Ast.Instr.free ~loc tmpv in
           ChangeTo [call; assign; free]
         else
-          let call = Call(lvo,callee,args,loc) in
+          let call = Call (lvo, callee, args, loc) in
           ChangeTo [call]
       end
     | Asm _ | Skip _ -> SkipChildren
     | Code_annot _ -> Console.fatal "code annotation: shold have been removed in register.ml"
 
-  method! vterm_lval tlv =
-    ChangeDoChildrenPost (tlv, postaction_term_lval)
+  method! vterm_lval tlv = Visit.to_visit_action @@ ChangeDoChildrenPost (tlv, postaction_term_lval)
 
   method! vterm t =
     (* Renormalize the term tree. *)
@@ -859,13 +863,11 @@ object(self)
       | TAddrOf (TMem t,TNoOffset) -> t
       | _ -> t
     in
-    ChangeDoChildrenPost (t, postaction)
+    Visit.to_visit_action @@ ChangeDoChildrenPost (t, postaction)
 
 end
 
-let expand_struct_assign file =
-  visitFramacFile (visit_and_push_statements_visitor (new struct_assign_expander ())) file
-
+let expand_struct_assign = Visit.inserting_statements (new struct_assign_expander ())
 
 (*****************************************************************************)
 (* Move first substructure fields out to the outer structures to simplify    *)
@@ -873,7 +875,7 @@ let expand_struct_assign file =
 (*****************************************************************************)
 
 class embed_first_substructs_visitor =
-  let subfield_name ci fi = unique_name (ci.cname ^ "_" ^ fi.fname) in
+  let subfield_name ci fi = Name.unique (ci.cname ^ "_" ^ fi.fname) in
   let is_embedded, embed_first_substruct, get_field  =
     let module FI = Cil_datatype.Fieldinfo in
     let module FH = FI.Hashtbl in
@@ -890,7 +892,7 @@ class embed_first_substructs_visitor =
                   fcomp = ci;
                   fname = subfield_name ci' fi;
                   fattr =
-                    addAttribute (Attr (embedded_attr_name,
+                    addAttribute (Attr (Name.Of.Attr.embedded,
                                         [AStr efi.forig_name; AStr (compFullName ci'); AStr fi.forig_name])) fi.fattr }
               in
               let fs =
@@ -905,7 +907,7 @@ class embed_first_substructs_visitor =
               fi')
            ci'.cfields
        in
-       (retaining_size_of_composite ci @@ fun ci ->
+       (Do.retaining_size_of_composite ci @@ fun ci ->
         ci.cfields <- cfields' @ cfields);
        FH.replace embedded_fields efi true),
     fun efi -> FH.(find (find field_map efi))
@@ -915,17 +917,20 @@ class embed_first_substructs_visitor =
 
     method! vcompinfo ci =
       match ci.cfields with
-      | { ftype; fattr } :: _ when
-          is_reference_type ftype &&
-          reference_size ftype = Int64.one &&
-          isStructOrUnionType (pointed_type ftype) &&
-          not (hasAttribute wrapper_attr_name @@ typeAttrs @@ pointed_type ftype) &&
-          not (hasAttribute noembed_attr_name fattr) ->
-        begin match unrollType (pointed_type ftype) with
-        | TComp (ci', _, _) when ci'.cstruct ->
-          embed_first_substruct ci ci';
-          SkipChildren
-        | _ -> SkipChildren
+      | { ftype; fattr } :: _ ->
+        begin match Type.Ref.of_typ ftype with
+        | Some ftype
+          when Type.Ref.size ftype = Int64.one &&
+               isStructOrUnionType (pointed_type (ftype : _ Type.t :> typ)) &&
+               not (hasAttribute Name.Of.Attr.wrapper @@ typeAttrs @@ pointed_type (ftype : _ Type.t :> typ)) && 
+               not (hasAttribute Name.Of.Attr.noembed fattr) ->
+          begin match unrollType (pointed_type ftype) with
+          | TComp (ci', _, _) when ci'.cstruct ->
+            embed_first_substruct ci ci';
+            SkipChildren
+          | _ -> SkipChildren
+          end
+        | Some _ | None -> SkipChildren
         end
       | _ -> SkipChildren
 

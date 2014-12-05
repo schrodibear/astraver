@@ -2113,9 +2113,9 @@ class cursor_pointers_rewriter
       List.iter local f.slocals;
       Fundec.DoChildren (prepending prelude)
 
-    method! vinst _ =
+    method! vinst instr _ =
       let open Visit in
-      function
+      match instr with
       | Set ((Var v, NoOffset), e, loc) ->
         if v.vformal then
           begin try
@@ -2172,12 +2172,12 @@ class cursor_pointers_rewriter
           end
       | _ -> Local.DoChildren inserting_nothing
 
-    method! vexpr context e =
-      Visit.of_visit_action context @@ ChangeDoChildrenPost (preaction_expr e, postaction_expr)
+    method! vexpr e =
+      Visit.to_visit_action @@ ChangeDoChildrenPost (preaction_expr e, postaction_expr)
 
-    method! vterm context = Visit.of_visit_action context % Do.on_term ~pre:preaction_expr ~post:postaction_expr
+    method! vterm = Visit.to_visit_action % Do.on_term ~pre:preaction_expr ~post:postaction_expr
 
-    method! vspec context _ = Visit.of_visit_action context SkipChildren
+    method! vspec _ = Visit.to_visit_action SkipChildren
 end
 
 let rewrite_cursor_pointers file =
@@ -2407,9 +2407,9 @@ class cursor_integers_rewriter
       List.iter local f.slocals;
       Fundec.DoChildren (prepending prelude)
 
-    method! vinst _ =
+    method! vinst instr _ =
       let open Visit in
-      function
+      match instr with
       | Set ((Var v, NoOffset), e, loc) ->
         begin try
           let voff = H.find cursor_to_offset v in
@@ -2446,13 +2446,11 @@ class cursor_integers_rewriter
         end
       | _ -> Local.DoChildren inserting_nothing
 
-    method! vexpr context e =
-      Visit.of_visit_action context @@ ChangeDoChildrenPost (e, postaction_expr)
+    method! vexpr e = Visit.to_visit_action @@ ChangeDoChildrenPost (e, postaction_expr)
 
-    method! vterm context t =
-      Visit.of_visit_action context @@ ChangeDoChildrenPost (t, postaction_term)
+    method! vterm t = Visit.to_visit_action @@ ChangeDoChildrenPost (t, postaction_term)
 
-    method! vspec context _ = Visit.of_visit_action context SkipChildren
+    method! vspec _ = Visit.to_visit_action SkipChildren
 end
 
 let rewrite_cursor_integers file =
