@@ -799,7 +799,7 @@ object(self)
     | Return (Some _, _) -> SkipChildren
     | _ -> DoChildren
 
-  method! vinst instr context =
+  method! vinst instr _ =
     Visit.Local.to_visit_action @@
     match instr with
     | Set (lv, e, loc) when isStructOrUnionType (typeOf e) ->
@@ -920,11 +920,11 @@ class embed_first_substructs_visitor =
       | { ftype; fattr } :: _ ->
         begin match Type.Ref.of_typ ftype with
         | Some ftype
-          when Type.Ref.size ftype = Int64.one &&
-               isStructOrUnionType (pointed_type (ftype : _ Type.t :> typ)) &&
-               not (hasAttribute Name.Of.Attr.wrapper @@ typeAttrs @@ pointed_type (ftype : _ Type.t :> typ)) && 
+          when Type.Ref.(size ftype = Int64.one &&
+                         isStructOrUnionType (typ ftype) &&
+                         not (hasAttribute Name.Of.Attr.wrapper @@ typeAttrs @@ typ ftype)) &&
                not (hasAttribute Name.Of.Attr.noembed fattr) ->
-          begin match unrollType (pointed_type ftype) with
+          begin match unrollType (Type.Ref.typ ftype) with
           | TComp (ci', _, _) when ci'.cstruct ->
             embed_first_substruct ci ci';
             SkipChildren
@@ -1055,7 +1055,7 @@ class side_cast_rewriter =
     len1 > len2 &&
     List.for_all2
       (fun fi1 fi2 -> Retype.same_fields fi1 fi2)
-      (take len2 fields1)
+      (List.take len2 fields1)
       fields2
   in
 object(self)
@@ -1085,12 +1085,11 @@ object(self)
         DoChildren
     | _ -> DoChildren
 
-  method! vterm =
-    do_on_term (Some (fun e -> match self#vexpr e with ChangeTo e | ChangeDoChildrenPost (e, _) -> e | _ -> e), None)
+  method! vterm t =
+    Do.on_term ~pre:(fun e -> match self#vexpr e with ChangeTo e | ChangeDoChildrenPost (e, _) -> e | _ -> e) t
 end
 
-let rewrite_side_casts file =
-  visitFramacFile (new side_cast_rewriter) file
+let rewrite_side_casts  = visitFramacFile (new side_cast_rewriter)
 
 (*****************************************************************************)
 (* Retype variables of structure type.                                       *)
@@ -1109,7 +1108,7 @@ let rewrite_side_casts file =
  * - changes left-values to reflect new type
  *)
 
-class struct_variables_retyping_visitor =
+class struct_variables_retyping_visitor ~attach =
 
   let varset = ref Set_vi.empty in
   let lvarset = ref Set_lv.empty in
@@ -1118,7 +1117,7 @@ class struct_variables_retyping_visitor =
     let host =
       match host with
       | Var v when Set_vi.mem v !varset ->
-        Mem (mkInfo @@
+        Mem (Ast.Exp.dummy_info @@
                new_exp ~loc:(Cil_const.CurrentLoc.get ()) @@
                   Lval (Var v, NoOffset))
       | Var _ | Mem _ -> host
@@ -1127,7 +1126,7 @@ class struct_variables_retyping_visitor =
   in
   let postaction_tlval (host, off) =
     let add_deref host v =
-      TMem (mkterm (TLval (host, TNoOffset)) v.lv_type @@ Cil_const.CurrentLoc.get ())
+      TMem (Ast.Term.mk (TLval (host, TNoOffset)) ~typ:v.lv_type ~loc:(CurrentLoc.get ()))
     in
     let host =
       match host with
@@ -1148,34 +1147,42 @@ class struct_variables_retyping_visitor =
   in
 object(self)
 
-  inherit frama_c_inplace
+  inherit Visit.frama_c_inplace_inserting
 
   method! vvdec v =
     if isStructOrUnionType v.vtype && not v.vformal then  begin
-      v.vtype <- mkTRef v.vtype "Norm.vvdec";
+      v.vtype <- (Type.Ref.singleton v.vtype ~msg:"Norm.vvdec" :> typ);
       varset := Set_vi.add v !varset
     end;
-    DoChildren
+    Visit.to_visit_action DoChildren
 
-  method! vquantifiers vl =
-    List.iter
-      (fun v ->
-        (* Only iterate on logic variable with C type *)
-        if app_term_type (fun _ -> true) false v.lv_type then
-          match v.lv_origin with
-          | None -> ()
-          | Some v -> ignore (self#vvdec v))
-      vl;
-    DoChildren
+  method! vquantifiers (type result) (type visit_action) :
+    quantifiers -> (quantifiers, result, visit_action) Visit.context -> visit_action =
+    fun vl context ->
+      let open Visit in
+      List.iter
+        (fun v ->
+           (* Only iterate on logic variable with C type *)
+           if Type.Logic_c_type.is_c v.lv_type then
+             match v.lv_origin with
+             | None -> ()
+             | Some v ->
+               match context with
+               | Local _ as l -> ignore @@ self#vvdec v l
+               | Global -> ignore @@ self#vvdec v Global)
+        vl;
+      to_visit_action DoChildren context
 
   method! vlogic_var_decl v =
     let newty =
-      app_term_type
-        (fun ty -> Ctype (if isStructOrUnionType ty then mkTRef ty "Norm.vlogic_var_decl" else ty))
-        v.lv_type v.lv_type
+      Type.Logic_c_type.map_default
+        ~default:v.lv_type
+        ~f:(fun ty ->
+          Ctype (if isStructOrUnionType ty then (Type.Ref.singleton ty ~msg:"Norm.vlogic_var_decl" :> typ) else ty))
+        v.lv_type
     in
     v.lv_type <- newty;
-    DoChildren
+    Visit.to_visit_action DoChildren
 
   method! vglob_aux =
     function
@@ -1197,12 +1204,10 @@ object(self)
                constant_term v.vdecl Integer.zero,
                constant_term v.vdecl Integer.zero)
           in
-          let globinv =
-            Cil_const.make_logic_info @@ unique_logic_name ("valid_" ^ v.vname)
-          in
+          let globinv = Cil_const.make_logic_info @@ Name.Logic.unique ("valid_" ^ v.vname) in
           globinv.l_labels <- [label_here];
           globinv.l_body <- LBpred p;
-          attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
+          attach#globaction (fun () -> Logic_utils.add_logic_function globinv);
           [g; GAnnot (Dinvariant (globinv, v.vdecl), v.vdecl)]
         | [GVar _] -> [g]
         | _ -> Console.fatal "transformed variable to somethig else during normalization: %a" Printer.pp_global g
@@ -1213,25 +1218,29 @@ object(self)
     | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
 
   method! vfunc f =
+    let open Visit in
     (* First change type of local structure variables *)
-    List.iter (ignore % visitCilVarDecl (self :> cilVisitor)) f.slocals;
-    List.iter (ignore % visitCilVarDecl (self :> cilVisitor)) f.sformals;
+    List.iter (ignore % visitCilVarDecl (Visit.to_cil_visitor self)) f.slocals;
+    List.iter (ignore % visitCilVarDecl (Visit.to_cil_visitor self)) f.sformals;
     (* Then allocate/deallocate memory for those that need it *)
-    List.iter
-      (fun v ->
-        if Set_vi.mem v !varset then
-          let ast = mkalloc_statement v (pointed_type v.vtype) v.vdecl in
-          add_pending_statement ~beginning:true ast;
-          (* do not deallocate variable used in returning a structure *)
-          if not (Htbl_vi.mem return_vars v) then
-          let fst = mkfree_statement v v.vdecl in
-          add_pending_statement ~beginning:false fst)
-      f.slocals;
-    DoChildren
+    let inserting_pending =
+      List.fold_left
+        (fun acc v ->
+           if Set_vi.mem v !varset then
+             prepend acc @@ Ast.Stmt.alloc_singleton ~lvar:v ~typ:(pointed_type v.vtype) ~loc:v.vdecl |> fun acc ->
+             (* do not deallocate variable used in returning a structure *)
+             if not (Htbl_vi.mem return_vars v) then append acc @@ Ast.Stmt.free ~loc:v.vdecl v
+             else acc
+           else
+             acc)
+        inserting_nothing
+        f.slocals
+    in
+    Fundec.DoChildren inserting_pending
 
-  method! vlval lv = ChangeDoChildrenPost (lv, postaction_lval)
+  method! vlval lv = Visit.to_visit_action @@ ChangeDoChildrenPost (lv, postaction_lval)
 
-  method! vterm_lval lv = ChangeDoChildrenPost(lv, postaction_tlval)
+  method! vterm_lval lv = Visit.to_visit_action @@ ChangeDoChildrenPost (lv, postaction_tlval)
 
   method! vexpr e =
     (* Renormalize the expression tree. *)
@@ -1240,7 +1249,7 @@ object(self)
       | AddrOf (Mem e, NoOffset) -> e
       | _ -> e
     in
-    ChangeDoChildrenPost (e, postaction)
+    Visit.to_visit_action @@ ChangeDoChildrenPost (e, postaction)
 
   method! vterm t =
     (* Renormalize the term tree. *)
@@ -1249,13 +1258,12 @@ object(self)
       | TAddrOf (TMem t, TNoOffset) -> t
       | _ -> t
     in
-    ChangeDoChildrenPost (t, postaction)
+    Visit.to_visit_action @@ ChangeDoChildrenPost (t, postaction)
 
 end
 
-let retype_struct_variables file =
-  visit_and_push_statements visit_and_update_globals (new struct_variables_retyping_visitor) file
-
+let retype_struct_variables =
+  (Visit.inserting_statements_and_attaching_globs { Visit.mk = new struct_variables_retyping_visitor })[@warning "-42"]
 
 (*****************************************************************************)
 (* Retype variables and fields whose address is taken.                       *)
@@ -1291,7 +1299,7 @@ class addrof_retyping_visitor =
   let retypable_var v =
     v.vaddrof
     && not (isArrayType v.vtype)
-    && not (is_reference_type v.vtype)
+    && not (Type.Ref.is_ref v.vtype)
   in
   let retypable_lvar v =
     match v.lv_origin with None -> false | Some v -> retypable_var v
@@ -1301,27 +1309,30 @@ class addrof_retyping_visitor =
    *)
   let retypable_field fi =
     fi.faddrof
-    && not (is_reference_type fi.ftype)
+    && not (Type.Ref.is_ref fi.ftype)
     && not (isArrayType fi.ftype)
     && not (isStructOrUnionType fi.ftype)
   in
   let retype_var v =
     if retypable_var v then begin
-      v.vtype <- mkTRef v.vtype "Norm.retype_var";
+      v.vtype <- (Type.Ref.singleton v.vtype ~msg:"Norm.retype_var" :> typ);
       if not  (isPointerType v.vtype) then
         Console.fatal "retypable var should be of pointer type (retype_var): %s" v.vname;
       varset := Set_vi.add v !varset
     end
   in
   let retype_lvar v =
-    if retypable_lvar v then begin
-      v.lv_type <- Ctype (force_app_term_type (fun x -> mkTRef x "Norm.retyp_lvar") v.lv_type);
-      lvarset := Set_lv.add v !lvarset
-    end
+    if retypable_lvar v then
+      begin match Type.Logic_c_type.of_logic_type v.lv_type with
+      | Some lv_type ->
+        v.lv_type <- Ctype (Type.Logic_c_type.map ~f:(Type.Ref.singleton ~msg:"Norm.retyp_lvar") lv_type :> typ);
+        lvarset := Set_lv.add v !lvarset
+      | None -> ()
+      end
   in
   let retype_field fi =
     if retypable_field fi then begin
-      fi.ftype <- mkTRef fi.ftype "Norm.retype_field";
+      fi.ftype <- (Type.Ref.singleton fi.ftype ~msg:"Norm.retype_field" :> typ);
       if not  (isPointerType fi.ftype) then
         Console.fatal "retypable field should be of pointer type (retype_field): %s" fi.fname;
       fieldset := Set_fi.add fi !fieldset
@@ -1334,7 +1345,7 @@ class addrof_retyping_visitor =
       | Var v when Set_vi.mem v !varset ->
         if not (isPointerType v.vtype) then
           Console.fatal "retypable var should be of pointer type (postaction_lval): %s" v.vname;
-        Mem (mkInfo @@
+        Mem (Ast.Exp.dummy_info @@
              new_exp ~loc:(Cil_const.CurrentLoc.get ()) @@ Lval (Var v, NoOffset))
 
       | Var _ | Mem _ -> host
@@ -1346,14 +1357,13 @@ class addrof_retyping_visitor =
     | Field (fi, _) when Set_fi.mem fi !fieldset ->
         if not  (isPointerType fi.ftype) then
           Console.fatal "retypable field should be of pointer type (postaction_lval): %s" fi.fname;
-        mkMem (mkInfo (new_exp ~loc:(Cil_const.CurrentLoc.get ()) @@ Lval (host, off))) NoOffset
+        mkMem (Ast.Exp.dummy_info (new_exp ~loc:(Cil_const.CurrentLoc.get ()) @@ Lval (host, off))) NoOffset
     | _ -> host, off
   in
 
   let postaction_tlval (host, off) =
-    let add_deref host ty =
-      force_app_term_type ignore ty;
-      TMem (mkterm (TLval (host, TNoOffset)) ty @@ Cil_const.CurrentLoc.get ())
+    let add_deref host typ =
+      TMem (Ast.Term.mk ~typ ~loc:(Cil_const.CurrentLoc.get ()) @@ TLval (host, TNoOffset))
     in
     let host =
       match host with
@@ -1414,11 +1424,11 @@ class addrof_retyping_visitor =
   let in_funspec = ref false in
 object
 
-  inherit frama_c_inplace
+  inherit Visit.frama_c_inplace_inserting
 
   method! vglob_aux =
     function
-    | GVar(v, _, _) ->
+    | GVar (v, _, _) ->
       if retypable_var v then
         retype_var v;
           (* Disabled, see BTS 0284
@@ -1433,8 +1443,8 @@ object
       SkipChildren
     | GFun _ -> DoChildren
     | GAnnot _ -> DoChildren
-    | GCompTag(compinfo,_loc) ->
-      retaining_size_of_composite compinfo @@ fun compinfo ->
+    | GCompTag (compinfo,_loc) ->
+      Do.retaining_size_of_composite compinfo @@ fun compinfo ->
       List.iter retype_field compinfo.cfields;
       SkipChildren
     | GType _ | GCompTagDecl _ | GEnumTagDecl _ | GEnumTag _
@@ -1442,6 +1452,7 @@ object
       SkipChildren
 
   method! vfunc f =
+    let open Visit in
     (* Change types before code. *)
     let formals, locals, pairs =
       List.fold_right
@@ -1461,38 +1472,39 @@ object
     f.slocals <- locals @ f.slocals;
     List.iter retype_var f.slocals;
 
-    List.iter
-      (fun v ->
-        (* allocate/deallocate locals *)
-        if Set_vi.mem v !varset then begin
-          let ast = mkalloc_statement v (pointed_type v.vtype) v.vdecl in
-          add_pending_statement ~beginning:true ast;
-          (* do not deallocate variable used in returning a structure *)
-          if not (Htbl_vi.mem return_vars v) then
-            let fst = mkfree_statement v v.vdecl in
-            add_pending_statement ~beginning:false fst
-        end;
-        (* allocate/deallocate formals *)
-        try
-          let loc = v.vdecl in
-          (* [varpairs] holds pairs of (local,formal) to initialize due to
-           * the transformation for formals whose address is taken.
-           *)
-          let fv = List.assoc v !varpairs in
-          let lhs = mkMem (new_exp ~loc @@ Lval (Var v, NoOffset)) NoOffset in
-          let rhs = new_exp ~loc @@ Lval (Var fv, NoOffset) in
-          let assign = mkassign_statement lhs rhs loc in
-          add_pending_statement ~beginning:true assign
-        with
-        | Not_found -> ())
-      f.slocals;
-    DoChildren
+    let inserting_pending =
+      List.fold_left
+        (fun acc v ->
+           (* allocate/deallocate locals *)
+           (if Set_vi.mem v !varset then
+              prepend acc @@ Ast.Stmt.alloc_singleton ~lvar:v ~typ:(pointed_type v.vtype) ~loc:v.vdecl |> fun acc ->
+              (* do not deallocate variable used in returning a structure *)
+              if not (Htbl_vi.mem return_vars v) then append acc @@ Ast.Stmt.free v ~loc:v.vdecl else acc
+            else acc)
+           |> fun acc ->
+           (* allocate/deallocate formals *)
+           try
+             let loc = v.vdecl in
+             (* [varpairs] holds pairs of (local,formal) to initialize due to
+              * the transformation for formals whose address is taken.
+             *)
+             let fv = List.assoc v !varpairs in
+             let lhs = mkMem (new_exp ~loc @@ Lval (Var v, NoOffset)) NoOffset in
+             let rhs = new_exp ~loc @@ Lval (Var fv, NoOffset) in
+             prepend acc @@ mkassign_statement lhs rhs loc
+           with
+           | Not_found -> acc)
+        inserting_nothing
+        f.slocals
+    in
+    Fundec.DoChildren inserting_pending
 
   method! vspec _ =
     in_funspec := true;
-    DoChildrenPost (fun x -> in_funspec := false; x)
+    Visit.to_visit_action @@ DoChildrenPost (fun x -> in_funspec := false; x)
 
   method! vlogic_var_use v =
+    Visit.to_visit_action @@
     if !in_funspec then
       match v.lv_origin with
       | None -> SkipChildren
@@ -1505,23 +1517,21 @@ object
     else begin
       if retypable_lvar v then retype_lvar v;
       DoChildren
-   end
+    end
 
-  method! vlogic_var_decl v = if retypable_lvar v then retype_lvar v; DoChildren
+  method! vlogic_var_decl v = if retypable_lvar v then retype_lvar v; Visit.to_visit_action DoChildren
 
-  method! vlval lv = ChangeDoChildrenPost (lv, postaction_lval)
+  method! vlval lv = Visit.to_visit_action @@ ChangeDoChildrenPost (lv, postaction_lval)
 
-  method! vterm_lval lv = ChangeDoChildrenPost (lv, postaction_tlval)
+  method! vterm_lval lv = Visit.to_visit_action @@ ChangeDoChildrenPost (lv, postaction_tlval)
 
-  method! vexpr e = ChangeDoChildrenPost (e, postaction_expr)
+  method! vexpr e = Visit.to_visit_action @@ ChangeDoChildrenPost (e, postaction_expr)
 
-  method! vterm t = ChangeDoChildrenPost (t, postaction_term)
+  method! vterm t = Visit.to_visit_action @@ ChangeDoChildrenPost (t, postaction_term)
 
 end
 
-let retype_address_taken file =
-  visit_and_push_statements visit_and_update_globals (new addrof_retyping_visitor) file
-
+let retype_address_taken = Visit.inserting_statements (new addrof_retyping_visitor)
 
 (*****************************************************************************)
 (* Retype fields of type structure and array.                                *)
@@ -1557,7 +1567,7 @@ class fields_retyping_visitor =
         Index (e, Field (fi, NoOffset)) :: offset_list off
       | Index (_idx, NoOffset) as off -> [off]
       | Index (idx, (Index _ as off)) ->
-        if !flatten_multi_dim_array then
+        if Config.flatten_multi_dim_arrays then
           Console.fatal
             "postaction_lval: the following index is incompatible with multi-dim array flattening: %a %a"
             Printer.pp_exp idx Printer.pp_offset off;
@@ -1567,8 +1577,8 @@ class fields_retyping_visitor =
       function
       | Field (fi, roff) ->
         begin try
-          let ty = Htbl_fi.find field_to_array_type fi in
-          let roff = apply_lift_offset (lift_offset ty roff) in
+          let typ = Htbl_fi.find field_to_array_type fi in
+          let roff = apply_lift_offset (Ast.Offset.flatten ~typ roff) in
           Field (fi, roff)
         with
         | Not_found ->
@@ -1580,7 +1590,7 @@ class fields_retyping_visitor =
         Index (idx, roff)
       | NoOffset -> NoOffset
     in
-    let off = if !flatten_multi_dim_array then apply_lift_offset off else off in
+    let off = if Config.flatten_multi_dim_arrays then apply_lift_offset off else off in
     (* [initlv] : topmost lval
      * [initlist] : list of offsets to apply to topmost lval
      *)
@@ -1598,7 +1608,7 @@ class fields_retyping_visitor =
          | Field (_, _)
          | Index (_, Field (_ ,_))
          | Index(_, NoOffset) as nextoff ->
-           Mem (mkInfo @@ new_exp ~loc:(Cil_const.CurrentLoc.get ()) @@ Lval curlv), nextoff
+           Mem (Ast.Exp.dummy_info @@ new_exp ~loc:(Cil_const.CurrentLoc.get ()) @@ Lval curlv), nextoff
          | Index (_, Index _) ->
            Console.fatal "lift_offset: unexpected index")
       initlv
@@ -1637,21 +1647,21 @@ object
     | GCompTag (compinfo,_) ->
       let field fi =
         if isStructOrUnionType fi.ftype then
-          fi.ftype <- mkTRef fi.ftype "Norm.vglob_aux(2)"
+          fi.ftype <- (Type.Ref.singleton fi.ftype ~msg:"Norm.vglob_aux(2)" :> typ)
         else if isArrayType fi.ftype then begin
           Htbl_fi.replace field_to_array_type fi fi.ftype;
-          if not !flatten_multi_dim_array then
-            fi.ftype <- reference_of_array fi.ftype
+          if not Config.flatten_multi_dim_arrays then
+            fi.ftype <- (Type.Ref.of_array_exn fi.ftype : _ Type.t :> typ)
           else
 (*                 if array_size fi.ftype > 0L then *)
-            let size = constant_expr (array_size fi.ftype) in
-            fi.ftype <- mkTRefArray(element_type fi.ftype,size,[])
+            let size = Ast.Exp.const (array_size fi.ftype) in
+            fi.ftype <- (Type.Ref.array ~size @@ element_type fi.ftype :> typ)
 (*                 else *)
 (*                   (\* Array of zero size, e.g. in struct array hack. *\) *)
 (*                   fi.ftype <- TPtr(element_type fi.ftype,[]) *)
         end
       in
-      retaining_size_of_composite compinfo @@ fun compinfo ->
+      Do.retaining_size_of_composite compinfo @@ fun compinfo ->
       List.iter field compinfo.cfields;
       SkipChildren
     | GFun _ | GAnnot _ | GVar _ | GVarDecl _ -> DoChildren
@@ -1660,16 +1670,15 @@ object
 
   method! vlval lv = ChangeDoChildrenPost (lv, postaction_lval)
 
-  method! vterm_lval = do_on_term_lval (None, Some postaction_lval)
+  method! vterm_lval lv = Do.on_term_lval ~post:postaction_lval lv
 
   method! vexpr e =  ChangeDoChildrenPost(e, postaction_expr)
 
-  method! vterm = do_on_term (None, Some postaction_expr)
+  method! vterm t = Do.on_term ~post:postaction_expr t
 
 end
 
-let retype_fields file =
-  visitFramacFile (new fields_retyping_visitor) file
+let retype_fields = visitFramacFile (new fields_retyping_visitor)
 
 (*****************************************************************************)
 (* Retype pointers to base types.                                            *)
@@ -1682,7 +1691,7 @@ module Set_ty = Cil_datatype.Typ.Set
  * - if T is [TVoid], no field in S
  * - otherwise, a single field of type T in S
  *)
-class base_retyping_visitor =
+class base_retyping_visitor ~attach =
 
   (* Correspondance between a base type and its wrapper structure type *)
   let type_wrappers = Htbl_ty.create 17 in
@@ -1691,24 +1700,24 @@ class base_retyping_visitor =
 
   let is_wrapper_type ty = Set_ty.mem ty !auto_type_wrappers in
 
-  let new_wrapper_for_type_no_sharing ty =
+  let new_wrapper_for_type_no_sharing typ =
     (* Choose name t_P for the wrapper and t_M for the field *)
-    let name = type_name ty in
-    let wrapper_name = name ^ "P" in
-    let field_name = name ^ "M" in
+    let name = Name.Of.typ typ in
+    let sname = name ^ "P" in
+    let fname = name ^ "M" in
     let compinfo =
-      if isVoidType ty
-      then { (mkStructEmpty wrapper_name) with cdefined = true }
-      else mkStructSingleton wrapper_name field_name ty
+      if isVoidType typ
+      then { (Type.Composite.Ci.Struct.empty sname :> compinfo) with cdefined = true }
+      else (Type.Composite.Ci.Struct.singleton ~sname ~fname typ :> compinfo)
     in
     let tdef = GCompTag (compinfo, Cil_datatype.Location.unknown) in
     let tattrs =
-      if isStructOrUnionType ty || isVoidType ty
+      if isStructOrUnionType typ || isVoidType typ
       then []
-      else [Attr (wrapper_attr_name, [])]
+      else [Attr (Name.Of.Attr.wrapper, [])]
     in
     let tdecl = TComp (compinfo, empty_size_cache (), tattrs) in
-    attach_global tdef;
+    attach#global tdef;
     tdef, tdecl
   in
 object(self)
@@ -1753,18 +1762,21 @@ object(self)
          Some ty
        else if isStructOrUnionType elemty then
          None (* Already in a suitable form for Jessie translation. *)
-       else if is_array_reference_type ty then begin
-        (* Do not lose the information that this type is a reference *)
-        let size = constant_expr (Integer.of_int64 (reference_size ty)) in
-        if !flatten_multi_dim_array && is_reference_type elemty then
-          Console.fatal "failed to flatten multi-dim array: %a" Printer.pp_typ ty;
-        Some (mkTRefArray (self#new_wrapper_for_type elemty, size, []))
-       end else if is_reference_type ty then
-        (* Do not lose the information that this type is a reference *)
-        Some (mkTRef (self#new_wrapper_for_type elemty) "Norm.private wrap_type_if_needed")
-      else
-        (* Here is the case where a transformation is needed *)
-        Some (TPtr (self#new_wrapper_for_type elemty, attr))
+       else
+         begin match Type.Ref.of_typ ty with
+         | Some ty when Type.Ref.is_array ty ->
+           (* Do not lose the information that this type is a reference *)
+           let size = Ast.Exp.const (Integer.of_int64 (Type.Ref.size ty)) in
+           if Config.flatten_multi_dim_arrays && Type.Ref.is_ref elemty then
+             Console.fatal "failed to flatten multi-dim array: %a" Printer.pp_typ (ty :> typ);
+           Some (Type.Ref.array ~size @@ self#new_wrapper_for_type elemty :> typ)
+         | Some _ ->
+           (* Do not lose the information that this type is a reference *)
+           Some (Type.Ref.singleton (self#new_wrapper_for_type elemty) ~msg:"Norm.private wrap_type_if_needed" :> typ)
+         | None ->
+           (* Here is the case where a transformation is needed *)
+           Some (TPtr (self#new_wrapper_for_type elemty, attr))
+         end
     | TArray (_, len, size, attr) ->
       (*[VP-20100826] Can happen in case of logic term translation *)
       let elemty = element_type ty in
@@ -1789,7 +1801,7 @@ object(self)
           fi.ftype <- newtyp
         | None -> ()
       in
-      retaining_size_of_composite compinfo @@ fun compinfo ->
+      Do.retaining_size_of_composite compinfo @@ fun compinfo ->
       List.iter field compinfo.cfields;
       None
     | TVoid _ | TInt _ | TFloat _ | TEnum _ | TBuiltin_va_list _ -> None
@@ -1802,17 +1814,17 @@ object(self)
     | Mem e, NoOffset ->
       begin match self#wrap_type_if_needed (typeOf e) with
       | Some newtyp ->
-        let newfi = get_unique_field (pointed_type newtyp) in
+        let newfi = Type.Composite.(unique_field_exn (of_typ_exn @@ pointed_type newtyp)) in
         let newlv = Mem e, Field (newfi, NoOffset) in
         (* Check new left-value is well-typed. *)
         (* begin try ignore (typeOfLval newlv) with _ -> assert false end; *)
         newlv
       | None -> lv
       end
-    | Mem e, (Index (ie, _) as off) when is_last_offset off ->
+    | Mem e, (Index (ie, _) as off) when Ast.Offset.is_last off ->
       begin match self#wrap_type_if_needed (typeOf e) with
       | Some newtyp ->
-        let newfi = get_unique_field (pointed_type newtyp) in
+        let newfi = Type.Composite.(unique_field_exn (of_typ_exn @@ pointed_type newtyp)) in
         let newlv =
         if isArrayType (direct_pointed_type newtyp) then
           lv
@@ -1832,7 +1844,7 @@ object(self)
   inherit frama_c_inplace
 
   method! vfile _ =
-    struct_type_for_void := self#new_wrapper_for_type voidType;
+    Type.Composite.Struct.(init_void @@ of_typ_exn @@ self#new_wrapper_for_type voidType);
     DoChildren
 
   method! vtype ty =
@@ -1874,13 +1886,11 @@ object(self)
 
   method! vlval lv = ChangeDoChildrenPost (lv, self#postaction_lval)
 
-  method! vterm_lval t = do_on_term_lval (None, Some self#postaction_lval) t
+  method! vterm_lval t = Do.on_term_lval ~post:self#postaction_lval t
 
 end
 
-let retype_base_pointer file =
-  visit_and_update_globals (new base_retyping_visitor :> frama_c_visitor) file
-
+let retype_base_pointer = (Visit.attaching_globs { Visit.mk = new base_retyping_visitor })[@warning "-42"]
 
 (*****************************************************************************)
 (* Remove useless casts.                                                     *)
@@ -1949,10 +1959,10 @@ let generated_union_types = Htbl_ty.create 0
 class unions_translator =
   let field_to_equiv_type : typ Htbl_fi.t = Htbl_fi.create 0 in
   let new_field_type fi =
-    let tname = unique_name (fi.fname ^ "P") in
-    let fname = unique_name (fi.fname ^ "M") in
+    let sname = Name.unique (fi.fname ^ "P") in
+    let fname = Name.unique (fi.fname ^ "M") in
     let padding = the fi.fpadding_in_bits in
-    let mcomp = mkStructSingleton ~padding tname fname fi.ftype in
+    let mcomp = (Type.Composite.Ci.Struct.singleton ~padding ~sname ~fname fi.ftype :> compinfo) in
     let tdef = GCompTag (mcomp, CurrentLoc.get ()) in
     let tdecl = TComp (mcomp, empty_size_cache (), []) in
     Htbl_ty.add generated_union_types tdecl ();
@@ -1965,7 +1975,7 @@ class unions_translator =
     | Field(fi,off) as off' ->
       begin try
         let ty = Htbl_fi.find field_to_equiv_type fi in
-        let newfi = get_unique_field ty in
+        let newfi = Type.Composite.(unique_field_exn @@ of_typ_exn ty) in
         Field (fi, Field (newfi, off))
       with
       | Not_found -> off'
@@ -1979,8 +1989,8 @@ object
   method! vglob_aux = function
   | GCompTag (compinfo,_) as g when not compinfo.cstruct ->
     let field fi = new_field_type fi in
-    retaining_size_of_composite compinfo @@ fun compinfo ->
-    let fty = List.map field (proper_fields compinfo) in
+    Do.retaining_size_of_composite compinfo @@ fun compinfo ->
+    let fty = List.map field (Type.Composite.Ci.proper_fields compinfo) in
     ChangeTo (g :: fty)
   | GFun _ | GAnnot _ | GVar _ | GVarDecl _ -> DoChildren
   | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
@@ -1988,11 +1998,11 @@ object
 
   method! voffs off = ChangeDoChildrenPost (off, postaction_offset)
 
-  method! vterm_offset = do_on_term_offset (None, Some postaction_offset)
+  method! vterm_offset toff = Do.on_term_offset ~post:postaction_offset toff
 
 end
 
-let translate_unions file = visitFramacFile (new unions_translator) file
+let translate_unions = visitFramacFile (new unions_translator)
 
 (*****************************************************************************)
 (* Remove array address.                                                     *)
@@ -2047,7 +2057,7 @@ object
         begin match (stripCastsAndInfo e).enode with
         | Lval (_host, off) ->
           begin match lastOffset off with
-          | Field (fi, _) when isIntegralType fi.ftype && bits_sizeof ty = bits_sizeof fi.ftype ->
+          | Field (fi, _) when isIntegralType fi.ftype && Type.(size_in_bits_exn ty = size_in_bits_exn fi.ftype) ->
             H.replace cast_field_to_type fi fi.ftype
           | _ -> ()
           end
@@ -2081,14 +2091,14 @@ object
         let fields = compinfo.cfields in
         let field fi =
           if H.mem cast_field_to_type fi then
-            fi.ftype <- TPtr (!Common.struct_type_for_void, [])
+            fi.ftype <- TPtr ((Type.Composite.Struct.void () :> typ), [])
         in
-        retaining_size_of_composite compinfo @@ fun _ ->
+        Do.retaining_size_of_composite compinfo @@ fun _ ->
         List.iter field fields;
         DoChildren
     | _ -> DoChildren
 
-  method! vterm = do_on_term (None, Some postaction_expr)
+  method! vterm t = Do.on_term ~post:postaction_expr t
 end
 
 let retype_int_field file =

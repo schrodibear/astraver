@@ -350,6 +350,7 @@ sig
     val map_default : default:'a -> f:(typ -> 'a) -> logic_type -> 'a
     val map : f:(typ -> 'a) -> t -> 'a
     val get : t -> typ
+    val is_c : logic_type -> bool
     val typ : logic_type -> typ option
   end
 
@@ -361,6 +362,8 @@ sig
     val size : t -> int64
     val of_typ : typ -> t option
     val of_typ_exn : typ -> t
+    val typ : t -> typ
+    val is_array : t -> bool
     val is_ref : typ -> bool
     val is_array_ref : typ -> bool
     val of_array_exn : typ -> t
@@ -387,7 +390,7 @@ sig
         val of_ci : compinfo -> t option
         val of_ci_exn : compinfo -> t
         val empty : string -> t
-        val singleton : ?padding:int -> string -> string -> typ -> t
+        val singleton : ?padding:int -> sname:string -> fname:string -> typ -> t
       end
 
       val size : compinfo -> int option
@@ -398,7 +401,11 @@ sig
 
     module Struct :
     sig
-      val void : unit -> typ
+      type t = private composite Type.t
+      val of_typ : typ -> t option
+      val of_typ_exn : typ -> t
+      val void : unit -> t
+      val init_void : t -> unit
     end
   end
 

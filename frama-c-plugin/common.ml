@@ -1175,6 +1175,8 @@ struct
 
     let get = map ~f:Fn.id
 
+    let is_c = Option.is_some % of_logic_type
+
     let typ = Option.map ~f:get % of_logic_type
   end
 
@@ -1232,15 +1234,23 @@ struct
       | _ -> None
 
     let of_typ_exn ty =
-      match findAttribute Name.Of.Attr.arraylen (typeAttrs ty) with
-      | [AInt _] -> ty
-      | _ -> Console.fatal "Type.Ref.of_typ_exn: non-reference type: %a" Printer.pp_typ ty
+      match of_typ ty with
+      | Some ty -> ty
+      | None -> Console.fatal "Type.Ref.of_typ_exn: non-reference type: %a" Printer.pp_typ ty
+
+    let typ ty =
+      match of_typ ty with
+      | Some ty when isPointerType ty -> pointed_type ty
+      | _ -> Console.fatal "Type.Ref.typ: non-reference type: %a" Printer.pp_typ ty
 
     let is_ref ty =
       isPointerType ty && hasAttribute Name.Of.Attr.arraylen (typeAttrs ty)
 
     let is_array_ref ty =
-      is_ref ty && isArrayType (Cil.unrollType (direct_pointed_type ty))
+      is_ref ty && isArrayType (unrollType (direct_pointed_type ty))
+
+    let is_array ty =
+      isArrayType (unrollType (direct_pointed_type ty))
 
     let of_array_exn ty =
       let rec reftype ty =
@@ -1310,13 +1320,13 @@ struct
         let empty stname =
           mkCompInfo true stname (fun _ -> []) []
 
-        let singleton ?(padding=0) stname finame fitype =
+        let singleton ?(padding=0) ~sname ~fname typ =
           let compinfo =
-            mkCompInfo true stname
-              (fun _ -> [finame, fitype, None, [], CurrentLoc.get ()]) []
+            mkCompInfo true sname
+              (fun _ -> [fname, typ, None, [], CurrentLoc.get ()]) []
           in
           let fi = unique_field_exn @@ TComp (compinfo, empty_size_cache (), []) in
-          fi.fsize_in_bits <- Some (bitsSizeOf fitype);
+          fi.fsize_in_bits <- Some (bitsSizeOf typ);
           fi.foffset_in_bits <- Some 0;
           fi.fpadding_in_bits <- Some padding;
           compinfo
@@ -1414,7 +1424,32 @@ struct
 
     module Struct =
     struct
-      let void () = Console.fatal "Type.Composite.Struct.void: called before normalization"
+      type t = typ
+      let void_wrapper = ref None
+      let void () =
+        match !void_wrapper with
+        | Some wrapper -> wrapper
+        | None -> Console.fatal "Type.Composite.Struct.void: called before normalization"
+
+      let of_typ ty =
+        match ty with
+        | TComp ({ cstruct = true }, _, _) ->
+          Some ty
+        | _ -> None
+
+      let of_typ_exn ty =
+        match of_typ ty with
+        | Some ty -> ty
+        | None -> Console.fatal "Type.Composite.Struct.of_ty_exn: called on non-struct"
+
+      let init_void wrapper =
+        match !void_wrapper with
+        | Some _ -> Console.fatal "Type.Composite.Struct.init_void: called after initilization"
+        | None ->
+          match wrapper with
+          | TComp ({ cstruct = true }, _, _) ->
+            void_wrapper := Some wrapper
+          | _ -> Console.fatal "Type.Composite.Struct.init_void: called on non-struct"
     end
   end
 
@@ -1718,7 +1753,7 @@ struct
    *)
 
   type ('a, 'result, 'visit_action) context =
-    | Local : fundec -> ('a, ('a * insert) as 'result, 'a Local.visit_action) context
+    | Local : fundec -> ('a, 'a * insert, 'a Local.visit_action) context
     | Global : ('a, 'a, 'a visitAction) context
 
   open Local
