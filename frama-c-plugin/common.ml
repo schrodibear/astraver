@@ -1892,11 +1892,18 @@ struct
       method vfrees : 'a 'b. (identified_term list, 'a, 'b) visitor_method = do_children
     end
 
+  module Inserting_visitor =
+    struct
+      type 'a inserting_visitor = { mk : 'b. (#frama_c_visitor as 'b) -> (#frama_c_inplace_inserting as 'a) }
+    end
+
+  include Inserting_visitor
+
   type 'a visitor_function = { visit: 'r 'v. ('a, 'r, 'v) visitor_method }
 
-  class proxy_frama_c_visitor : (frama_c_visitor -> #frama_c_inplace_inserting) -> frama_c_visitor =
+  class proxy_frama_c_visitor =
     let visitor = ref (new frama_c_inplace_inserting (new frama_c_inplace)) in
-    fun mk_visitor ->
+    fun inserting_visitor ->
     let insert, before, after =
       let pending_before = ref [] and pending_after = ref [] in
       (fun { before; after } ->
@@ -1953,7 +1960,7 @@ struct
       inherit frama_c_inplace
 
       initializer
-        visitor := (mk_visitor (self :> frama_c_visitor) :> frama_c_inplace_inserting)
+        visitor := (inserting_visitor.mk self :> frama_c_inplace_inserting)
 
       method! videntified_term = cond { visit = fun c -> !visitor#videntified_term c }
       method! videntified_predicate = cond { visit = fun c -> !visitor#videntified_predicate c }
@@ -2052,11 +2059,11 @@ struct
     visitFramacFile (new proxy_frama_c_visitor visitor) file
 
   type 'a inserting_attaching_visitor =
-    { mk : 'b. attach:'b Do.attach -> frama_c_visitor -> (#frama_c_inplace_inserting as 'a) }
+    { mk : 'b 'c. attach:'b Do.attach -> (#frama_c_visitor as 'c) -> (#frama_c_inplace_inserting as 'a) }
 
   let inserting_statements_and_attaching_globs visitor file =
     let perform ~attach =
-      visitFramacFile @@ new proxy_frama_c_visitor @@ visitor.mk ~attach
+      visitFramacFile @@ new proxy_frama_c_visitor @@ { Inserting_visitor.mk = fun vis -> visitor.mk ~attach vis }
     in
     Do.attaching_globs { Do.perform } file
 

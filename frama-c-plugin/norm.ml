@@ -866,7 +866,7 @@ object
 
 end
 
-let expand_struct_assign = Visit.inserting_statements (new struct_assign_expander)
+let expand_struct_assign = (Visit.inserting_statements { Visit.mk = new struct_assign_expander })[@warning "-42"]
 
 (*****************************************************************************)
 (* Move first substructure fields out to the outer structures to simplify    *)
@@ -1526,7 +1526,7 @@ object
 
 end
 
-let retype_address_taken = Visit.inserting_statements (new addrof_retyping_visitor)
+let retype_address_taken = (Visit.inserting_statements { Visit.mk = new addrof_retyping_visitor })[@warning "-42"]
 
 (*****************************************************************************)
 (* Retype fields of type structure and array.                                *)

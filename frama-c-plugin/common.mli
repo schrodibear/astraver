@@ -611,16 +611,18 @@ sig
       method vvrbl : (varinfo, 'a, 'b) visitor_method
     end
 
-  class proxy_frama_c_visitor : (frama_c_visitor -> #frama_c_inplace_inserting) -> frama_c_visitor
+  type 'a inserting_visitor = { mk : 'b. (#frama_c_visitor as 'b) -> (#frama_c_inplace_inserting as 'a) }
 
-  val inserting_statements : (frama_c_visitor -> #frama_c_inplace_inserting) -> file -> unit
+  class proxy_frama_c_visitor : 'a inserting_visitor -> frama_c_visitor
+
+  val inserting_statements : 'a inserting_visitor -> file -> unit
 
   type 'a attaching_visitor = { mk : 'b. attach:'b Do.attach -> (#frama_c_visitor as 'a) }
 
   val attaching_globs : 'a attaching_visitor -> file -> unit
 
   type 'a inserting_attaching_visitor =
-    { mk : 'b. attach:'b Do.attach -> frama_c_visitor -> (#frama_c_inplace_inserting as 'a) }
+    { mk : 'b 'c. attach:'b Do.attach -> (#frama_c_visitor as 'c) -> (#frama_c_inplace_inserting as 'a) }
 
   val inserting_statements_and_attaching_globs : 'a inserting_attaching_visitor -> file -> unit
 

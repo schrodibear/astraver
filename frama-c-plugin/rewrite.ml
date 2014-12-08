@@ -2216,9 +2216,9 @@ let rewrite_cursor_pointers file =
     formal_to_base;
 
   (* Rewrite cursor variables as offsets from their base variable *)
-  Visit.inserting_statements
-    (new cursor_pointers_rewriter cursor_to_base formal_to_base !assigned_vars)
-    file
+  (Visit.inserting_statements
+    { Visit.mk = fun self -> new cursor_pointers_rewriter cursor_to_base formal_to_base !assigned_vars self }
+    file)[@warning "-42"]
 
 (*****************************************************************************)
 (* Rewrite cursor integers into offsets from base integers.                  *)
@@ -2476,9 +2476,9 @@ let rewrite_cursor_integers file =
     cursor_to_base;
 
   (* Rewrite cursor variables as offsets from their base variable *)
-  Visit.inserting_statements
-    (new cursor_integers_rewriter cursor_to_base !assigned_vars)
-    file
+  (Visit.inserting_statements
+    { Visit.mk = fun self -> new cursor_integers_rewriter cursor_to_base !assigned_vars self }
+    file)[@warning "-42"]
 
 
 (*****************************************************************************)
