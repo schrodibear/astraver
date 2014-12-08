@@ -50,7 +50,6 @@
 open Cil_types
 open Cil
 open Ast_info
-open Extlib
 
 open Visitor
 
@@ -324,7 +323,7 @@ class array_variables_retyping_visitor ~attach =
 
     method! vterm_lval = Visit.to_visit_action % Do.on_term_lval ~pre:preaction_lval ~post:postaction_lval
 
-    method! vexpr e = Visit.to_visit_action @@ ChangeDoChildrenPost (preaction_expr e, id)
+    method! vexpr e = Visit.to_visit_action @@ ChangeDoChildrenPost (preaction_expr e, Fn.id)
 
     method! vterm t = Visit.to_visit_action @@ Do.on_term ~pre:preaction_expr t
 end
@@ -458,7 +457,7 @@ object
         | None -> DoChildren
         | Some rt ->
           let li' = { li with l_type = Some (return_type rt) }  in
-          ChangeDoChildrenPost (Dfun_or_pred (li', loc), id)
+          ChangeDoChildrenPost (Dfun_or_pred (li', loc), Fn.id)
         end
       | Dtype_annot (annot, loc) ->
         begin match (List.hd annot.l_profile).lv_type with
@@ -508,7 +507,7 @@ object
     function
     | Papp (callee, labels, args) ->
       let args = List.map preaction_term_arg args in
-      ChangeDoChildrenPost (Papp (callee, labels, args), id)
+      ChangeDoChildrenPost (Papp (callee, labels, args), Fn.id)
     | _ -> DoChildren
 
 end
@@ -645,7 +644,7 @@ class struct_assign_expander () =
     | _ -> [lv]
   in
 
-object(self)
+object
 
   inherit Visit.frama_c_inplace_inserting
 
@@ -701,7 +700,7 @@ object(self)
     (* Add local variable for return *)
     let rt = getReturnType f.svar.vtype in
     if isStructOrUnionType rt then
-      let rv = makeTempVar (the self#current_func) rt in
+      let rv = makeTempVar f rt in
       return_var := Some rv;
       Htbl_vi.add return_vars rv ()
     else
@@ -777,7 +776,7 @@ object(self)
         ~allocation:(Some b.b_allocation)
         ()
     in
-    Visit.to_visit_action @@ ChangeDoChildrenPost (new_bhv, id)
+    Visit.to_visit_action @@ ChangeDoChildrenPost (new_bhv, Fn.id)
 
   method! vstmt_aux s _ =
     let open Visit in
@@ -790,7 +789,7 @@ object(self)
 (*                 let skind = Return(Some(Cabs2cil.mkAddrOfAndMark lv),loc) in *)
 (*                 ChangeTo { s with skind = skind; } *)
 (*             | _ -> assert false (\* Should not be possible *\) *)
-      let lv = Var (the !return_var), NoOffset in
+      let lv = Var (Option.value_fatal ~in_:"struct_assign_expander:vstmt_aux:return_var" !return_var), NoOffset in
       let ret = mkStmt (Return (Some (Cabs2cil.mkAddrOfAndMark loc lv), loc)) in
       let assigns = expand_assign lv e (typeOf e) loc in
       let assigns = List.map (fun i -> mkStmt (Instr i)) assigns in
@@ -799,7 +798,7 @@ object(self)
     | Return (Some _, _) -> SkipChildren
     | _ -> DoChildren
 
-  method! vinst instr _ =
+  method! vinst instr fundec =
     Visit.Local.to_visit_action @@
     match instr with
     | Set (lv, e, loc) when isStructOrUnionType (typeOf e) ->
@@ -834,7 +833,7 @@ object(self)
         let lvty = typeOfLval lv in
         if isStructOrUnionType lvty then
           let tmpv =
-            makeTempVar (the self#current_func) (Type.Ref.singleton lvty ~msg:"Norm.vinst" :> typ)
+            makeTempVar fundec (Type.Ref.singleton lvty ~msg:"Norm.vinst" :> typ)
           in
           let tmplv = Var tmpv, NoOffset in
           let call = Call (Some tmplv, callee, args, loc) in
@@ -950,7 +949,7 @@ class embed_first_substructs_visitor =
           end
         | lval -> lval
       in
-      ChangeDoChildrenPost (do_lval lval, id)
+      ChangeDoChildrenPost (do_lval lval, Fn.id)
 
     method! vterm_lval tlval =
       let rec do_term_lval =
@@ -964,7 +963,7 @@ class embed_first_substructs_visitor =
           end
         | tlval -> tlval
       in
-      ChangeDoChildrenPost (do_term_lval tlval, id)
+      ChangeDoChildrenPost (do_term_lval tlval, Fn.id)
 
     method! vexpr _ =
       DoChildrenPost
@@ -1013,7 +1012,7 @@ object
          | { enode = BinOp (op, e1, e2, _); eloc } -> mkBinOp ~loc:eloc op e1 e2
          | e -> Console.fatal "vexpr: unexpected transformation of BinOp to: %a" Printer.pp_exp e)
     | UnOp (op, ( { eloc } as e), typ) when isCharPtrType typ ->
-        ChangeDoChildrenPost (new_exp ~loc:eloc (UnOp (op, e, void_ptr_with_attrs typ)), id)
+        ChangeDoChildrenPost (new_exp ~loc:eloc (UnOp (op, e, void_ptr_with_attrs typ)), Fn.id)
     | _ -> DoChildren
 end
 
@@ -1080,7 +1079,7 @@ object(self)
       then
         let void_ptr_type = typeAddAttributes (typeAttrs tfrom) voidConstPtrType in
         ChangeDoChildrenPost
-          ({ e with enode = CastE (tto, mkCastT ~force:false ~e:efrom ~oldt:tfrom ~newt:void_ptr_type)}, id)
+          ({ e with enode = CastE (tto, mkCastT ~force:false ~e:efrom ~oldt:tfrom ~newt:void_ptr_type)}, Fn.id)
       else
         DoChildren
     | _ -> DoChildren
@@ -1134,12 +1133,12 @@ class struct_variables_retyping_visitor ~attach =
         if Set_lv.mem v !lvarset then
           add_deref host v
         else
-          may_map
-           ~dft:host
-           (fun cv ->
-              if Set_vi.mem cv !varset then
-                add_deref host v
-              else host)
+          Option.map_default
+           ~default:host
+           ~f:(fun cv ->
+             if Set_vi.mem cv !varset then
+               add_deref host v
+             else host)
            v.lv_origin
       | TMem _ | TResult _ -> host
     in
@@ -1371,9 +1370,9 @@ class addrof_retyping_visitor =
         if Set_lv.mem v !lvarset then
           add_deref host v.lv_type
         else
-          may_map
-            ~dft:host
-            (fun cv ->
+          Option.map_default
+            ~default:host
+            ~f:(fun cv ->
                if Set_vi.mem cv !varset then
                  add_deref host (Ctype cv.vtype)
                else host)
@@ -1856,7 +1855,7 @@ object(self)
     in
     if isFunctionType ty then
       (* Applies changes in particular to parameter types in function types. *)
-      ChangeDoChildrenPost (ty, id)
+      ChangeDoChildrenPost (ty, Fn.id)
     else
       ChangeTo ty
 
@@ -1942,9 +1941,9 @@ object
 
   inherit frama_c_inplace
 
-  method! vexpr e = ChangeDoChildrenPost (preaction_expr e, id)
+  method! vexpr e = ChangeDoChildrenPost (preaction_expr e, Fn.id)
 
-  method! vterm t = ChangeDoChildrenPost (preaction_term t, id)
+  method! vterm t = ChangeDoChildrenPost (preaction_term t, Fn.id)
 
 end
 
@@ -1962,7 +1961,7 @@ class unions_translator =
   let new_field_type fi =
     let sname = Name.unique (fi.fname ^ "P") in
     let fname = Name.unique (fi.fname ^ "M") in
-    let padding = the fi.fpadding_in_bits in
+    let padding = Option.value_fatal ~in_:"union_translator:new_field_type:fpaddding_in_bits" fi.fpadding_in_bits in
     let mcomp = (Type.Composite.Ci.Struct.singleton ~padding ~sname ~fname fi.ftype :> compinfo) in
     let tdef = GCompTag (mcomp, CurrentLoc.get ()) in
     let tdecl = TComp (mcomp, empty_size_cache (), []) in
@@ -2022,7 +2021,7 @@ object
         new_exp ~loc:e.eloc @@ BinOp (PlusPI, ptre, ie, ptrty)
       | _ -> e
     in
-    ChangeDoChildrenPost (preaction e, id)
+    ChangeDoChildrenPost (preaction e, Fn.id)
 
   method! vterm t =
     let preaction t =
@@ -2031,7 +2030,7 @@ object
         { t with term_node = TBinOp (PlusPI, ptrt, it) }
       | _ -> t
     in
-    ChangeDoChildrenPost (preaction t, id)
+    ChangeDoChildrenPost (preaction t, Fn.id)
 
   (* TODO: translate to add tsets easily *)
 

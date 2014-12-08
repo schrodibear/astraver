@@ -1911,8 +1911,8 @@ struct
       | JustCopy i -> insert i; JustCopy
       | JustCopyPost (f, i) -> insert i; JustCopyPost (post f)
       | ChangeTo (x, i) -> insert i; ChangeTo x
-      | ChangeToPost (a, f, i) -> insert i; Cil.ChangeToPost (a, post f)
-      | ChangeDoChildrenPost (a, f, i) -> insert i; Cil.ChangeDoChildrenPost (a, post f)
+      | ChangeToPost (a, f, i) -> insert i; ChangeToPost (a, post f)
+      | ChangeDoChildrenPost (a, f, i) -> insert i; ChangeDoChildrenPost (a, post f)
     in
     let cond { visit } x =
       match visitor#current_func with
