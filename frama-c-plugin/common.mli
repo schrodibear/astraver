@@ -531,8 +531,8 @@ sig
   type ('a, 'r, 'v) visitor_method = 'a -> ('a, 'r, 'v) context -> 'v
 
   class frama_c_inplace_inserting :
+    #frama_c_visitor ->
     object
-      val super : frama_c_inplace
       method behavior : visitor_behavior
       method current_func : fundec option
       method current_kf : kernel_function option
@@ -599,8 +599,8 @@ sig
       method vquantifiers : (quantifiers, 'a, 'b) visitor_method
       method vslice_pragma : (term slice_pragma, 'a, 'b) visitor_method
       method vspec : (funspec, 'a, 'b) visitor_method
-      method vstmt : stmt -> fundec -> stmt Local.visit_action
-      method vstmt_aux : stmt -> fundec -> stmt Local.visit_action
+      method vstmt : stmt -> stmt visitAction
+      method vstmt_aux_inserting : stmt -> fundec -> stmt Local.visit_action
       method vterm : (term, 'a, 'b) visitor_method
       method vterm_lhost : (term_lhost, 'a, 'b) visitor_method
       method vterm_lval : (term_lval, 'a, 'b) visitor_method
@@ -611,19 +611,16 @@ sig
       method vvrbl : (varinfo, 'a, 'b) visitor_method
     end
 
-  class proxy_frama_c_visitor : #frama_c_inplace_inserting -> frama_c_visitor
+  class proxy_frama_c_visitor : (frama_c_visitor -> #frama_c_inplace_inserting) -> frama_c_visitor
 
-  val to_frama_c_visitor : #frama_c_inplace_inserting -> frama_c_visitor
-
-  val to_cil_visitor : #frama_c_inplace_inserting -> cilVisitor
-
-  val inserting_statements : #frama_c_inplace_inserting -> file -> unit
+  val inserting_statements : (frama_c_visitor -> #frama_c_inplace_inserting) -> file -> unit
 
   type 'a attaching_visitor = { mk : 'b. attach:'b Do.attach -> (#frama_c_visitor as 'a) }
 
   val attaching_globs : 'a attaching_visitor -> file -> unit
 
-  type 'a inserting_attaching_visitor = { mk : 'b. attach:'b Do.attach -> (#frama_c_inplace_inserting as 'a) }
+  type 'a inserting_attaching_visitor =
+    { mk : 'b. attach:'b Do.attach -> frama_c_visitor -> (#frama_c_inplace_inserting as 'a) }
 
   val inserting_statements_and_attaching_globs : 'a inserting_attaching_visitor -> file -> unit
 

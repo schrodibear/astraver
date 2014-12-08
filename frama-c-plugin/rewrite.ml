@@ -1962,7 +1962,9 @@ class cursor_pointers_collector ~signal
 class cursor_pointers_rewriter
   (cursor_to_base : varinfo H.t)
   (formal_to_base : varinfo H.t)
-  (assigned_vars : S.t) =
+  (assigned_vars : S.t)
+  self
+  =
 
   (* Correspondance between cursor variables and offset variables *)
   let cursor_to_offset : varinfo H.t = H.create 0 in
@@ -2068,7 +2070,7 @@ class cursor_pointers_rewriter
   in
   object
 
-    inherit Visit.frama_c_inplace_inserting
+    inherit Visit.frama_c_inplace_inserting self
 
     method! vfunc f =
       let open Visit in
@@ -2336,7 +2338,9 @@ end
 
 class cursor_integers_rewriter
   (cursor_to_base : varinfo H.t)
-  (assigned_vars : S.t) =
+  (assigned_vars : S.t)
+  self
+  =
 
   (* Correspondance between cursor variables and offset variables *)
   let cursor_to_offset : varinfo H.t = H.create 0 in
@@ -2376,7 +2380,7 @@ class cursor_integers_rewriter
   in
   object
 
-    inherit Visit.frama_c_inplace_inserting
+    inherit Visit.frama_c_inplace_inserting self
 
     method! vfunc f =
       let open Visit in

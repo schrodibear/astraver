@@ -71,7 +71,7 @@ module Htbl_lv = Cil_datatype.Logic_var.Hashtbl
  * E.g. in example array.c, "\valid_index(t, 1)" for "t" being typed as
  * "int t[3][3]", should be transformed into "\valid_range(t, 3, 5)".
  *)
-class array_variables_retyping_visitor ~attach =
+class array_variables_retyping_visitor ~attach self =
 
   (* Variables originally of array type *)
   let varset = ref Set_vi.empty in
@@ -181,9 +181,9 @@ class array_variables_retyping_visitor ~attach =
       end
     | _ -> e
   in
-  object(self)
+  object
 
-    inherit Visit.frama_c_inplace_inserting
+    inherit Visit.frama_c_inplace_inserting self
 
     method! vvdec v =
       if isArrayType v.vtype && not (Set_vi.mem v !varset) then begin
@@ -247,7 +247,7 @@ class array_variables_retyping_visitor ~attach =
       match g with
       | GVar (v, _init, _loc) ->
         (* Make sure variable declaration is treated before definition *)
-        ignore @@ visitCilVarDecl (Visit.to_cil_visitor self) v;
+        ignore @@ visitCilVarDecl (self :> cilVisitor) v;
         if Set_vi.mem v !allocvarset then
           (* Allocate memory for new reference variable *)
           let ty = Htbl_vi.find var_to_array_type v in
@@ -298,8 +298,8 @@ class array_variables_retyping_visitor ~attach =
     method! vfunc f =
       let open Visit in
       (* First change type of local array variables *)
-      List.iter (ignore % visitCilVarDecl (to_cil_visitor self)) f.slocals;
-      List.iter (ignore % visitCilVarDecl (to_cil_visitor self)) f.sformals;
+      List.iter (ignore % visitCilVarDecl (self :> cilVisitor)) f.slocals;
+      List.iter (ignore % visitCilVarDecl (self :> cilVisitor)) f.sformals;
       (* Then allocate/deallocate memory for those that need it *)
       let inserting_pending =
         List.fold_left
@@ -533,7 +533,7 @@ let return_vars = Htbl_vi.create 17
  * assignment:
  * - recursively decompose into elementary assignments
  *)
-class struct_assign_expander () =
+class struct_assign_expander self =
 
   let pairs = ref [] in
   let new_return_type = ref None in
@@ -646,7 +646,7 @@ class struct_assign_expander () =
 
 object
 
-  inherit Visit.frama_c_inplace_inserting
+  inherit Visit.frama_c_inplace_inserting self
 
   method! vglob_aux =
     let retype_func fvi =
@@ -778,7 +778,7 @@ object
     in
     Visit.to_visit_action @@ ChangeDoChildrenPost (new_bhv, Fn.id)
 
-  method! vstmt_aux s _ =
+  method! vstmt_aux_inserting s _ =
     let open Visit in
     Local.to_visit_action @@
     match s.skind with
@@ -866,7 +866,7 @@ object
 
 end
 
-let expand_struct_assign = Visit.inserting_statements (new struct_assign_expander ())
+let expand_struct_assign = Visit.inserting_statements (new struct_assign_expander)
 
 (*****************************************************************************)
 (* Move first substructure fields out to the outer structures to simplify    *)
@@ -1107,7 +1107,7 @@ let rewrite_side_casts  = visitFramacFile (new side_cast_rewriter)
  * - changes left-values to reflect new type
  *)
 
-class struct_variables_retyping_visitor ~attach =
+class struct_variables_retyping_visitor ~attach self =
 
   let varset = ref Set_vi.empty in
   let lvarset = ref Set_lv.empty in
@@ -1144,9 +1144,9 @@ class struct_variables_retyping_visitor ~attach =
     in
     host, off
   in
-object(self)
+object
 
-  inherit Visit.frama_c_inplace_inserting
+  inherit Visit.frama_c_inplace_inserting self
 
   method! vvdec v =
     if isStructOrUnionType v.vtype && not v.vformal then  begin
@@ -1155,8 +1155,7 @@ object(self)
     end;
     Visit.to_visit_action DoChildren
 
-  method! vquantifiers (type result) (type visit_action) :
-    quantifiers -> (quantifiers, result, visit_action) Visit.context -> visit_action =
+  method! vquantifiers =
     fun vl context ->
       let open Visit in
       List.iter
@@ -1165,10 +1164,7 @@ object(self)
            if Type.Logic_c_type.is_c v.lv_type then
              match v.lv_origin with
              | None -> ()
-             | Some v ->
-               match context with
-               | Local _ as l -> ignore @@ self#vvdec v l
-               | Global -> ignore @@ self#vvdec v Global)
+             | Some v -> ignore (self#vvdec v))
         vl;
       to_visit_action DoChildren context
 
@@ -1219,8 +1215,8 @@ object(self)
   method! vfunc f =
     let open Visit in
     (* First change type of local structure variables *)
-    List.iter (ignore % visitCilVarDecl (Visit.to_cil_visitor self)) f.slocals;
-    List.iter (ignore % visitCilVarDecl (Visit.to_cil_visitor self)) f.sformals;
+    List.iter (ignore % visitCilVarDecl (self :> cilVisitor)) f.slocals;
+    List.iter (ignore % visitCilVarDecl (self :> cilVisitor)) f.sformals;
     (* Then allocate/deallocate memory for those that need it *)
     let inserting_pending =
       List.fold_left
@@ -1289,7 +1285,7 @@ module Set_fi = Cil_datatype.Fieldinfo.Set
  * - change type from [t] to [t*]
  * - TODO: allocation/release
  *)
-class addrof_retyping_visitor =
+class addrof_retyping_visitor self =
 
   let varset = ref Set_vi.empty in
   let lvarset = ref Set_lv.empty in
@@ -1423,7 +1419,7 @@ class addrof_retyping_visitor =
   let in_funspec = ref false in
 object
 
-  inherit Visit.frama_c_inplace_inserting
+  inherit Visit.frama_c_inplace_inserting self
 
   method! vglob_aux =
     function
