@@ -1643,7 +1643,8 @@ object
 
   inherit frama_c_inplace
 
-  method! vglob_aux = function
+  method! vglob_aux =
+    function
     | GCompTag (compinfo,_) ->
       let field fi =
         if isStructOrUnionType fi.ftype then
@@ -1672,7 +1673,7 @@ object
 
   method! vterm_lval lv = Do.on_term_lval ~post:postaction_lval lv
 
-  method! vexpr e =  ChangeDoChildrenPost(e, postaction_expr)
+  method! vexpr e =  ChangeDoChildrenPost (e, postaction_expr)
 
   method! vterm t = Do.on_term ~post:postaction_expr t
 
