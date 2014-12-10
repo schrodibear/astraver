@@ -34,14 +34,6 @@
 open Format
 open Pp
 
-(*
-let files = Hashtbl.create 97
-
-let add ~file ~f =
-  let l = try Hashtbl.find files file with Not_found -> [] in
-  Hashtbl.replace files file (f :: l)
-*)
-
 let simplify fmt f = fprintf fmt "simplify/%s_why.sx" f
 let vampire fmt f = fprintf fmt "vampire/%s_why.vp" f
 let coq_v fmt f = fprintf fmt "coq/%s_why.v" f
@@ -85,8 +77,7 @@ let generic full f targets =
        out "COQDEP = coqdep@\n@\n";
 
        out ".PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon@\n@\n";
-       out "all: %a@\n@\n"
-	 (print_files simplify) targets;
+       out "all: %a@\n@\n" (print_files simplify) targets;
 
        out "project: %a@\n@\n" (print_files wpr) targets;
        out "why/%%.wpr:  WHYOPT=--project -dir why@\n";
@@ -132,8 +123,7 @@ let generic full f targets =
        out "isabelle/%%_why.thy: WHYOPT=-isabelle -dir isabelle -isabelle-base-theory jessie_why@\n";
        out "isabelle/%%_why.thy: why/%%.why@\n";
        out "\t$(WHY) $(JESSIELIBFILES) why/$*.why@\n";
-       out "\tcp -f %s/isabelle/jessie_why.thy isabelle/@\n@\n"
-	 Jc_options.libdir;
+       out "\tcp -f %s/isabelle/jessie_why.thy isabelle/@\n@\n" Jc_options.libdir;
 
        out "simplify: %a@\n" (print_files simplify) targets;
        out "\t@@echo 'Running Simplify on proof obligations' && ($(DP) $^)@\n@\n";
@@ -202,13 +192,13 @@ let generic full f targets =
 
 
        out "gui stat: %s@\n"
-	 (match targets with f::_ -> f^".stat" | [] -> "");
+	 (match targets with f :: _ -> f ^ ".stat" | [] -> "");
        out "@\n";
        out "%%.stat: why/%%.why@\n";
        out "\t@@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
 
        let why3_target =
-	 (match targets with f::_ -> f^"_why3.why" | [] -> "")
+	 (match targets with f :: _ -> f ^ "_why3.why" | [] -> "")
        in
        out "why3: why/%s@\n" why3_target;
 
@@ -218,7 +208,7 @@ let generic full f targets =
             && $(WHY) $(JESSIELIBFILES) why/$*.why@\n";
 
        let why3ml_target =
-	 (match targets with f::_ -> f^".mlw" | [] -> "")
+	 (match targets with f :: _ -> f ^ ".mlw" | [] -> "")
        in
        out "why3ml: %s@\n" why3ml_target;
        out "\t why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";

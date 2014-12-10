@@ -96,7 +96,7 @@ let apply_if_dir_exist name f =
     let d = Unix.opendir name in
     Unix.closedir d;
     f name
-  with Unix.Unix_error (Unix.ENOENT, "opendir",_) -> ()
+  with Unix.Unix_error (Unix.ENOENT, "opendir", _) -> ()
 
 let run () =
   if Jessie_config.jessie_local then begin
@@ -197,7 +197,10 @@ let run () =
     Console.feedback "Producing Jessie files in subdir %s" jessie_subdir;
 
     (* basename is 'file' *)
-    let basename = Filename.basename projname in
+    let basename =
+      String.filter_alphanumeric ~assoc:[' ', '-'; '(', '-'; ')', '-'] ~default:'_' @@
+        Filename.basename projname
+    in
 
     (* filename is 'file.jc' *)
     let filename = basename ^ ".jc" in
@@ -274,14 +277,8 @@ let run () =
               raise Exit
             end
           else
-	    ("TIMEOUT=" ^ (string_of_int (Jessie_options.Cpu_limit.get ())) ^ " ")
+	    ("TIMEOUT=" ^ (string_of_int (Config.Cpu_limit.get ())) ^ " ")
 	else ""
-      in
-      let rec make_command =
-        function
-	| [] -> ""
-	| [a] -> a
-	| a :: cmd -> a ^ " " ^ make_command cmd
       in
       Console.feedback "Calling Jessie tool in subdir %s" jessie_subdir;
       Sys.chdir jessie_subdir;
@@ -294,12 +291,22 @@ let run () =
 	  | _ -> "-why-opt -split-user-conj"
       in
       let cmd =
-	make_command
-	  [ env_opt; jessie_cmd; jessie_opt ;
-	    verbose_opt; why_opt; why3_opt; jc_opt; debug_opt; behav_opt;
-	    "-locs"; locname; filename ]
+        String.concat " "
+          [
+            env_opt;
+            jessie_cmd;
+            jessie_opt ;
+            verbose_opt;
+            why_opt;
+            why3_opt;
+            jc_opt;
+            debug_opt;
+            behav_opt;
+            "-locs";
+            locname;
+            filename
+          ]
       in
-      (*      Format.eprintf "CMD=%S" cmd; *)
       sys_command cmd;
 
       (* Phase 9: call Why to VP translation *)
@@ -307,7 +314,7 @@ let run () =
       let makefile = basename ^ ".makefile" in
 
       (* temporarily, we launch proving tools of the Why platform,
-	 either graphic or script-based
+         either graphic or script-based
       *)
 
       Console.feedback "Calling VCs generator.";
