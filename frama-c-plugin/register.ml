@@ -45,11 +45,11 @@ open Common
 let std_include = Filename.concat Framac.Config.datadir "jessie"
 
 let treat_integer_model () =
-  if !Interp.int_model = Interp.IMexact then
+  if Config.Analysis.get () && !Interp.int_model = Interp.IMexact then
     Kernel.CppExtraArgs.add ("-D JESSIE_EXACT_INT_MODEL")
 
 let treat_jessie_spec_prolog () =
-  if Config.Specialize.get () then
+  if Config.Analysis.get () && Config.Specialize.get () then
     let spec_prolog_h_name = Filename.concat std_include Name.Of.File.blockfuns_include in
     Kernel.CppExtraArgs.append_before ["-include " ^ spec_prolog_h_name]
 
