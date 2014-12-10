@@ -1,0 +1,3 @@
+tests/parsec/jessie_structure_embedding_size_fix.c
+tests/parsec/jessie_union_embedding_size_fix.c
+tests/parsec/jessie spaces in (file) name.c
