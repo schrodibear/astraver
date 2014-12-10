@@ -1327,7 +1327,8 @@ class addrof_retyping_visitor self =
   in
   let retype_field fi =
     if retypable_field fi then begin
-      fi.ftype <- (Type.Ref.singleton fi.ftype ~msg:"Norm.retype_field" :> typ);
+      Do.retaining_size_of_field fi
+        (fun fi -> fi.ftype <- (Type.Ref.singleton fi.ftype ~msg:"Norm.retype_field" :> typ));
       if not  (isPointerType fi.ftype) then
         Console.fatal "retypable field should be of pointer type (retype_field): %s" fi.fname;
       fieldset := Set_fi.add fi !fieldset
@@ -1642,6 +1643,7 @@ object
     function
     | GCompTag (compinfo,_) ->
       let field fi =
+        Do.retaining_size_of_field fi @@ fun fi ->
         if isStructOrUnionType fi.ftype then
           fi.ftype <- (Type.Ref.singleton fi.ftype ~msg:"Norm.vglob_aux(2)" :> typ)
         else if isArrayType fi.ftype then begin
@@ -1794,7 +1796,7 @@ object(self)
       let field fi =
         match self#wrap_type_if_needed fi.ftype with
         | Some newtyp ->
-          fi.ftype <- newtyp
+          Do.retaining_size_of_field fi (fun fi -> fi.ftype <- newtyp)
         | None -> ()
       in
       Do.retaining_size_of_composite compinfo @@ fun compinfo ->
@@ -1963,7 +1965,8 @@ class unions_translator =
     let tdecl = TComp (mcomp, empty_size_cache (), []) in
     Htbl_ty.add generated_union_types tdecl ();
     Htbl_fi.add field_to_equiv_type fi tdecl;
-    fi.ftype <- tdecl;
+    Do.retaining_size_of_field fi
+      (fun fi -> fi.ftype <- tdecl);
     tdef
   in
 
@@ -1983,10 +1986,9 @@ object
   inherit frama_c_inplace
 
   method! vglob_aux = function
-  | GCompTag (compinfo,_) as g when not compinfo.cstruct ->
-    let field fi = new_field_type fi in
+  | GCompTag (compinfo, _) as g when not compinfo.cstruct ->
     Do.retaining_size_of_composite compinfo @@ fun compinfo ->
-    let fty = List.map field (Type.Composite.Ci.proper_fields compinfo) in
+    let fty = List.map new_field_type (Type.Composite.Ci.proper_fields compinfo) in
     ChangeTo (g :: fty)
   | GFun _ | GAnnot _ | GVar _ | GVarDecl _ -> DoChildren
   | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
@@ -2087,7 +2089,8 @@ object
         let fields = compinfo.cfields in
         let field fi =
           if H.mem cast_field_to_type fi then
-            fi.ftype <- TPtr ((Type.Composite.Struct.void () :> typ), [])
+            Do.retaining_size_of_field fi
+              (fun fi -> fi.ftype <- TPtr ((Type.Composite.Struct.void () :> typ), []))
         in
         Do.retaining_size_of_composite compinfo @@ fun _ ->
         List.iter field fields;

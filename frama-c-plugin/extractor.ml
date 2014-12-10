@@ -29,8 +29,6 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Extlib
-
 open Cil_types
 open Cil
 open Visitor
@@ -139,7 +137,7 @@ class dummy_type_visitor { State. enums } dcomps = object(self)
 end
 
 let fatal_offset =
-  Jessie_options.fatal
+  Console.fatal
     "Encountered function type with offset: %a"
     Printer.pp_exp
 
@@ -147,7 +145,7 @@ let fatal_offset =
 let do_fun { State. vars; fun_queue } (vi, kf_opt) =
   if not (Set.mem vars vi) then begin
     Set.add vars vi;
-    let kf = opt_conv (Globals.Functions.get vi) kf_opt in
+    let kf = Option.value ~default:(Globals.Functions.get vi) kf_opt in
     Queue.add fun_queue kf.fundec
   end
 
@@ -165,7 +163,7 @@ let add_field { State. fields } off =
   end;
   off
 
-let add_hcast { State.fields } typ exp =
+let add_hcast { State.fields } ~typ ~exp =
   let t = typeOf exp in
   if List.for_all isPointerType [typ; t] then begin
     match map_pair typeOf_pointed (typ, t) with
@@ -187,19 +185,22 @@ let add_hcast { State.fields } typ exp =
 (* Helper function to extract functions occurring as variables
    and mark first structure fields used in hierarchical casts. *)
 let do_expr_post ?state f do_not_touch e =
-  if !do_not_touch = Some e.eid then (do_not_touch := None; e)
-  else match e.enode with
-  | Lval (Var vi, NoOffset) | AddrOf (Var vi, NoOffset)
-    when isFunctionType vi.vtype ->
-    f vi;
+  if !do_not_touch = Some e.eid then begin
+    do_not_touch := None;
     e
-  | Lval (Var vi, _) | AddrOf (Var vi, _)
-    when isFunctionType vi.vtype ->
-    fatal_offset e
-  | CastE (typ, exp) when has_some state ->
-    add_hcast (the state) typ exp;
-    e
-  | _ -> e
+  end else
+    match e.enode with
+    | Lval (Var vi, NoOffset) | AddrOf (Var vi, NoOffset)
+      when isFunctionType vi.vtype ->
+      f vi;
+      e
+    | Lval (Var vi, _) | AddrOf (Var vi, _)
+      when isFunctionType vi.vtype ->
+      fatal_offset e
+    | CastE (typ, exp)  ->
+      Option.iter state ~f:(add_hcast ~typ ~exp);
+      e
+    | _ -> e
 
 class relevant_function_visitor state add_from_type =
   let do_fun = do_fun state in
@@ -234,7 +235,7 @@ object
       let types =
         match unrollType (typeOf f) with
         | TFun (rt, ao, _, _) | TPtr (TFun (rt, ao, _, _), _) ->
-          rt :: (List.map (fun (_, t, _) -> t) (opt_conv [] ao))
+          rt :: (List.map (fun (_, t, _) -> t) (Option.value ~default:[] ao))
         | t ->
           Jessie_options.fatal
             "Non-function (%a) called as function: %a"
@@ -362,17 +363,19 @@ let collect file =
         vars;
         fun_queue;
         typ_queue;
-        comp_queue } as state =
-      let open Cil_datatype in
-      { State.
-        types = Set.create (module Typeinfo);
-        comps = Set.create (module Compinfo);
-        fields = Set.create (module Fieldinfo);
-        enums = Set.create (module Enuminfo);
-        vars = Set.create (module Varinfo);
-        fun_queue = Queue.create ();
-        typ_queue = Queue.create ();
-        comp_queue = Queue.create () }
+        comp_queue
+      } as state =
+    let open Cil_datatype in
+    { State.
+      types = Set.create (module Typeinfo);
+      comps = Set.create (module Compinfo);
+      fields = Set.create (module Fieldinfo);
+      enums = Set.create (module Enuminfo);
+      vars = Set.create (module Varinfo);
+      fun_queue = Queue.create ();
+      typ_queue = Queue.create ();
+      comp_queue = Queue.create ()
+    }
   in
   let dcomps = Set.create (module Cil_datatype.Compinfo) in
   let add_from_type = ignore % visitFramacType (new relevant_type_visitor state) in
@@ -391,7 +394,8 @@ let collect file =
   let do_fun =
     function
     | Definition (f, _) -> ignore @@ visitFramacFunction (new relevant_function_visitor state add_from_type) f
-    | Declaration (_, vi, vis_opt, _) -> List.iter (fun vi -> add_from_type vi.vtype) (vi :: opt_conv [] vis_opt)
+    | Declaration (_, vi, vis_opt, _) ->
+      List.iter (fun vi -> add_from_type vi.vtype) (vi :: Option.value ~default:[] vis_opt)
   in
   (* Mark all addressed functions in their vaddrof field. *)
   visitFramacFile (new fun_vaddrof_visitor) file;
@@ -424,40 +428,37 @@ object
 
   method! vtype =
     function
-    | TArray (t, eo, _, attrs) -> ChangeDoChildrenPost (TArray (t, eo, empty_size_cache (), attrs), id)
-    | TComp (ci, _, attrs) -> ChangeDoChildrenPost (TComp (ci, empty_size_cache (), attrs), id)
+    | TArray (t, eo, _, attrs) -> ChangeDoChildrenPost (TArray (t, eo, empty_size_cache (), attrs), Fn.id)
+    | TComp (ci, _, attrs) -> ChangeDoChildrenPost (TComp (ci, empty_size_cache (), attrs), Fn.id)
     | _ -> DoChildren
 
   method! vglob_aux =
-    let dummy_if_empty ?original_size ci =
-      function
-      | [] -> [Type.Composite.Ci.padding_field ?fsize_in_bits:original_size ci]
-      | l -> l
-    in
     function
     | GType (ti, _) when Set.mem types ti -> SkipChildren
     | GCompTag (ci, _) | GCompTagDecl (ci, _) when Set.mem comps ci ->
       Do.retaining_size_of_composite ci @@ fun ci ->
-      let original_size = Type.Composite.Ci.size ci in
-      let is_old_parent =
-        let old_parent = try Some (List.hd ci.cfields) with Failure "hd" -> None in
-        fun fi -> may_map ~dft:false ((==) fi) old_parent
-      in
       ci.cfields <-
-        dummy_if_empty ?original_size ci (List.filter (fun fi -> fi.faddrof || Set.mem fields fi) ci.cfields);
-      ListLabels.iteri ci.cfields
-        ~f:(fun i fi ->
-             if i == 0 && isStructOrUnionType fi.ftype && not (is_old_parent fi) then
+        ListLabels.mapi ci.cfields
+          ~f:(fun i fi ->
+            if fi.faddrof || Set.mem fields fi then begin
+              if i == 0 && isStructOrUnionType fi.ftype then
                 fi.fattr <- addAttribute (Attr (Name.Of.Attr.noembed, [])) fi.fattr;
-             fi.fsize_in_bits <- None;
-             fi.foffset_in_bits <- None;
-             fi.fpadding_in_bits <- None);
+              fi.fsize_in_bits <- None;
+              fi.foffset_in_bits <- None;
+              fi.fpadding_in_bits <- None;
+              fi
+            end else
+              Type.Composite.Ci.padding_field
+                ~fsize_in_bits:(Option.value ~default:(bitsSizeOf fi.ftype) fi.fsize_in_bits)
+                ci);
       SkipChildren
     | GCompTag (ci, _) | GCompTagDecl (ci, _) when Set.mem dcomps ci ->
-      let original_size = Type.Composite.Ci.size ci in
       (* The composite is dummy i.e. only used as an abstract type, so *)
-      (* its precise contents isn't matter. *)
-      ci.cfields <- dummy_if_empty ?original_size ci [];
+      (* its precise contents doesn't matter. *)
+      begin match Type.Composite.Ci.size ci with
+      | Some fsize_in_bits -> ci.cfields <- [Type.Composite.Ci.padding_field ~fsize_in_bits ci];
+      | None -> ()
+      end;
       SkipChildren
     | GEnumTag (ei, _) | GEnumTagDecl (ei, _) when Set.mem enums ei ->
       SkipChildren

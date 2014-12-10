@@ -56,16 +56,20 @@ exception Unsupported of string
 
 module Console =
 struct
-  let fatal fmt = Jessie_options.fatal ~current:true fmt
-  let error fmt = Jessie_options.error ~current:true fmt
+  open Jessie_options
+
+  let fatal fmt = fatal ~current:true fmt
+  let abort fmt = abort fmt
+  let error fmt = error ~current:true fmt
   let unsupported fmt =
     Jessie_options.with_failure
       (fun evt ->
          raise (Unsupported evt.Log.evt_message))
       ~current:true
       fmt
-  let warning fmt = Jessie_options.warning ~current:true fmt
-  let general_warning fmt = Jessie_options.warning ~current:false fmt
+  let feedback fmt = feedback fmt
+  let general_warning fmt = warning ~current:false fmt
+  let warning fmt = warning ~current:true fmt
   let warn_once =
     let known_warns = Hashtbl.create 7 in
     fun s ->
@@ -73,7 +77,10 @@ struct
         Hashtbl.add known_warns s ();
         general_warning "%s" s
       end
-  let debug fmt = Jessie_options.debug fmt
+  let debug fmt = debug fmt
+
+  let debug_at_least = debug_atleast
+  let verbose_at_least = verbose_atleast
 end
 
 module List =
@@ -1335,12 +1342,14 @@ struct
 
       let size ci =
         if ci.cdefined then Some (bitsSizeOf @@ TComp (ci, empty_size_cache (), []))
-        else  None
+        else None
 
       let padding_field =
         let padding_type = intType in
-        fun ?fsize_in_bits ci ->
-          { fcomp = ci;
+        fun ~fsize_in_bits ci ->
+          let fsize_in_bits = Some fsize_in_bits in
+          {
+            fcomp = ci;
             forig_name = "";
             fname = Name.unique "padding";
             ftype = padding_type;
@@ -1350,16 +1359,22 @@ struct
             faddrof = false;
             fsize_in_bits;
             foffset_in_bits = None;
-            fpadding_in_bits = None }
+            fpadding_in_bits = None
+          }
 
       let fix_size ?original_size ci =
         let current_size = size ci in
         match original_size, current_size with
         | Some original_size, Some current_size ->
           List.iter (fun fi -> fi.foffset_in_bits <- None) ci.cfields;
-          if current_size < original_size then
-              ci.cfields <- ci.cfields @ [padding_field ~fsize_in_bits:(original_size - current_size) ci]
-          else if current_size > original_size then
+          let warn action =
+            Console.warning "Fixing size of composite [%s] by %s" (compFullName ci) action
+          in
+          if current_size < original_size then begin
+            warn "padding";
+            ci.cfields <- ci.cfields @ [padding_field ~fsize_in_bits:(original_size - current_size) ci]
+          end else if current_size > original_size then begin
+            warn "shrinking";
             let remaining_size_fix =
               List.fold_left
                 (fun size_fix fi ->
@@ -1418,6 +1433,7 @@ struct
                 composite_name original_name original_size current_size pointer_size composite_name empty_members
             else
               assert (remaining_size_fix = 0)
+          end
         | _ -> ()
 
       let proper_fields ci = List.filter (fun fi -> not @@ hasAttribute Name.Of.Attr.padding fi.fattr) ci.cfields
@@ -1635,6 +1651,13 @@ struct
     let original_size = Type.Composite.Ci.size ci in
     let result = f ci in
     Type.Composite.Ci.fix_size ?original_size ci;
+    result
+
+  let retaining_size_of_field fi f =
+    let original_size = bitsSizeOf fi.ftype in
+    let result = f fi in
+    if bitsSizeOf fi.ftype <> original_size then
+      fi.fbitfield <- Some original_size;
     result
 
   (* Delaying updates to the file until after the action function has

@@ -44,22 +44,12 @@ open Common
 
 let std_include = Filename.concat Framac.Config.datadir "jessie"
 
-(*
-let prolog_h_name = Filename.concat std_include "jessie_prolog.h"
-
-let treat_jessie_prolog () =
-  Kernel.CppExtraArgs.add ("-include " ^ prolog_h_name)
-
-let treat_jessie_std_headers () =
-  Kernel.CppExtraArgs.add ("-I " ^ std_include)
-*)
-
 let treat_integer_model () =
   if !Interp.int_model = Interp.IMexact then
     Kernel.CppExtraArgs.add ("-D JESSIE_EXACT_INT_MODEL")
 
 let treat_jessie_spec_prolog () =
-  if Jessie_options.Specialize.get () then
+  if Config.Specialize.get () then
     let spec_prolog_h_name = Filename.concat std_include Name.Of.File.blockfuns_include in
     Kernel.CppExtraArgs.append_before ["-include " ^ spec_prolog_h_name]
 
@@ -97,7 +87,7 @@ let steal_annots () =
         (stmt, ca) :: acc)
       []
   in
-  List.iter (fun (stmt,ca) -> Annotations.add_code_annot emitter stmt ca) l;
+  List.iter (fun (stmt, ca) -> Annotations.add_code_annot emitter stmt ca) l;
   steal_globals ();
   Globals.Functions.iter (Annotations.register_funspec ~emitter ~force:true)
 
@@ -116,19 +106,19 @@ let run () =
      with Not_found ->
        apply_if_dir_exist whylib (Unix.putenv "WHYLIB"));
   end;
-  Jessie_options.feedback "Starting Jessie translation";
+  Console.feedback "Starting Jessie translation";
   (* Work in our own project, initialized by a copy of the main one. *)
   let prj =
     File.create_project_from_visitor "jessie"
       (fun prj -> new Visitor.frama_c_copy prj)
   in
-  Jessie_options.debug "Project created";
+  Console.debug "Project created";
   FCProject.copy ~selection:(Parameter_state.get_selection ()) prj;
   FCProject.set_current prj;
   let file = FCAst.get () in
   try
     if file.globals = [] then
-      Jessie_options.abort "Nothing to process. There was probably an error before.";
+      Console.abort "Nothing to process. There was probably an error before.";
     (* Phase 1: various preprocessing steps before C to Jessie translation *)
 
     (* Enforce the prototype of malloc to exist before visiting anything.
@@ -136,19 +126,19 @@ let run () =
      *)
     ignore (Ast.Vi.Function.malloc ());
     ignore (Ast.Vi.Function.free ());
-    Jessie_options.debug  "After malloc and free";
+    Console.debug  "After malloc and free";
     Debug.check_exp_types file;
     steal_annots ();
-    Jessie_options.debug "After steal_annots";
+    Console.debug "After steal_annots";
     Debug.check_exp_types file;
     (* Extract relevant globals *)
-    if Jessie_options.Extract.get () then begin
-      Jessie_options.debug "Extract relevant globals";
+    if Config.Extract.get () then begin
+      Console.debug "Extract relevant globals";
       Extractor.extract file;
       Debug.check_exp_types file
     end;
     (* Rewrite ranges in logic annotations by comprehesion *)
-    Jessie_options.debug "from range to comprehension";
+    Console.debug "from range to comprehension";
     Rewrite.from_range_to_comprehension
       (Cil.inplace_visit ()) file;
     Debug.check_exp_types file;
@@ -176,20 +166,20 @@ let run () =
     (* Phase 5: C to Jessie translation, should be quite straighforward at this
      * stage (after normalization)
      *)
-    Jessie_options.debug "Jessie pragmas";
+    Console.debug "Jessie pragmas";
     let pragmas = Interp.pragmas file in
-    Jessie_options.debug "Jessie translation";
+    Console.debug "Jessie translation";
     let pfile = Interp.file file in
-    Jessie_options.debug "Printing Jessie program";
+    Console.debug "Printing Jessie program";
 
     (* Phase 6: pretty-printing of Jessie program *)
 
     let sys_command cmd =
       if Sys.command cmd <> 0 then
-	(Jessie_options.error "Jessie subprocess failed: %s" cmd; raise Exit)
+	(Console.error "Jessie subprocess failed: %s" cmd; raise Exit)
     in
 
-    let projname = Jessie_options.Project_name.get () in
+    let projname = Config.Project_name.get () in
     let projname =
       if projname <> "" then projname else
 	match Kernel.Files.get() with
@@ -204,7 +194,7 @@ let run () =
     (* jessie_subdir is 'path/file.jessie' *)
     let jessie_subdir = projname ^ ".jessie" in
     Lib.mkdir_p jessie_subdir;
-    Jessie_options.feedback "Producing Jessie files in subdir %s" jessie_subdir;
+    Console.feedback "Producing Jessie files in subdir %s" jessie_subdir;
 
     (* basename is 'file' *)
     let basename = Filename.basename projname in
@@ -217,7 +207,7 @@ let run () =
 	 Format.fprintf fmt "%a" Jc_poutput.pdecls pfile)
       (Filename.concat jessie_subdir filename)
     in
-    Jessie_options.feedback "File %s/%s written." jessie_subdir filename;
+    Console.feedback "File %s/%s written." jessie_subdir filename;
 
     (* Phase 7: produce source-to-source correspondance file *)
 
@@ -226,15 +216,15 @@ let run () =
     Pp.print_in_file
       (Jc_why_output_misc.jc_print_pos Jc_why_output.fprintf_vc_kind)
       (Filename.concat jessie_subdir locname);
-    Jessie_options.feedback "File %s/%s written." jessie_subdir locname;
+    Console.feedback "File %s/%s written." jessie_subdir locname;
 
-    if not @@ Jessie_options.Gen_only.get () then
+    if not @@ Config.Gen_only.get () then
 
       (* Phase 8: call Jessie to Why translation *)
 
       let why_opt =
 	let res = ref "" in
-	Jessie_options.Why_opt.iter
+	Config.Why_opt.iter
 	  (fun s ->
 	     res := Format.sprintf "%s%s-why-opt %S"
 	       !res
@@ -244,7 +234,7 @@ let run () =
       in
       let why3_opt =
 	let res = ref "" in
-	Jessie_options.Why3_opt.iter
+	Config.Why3_opt.iter
 	  (fun s ->
 	     res := Format.sprintf "%s%s-why3-opt %S"
 	       !res
@@ -252,18 +242,18 @@ let run () =
 	       s);
 	!res
       in
-      let jc_opt = Jessie_options.Jc_opt.get_set ~sep:" " () in
-      let debug_opt = if Jessie_options.debug_atleast 1 then " -d " else " " in
+      let jc_opt = Config.Jc_opt.get_set ~sep:" " () in
+      let debug_opt = if Console.debug_at_least 1 then " -d " else " " in
       let behav_opt =
-	if Jessie_options.Behavior.get () <> "" then
-	  "-behavior " ^ Jessie_options.Behavior.get ()
+	if Config.Behavior.get () <> "" then
+	  "-behavior " ^ Config.Behavior.get ()
 	else ""
       in
       let verbose_opt =
-	if Jessie_options.verbose_atleast 1 then " -v " else " "
+	if Console.verbose_at_least 1 then " -v " else " "
       in
       let env_opt =
-	if Jessie_options.debug_atleast 1 then
+	if Console.debug_at_least 1 then
 	  "OCAMLRUNPARAM=bt"
 	else ""
       in
@@ -273,14 +263,14 @@ let run () =
           (* NdV: the test below might not be that useful, since ocaml
              has stack trace in native code since 3.10, even though -g
              is usually missing from native flags.  *)
-          if Jessie_options.debug_atleast 1 then " jessie.byte "
+          if Console.debug_at_least 1 then " jessie.byte "
           else " jessie "
       in
       let timeout =
-	if Jessie_options.Cpu_limit.get () <> 0 then
-          if Jessie_options.Atp.get () = "gui" then
+	if Config.Cpu_limit.get () <> 0 then
+          if Config.Atp.get () = "gui" then
 	    begin
-              Jessie_options.error "Jessie: option -jessie-cpu-limit requires to set also -jessie-atp";
+              Console.error "Jessie: option -jessie-cpu-limit requires to set also -jessie-atp";
               raise Exit
             end
           else
@@ -293,10 +283,10 @@ let run () =
 	| [a] -> a
 	| a :: cmd -> a ^ " " ^ make_command cmd
       in
-      Jessie_options.feedback "Calling Jessie tool in subdir %s" jessie_subdir;
+      Console.feedback "Calling Jessie tool in subdir %s" jessie_subdir;
       Sys.chdir jessie_subdir;
 
-      let atp = Jessie_options.Atp.get () in
+      let atp = Config.Atp.get () in
       let jessie_opt =
 	match atp with
 	  | "why3" -> ""
@@ -320,7 +310,7 @@ let run () =
 	 either graphic or script-based
       *)
 
-      Jessie_options.feedback "Calling VCs generator.";
+      Console.feedback "Calling VCs generator.";
       sys_command (timeout ^ "make -f " ^ makefile ^ " " ^ atp);
       flush_all ()
 
@@ -334,13 +324,12 @@ let run_and_catch_error () =
   try run ()
   with
   | Unsupported _ ->
-    Jessie_options.error "Unsupported feature(s).@\n\
-                          Jessie plugin can not be used on your code."
-  | Log.FeatureRequest (_,s) ->
-    Jessie_options.error "Unimplemented feature: %s." s
+    Console.error "Unsupported feature(s).@\n\
+                   Jessie plugin can not be used on your code."
+  | Log.FeatureRequest (_, s) ->
+    Console.error "Unimplemented feature: %s." s
     | SizeOfError (s, _) when Str.(string_match (regexp "abstract type '\\(.*\\)'") s 0) ->
-      Jessie_options.error
-        ~current:true
+      Console.error
         "Can't compute the size of an undeclared composite type '%s'"
         (Str.matched_group 1 s)
 
@@ -352,7 +341,7 @@ let run_and_catch_error =
     ~journalize:true
     run_and_catch_error
 
-let main () = if Jessie_options.Analysis.get () then run_and_catch_error ()
+let main () = if Config.Analysis.get () then run_and_catch_error ()
 let () = Db.Main.extend main
 
 (*

@@ -17,11 +17,15 @@ module Console :
 sig
   val fatal : ('a, formatter, unit, 'b) format4 -> 'a
   val error : ('a, formatter, unit) format -> 'a
+  val abort : ('a, formatter, unit, 'b) format4 -> 'a
   val unsupported : ('a, formatter, unit, 'b) format4 -> 'a
+  val feedback : ('a, formatter, unit) format -> 'a
   val warning : ('a, formatter, unit) format -> 'a
   val general_warning : ('a, formatter, unit) format -> 'a
   val warn_once : string -> unit
   val debug : ('a, formatter, unit) format -> 'a
+  val debug_at_least : int -> bool
+  val verbose_at_least : int -> bool
 end
 
 module List :
@@ -395,7 +399,7 @@ sig
       end
 
       val size : compinfo -> int option
-      val padding_field : ?fsize_in_bits:int -> compinfo -> fieldinfo
+      val padding_field : fsize_in_bits:int -> compinfo -> fieldinfo
       val fix_size : ?original_size:int -> compinfo -> unit
       val proper_fields : compinfo -> fieldinfo list
     end
@@ -450,6 +454,7 @@ end
 module Do :
 sig
   val retaining_size_of_composite : compinfo -> (compinfo -> 'a) -> 'a
+  val retaining_size_of_field : fieldinfo -> (fieldinfo -> 'a) -> 'a
 
   type 'a attach = 'a
     constraint 'a =

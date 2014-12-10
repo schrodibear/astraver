@@ -89,10 +89,12 @@ let () =
        end);
   State_dependency_graph.add_dependencies
     ~from:Force_ad_hoc_normalization.self
-    [ Kernel.SimplifyCfg.self;
+    [
+      Kernel.SimplifyCfg.self;
       Kernel.KeepSwitch.self;
       Kernel.Constfold.self;
-      Kernel.PreprocessAnnot.self ]
+      Kernel.PreprocessAnnot.self
+    ]
 
 let () =
   Analysis.add_set_hook (fun _ b -> Force_ad_hoc_normalization.set b);
