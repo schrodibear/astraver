@@ -438,11 +438,9 @@ object
     | GCompTag (ci, _) | GCompTagDecl (ci, _) when Set.mem comps ci ->
       Do.retaining_size_of_composite ci @@ fun ci ->
       ci.cfields <-
-        ListLabels.mapi ci.cfields
-          ~f:(fun i fi ->
+        ListLabels.map ci.cfields
+          ~f:(fun fi ->
             if fi.faddrof || Set.mem fields fi then begin
-              if i == 0 && isStructOrUnionType fi.ftype then
-                fi.fattr <- addAttribute (Attr (Name.Of.Attr.noembed, [])) fi.fattr;
               fi.fsize_in_bits <- None;
               fi.foffset_in_bits <- None;
               fi.fpadding_in_bits <- None;
