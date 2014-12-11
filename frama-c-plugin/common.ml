@@ -59,7 +59,7 @@ struct
   open Jessie_options
 
   let fatal fmt = fatal ~current:true fmt
-  let abort fmt = abort fmt
+  let abort ?source fmt = abort ?source fmt
   let error fmt = error ~current:true fmt
   let unsupported fmt =
     Jessie_options.with_failure

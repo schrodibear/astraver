@@ -744,7 +744,7 @@ object
       | Tlambda _ | TDataCons _ | Tbase_addr _ | TBinOp _ | TUnOp _
       | Tblock_length _ | TCoerce _ | TCoerceE _ | TUpdate _
       | Ttypeof _ | Ttype _ | Tlet _ | Toffset _ | Toffset_max _ | Toffset_min _ ->
-        Console.fatal "unexpected term in assigns clause: %a" Printer.pp_term t
+        Console.abort ~source:(fst t.term_loc) "unexpected term in assigns clause: %a" Printer.pp_term t
     in
     let zone idts =
       List.map Logic_const.new_identified_term (term idts.it_content)

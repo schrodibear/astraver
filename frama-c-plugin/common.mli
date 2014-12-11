@@ -17,7 +17,7 @@ module Console :
 sig
   val fatal : ('a, formatter, unit, 'b) format4 -> 'a
   val error : ('a, formatter, unit) format -> 'a
-  val abort : ('a, formatter, unit, 'b) format4 -> 'a
+  val abort : ?source:Lexing.position -> ('a, formatter, unit, 'b) format4 -> 'a
   val unsupported : ('a, formatter, unit, 'b) format4 -> 'a
   val feedback : ('a, formatter, unit) format -> 'a
   val warning : ('a, formatter, unit) format -> 'a
