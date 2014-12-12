@@ -3183,7 +3183,7 @@ let tr_allocates ~internal ~type_safe ?region_list ef =
       fun pcr ->
       let args =
         let tt = tag_table_name pcr in
-        [LDerefAtLabel (tt, ""); LDeref tt]
+        [LDerefAtLabel (tt, internal |? ""); LDeref tt]
       in
       LPred ("tag_extends", args)
     in
@@ -3538,9 +3538,8 @@ let tr_fun f funpos spec body acc =
         fun_parameters ~type_safe:false fparams
           internal_write_params internal_read_params
       in
-      let wrap_body f spec bname =
-        (* rename formals after parameters are computed and before body
-               is treated *)
+      let wrap_body f spec bname body =
+        (* rename formals after parameters are computed and before body is treated *)
         let list_of_refs =
           List.fold_right
             (fun id ->
@@ -3553,11 +3552,12 @@ let tr_fun f funpos spec body acc =
             fparams
             []
         in
-        function_body f spec bname %>
+        body |>
+        function_body f spec bname |>
         Fn.on
           (!Jc_options.inv_sem = InvOwnership)
           (fun e -> append (assume_all_invariants fparams) e)
-        %>
+        |>
         (let assert_internal_allocates =
           Fn.on'
             (bname = "default") @@
@@ -3591,14 +3591,14 @@ let tr_fun f funpos spec body acc =
                       Try (append body (mk_expr Absurd),
                            jessie_return_exception, None,
                            assert_internal_allocates @@ mk_expr @@ Deref jessie_return_variable)))
-        %>
-        define_locals %>
-        make_label "init" %>
+        |>
+        define_locals |>
+        make_label "init" |>
         List.fold_right
           (fun (mut_id, id) e' ->
              mk_expr (Let_ref (mut_id, plain_var id, e')))
           list_of_refs
-        %>
+        |>
         (* FS#393: restore parameter real names *)
         Fn.tap
           (Fn.const @@
