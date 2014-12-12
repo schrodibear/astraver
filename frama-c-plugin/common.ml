@@ -174,7 +174,7 @@ struct
     let is_alphanum c =
       String.contains "abcdefghijklmnopqrstuvwxyz" c
       || String.contains "ABCDEFGHIJKLMNOPQRSTUVWXYZ" c
-      || String.contains "123456789" c
+      || String.contains "0123456789" c
       || c = '_'
     in
     let alphanum_or_default c =

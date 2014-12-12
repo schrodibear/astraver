@@ -198,7 +198,7 @@ let run () =
 
     (* basename is 'file' *)
     let basename =
-      String.filter_alphanumeric ~assoc:[' ', '-'; '(', '-'; ')', '-'] ~default:'_' @@
+      String.filter_alphanumeric ~assoc:['-', '-'; ' ', '-'; '(', '-'; ')', '-'] ~default:'_' @@
         Filename.basename projname
     in
 
