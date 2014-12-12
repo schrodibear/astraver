@@ -45,6 +45,7 @@ val make_located : Loc.floc -> ?behavior:string -> ?kind:vc_kind -> term -> term
 val make_positioned_lex : Loc.position -> ?behavior:string -> ?kind:vc_kind -> term -> term
 
 (* Assertions *)
+val unlabel : assertion -> assertion
 val make_or : assertion -> assertion -> assertion
 val make_and : assertion -> assertion -> assertion
 val make_or_list : assertion list -> assertion

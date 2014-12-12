@@ -1241,7 +1241,7 @@ let single_assertion ef a =
         | JCTtypeof (t, st) -> add_tag_effect lab ef (struct_root st, t#region)
         | JCTtag _ | JCTbottom -> ef
       in
-      true, fold_left_pair add_tag_effect ef (tag1, tag2)
+      true, Pair.fold_left ~f:add_tag_effect ~init:ef (tag1, tag2)
     | JCAtrue | JCAfalse | JCAif _ | JCAbool_term _ | JCAnot _
     | JCAold _ | JCAat _ | JCAquantifier _ | JCArelation _
     | JCAand _ | JCAor _ | JCAiff _ | JCAimplies _
@@ -1264,125 +1264,83 @@ let single_assertion fef a =
   let cont,ef = single_assertion fef.fe_reads a in
   cont,{ fef with fe_reads = ef }
 
-type assign_alloc_clause = Assigns | Allocates | Reads
+let (|.>) ~lab fef =
+  function
+  | `App (f, xc, r) -> f lab fef (xc, r)
+  | `Nop -> fef
 
-let rec single_location ~in_clause fef
-    (loc : Jc_fenv.logic_info Jc_ast.location) =
+let rec single_location ~in_clause fef loc =
   let lab =
-    match loc#label with None -> LabelHere | Some lab -> lab
+    match loc#label with
+    | None -> LabelHere
+    | Some lab -> lab
   in
-  let fef = match loc#node with
-    | JCLvar v ->
-        let fef =
-          if v.vi_assigned then
-            if v.vi_static then
-              begin
-                match in_clause with
-                  | Assigns -> add_global_writes lab fef v
-                  | Allocates ->
-                      let ac = lderef_alloc_class ~type_safe:true loc in
-                      add_alloc_writes lab fef (ac,loc#region)
-                  | Reads -> add_global_reads lab fef v
-              end
-            else fef
-          else fef
-        in
-        fef
-
-    | JCLderef(locs,lab,fi,_r) ->
-        let add_mem ~only_writes fef mc =
-          match in_clause with
-            | Assigns ->
-              let fef = add_memory_writes lab fef (mc,locs#region) in
-              if only_writes then fef else
-              (* Add effect on allocation table for [not_assigns] predicate *)
-                let ac = alloc_class_of_mem_class mc in
-                add_alloc_reads lab fef (ac,locs#region)
-            | Allocates ->
-                (* wrong !
-                  let fef =
-                  if only_writes then fef else
-                    let ac = alloc_class_of_mem_class mc in
-                    add_alloc_writes lab fef (ac,locs#region)
-                in
-                *)
-                fef
-            | Reads ->
-                if only_writes then fef else
-                  add_memory_reads lab fef (mc,locs#region)
-        in
-        let mc,ufi_opt = lderef_mem_class ~type_safe:true locs fi in
-        let fef = add_mem ~only_writes:false fef mc in
-        let fef =
-          begin match mc,ufi_opt with
-            | JCmem_field _fi, Some ufi ->
-                let mems = overlapping_union_memories ufi in
-                List.fold_left (add_mem ~only_writes:true) fef mems
-            | JCmem_field _, None
-            | JCmem_plain_union _, _
-            | JCmem_bitvector, _ -> fef
-          end
-        in
-        fef
-    | JCLderef_term(t1,fi) ->
-        let add_mem ~only_writes fef mc =
-          match in_clause with
-            | Assigns ->
-              let fef = add_memory_writes lab fef (mc,t1#region) in
-              if only_writes then fef else
-              (* Add effect on allocation table for [not_assigns] predicate *)
-                let ac = alloc_class_of_mem_class mc in
-                add_alloc_reads lab fef (ac,t1#region)
-            | Allocates ->
-(* wrong !
-              if only_writes then fef else
-                let ac = alloc_class_of_mem_class mc in
-                add_alloc_writes lab fef (ac,t1#region)
-*)
-                fef
-            | Reads ->
-                if only_writes then fef else
-                  add_memory_reads lab fef (mc,t1#region)
-        in
-        let mc,ufi_opt = tderef_mem_class ~type_safe:true t1 fi in
-        let fef = add_mem ~only_writes:false fef mc in
-        begin match mc,ufi_opt with
-          | JCmem_field _fi, Some ufi ->
-              let mems = overlapping_union_memories ufi in
-              List.fold_left (add_mem ~only_writes:true) fef mems
-          | JCmem_field _, None
-          | JCmem_plain_union _, _
-          | JCmem_bitvector, _ -> fef
-        end
-    | JCLat(loc,lab) ->
-      assert (loc#label = Some lab);
-      snd (single_location ~in_clause fef loc)
-  in true, fef
-
-let rec single_location_set fef locs =
-  let lab =
-    match locs#label with None -> LabelHere | Some lab -> lab
+  let add_deref x ?(lab = x#label |? lab) ?(r=x#region) get_mem_class fi =
+    let add_by_mc ~only_mem fef mc =
+      let (|.>) fef = (|.>) ~lab fef in
+      match in_clause with
+      | `Assigns ->
+        fef |.>
+        `App (add_memory_writes, mc, r) |.>
+        (* Add effect on allocation table for [not_assigns] predicate *)
+        if not only_mem then
+          let ac = alloc_class_of_mem_class mc in
+          `App (add_alloc_reads, ac, x#region)
+      else
+        `Nop
+      | `Allocates when not only_mem ->
+        let ac = alloc_class_of_mem_class mc in
+        add_alloc_writes lab fef (ac, x#region)
+      | `Allocates -> fef
+      | `Reads ->
+        add_memory_reads lab fef (mc, r)
+    in
+    let mc, ufi_opt = get_mem_class ~type_safe:true x fi in
+    add_by_mc ~only_mem:false fef mc |>
+    match mc, ufi_opt with
+    | JCmem_field _, Some ufi ->
+      fun fef -> List.fold_left (add_by_mc ~only_mem:true) fef (overlapping_union_memories ufi)
+    | JCmem_field _, None
+    | JCmem_plain_union _, _
+    | JCmem_bitvector, _ -> Fn.id
   in
-  let fef = match locs#node with
-    | JCLSvar v ->
-        if v.vi_assigned then
-          if v.vi_static then
-            add_global_reads lab fef v
-          else fef
-        else fef
-    | JCLSderef(locs,lab,fi,_r) ->
-        let mc,_ufi_opt = lderef_mem_class ~type_safe:true locs fi in
-        add_memory_reads lab fef (mc,locs#region)
-    | JCLSrange(_,_,_)
-    | JCLSrange_term(_,_,_) ->
-        fef
-    | JCLSat(locs,_) -> snd (single_location_set fef locs)
-  in true, fef
+  true,
+  match loc#node with
+  | JCLvar v ->
+    begin match in_clause with
+    | `Assigns when v.vi_assigned && v.vi_static -> add_global_writes lab fef v
+    | `Assigns -> fef
+    | `Allocates ->
+      let ac = lderef_alloc_class ~type_safe:true loc in
+      add_alloc_writes lab fef (ac, loc#region)
+    | `Reads -> add_global_reads lab fef v
+    end
+  | JCLderef (locs, lab, fi, r) -> add_deref locs ~lab ~r lderef_mem_class fi
+  | JCLderef_term (t, fi) -> add_deref t tderef_mem_class fi
+  | JCLat (loc, lab) ->
+    loc#set_label @@ Some (loc#label |? lab);
+    snd @@ single_location ~in_clause fef loc
+
+let rec single_location_set ~in_clause fef locs =
+  let single_location = single_location ~in_clause fef % location_with_node locs in
+  let single_location_set = single_location_set ~in_clause fef in
+  match locs#node with
+  | JCLSvar v ->
+    single_location (JCLvar v)
+  | JCLSderef (locs, lab, fi, r) ->
+    single_location (JCLderef (locs, lab, fi, r))
+  | JCLSrange (ls, _, _) ->
+    single_location_set ls
+  | JCLSrange_term (t, _, _) ->
+    single_term fef t
+  | JCLSat (locs, lab) ->
+    locs#set_label @@ Some (locs#label |? lab);
+    single_location_set locs
 
 let location ~in_clause fef loc =
   let fef =
     Jc_iterators.fold_rec_location single_term
-      (single_location ~in_clause) single_location_set fef loc
+      (single_location ~in_clause) (single_location_set ~in_clause) fef loc
   in
   fef
 
@@ -1394,7 +1352,8 @@ let location ~in_clause fef loc =
 let rec expr fef e =
   Jc_iterators.fold_rec_expr_and_term_and_assertion
     single_term single_assertion
-    (single_location ~in_clause:Assigns) single_location_set
+    (single_location ~in_clause:`Assigns)
+    (single_location_set ~in_clause:`Assigns)
     (fun (fef : fun_effect) e -> match e#node with
        | JCEvar v ->
            true,
@@ -1599,7 +1558,7 @@ let rec expr fef e =
              | JCTpointer (JCtag (st, _), _, _) -> st
              | _ -> error "for a root pointer or a non-pointer"
            in
-           map_pair (check_singleton "several fields") (st1.si_fields, st.si_fields)
+           Pair.map ~f:(check_singleton "several fields") (st1.si_fields, st.si_fields)
          in
          if not (is_integral_type fi1.fi_type && is_integral_type fi2.fi_type) then error "for non-integral field";
          let (|.>) fef (f, xc) = f LabelHere fef (xc, e#region) in
@@ -1608,7 +1567,7 @@ let rec expr fef e =
          (add_tag_writes, ri) |.>
          (add_memory_reads, JCmem_field fi1) |.>
          (add_memory_writes, JCmem_field fi2) |>
-         fdup2 (const true) id
+         fdup2 (Fn.const true) Fn.id
        | JCEpack(st,e,_st) ->
            (* Assert the invariants of the structure
               => need the reads of the invariants *)
@@ -1705,11 +1664,13 @@ let behavior fef (_pos,_id,b) =
   in
   let itl =
     Jc_iterators.fold_rec_location single_term
-      (single_location ~in_clause:Assigns) single_location_set
+      (single_location ~in_clause:`Assigns)
+      (single_location_set ~in_clause:`Assigns)
   in
   let itl_alloc =
     Jc_iterators.fold_rec_location single_term
-      (single_location ~in_clause:Allocates) single_location_set
+      (single_location ~in_clause:`Allocates)
+      (single_location_set ~in_clause:`Allocates)
   in
   let fef = Option_misc.fold_left ita fef b.b_assumes in
   let fef =
@@ -1873,7 +1834,7 @@ let logic_fun_effects f =
     | JCReads loclist ->
       List.fold_left
         (fun ef loc ->
-           ef_union ef (location ~in_clause:Reads empty_fun_effect loc).fe_reads)
+           ef_union ef (location ~in_clause:`Reads empty_fun_effect loc).fe_reads)
         ef
         loclist
   in
@@ -1998,7 +1959,7 @@ let restrict_poly_mems_in_assertion mm =
         MemoryMap.(
           f.li_effects.e_memories
         |> filter (fun (_, r as key) _ -> not (List.exists (Region.equal r) poly_regs) || mem key mm)
-        |> merge (curry @@ fst) mm)
+        |> merge (Fn.curry @@ fst) mm)
       in
       { f with li_effects = { f.li_effects with e_memories = mems }}
    in

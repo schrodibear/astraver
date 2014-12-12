@@ -29,78 +29,173 @@
 (*                                                                        *)
 (**************************************************************************)
 
-let (%) f g x = f (g x)
+module Fn =
+struct
+  type ('a, 'b) t = 'a -> 'b
+
+  external id : 'a -> 'a = "%identity"
+  let compose f g x = f (g x)
+  let const r _ = r
+  let tap f x = f x; x
+  let on cond f x =
+    if cond then f x
+    else x
+  let on' cond f x =
+    if cond then f () x
+    else x
+  let pipe_compose f g x = g (f x)
+  let uncurry f (a, b) = f a b
+  let curry f a b = f (a, b)
+  let flip f a b = f b a
+end
+
+let (%) = Fn.compose
+
+let (%>) = Fn.pipe_compose
 
 let (%%) f g h x y = f (g x) (h y)
 
-let (%>) f g x = g (f x)
+module Tuple =
+struct
+  module T2 =
+  struct
+    type ('a, 'b) t = 'a * 'b
 
-let const r _ = r
-
-let id x = x
-
-let dup2 a = a, a
-
-let fdup2 f g x = f x, g x
-
-let map_fst f (a, b) = f a, b
-
-let map_snd f (a, b) = a, f b
-
-let map_pair f (a, b) = f a, f b
-
-let map_pair2 f g (a, b) = f a, g b
-
-let fold_left_pair f init (a, b) = f (f init a) b
-
-let fold_right_pair f (a, b) init = f a (f b init)
-
-let uncurry f (a, b) = f a b
-
-let curry f a b = f (a, b)
-
-let swap (a, b) = b, a
-
-let fdup3 f g h x = f x, g x, h x
-
-module type MONAD_DEF = sig
-  type 'a m
-  val return : 'a -> 'a m
-  val bind : 'a m -> ('a -> 'b m) -> 'b m
+    let dup2 a = a, a
+    let fdup2 ~f ~g x = f x, g x
+    let map1 ~f (a, b) = f a, b
+    let map2 ~f (a, b) = a, f b
+    let map ~f (a, b) = f a, f b
+    let map_2 ~f ~g (a, b) = f a, g b
+    let fold_left ~f ~init (a, b) = f (f init a) b
+    let fold_right ~f (a, b) ~init = f a (f b init)
+    let swap (a, b) = b, a
+  end
+  module T3 =
+  struct
+    let fst (a, _, _) = a
+    let snd (_, b, _) = b
+    let trd (_, _, c) = c
+    let fdup3 ~f ~g ~h x = f x, g x, h x
+  end
 end
 
-module type MONAD = sig
-  include MONAD_DEF
-  val (>>=) : 'a m -> ('a -> 'b m) -> 'b m
-  val (>>) : 'a m -> 'b m -> 'b m
+module Pair = Tuple.T2
+
+let dup2 = Pair.dup2
+
+let fdup2 f g = Pair.fdup2 ~f ~g
+
+let map_fst f = Pair.map1 ~f
+
+let map_snd f = Pair.map2 ~f
+
+let swap = Pair.swap
+
+module Triple = Tuple.T3
+
+let fdup3 f g h = Triple.fdup3 ~f ~g ~h
+
+module Monad_def =
+struct
+  module type S =
+  sig
+    type 'a m
+    val return : 'a -> 'a m
+    val bind : 'a m -> ('a -> 'b m) -> 'b m
+  end
 end
 
-module Monad (M : MONAD_DEF) = struct
-  include M
-  let (>>=) = M.bind
-  let (>>) m1 m2 = M.bind m1 (fun _ -> m2)
+module Monad =
+struct
+  module type S =
+    sig
+      include Monad_def.S
+      val (>>=) : 'a m -> ('a -> 'b m) -> 'b m
+      val (>>) : 'a m -> 'b m -> 'b m
+    end
+
+  module Make (M : Monad_def.S) : S =
+  struct
+    include M
+    let (>>=) = M.bind
+    let (>>) m1 m2 = M.bind m1 (fun _ -> m2)
+  end
+
+  module Make_subst (M : Monad_def.S) : S with type 'a m := 'a M.m =
+  struct
+    include M
+    let (>>=) = M.bind
+    let (>>) m1 m2 = M.bind m1 (fun _ -> m2)
+  end
 end
 
-module Option_monad = struct
-  include Monad
-    (struct
-      type 'a m = 'a option
-      let bind m f =
-        match m with
-        | Some v -> f v
-        | None -> None
-      let return v = Some v
-    end)
+module Option =
+struct
+  let value ~default =
+    function
+    | Some x -> x
+    | None -> default
+
+  let value_exn ~exn =
+    function
+    | Some x -> x
+    | None -> raise exn
+
+  let value_fatal ~in_ =
+    function
+    | Some x -> x
+    | None -> failwith ("Tried to get some value from None in " ^ in_)
+
+  let compare ~cmp a b =
+    match a, b with
+    | Some a, Some b -> cmp a b
+    | None, Some _ -> -1
+    | Some _, None -> 1
+    | None, None -> 0
+
+  include
+    (Monad.Make_subst
+       (struct
+         type 'a m = 'a option
+         let bind m f =
+           match m with
+           | Some v -> f v
+           | None -> None
+         let return v = Some v
+       end))
 
   let abort = None
+  let map ~f =
+    function
+    | None -> None
+    | Some x -> Some (f x)
 
-  let default v m =
-    match m with
-    | Some v -> v
-    | None -> v
+  let map_default ~default ~f =
+    function
+    | None -> default
+    | Some x -> f x
+
+  let fold ~init ~f =
+    function
+    | Some x -> f init x
+    | None -> init
+
+  let iter ~f =
+    function
+    | None -> ()
+    | Some x -> f x
+
+  let is_some =
+    function
+    | Some _ -> true
+    | None -> false
 end
 
-module List = struct
+let (|?) xo default = Option.value ~default xo
+
+module List =
+struct
   include List
 
   let cons e l = e :: l
@@ -176,7 +271,8 @@ module List = struct
 
 end
 
-module Set = struct
+module Set =
+struct
 
   module type OrderedType = Set.OrderedType
 
@@ -198,7 +294,8 @@ module Set = struct
   end
 end
 
-module Map = struct
+module Map =
+struct
 
   module type OrderedType = Map.OrderedType
 
@@ -299,7 +396,8 @@ end
 
 module StdHashtbl = Hashtbl
 
-module Hashtbl = struct
+module Hashtbl =
+struct
 
   module type HashedType = Hashtbl.HashedType
 

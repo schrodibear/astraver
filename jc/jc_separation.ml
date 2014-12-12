@@ -158,7 +158,7 @@ let location comp result_region =
 
 let single_expr code_comp logic_comp result_region e =
   match e#node with
-  | JCEbinary(e1,_,e2) | JCEif(_,e1,e2) ->
+  | JCEbinary (e1, _, e2) | JCEif (_, e1, e2) ->
     Region.unify e1#region e2#region
   | JCEmatch(_, (_, e1) :: rem) ->
     List.iter (fun (_, e2) -> Region.unify e1#region e2#region) rem

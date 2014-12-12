@@ -85,11 +85,11 @@ let () =
       "if"; "in"; "int"; "invariant"; "label"; "let"; "logic"; "not";
       "of"; "or"; "parameter"; "predicate"; "prop"; "raise"; "raises";
       "reads"; "real"; "rec"; "ref"; "result"; "returns"; "then"; "true"; "try";
-      "type"; "unit"; "variant"; "void"; "while"; "with"; "writes"; "init";
+      "type"; "unit"; "variant"; "void"; "while"; "with"; "writes";
       (* Why prelude *)
       "exp" ; "log" ; "sin" ; "cos" ; "tan" ; "sqr_real" ; "atan" ;
       (* jessie generated names *)
-      "shift"
+      "shift"; "init"; "start"; "valid"
       (* "global" ; "alloc"  *)
     ]
 

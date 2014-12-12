@@ -610,7 +610,7 @@ let rec pset_union_of_list =
 
 let separation_condition loclist1 loclist2 =
   let floc = location ~type_safe:false ~global_assertion:false LabelHere in
-  let pset1, pset2 = map_pair (pset_union_of_list % List.map floc) (loclist1, loclist2) in
+  let pset1, pset2 = Pair.map (pset_union_of_list % List.map floc) (loclist1, loclist2) in
   LPred ("pset_disjoint", [pset1; pset2])
 
 type memory_effect = RawMemory of Memory.t | PreciseMemory of Location.t
@@ -917,9 +917,9 @@ let map_embedded_fields ~f ~p ac =
 
 let make_valid_pred_app ~in_param ~equal (ac, r) pc p ao bo =
   let params =
-       allocs ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r
-    |> Option_misc.fold List.cons bo
-    |> Option_misc.fold List.cons ao
+    allocs ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r |>
+    Option_misc.fold List.cons bo |>
+    Option_misc.fold List.cons ao
   in
   LPred (valid_pred_name ~equal ~left:(ao <> None) ~right:(bo <> None) ac pc, p :: params)
 
@@ -942,9 +942,9 @@ let make_valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
     let a = a, why_integer_type in
     let b = b, why_integer_type in
     p :: (
-         allocs ac pc In_pred @ mems ac pc In_pred
-      |> (if right then List.cons b else id)
-      |> if left then List.cons a else id)
+      allocs ac pc In_pred @ mems ac pc In_pred |>
+      Fn.on right (List.cons b) |>
+      Fn.on left (List.cons a))
   in
   let validity =
     let omin, omax, super_valid =
@@ -1085,11 +1085,11 @@ let make_instanceof_pred ~exact
                   make_instanceof_pred_app ~exact ~arg:Singleton ~in_param:false acr pc p
                 in
                 instanceof p ::
-                  (  List.(range ~-1 `Downto (int_of_num l) @ range 1 `To (int_of_num r))
-                  |> List.map @@ fun i -> instanceof @@ LApp ("shift", [p; const_of_int i]))
+                  (List.(range ~-1 `Downto (int_of_num l) @ range 1 `To (int_of_num r)) |>
+                   List.map @@ fun i -> instanceof @@ LApp ("shift", [p; const_of_int i]))
               else
                 let r = r +/ Int 1 in
-                let l, r = map_pair const_of_num (l, r) in
+                let l, r = Pair.map const_of_num (l, r) in
                 [make_instanceof_pred_app ~exact ~arg:Range_l_r ~in_param:false acr pc p l r])
   in
   match arg with
@@ -1199,8 +1199,9 @@ let make_frame_pred ~for_ ac pc =
                 (pset_singleton p)
                 ps]
         | _ -> assert false (* group_consecutive doesn't return [[]], it instead returns just [] *)))
-    |> List.flatten
-    |> make_and_list
+    |>
+    List.flatten |>
+    make_and_list
   in
   Predicate (false, id_no_loc (frame_pred_name ~for_ ac pc), params, frame)
 
@@ -1270,7 +1271,7 @@ let make_alloc_param (type t1) (type t2) :
         (* [valid_st(result, 0, n-1, alloc ...)] *)
         let rbound, size =
           match arg with
-          | Singleton -> map_pair const_of_int (0, 1)
+          | Singleton -> Pair.map const_of_int (0, 1)
           | Range_0_n -> LApp ("sub_int", [LVar (get_n n); const_of_int 1]), LVar (get_n n)
         in
         [make_valid_pred_app ~in_param:true ~equal:true (ac, dummy_region) pc lresult
@@ -2517,10 +2518,10 @@ let collect_li_reads acc li =
       (get_map li.li_effects)
       acc
   in
-     acc
-  |> add MemoryMap.fold memory_name      (fun e -> e.e_memories)
-  |> add AllocMap.fold  alloc_table_name (fun e -> e.e_alloc_tables)
-  |> add TagMap.fold    tag_table_name   (fun e -> e.e_tag_tables)
+  acc |>
+  add MemoryMap.fold memory_name      (fun e -> e.e_memories) |>
+  add AllocMap.fold  alloc_table_name (fun e -> e.e_alloc_tables) |>
+  add TagMap.fold    tag_table_name   (fun e -> e.e_tag_tables)
 
 
 (* fold all effects into a list *)

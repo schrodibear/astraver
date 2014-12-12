@@ -355,29 +355,27 @@ let equality_op_for_type =
 (*                                 Structures                                 *)
 (******************************************************************************)
 
-let tr_struct si acc =
-  acc |>
+let tr_struct si =
   List.cons
     (let tagid_type = tag_id_type (struct_root si) in
      (* declaration of the tag_id *)
      Logic (false, id_no_loc (tag_name si), [], tagid_type))
-  |>
+  %>
   List.append
     (* Declarations of field memories. *)
-    (if !Jc_options.separation_sem = SepRegions || struct_of_plain_union si
-     then []
-     else
-       List.fold_left
-         (fun acc fi ->
-            let mem = memory_type (JCmem_field fi) in
-             Param (false,
-                    id_no_loc (field_memory_name fi),
-                    Ref_type (Base_type mem))
-             :: acc)
-         []
-         si.si_fields)
-  |>
-  List.append @@
+    ([] |>
+     Fn.on
+       (!Jc_options.separation_sem = SepRegions || struct_of_plain_union si) @@
+     List.fold_right
+       (fun fi acc ->
+          let mem = memory_type (JCmem_field fi) in
+          Param (false,
+                 id_no_loc (field_memory_name fi),
+                 Ref_type (Base_type mem))
+          :: acc)
+       si.si_fields)
+  %>
+  List.append
     (if struct_of_union si
      then []
      else
@@ -409,8 +407,8 @@ let tr_struct si acc =
        :: make_alloc_param ~arg:Range_0_n ~check_size:true ac pc
        :: make_alloc_param ~arg:Range_0_n ~check_size:false ac pc
        :: (if Region.exists_bitwise () then make_conversion_params pc else []))
-  |>
-  List.append @@
+  %>
+  List.append
     (if not si.si_final
      then []
      else
@@ -422,9 +420,9 @@ let tr_struct si acc =
                 LForall (p, pointer_type (JCalloc_root ri) (JCtag (si, [])), [],
                          LImpl (make_instanceof lt lp si,
                                 make_typeeq lt lp si))))])
-  |>
-  List.cons @@
-    match si.si_parent with
+  %>
+  List.cons
+    begin match si.si_parent with
     | None ->
       (* axiom for parenttag *)
       let name = si.si_name ^ "_parenttag_bottom" in
@@ -435,7 +433,7 @@ let tr_struct si acc =
       let name = si.si_name ^ "_parenttag_" ^ p.si_name in
       let p = LPred ("parenttag", [LVar (tag_name si); LVar (tag_name p)]) in
       Goal (KAxiom, id_no_loc name, p)
-
+    end
 
 (******************************************************************************)
 (*                                 Coercions                                  *)
@@ -858,9 +856,9 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
     | JCTapp app ->
       let f = app.app_fun in
       let args =
-           List.fold_right (fun arg acc -> ft arg :: acc) app.app_args []
-        |> List.map2 (fun e e' -> e, e') app.app_args
-        |> List.map2 (fun v (t, t') -> term_coerce t#pos v.vi_type t#typ t t') f.li_parameters
+        List.fold_right (fun arg acc -> ft arg :: acc) app.app_args [] |>
+        List.map2 (fun e e' -> e, e') app.app_args |>
+        List.map2 (fun v (t, t') -> term_coerce t#pos v.vi_type t#typ t t') f.li_parameters
       in
       let relab (lab1, lab2) = (lab1, if lab2 = LabelHere then lab else lab2) in
       let label_assoc =
@@ -938,7 +936,7 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
     | JCArelation (t1, ((`Beq | `Bneq as op), _), t2)
       when is_base_block t1 && is_base_block t2 ->
       let base_block t = match t#node with JCTbase_block t -> t | _ -> assert false in
-      let t1, t2 = map_pair base_block (t1, t2) in
+      let t1, t2 = Pair.map base_block (t1, t2) in
       let p = LPred ("same_block", [ft t1; ft t2]) in
       begin match op with
       | `Beq -> p
@@ -954,9 +952,9 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
     | JCAapp app ->
       let f = app.app_fun in
       let args =
-           List.fold_right (fun arg -> List.cons (ft arg)) app.app_args []
-        |> List.map2 (fun e e' -> (e, e')) app.app_args
-        |> List.map2 (fun v (t,t') -> term_coerce t#pos v.vi_type t#typ t t') f.li_parameters
+        List.fold_right (fun arg -> List.cons (ft arg)) app.app_args [] |>
+        List.map2 (fun e e' -> (e, e')) app.app_args |>
+        List.map2 (fun v (t,t') -> term_coerce t#pos v.vi_type t#typ t t') f.li_parameters
       in
       let label_assoc =
         if relocate
@@ -972,9 +970,9 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
         ~label_assoc
         f args
       |>
-      if IntHashtblIter.mem Jc_typing.global_invariants_table app.app_fun.li_tag then
+      Fn.on
+        (IntHashtblIter.mem Jc_typing.global_invariants_table app.app_fun.li_tag) @@
         mk_positioned_lex ~e:a ?behavior:None ~kind:(JCVCglobal_invariant app.app_fun.li_name)
-      else id
     | JCAquantifier (Forall, v, trigs, a1) ->
       LForall (v.vi_final_name,
                tr_var_base_type v,
@@ -1110,7 +1108,7 @@ let rec pset ~type_safe ~global_assertion before loc =
            term_coerce b#pos integer_type b#typ b @@ ft b])
   | JCLSat (locs, _) -> fpset locs
 
-let rec collect_locations ~type_safe ~global_assertion ~in_clause before (refs, mems) loc =
+let rec collect_locations ~type_safe ~global_assertion ~in_clause before loc (refs, mems) =
   let ft = term ~type_safe ~global_assertion ~relocate:false before before in
   let ef = Jc_effect.location ~in_clause empty_fun_effect loc in
   match loc#node with
@@ -1127,7 +1125,7 @@ let rec collect_locations ~type_safe ~global_assertion ~in_clause before (refs, 
     let var = vi.vi_final_name in
     StringMap.add var true refs, mems
   | JCLat (loc, _lab) ->
-    collect_locations ~type_safe ~global_assertion ~in_clause before (refs, mems) loc
+    collect_locations ~type_safe ~global_assertion ~in_clause before loc (refs, mems)
 
 let rec collect_pset_locations ~type_safe ~global_assertion lab loc =
   let ft = term ~type_safe ~global_assertion ~relocate:false in
@@ -1148,7 +1146,7 @@ let rec collect_pset_locations ~type_safe ~global_assertion lab loc =
   | JCLat (loc, lab) ->
     collect_pset_locations ~type_safe ~global_assertion lab loc
 
-let writes_region ?region_list (_, r) =
+let external_region ?region_list (_, r) =
   (* More exact apprixmation (at least fixes both previously encountered bugs): *)
   (* generate not_assigns for parameters and constant (i.e. global) memories (tables). *)
   (* Also generate not_assigns always when in SepNone sparation mode. *)
@@ -1163,40 +1161,31 @@ let tr_assigns ~type_safe ?region_list before ef =
   | None -> LTrue
   | Some (pos, locs) ->
     let e = (new assertion ~pos JCAtrue :> < mark : _; pos : _ > ) in
-    let refs =
-      VarMap.fold
-        (fun v _labs m -> StringMap.add v.vi_final_name false m)
-        ef.fe_writes.e_globals
-        StringMap.empty
-    in
-    let mems =
-      MemoryMap.(
-        fold
-          (fun fir _labs acc ->
-             (* TODO: bug some assigns \nothing clauses are not translated e.g. in Purse.java *)
-             (* (perhaps when no region is used). The first test resolve the problem but may hide another bug:*)
-             (*  What must be region_list when --no-region is used? *)
-             if writes_region ?region_list fir
-             then
-               add fir [] acc
-             else (* if not counted as effect, then it's automatically immutable in the function scope *)
-               acc)
-          ef.fe_writes.e_memories
-          empty)
-    in
-    let refs, mems =
-      List.fold_left
-        (collect_locations ~type_safe ~in_clause:Assigns ~global_assertion:false before)
-        (refs, mems)
-        locs
-    in
+    (VarMap.fold
+       (fun v _labs m -> StringMap.add v.vi_final_name false m)
+       ef.fe_writes.e_globals
+       StringMap.empty,
+     MemoryMap.(
+       fold
+         (fun fir _labs ->
+            Fn.on
+              (external_region ?region_list fir)
+              (add fir []))
+         ef.fe_writes.e_memories
+         empty))
+    |>
+    List.fold_right
+      (collect_locations ~type_safe ~in_clause:`Assigns ~global_assertion:false before)
+      locs
+    |> fun (refs, mems) ->
     LTrue |>
     StringMap.fold
-      (fun v p acc ->
-         if p then acc else
+      (fun v p ->
+         Fn.on'
+           (not p) @@
+         fun () -> make_and @@
            let at = lvar ~constant:false ~label_in_name:false in
-           make_and acc @@
-             mk_positioned_lex ~e ~kind:JCVCassigns @@ LPred ("eq", [at LabelHere v; at before v]))
+           mk_positioned_lex ~e ~kind:JCVCassigns @@ LPred ("eq", [at LabelHere v; at before v]))
       refs
     |>
     MemoryMap.fold
@@ -1217,18 +1206,16 @@ let tr_assigns ~type_safe ?region_list before ef =
       mems
 
 let tr_loop_assigns ~type_safe ?region_list before ef =
-  let tr_assigns = tr_assigns ~type_safe ?region_list before ef in
-  function
-  | Some locs -> tr_assigns @@ Some (Loc.dummy_position, locs)
-  | None -> LTrue
+  Option.map_default
+    ~default:LTrue
+    ~f:(fun locs -> tr_assigns ~type_safe ?region_list before ef @@ Some (Loc.dummy_position, locs))
 
-let reads ~type_safe ~global_assertion locs (mc,r) =
-  let _refs, mems =
-    List.fold_left
-      (collect_locations ~type_safe ~global_assertion ~in_clause:Reads LabelOld)
-      (StringMap.empty, MemoryMap.empty)
-      locs
-  in
+let reads ~type_safe ~global_assertion locs (mc, r) =
+  (StringMap.empty, MemoryMap.empty) |>
+  List.fold_right
+    (collect_locations ~type_safe ~global_assertion ~in_clause:`Reads LabelOld)
+    locs
+  |> fun (_, mems) ->
   let ps, _efs = List.split @@ MemoryMap.find_or_default (mc, r) [] mems in
   pset_union_of_list ps
 
@@ -1921,7 +1908,7 @@ and make_reinterpret ~e e1 st =
   in
   let s_to, fi_to = tag_name st, get_fi st in (* dest. subtag & field_info *)
   let ac = deref_alloc_class ~type_safe:false e1 in
-  let mc_from, mc_to = map_pair (fst % deref_mem_class ~type_safe:false e1) (fi_from, fi_to) in
+  let mc_from, mc_to = Pair.map (fst % deref_mem_class ~type_safe:false e1) (fi_from, fi_to) in
   let before = fresh_reinterpret_label () in
 
   (* call to [safe]_reinterpret_parameter *)
@@ -1947,11 +1934,11 @@ and make_reinterpret ~e e1 st =
      merging (e.g. char -> int) / splitting (e.g. int -> char) / plain (e.g. int -> long) *)
   let op =
     let from_bitsize, to_bitsize =
-      map_pair
-        (function
+      Pair.map
+        (fi_from, fi_to)
+        ~f:(function
          | { fi_bitsize = Some s } -> s
          | _ -> unsupported e1#pos "reinterpretation for field with no bitsize specified")
-        (fi_from, fi_to)
     in
     match compare from_bitsize to_bitsize with
     | 0 -> `Retain
@@ -1979,7 +1966,7 @@ and make_reinterpret ~e e1 st =
   in
 
   let mem =
-    let old_mem, new_mem = map_pair (fun mc -> memory_name (mc, e1#region)) (mc_from, mc_to) in
+    let old_mem, new_mem = Pair.map (fun mc -> memory_name (mc, e1#region)) (mc_from, mc_to) in
     function
     | `Old -> at before old_mem
     | `New -> at LabelHere new_mem
@@ -1995,7 +1982,7 @@ and make_reinterpret ~e e1 st =
         | `Old -> LApp (f, [at before alloc; lp])
         | `New -> LApp (f, [at LabelHere alloc; lps])
       in
-      (uncurry fdup2) @@ map_pair app ("offset_min", "offset_max")
+      (Fn.uncurry fdup2) @@ Pair.map app ("offset_min", "offset_max")
     in
     let deref (where, p) ?boff offs =
       let shift t o1 o2 =
@@ -2013,12 +2000,12 @@ and make_reinterpret ~e e1 st =
         | { fi_type = JCTenum { ei_name = name } } -> name
         | _ -> unsupported e1#pos "reinterpretation for structure with a non-enum field"
       in
-      let from_name, to_name = map_pair enum_name (fi_from, fi_to) in
+      let from_name, to_name = Pair.map enum_name (fi_from, fi_to) in
       [from_name ^ "_as_" ^ to_name; to_name ^ "_as_" ^ from_name]
     in
     let assumptions =
       let (dwhole, dpart), (omin, omax), c =
-        let ret ((w, _), _ as w_p) c = map_pair deref w_p, omin_omax w, c in
+        let ret ((w, _), _ as w_p) c = Pair.map deref w_p, omin_omax w, c in
         let merge, split = fdup2 ret (ret % swap) ((`New, lps), (`Old, lp)) in
         match op with
         | `Merge c -> merge c
@@ -2101,8 +2088,8 @@ and expr e =
         let dummy e1 e2 = if is_null e1 then e2 else e1 in
         let e1, e1', e2, e2' = dummy e1 e2, expr e1, dummy e2 e1, expr e2 in
         let at1, at2 =
-          let ac1, ac2 = map_pair (deref_alloc_class ~type_safe:false) (e1, e2) in
-          map_pair alloc_table_var ((ac1, e1#region), (ac2, e2#region))
+          let ac1, ac2 = Pair.map (deref_alloc_class ~type_safe:false) (e1, e2) in
+          Pair.map alloc_table_var ((ac1, e1#region), (ac2, e2#region))
         in
         make_positioned_lex_e ~e @@
           make_app (bin_op op) [at1; at2; e1'; e2']
@@ -2332,21 +2319,19 @@ and expr e =
         in
         assert (pre = LTrue);
         assert (fname = f.li_final_name);
-          make_logic_app fname args
+        make_logic_app fname args |>
+        (let new_arg_types_assert = List.fold_right (fun (_tmp, _e, a) -> make_and a) arg_types_asserts LTrue in
+         Fn.on (new_arg_types_assert <> LTrue && safety_checking ())
+           (fun call -> mk_expr @@ Assert (`ASSERT, new_arg_types_assert, call)))
         |>
-          let new_arg_types_assert = List.fold_right (fun (_tmp, _e, a) -> make_and a) arg_types_asserts LTrue in
-          if new_arg_types_assert = LTrue || not (safety_checking ())
-          then id
-          else fun call -> mk_expr @@ Assert (`ASSERT, new_arg_types_assert, call)
-        |> List.fold_right (fun (tmp, e, _ass) c -> mk_expr @@ Let (tmp, e, c)) arg_types_asserts
-        |> append prolog
+        List.fold_right (fun (tmp, e, _ass) c -> mk_expr @@ Let (tmp, e, c)) arg_types_asserts |>
+        append prolog |>
+        Fn.on (epilog.expr_node <> Void)
+          (fun call ->
+             let tmp = tmp_var_name () in
+             mk_expr @@ Let (tmp, call, append epilog @@ mk_var tmp))
         |>
-          if epilog.expr_node = Void
-          then id
-          else
-            let tmp = tmp_var_name () in
-            fun call -> mk_expr @@ Let (tmp, call, append epilog @@ mk_var tmp)
-        |> define_locals ~writes:locals
+        define_locals ~writes:locals
 
       | JCfun f ->
         let arg_types_asserts, args =
@@ -2397,117 +2382,115 @@ and expr e =
             fname
             args
         in
-          make_vc_app_e ~e ~kind:(JCVCuser_call f.fun_name) fname new_args
+        make_vc_app_e ~e ~kind:(JCVCuser_call f.fun_name) fname new_args |>
+        Fn.on
+          (is_pointer_type e#typ && Region.bitwise e#region)
+          (fun call -> make_app "pointer_address" [call])
         |>
-          (if is_pointer_type e#typ && Region.bitwise e#region
-           then fun call -> make_app "pointer_address" [call]
-           else id)
+        (* decreases *)
+        (let this_comp = f.fun_component in
+         let current_comp = (get_current_function ()).fun_component in
+         Fn.on'
+           (safety_checking () && this_comp = current_comp) @@
+         fun () ->
+         try
+           let cur_measure, cur_r = get_measure_for @@ get_current_function () in
+           let cur_measure_why =
+             term
+               ~type_safe:true
+               ~global_assertion:true
+               ~relocate:false
+               LabelPre LabelPre
+               cur_measure
+           in
+           let this_measure, this_r = get_measure_for f in
+           let subst =
+             List.fold_left2
+               (fun acc (_, vi) (tmp, _, _) -> VarMap.add vi (LVar tmp) acc)
+               VarMap.empty
+               f.fun_parameters
+               arg_types_asserts
+           in
+           let this_measure_why =
+             term
+               ~subst
+               ~type_safe:true
+               ~global_assertion:true
+               ~relocate:false
+               LabelHere LabelHere
+               this_measure
+           in
+           let r, ty =
+             assert (this_r = cur_r);
+             match this_r with
+             | None -> "zwf_zero", integer_type
+             | Some li ->
+               match li.li_parameters with
+               | v1 :: _ -> li.li_name, v1.vi_type
+               | _ ->
+                 Jc_options.jc_error
+                   e#pos
+                   "Can't generate termination condition: measure has no arguments (%s)"
+                   li.li_name
+           in
+           let this_measure_why =
+             term_coerce
+               ~type_safe:false
+               ~global_assertion:false
+               LabelHere
+               this_measure#pos
+               ty
+               this_measure#typ
+               this_measure
+               this_measure_why
+           in
+           let cur_measure_why =
+             term_coerce
+               ~type_safe:false
+               ~global_assertion:false
+               LabelHere
+               cur_measure#pos
+               ty
+               cur_measure#typ
+               cur_measure
+               cur_measure_why
+           in
+           let pre = LPred (r, [this_measure_why; cur_measure_why]) in
+           fun call ->
+             make_positioned_lex_e
+               ~e
+               ~kind:JCVCvar_decr @@
+             mk_expr @@ Assert (`CHECK, pre, call)
+         with
+         | Exit -> Fn.id)
         |>
-           (* decreases *)
-           (let this_comp = f.fun_component in
-            let current_comp = (get_current_function ()).fun_component in
-            if safety_checking () && this_comp = current_comp then
-             try
-               let cur_measure, cur_r = get_measure_for @@ get_current_function () in
-               let cur_measure_why =
-                 term
-                   ~type_safe:true
-                   ~global_assertion:true
-                   ~relocate:false
-                   LabelPre LabelPre
-                   cur_measure
-               in
-               let this_measure, this_r = get_measure_for f in
-               let subst =
-                 List.fold_left2
-                   (fun acc (_, vi) (tmp, _, _) -> VarMap.add vi (LVar tmp) acc)
-                   VarMap.empty
-                   f.fun_parameters
-                   arg_types_asserts
-               in
-               let this_measure_why =
-                 term
-                   ~subst
-                   ~type_safe:true
-                   ~global_assertion:true
-                   ~relocate:false
-                   LabelHere LabelHere
-                   this_measure
-               in
-               let r, ty =
-                 assert (this_r = cur_r);
-                 match this_r with
-                 | None -> "zwf_zero", integer_type
-                 | Some li ->
-                   match li.li_parameters with
-                   | v1 :: _ -> li.li_name, v1.vi_type
-                   | _ ->
-                     Jc_options.jc_error
-                       e#pos
-                       "Can't generate termination condition: measure has no arguments (%s)"
-                       li.li_name
-               in
-               let this_measure_why =
-                 term_coerce
-                   ~type_safe:false
-                   ~global_assertion:false
-                   LabelHere
-                   this_measure#pos
-                   ty
-                   this_measure#typ
-                   this_measure
-                   this_measure_why
-               in
-               let cur_measure_why =
-                 term_coerce
-                   ~type_safe:false
-                   ~global_assertion:false
-                   LabelHere
-                   cur_measure#pos
-                   ty
-                   cur_measure#typ
-                   cur_measure
-                   cur_measure_why
-               in
-               let pre = LPred (r, [this_measure_why; cur_measure_why]) in
-               fun call ->
-                 make_positioned_lex_e
-                   ~e
-                   ~kind:JCVCvar_decr @@
-                   mk_expr @@ Assert (`CHECK, pre, call)
-             with
-             | Exit -> id
-           else id)
+        (* separation assertions *)
+        Fn.on
+          (pre <> LTrue && safety_checking ())
+          (fun call ->
+             make_positioned_lex_e
+               ~e
+               ~kind:JCVCseparation @@
+             mk_expr @@ Assert (`ASSERT, pre, call))
         |>
-         (* separation assertions *)
-         (if pre = LTrue || not (safety_checking ())
-          then id
-          else
-            fun call ->
-              make_positioned_lex_e
-                ~e
-                ~kind:JCVCseparation @@
-                mk_expr @@ Assert (`ASSERT, pre, call))
-        |>
-          (let arg_types_assert = List.fold_right (fun (_tmp, _e, a) -> make_and a) arg_types_asserts LTrue in
-           if arg_types_assert = LTrue || not (safety_checking())
-           then id
-           else
-             fun call ->
+         (let arg_types_assert = List.fold_right (fun (_tmp, _e, a) -> make_and a) arg_types_asserts LTrue in
+          Fn.on
+            (arg_types_assert <> LTrue && safety_checking())
+            (fun call ->
                make_positioned_lex_e
                  ~e
                  ~kind:JCVCindex_bounds @@
-                 mk_expr @@ Assert (`ASSERT, arg_types_assert, call))
-        |> List.fold_right  (fun (tmp, e, _ass) c -> mk_expr @@ Let (tmp, e, c)) arg_types_asserts
-        |> append prolog
+               mk_expr @@ Assert (`ASSERT, arg_types_assert, call)))
         |>
-          (if epilog.expr_node = Void
-           then id
-           else
+        List.fold_right  (fun (tmp, e, _ass) c -> mk_expr @@ Let (tmp, e, c)) arg_types_asserts |>
+        append prolog |>
+        Fn.on
+          (epilog.expr_node <> Void)
+          (fun call ->
              let tmp = tmp_var_name () in
-             fun call ->
              mk_expr @@ Let (tmp, call, append epilog @@ mk_var tmp))
-        |> define_locals ~writes:locals
+        |>
+        define_locals ~writes:locals
       end
     | JCEassign_var (v, e1) ->
       let e' = mk_expr @@ Assign (v.vi_final_name, value_assigned ~e v.vi_type e1) in
@@ -2895,19 +2878,16 @@ and expr e =
   (if lab = ""
    then e'
    else make_label e#mark e')
-  |> fun e' ->
-     if e#typ = Jc_pervasives.unit_type then
-       if
+  |>
+  Fn.on
+    (e#typ = Jc_pervasives.unit_type &&
          match e#original_type with
          | JCTany | JCTnative Tunit -> false
-         | _ -> true
-       then
-         (* Create dummy temporary *)
-         let tmp = tmp_var_name () in
-         mk_expr @@ Let (tmp, e', void)
-       else
-         e'
-     else e'
+         | _ -> true) @@
+  (* Create dummy temporary *)
+  fun e' ->
+  let tmp = tmp_var_name () in
+  mk_expr @@ Let (tmp, e', void)
 
 (* NOTE: [~shifted] should contain the necessary type safety checks! *)
 let make_old_style_update ~e ~at ~tt ~mem ~p ~i ~shifted ~lbound ~rbound ~tag ~typesafe ~v =
@@ -3153,15 +3133,15 @@ let make_instanceof_pred_app_vi ~in_param all_effects (* vi *) =
     let pre, (l, r) =
       let _, at = talloc_table_var ~label_in_name:false LabelHere (ac, vi_region) in
       LPred ("allocated", [at; v]),
-      map_pair
-        (function Some n, _ -> const_of_num n | None, f -> LApp (f, [at; v]))
+      Pair.map
         ((lo, "offset_min"), (ro, "offset_max"))
+        ~f:(function Some n, _ -> const_of_num n | None, f -> LApp (f, [at; v]))
     in
     LImpl (pre,
            make_instanceof_pred_app ~exact:si.si_final ~in_param (ac, vi_region) pc v ~arg:Range_l_r l r)
   | _ -> LTrue
 
-let tr_allocates ~type_safe ?region_list ef =
+let tr_allocates ~internal ~type_safe ?region_list ef =
   function
   | None -> LTrue
   | Some (pos, locs) ->
@@ -3169,48 +3149,43 @@ let tr_allocates ~type_safe ?region_list ef =
       let e = (new assertion ~pos JCAtrue :> < mark : _; pos : _ > ) in
       mk_positioned_lex ~e ~kind:JCVCallocates
     in
+    let tr tables f =
+      tables |>
+      List.filter ((=) (internal = None) % external_region ?region_list) |>
+      List.map f |>
+      List.map mk_positioned |>
+      make_and_list
+    in
     let alloc_frame =
       let at_locs =
         List.map
           (fun loc -> alloc_table_name (lderef_alloc_class ~type_safe loc, loc#region), loc)
           locs
       in
-      let alloc_same_except acr =
-        let at = alloc_table_name acr in
-        let args = [LDerefAtLabel (at, ""); LDeref at]  in
-        match List.fold_left (fun acc (at', loc) -> if at = at' then loc :: acc else acc) [] at_locs with
-        | [] -> LPred ("alloc_same_except", args @ [LVar "pset_empty"])
-        | locs ->
-          let pset =
-            pset_union_of_list @@
-              List.map
-                (fun ls -> LApp ("pset_all",
-                                 [collect_pset_locations ~type_safe ~global_assertion:false LabelPost ls]))
-                locs
-          in
-          LPred ("alloc_same_except", args @ [pset])
-      in
-      ef.fe_writes.e_alloc_tables |>
-      AllocMap.keys |>
-      List.filter (writes_region ?region_list) |>
-      List.map alloc_same_except |>
-      List.map mk_positioned |>
-      make_and_list
+      tr (AllocMap.keys ef.fe_writes.e_alloc_tables) @@
+      fun acr ->
+      let at = alloc_table_name acr in
+      let args = [LDerefAtLabel (at, internal |? ""); LDeref at]  in
+      match List.fold_left (fun acc (at', loc) -> if at = at' then loc :: acc else acc) [] at_locs with
+      | [] -> LPred ("alloc_same_except", args @ [LVar "pset_empty"])
+      | locs ->
+        let pset =
+          pset_union_of_list @@
+          List.map
+            (fun ls -> LApp ("pset_all",
+                             [collect_pset_locations ~type_safe ~global_assertion:false LabelPost ls]))
+            locs
+        in
+        LPred ("alloc_same_except", args @ [pset])
     in
     let tag_frame =
-      let tag_extends pcr =
-        let args =
-          let tt = tag_table_name pcr in
-          [LDerefAtLabel (tt, ""); LDeref tt]
-        in
-        LPred ("tag_extends", args)
+      tr (TagMap.keys ef.fe_writes.e_tag_tables) @@
+      fun pcr ->
+      let args =
+        let tt = tag_table_name pcr in
+        [LDerefAtLabel (tt, ""); LDeref tt]
       in
-      ef.fe_writes.e_tag_tables |>
-      TagMap.keys |>
-      List.filter (writes_region ?region_list) |>
-      List.map tag_extends |>
-      List.map mk_positioned |>
-      make_and_list
+      LPred ("tag_extends", args)
     in
     mk_positioned @@ make_and alloc_frame tag_frame
 
@@ -3224,13 +3199,10 @@ let pre_tr_fun f _funpos spec _body acc =
   acc
 
 let tr_fun f funpos spec body acc =
-
   if Jc_options.debug then
     Format.printf "[interp] function %s@." f.fun_name;
   Jc_options.lprintf "Jc_interp: function %s@." f.fun_name;
-
   (* handle parameters that are assigned in the body *)
-
   let assigned_params =
     List.fold_left
       (fun acc (_,v) ->
@@ -3241,22 +3213,12 @@ let tr_fun f funpos spec body acc =
            end
          else
            acc)
-      [] f.fun_parameters
+      []
+      f.fun_parameters
   in
-
   (* global variables valid predicates *)
-  let variables_valid_pred_apps = LTrue
-(* Yannick: commented out because not taken into account in effects
-    Hashtbl.fold
-      (fun _ (vi, _) acc ->
-         let req = get_valid_pred_app vi in
-           make_and req acc)
-      Jc_typing.variables_table LTrue
-*)
-  in
-
+  let variables_valid_pred_apps = LTrue in
   (* precondition for calling the function and extra one for analyzing it *)
-
   let external_requires =
     let kind = JCVCpre (if Option_misc.has_some body then "Internal" else "External") in
     mk_positioned_lex
@@ -3273,9 +3235,8 @@ let tr_fun f funpos spec body acc =
         named_assertion ~type_safe:true ~global_assertion:false ~relocate:false
           LabelHere LabelHere spec.fs_free_requires
       in
-        make_and external_requires free_requires
+      make_and external_requires free_requires
   in
-
   let internal_requires =
     named_assertion ~type_safe:false ~global_assertion:false ~relocate:false
       LabelHere LabelHere spec.fs_requires
@@ -3299,17 +3260,16 @@ let tr_fun f funpos spec body acc =
       internal_requires
       f.fun_parameters
   in
-
-
   (* partition behaviors as follows:
      - (optional) 'safety' behavior (if Arguments Invariant Policy is selected)
      - (optional) 'inferred' behaviors (computed by analysis)
      - user defined behaviors *)
-
   let behaviors = spec.fs_default_behavior :: spec.fs_behavior in
   let (safety_behavior,
-       normal_behaviors_inferred, normal_behaviors,
-       excep_behaviors_inferred, excep_behaviors) =
+       normal_behaviors_inferred,
+       normal_behaviors,
+       excep_behaviors_inferred,
+       excep_behaviors) =
     List.fold_left
       (fun (safety, normal_inferred, normal, excep_inferred, excep) (_pos, id, b) ->
          let make_post ~type_safe ~internal =
@@ -3337,6 +3297,7 @@ let tr_fun f funpos spec body acc =
            (* otherwise safety might be violated. *)
            make_and @@
              tr_allocates
+               ~internal:None
                ~type_safe
                ~region_list:f.fun_param_regions
                f.fun_effects
@@ -3354,40 +3315,38 @@ let tr_fun f funpos spec body acc =
          let external_post = make_post ~type_safe:true ~internal:false in
          let behav = (id,b,internal_post,external_post) in
          match b.b_throws with
-           | None ->
-               begin match id with
-                 | "safety" ->
-                     assert (b.b_assumes = None);
-                     let internal_post =
-                       make_and variables_valid_pred_apps internal_post
-                     in
-                     let external_post =
-                       make_and variables_valid_pred_apps external_post
-                     in
-                     (id, b, internal_post, external_post) :: safety,
-                     normal_inferred, normal, excep_inferred, excep
-                 | "inferred" ->
-                     assert (b.b_assumes = None);
-                     safety, behav :: normal_inferred,
-                     (if Jc_options.trust_ai then normal else behav :: normal),
-                     excep_inferred, excep
-                 | _ ->
-                     safety, normal_inferred, behav :: normal,
-                     excep_inferred, excep
-               end
-           | Some exc ->
-               if id = "inferred" then
-                 begin
-                   assert (b.b_assumes = None);
-                   safety, normal_inferred, normal,
-                   ExceptionMap.add_merge
-                     List.append exc [behav] excep_inferred,
-                   if Jc_options.trust_ai then excep else
-                     ExceptionMap.add_merge List.append exc [behav] excep
-                 end
-               else
-                 safety, normal_inferred, normal, excep_inferred,
-                 ExceptionMap.add_merge List.append exc [behav] excep)
+         | None ->
+           begin match id with
+           | "safety" ->
+             assert (b.b_assumes = None);
+             let internal_post =
+               make_and variables_valid_pred_apps internal_post
+             in
+             let external_post =
+               make_and variables_valid_pred_apps external_post
+             in
+             (id, b, internal_post, external_post) :: safety,
+             normal_inferred, normal, excep_inferred, excep
+           | "inferred" ->
+             assert (b.b_assumes = None);
+             safety, behav :: normal_inferred,
+             (if Jc_options.trust_ai then normal else behav :: normal),
+             excep_inferred, excep
+           | _ ->
+             safety, normal_inferred, behav :: normal,
+             excep_inferred, excep
+           end
+         | Some exc ->
+           if id = "inferred" then begin
+             assert (b.b_assumes = None);
+             safety, normal_inferred, normal,
+             ExceptionMap.add_merge
+               List.append exc [behav] excep_inferred,
+             if Jc_options.trust_ai then excep else
+               ExceptionMap.add_merge List.append exc [behav] excep
+           end else
+             safety, normal_inferred, normal, excep_inferred,
+             ExceptionMap.add_merge List.append exc [behav] excep)
       ([], [], [], ExceptionMap.empty, ExceptionMap.empty)
       behaviors
   in
@@ -3406,11 +3365,8 @@ let tr_fun f funpos spec body acc =
       f.fun_effects.fe_raises
       excep_behaviors
   in
-
   (* Effects, parameters and locals *)
-
   let params = List.map snd f.fun_parameters in
-
   let external_write_effects =
     write_effects
       ~callee_reads:f.fun_effects.fe_reads
@@ -3508,8 +3464,9 @@ let tr_fun f funpos spec body acc =
          let a' =
            List.fold_right (add_postcondition ~internal:false) bl LTrue
          in
-         (exception_name exc, a') :: acc
-      ) excep_behaviors []
+         (exception_name exc, a') :: acc)
+      excep_behaviors
+      []
   in
   let excep_posts_inferred =
     ExceptionMap.fold
@@ -3519,8 +3476,9 @@ let tr_fun f funpos spec body acc =
              (add_modif_postcondition ~internal:false assume_in_postcondition)
              bl LTrue
          in
-         (exception_name exc, a') :: acc
-      ) excep_behaviors_inferred []
+         (exception_name exc, a') :: acc)
+      excep_behaviors_inferred
+      []
   in
 
   (* Function type *)
@@ -3532,218 +3490,212 @@ let tr_fun f funpos spec body acc =
       make_and_list [external_safety_post; normal_post; normal_post_inferred]
   in
   let param_excep_posts = excep_posts @ excep_posts_inferred in
-  let acc =
-    let annot_type = (* function declaration with precondition *)
-      Annot_type (
-        external_requires,
-        ret_type,
-        external_read_effects,
-        external_write_effects,
-        param_normal_post,
-        param_excep_posts)
-    in
-    let fun_type =
-      annot_fun_parameters fparams
-        external_write_params external_read_params annot_type
-    in
-    let newid = f.fun_final_name ^ "_requires" in
-    Hashtbl.add function_prototypes newid fun_type;
-    Param(false, id_no_loc newid, fun_type) :: acc
-  in
-  let acc = (* function declaration without precondition *)
-    let annot_type =
-      Annot_type(LTrue, ret_type,
-                 external_read_effects, external_write_effects,
-                 param_normal_post, param_excep_posts)
-    in
-    let fun_type =
-      annot_fun_parameters fparams
-        external_write_params external_read_params annot_type
-    in
-    let newid = f.fun_final_name in
-    Hashtbl.add function_prototypes newid fun_type;
-    Param(false, id_no_loc newid, fun_type) :: acc
-  in
-
-
+  acc |>
+  (let annot_type = (* function declaration with precondition *)
+    Annot_type (
+      external_requires,
+      ret_type,
+      external_read_effects,
+      external_write_effects,
+      param_normal_post,
+      param_excep_posts)
+   in
+   let fun_type =
+     annot_fun_parameters fparams
+       external_write_params external_read_params annot_type
+   in
+   let newid = f.fun_final_name ^ "_requires" in
+   Hashtbl.add function_prototypes newid fun_type;
+   List.cons (Param (false, id_no_loc newid, fun_type)))
+  |>
+  (let annot_type =
+    Annot_type(LTrue, ret_type,
+               external_read_effects, external_write_effects,
+               param_normal_post, param_excep_posts)
+   in
+   let fun_type =
+     annot_fun_parameters fparams
+       external_write_params external_read_params annot_type
+   in
+   let newid = f.fun_final_name in
+   Hashtbl.add function_prototypes newid fun_type;
+   List.cons (Param (false, id_no_loc newid, fun_type)))
+  |>
   (* restore assigned status for parameters assigned in the body *)
-
-  List.iter
-    (fun v -> v.vi_assigned <- true)
-    assigned_params;
-
+  Fn.tap (Fn.const @@ List.iter (fun v -> v.vi_assigned <- true) assigned_params)
+  |>
   (* Function body *)
-
-  match body with
-    | None -> acc (* function was only declared *)
-    | Some body ->
-        if Jc_options.verify <> [] &&
-          not (List.mem f.fun_name Jc_options.verify)
-        then
-          acc (* function is not in the list of functions to verify *)
-        else
-          let () =
-            printf "Generating Why function %s@." f.fun_final_name
-          in
-
-          (* parameters *)
-          let params =
-            fun_parameters ~type_safe:false fparams
-              internal_write_params internal_read_params
-          in
-
-          let wrap_body f spec bname body =
-            (* rename formals after parameters are computed and before body
+  Option.map_default body
+    ~default:Fn.id
+    ~f:(fun body ->
+      Fn.on'
+        (Jc_options.verify = [] ||
+         List.mem f.fun_name Jc_options.verify) @@
+      fun () ->
+      Fn.tap (Fn.const @@ printf "Generating Why function %s@." f.fun_final_name) %>
+      (* parameters *)
+      let params =
+        fun_parameters ~type_safe:false fparams
+          internal_write_params internal_read_params
+      in
+      let wrap_body f spec bname =
+        (* rename formals after parameters are computed and before body
                is treated *)
-            let list_of_refs =
-              List.fold_right
-                (fun id bl ->
-                   if id.vi_assigned
-                   then
-                     let n = id.vi_final_name in
-                     let newn = "mutable_" ^ n in
-                     id.vi_final_name <- newn;
-                     (newn, n) :: bl
-                   else bl)
-                fparams []
-            in
-            let body = function_body f spec bname body in
-            let body =
-              if !Jc_options.inv_sem = InvOwnership
-              then append (assume_all_invariants fparams) body
-              else body
-            in
-            let body = define_locals body in
-            let body =
-              match f.fun_result.vi_type with
-              | JCTnative Tunit ->
-                mk_expr @@
-                  Try (append body @@ mk_expr @@ Raise (jessie_return_exception, None),
-                       jessie_return_exception,
-                       None,
-                       void)
-              | _ ->
-                let result = f.fun_result in
-                let e' = any_value result.vi_region result.vi_type in
-                mk_expr @@
-                  Let_ref (jessie_return_variable, e',
-                           mk_expr @@
-                             Try (append body (mk_expr Absurd),
-                                  jessie_return_exception, None,
-                                  mk_expr @@ Deref jessie_return_variable))
-            in
-            let body = make_label "init" body in
-            let body =
-              List.fold_right
-                (fun (mut_id, id) e' ->
-                   mk_expr (Let_ref (mut_id, plain_var id, e')))
-                list_of_refs body
-            in
-            (* FS#393: restore parameter real names *)
-            List.iter
-              (fun v ->
-                 let n = v.vi_final_name in
-                 if List.mem_assoc n list_of_refs then
-                   v.vi_final_name <- List.assoc n list_of_refs)
-              fparams;
-            body
+        let list_of_refs =
+          List.fold_right
+            (fun id ->
+               Fn.on id.vi_assigned @@
+               fun bl ->
+               let n = id.vi_final_name in
+               let newn = "mutable_" ^ n in
+               id.vi_final_name <- newn;
+                  (newn, n) :: bl)
+            fparams
+            []
+        in
+        function_body f spec bname %>
+        Fn.on
+          (!Jc_options.inv_sem = InvOwnership)
+          (fun e -> append (assume_all_invariants fparams) e)
+        %>
+        (let assert_internal_allocates =
+          Fn.on'
+            (bname = "default") @@
+          fun () ->
+          let allocates =
+            tr_allocates
+              ~internal:(Some "init")
+              ~type_safe:true
+              ~region_list:f.fun_param_regions
+              f.fun_effects
+              (Triple.trd spec.fs_default_behavior).b_allocates
           in
-
-          (* safety behavior *)
-          let acc =
-            if Jc_options.verify_behavior "safety" ||
-               Jc_options.verify_behavior "variant" then
-              let behav = if Jc_options.verify_behavior "safety"
-                then "safety" else "variant" in
+          Fn.on
+            (is_not_true allocates) @@
+          fun e -> mk_expr @@ Assert (`ASSERT, allocates, e)
+         in
+         fun body ->
+           match f.fun_result.vi_type with
+           | JCTnative Tunit ->
+             mk_expr @@
+             Try (append body @@ mk_expr @@ Raise (jessie_return_exception, None),
+                  jessie_return_exception,
+                  None,
+                  assert_internal_allocates void)
+           | _ ->
+             let result = f.fun_result in
+             let e' = any_value result.vi_region result.vi_type in
+             mk_expr @@
+             Let_ref (jessie_return_variable, e',
+                      mk_expr @@
+                      Try (append body (mk_expr Absurd),
+                           jessie_return_exception, None,
+                           assert_internal_allocates @@ mk_expr @@ Deref jessie_return_variable)))
+        %>
+        define_locals %>
+        make_label "init" %>
+        List.fold_right
+          (fun (mut_id, id) e' ->
+             mk_expr (Let_ref (mut_id, plain_var id, e')))
+          list_of_refs
+        %>
+        (* FS#393: restore parameter real names *)
+        Fn.tap
+          (Fn.const @@
+           List.iter
+             (fun v ->
+                let n = v.vi_final_name in
+                if List.mem_assoc n list_of_refs then
+                  v.vi_final_name <- List.assoc n list_of_refs)
+             fparams)
+      in
+      (* safety behavior *)
+      Fn.on'
+        (Jc_options.verify_behavior "safety" ||
+         Jc_options.verify_behavior "variant")
+        (fun () ->
+         let behav =
+           if Jc_options.verify_behavior "safety" then "safety"
+           else "variant"
+         in
+         let newid = f.fun_name ^ "_safety" in
+         Fn.on'
+           (not (is_purely_exceptional_fun spec) && not Jc_options.verify_invariants_only)
+           (fun () ->
               let safety_body = wrap_body f spec behav body in
-              let newid = f.fun_name ^ "_safety" in
-              if is_purely_exceptional_fun spec
-              then acc
-              else if Jc_options.verify_invariants_only
-              then acc
-              else
+              List.cons @@
+              Def (
+                { why_name = newid;
+                  why_expl = "Function " ^ f.fun_name ^ ", safety";
+                  why_pos = Jc_position.of_pos funpos},
+                mk_expr @@
+                Fun (
+                  params,
+                  internal_requires,
+                  safety_body,
+                  mk_positioned_lex
+                    ~e:(new assertion JCAtrue :> < mark : _; pos: _ >)
+                    ~kind:JCVCpost
+                    internal_safety_post,
+                  false (* we require termination proofs, also Why3 now checks possible divergence *),
+                  excep_posts_for_others None excep_behaviors))))
+      %>
+      List.fold_right
+        (fun (id, b, internal_post, _) ->
+           Fn.on'
+             (Jc_options.verify_behavior id) @@
+           fun () ->
+           let normal_body = wrap_body f spec id body in
+           let newid = f.fun_name ^ "_ensures_" ^ id in
+           let beh =
+             if id = "default"
+             then "default behavior"
+             else "behavior " ^ id
+           in
+           List.cons @@
+           Def (
+             { why_name = newid;
+               why_expl = "Function " ^ f.fun_name ^ ", " ^ beh;
+               why_pos = Jc_position.of_pos funpos },
+             mk_expr @@
+             Fun (
+               params,
+               assume_in_precondition b internal_requires,
+               normal_body,
+               mk_positioned_lex
+                 ~e:(new assertion JCAtrue :> < mark : _; pos: _ >)
+                 ~kind:JCVCpost
+                 internal_post,
+               f.fun_may_diverge, (* Adding `diverges' clause for recursive and looping functions *)
+               excep_posts_for_others None excep_behaviors)))
+        normal_behaviors
+      (* exceptional behaviors *)
+      %>
+      ExceptionMap.fold
+        (fun exc ->
+           List.fold_right
+             (fun (id, b, internal_post, _) ->
+                Fn.on'
+                  (Jc_options.verify_behavior id) @@
+                fun () ->
+                let except_body = wrap_body f spec id body in
+                let newid = f.fun_name ^ "_exsures_" ^ id in
+                List.cons @@
                 Def (
                   { why_name = newid;
-                    why_expl = "Function " ^ f.fun_name ^ ", safety";
-                    why_pos = Jc_position.of_pos funpos},
+                    why_expl = "Function " ^ f.fun_name ^ ", behavior " ^ id;
+                    why_pos = Jc_position.of_pos funpos },
                   mk_expr @@
                   Fun (
                     params,
-                    internal_requires,
-                    safety_body,
-                    mk_positioned_lex
-                      ~e:(new assertion JCAtrue :> < mark : _; pos: _ >)
-                      ~kind:JCVCpost
-                      internal_safety_post,
-                    false (* we require termination proofs, also Why3 now checks possible divergence *),
-                    excep_posts_for_others None excep_behaviors))
-                :: acc
-            else acc
-          in
-
-          (* normal behaviors *)
-          let acc =
-            List.fold_right
-              (fun (id, b, internal_post, _) acc ->
-                 if Jc_options.verify_behavior id then
-                   let normal_body = wrap_body f spec id body in
-                   let newid = f.fun_name ^ "_ensures_" ^ id in
-                   let beh =
-                     if id = "default"
-                     then "default behavior"
-                     else "behavior " ^ id
-                   in
-                   Def (
-                     { why_name = newid;
-                       why_expl = "Function " ^ f.fun_name ^ ", " ^ beh;
-                       why_pos = Jc_position.of_pos funpos },
-                      mk_expr @@
-                       Fun (
-                         params,
-                         assume_in_precondition b internal_requires,
-                         normal_body,
-                         mk_positioned_lex
-                           ~e:(new assertion JCAtrue :> < mark : _; pos: _ >)
-                           ~kind:JCVCpost
-                           internal_post,
-                         f.fun_may_diverge, (* Adding `diverges' clause for recursive and looping functions *)
-                         excep_posts_for_others None excep_behaviors))
-                   :: acc
-                 else acc
-              ) normal_behaviors acc
-          in
-
-          (* exceptional behaviors *)
-          let acc =
-            ExceptionMap.fold
-              (fun exc bl acc ->
-                 List.fold_right
-                   (fun (id,b,internal_post,_) acc ->
-                      if Jc_options.verify_behavior id then
-                        let except_body = wrap_body f spec id body in
-                        let newid = f.fun_name ^ "_exsures_" ^ id in
-                        Def (
-                          { why_name = newid;
-                            why_expl = "Function " ^ f.fun_name ^ ", behavior " ^ id;
-                            why_pos = Jc_position.of_pos funpos },
-                           mk_expr @@
-                          Fun (
-                            params,
-                            assume_in_precondition b internal_requires,
-                            except_body,
-                            LTrue,
-                            false,
-                            (exception_name exc, internal_post) ::
-                            excep_posts_for_others (Some exc)
-                              excep_behaviors))
-                        :: acc
-                      else acc)
-                   bl
-                   acc)
-              user_excep_behaviors
-              acc
-          in
-          acc
+                    assume_in_precondition b internal_requires,
+                    except_body,
+                    LTrue,
+                    false,
+                    (exception_name exc, internal_post) ::
+                    excep_posts_for_others (Some exc)
+                      excep_behaviors))))
+        user_excep_behaviors)
 
 let tr_fun f funpos spec body acc =
   set_current_function f;

@@ -371,14 +371,14 @@ let fun_def f ta fa ft term_coerce params =
       | None, JCAssertion a -> (* Predicate *)
           let body = fa a in
           [Predicate(false, id_no_loc f.li_final_name,
-		     params, body)]
+                     params, body)]
       | Some ty, JCTerm t -> (* Function *)
           let ty' = tr_base_type ty in
           let t' = ft t in
-	  let t' = term_coerce t#pos ty t#typ t t' in
+          let t' = term_coerce t#pos ty t#typ t t' in
           if List.mem f f.li_calls then
             let logic = Logic(false, id_no_loc f.li_final_name,
-			      params, ty')
+                              params, ty')
             in
             let fstparams = List.map (fun (s,_) -> LVar s) params in
             let app = (LApp(f.li_final_name,fstparams)) in
@@ -389,37 +389,37 @@ let fun_def f ta fa ft term_coerce params =
             [logic;axiom]
           else
             [Function(false, id_no_loc f.li_final_name,
-		      params, ty', t')]
+                      params, ty', t')]
       | ty_opt, (JCNone | JCReads _) -> (* Logic *)
           let ty' = match ty_opt with
-	    | None -> simple_logic_type prop_type
-	    | Some ty -> tr_base_type ty
+            | None -> simple_logic_type prop_type
+            | Some ty -> tr_base_type ty
           in
           [Logic(false, id_no_loc f.li_final_name,
-		 params, ty')]
+                 params, ty')]
       | None, JCInductive l  ->
-	  [Inductive(false, id_no_loc f.li_final_name,
-		     params,
-		    List.map
-		      (fun (id,_labels,a) ->
-			 let ef = Jc_effect.assertion empty_effects a in
-			 let a' = fa a in
-			 let params =
-			   tr_li_model_args_3 ~label_in_name:true ef
-			 in
-			 let a' =
-			   List.fold_right
-			     (fun (n,_v,ty') a' -> LForall(n,ty',[],a'))
+          [Inductive(false, id_no_loc f.li_final_name,
+                     params,
+                    List.map
+                      (fun (id,_labels,a) ->
+                         let ef = Jc_effect.assertion empty_effects a in
+                         let a' = fa a in
+                         let params =
+                           tr_li_model_args_3 ~label_in_name:true ef
+                         in
+                         let a' =
+                           List.fold_right
+                             (fun (n,_v,ty') a' -> LForall(n,ty',[],a'))
                              params a'
-			 in
-			 (get_unique_name id#name, a')) l)]
+                         in
+                         (get_unique_name id#name, a')) l)]
       | Some _, JCInductive _ -> assert false
       | None, JCTerm _ -> assert false
       | Some _, JCAssertion _ -> assert false
 
 let gen_no_update_axioms f ta _fa _ft _term_coerce params acc =
     match ta with
-      |	JCAssertion _ | JCTerm _ | JCInductive _ -> acc
+      |        JCAssertion _ | JCTerm _ | JCInductive _ -> acc
       | JCNone -> acc
       | JCReads pset ->
     let memory_params_reads =
@@ -429,55 +429,55 @@ let gen_no_update_axioms f ta _fa _ft _term_coerce params acc =
     let normal_params = List.map (fun name -> LVar name) params_names in
     snd (List.fold_left
       (fun (count,acc) param ->
-	 let paramty = snd param in
+         let paramty = snd param in
          (* Pourquoi parcourir params et tester au lieu de parcourir
             params_memory*)
-	 if not (is_memory_type paramty) then count,acc else
-	   let (mc,r),_ = (* Recover which memory it is exactly *)
-	     List.find (fun ((_mc,_r),(n,_v,_ty')) -> n = fst param)
-	       memory_params_reads
-	   in
-	   let zonety,basety = deconstruct_memory_type_args paramty in
-	   let pset =
-	     reads ~type_safe:false ~global_assertion:true pset (mc,r)
-	   in
-	   let sepa = LNot(LPred("in_pset",[LVar "tmp";pset])) in
-	   let update_params =
+         if not (is_memory_type paramty) then count,acc else
+           let (mc,r),_ = (* Recover which memory it is exactly *)
+             List.find (fun ((_mc,_r),(n,_v,_ty')) -> n = fst param)
+               memory_params_reads
+           in
+           let zonety,basety = deconstruct_memory_type_args paramty in
+           let pset =
+             reads ~type_safe:false ~global_assertion:true pset (mc,r)
+           in
+           let sepa = LNot(LPred("in_pset",[LVar "tmp";pset])) in
+           let update_params =
              List.map (fun name ->
-			 if name = fst param then
-			   LApp("store",[LVar name;LVar "tmp";LVar "tmpval"])
-			 else LVar name
-		      ) params_names
-	   in
-	   let a =
+                         if name = fst param then
+                           LApp("store",[LVar name;LVar "tmp";LVar "tmpval"])
+                         else LVar name
+                      ) params_names
+           in
+           let a =
              match f.li_result_type with
-	       | None ->
-		   LImpl(
+               | None ->
+                   LImpl(
                      sepa,
                      LIff(
-		       LPred(f.li_final_name,normal_params),
-		       LPred(f.li_final_name,update_params)))
-	       | Some _rety ->
-		   LImpl(
+                       LPred(f.li_final_name,normal_params),
+                       LPred(f.li_final_name,update_params)))
+               | Some _rety ->
+                   LImpl(
                      sepa,
                      LPred("eq",[
-			     LApp(f.li_final_name,normal_params);
-			     LApp(f.li_final_name,update_params)]))
-	   in
-	   let a =
+                             LApp(f.li_final_name,normal_params);
+                             LApp(f.li_final_name,update_params)]))
+           in
+           let a =
              List.fold_left (fun a (name,ty) -> LForall(name,ty,[],a)) a params
-	   in
-	   let a =
+           in
+           let a =
              LForall(
-	       "tmp",raw_pointer_type zonety,[],
-	       LForall(
-		 "tmpval",basety,[],
-		 a))
-	   in
-	   let name =
-	     "no_update_" ^ f.li_name ^ "_" ^ string_of_int count
-	   in
-	   count + 1, Goal(KAxiom,id_no_loc name,a) :: acc
+               "tmp",raw_pointer_type zonety,[],
+               LForall(
+                 "tmpval",basety,[],
+                 a))
+           in
+           let name =
+             "no_update_" ^ f.li_name ^ "_" ^ string_of_int count
+           in
+           count + 1, Goal(KAxiom,id_no_loc name,a) :: acc
       ) (0,acc) params)
 
 let gen_no_assign_axioms f ta _fa _ft _term_coerce params acc =
@@ -493,55 +493,55 @@ let gen_no_assign_axioms f ta _fa _ft _term_coerce params acc =
     let normal_params = List.map (fun name -> LVar name) params_names in
     snd (List.fold_left
       (fun (count,acc) param ->
-	 let paramty = snd param in
-	 if not (is_memory_type paramty) then count,acc else
-	   let (mc,r),_ = (* Recover which memory it is exactly *)
-	     List.find (fun ((_mc,_r),(n,_v,_ty')) -> n = fst param)
-	       memory_params_reads
-	   in
-	   let zonety,_basety = deconstruct_memory_type_args paramty in
-	   let pset =
-	     reads ~type_safe:false ~global_assertion:true pset (mc,r)
-	   in
-	   let sepa = LPred ("pset_disjoint", [LVar "tmp"; pset]) in
-	   let upda =
+         let paramty = snd param in
+         if not (is_memory_type paramty) then count,acc else
+           let (mc,r),_ = (* Recover which memory it is exactly *)
+             List.find (fun ((_mc,_r),(n,_v,_ty')) -> n = fst param)
+               memory_params_reads
+           in
+           let zonety,_basety = deconstruct_memory_type_args paramty in
+           let pset =
+             reads ~type_safe:false ~global_assertion:true pset (mc,r)
+           in
+           let sepa = LPred ("pset_disjoint", [LVar "tmp"; pset]) in
+           let upda =
              LPred ("not_assigns", [LVar "tmpalloc_pre";
                                     LVar "tmpalloc_post";
                                     LVar (fst param);
-			            LVar "tmpmem";
+                                    LVar "tmpmem";
                                     LVar "tmp"])
-	   in
-	   let update_params =
+           in
+           let update_params =
              List.map (fun name ->
-			 if name = fst param then LVar "tmpmem"
-			 else LVar name
-		      ) params_names
-	   in
-	   let a =
+                         if name = fst param then LVar "tmpmem"
+                         else LVar name
+                      ) params_names
+           in
+           let a =
              match f.li_result_type with
-	       | None ->
-		   LImpl (make_and sepa upda,
+               | None ->
+                   LImpl (make_and sepa upda,
                      LIff (LPred(f.li_final_name, normal_params),
                            LPred(f.li_final_name, update_params)))
-	       | Some _rety ->
-		   LImpl (make_and sepa upda,
+               | Some _rety ->
+                   LImpl (make_and sepa upda,
                      LPred ("eq", [LApp (f.li_final_name, normal_params);
-			           LApp (f.li_final_name, update_params)]))
-	   in
-	   let a =
+                                   LApp (f.li_final_name, update_params)]))
+           in
+           let a =
              List.fold_left (fun a (name, ty) -> LForall(name, ty, [], a)) a params
-	   in
-	   let a =
+           in
+           let a =
              LForall ("tmp", raw_pset_type zonety, [],
                LForall ("tmpmem", paramty, [],
-	         LForall ("tmpalloc_pre", raw_alloc_table_type zonety, [],
+                 LForall ("tmpalloc_pre", raw_alloc_table_type zonety, [],
                    LForall ("tmpalloc_post", raw_alloc_table_type zonety, [],
                              a))))
-	   in
-	   let name =
-	     "no_assign_" ^ f.li_name ^ "_" ^ string_of_int count
-	   in
-	   count + 1, Goal(KAxiom,id_no_loc name,a) :: acc
+           in
+           let name =
+             "no_assign_" ^ f.li_name ^ "_" ^ string_of_int count
+           in
+           count + 1, Goal(KAxiom,id_no_loc name,a) :: acc
       ) (0,acc) params) (* memory_param_reads ? *)
 
 let gen_alloc_extend_axioms f ta _fa _ft _term_coerce params acc =
@@ -557,60 +557,58 @@ let gen_alloc_extend_axioms f ta _fa _ft _term_coerce params acc =
     let normal_params = List.map (fun name -> LVar name) params_names in
     snd (List.fold_left
       (fun (count,acc) (n,_v,paramty) ->
-	 assert (is_alloc_table_type paramty);
-	 let exta =
-	   LPred("alloc_extends",[LVar n; LVar "tmpalloc"])
-	 in
-	 let ps =
-	   List.map
-	     (collect_pset_locations ~type_safe:false ~global_assertion:true LabelPost)
+         assert (is_alloc_table_type paramty);
+         let exta =
+           LPred("alloc_extends",[LVar n; LVar "tmpalloc"])
+         in
+         let ps =
+           List.map
+             (collect_pset_locations ~type_safe:false ~global_assertion:true LabelPost)
              ps
-	 in
-	 let ps = pset_union_of_list ps in
-	 let valida =
-	   LPred("valid_pset",[LVar n; ps])
-	 in
-	 let update_params =
+         in
+         let ps = pset_union_of_list ps in
+         let valida =
+           LPred("valid_pset",[LVar n; ps])
+         in
+         let update_params =
            List.map (fun name ->
-		       if name = n then LVar "tmpalloc"
-		       else LVar name
-		    ) params_names
-	 in
-	 let a =
+                       if name = n then LVar "tmpalloc"
+                       else LVar name
+                    ) params_names
+         in
+         let a =
            match f.li_result_type with
-	     | None ->
-		 LImpl(
+             | None ->
+                 LImpl(
                    make_and exta valida,
                    LIff(
-		     LPred(f.li_final_name,normal_params),
-		     LPred(f.li_final_name,update_params)))
-	     | Some _rety ->
-		 LImpl(
+                     LPred(f.li_final_name,normal_params),
+                     LPred(f.li_final_name,update_params)))
+             | Some _rety ->
+                 LImpl(
                    make_and exta valida,
                    LPred("eq",[
-			   LApp(f.li_final_name,normal_params);
-			   LApp(f.li_final_name,update_params)]))
-	 in
-	 let a =
+                           LApp(f.li_final_name,normal_params);
+                           LApp(f.li_final_name,update_params)]))
+         in
+         let a =
            List.fold_left (fun a (name,ty) -> LForall(name,ty,[],a)) a params
-	 in
-	 let a =
-	   LForall(
-	     "tmpalloc",paramty,[],
-	     a)
-	 in
-	 let name =
-	   "alloc_extend_" ^ f.li_name ^ "_" ^ string_of_int count
-	 in
-	 count + 1, Goal(KAxiom,id_no_loc name,a) :: acc
+         in
+         let a =
+           LForall(
+             "tmpalloc",paramty,[],
+             a)
+         in
+         let name =
+           "alloc_extend_" ^ f.li_name ^ "_" ^ string_of_int count
+         in
+         count + 1, Goal(KAxiom,id_no_loc name,a) :: acc
       ) (0,acc) alloc_params_reads)
 
 
 let reduce f = function
   | [] -> assert false
   | a::l -> List.fold_left f a l
-
-let (|>) x y = y x
 
 let select_name = "select"
 
@@ -930,84 +928,86 @@ let tr_logic_model_params f =
   let module List = ListLabels in
   let module LabelRegionMap = PairRegionMap (LogicLabelOrd) (PairOrd (LogicLabelOrd) (InternalRegion)) in
   Lazy.force @@
-  let open Option_monad in
+  let open Option in
   let tr_li_model_args_3 = tr_li_model_args_3 ~label_in_name:true in
-  default (lazy (tr_li_model_args_3 f.li_effects)) begin
-
-      poly_mem_regions f
-    |> function [] -> abort | l -> return l
+  let abort_on cond l = if cond l then abort else (return l) in
+  value ~default:(lazy (tr_li_model_args_3 f.li_effects)) @@
+  begin
+    (poly_mem_regions f |>
+     abort_on ((=) []))
     >>= fun regions ->
-
-      MemoryMap.partition
-        (fun (_, r) _ -> List.exists regions ~f:(Region.equal r))
-        f.li_effects.e_memories
-    |> fun (replace, _ as r) -> if MemoryMap.is_empty replace then abort else return r
+    MemoryMap.partition
+      (fun (_, r) _ -> List.exists regions ~f:(Region.equal r))
+      f.li_effects.e_memories
+    |>
+    fun (replace, _ as r) ->
+    abort_on (Fn.const @@ MemoryMap.is_empty replace) r
     >>= fun (replace, keep) ->
-
     (try
-      Option_misc.map (StringHashtblIter.find axiomatics_table) f.li_axiomatic
-     with Not_found -> abort)
+       Option_misc.map (StringHashtblIter.find axiomatics_table) f.li_axiomatic
+     with
+     | Not_found -> abort)
     >>= fun ax_data ->
-
-      List.filter ax_data.axiomatics_decls
-        ~f:(fun (ABaxiom (_, _, _, a)) -> List.hd (occurrences [f.li_tag] a) <> [])
-    |> function [] -> abort | l -> return l
+    List.filter ax_data.axiomatics_decls
+      ~f:(fun (ABaxiom (_, _, _, a)) -> List.hd (occurrences [f.li_tag] a) <> [])
+    |>
+    abort_on ((=) [])
     >>= fun ax_decls ->
-
-      List.map ax_decls
-        ~f:(fun decl ->
-             let decl = restrict_poly_mems_in_axiomatic_decl MemoryMap.empty decl in
-             let ef = axiomatic_decl_effect empty_effects decl in
-             li_effects_from_ax_decl f ef empty_effects decl)
-    |> let count mm =
-         LabelRegionMap.(
-           MemoryMap.fold
-             (fun (_, r) ls lrm ->
-               if List.exists regions ~f:(Region.equal r) then
-                 LogicLabelSet.fold
-                   (fun l lrm ->
-                     let key = l, r in
-                     let c = find_or_default key 0 lrm in
-                     add key (c + 1) lrm)
-                   ls
-                   lrm
-               else lrm)
-             mm
-             empty)
-       in
-       List.map ~f:(fun { e_memories = mm } -> count mm)
-    %> List.fold_left ~init:LabelRegionMap.empty ~f:(LabelRegionMap.merge max)
-    %> fun maxs ->
-       if LabelRegionMap.compare (-) (count replace) maxs <= 0 then abort
-                                                               else return maxs
-    >>= fun maxs ->
-
+    List.map ax_decls
+      ~f:(fun decl ->
+        let decl = restrict_poly_mems_in_axiomatic_decl MemoryMap.empty decl in
+        let ef = axiomatic_decl_effect empty_effects decl in
+        li_effects_from_ax_decl f ef empty_effects decl)
+    |>
+    let count mm =
+      LabelRegionMap.(
+        MemoryMap.fold
+          (fun (_, r) ls lrm ->
+             if List.exists regions ~f:(Region.equal r) then
+               LogicLabelSet.fold
+                 (fun l lrm ->
+                    let key = l, r in
+                    let c = find_or_default key 0 lrm in
+                    add key (c + 1) lrm)
+                 ls
+                 lrm
+             else
+               lrm)
+          mm
+          empty)
+    in
+    List.map ~f:(fun { e_memories = mm } -> count mm) %>
+    List.fold_left ~init:LabelRegionMap.empty ~f:(LabelRegionMap.merge max) %>
+    fun maxs -> abort_on (Fn.const (LabelRegionMap.compare (-) (count replace) maxs <= 0)) maxs
+      >>= fun maxs ->
       LabelRegionMap.bindings maxs
-    |> List.mapi
-         ~f:(fun i ((l, r), c) ->
-              let poly_name i = "poly_" ^ string_of_int i ^ "_" ^ Region.name r in
-              let name = lvar_name ~label_in_name:true l % poly_name in
-              let var = lvar ~label_in_name:true ~constant:true l % poly_name in
-              let typ j =
-                let ri =
-                  match r.r_type with
-                  | JCTpointer (JCtag ({ si_root = Some ri }, _), _, _)
-                  | JCTpointer (JCroot ri, _, _) -> ri
-                  | _ -> failwith "unexpected region type in memory merging"
-                in
-                raw_memory_type (root_model_type ri) (logic_type_var @@ "a" ^ string_of_int i ^ "_" ^ string_of_int j)
-              in
-              List.map ~f:(fdup3 name var typ) @@ Jc_stdlib.List.range 0 `To (c - 1))
-    |> List.flatten
-    |> fun poly_params ->
-       let initial_params = tr_li_model_args_3  { f.li_effects with
-                                                    e_memories = keep;
-                                                    e_globals = VarMap.empty }
-       in
-       let final_params = tr_li_model_args_3 { empty_effects with
-                                                 e_globals = f.li_effects.e_globals }
-       in
-       return @@ lazy (initial_params @ poly_params @ final_params)
+      |>
+      List.mapi
+        ~f:(fun i ((l, r), c) ->
+          let poly_name i = "poly_" ^ string_of_int i ^ "_" ^ Region.name r in
+          let name = lvar_name ~label_in_name:true l % poly_name in
+          let var = lvar ~label_in_name:true ~constant:true l % poly_name in
+          let typ j =
+            let ri =
+              match r.r_type with
+              | JCTpointer (JCtag ({ si_root = Some ri }, _), _, _)
+              | JCTpointer (JCroot ri, _, _) -> ri
+              | _ -> failwith "unexpected region type in memory merging"
+            in
+            raw_memory_type (root_model_type ri) (logic_type_var @@ "a" ^ string_of_int i ^ "_" ^ string_of_int j)
+          in
+          List.map ~f:(fdup3 name var typ) @@ Jc_stdlib.List.range 0 `To (c - 1))
+      |>
+      List.flatten |>
+      fun poly_params ->
+      let initial_params = tr_li_model_args_3  { f.li_effects with
+                                                 e_memories = keep;
+                                                 e_globals = VarMap.empty }
+      in
+      let final_params = tr_li_model_args_3 { empty_effects with
+                                              e_globals = f.li_effects.e_globals }
+      in
+      return @@ lazy (initial_params @ poly_params @ final_params)
   end
 
 let tr_params_usual_model_aux f =
@@ -1094,10 +1094,10 @@ struct
       |> List.map fst in
     let framed_update_params =
       List.map (fun name ->
-		  if name = NotIn.mem_name notin_update then
-		    LApp("store",[LVar name;LVar elt;LVar elt_val])
-		  else LVar name
-	       ) framed_normal_params in
+                  if name = NotIn.mem_name notin_update then
+                    LApp("store",[LVar name;LVar elt;LVar elt_val])
+                  else LVar name
+               ) framed_normal_params in
     let framed_normal_params = framed_normal_params
       |> List.map make_var in
     let params = params
@@ -1173,9 +1173,9 @@ struct
             m1 in
     let to_update =
       List.map (fun name ->
-		  if name = NotIn.mem_name notin_update then
+                  if name = NotIn.mem_name notin_update then
                     LApp("store",[LVar name;LVar elt;LVar elt_val])
-		  else LVar name) in
+                  else LVar name) in
     let params_update = to_update params in
     let ft_params_update = to_update ft_params in
     let params = List.map make_var params in
@@ -1846,7 +1846,7 @@ struct
         let l = List.fold_left gen_case [] l in
         let constr acc (ident,assertion) =
           Goal(KAxiom,id_no_loc (frame_between_name^f_name.why_name^ident),
-	       assertion)::acc in
+               assertion)::acc in
         List.fold_left constr acc l
       | [Function (_,f_name,params,_,term)] ->
           let name = in_name notin f_name.why_name in
@@ -2073,9 +2073,9 @@ struct
     let framed_update_params =
       let notin_mem_name = NotIn.mem_name in_update in
       List.map (fun name ->
-	if name = notin_mem_name then
-	  LApp("store",[LVar name;LVar elt;LVar elt_val])
-	else LVar name
+        if name = notin_mem_name then
+          LApp("store",[LVar name;LVar elt;LVar elt_val])
+        else LVar name
       ) framed_normal_params in
     let framed_normal_params = framed_normal_params
       |> List.map make_var in

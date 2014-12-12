@@ -464,7 +464,7 @@ let fprintf_variant ~locals fmttr =
 let rec fprintf_expr_node ~locals in_app fmttr =
   let pr fmt = fprintf fmttr fmt in
   let pr_fun params pre body post diverges signals =
-    let locals = List.fold_right (function _, Ref_type _ -> id | x, _ -> StringSet.add x) params locals in
+    let locals = List.fold_right (function _, Ref_type _ -> Fn.id | x, _ -> StringSet.add x) params locals in
     let fprintf_assertion = fprintf_assertion ~locals in
     pr "@[<hov 1>fun@ @[";
     List.iter (fun (x, t) -> pr "(%s@ :@ %a)@ " (why3_id x) (fprintf_type ~locals ~need_colon:false false) t) params;
