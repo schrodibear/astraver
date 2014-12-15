@@ -6,11 +6,11 @@
 <file name="../jc_frame_allocates.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="4721075f6d444de69dc60c7e11d15abe" expanded="true">
+<theory name="Jessie_program" sum="a5f126673beeeeb5d6e9b3fb32969e91" expanded="true">
  <goal name="WP_parameter alloc_ensures_default" expl="Function alloc, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter alloc_ensures_default.1" expl="1. Postcondition" expanded="true">
-  <proof prover="0"><result status="valid" time="1.30"/></proof>
+  <proof prover="0"><result status="valid" time="0.95"/></proof>
   </goal>
  </transf>
  </goal>

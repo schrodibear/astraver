@@ -7,7 +7,7 @@
 <file name="../jc_reinterpretation.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="9c598cefeebc370c2b7bdd47798c8d54" expanded="true">
+<theory name="Jessie_program" sum="39271b00682fb454c32289d5de2417eb" expanded="true">
  <goal name="WP_parameter f_ensures_default" expl="Function f, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter f_ensures_default.1" expl="1. Postcondition" expanded="true">
@@ -40,7 +40,7 @@
  <proof prover="0"><result status="valid" time="0.78"/></proof>
  </goal>
  <goal name="WP_parameter caller_ensures_default" expl="Function caller, default behavior" expanded="true">
- <proof prover="0"><result status="valid" time="0.67"/></proof>
+ <proof prover="0"><result status="timeout" time="4.96"/></proof>
  </goal>
  <goal name="WP_parameter caller_safety" expl="Function caller, safety" expanded="true">
  <proof prover="0"><result status="valid" time="0.46"/></proof>

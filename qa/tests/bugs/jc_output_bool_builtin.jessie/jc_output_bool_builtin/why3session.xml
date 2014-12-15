@@ -2,16 +2,18 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="4">
-<prover id="0" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
+<prover id="0" name="CVC3" version="2.4.1" timelimit="5" memlimit="1000"/>
+<prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
 <file name="../jc_output_bool_builtin.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 <theory name="Jessie_program" sum="43ce15cc70ba2c1ce493ba066de57656" expanded="true">
  <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
- <proof prover="0"><result status="timeout" time="4.98"/></proof>
+ <proof prover="0"><result status="unknown" time="0.14"/></proof>
+ <proof prover="1"><result status="timeout" time="4.98"/></proof>
  </goal>
  <goal name="WP_parameter main_safety" expl="Function main, safety" expanded="true">
- <proof prover="0"><result status="valid" time="0.06"/></proof>
+ <proof prover="1"><result status="valid" time="0.06"/></proof>
  </goal>
 </theory>
 </file>

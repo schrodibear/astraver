@@ -125,8 +125,7 @@ extern /*static inline*/ void *kzalloc(size_t size, gfp_t flags);
 
 //@ ghost enum {SUCCESS, FAILURE} outcome_pdpl_get_new;
 
-/*@ assigns \result; 
-    assigns outcome_pdpl_get_new;
+/*@ assigns outcome_pdpl_get_new;
     behavior SUCCESS:
         ensures outcome_pdpl_get_new == SUCCESS ==>
             \result != \null && \valid(\result) &&

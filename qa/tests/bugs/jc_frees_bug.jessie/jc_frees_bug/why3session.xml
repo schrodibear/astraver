@@ -6,9 +6,9 @@
 <file name="../jc_frees_bug.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="5f8811404eb0d7999afefc9641447648" expanded="true">
+<theory name="Jessie_program" sum="e0794e0b92106b1ba938e5b59b9fd651" expanded="true">
  <goal name="WP_parameter t_ensures_default" expl="Function t, default behavior" expanded="true">
- <proof prover="0"><result status="valid" time="0.07"/></proof>
+ <proof prover="0"><result status="valid" time="0.31"/></proof>
  </goal>
  <goal name="WP_parameter t_safety" expl="Function t, safety" expanded="true">
  <proof prover="0"><result status="valid" time="0.11"/></proof>

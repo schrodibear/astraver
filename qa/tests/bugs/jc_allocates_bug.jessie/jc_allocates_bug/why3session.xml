@@ -6,9 +6,9 @@
 <file name="../jc_allocates_bug.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="346f58258f1acf128a1fe8f60c726870" expanded="true">
+<theory name="Jessie_program" sum="fe8f6dbbff7376993880f05b0ce8c3a5" expanded="true">
  <goal name="WP_parameter t_ensures_default" expl="Function t, default behavior" expanded="true">
- <proof prover="0"><result status="valid" time="0.07"/></proof>
+ <proof prover="0"><result status="timeout" time="4.96"/></proof>
  </goal>
  <goal name="WP_parameter t_safety" expl="Function t, safety" expanded="true">
  <proof prover="0"><result status="valid" time="0.06"/></proof>
