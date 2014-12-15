@@ -501,14 +501,20 @@ let add_committed_effect ef pc =
 
 (* Addition of a single read *)
 
-let add_alloc_reads lab fef (ac,r) =
-  { fef with fe_reads = add_alloc_effect lab fef.fe_reads (ac,r) }
+let add_alloc_reads lab fef acr =
+  { fef with fe_reads = add_alloc_effect lab fef.fe_reads acr }
 
-let add_tag_reads lab fef (vi,r) =
-  { fef with fe_reads = add_tag_effect lab fef.fe_reads (vi,r) }
+let add_alloc_reads' lab acr fef = add_alloc_reads lab fef acr
 
-let add_memory_reads lab fef (mc,r) =
-  { fef with fe_reads = add_memory_effect lab fef.fe_reads (mc,r) }
+let add_tag_reads lab fef rir =
+  { fef with fe_reads = add_tag_effect lab fef.fe_reads rir }
+
+let add_tag_reads' lab rir fef = add_tag_reads lab fef rir
+
+let add_memory_reads lab fef mcr =
+  { fef with fe_reads = add_memory_effect lab fef.fe_reads mcr }
+
+let add_memory_reads' lab mcr fef = add_memory_reads lab fef mcr
 
 let add_precise_memory_reads lab fef (loc,(mc,r)) =
   { fef with fe_reads =
@@ -528,14 +534,20 @@ let add_committed_reads fef pc =
 
 (* Addition of a single write *)
 
-let add_alloc_writes lab fef (ac,r) =
-  { fef with fe_writes = add_alloc_effect lab fef.fe_writes (ac,r) }
+let add_alloc_writes lab fef acr =
+  { fef with fe_writes = add_alloc_effect lab fef.fe_writes acr }
 
-let add_tag_writes lab fef (vi,r) =
-  { fef with fe_writes = add_tag_effect lab fef.fe_writes (vi,r) }
+let add_alloc_writes' lab acr fef = add_alloc_writes lab fef acr
 
-let add_memory_writes lab fef (mc,r) =
-  { fef with fe_writes = add_memory_effect lab fef.fe_writes (mc,r) }
+let add_tag_writes lab fef rir =
+  { fef with fe_writes = add_tag_effect lab fef.fe_writes rir }
+
+let add_tag_writes' lab rir fef = add_tag_writes lab fef rir
+
+let add_memory_writes lab fef mcr =
+  { fef with fe_writes = add_memory_effect lab fef.fe_writes mcr }
+
+let add_memory_writes' lab mcr fef = add_memory_writes lab fef mcr
 
 let add_precise_memory_writes lab fef (loc,(mc,r)) =
   { fef with fe_writes =
@@ -1264,11 +1276,6 @@ let single_assertion fef a =
   let cont,ef = single_assertion fef.fe_reads a in
   cont,{ fef with fe_reads = ef }
 
-let (|.>) ~lab fef =
-  function
-  | `App (f, xc, r) -> f lab fef (xc, r)
-  | `Nop -> fef
-
 let rec single_location ~in_clause fef loc =
   let lab =
     match loc#label with
@@ -1276,18 +1283,16 @@ let rec single_location ~in_clause fef loc =
     | Some lab -> lab
   in
   let add_deref x ?(lab = x#label |? lab) ?(r=x#region) get_mem_class fi =
+    let r = if in_clause = `Allocates then r else x#region in
     let add_by_mc ~only_mem fef mc =
-      let (|.>) fef = (|.>) ~lab fef in
       match in_clause with
       | `Assigns ->
-        fef |.>
-        `App (add_memory_writes, mc, r) |.>
+        fef |>
+        add_memory_writes' lab (mc, r) |>
         (* Add effect on allocation table for [not_assigns] predicate *)
-        if not only_mem then
-          let ac = alloc_class_of_mem_class mc in
-          `App (add_alloc_reads, ac, x#region)
-      else
-        `Nop
+        Fn.on
+          (not only_mem) @@
+          add_alloc_reads' lab (alloc_class_of_mem_class mc, x#region)
       | `Allocates when not only_mem ->
         let ac = alloc_class_of_mem_class mc in
         add_alloc_writes lab fef (ac, x#region)
@@ -1313,7 +1318,11 @@ let rec single_location ~in_clause fef loc =
     | `Allocates ->
       let ac = lderef_alloc_class ~type_safe:true loc in
       add_alloc_writes lab fef (ac, loc#region)
-    | `Reads -> add_global_reads lab fef v
+    (* If the variable is not assigned it's translated into logic function,
+     * which is not compatible with reads clause in Why3.
+     *)
+    | `Reads when v.vi_assigned -> add_global_reads lab fef v
+    | `Reads -> fef
     end
   | JCLderef (locs, lab, fi, r) -> add_deref locs ~lab ~r lderef_mem_class fi
   | JCLderef_term (t, fi) -> add_deref t tderef_mem_class fi
@@ -1561,13 +1570,13 @@ let rec expr fef e =
            Pair.map ~f:(check_singleton "several fields") (st1.si_fields, st.si_fields)
          in
          if not (is_integral_type fi1.fi_type && is_integral_type fi2.fi_type) then error "for non-integral field";
-         let (|.>) fef (f, xc) = f LabelHere fef (xc, e#region) in
-         fef |.>
-         (add_alloc_writes, ac) |.>
-         (add_tag_writes, ri) |.>
-         (add_memory_reads, JCmem_field fi1) |.>
-         (add_memory_writes, JCmem_field fi2) |>
-         fdup2 (Fn.const true) Fn.id
+         let r = e#region in
+         fef |>
+         add_alloc_writes' LabelHere (ac, r) |>
+         add_tag_writes' LabelHere (ri, r) |>
+         add_memory_reads' LabelHere (JCmem_field fi1, r) |>
+         add_memory_writes' LabelHere (JCmem_field fi2, r) |>
+         fun fef -> true, fef
        | JCEpack(st,e,_st) ->
            (* Assert the invariants of the structure
               => need the reads of the invariants *)
@@ -1706,11 +1715,12 @@ let spec s fef =
    Therefore, add allocation table to reads. *)
 let parameter fef v =
   match v.vi_type with
-    | JCTpointer(pc,Some _i,Some _j) ->
-        let ac = alloc_class_of_pointer_class pc in
-        add_alloc_reads LabelOld fef (ac,v.vi_region)
-    | _ -> fef
+  | JCTpointer (pc, Some _i, Some _j) ->
+    let ac = alloc_class_of_pointer_class pc in
+    add_alloc_reads LabelOld fef (ac, v.vi_region)
+  | _ -> fef
 
+let parameter' v fef = parameter fef v
 
 (******************************************************************************)
 (*                                 fix-point                                  *)
@@ -1847,17 +1857,17 @@ let logic_fun_effects f =
 
 let fun_effects f =
   let f, _pos, s, e_opt = IntHashtblIter.find Jc_typing.functions_table f.fun_tag in
-     f.fun_effects
-  |> spec s
-  |> (fun fef -> Option_misc.fold_left expr fef e_opt)
-  |> (fun fef -> List.fold_left parameter fef @@ List.map snd f.fun_parameters)
-  |> fun fef ->
-     if same_feffects fef f.fun_effects then
-       `Final fef
-     else begin
-       f.fun_effects <- fef;
-       `Provisional fef
-     end
+  f.fun_effects |>
+  spec s |>
+  Option.fold_right expr e_opt |>
+  List.fold_right parameter' (List.map snd f.fun_parameters) |>
+  fun fef ->
+  if same_feffects fef f.fun_effects then
+    `Final fef
+  else begin
+    f.fun_effects <- fef;
+    `Provisional fef
+  end
 
 let finished f acc x =
   acc &&
@@ -1936,8 +1946,8 @@ let is_poly_mem_function f =
   List.exists is_poly_mem_param f.li_parameters
 
 let poly_mem_regions f =
-     List.filter is_poly_mem_param f.li_parameters
-  |> List.map @@ function { vi_region = r } -> r
+  List.filter is_poly_mem_param f.li_parameters |>
+  List.map @@ function { vi_region = r } -> r
 
 
 let restrict_poly_mems_in_assertion mm =
@@ -1957,9 +1967,9 @@ let restrict_poly_mems_in_assertion mm =
       let mems =
         let poly_regs = poly_mem_regions f in
         MemoryMap.(
-          f.li_effects.e_memories
-        |> filter (fun (_, r as key) _ -> not (List.exists (Region.equal r) poly_regs) || mem key mm)
-        |> merge (Fn.curry @@ fst) mm)
+          f.li_effects.e_memories |>
+          filter (fun (_, r as key) _ -> not (List.exists (Region.equal r) poly_regs) || mem key mm) |>
+          merge (Fn.curry @@ fst) mm)
       in
       { f with li_effects = { f.li_effects with e_memories = mems }}
    in

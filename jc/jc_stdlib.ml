@@ -181,6 +181,8 @@ struct
     | Some x -> f init x
     | None -> init
 
+  let fold_right f o init = fold ~init ~f o
+
   let iter ~f =
     function
     | None -> ()
