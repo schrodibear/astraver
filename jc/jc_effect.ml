@@ -1660,6 +1660,12 @@ let rec expr fef e =
            let pef = List.fold_left pattern empty_effects (List.map fst psl) in
            true,
            { fef with fe_reads = ef_union fef.fe_reads pef }
+       | JCEbinary (e1, ((`Beq | `Bneq), `Pointer), e2) ->
+         [e1; e2] |>
+         List.filter (fun e -> e#node <> JCEconst JCCnull) |>
+         List.map (fun e -> deref_alloc_class ~type_safe:true e, e#region) |>
+         List.fold_left (add_alloc_reads LabelHere) fef |>
+         fun fef -> true, fef
        | JCEloop _ | JCElet _ | JCEassert _ | JCEcontract _ | JCEblock _
        | JCEconst _  | JCEif _ | JCErange_cast _
        | JCEreal_cast _ | JCEunary _ | JCEaddress _ | JCEbinary _
