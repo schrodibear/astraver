@@ -88,17 +88,11 @@ fi
 
 # we extract Ocaml version number
 OCAMLVERSION=`$OCAMLC -v | sed -n -e 's|.*version* *\(.*\)$|\1|p' `
-echo "ocaml version is $OCAMLVERSION"
+echo "OCaml version is $OCAMLVERSION"
 
 case $OCAMLVERSION in
-  0.*|1.*|2.00|3.00*|3.01*|3.02*|3.03*|3.04*|3.05*|3.06*|3.07*)
-        AC_MSG_ERROR(You need Objective 3.08 or later);;
-  3.08.2)
-	FORPACK=""
-	OCAMLV=3082;;
-  3.08*)
-	FORPACK=""
-	OCAMLV=308;;
+  0.*|1.*|2.00|3.00*|3.01*|3.02*|3.03*|3.04*|3.05*|3.06*|3.07*|3.08*|3.09*|3.10*|3.11*|3.12*|4.00*|4.01*)
+        AC_MSG_ERROR(OCaml 4.02 or later is needed);;
   *)
 	FORPACK="-for-pack Graph";;
 esac
@@ -428,18 +422,15 @@ else
 	COQC7=$COQC
 	COQVER=v7
 	WHYLIBCOQ=lib/coq-v7
-	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v;;
+        ;;
     8.*)
 	AC_MSG_RESULT($COQVERSION)
 	COQC7="$COQC -v7"
 	COQC8=$COQC
 	COQVER=v8
 	WHYLIBCOQ=lib/coq
-	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v
 	case $COQVERSION in
 	8.1*|8.2*|8.3*|8.4*|trunk)
-	  JESSIELIBCOQ=lib/coq/jessie_why.vo
-	  cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v
           # useful ??? [VP] Yes, the hack for making the output compliant with
           # Dp needs >= v8.1
           COQVER=v8.1
@@ -451,7 +442,6 @@ else
 	AC_MSG_CHECKING(Coq floating-point library)
 	if test -f "$COQLIB/user-contrib/Flocq/Core/Fcore.vo"; then
 	  AC_MSG_RESULT(yes)
-	  WHYFLOATS="lib/coq/WhyFloats.vo lib/coq/WhyFloatsStrict.vo"
 	  COQFLOATSMSG=yes
 	else
 	  AC_MSG_RESULT(no)
@@ -460,7 +450,6 @@ else
 	AC_MSG_CHECKING(Coq legacy floating-point library)
 	if test -f "$COQLIB/user-contrib/AllFloat.vo" || test -f "$COQLIB/user-contrib/Float/AllFloat.vo"; then
 	  AC_MSG_RESULT(yes)
-	  WHYFLOATS="$WHYFLOATS lib/coq/WhyFloatsStrictLegacy.vo"
 	  COQFLOATSLEGACYMSG=yes
 	else
 	  AC_MSG_RESULT(no)

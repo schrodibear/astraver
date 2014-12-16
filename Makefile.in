@@ -85,26 +85,12 @@ endif
 
 enable_local=@enable_local@
 
-COQC7  = @COQC7@
 COQC8  = @COQC8@
 COQDEP = @COQDEP@
 COQLIB = $(DESTDIR)"@COQLIB@"
 COQVER = @COQVER@
 
-VO7= lib/coq-v7/WhyInt.vo lib/coq-v7/WhyArrays.vo  lib/coq-v7/WhyBool.vo \
-     lib/coq-v7/WhyTuples.vo  lib/coq-v7/WhyPermut.vo \
-     lib/coq-v7/WhySorted.vo  lib/coq-v7/Why.vo     lib/coq-v7/WhyReal.vo \
-     lib/coq-v7/WhyExn.vo lib/coq-v7/WhyCoqCompat.vo \
-     lib/coq-v7/WhyLemmas.vo  lib/coq-v7/WhyTactics.vo lib/coq-v7/WhyCM.vo
-
-V7FILES=$(VO7:.vo=.v)
-
-VO8= lib/coq/WhyInt.vo lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo \
-     lib/coq/WhyTuples.vo  lib/coq/WhyPermut.vo lib/coq/WhyCoqCompat.vo \
-     lib/coq/WhySorted.vo  \
-     lib/coq/WhyExn.vo lib/coq/WhyLemmas.vo  lib/coq/WhyTactics.vo \
-     lib/coq/WhyPrelude.vo lib/coq/WhyCM.vo lib/coq/Why.vo lib/coq/WhyReal.vo \
-     @JESSIEWHY3LIBCOQ@ \
+VO8= @JESSIEWHY3LIBCOQ@ \
      @JESSIELIBCOQ@ \
      @WHYFLOATS@
 
