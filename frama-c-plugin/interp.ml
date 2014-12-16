@@ -79,10 +79,11 @@ let rec mkdisjunct elist pos =
     | [e] -> e
     | e::el -> mkexpr (JCPEbinary(e,`Blor,mkdisjunct el pos)) pos
 
-let mkimplies elist e pos =
-  match elist with
-    | [] -> e
-    | _ -> mkexpr (JCPEbinary(e,`Bimplies,mkconjunct elist pos)) pos
+let mkimplies antec conseq pos =
+  match antec, conseq with
+  | _, [] -> true_expr
+  | [], _ -> mkconjunct conseq pos
+  | _ -> mkexpr (JCPEbinary (mkconjunct antec pos, `Bimplies, mkconjunct conseq pos)) pos
 
 let mkdecl dnode pos = new decl ~pos dnode
 
@@ -1174,18 +1175,10 @@ let spec _fname funspec =
   let requires =
     List.fold_right
       (fun b acc ->
-         let ass = List.map (pred % Logic_const.pred_of_id_pred) b.Cil_types.b_assumes in
-         List.fold_right
-           (fun req acc ->
-              let impl =
-                mkimplies
-                  ass
-                  (pred (Logic_const.pred_of_id_pred req))
-                  req.ip_loc
-              in
-              JCCrequires(locate impl) :: acc)
-           b.b_requires
-           acc)
+         let ass, reqs =
+           map_pair (List.map (locate % pred % Logic_const.pred_of_id_pred)) (b.Cil_types.b_assumes, b.b_requires)
+         in
+         JCCrequires (mkimplies ass reqs Loc.dummy_position) :: acc)
       funspec.spec_behavior
       []
   in

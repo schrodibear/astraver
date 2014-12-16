@@ -194,6 +194,7 @@ struct
     let map1 ~f (a, b) = f a, b
     let map2 ~f (a, b) = a, f b
     let map ~f (a, b) = f a, f b
+    let iter ~f (a, b) = f a; f b
     let swap (a, b) = b, a
   end
 end
@@ -219,6 +220,7 @@ let fdup2 f g = Pair.fdup2 ~f ~g
 let map_fst f = Pair.map1 ~f
 let map_snd f = Pair.map2 ~f
 let map_pair f = Pair.map ~f
+let iter_pair f = Pair.iter ~f
 let swap = Pair.swap
 
 module Monad_def =

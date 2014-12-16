@@ -58,6 +58,7 @@ sig
     val map1 : f:('a -> 'b) -> 'a * 'c -> 'b * 'c
     val map2 : f:('a -> 'b) -> 'c * 'a -> 'c * 'b
     val map : f:('a -> 'b) -> 'a * 'a -> 'b * 'b
+    val iter : f:('a -> unit) -> 'a * 'a -> unit
     val swap : 'a * 'b -> 'b * 'a
   end
 end
@@ -85,6 +86,8 @@ val map_fst : ('a -> 'b) -> 'a * 'c -> 'b * 'c
 val map_snd : ('a -> 'b) -> 'c * 'a -> 'c * 'b
 
 val map_pair : ('a -> 'b) -> 'a * 'a -> 'b * 'b
+
+val iter_pair : ('a -> unit) -> 'a * 'a -> unit
 
 val swap : 'a * 'b -> 'b * 'a
 
