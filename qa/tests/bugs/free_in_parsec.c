@@ -19,7 +19,7 @@ typedef __u64 uint64_t;
 typedef __u8 uint8_t;
 
 //#define NULL ((void *) 0)
-#define NULL 0
+//#define NULL 0
 
 //------------------------------------------------------------------------------
 
