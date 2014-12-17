@@ -1,0 +1,1 @@
+<src/frama-c-plugin/*.{cmo,cmi,cmx,cma,o,cmt,cmti,annot}>: not_hygienic

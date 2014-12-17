@@ -14,6 +14,9 @@
 *.glob
 *.vo
 
+_build
+bin
+
 /.depend
 /.depend.coq
 /Makefile
@@ -74,13 +77,13 @@
 /lib/coq/WhyCoqCompat.v
 /lib/why3/why3.conf
 
-/src/lexer.ml
-/src/linenum.ml
-/src/parser.ml
-/src/parser.mli
-/src/rc.ml
-/src/version.ml
-/src/xml.ml
+/src/why/lexer.ml
+/src/why/linenum.ml
+/src/why/parser.ml
+/src/why/parser.mli
+/src/why/rc.ml
+/src/why/version.ml
+/src/why/xml.ml
 
 /mix/mix_lexer.ml
 /mix/mix_parser.ml
@@ -100,11 +103,11 @@
 /java/java_parser.ml
 /java/java_parser.mli
 
-/jc/jc_ai.ml
-/jc/jc_lexer.ml
-/jc/jc_parser.ml
-/jc/jc_parser.mli
-/jc/numconst.ml
+/src/jc/jc_ai.ml
+/src/jc/jc_lexer.ml
+/src/jc/jc_parser.ml
+/src/jc/jc_parser.mli
+/src/jc/numconst.ml
 
 /c/cconst.ml
 /c/clexer.ml
@@ -116,9 +119,9 @@
 /c/cpp.ml
 /c/cversion.ml
 
-/frama-c-plugin/.depend
-/frama-c-plugin/Jessie_DEP
-/frama-c-plugin/jessie_config.ml
+/src/frama-c-plugin/.depend
+/src/frama-c-plugin/Jessie_DEP
+/src/frama-c-plugin/jessie_config.ml
 
 /tools/simplify_lexer.ml
 /tools/simplify_parser.ml
@@ -151,14 +154,14 @@
 /tests/c/*.jessie/simplify
 /tests/c/*.jessie/gappa
 
-/frama-c-plugin/tests/jessie/*.jessie/*.jc
-/frama-c-plugin/tests/jessie/*.jessie/*.mlw
-/frama-c-plugin/tests/jessie/*.jessie/*.loc
-/frama-c-plugin/tests/jessie/*.jessie/*.cloc
-/frama-c-plugin/tests/jessie/*.jessie/*.makefile
-/frama-c-plugin/tests/jessie/*.jessie/why
-/frama-c-plugin/tests/jessie/*.jessie/simplify
-/frama-c-plugin/tests/jessie/*.jessie/gappa
+/src/frama-c-plugin/tests/jessie/*.jessie/*.jc
+/src/frama-c-plugin/tests/jessie/*.jessie/*.mlw
+/src/frama-c-plugin/tests/jessie/*.jessie/*.loc
+/src/frama-c-plugin/tests/jessie/*.jessie/*.cloc
+/src/frama-c-plugin/tests/jessie/*.jessie/*.makefile
+/src/frama-c-plugin/tests/jessie/*.jessie/why
+/src/frama-c-plugin/tests/jessie/*.jessie/simplify
+/src/frama-c-plugin/tests/jessie/*.jessie/gappa
 
 /export
 

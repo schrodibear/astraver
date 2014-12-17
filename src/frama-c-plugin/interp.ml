@@ -39,11 +39,10 @@ open Ast_info
 open Extlib
 
 (* Import from Why *)
-open Jc
-open Jc_constructors
-open Jc_ast
-open Jc_env
-open! Jc_pervasives
+open Jc.Constructors
+open Jc.Ast
+open Jc.Env
+open! Jc.Pervasives
 
 (* Utility functions *)
 open! Common
@@ -92,7 +91,7 @@ let mkdecl dnode pos = new decl ~pos dnode
 (*****************************************************************************)
 
 let reg_position ?id ?kind ?name pos =
-  Jc_why_output_misc.jc_reg_pos "_C" ?id ?kind ?name (Loc.extract pos)
+  Jc.Why_output_misc.jc_reg_pos "_C" ?id ?kind ?name (Loc.extract pos)
 
 (* [locate] should be called on every Jessie expression which we would like to
  * locate in the original source program.
@@ -184,7 +183,7 @@ let relation = function
 
 
 
-let invariant_policy = ref Jc_env.InvArguments
+let invariant_policy = ref Jc.Env.InvArguments
 
 let separation_policy_regions = ref true
 
@@ -450,7 +449,7 @@ let wrapper_name t = Name.Of.typ (unrollType t) ^ "P"
 (* Cil to Jessie translation of constants                                    *)
 (*****************************************************************************)
 
-let native_type_of_fkind x : Jc_env.native_type =
+let native_type_of_fkind x : Jc.Env.native_type =
   match x with
   | FFloat -> Tgenfloat `Float
   | FDouble -> Tgenfloat `Double
@@ -1183,7 +1182,7 @@ let spec _fname funspec =
       []
   in
 
-  let complete_behaviors_assertions : Jc_ast.pexpr list =
+  let complete_behaviors_assertions : Jc.Ast.pexpr list =
     List.map
       (fun bnames ->
          mkdisjunct
@@ -1203,7 +1202,7 @@ let spec _fname funspec =
              Loc.dummy_position)
       funspec.spec_complete_behaviors
   in
-  let disjoint_behaviors_assertions  : Jc_ast.pexpr list =
+  let disjoint_behaviors_assertions  : Jc.Ast.pexpr list =
     List.fold_left
       (fun acc bnames ->
          let all_assumes =
@@ -2897,9 +2896,9 @@ let pragma =
     begin match name with
     | "InvariantPolicy" ->
       begin match String.lowercase arg with
-      | "none" -> invariant_policy := Jc_env.InvNone
-      | "arguments" -> invariant_policy := Jc_env.InvArguments
-      | "ownership" -> invariant_policy := Jc_env.InvOwnership
+      | "none" -> invariant_policy := Jc.Env.InvNone
+      | "arguments" -> invariant_policy := Jc.Env.InvArguments
+      | "ownership" -> invariant_policy := Jc.Env.InvOwnership
       | _ -> assert false
       end;
       []
@@ -2912,33 +2911,33 @@ let pragma =
       []
     | "AnnotationPolicy" ->
       begin match String.lowercase arg with
-      | "none" -> [Jc_output.JCannotation_policy Jc_env.AnnotNone]
-      | "invariants" -> [Jc_output.JCannotation_policy Jc_env.AnnotInvariants]
-      | "weakpre" -> [Jc_output.JCannotation_policy Jc_env.AnnotWeakPre]
-      | "strongpre" -> [Jc_output.JCannotation_policy Jc_env.AnnotStrongPre]
+      | "none" -> [Jc.Output.JCannotation_policy Jc.Env.AnnotNone]
+      | "invariants" -> [Jc.Output.JCannotation_policy Jc.Env.AnnotInvariants]
+      | "weakpre" -> [Jc.Output.JCannotation_policy Jc.Env.AnnotWeakPre]
+      | "strongpre" -> [Jc.Output.JCannotation_policy Jc.Env.AnnotStrongPre]
       | _ -> assert false
       end
     | "AbstractDomain" ->
       begin match String.lowercase arg with
-      | "none" -> [Jc_output.JCabstract_domain Jc_env.AbsNone]
-      | "box" -> [Jc_output.JCabstract_domain Jc_env.AbsBox]
-      | "oct" -> [Jc_output.JCabstract_domain Jc_env.AbsOct]
-      | "pol" -> [Jc_output.JCabstract_domain Jc_env.AbsPol]
+      | "none" -> [Jc.Output.JCabstract_domain Jc.Env.AbsNone]
+      | "box" -> [Jc.Output.JCabstract_domain Jc.Env.AbsBox]
+      | "oct" -> [Jc.Output.JCabstract_domain Jc.Env.AbsOct]
+      | "pol" -> [Jc.Output.JCabstract_domain Jc.Env.AbsPol]
       | _ -> assert false
       end
         | "JessieFloatModel" ->
           begin match String.lowercase arg with
           | "math" -> float_model := `Math;
-            [Jc_output.JCfloat_model Jc_env.FMmath]
+            [Jc.Output.JCfloat_model Jc.Env.FMmath]
           | "defensive" ->
             float_model := `Defensive;
-            [Jc_output.JCfloat_model Jc_env.FMdefensive]
+            [Jc.Output.JCfloat_model Jc.Env.FMdefensive]
           | "full" ->
             float_model := `Full;
-            [Jc_output.JCfloat_model Jc_env.FMfull]
+            [Jc.Output.JCfloat_model Jc.Env.FMfull]
           | "multirounding" ->
             float_model := `Multirounding;
-            [Jc_output.JCfloat_model Jc_env.FMmultirounding]
+            [Jc.Output.JCfloat_model Jc.Env.FMmultirounding]
           | s ->
             Console.warning
               "pragma %s: identifier %s is not a valid value (ignored)."
@@ -2948,19 +2947,19 @@ let pragma =
           begin match String.lowercase arg with
           | "nearesteven" ->
             (* float_rounding_mode := `NearestEven; *)
-            [Jc_output.JCfloat_rounding_mode Jc_env.FRMNearestEven]
+            [Jc.Output.JCfloat_rounding_mode Jc.Env.FRMNearestEven]
           | "down" ->
             (* float_rounding_mode := `Downward; *)
-            [Jc_output.JCfloat_rounding_mode Jc_env.FRMDown]
+            [Jc.Output.JCfloat_rounding_mode Jc.Env.FRMDown]
           | "up" ->
             (* float_rounding_mode := `Upward; *)
-            [Jc_output.JCfloat_rounding_mode Jc_env.FRMUp]
+            [Jc.Output.JCfloat_rounding_mode Jc.Env.FRMUp]
           | "tozero" ->
             (* float_rounding_mode := `Towardzero; *)
-            [Jc_output.JCfloat_rounding_mode Jc_env.FRMToZero]
+            [Jc.Output.JCfloat_rounding_mode Jc.Env.FRMToZero]
           | "nearestaway" ->
             (* float_rounding_mode := `Towardawayzero; *)
-            [Jc_output.JCfloat_rounding_mode Jc_env.FRMNearestAway]
+            [Jc.Output.JCfloat_rounding_mode Jc.Env.FRMNearestAway]
           | s ->
             Console.warning
               "pragma %s: identifier %s is not a valid value (ignored)" name s; []
@@ -2968,9 +2967,9 @@ let pragma =
         | "JessieFloatInstructionSet" ->
           begin match String.lowercase arg with
           | "x87" ->
-            [Jc_output.JCfloat_instruction_set "x87"]
+            [Jc.Output.JCfloat_instruction_set "x87"]
           | "ieee754" ->
-            [Jc_output.JCfloat_instruction_set "ieee754"]
+            [Jc.Output.JCfloat_instruction_set "ieee754"]
               | s ->
                 Console.warning
                   "pragma %s: identifier %s is not a valid value (ignored)" name s; []
@@ -2990,11 +2989,11 @@ let pragma =
         | "JessieTerminationPolicy" ->
           begin match String.lowercase arg with
           | "always" ->
-            [Jc_output.JCtermination_policy TPalways]
+            [Jc.Output.JCtermination_policy TPalways]
           | "user" ->
-            [Jc_output.JCtermination_policy TPuser]
+            [Jc.Output.JCtermination_policy TPuser]
           | "never" ->
-            [Jc_output.JCtermination_policy TPnever]
+            [Jc.Output.JCtermination_policy TPnever]
           | s ->
             Console.warning
               "pragma %s: identifier %s is not a valid value (ignored)" name s; []
@@ -3015,25 +3014,25 @@ let pragmas f =
 
   (match !int_model with
     | IMexact -> []
-    | IMbounded -> [ Jc_output.JCint_model Jc_env.IMbounded ]
-    | IMmodulo -> [ Jc_output.JCint_model Jc_env.IMmodulo ])
-  @ Jc_output.JCinvariant_policy !invariant_policy
+    | IMbounded -> [ Jc.Output.JCint_model Jc.Env.IMbounded ]
+    | IMmodulo -> [ Jc.Output.JCint_model Jc.Env.IMmodulo ])
+  @ Jc.Output.JCinvariant_policy !invariant_policy
   :: (if !separation_policy_regions then
-        Jc_output.JCseparation_policy Jc_env.SepRegions
+        Jc.Output.JCseparation_policy Jc.Env.SepRegions
       else
-        Jc_output.JCseparation_policy Jc_env.SepNone)
+        Jc.Output.JCseparation_policy Jc.Env.SepNone)
   :: (match Config.Infer_annot.get () with
-    | "" -> Jc_output.JCannotation_policy Jc_env.AnnotNone
-    | "inv" -> Jc_output.JCannotation_policy Jc_env.AnnotInvariants
-    | "pre" -> Jc_output.JCannotation_policy Jc_env.AnnotElimPre
-    | "spre" -> Jc_output.JCannotation_policy Jc_env.AnnotStrongPre
-    | "wpre" -> Jc_output.JCannotation_policy Jc_env.AnnotWeakPre
+    | "" -> Jc.Output.JCannotation_policy Jc.Env.AnnotNone
+    | "inv" -> Jc.Output.JCannotation_policy Jc.Env.AnnotInvariants
+    | "pre" -> Jc.Output.JCannotation_policy Jc.Env.AnnotElimPre
+    | "spre" -> Jc.Output.JCannotation_policy Jc.Env.AnnotStrongPre
+    | "wpre" -> Jc.Output.JCannotation_policy Jc.Env.AnnotWeakPre
     | s ->
       Jessie_options.abort "unknown inference technique %s" s)
   :: (match Config.Abs_domain.get () with
-    | "box" -> Jc_output.JCabstract_domain Jc_env.AbsBox
-    | "oct" -> Jc_output.JCabstract_domain Jc_env.AbsOct
-    | "poly" -> Jc_output.JCabstract_domain Jc_env.AbsPol
+    | "box" -> Jc.Output.JCabstract_domain Jc.Env.AbsBox
+    | "oct" -> Jc.Output.JCabstract_domain Jc.Env.AbsOct
+    | "poly" -> Jc.Output.JCabstract_domain Jc.Env.AbsPol
     | s ->
       Jessie_options.abort "unknown abstract domain %s" s)
   :: l

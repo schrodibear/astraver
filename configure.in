@@ -64,7 +64,7 @@
 
 # check for one particular file of the sources
 # ADAPT THE FOLLOWING LINE TO YOUR SOURCES!
-AC_INIT(jc/jc_interp.ml)
+AC_INIT(src/jc/jc_interp.ml)
 
 # verbosemake feature
 
@@ -102,6 +102,10 @@ esac
 OCAMLLIB=`$OCAMLC -where | tr -d '\\r'`
 echo "ocaml library path is $OCAMLLIB"
 
+AC_CHECK_PROG(OCAMLBUILD,ocamlbuild,ocamlbuild,no)
+if test "$OCAMLBUILD" = no ; then
+	AC_MSG_ERROR(Cannot find ocamlbuild.)
+fi
 
 ## Where are the library we need
 # we look for ocamlfind; if not present, we just don't use it to find
@@ -117,7 +121,6 @@ if test "$USEOCAMLFIND" = yes; then
    echo "ocamlfind : $OCAMLFINDLIB, ocamlc : $OCAMLLIB"
    fi
 fi
-
 
 
 # Check for arch/OS
@@ -242,7 +245,7 @@ fi
 if test -n "$OCAMLGRAPHLIB"; then
    echo "ocamlfind found ocamlgraph in $OCAMLGRAPHLIB"
       OCAMLGRAPHLIB="-I $OCAMLGRAPHLIB"
-      OCAMLGRAPHVER=" found by ocamlfind"
+      OCAMLGRAPHVER="found by ocamlfind"
  else
  AC_CHECK_FILE($OCAMLLIB/ocamlgraph/graph.cmi,OCAMLGRAPH=yes,OCAMLGRAPH=no)
  if test "$OCAMLGRAPH" = no ; then
@@ -317,23 +320,17 @@ else
 fi
 
 # Frama-C
-TESTFRAMAC=yes
-
-if test "$TESTFRAMAC" = no ; then
+AC_CHECK_PROG(FRAMAC,frama-c,frama-c,no)
+if test "$FRAMAC" = no ; then
+   AC_MSG_ERROR(Cannot find Frama-c.)
    FRAMACPLUGIN=no
-   FRAMACMSG="Disabled on user request"
+   FRAMACMSG="Cannot find Frama-C"
 else
-   AC_CHECK_PROG(FRAMAC,frama-c,frama-c,no)
-   if test "$FRAMAC" = no ; then
-	AC_MSG_WARN(Cannot find frama-c.)
-	FRAMACPLUGIN=no
-        FRAMACMSG="Cannot find Frama-C"
-   else
-      # we extract Ocaml version number
-      AC_MSG_CHECKING(Frama-c version)
-      FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
-      AC_MSG_RESULT($FRAMACVERSION)
-      case $FRAMACVERSION in
+   # we extract Ocaml version number
+   AC_MSG_CHECKING(Frama-c version)
+   FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
+   AC_MSG_RESULT($FRAMACVERSION)
+   case $FRAMACVERSION in
         Neon-rc1|Neon-rc2|Neon-rc3|Neon-rc4|Neon-20140301)
            FRAMACPLUGIN=yes
            ;;
@@ -346,22 +343,7 @@ else
            FRAMACPLUGIN=no
            AC_MSG_WARN($FRAMACMSG)
            ;;
-      esac
-   fi
-fi
-
-# camlp4
-AC_CHECK_PROG(CAMLP4O,camlp4o,camlp4o,no)
-if test "$CAMLP4O" = no ; then
-     AC_MSG_ERROR(Cannot find camlp4o.)
-fi
-CAMLP4LIB=`camlp4o -where`
-CAMLP4VERSION=`$CAMLP4O -v 2>&1 | sed -n -e 's|.*version *\(.*\)$|\1|p'`
-AC_MSG_CHECKING(camlp4 version)
-if test "$CAMLP4VERSION" != "$OCAMLVERSION" ; then
-     AC_MSG_ERROR(differs from ocaml version)
-else
-     AC_MSG_RESULT(ok)
+   esac
 fi
 
 # Why3
@@ -369,7 +351,7 @@ fi
 AC_CHECK_PROG(WHY3,why3,yes,no)
 if test "$WHY3" = no ; then
   WHY3MSG="command 'why3' not found"
-  AC_MSG_WARN($WHY3MSG)
+  AC_MSG_ERROR($WHY3MSG)
 else
   AC_MSG_CHECKING(Why3 version)
   WHY3VERSION=`why3 --version | sed -n -e 's|.*version \([[^ ]]\+\) .*$|\1|p'`
@@ -396,7 +378,6 @@ else
       ;;
   esac
 fi
-
 
 
 WHYFLOATS=
@@ -436,8 +417,7 @@ else
           COQVER=v8.1
           ;;
 	*)
-	  JESSIELIBCOQ=
-	  cp -f lib/coq/WhyCoq8.v lib/coq/WhyCoqCompat.v;;
+          ;;
         esac
 	AC_MSG_CHECKING(Coq floating-point library)
 	if test -f "$COQLIB/user-contrib/Flocq/Core/Fcore.vo"; then
@@ -472,19 +452,6 @@ else
 	AC_MSG_WARN(You need Coq 7.4 or later; Coq support discarded);;
     esac
 fi
-
-# Alt-ergo
-dnl AC_CHECK_PROG(ALTERGO,alt-ergo,alt-ergo,no)
-dnl if test "$ALTERGO" = no ; then
-dnl    AC_CHECK_PROG(ERGO,ergo,ergo,no)
-dnl    if test "$ERGO" = no ; then
-dnl      ERGOBIN=alt-ergo
-dnl    else
-dnl      ERGOBIN=ergo
-dnl    fi
-dnl else
-dnl    ERGOBIN=alt-ergo
-dnl fi
 
 # PVS
 AC_PATH_PROG(PVSC,pvs,no)
@@ -535,6 +502,7 @@ AC_SUBST(OCAMLYACC)
 AC_SUBST(OCAMLDOC)
 AC_SUBST(OCAMLBEST)
 AC_SUBST(OCAMLVERSION)
+AC_SUBST(OCAMLBUILD)
 AC_SUBST(OCAMLV)
 AC_SUBST(OCAMLLIB)
 AC_SUBST(OCAMLGRAPHLIB)
@@ -559,7 +527,6 @@ AC_SUBST(COQLIB)
 AC_SUBST(COQVER)
 AC_SUBST(WHYLIBCOQ)
 AC_SUBST(WHYFLOATS)
-AC_SUBST(JESSIELIBCOQ)
 AC_SUBST(JESSIEWHY3LIBCOQ)
 AC_SUBST(WHY3COQPATH)
 
@@ -576,9 +543,8 @@ AC_SUBST(MIZARLIB)
 AC_SUBST(FORPACK)
 
 # Finally create the Makefile from Makefile.in
-AC_OUTPUT(Makefile bench/bench)
-chmod a-w Makefile bench/bench
-chmod a+x bench/bench
+AC_OUTPUT(Makefile)
+chmod a-w Makefile
 
 # Summary
 
@@ -594,17 +560,15 @@ if test "$enable_apron" = "yes" ; then
    echo "    APRON lib            : $APRONLIB"
 fi
 
-echo "Why3 support             : $WHY3"
 if test "$WHY3" = "yes" ; then
-   echo "    Version              : $WHY3VERSION"
+   echo "Why3 version             : $WHY3VERSION"
 fi
 if test -n "$WHY3MSG" ; then
    echo "    $WHY3MSG"
 fi
 
-echo "Frama-C plugin           : $FRAMACPLUGIN"
 if test "$FRAMACPLUGIN" = "yes" ; then
-   echo "    Frama-C version      : $FRAMACVERSION"
+   echo "Frama-C version          : $FRAMACVERSION"
    if test -n "$FRAMACMSG" ; then
       echo "    $FRAMACMSG"
    fi
@@ -614,9 +578,6 @@ fi
 echo "Coq support              : $COQ"
 if test "$COQ" = "yes" ; then
    echo "    Version              : $COQVER ($COQVERSION)"
-   if test "$JESSIELIBCOQ" = ""; then
-      echo "                         : (Jessie/Why2 Coq proofs disabled, requires >= 8.1)"
-   fi
    if test "$JESSIEWHY3LIBCOQ" = ""; then
       echo "                         : (Jessie/Why3 Coq proofs disabled, requires Coq realizations for Why3)"
    fi

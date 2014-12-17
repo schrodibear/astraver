@@ -36,8 +36,6 @@ open Cil_types
 open Cil
 module FCAst = Ast
 module FCProject = Project
-(* Import from Why *)
-open Jc
 
 (* Utility functions *)
 open Common
@@ -206,8 +204,8 @@ let run () =
     let filename = basename ^ ".jc" in
     let () = Pp.print_in_file
       (fun fmt ->
-	 Jc_output.print_decls fmt pragmas;
-	 Format.fprintf fmt "%a" Jc_poutput.pdecls pfile)
+	 Jc.Output.print_decls fmt pragmas;
+	 Format.fprintf fmt "%a" Jc.Poutput.pdecls pfile)
       (Filename.concat jessie_subdir filename)
     in
     Console.feedback "File %s/%s written." jessie_subdir filename;
@@ -217,7 +215,7 @@ let run () =
     (* locname is 'file.cloc' *)
     let locname = basename ^ ".cloc" in
     Pp.print_in_file
-      (Jc_why_output_misc.jc_print_pos Jc_why_output.fprintf_vc_kind)
+      (Jc.Why_output_misc.jc_print_pos Jc.Why_output.fprintf_vc_kind)
       (Filename.concat jessie_subdir locname);
     Console.feedback "File %s/%s written." jessie_subdir locname;
 

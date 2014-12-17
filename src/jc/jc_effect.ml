@@ -73,13 +73,14 @@ let add_constant_tag_table (vi,r) =
 
 let transpose_labels ~label_assoc labs =
   match label_assoc with
-    | None -> labs
-    | Some assoc ->
-        LogicLabelSet.fold
-          (fun lab acc ->
-             let lab = try List.assoc lab assoc with Not_found -> lab in
-             LogicLabelSet.add lab acc)
-          labs LogicLabelSet.empty
+  | None -> labs
+  | Some assoc ->
+    LogicLabelSet.fold
+      (fun lab acc ->
+         let lab = try List.assoc lab assoc with Not_found -> lab in
+         LogicLabelSet.add lab acc)
+      labs
+      LogicLabelSet.empty
 
 let transpose_region ~region_assoc r =
   if Region.polymorphic r then

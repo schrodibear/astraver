@@ -30,15 +30,13 @@
 (**************************************************************************)
 
 
-
-(* import from JC *)
-open Jc
+open Cil_types
 
 type int_model = IMexact | IMbounded | IMmodulo
 
 val int_model : int_model ref
 
 (* transforms a CIL AST into a Jessie AST *)
-val file : Cil_types.file -> Jc_ast.pdecl list
+val file : file -> Jc.Ast.pdecl list
 
-val pragmas : Cil_types.file -> Jc_output.jc_decl list
+val pragmas : file -> Jc.Output.jc_decl list

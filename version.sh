@@ -8,21 +8,13 @@
 . ./Version
 
 # Why
-WHYVF=src/version.ml
-mkdir -p src
+WHYVF=src/why/version.ml
+mkdir -p src/why
 echo "let coqversion = \"$COQVER\"" > $WHYVF
 echo "let version = \"$VERSION\"" >> $WHYVF
 echo "let date = \""`date`"\"" >> $WHYVF
 echo "let bindir = \"$BINDIR\"" >> $WHYVF
 echo "let libdir = \"$LIBDIR/why\"" >> $WHYVF
-
-# Caduceus
-CADUCEUSVF=c/cversion.ml
-mkdir -p c
-echo "let version = \""$CVERSION"\"" > $CADUCEUSVF
-echo "let date = \""`date`"\"" >> $CADUCEUSVF
-echo "let libdir = \""$LIBDIR/caduceus"\"" >> $CADUCEUSVF
-
 
 # Doc
 DOCF=doc/version.tex
