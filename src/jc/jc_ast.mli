@@ -31,13 +31,13 @@
 
 
 
-open Jc_stdlib
-open Jc_env
-open Jc_region
+open Stdlib
+open Env
+open Region
 
 class type positioned =
 object
-  method pos: Loc.position
+  method pos: Why_loc.position
 end
 
 class type typed =
@@ -155,14 +155,14 @@ type ppattern_node =
 and ppattern = ppattern_node node_positioned
 
 type 'expr pbehavior =
-    Loc.position * string * identifier option * 'expr option
-    * 'expr option * (Loc.position * 'expr list) option *
-    (Loc.position * 'expr list) option * 'expr
+    Why_loc.position * string * identifier option * 'expr option
+    * 'expr option * (Why_loc.position * 'expr list) option *
+    (Why_loc.position * 'expr list) option * 'expr
       (*r loc, name, throws, assumes,requires,assigns,allocates, ensures *)
 
 and 'expr loopbehavior =
     identifier list
-    * 'expr option * (Loc.position * 'expr list) option
+    * 'expr option * (Why_loc.position * 'expr list) option
       (*r idents, invariant, assigns *)
 
 and pexpr_node =
@@ -336,7 +336,7 @@ type nexpr_node =
   | JCNEmutable of nexpr * nexpr ptag
   | JCNEeqtype of nexpr ptag * nexpr ptag
   | JCNEsubtype of nexpr ptag * nexpr ptag
-  (* Locations only *)
+  (* locations only *)
   | JCNErange of nexpr option * nexpr option
 
 and nexpr = nexpr_node c_nexpr
@@ -491,8 +491,8 @@ type 'li loop_annot = {
 type 'li behavior = {
   b_throws               : exception_info option;
   b_assumes              : 'li assertion option;
-  b_assigns              : (Loc.position * 'li location list) option;
-  b_allocates            : (Loc.position * 'li location list) option;
+  b_assigns              : (Why_loc.position * 'li location list) option;
+  b_allocates            : (Why_loc.position * 'li location list) option;
   mutable b_ensures      : 'li assertion;
   (* "free" postcondition, proved by static analysis. It can be used
      as the postcondition of a call without being checked in the function
@@ -509,8 +509,8 @@ type 'li fun_spec =    {
   mutable fs_decreases        : ('li term * 'li option) option;
   (* special behavior without [assumes] clause, on which all annotations
      not specifically attached to a behavior are checked *)
-  mutable fs_default_behavior : Loc.position * string * 'li behavior;
-  mutable fs_behavior         : (Loc.position * string * 'li behavior) list;
+  mutable fs_default_behavior : Why_loc.position * string * 'li behavior;
+  mutable fs_behavior         : (Why_loc.position * string * 'li behavior) list;
 }
 
 
@@ -556,7 +556,7 @@ type ('li,'fi) expr_node =
   | JCEassert of identifier list * asrt_kind * 'li assertion
   | JCEcontract of 'li assertion option *
       ('li term * identifier option) option * var_info *
-      (Loc.position * string * 'li behavior) list * ('li,'fi) expr
+      (Why_loc.position * string * 'li behavior) list * ('li,'fi) expr
       (* requires, decreases, vi of \result, behaviors, expression *)
   | JCEblock of ('li,'fi) expr list
   | JCEloop of 'li loop_annot * ('li,'fi) expr

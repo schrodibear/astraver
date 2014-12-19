@@ -29,25 +29,25 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_stdlib
-open Jc_env
-open Jc_envset
-open Jc_region
-open Jc_ast
-open Jc_fenv
+open Stdlib
+open Env
+open Envset
+open Region
+open Ast
+open Fenv
 
-open Jc_name
-open Jc_constructors
-open Jc_pervasives
-open Jc_separation
-open Jc_struct_tools
-open Jc_effect
-open Jc_interp_misc
-open Jc_invariants
-open Jc_pattern
+open Name
+open Constructors
+open Common
+open Separation
+open Struct_tools
+open Effect
+open Interp_misc
+open Invariants
+open Pattern
 
-open Jc_why_output_ast
-open Jc_why_output_misc
+open Why_output_ast
+open Why_output_misc
 open Format
 open Pp
 
@@ -111,7 +111,7 @@ struct
   let ty ty =
     { lt_name = mybag_suffix;
       lt_args = [ty] }
-  
+
   let ty_elt = function
     | { lt_args = [ty] } -> ty
     | _ -> assert false
@@ -121,8 +121,8 @@ struct
     let tvar = Jc_type_var.type_var_from_string ~univ:true "a_in" in
     pid.li_poly_args <- [tvar];
     let tvar = JCTtype_var tvar in
-    pid.li_parameters <- [Jc_pervasives.var tvar "x";
-                                     Jc_pervasives.var (jc_ty tvar) "s"];
+    pid.li_parameters <- [Common.var tvar "x";
+                                     Common.var (jc_ty tvar) "s"];
     pid
 
   let make_jc_in l =
@@ -139,8 +139,8 @@ struct
     let tvar = Jc_type_var.type_var_from_string ~univ:true "a" in
     pid.li_poly_args <- [tvar];
     let tvar = JCTtype_var tvar in
-    pid.li_parameters <- [Jc_pervasives.var (jc_ty tvar) "s1";
-                                     Jc_pervasives.var (jc_ty tvar) "s2"];
+    pid.li_parameters <- [Common.var (jc_ty tvar) "s1";
+                                     Common.var (jc_ty tvar) "s2"];
     pid
 
   let make_jc_disj l =
@@ -158,8 +158,8 @@ struct
     let tvar = Jc_type_var.type_var_from_string ~univ:true "a" in
     pid.li_poly_args <- [tvar];
     let tvar = JCTtype_var tvar in
-    pid.li_parameters <- [Jc_pervasives.var (jc_ty tvar) "s1";
-                                     Jc_pervasives.var (jc_ty tvar) "s2"];
+    pid.li_parameters <- [Common.var (jc_ty tvar) "s1";
+                                     Common.var (jc_ty tvar) "s2"];
     pid
 
   let make_jc_sub l =

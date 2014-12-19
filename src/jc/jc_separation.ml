@@ -29,17 +29,15 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Stdlib
+open Env
+open Envset
+open Region
+open Ast
+open Fenv
 
-
-open Jc_stdlib
-open Jc_env
-open Jc_envset
-open Jc_region
-open Jc_ast
-open Jc_fenv
-
-open Jc_constructors
-open Jc_pervasives
+open Constructors
+open Common
 
 open Format
 open Pp
@@ -238,7 +236,7 @@ let axiomatic comp a =
   with
   | Not_found ->
     Jc_options.jc_error
-      Loc.dummy_position
+      Why_loc.dummy_position
       "separation: axiomatic: can't find axiomatic: %s" a
 
 let logic_function comp f =

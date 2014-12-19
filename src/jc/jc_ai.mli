@@ -36,11 +36,11 @@ open Jc_fenv
 val normalize_expr: expr -> expr
 
 (* intraprocedural analysis *)
-val code_function : fun_info * Loc.position * fun_spec * expr option -> unit
+val code_function : fun_info * Why_loc.position * fun_spec * expr option -> unit
 
 
 (* interprocedural analysis *)
-val main_function : fun_info * Loc.position * fun_spec * expr option -> unit
+val main_function : fun_info * Why_loc.position * fun_spec * expr option -> unit
 
 
 (*

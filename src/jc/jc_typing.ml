@@ -31,23 +31,21 @@
 
 
 
-open Jc_stdlib
-open Jc_env
-open Jc_envset
-open Jc_region
-open Jc_ast
-open Jc_fenv
+open Stdlib
+open Env
+open Envset
+open Region
+open Ast
+open Fenv
 
-open Jc_constructors
-open Jc_pervasives
-(*
-open Jc_iterators
-*)
-open Jc_struct_tools
+open Constructors
+open Common
+
+open Struct_tools
 
 open Format
 
-exception Typing_error of Loc.position * string
+exception Typing_error of Why_loc.position * string
 
 let typing_error l =
   Format.kfprintf
@@ -104,7 +102,7 @@ let () =
        pi.li_parameters <- pl;
        pi.li_final_name <- whyid;
        Hashtbl.add logic_functions_env x pi)
-    Jc_pervasives.builtin_logic_symbols;
+    Common.builtin_logic_symbols;
   List.iter
     (fun (ty,x,whyid,pl,treat) ->
        let pi = make_fun_info x ty in
@@ -115,7 +113,7 @@ let () =
        pi.fun_final_name <- whyid;
        pi.fun_builtin_treatment <- treat;
        Hashtbl.add functions_env x pi)
-    Jc_pervasives.builtin_function_symbols
+    Common.builtin_function_symbols
 
 let real_of_integer =
   let fi =
@@ -129,7 +127,7 @@ let real_of_integer =
 
 
 type axiomatic_decl =
-  | ABaxiom of Loc.position * string * Jc_env.label list * Jc_constructors.assertion
+  | ABaxiom of Why_loc.position * string * Jc_env.label list * Jc_constructors.assertion
 
 type axiomatic_data =
     {
@@ -302,9 +300,9 @@ let mintype loc t1 t2 =
         if n1=n2 then t1 else raise Not_found
           (* TODO: integer is subtype of real *)
     | JCTenum e1, JCTenum e2 ->
-        if EnumInfo.(e1 = e2) then t1 else  Jc_pervasives.integer_type
+        if EnumInfo.(e1 = e2) then t1 else  Common.integer_type
     | (JCTenum _ | JCTnative Tinteger), (JCTenum _| JCTnative Tinteger) ->
-        Jc_pervasives.integer_type
+        Common.integer_type
     | JCTlogic s1, JCTlogic s2 ->
         if s1=s2 then t1 else raise Not_found
     | JCTpointer(JCtag(s1, []), _, _), JCTpointer(pc, _, _)
@@ -2401,7 +2399,7 @@ used as an assertion, not as a term" pi.li_name
                 typing_error e#pos "type `%a' expected instead of `%a'"
                   print_type tei print_type te1#typ
         in
-        Jc_pervasives.any_type, region, JCEthrow(ei, te1o)
+        Common.any_type, region, JCEthrow(ei, te1o)
     | JCNEpack(e1, t) ->
         let te1 = fe e1 in
         begin match te1#typ with
@@ -3213,7 +3211,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
                 fs_free_requires = assertion_true;
 		fs_decreases = None;
                 fs_default_behavior =
-		  Loc.dummy_position ,"default", default_behavior;
+		  Why_loc.dummy_position ,"default", default_behavior;
                 fs_behavior = [] }
             in
 	    reset_return_label ();

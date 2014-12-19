@@ -29,11 +29,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
-
-open Jc_stdlib
-open Jc_env
-open Jc_envset
+open Stdlib
+open Env
+open Envset
 
 open Format
 open Pp
@@ -76,7 +74,7 @@ module InternalRegion = struct
 
   let equal r1 r2 = r1.r_id = r2.r_id
 
-  let compare r1 r2 = Pervasives.compare r1.r_id r2.r_id
+  let compare r1 r2 = compare r1.r_id r2.r_id
 
   let hash r = r.r_id
 

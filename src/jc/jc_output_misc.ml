@@ -29,9 +29,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_pervasives
-open Jc_env
-open Jc_ast
+open Common
+open Env
+open Ast
 open Format
 open Pp
 

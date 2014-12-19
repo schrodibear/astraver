@@ -31,16 +31,16 @@
 
 
 
-open Jc_stdlib
-open Jc_env
-open Jc_region
-open Jc_ast
-open Jc_fenv
-open Jc_pervasives
+open Stdlib
+open Env
+open Region
+open Ast
+open Fenv
+open Common
 
 open Format
 
-module Output = (val Jc_options.backend)
+module Output = (val Options.backend)
 
 let parse_file f =
   try
@@ -50,7 +50,7 @@ let parse_file f =
     d
   with
   | Jc_lexer.Lexical_error (l, s) ->
-    eprintf "%a: lexical error: %s@." Loc.gen_report_position l s;
+    eprintf "%a: lexical error: %s@." Why_loc.gen_report_position l s;
     exit 1
 
 let compute_regions logic_components components =
@@ -221,13 +221,13 @@ let main () =
       (* production phase 1.2: translate coding types *)
       Jc_options.lprintf "Translate structures@.";
       push_decls
-        (StringHashtblIter.fold (fun _ (st, _) acc -> Jc_interp.tr_struct st acc)
+        (StringHashtblIter.fold (fun _ (st, _) acc -> Interp.struc st acc)
            Jc_typing.structs_table);
 
       Jc_options.lprintf "Translate variants@.";
       push_decls
         (StringHashtblIter.fold
-           (fun _ -> Jc_interp.tr_root) Jc_typing.roots_table);
+           (fun _ -> Interp.root) Jc_typing.roots_table);
 
       (* production phase 2: generation of Why variables *)
 
@@ -434,13 +434,13 @@ let main () =
     Jc_make.makefile filename
   with
     | Jc_typing.Typing_error (l, s) when not Jc_options.debug ->
-      eprintf "%a: typing error: %s@." Loc.gen_report_position l s;
+      eprintf "%a: typing error: %s@." Why_loc.gen_report_position l s;
       exit 1
     | Jc_options.Jc_error (l, s) when not Jc_options.debug ->
-      eprintf "%a: [Error]: %s@." Loc.gen_report_position l s;
+      eprintf "%a: [Error]: %s@." Why_loc.gen_report_position l s;
       exit 1
     | Assert_failure (f, l, c) as exn when not Jc_options.debug ->
-      eprintf "%a:@." Loc.gen_report_line (f,l,c,c);
+      eprintf "%a:@." Why_loc.gen_report_line (f,l,c,c);
       raise exn
 
 let _ =

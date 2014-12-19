@@ -93,18 +93,18 @@ val close_log : unit -> unit
 
 (* error handling *)
 
-exception Jc_error of Loc.position * string
+exception Jc_error of Why_loc.position * string
 
-val jc_error : Loc.position -> ('a, unit, string, 'b) format4 -> 'a
-val jc_warning : Loc.position -> ('a, Format.formatter, unit, unit) format4 -> 'a
+val jc_error : Why_loc.position -> ('a, unit, string, 'b) format4 -> 'a
+val jc_warning : Why_loc.position -> ('a, Format.formatter, unit, unit) format4 -> 'a
 
-val parsing_error : Loc.position -> ('a, unit, string, 'b) format4 -> 'a
+val parsing_error : Why_loc.position -> ('a, unit, string, 'b) format4 -> 'a
 
 val pos_table :
   (string, (string * int * int * int * Jc_why_output_ast.vc_kind option * (string * Rc.rc_value) list))
      Hashtbl.t
 
-val position_of_label: string -> Loc.position option
+val position_of_label: string -> Why_loc.position option
 
 (*
   Local Variables:

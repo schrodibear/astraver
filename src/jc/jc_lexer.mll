@@ -33,8 +33,8 @@
 (*i $Id: jc_lexer.mll,v 1.95 2010-02-19 15:51:08 marche Exp $ i*)
 
 {
-  open Jc_ast
-  open Jc_parser
+  open Ast
+  open Parser
   open Lexing
 
   type location = Lexing.position * Lexing.position
@@ -53,7 +53,7 @@
 
   let newline lexbuf =
     let pos = lexbuf.lex_curr_p in
-    lexbuf.lex_curr_p <- 
+    lexbuf.lex_curr_p <-
       { pos with pos_lnum = pos.pos_lnum + 1; pos_bol = pos.pos_cnum }
 
   (* Update the current location with file name and line number. *)
@@ -64,7 +64,7 @@
       | None -> pos.pos_fname
       | Some s -> s
     in
-    lexbuf.lex_curr_p <- 
+    lexbuf.lex_curr_p <-
       { pos with
 	  pos_fname = new_file;
 	  pos_lnum = if absolute then line else pos.pos_lnum + line;
@@ -75,10 +75,10 @@
     let table = Hashtbl.create 17 in
     List.iter
       (fun (_ty,id,_whyid,_params) -> Hashtbl.add table id ())
-      Jc_pervasives.builtin_logic_symbols;
+      Common.builtin_logic_symbols;
     List.iter
       (fun (_ty,id,_whyid,_params,_) -> Hashtbl.add table id ())
-      Jc_pervasives.builtin_function_symbols;
+      Common.builtin_function_symbols;
     table
 
   let special_id lexbuf s =
@@ -96,12 +96,12 @@
       | "InvariantPolicy" ->
 	  begin
 	    Jc_options.inv_sem :=
-	      match v with	  
+	      match v with
 		| "None" -> Jc_env.InvNone
 		| "Arguments" -> Jc_env.InvArguments
 		| "Ownership" -> Jc_env.InvOwnership
 		| _ -> lex_error lexbuf ("unknown invariant policy " ^ v)
-	  end  
+	  end
       | "SeparationPolicy" ->
 	  begin
 	    Jc_options.separation_sem :=
@@ -109,7 +109,7 @@
 		| "None" -> Jc_env.SepNone
 		| "Regions" -> Jc_env.SepRegions
 		| _ -> lex_error lexbuf ("unknown separation policy " ^ v)
-	  end  
+	  end
       | "AnnotationPolicy" ->
 	  begin
 	    Jc_options.annotation_sem :=
@@ -120,35 +120,35 @@
 		| "StrongPre" -> Jc_env.AnnotStrongPre
 		| "WeakPre" -> Jc_env.AnnotWeakPre
 		| _ -> lex_error lexbuf ("unknown annotation policy " ^ v)
-	  end  
+	  end
       | "AbstractDomain" ->
 	  begin
 	    Jc_options.ai_domain :=
 	      match v with
-		| "None" -> Jc_env.AbsNone 
-		| "Box" -> Jc_env.AbsBox 
-		| "Oct" -> Jc_env.AbsOct 
-		| "Pol" -> Jc_env.AbsPol 
+		| "None" -> Jc_env.AbsNone
+		| "Box" -> Jc_env.AbsBox
+		| "Oct" -> Jc_env.AbsOct
+		| "Pol" -> Jc_env.AbsPol
 		| _ -> lex_error lexbuf ("unknown abstract domain " ^ v)
-	  end  
+	  end
       | "IntModel" ->
 	  begin
 	    Jc_options.set_int_model
 	      (match v with
 		 | "bounded" -> Jc_env.IMbounded
-		 | "modulo" -> Jc_env.IMmodulo 
+		 | "modulo" -> Jc_env.IMmodulo
 		 | _ -> lex_error lexbuf ("unknown int model " ^ v))
-	  end  
+	  end
       | "FloatModel" ->
 	  begin
-	    Jc_options.float_model := 
+	    Jc_options.float_model :=
 	      (match v with
 	         | "math" -> Jc_env.FMmath
 		 | "defensive" -> Jc_env.FMdefensive
 		 | "full" -> Jc_env.FMfull
 		 | "multirounding" -> Jc_env.FMmultirounding
 		 | _ -> lex_error lexbuf ("unknown float model " ^ v))
-	  end  
+	  end
       | "FloatRoundingMode" ->
 	  begin
 	    Jc_options.current_rounding_mode :=
@@ -157,9 +157,9 @@
 		 | "down" -> Jc_env.FRMDown
 		 | "up" -> Jc_env.FRMUp
 		 | "toZero" -> Jc_env.FRMToZero
-		 | "nearestAway" -> Jc_env.FRMNearestAway 
+		 | "nearestAway" -> Jc_env.FRMNearestAway
 		 | _ -> lex_error lexbuf ("unknown float rounding mode " ^ v))
-	  end 
+	  end
       | "FloatInstructionSet" ->
 	  begin
 	    Jc_options.float_instruction_set :=
@@ -167,7 +167,7 @@
 		 | "x87" -> Jc_env.FISx87
 		 | "ieee754" -> Jc_env.FISstrictIEEE754
 		 | _ -> lex_error lexbuf ("unknown float instruction set " ^ v))
-	  end 
+	  end
       | "TerminationPolicy" ->
 	  begin
 	    Jc_options.termination_policy :=
@@ -176,7 +176,7 @@
 		 | "never" -> Jc_env.TPnever
 		 | "user" -> Jc_env.TPuser
 		 | _ -> lex_error lexbuf ("unknown termination policy " ^ v))
-	  end 
+	  end
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 
  let float_suffix = function
@@ -296,9 +296,9 @@ rule token = parse
         token lexbuf }
   | '#' [^'\n']* '\n'       { newline lexbuf; token lexbuf }
 *)
-  | '#' space* ((rL | rD)+ as id) space* "=" 
+  | '#' space* ((rL | rD)+ as id) space* "="
         space* ((rL | rD)+ as v) space* '\n'
-      { pragma lexbuf id v; newline lexbuf; token lexbuf } 
+      { pragma lexbuf id v; newline lexbuf; token lexbuf }
   | '#' ' '* "Gen_Separation" { PRAGMA_GEN_SEP }
   | '#' ' '* "Gen_Frame" { PRAGMA_GEN_FRAME }
   | '#' ' '* "Gen_Sub" { PRAGMA_GEN_SUB }
@@ -315,9 +315,9 @@ rule token = parse
   | ('0'['x''X'] rH+ '.' rH* rP) as pre
   | ('0'['x''X'] rH* '.' rH+ rP) as pre
   | ('0'['x''X'] rH+ rP) as pre
-  | (rD+ rE) as pre  
-  | (rD* "." rD+ (rE)?) as pre  
-  | (rD+ "." rD* (rE)?) as pre   
+  | (rD+ rE) as pre
+  | (rD* "." rD+ (rE)?) as pre
+  | (rD+ "." rD* (rE)?) as pre
       { CONSTANT (JCCreal pre) }
 
       (* trick to deal with intervals like 0..10 *)
@@ -368,8 +368,8 @@ rule token = parse
   | "."                     { DOT }
   | ".."                    { DOTDOT }
   | "..."                   { DOTDOTDOT }
-  | "<:"                    { LTCOLON } 
-  | ":>"                    { COLONGT } 
+  | "<:"                    { LTCOLON }
+  | ":>"                    { COLONGT }
   | "&"                     { AMP }
   | "!"                     { EXCLAM }
   | "~"                     { TILDE }
@@ -402,21 +402,21 @@ and string = parse
   | '\\' backslash_escapes
       { Buffer.add_string buf (lexeme lexbuf);
 	string lexbuf }
-  | '\\' _ 
+  | '\\' _
       { lex_error lexbuf "unknown escape sequence in string" }
   | ['\n' '\r']
       { (* no \n anymore in strings since java 1.4 *)
 	lex_error lexbuf "string not terminated"; }
-  | [^ '\n' '\\' '"']+ 
+  | [^ '\n' '\\' '"']+
       { Buffer.add_string buf (lexeme lexbuf); string lexbuf }
   | eof
       { lex_error lexbuf "string not terminated" }
 
-      
+
 {
 
 let dotdot_mem = ref false
- 
+
 let next_token lexbuf =
   if !dotdot_mem then
     begin
@@ -440,13 +440,12 @@ let next_token lexbuf =
       Jc_parser.file next_token lb
     with Parsing.Parse_error ->
       Jc_options.parsing_error (loc lb) ""
-	
+
 }
 
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "make -C .. bin/jessie.byte"
-End: 
+End:
 *)
-

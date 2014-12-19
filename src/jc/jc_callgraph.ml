@@ -29,15 +29,15 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_stdlib
-open Jc_env
-open Jc_ast
-open Jc_fenv
+open Stdlib
+open Env
+open Ast
+open Fenv
 
-open Jc_pervasives
+open Common
 
 let rec term acc t =
-  Jc_iterators.fold_term 
+  Jc_iterators.fold_term
     (fun acc t -> match t#node with
     | JCTapp app -> app.app_fun::acc
     | _ -> acc
@@ -49,15 +49,15 @@ let tag acc t = match t#node with
 
 let rec assertion acc p =
   match p#node with
-  | JCAtrue 
+  | JCAtrue
   | JCAfalse -> acc
   | JCArelation(t1,_op,t2) ->
       term (term acc t1) t2
   | JCAapp app -> app.app_fun :: (List.fold_left term acc app.app_args)
   | JCAand(pl) | JCAor(pl) -> List.fold_left assertion acc pl
-  | JCAimplies (p1,p2) | JCAiff(p1,p2) -> 
+  | JCAimplies (p1,p2) | JCAiff(p1,p2) ->
       assertion (assertion acc p1) p2
-  | JCAif(t1,p2,p3) -> 
+  | JCAif(t1,p2,p3) ->
       assertion (assertion (term acc t1) p2) p3
   | JCAnot p | JCAold p | JCAat(p,_) ->
       assertion acc p
@@ -74,17 +74,17 @@ let rec assertion acc p =
       term (List.fold_left (fun acc (_, a) -> assertion acc a) acc pal) t
 
 and triggers acc trigs =
-  List.fold_left (List.fold_left 
+  List.fold_left (List.fold_left
     (fun acc pat -> match pat with
        | JCAPatT t -> term acc t
        | JCAPatP p -> assertion acc p)) acc trigs
 
 (*
-let spec s = 
+let spec s =
   begin
   match s.requires with
     | None -> []
-    | Some p -> 
+    | Some p ->
 	predicate p
   end @
   begin
@@ -104,22 +104,22 @@ let spec s =
   end
 *)
 
-let loop_annot acc la = 
-  let acc = 
-    List.fold_left 
-      (fun acc (_id,inv,_assigns) -> 
+let loop_annot acc la =
+  let acc =
+    List.fold_left
+      (fun acc (_id,inv,_assigns) ->
 	 (* TODO : traverse assigns clause *)
 	 Option_misc.fold_left assertion acc inv)
-      acc la.loop_behaviors 
+      acc la.loop_behaviors
   in
   match la.loop_variant with
   | None -> acc
   | Some (t,None) -> term acc t
   | Some (t,Some ri) -> term (ri::acc) t
 
-let expr = 
-  Jc_iterators.IExpr.fold_left 
-    (fun acc e -> match e#node with  
+let expr =
+  Jc_iterators.IExpr.fold_left
+    (fun acc e -> match e#node with
        | JCEapp call ->
 	   let f = call.call_fun in
 	   let (a,b)=acc in
@@ -150,29 +150,29 @@ let compute_axiomatic_calls a =
     with
 	Not_found -> assert false
 
-let compute_logic_calls f t = 
+let compute_logic_calls f t =
   let calls =
     match t with
       | JCNone -> []
-      | JCTerm t -> term [] t 
-      | JCAssertion a -> assertion [] a 
-      | JCReads _r -> 
+      | JCTerm t -> term [] t
+      | JCAssertion a -> assertion [] a
+      | JCReads _r ->
 	  begin
 	    match f.li_axiomatic with
 	      | None -> []
-	      | Some a -> compute_axiomatic_calls a 
+	      | Some a -> compute_axiomatic_calls a
 	  end
-      | JCInductive l -> 
+      | JCInductive l ->
 	  List.fold_left (fun acc (_,_,a) -> assertion acc a) [] l
   in
   f.li_calls <- calls
 
-let compute_calls f _s b = 
+let compute_calls f _s b =
   let (_a,b) = expr ([],[]) b in
   f.fun_calls <- b
-      
-module LogicCallGraph = struct 
-  type t = (Jc_fenv.logic_info * Jc_fenv.term_or_assertion) IntHashtblIter.t 
+
+module LogicCallGraph = struct
+  type t = (Jc_fenv.logic_info * Jc_fenv.term_or_assertion) IntHashtblIter.t
   module V = struct
     type t = logic_info
     let compare f1 f2 = Pervasives.compare f1.li_tag f2.li_tag
@@ -180,15 +180,15 @@ module LogicCallGraph = struct
     let equal f1 f2 = f1 == f2
   end
   let iter_vertex iter =
-    IntHashtblIter.iter (fun _ (f,_a) -> iter f) 
+    IntHashtblIter.iter (fun _ (f,_a) -> iter f)
   let iter_succ iter _ f =
-    List.iter iter f.li_calls 
+    List.iter iter f.li_calls
   end
 
 module LogicCallComponents = Graph.Components.Make(LogicCallGraph)
 
-module CallGraph = struct 
-  type t = (fun_info * Loc.position * fun_spec * expr option) IntHashtblIter.t
+module CallGraph = struct
+  type t = (fun_info * Why_loc.position * fun_spec * expr option) IntHashtblIter.t
   module V = struct
     type t = fun_info
     let compare f1 f2 = Pervasives.compare f1.fun_tag f2.fun_tag
@@ -196,9 +196,9 @@ module CallGraph = struct
     let equal f1 f2 = f1 == f2
   end
   let iter_vertex iter =
-    IntHashtblIter.iter (fun _ (f,_loc,_spec,_b) -> iter f) 
+    IntHashtblIter.iter (fun _ (f,_loc,_spec,_b) -> iter f)
   let iter_succ iter _ f =
-    List.iter iter f.fun_calls 
+    List.iter iter f.fun_calls
   end
 
 module CallComponents = Graph.Components.Make(CallGraph)
@@ -209,15 +209,15 @@ open Pp
 let compute_logic_components ltable =
   let tab_comp = LogicCallComponents.scc_array ltable in
   Jc_options.lprintf "***********************************\n";
-  Jc_options.lprintf "Logic call graph: has %d components\n" 
+  Jc_options.lprintf "Logic call graph: has %d components\n"
     (Array.length tab_comp);
   Jc_options.lprintf "***********************************\n";
-  Array.iteri 
-    (fun i l -> 
+  Array.iteri
+    (fun i l ->
        Jc_options.lprintf "Component %d:\n%a@." i
-	 (print_list newline 
+	 (print_list newline
 	    (fun fmt f -> fprintf fmt " %s calls: %a\n" f.li_name
-		 (print_list comma 
+		 (print_list comma
 		    (fun fmt f -> fprintf fmt "%s" f.li_name))
 		 f.li_calls))
 	 l)
@@ -225,29 +225,29 @@ let compute_logic_components ltable =
   tab_comp
 
 
-let compute_components table = 
+let compute_components table =
   (* see above *)
   let tab_comp = CallComponents.scc_array table in
   Jc_options.lprintf "******************************\n";
   Jc_options.lprintf "Call graph: has %d components\n" (Array.length tab_comp);
   Jc_options.lprintf "******************************\n";
-  Array.iteri 
-    (fun i l -> 
+  Array.iteri
+    (fun i l ->
       Jc_options.lprintf "Component %d:\n%a@." i
-	(print_list newline 
+	(print_list newline
 	   (fun fmt f -> fprintf fmt " %s calls: %a\n" f.fun_name
-	       (print_list comma 
+	       (print_list comma
 		  (fun fmt f -> fprintf fmt "%s" f.fun_name))
 	       f.fun_calls))
 	l)
     tab_comp;
   tab_comp
-    
-    
+
+
 
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
-End: 
+End:
 *)

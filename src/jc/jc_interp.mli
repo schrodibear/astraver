@@ -55,10 +55,10 @@ val tr_logic_type :
   string * Jc_type_var.t list ->
   why_decl list -> why_decl list
 
-val tr_struct :
+val struc :
   Jc_env.struct_info -> why_decl list -> why_decl list
 
-val tr_root :
+val root :
   Jc_env.root_info -> why_decl list -> why_decl list
 
 val tr_enum_type :
@@ -104,7 +104,7 @@ val term_coerce :
   global_assertion:bool ->
   Jc_env.label ->
   ?cast:bool ->
-  Loc.position ->
+  Why_loc.position ->
   Jc_env.jc_type ->
   Jc_env.jc_type ->
   < region : Jc_region.RegionTable.key; .. > ->
@@ -131,7 +131,7 @@ val assertion :
 (** {2 theories} *)
 
 val tr_axiom :
-  Loc.position ->
+  Why_loc.position ->
   string ->
   is_axiom:bool ->
   Jc_env.label list ->
@@ -150,7 +150,7 @@ val pre_tr_fun :
 
 val tr_fun :
   Jc_fenv.fun_info ->
-  Loc.position ->
+  Why_loc.position ->
   Jc_fenv.fun_spec ->
   (Jc_fenv.logic_info, Jc_fenv.fun_info) Jc_ast.expr option ->
   why_decl list -> why_decl list

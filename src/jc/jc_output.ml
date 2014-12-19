@@ -32,12 +32,12 @@
 
 
 open Format
-open Jc_env
-open Jc_ast
-open Jc_fenv
-open Jc_pervasives
-open Jc_constructors
-open Jc_output_misc
+open Env
+open Ast
+open Fenv
+open Common
+open Constructors
+open Output_misc
 open Pp
 
 type jc_decl =

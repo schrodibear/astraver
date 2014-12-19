@@ -30,26 +30,26 @@
 (**************************************************************************)
 
 
-open Jc_stdlib
-open Jc_env
-open Jc_envset
-open Jc_region
-open Jc_ast
-open Jc_fenv
+open Stdlib
+open Env
+open Envset
+open Region
+open Ast
+open Fenv
 
-open Jc_name
-open Jc_constructors
-open Jc_pervasives
-open Jc_separation
-open Jc_struct_tools
-open Jc_effect
-open Jc_interp_misc
-open Jc_invariants
-open Jc_pattern
+open Name
+open Constructors
+open Common
+open Separation
+open Struct_tools
+open Jc.Effect
+open Interp_misc
+open Invariants
+open Pattern
 
-open Jc_why_output_ast
-open Jc_why_output_misc
-module Output = (val Jc_options.backend)
+open Why_output_ast
+open Why_output_misc
+module Output = (val Options.backend)
 
 open Format
 open Pp
@@ -225,7 +225,7 @@ let frame_between_name = "frame_between"
 let frame_between ftin notin labels =
   let pid = make_pred frame_between_name in
   pid.li_final_name <- frame_between_name; (* ugly *)
-  let var = Jc_pervasives.var (NotIn.jc_ty notin) "a" in
+  let var = Common.var (NotIn.jc_ty notin) "a" in
   pid.li_parameters <- [var];
   let ef = {empty_effects with e_memories =
       MemoryMap.add notin.NotIn.mem

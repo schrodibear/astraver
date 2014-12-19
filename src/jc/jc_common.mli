@@ -110,6 +110,7 @@ val make_pred : string -> Jc_fenv.logic_info
 val make_logic_fun : string -> Jc_env.jc_type -> Jc_fenv.logic_info
 
 val location_set_region : location_set -> Jc_env.region
+val location_set_of_location : location -> location_set
 (*
 val direct_embedded_struct_fields : Jc_env.struct_info -> Jc_env.field_info list
 val embedded_struct_fields : Jc_env.struct_info -> Jc_env.field_info list

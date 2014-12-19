@@ -38,8 +38,8 @@ open Jc_fenv
 
 class positioned ~pos =
 object
-  method pos: Loc.position =
-    match pos with None -> Loc.dummy_position | Some pos -> pos
+  method pos: Why_loc.position =
+    match pos with None -> Why_loc.dummy_position | Some pos -> pos
 end
 
 class typed ~typ =
@@ -78,12 +78,12 @@ object
   method node: 'a = node
 end
 
-class ptype ?(pos = Loc.dummy_position) node =
+class ptype ?(pos = Why_loc.dummy_position) node =
 object
   inherit [ptype_node] node_positioned ~pos node
 end
 
-class pexpr ?(pos = Loc.dummy_position) node =
+class pexpr ?(pos = Why_loc.dummy_position) node =
 object
   inherit [pexpr_node] node_positioned ~pos node
 end
@@ -93,7 +93,7 @@ class pexpr_with ?pos ?node e =
   let node = match node with None -> e#node | Some node -> node in
   pexpr ~pos node
 
-class nexpr ?(pos = Loc.dummy_position) ?label node =
+class nexpr ?(pos = Why_loc.dummy_position) ?label node =
 object
   inherit labeled label
   inherit [nexpr_node] node_positioned ~pos node
@@ -105,7 +105,7 @@ class nexpr_with ?pos ?node e =
   let llab = e#label in
   nexpr ~pos ~label:llab node
 
-class pattern ?(pos = Loc.dummy_position) ~typ node =
+class pattern ?(pos = Why_loc.dummy_position) ~typ node =
 object
   inherit typed typ
   inherit [pattern_node] node_positioned ~pos node
@@ -117,7 +117,7 @@ class pattern_with ?pos ?node ?typ p =
   let typ = match typ with None -> p#typ | Some typ -> typ in
   pattern ~pos ~typ node
 
-class term ?(pos = Loc.dummy_position) ~typ ?(mark="") ?label ?region node =
+class term ?(pos = Why_loc.dummy_position) ~typ ?(mark="") ?label ?region node =
   let region =
     match region with None -> dummy_region | Some region -> region
   in
@@ -146,11 +146,11 @@ let term_with_node t ?(pos=t#pos) ?(typ=t#typ) ?(mark=t#mark) ?(region=t#region)
 let term_with_node_nomark t ?(pos=t#pos) ?(typ=t#typ) ?(mark="") ?(region=t#region) node =
   new term ~pos ~typ ~mark ?label:t#label ~region node
 
-class term_var ?(pos = Loc.dummy_position) ?(mark="") v =
+class term_var ?(pos = Why_loc.dummy_position) ?(mark="") v =
   term ~pos ~typ:v.vi_type ~mark ~region:v.vi_region
     (JCTvar v)
 
-class location ?(pos = Loc.dummy_position) ~typ ?label ?region node =
+class location ?(pos = Why_loc.dummy_position) ~typ ?label ?region node =
   let region =
     match region with None -> dummy_region | Some region -> region
   in
@@ -171,7 +171,7 @@ let location_with_node t ?(pos=t#pos) ?(typ=t#typ) ?label ?(region=t#region) nod
   let label = match label with None -> t#label | Some _ -> label in
   new location ~pos ~typ ?label ~region node
 
-class location_set ?(pos = Loc.dummy_position) ~typ ?label ?region node =
+class location_set ?(pos = Why_loc.dummy_position) ~typ ?label ?region node =
   let region =
     match region with None -> dummy_region | Some region -> region
   in
@@ -192,7 +192,7 @@ let location_set_with_node t ?(pos=t#pos) ?(typ=t#typ) ?label ?(region=t#region)
   let label = match label with None -> t#label | Some _ -> label in
   new location_set ~pos ~typ ?label ~region node
 
-class expr ?(pos = Loc.dummy_position) ~typ ?(mark="") ?region
+class expr ?(pos = Why_loc.dummy_position) ~typ ?(mark="") ?region
   ?original_type node =
   let region =
     match region with None -> dummy_region | Some region -> region
@@ -223,7 +223,7 @@ class expr_with ?pos ?typ ?mark ?region ?node ?original_type e =
 let expr_with_node e ?(pos=e#pos) ?(typ=e#typ) ?(mark=e#mark) ?(region=e#region) ?(original_type=e#original_type) =
   new expr ~pos ~typ ~mark ~region ~original_type
 
-class assertion ?(mark="") ?label ?(pos = Loc.dummy_position) node =
+class assertion ?(mark="") ?label ?(pos = Why_loc.dummy_position) node =
 object
   inherit marked mark
   inherit labeled label
@@ -242,7 +242,7 @@ class assertion_with ?pos ?mark ?node a =
 let assertion_with_node a ?(pos=a#pos) ?(mark=a#mark) node =
   new assertion ~pos ~mark node
 
-class ['expr] ptag ?(pos = Loc.dummy_position) node =
+class ['expr] ptag ?(pos = Why_loc.dummy_position) node =
 object
   inherit ['expr ptag_node] node_positioned ~pos node
 end
@@ -252,7 +252,7 @@ class ['expr] ptag_with ?pos ?node t =
   let node = match node with None -> t#node | Some node -> node in
   ['expr] ptag ~pos node
 
-class tag ?(pos = Loc.dummy_position) node =
+class tag ?(pos = Why_loc.dummy_position) node =
 object
   inherit [tag_node] node_positioned ~pos node
 end
@@ -262,7 +262,7 @@ class tag_with ?pos ?node t =
   let node = match node with None -> t#node | Some node -> node in
   tag ~pos node
 
-class ['expr] decl ?(pos = Loc.dummy_position) node =
+class ['expr] decl ?(pos = Why_loc.dummy_position) node =
 object
   inherit ['expr decl_node] node_positioned ~pos node
 end
@@ -469,7 +469,7 @@ module PDecl = struct
   let mkabstract_domain_def ~value = mk ~node:(JCDabstract_domain value)
   let mkint_model_def ~value = mk ~node:(JCDint_model value)
 
-  let mkbehavior ?(pos = Loc.dummy_position) ~name ?throws ?assumes ?requires
+  let mkbehavior ?(pos = Why_loc.dummy_position) ~name ?throws ?assumes ?requires
       ?assigns ?allocates ?(ensures = mkboolean ~value:true ()) () =
     (pos, name, throws, assumes, requires, assigns, allocates, ensures)
 
@@ -477,7 +477,7 @@ module PDecl = struct
 
   let mkdecreases_clause ?measure expr = JCCdecreases(expr,measure)
 
-  let mkbehavior_clause ?(pos = Loc.dummy_position) ~name ?throws ?assumes ?requires
+  let mkbehavior_clause ?(pos = Why_loc.dummy_position) ~name ?throws ?assumes ?requires
       ?assigns ?allocates ?(ensures = mkboolean ~value:true ()) () =
       JCCbehavior (mkbehavior ~pos ~name ?throws ?assumes ?requires ?assigns ?allocates ~ensures ())
 
@@ -496,7 +496,7 @@ module PDecl = struct
             oo ensures ensures'
           )
       | _ -> raise (Invalid_argument "mkbehavior_with")
-  let mkassigns ?(pos = Loc.dummy_position) ?(locations = []) () =
+  let mkassigns ?(pos = Why_loc.dummy_position) ?(locations = []) () =
     pos, locations
 
   let mktag_invariant ~name ~var ~body = name, var, body

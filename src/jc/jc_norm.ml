@@ -31,12 +31,12 @@
 
 
 
-open Jc_env
-open Jc_envset
-open Jc_fenv
-open Jc_pervasives
-open Jc_constructors
-open Jc_ast
+open Env
+open Envset
+open Fenv
+open Common
+open Constructors
+open Ast
 open Format
 (*
 open Jc_iterators

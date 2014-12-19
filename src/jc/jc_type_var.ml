@@ -29,13 +29,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_env
-open Jc_envset
-open Jc_pervasives
+open Env
+open Envset
+open Common
 
 type t = type_var_info
 
-let type_var_from_string = let c = ref 0 in fun ?(univ=false) n -> incr c; 
+let type_var_from_string = let c = ref 0 in fun ?(univ=false) n -> incr c;
   { tvi_name = n;
     tvi_tag = !c;
     tvi_univ = univ}
@@ -47,7 +47,7 @@ let name x = x.tvi_name
 let uname x =
   name x ^ string_of_int (uid x)
 
-type typing_error = {f : 'a. Loc.position -> ('a, Format.formatter, unit, unit) format4 -> 'a}
+type typing_error = {f : 'a. Why_loc.position -> ('a, Format.formatter, unit, unit) format4 -> 'a}
 
 type env = { typing_error : typing_error;
              mutable smap : t StringMap.t;
@@ -58,21 +58,21 @@ let create x = {typing_error = x;
                 vmap = TypeVarMap.empty}
 
 let reset env = env.smap <- StringMap.empty;env.vmap <- TypeVarMap.empty
-  
+
 
 (** Add substitution from string to type *)
-let add_type_var env s = 
-  if StringMap.mem s env.smap 
+let add_type_var env s =
+  if StringMap.mem s env.smap
   then invalid_arg ("The same identifier appear twice as polymorphic variable in a function")
-  else 
+  else
     (let n = (type_var_from_string ~univ:true s) in
     env.smap <- StringMap.add s n env.smap;
     n)
 
 (*                    if subtype_strict te#typ ty then te
                      else
-                       typing_error e#pos 
-                         "type %a expected instead of %a" 
+                       typing_error e#pos
+                         "type %a expected instead of %a"
                          print_type ty print_type te#typ*)
 
 let find_type_var env s = StringMap.find s env.smap
@@ -84,7 +84,7 @@ let rec substruct st = function
       if st == st' then true else
         let vi = struct_root st and vi' = struct_root st' in
         (vi == vi' && (root_is_union vi))
-        || 
+        ||
         begin match st.si_parent with
           | None -> false
           | Some(p, []) -> substruct p pc
@@ -99,17 +99,17 @@ let rec dec_type ~subtype acc t1 t2 =
     | JCTnative t1, JCTnative t2 ->
         accorraise (t1=t2 ||
          (* integer is subtype of real *)
-            (subtype && match t1,t2 with 
+            (subtype && match t1,t2 with
                | Tinteger, Treal -> true
 	       | _ -> false))
-    | JCTenum ri1, JCTenum ri2 -> 
+    | JCTenum ri1, JCTenum ri2 ->
         accorraise (subtype && Num.ge_num ri1.ei_min ri2.ei_min &&
-                      Num.le_num ri1.ei_max ri2.ei_max) 
+                      Num.le_num ri1.ei_max ri2.ei_max)
     | JCTenum _, JCTnative (Tinteger | Treal) ->
         accorraise subtype
-    | JCTnative Tinteger, JCTenum _ -> 
+    | JCTnative Tinteger, JCTenum _ ->
         accorraise false
-    | JCTpointer(JCtag(s1, []), _, _), JCTpointer(pc, _, _) -> 
+    | JCTpointer(JCtag(s1, []), _, _), JCTpointer(pc, _, _) ->
         accorraise (substruct s1 pc)
     | JCTpointer(JCroot v1, _, _), JCTpointer(JCroot v2, _, _) ->
          accorraise (v1 == v2)
@@ -119,15 +119,15 @@ let rec dec_type ~subtype acc t1 t2 =
         if s1=s2 then List.fold_left2 (dec_type ~subtype) acc l1 l2
         else raise (Not_subtype (t1,t2))
           (* No subtyping for this case, the equality is strict *)
-    | JCTtype_var {tvi_tag = t1}, 
+    | JCTtype_var {tvi_tag = t1},
         JCTtype_var {tvi_tag = t2} when t1=t2-> acc
-    | (JCTtype_var ({tvi_univ = false} as tvar),t) 
+    | (JCTtype_var ({tvi_univ = false} as tvar),t)
     | (t,JCTtype_var ({tvi_univ = false} as tvar)) -> (tvar,t)::acc
     | _ -> accorraise false
 
 let rec subst_aux vmap a =
   match a with
-    | JCTtype_var tvar -> 
+    | JCTtype_var tvar ->
         (try TypeVarMap.find tvar vmap
         with Not_found -> a)
     | JCTlogic (s,l) -> JCTlogic (s,List.map (subst_aux vmap) l)
@@ -141,16 +141,16 @@ let rec occur_check tvar t =
     | JCTtype_var tvar2 -> TypeVarOrd.equal tvar tvar2
     | _ -> false
 
-let rec add_subst env (tvar,t) = 
+let rec add_subst env (tvar,t) =
   assert (not tvar.tvi_univ);
   let t = subst_aux env.vmap t in
   try
     let t2 = TypeVarMap.find tvar env.vmap in
     add_aux ~subtype:false env t2 t
-  with Not_found ->     
+  with Not_found ->
     if occur_check tvar t then raise (Not_subtype (JCTtype_var tvar,t))
     else env.vmap <- TypeVarMap.add tvar t env.vmap
-          
+
 and add_aux ~subtype env t1 t2 =
   let acc = dec_type ~subtype [] t1 t2 in
   List.iter (add_subst env) acc
@@ -158,14 +158,14 @@ and add_aux ~subtype env t1 t2 =
 (*let subtype_strict = subtype ~allow_implicit_cast:false*)
 
 (** Add an equality for unification *)
-let add ?(subtype=true) env pos x y = 
+let add ?(subtype=true) env pos x y =
   (*Format.printf "%a=%a@." print_type x print_type y;*)
   try
     add_aux ~subtype env x y
-  with Not_subtype (t1,t2) -> 
+  with Not_subtype (t1,t2) ->
     env.typing_error.f pos "%a and %a can't be unified" print_type t1 print_type t2
 
-(** Get instances of a list of type variables, 
+(** Get instances of a list of type variables,
     return a substitution function *)
 let instance l =
   let aux acc e =
@@ -185,10 +185,10 @@ let print fmt uenv = Format.fprintf fmt "uenv : smap : %a@.vmap : %a@." print_sm
 
 let subst_type_in_assertion uenv =
   Jc_iterators.map_term_in_assertion
-    (fun t -> new Jc_constructors.term_with ~typ:(subst uenv t#typ) t)                                   
-    
+    (fun t -> new Jc_constructors.term_with ~typ:(subst uenv t#typ) t)
+
 (*
-Local Variables: 
+Local Variables:
 compile-command: "unset LANG ; make -C .. byte"
-End: 
+End:
 *)

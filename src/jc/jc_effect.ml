@@ -32,18 +32,18 @@
 
 
 
-open Jc_stdlib
-open Jc_env
-open Jc_envset
-open Jc_region
-open Jc_ast
-open Jc_fenv
+open Stdlib
+open Env
+open Envset
+open Region
+open Ast
+open Fenv
 
-open Jc_name
-open Jc_constructors
-open Jc_pervasives
+open Name
+open Constructors
+open Common
 
-open Jc_struct_tools
+open Struct_tools
 
 open Format
 open Pp
@@ -64,10 +64,10 @@ let add_constant_memory (mc,r) =
   StringHashtblIter.add constant_memories (memory_name (mc,r)) (mc,r)
 
 let add_constant_alloc_table (ac,r) =
-  StringHashtblIter.add constant_alloc_tables (alloc_table_name (ac,r)) (ac,r)
+  StringHashtblIter.add constant_alloc_tables (Name.Of.alloc_table (ac,r)) (ac,r)
 
 let add_constant_tag_table (vi,r) =
-  StringHashtblIter.add constant_tag_tables (tag_table_name (vi,r)) (vi,r)
+  StringHashtblIter.add constant_tag_tables (Name.Of.tag_table (vi,r)) (vi,r)
 
 (* Transposition for calls *)
 
@@ -494,11 +494,11 @@ let add_local_effect lab ef v =
 
 let add_mutable_effect ef pc =
   { ef with e_mutable = StringSet.add
-      (pointer_class_type_name pc) ef.e_mutable }
+      (Name.Of.Class.pointer pc) ef.e_mutable }
 
 let add_committed_effect ef pc =
   { ef with e_committed = StringSet.add
-      (pointer_class_type_name pc) ef.e_committed }
+      (Name.Of.Class.pointer pc) ef.e_committed }
 
 (* Addition of a single read *)
 
@@ -1767,10 +1767,10 @@ let li_effects_from_axiomatic fi ax acc =
   with
   | Not_found ->
     Jc_options.jc_error
-      Loc.dummy_position
+      Why_loc.dummy_position
       "effects_from_axiomatic: can't find axiomatic: %s" ax
 
-exception Dangling_region of region * Loc.position * effect * string * Loc.position
+exception Dangling_region of region * Why_loc.position * effect * string * Why_loc.position
 
 let check_li_effects_from_axiomatic li =
   let check_decl d =
@@ -1809,15 +1809,15 @@ let check_li_effects_from_axiomatic li =
        "The inferred side effect of the logic function is:@ %a@]")
       r.r_name
       li.li_name
-      Loc.gen_report_position app_pos
+      Why_loc.gen_report_position app_pos
       ax_name
-      Loc.gen_report_position ax_pos
+      Why_loc.gen_report_position ax_pos
       li.li_name
       print_type r.r_type
       print_effect ef
   | Not_found ->
     Jc_options.jc_error
-      Loc.dummy_position
+      Why_loc.dummy_position
       "check_effects_from_axiomatic: can't find axiomatic for function: %s" li.li_name
 
 let logic_fun_effects f =
@@ -1844,7 +1844,7 @@ let logic_fun_effects f =
           ef
         | None -> (* not allowed outside axiomatics *)
           Jc_options.jc_error
-            Loc.dummy_position
+            Why_loc.dummy_position
             "Undefined pure logic function %s declared outside axiomatic"
             f.li_name
       end

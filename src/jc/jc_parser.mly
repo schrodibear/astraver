@@ -34,12 +34,12 @@
 %{
 
   open Format
-  open Jc_env
-  open Jc_ast
-  open Jc_pervasives
+  open Env
+  open Ast
+  open Common
   open Parsing
   open Error
-  open Jc_constructors
+  open Constructors
 
   let pos () = (symbol_start_pos (), symbol_end_pos ())
   let pos_i i = (rhs_start_pos i, rhs_end_pos i)
@@ -66,7 +66,7 @@
       (fun (v,t,x) ->
 	 if v then (t,x) else
 	   Jc_options.parsing_error
-	     Loc.dummy_position
+	     Why_loc.dummy_position
 	     "logic params cannot not be in invalid state")
 %}
 

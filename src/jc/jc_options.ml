@@ -248,14 +248,14 @@ let set_float_model fm = float_model := fm
 
 (* error handling *)
 
-exception Jc_error of Loc.position * string
+exception Jc_error of Why_loc.position * string
 
 let jc_error l =
   Format.ksprintf (fun s -> raise @@ Jc_error (l, s))
 
 let jc_warning l =
   Format.kfprintf
-    (fun _ -> eprintf "%a: [Warning]: %s@." Loc.gen_report_position l @@ flush_str_formatter ())
+    (fun _ -> eprintf "%a: [Warning]: %s@." Why_loc.gen_report_position l @@ flush_str_formatter ())
     str_formatter
 
 let parsing_error l f =

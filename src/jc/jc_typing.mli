@@ -29,16 +29,16 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_stdlib
-open Jc_env
-open Jc_ast
-open Jc_fenv
-open Jc_pervasives
+open Stdlib
+open Env
+open Ast
+open Fenv
+open Common
 
 val default_label : label list -> label option
- 
-val typing_error : 
-    Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
+
+val typing_error :
+    Why_loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
 
 val is_root_struct : struct_info -> bool
 
@@ -46,14 +46,14 @@ val substruct : struct_info -> pointer_class -> bool
 
 val logic_type_table : (string * type_var_info list) StringHashtblIter.t
 
-val logic_constants_table : 
+val logic_constants_table :
   (int, logic_info * Jc_fenv.logic_info Jc_ast.term) Hashtbl.t
 
 val logic_functions_table:
   (logic_info * term_or_assertion) IntHashtblIter.t
 
-val functions_table : 
-  (fun_info * Loc.position * fun_spec * expr option) IntHashtblIter.t
+val functions_table :
+  (fun_info * Why_loc.position * fun_spec * expr option) IntHashtblIter.t
 
 val variables_table : (var_info * expr option) IntHashtblIter.t
 
@@ -69,12 +69,12 @@ val enum_conversion_functions_table : (fun_info, string) Hashtbl.t
 val enum_conversion_logic_functions_table : (logic_info, string) Hashtbl.t
 *)
 
-val lemmas_table : 
-  (Loc.position * bool * type_var_info list * label list * assertion)
+val lemmas_table :
+  (Why_loc.position * bool * type_var_info list * label list * assertion)
   StringHashtblIter.t
 
 type axiomatic_decl =
-  | ABaxiom of Loc.position * string * Jc_env.label list * Jc_constructors.assertion
+  | ABaxiom of Why_loc.position * string * Jc_env.label list * Jc_constructors.assertion
 
 type axiomatic_data = private
     {
@@ -84,12 +84,12 @@ type axiomatic_data = private
 
 val axiomatics_table : axiomatic_data StringHashtblIter.t
 
-val global_invariants_table : 
+val global_invariants_table :
   (logic_info * assertion) IntHashtblIter.t
 
 val exceptions_table: exception_info StringHashtblIter.t
 
-exception Typing_error of Loc.position * string
+exception Typing_error of Why_loc.position * string
 
 val coerce : jc_type -> native_type -> expr -> expr
 
@@ -110,8 +110,8 @@ val pragma_gen_sep :  (int,
    [ `Logic of Jc_fenv.logic_info * string list * Jc_env.var_info list
    | `Pointer of Jc_env.var_info ] list) Jc_stdlib.Hashtbl.t
 
-val pragma_gen_frame : 
-  (int, Jc_fenv.logic_info * Jc_fenv.logic_info 
+val pragma_gen_frame :
+  (int, Jc_fenv.logic_info * Jc_fenv.logic_info
     * Jc_env.var_info list * Jc_env.var_info list *
       [ `Frame | `Sub ]) Jc_stdlib.Hashtbl.t
 
@@ -121,7 +121,7 @@ val pragma_gen_same :
 val comparable_types : jc_type -> jc_type -> bool
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "make -C .. bin/jessie.byte"
-End: 
+End:
 *)

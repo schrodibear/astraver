@@ -29,11 +29,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_name
-open Jc_stdlib
-open Jc_pervasives
-open Jc_env
-open Jc_envset
+open Name
+open Stdlib
+open Common
+open Env
+open Envset
 
 let alloc_class_of_mem_class =
   function
@@ -152,7 +152,7 @@ let rec all_memories select forbidden acc pc =
 	  (* add the fields to our list *)
 	  let acc =
 	    List.fold_left
-	      (fun acc mc -> StringMap.add (memory_class_name mc) mc acc)
+	      (fun acc mc -> StringMap.add (Name.Of.Class.memory mc) mc acc)
 	      acc mems
 	  in
 	  (* continue recursively on the fields *)
@@ -168,7 +168,7 @@ let rec all_memories select forbidden acc pc =
 		(List.map (fun st -> JCtag(st,[])) rt.ri_hroots)
 	  | RplainUnion ->
 	      let mc = JCmem_plain_union rt in
-	      StringMap.add (memory_class_name mc) mc acc
+	      StringMap.add (Name.Of.Class.memory mc) mc acc
 
 let all_memories ?(select = fun _ -> true) pc =
   Jc_options.lprintf "all_memories(%s):@." (Jc_output_misc.pointer_class pc);
@@ -223,11 +223,11 @@ let rec all_allocs select forbidden acc pc =
 	  let forbidden = StringSet.add st.si_name forbidden in
 	  List.fold_left
 	    (all_allocs select forbidden)
-	    (StringMap.add (alloc_class_name ac) ac acc)
+	    (StringMap.add (Name.Of.Class.alloc ac) ac acc)
 	    (fields_pointer_class (List.filter select (all_fields pc)))
     | JCroot rt ->
 	let ac = JCalloc_root rt in
-	let acc = StringMap.add (alloc_class_name ac) ac acc in
+	let acc = StringMap.add (Name.Of.Class.alloc ac) ac acc in
 	match rt.ri_kind with
 	  | Rvariant
 	  | RplainUnion -> acc

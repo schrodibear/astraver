@@ -142,7 +142,7 @@ struct
     | Some x -> x
     | None -> raise exn
 
-  let value_fatal ~in_ =
+  let value_fail ~in_ =
     function
     | Some x -> x
     | None -> failwith ("Tried to get some value from None in " ^ in_)
@@ -244,6 +244,14 @@ struct
       let acc = fold_left (fun acc e' -> (e,e') :: acc) acc l in
       all_pairs ~acc l
     | [] -> acc
+
+  let concat_map l ~f =
+    let rec aux acc =
+      function
+      | [] -> List.rev acc
+      | hd :: tl -> aux (rev_append (f hd) acc) tl
+    in
+    aux [] l
 
   let map_fold f acc l =
     let rev, acc =

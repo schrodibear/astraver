@@ -59,7 +59,7 @@ val uname: t -> string
 type env
 
 (** The type of function used in case of unification error *)
-type typing_error = {f : 'a. Loc.position -> ('a, Format.formatter, unit, unit) format4 -> 'a}
+type typing_error = {f : 'a. Why_loc.position -> ('a, Format.formatter, unit, unit) format4 -> 'a}
 
 val create : typing_error -> env
 val reset : env -> unit
@@ -73,7 +73,7 @@ val add_type_var : env -> string -> t
 val find_type_var : env -> string -> t
 
 (** Add an equality for unification of logic type variable*)
-val add : ?subtype:bool -> env ->  Loc.position -> jc_type -> jc_type -> unit
+val add : ?subtype:bool -> env ->  Why_loc.position -> jc_type -> jc_type -> unit
 
 val subst : env -> jc_type -> jc_type
 

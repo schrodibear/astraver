@@ -29,13 +29,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_pervasives
-open Jc_name
-open Jc_ast
-open Jc_env
-open Jc_interp_misc
-open Jc_why_output_ast
-open Jc_why_output_misc
+open Common
+open Name
+open Ast
+open Env
+open Interp_misc
+open Why_output_ast
+open Why_output_misc
 
 module type TAssertionMaker =
 sig
@@ -108,7 +108,7 @@ struct
 
   let make_subtag x st =
     let _, tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, Jc_region.dummy_region) in
-    make_subtag (make_typeof tag x) (LVar (tag_name st))
+    make_subtag (make_typeof tag x) (LVar (Name.Of.tag st))
   let make_or a b = LOr(a, b)
   let make_and a b = LAnd(a, b)
   let make_not a = LNot a
@@ -124,7 +124,7 @@ struct
 
   let make_subtag x st =
     let _, tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, Jc_region.dummy_region) in
-    make_subtag_bool (make_typeof tag x) (LVar (tag_name st))
+    make_subtag_bool (make_typeof tag x) (LVar (Name.Of.tag st))
   let make_or = make_or_term
   let make_and = make_and_term
   let make_not = make_not_term

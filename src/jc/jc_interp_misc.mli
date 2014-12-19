@@ -29,13 +29,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_env
-open Jc_envset
-open Jc_fenv
+open Env
+open Envset
+open Fenv
 
-open Jc_region
+open Region
 
-open Jc_why_output_ast
+open Why_output_ast
 
 (** {1 Preliminaries} *)
 
@@ -75,6 +75,12 @@ val make_subtag : term -> term -> assertion
 
 val make_eq : term -> term -> assertion
 (** builds eq(t1,t2) *)
+
+val make_le : term -> term -> assertion
+val make_ge : term -> term -> assertion
+
+val make_offset_min : alloc_class -> term -> term
+val make_offset_max : alloc_class -> term -> term
 
 val make_select: term -> term -> term
 (** builds select(t1,t2) *)
@@ -145,32 +151,6 @@ val ref_term :
 
 val any_value : region -> jc_type -> expr
 
-val make_valid_pred :
-  in_param:bool -> equal:bool -> ?left:bool -> ?right:bool -> alloc_class -> pointer_class -> why_decl
-
-val make_fresh_pred : for_:[`alloc_tables | `tag_tables] -> alloc_class -> pointer_class -> why_decl
-
-val make_instanceof_pred :
-  exact:bool ->
-  arg:(assertion, _, term -> term -> assertion, [`Range_l_r | `Singleton], _, _) arg ->
-  alloc_class -> pointer_class -> why_decl
-
-val make_instanceof_pred_app :
-  exact:bool ->
-  arg:(assertion, _, term -> term -> assertion, [ `Range_l_r | `Singleton ], _, 'r) arg ->
-  in_param:bool ->
-  alloc_class * region -> pointer_class -> term -> 'r
-
-val make_frame_pred : for_:[`alloc_tables | `tag_tables] ->alloc_class -> pointer_class -> why_decl
-
-val make_valid_pred_app :
-  in_param:bool -> equal:bool ->
-  alloc_class * RegionTable.key -> pointer_class -> term -> term option -> term option -> assertion
-
-val make_alloc_param :
-   arg:(why_decl, check_size:bool -> why_decl, _, [`Range_0_n | `Singleton], _, 'r) arg ->
-     alloc_class -> pointer_class -> 'r
-
 val make_conversion_params : pointer_class -> why_decl list
 
 val param : type_safe:bool -> var_info -> string * logic_type
@@ -216,8 +196,6 @@ val alloc_table_var : ?test_current_function:bool -> AllocClass.t * RegionTable.
 
 val plain_alloc_table_var : alloc_class * RegionTable.key -> expr
 
-val alloc_arguments : alloc_class * RegionTable.key -> pointer_class -> expr list
-
 val plain_tag_table_var : root_info * RegionTable.key -> expr
 
 val make_arguments :
@@ -252,10 +230,6 @@ val raw_pointer_type : logic_type -> logic_type
 val bitvector_type : logic_type
 
 (** {2 building output terms} *)
-
-val const_of_num :  Num.num -> term
-
-val const_of_int :  int -> term
 
 val const : Jc_ast.const -> constant
 (** constant *)
@@ -354,7 +328,7 @@ val read_locals :
 
 (** {1 Misc} *)
 
-val specialized_functions : (string * string StringMap.t) Jc_pervasives.StringHashtblIter.t
+val specialized_functions : (string * string StringMap.t) Common.StringHashtblIter.t
 
 (*
   Local Variables:

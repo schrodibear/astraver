@@ -72,12 +72,12 @@ let fprintf_vc_kind fmttr k =
 
 let add_why_label, add_why_id =
   (fun { l_kind; l_behavior; l_pos } ->
-    let f, l, fc, lc = Jc_position.to_loc l_pos in
-    let mark = Jc_pervasives.new_label_name () in
+    let f, l, fc, lc = Position.to_loc l_pos in
+    let mark = Common.new_label_name () in
     why_reg_pos mark (l_kind, None, (if l_behavior <> "" then Some l_behavior else None), f, l, fc, lc);
     mark),
   fun { why_name; why_expl; why_pos } ->
-    let f, l, fc, lc = Jc_position.to_loc why_pos in
+    let f, l, fc, lc = Position.to_loc why_pos in
     why_reg_pos why_name (None, Some why_expl, None, f, l, fc, lc)
 
 let rec fprintf_logic_type fmttr t =

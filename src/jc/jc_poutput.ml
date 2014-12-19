@@ -32,11 +32,11 @@
 
 
 open Format
-open Jc_env
-open Jc_fenv
-open Jc_pervasives
-open Jc_ast
-open Jc_output_misc
+open Env
+open Fenv
+open Pervasives
+open Ast
+open Output_misc
 open Pp
 
 

@@ -31,11 +31,11 @@
 
 
 
-open Jc_stdlib
-open Jc_env
-open Jc_envset
-open Jc_region
-open Jc_ast
+open Stdlib
+open Env
+open Envset
+open Region
+open Ast
 
 module rec LocationOrd : Map.OrderedType with type t = Effect.logic_info location =
 struct

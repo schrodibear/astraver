@@ -46,14 +46,14 @@ let of_pos ({ Lexing.pos_fname = f1; pos_lnum = l1; pos_bol = b1; pos_cnum = c1 
 
 let of_loc (f, l, b, e as loc) =
   if e >= b then Some (f, l, b, e - b + 1)
-  else if loc = Loc.dummy_floc then dummy_position
+  else if loc = Why_loc.dummy_floc then dummy_position
   else invalid_arg "Jc_position.of_loc"
 
 let to_loc =
   function
   | Some (f, l, b, n) ->
     f, l, b, b + n - 1
-  | None -> Loc.dummy_floc
+  | None -> Why_loc.dummy_floc
 
 let file =
   function

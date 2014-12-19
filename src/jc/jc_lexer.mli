@@ -33,10 +33,10 @@
 
 open Jc_ast
 
-exception Lexical_error of Loc.position * string
+exception Lexical_error of Why_loc.position * string
 
 (*
-exception Syntax_error of Loc.position
+exception Syntax_error of Why_loc.position
 *)
 
 val token : Lexing.lexbuf -> Jc_parser.token

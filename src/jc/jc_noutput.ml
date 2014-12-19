@@ -31,9 +31,9 @@
 
 (** Ouput the normalized AST. Useful for debugging. Not parsable. *)
 
-open Jc_pervasives
-open Jc_output_misc
-open Jc_ast
+open Common
+open Output_misc
+open Ast
 open Format
 open Pp
 

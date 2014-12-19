@@ -280,7 +280,7 @@ let fprintf_vc_kind fmttr k =
 
 let fprintf_jc_position fmttr pos =
   let f, l, b, e as loc = Jc_position.to_loc pos in
-  if loc <> Loc.dummy_floc then
+  if loc <> Why_loc.dummy_floc then
     fprintf fmttr "#\"%s\" %d %d %d#" f l b e
 
 let fprintf_why_label fmttr { l_kind; l_behavior; l_pos } =

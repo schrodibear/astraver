@@ -31,24 +31,22 @@
 
 
 
-open Jc_stdlib
-open Jc_env
-open Jc_envset
-open Jc_region
-open Jc_ast
-open Jc_fenv
+open Stdlib
+open Env
+open Envset
+open Region
+open Ast
+open Fenv
 
-open Jc_name
-open Jc_constructors
-open Jc_pervasives
-(*
-open Jc_iterators
-*)
-open Jc_interp_misc
-open Jc_struct_tools
+open Name
+open Constructors
+open Common
 
-open Jc_why_output_ast
-open Jc_why_output_misc
+open Interp_misc
+open Struct_tools
+
+open Why_output_ast
+open Why_output_misc
 
 (* other modifications for this extension can be found in:
      ast, typing, norm, interp: about pack / unpack, and mutable
@@ -102,7 +100,7 @@ let make_assume reads assume =
 let fully_packed pc e =
   LPred(
     fully_packed_name,
-    [ LVar (generic_tag_table_name (pointer_class_root pc));
+    [ LVar (Name.Of.Generic.tag_table (pointer_class_root pc));
       LVar (mutable_name pc);
       e ])
 (*
@@ -385,7 +383,7 @@ let invariant_params acc li =
   let acc =
     AllocMap.fold
       (fun (ac,r) _labs acc ->
-         (alloc_table_name (ac, r),
+         (Name.Of.alloc_table (ac, r),
           alloc_table_type (ac))::acc)
       li.li_effects.e_alloc_tables
       acc
@@ -397,7 +395,7 @@ let invariant_params acc li =
            { lt_args = [root_model_type v];
              lt_name = "tag_table" }
          in
-         (tag_table_name (v,r), t)::acc)
+         (Name.Of.tag_table (v,r), t)::acc)
       li.li_effects.e_tag_tables
       acc
   in
@@ -579,7 +577,7 @@ let assert_mutable e fi =
       (*let e_committed = LApp("select", [LVar committed_name; e]) in*)
       let parent_tag = match st.si_parent with
         | None -> LVar "bottom_tag"
-        | Some(parent, _) -> LVar (tag_name parent)
+        | Some(parent, _) -> LVar (Name.Of.tag parent)
       in
       let sub = make_subtag parent_tag e_mutable in
       (*let not_committed =
@@ -681,7 +679,7 @@ let not_mutable_implies_invariant this st (li, _) =
   let mutable_name = mutable_name (JCtag(st, [])) in
   let mutable_io = make_subtag
     (LApp("select", [ LVar mutable_name; LVar this ]))
-    (LVar (tag_name st))
+    (LVar (Name.Of.tag st))
   in
 
   (* invariant *)
@@ -694,7 +692,7 @@ let not_mutable_implies_invariant this st (li, _) =
 
   (* params *)
   let params = (mutable_name, mutable_memory_type (JCtag(st, [])))::params in
-  let params = (generic_tag_table_name (struct_root st),
+  let params = (Name.Of.Generic.tag_table (struct_root st),
                 tag_table_type (struct_root st))::params in
 
   params, impl
@@ -707,7 +705,7 @@ let not_mutable_implies_fields_committed this st =
   let mutable_name = mutable_name (JCtag(st, [])) in
   let mutable_io = make_subtag
     (LApp("select", [ LVar mutable_name; LVar this ]))
-    (LVar (tag_name st))
+    (LVar (Name.Of.tag st))
   in
 
   (* fields committed *)
@@ -719,7 +717,7 @@ let not_mutable_implies_fields_committed this st =
              let index = "jc_index" in
              let committed_name = committed_name fi_pc in
              let fi_ac = alloc_class_of_pointer_class fi_pc in
-             let alloc = generic_alloc_table_name fi_ac in
+             let alloc = Name.Of.Generic.alloc_table fi_ac in
              let params =
                [ n, memory_type (JCmem_field fi);
                  committed_name, committed_memory_type fi_pc;
@@ -746,7 +744,7 @@ let not_mutable_implies_fields_committed this st =
 
   (* additional params *)
   let params = (mutable_name, mutable_memory_type (JCtag(st, [])))::params in
-  let params = (generic_tag_table_name (struct_root st),
+  let params = (Name.Of.Generic.tag_table (struct_root st),
                 tag_table_type (struct_root st))::params in
 
   (* implies *)
@@ -760,7 +758,7 @@ let committed_implies_fully_packed this root =
   let committed_type = committed_memory_type root in
   let mutable_name = mutable_name root in
   let mutable_type = mutable_memory_type root in
-  let tag_table = generic_tag_table_name (pointer_class_root root) in
+  let tag_table = Name.Of.Generic.tag_table (pointer_class_root root) in
   let tag_table_type = tag_table_type (pointer_class_root root) in
 
   (* this.committed = true *)
@@ -825,7 +823,7 @@ let owner_unicity this root =
 
          (* indexes, ranges *)
          let fi_ac = alloc_class_of_pointer_class fi_pc in
-         let alloc = generic_alloc_table_name fi_ac in
+         let alloc = Name.Of.Generic.alloc_table fi_ac in
          let omin1, omax1 = omin_omax (LVar alloc) this_dot_f
            (range_min fi.fi_type)
            (range_max fi.fi_type)
@@ -870,7 +868,7 @@ let owner_unicity this root =
        [ fi.fi_final_name, memory_type (JCmem_field fi);
          committed_name (JCtag(fi.fi_hroot, [])),
          committed_memory_type (JCtag(fi.fi_hroot, []));
-         generic_alloc_table_name ac,
+         Name.Of.Generic.alloc_table ac,
          alloc_table_type ac ])
     reps
   in
@@ -1035,7 +1033,7 @@ let components st =
 
 let components_by_type st =
   let compare_pcs s t =
-    compare (pointer_class_type_name s) (pointer_class_type_name t) in
+    compare (Name.Of.Class.pointer s) (Name.Of.Class.pointer t) in
   let comps = components st in
   let comps =
     List.sort
@@ -1062,7 +1060,7 @@ hierarchy "root" has been set to "value", and only them *)
 let hierarchy_committed_postcond this root fields value =
   let com = committed_name root in
   let ac = alloc_class_of_pointer_class root in
-  let alloc = generic_alloc_table_name ac in
+  let alloc = Name.Of.Generic.alloc_table ac in
   (* fields information and range *)
   let fields = List.map
     (fun fi ->
@@ -1127,7 +1125,7 @@ let make_components_postcond this st reads writes committed =
   let reads = StringSet.union reads writes in
   let reads = List.fold_left
     (fun acc (pc, _fields) -> StringSet.add
-       (generic_alloc_table_name (alloc_class_of_pointer_class pc)) acc)
+       (Name.Of.Generic.alloc_table (alloc_class_of_pointer_class pc)) acc)
     reads comps
   in
   let postcond =
@@ -1164,8 +1162,8 @@ let make_components_precond this st reads =
        in
        let fi_pc = type_pc fi.fi_type in
        let fi_ac = alloc_class_of_pointer_class fi_pc in
-       let alloc = generic_alloc_table_name fi_ac in
-       let reads = StringSet.add (generic_tag_table_name (pointer_class_root fi_pc)) reads in
+       let alloc = Name.Of.Generic.alloc_table fi_ac in
+       let reads = StringSet.add (Name.Of.Generic.tag_table (pointer_class_root fi_pc)) reads in
        let reads = StringSet.add alloc reads in
        let reads = StringSet.add mutable_name reads in
        (* pre-condition: forall i, valid(x.f+i) => fp(x.f+i) /\ not committed(x.f+i) *)
@@ -1456,7 +1454,7 @@ let code_function (fi, pos, fs, _sl) vil =
                            app_label_assoc = [];
                            app_region_assoc = [] }
                  in
-                 (new assertion ~mark:(Jc_pervasives.new_label_name ())
+                 (new assertion ~mark:(Common.new_label_name ())
                     ~pos (JCAapp a)) :: acc)
               Jc_typing.global_invariants_table []
           in
@@ -1503,11 +1501,11 @@ let code_function (fi, pos, fs, _sl) vil =
               if Jc_options.verify_invariants_only then
                 let invariants_b = { default_behavior with b_ensures = post } in
                 fs.fs_behavior <-
-                  (Loc.dummy_position, "invariants", invariants_b) :: fs.fs_behavior;
+                  (Why_loc.dummy_position, "invariants", invariants_b) :: fs.fs_behavior;
               else
                 let safety_b = { default_behavior with b_ensures = post } in
                 fs.fs_behavior <-
-                  (Loc.dummy_position, "safety", safety_b) :: fs.fs_behavior;
+                  (Why_loc.dummy_position, "safety", safety_b) :: fs.fs_behavior;
       | _ -> ()
   end;
 

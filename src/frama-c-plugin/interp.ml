@@ -42,7 +42,7 @@ open Extlib
 open Jc.Constructors
 open Jc.Ast
 open Jc.Env
-open! Jc.Pervasives
+open! Jc.Common
 
 (* Utility functions *)
 open! Common
@@ -56,11 +56,11 @@ let mktype tnode = new ptype tnode
 
 let mkexpr enode pos = new pexpr ~pos enode
 
-let null_expr = mkexpr (JCPEconst JCCnull) Loc.dummy_position
-let true_expr = mkexpr (JCPEconst(JCCboolean true)) Loc.dummy_position
-let false_expr = mkexpr (JCPEconst(JCCboolean false)) Loc.dummy_position
-let zero_expr = mkexpr (JCPEconst(JCCinteger "0")) Loc.dummy_position
-let one_expr = mkexpr (JCPEconst(JCCinteger "1")) Loc.dummy_position
+let null_expr = mkexpr (JCPEconst JCCnull) Why_loc.dummy_position
+let true_expr = mkexpr (JCPEconst(JCCboolean true)) Why_loc.dummy_position
+let false_expr = mkexpr (JCPEconst(JCCboolean false)) Why_loc.dummy_position
+let zero_expr = mkexpr (JCPEconst(JCCinteger "0")) Why_loc.dummy_position
+let one_expr = mkexpr (JCPEconst(JCCinteger "1")) Why_loc.dummy_position
 
 let mktag tag_node pos = new ptag ~pos tag_node
 
@@ -91,7 +91,7 @@ let mkdecl dnode pos = new decl ~pos dnode
 (*****************************************************************************)
 
 let reg_position ?id ?kind ?name pos =
-  Jc.Why_output_misc.jc_reg_pos "_C" ?id ?kind ?name (Loc.extract pos)
+  Jc.Why_output_misc.jc_reg_pos "_C" ?id ?kind ?name (Why_loc.extract pos)
 
 (* [locate] should be called on every Jessie expression which we would like to
  * locate in the original source program.
@@ -1113,7 +1113,7 @@ let assigns =
         assign_list
     in
     let assign_list = List.flatten (List.map zone assign_list) in
-    Some (Loc.dummy_position, assign_list)
+    Some (Why_loc.dummy_position, assign_list)
 
 let allocates a =
   match a with
@@ -1132,7 +1132,7 @@ let allocates a =
           (alloc @ frees)
     in
     let assign_list = List.flatten (List.map zone assign_list) in
-    Some (Loc.dummy_position, assign_list)
+    Some (Why_loc.dummy_position, assign_list)
 
 let spec _fname funspec =
   let is_normal_postcond =
@@ -1152,7 +1152,7 @@ let spec _fname funspec =
     in
     let loc =
       function
-      | [] -> Loc.dummy_position
+      | [] -> Why_loc.dummy_position
       | ip :: _ -> ip.ip_loc
     in
     JCCbehavior(
@@ -1177,7 +1177,7 @@ let spec _fname funspec =
          let ass, reqs =
            map_pair (List.map (locate % pred % Logic_const.pred_of_id_pred)) (b.Cil_types.b_assumes, b.b_requires)
          in
-         JCCrequires (mkimplies ass reqs Loc.dummy_position) :: acc)
+         JCCrequires (mkimplies ass reqs Why_loc.dummy_position) :: acc)
       funspec.spec_behavior
       []
   in
@@ -1199,7 +1199,7 @@ let spec _fname funspec =
                    | _ -> assert false)
                 []
                 behaviors)
-             Loc.dummy_position)
+             Why_loc.dummy_position)
       funspec.spec_complete_behaviors
   in
   let disjoint_behaviors_assertions  : Jc.Ast.pexpr list =
@@ -1227,8 +1227,8 @@ let spec _fname funspec =
                List.fold_left
                  (fun acc a ->
                     (mkexpr (JCPEunary(`Unot,
-                                       mkconjunct [b;a] Loc.dummy_position))
-                       Loc.dummy_position)
+                                       mkconjunct [b;a] Why_loc.dummy_position))
+                       Why_loc.dummy_position)
                         :: acc)
                  acc prevs
              in
@@ -2035,9 +2035,9 @@ and statement_list slist =
 
 and block bl =
   match bl.bstmts with
-    | [] -> mkexpr (JCPEconst JCCvoid) Loc.dummy_position
+    | [] -> mkexpr (JCPEconst JCCvoid) Why_loc.dummy_position
     | [s] -> statement s
-    | slist -> mkexpr (JCPEblock(statement_list slist)) Loc.dummy_position
+    | slist -> mkexpr (JCPEblock(statement_list slist)) Why_loc.dummy_position
 
 
 (*****************************************************************************)
@@ -2578,7 +2578,7 @@ let global vardefs g =
 let integral_type name ty bitsize =
   let min = Integer.to_num (Type.Integral.min_value ?bitsize ty) in
   let max = Integer.to_num (Type.Integral.max_value ?bitsize ty) in
-  mkdecl (JCDenum_type(name,min,max)) Loc.dummy_position
+  mkdecl (JCDenum_type(name,min,max)) Why_loc.dummy_position
 
 let integral_types () =
   if !int_model = IMexact then
@@ -2868,8 +2868,8 @@ let file f =
   let get_compinfo = get_compinfo globals in
   mkdecl (JCDaxiomatic("Padding",
                        [mkdecl (JCDlogic_type (Name.Of.Logic_type.padding, []))
-                          Loc.dummy_position]))
-    Loc.dummy_position
+                          Why_loc.dummy_position]))
+    Why_loc.dummy_position
   ::
   (* This predicate generator has a side effect, i.e. it can add new (unsigned) integral types as used. *)
   (* So we call it before translating the integral types. *)

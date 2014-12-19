@@ -29,41 +29,154 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_env
-open Jc_ast
-open Jc_region
-open Jc_pervasives
-open Jc_why_output_ast
+open Env
+open Ast
+open Region
+open Common
+open Why_output_ast
 
-let alloc_table_type_name = "alloc_table"
-let tag_table_type_name = "tag_table"
 let pointer_type_name = "pointer"
 let pset_type_name = "pset"
-let memory_type_name = "memory"
 let tag_id_type_name = "tag_id"
-let bitvector_type_name = "bitvector"
+
+let old s = "old_" ^ s
+
+module Of =
+struct
+  module Type =
+  struct
+    let root ri = ri.ri_name
+    let struc st = root (struct_root st)
+    let bitvector = "bitvector"
+    let memory = "memory"
+    let alloc_table = "alloc_table"
+    let tag_table = "tag_table"
+  end
+
+  module Class =
+  struct
+    let pointer =
+      function
+      | JCtag (st, _) -> Type.struc st
+      | JCroot vi -> Type.root vi
+
+    let alloc =
+      function
+      | JCalloc_root vi -> Type.root vi
+      | JCalloc_bitvector -> Type.bitvector
+
+    let memory =
+      function
+      | JCmem_field fi -> fi.fi_final_name
+      | JCmem_plain_union vi -> Type.root vi
+      | JCmem_bitvector -> Type.bitvector
+  end
+
+  let tag st = st.si_name ^ "_tag"
+
+  let tag_table (ri, r) =
+    if !Common_options.separation_sem = SepRegions && not (is_dummy_region r)
+    then
+      (Type.root ri) ^ "_" ^ (Region.name r) ^ "_tag_table"
+    else
+      (Type.root ri) ^ "_tag_table"
+
+  let alloc_table (ac, r) =
+    if !Common_options.separation_sem = SepRegions && not (is_dummy_region r)
+    then
+      (Class.alloc ac) ^ "_" ^ (Region.name r) ^ "_alloc_table"
+    else
+      (Class.alloc ac) ^ "_alloc_table"
+
+  module Generic =
+  struct
+    let tag_table ri =  (Type.root ri) ^ "_tag_table"
+    let alloc_table ac = (Class.alloc ac) ^ "_alloc_table"
+    let memory mc = Class.memory mc
+  end
+
+  module Axiom =
+  struct
+    let int_of_tag st = st.si_name ^ "_int"
+  end
+
+  module Pred =
+  struct
+    let valid ~equal ~left ~right ac pc =
+      let prefix =
+        match ac with
+        | JCalloc_root _ ->
+          if equal then
+            "strict_valid"
+          else
+            begin match left, right with
+            | false, false -> assert false
+            | false, true -> "right_valid"
+            | true, false -> "left_valid"
+            | true, true -> "valid"
+            end
+        | JCalloc_bitvector -> "valid_bitvector" (* TODO ? *)
+      in
+      prefix ^ "_" ^ (Class.pointer pc)
+
+    let fresh ~for_ ac pc =
+      let for_ =
+        match for_ with
+        | `alloc_tables -> "alloc"
+        | `tag_tables -> "tag"
+      in
+      let prefix =
+        match ac with
+        | JCalloc_root _ -> "fresh_" ^ for_
+        | JCalloc_bitvector -> "fresh_bitvector" (* TODO *)
+      in
+      prefix ^ "_" ^ (Class.pointer pc)
+
+    let instanceof ~exact
+        (type t1) (type t2) (type t3) (type t4) (type t5) : arg:(t1, t2, t3, _, t4, t5) arg -> _ =
+      fun ~arg ac pc ->
+        let prefix =
+          let pred_name = if exact then "typeof" else "instanceof" in
+          match ac with
+          | JCalloc_root _ ->
+            pred_name ^ (match arg with Singleton -> "_singleton" | Range_l_r -> "")
+          | JCalloc_bitvector -> pred_name ^ "_bitvector" (* TODO *)
+        in
+        prefix ^ "_" ^ (Class.pointer pc)
+
+    let frame ~for_ ac pc =
+      let for_ =
+        match for_ with
+        | `alloc_tables -> "alloc"
+        | `tag_tables -> "tag"
+      in
+      let prefix =
+        match ac with
+        | JCalloc_root _ -> "frame_" ^ for_
+        | JCalloc_bitvector -> "frame_" ^ for_ ^ "_bitvector" (* TODO *)
+      in
+      prefix ^ "_" ^ (Class.pointer pc)
+  end
+
+  module Param =
+    struct
+      let alloc (type t1) (type t2) : arg:(string, check_size:bool -> string, _, _, t1, t2) arg -> _ -> _ -> t2 =
+        fun ~arg ac pc ->
+          let prefix =
+            match ac with
+            | JCalloc_root _ ->
+              "allocate" ^ (match arg with Singleton -> "_singleton" | Range_0_n -> "")
+            | JCalloc_bitvector -> "allocate_bitvector"
+          in
+          let n = prefix ^ "_" ^ (Class.pointer pc) in
+          match arg with
+          | Singleton -> n
+          | Range_0_n ->
+            fun ~check_size -> if check_size then n ^ "_requires" else n
+    end
+end
 
 let simple_logic_type s = { lt_name = s; lt_args = [] }
-
-let root_type_name vi = vi.ri_name
-
-let struct_type_name st = root_type_name (struct_root st)
-
-let pointer_class_type_name =
-  function
-  | JCtag (st, _) -> struct_type_name st
-  | JCroot vi -> root_type_name vi
-
-let alloc_class_name =
-  function
-  | JCalloc_root vi -> root_type_name vi
-  | JCalloc_bitvector -> bitvector_type_name
-
-let memory_class_name =
-  function
-  | JCmem_field fi -> fi.fi_final_name
-  | JCmem_plain_union vi -> root_type_name vi
-  | JCmem_bitvector -> bitvector_type_name
 
 let root_alloc_table_name vi = vi.ri_name ^ "_alloc_table"
 
@@ -71,32 +184,8 @@ let root_tag_table_name vi = vi.ri_name ^ "_tag_table"
 
 let root_axiom_on_tags_name vi = vi.ri_name ^ "_tags"
 
-let axiom_int_of_tag_name st = st.si_name ^ "_int"
-
-let tag_name st = st.si_name ^ "_tag"
-
 let of_pointer_address_name vi =
   vi.ri_name ^ "_of_pointer_address"
-
-let generic_tag_table_name vi =
-  (root_type_name vi) ^ "_tag_table"
-
-let tag_table_name (vi,r) =
-  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r)
-  then
-    (root_type_name vi) ^ "_" ^ (Region.name r) ^ "_tag_table"
-  else
-    (root_type_name vi) ^ "_tag_table"
-
-let generic_alloc_table_name ac =
-  (alloc_class_name ac) ^ "_alloc_table"
-
-let alloc_table_name (ac, r) =
-  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r)
-  then
-    (alloc_class_name ac) ^ "_" ^ (Region.name r) ^ "_alloc_table"
-  else
-    (alloc_class_name ac) ^ "_alloc_table"
 
 let field_memory_name fi =
   let rt = struct_root fi.fi_struct in
@@ -125,15 +214,12 @@ let union_region_memory_name (vi, r) =
 let bitvector_region_memory_name r =
   if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r)
   then
-    bitvector_type_name ^ "_" ^ (Region.name r)
+    Of.Type.bitvector ^ "_" ^ (Region.name r)
   else
-    bitvector_type_name
+    Of.Type.bitvector
 
 let union_memory_type_name vi =
   vi.ri_name ^ "_union"
-
-let generic_memory_name mc =
-  memory_class_name mc
 
 let memory_name (mc,r) =
   match mc with
@@ -149,75 +235,6 @@ let pointer_class_name =
     else
       "struct_" ^ st.si_name
   | JCroot vi -> "root_" ^ vi.ri_name
-
-let valid_pred_name ~equal ~left ~right ac pc =
-  let prefix =
-    match ac with
-    | JCalloc_root _ ->
-      if equal then
-        "strict_valid"
-      else
-        begin match left, right with
-        | false, false -> assert false
-        | false, true -> "right_valid"
-        | true, false -> "left_valid"
-        | true, true -> "valid"
-        end
-    | JCalloc_bitvector -> "valid_bitvector" (* TODO ? *)
-  in
-  prefix ^ "_" ^ (pointer_class_name pc)
-
-let fresh_pred_name ~for_ ac pc =
-  let for_ =
-    match for_ with
-    | `alloc_tables -> "alloc"
-    | `tag_tables -> "tag"
-  in
-  let prefix =
-    match ac with
-    | JCalloc_root _ -> "fresh_" ^ for_
-    | JCalloc_bitvector -> "fresh_bitvector" (* TODO *)
-  in
-  prefix ^ "_" ^ (pointer_class_name pc)
-
-let instanceof_pred_name ~exact
-    (type t1) (type t2) (type t3) (type t4) (type t5) : arg:(t1, t2, t3, _, t4, t5) arg -> _ =
-  fun ~arg ac pc ->
-  let prefix =
-    let pred_name = if exact then "typeof" else "instanceof" in
-    match ac with
-    | JCalloc_root _ ->
-      pred_name ^ (match arg with Singleton -> "_singleton" | Range_l_r -> "")
-    | JCalloc_bitvector -> pred_name ^ "_bitvector" (* TODO *)
-  in
-  prefix ^ "_" ^ (pointer_class_name pc)
-
-let frame_pred_name ~for_ ac pc =
-  let for_ =
-    match for_ with
-    | `alloc_tables -> "alloc"
-    | `tag_tables -> "tag"
-  in
-  let prefix =
-    match ac with
-    | JCalloc_root _ -> "frame_" ^ for_
-    | JCalloc_bitvector -> "frame_" ^ for_ ^ "_bitvector" (* TODO *)
-  in
-  prefix ^ "_" ^ (pointer_class_name pc)
-
-let alloc_param_name (type t1) (type t2) : arg:(string, check_size:bool -> string, _, _, t1, t2) arg -> _ -> _ -> t2 =
-  fun ~arg ac pc ->
-  let prefix =
-    match ac with
-    | JCalloc_root _ ->
-      "allocate" ^ (match arg with Singleton -> "_singleton" | Range_0_n -> "")
-    | JCalloc_bitvector -> "allocate_bitvector"
-  in
-  let n = prefix ^ "_" ^ (pointer_class_name pc) in
-  match arg with
-  | Singleton -> n
-  | Range_0_n ->
-    fun ~check_size -> if check_size then n ^ "_requires" else n
 
 let alloc_bitvector_logic_name pc =
   (pointer_class_name pc) ^ "_alloc_bitvector"
@@ -244,10 +261,10 @@ let exception_name ei =
   ei.exi_name ^ "_exc"
 
 let mutable_name pc =
-  "mutable_"^(pointer_class_type_name pc)
+  "mutable_" ^ (Of.Class.pointer pc)
 
 let committed_name pc =
-  "committed_"^(pointer_class_type_name pc)
+  "committed_" ^ (Of.Class.pointer pc)
 
 let fully_packed_name st =
   "fully_packed_"^(root_name st)
@@ -273,8 +290,6 @@ let unique_name =
       s ^ "_" ^ (string_of_int !count)
     with Not_found ->
       Hashtbl.add unique_names s (ref 0); s
-
-let old_name s = "old_" ^ s
 
 let cast_factor_name = "cast_factor"
 

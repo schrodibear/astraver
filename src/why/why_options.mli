@@ -185,7 +185,7 @@ val files : string list
 (*s GUI? *)
 
 val gui : bool ref
-val gui_project : Project.t option ref
+val gui_project : Why_project.t option ref
 val lib_files_to_load : string list
 
 (*

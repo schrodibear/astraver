@@ -162,7 +162,7 @@ end
 
 (* spec ? *)
 val replace_sub_pexpr : 
-    < node : Jc_ast.pexpr_node; pos : Loc.position; .. > ->
+    < node : Jc_ast.pexpr_node; pos : Why_loc.position; .. > ->
     Jc_ast.pexpr list -> Jc_constructors.pexpr_with
 
 (* spec ?
@@ -188,7 +188,7 @@ val map_expr :
 
 val replace_sub_expr :
   < mark : string; node : Jc_fenv.expr_node;
-  original_type : Jc_env.jc_type; pos : Loc.position;
+  original_type : Jc_env.jc_type; pos : Why_loc.position;
   region : Jc_env.region; typ : Jc_env.jc_type; .. > ->
     (Jc_fenv.logic_info, Jc_fenv.fun_info) Jc_ast.expr list ->
     Jc_constructors.expr_with

@@ -54,6 +54,10 @@ let rec iter_logic_type f t =
 (* Terms                                                                       *)
 (*******************************************************************************)
 
+let const_of_num n = LConst (Prim_int (Num.string_of_num n))
+
+let const_of_int i = LConst (Prim_int (string_of_int i))
+
 let rec iter_term f t =
   match t with
   | LConst _ -> ()

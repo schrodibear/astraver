@@ -87,7 +87,7 @@ type t =
   | PatternBadArity
   | TypeBadArity
   | TypeArity of Ident.t * int * int
-  | GlobalWithEffects of Ident.t * Effect.t
+  | GlobalWithEffects of Ident.t * Why_effect.t
   | IllformedPattern
   | CannotGeneralize
   | IllegalComparison of (formatter -> unit)

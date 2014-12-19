@@ -34,7 +34,7 @@ VERBOSEMAKE ?= @VERBOSEMAKE@
 ifeq ($(VERBOSEMAKE),yes)
  QUIET =
 else
- QUIET = yes
+ QUIET =yes
 endif
 
 # where to install the binaries
@@ -60,10 +60,6 @@ OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 OCAMLBUILD = @OCAMLBUILD@
 CAMLP4   = @CAMLP4O@
-
-INCLUDES = -I src/why -I src/jc
-PACKS = unix,str,num,ocamlgraph
-FLAGS   = -w,Z,-warn-error,A,-bin-annot,-short-paths,-strict-formats,-safe-string,-no-alias-deps,-g
 
 APRONLIB = @APRONLIB@
 APRONLIBS = @APRONLIBS@
@@ -105,7 +101,7 @@ GENERATED = src/why/version.ml \
 
 JESSIE=bin/jessie.$(OCAMLBEST)
 
-OCAMLBUILD += $(INCLUDES) -j 0 -use-ocamlfind -pkgs $(PACKS) -cflags $(FLAGS)
+OCAMLBUILD += -j 0
 
 JC_SOURCES=$(wildcard src/why/*.ml src/why/*.mli src/why/*.mll src/why/*.mly src/jc/*.ml src/jc/*.mli src/jc/*.mll src/jc/*.mly)
 
@@ -137,8 +133,8 @@ bin/jessie.opt: $(JC_SOURCES) bin $(BUILDSRC)/jc/jc.cmxa
 	touch $@
 
 bin/jessie.byte: $(JC_SOURCES) bin $(BUILDSRC)/jc/jc.cma
-	$(OCAMLBUILD) jc_main.byte
-	mv jc_main.byte $@
+	$(OCAMLBUILD) jc_main.d.byte
+	mv jc_main.d.byte $@
 	touch $@
 
 bin:
