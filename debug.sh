@@ -1,10 +1,10 @@
 #/bin/bash
 
-DIR=$(dirname $(readlink -f $0))
+BUILDSRC=$(dirname $(readlink -f $0))/_build/src
 
-ocamlc -c -I "$DIR/../src/" -o "$DIR/jc_debug_output.cmo" "$DIR/jc_debug_output.ml"
+make -C $BUILDSRC/../.. -j byte
 
-make -C $DIR/.. -j 5 byte
+ocamlc -c -I "$BUILDSRC/why" -I "$BUILDSRC/jc" -o "$BUILDSRC/jc/jc_debug_output.cmo" "$BUILDSRC/../../src/jc/jc_debug_output.ml"
 
 SCRIPT='load_printer nums.cma
 load_printer pp.cmo
@@ -49,4 +49,5 @@ install_printer Jc_debug_output.location
 install_printer Jc_debug_output.location_set
 set print_depth 3
 '
-rlwrap -P "$SCRIPT" ocamldebug -I "$DIR/../src/" -I "$DIR" $DIR/../bin/jessie.byte $@
+rlwrap -P "$SCRIPT" ocamldebug -I "$BUILDSRC/why" -I "$BUILDSRC/jc" -I "$BUILDSRC/../../src/why" -I "$BUILDSSRC/../../src/jc"\
+       $BUILDSRC/../../bin/jessie.byte $@

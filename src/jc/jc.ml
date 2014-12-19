@@ -33,5 +33,6 @@ module Struct_tools = Jc_struct_tools
 module Type_var = Jc_type_var
 module Typing = Jc_typing
 module Why3_output = Jc_why3_output
+module Why_output_ast = Jc_why_output_ast
 module Why_output_misc = Jc_why_output_misc
 module Why_output = Jc_why_output

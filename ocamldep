@@ -1,0 +1,12 @@
+#!/bin/bash
+
+RESULT=$(ocamldep $@)
+STATUS=$?
+PREFIXED=""
+if [[ "$RESULT" =~ src/jc/jc_.*\.ml.* ]]; then
+    for i in $RESULT; do
+        [[ "$i" =~ .*: ]] || PREFIXED="$PREFIXED Jc_${i,}"
+    done
+fi
+echo $RESULT $PREFIXED
+exit $STATUS

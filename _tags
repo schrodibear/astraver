@@ -1,1 +1,7 @@
+<src/why>: include
+<src/jc>: include
+<src/jc/jc.ml>: warn_error_a
+true: warn_Z, warn_error_A, bin_annot, short_paths, strict_formats, safe_string, no_alias_deps
+true: package(unix), package(str), package(num), package(ocamlgraph)
+<src/jc/jc_*.ml*>: open(Jc)
 <src/frama-c-plugin/*.{cmo,cmi,cmx,cma,o,cmt,cmti,annot}>: not_hygienic
