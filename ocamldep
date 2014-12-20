@@ -1,11 +1,11 @@
 #!/bin/bash
 
-RESULT=$(ocamldep $@)
+RESULT=$(ocamlfind ocamldep $@)
 STATUS=$?
 PREFIXED=""
-if [[ "$RESULT" =~ src/jc/jc_.*\.ml.* ]]; then
+if [[ "$RESULT" =~ src/jc/jc_.*\.mli?:.* ]]; then
     for i in $RESULT; do
-        [[ "$i" =~ .*: ]] || PREFIXED="$PREFIXED Jc_${i,}"
+        [[ "$i" =~ .*: || "$i" =~ Why_.* ]] || PREFIXED="$PREFIXED Jc_${i,}"
     done
 fi
 echo $RESULT $PREFIXED

@@ -32,7 +32,7 @@
 
 (** {1 Frame ??} *)
 
-open Jc_why_output_ast
+open Output_ast
 
 val compute_needed_predicates: unit -> unit
 

@@ -31,10 +31,10 @@
 
 
 
-open Jc_stdlib
+open Stdlib
 open Format
-open Jc_env
-open Jc_common_options
+open Env
+open Common_options
 
 (* The log file *)
 
@@ -60,7 +60,7 @@ let libdir =
     v
   with
   | Not_found ->
-    let p = Version.libdir in
+    let p = Why_version.libdir in
     lprintf "WHYLIB is not set, using %s as default@." p;
     p
 
@@ -124,7 +124,7 @@ let version () =
 Copyright (c) 2006-2014 - CNRS/INRIA/Univ Paris-Sud
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 "
-    Version.version Version.date;
+    Why_version.version Why_version.date;
   exit 0
 
 let usage = "jessie [options] files"
@@ -268,7 +268,7 @@ let parsing_error l f =
 (* pos table *)
 
 let kind_of_ident =
-  let open Jc_why_output_ast in
+  let open Output_ast in
   function
   | "ArithOverflow" -> JCVCarith_overflow
   | "DownCast" -> JCVCdowncast
@@ -285,18 +285,19 @@ let kind_of_ident =
 let () =
   List.iter
     (fun f ->
-       let l = Rc.from_file f in
+       let l = Why_rc.from_file f in
        List.iter
          (fun (id, fs) ->
             let f, l, b, e, k, o =
               List.fold_left
                 (fun (f, l, b, e, k, o) v ->
+                   let open Why_rc in
                    match v with
-                   | "file",  Rc.RCstring f -> f, l, b, e, k, o
-                   | "line",  Rc.RCint l ->    f, l, b, e, k, o
-                   | "begin", Rc.RCint b ->    f, l, b, e, k, o
-                   | "end",   Rc.RCint e ->    f, l, b, e, k, o
-                   | "kind",  Rc.RCident s ->
+                   | "file",  RCstring f -> f, l, b, e, k, o
+                   | "line",  RCint l ->    f, l, b, e, k, o
+                   | "begin", RCint b ->    f, l, b, e, k, o
+                   | "end",   RCint e ->    f, l, b, e, k, o
+                   | "kind",  RCident s ->
                      let k = try Some (kind_of_ident s) with Not_found -> None in
                      f, l, b, e, k, o
                    | _ ->

@@ -191,7 +191,7 @@ let run () =
     (* if called on 'path/file.c', projname is 'path/file' *)
     (* jessie_subdir is 'path/file.jessie' *)
     let jessie_subdir = projname ^ ".jessie" in
-    Lib.mkdir_p jessie_subdir;
+    Why_lib.mkdir_p jessie_subdir;
     Console.feedback "Producing Jessie files in subdir %s" jessie_subdir;
 
     (* basename is 'file' *)
@@ -202,10 +202,10 @@ let run () =
 
     (* filename is 'file.jc' *)
     let filename = basename ^ ".jc" in
-    let () = Pp.print_in_file
+    let () = Why_pp.print_in_file
       (fun fmt ->
-	 Jc.Output.print_decls fmt pragmas;
-	 Format.fprintf fmt "%a" Jc.Poutput.pdecls pfile)
+	 Jc.Print.print_decls fmt pragmas;
+	 Format.fprintf fmt "%a" Jc.Print_p.pdecls pfile)
       (Filename.concat jessie_subdir filename)
     in
     Console.feedback "File %s/%s written." jessie_subdir filename;
@@ -214,8 +214,8 @@ let run () =
 
     (* locname is 'file.cloc' *)
     let locname = basename ^ ".cloc" in
-    Pp.print_in_file
-      (Jc.Why_output_misc.jc_print_pos Jc.Why_output.fprintf_vc_kind)
+    Why_pp.print_in_file
+      (Jc.Output_misc.jc_print_pos Jc.Why_output.fprintf_vc_kind)
       (Filename.concat jessie_subdir locname);
     Console.feedback "File %s/%s written." jessie_subdir locname;
 

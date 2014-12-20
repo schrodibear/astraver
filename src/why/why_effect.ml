@@ -33,26 +33,26 @@
 
 (*s Effects. *)
 
-open Ident
+open Why_ident
 
 (*s An effect is composed of three sets of variables.
 
     The first one is the set of all variables (the input),
     the second one is the set of possibly modified variables (the output),
     and the third one the set of possibly raised exceptions.
- 
-    INVARIANTS: 
-    1. there are no duplicate elements in each list 
+
+    INVARIANTS:
+    1. there are no duplicate elements in each list
     2. output is contained in input
 
     REMARK: for most operations, sets will be more relevant than lists,
     but order must not change when a substitution is applied and thus
     lists are preferred *)
 
-type t = { 
-  input : Ident.set;
-  output : Ident.set;
-  exns : Ident.set;
+type t = {
+  input : Why_ident.set;
+  output : Why_ident.set;
+  exns : Why_ident.set;
   nt : bool
 }
 
@@ -64,7 +64,7 @@ let bottom = { input = Idset.empty; output = Idset.empty; exns = Idset.empty; nt
 
 let list_add x l = if List.mem x l then l else x :: l
 
-let list_remove x l = 
+let list_remove x l =
   let rec rem_rec = function
     | [] -> []
     | y :: l -> if x = y then l else y :: rem_rec l
@@ -74,7 +74,7 @@ let list_remove x l =
 let mem x (r,w) = (List.mem x r) || (List.mem x w)
 
 (* [list_union] is a merge sort *)
-let list_union l1 l2 = 
+let list_union l1 l2 =
   let rec basic_union = function
     | [], s2 -> s2
     | s1, [] -> s1
@@ -94,7 +94,7 @@ let add_read x e = { e with input = Idset.add x e.input }
 
 let add_reads = Idset.fold add_read
 
-let add_write x e = 
+let add_write x e =
   { e with input = Idset.add x e.input; output = Idset.add x e.output }
 
 let add_writes = Idset.fold add_write
@@ -110,7 +110,7 @@ let add_nontermination e = { e with nt = true }
 let get_reads e = Idset.elements e.input
 let get_writes e = Idset.elements e.output
 let get_exns e = Idset.elements e.exns
-let get_repr e = 
+let get_repr e =
   Idset.elements e.input, Idset.elements e.output, Idset.elements e.exns, e.nt
 
 (*s tests *)
@@ -140,8 +140,8 @@ let inf _e1 _e2 = failwith "effects: inf: not yet implemented"
 
 (*s remove *)
 
-let remove x e = 
-  { e with 
+let remove x e =
+  { e with
       input = Idset.remove x e.input;
       output = Idset.remove x e.output }
 
@@ -165,7 +165,7 @@ let list_subst x x' l =
   in
   if List.mem x l then subst l else l
 
-let subst_one x x' e = 
+let subst_one x x' e =
   { e with input = list_subst x x' e.input; output = list_subst x x' e.output }
 
 let subst = Idmap.fold subst_one
@@ -173,7 +173,7 @@ let subst = Idmap.fold subst_one
 
 let subst subst e =
   let subst_set s =
-    Idset.fold (fun x acc -> 
+    Idset.fold (fun x acc ->
 		  let x' = try Idmap.find x subst with Not_found -> x in
 		  Idset.add x' acc)
       s Idset.empty
@@ -196,20 +196,19 @@ let print fmt { input = r; output = w; exns = e; nt = nt } =
   fprintf fmt "@[";
   if r <> [] then begin
     fprintf fmt "reads ";
-    print_list (fun fmt () -> fprintf fmt ",@ ") Ident.print fmt r;
+    print_list (fun fmt () -> fprintf fmt ",@ ") Why_ident.print fmt r;
   end;
   if r <> [] && w <> [] then fprintf fmt "@ ";
   if w <> [] then begin
     fprintf fmt "writes ";
-    print_list (fun fmt () -> fprintf fmt ",@ ") Ident.print fmt w;
+    print_list (fun fmt () -> fprintf fmt ",@ ") Why_ident.print fmt w;
   end;
   let e = Idset.elements e in
   if (r <> [] || w <> []) && e <> [] then fprintf fmt "@ ";
   if e <> [] then begin
     fprintf fmt "raises ";
-    print_list (fun fmt () -> fprintf fmt ",@ ") Ident.print fmt e;
+    print_list (fun fmt () -> fprintf fmt ",@ ") Why_ident.print fmt e;
   end;
   if r <> [] || w <> [] || e <> [] then fprintf fmt "@ ";
   if nt then fprintf fmt ",@ nt";
   fprintf fmt "@]"
-

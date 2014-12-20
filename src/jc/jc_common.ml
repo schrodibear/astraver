@@ -29,14 +29,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_stdlib
-open Jc_env
-open Jc_envset
-open Jc_region
-open Jc_ast
-open Jc_fenv
+open Stdlib
+open Env
+open Envset
+open Region
+open Ast
+open Fenv
 
-open Jc_constructors
+open Constructors
 
 open Format
 open Num
@@ -125,7 +125,7 @@ let print_type_var fmt v = fprintf fmt "(var_%s_%d)" v.tvi_name v.tvi_tag
 let rec print_type fmt t =
   match t with
   | JCTnative n -> fprintf fmt "%s" (string_of_native n)
-  | JCTlogic (s,l) -> fprintf fmt "%s%a" s (Pp.print_list_delim Pp.lchevron Pp.rchevron Pp.comma print_type) l
+  | JCTlogic (s,l) -> fprintf fmt "%s%a" s Why_pp.(print_list_delim lchevron rchevron comma print_type) l
   | JCTenum ri -> fprintf fmt "%s" ri.ei_name
   | JCTpointer(pc, ao, bo) ->
     begin match pc with
@@ -134,7 +134,7 @@ let rec print_type fmt t =
       fprintf fmt "%s" name
     | JCtag({ si_name = name }, params) ->
       fprintf fmt "%s<%a>" name
-        (Pp.print_list Pp.comma print_type) params
+        Why_pp.(print_list comma print_type) params
     end;
     begin match ao, bo with
     | None, None ->
@@ -595,9 +595,9 @@ module TermOrd = struct
       | JCTrange_cast(t11,_)
       | JCTat(t11,_) ->
           hash t11
-      | JCTrange(t11opt,t12opt) ->
-          Option_misc.map_default hash 1 t11opt
-          * Option_misc.map_default hash 1 t12opt
+      | JCTrange (t11opt, t12opt) ->
+        let opt_hash = Option.map_default ~default:1 ~f:hash in
+        opt_hash t11opt * opt_hash t12opt
       | JCTapp app1 ->
           let li1 = app1.app_fun and ts1 = app1.app_args in
           List.fold_left

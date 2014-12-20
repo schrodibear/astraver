@@ -34,17 +34,17 @@ open Env
 open Envset
 open Region
 open Ast
+open Effect
 open Fenv
 
 open Name
 open Constructors
 open Common
 open Struct_tools
-open Jc.Effect
 
-open Why_output_ast
-open Why_output_misc
-open Pp
+open Output_ast
+open Output_misc
+open Why_pp
 open Format
 
 module Output = (val Options.backend)
@@ -139,7 +139,7 @@ let make_typeof t x =
   LApp ("typeof", [t; x])
 
 let make_typeeq t x st =
-  LPred ("eq", [make_typeof t x; LVar (Name.Of.tag st)])
+  LPred ("eq", [make_typeof t x; LVar (Name.tag st)])
 
 let make_subtag t u =
   LPred ("subtag", [t; u])
@@ -148,19 +148,19 @@ let make_subtag_bool t u =
   LApp ("subtag_bool", [t; u])
 
 let make_instanceof t p st =
-  LPred ("instanceof", [t; p; LVar (Name.Of.tag st)])
+  LPred ("instanceof", [t; p; LVar (Name.tag st)])
 
 let make_instanceof_bool t p st =
-  LApp ("instanceof_bool", [t; p; LVar (Name.Of.tag st)])
+  LApp ("instanceof_bool", [t; p; LVar (Name.tag st)])
 
 let make_offset_min ac p =
-  LApp ("offset_min", [LVar (Name.Of.Generic.alloc_table ac); p])
+  LApp ("offset_min", [LVar (Name.Generic.alloc_table ac); p])
 
 let make_offset_max ac p =
-  LApp ("offset_max", [LVar (Name.Of.Generic.alloc_table ac); p])
+  LApp ("offset_max", [LVar (Name.Generic.alloc_table ac); p])
 
 let make_int_of_tag st =
-  LApp ("int_of_tag", [LVar (Name.Of.tag st)])
+  LApp ("int_of_tag", [LVar (Name.tag st)])
 
 let pc_of_name name = JCtag (find_struct name, []) (* TODO: parameters *)
 
@@ -229,7 +229,7 @@ let why_integer_type = simple_logic_type "int"
 let why_unit_type = simple_logic_type "unit"
 
 let root_model_type vi =
-  simple_logic_type (Name.Of.Type.root vi)
+  simple_logic_type (Name.Type.root vi)
 
 let struct_model_type st =
   root_model_type (struct_root st)
@@ -237,7 +237,7 @@ let struct_model_type st =
 let pointer_class_model_type pc =
   root_model_type (pointer_class_root pc)
 
-let bitvector_type = simple_logic_type Name.Of.Type.bitvector
+let bitvector_type = simple_logic_type Name.Type.bitvector
 
 let alloc_class_type =
   function
@@ -258,11 +258,11 @@ let raw_pset_type ty' =
     lt_args = [ty']; }
 
 let raw_alloc_table_type ty' =
-  { lt_name = Name.Of.Type.alloc_table;
+  { lt_name = Name.Type.alloc_table;
     lt_args = [ty']; }
 
 let raw_tag_table_type ty' =
-  { lt_name = Name.Of.Type.tag_table;
+  { lt_name = Name.Type.tag_table;
     lt_args = [ty']; }
 
 let raw_tag_id_type ty' =
@@ -270,7 +270,7 @@ let raw_tag_id_type ty' =
     lt_args = [ty']; }
 
 let raw_memory_type ty1' ty2' =
-  { lt_name = Name.Of.Type.memory;
+  { lt_name = Name.Type.memory;
     lt_args = [ty1';ty2'] }
 
 (* pointer model types *)
@@ -367,11 +367,11 @@ let memory_type mc =
 
 (* query model types *)
 
-let is_alloc_table_type ty' = ty'.lt_name = Name.Of.Type.alloc_table
+let is_alloc_table_type ty' = ty'.lt_name = Name.Type.alloc_table
 
-let is_tag_table_type ty' = ty'.lt_name = Name.Of.Type.tag_table
+let is_tag_table_type ty' = ty'.lt_name = Name.Type.tag_table
 
-let is_memory_type ty' = ty'.lt_name = Name.Of.Type.memory
+let is_memory_type ty' = ty'.lt_name = Name.Type.memory
 
 let deconstruct_memory_type_args ty =
   match ty.lt_args with [t; v] -> t, v | _ -> invalid_arg "deconstruct_memory_type_args"
@@ -504,8 +504,8 @@ let tmemory_var ~label_in_name lab (mc,r) =
   in
   lvar ~constant ~label_in_name lab mem
 
-let plain_alloc_table_var (ac, r) = mk_var @@ Name.Of.alloc_table (ac, r)
-let deref_alloc_table_var (ac, r) = mk_expr @@ Deref (Name.Of.alloc_table (ac, r))
+let plain_alloc_table_var (ac, r) = mk_var @@ Name.alloc_table (ac, r)
+let deref_alloc_table_var (ac, r) = mk_expr @@ Deref (Name.alloc_table (ac, r))
 
 let alloc_table_var ?(test_current_function=false) (ac, r) =
   if test_current_function && !current_function = None then
@@ -515,7 +515,7 @@ let alloc_table_var ?(test_current_function=false) (ac, r) =
   else plain_alloc_table_var (ac, r)
 
 let talloc_table_var ~label_in_name lab (ac, r) =
-  let alloc = Name.Of.alloc_table (ac, r) in
+  let alloc = Name.alloc_table (ac, r) in
   let constant =
     match !current_function with
     | None -> true
@@ -524,8 +524,8 @@ let talloc_table_var ~label_in_name lab (ac, r) =
   not constant, lvar ~constant ~label_in_name lab alloc
 
 
-let plain_tag_table_var (vi, r) = mk_var @@ Name.Of.tag_table (vi, r)
-let deref_tag_table_var (vi, r) = mk_expr @@ Deref (Name.Of.tag_table (vi, r))
+let plain_tag_table_var (vi, r) = mk_var @@ Name.tag_table (vi, r)
+let deref_tag_table_var (vi, r) = mk_expr @@ Deref (Name.tag_table (vi, r))
 
 let tag_table_var (vi, r) =
   if mutable_tag_table (get_current_function ()) (vi, r) then
@@ -533,7 +533,7 @@ let tag_table_var (vi, r) =
   else plain_tag_table_var (vi, r)
 
 let ttag_table_var ~label_in_name lab (vi,r) =
-  let tag = Name.Of.tag_table (vi, r) in
+  let tag = Name.tag_table (vi, r) in
   let constant =
     match !current_function with
     | None -> true
@@ -817,7 +817,7 @@ let rewrite_effects ~type_safe ~params ef =
 let any_value' ty =
   let any_fun =
     let typ = ty.lt_name in
-    let open Name.Of.Type in
+    let open Name.Type in
     if typ = alloc_table then "any_alloc_table"
     else if typ = tag_table then "any_tag_table"
     else if typ = memory then "any_memory"
@@ -981,8 +981,8 @@ let make_of_bitvector_app fi e' =
 
 let make_conversion_params pc =
   let p = "p" in
-  let bv_mem = Name.Of.Generic.memory JCmem_bitvector in
-  let bv_alloc = Name.Of.Generic.alloc_table JCalloc_bitvector in
+  let bv_mem = Name.Generic.memory JCmem_bitvector in
+  let bv_alloc = Name.Generic.alloc_table JCalloc_bitvector in
 
   (* postcondition *)
   let post_alloc = match pc with
@@ -990,7 +990,7 @@ let make_conversion_params pc =
         if struct_has_size st then
           let post_alloc =
             let ac = alloc_class_of_pointer_class pc in
-            let alloc = Name.Of.Generic.alloc_table ac in
+            let alloc = Name.Generic.alloc_table ac in
             let s = string_of_int (struct_size_in_bytes st) in
             let post_min =
               make_eq_pred integer_type
@@ -1163,7 +1163,7 @@ let add_alloc_table_argument
       (* Polymorphic allocation table. Both passed in argument by the caller,
          and counted as effect. *)
       let locr =
-        Option_misc.map_default (RegionList.assoc distr) distr region_assoc
+        Option.map_default ~f:(RegionList.assoc distr) ~default:distr region_assoc
       in
       match mode with
         | `MAppParam ->
@@ -1324,7 +1324,7 @@ let add_tag_table_argument ~mode ~no_deref (vi,distr) ?region_assoc acc =
       (* Polymorphic tag table. Both passed in argument by the caller,
          and counted as effect. *)
       let locr =
-        Option_misc.map_default (RegionList.assoc distr) distr region_assoc
+        Option.map_default ~f:(RegionList.assoc distr) ~default:distr region_assoc
       in
       match mode with
         | #param_or_effect_mode -> (tagvar (vi,locr), ty') :: acc
@@ -1385,7 +1385,7 @@ let add_memory_argument
       (* Polymorphic memory. Both passed in argument by the caller,
          and counted as effect. *)
       let locr =
-        Option_misc.map_default (RegionList.assoc distr) distr region_assoc
+        Option.map_default ~f:(RegionList.assoc distr) ~default:distr region_assoc
       in
       match mode with
         | `MAppParam ->
@@ -1595,7 +1595,7 @@ let make_region_assoc region_list =
 let write_model_parameters
     ~type_safe ~mode ~callee_reads ~callee_writes ?region_list ~params () =
   assert (Jc_effect.same_effects callee_reads callee_reads);
-  let region_assoc = Option_misc.map make_region_assoc region_list in
+  let region_assoc = Option.map make_region_assoc region_list in
   let region_mem_assoc = make_region_mem_assoc ~params in
   let callee_writes = rewrite_effects ~type_safe ~params callee_writes in
   let write_allocs =
@@ -1647,7 +1647,7 @@ let local_write_effects ~callee_reads ~callee_writes =
 
 let read_model_parameters ~type_safe ~mode ~callee_reads ~callee_writes
     ?region_list ~params ~already_used () =
-  let region_assoc = Option_misc.map make_region_assoc region_list in
+  let region_assoc = Option.map make_region_assoc region_list in
   let region_mem_assoc = make_region_mem_assoc ~params in
   let callee_reads = rewrite_effects ~type_safe ~params callee_reads in
   let callee_writes = rewrite_effects ~type_safe ~params callee_writes in
@@ -1969,15 +1969,15 @@ let tr_li_model_arg_3 is_mutable get_name get_type ~label_in_name lab (c, _ as c
 let tr_li_model_mem_arg_3, tr_li_model_at_arg_3, tr_li_model_tt_arg_3 =
   let tr = tr_li_model_arg_3 in
   tr mutable_memory      memory_name              memory_type,
-  tr mutable_alloc_table Name.Of.alloc_table      alloc_table_type,
-  tr mutable_tag_table   Name.Of.tag_table        tag_table_type
+  tr mutable_alloc_table Name.alloc_table      alloc_table_type,
+  tr mutable_tag_table   Name.tag_table        tag_table_type
 
 let tr_li_model_args_5 fold tr_arg_3 get_map ~label_in_name ?region_assoc ?label_assoc reads =
   let tr_region =
-    Option_misc.(
+    Option.(
       map_default
-        (fun ra r -> transpose_region ra r)
-        some
+        ~f:(fun ra r -> transpose_region ra r)
+        ~default:some
         region_assoc)
   in
   fold
@@ -2058,8 +2058,8 @@ let collect_li_reads acc li =
   in
   acc |>
   add MemoryMap.fold memory_name         (fun e -> e.e_memories) |>
-  add AllocMap.fold  Name.Of.alloc_table (fun e -> e.e_alloc_tables) |>
-  add TagMap.fold    Name.Of.tag_table   (fun e -> e.e_tag_tables)
+  add AllocMap.fold  Name.alloc_table (fun e -> e.e_alloc_tables) |>
+  add TagMap.fold    Name.tag_table   (fun e -> e.e_tag_tables)
 
 
 (* fold all effects into a list *)
@@ -2089,7 +2089,7 @@ let all_effects ef =
   let res =
     AllocMap.fold
       (fun (a,r) _labs acc ->
-        let alloc = Name.Of.alloc_table (a, r) in
+        let alloc = Name.alloc_table (a, r) in
         if Region.polymorphic r then
 (*        if RegionList.mem r f.fun_param_regions then
             if AllocSet.mem (a,r)
@@ -2104,7 +2104,7 @@ let all_effects ef =
   in
   let res =
     TagMap.fold
-      (fun v _ acc -> (Name.Of.tag_table v)::acc)
+      (fun v _ acc -> (Name.tag_table v)::acc)
       ef.e_tag_tables
       res
   in

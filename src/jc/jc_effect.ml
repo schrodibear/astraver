@@ -46,7 +46,7 @@ open Common
 open Struct_tools
 
 open Format
-open Pp
+open Why_pp
 
 type precision_mode = MApprox | MPrecise
 let current_mode = ref MApprox
@@ -64,10 +64,10 @@ let add_constant_memory (mc,r) =
   StringHashtblIter.add constant_memories (memory_name (mc,r)) (mc,r)
 
 let add_constant_alloc_table (ac,r) =
-  StringHashtblIter.add constant_alloc_tables (Name.Of.alloc_table (ac,r)) (ac,r)
+  StringHashtblIter.add constant_alloc_tables (Name.alloc_table (ac,r)) (ac,r)
 
 let add_constant_tag_table (vi,r) =
-  StringHashtblIter.add constant_tag_tables (Name.Of.tag_table (vi,r)) (vi,r)
+  StringHashtblIter.add constant_tag_tables (Name.tag_table (vi,r)) (vi,r)
 
 (* Transposition for calls *)
 
@@ -160,21 +160,21 @@ let print_list_assoc_label pr fmt ls =
        (fun fmt (k, labs) ->
           fprintf fmt "%a at (%a)"
             pr k
-            (print_list comma Jc_output_misc.label)
+            (print_list comma Print_misc.label)
             (LogicLabelSet.elements labs)))
     ls
 
 let print_alloc_table fmt (ac, r) =
-  fprintf fmt "(%a : %a)" Region.print r Jc_output_misc.alloc_class ac
+  fprintf fmt "(%a : %a)" Region.print r Print_misc.alloc_class ac
 
 let print_tag_table fmt (vi, r) =
   fprintf fmt "(%a : %s)" Region.print r vi.ri_name
 
 let print_memory fmt (mc, r) =
-  fprintf fmt "(%a : %a)" Region.print r Jc_output_misc.memory_class mc
+  fprintf fmt "(%a : %a)" Region.print r Print_misc.memory_class mc
 
 let print_location fmt (loc, (mc, r)) =
-  fprintf fmt "(%a at %a)" print_memory (mc, r) Jc_output.location loc
+  fprintf fmt "(%a at %a)" print_memory (mc, r) Print.location loc
 
 let print_variable fmt v =
   fprintf fmt "%s" v.vi_name
@@ -494,11 +494,11 @@ let add_local_effect lab ef v =
 
 let add_mutable_effect ef pc =
   { ef with e_mutable = StringSet.add
-      (Name.Of.Class.pointer pc) ef.e_mutable }
+      (Name.Class.pointer pc) ef.e_mutable }
 
 let add_committed_effect ef pc =
   { ef with e_committed = StringSet.add
-      (Name.Of.Class.pointer pc) ef.e_committed }
+      (Name.Class.pointer pc) ef.e_committed }
 
 (* Addition of a single read *)
 
@@ -1040,10 +1040,10 @@ let rec term_of_location_set locs =
       | JCLSderef (locs, lab, fi, r), r' when Region.equal r r' ->
           JCTderef (term_of_location_set locs, lab, fi)
       | JCLSderef (_, _, _, r), r' ->
-          Jc_typing.typing_error
+          Typing.typing_error
             locs#pos
             "Failed to transform location set to term: %a: different regions: %a != %a"
-            Jc_output.location_set locs Region.print r Region.print r'
+            Print.location_set locs Region.print r Region.print r'
       | JCLSrange (locs, t1_opt, t2_opt), _ -> JCTshift (term_of_location_set locs, range_term t1_opt t2_opt)
       | JCLSrange_term (t, t1_opt, t2_opt), _ -> JCTshift (t, range_term t1_opt t2_opt)
       | JCLSat (locs, lab), _ -> JCTat (term_of_location_set locs, lab)
@@ -1055,10 +1055,10 @@ let rec term_of_location ?(label=LabelHere) loc =
       | JCLderef (locs, lab, fi, r), r' when Region.equal r r' ->
           JCTderef (term_of_location_set locs, lab, fi)
       | JCLderef (_, _, _, r), r' ->
-          Jc_typing.typing_error
+          Typing.typing_error
             loc#pos
             "Failed to transform location to term: %a: different regions: %a != %a"
-            Jc_output.location loc Region.print r Region.print r'
+            Print.location loc Region.print r Region.print r'
       | JCLderef_term (t, fi), _ -> JCTderef (t, label, fi)
       | JCLat (loc, label), _ -> JCTat (term_of_location ~label loc, label)
 
@@ -1688,21 +1688,23 @@ let behavior fef (_pos,_id,b) =
       (single_location ~in_clause:`Allocates)
       (single_location_set ~in_clause:`Allocates)
   in
-  let fef = Option_misc.fold_left ita fef b.b_assumes in
+  let fef = Option.fold ~f:ita ~init:fef b.b_assumes in
   let fef =
-    Option_misc.fold_left
-      (fun fef (_,locs) -> List.fold_left itl fef locs)
-      fef b.b_assigns
+    Option.fold
+      ~f:(fun fef (_,locs) -> List.fold_left itl fef locs)
+      ~init:fef
+      b.b_assigns
   in
   let fef =
-    Option_misc.fold_left
-      (fun fef (_,locs) ->
+    Option.fold
+      ~f:(fun fef (_,locs) ->
         List.fold_left itl_alloc fef locs)
-      fef b.b_allocates
+      ~init:fef
+      b.b_allocates
   in
   let fef = ita fef b.b_ensures in
   let fef = ita fef b.b_free_ensures in
-  Option_misc.fold_left add_exception_effect fef b.b_throws
+  Option.fold ~f:add_exception_effect ~init:fef b.b_throws
 
 
 
@@ -1777,7 +1779,7 @@ let check_li_effects_from_axiomatic li =
     let check_app ax_pos ax_name app_pos app =
       let is_dangling =
         let region_assoc = app.app_region_assoc in
-        fun r -> not @@ Option_misc.has_some (transpose_region ~region_assoc r)
+        fun r -> not @@ Option.is_some (transpose_region ~region_assoc r)
       in
       ignore @@ ef_filter_by_region
         (fun r ->
@@ -1796,7 +1798,7 @@ let check_li_effects_from_axiomatic li =
         a
   in
   try
-    Option_misc.iter
+    Option.iter
       Jc_typing.(fun ax -> List.iter check_decl (StringHashtblIter.find axiomatics_table ax).axiomatics_decls)
       li.li_axiomatic
   with
@@ -1866,7 +1868,7 @@ let fun_effects f =
   let f, _pos, s, e_opt = IntHashtblIter.find Jc_typing.functions_table f.fun_tag in
   f.fun_effects |>
   spec s |>
-  Option.fold_right expr e_opt |>
+  Option.fold_left ~f:expr e_opt |>
   List.fold_right parameter' (List.map snd f.fun_parameters) |>
   fun fef ->
   if same_feffects fef f.fun_effects then

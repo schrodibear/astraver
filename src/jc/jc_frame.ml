@@ -35,6 +35,7 @@ open Env
 open Envset
 open Region
 open Ast
+open Effect
 open Fenv
 
 open Name
@@ -42,17 +43,16 @@ open Constructors
 open Common
 open Separation
 open Struct_tools
-open Jc.Effect
 open Interp_misc
 open Invariants
 open Pattern
 
-open Why_output_ast
-open Why_output_misc
+open Output_ast
+open Output_misc
 module Output = (val Options.backend)
 
 open Format
-open Pp
+open Why_pp
 
 open Jc_interp
 
@@ -944,7 +944,7 @@ let tr_logic_model_params f =
     abort_on (Fn.const @@ MemoryMap.is_empty replace) r
     >>= fun (replace, keep) ->
     (try
-       Option_misc.map (StringHashtblIter.find axiomatics_table) f.li_axiomatic
+       Option.map (StringHashtblIter.find axiomatics_table) f.li_axiomatic
      with
      | Not_found -> abort)
     >>= fun ax_data ->
@@ -1756,7 +1756,7 @@ struct
           let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
           define_In notin ta_conv acc
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
-          (Pp.print_list Pp.newline Output.fprintf_why_decl) ta_conv;assert false
+          Why_pp.(print_list newline Output.fprintf_why_decl) ta_conv; assert false
 
   let rec define_disj notin ta_conv acc =
     match ta_conv with
@@ -1810,7 +1810,7 @@ struct
           let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
           define_disj notin ta_conv acc
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
-          (Pp.print_list Pp.newline Output.fprintf_why_decl) ta_conv;assert false
+          Why_pp.(print_list newline Output.fprintf_why_decl) ta_conv;assert false
 
   let rec add_triggers tr = function
     | LForall(vn,vt,[],(LForall _ as t)) -> LForall(vn,vt,[],add_triggers tr t)
@@ -1880,7 +1880,7 @@ struct
           let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
           define_frame_between notin ta_conv acc
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
-          (Pp.print_list Pp.newline Output.fprintf_why_decl) ta_conv;assert false
+          Why_pp.(print_list newline Output.fprintf_why_decl) ta_conv;assert false
 
 
   let rec define_sub notin ta_conv acc =
@@ -1943,7 +1943,7 @@ struct
           let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
           define_sub notin ta_conv acc
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
-          (Pp.print_list Pp.newline Output.fprintf_why_decl) ta_conv;assert false
+          Why_pp.(print_list newline Output.fprintf_why_decl) ta_conv;assert false
 
   let rec define_x_sub notin ta_conv acc =
     match ta_conv with
@@ -2008,7 +2008,7 @@ struct
           let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
           define_x_sub notin ta_conv acc
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
-          (Pp.print_list Pp.newline Output.fprintf_why_decl) ta_conv;assert false
+          Why_pp.(print_list newline Output.fprintf_why_decl) ta_conv;assert false
 
   let rec define_sub_x notin ta_conv acc =
     match ta_conv with
@@ -2062,7 +2062,7 @@ struct
           let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
           define_sub_x notin ta_conv acc
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
-          (Pp.print_list Pp.newline Output.fprintf_why_decl) ta_conv;assert false
+          Why_pp.(print_list newline Output.fprintf_why_decl) ta_conv;assert false
 
   let gen axiom_name f_name gen_framed in_update params framed_params =
     (* frame for one update *)
@@ -2280,7 +2280,7 @@ let lemma_disjoint_cases ta_conv acc =
       let goal_name = f_name.why_name^"_disjoint_case" in
       Goal(KGoal,id_no_loc goal_name,condition)::acc
     | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
-      (Pp.print_list Pp.newline Output.fprintf_why_decl) ta_conv;assert false
+      Why_pp.(print_list newline Output.fprintf_why_decl) ta_conv;assert false
 
 
 
@@ -2341,7 +2341,7 @@ let tr_logic_fun_aux f ta acc =
           | (`In,_) -> fprintf fmt "in"
           | (`Disj,_) -> fprintf fmt "disj" in
         Jc_options.lprintf "user predicate %s asks to generate : %a@."
-          f.li_name (Pp.print_list Pp.comma print_todo) todos;
+          f.li_name Why_pp.(print_list comma print_todo) todos;
         let make_todo acc (todo,notin) =
           match todo with
             | `In ->
@@ -2371,7 +2371,7 @@ let tr_logic_fun_aux f ta acc =
            | (`Disj,_) -> fprintf fmt "disj"
            | (`In,_) -> fprintf fmt "in" in
         Jc_options.lprintf "%s asks to generate : %a@."
-          f_name (Pp.print_list Pp.comma print_todo) todos;
+          f_name Why_pp.(print_list comma print_todo) todos;
         let acc = if todos = [] then acc else
             lemma_disjoint_cases fun_def acc in
         let make_todo acc (todo,notin) =

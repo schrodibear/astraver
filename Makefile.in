@@ -90,7 +90,7 @@ V8FILES=$(VO8:.vo=.v)
 PVSFILES = lib/pvs/jessie.pvs
 PVSLIB = $(DESTDIR)@PVSLIB@
 
-GENERATED = src/why/version.ml \
+GENERATED = src/why/why_version.ml \
 	    src/jc/jc_ai.ml \
             lib/why3/why3.conf
 
@@ -101,7 +101,7 @@ GENERATED = src/why/version.ml \
 
 JESSIE=bin/jessie.$(OCAMLBEST)
 
-OCAMLBUILD += -j 0
+OCAMLBUILD += -use-ocamlfind -j 0
 
 JC_SOURCES=$(wildcard src/why/*.ml src/why/*.mli src/why/*.mll src/why/*.mly src/jc/*.ml src/jc/*.mli src/jc/*.mll src/jc/*.mly)
 
@@ -113,7 +113,7 @@ else
 JCLIB=$(BUILDSRC)/jc/jc.cma
 endif
 
-all: all-without-frama-c-plugin .depend $(JESSIE_PLUGIN_BEST)
+all: all-without-frama-c-plugin $(JESSIE_PLUGIN_BEST)
 
 all-without-frama-c-plugin: $(JESSIE) coq-@COQ@ pvs-@PVS@ $(JCLIB)
 
@@ -197,7 +197,7 @@ pvs-yes: $(PVSFILES)
 
 include Version
 
-doc/version.tex src/why/version.ml: Version version.sh config.status
+doc/version.tex src/why/why_version.ml: Version version.sh config.status
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) COQVER=$(COQVER) ./version.sh
 
 # installation
@@ -237,7 +237,6 @@ install-coq-v7:
 install-coq-v8 install-coq-v8.1:
 	if test -w $(COQLIB) ; then \
 	  rm -f $(COQLIB)/user-contrib/Why*.v* ; \
-	  rm -f $(COQLIB)/user-contrib/caduceus*.v* $(COQLIB)/user-contrib/Caduceus*.v* ; \
 	  rm -f $(COQLIB)/user-contrib/jessie*.v* $(COQLIB)/user-contrib/Jessie*.v* ; \
 	  mkdir -p $(COQLIB)/user-contrib/Why ; \
 	  cp -f $(VO8) $(COQLIB)/user-contrib/Why ; \

@@ -32,10 +32,10 @@
 (** Ouput the normalized AST. Useful for debugging. Not parsable. *)
 
 open Common
-open Output_misc
+open Print_misc
 open Ast
 open Format
-open Pp
+open Why_pp
 
 
 let identifier fmt id =

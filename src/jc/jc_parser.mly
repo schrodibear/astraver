@@ -38,7 +38,7 @@
   open Ast
   open Common
   open Parsing
-  open Error
+  open Why_error
   open Constructors
 
   let pos () = (symbol_start_pos (), symbol_end_pos ())

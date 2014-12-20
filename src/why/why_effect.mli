@@ -37,36 +37,36 @@ type t
 
 val bottom : t
 
-val add_read  : Ident.t -> t -> t
-val add_reads : Ident.set -> t -> t
-val add_write : Ident.t -> t -> t
-val add_writes : Ident.set -> t -> t
-val add_exn : Ident.t -> t -> t
-val add_exns : Ident.set -> t -> t
+val add_read  : Why_ident.t -> t -> t
+val add_reads : Why_ident.set -> t -> t
+val add_write : Why_ident.t -> t -> t
+val add_writes : Why_ident.set -> t -> t
+val add_exn : Why_ident.t -> t -> t
+val add_exns : Why_ident.set -> t -> t
 val add_nontermination : t -> t
 
-val get_reads : t -> Ident.t list
-val get_writes : t -> Ident.t list
-val get_exns : t -> Ident.t list
-val get_repr : t -> Ident.t list * Ident.t list * Ident.t list * bool
+val get_reads : t -> Why_ident.t list
+val get_writes : t -> Why_ident.t list
+val get_exns : t -> Why_ident.t list
+val get_repr : t -> Why_ident.t list * Why_ident.t list * Why_ident.t list * bool
 
-val is_read  : t -> Ident.t -> bool    (* read-only *)
-val is_write : t -> Ident.t -> bool    (* read-write *)
-val is_exn : t -> Ident.t -> bool
+val is_read  : t -> Why_ident.t -> bool    (* read-only *)
+val is_write : t -> Why_ident.t -> bool    (* read-write *)
+val is_exn : t -> Why_ident.t -> bool
 val is_nonterminating : t -> bool
 
 val union : t -> t -> t
 
-val remove : Ident.t -> t -> t
-val remove_exn : Ident.t -> t -> t
+val remove : Why_ident.t -> t -> t
+val remove_exn : Why_ident.t -> t -> t
 val remove_nontermination : t -> t
 
 val keep_writes : t -> t
 val erase_exns : t -> t
 
-val occur : Ident.t -> t -> bool
+val occur : Why_ident.t -> t -> bool
 
-val subst : Logic.var_substitution -> t -> t
+val subst : Why_logic.var_substitution -> t -> t
 
 open Format
 

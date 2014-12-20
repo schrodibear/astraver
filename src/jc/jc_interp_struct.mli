@@ -1,6 +1,6 @@
 
-open Jc_env
-open Jc_why_output_ast
+open Env
+open Output_ast
 
 val struc : struct_info -> why_decl list -> why_decl list
 

@@ -40,7 +40,7 @@ open Constructors
 open Common
 
 open Format
-open Pp
+open Why_pp
 
 let in_logic_component f = List.exists (Logic_info.equal f)
 
@@ -201,7 +201,7 @@ let single_expr code_comp logic_comp result_region e =
     assertion logic_comp result_region a
   | JCEcontract (req, None, _vi_result, _behs, _e) ->
     (* TODO: decreases, behaviors, etc. *)
-    Option_misc.iter (assertion logic_comp result_region) req
+    Option.iter (assertion logic_comp result_region) req
   | JCEcontract _ ->
     Jc_options.jc_error
       e#pos
@@ -254,7 +254,7 @@ let logic_function comp f =
   | JCInductive l ->
     List.iter (fun (_, _, a) -> assertion comp result_region a) l
   end;
-  Option_misc.iter (axiomatic comp) f.li_axiomatic
+  Option.iter (axiomatic comp) f.li_axiomatic
 
 let logic_component comp =
   let generalize_logic_function f =
@@ -301,7 +301,7 @@ let code_function comp f =
   Jc_options.lprintf "Separation: treating function %s@." f.fun_name;
   let result_region = f.fun_return_region in
   funspec [] result_region spec;
-  Option_misc.iter (expr comp [] result_region) body
+  Option.iter (expr comp [] result_region) body
 
 let code_component comp =
   let generalize_code_function f =

@@ -32,7 +32,7 @@
 
 
 open Format
-open Pp
+open Why_pp
 
 let simplify fmt f = fprintf fmt "simplify/%s_why.sx" f
 let vampire fmt f = fprintf fmt "vampire/%s_why.vp" f

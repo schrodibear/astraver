@@ -29,7 +29,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
+open Stdlib
 
 open Env
 open Envset
@@ -38,10 +38,7 @@ open Common
 open Constructors
 open Ast
 open Format
-(*
-open Jc_iterators
-*)
-open Jc_constructors.PExpr
+open Constructors.PExpr
 
 
 (** Normalization: transforms the parsed AST in order to reduce the number of
@@ -427,7 +424,7 @@ let rec printf_label_tree fmt lt =
   match lt with
     | LabelItem s -> fprintf fmt "%s" s
     | LabelBlock l ->
-	fprintf fmt "{ %a }" (Pp.print_list Pp.space printf_label_tree ) l
+	fprintf fmt "{ %a }" Why_pp.(print_list space printf_label_tree ) l
 
 let rec in_label_tree lab = function
   | LabelItem l -> l=lab
@@ -573,13 +570,13 @@ let rec expr e =
     | JCPEbase_block(e) -> JCNEbase_block(expr e)
     | JCPEif(e1,e2,e3) -> JCNEif(expr e1,expr e2,expr e3)
     | JCPElet(tyopt,id,e1,e2) ->
-	JCNElet(tyopt,id,Option_misc.map expr e1,expr e2)
+	JCNElet(tyopt,id,Option.map ~f:expr e1,expr e2)
     | JCPEdecl _ ->
 	assert false
 	(* (ty,name,initopt) ->  *)
-(* 	JCNElet(Some ty,name,Option_misc.map expr initopt,expr (mkvoid())) *)
+(* 	JCNElet(Some ty,name,Option.map expr initopt,expr (mkvoid())) *)
     | JCPErange(e1opt,e2opt) ->
-	JCNErange(Option_misc.map expr e1opt,Option_misc.map expr e2opt)
+	JCNErange(Option.map expr e1opt,Option.map expr e2opt)
     | JCPEalloc(e,id) -> JCNEalloc(expr e,id)
     | JCPEfree e -> JCNEfree(expr e)
     | JCPEreinterpret (e, id) -> JCNEreinterpret (expr e, id)
@@ -591,14 +588,14 @@ let rec expr e =
     | JCPEblock elist -> JCNEblock(List.map expr elist)
     | JCPEassert(behav,asrt,e) -> JCNEassert(behav,asrt,expr e)
     | JCPEcontract(req,dec,behs,e) ->
-	JCNEcontract(Option_misc.map expr req,
-		     Option_misc.map
+	JCNEcontract(Option.map expr req,
+		     Option.map
 		       (fun (t,r) -> (expr t,r)) dec,
 		     List.map behavior behs,
 		     expr e)
     | JCPEwhile(_,behs,vareopt,e) ->
 	let behs = List.map loopbehavior behs in
-	JCNEloop(behs,Option_misc.map (fun (v,r) -> (expr v,r)) vareopt,expr e)
+	JCNEloop(behs,Option.map (fun (v,r) -> (expr v,r)) vareopt,expr e)
     | JCPEfor _ -> assert false
     | JCPEreturn e ->
         begin match e#node with
@@ -628,15 +625,15 @@ and tag_ tag =
 
 and behavior (pos,id,idopt,e1opt,e2opt,asslist,alloclist,e3) =
   (pos,id,idopt,
-   Option_misc.map expr e1opt,
-   Option_misc.map expr e2opt,
-   Option_misc.map (fun (pos,elist) -> pos,List.map expr elist) asslist,
-   Option_misc.map (fun (pos,elist) -> pos,List.map expr elist) alloclist,
+   Option.map expr e1opt,
+   Option.map expr e2opt,
+   Option.map (fun (pos,elist) -> pos,List.map expr elist) asslist,
+   Option.map (fun (pos,elist) -> pos,List.map expr elist) alloclist,
    expr e3)
 
 and loopbehavior (ids,inv,asslist) =
-  (ids,Option_misc.map expr inv,
-   Option_misc.map (fun (pos,elist) -> pos,List.map expr elist) asslist)
+  (ids,Option.map expr inv,
+   Option.map (fun (pos,elist) -> pos,List.map expr elist) asslist)
 
 let expr e =
   let e,_ = goto e (build_label_tree e) in
@@ -669,7 +666,7 @@ let reads_or_expr = function
 let rec decl d =
   let dnode = match d#node with
     | JCDfun(ty,id,params,clauses,body) ->
-	JCDfun(ty,id,params,List.map clause clauses,Option_misc.map expr body)
+	JCDfun(ty,id,params,List.map clause clauses,Option.map expr body)
     | JCDenum_type(id,min,max) ->
 	JCDenum_type(id,min,max)
     | JCDvariant_type(id, tags) ->
@@ -680,7 +677,7 @@ let rec decl d =
 	JCDtag (id, params, extends, fields,
 		List.map (fun (id,name,e) -> id,name,expr e) invs)
     | JCDvar(ty,id,init) ->
-	JCDvar(ty,id,Option_misc.map expr init)
+	JCDvar(ty,id,Option.map expr init)
     | JCDlemma(id,is_axiom,poly_args,lab,a) ->
 	JCDlemma(id,is_axiom,poly_args,lab,expr a)
     | JCDglobal_inv(id,a) ->
@@ -688,7 +685,7 @@ let rec decl d =
     | JCDexception(id,ty) ->
 	JCDexception(id,ty)
     | JCDlogic_var (ty, id, body) ->
-	JCDlogic_var (ty, id, Option_misc.map expr body)
+	JCDlogic_var (ty, id, Option.map expr body)
     | JCDlogic (ty, id, poly_args, labels, params, body) ->
 	JCDlogic (ty, id, poly_args, labels, params, reads_or_expr body)
     | JCDaxiomatic(id,l) -> JCDaxiomatic(id,List.map decl l)

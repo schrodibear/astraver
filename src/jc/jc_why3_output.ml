@@ -30,13 +30,13 @@
 (**************************************************************************)
 
 open Format
-open Pp
+open Why_pp
 
-open Jc_stdlib
-open Jc_envset
+open Stdlib
+open Envset
 
-open Jc_why_output_ast
-open Jc_why_output_misc
+open Output_ast
+open Output_misc
 
 let fprintf_constant fmttr =
   let pr fmt = fprintf fmttr fmt in
@@ -459,7 +459,7 @@ let fprintf_variant ~locals fmttr =
   | None -> ()
   | Some (t, r_opt) ->
     pr "variant@ {@ %a@ }" (fprintf_term ~locals) t;
-    Option_misc.iter (pr "@ with@ %s") r_opt
+    Option.iter (pr "@ with@ %s") r_opt
 
 let rec fprintf_expr_node ~locals in_app fmttr =
   let pr fmt = fprintf fmttr fmt in
@@ -534,7 +534,7 @@ let rec fprintf_expr_node ~locals in_app fmttr =
   | App (e1, e2, ty)  ->
     pr "@[<hov 1>(%a@ %a@ %a)@]"
       (fprintf_expr_gen true) e1 fprintf_expr e2
-      (Pp.print_option @@ fprintf_type ~need_colon:true false) ty
+      (print_option @@ fprintf_type ~need_colon:true false) ty
   | Raise (id, None) ->
     pr "@[<hov 1>(raise@ %s)@]" id
   | Raise (id, Some e) ->
@@ -687,7 +687,7 @@ let pr_use fmttr f ?(import = false) ?as_ s =
   let pr fmt = fprintf fmttr fmt in
   if f then begin
     pr "use %s%s" (if import then "import " else "") s;
-    Option_misc.iter (pr " as %s") as_;
+    Option.iter (pr " as %s") as_;
     pr "@\n@\n"
   end
 and import = true
@@ -754,7 +754,7 @@ let fprintf_why_decls ?float_model fmttr decls =
   pr_use ~import "Jessie_model";
   pr_use ~import "ref.Ref";
   pr_use ~import "jessie3.JessieDivision";
-  Option_misc.iter (fun _ ->
+  Option.iter (fun _ ->
     pr_use ~import "floating_point.Rounding")
     float_model;
   begin match float_model with

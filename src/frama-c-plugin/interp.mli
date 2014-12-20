@@ -39,4 +39,4 @@ val int_model : int_model ref
 (* transforms a CIL AST into a Jessie AST *)
 val file : file -> Jc.Ast.pdecl list
 
-val pragmas : file -> Jc.Output.jc_decl list
+val pragmas : file -> Jc.Print.jc_decl list

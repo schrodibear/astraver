@@ -176,7 +176,7 @@ let instance l =
   let vmap = List.fold_left aux TypeVarMap.empty l in
   subst_aux vmap
 
-open Pp
+open Why_pp
 let print_smap fmt a = print_list comma (print_pair string print_type_var) fmt (StringMap.to_list a)
 
 let print_vmap fmt a = print_list comma (print_pair print_type_var print_type) fmt (TypeVarMap.to_list a)

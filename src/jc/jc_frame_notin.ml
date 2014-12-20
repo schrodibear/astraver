@@ -46,10 +46,10 @@ open Interp_misc
 open Invariants
 open Pattern
 
-open Why_output_ast
-open Why_output_misc
+open Output_ast
+open Output_misc
 open Format
-open Pp
+open Why_pp
 
 let prop_type = "prop"
 (*let ft_suffix = "_ft"

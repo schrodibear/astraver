@@ -92,7 +92,7 @@ let main () =
       Jc_options.lprintf "Parsing@.";
       let ast = parse_file file in
       if Jc_options.debug then
-        Format.printf "@\nAST AFTER PARSING:@\n%a@." Jc_poutput.pdecls ast;
+        Format.printf "@\nAST AFTER PARSING:@\n%a@." Print_p.pdecls ast;
 
       (*************************************************************************)
       (*                          PART 2: ANALYSIS                             *)
@@ -121,7 +121,7 @@ let main () =
         Jc_typing.logic_functions_table;
       IntHashtblIter.iter
         (fun _ (f, _loc, s, b) ->
-           Option_misc.iter (Jc_callgraph.compute_calls f s) b)
+           Option.iter (Jc_callgraph.compute_calls f s) b)
         Jc_typing.functions_table;
 
       let logic_components =

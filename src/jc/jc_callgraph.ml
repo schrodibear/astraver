@@ -109,7 +109,7 @@ let loop_annot acc la =
     List.fold_left
       (fun acc (_id,inv,_assigns) ->
 	 (* TODO : traverse assigns clause *)
-	 Option_misc.fold_left assertion acc inv)
+	 Option.fold ~f:assertion ~init:acc inv)
       acc la.loop_behaviors
   in
   match la.loop_variant with
@@ -204,7 +204,7 @@ module CallGraph = struct
 module CallComponents = Graph.Components.Make(CallGraph)
 
 open Format
-open Pp
+open Why_pp
 
 let compute_logic_components ltable =
   let tab_comp = LogicCallComponents.scc_array ltable in

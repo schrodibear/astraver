@@ -500,7 +500,7 @@ let rec pattern env vars pat ety =
         if not (substruct st pc) then
           typing_error id#pos
             "tag %s is not a subtag of %s"
-            st.si_name (Jc_output_misc.pointer_class pc);
+            st.si_name (Print_misc.pointer_class pc);
         (* fields *)
         let env, tlpl = List.fold_left
           (fun (env, acc) (l, p) ->
@@ -720,7 +720,7 @@ However, [label] might be changed by the "\at" construction. *)
 let rec type_labels env ~result_label label e =
   let check e x =
     if not (List.mem x env) then
-      typing_error e#pos "label `%a' not found" Jc_output_misc.label x
+      typing_error e#pos "label `%a' not found" Print_misc.label x
   in
   let iter_subs ?(env=env) label =
     List.iter
@@ -732,7 +732,7 @@ let rec type_labels env ~result_label label e =
   (match label with
     | None -> assert false
     | Some l ->
-	eprintf "setting label %a to expr %a@." Jc_output_misc.label l Jc_noutput.expr e);
+	eprintf "setting label %a to expr %a@." Jc_output_misc.label l Print_n.expr e);
 *)
   match e#node with
     | JCNEconst _ | JCNEderef _ | JCNEbinary _
@@ -749,14 +749,14 @@ let rec type_labels env ~result_label label e =
 	  begin match label,result_label with
 	    | Some lab1, Some lab2 ->
 		if lab1 <> lab2 then
-		  typing_error e#pos "\\result not allowed here (lab1 = %a, lab2= %a)" Jc_output_misc.label lab1 Jc_output_misc.label lab2
+		  typing_error e#pos "\\result not allowed here (lab1 = %a, lab2= %a)" Print_misc.label lab1 Print_misc.label lab2
 	    | None, _
 	    | _, None -> typing_error e#pos "\\result not allowed here"
 	  end;
 	env
     | JCNEcontract(req,dec,behs,e) ->
 	ignore (type_labels_opt env ~result_label:None (Some LabelHere) req);
-	Option_misc.iter
+	Option.iter
 	  (fun (dec,_) ->
 	     ignore (type_labels env ~result_label:None (Some LabelHere) dec)) dec;
 	List.iter (behavior_labels env) behs;
@@ -798,14 +798,14 @@ and behavior_labels env
   let _ = type_labels_opt env ~result_label:None here assumes in
   let _ = type_labels_opt env ~result_label:None here requires in
   let env = LabelOld :: LabelPost :: env in
-  Option_misc.iter
+  Option.iter
     (fun (_,a) ->
        List.iter
 	 (fun e ->
 	    ignore(type_labels env
 		     ~result_label:(Some LabelPost) (Some LabelOld) e)) a)
     assigns;
-  Option_misc.iter
+  Option.iter
     (fun (_,a) ->
        List.iter
 	 (fun e ->
@@ -1180,7 +1180,7 @@ used as an assertion, not as a term" pi.li_name
     | JCNEunpack _ | JCNEquantifier _ | JCNEcontract _
     | JCNEeqtype _ | JCNEsubtype _ ->
 	typing_error e#pos "construction %a not allowed in logic terms"
-	  Jc_noutput.expr e
+	  Print_n.expr e
   in
   new term
     ~typ: t
@@ -1678,12 +1678,12 @@ let behavior env vi_result (loc, id, throws, assumes, _requires, assigns, alloca
             typing_error id#pos
               "undeclared exception %s" id#name
   in
-  let assumes = Option_misc.map (assertion env) assumes in
+  let assumes = Option.map (assertion env) assumes in
   (*
     let requires = Option_misc.map (assertion (Some "Here") env) requires in
   *)
   let assigns =
-    Option_misc.map
+    Option.map
       (fun (loc, l) ->
          (loc, List.map
             (fun a -> let _,_,tl = location env_result a in
@@ -1695,7 +1695,7 @@ let behavior env vi_result (loc, id, throws, assumes, _requires, assigns, alloca
       assigns
   in
   let allocates =
-    Option_misc.map
+    Option.map
       (fun (loc, l) ->
          (loc, List.map
             (fun a -> let _,_,tl = location env_result a in
@@ -1726,8 +1726,8 @@ let behavior env vi_result (loc, id, throws, assumes, _requires, assigns, alloca
 
 
 let loopbehavior env (names,inv,ass) =
-  (names,Option_misc.map (assertion env) inv,
-     Option_misc.map
+  (names,Option.map (assertion env) inv,
+     Option.map
        (fun (_p,locs) ->
 	  List.map
 	    (fun l ->
@@ -2233,7 +2233,7 @@ used as an assertion, not as a term" pi.li_name
 	  | JCTpointer (JCroot _, _, _)  -> assert false (* TODO *)
 	  | JCTtype_var _|JCTlogic _|JCTany|JCTnull -> assert false (* TODO *)
 	end
-    | JCNEreinterpret_cast _ -> typing_error e#pos "unsupported reinterpret cast in expression: %a" Jc_noutput.expr e
+    | JCNEreinterpret_cast _ -> typing_error e#pos "unsupported reinterpret cast in expression: %a" Print_n.expr e
     | JCNEif(e1,e2,e3) ->
         let te1 = fe e1 and te2 = fe e2 and te3 = fe e3 in
         begin match te1#typ with
@@ -2309,13 +2309,13 @@ used as an assertion, not as a term" pi.li_name
         let te2 = expr ((id, vi)::env) e2 in
         te2#typ,
         te2#region,
-        JCElet(vi, Option_misc.map (coerce_to_type ty) te1o, te2)
+        JCElet(vi, Option.map (coerce_to_type ty) te1o, te2)
     (* old statements *)
     | JCNEassert(behav,asrt,e1) ->
         unit_type, dummy_region, JCEassert(behav,asrt,assertion env e1)
     | JCNEcontract(req,dec,behs,e) ->
-	let requires = Option_misc.map (assertion env) req in
-	let decreases = Option_misc.map (fun (t,rel) -> term env t,rel) dec in
+	let requires = Option.map (assertion env) req in
+	let decreases = Option.map (fun (t,rel) -> term env t,rel) dec in
 	let e = expr env e in
 	let vi_result = var (e#typ) "\\result" in
 	let behs = List.map (behavior env vi_result) behs in
@@ -2333,9 +2333,9 @@ used as an assertion, not as a term" pi.li_name
     | JCNEloop(behs, vo, body) ->
         let behaviors = List.map (loopbehavior env) behs in
         let variant =
-          Option_misc.map
+          Option.map
             (fun (v,r) ->
-               let r = Option_misc.map
+               let r = Option.map
                  (fun id -> find_logic_info id#name) r
                in
                (ft v,r))
@@ -2487,17 +2487,17 @@ let type_labels_in_clause = function
   | JCCrequires e | JCCdecreases(e,_) ->
       type_labels [LabelHere] ~result_label:None (Some LabelHere) e
   | JCCbehavior(_, _, _, assumes, requires, assigns, allocates, ensures) ->
-      Option_misc.iter
+      Option.iter
 	(type_labels [LabelHere] ~result_label:None (Some LabelHere)) assumes;
-      Option_misc.iter
+      Option.iter
 	(type_labels [LabelHere] ~result_label:None (Some LabelHere)) requires;
-      Option_misc.iter
+      Option.iter
         (fun (_, x) ->
            List.iter
              (type_labels [LabelOld; LabelPre; LabelPost]
 		~result_label:(Some LabelPost) (Some LabelOld)) x)
         assigns;
-      Option_misc.iter
+      Option.iter
         (fun (_, x) ->
            List.iter
              (type_labels [LabelOld; LabelPre; LabelPost]
@@ -2511,9 +2511,9 @@ let type_labels_in_clause = function
 with the correct label environment. *)
 let rec type_labels_in_decl d = match d#node with
   | JCDvar(_, _, init) ->
-      Option_misc.iter (type_labels [] ~result_label:None None) init
+      Option.iter (type_labels [] ~result_label:None None) init
   | JCDfun(_, _, _, clauses, body) ->
-      Option_misc.iter
+      Option.iter
         (type_labels [LabelHere; LabelPre] ~result_label:None (Some LabelHere))
         body;
       List.iter type_labels_in_clause clauses
@@ -2570,7 +2570,7 @@ let clause env vi_result c acc =
             make_and (assertion env e) acc.fs_requires; }
     | JCCdecreases(e,r) ->
 	assert (acc.fs_decreases = None);
-	let pi = Option_misc.map
+	let pi = Option.map
 	  (fun id ->
              let pi =
 	       try Hashtbl.find logic_functions_env id#name
@@ -2699,7 +2699,7 @@ let add_logic_fundecl (ty,id,poly_args,labels,pl) =
   with Not_found ->
     let poly_args = add_poly_args poly_args in
     let param_env = List.map param pl in
-    let ty = Option_misc.map type_type ty in
+    let ty = Option.map type_type ty in
     let pi = match ty with
       | None -> make_pred id
       | Some ty -> make_logic_fun id ty
@@ -2905,7 +2905,7 @@ let rec term_occurrences table t =
     term t;
     List.iter (term % snd) l
   | JCTrange (to1, to2) ->
-    Option_misc.(
+    Option.(
       iter term to1;
       iter term to2)
   | JCTif (t, t1, t2) ->
@@ -2988,8 +2988,8 @@ let check_consistency id data =
 	    Jc_options.lprintf "%d: @[" pi;
 	    List.iter
 	      (fun label_assoc ->
-		 Jc_options.lprintf "%a ;"
-		   (Pp.print_list Pp.comma (fun fmt (_l1,l2) -> Jc_output_misc.label fmt l2)) label_assoc)
+		 Options.lprintf "%a ;"
+		   Why_pp.(print_list comma (fun fmt (_l1,l2) -> Print_misc.label fmt l2)) label_assoc)
 	      l;
 	    Jc_options.lprintf "@]@\n")
 	 h;
@@ -3001,7 +3001,7 @@ let check_consistency id data =
 	 (fun lab ->
 	    if not (Hashtbl.fold (fun _pi l acc -> acc || List.exists (list_assoc_data lab) l) h false) then
 	      typing_error loc
-		"there should be at least one declared symbol depending on label %a in this axiom" Jc_output_misc.label lab)
+		"there should be at least one declared symbol depending on label %a in this axiom" Print_misc.label lab)
 	 labels
     )
     data.axiomatics_decls
@@ -3187,7 +3187,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
 	  begin
 	    if in_axiomatic then
 	      typing_error loc "not allowed inside axiomatic specification";
-            let e = Option_misc.map (expr []) init in
+            let e = Option.map (expr []) init in
             let vi = get_vardecl id in
             IntHashtblIter.add variables_table vi.vi_tag (vi, e);
 	    acc
@@ -3215,7 +3215,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
                 fs_behavior = [] }
             in
 	    reset_return_label ();
-            let b = Option_misc.map
+            let b = Option.map
 	      (unit_expr % expr (("\\result",vi)::param_env)) body
 	    in
 	    fi.fun_has_return_label <- get_return_label ();
@@ -3367,7 +3367,7 @@ of an invariant policy";
 	  begin
 	    if in_axiomatic then
 	      typing_error loc "not allowed inside axiomatic specification";
-            let tt = Option_misc.map type_type tyopt in
+            let tt = Option.map type_type tyopt in
             StringHashtblIter.add exceptions_table id (exception_info tt id);
 	    acc
 	  end
@@ -3375,7 +3375,7 @@ of an invariant policy";
 	  acc
     | JCDlogic_var (_ty, _id, _body) -> assert false
         (*         let ty, vi = add_logic_constdecl (ty, id) in *)
-        (*         let t = Option_misc.map  *)
+        (*         let t = Option.map  *)
         (* 	  (function body -> *)
         (* 	     let t = term [] body in *)
         (*              if not (subtype t#typ ty) then *)
@@ -3728,7 +3728,7 @@ let print_file fmt () =
   let functions =
     IntHashtblIter.fold
       (fun _ (finfo,_,fspec,slist) f ->
-         Jc_output.JCfun_def
+         Print.JCfun_def
            (finfo.fun_result.vi_type,finfo.fun_name,
             finfo.fun_parameters,fspec,slist)
          :: f
@@ -3737,7 +3737,7 @@ let print_file fmt () =
   let logic_functions =
     IntHashtblIter.fold
       (fun _ (linfo,tora) f ->
-         Jc_output.JClogic_fun_def
+         Print.JClogic_fun_def
            (linfo.li_result_type,linfo.li_name,
             linfo.li_poly_args,
             linfo.li_labels,
@@ -3748,21 +3748,21 @@ let print_file fmt () =
 (*  let logic_constants =
     Hashtbl.fold
       (fun _ (vi,t) f ->
-         Jc_output.JClogic_const_def
-           (vi.vi_type, vi.vi_name, Option_misc.map fst t)
+         Print.JClogic_const_def
+           (vi.vi_type, vi.vi_name, Option.map fst t)
         :: f
       ) logic_constants_table []
   in *)
   let logic_types =
     StringHashtblIter.fold
-      (fun _ (s,l) f -> Jc_output.JClogic_type_def (s,l) :: f)
+      (fun _ (s,l) f -> Print.JClogic_type_def (s,l) :: f)
       logic_type_table
       []
   in
   let variables =
     IntHashtblIter.fold
       (fun _ (vinfo,vinit) f ->
-         Jc_output.JCvar_def
+         Print.JCvar_def
            (vinfo.vi_type,vinfo.vi_name,vinit)
          :: f
       ) variables_table []
@@ -3774,7 +3774,7 @@ let print_file fmt () =
            | None -> None
            | Some(st, _) -> Some st.si_name
          in
-         Jc_output.JCstruct_def
+         Print.JCstruct_def
            (name,super,sinfo.si_fields,[])
          :: f
       ) structs_table []
@@ -3786,14 +3786,14 @@ let print_file fmt () =
           List.map (fun sinfo -> sinfo.si_name)
             vinfo.ri_hroots
         in
-        Jc_output.JCvariant_type_def (name,tags)
+        Print.JCvariant_type_def (name,tags)
         :: f
       ) roots_table []
   in
   let enums =
     StringHashtblIter.fold
       (fun name rinfo f ->
-         Jc_output.JCenum_type_def
+         Print.JCenum_type_def
            (name,rinfo.ei_min,rinfo.ei_max)
          :: f
       ) enum_types_table []
@@ -3801,21 +3801,21 @@ let print_file fmt () =
   let axioms =
     StringHashtblIter.fold
       (fun name (_loc,is_axiom,poly_args,labels, a) f ->
-         Jc_output.JClemma_def (name,is_axiom, poly_args, labels,a)
+         Print.JClemma_def (name,is_axiom, poly_args, labels,a)
          :: f
       ) lemmas_table []
   in
   let global_invariants =
     IntHashtblIter.fold
       (fun _ (li, a) f ->
-         Jc_output.JCglobinv_def (li.li_name,a) :: f)
+         Print.JCglobinv_def (li.li_name,a) :: f)
       global_invariants_table
       []
   in
   let exceptions =
     StringHashtblIter.fold
       (fun name ei f ->
-         Jc_output.JCexception_def (name,ei)
+         Print.JCexception_def (name,ei)
          :: f
       ) exceptions_table []
   in
@@ -3830,13 +3830,13 @@ let print_file fmt () =
     @ (List.rev exceptions)
     @ (List.rev variables)
     @ (List.rev logic_types)
-    @ (Jc_output.JCrec_fun_defs
+    @ (Print.JCrec_fun_defs
       (* (List.rev logic_constants @*) (List.rev logic_functions))
     :: (List.rev axioms)
     @ (List.rev global_invariants)
-    @ [Jc_output.JCrec_fun_defs (List.rev functions)]
+    @ [Print.JCrec_fun_defs (List.rev functions)]
   in
-  Jc_output.print_decls fmt tfile;
+  Print.print_decls fmt tfile;
 
 (*
 Local Variables:

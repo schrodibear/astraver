@@ -166,6 +166,8 @@ struct
        end))
 
   let abort = None
+
+  let some x = Some x
   let map ~f =
     function
     | None -> None
@@ -181,7 +183,12 @@ struct
     | Some x -> f init x
     | None -> init
 
-  let fold_right f o init = fold ~init ~f o
+  let fold_left ~f o init = fold ~init ~f o
+
+  let fold_right ~f o init =
+    match o with
+    | Some x -> f x init
+    | None -> init
 
   let iter ~f =
     function

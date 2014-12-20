@@ -35,7 +35,7 @@ open Fenv
 
 open Region
 
-open Why_output_ast
+open Output_ast
 
 (** {1 Preliminaries} *)
 

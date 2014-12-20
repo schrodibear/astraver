@@ -35,22 +35,22 @@
 
 open Format
 
-type t = 
-  | UnboundVariable of Ident.t
-  | UnboundReference of Ident.t
-  | UnboundArray of Ident.t
+type t =
+  | UnboundVariable of Why_ident.t
+  | UnboundReference of Why_ident.t
+  | UnboundArray of Why_ident.t
   | UnboundLabel of string
   | ReboundLabel of string
-  | UnboundException of Ident.t
-  | UnboundType of Ident.t
-  | Clash of Ident.t
-  | ClashParam of Ident.t
-  | ClashExn of Ident.t
-  | ClashRef of Ident.t
-  | ClashType of Ident.t
-  | Undefined of Ident.t
-  | NotAReference of Ident.t
-  | NotAnArray of Ident.t
+  | UnboundException of Why_ident.t
+  | UnboundType of Why_ident.t
+  | Clash of Why_ident.t
+  | ClashParam of Why_ident.t
+  | ClashExn of Why_ident.t
+  | ClashRef of Why_ident.t
+  | ClashType of Why_ident.t
+  | Undefined of Why_ident.t
+  | NotAReference of Why_ident.t
+  | NotAnArray of Why_ident.t
   | NotAnIndex
   | HasSideEffects
   | ShouldBeBoolean
@@ -65,30 +65,29 @@ type t =
   | AppNonFunction
   | TooManyArguments
   | TooComplexArgument
-  | Alias of Ident.t
+  | Alias of Why_ident.t
   | PartialApp
   | TermExpectedType of (formatter -> unit) * (formatter -> unit)
   | ExpectedType of (formatter -> unit)
   | ExpectedType2 of (formatter -> unit) * (formatter -> unit)
-  | ExpectsAType of Ident.t
-  | ExpectsATerm of Ident.t
+  | ExpectsAType of Why_ident.t
+  | ExpectsATerm of Why_ident.t
   | ShouldBeVariable
-  | ShouldBeReference of Ident.t
+  | ShouldBeReference of Why_ident.t
   | ShouldNotBeReference
   | IllTypedArgument of (formatter -> unit)
-  | NoVariableAtDate of Ident.t * string
+  | NoVariableAtDate of Why_ident.t * string
   | MutableExternal
   | AnyMessage of string
-  | ExceptionArgument of Ident.t * bool
-  | CannotBeRaised of Ident.t
+  | ExceptionArgument of Why_ident.t * bool
+  | CannotBeRaised of Why_ident.t
   | MutableMutable
   | PolymorphicGoal
-  | NonExhaustive of Ident.t
+  | NonExhaustive of Why_ident.t
   | PatternBadArity
   | TypeBadArity
-  | TypeArity of Ident.t * int * int
-  | GlobalWithEffects of Ident.t * Why_effect.t
+  | TypeArity of Why_ident.t * int * int
+  | GlobalWithEffects of Why_ident.t * Why_effect.t
   | IllformedPattern
   | CannotGeneralize
   | IllegalComparison of (formatter -> unit)
-

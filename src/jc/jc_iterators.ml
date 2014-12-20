@@ -113,7 +113,7 @@ let pop =
   | _ -> failwith "pop"
 
 let pop_opt opt l =
-  Option_misc.map_default (fun _ -> map_fst (fun e -> Some e) @@ pop l) (None, l) opt
+  Option.map_default ~default:(None, l) ~f:(fun _ -> map_fst (fun e -> Some e) @@ pop l) opt
 
 let rec popn n l =
   if n > 0 then
@@ -369,19 +369,19 @@ module PExprAst = struct
           let acc =
             List.fold_right
               (fun (_,inv,_ass) acc ->
-                 Option_misc.fold (fun x l -> x::l) inv acc
+                 Option.fold ~init:acc ~f:(fun l x -> x :: l) inv
                    (* TODO : ass *))
               behs
-              (Option_misc.fold (fun (x,_) l -> x::l) variant [body])
+              (Option.fold ~init:[body] ~f:(fun l (x,_) -> x :: l) variant)
           in e1::acc
       | JCPEfor(inits,cond,update,behs,variant,body) ->
           let acc =
             List.fold_right
               (fun (_,inv,_ass) acc ->
-                 Option_misc.fold (fun x l -> x::l) inv acc
+                 Option.fold ~init:acc ~f:(fun l x -> x :: l) inv
                    (* TODO : ass *))
               behs
-              (Option_misc.fold (fun (x,_) l -> x::l) variant [body])
+              (Option.fold ~init:[body] ~f:(fun l (x, _) -> x :: l) variant)
           in inits @ cond :: update @ acc
       | JCPEblock el
       | JCPEapp(_,_,el) ->
@@ -423,7 +423,7 @@ let rec subst_term (subst : term_subst) t =
         end
     | JCTbinary(t1,op,t2) -> JCTbinary(f t1,op,f t2)
     | JCTshift(t1,t2) -> JCTshift(f t1, f t2)
-    | JCTrange(t1,t2) -> JCTrange(Option_misc.map f t1, Option_misc.map f t2)
+    | JCTrange(t1,t2) -> JCTrange(Option.map f t1, Option.map f t2)
     | JCTunary(op,t1) -> JCTunary(op, f t1)
     | JCTderef(t1,lab,fi) -> JCTderef(f t1,lab,fi)
     | JCTold(t1) -> JCTold(f t1)
@@ -486,9 +486,9 @@ let fold_sub_term it f acc t =
     | JCTshift(t1,t2) ->
         let acc = it acc t1 in
         it acc t2
-    | JCTrange(t1_opt,t2_opt) ->
-        let acc = Option_misc.fold_left it acc t1_opt in
-        Option_misc.fold_left it acc t2_opt
+    | JCTrange (t1_opt, t2_opt) ->
+      Option.fold ~init:acc ~f:it t1_opt |>
+      Option.fold_left ~f:it t2_opt
     | JCTunary(_,t1)
     | JCTderef(t1,_,_)
     | JCTold t1
@@ -804,19 +804,19 @@ let iter_term_and_assertion ft fa a =
 let fold_sub_location_set itt itls ft fls acc locs =
   let itt = itt ft and itls = itls ft fls in
   match locs#node with
-    | JCLSvar _vi ->
-        acc
-    | JCLSderef(locs,_lab,_fi,_r) ->
-        itls acc locs
-    | JCLSrange(locs,t1_opt,t2_opt) ->
-        let acc = itls acc locs in
-        let acc = Option_misc.fold_left itt acc t1_opt in
-        Option_misc.fold_left itt acc t2_opt
-   | JCLSrange_term(t0,t1_opt,t2_opt) ->
-        let acc = itt acc t0 in
-        let acc = Option_misc.fold_left itt acc t1_opt in
-        Option_misc.fold_left itt acc t2_opt
-   | JCLSat(ls,_lab) -> itls acc ls
+  | JCLSvar _vi ->
+    acc
+  | JCLSderef (locs, _lab, _fi, _r) ->
+    itls acc locs
+  | JCLSrange (locs, t1_opt, t2_opt) ->
+    itls acc locs |>
+    Option.fold_left ~f:itt t1_opt |>
+    Option.fold_left ~f:itt t2_opt
+  | JCLSrange_term (t0, t1_opt, t2_opt) ->
+    itt acc t0 |>
+    Option.fold_left ~f:itt t1_opt |>
+    Option.fold_left ~f:itt t2_opt
+  | JCLSat (ls, _lab) -> itls acc ls
 
 let rec fold_location_set ft fls acc locs =
   let acc = fls acc locs in
@@ -861,14 +861,14 @@ let iter_location ft fl fls loc =
 
 let fold_sub_behavior _itt ita itl _itls ft fa fl fls acc b =
   let ita = ita ft fa and itl = itl ft fl fls in
-  let acc = Option_misc.fold_left ita acc b.b_assumes in
-  let acc =
-    Option_misc.fold_left
-      (fun acc (_,locs) -> List.fold_left itl acc locs)
-      acc b.b_assigns
-  in
-  let acc = ita acc b.b_ensures in
-  ita acc b.b_free_ensures
+  let ita' = Fn.flip ita in
+  Option.fold ~init:acc ~f:ita b.b_assumes |>
+  Option.fold_left
+      ~f:(fun acc (_,locs) -> List.fold_left itl acc locs)
+      b.b_assigns
+  |>
+  ita' b.b_ensures |>
+  ita' b.b_free_ensures
 
 let rec fold_behavior ft fa fl fls acc e =
   fold_sub_behavior
@@ -1263,8 +1263,7 @@ let fold_sub_expr_and_term_and_assertion
     | JCEvar _
     | JCEreturn_void ->
        acc
-    | JCEthrow(_exc,e1_opt) ->
-        Option_misc.fold_left ite acc e1_opt
+    | JCEthrow (_exc, e1_opt) -> Option.fold ~init:acc ~f:ite e1_opt
     | JCEbinary(e1,_,e2)
     | JCEshift(e1,e2)
     | JCEassign_heap(e1,_,e2) ->
@@ -1290,8 +1289,7 @@ let fold_sub_expr_and_term_and_assertion
     | JCEreturn(_,e1) ->
         ite acc e1
     | JCElet(_,e1_opt,e2) ->
-        let acc = Option_misc.fold_left ite acc e1_opt in
-        ite acc e2
+        ite (Option.fold ~f:ite ~init:acc e1_opt) e2
     | JCEapp call ->
         List.fold_left ite acc call.call_args
     | JCEif(e1,e2,e3) ->
@@ -1316,22 +1314,25 @@ let fold_sub_expr_and_term_and_assertion
         let acc =
           List.fold_left
             (fun acc (_id,inv,_assigns) ->
-               let acc = Option_misc.fold_left ita acc inv in
-               acc (* TODO: fold on assigns *)
-            ) acc la.loop_behaviors
+               Option.fold ~f:ita ~init:acc inv
+               (* TODO: fold on assigns *))
+            acc
+            la.loop_behaviors
         in
         let acc = ita acc la.loop_free_invariant in
-        Option_misc.fold_left (fun acc (t,_) -> itt acc t) acc la.loop_variant
-    | JCEcontract(a_opt,t_opt,_v,behavs,e) ->
-        let acc = Option_misc.fold_left ita acc a_opt in
-        let acc = Option_misc.fold_left (fun acc (t,_) -> itt acc t) acc t_opt in
-        let acc =
-          List.fold_left
-            (fun acc (_loc,_name,behav) ->
-               fold_sub_behavior acc behav
-            ) acc behavs
-        in
-        ite acc e
+        Option.fold ~f:(fun acc -> itt acc % fst) ~init:acc la.loop_variant
+    | JCEcontract (a_opt, t_opt, _v, behavs, e) ->
+      Option.fold ~f:ita ~init:acc a_opt |>
+      Option.fold_left ~f:(fun acc -> itt acc % fst) t_opt |>
+      fun acc ->
+      let acc =
+        List.fold_left
+          (fun acc (_loc,_name,behav) ->
+             fold_sub_behavior acc behav)
+          acc
+          behavs
+      in
+      ite acc e
 
 
 let rec fold_expr_and_term_and_assertion ft fa fl fls fe acc e =
@@ -1408,15 +1409,16 @@ module NExprAst = struct
           [e1; e2; e3]
       | JCNEloop(behs, variant, e2) ->
           List.fold_right
-            (fun (_,inv,ass) acc ->
+            (fun (_, inv, ass) acc ->
                let acc =
-                 Option_misc.fold (fun x l -> x::l) inv acc
+                 Option.fold ~f:(fun l x -> x :: l) ~init:acc inv
                in
-                 Option_misc.fold
-                   (fun (_,locs) l -> locs@l)
-                   ass acc)
+               Option.fold
+                 ~f:(fun l (_,locs) -> locs @ l)
+                 ass
+                 ~init:acc)
             behs
-            (Option_misc.fold (fun (x,_) l -> x::l) variant [e2])
+            (Option.fold ~f:(fun l (x,_) -> x :: l) variant ~init:[e2])
       | JCNEapp(_, _, el)
       | JCNEblock el ->
           el

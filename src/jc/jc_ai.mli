@@ -30,8 +30,8 @@
 (**************************************************************************)
 
 
-open Jc_ast
-open Jc_fenv
+open Ast
+open Fenv
 
 val normalize_expr: expr -> expr
 
@@ -48,7 +48,7 @@ val is_recursive : fun_info -> bool
 *)
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
-End: 
+End:
 *)

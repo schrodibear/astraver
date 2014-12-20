@@ -29,15 +29,15 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
+open Stdlib
 
 open Format
 open Env
 open Fenv
 open Pervasives
 open Ast
-open Output_misc
-open Pp
+open Print_misc
+open Why_pp
 
 
 let is_not_true (p : Jc_ast.pexpr) =
@@ -80,22 +80,22 @@ let unary_op = function
 let rec ppattern fmt p =
   match p#node with
     | JCPPstruct(st, lbls) ->
-	fprintf fmt "@[<hv 2>%s{@ " st#name;
-	List.iter
-	  (fun (lbl, pat) ->
-	     fprintf fmt "%s = %a;@ " lbl#name ppattern pat)
+        fprintf fmt "@[<hv 2>%s{@ " st#name;
+        List.iter
+          (fun (lbl, pat) ->
+             fprintf fmt "%s = %a;@ " lbl#name ppattern pat)
           lbls;
-	fprintf fmt "}@]"
+        fprintf fmt "}@]"
     | JCPPvar vi ->
-	fprintf fmt "%s" vi#name
+        fprintf fmt "%s" vi#name
     | JCPPor(p1, p2) ->
-	fprintf fmt "(%a)@ | (%a)" ppattern p1 ppattern p2
+        fprintf fmt "(%a)@ | (%a)" ppattern p1 ppattern p2
     | JCPPas(pat, vi) ->
-	fprintf fmt "(%a as %s)" ppattern pat vi#name
+        fprintf fmt "(%a as %s)" ppattern pat vi#name
     | JCPPany ->
-	fprintf fmt "_"
+        fprintf fmt "_"
     | JCPPconst c ->
-	fprintf fmt "%a" const c
+        fprintf fmt "%a" const c
 
 let quantifier fmt = function
   | Forall -> fprintf fmt "forall"
@@ -107,105 +107,105 @@ let identifier fmt id =
 let rec pexpr fmt e =
   match e#node with
     | JCPElabel(lab,e) ->
-	assert (lab <> "");
-	fprintf fmt "@[(%s : %a)@]" lab pexpr e
+        assert (lab <> "");
+        fprintf fmt "@[(%s : %a)@]" lab pexpr e
     | JCPEconst c -> const fmt c
     | JCPEvar vi ->
-	fprintf fmt "%s" vi
+        fprintf fmt "%s" vi
     | JCPEbinary (e1, op, e2) ->
-	fprintf fmt "@[<hv 2>(%a %s@ %a)@]" pexpr e1 (bin_op op) pexpr e2
+        fprintf fmt "@[<hv 2>(%a %s@ %a)@]" pexpr e1 (bin_op op) pexpr e2
     | JCPEunary((`Upostfix_dec | `Upostfix_inc) as op,e1) ->
-	fprintf fmt "@[(%a %s)@]" pexpr e1 (unary_op op)
+        fprintf fmt "@[(%a %s)@]" pexpr e1 (unary_op op)
     | JCPEunary(op,e1) ->
-	fprintf fmt "@[(%s %a)@]" (unary_op op) pexpr e1
+        fprintf fmt "@[(%s %a)@]" (unary_op op) pexpr e1
     | JCPEif (e1,e2,e3) ->
-	fprintf fmt "@[(if %a then %a else %a)@]" pexpr e1 pexpr e2 pexpr e3
+        fprintf fmt "@[(if %a then %a else %a)@]" pexpr e1 pexpr e2 pexpr e3
     | JCPElet(Some ty,vi,Some e1,e2) ->
-	fprintf fmt "@[(let %a %s =@ %a@ in %a)@]"
+        fprintf fmt "@[(let %a %s =@ %a@ in %a)@]"
           ptype ty vi pexpr e1 pexpr e2
     | JCPElet(None,vi,Some e1,e2) ->
-	fprintf fmt "@[(let %s =@ %a@ in %a)@]"
+        fprintf fmt "@[(let %s =@ %a@ in %a)@]"
           vi pexpr e1 pexpr e2
     | JCPElet(_ty,_vi,None,_e2) -> assert false
     | JCPEassign (v, e) ->
-	fprintf fmt "(%a = %a)" pexpr v pexpr e
+        fprintf fmt "(%a = %a)" pexpr v pexpr e
     | JCPEassign_op (v, op, e) ->
-	fprintf fmt "%a %s= %a" pexpr v (bin_op op) pexpr e
+        fprintf fmt "%a %s= %a" pexpr v (bin_op op) pexpr e
     | JCPEcast (e, si) ->
-	fprintf fmt "(%a :> %a)" pexpr e ptype si
+        fprintf fmt "(%a :> %a)" pexpr e ptype si
     | JCPEreinterpret_cast (e, si) ->
         fprintf fmt "(%a as %a)" pexpr e ptype si
     | JCPEalloc (e, si) ->
-	fprintf fmt "(new %s[%a])" si pexpr e
+        fprintf fmt "(new %s[%a])" si pexpr e
     | JCPEfree (e) ->
-	fprintf fmt "(free(%a))" pexpr e
+        fprintf fmt "(free(%a))" pexpr e
     | JCPEreinterpret (e, id) ->
         fprintf fmt "(reinterpret %a as %s)" pexpr e id
     | JCPEoffset(k,e) ->
-	fprintf fmt "\\offset_m%a(%a)" offset_kind k pexpr e
+        fprintf fmt "\\offset_m%a(%a)" offset_kind k pexpr e
     | JCPEaddress(absolute,e) ->
-	fprintf fmt "\\%aaddress(%a)" address_kind absolute pexpr e
+        fprintf fmt "\\%aaddress(%a)" address_kind absolute pexpr e
     | JCPEbase_block(e) ->
-	fprintf fmt "\\base_block(%a)" pexpr e
+        fprintf fmt "\\base_block(%a)" pexpr e
     | JCPEfresh(e) ->
-	fprintf fmt "\\fresh(%a)" pexpr e
+        fprintf fmt "\\fresh(%a)" pexpr e
     | JCPEinstanceof (e, si) ->
-	fprintf fmt "(%a <: %s)" pexpr e si
+        fprintf fmt "(%a <: %s)" pexpr e si
     | JCPEderef (e, fi) ->
-	fprintf fmt "%a.%s" pexpr e fi
+        fprintf fmt "%a.%s" pexpr e fi
     | JCPEmatch (e, pel) ->
-	fprintf fmt "@[<v 2>match %a with@ " pexpr e;
-	List.iter
-	  (fun (p, e) -> fprintf fmt "  @[<v 2>%a ->@ %a;@]@ "
-	     ppattern p pexpr e) pel;
-	fprintf fmt "end@]"
+        fprintf fmt "@[<v 2>match %a with@ " pexpr e;
+        List.iter
+          (fun (p, e) -> fprintf fmt "  @[<v 2>%a ->@ %a;@]@ "
+             ppattern p pexpr e) pel;
+        fprintf fmt "end@]"
     | JCPEold t -> fprintf fmt "@[\\old(%a)@]" pexpr t
     | JCPEat(t,lab) -> fprintf fmt "@[\\at(%a,%a)@]" pexpr t label lab
     | JCPEapp(f,labs,args) ->
-	fprintf fmt "%s%a(@[%a@])" f
-	  (fun fmt labs -> if List.length labs = 0 then () else
-	    fprintf fmt "%a" (print_list_delim lbrace rbrace comma label) labs) labs
-	  (print_list comma pexpr) args
+        fprintf fmt "%s%a(@[%a@])" f
+          (fun fmt labs -> if List.length labs = 0 then () else
+            fprintf fmt "%a" (print_list_delim lbrace rbrace comma label) labs) labs
+          (print_list comma pexpr) args
     | JCPErange(t1,t2) ->
-	fprintf fmt "@[[%a..%a]@]" (print_option pexpr) t1 (print_option pexpr) t2
+        fprintf fmt "@[[%a..%a]@]" (print_option pexpr) t1 (print_option pexpr) t2
     | JCPEquantifier (q,ty,vil,trigs, a)->
-	fprintf fmt "@[<hv 2>(\\%a %a %a%a;@\n%a)@]"
-	  quantifier q
-	  ptype ty
-	  (print_list comma identifier) vil
-	  triggers trigs pexpr a
+        fprintf fmt "@[<hv 2>(\\%a %a %a%a;@\n%a)@]"
+          quantifier q
+          ptype ty
+          (print_list comma identifier) vil
+          triggers trigs pexpr a
     | JCPEmutable _ ->
         fprintf fmt "\\mutable(TODO)"
     | JCPEeqtype(tag1,tag2) ->
-	fprintf fmt "\\typeeq(%a,%a)" ptag tag1 ptag tag2
+        fprintf fmt "\\typeeq(%a,%a)" ptag tag1 ptag tag2
     | JCPEsubtype(tag1,tag2) ->
-	fprintf fmt "(%a <: %a)" ptag tag1 ptag tag2
+        fprintf fmt "(%a <: %a)" ptag tag1 ptag tag2
     | JCPEreturn (e) ->
-	fprintf fmt "@\n(return %a)" pexpr e
+        fprintf fmt "@\n(return %a)" pexpr e
     | JCPEunpack _ ->
         fprintf fmt "unpack(TODO)"
     | JCPEpack _ ->
         fprintf fmt "pack(TODO)"
     | JCPEthrow (ei, eo) ->
-	fprintf fmt "@\n(throw %s %a)"
-	  ei#name
-	  pexpr eo
+        fprintf fmt "@\n(throw %s %a)"
+          ei#name
+          pexpr eo
     | JCPEtry (s, hl, fs) ->
-	fprintf fmt
-	  "@\n@[<v 2>try %a@]%a@\n@[<v 2>finally%a@ end@]"
-	  pexpr s
-	  (print_list nothing handler) hl
-	  pexpr fs
+        fprintf fmt
+          "@\n@[<v 2>try %a@]%a@\n@[<v 2>finally%a@ end@]"
+          pexpr s
+          (print_list nothing handler) hl
+          pexpr fs
     | JCPEgoto lab ->
-	fprintf fmt "@\n(goto %s)" lab
+        fprintf fmt "@\n(goto %s)" lab
     | JCPEcontinue lab ->
-	fprintf fmt "@\n(continue %s)" lab
+        fprintf fmt "@\n(continue %s)" lab
     | JCPEbreak lab ->
-	fprintf fmt "@\n(break %s)" lab
+        fprintf fmt "@\n(break %s)" lab
     | JCPEwhile (e, behaviors, variant, s)->
-	fprintf fmt "@\n@[loop %a%a@\nwhile (%a)%a@]"
-	  (print_list nothing loop_behavior) behaviors
-	  (print_option
+        fprintf fmt "@\n@[loop %a%a@\nwhile (%a)%a@]"
+          (print_list nothing loop_behavior) behaviors
+          (print_option
              (fun fmt (t,r) ->
                 match r with
                   | None ->
@@ -213,12 +213,12 @@ let rec pexpr fmt e =
                   | Some r ->
                       fprintf fmt "@\nvariant %a for %a;" pexpr t identifier r
              ))
-	  variant
-	  pexpr e block [s]
+          variant
+          pexpr e block [s]
     | JCPEfor (inits, cond, updates, behaviors, variant, body)->
-	fprintf fmt "@\n@[loop %a@\n%a@\nfor (%a ; %a ; %a)%a@]"
-	  (print_list nothing loop_behavior) behaviors
-	  (print_option
+        fprintf fmt "@\n@[loop %a@\n%a@\nfor (%a ; %a ; %a)%a@]"
+          (print_list nothing loop_behavior) behaviors
+          (print_option
              (fun fmt (t,r) ->
                 match r with
                   | None ->
@@ -226,40 +226,41 @@ let rec pexpr fmt e =
                   | Some r ->
                       fprintf fmt "@\nvariant %a for %a;" pexpr t identifier r
              ))
-	  variant
-	  (print_list comma pexpr) inits
-	  pexpr cond (print_list comma pexpr) updates
-	  block [body]
+          variant
+          (print_list comma pexpr) inits
+          pexpr cond (print_list comma pexpr) updates
+          block [body]
     | JCPEdecl (ty,vi, None)->
-	fprintf fmt "@\n(var %a %s)" ptype ty vi
+        fprintf fmt "@\n(var %a %s)" ptype ty vi
     | JCPEdecl (ty,vi, Some e)->
-	fprintf fmt "@\n(var %a %s = %a)"
-	  ptype ty vi pexpr e
+        fprintf fmt "@\n(var %a %s = %a)"
+          ptype ty vi pexpr e
     | JCPEassert(behav,asrt,a)->
-	fprintf fmt "@\n(%a %a%a)"
-	  asrt_kind asrt
-	  (print_list_delim
-	     (constant_string "for ") (constant_string ": ")
-	     comma identifier)
-	  behav
-	  pexpr a
+        fprintf fmt "@\n(%a %a%a)"
+          asrt_kind asrt
+          (print_list_delim
+             (constant_string "for ") (constant_string ": ")
+             comma identifier)
+          behav
+          pexpr a
     | JCPEcontract(req,dec,behs,e) ->
-	fprintf fmt "@\n@[<v 2>( ";
-	Option_misc.iter
-	  (fun e -> if is_not_true e then
-	     fprintf fmt "requires %a;@\n" pexpr e) req;
-	Option_misc.iter
-	  (fun (t,r) -> match r with
-	     | None -> fprintf fmt "decreases %a;@\n" pexpr t
-	     | Some r -> fprintf fmt "decreases %a for %a;@\n"
-		 pexpr t identifier r)
-	  dec;
-	List.iter (behavior fmt) behs;
-	fprintf fmt "@\n{ %a@ })@]" pexpr e
+        fprintf fmt "@\n@[<v 2>( ";
+        Option.iter
+          req
+          ~f:(fun e -> if is_not_true e then
+                 fprintf fmt "requires %a;@\n" pexpr e);
+        Option.iter
+          dec
+          ~f:(fun (t,r) -> match r with
+             | None -> fprintf fmt "decreases %a;@\n" pexpr t
+             | Some r -> fprintf fmt "decreases %a for %a;@\n"
+                 pexpr t identifier r);
+        List.iter (behavior fmt) behs;
+        fprintf fmt "@\n{ %a@ })@]" pexpr e
     | JCPEblock l -> block fmt l
     | JCPEswitch (e, csl) ->
-	fprintf fmt "@\n@[<v 2>switch (%a) {%a@]@\n}"
-	  pexpr e (print_list nothing case) csl
+        fprintf fmt "@\n@[<v 2>switch (%a) {%a@]@\n}"
+          pexpr e (print_list nothing case) csl
 
 and triggers fmt trigs =
   print_list_delim lsquare rsquare semi (print_list comma pexpr) fmt trigs
@@ -288,54 +289,40 @@ and block fmt b =
 and case fmt (c,sl) =
   let onecase fmt = function
     | Some c ->
-	fprintf fmt "@\ncase %a:" pexpr c
+        fprintf fmt "@\ncase %a:" pexpr c
     | None ->
-	fprintf fmt "@\ndefault:"
+        fprintf fmt "@\ndefault:"
   in
   fprintf fmt "%a%a" (print_list nothing onecase) c pexpr sl
 
-and behavior fmt (_loc,id,throws,assumes,requires,assigns,allocates,ensures) =
-  fprintf fmt "@\n@[<v 2>behavior %s:" id;
-  Option_misc.iter
-    (fun a ->
-(*       Format.eprintf "Jc_poutput: assumes %a@." pexpr a;*)
-       if is_not_true a then
-         fprintf fmt "@\nassumes %a;" pexpr a) assumes;
-  Option_misc.iter (fprintf fmt "@\nrequires %a;" pexpr) requires;
-  Option_misc.iter
-    (fun id -> fprintf fmt "@\nthrows %s;" id#name) throws;
-  Option_misc.iter
-    (fun (_,locs) -> fprintf fmt "@\nassigns %a;"
-       (print_list_or_default "\\nothing" comma pexpr) locs)
-    assigns;
-  Option_misc.iter
-    (fun (_,locs) -> fprintf fmt "@\nallocates %a;"
-       (print_list_or_default "\\nothing" comma pexpr) locs)
-    allocates;
-  fprintf fmt "@\nensures %a;@]" pexpr ensures
+and behavior fmttr (_loc, id, throws, assumes, requires, assigns, allocates, ensures) =
+  let open Option in
+  let pr fmt = fprintf fmttr fmt in
+  pr "@\n@[<v 2>behavior %s:" id;
+  iter assumes ~f:(fun a -> if is_not_true a then pr "@\nassumes %a;" pexpr a);
+  iter requires ~f:(pr "@\nrequires %a;" pexpr);
+  iter throws ~f:(fun id -> pr "@\nthrows %s;" id#name);
+  iter assigns ~f:(snd %> pr "@\nassigns %a;" (print_list_or_default "\\nothing" comma pexpr));
+  iter allocates ~f:(snd %> pr "@\nallocates %a;" (print_list_or_default "\\nothing" comma pexpr));
+  pr "@\nensures %a;@]" pexpr ensures
 
-and loop_behavior fmt (ids,inv,ass) =
-  fprintf fmt "@\n@[<v 2>behavior %a:@\n"
-    (print_list comma (fun fmt id -> fprintf fmt "%s" id#name)) ids;
-  Option_misc.iter
-    (fun i -> fprintf fmt "invariant %a;" pexpr i) inv;
-  Option_misc.iter
-    (fun (_,locs) -> fprintf fmt "@\nassigns %a;"
-       (print_list_or_default "\\nothing" comma pexpr) locs)
-    ass;
-  fprintf fmt "@]"
-
-
+and loop_behavior fmttr (ids, inv, ass) =
+  let open Option in
+  let pr fmt = fprintf fmttr fmt in
+  pr "@\n@[<v 2>behavior %a:@\n" (print_list comma (fun fmt id -> fprintf fmt "%s" id#name)) ids;
+  iter inv ~f:(pr "invariant %a;" pexpr);
+  iter ass ~f:(snd %> pr "@\nassigns %a;" (print_list_or_default "\\nothing" comma pexpr));
+  pr "@]"
 
 let pclause fmt = function
   | JCCrequires e ->
       if is_not_true e then
-	fprintf fmt "@\n@[<v 2>  requires @[%a@];@]" pexpr e
+        fprintf fmt "@\n@[<v 2>  requires @[%a@];@]" pexpr e
   | JCCdecreases(e,None) ->
       fprintf fmt "@\n@[<v 2>  decreases @[%a@];@]" pexpr e
   | JCCdecreases(e,Some r) ->
       fprintf fmt "@\n@[<v 2>  decreases @[%a@] for %a;@]"
-	pexpr e identifier r
+        pexpr e identifier r
   | JCCbehavior b -> behavior fmt b
 
 let param fmt (ty,vi) =
@@ -356,9 +343,9 @@ let field fmt (modifier,ty,fi,bitsize) =
     ptype ty fi;
   match bitsize with
     | Some bitsize ->
-	fprintf fmt ": %d;" bitsize
+        fprintf fmt ": %d;" bitsize
     | None ->
-	fprintf fmt ";"
+        fprintf fmt ";"
 
 let invariant fmt (id, vi, a) =
   fprintf fmt "@\n@[<hv 2>invariant %s(%s) =@ %a;@]"
@@ -374,13 +361,13 @@ let reads_or_expr fmt = function
       fprintf fmt " =@\n%a" pexpr e
   | JCinductive l ->
       fprintf fmt " {@\n@[<v 2>%a@]@\n}"
-	(print_list newline
-	   (fun fmt (id,labels,e) ->
-	      fprintf fmt "case %s@[%a@]: %a;@\n" id#name
-		(print_list_delim lbrace rbrace comma label) labels
-		pexpr e)) l
+        (print_list newline
+           (fun fmt (id,labels,e) ->
+              fprintf fmt "case %s@[%a@]: %a;@\n" id#name
+                (print_list_delim lbrace rbrace comma label) labels
+                pexpr e)) l
 
-let type_params_decl fmt l = print_list_delim lchevron rchevron comma Pp.string fmt l
+let type_params_decl fmt l = print_list_delim lchevron rchevron comma Why_pp.string fmt l
 
 let type_params fmt = function
   | [] -> ()
@@ -393,69 +380,69 @@ let super_option fmt = function
 let rec pdecl fmt d =
   match d#node with
     | JCDfun(ty,id,params,clauses,body) ->
-	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@\n" ptype ty id#name
-	  (print_list comma fun_param) params
-	  (print_list nothing pclause) clauses
-	  (print_option_or_default "\n;" pexpr) body
+        fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@\n" ptype ty id#name
+          (print_list comma fun_param) params
+          (print_list nothing pclause) clauses
+          (print_option_or_default "\n;" pexpr) body
     | JCDenum_type(id,min,max) ->
-	fprintf fmt "@\n@[type %s = %s..%s@]@\n"
-	  id (Num.string_of_num min) (Num.string_of_num max)
+        fprintf fmt "@\n@[type %s = %s..%s@]@\n"
+          id (Num.string_of_num min) (Num.string_of_num max)
     | JCDvariant_type(id, tags) ->
-	fprintf fmt "@\n@[type %s = [" id;
-	print_list
-	  (fun fmt () -> fprintf fmt " | ")
-	  (fun fmt tag -> fprintf fmt "%s" tag#name)
-	  fmt tags;
-	fprintf fmt "]@]@\n"
+        fprintf fmt "@\n@[type %s = [" id;
+        print_list
+          (fun fmt () -> fprintf fmt " | ")
+          (fun fmt tag -> fprintf fmt "%s" tag#name)
+          fmt tags;
+        fprintf fmt "]@]@\n"
     | JCDunion_type(id,discriminated,tags) ->
-	fprintf fmt "@\n@[type %s = [" id;
-	print_list
-	  (fun fmt () -> fprintf fmt " %c "
-	     (if discriminated then '^' else '&'))
-	  (fun fmt tag -> fprintf fmt "%s" tag#name)
-	  fmt tags;
-	fprintf fmt "]@]@\n"
+        fprintf fmt "@\n@[type %s = [" id;
+        print_list
+          (fun fmt () -> fprintf fmt " %c "
+             (if discriminated then '^' else '&'))
+          (fun fmt tag -> fprintf fmt "%s" tag#name)
+          fmt tags;
+        fprintf fmt "]@]@\n"
     | JCDtag(id, params, super, fields, invs) ->
-	fprintf fmt "@\n@[<v 2>tag %s%a = %a{%a%a@]@\n}@\n"
+        fprintf fmt "@\n@[<v 2>tag %s%a = %a{%a%a@]@\n}@\n"
           id
           type_params_decl params
           super_option super
           (print_list space field) fields
-	  (print_list space invariant) invs
+          (print_list space invariant) invs
     | JCDvar(ty,id,init) ->
-	fprintf fmt "@\n@[%a %s%a;@]@\n" ptype ty id
-	  (print_option (fun fmt e -> fprintf fmt " = %a" pexpr e)) init
+        fprintf fmt "@\n@[%a %s%a;@]@\n" ptype ty id
+          (print_option (fun fmt e -> fprintf fmt " = %a" pexpr e)) init
     | JCDlemma(id,is_axiom,poly_args,lab,a) ->
-	fprintf fmt "@\n@[%s %s@[%a@]@[%a@] :@\n%a@]@\n"
+        fprintf fmt "@\n@[%s %s@[%a@]@[%a@] :@\n%a@]@\n"
           (if is_axiom then "axiom" else "lemma") id
-	  (print_list_delim lchevron rchevron comma string) poly_args
-	  (print_list_delim lbrace rbrace comma label) lab
-	  pexpr a
+          (print_list_delim lchevron rchevron comma string) poly_args
+          (print_list_delim lbrace rbrace comma label) lab
+          pexpr a
     | JCDglobal_inv(id,a) ->
-	fprintf fmt "@\n@[invariant %s :@\n%a@]@\n" id pexpr a
+        fprintf fmt "@\n@[invariant %s :@\n%a@]@\n" id pexpr a
     | JCDexception(id,tyopt) ->
-	fprintf fmt "@\n@[exception %s of %a@]@\n" id
-	  (print_option ptype) tyopt
+        fprintf fmt "@\n@[exception %s of %a@]@\n" id
+          (print_option ptype) tyopt
     | JCDlogic_var (ty, id, body) ->
-	fprintf fmt "@\n@[logic %a %s %a@]@\n"
-	  ptype ty id
-	  (print_option (fun fmt e -> fprintf fmt "=@\n%a" pexpr e)) body
+        fprintf fmt "@\n@[logic %a %s %a@]@\n"
+          ptype ty id
+          (print_option (fun fmt e -> fprintf fmt "=@\n%a" pexpr e)) body
     | JCDlogic (None, id, poly_args, labels, params, body) ->
-	fprintf fmt "@\n@[predicate %s@[%a@]@[%a@](@[%a@])%a@]@\n"
-	  id
+        fprintf fmt "@\n@[predicate %s@[%a@]@[%a@](@[%a@])%a@]@\n"
+          id
           (print_list_delim lchevron rchevron comma string) poly_args
           (print_list_delim lbrace rbrace comma label) labels
-	  (print_list comma param) params
-	  reads_or_expr body
+          (print_list comma param) params
+          reads_or_expr body
     | JCDlogic (Some ty, id, poly_args, labels, params, body) ->
-	fprintf fmt "@\n@[logic %a %s@[%a@]@[%a@](@[%a@])%a@]@\n"
-	  ptype ty id
+        fprintf fmt "@\n@[logic %a %s@[%a@]@[%a@](@[%a@])%a@]@\n"
+          ptype ty id
           (print_list_delim lchevron rchevron comma string) poly_args
           (print_list_delim lbrace rbrace comma label) labels
-	  (print_list comma param) params
-	  reads_or_expr body
+          (print_list comma param) params
+          reads_or_expr body
     | JCDlogic_type (id,args) ->
-	fprintf fmt "@\n@[logic type %s%a@]@\n" id (print_list_delim lchevron rchevron comma string) args
+        fprintf fmt "@\n@[logic type %s%a@]@\n" id (print_list_delim lchevron rchevron comma string) args
     | JCDinvariant_policy p ->
         fprintf fmt "# InvariantPolicy = %s@\n" (string_of_invariant_policy p)
     | JCDseparation_policy p ->
@@ -480,8 +467,8 @@ let rec pdecl fmt d =
     | JCDpragma_gen_same (name,logic) ->
       fprintf fmt "# Gen_Same_Footprint %s %s" name logic
     | JCDaxiomatic(id,l) ->
-	fprintf fmt "@\n@[axiomatic %s {@\n@[<v 2>%a@]@\n}@]@\n" id
-	  (print_list space pdecl) l
+        fprintf fmt "@\n@[axiomatic %s {@\n@[<v 2>%a@]@\n}@]@\n" id
+          (print_list space pdecl) l
 
 and pdecls fmt (l : pexpr decl list) =
   match l with

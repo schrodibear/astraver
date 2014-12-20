@@ -29,7 +29,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_why_output_ast
+open Output_ast
 
 
 (** {1 Main translation functions} *)

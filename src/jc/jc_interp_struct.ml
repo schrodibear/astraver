@@ -36,8 +36,8 @@ open Env
 open Struct_tools
 open Region
 open Interp_misc
-open Why_output_ast
-open Why_output_misc
+open Output_ast
+open Output_misc
 
 module Output = (val Options.backend)
 
@@ -76,7 +76,7 @@ let mems ac pc (type t) : (t, region -> term list, (string * logic_type) list) w
   let map f = List.map f (all_mems_ac ac pc) in
   function
   | In_app -> fun r -> map @@ fun mc -> tmemory_var ~label_in_name:false LabelHere (mc, r)
-  | In_pred -> map (fdup2 Name.Of.Generic.memory memory_type)
+  | In_pred -> map (fdup2 Name.Generic.memory memory_type)
 
 let allocs ac pc (type t) : (t, region -> in_param:bool -> label -> term list, (string * logic_type) list) where -> t =
   let map f = List.map f (all_allocs_ac ac pc) in
@@ -84,7 +84,7 @@ let allocs ac pc (type t) : (t, region -> in_param:bool -> label -> term list, (
   | In_app ->
     fun r ~in_param lab ->
     map @@ fun ac -> deref_if_needed ~in_param lab @@ talloc_table_var ~label_in_name:false LabelHere (ac, r)
-  | In_pred -> map (fdup2 Name.Of.Generic.alloc_table alloc_table_type)
+  | In_pred -> map (fdup2 Name.Generic.alloc_table alloc_table_type)
 
 let tags ac pc (type t) : (t, region -> in_param:bool -> label -> term list, (string * logic_type) list) where -> t =
   let map f = List.map f (all_tags_ac ac pc) in
@@ -92,7 +92,7 @@ let tags ac pc (type t) : (t, region -> in_param:bool -> label -> term list, (st
   | In_app ->
     fun r ~in_param lab ->
     map @@ fun ac -> deref_if_needed ~in_param lab @@ ttag_table_var ~label_in_name:false LabelHere (ac, r)
-  | In_pred -> map @@ fdup2 (Name.Of.tag_table % fun ac -> ac, dummy_region) tag_table_type
+  | In_pred -> map @@ fdup2 (Name.tag_table % fun ac -> ac, dummy_region) tag_table_type
 
 let map_st ~f ac pc =
   match ac with
@@ -123,10 +123,10 @@ let map_embedded_fields ~f ~p ac =
 let valid ~in_param ~equal (ac, r) pc p ao bo =
   let params =
     allocs ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r |>
-    Option_misc.fold List.cons bo |>
-    Option_misc.fold List.cons ao
+    Option.fold_right ~f:List.cons bo |>
+    Option.fold_right ~f:List.cons ao
   in
-  LPred (Name.Of.Pred.valid ~equal ~left:(ao <> None) ~right:(bo <> None) ac pc, p :: params)
+  LPred (Name.Pred.valid ~equal ~left:(ao <> None) ~right:(bo <> None) ac pc, p :: params)
 
 (* If T is a structure:
      valid_T(p, a, b, allocs ...) =
@@ -181,7 +181,7 @@ let valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
     let validity = if left then omin :: validity else validity in
     make_and_list validity
   in
-  Predicate (false, id_no_loc (Name.Of.Pred.valid ~equal ~left ~right ac pc), params, validity)
+  Predicate (false, id_no_loc (Name.Pred.valid ~equal ~left ~right ac pc), params, validity)
 
 (* Freshness *)
 
@@ -190,7 +190,7 @@ let fresh ~for_ ~in_param (ac, r) pc p =
     (match for_ with `alloc_tables -> allocs | `tag_tables -> tags) ac pc In_app r ~in_param LabelOld
     @ mems ac pc In_app r
   in
-  LPred (Name.Of.Pred.fresh ~for_ ac pc, p :: params)
+  LPred (Name.Pred.fresh ~for_ ac pc, p :: params)
 
 let fresh_pred ~for_ ac pc =
   let p = "p" in
@@ -213,8 +213,8 @@ let fresh_pred ~for_ ac pc =
         ~f:(fun st ->
             let predicate, table =
               match for_ with
-              | `alloc_tables -> "alloc_fresh", Name.Of.Generic.alloc_table ac
-              | `tag_tables -> "tag_fresh", Name.Of.Generic.tag_table (struct_root st)
+              | `alloc_tables -> "alloc_fresh", Name.Generic.alloc_table ac
+              | `tag_tables -> "tag_fresh", Name.Generic.tag_table (struct_root st)
             in
             [LPred (predicate, [LVar table; LVar p])])
   in
@@ -224,7 +224,7 @@ let fresh_pred ~for_ ac pc =
         ~f:(fun ~acr ~pc ~p ~l:_ ~r:_ -> [fresh ~for_ ~in_param:false acr pc p])
   in
   let freshness = make_and_list @@ super_fresh @ fields_fresh (LVar p) in
-  Predicate (false, id_no_loc (Name.Of.Pred.fresh ~for_ ac pc), params, freshness)
+  Predicate (false, id_no_loc (Name.Pred.fresh ~for_ ac pc), params, freshness)
 
 (* Instanceof *)
 
@@ -252,8 +252,8 @@ let instanceof ~exact (type t1) (type t2) :
   fun ~arg ~in_param (ac, r) pc p ->
   let params = tags ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r in
   match arg with
-  | Singleton -> LPred (Name.Of.Pred.instanceof ~exact ~arg ac pc, p :: params)
-  | Range_l_r -> fun l r -> LPred (Name.Of.Pred.instanceof ~exact ~arg ac pc, p :: l :: r :: params)
+  | Singleton -> LPred (Name.Pred.instanceof ~exact ~arg ac pc, p :: params)
+  | Range_l_r -> fun l r -> LPred (Name.Pred.instanceof ~exact ~arg ac pc, p :: l :: r :: params)
 
 let instanceof_pred ~exact
     (type t1) (type t2) : arg : (assertion, _, term -> term -> assertion, _, t1, t2) arg -> _ =
@@ -277,8 +277,8 @@ let instanceof_pred ~exact
   let self_instanceof p =
     map_st ac pc
       ~f:(fun st ->
-          let tag = Name.Of.Generic.tag_table (struct_root st) in
-          [LPred (pred_name, [make_typeof (LVar tag) p; LVar (Name.Of.tag st)])])
+          let tag = Name.Generic.tag_table (struct_root st) in
+          [LPred (pred_name, [make_typeof (LVar tag) p; LVar (Name.tag st)])])
   in
   let fields_instanceof p =
     List.flatten @@
@@ -300,7 +300,7 @@ let instanceof_pred ~exact
   match arg with
   | Singleton ->
     let instanceof = make_and_list @@ self_instanceof (LVar p) @ fields_instanceof (LVar p) in
-    Predicate (false, id_no_loc (Name.Of.Pred.instanceof ~exact ~arg ac pc), params, instanceof)
+    Predicate (false, id_no_loc (Name.Pred.instanceof ~exact ~arg ac pc), params, instanceof)
   | Range_l_r ->
     let instanceof =
       let instanceof p = self_instanceof p @ fields_instanceof p in
@@ -309,7 +309,7 @@ let instanceof_pred ~exact
         [forall_offset_in_range (LVar p) (LVar (get_l l_r)) (LVar (get_r l_r))
           ~f:(fun p -> instanceof p)]
     in
-    Predicate (false, id_no_loc (Name.Of.Pred.instanceof ~exact ~arg ac pc), params, instanceof)
+    Predicate (false, id_no_loc (Name.Pred.instanceof ~exact ~arg ac pc), params, instanceof)
 
 (* Alloc *)
 
@@ -329,14 +329,14 @@ let frame ~for_ ~in_param (ac, r) pc p n =
       match for_ with
       | `alloc_tables ->
         map (all_allocs_ac ac pc)
-          ~f:(tables_for ~tx_table_var:talloc_table_var ~name_of_x:Name.Of.Generic.alloc_table)
+          ~f:(tables_for ~tx_table_var:talloc_table_var ~name_of_x:Name.Generic.alloc_table)
       | `tag_tables ->
         map (all_tags_ac ac pc)
-          ~f:(tables_for ~tx_table_var:ttag_table_var ~name_of_x:Name.Of.Generic.tag_table)
+          ~f:(tables_for ~tx_table_var:ttag_table_var ~name_of_x:Name.Generic.tag_table)
     in
     tables @ mems ac pc In_app r
   in
-  LPred (Name.Of.Pred.frame ~for_ ac pc, p :: n :: params)
+  LPred (Name.Pred.frame ~for_ ac pc, p :: n :: params)
 
 let frame_pred ~for_ ac pc =
   let p = "p" in
@@ -351,10 +351,10 @@ let frame_pred ~for_ ac pc =
       match for_ with
       | `alloc_tables ->
         map (all_allocs_ac ac pc)
-          ~f:(tables_for ~name_of_x:Name.Of.Generic.alloc_table ~x_table_type:alloc_table_type)
+          ~f:(tables_for ~name_of_x:Name.Generic.alloc_table ~x_table_type:alloc_table_type)
       | `tag_tables ->
         map (all_tags_ac ac pc)
-          ~f:(tables_for ~name_of_x:Name.Of.Generic.tag_table ~x_table_type:tag_table_type)
+          ~f:(tables_for ~name_of_x:Name.Generic.tag_table ~x_table_type:tag_table_type)
     in
     [p, pointer_type ac pc; n, why_integer_type] @ tables @ mems ac pc In_pred
   in
@@ -364,13 +364,13 @@ let frame_pred ~for_ ac pc =
       let n = LVar n in
       let name_of_x ac =
         match for_ with
-        | `alloc_tables -> Name.Of.Generic.alloc_table ac
+        | `alloc_tables -> Name.Generic.alloc_table ac
         | `tag_tables ->
           match ac with
           | JCalloc_bitvector ->
             Jc_options.jc_error Why_loc.dummy_position "Unsupported alloc_struct frame conditions for bitvector regions"
           | JCalloc_root ri ->
-            Name.Of.Generic.tag_table ri
+            Name.Generic.tag_table ri
       in
       let assoc ac p = name_of_x ac, p, None in
       let rec frame ac pc p =
@@ -408,7 +408,7 @@ let frame_pred ~for_ ac pc =
     List.flatten |>
     make_and_list
   in
-  Predicate (false, id_no_loc (Name.Of.Pred.frame ~for_ ac pc), params, frame)
+  Predicate (false, id_no_loc (Name.Pred.frame ~for_ ac pc), params, frame)
 
 (* Allocation *)
 
@@ -434,11 +434,11 @@ let alloc (type t1) (type t2) :
     in
     match arg with
     | Singleton ->
-      make_app (Name.Of.Param.alloc ~arg:Singleton ac pc) args
+      make_app (Name.Param.alloc ~arg:Singleton ac pc) args
     | Range_0_n ->
       fun ~check_size e ->
         make_app
-          (Name.Of.Param.alloc ~arg:Range_0_n ~check_size ac pc)
+          (Name.Param.alloc ~arg:Range_0_n ~check_size ac pc)
           (e :: args)
 
 let alloc_param (type t1) (type t2) :
@@ -502,7 +502,7 @@ let alloc_param (type t1) (type t2) :
       (* no exceptional post *)
       [])
   in
-  let name = Name.Of.Param.alloc ac pc in
+  let name = Name.Param.alloc ac pc in
   match arg with
   | Singleton -> Param (false, id_no_loc @@ name ~arg:Singleton, alloc_type LTrue)
   | Range_0_n ->
@@ -518,7 +518,7 @@ let struc si =
   let tag_id_type =
     List.cons
       (let tagid_type = tag_id_type (struct_root si) in
-       Logic (false, id_no_loc (Name.Of.tag si), [], tagid_type))
+       Logic (false, id_no_loc (Name.tag si), [], tagid_type))
   in
   let alloc_free_preds_and_params =
     Fn.on'
@@ -568,11 +568,11 @@ let struc si =
       begin match si.si_parent with
       | None ->
         let name = si.si_name ^ "_parenttag_bottom" in
-        let p = LPred ("parenttag", [LVar (Name.Of.tag si); LVar "bottom_tag" ]) in
+        let p = LPred ("parenttag", [LVar (Name.tag si); LVar "bottom_tag" ]) in
         Goal (KAxiom, id_no_loc name, p)
       | Some (p, _) ->
         let name = si.si_name ^ "_parenttag_" ^ p.si_name in
-        let p = LPred ("parenttag", [LVar (Name.Of.tag si); LVar (Name.Of.tag p)]) in
+        let p = LPred ("parenttag", [LVar (Name.tag si); LVar (Name.tag p)]) in
         Goal (KAxiom, id_no_loc name, p)
       end
   in
@@ -588,7 +588,7 @@ let root =
   in
   fun ri ->
     let tag_id_type =
-      List.cons @@ Type (id_no_loc (Name.Of.Type.root ri), [])
+      List.cons @@ Type (id_no_loc (Name.Type.root ri), [])
     in
     let preds_and_params =
       let ac = JCalloc_root ri and pc = JCroot ri in
@@ -614,7 +614,7 @@ let root =
         ~init:[]
         ~f:(fun acc st ->
           Goal (KAxiom,
-                id_no_loc (Name.Of.Axiom.int_of_tag st),
+                id_no_loc (Name.Axiom.int_of_tag st),
                 make_eq
                   (make_int_of_tag st)
                   (LConst (Prim_int (string_of_int @@ fresh_tag_id ()))))

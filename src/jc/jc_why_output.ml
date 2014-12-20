@@ -30,10 +30,10 @@
 (**************************************************************************)
 
 open Format
-open Pp
+open Why_pp
 
-open Jc_why_output_ast
-open Jc_why_output_misc
+open Output_ast
+open Output_misc
 
 let fprintf_constant fmttr e =
   let pr fmt = fprintf fmttr fmt in
@@ -419,7 +419,7 @@ let fprintf_why_decls ?float_model:_ fmttr decls =
   pr params;
   pr defs
 
-let print_to_file = print_to_file (fun f -> Lib.file_subdir "why" (f ^ ".why")) fprintf_vc_kind fprintf_why_decls
+let print_to_file = print_to_file (fun f -> Why_lib.file_subdir "why" (f ^ ".why")) fprintf_vc_kind fprintf_why_decls
 
 (*
   Local Variables:
