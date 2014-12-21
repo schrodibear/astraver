@@ -89,9 +89,9 @@ let verify_invariants_only = ref false
 let verify = ref []
 let behavior = ref []
 
-module type Backend = module type of Jc_why_output
+module type Backend = module type of Why_output
 
-let backend = ref (module Jc_why_output : Backend)
+let backend = ref (module Why_output : Backend)
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 let add_why3_opt s = why3_opt := !why3_opt ^ " " ^ s
@@ -101,7 +101,7 @@ let ai_domain = ref AbsNone
 
 let current_rounding_mode = ref FRMNearestEven
 
-let termination_policy = ref Jc_env.TPalways
+let termination_policy = ref Env.TPalways
 
 let int_model = ref IMbounded
 let interprocedural = ref false
@@ -146,7 +146,7 @@ let _ =
         "-behavior", Arg.String (fun s -> behavior := s::!behavior),
           "  verify only specified behavior (safety, variant, default or user-defined behavior)";
 
-        "-why3ml", Arg.Unit (fun () -> backend := (module Jc_why3_output)),
+        "-why3ml", Arg.Unit (fun () -> backend := (module Why3_output)),
           "  (experimental) produce a program in why3ml syntax" ;
 
         "-why-opt", Arg.String add_why_opt,
@@ -248,10 +248,10 @@ let set_float_model fm = float_model := fm
 
 (* error handling *)
 
-exception Jc_error of Why_loc.position * string
+exception Error of Why_loc.position * string
 
 let jc_error l =
-  Format.ksprintf (fun s -> raise @@ Jc_error (l, s))
+  Format.ksprintf (fun s -> raise @@ Error (l, s))
 
 let jc_warning l =
   Format.kfprintf
@@ -262,7 +262,7 @@ let parsing_error l f =
   Format.ksprintf
     (fun s ->
        let s = if s = "" then s else " (" ^ s ^ ")" in
-       raise @@ Jc_error (l, "syntax error" ^ s))
+       raise @@ Error (l, "syntax error" ^ s))
     f
 
 (* pos table *)

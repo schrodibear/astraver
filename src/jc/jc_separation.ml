@@ -70,7 +70,7 @@ let call_regions ~pos app in_current_comp param_regions result_region params =
                                    else dummy_region
       with
       | Not_found ->
-        Jc_options.jc_error
+        Options.jc_error
           pos
           ("Can't associate generalized region to a local one: %s (%s) in call to %s.\n" ^^
            "Unable to complete region analysis, aborting. Consider using #pragma SeparationPolicy(none)")
@@ -113,7 +113,7 @@ let single_term comp result_region t =
   | JCTcast _  | JCTbitwise_cast _     | JCTrange_cast _ | JCTreal_cast _ ->
     ()
 
-let term comp result_region = Jc_iterators.iter_term (single_term comp result_region)
+let term comp result_region = Iterators.iter_term (single_term comp result_region)
 
 let single_assertion comp a =
   match a#node with
@@ -145,14 +145,14 @@ let single_assertion comp a =
     ()
 
 let assertion comp result_region =
-  Jc_iterators.iter_term_and_assertion (single_term comp result_region) (single_assertion comp)
+  Iterators.iter_term_and_assertion (single_term comp result_region) (single_assertion comp)
 
 let single_location = ignore
 
 let single_location_set = ignore
 
 let location comp result_region =
-  Jc_iterators.iter_location (single_term comp result_region) single_location single_location_set
+  Iterators.iter_location (single_term comp result_region) single_location single_location_set
 
 let single_expr code_comp logic_comp result_region e =
   match e#node with
@@ -170,7 +170,7 @@ let single_expr code_comp logic_comp result_region e =
   | JCEthrow (exi, _) ->
     begin match exi.exi_type with
     | Some ty when is_pointer_type ty ->
-      Jc_options.jc_error
+      Options.jc_error
         e#pos
         "Unsupported pointer in throw clause (TODO)" (* TODO *)
     | Some _ | None -> ()
@@ -203,7 +203,7 @@ let single_expr code_comp logic_comp result_region e =
     (* TODO: decreases, behaviors, etc. *)
     Option.iter (assertion logic_comp result_region) req
   | JCEcontract _ ->
-    Jc_options.jc_error
+    Options.jc_error
       e#pos
       "Unsupported decreases clause in statement contract"
   | JCEconst _        | JCEvar _        | JCEshift _   | JCEunary _
@@ -217,7 +217,7 @@ let single_expr code_comp logic_comp result_region e =
     ()
 
 let expr code_comp logic_comp result_region =
-  Jc_iterators.iter_expr_and_term_and_assertion
+  Iterators.iter_expr_and_term_and_assertion
     (single_term logic_comp result_region)
     (single_assertion logic_comp)
     single_location
@@ -226,21 +226,21 @@ let expr code_comp logic_comp result_region =
 
 let axiomatic_decl logic_comp d =
   match d with
-  | Jc_typing.ABaxiom (_, _, _, a) ->
+  | Typing.ABaxiom (_, _, _, a) ->
     assertion logic_comp dummy_region a
 
 let axiomatic comp a =
   try
-    let l = StringHashtblIter.find Jc_typing.axiomatics_table a in
-    List.iter (axiomatic_decl comp) l.Jc_typing.axiomatics_decls
+    let l = StringHashtblIter.find Typing.axiomatics_table a in
+    List.iter (axiomatic_decl comp) l.Typing.axiomatics_decls
   with
   | Not_found ->
-    Jc_options.jc_error
+    Options.jc_error
       Why_loc.dummy_position
       "separation: axiomatic: can't find axiomatic: %s" a
 
 let logic_function comp f =
-  let f, ta = IntHashtblIter.find Jc_typing.logic_functions_table f.li_tag in
+  let f, ta = IntHashtblIter.find Typing.logic_functions_table f.li_tag in
   let result_region = f.li_result_region in
   begin match ta with
   | JCNone -> ()
@@ -286,9 +286,9 @@ let funspec comp result_region spec =
       | _ -> acc
     in
     let dummy acc _ = acc in
-    ignore % Jc_iterators.fold_funspec single_term dummy dummy dummy []
+    ignore % Iterators.fold_funspec single_term dummy dummy dummy []
   in
-  Jc_iterators.iter_funspec
+  Iterators.iter_funspec
     (single_term comp result_region)
     (single_assertion comp)
     single_location
@@ -297,8 +297,8 @@ let funspec comp result_region spec =
   unify_logic_apps_in_funspec spec
 
 let code_function comp f =
-  let f, _, spec, body = IntHashtblIter.find Jc_typing.functions_table f.fun_tag in
-  Jc_options.lprintf "Separation: treating function %s@." f.fun_name;
+  let f, _, spec, body = IntHashtblIter.find Typing.functions_table f.fun_tag in
+  Options.lprintf "Separation: treating function %s@." f.fun_name;
   let result_region = f.fun_return_region in
   funspec [] result_region spec;
   Option.iter (expr comp [] result_region) body
@@ -319,7 +319,7 @@ let code_component comp =
 let axiom comp _id (_loc, _is_axiom, _, _labels, a) = assertion comp dummy_region a
 
 let regionalize_assertion a assoc =
-  Jc_iterators.map_term_in_assertion
+  Iterators.map_term_in_assertion
     (fun t ->
        let t =
          match t#node with

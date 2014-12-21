@@ -37,7 +37,7 @@ open Fenv
 open Common
 
 let rec term acc t =
-  Jc_iterators.fold_term
+  Iterators.fold_term
     (fun acc t -> match t#node with
     | JCTapp app -> app.app_fun::acc
     | _ -> acc
@@ -118,7 +118,7 @@ let loop_annot acc la =
   | Some (t,Some ri) -> term (ri::acc) t
 
 let expr =
-  Jc_iterators.IExpr.fold_left
+  Iterators.IExpr.fold_left
     (fun acc e -> match e#node with
        | JCEapp call ->
 	   let f = call.call_fun in
@@ -136,15 +136,15 @@ let axiomatic_calls_table = Hashtbl.create 17
 
 let compute_axiomatic_decl_call acc d =
   match d with
-    | Jc_typing.ABaxiom(_,_,_,a) -> assertion acc a
+    | Typing.ABaxiom(_,_,_,a) -> assertion acc a
 
 let compute_axiomatic_calls a =
   try
     Hashtbl.find axiomatic_calls_table a
   with Not_found ->
     try
-      let l = StringHashtblIter.find Jc_typing.axiomatics_table a in
-      let c = List.fold_left compute_axiomatic_decl_call [] l.Jc_typing.axiomatics_decls in
+      let l = StringHashtblIter.find Typing.axiomatics_table a in
+      let c = List.fold_left compute_axiomatic_decl_call [] l.Typing.axiomatics_decls in
       Hashtbl.add axiomatic_calls_table a c;
       c
     with
@@ -172,7 +172,7 @@ let compute_calls f _s b =
   f.fun_calls <- b
 
 module LogicCallGraph = struct
-  type t = (Jc_fenv.logic_info * Jc_fenv.term_or_assertion) IntHashtblIter.t
+  type t = (Fenv.logic_info * Fenv.term_or_assertion) IntHashtblIter.t
   module V = struct
     type t = logic_info
     let compare f1 f2 = Pervasives.compare f1.li_tag f2.li_tag
@@ -208,13 +208,13 @@ open Why_pp
 
 let compute_logic_components ltable =
   let tab_comp = LogicCallComponents.scc_array ltable in
-  Jc_options.lprintf "***********************************\n";
-  Jc_options.lprintf "Logic call graph: has %d components\n"
+  Options.lprintf "***********************************\n";
+  Options.lprintf "Logic call graph: has %d components\n"
     (Array.length tab_comp);
-  Jc_options.lprintf "***********************************\n";
+  Options.lprintf "***********************************\n";
   Array.iteri
     (fun i l ->
-       Jc_options.lprintf "Component %d:\n%a@." i
+       Options.lprintf "Component %d:\n%a@." i
 	 (print_list newline
 	    (fun fmt f -> fprintf fmt " %s calls: %a\n" f.li_name
 		 (print_list comma
@@ -228,12 +228,12 @@ let compute_logic_components ltable =
 let compute_components table =
   (* see above *)
   let tab_comp = CallComponents.scc_array table in
-  Jc_options.lprintf "******************************\n";
-  Jc_options.lprintf "Call graph: has %d components\n" (Array.length tab_comp);
-  Jc_options.lprintf "******************************\n";
+  Options.lprintf "******************************\n";
+  Options.lprintf "Call graph: has %d components\n" (Array.length tab_comp);
+  Options.lprintf "******************************\n";
   Array.iteri
     (fun i l ->
-      Jc_options.lprintf "Component %d:\n%a@." i
+      Options.lprintf "Component %d:\n%a@." i
 	(print_list newline
 	   (fun fmt f -> fprintf fmt " %s calls: %a\n" f.fun_name
 	       (print_list comma

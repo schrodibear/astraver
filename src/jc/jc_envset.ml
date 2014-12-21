@@ -31,8 +31,8 @@
 
 
 
-open Jc_stdlib
-open Jc_env
+open Stdlib
+open Env
 
 module type OrderedType =
 sig

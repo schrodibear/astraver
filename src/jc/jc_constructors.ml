@@ -31,10 +31,10 @@
 
 
 
-open Jc_env
-open Jc_region
-open Jc_ast
-open Jc_fenv
+open Env
+open Region
+open Ast
+open Fenv
 
 class positioned ~pos =
 object
@@ -285,13 +285,13 @@ module Const = struct
     match value, valuestr with
       | Some value, None -> JCCinteger (string_of_int value)
       | None, Some valuestr -> JCCinteger valuestr
-      | _ -> failwith "Jc_constructors.Const.mkint: use with ~value OR \
+      | _ -> failwith "Constructors.Const.mkint: use with ~value OR \
 ~valuestr only"
   let mkreal ?value ?valuestr () =
     match value, valuestr with
       | Some value, None -> JCCreal (string_of_float value)
       | None, Some valuestr -> JCCreal(valuestr)
-      | _ -> failwith "Jc_constructors.Const.mkint: use with ~value OR \
+      | _ -> failwith "Constructors.Const.mkint: use with ~value OR \
 ~valuestr only"
 end
 
@@ -327,7 +327,7 @@ module PExpr = struct
               e el
 	  end
       | Some expr1, Some expr2, None -> mkbinary ~expr1 ~op ~expr2 ?pos ()
-      | _ -> failwith "Jc_constructors.PExpr.mkbinary_list should be used \
+      | _ -> failwith "Constructors.PExpr.mkbinary_list should be used \
 either with (~expr1 AND ~expr2) OR ~list only."
   let mkand = mkbinary_list ~default:(mkboolean ~value:true ()) ~op:`Bland
   let mkor = mkbinary_list ~default:(mkboolean ~value:false ()) ~op:`Blor

@@ -46,8 +46,8 @@ sig
   val hash : t -> int
 end
 
-open Jc_env
-open Jc_stdlib
+open Env
+open Stdlib
 
 module StringSet : Set.S with type elt = string
 
@@ -55,11 +55,11 @@ module StringMap : Map.S with type key = string
 
 val get_unique_name : ?local_names:StringSet.t -> string -> string
 
-val is_pointer_type : Jc_env.jc_type -> bool
-val is_nonnull_pointer_type : Jc_env.jc_type -> bool
+val is_pointer_type : Env.jc_type -> bool
+val is_nonnull_pointer_type : Env.jc_type -> bool
 val is_integral_type: jc_type -> bool
 
-val is_embedded_field : Jc_env.field_info -> bool
+val is_embedded_field : Env.field_info -> bool
 
 module VarOrd : OrderedHashedType with type t = var_info
 

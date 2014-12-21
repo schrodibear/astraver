@@ -42,7 +42,7 @@ val const_of_num : Num.num -> term
 val match_term : (string * term) list -> term -> term -> (string * term) list
 val make_var : string -> term
 
-val make_positioned : Jc_position.t -> ?behavior:string -> ?kind:vc_kind -> term -> term
+val make_positioned : Position.t -> ?behavior:string -> ?kind:vc_kind -> term -> term
 val make_located : Why_loc.floc -> ?behavior:string -> ?kind:vc_kind -> term -> term
 val make_positioned_lex : Why_loc.position -> ?behavior:string -> ?kind:vc_kind -> term -> term
 
@@ -61,7 +61,7 @@ val is_not_true : assertion -> bool
 
 val assertion_of_term : term -> assertion
 
-val mk_positioned : Jc_position.t -> ?behavior:string -> ?kind:vc_kind -> assertion -> assertion
+val mk_positioned : Position.t -> ?behavior:string -> ?kind:vc_kind -> assertion -> assertion
 val mk_located : Why_loc.floc -> ?behavior:string -> ?kind:vc_kind -> assertion -> assertion
 val mk_positioned_lex : Why_loc.position -> ?behavior:string -> ?kind:vc_kind -> assertion -> assertion
 
@@ -81,7 +81,7 @@ val make_app : ?ty:why_type -> string -> expr list -> expr
 val make_logic_app : ?ty:why_type -> string -> expr list -> expr
 val make_app_e : ?ty:why_type -> expr -> expr list -> expr
 
-val make_positioned_e : Jc_position.t -> ?behavior:string -> ?kind:vc_kind -> expr -> expr
+val make_positioned_e : Position.t -> ?behavior:string -> ?kind:vc_kind -> expr -> expr
 val make_located_e : Why_loc.floc -> ?behavior:string -> ?kind:vc_kind -> expr -> expr
 val make_positioned_lex_e : Why_loc.position -> ?behavior:string -> ?kind:vc_kind -> expr -> expr
 
@@ -119,8 +119,8 @@ val jc_print_pos : (formatter -> vc_kind -> unit) -> formatter -> unit
 val print_to_file:
   (string -> string) ->
   (formatter -> vc_kind -> unit) ->
-  (?float_model:Jc_env.float_model -> formatter -> why_decl list -> unit) ->
-  ?float_model:Jc_env.float_model -> string -> why_decl list -> unit
+  (?float_model:Env.float_model -> formatter -> why_decl list -> unit) ->
+  ?float_model:Env.float_model -> string -> why_decl list -> unit
 
 (*
   Local Variables:

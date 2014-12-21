@@ -95,86 +95,86 @@
     match id with
       | "InvariantPolicy" ->
 	  begin
-	    Jc_options.inv_sem :=
+	    Options.inv_sem :=
 	      match v with
-		| "None" -> Jc_env.InvNone
-		| "Arguments" -> Jc_env.InvArguments
-		| "Ownership" -> Jc_env.InvOwnership
+		| "None" -> Env.InvNone
+		| "Arguments" -> Env.InvArguments
+		| "Ownership" -> Env.InvOwnership
 		| _ -> lex_error lexbuf ("unknown invariant policy " ^ v)
 	  end
       | "SeparationPolicy" ->
 	  begin
-	    Jc_options.separation_sem :=
+	    Options.separation_sem :=
 	      match v with
-		| "None" -> Jc_env.SepNone
-		| "Regions" -> Jc_env.SepRegions
+		| "None" -> Env.SepNone
+		| "Regions" -> Env.SepRegions
 		| _ -> lex_error lexbuf ("unknown separation policy " ^ v)
 	  end
       | "AnnotationPolicy" ->
 	  begin
-	    Jc_options.annotation_sem :=
+	    Options.annotation_sem :=
 	      match v with
-		| "None" -> Jc_env.AnnotNone
-		| "Invariants" -> Jc_env.AnnotInvariants
-		| "ElimPre" -> Jc_env.AnnotElimPre
-		| "StrongPre" -> Jc_env.AnnotStrongPre
-		| "WeakPre" -> Jc_env.AnnotWeakPre
+		| "None" -> Env.AnnotNone
+		| "Invariants" -> Env.AnnotInvariants
+		| "ElimPre" -> Env.AnnotElimPre
+		| "StrongPre" -> Env.AnnotStrongPre
+		| "WeakPre" -> Env.AnnotWeakPre
 		| _ -> lex_error lexbuf ("unknown annotation policy " ^ v)
 	  end
       | "AbstractDomain" ->
 	  begin
-	    Jc_options.ai_domain :=
+	    Options.ai_domain :=
 	      match v with
-		| "None" -> Jc_env.AbsNone
-		| "Box" -> Jc_env.AbsBox
-		| "Oct" -> Jc_env.AbsOct
-		| "Pol" -> Jc_env.AbsPol
+		| "None" -> Env.AbsNone
+		| "Box" -> Env.AbsBox
+		| "Oct" -> Env.AbsOct
+		| "Pol" -> Env.AbsPol
 		| _ -> lex_error lexbuf ("unknown abstract domain " ^ v)
 	  end
       | "IntModel" ->
 	  begin
-	    Jc_options.set_int_model
+	    Options.set_int_model
 	      (match v with
-		 | "bounded" -> Jc_env.IMbounded
-		 | "modulo" -> Jc_env.IMmodulo
+		 | "bounded" -> Env.IMbounded
+		 | "modulo" -> Env.IMmodulo
 		 | _ -> lex_error lexbuf ("unknown int model " ^ v))
 	  end
       | "FloatModel" ->
 	  begin
-	    Jc_options.float_model :=
+	    Options.float_model :=
 	      (match v with
-	         | "math" -> Jc_env.FMmath
-		 | "defensive" -> Jc_env.FMdefensive
-		 | "full" -> Jc_env.FMfull
-		 | "multirounding" -> Jc_env.FMmultirounding
+	         | "math" -> Env.FMmath
+		 | "defensive" -> Env.FMdefensive
+		 | "full" -> Env.FMfull
+		 | "multirounding" -> Env.FMmultirounding
 		 | _ -> lex_error lexbuf ("unknown float model " ^ v))
 	  end
       | "FloatRoundingMode" ->
 	  begin
-	    Jc_options.current_rounding_mode :=
+	    Options.current_rounding_mode :=
 	      (match v with
-		 | "nearestEven" -> Jc_env.FRMNearestEven
-		 | "down" -> Jc_env.FRMDown
-		 | "up" -> Jc_env.FRMUp
-		 | "toZero" -> Jc_env.FRMToZero
-		 | "nearestAway" -> Jc_env.FRMNearestAway
+		 | "nearestEven" -> Env.FRMNearestEven
+		 | "down" -> Env.FRMDown
+		 | "up" -> Env.FRMUp
+		 | "toZero" -> Env.FRMToZero
+		 | "nearestAway" -> Env.FRMNearestAway
 		 | _ -> lex_error lexbuf ("unknown float rounding mode " ^ v))
 	  end
       | "FloatInstructionSet" ->
 	  begin
-	    Jc_options.float_instruction_set :=
+	    Options.float_instruction_set :=
 	      (match v with
-		 | "x87" -> Jc_env.FISx87
-		 | "ieee754" -> Jc_env.FISstrictIEEE754
+		 | "x87" -> Env.FISx87
+		 | "ieee754" -> Env.FISstrictIEEE754
 		 | _ -> lex_error lexbuf ("unknown float instruction set " ^ v))
 	  end
       | "TerminationPolicy" ->
 	  begin
-	    Jc_options.termination_policy :=
+	    Options.termination_policy :=
 	      (match v with
-		 | "always" -> Jc_env.TPalways
-		 | "never" -> Jc_env.TPnever
-		 | "user" -> Jc_env.TPuser
+		 | "always" -> Env.TPalways
+		 | "never" -> Env.TPnever
+		 | "user" -> Env.TPuser
 		 | _ -> lex_error lexbuf ("unknown termination policy " ^ v))
 	  end
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
@@ -225,14 +225,14 @@ rule token = parse
   | "decreases"             { DECREASES }
   | "default"               { DEFAULT }
   | "do"                    { DO }
-  | "double"                { Jc_options.has_floats := true; DOUBLE }
+  | "double"                { Options.has_floats := true; DOUBLE }
   | "else"                  { ELSE }
   | "end"                   { END }
   | "ensures"               { ENSURES }
   | "exception"             { EXCEPTION }
   | "false"                 { CONSTANT (JCCboolean false) }
   | "finally"               { FINALLY }
-  | "float"                 { Jc_options.has_floats := true; FLOAT }
+  | "float"                 { Options.has_floats := true; FLOAT }
   | "for"                   { FOR }
   | "free"                  { FREE }
   | "goto"                  { GOTO }
@@ -437,9 +437,9 @@ let next_token lexbuf =
     let lb = from_channel c in
     lb.lex_curr_p <- { lb.lex_curr_p with pos_fname = f };
     try
-      Jc_parser.file next_token lb
+      Parser.file next_token lb
     with Parsing.Parse_error ->
-      Jc_options.parsing_error (loc lb) ""
+      Options.parsing_error (loc lb) ""
 
 }
 

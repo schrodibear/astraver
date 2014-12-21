@@ -285,7 +285,7 @@ let instanceof_pred ~exact
       map_embedded_fields ac pc ~p
         ~f:(fun ~acr ~pc ~p ~l ~r ->
               let open Num in
-              if r -/ l >=/ Int 0 && l -/ r <=/ Int Jc_options.forall_inst_bound then
+              if r -/ l >=/ Int 0 && l -/ r <=/ Int Options.forall_inst_bound then
                 let instanceof p =
                   instanceof ~exact ~arg:Singleton ~in_param:false acr pc p
                 in
@@ -368,7 +368,7 @@ let frame_pred ~for_ ac pc =
         | `tag_tables ->
           match ac with
           | JCalloc_bitvector ->
-            Jc_options.jc_error Why_loc.dummy_position "Unsupported alloc_struct frame conditions for bitvector regions"
+            Options.jc_error Why_loc.dummy_position "Unsupported alloc_struct frame conditions for bitvector regions"
           | JCalloc_root ri ->
             Name.Generic.tag_table ri
       in

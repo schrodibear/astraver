@@ -65,13 +65,13 @@
     List.map
       (fun (v,t,x) ->
 	 if v then (t,x) else
-	   Jc_options.parsing_error
+	   Options.parsing_error
 	     Why_loc.dummy_position
 	     "logic params cannot not be in invalid state")
 %}
 
 %token <string> IDENTIFIER
-%token <Jc_ast.const> CONSTANT
+%token <Ast.const> CONSTANT
 %token <string> STRING_LITERAL
 %token NULL
 
@@ -137,7 +137,7 @@
 %token PRAGMA_GEN_SEP PRAGMA_GEN_FRAME PRAGMA_GEN_SUB  PRAGMA_GEN_SAME
 
 %token EOF
-%type <Jc_ast.pexpr Jc_ast.decl list> file
+%type <Ast.pexpr Ast.decl list> file
 %start file
 
 /* precedences on expressions (from lowest to highest) */
@@ -222,7 +222,7 @@ decl:
     { $1 }
 /*
 | error
-    { Jc_options.parsing_error (pos ()) "'type' or type expression expected" }
+    { Options.parsing_error (pos ()) "'type' or type expression expected" }
 */
 ;
 

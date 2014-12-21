@@ -15,6 +15,7 @@ module Interp_misc = Jc_interp_misc
 module Interp = Jc_interp
 module Invariants = Jc_invariants
 module Iterators = Jc_iterators
+module Lexer = Jc_lexer
 module Main = Jc_main
 module Make = Jc_make
 module Name = Jc_name

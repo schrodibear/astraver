@@ -31,9 +31,9 @@
 
 
 
-open Jc_env
-open Jc_fenv
-open Jc_ast
+open Env
+open Fenv
+open Ast
 
 val decls : pexpr decl list -> nexpr decl list
 

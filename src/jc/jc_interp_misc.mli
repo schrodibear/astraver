@@ -146,7 +146,7 @@ val ref_term :
     type_safe:bool ->
     global_assertion:bool ->
     relocate:bool ->
-    label -> label -> Jc_fenv.term -> term)
+    label -> label -> Fenv.term -> term)
   ref
 
 val any_value : region -> jc_type -> expr
@@ -202,7 +202,7 @@ val make_arguments :
   callee_reads:effect ->
   callee_writes:effect ->
   region_assoc:(RegionTable.key * RegionTable.key) list ->
-  param_assoc:(VarOrd.t * ('a, 'b) Jc_ast.expr) list ->
+  param_assoc:(VarOrd.t * ('a, 'b) Ast.expr) list ->
   with_globals:bool ->
   with_body:bool ->
   string ->
@@ -231,7 +231,7 @@ val bitvector_type : logic_type
 
 (** {2 building output terms} *)
 
-val const : Jc_ast.const -> constant
+val const : Ast.const -> constant
 (** constant *)
 
 val make_select : term -> term -> term

@@ -118,7 +118,7 @@ struct
 
   let iin =
     let pid = make_pred nin in
-    let tvar = Jc_type_var.type_var_from_string ~univ:true "a_in" in
+    let tvar = Type_var.type_var_from_string ~univ:true "a_in" in
     pid.li_poly_args <- [tvar];
     let tvar = JCTtype_var tvar in
     pid.li_parameters <- [Common.var tvar "x";
@@ -136,7 +136,7 @@ struct
 
   let idisj =
     let pid = make_pred ndisj in
-    let tvar = Jc_type_var.type_var_from_string ~univ:true "a" in
+    let tvar = Type_var.type_var_from_string ~univ:true "a" in
     pid.li_poly_args <- [tvar];
     let tvar = JCTtype_var tvar in
     pid.li_parameters <- [Common.var (jc_ty tvar) "s1";
@@ -155,7 +155,7 @@ struct
 
   let isub =
     let pid = make_pred sub_pred in
-    let tvar = Jc_type_var.type_var_from_string ~univ:true "a" in
+    let tvar = Type_var.type_var_from_string ~univ:true "a" in
     pid.li_poly_args <- [tvar];
     let tvar = JCTtype_var tvar in
     pid.li_parameters <- [Common.var (jc_ty tvar) "s1";
@@ -190,7 +190,7 @@ struct
     if c <> 0 then c else compare e1 e2
 
   let print fmt : elt_set -> unit =
-    let module Output = (val Jc_options.backend) in
+    let module Output = (val Options.backend) in
     function
     | `Empty -> fprintf fmt "empty"
     | `All -> fprintf fmt "all"
@@ -205,7 +205,7 @@ struct
     | `MyBag s::l -> make_inter s (aux l)
     | `Elt e::l -> make_rem e (aux l) in
     let l_s = remove_double compare l in
-    Jc_options.lprintf "make_inter_rem : %a" (print_list comma print) l_s;
+    Options.lprintf "make_inter_rem : %a" (print_list comma print) l_s;
     aux l_s
  *)
 end
@@ -245,7 +245,7 @@ struct
        ty_mem = memory_type mc}
 
   let is_memory t m =
-    (*Jc_options.lprintf "is_memory : %s = %s@." m t.mem_name;*)
+    (*Options.lprintf "is_memory : %s = %s@." m t.mem_name;*)
     m = t.mem_name
   let is_memory_var t = function
     | LVar m -> is_memory t m
@@ -301,7 +301,7 @@ let get_in_logic =
       fin.li_param_regions <- f.li_param_regions;
       fin.li_effects <- f.li_effects;
       fin.li_labels <- f.li_labels;
-      IntHashtblIter.add Jc_typing.logic_functions_table fin.li_tag
+      IntHashtblIter.add Typing.logic_functions_table fin.li_tag
         (fin,JCNone);
       Hashtbl.add memo (f.li_tag,notin) fin;
       fin

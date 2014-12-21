@@ -61,12 +61,12 @@ let unsupported = Typing.typing_error
 (******************************************************************************)
 
 let lookup_pos e =
-  let open Jc_stdlib in
+  let open Stdlib in
   try
-    let f, l, b, e, _, _ = Hashtbl.find Jc_options.pos_table e#mark in
-    Jc_position.of_loc (f, l, b, e)
+    let f, l, b, e, _, _ = Hashtbl.find Options.pos_table e#mark in
+    Position.of_loc (f, l, b, e)
   with
-  | Not_found -> Jc_position.of_pos e#pos
+  | Not_found -> Position.of_pos e#pos
 
 let make_vc_app_e ?behavior ~e ~kind f args =
   let pos = lookup_pos e in
@@ -109,7 +109,7 @@ let term_unary_op: expr_unary_op -> string =
   | _ -> invalid_arg "term_unary_op: not a proper type"
 
 let float_model_has_safe_functions () =
-  match !Jc_options.float_model with
+  match !Options.float_model with
   | FMdefensive | FMmultirounding -> true
   | FMmath | FMfull -> false
 
@@ -136,7 +136,7 @@ let float_operator f t =
 
 
 let logic_current_rounding_mode () =
-  match !Jc_options.current_rounding_mode with
+  match !Options.current_rounding_mode with
   | FRMNearestEven -> LVar "nearest_even"
   | FRMDown -> LVar "down"
   | FRMUp -> LVar "up"
@@ -144,7 +144,7 @@ let logic_current_rounding_mode () =
   | FRMNearestAway -> LVar "nearest_away"
 
 let current_rounding_mode () =
-  match !Jc_options.current_rounding_mode with
+  match !Options.current_rounding_mode with
   | FRMNearestEven -> mk_var "nearest_even"
   | FRMDown -> mk_var "down"
   | FRMUp -> mk_var "up"
@@ -444,7 +444,7 @@ let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty
       (* between pointers and null *)
   | JCTpointer _ , JCTnull -> e'
   | JCTpointer(pc1, _, _), JCTpointer (JCtag (st2, _), _, _)
-    when Jc_typing.substruct st2 pc1 -> e'
+    when Typing.substruct st2 pc1 -> e'
   | JCTpointer (JCtag (st1, _), _, _), JCTpointer _ ->
     let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st1, e#region) in
     LApp ("downcast", [tag; e'; LVar (Name.tag st1)])
@@ -577,7 +577,7 @@ let rec coerce ~check_int_overflow ~e ty_dst ty_src e1 e1' =
     (* between pointers and null *)
   | JCTpointer _ , JCTnull -> e1'
   | JCTpointer(pc1, _, _), JCTpointer (JCtag (st2, _), _, _)
-    when Jc_typing.substruct st2 pc1 -> e1'
+    when Typing.substruct st2 pc1 -> e1'
   | JCTpointer (JCtag (st1, _), _, _), JCTpointer _  ->
     let downcast_fun =
       if safety_checking () then "downcast_" else "safe_downcast_"
@@ -745,7 +745,7 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
         | JCTpointer (_, _, _)
         | JCTlogic _
         | JCTany
-        | JCTnull -> Jc_options.jc_error t#pos "Unsupported bv type conversion"
+        | JCTnull -> Options.jc_error t#pos "Unsupported bv type conversion"
         end
       | JCmem_bitvector ->
         (* Retrieve bitvector *)
@@ -766,7 +766,7 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
         (* Convert bitvector into appropriate type *)
         begin match fi.fi_type with
         | JCTenum ri -> LApp (logic_enum_of_bitvector_name ri, [e'])
-        | _ty -> Jc_options.jc_error t#pos "Unsupported bv type conversion" (* TODO *)
+        | _ty -> Options.jc_error t#pos "Unsupported bv type conversion" (* TODO *)
         end
       end
     | JCTapp app ->
@@ -794,7 +794,7 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
       let lab = if relocate && lab' = LabelHere then lab else lab' in
       term ~type_safe ~global_assertion ~relocate lab oldlab t1
     | JCTrange(_t1,_t2) ->
-      Jc_typing.typing_error t#pos "Unsupported range in term, sorry" (* TODO ? *)
+      Typing.typing_error t#pos "Unsupported range in term, sorry" (* TODO ? *)
     | JCTmatch(t, ptl) ->
       let t' = ft t in
       (* TODO: use a temporary variable for t' *)
@@ -887,7 +887,7 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
         f args
       |>
       Fn.on
-        (IntHashtblIter.mem Jc_typing.global_invariants_table app.app_fun.li_tag) @@
+        (IntHashtblIter.mem Typing.global_invariants_table app.app_fun.li_tag) @@
         mk_positioned_lex ~e:a ?behavior:None ~kind:(JCVCglobal_invariant app.app_fun.li_name)
     | JCAquantifier (Forall, v, trigs, a1) ->
       LForall (v.vi_final_name,
@@ -952,7 +952,7 @@ let rec mark_assertion ?(recursively=true) ~e ?kind a =
     | LLabeled ({ l_kind; l_pos } as l, a) ->
       LLabeled ({ l with
                   l_kind = if l_kind = None then kind else l_kind;
-                  l_pos = if Jc_position.is_dummy l_pos then lookup_pos e else l_pos },
+                  l_pos = if Position.is_dummy l_pos then lookup_pos e else l_pos },
                 a)
     | a -> mk_positioned_lex ~e ?kind a
   in
@@ -1026,7 +1026,7 @@ let rec pset ~type_safe ~global_assertion before loc =
 
 let rec collect_locations ~type_safe ~global_assertion ~in_clause before loc (refs, mems) =
   let ft = term ~type_safe ~global_assertion ~relocate:false before before in
-  let ef = Jc_effect.location ~in_clause empty_fun_effect loc in
+  let ef = Effect.location ~in_clause empty_fun_effect loc in
   match loc#node with
   | JCLderef (e, lab, fi, _fr) ->
     let iloc = pset ~type_safe ~global_assertion lab e in
@@ -1056,7 +1056,7 @@ let rec collect_pset_locations ~type_safe ~global_assertion lab loc =
   | JCLvar ({ vi_type = JCTpointer _ } as vi)  ->
     LApp ("pset_singleton", [tvar ~label_in_name:global_assertion lab vi])
   | JCLvar vi ->
-    Jc_options.jc_warning loc#pos "Non-pointer variable `%s' found as location in pointer-set context, ignoring"
+    Options.jc_warning loc#pos "Non-pointer variable `%s' found as location in pointer-set context, ignoring"
       vi.vi_name;
     LVar "pset_empty"
   | JCLat (loc, lab) ->
@@ -1066,7 +1066,7 @@ let external_region ?region_list (_, r) =
   (* More exact apprixmation (at least fixes both previously encountered bugs): *)
   (* generate not_assigns for parameters and constant (i.e. global) memories (tables). *)
   (* Also generate not_assigns always when in SepNone sparation mode. *)
-  !Jc_options.separation_sem = SepNone || (* no regions used at all *)
+  !Options.separation_sem = SepNone || (* no regions used at all *)
   (* constant memory, alloc- or tag table, not passed as argument, but counted as effect (global) *)
   not (Region.polymorphic r) ||
   (* passed as argument and counted as effect *)
@@ -1155,8 +1155,8 @@ let rec const_int_term t =
         begin
           try
             let _, init =
-              Jc_stdlib.Hashtbl.find
-                Jc_typing.logic_constants_table
+              Stdlib.Hashtbl.find
+                Typing.logic_constants_table
                 vi.vi_tag
             in
               const_int_term init
@@ -1166,8 +1166,8 @@ let rec const_int_term t =
         begin
           try
             let _, init =
-              Jc_stdlib.Hashtbl.find
-                Jc_typing.logic_constants_table
+              Stdlib.Hashtbl.find
+                Typing.logic_constants_table
                 app.app_fun.li_tag
             in
               const_int_term init
@@ -1216,8 +1216,8 @@ let rec const_int_expr e =
         begin
           try
             let _, init =
-              Jc_stdlib.Hashtbl.find
-                Jc_typing.logic_constants_table
+              Stdlib.Hashtbl.find
+                Typing.logic_constants_table
                 vi.vi_tag
             in
               const_int_term init
@@ -1229,8 +1229,8 @@ let rec const_int_expr e =
               begin
                 try
                   let _, init =
-                    Jc_stdlib.Hashtbl.find
-                      Jc_typing.logic_constants_table
+                    Stdlib.Hashtbl.find
+                      Typing.logic_constants_table
                       li.li_tag
                   in
                     const_int_term init
@@ -1305,7 +1305,7 @@ let old_to_pre = function
   | lab -> lab
 
 let old_to_pre_term =
-  Jc_iterators.map_term
+  Iterators.map_term
     (fun t ->
        match t#node with
        | JCTold t'
@@ -1365,14 +1365,14 @@ let rec old_to_pre_loc loc =
       loc
 
 let assumption al a' =
-  let ef = List.fold_left Jc_effect.assertion empty_effects al in
+  let ef = List.fold_left Effect.assertion empty_effects al in
   let read_effects =
     local_read_effects ~callee_reads:ef ~callee_writes:empty_effects
   in
   mk_expr (BlackBox(Annot_type(LTrue, unit_type, read_effects, [], a', [])))
 
 let check al a' =
-  let ef = List.fold_left Jc_effect.assertion empty_effects al in
+  let ef = List.fold_left Effect.assertion empty_effects al in
   let read_effects =
     local_read_effects ~callee_reads:ef ~callee_writes:empty_effects
   in
@@ -1387,7 +1387,7 @@ let term_zero = new term ~typ:integer_type (JCTconst(JCCinteger "0"))
 let dummy_measure = (term_zero, None)
 
 let get_measure_for f =
-  match !Jc_options.termination_policy with
+  match !Options.termination_policy with
     | TPalways ->
         (try
           Hashtbl.find decreases_clause_table (f.fun_tag)
@@ -1474,7 +1474,7 @@ and make_upd_union ~e off e1 fi tmp2 =
     | JCTlogic _
     | JCTany
     | JCTnull ->
-      Jc_options.jc_error e1#pos "Unsupported bv type conversion" (* TODO ? *)
+      Options.jc_error e1#pos "Unsupported bv type conversion" (* TODO ? *)
   in
   (* Temporary variables to avoid duplicating code *)
   let tmp1 = tmp_var_name () in
@@ -1498,7 +1498,7 @@ and make_upd_union ~e off e1 fi tmp2 =
       let off =
         match off with
         | Int_offset s -> s
-        | _ -> Jc_options.jc_error e1#pos "Unsupported offset in expression" (* TODO *)
+        | _ -> Options.jc_error e1#pos "Unsupported offset in expression" (* TODO *)
       in
       let off = string_of_int off and size = string_of_int size in
       make_app "replace_bytes"
@@ -1514,7 +1514,7 @@ and make_upd_bytes ~e e1 fi tmp2 =
   let e2' =
     match fi.fi_type with
     | JCTenum ri -> make_app (logic_bitvector_of_enum_name ri) [mk_var tmp2]
-    | _ty -> Jc_options.jc_error e#pos "Unsupported field type in bv update" (* TODO *)
+    | _ty -> Options.jc_error e#pos "Unsupported field type in bv update" (* TODO *)
   in
   (* Temporary variables to avoid duplicating code *)
   let tmp1 = tmp_var_name () in
@@ -1632,7 +1632,7 @@ and make_deref_union ~e off e1 fi =
   let off =
     match off with
     | Int_offset s -> s
-    | _ -> Jc_options.jc_error e#pos "Usnupported offset" (* TODO *)
+    | _ -> Options.jc_error e#pos "Usnupported offset" (* TODO *)
   in
   let size =
     match fi.fi_bitsize with
@@ -1644,7 +1644,7 @@ and make_deref_union ~e off e1 fi =
   (* Convert bitvector into appropriate type *)
   match fi.fi_type with
   | JCTenum ri -> make_app (logic_enum_of_bitvector_name ri) [e']
-  | _ty -> Jc_options.jc_error e#pos "Unsupported field type in bv update" (* TODO *)
+  | _ty -> Options.jc_error e#pos "Unsupported field type in bv update" (* TODO *)
 
 and make_deref_bytes ~e e1 fi =
   (* Define memory and allocation table *)
@@ -1748,28 +1748,28 @@ and type_assert tmp ty e =
         | Some n, None ->
           begin match n1o' with
           | Some n'
-            when n' <=/ n && not Jc_options.verify_all_offsets -> LTrue
+            when n' <=/ n && not Options.verify_all_offsets -> LTrue
           | _ -> offset_mina n
           end
         | None, Some n ->
           begin match n2o' with
           | Some n'
-            when n' >=/ n && not Jc_options.verify_all_offsets -> LTrue
+            when n' >=/ n && not Options.verify_all_offsets -> LTrue
           | _ -> offset_maxa n
           end
         | Some n1, Some n2 ->
           begin match n1o', n2o' with
           | None, None -> make_and (offset_mina n1) (offset_maxa n2)
           | Some n1', None ->
-            if n1' <=/ n1 && not Jc_options.verify_all_offsets
+            if n1' <=/ n1 && not Options.verify_all_offsets
             then offset_maxa n2
             else make_and (offset_mina n1) (offset_maxa n2)
           | None, Some n2' ->
-            if n2' >=/ n2 && not Jc_options.verify_all_offsets
+            if n2' >=/ n2 && not Options.verify_all_offsets
             then offset_mina n1
             else make_and (offset_mina n1) (offset_maxa n2)
           | Some n1', Some n2' ->
-            if Jc_options.verify_all_offsets
+            if Options.verify_all_offsets
             then make_and (offset_mina n1) (offset_maxa n2)
             else if n1' <=/ n1 then
               if n2' >=/ n2
@@ -1835,7 +1835,7 @@ and make_reinterpret ~e e1 st =
     let tag = tag_table_var (struct_root st, e1#region) in
     let mem_to = plain_memory_var (mc_to, e1#region) in
     make_label before.lab_final_name @@
-      match !Jc_options.inv_sem with
+      match !Options.inv_sem with
       | InvOwnership -> unsupported e1#pos "reinterpret .. as construct is not supported when inv_sem = InvOwnership"
       | InvNone | InvArguments ->
         make_positioned_lex_e ~e @@
@@ -1986,7 +1986,7 @@ and expr e =
     | JCEvar v -> var v
     | JCEunary ((`Uminus, (`Double | `Float as format)), e2) ->
       let e2' = expr e2 in
-      if !Jc_options.float_model <> FMmultirounding
+      if !Options.float_model <> FMmultirounding
       then make_vc_app_e ~e ~kind:JCVCfp_overflow ("neg_" ^ float_format format) [e2']
       else make_vc_app_e ~e ~kind:JCVCfp_overflow  (float_operator `Uminus format) [current_rounding_mode (); e2']
     | JCEunary (op, e1) ->
@@ -2105,7 +2105,7 @@ and expr e =
       make_app "address" [expr e1]
     | JCEbase_block e1 ->
       make_app "base_block" [expr e1]
-    | JCEfresh _ -> Jc_options.jc_error e#pos "Unsupported \\fresh as expression"
+    | JCEfresh _ -> Options.jc_error e#pos "Unsupported \\fresh as expression"
     | JCEinstanceof (e1, st) ->
       let tag = tag_table_var (struct_root st, e1#region) in
       (* always safe *)
@@ -2156,7 +2156,7 @@ and expr e =
       let ac = deref_alloc_class ~type_safe:false e in
       let alloc = plain_alloc_table_var (ac, e#region) in
       let pc = JCtag (st, []) in
-      if !Jc_options.inv_sem = InvOwnership then
+      if !Options.inv_sem = InvOwnership then
         let tag = plain_tag_table_var (struct_root st, e#region) in
         let mut = mutable_name pc in
         let com = committed_name pc in
@@ -2191,7 +2191,7 @@ and expr e =
       let e1' = expr e1 in
       let ac = deref_alloc_class ~type_safe:false e1 in
       let alloc = plain_alloc_table_var (ac, e1#region) in
-      if !Jc_options.inv_sem = InvOwnership then
+      if !Options.inv_sem = InvOwnership then
         let pc = pointer_class e1#typ in
         let com = committed_name pc in
         make_app "free_parameter_ownership" [alloc; mk_var com; e1']
@@ -2214,7 +2214,7 @@ and expr e =
         let param_assoc = List.map2 (fun param arg -> param, arg) f.li_parameters call.call_args in
         let with_body =
           try
-            let _f, body = IntHashtblIter.find Jc_typing.logic_functions_table f.li_tag in
+            let _f, body = IntHashtblIter.find Typing.logic_functions_table f.li_tag in
             match body with
             | JCTerm _ -> true
             | JCNone | JCReads _ -> false
@@ -2276,7 +2276,7 @@ and expr e =
         let fname = f.fun_final_name ^ if safety_checking () then  "_requires" else "" in
         let with_body =
           try
-            let _f, _loc, _s, body = IntHashtblIter.find Jc_typing.functions_table f.fun_tag in
+            let _f, _loc, _s, body = IntHashtblIter.find Typing.functions_table f.fun_tag in
             body <> None
           with
           | Not_found -> false
@@ -2344,7 +2344,7 @@ and expr e =
                match li.li_parameters with
                | v1 :: _ -> li.li_name, v1.vi_type
                | _ ->
-                 Jc_options.jc_error
+                 Options.jc_error
                    e#pos
                    "Can't generate termination condition: measure has no arguments (%s)"
                    li.li_name
@@ -2422,7 +2422,7 @@ and expr e =
         (* Translate assignment *)
         let tmp1, lets, e' = make_upd ~e e1 fi e2 in
         let e' =
-          if (safety_checking()) && !Jc_options.inv_sem = InvOwnership
+          if (safety_checking()) && !Options.inv_sem = InvOwnership
           then append (assert_mutable (LVar tmp1) fi) e'
           else e'
         in
@@ -2432,7 +2432,7 @@ and expr e =
           then make_lets lets e'
           else make_lets lets (append e' (mk_var tmp2))
         in
-        if !Jc_options.inv_sem = InvOwnership
+        if !Options.inv_sem = InvOwnership
         then append e' (assume_field_invariants fi)
         else e'
 
@@ -2540,7 +2540,7 @@ and expr e =
             ~type_safe:false ~global_assertion:false ~relocate:false
             LabelHere LabelPre free_inv
         in
-        let inv' = if Jc_options.trust_ai then inv' else make_and inv' free_inv' in
+        let inv' = if Options.trust_ai then inv' else make_and inv' free_inv' in
         (* loop assigns
 
            By default, the assigns clause for the function should be
@@ -2670,7 +2670,7 @@ and expr e =
         let body = expr e1 in
         let add_assume s =
           let s = append (assumption assume_from_inv assume_from_inv') s in
-          if Jc_options.trust_ai then append (assumption [free_inv] free_inv') s
+          if Options.trust_ai then append (assumption [free_inv] free_inv') s
           else s
         in
         let body = [ add_assume body ] in
@@ -2678,7 +2678,7 @@ and expr e =
         let loop_variant =
           match la.loop_variant with
             | Some (t,r) when variant_checking () &&
-                !Jc_options.termination_policy <> TPnever ->
+                !Options.termination_policy <> TPnever ->
                 let variant =
                   named_term
                     ~type_safe:false ~global_assertion:false ~relocate:false
@@ -2693,7 +2693,7 @@ and expr e =
                 in
                 Some (variant,r)
             | None when variant_checking () &&
-                !Jc_options.termination_policy = TPalways ->
+                !Options.termination_policy = TPalways ->
                 eprintf
                   "Warning, generating a dummy variant for loop. \
                    Please provide a real variant or set termination policy \
@@ -2719,7 +2719,7 @@ and expr e =
           | _ -> LTrue
         in
         assert (dec = None);
-        let ef = Jc_effect.expr Common.empty_fun_effect e in
+        let ef = Effect.expr Common.empty_fun_effect e in
         let before = fresh_statement_label () in
         begin match behs with
         | [_pos, id, b] ->
@@ -2782,7 +2782,7 @@ and expr e =
            ExceptionSet.remove ei excs)
         else s, excs
       in
-      let ef = Jc_effect.expr empty_fun_effect s in
+      let ef = Effect.expr empty_fun_effect s in
       fst @@ List.fold_left catch (expr s, ef.fe_raises) catches
     | JCEmatch (e, psl) ->
       let tmp = tmp_var_name () in
@@ -2913,14 +2913,14 @@ let make_not_assigns mem t l =
 
 let tr_axiom pos id ~is_axiom labels a acc =
 
-  if Jc_options.debug then
+  if Options.debug then
     Format.printf "[interp] axiom %s@." id;
 
   let lab = match labels with [lab] -> lab | _ -> LabelHere in
   (* Special (local) translation of effects for predicates with polymorphic memories.
      We first entirely exclude their effects from the assertion, then only restore the effects that
      are relevant in this axiom. So the effects from other axioms won't be translated. *)
-  let ef = Jc_effect.assertion empty_effects (restrict_poly_mems_in_assertion MemoryMap.empty a) in
+  let ef = Effect.assertion empty_effects (restrict_poly_mems_in_assertion MemoryMap.empty a) in
   let a' =
     assertion ~type_safe:false ~global_assertion:true ~relocate:false lab lab @@
       restrict_poly_mems_in_assertion ef.e_memories a
@@ -2931,7 +2931,7 @@ let tr_axiom pos id ~is_axiom labels a acc =
   Goal ((if is_axiom then KAxiom else KLemma),
         { why_name = new_id;
           why_expl = (if is_axiom then "Axiom " else "Lemma ") ^ id;
-          why_pos = Jc_position.of_pos pos},
+          why_pos = Position.of_pos pos},
         a')
   :: acc
 
@@ -2941,7 +2941,7 @@ let tr_axiom pos id ~is_axiom labels a acc =
 
 let tr_axiomatic_decl acc d =
   match d with
-    | Jc_typing.ABaxiom(loc,id,labels,p) ->
+    | Typing.ABaxiom(loc,id,labels,p) ->
         tr_axiom loc ~is_axiom:true id labels p acc
 
 (******************************************************************************)
@@ -3092,9 +3092,9 @@ let pre_tr_fun f _funpos spec _body acc =
   acc
 
 let tr_fun f funpos spec body acc =
-  if Jc_options.debug then
+  if Options.debug then
     Format.printf "[interp] function %s@." f.fun_name;
-  Jc_options.lprintf "Jc_interp: function %s@." f.fun_name;
+  Options.lprintf "Interp: function %s@." f.fun_name;
   (* handle parameters that are assigned in the body *)
   let assigned_params =
     List.fold_left
@@ -3121,7 +3121,7 @@ let tr_fun f funpos spec body acc =
         LabelHere LabelHere spec.fs_requires
   in
   let external_requires =
-    if Jc_options.trust_ai then
+    if Options.trust_ai then
       external_requires
     else
       let free_requires =
@@ -3166,7 +3166,7 @@ let tr_fun f funpos spec body acc =
     List.fold_left
       (fun (safety, normal_inferred, normal, excep_inferred, excep) (_pos, id, b) ->
          let make_post ~type_safe ~internal =
-           (if internal && Jc_options.trust_ai then
+           (if internal && Options.trust_ai then
                b.b_ensures
             else
               Assertion.mkand
@@ -3223,7 +3223,7 @@ let tr_fun f funpos spec body acc =
            | "inferred" ->
              assert (b.b_assumes = None);
              safety, behav :: normal_inferred,
-             (if Jc_options.trust_ai then normal else behav :: normal),
+             (if Options.trust_ai then normal else behav :: normal),
              excep_inferred, excep
            | _ ->
              safety, normal_inferred, behav :: normal,
@@ -3235,7 +3235,7 @@ let tr_fun f funpos spec body acc =
              safety, normal_inferred, normal,
              ExceptionMap.add_merge
                List.append exc [behav] excep_inferred,
-             if Jc_options.trust_ai then excep else
+             if Options.trust_ai then excep else
                ExceptionMap.add_merge List.append exc [behav] excep
            end else
              safety, normal_inferred, normal, excep_inferred,
@@ -3422,8 +3422,8 @@ let tr_fun f funpos spec body acc =
     ~default:Fn.id
     ~f:(fun body ->
       Fn.on'
-        (Jc_options.verify = [] ||
-         List.mem f.fun_name Jc_options.verify) @@
+        (Options.verify = [] ||
+         List.mem f.fun_name Options.verify) @@
       fun () ->
       Fn.tap (Fn.const @@ printf "Generating Why function %s@." f.fun_final_name) %>
       (* parameters *)
@@ -3448,7 +3448,7 @@ let tr_fun f funpos spec body acc =
         body |>
         function_body f spec bname |>
         Fn.on
-          (!Jc_options.inv_sem = InvOwnership)
+          (!Options.inv_sem = InvOwnership)
           (fun e -> append (assume_all_invariants fparams) e)
         |>
         (let assert_internal_allocates =
@@ -3504,23 +3504,23 @@ let tr_fun f funpos spec body acc =
       in
       (* safety behavior *)
       Fn.on'
-        (Jc_options.verify_behavior "safety" ||
-         Jc_options.verify_behavior "variant")
+        (Options.verify_behavior "safety" ||
+         Options.verify_behavior "variant")
         (fun () ->
          let behav =
-           if Jc_options.verify_behavior "safety" then "safety"
+           if Options.verify_behavior "safety" then "safety"
            else "variant"
          in
          let newid = f.fun_name ^ "_safety" in
          Fn.on'
-           (not (is_purely_exceptional_fun spec) && not Jc_options.verify_invariants_only)
+           (not (is_purely_exceptional_fun spec) && not Options.verify_invariants_only)
            (fun () ->
               let safety_body = wrap_body f spec behav body in
               List.cons @@
               Def (
                 { why_name = newid;
                   why_expl = "Function " ^ f.fun_name ^ ", safety";
-                  why_pos = Jc_position.of_pos funpos},
+                  why_pos = Position.of_pos funpos},
                 mk_expr @@
                 Fun (
                   params,
@@ -3536,7 +3536,7 @@ let tr_fun f funpos spec body acc =
       List.fold_right
         (fun (id, b, internal_post, _) ->
            Fn.on'
-             (Jc_options.verify_behavior id) @@
+             (Options.verify_behavior id) @@
            fun () ->
            let normal_body = wrap_body f spec id body in
            let newid = f.fun_name ^ "_ensures_" ^ id in
@@ -3549,7 +3549,7 @@ let tr_fun f funpos spec body acc =
            Def (
              { why_name = newid;
                why_expl = "Function " ^ f.fun_name ^ ", " ^ beh;
-               why_pos = Jc_position.of_pos funpos },
+               why_pos = Position.of_pos funpos },
              mk_expr @@
              Fun (
                params,
@@ -3569,7 +3569,7 @@ let tr_fun f funpos spec body acc =
            List.fold_right
              (fun (id, b, internal_post, _) ->
                 Fn.on'
-                  (Jc_options.verify_behavior id) @@
+                  (Options.verify_behavior id) @@
                 fun () ->
                 let except_body = wrap_body f spec id body in
                 let newid = f.fun_name ^ "_exsures_" ^ id in
@@ -3577,7 +3577,7 @@ let tr_fun f funpos spec body acc =
                 Def (
                   { why_name = newid;
                     why_expl = "Function " ^ f.fun_name ^ ", behavior " ^ id;
-                    why_pos = Jc_position.of_pos funpos },
+                    why_pos = Position.of_pos funpos },
                   mk_expr @@
                   Fun (
                     params,
@@ -3671,11 +3671,11 @@ let tr_specialized_fun n fname param_name_assoc acc =
 (*                               Logic entities                               *)
 (******************************************************************************)
 
-let tr_logic_type (id,l) acc = Type(id_no_loc id,List.map Jc_type_var.name l) :: acc
+let tr_logic_type (id,l) acc = Type(id_no_loc id,List.map Type_var.name l) :: acc
 
 
 let tr_exception ei acc =
-  Jc_options.lprintf "producing exception '%s'@." ei.exi_name;
+  Options.lprintf "producing exception '%s'@." ei.exi_name;
   let typ = match ei.exi_type with
     | Some tei -> Some (tr_base_type tei)
     | None -> None
@@ -3722,7 +3722,7 @@ let tr_enum_type =
     let post =
       LPred("eq_int",
             [LApp (logic_int_of_enum_name ri, [LVar "result"]);
-             if !Jc_options.int_model = IMbounded then LVar "x"
+             if !Options.int_model = IMbounded then LVar "x"
              else LApp (mod_of_enum_name ri, [LVar "x"])])
     in
     Prod_type ("x", Base_type (why_integer_type),
@@ -3732,12 +3732,12 @@ let tr_enum_type =
   in
   let of_int_type =
     let pre =
-      if !Jc_options.int_model = IMbounded then in_bounds (LVar "x") else LTrue
+      if !Options.int_model = IMbounded then in_bounds (LVar "x") else LTrue
     in
     let post =
       LPred ("eq_int",
              [LApp (logic_int_of_enum_name ri, [LVar "result"]);
-             if !Jc_options.int_model = IMbounded then LVar "x"
+             if !Options.int_model = IMbounded then LVar "x"
              else LApp (mod_of_enum_name ri, [LVar "x"])])
     in
     Prod_type ("x", Base_type (why_integer_type),
@@ -3779,7 +3779,7 @@ let tr_enum_type =
   :: Predicate (false, id_no_loc (eq_of_enum_name ri), [("x", lt); ("y", lt)],
                 LPred ("eq_int", [LApp (logic_int_of_enum_name ri, [LVar "x"]);
                                   LApp (logic_int_of_enum_name ri, [LVar "y"])]))
-  :: (if !Jc_options.int_model = IMmodulo then
+  :: (if !Options.int_model = IMmodulo then
         let width = LConst (Prim_int width) in
         let fmod t = LApp (mod_of_enum_name ri, [t]) in
         [Logic (false, id_no_loc (mod_of_enum_name ri),
@@ -3858,7 +3858,7 @@ let tr_enum_type_pair ri1 ri2 acc =
   let name2 = ri2.ei_name in
   let min2 = ri2.ei_min in
   let max2 = ri2.ei_max in
-  if not (!Jc_options.int_model = IMmodulo) then acc else
+  if not (!Options.int_model = IMmodulo) then acc else
     if max1 </ min2 || max2 </ min1 then acc else
       (* Compute intersection of ranges *)
       let min = if min1 <=/ min2 && min2 <=/ max1 then min2 else min1 in

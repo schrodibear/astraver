@@ -107,7 +107,7 @@ struct
   type t = assertion
 
   let make_subtag x st =
-    let _, tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, Jc_region.dummy_region) in
+    let _, tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, Region.dummy_region) in
     make_subtag (make_typeof tag x) (LVar (Name.tag st))
   let make_or a b = LOr(a, b)
   let make_and a b = LAnd(a, b)
@@ -123,7 +123,7 @@ struct
   type t = term
 
   let make_subtag x st =
-    let _, tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, Jc_region.dummy_region) in
+    let _, tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, Region.dummy_region) in
     make_subtag_bool (make_typeof tag x) (LVar (Name.tag st))
   let make_or = make_or_term
   let make_and = make_and_term
@@ -143,7 +143,7 @@ let pattern_list_expr translate_body arg region ty pbl =
        let notcond, cond, vars = PatternAssertion.pattern arg ty pat in
        let body = translate_body body in
        let reads =
-         let ef = Jc_effect.pattern empty_effects (*LabelHere region*) pat in
+         let ef = Effect.pattern empty_effects (*LabelHere region*) pat in
          all_effects ef
        in
        let writes = List.map fst vars in

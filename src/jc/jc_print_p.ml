@@ -40,7 +40,7 @@ open Print_misc
 open Why_pp
 
 
-let is_not_true (p : Jc_ast.pexpr) =
+let is_not_true (p : Ast.pexpr) =
   match p#node with
     | JCPEconst (JCCboolean true) -> false
     | _ -> true

@@ -59,37 +59,37 @@ type jc_decl =
   | JCglobinv_def of string * assertion
   | JClogic_const_def of jc_type * string * type_var_info list * term option
   | JClogic_type_def of string * type_var_info list
-  | JCinvariant_policy of Jc_env.inv_sem
-  | JCseparation_policy of Jc_env.separation_sem
-  | JCannotation_policy of Jc_env.annotation_sem
-  | JCabstract_domain of Jc_env.abstract_domain
-  | JCint_model of Jc_env.int_model
-  | JCfloat_rounding_mode of Jc_env.float_rounding_mode
-  | JCfloat_model of Jc_env.float_model
+  | JCinvariant_policy of Env.inv_sem
+  | JCseparation_policy of Env.separation_sem
+  | JCannotation_policy of Env.annotation_sem
+  | JCabstract_domain of Env.abstract_domain
+  | JCint_model of Env.int_model
+  | JCfloat_rounding_mode of Env.float_rounding_mode
+  | JCfloat_model of Env.float_model
   | JCfloat_instruction_set of string
-  | JCtermination_policy of Jc_env.termination_policy
+  | JCtermination_policy of Env.termination_policy
 
 (*
 let lbin_op op =
-  if op == Jc_pervasives.ge_int then ">=" else
-  if op == Jc_pervasives.le_int then "<=" else
-  if op == Jc_pervasives.gt_int then ">" else
-  if op == Jc_pervasives.lt_int then "<" else
-  if op == Jc_pervasives.eq then "==" else
-  if op == Jc_pervasives.neq then "!=" else
-  if op == Jc_pervasives.add_int then "+" else
-  if op == Jc_pervasives.sub_int then "-" else
-  if op == Jc_pervasives.mul_int then "*" else
-  if op == Jc_pervasives.div_int then "/" else
-  if op == Jc_pervasives.mod_int then "%" else
-  if op == Jc_pervasives.shift then "+" else
+  if op == Pervasives.ge_int then ">=" else
+  if op == Pervasives.le_int then "<=" else
+  if op == Pervasives.gt_int then ">" else
+  if op == Pervasives.lt_int then "<" else
+  if op == Pervasives.eq then "==" else
+  if op == Pervasives.neq then "!=" else
+  if op == Pervasives.add_int then "+" else
+  if op == Pervasives.sub_int then "-" else
+  if op == Pervasives.mul_int then "*" else
+  if op == Pervasives.div_int then "/" else
+  if op == Pervasives.mod_int then "%" else
+  if op == Pervasives.shift then "+" else
   raise Not_found
 *)
 
 let identifier fmt id =
   fprintf fmt "%s" id#name
 
-let type_var_info fmt x = fprintf fmt "%s" (Jc_type_var.uname x)
+let type_var_info fmt x = fprintf fmt "%s" (Type_var.uname x)
 
 let bin_op (op, _) = match op with
   | `Blt -> "<"
@@ -188,7 +188,7 @@ let rec term fmt t =
 	let t1 = List.hd app.app_args in
 	begin try
 	  ignore
-	    (Hashtbl.find Jc_typing.enum_conversion_logic_functions_table op);
+	    (Hashtbl.find Typing.enum_conversion_logic_functions_table op);
 	  (* conversion due to enumeration. Ignore it. *)
 	  term fmt t1
 	with Not_found ->
@@ -549,50 +549,50 @@ let print_super fmt = function
 (*
 let string_of_invariant_policy p =
   match p with
-    | Jc_env.InvNone -> "None"
-    | Jc_env.InvArguments -> "Arguments"
-    | Jc_env.InvOwnership -> "Ownership"
+    | Env.InvNone -> "None"
+    | Env.InvArguments -> "Arguments"
+    | Env.InvOwnership -> "Ownership"
 
 let string_of_separation_policy p =
   match p with
-    | Jc_env.SepNone -> "None"
-    | Jc_env.SepRegions -> "Regions"
+    | Env.SepNone -> "None"
+    | Env.SepRegions -> "Regions"
 
 let string_of_annotation_policy p =
   match p with
-    | Jc_env.AnnotNone -> "None"
-    | Jc_env.AnnotInvariants -> "Invariants"
-    | Jc_env.AnnotElimPre -> "ElimPre"
-    | Jc_env.AnnotStrongPre -> "StrongPre"
-    | Jc_env.AnnotWeakPre -> "WeakPre"
+    | Env.AnnotNone -> "None"
+    | Env.AnnotInvariants -> "Invariants"
+    | Env.AnnotElimPre -> "ElimPre"
+    | Env.AnnotStrongPre -> "StrongPre"
+    | Env.AnnotWeakPre -> "WeakPre"
 
 let string_of_abstract_domain p =
   match p with
-    | Jc_env.AbsNone -> "None"
-    | Jc_env.AbsBox -> "Box"
-    | Jc_env.AbsOct -> "Oct"
-    | Jc_env.AbsPol -> "Pol"
+    | Env.AbsNone -> "None"
+    | Env.AbsBox -> "Box"
+    | Env.AbsOct -> "Oct"
+    | Env.AbsPol -> "Pol"
 
 let string_of_int_model p =
   match p with
-    | Jc_env.IMbounded -> "bounded"
-    | Jc_env.IMmodulo -> "modulo"
+    | Env.IMbounded -> "bounded"
+    | Env.IMmodulo -> "modulo"
 *)
 
 let string_of_float_rounding_mode p =
   match p with
-    | Jc_env.FRMNearestEven -> "nearesteven"
-    | Jc_env.FRMDown -> "down"
-    | Jc_env.FRMUp -> "up"
-    | Jc_env.FRMToZero -> "tozero"
-    | Jc_env.FRMNearestAway -> "nearestaway"
+    | Env.FRMNearestEven -> "nearesteven"
+    | Env.FRMDown -> "down"
+    | Env.FRMUp -> "up"
+    | Env.FRMToZero -> "tozero"
+    | Env.FRMNearestAway -> "nearestaway"
 
 let string_of_float_model p =
   match p with
-    | Jc_env.FMmath -> "math"
-    | Jc_env.FMdefensive -> "defensive"
-    | Jc_env.FMfull-> "full"
-    | Jc_env.FMmultirounding-> "multirounding"
+    | Env.FMmath -> "math"
+    | Env.FMdefensive -> "defensive"
+    | Env.FMfull-> "full"
+    | Env.FMmultirounding-> "multirounding"
 
 let rec print_decl fmt d =
   match d with

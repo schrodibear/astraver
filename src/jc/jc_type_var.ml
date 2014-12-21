@@ -184,8 +184,8 @@ let print_vmap fmt a = print_list comma (print_pair print_type_var print_type) f
 let print fmt uenv = Format.fprintf fmt "uenv : smap : %a@.vmap : %a@." print_smap uenv.smap print_vmap uenv.vmap
 
 let subst_type_in_assertion uenv =
-  Jc_iterators.map_term_in_assertion
-    (fun t -> new Jc_constructors.term_with ~typ:(subst uenv t#typ) t)
+  Iterators.map_term_in_assertion
+    (fun t -> new Constructors.term_with ~typ:(subst uenv t#typ) t)
 
 (*
 Local Variables:

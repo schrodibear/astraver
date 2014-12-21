@@ -29,29 +29,29 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_env
-open Jc_ast
-open Jc_fenv
+open Env
+open Ast
+open Fenv
 
 (*
 class positioned :
   pos:Why_loc.position option -> object method pos : Why_loc.position end
-class typed : typ:Jc_env.jc_type -> object method typ : Jc_env.jc_type end
+class typed : typ:Env.jc_type -> object method typ : Env.jc_type end
 class labeled :
-  label:Jc_env.label option ->
+  label:Env.label option ->
   object
-    val mutable llab : Jc_env.label option
-    method label : Jc_env.label option
-    method set_label : Jc_env.label option -> unit
+    val mutable llab : Env.label option
+    method label : Env.label option
+    method set_label : Env.label option -> unit
   end
 class marked :
   mark:string -> object method mark : string end
 class regioned :
-  region:Jc_env.region ->
+  region:Env.region ->
   object
-    val mutable r : Jc_env.region
-    method region : Jc_env.region
-    method set_region : Jc_env.region -> unit
+    val mutable r : Env.region
+    method region : Env.region
+    method set_region : Env.region -> unit
   end
 *)
 
@@ -614,7 +614,7 @@ module PExpr :
 
     val mkcontract :
       requires:pexpr option ->
-      decreases:(pexpr * Jc_ast.identifier option) option ->
+      decreases:(pexpr * Ast.identifier option) option ->
       behaviors:pexpr pbehavior list ->
       expr:pexpr -> ?pos:Why_loc.position -> unit -> pexpr
 
@@ -666,7 +666,7 @@ module PDecl :
 
     val mkaxiomatic :
       name:string ->
-      decls:'a Jc_ast.decl list ->
+      decls:'a Ast.decl list ->
       ?pos:Why_loc.position ->
       unit -> 'a decl_node node_positioned
 
@@ -838,7 +838,7 @@ module Term :
       const: const ->
       ?pos:Why_loc.position ->
       ?mark:string ->
-      ?region:Jc_env.region ->
+      ?region:Env.region ->
       unit ->
       term
     val mkint :

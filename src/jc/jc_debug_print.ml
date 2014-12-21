@@ -1,9 +1,9 @@
-open Jc_env
-open Jc_fenv
-open Jc_ast
-open Jc_stdlib
-open Jc_pervasives
-open Jc_constructors
+open Env
+open Fenv
+open Ast
+open Stdlib
+open Pervasives
+open Constructors
 
 let invoke_static : 'a. < .. > -> < .. > -> string -> 'a = fun o e name ->
   let open CamlinternalOO in
@@ -40,7 +40,7 @@ end
 class marked_wrapper o m : marked =
 object
   (* method mark = unsafe_call m "mark" *)
-  method mark = "" (* due to Jc_output implementation, which re-constructs the object in case the label in non-empty *)
+  method mark = "" (* due to Output implementation, which re-constructs the object in case the label in non-empty *)
 end
 
 class regioned_wrapper o r : regioned =
@@ -70,7 +70,7 @@ let term_dummy = Term.mkint ~value:0 ()
 class term_wrapper o t : term =
   let wrap = new term_wrapper term_dummy in
 object
-  val mutable r = Jc_region.dummy_region
+  val mutable r = Region.dummy_region
   inherit positioned_wrapper o t
   inherit typed_wrapper o t
   inherit labeled_wrapper o t
@@ -154,7 +154,7 @@ let locs_dummy = new location_set ~typ:JCTnull @@ JCLSvar (newvar JCTnull)
 class locs_wrapper o ls : location_set =
   let wrap = new locs_wrapper locs_dummy in
 object
-  val mutable r = Jc_region.dummy_region
+  val mutable r = Region.dummy_region
   inherit positioned_wrapper o ls
   inherit typed_wrapper o ls
   inherit labeled_wrapper o ls
@@ -175,7 +175,7 @@ let loc_dummy = new location ~typ:JCTnull @@ JCLvar (newvar JCTnull)
 class loc_wrapper o l : location =
   let wrap = new loc_wrapper loc_dummy in
 object
-  val mutable r = Jc_region.dummy_region
+  val mutable r = Region.dummy_region
   inherit positioned_wrapper o l
   inherit typed_wrapper o l
   inherit labeled_wrapper o l
@@ -194,7 +194,7 @@ let expr_dummy = Expr.mk JCTnull (JCEconst JCCnull) ()
 class expr_wrapper o e : expr =
   let wrap = new expr_wrapper expr_dummy in
 object
-  val mutable r = Jc_region.dummy_region
+  val mutable r = Region.dummy_region
   inherit positioned_wrapper o e
   inherit typed_wrapper o e
   inherit marked_wrapper o e
@@ -256,13 +256,13 @@ end
 
 let ewrap : expr -> expr = new expr_wrapper expr_dummy
 
-let expr fmt = Jc_output.expr fmt % ewrap
-let term fmt = Jc_output.term fmt % twrap
-let assertion fmt = Jc_output.assertion fmt % awrap
-let location fmt = Jc_output.location fmt % lwrap
-let location_set fmt = Jc_output.location_set fmt % lswrap
+let expr fmt = Output.expr fmt % ewrap
+let term fmt = Output.term fmt % twrap
+let assertion fmt = Output.assertion fmt % awrap
+let location fmt = Output.location fmt % lwrap
+let location_set fmt = Output.location_set fmt % lswrap
 
-let string_set fmt ss = Format.fprintf fmt "%a" Pp.(print_list comma string) @@ Jc_envset.StringSet.elements ss
+let string_set fmt ss = Format.fprintf fmt "%a" Pp.(print_list comma string) @@ Envset.StringSet.elements ss
 
 (*
   Local Variables:

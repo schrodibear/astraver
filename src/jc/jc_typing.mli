@@ -47,7 +47,7 @@ val substruct : struct_info -> pointer_class -> bool
 val logic_type_table : (string * type_var_info list) StringHashtblIter.t
 
 val logic_constants_table :
-  (int, logic_info * Jc_fenv.logic_info Jc_ast.term) Hashtbl.t
+  (int, logic_info * Fenv.logic_info Ast.term) Hashtbl.t
 
 val logic_functions_table:
   (logic_info * term_or_assertion) IntHashtblIter.t
@@ -74,7 +74,7 @@ val lemmas_table :
   StringHashtblIter.t
 
 type axiomatic_decl =
-  | ABaxiom of Why_loc.position * string * Jc_env.label list * Jc_constructors.assertion
+  | ABaxiom of Why_loc.position * string * Env.label list * Constructors.assertion
 
 type axiomatic_data = private
     {
@@ -95,7 +95,7 @@ val coerce : jc_type -> native_type -> expr -> expr
 
 val type_range_of_term : jc_type -> term -> assertion
 
-val find_struct_root : Jc_env.struct_info -> Jc_env.root_info
+val find_struct_root : Env.struct_info -> Env.root_info
 
 val type_file : nexpr decl list -> unit
 
@@ -107,16 +107,16 @@ val occurrences : int list -> assertion -> (label * label) list list list
 
 val pragma_gen_sep :  (int,
    [ `Sep | `Inc | `Cni] *
-   [ `Logic of Jc_fenv.logic_info * string list * Jc_env.var_info list
-   | `Pointer of Jc_env.var_info ] list) Jc_stdlib.Hashtbl.t
+   [ `Logic of Fenv.logic_info * string list * Env.var_info list
+   | `Pointer of Env.var_info ] list) Stdlib.Hashtbl.t
 
 val pragma_gen_frame :
-  (int, Jc_fenv.logic_info * Jc_fenv.logic_info
-    * Jc_env.var_info list * Jc_env.var_info list *
-      [ `Frame | `Sub ]) Jc_stdlib.Hashtbl.t
+  (int, Fenv.logic_info * Fenv.logic_info
+    * Env.var_info list * Env.var_info list *
+      [ `Frame | `Sub ]) Stdlib.Hashtbl.t
 
 val pragma_gen_same :
-  (int, Jc_fenv.logic_info) Jc_stdlib.Hashtbl.t
+  (int, Fenv.logic_info) Stdlib.Hashtbl.t
 
 val comparable_types : jc_type -> jc_type -> bool
 

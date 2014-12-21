@@ -78,7 +78,7 @@ let prop_type = simple_logic_type "prop"
 and r is a StringSet of the "reads" needed by these invariants *)
 let invariant_for_struct this st =
   let (_, invs) =
-    StringHashtblIter.find Jc_typing.structs_table st.si_name
+    StringHashtblIter.find Typing.structs_table st.si_name
   in
   let inv =
     make_and_list
@@ -171,7 +171,7 @@ let make_bool b = LConst(Prim_bool b)
 (* Typing imposes non pointer fields to have the flag "rep" *)
 let field this pos fi =
   if not fi.fi_rep then
-    Jc_typing.typing_error pos "this term is not a rep field of %s"
+    Typing.typing_error pos "this term is not a rep field of %s"
       this.vi_name
 
 (*let rec check_rep ?(must_deref=false) this pos t =
@@ -186,12 +186,12 @@ let field this pos fi =
         (* (? TODO) *)
         check_rep ~must_deref:true this pos t
     | _ ->
-        Jc_typing.typing_error pos "this term is not a rep field of %s"
+        Typing.typing_error pos "this term is not a rep field of %s"
           this.vi_name*)
 
 (* A pattern may hide some dereferencing. *)
 let pattern this p =
-  Jc_iterators.iter_pattern
+  Iterators.iter_pattern
     (fun p -> match p#node with
        | JCPstruct(_, fipl) ->
            List.iter (field this p#pos) (List.map fst fipl)
@@ -203,13 +203,13 @@ is the argument of the pointer. Thus, it is sufficient to check that all
 dereferencing is done on a rep field AND that all applications do not read
 any memory (else one could hide dereferencing in logic functions). *)
 let term this t =
-  Jc_iterators.ITerm.iter
+  Iterators.ITerm.iter
     (fun t -> match t#node with
        | JCTapp app ->
            let id = app.app_fun in
            if not (MemoryMap.is_empty
                      id.li_effects.e_memories) then
-             Jc_typing.typing_error t#pos
+             Typing.typing_error t#pos
                "this call is not allowed in structure invariant"
        | JCTderef(_, _, fi) ->
            field this t#pos fi
@@ -249,7 +249,7 @@ let term this t =
            let id = app.app_fun in
            if not (FieldRegionMap.is_empty
                      id.li_effects.e_memories) then
-             Jc_typing.typing_error t.jc_term_loc
+             Typing.typing_error t.jc_term_loc
                "this call is not allowed in structure invariant"
        | JCTderef _ ->
            check_rep this t.jc_term_loc t
@@ -277,7 +277,7 @@ let rec assertion this p =
         if MemoryMap.is_empty id.li_effects.e_memories
         then List.iter (term this) app.app_args
         else
-          Jc_typing.typing_error p#pos
+          Typing.typing_error p#pos
             "this call is not allowed in structure invariant"
     | JCAnot p -> assertion this p
     | JCAiff (p1, p2)
@@ -285,7 +285,7 @@ let rec assertion this p =
     | JCArelation (t1,_, t2) -> term this t1; term this t2
     | JCAand l | JCAor l -> List.iter (assertion this) l
     | JCAmutable _ ->
-        Jc_typing.typing_error p#pos
+        Typing.typing_error p#pos
           "\\mutable is not allowed in structure invariant"
     | JCAeqtype(t1, t2, _) | JCAsubtype(t1, t2, _) ->
         tag this t1;
@@ -300,7 +300,7 @@ let rec assertion this p =
 let check invs =
   List.iter
     (fun (li,p) ->
-       Jc_options.lprintf
+       Options.lprintf
          "    Checking invariant: %s@." li.li_name;
        match li.li_parameters with
          | [this] -> assertion this p
@@ -312,7 +312,7 @@ let check invs =
 (***********************************)
 
 let rec term_memories aux t =
-  Jc_iterators.fold_term
+  Iterators.fold_term
     (fun aux t -> match t#node with
     | JCTderef(_t, _lab, fi) ->
         let m = fi.fi_final_name in
@@ -364,14 +364,14 @@ let rec all_structures st acc =
 
 (* Returns all memories used by the structure invariants. *)
 let struct_inv_memories acc st =
-  let _, invs = StringHashtblIter.find Jc_typing.structs_table st in
+  let _, invs = StringHashtblIter.find Typing.structs_table st in
   List.fold_left
     (fun acc (_, a) -> assertion_memories acc a)
     acc
     invs
 
 (* Returns the parameters needed by an invariant, "this" not included *)
-(* TODO: factorize using Jc_interp_misc.logic_params *)
+(* TODO: factorize using Interp_misc.logic_params *)
 let invariant_params acc li =
   let acc =
     MemoryMap.fold
@@ -404,7 +404,7 @@ let invariant_params acc li =
 (* Returns the parameters needed by the invariants of a structure, "this" not included *)
 let invariants_params acc st =
   let (_, invs) =
-    StringHashtblIter.find Jc_typing.structs_table st.si_name
+    StringHashtblIter.find Typing.structs_table st.si_name
   in
   List.fold_left (fun acc (li, _) -> invariant_params acc li) acc invs
 
@@ -437,7 +437,7 @@ let hierarchy_structures h =
        (* don't use equality directly on st and h, as it might not terminate *)
        (* we could use == instead though *)
        if root_name st = root_name h then st::acc else acc)
-    Jc_typing.structs_table
+    Typing.structs_table
     []
 
 let hierarchies () =
@@ -445,7 +445,7 @@ let hierarchies () =
     StringHashtblIter.fold
       (fun _ (st, _) acc ->
          StringMap.add (root_name st) st.si_hroot acc)
-      Jc_typing.structs_table
+      Typing.structs_table
       StringMap.empty
   in
   StringMap.fold
@@ -499,7 +499,7 @@ let make_assume_assocs pp mems =
 (* List of each memory m that appears in an invariant
 which can be broken by the modification of the field fi *)
 let field_assocs fi =
-  let _, invs = Hashtbl.find Jc_typing.structs_table fi.fi_root in
+  let _, invs = Hashtbl.find Typing.structs_table fi.fi_root in
   let mems = List.fold_left
     (fun aux (_, a) ->
        let amems = assertion_memories StringSet.empty a in
@@ -639,7 +639,7 @@ let assert_mutable e fi =
   Axiom("axiom_"^li.li_name, axiom)::acc
 
 let invariants_axioms st acc =
-  let _, invs = Hashtbl.find Jc_typing.structs_table st.si_name in
+  let _, invs = Hashtbl.find Typing.structs_table st.si_name in
   List.fold_left (invariant_axiom st) acc invs*)
 
 (******************************************)
@@ -656,7 +656,7 @@ let field_invariants fi =
     let invs =
       StringHashtblIter.fold
         (fun _ (st, invs) acc -> (List.map (fun inv -> st, inv) invs)@acc)
-        Jc_typing.structs_table
+        Typing.structs_table
         []
     in
     (* Only keep the invariants which uses the field *)
@@ -889,7 +889,7 @@ let make_hierarchy_global_invariant acc root =
     (fun st ->
        let _, invs =
          StringHashtblIter.find
-           Jc_typing.structs_table st.si_name
+           Typing.structs_table st.si_name
        in
        List.map (fun inv -> not_mutable_implies_invariant this st inv) invs)
     structs
@@ -947,7 +947,7 @@ let assume_global_invariant st =
       Hashtbl.find hierarchy_invariants (root_name st)
     with Not_found ->
       failwith
-        ("Jc_invariants.assume_global_invariant: "^
+        ("Invariants.assume_global_invariant: "^
            (root_name st)^" not found")
   in
   match params with
@@ -992,7 +992,7 @@ let assume_all_invariants params =
 useful invariant for all objects that is not mutable *)
 let assume_field_invariants fi =
   (* structure in which the field is defined *)
-  let st, _ = Hashtbl.find Jc_typing.structs_table fi.fi_struct in
+  let st, _ = Hashtbl.find Typing.structs_table fi.fi_struct in
   let assumes = List.map (fun inv -> forall_mutable_invariant st inv) (field_invariants fi) in (* FAUX (st n'est pas forcément la bonne structure !) *)
   let assumes = List.map (fun (params, inv) -> make_assume (List.map fst params) inv) assumes in
   List.fold_left append Void assumes
@@ -1007,7 +1007,7 @@ let assume_all_invariants params =
   let structures = function_structures params in
   let st_invs =
     List.map
-      (fun id -> Hashtbl.find Jc_typing.structs_table id)
+      (fun id -> Hashtbl.find Typing.structs_table id)
       structures
   in
   let st_invs = flatten_snd st_invs in
@@ -1410,7 +1410,7 @@ let tr_valid_inv st acc =
 
 let rec invariant_for_struct ?pos this si =
   let _, invs =
-    StringHashtblIter.find Jc_typing.structs_table si.si_name
+    StringHashtblIter.find Typing.structs_table si.si_name
   in
   let invs = Assertion.mkand ?pos
     ~conjuncts:(List.map
@@ -1438,7 +1438,7 @@ let rec invariant_for_struct ?pos this si =
 
 let code_function (fi, pos, fs, _sl) vil =
   begin
-    match !Jc_common_options.inv_sem with
+    match !Common_options.inv_sem with
       | InvArguments ->  (* apply arguments invariant policy *)
           (* Calculate global invariants. *)
           let _vitl =
@@ -1456,7 +1456,7 @@ let code_function (fi, pos, fs, _sl) vil =
                  in
                  (new assertion ~mark:(Common.new_label_name ())
                     ~pos (JCAapp a)) :: acc)
-              Jc_typing.global_invariants_table []
+              Typing.global_invariants_table []
           in
           let global_invariants =
             Assertion.mkand ~pos ~conjuncts:global_invariants ()
@@ -1498,7 +1498,7 @@ let code_function (fi, pos, fs, _sl) vil =
             (* add the 'safety' spec if it does not exist
                (it could exist e.g. from Krakatoa) *)
             if not !safety_exists then
-              if Jc_options.verify_invariants_only then
+              if Options.verify_invariants_only then
                 let invariants_b = { default_behavior with b_ensures = post } in
                 fs.fs_behavior <-
                   (Why_loc.dummy_position, "invariants", invariants_b) :: fs.fs_behavior;

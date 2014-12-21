@@ -31,7 +31,7 @@
 
 
 
-open Jc_ast
+open Ast
 
 exception Lexical_error of Why_loc.position * string
 
@@ -39,7 +39,7 @@ exception Lexical_error of Why_loc.position * string
 exception Syntax_error of Why_loc.position
 *)
 
-val token : Lexing.lexbuf -> Jc_parser.token
+val token : Lexing.lexbuf -> Parser.token
 
 val parse  : string -> in_channel -> pexpr decl list
 

@@ -49,9 +49,9 @@ open Format
 
 module Output = (val Options.backend)
 
-let find_struct a = fst @@ StringHashtblIter.find Jc_typing.structs_table a
+let find_struct a = fst @@ StringHashtblIter.find Typing.structs_table a
 
-let find_variant a = StringHashtblIter.find Jc_typing.roots_table a
+let find_variant a = StringHashtblIter.find Typing.roots_table a
 
 let find_pointer_class a =
   try
@@ -86,7 +86,7 @@ let make_eq_term ty a b =
     | JCTnative (Tgenfloat f) -> "eq_" ^ native_name (Tgenfloat f)
     | JCTnative Tstring -> "eq_string_bool"
     | JCTtype_var _ ->
-      Jc_options.jc_error Why_loc.dummy_position "Unsupported equality for poly type" (* TODO: need environment *)
+      Options.jc_error Why_loc.dummy_position "Unsupported equality for poly type" (* TODO: need environment *)
   in
   LApp (eq, [a; b])
 
@@ -104,7 +104,7 @@ let make_eq_pred ty a b =
     | JCTnative (Tgenfloat f) -> "eq_" ^ native_name (Tgenfloat f)
     | JCTnative Tstring -> "eq_string"
     | JCTtype_var _ ->
-      Jc_options.jc_error Why_loc.dummy_position "Unsupported equality for poly type" (* TODO: need environment *)
+      Options.jc_error Why_loc.dummy_position "Unsupported equality for poly type" (* TODO: need environment *)
   in
   LPred (eq, [a; b])
 
@@ -172,7 +172,7 @@ let const c =
   | JCCinteger s -> Prim_int (Num.string_of_num (Numconst.integer s))
   | JCCboolean b -> Prim_bool b
   | JCCstring _s ->
-    Jc_options.jc_error Why_loc.dummy_position "Unsupported string constant" (* TODO *)
+    Options.jc_error Why_loc.dummy_position "Unsupported string constant" (* TODO *)
 
 (******************************************************************************)
 (*                              environment                                   *)
@@ -314,7 +314,7 @@ let rec tr_base_type ?region =
     in
     pointer_type ac pc
   | JCTnull | JCTany -> invalid_arg "tr_base_type"
-  | JCTtype_var t -> logic_type_var (Jc_type_var.uname t)
+  | JCTtype_var t -> logic_type_var (Type_var.uname t)
 
 let tr_type ~region ty = Base_type (tr_base_type ~region ty)
 
@@ -344,7 +344,7 @@ let any_value region t =
     in mk_expr (BlackBox t)
   | JCTany -> failwith "any_value: value of wilcard type"
   | JCTtype_var _ ->
-    Jc_options.jc_error Why_loc.dummy_position "Usnupported value of poly type" (* TODO: need environment *)
+    Options.jc_error Why_loc.dummy_position "Usnupported value of poly type" (* TODO: need environment *)
 
 (* model types *)
 
@@ -545,9 +545,9 @@ let ttag_table_var ~label_in_name lab (vi,r) =
 (*                           locations and separation                         *)
 (******************************************************************************)
 
-let ref_term : (?subst:(term Jc_envset.VarMap.t) ->
+let ref_term : (?subst:(term Envset.VarMap.t) ->
                  type_safe:bool -> global_assertion:bool -> relocate:bool
-                 -> label -> label -> Jc_fenv.term -> term) ref
+                 -> label -> label -> Fenv.term -> term) ref
     = ref (fun ?(subst=VarMap.empty) ~type_safe:_ ~global_assertion:_
              ~relocate:_ _ _ _ ->
                assert (VarMap.is_empty subst);
@@ -563,7 +563,7 @@ let rec location ~type_safe ~global_assertion lab loc =
     flocs locs
   | JCLderef_term (t1,_fi) ->
     LApp ("pset_singleton", [ft t1])
-  | _ -> Jc_options.jc_error loc#pos "Unsupported location" (* TODO *)
+  | _ -> Options.jc_error loc#pos "Unsupported location" (* TODO *)
 
 and location_set ~type_safe ~global_assertion lab locs =
   let flocs = location_set ~type_safe ~global_assertion lab in
@@ -630,7 +630,7 @@ let rec transpose_location ~region_assoc ~param_assoc (loc, (mc, rdist)) =
         | JCLat (loc, lab) ->
           let node = mk_node loc in
           JCLat (new location_with ~typ:loc#typ ~region:rloc ~node loc, lab)
-        | _ -> Jc_options.jc_error loc#pos "Unsupported location" (* TODO *)
+        | _ -> Options.jc_error loc#pos "Unsupported location" (* TODO *)
       in
       let node = mk_node loc in
       let loc = new location_with ~typ:loc#typ ~region:rloc ~node loc in
@@ -659,7 +659,7 @@ and transpose_location_set ~region_assoc ~param_assoc locs =
       | JCLSat (locs', lab) ->
         let locs' = transpose_location_set ~region_assoc ~param_assoc locs' in
         JCLSat (locs', lab)
-      | _ -> Jc_options.jc_error locs#pos "Unsupported location set" (* TODO *)
+      | _ -> Options.jc_error locs#pos "Unsupported location set" (* TODO *)
     in
     new location_set_with ~typ:locs#typ  ~region:rloc ~node locs
 
@@ -782,7 +782,7 @@ let rec all_possible_memory_effects acc r (* ty *) =
   | JCTlogic _
   | JCTany -> acc
   | JCTtype_var _ ->
-    Jc_options.jc_error Why_loc.dummy_position "Unsupported effect for poly expression" (* TODO: need environment *)
+    Options.jc_error Why_loc.dummy_position "Unsupported effect for poly expression" (* TODO: need environment *)
 
 let rewrite_effects ~type_safe ~params ef =
   let all_mems =
@@ -898,7 +898,7 @@ let conv_typ_mem_parameters ~deref r (* pc *) =
   | JCroot rt ->
     match rt.ri_kind with
     | Rvariant -> []
-    | RdiscrUnion -> Jc_options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
+    | RdiscrUnion -> Options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
     | RplainUnion ->
       let mc = JCmem_plain_union rt in
       let mem = memvar (mc, r), memory_type mc in
@@ -915,8 +915,8 @@ let make_ofbit_alloc_param_app r pc =
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> void
-      | RdiscrUnion -> Jc_options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
-      | RplainUnion -> Jc_options.jc_error Why_loc.dummy_position "Unsupported plain union" (* TODO *)
+      | RdiscrUnion -> Options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
+      | RplainUnion -> Options.jc_error Why_loc.dummy_position "Unsupported plain union" (* TODO *)
   in
   let locals = List.map local_of_parameter writes in
   locals, app
@@ -932,8 +932,8 @@ let make_ofbit_mem_param_app r pc =
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> void
-      | RdiscrUnion -> Jc_options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
-      | RplainUnion -> Jc_options.jc_error Why_loc.dummy_position "Unsupported plain union" (* TODO *)
+      | RdiscrUnion -> Options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
+      | RplainUnion -> Options.jc_error Why_loc.dummy_position "Unsupported plain union" (* TODO *)
   in
   let locals = List.map local_of_parameter writes in
   locals, app
@@ -949,8 +949,8 @@ let make_tobit_alloc_param_app r pc =
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> void
-      | RdiscrUnion -> Jc_options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
-      | RplainUnion -> Jc_options.jc_error Why_loc.dummy_position "Unsupported plain union" (* TODO *)
+      | RdiscrUnion -> Options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
+      | RplainUnion -> Options.jc_error Why_loc.dummy_position "Unsupported plain union" (* TODO *)
   in
   app
 
@@ -965,8 +965,8 @@ let make_tobit_mem_param_app r pc =
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> void
-      | RdiscrUnion -> Jc_options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
-      | RplainUnion -> Jc_options.jc_error Why_loc.dummy_position "Unsupported plain union" (* TODO *)
+      | RdiscrUnion -> Options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
+      | RplainUnion -> Options.jc_error Why_loc.dummy_position "Unsupported plain union" (* TODO *)
   in
   app
 
@@ -977,7 +977,7 @@ let make_of_bitvector_app fi e' =
   | JCTpointer (pc, _, _) ->
     LApp (logic_variant_of_bitvector_name (pointer_class_root pc), [e'])
   | _ty ->
-    Jc_options.jc_error Why_loc.dummy_position "Unsupported type of field %s.%s" fi.fi_hroot.si_name fi.fi_name (* TODO *)
+    Options.jc_error Why_loc.dummy_position "Unsupported type of field %s.%s" fi.fi_hroot.si_name fi.fi_name (* TODO *)
 
 let make_conversion_params pc =
   let p = "p" in
@@ -1033,7 +1033,7 @@ let make_conversion_params pc =
                      match field_offset_in_bytes fi with
                        | Some x -> x
                        | None ->
-                          Jc_typing.typing_error
+                          Typing.typing_error
                             Why_loc.dummy_position
                             "Field %s of structure %s \
 has bitvector representation, but its bit offset (%d) is not a multiple of 8. \
@@ -1048,7 +1048,7 @@ thus turn out to be considerably hard and are currently unsupported."
                      match fi.fi_bitsize with
                        | Some x -> x / 8
                        | None ->
-                           Jc_typing.typing_error
+                           Typing.typing_error
                              Why_loc.dummy_position
                              "Field %s of structure %s \
 has bitvector representation, but its bit size is unknown. \
@@ -1594,7 +1594,7 @@ let make_region_assoc region_list =
 
 let write_model_parameters
     ~type_safe ~mode ~callee_reads ~callee_writes ?region_list ~params () =
-  assert (Jc_effect.same_effects callee_reads callee_reads);
+  assert (same_effects callee_reads callee_reads);
   let region_assoc = Option.map make_region_assoc region_list in
   let region_mem_assoc = make_region_mem_assoc ~params in
   let callee_writes = rewrite_effects ~type_safe ~params callee_writes in
@@ -1988,7 +1988,7 @@ let tr_li_model_args_5 fold tr_arg_3 get_map ~label_in_name ?region_assoc ?label
               match tr_region param_r with
               | Some arg_r -> arg_r, tr_arg_3 ~label_in_name (transpose_label ~label_assoc lab) (c, arg_r)
               | None ->
-                Jc_options.jc_error
+                Options.jc_error
                   Why_loc.dummy_position
                   "Unable to translate logic function application: dangling region. See warnings above for more info."
             in
@@ -2040,12 +2040,12 @@ let tr_li_args ~label_in_name ~region_assoc ~label_assoc f args =
     tr_li_model_args_3 ~label_in_name ~region_assoc ~label_assoc f.li_effects
 
 let tr_logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
-  if Jc_options.debug then printf "logic call to %s@." f.li_name;
+  if Options.debug then printf "logic call to %s@." f.li_name;
   let args = tr_li_args ~label_in_name ~region_assoc ~label_assoc f args in
   LApp (f.li_final_name, args)
 
 let tr_logic_pred_call ~label_in_name ~region_assoc ~label_assoc f args =
-  if Jc_options.debug then printf "logic pred call to %s@." f.li_name;
+  if Options.debug then printf "logic pred call to %s@." f.li_name;
   let args = tr_li_args ~label_in_name ~region_assoc ~label_assoc f args in
   LPred (f.li_final_name, args)
 

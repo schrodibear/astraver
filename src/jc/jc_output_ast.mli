@@ -62,7 +62,7 @@ type vc_kind =
   | JCVCassigns
   | JCVCallocates
   | JCVCensures
-  | JCVCassertion of Jc_position.t
+  | JCVCassertion of Position.t
   | JCVCcheck of string
   | JCVCpost
   | JCVCglobal_invariant of string
@@ -71,7 +71,7 @@ type vc_kind =
 type why_label = {
   l_kind     : vc_kind option;
   l_behavior : string;
-  l_pos      : Jc_position.t
+  l_pos      : Position.t
 }
 
 type term =
@@ -154,7 +154,7 @@ and expr = {
 type why_id = {
   why_name : string;
   why_expl : string;
-  why_pos  : Jc_position.t
+  why_pos  : Position.t
 }
 
 type goal_kind = KAxiom | KLemma | KGoal

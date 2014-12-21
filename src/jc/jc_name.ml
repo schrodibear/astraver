@@ -192,7 +192,7 @@ let field_memory_name fi =
     fi.fi_final_name
 
 let field_region_memory_name (fi, r) =
-  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r)
+  if !Common_options.separation_sem = SepRegions && not (is_dummy_region r)
   then
     (field_memory_name fi) ^ "_" ^ (Region.name r)
   else
@@ -202,14 +202,14 @@ let union_memory_name vi =
   vi.ri_name ^ "_fields"
 
 let union_region_memory_name (vi, r) =
-  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r)
+  if !Common_options.separation_sem = SepRegions && not (is_dummy_region r)
   then
     (union_memory_name vi) ^ "_" ^ (Region.name r)
   else
     union_memory_name vi
 
 let bitvector_region_memory_name r =
-  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r)
+  if !Common_options.separation_sem = SepRegions && not (is_dummy_region r)
   then
     Type.bitvector ^ "_" ^ (Region.name r)
   else

@@ -61,9 +61,9 @@ let generic full f targets =
        out "DP ?= why-dp -timeout $(TIMEOUT)@\n";
        out "WHYEXEC ?= why@\n";
        out "GWHYEXEC ?= gwhy-bin@\n";
-       out "WHYLIB ?= %s@\n@\n" (String.escaped Jc_options.libdir);
-       out "USERWHYTWOOPT=%s@\n"  (Jc_options.why_opt);
-       out "USERWHYTHREEOPT=%s@\n"  (Jc_options.why3_opt);
+       out "WHYLIB ?= %s@\n@\n" (String.escaped Options.libdir);
+       out "USERWHYTWOOPT=%s@\n"  (Options.why_opt);
+       out "USERWHYTHREEOPT=%s@\n"  (Options.why3_opt);
        out "WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs %s.loc@\n@\n" f;
        out "GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs %s.loc@\n@\n"  f;
        out "JESSIELIBFILES ?=";
@@ -71,7 +71,7 @@ let generic full f targets =
 		    out " %s"
 		      (String.escaped (Filename.concat "$(WHYLIB)"
 					 (Filename.concat "why" s))))
-	 (Jc_options.get_libfiles ());
+	 (Options.get_libfiles ());
        out "@\n";
        out "JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf@\n@\n";
        out "COQDEP = coqdep@\n@\n";
@@ -123,7 +123,7 @@ let generic full f targets =
        out "isabelle/%%_why.thy: WHYOPT=-isabelle -dir isabelle -isabelle-base-theory jessie_why@\n";
        out "isabelle/%%_why.thy: why/%%.why@\n";
        out "\t$(WHY) $(JESSIELIBFILES) why/$*.why@\n";
-       out "\tcp -f %s/isabelle/jessie_why.thy isabelle/@\n@\n" Jc_options.libdir;
+       out "\tcp -f %s/isabelle/jessie_why.thy isabelle/@\n@\n" Options.libdir;
 
        out "simplify: %a@\n" (print_files simplify) targets;
        out "\t@@echo 'Running Simplify on proof obligations' && ($(DP) $^)@\n@\n";

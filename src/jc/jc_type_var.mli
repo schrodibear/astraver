@@ -31,7 +31,7 @@
 
 
 
-open Jc_env
+open Env
 
 (** Type variables: unification, generalization, ... *)
 
@@ -89,8 +89,8 @@ val print : Format.formatter -> env -> unit
     the environnement env *)
 val subst_type_in_assertion : 
   env -> 
-  Jc_fenv.logic_info Jc_ast.assertion -> 
-  Jc_fenv.logic_info Jc_ast.assertion
+  Fenv.logic_info Ast.assertion -> 
+  Fenv.logic_info Ast.assertion
 
 (*
 Local Variables: 

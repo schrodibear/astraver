@@ -32,7 +32,7 @@
 
 (* control-flow graph *)
 
-open Jc_ast
+open Ast
 
 type node_info =
     | Statement of expr

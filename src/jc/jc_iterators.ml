@@ -29,11 +29,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_stdlib
-open Jc_ast
-open Jc_constructors
+open Stdlib
+open Ast
+open Constructors
 
-open Jc_envset
+open Envset
 
 module type TAst = sig
   type t
@@ -410,7 +410,7 @@ let rec map_pexpr ?(before = fun x -> x) ?(after = fun x -> x) e =
 (* General iterators on terms.                                               *)
 (*****************************************************************************)
 
-type term_subst = Jc_fenv.term Jc_envset.VarMap.t
+type term_subst = Fenv.term Envset.VarMap.t
 
 let rec subst_term (subst : term_subst) t =
   let f = subst_term subst in
@@ -1199,7 +1199,7 @@ let replace_sub_expr e el =
   new expr_with ~node:enode e
 
 module ExprAst = struct
-  type t = Jc_constructors.expr
+  type t = Constructors.expr
   let subs e =
     match e#node with
       | JCEconst _

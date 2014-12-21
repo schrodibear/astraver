@@ -578,8 +578,8 @@ let add_exception_effect fef exc =
 
 type shift_offset =
   | Int_offset of int
-  | Expr_offset of Jc_fenv.expr
-  | Term_offset of Jc_fenv.term
+  | Expr_offset of Fenv.expr
+  | Term_offset of Fenv.term
 
 let offset_of_expr e =
   match e#node with
@@ -600,7 +600,7 @@ let offset_of_term t =
 let offset_of_field fi =
   match field_offset_in_bytes fi with
     | None ->
-        Format.eprintf "Jc_effect.offset_of_field: fi=%s@."
+        Format.eprintf "Effect.offset_of_field: fi=%s@."
           fi.fi_name;
         assert false
     | Some off -> Int_offset off
@@ -1205,7 +1205,7 @@ let rec single_term ef t =
         true, ef
 
 and term ef t =
-  Jc_iterators.fold_rec_term single_term ef t
+  Iterators.fold_rec_term single_term ef t
 
 let tag ef lab _t vi_opt r =
   match vi_opt with
@@ -1262,7 +1262,7 @@ let single_assertion ef a =
         true, ef
 
 let assertion ef a =
-  Jc_iterators.fold_rec_term_and_assertion single_term single_assertion ef a
+  Iterators.fold_rec_term_and_assertion single_term single_assertion ef a
 
 
 (******************************************************************************)
@@ -1349,7 +1349,7 @@ let rec single_location_set ~in_clause fef locs =
 
 let location ~in_clause fef loc =
   let fef =
-    Jc_iterators.fold_rec_location single_term
+    Iterators.fold_rec_location single_term
       (single_location ~in_clause) (single_location_set ~in_clause) fef loc
   in
   fef
@@ -1360,7 +1360,7 @@ let location ~in_clause fef loc =
 (******************************************************************************)
 
 let rec expr fef e =
-  Jc_iterators.fold_rec_expr_and_term_and_assertion
+  Iterators.fold_rec_expr_and_term_and_assertion
     single_term single_assertion
     (single_location ~in_clause:`Assigns)
     (single_location_set ~in_clause:`Assigns)
@@ -1473,7 +1473,7 @@ let rec expr fef e =
            let st =
              match e1#typ with
              | JCTpointer (JCtag (st, _), _, _) -> st
-             | _ -> Jc_typing.typing_error e1#pos "Shifting of a non-pointer"
+             | _ -> Typing.typing_error e1#pos "Shifting of a non-pointer"
            in
            add_tag_reads LabelHere fef (struct_root st, e#region)
        | JCEalloc(_e1,st) ->
@@ -1485,7 +1485,7 @@ let rec expr fef e =
                  match rt.ri_kind with
                    | Rvariant -> all_allocs ~select:fully_allocated pc
                    | RdiscrUnion ->
-                       Jc_typing.typing_error e#pos "Unsupported discriminated union, sorry" (* TODO *)
+                       Typing.typing_error e#pos "Unsupported discriminated union, sorry" (* TODO *)
                    | RplainUnion -> [ ac ]
            in
            let all_mems = match ac with
@@ -1532,7 +1532,7 @@ let rec expr fef e =
           *  for pointers to structures with a single non-embedded field of an integral type.
           *  So actually only conversions between char <--> short <--> int <--> long and such are supported.
           *)
-         let error msg = Jc_typing.typing_error e#pos ("Unsupported reinterpretation " ^^ msg) in
+         let error msg = Typing.typing_error e#pos ("Unsupported reinterpretation " ^^ msg) in
          let check_equal (type t) (module O : OrderedType with type t = t) v1 v2 =
            if O.equal v1 v2 then
              v1
@@ -1583,7 +1583,7 @@ let rec expr fef e =
               => need the reads of the invariants *)
            let (_, invs) =
              StringHashtblIter.find
-               Jc_typing.structs_table st.si_name
+               Typing.structs_table st.si_name
            in
            let fef =
              List.fold_left
@@ -1676,15 +1676,15 @@ let rec expr fef e =
 
 let behavior fef (_pos,_id,b) =
   let ita =
-    Jc_iterators.fold_rec_term_and_assertion single_term single_assertion
+    Iterators.fold_rec_term_and_assertion single_term single_assertion
   in
   let itl =
-    Jc_iterators.fold_rec_location single_term
+    Iterators.fold_rec_location single_term
       (single_location ~in_clause:`Assigns)
       (single_location_set ~in_clause:`Assigns)
   in
   let itl_alloc =
-    Jc_iterators.fold_rec_location single_term
+    Iterators.fold_rec_location single_term
       (single_location ~in_clause:`Allocates)
       (single_location_set ~in_clause:`Allocates)
   in
@@ -1742,7 +1742,7 @@ let li_effects_from_assertion fi ax_effects =
       ef_union (ef_filter_labels app.app_label_assoc ax_effects) acc
     | Some _ | None -> acc
   in
-  Jc_iterators.fold_term_and_assertion
+  Iterators.fold_term_and_assertion
     (li_effects_from_app
       (function
        | JCTapp app -> Some app
@@ -1755,20 +1755,20 @@ let li_effects_from_assertion fi ax_effects =
 let axiomatic_decl_effect, li_effects_from_ax_decl =
   let with_axiomatic_decl f acc d =
     match d with
-    | Jc_typing.ABaxiom (_, _, _, a) -> f acc a
+    | Typing.ABaxiom (_, _, _, a) -> f acc a
   in
   with_axiomatic_decl assertion,
   fun fi ax_effects -> with_axiomatic_decl (li_effects_from_assertion fi ax_effects)
 
 let li_effects_from_axiomatic fi ax acc =
-  let open Jc_typing in
+  let open Typing in
   try
     let decls = (StringHashtblIter.find axiomatics_table ax).axiomatics_decls in
     let ef = List.fold_left axiomatic_decl_effect empty_effects decls in
     List.fold_left (li_effects_from_ax_decl fi ef) acc decls
   with
   | Not_found ->
-    Jc_options.jc_error
+    Options.jc_error
       Why_loc.dummy_position
       "effects_from_axiomatic: can't find axiomatic: %s" ax
 
@@ -1790,20 +1790,20 @@ let check_li_effects_from_axiomatic li =
         li.li_effects
     in
     match d with
-    | Jc_typing.ABaxiom (pos, name, _, a) ->
+    | Typing.ABaxiom (pos, name, _, a) ->
       let check_app = check_app pos name in
-      Jc_iterators.iter_term_and_assertion
+      Iterators.iter_term_and_assertion
         (fun t -> match t#node with JCTapp app -> check_app t#pos app | _ -> ())
         (fun a -> match a#node with JCAapp app -> check_app a#pos app | _ -> ())
         a
   in
   try
     Option.iter
-      Jc_typing.(fun ax -> List.iter check_decl (StringHashtblIter.find axiomatics_table ax).axiomatics_decls)
+      Typing.(fun ax -> List.iter check_decl (StringHashtblIter.find axiomatics_table ax).axiomatics_decls)
       li.li_axiomatic
   with
   | Dangling_region (r, app_pos, ef, ax_name, ax_pos) ->
-    Jc_options.jc_warning
+    Options.jc_warning
       app_pos
       ("Encountered dangling region \"%s\"@[<4>@ in logic function \"%s\"@ " ^^
        "at %a@ in axiom \"%s\"@ (defined at %a).@\n" ^^
@@ -1818,12 +1818,12 @@ let check_li_effects_from_axiomatic li =
       print_type r.r_type
       print_effect ef
   | Not_found ->
-    Jc_options.jc_error
+    Options.jc_error
       Why_loc.dummy_position
       "check_effects_from_axiomatic: can't find axiomatic for function: %s" li.li_name
 
 let logic_fun_effects f =
-  let f, ta = IntHashtblIter.find Jc_typing.logic_functions_table f.li_tag in
+  let f, ta = IntHashtblIter.find Typing.logic_functions_table f.li_tag in
   let ef = f.li_effects in
   let ef =
     match ta with
@@ -1845,7 +1845,7 @@ let logic_fun_effects f =
           check_li_effects_from_axiomatic f;
           ef
         | None -> (* not allowed outside axiomatics *)
-          Jc_options.jc_error
+          Options.jc_error
             Why_loc.dummy_position
             "Undefined pure logic function %s declared outside axiomatic"
             f.li_name
@@ -1865,7 +1865,7 @@ let logic_fun_effects f =
   end
 
 let fun_effects f =
-  let f, _pos, s, e_opt = IntHashtblIter.find Jc_typing.functions_table f.fun_tag in
+  let f, _pos, s, e_opt = IntHashtblIter.find Typing.functions_table f.fun_tag in
   f.fun_effects |>
   spec s |>
   Option.fold_left ~f:expr e_opt |>
@@ -1892,12 +1892,12 @@ let logic_effects funs =
   List.iter (fun f -> f.li_effects <- empty_effects) funs;
   fix
     (fun () ->
-       Jc_options.lprintf "Effects: doing one iteration@.";
+       Options.lprintf "Effects: doing one iteration@.";
        List.fold_left (finished logic_fun_effects) true funs);
-  Jc_options.lprintf "Effects: fixpoint reached@.";
+  Options.lprintf "Effects: fixpoint reached@.";
   List.iter
     (fun f ->
-       Jc_options.lprintf "Effects for logic function %s:@\n%a@."
+       Options.lprintf "Effects for logic function %s:@\n%a@."
          f.li_name print_effect f.li_effects)
     funs
 
@@ -1906,7 +1906,7 @@ let function_effects funs =
   let iterate () =
     fix
       (fun () ->
-         Jc_options.lprintf "Effects: doing one iteration...@.";
+         Options.lprintf "Effects: doing one iteration...@.";
          List.fold_left (finished fun_effects) true funs)
   in
 
@@ -1918,11 +1918,11 @@ let function_effects funs =
   iterate ();
   (* Reset mode to raw effects for individual calls *)
   current_mode := MApprox;
-  Jc_options.lprintf "Effects: fixpoint reached@.";
+  Options.lprintf "Effects: fixpoint reached@.";
 
   (* Global variables that are only read are translated into logic
      functions in Why, and thus they should not appear in effects. *)
-  Jc_options.lprintf "Effects: removing global reads w/o writes@.";
+  Options.lprintf "Effects: removing global reads w/o writes@.";
   List.iter
     (fun f ->
        let fef = f.fun_effects in
@@ -1935,7 +1935,7 @@ let function_effects funs =
 
   List.iter
     (fun f ->
-       Jc_options.lprintf
+       Options.lprintf
          "Effects for function %s:@\n@[ reads: %a@]@\n@[ writes: %a@]@\n@[ raises: %a@]@."
          f.fun_name
          print_effect f.fun_effects.fe_reads
@@ -1984,7 +1984,7 @@ let restrict_poly_mems_in_assertion mm =
    in
    fun app -> { app with app_fun = map_f app.app_fun }
   in
-  Jc_iterators.map_term_and_assertion
+  Iterators.map_term_and_assertion
     (fun a ->
       match a#node with
       | JCAapp app when is_poly_mem_function app.app_fun ->
@@ -1997,7 +1997,7 @@ let restrict_poly_mems_in_assertion mm =
       | _ -> t)
 
 let restrict_poly_mems_in_axiomatic_decl mm =
-  Jc_typing.(fun (ABaxiom (pos, name, ls, a)) -> ABaxiom (pos, name, ls, restrict_poly_mems_in_assertion mm a))
+  Typing.(fun (ABaxiom (pos, name, ls, a)) -> ABaxiom (pos, name, ls, restrict_poly_mems_in_assertion mm a))
 
 (*
   Local Variables:

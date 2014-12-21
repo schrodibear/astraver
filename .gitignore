@@ -77,13 +77,13 @@ bin
 /lib/coq/WhyCoqCompat.v
 /lib/why3/why3.conf
 
-/src/why/lexer.ml
-/src/why/linenum.ml
-/src/why/parser.ml
-/src/why/parser.mli
-/src/why/rc.ml
-/src/why/version.ml
-/src/why/xml.ml
+/src/why/why_lexer.ml
+/src/why/why_linenum.ml
+/src/why/why_parser.ml
+/src/why/why_parser.mli
+/src/why/why_rc.ml
+/src/why/why_version.ml
+/src/why/why_xml.ml
 
 /mix/mix_lexer.ml
 /mix/mix_parser.ml
@@ -107,7 +107,7 @@ bin
 /src/jc/jc_lexer.ml
 /src/jc/jc_parser.ml
 /src/jc/jc_parser.mli
-/src/jc/numconst.ml
+/src/jc/jc_numconst.ml
 
 /c/cconst.ml
 /c/clexer.ml

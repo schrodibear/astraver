@@ -31,183 +31,183 @@
 
 (* {1 substitution in logic} *)
 
-type term_subst = Jc_fenv.term Jc_envset.VarMap.t
+type term_subst = Fenv.term Envset.VarMap.t
 
-val subst_term : term_subst -> Jc_fenv.term -> Jc_fenv.term
+val subst_term : term_subst -> Fenv.term -> Fenv.term
 
 (* {2 miscellaneous} *)
 
 (* spec ? *)
 val fold_term :
- ('a -> 'b Jc_ast.term -> 'a) -> 'a -> 'b Jc_ast.term -> 'a
+ ('a -> 'b Ast.term -> 'a) -> 'a -> 'b Ast.term -> 'a
 
 (* spec ? *)
 val fold_term_in_assertion :
-  ('a -> 'b Jc_ast.term -> 'a) -> 'a -> 'b Jc_ast.assertion -> 'a
+  ('a -> 'b Ast.term -> 'a) -> 'a -> 'b Ast.assertion -> 'a
 
 (* spec ? *)
-val iter_term : ('a Jc_ast.term -> unit) -> 'a Jc_ast.term -> unit
+val iter_term : ('a Ast.term -> unit) -> 'a Ast.term -> unit
 
 (* spec ? *)
 val iter_term_and_assertion : 
-  ('a Jc_ast.term -> unit) ->  ('a Jc_ast.assertion -> unit) 
-  -> 'a Jc_ast.assertion -> unit
+  ('a Ast.term -> unit) ->  ('a Ast.assertion -> unit) 
+  -> 'a Ast.assertion -> unit
 
 (* spec ? *)
 val iter_location : 
-  ('a Jc_ast.term -> unit) ->
-  ('a Jc_ast.location -> unit) ->
-  ('a Jc_ast.location_set -> unit) -> 'a Jc_ast.location -> unit
+  ('a Ast.term -> unit) ->
+  ('a Ast.location -> unit) ->
+  ('a Ast.location_set -> unit) -> 'a Ast.location -> unit
 
 (* spec ? *)
 val iter_expr_and_term_and_assertion :
-  ('a Jc_ast.term -> unit) ->
-  ('a Jc_ast.assertion -> unit) ->
-  ('a Jc_ast.location -> unit) ->
-  ('a Jc_ast.location_set -> unit) ->
-  (('a, 'b) Jc_ast.expr -> unit) -> ('a, 'b) Jc_ast.expr -> unit
+  ('a Ast.term -> unit) ->
+  ('a Ast.assertion -> unit) ->
+  ('a Ast.location -> unit) ->
+  ('a Ast.location_set -> unit) ->
+  (('a, 'b) Ast.expr -> unit) -> ('a, 'b) Ast.expr -> unit
   
 
-(* used only once in Jc_separation *)
+(* used only once in Separation *)
 val iter_funspec : 
-  ('a Jc_ast.term -> unit) ->
-  ('a Jc_ast.assertion -> unit) ->
-  ('a Jc_ast.location -> unit) ->
-  ('a Jc_ast.location_set -> unit) -> 'a Jc_ast.fun_spec -> unit
+  ('a Ast.term -> unit) ->
+  ('a Ast.assertion -> unit) ->
+  ('a Ast.location -> unit) ->
+  ('a Ast.location_set -> unit) -> 'a Ast.fun_spec -> unit
 
-val fold_funspec: ('a -> 'b Jc_ast.term -> 'a) ->
-                  ('a ->'b Jc_ast.assertion -> 'a) ->
-                  ('a ->'b Jc_ast.location ->'a) ->
-                  ('a ->'b Jc_ast.location_set -> 'a) ->
-                  'a -> 'b Jc_ast.fun_spec -> 'a
+val fold_funspec: ('a -> 'b Ast.term -> 'a) ->
+                  ('a ->'b Ast.assertion -> 'a) ->
+                  ('a ->'b Ast.location ->'a) ->
+                  ('a ->'b Ast.location_set -> 'a) ->
+                  'a -> 'b Ast.fun_spec -> 'a
 
 (* spec ? *)
-val iter_pattern: (Jc_ast.pattern -> 'a) -> Jc_ast.pattern -> unit
+val iter_pattern: (Ast.pattern -> 'a) -> Ast.pattern -> unit
 
 (* spec ? *)
 val map_term :
-  (Jc_constructors.term_with -> Jc_fenv.logic_info Jc_ast.term) ->
-  Jc_fenv.logic_info Jc_ast.term -> Jc_fenv.logic_info Jc_ast.term
+  (Constructors.term_with -> Fenv.logic_info Ast.term) ->
+  Fenv.logic_info Ast.term -> Fenv.logic_info Ast.term
 
 (* spec ? *)
 val map_term_in_assertion :
-  (Jc_constructors.term_with -> Jc_fenv.logic_info Jc_ast.term) ->
-  Jc_fenv.logic_info Jc_ast.assertion ->
-  Jc_fenv.logic_info Jc_ast.assertion
+  (Constructors.term_with -> Fenv.logic_info Ast.term) ->
+  Fenv.logic_info Ast.assertion ->
+  Fenv.logic_info Ast.assertion
 
 val map_assertion :
-  (Jc_constructors.assertion_with -> Jc_fenv.logic_info Jc_ast.assertion) ->
-  Jc_fenv.logic_info Jc_ast.assertion -> Jc_fenv.logic_info Jc_ast.assertion
+  (Constructors.assertion_with -> Fenv.logic_info Ast.assertion) ->
+  Fenv.logic_info Ast.assertion -> Fenv.logic_info Ast.assertion
 
 val map_term_and_assertion :
-  (Jc_constructors.assertion_with -> Jc_fenv.logic_info Jc_ast.assertion) ->
-  (Jc_constructors.term_with -> Jc_fenv.logic_info Jc_ast.term) ->
-  Jc_fenv.logic_info Jc_ast.assertion -> Jc_fenv.logic_info Jc_ast.assertion
+  (Constructors.assertion_with -> Fenv.logic_info Ast.assertion) ->
+  (Constructors.term_with -> Fenv.logic_info Ast.term) ->
+  Fenv.logic_info Ast.assertion -> Fenv.logic_info Ast.assertion
 
 (* spec ? *)
 val fold_term : 
-  ('a -> 'b Jc_ast.term -> 'a) -> 'a -> 'b Jc_ast.term -> 'a
+  ('a -> 'b Ast.term -> 'a) -> 'a -> 'b Ast.term -> 'a
 
 (* spec ? *)
 val fold_term_and_assertion :
-  ('a -> 'b Jc_ast.term -> 'a) ->
-  ('a -> 'b Jc_ast.assertion -> 'a) -> 'a -> 'b Jc_ast.assertion -> 'a
+  ('a -> 'b Ast.term -> 'a) ->
+  ('a -> 'b Ast.assertion -> 'a) -> 'a -> 'b Ast.assertion -> 'a
 
 (* spec ? *)
 val fold_rec_term : 
-  ('a -> 'b Jc_ast.term -> bool * 'a) -> 'a -> 'b Jc_ast.term -> 'a
+  ('a -> 'b Ast.term -> bool * 'a) -> 'a -> 'b Ast.term -> 'a
 
 (* spec ? *)
 val fold_rec_term_and_assertion :
-  ('a -> 'b Jc_ast.term -> bool * 'a) ->
-  ('a -> 'b Jc_ast.assertion -> bool * 'a) ->
-  'a -> 'b Jc_ast.assertion -> 'a
+  ('a -> 'b Ast.term -> bool * 'a) ->
+  ('a -> 'b Ast.assertion -> bool * 'a) ->
+  'a -> 'b Ast.assertion -> 'a
 
 (* spec ? *)
 val fold_rec_location : 
-  ('a -> 'b Jc_ast.term -> bool * 'a) ->
-  ('a -> 'b Jc_ast.location -> bool * 'a) ->
-  ('a -> 'b Jc_ast.location_set -> bool * 'a) ->
-  'a -> 'b Jc_ast.location -> 'a
+  ('a -> 'b Ast.term -> bool * 'a) ->
+  ('a -> 'b Ast.location -> bool * 'a) ->
+  ('a -> 'b Ast.location_set -> bool * 'a) ->
+  'a -> 'b Ast.location -> 'a
 
 val fold_rec_expr_and_term_and_assertion : 
-  ('a -> 'b Jc_ast.term -> bool * 'a) ->
-  ('a -> 'b Jc_ast.assertion -> bool * 'a) ->
-  ('a -> 'b Jc_ast.location -> bool * 'a) ->
-  ('a -> 'b Jc_ast.location_set -> bool * 'a) ->
-  ('a -> ('b, 'c) Jc_ast.expr -> bool * 'a) ->
-  'a -> ('b, 'c) Jc_ast.expr -> 'a
+  ('a -> 'b Ast.term -> bool * 'a) ->
+  ('a -> 'b Ast.assertion -> bool * 'a) ->
+  ('a -> 'b Ast.location -> bool * 'a) ->
+  ('a -> 'b Ast.location_set -> bool * 'a) ->
+  ('a -> ('b, 'c) Ast.expr -> bool * 'a) ->
+  'a -> ('b, 'c) Ast.expr -> 'a
 
 (*
 val fold_rec_behavior: 
-  ('a -> 'b Jc_ast.term -> bool * 'a) ->
-  ('a -> 'b Jc_ast.assertion -> bool * 'a) ->
-  ('a -> 'b Jc_ast.location -> bool * 'a) ->
-  ('a -> 'b Jc_ast.location_set -> bool * 'a) ->
-  'a -> 'b Jc_ast.behavior -> 'a
+  ('a -> 'b Ast.term -> bool * 'a) ->
+  ('a -> 'b Ast.assertion -> bool * 'a) ->
+  ('a -> 'b Ast.location -> bool * 'a) ->
+  ('a -> 'b Ast.location_set -> bool * 'a) ->
+  'a -> 'b Ast.behavior -> 'a
 *)
 
 module IPExpr : sig
 
   (* spec ?
-     This function is used only once, in Jc_norm 
+     This function is used only once, in Norm 
      -> should be erased
   *)
-  val fold_left : ('a -> Jc_ast.pexpr -> 'a) -> 'a -> Jc_ast.pexpr -> 'a
+  val fold_left : ('a -> Ast.pexpr -> 'a) -> 'a -> Ast.pexpr -> 'a
 
-  (* Used twice in Jc_norm. spec ? *) 
-  val subs : Jc_ast.pexpr -> Jc_ast.pexpr list
+  (* Used twice in Norm. spec ? *) 
+  val subs : Ast.pexpr -> Ast.pexpr list
 
 end
 
 (* spec ? *)
 val replace_sub_pexpr : 
-    < node : Jc_ast.pexpr_node; pos : Why_loc.position; .. > ->
-    Jc_ast.pexpr list -> Jc_constructors.pexpr_with
+    < node : Ast.pexpr_node; pos : Why_loc.position; .. > ->
+    Ast.pexpr list -> Constructors.pexpr_with
 
 (* spec ?
-   This function is used only once, in Jc_norm 
+   This function is used only once, in Norm 
    -> should be erased
 *)
 val map_pexpr : 
-  ?before:(Jc_ast.pexpr -> Jc_ast.pexpr) ->
-  ?after:(Jc_constructors.pexpr_with -> Jc_constructors.pexpr_with) ->
-  Jc_ast.pexpr -> Jc_ast.pexpr
+  ?before:(Ast.pexpr -> Ast.pexpr) ->
+  ?after:(Constructors.pexpr_with -> Constructors.pexpr_with) ->
+  Ast.pexpr -> Ast.pexpr
 
 
 (* spec ?
-   This function is used only once, in Jc_annot_inference
+   This function is used only once, in Annot_inference
    -> should be erased
 *)
 val map_expr :
-  ?before:((Jc_fenv.logic_info, Jc_fenv.fun_info) Jc_ast.expr ->
-             (Jc_fenv.logic_info, Jc_fenv.fun_info) Jc_ast.expr) ->
-  ?after:(Jc_constructors.expr_with -> Jc_constructors.expr_with) ->
-  (Jc_fenv.logic_info, Jc_fenv.fun_info) Jc_ast.expr ->
-  (Jc_fenv.logic_info, Jc_fenv.fun_info) Jc_ast.expr
+  ?before:((Fenv.logic_info, Fenv.fun_info) Ast.expr ->
+             (Fenv.logic_info, Fenv.fun_info) Ast.expr) ->
+  ?after:(Constructors.expr_with -> Constructors.expr_with) ->
+  (Fenv.logic_info, Fenv.fun_info) Ast.expr ->
+  (Fenv.logic_info, Fenv.fun_info) Ast.expr
 
 val replace_sub_expr :
-  < mark : string; node : Jc_fenv.expr_node;
-  original_type : Jc_env.jc_type; pos : Why_loc.position;
-  region : Jc_env.region; typ : Jc_env.jc_type; .. > ->
-    (Jc_fenv.logic_info, Jc_fenv.fun_info) Jc_ast.expr list ->
-    Jc_constructors.expr_with
+  < mark : string; node : Fenv.expr_node;
+  original_type : Env.jc_type; pos : Why_loc.position;
+  region : Env.region; typ : Env.jc_type; .. > ->
+    (Fenv.logic_info, Fenv.fun_info) Ast.expr list ->
+    Constructors.expr_with
 
 
 module ITerm : sig
-  type t = Jc_constructors.term
+  type t = Constructors.term
   val iter : (t -> unit) -> t -> unit
 end
 
 module INExpr : sig
 
   (* spec ? *)
-  val subs: Jc_ast.nexpr -> Jc_ast.nexpr list
+  val subs: Ast.nexpr -> Ast.nexpr list
 end
 
 module IExpr : sig
 
-  type t = Jc_constructors.expr
+  type t = Constructors.expr
 
   (* spec ? *)
   val fold_left : ('a -> t -> 'a) -> 'a -> t -> 'a

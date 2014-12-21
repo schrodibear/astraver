@@ -248,7 +248,7 @@ let var ?(unique=true) ?(static=false) ?(formal=false) ty id =
     vi_tag = !var_tag_counter;
     vi_name = id;
     vi_final_name =
-      if unique then Jc_envset.get_unique_name id else id;
+      if unique then Envset.get_unique_name id else id;
     vi_region =
       if static then Region.make_const ty id else Region.make_var ty id;
     vi_type = ty;
@@ -328,7 +328,7 @@ let make_logic_fun name ty =
   incr logic_fun_tag_counter;
   { li_tag = !logic_fun_tag_counter;
     li_name = name;
-    li_final_name = Jc_envset.get_unique_name name;
+    li_final_name = Envset.get_unique_name name;
     li_result_type = Some ty;
     li_result_region = Region.make_var ty name;
     li_poly_args = [];
@@ -359,7 +359,7 @@ let make_pred name =
   incr logic_fun_tag_counter;
   { li_tag = !logic_fun_tag_counter;
     li_name = name;
-    li_final_name = Jc_envset.get_unique_name name;
+    li_final_name = Envset.get_unique_name name;
     li_result_type = None;
     li_result_region = dummy_region;
     li_poly_args = [];
@@ -391,7 +391,7 @@ let make_fun_info name ty =
   vi.vi_final_name <- "result";
   { fun_tag = !fun_tag_counter;
     fun_name = name;
-    fun_final_name = Jc_envset.get_unique_name name;
+    fun_final_name = Envset.get_unique_name name;
     fun_builtin_treatment = TreatNothing;
     fun_parameters = [];
     fun_result = vi;

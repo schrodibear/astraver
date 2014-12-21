@@ -42,12 +42,12 @@ let of_pos ({ Lexing.pos_fname = f1; pos_lnum = l1; pos_bol = b1; pos_cnum = c1 
   if f1 = f2 && l1 >= 1 && l2 >= 1 && l2 >= l1 && c1 - b1 >= 0 && c2 - b2 >= 0 && c2 >= c1 then
     Some (f1, l1, c1 - b1, c2 - c1 + 1)
   else if pos = Lexing.(dummy_pos, dummy_pos) then dummy_position
-  else invalid_arg "Jc_position.of_pos"
+  else invalid_arg "Position.of_pos"
 
 let of_loc (f, l, b, e as loc) =
   if e >= b then Some (f, l, b, e - b + 1)
   else if loc = Why_loc.dummy_floc then dummy_position
-  else invalid_arg "Jc_position.of_loc"
+  else invalid_arg "Position.of_loc"
 
 let to_loc =
   function

@@ -29,7 +29,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_env
+open Env
 
 (** Convert class or memory to class of allocation. *)
 val alloc_class_of_mem_class: mem_class -> alloc_class

@@ -37,9 +37,9 @@ open Envset
 open Region
 open Ast
 
-module rec LocationOrd : Map.OrderedType with type t = Effect.logic_info location =
+module rec LocationOrd : Map.OrderedType with type t = Effects.logic_info location =
 struct
-  type t = Effect.logic_info location
+  type t = Effects.logic_info location
   let compare loc1 loc2 =
     match loc1#node, loc2#node with
     | JCLvar v1, JCLvar v2 -> VarOrd.compare v1 v2
@@ -48,10 +48,10 @@ struct
     | _, _ -> 0
     (* TODO: complete def of Location *)
 end
-and Location : Map.OrderedType with type t = Effect.logic_info location * Memory.t = PairOrd (LocationOrd) (Memory)
+and Location : Map.OrderedType with type t = Effects.logic_info location * Memory.t = PairOrd (LocationOrd) (Memory)
 and LocationSet : Set.S with type elt = Location.t = Set.Make (Location)
 and LocationMap : Map.S with type key = Location.t = Map.Make (Location)
-and Effect :
+and Effects :
 sig
   type effect = {
     e_alloc_tables     : LogicLabelSet.t AllocMap.t;
@@ -109,9 +109,9 @@ sig
     mutable fun_logic_apps        : logic_info list;
     mutable fun_effects           : fun_effect;
   }
-end = Effect
+end = Effects
 
-include Effect
+include Effects
 
 module Logic_info =
 struct
@@ -127,26 +127,26 @@ struct
   let equal fi1 fi2 = fi1.fun_tag = fi2.fun_tag
 end
 
-type app = logic_info Jc_ast.app
-type term_node = logic_info Jc_ast.term_node
-type term = logic_info Jc_ast.term
-type tag_node = logic_info Jc_ast.tag_node
-type tag = logic_info Jc_ast.tag
-type location_set_node = logic_info Jc_ast.location_set_node
-type location_set = logic_info Jc_ast.location_set
-type location_node = logic_info Jc_ast.location_node
-type location = logic_info Jc_ast.location
-type assertion = logic_info Jc_ast.assertion
-type assertion_node = logic_info Jc_ast.assertion_node
-type term_or_assertion = logic_info Jc_ast.term_or_assertion
-type loop_annot = logic_info Jc_ast.loop_annot
-type behavior = logic_info Jc_ast.behavior
-type fun_spec = logic_info Jc_ast.fun_spec
+type app = logic_info Ast.app
+type term_node = logic_info Ast.term_node
+type term = logic_info Ast.term
+type tag_node = logic_info Ast.tag_node
+type tag = logic_info Ast.tag
+type location_set_node = logic_info Ast.location_set_node
+type location_set = logic_info Ast.location_set
+type location_node = logic_info Ast.location_node
+type location = logic_info Ast.location
+type assertion = logic_info Ast.assertion
+type assertion_node = logic_info Ast.assertion_node
+type term_or_assertion = logic_info Ast.term_or_assertion
+type loop_annot = logic_info Ast.loop_annot
+type behavior = logic_info Ast.behavior
+type fun_spec = logic_info Ast.fun_spec
 
-type expr_node = (logic_info, fun_info) Jc_ast.expr_node
-type expr = (logic_info, fun_info) Jc_ast.expr
-type callee = (logic_info, fun_info) Jc_ast.callee
-type call = (logic_info, fun_info) Jc_ast.call
+type expr_node = (logic_info, fun_info) Ast.expr_node
+type expr = (logic_info, fun_info) Ast.expr
+type callee = (logic_info, fun_info) Ast.callee
+type call = (logic_info, fun_info) Ast.call
 
 (*
   Local Variables:

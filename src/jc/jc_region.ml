@@ -236,7 +236,7 @@ struct
 
   let make_const ty name =
     let name = filter_alphanumeric name in
-    if !Jc_common_options.separation_sem = SepNone then dummy_region
+    if !Common_options.separation_sem = SepNone then dummy_region
     else if not(is_pointer_type ty) then dummy_region else
       let id = next_count () in
       {
@@ -250,7 +250,7 @@ struct
 
   let make_var ty name =
     let name = filter_alphanumeric name in
-    if !Jc_common_options.separation_sem = SepNone then dummy_region
+    if !Common_options.separation_sem = SepNone then dummy_region
     else if not(is_pointer_type ty) then dummy_region else
       let id = next_count () in
       {
@@ -282,7 +282,7 @@ struct
     some_bitwise_region := true;
     if bitwise r then () else
       let rep = RegionUF.repr r in
-      if !Jc_common_options.separation_sem = SepNone then
+      if !Common_options.separation_sem = SepNone then
 	(* Potentially all pointers may be aliased *)
 	(assert (is_dummy_region rep);
 	 rep.r_bitwise <- true)
@@ -364,7 +364,7 @@ struct
   let make_field r fi =
     let r = RegionUF.repr r in
 (*     assert (not r.r_bitwise); *)
-    if !Jc_common_options.separation_sem = SepNone then dummy_region
+    if !Common_options.separation_sem = SepNone then dummy_region
     else if not(is_pointer_type fi.fi_type) then dummy_region else
       try
 	let t = RegionTable.find global_region_table r in

@@ -47,7 +47,7 @@ val print_graph : bool
 val debug : bool
 val verbose : bool
 val werror : bool
-module type Backend = module type of Jc_why_output
+module type Backend = module type of Why_output
 val backend : (module Backend)
 val why_opt : string
 val why3_opt : string
@@ -63,21 +63,21 @@ val main : string
 val files : unit -> string list
 val usage : unit -> unit
 
-val inv_sem: Jc_env.inv_sem ref
-val separation_sem : Jc_env.separation_sem ref
-val annotation_sem : Jc_env.annotation_sem ref
-val termination_policy : Jc_env.termination_policy ref
-val ai_domain : Jc_env.abstract_domain ref
-val int_model : Jc_env.int_model ref
-val float_model : Jc_env.float_model ref
-val float_instruction_set : Jc_env.float_instruction_set ref
+val inv_sem: Env.inv_sem ref
+val separation_sem : Env.separation_sem ref
+val annotation_sem : Env.annotation_sem ref
+val termination_policy : Env.termination_policy ref
+val ai_domain : Env.abstract_domain ref
+val int_model : Env.int_model ref
+val float_model : Env.float_model ref
+val float_instruction_set : Env.float_instruction_set ref
 val trust_ai : bool
 val fast_ai : bool
 val forall_inst_bound: int
 
 val gen_frame_rule_with_ft : bool
 
-val current_rounding_mode : Jc_env.float_rounding_mode ref
+val current_rounding_mode : Env.float_rounding_mode ref
 
 val verify_behavior: string -> bool
 
@@ -93,7 +93,7 @@ val close_log : unit -> unit
 
 (* error handling *)
 
-exception Jc_error of Why_loc.position * string
+exception Error of Why_loc.position * string
 
 val jc_error : Why_loc.position -> ('a, unit, string, 'b) format4 -> 'a
 val jc_warning : Why_loc.position -> ('a, Format.formatter, unit, unit) format4 -> 'a

@@ -33,7 +33,7 @@
 
 (*s command-line options *)
 
-open Jc_env
+open Env
 
 let debug = ref false
 let verbose = ref false

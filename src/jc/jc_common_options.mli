@@ -33,7 +33,7 @@
 
 (*s command-line options *)
 
-open Jc_env
+open Env
 
 val debug : bool ref
 val verbose : bool ref

@@ -37,8 +37,8 @@ open Output_ast
 val compute_needed_predicates: unit -> unit
 
 val tr_logic_fun :
-  Jc_fenv.logic_info ->
-  Jc_fenv.logic_info Jc_ast.term_or_assertion ->
+  Fenv.logic_info ->
+  Fenv.logic_info Ast.term_or_assertion ->
   why_decl list -> why_decl list
 
 

@@ -29,7 +29,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-include module type of Jc_why_output
+include module type of Why_output
 
 (*
   Local Variables:

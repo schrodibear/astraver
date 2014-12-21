@@ -92,9 +92,9 @@ let positioned f l_pos ?behavior:(l_behavior = "default") ?kind:l_kind =
 
 let make_positioned = positioned @@ fun l t -> TLabeled (l, t)
 
-let make_located = make_positioned % Jc_position.of_loc
+let make_located = make_positioned % Position.of_loc
 
-let make_positioned_lex  = make_positioned % Jc_position.of_pos
+let make_positioned_lex  = make_positioned % Position.of_pos
 
 (*******************************************************************************)
 (* Assertions                                                                  *)
@@ -107,9 +107,9 @@ let rec unlabel a =
 
 let mk_positioned = positioned @@ fun l a -> LLabeled (l, a)
 
-let mk_located = mk_positioned % Jc_position.of_loc
+let mk_located = mk_positioned % Position.of_loc
 
-let mk_positioned_lex = mk_positioned % Jc_position.of_pos
+let mk_positioned_lex = mk_positioned % Position.of_pos
 
 let is_not_true a =
   match unlabel a with
@@ -396,9 +396,9 @@ let make_pre pre e =  mk_expr @@ Triple (false, pre, e, LTrue, [])
 
 let make_positioned_e = positioned @@ fun l e -> mk_expr @@ Labeled (l, e)
 
-let make_located_e = make_positioned_e % Jc_position.of_loc
+let make_located_e = make_positioned_e % Position.of_loc
 
-let make_positioned_lex_e = make_positioned_e % Jc_position.of_pos
+let make_positioned_lex_e = make_positioned_e % Position.of_pos
 
 let make_block labels l =
   match l with
@@ -449,7 +449,7 @@ let append e1 e2 =
 (* Declarations                                                                *)
 (*******************************************************************************)
 
-let id_no_loc s = { why_name = s; why_expl = ""; why_pos = Jc_position.dummy }
+let id_no_loc s = { why_name = s; why_expl = ""; why_pos = Position.dummy }
 
 let get_why_id d =
   match d with
@@ -510,7 +510,7 @@ let rec do_topo decl_map iter_fun output_fun id d =
 let compare_ids
     { why_name = id1; why_pos = pos1 }
     { why_name = id2; why_pos = pos2 } =
-  let c = Jc_position.compare pos1 pos2 in
+  let c = Position.compare pos1 pos2 in
   if c = 0 then compare id1 id2 else c
 
 let build_map get_id decl_list =

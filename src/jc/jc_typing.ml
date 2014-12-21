@@ -52,11 +52,11 @@ let typing_error l =
     (fun _fmt -> raise (Typing_error(l, flush_str_formatter())))
     str_formatter
 
-let uenv = Jc_type_var.create {Jc_type_var.f = typing_error}
+let uenv = Type_var.create {Type_var.f = typing_error}
 
-let reset_uenv () = Jc_type_var.reset uenv
-let print_uenv () = Format.printf "%a" Jc_type_var.print uenv
-let add_poly_args poly_args = List.map (fun e -> Jc_type_var.add_type_var uenv e) poly_args
+let reset_uenv () = Type_var.reset uenv
+let print_uenv () = Format.printf "%a" Type_var.print uenv
+let add_poly_args poly_args = List.map (fun e -> Type_var.add_type_var uenv e) poly_args
 
 let logic_type_table = StringHashtblIter.create 97
 
@@ -127,7 +127,7 @@ let real_of_integer =
 
 
 type axiomatic_decl =
-  | ABaxiom of Why_loc.position * string * Jc_env.label list * Jc_constructors.assertion
+  | ABaxiom of Why_loc.position * string * Env.label list * Constructors.assertion
 
 type axiomatic_data =
     {
@@ -145,7 +145,7 @@ let create_mutable_field st =
   let fi = {
     fi_tag = !field_tag_counter;
     fi_name = name;
-    fi_final_name = Jc_envset.get_unique_name name;
+    fi_final_name = Envset.get_unique_name name;
     fi_type = boolean_type;
     fi_hroot = st.si_hroot;
     fi_struct = st;
@@ -228,7 +228,7 @@ let is_root_struct st =
 let lub_numeric_types t1 t2 =
   match t1,t2 with
     | JCTnative (Tgenfloat _), JCTnative (Tgenfloat _) when
-	!Jc_options.float_instruction_set = FISx87 ->
+	!Options.float_instruction_set = FISx87 ->
 	Tgenfloat `Binary80
     | JCTnative (Tgenfloat `Float), JCTnative (Tgenfloat `Float) -> (Tgenfloat `Float)
     | JCTnative (Tgenfloat _), JCTnative (Tgenfloat _) -> Tgenfloat `Double
@@ -370,7 +370,7 @@ let rec list_assoc_name f id l =
 
 let rec find_field_struct loc st allow_mutable = function
   | ("mutable" | "committed") as x ->
-      if allow_mutable && !Jc_common_options.inv_sem = InvOwnership then
+      if allow_mutable && !Common_options.inv_sem = InvOwnership then
         let table =
           if x = "mutable" then mutable_fields_table
           else committed_fields_table
@@ -427,7 +427,7 @@ let rec type_type t =
         end
     | JCPTidentifier (id,l) ->
         try
-          JCTtype_var (Jc_type_var.find_type_var uenv id)
+          JCTtype_var (Type_var.find_type_var uenv id)
         with Not_found ->
           try
             let l = List.map type_type l in
@@ -526,7 +526,7 @@ let rec pattern env vars pat ety =
         JCPany, ety, env
     | JCPPconst c ->
         let ty, _, c = const c in
-        Jc_type_var.add uenv pat#pos ty ety;
+        Type_var.add uenv pat#pos ty ety;
         JCPconst c, ety, env
   in newenv, new pattern ~typ:ty ~pos:pat#pos tpn
 let pattern = pattern [] StringMap.empty
@@ -543,11 +543,11 @@ let num_un_op t (op: [< `Uminus | `Ubw_not | `Unot]) e =
     | `Uminus
     | `Ubw_not -> JCTunary((unary_op t op :> unary_op * 'a),e)
 
-let make_logic_unary_op loc (op : Jc_ast.unary_op) e2 =
+let make_logic_unary_op loc (op : Ast.unary_op) e2 =
   let t2 = e2#typ in
   match op with
     | `Unot ->
-        Jc_type_var.add uenv loc (JCTnative Tboolean) t2;
+        Type_var.add uenv loc (JCTnative Tboolean) t2;
 	  t2, dummy_region, num_un_op (operator_of_native Tboolean) op  e2
     | ((`Uminus | `Ubw_not) as x) ->
         must_be_subtypable loc t2;
@@ -725,14 +725,14 @@ let rec type_labels env ~result_label label e =
   let iter_subs ?(env=env) label =
     List.iter
       (fun e -> ignore (type_labels env ~result_label label e))
-      (Jc_iterators.INExpr.subs e)
+      (Iterators.INExpr.subs e)
   in
   e#set_label label;
 (*
   (match label with
     | None -> assert false
     | Some l ->
-	eprintf "setting label %a to expr %a@." Jc_output_misc.label l Print_n.expr e);
+	eprintf "setting label %a to expr %a@." Output_misc.label l Print_n.expr e);
 *)
   match e#node with
     | JCNEconst _ | JCNEderef _ | JCNEbinary _
@@ -870,7 +870,7 @@ let rec term env e =
 	      | Some t -> t
 	      | None -> assert false (* check it is a function *)
 	  in
-          let ty = (Jc_type_var.instance pi.li_poly_args) ty in
+          let ty = (Type_var.instance pi.li_poly_args) ty in
 	  ty, Region.make_var ty pi.li_name, JCTapp app
 	end
     | JCNEderef(e1, f) ->
@@ -892,14 +892,14 @@ let rec term env e =
 (*           else *)
 	    begin
             let pi = find_logic_info id in
-            let subst = Jc_type_var.instance pi.li_poly_args in
+            let subst = Type_var.instance pi.li_poly_args in
             let tl =
               try
                 List.map2
                   (fun vi e ->
                      let ty = subst vi.vi_type in
                      let te = ft e in
-                     Jc_type_var.add uenv te#pos te#typ ty;
+                     Type_var.add uenv te#pos te#typ ty;
                      te)
                    pi.li_parameters args
               with  Invalid_argument _ ->
@@ -913,7 +913,7 @@ let rec term env e =
 used as an assertion, not as a term" pi.li_name
               | Some ty -> ty
 	    in
-            let ty = Jc_type_var.subst uenv (subst ty) in
+            let ty = Type_var.subst uenv (subst ty) in
             let label_assoc =
 	      label_assoc e#pos id e#label pi.li_labels labs
 	    in
@@ -1063,13 +1063,13 @@ used as an assertion, not as a term" pi.li_name
         end
     | JCNEif(e1, e2, e3) ->
         let te1 = ft e1 and te2 = ft e2 and te3 = ft e3 in
-        Jc_type_var.add uenv e#pos (JCTnative Tboolean) te1#typ;
+        Type_var.add uenv e#pos (JCTnative Tboolean) te1#typ;
         let t =
           let t2 = te2#typ and t3 = te3#typ in
           if subtype_strict t2 t3 then t3 else
             if subtype_strict t3 t2 then t2 else
-              (Jc_type_var.add uenv e#pos t2 t3;
-               Jc_type_var.subst uenv t2)
+              (Type_var.add uenv e#pos t2 t3;
+               Type_var.subst uenv t2)
 		(* typing_error e#pos "incompatible result types"*)
               in
         t, te1#region, JCTif(te1, te2, te3)
@@ -1114,8 +1114,8 @@ used as an assertion, not as a term" pi.li_name
           | None -> te1#typ
           | Some pty ->
               let ty = type_type pty in
-              Jc_type_var.add uenv e1#pos te1#typ ty;
-              Jc_type_var.subst uenv ty
+              Type_var.add uenv e1#pos te1#typ ty;
+              Type_var.subst uenv ty
         in
         let vi = var ty id in
         let te2 = term ((id, vi)::env) e2 in
@@ -1353,13 +1353,13 @@ let rec assertion env e =
     | JCNEapp (id, labs, args) ->
         begin try
           let pi = find_logic_info id in
-          let subst = Jc_type_var.instance pi.li_poly_args in
+          let subst = Type_var.instance pi.li_poly_args in
           let tl = try
             List.map2
               (fun vi e ->
                  let ty = subst vi.vi_type in
                  let te = ft e in
-                 Jc_type_var.add uenv te#pos te#typ ty;
+                 Type_var.add uenv te#pos te#typ ty;
                  te)
               pi.li_parameters args
           with Invalid_argument _ ->
@@ -1384,7 +1384,7 @@ let rec assertion env e =
     | JCNEreinterpret_cast _ -> typing_error e#pos "unsupported reinterpret cast in assertion"
     | JCNEif(e1,e2,e3) ->
         let te1 = ft e1 and te2 = fa e2 and te3 = fa e3 in
-        Jc_type_var.add uenv e1#pos te1#typ (JCTnative Tboolean);
+        Type_var.add uenv e1#pos te1#typ (JCTnative Tboolean);
         JCAif(te1,te2,te3)
     | JCNElet(ty,id,Some e1,e2) ->
 	let te1 = ft e1 in
@@ -1733,7 +1733,7 @@ let loopbehavior env (names,inv,ass) =
 	    (fun l ->
 	       let _,_,tl = location env l in tl) locs) ass)
 
-let make_unary_op loc (op : Jc_ast.unary_op) e2 =
+let make_unary_op loc (op : Ast.unary_op) e2 =
   let t2 = e2#typ in
   match op with
 (*    | `Uprefix_inc | `Upostfix_inc | `Uprefix_dec | `Upostfix_dec (*as op*) ->
@@ -2364,7 +2364,7 @@ used as an assertion, not as a term" pi.li_name
         let tbody = unit_expr (fe body) in
         let tfinally = unit_expr (fe finally) in
         let tcatches = List.map begin function (id, v, cbody) ->
-	  if id#name = Jc_norm.return_label#name then set_return_label ();
+	  if id#name = Norm.return_label#name then set_return_label ();
           let ei = try
             StringHashtblIter.find exceptions_table id#name
           with Not_found ->
@@ -2461,7 +2461,7 @@ used as an assertion, not as a term" pi.li_name
   in
 (*
   if !lab = "L2" then
-    Format.eprintf "Jc_typing.expr: adding label L2@.";
+    Format.eprintf "Typing.expr: adding label L2@.";
 *)
   new expr
     ~pos: e#pos
@@ -2607,7 +2607,7 @@ let field st root ((rep,abs), t, id, bitsize) =
   let fi = {
     fi_tag = !field_tag_counter;
     fi_name = id ;
-    fi_final_name = Jc_envset.get_unique_name name;
+    fi_final_name = Envset.get_unique_name name;
     fi_type = ty;
     fi_hroot = root;
     fi_struct = st;
@@ -2767,9 +2767,9 @@ let type_range_of_term ty t =
         in
           maxcstr
 (*        if is_root_struct st then *)
-(*        Jc_pervasives.make_and [mincstr; maxcstr] *)
+(*        Pervasives.make_and [mincstr; maxcstr] *)
 (*        else
-          Jc_pervasives.make_and [instanceofcstr; mincstr; maxcstr] *)
+          Pervasives.make_and [instanceofcstr; mincstr; maxcstr] *)
     | JCTpointer (JCroot _vi, _, _) ->
         assert false (* TODO, but need to change JCToffset before *)
     | _ -> Assertion.mktrue ()
@@ -2791,7 +2791,7 @@ let type_range_of_term ty t =
         } in
         Hashtbl.add structs_table id (struct_info, []);
         (* declare mutable field (if needed) *)
-        if parent = None && !Jc_common_options.inv_sem = InvOwnership then
+        if parent = None && !Common_options.inv_sem = InvOwnership then
           create_mutable_field struct_info;
         (* TODO: declare fields *)
         (* TODO: declare invariants *)
@@ -2982,18 +2982,18 @@ let check_consistency id data =
 	 (fun pi -> Hashtbl.add h pi.li_tag [])
 	 pis;
        occurrences h a;
-       Jc_options.lprintf "@[<v 2>occurrences table for axiom %s in axiomatic %s:@\n" axid id;
+       Options.lprintf "@[<v 2>occurrences table for axiom %s in axiomatic %s:@\n" axid id;
        Hashtbl.iter
 	 (fun pi l ->
-	    Jc_options.lprintf "%d: @[" pi;
+	    Options.lprintf "%d: @[" pi;
 	    List.iter
 	      (fun label_assoc ->
 		 Options.lprintf "%a ;"
 		   Why_pp.(print_list comma (fun fmt (_l1,l2) -> Print_misc.label fmt l2)) label_assoc)
 	      l;
-	    Jc_options.lprintf "@]@\n")
+	    Options.lprintf "@]@\n")
 	 h;
-       Jc_options.lprintf "@]@.";
+       Options.lprintf "@]@.";
        if Hashtbl.fold (fun _pi l acc -> acc && l=[]) h true then
 	 typing_error loc
 	   "axiom %s should contain at least one occurrence of a symbol declared in axiomatic %s" axid id;
@@ -3199,7 +3199,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
 	  begin
 	    if in_axiomatic then
 	      typing_error loc "not allowed inside axiomatic specification";
-            let loc = match Jc_options.position_of_label id#name with
+            let loc = match Options.position_of_label id#name with
 	      | Some loc -> loc
 	      | None -> id#pos
 	    in
@@ -3249,7 +3249,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
     | JCDtag(id, _, _parent, _fields, inv) ->
 	if not only_types then
 	  begin
-	    Jc_options.lprintf "Typing tag %s@." id;
+	    Options.lprintf "Typing tag %s@." id;
 	    if in_axiomatic then
 	      typing_error loc "not allowed inside axiomatic specification";
             let struct_info, _ = StringHashtblIter.find structs_table id in
@@ -3257,7 +3257,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
             let invariants =
               List.fold_left
                 (fun acc (id, x, e) ->
-                   if !Jc_common_options.inv_sem = InvNone then
+                   if !Common_options.inv_sem = InvNone then
                      typing_error id#pos
                        "use of structure invariants requires declaration \
 of an invariant policy";
@@ -3310,13 +3310,13 @@ of an invariant policy";
     | JCDlogic_type(id,l) ->
 	if only_types then
 	  begin
-	    Jc_options.lprintf "Typing logic type declaration %s@." id;
+	    Options.lprintf "Typing logic type declaration %s@." id;
             begin
               try
                 let _ = StringHashtblIter.find logic_type_table id in
                 typing_error d#pos "duplicate logic type `%s'" id
               with Not_found ->
-                let l = List.map Jc_type_var.type_var_from_string l in
+                let l = List.map Type_var.type_var_from_string l in
                 StringHashtblIter.add logic_type_table id (id,l);
 	        acc
             end
@@ -3326,7 +3326,7 @@ of an invariant policy";
     | JCDlemma(id,is_axiom,poly_args,labels,e) ->
 	if not only_types then
 	  begin
-	    Jc_options.lprintf "Typing lemma/axiom %s@." id;
+	    Options.lprintf "Typing lemma/axiom %s@." id;
 	    if is_axiom && not in_axiomatic then
 	      typing_error loc "allowed only inside axiomatic specification";
             (*
@@ -3334,7 +3334,7 @@ of an invariant policy";
             *)
             let poly_args = add_poly_args poly_args in
             let te = assertion [] e in
-            let te = Jc_type_var.subst_type_in_assertion uenv te in
+            let te = Type_var.subst_type_in_assertion uenv te in
             if in_axiomatic && is_axiom then
 	      (ABaxiom(d#pos,id,labels,te))::acc
 	    else
@@ -3354,7 +3354,7 @@ of an invariant policy";
             let a = assertion [] e in
             let li = make_pred id in
             let idx = li.li_tag in
-            if !Jc_common_options.inv_sem = InvArguments then
+            if !Common_options.inv_sem = InvArguments then
               IntHashtblIter.replace logic_functions_table
                 idx (li, JCAssertion a);
             IntHashtblIter.add global_invariants_table idx (li, a);
@@ -3486,7 +3486,7 @@ of an invariant policy";
     | JCDtermination_policy _
     | JCDinvariant_policy _ -> assert false
     | JCDpragma_gen_sep (kind,id,li) ->
-        if Jc_options.gen_frame_rule_with_ft && not only_types then
+        if Options.gen_frame_rule_with_ft && not only_types then
 	  begin
             let kind = match kind,li with
               | "",_ -> `Sep
@@ -3504,19 +3504,19 @@ of an invariant policy";
           end;
 	acc
     | JCDpragma_gen_frame(name,logic) -> 
-        if Jc_options.gen_frame_rule_with_ft && not only_types then
+        if Options.gen_frame_rule_with_ft && not only_types then
 	  begin
             create_pragma_gen_frame_sub `Frame loc name logic
           end;
       acc
     | JCDpragma_gen_sub(name,logic) -> 
-        if Jc_options.gen_frame_rule_with_ft && not only_types then
+        if Options.gen_frame_rule_with_ft && not only_types then
 	  begin
             create_pragma_gen_frame_sub `Sub loc name logic
           end;
       acc
     | JCDpragma_gen_same(name,logic) -> 
-        if Jc_options.gen_frame_rule_with_ft && not only_types then
+        if Options.gen_frame_rule_with_ft && not only_types then
 	  begin
             let logic_info =
               try
@@ -3532,7 +3532,7 @@ of an invariant policy";
           end;
       acc
     | JCDaxiomatic(id,l) ->
-	Jc_options.lprintf "Typing axiomatic %s@." id;
+	Options.lprintf "Typing axiomatic %s@." id;
 	let data =
 	  {
 	    axiomatics_defined_ids = [];
@@ -3567,7 +3567,7 @@ let declare_struct_info d =
     in
     StringHashtblIter.add structs_table id (si, []);
     (* declare the "mutable" field (if needed) *)
-    if parent = None && !Jc_common_options.inv_sem = InvOwnership then
+    if parent = None && !Common_options.inv_sem = InvOwnership then
       create_mutable_field si
   | _ -> ()
 

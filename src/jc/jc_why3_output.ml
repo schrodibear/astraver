@@ -268,7 +268,7 @@ let fprintf_vc_kind fmttr k =
      | JCVCallocates -> "Allocates clause"
      | JCVCensures -> "Ensures clause"
      | JCVCassertion pos ->
-       begin match Jc_position.line pos with
+       begin match Position.line pos with
        | Some l -> Printf.sprintf "Assertion in line %d" l
        | None -> Printf.sprintf "Assertion"
        end
@@ -279,7 +279,7 @@ let fprintf_vc_kind fmttr k =
      | JCVCrequires -> "Requires clause")
 
 let fprintf_jc_position fmttr pos =
-  let f, l, b, e as loc = Jc_position.to_loc pos in
+  let f, l, b, e as loc = Position.to_loc pos in
   if loc <> Why_loc.dummy_floc then
     fprintf fmttr "#\"%s\" %d %d %d#" f l b e
 
@@ -291,7 +291,7 @@ let fprintf_why_label fmttr { l_kind; l_behavior; l_pos } =
     | b -> fun f -> f b
   in
   fprintf_jc_position fmttr l_pos;
-  if not (Jc_position.is_dummy l_pos) then pr "@ ";
+  if not (Position.is_dummy l_pos) then pr "@ ";
   begin match l_kind with
   | Some vc_kind ->
     pr "\"expl:%a" fprintf_vc_kind vc_kind;
@@ -604,7 +604,7 @@ let string_of_goal_kind =
 let fprintf_why_id ?(constr = false) fmttr { why_name; why_expl; why_pos } =
   let pr fmt = fprintf fmttr fmt in
   pr "%s" @@ (if not constr then why3_ident else why3_constr) why_name;
-  if not (Jc_position.is_dummy why_pos) then pr "@ %a" fprintf_jc_position why_pos;
+  if not (Position.is_dummy why_pos) then pr "@ %a" fprintf_jc_position why_pos;
   if why_expl <> "" then pr "@ \"expl:%s\"" why_expl
 
 let fprintf_why_decl fmttr =
@@ -711,15 +711,15 @@ let fprintf_why3_imports ?float_model fmttr d =
   pr         d.why3_ExpLog                              "real.ExpLog";
   pr         d.why3_Trigonometry                        "real.Trigonometry";
   begin match float_model with
-  | Some Jc_env.FMfull ->
+  | Some Env.FMfull ->
     pr ~import true ~as_:"Single" "floating_point.SingleFull";
     pr ~import true ~as_:"Double" "floating_point.DoubleFull"
-  | Some Jc_env.FMdefensive ->
+  | Some Env.FMdefensive ->
     pr ~import true ~as_:"Single" "floating_point.Single";
     pr ~import true ~as_:"Double" "floating_point.Double"
-  | Some Jc_env.FMmultirounding ->
+  | Some Env.FMmultirounding ->
     pr ~import true ~as_:"Double" "floating_point.DoubleMultiRounding"
-  | Some Jc_env.FMmath ->
+  | Some Env.FMmath ->
     failwith "unsupported \"math\" floating-point model" (* TODO *)
   | None -> ()
   end;
@@ -758,13 +758,13 @@ let fprintf_why_decls ?float_model fmttr decls =
     pr_use ~import "floating_point.Rounding")
     float_model;
   begin match float_model with
-  | Some Jc_env.FMfull ->
+  | Some Env.FMfull ->
     pr_use ~import "jessie3.JessieFloatsFull"
-  | Some Jc_env.FMdefensive ->
+  | Some Env.FMdefensive ->
     pr_use ~import "jessie3.JessieFloats"
-  | Some Jc_env.FMmultirounding ->
+  | Some Env.FMmultirounding ->
     pr_use ~import "jessie3.JessieFloatsMultiRounding"
-  | Some Jc_env.FMmath -> failwith "unsupported \"math\" floating-point model" (* TODO *)
+  | Some Env.FMmath -> failwith "unsupported \"math\" floating-point model" (* TODO *)
   | None -> ()
   end;
   pr_use ~import "jessie3.Jessie_memory_model_parameters";

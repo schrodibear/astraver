@@ -54,8 +54,8 @@ open Constructors.PExpr
 (* Globals to add to the list of declarations                             *)
 (**************************************************************************)
 
-let name_for_loop_exit = Jc_envset.get_unique_name "Loop_exit"
-let name_for_loop_continue = Jc_envset.get_unique_name "Loop_continue"
+let name_for_loop_exit = Envset.get_unique_name "Loop_exit"
+let name_for_loop_continue = Envset.get_unique_name "Loop_continue"
 let name_for_return_label = get_unique_name "Return_label"
 
 let loop_exit = new identifier name_for_loop_exit
@@ -72,7 +72,7 @@ let goto_exception_for_label lab =
     try
       Hashtbl.find label_to_exception lab
     with Not_found ->
-      let excname = Jc_envset.get_unique_name ("Goto_" ^ lab) in
+      let excname = Envset.get_unique_name ("Goto_" ^ lab) in
       let exc = new identifier excname in
       Hashtbl.add label_to_exception lab exc;
       exc
@@ -214,7 +214,7 @@ let normalize_for pos inits test updates behs var body =
     ()
 
 let duplicable =
-  Jc_iterators.IPExpr.fold_left
+  Iterators.IPExpr.fold_left
     (fun acc e -> acc && match e#node with
        | JCPEconst _ | JCPEvar _ | JCPErange _ | JCPEderef _ | JCPEfresh _
        | JCPEunary _ | JCPEoffset _ | JCPEaddress _ | JCPEold _ | JCPEat _
@@ -255,7 +255,7 @@ let normalize_assign_op pos e1 op e2 =
                ~value:(mkbinary ~pos ~expr1:e4 ~op ~expr2:e2 ())
                ())
             ()
-      | _ -> Jc_options.jc_error pos "Not an lvalue in assignment"
+      | _ -> Options.jc_error pos "Not an lvalue in assignment"
 
 (** Transform unary increment and decrement *)
 let normalize_pmunary pos op e =
@@ -310,7 +310,7 @@ let normalize_pmunary pos op e =
 	    let tmpvar = mkvar ~pos ~name:tmpname () in
 	    let e2 = mkderef ~pos ~expr:tmpvar ~field:f () in
 	    mklet_nodecl ~var:tmpname ~init:e1 ~body:(on_duplicable e2) ()
-	| _ -> Jc_options.jc_error pos "Not an lvalue in assignment"
+	| _ -> Options.jc_error pos "Not an lvalue in assignment"
 
 (** Transform local variable declarations *)
 let normalize_locvardecl pos elist =
@@ -380,7 +380,7 @@ let normalize_postaction pos elist =
 
 (** Apply normalizations recursively *)
 let normalize =
-  Jc_iterators.map_pexpr
+  Iterators.map_pexpr
     ~before:(fun e -> match e#node with
 	       | JCPEblock elist ->
 		   normalize_postaction e#pos elist
@@ -455,7 +455,7 @@ let build_label_tree e : label_tree list =
 	  if in_label_upper_tree_list lab fwdacc then
 	    Hashtbl.add label_used lab ()
 	  else
-	    Jc_options.jc_error e#pos "unsupported goto (backward or to some inner block)";
+	    Options.jc_error e#pos "unsupported goto (backward or to some inner block)";
 	  acc,fwdacc
       | JCPElabel (lab, e) ->
 	  let l,fwdl = build_bwd e ([],fwdacc) in
@@ -464,7 +464,7 @@ let build_label_tree e : label_tree list =
 	  let l,fwdl = List.fold_right build_bwd sl ([],fwdacc) in
 	  (LabelBlock l) :: acc, fwdl
       | _ ->
-	  let elist = Jc_iterators.IPExpr.subs e in
+	  let elist = Iterators.IPExpr.subs e in
 	  LabelBlock
 	    (List.map (fun e -> LabelBlock(fst (build_bwd e ([],fwdacc)))) elist)
 	  :: acc, fwdacc
@@ -527,7 +527,7 @@ let rec goto e lz =
 	let el = List.rev el in
 	(goto_block pos el)#node, lz2
     | _ ->
-	let elist = Jc_iterators.IPExpr.subs e in
+	let elist = Iterators.IPExpr.subs e in
 	let lz1list,lz2 = match lz with
 	  | LabelBlock b1::after ->
 	      List.map
@@ -536,7 +536,7 @@ let rec goto e lz =
 	  | _ -> assert false
 	in
 	let elist,_ = List.split (List.map2 goto elist lz1list) in
-	(Jc_iterators.replace_sub_pexpr e elist)#node, lz2
+	(Iterators.replace_sub_pexpr e elist)#node, lz2
   in new pexpr_with ~node:enode e, lz2
 
 
@@ -641,7 +641,7 @@ let expr e =
   (*
     let fmt = Format.std_formatter in
     Format.fprintf fmt "Normalized expression:@\n%a@\n@."
-    Jc_noutput.expr e;
+    Noutput.expr e;
   *)
   e
 

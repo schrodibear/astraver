@@ -29,10 +29,10 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_ast
-open Jc_env
-open Jc_fenv
-open Jc_region
+open Ast
+open Env
+open Fenv
+open Region
 
 val axiom :
   logic_info list ->
