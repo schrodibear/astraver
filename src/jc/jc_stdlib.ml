@@ -63,12 +63,17 @@ struct
 
     let dup2 a = a, a
     let fdup2 ~f ~g x = f x, g x
+    let cons a b = (a, b)
+    let cons' b a = (a, b)
     let map1 ~f (a, b) = f a, b
     let map2 ~f (a, b) = a, f b
     let map ~f (a, b) = f a, f b
     let map_2 ~f ~g (a, b) = f a, g b
     let fold_left ~f ~init (a, b) = f (f init a) b
+    let fold = fold_left
     let fold_right ~f (a, b) ~init = f a (f b init)
+    let fold_left' ~f ab init = fold_left f init ab
+    let fold_right' ~f ab init = fold_right f ab init
     let swap (a, b) = b, a
   end
   module T3 =
@@ -178,17 +183,21 @@ struct
     | None -> default
     | Some x -> f x
 
-  let fold ~init ~f =
+  let fold_left ~f ~init =
     function
     | Some x -> f init x
     | None -> init
 
-  let fold_left ~f o init = fold ~init ~f o
+  let fold = fold_left
 
-  let fold_right ~f o init =
+  let fold_right ~f o ~init =
     match o with
     | Some x -> f x init
     | None -> init
+
+  let fold_left' ~f o init = fold_left ~f ~init o
+
+  let fold_right' ~f o init = fold_right ~f o ~init
 
   let iter ~f =
     function
@@ -199,6 +208,8 @@ struct
     function
     | Some _ -> true
     | None -> false
+
+  let is_none o = not (is_some o)
 end
 
 let (|?) xo default = Option.value ~default xo
@@ -209,16 +220,19 @@ struct
 
   let cons e l = e :: l
 
+  let cons' l e = e :: l
+
+  let fold_left' ~f l init = fold_left f init l
+
+  let fold_right' ~f l init = fold_right f l init
+
   let range i dir j =
     try
       let op =
         match dir with
-        | `To ->
-          if i <= j then pred
-                    else raise Exit
-        | `Downto ->
-          if i >= j then succ
-                    else raise Exit
+        | `To when i <= j -> pred
+        | `Downto when i >= j -> succ
+        | _ -> raise Exit
       in
       let rec loop acc k =
         if i = k then
@@ -233,7 +247,7 @@ struct
   let as_singleton =
     function
     | [e] -> e
-    | _ -> failwith "as_singleton"
+    | _ -> failwith "as_singleton: non-singleton list"
 
   let mem_assoc_eq f k l =
     fold_left
@@ -252,7 +266,7 @@ struct
       all_pairs ~acc l
     | [] -> acc
 
-  let concat_map l ~f =
+  let concat_map ~f l =
     let rec aux acc =
       function
       | [] -> List.rev acc
@@ -274,7 +288,7 @@ struct
     | [] -> f acc part
     | a :: l -> fold_all_part f (fold_all_part f ~part:(a :: part) acc l) ~part l
 
-  let group_consecutive p =
+  let group_consecutive ~p =
     let rec loop acc last_group =
       function
       | x :: (y :: _ as xs) when p x y -> loop acc (y :: last_group) xs

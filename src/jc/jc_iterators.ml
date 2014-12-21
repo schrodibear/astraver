@@ -488,7 +488,7 @@ let fold_sub_term it f acc t =
         it acc t2
     | JCTrange (t1_opt, t2_opt) ->
       Option.fold ~init:acc ~f:it t1_opt |>
-      Option.fold_left ~f:it t2_opt
+      Option.fold_left' ~f:it t2_opt
     | JCTunary(_,t1)
     | JCTderef(t1,_,_)
     | JCTold t1
@@ -810,12 +810,12 @@ let fold_sub_location_set itt itls ft fls acc locs =
     itls acc locs
   | JCLSrange (locs, t1_opt, t2_opt) ->
     itls acc locs |>
-    Option.fold_left ~f:itt t1_opt |>
-    Option.fold_left ~f:itt t2_opt
+    Option.fold_left' ~f:itt t1_opt |>
+    Option.fold_left' ~f:itt t2_opt
   | JCLSrange_term (t0, t1_opt, t2_opt) ->
     itt acc t0 |>
-    Option.fold_left ~f:itt t1_opt |>
-    Option.fold_left ~f:itt t2_opt
+    Option.fold_left' ~f:itt t1_opt |>
+    Option.fold_left' ~f:itt t2_opt
   | JCLSat (ls, _lab) -> itls acc ls
 
 let rec fold_location_set ft fls acc locs =
@@ -863,7 +863,7 @@ let fold_sub_behavior _itt ita itl _itls ft fa fl fls acc b =
   let ita = ita ft fa and itl = itl ft fl fls in
   let ita' = Fn.flip ita in
   Option.fold ~init:acc ~f:ita b.b_assumes |>
-  Option.fold_left
+  Option.fold_left'
       ~f:(fun acc (_,locs) -> List.fold_left itl acc locs)
       b.b_assigns
   |>
@@ -1323,7 +1323,7 @@ let fold_sub_expr_and_term_and_assertion
         Option.fold ~f:(fun acc -> itt acc % fst) ~init:acc la.loop_variant
     | JCEcontract (a_opt, t_opt, _v, behavs, e) ->
       Option.fold ~f:ita ~init:acc a_opt |>
-      Option.fold_left ~f:(fun acc -> itt acc % fst) t_opt |>
+      Option.fold_left' ~f:(fun acc -> itt acc % fst) t_opt |>
       fun acc ->
       let acc =
         List.fold_left

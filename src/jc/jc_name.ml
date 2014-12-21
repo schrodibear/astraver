@@ -45,6 +45,10 @@ module Type =
 struct
   let root ri = ri.ri_name
   let struc st = root (struct_root st)
+  let pointer_class =
+    function
+    | JCtag (st, _) -> struc st
+    | JCroot vi -> root vi
   let bitvector = "bitvector"
   let memory = "memory"
   let alloc_table = "alloc_table"
@@ -55,8 +59,9 @@ module Class =
 struct
   let pointer =
     function
-    | JCtag (st, _) -> Type.struc st
-    | JCroot vi -> Type.root vi
+    | JCtag (st, _) when struct_of_union st -> "root_" ^ (struct_root st).ri_name
+    | JCtag (st, _) -> "struct_" ^ st.si_name
+    | JCroot vi -> "root_" ^ vi.ri_name
 
   let alloc =
     function
@@ -145,7 +150,8 @@ struct
   let frame ~for_ ac pc =
     let for_ =
       match for_ with
-      | `alloc_tables -> "alloc"
+      | `alloc_tables_in `alloc -> "alloc"
+      | `alloc_tables_in `free -> "free"
       | `tag_tables -> "tag"
     in
     let prefix =
@@ -171,6 +177,14 @@ struct
       | Singleton -> n
       | Range_0_n ->
         fun ~check_size -> if check_size then n ^ "_requires" else n
+
+  let free ~safe ac pc =
+    let prefix =
+      match ac with
+      | JCalloc_root _ -> "free"
+      | JCalloc_bitvector -> "free_bitvector"
+    in
+    (if safe then "safe_" else "") ^ prefix ^ "_" ^ (Class.pointer pc)
 end
 
 let simple_logic_type s = { lt_name = s; lt_args = [] }
@@ -224,32 +238,23 @@ let memory_name (mc,r) =
   | JCmem_plain_union vi -> union_region_memory_name (vi,r)
   | JCmem_bitvector -> bitvector_region_memory_name r
 
-let pointer_class_name =
-  function
-  | JCtag(st, _) ->
-    if struct_of_union st then
-      "root_" ^ (struct_root st).ri_name
-    else
-      "struct_" ^ st.si_name
-  | JCroot vi -> "root_" ^ vi.ri_name
-
 let alloc_bitvector_logic_name pc =
-  (pointer_class_name pc) ^ "_alloc_bitvector"
+  (Class.pointer pc) ^ "_alloc_bitvector"
 
 let mem_bitvector_logic_name pc =
-  (pointer_class_name pc) ^ "_mem_bitvector"
+  (Class.pointer pc) ^ "_mem_bitvector"
 
 let alloc_of_bitvector_param_name pc =
-  (pointer_class_name pc) ^ "_alloc_of_bitvector"
+  (Class.pointer pc) ^ "_alloc_of_bitvector"
 
 let mem_of_bitvector_param_name pc =
-  (pointer_class_name pc) ^ "_mem_of_bitvector"
+  (Class.pointer pc) ^ "_mem_of_bitvector"
 
 let alloc_to_bitvector_param_name pc =
-  (pointer_class_name pc) ^ "_alloc_to_bitvector"
+  (Class.pointer pc) ^ "_alloc_to_bitvector"
 
 let mem_to_bitvector_param_name pc =
-  (pointer_class_name pc) ^ "_mem_to_bitvector"
+  (Class.pointer pc) ^ "_mem_to_bitvector"
 
 let jessie_return_variable = "return"
 let jessie_return_exception = "Return"

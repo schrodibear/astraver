@@ -1175,7 +1175,7 @@ let rec const_int_term t =
         end
     | JCTunary (uop, t) ->
         let no = const_int_term t in
-          Option.fold_right
+          Option.fold_right'
             ~f:(fun n _ -> match uop with
                | `Uminus, `Integer -> Some (Num.minus_num n)
                | _ -> None)
@@ -1241,7 +1241,7 @@ let rec const_int_expr e =
     | JCErange_cast (e, _) -> const_int_expr e
     | JCEunary (uop, e) ->
         let no = const_int_expr e in
-          Option.fold_right
+          Option.fold_right'
             ~f:(fun n _ -> match uop with
                | `Uminus, `Integer -> Some (Num.minus_num n)
                | _ -> None)
@@ -2190,17 +2190,14 @@ and expr e =
     | JCEfree e1 ->
       let e1' = expr e1 in
       let ac = deref_alloc_class ~type_safe:false e1 in
-      let alloc = plain_alloc_table_var (ac, e1#region) in
+      let pc = pointer_class e1#typ in
       if !Options.inv_sem = InvOwnership then
-        let pc = pointer_class e1#typ in
+        let alloc = plain_alloc_table_var (ac, e1#region) in
         let com = committed_name pc in
         make_app "free_parameter_ownership" [alloc; mk_var com; e1']
       else
-        let free_fun =
-          if safety_checking () then "free_parameter"
-          else "safe_free_parameter"
-        in
-        make_app free_fun [alloc; e1']
+        make_positioned_lex_e ~e @@
+        Interp_struct.free ~safe:(not @@ safety_checking ()) (ac, e1#region) pc e1'
     | JCEreinterpret (e1, st) -> make_reinterpret ~e e1 st
     | JCEapp call ->
       begin match call.call_fun with

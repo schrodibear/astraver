@@ -1868,7 +1868,7 @@ let fun_effects f =
   let f, _pos, s, e_opt = IntHashtblIter.find Typing.functions_table f.fun_tag in
   f.fun_effects |>
   spec s |>
-  Option.fold_left ~f:expr e_opt |>
+  Option.fold_left' ~f:expr e_opt |>
   List.fold_right parameter' (List.map snd f.fun_parameters) |>
   fun fef ->
   if same_feffects fef f.fun_effects then

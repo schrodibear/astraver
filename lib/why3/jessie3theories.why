@@ -832,6 +832,10 @@ predicate alloc_extends (a1 : alloc_table 't) (a2 : alloc_table 't) =
   forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
     valid a1 p -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
 
+predicate free_extends (a1 : alloc_table 't) (a2 : alloc_table 't) =
+  forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+    not allocated a1 p -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
+
 predicate alloc_block (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) (n : int) =
   forall q : pointer 't [offset_min a2 q | offset_min a1 q | offset_max a1 q | offset_max a1 q].
       (not same_block q p ->
@@ -948,7 +952,7 @@ predicate alloc_tag_blockset (t1 : tag_table 't) (t2 : tag_table 't) (q : pset '
   forall p : pointer 't [tag t1 p | tag t2 p].
     tag t1 p <> bottom_tag -> tag t2 p = tag t1 p
 
-predicate alloc_tag_block (t1 : tag_table 't) (t2 : tag_table 't) (p : pointer 't) (n : int) = tag_extends t1 t2
+predicate alloc_tag_block (t1 : tag_table 't) (t2 : tag_table 't) (p : pointer 't) = tag_extends t1 t2
 
 predicate free_blockset (a1 : alloc_table 't) (a2 : alloc_table 't) (q : pset 't) = alloc_blockset a1 a2 q
 
