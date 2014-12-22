@@ -78,11 +78,11 @@ predicate eq_unit () ()
   function abs_int int : int
 
   axiom Abs_int_pos:
-    (forall x:int. ((Int.(>=) x 0) -> ((AbsInt.abs x : int) = x)))
+    (forall x:int. ((Int.(>=) x 0) -> ((abs_int x : int) = x)))
 
   axiom Abs_int_neg:
     (forall x:int.
-      ((Int.(<=) x 0) -> ((AbsInt.abs x : int) = (Int.(-_) x : int))))
+      ((Int.(<=) x 0) -> ((abs_int x : int) = (Int.(-_) x : int))))
 
   function int_max int int : int
 
