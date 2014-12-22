@@ -1524,8 +1524,21 @@ let rec expr fef e =
        | JCEfree e ->
            let pc = pointer_class e#typ in
            let ac = alloc_class_of_pointer_class pc in
+           let all_allocs =
+             match ac with
+             | JCalloc_bitvector -> [ac]
+             | JCalloc_root rt ->
+               match rt.ri_kind with
+               | Rvariant -> all_allocs ~select:fully_allocated pc
+               | RdiscrUnion ->
+                 Typing.typing_error e#pos "Unsupported discriminated union, sorry" (* TODO *)
+               | RplainUnion -> [ac]
+           in
            true,
-           add_alloc_writes LabelHere fef (ac,e#region)
+           List.fold_left
+             (add_alloc_writes LabelHere %% Fn.id @@ Pair.cons' e#region)
+             fef
+             all_allocs
        | JCEreinterpret (e, st) ->
          (*  Current support for reinterpretation is very limited --
           *  it's supported only for two-level type hierarchies (e.g. void * -- other pointers),
