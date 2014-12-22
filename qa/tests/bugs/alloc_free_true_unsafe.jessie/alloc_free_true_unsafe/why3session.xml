@@ -5,17 +5,17 @@
 <prover id="0" name="CVC3" version="2.4.1" timelimit="5" memlimit="1000"/>
 <prover id="1" name="CVC4 &apos;14" version="1.4" timelimit="56" memlimit="1000"/>
 <prover id="2" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
-<prover id="3" name="Alt-Ergo" version="0.95.2" timelimit="5" memlimit="1000"/>
-<prover id="4" name="Z3" version="4.3.2" timelimit="5" memlimit="1000"/>
+<prover id="3" name="Z3" version="4.3.2" timelimit="5" memlimit="1000"/>
+<prover id="4" name="Alt-Ergo" version="0.95.2" timelimit="5" memlimit="1000"/>
 <file name="../alloc_free_true_unsafe.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="9bb7ab5aa00f950d151858299e17fc2c" expanded="true">
+<theory name="Jessie_program" sum="bab8edc3c45852e9e4b42a037e66ab91" expanded="true">
  <goal name="WP_parameter pack_in_struct_ensures_default" expl="Function pack_in_struct, default behavior" expanded="true">
  <proof prover="0"><result status="timeout" time="4.98"/></proof>
  <proof prover="2"><result status="timeout" time="4.99"/></proof>
- <proof prover="3"><result status="timeout" time="4.96"/></proof>
- <proof prover="4"><result status="timeout" time="4.99"/></proof>
+ <proof prover="3"><result status="timeout" time="4.99"/></proof>
+ <proof prover="4"><result status="timeout" time="4.96"/></proof>
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter pack_in_struct_ensures_default.1" expl="1. Postcondition (Ensures clause)" expanded="true">
   <proof prover="2"><result status="timeout" time="4.99"/></proof>
@@ -33,8 +33,8 @@
    <proof prover="0" timelimit="56"><result status="timeout" time="55.79"/></proof>
    <proof prover="1"><result status="timeout" time="55.81"/></proof>
    <proof prover="2" timelimit="56"><result status="timeout" time="55.78"/></proof>
-   <proof prover="3" timelimit="56"><result status="timeout" time="55.84"/></proof>
-   <proof prover="4" timelimit="56"><result status="timeout" time="55.81"/></proof>
+   <proof prover="3" timelimit="56"><result status="timeout" time="55.81"/></proof>
+   <proof prover="4" timelimit="56"><result status="timeout" time="55.84"/></proof>
    </goal>
   </transf>
   </goal>
@@ -53,7 +53,7 @@
  <proof prover="2"><result status="valid" time="0.09"/></proof>
  </goal>
  <goal name="WP_parameter main_safety" expl="Function main, safety" expanded="true">
- <proof prover="2"><result status="valid" time="0.08"/></proof>
+ <proof prover="2"><result status="valid" time="0.19"/></proof>
  </goal>
 </theory>
 </file>

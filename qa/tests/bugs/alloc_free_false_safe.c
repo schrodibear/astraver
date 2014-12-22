@@ -1,4 +1,4 @@
-#define NULL 0
+//#define NULL 0
 
 struct s {
   int a, b;

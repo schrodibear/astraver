@@ -6,7 +6,7 @@
 <file name="../korntest1.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="eaad7fed897d3bc277ba2f88eba18b16" expanded="true">
+<theory name="Jessie_program" sum="dbda3aede9aa08ec9b8d976705977099" expanded="true">
  <goal name="WP_parameter max_ensures_default" expl="Function max, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="0.05"/></proof>
  </goal>

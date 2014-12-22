@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="CVC4 &apos;14" version="1.4" timelimit="5" memlimit="1000"/>
+<prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
+<file name="../jc_embedded_allocates.mlw" expanded="true">
+<theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_program" sum="a105b12246fc9e1c2bece8e150a44509" expanded="true">
+ <goal name="WP_parameter pdpr_get_new_ensures_default" expl="Function pdpr_get_new, default behavior" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter pdpr_get_new_ensures_default.1" expl="1. Postcondition">
+  <proof prover="0"><result status="valid" time="1.67"/></proof>
+  <proof prover="1"><result status="valid" time="4.37"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpr_get_new_ensures_default.2" expl="2. Postcondition">
+  <proof prover="1"><result status="valid" time="2.13"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter pdpr_get_new_safety" expl="Function pdpr_get_new, safety" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter pdpr_get_new_safety.1" expl="1. Pointer dereference (Validity)">
+  <proof prover="1"><result status="valid" time="0.14"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpr_get_new_safety.2" expl="2. Pointer dereference (Validity)">
+  <proof prover="1"><result status="valid" time="0.13"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpr_get_new_safety.3" expl="3. Arithmetic overflow (Bounded int32)">
+  <proof prover="1"><result status="valid" time="0.15"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpr_get_new_safety.4" expl="4. Pointer dereference (Validity)">
+  <proof prover="1"><result status="valid" time="0.21"/></proof>
+  </goal>
+  <goal name="WP_parameter pdpr_get_new_safety.5" expl="5. Pointer dereference (Assignment)">
+  <proof prover="1"><result status="valid" time="0.16"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter main_ensures_default.1" expl="1. Allocates clause" expanded="true">
+  <transf name="inline_goal" expanded="true">
+   <goal name="WP_parameter main_ensures_default.1.1" expl="1. Allocates clause" expanded="true">
+   <proof prover="1"><result status="valid" time="1.29"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="WP_parameter main_safety" expl="Function main, safety" expanded="true">
+ <transf name="split_goal_wp" expanded="true">
+  <goal name="WP_parameter main_safety.1" expl="1. Deallocation">
+  <proof prover="1"><result status="valid" time="0.17"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

@@ -5,7 +5,7 @@
 <file name="../atest.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="3d46e5581a92c18f176286e3bb82a49a" expanded="true">
+<theory name="Jessie_program" sum="e0708a63b403996b7bcaeeeb28e3b477" expanded="true">
  <goal name="WP_parameter mac_cpy_ensures_default" expl="Function mac_cpy, default behavior" expanded="true">
  </goal>
  <goal name="WP_parameter mac_cpy_safety" expl="Function mac_cpy, safety" expanded="true">

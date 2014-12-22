@@ -7,7 +7,7 @@
 <file name="../jc_loop_assigns_negative.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="b7d48ed41bad2189b8ab84b19e59c419" expanded="true">
+<theory name="Jessie_program" sum="191395991246fc1bd882c80ff545cdcc" expanded="true">
  <goal name="WP_parameter strange_loop_ensures_default" expl="Function strange_loop, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter strange_loop_ensures_default.1" expl="1. loop invariant init">
@@ -46,10 +46,10 @@
  <goal name="WP_parameter strange_loop_safety" expl="Function strange_loop, safety" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter strange_loop_safety.1" expl="1. Pointer dereference (Assignment)">
-  <proof prover="1"><result status="valid" time="0.12"/></proof>
+  <proof prover="1"><result status="valid" time="0.11"/></proof>
   </goal>
   <goal name="WP_parameter strange_loop_safety.2" expl="2. Pointer dereference (Assignment with offset)">
-  <proof prover="1"><result status="valid" time="0.11"/></proof>
+  <proof prover="1"><result status="valid" time="0.12"/></proof>
   </goal>
   <goal name="WP_parameter strange_loop_safety.3" expl="3. Arithmetic overflow (Bounded int32)">
   <proof prover="1"><result status="valid" time="0.14"/></proof>

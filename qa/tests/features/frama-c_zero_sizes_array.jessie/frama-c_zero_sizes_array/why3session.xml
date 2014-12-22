@@ -9,16 +9,16 @@
 <file name="../frama-c_zero_sizes_array.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="2897e2d94ba8d35dc890e15cf3fbf64f" expanded="true">
+<theory name="Jessie_program" sum="07a0a53f734279592986480451a0a7f8" expanded="true">
  <goal name="WP_parameter arbitrary_ensures_default" expl="Function arbitrary, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter arbitrary_ensures_default.1" expl="1. Postcondition (Ensures clause)" expanded="true">
   <proof prover="0"><result status="valid" time="0.06"/></proof>
-  <proof prover="2"><result status="valid" time="0.20"/></proof>
+  <proof prover="2"><result status="valid" time="0.21"/></proof>
   </goal>
   <goal name="WP_parameter arbitrary_ensures_default.2" expl="2. Postcondition (Ensures clause)" expanded="true">
   <proof prover="0"><result status="valid" time="0.06"/></proof>
-  <proof prover="2"><result status="valid" time="0.21"/></proof>
+  <proof prover="2"><result status="valid" time="0.20"/></proof>
   </goal>
   <goal name="WP_parameter arbitrary_ensures_default.3" expl="3. Postcondition (Ensures clause)" expanded="true">
   <proof prover="0"><result status="valid" time="0.06"/></proof>
@@ -30,11 +30,11 @@
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter arbitrary_safety.1" expl="1. Postcondition (Ensures clause)" expanded="true">
   <proof prover="0"><result status="valid" time="0.06"/></proof>
-  <proof prover="2"><result status="valid" time="0.21"/></proof>
+  <proof prover="2"><result status="valid" time="0.20"/></proof>
   </goal>
   <goal name="WP_parameter arbitrary_safety.2" expl="2. Postcondition (Ensures clause)" expanded="true">
   <proof prover="0"><result status="valid" time="0.06"/></proof>
-  <proof prover="2"><result status="valid" time="0.20"/></proof>
+  <proof prover="2"><result status="valid" time="0.21"/></proof>
   </goal>
   <goal name="WP_parameter arbitrary_safety.3" expl="3. Postcondition (Ensures clause)" expanded="true">
   <proof prover="0"><result status="valid" time="0.06"/></proof>
@@ -61,35 +61,44 @@
   <proof prover="2"><result status="valid" time="0.22"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.2" expl="2. Arithmetic overflow (Bounded uint32)" expanded="true">
-  <proof prover="2"><result status="valid" time="0.12"/></proof>
+  <proof prover="0"><result status="valid" time="0.06"/></proof>
+  <proof prover="2"><result status="valid" time="0.20"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.3" expl="3. Arithmetic overflow (Bounded uint32)" expanded="true">
-  <proof prover="0"><result status="valid" time="0.07"/></proof>
+  <proof prover="0"><result status="valid" time="0.06"/></proof>
   <proof prover="2"><result status="valid" time="0.20"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.4" expl="4. Arithmetic overflow (Bounded uint32)" expanded="true">
-  <proof prover="0"><result status="valid" time="0.06"/></proof>
+  <proof prover="0"><result status="valid" time="0.07"/></proof>
   <proof prover="2"><result status="valid" time="0.20"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.5" expl="5. Division by zero (precondition)" expanded="true">
   <proof prover="2"><result status="valid" time="0.08"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.6" expl="6. Arithmetic overflow (Bounded uint32)" expanded="true">
-  <proof prover="0"><result status="valid" time="0.06"/></proof>
-  <proof prover="2"><result status="valid" time="0.20"/></proof>
+  <proof prover="2"><result status="valid" time="0.25"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.7" expl="7. Allocation size (precondition)" expanded="true">
   <proof prover="2"><result status="valid" time="0.12"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.8" expl="8. Pointer dereference (Validity)" expanded="true">
   <proof prover="0" timelimit="35"><result status="valid" time="0.37"/></proof>
-  <proof prover="1"><result status="valid" time="0.33"/></proof>
-  <proof prover="2" timelimit="35"><result status="valid" time="0.34"/></proof>
-  <proof prover="3"><result status="valid" time="0.58"/></proof>
+  <proof prover="2" timelimit="35"><result status="valid" time="0.32"/></proof>
+  <proof prover="3" timelimit="5"><result status="valid" time="0.59" steps="135"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.9" expl="9. Pointer dereference (Assignment with offset)" expanded="true">
   <transf name="inline_goal" expanded="true">
    <goal name="WP_parameter main_safety.9.1" expl="1. Pointer dereference (Assignment with offset)" expanded="true">
+   <proof prover="0" timelimit="35"><result status="timeout" time="34.86"/></proof>
+   <proof prover="1"><result status="timeout" time="34.86"/></proof>
+   <proof prover="2" timelimit="35"><result status="timeout" time="34.75"/></proof>
+   <proof prover="3"><result status="timeout" time="34.74"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="WP_parameter main_safety.10" expl="10. Pointer dereference (Assignment with offset)" expanded="true">
+  <transf name="inline_goal" expanded="true">
+   <goal name="WP_parameter main_safety.10.1" expl="1. Pointer dereference (Assignment with offset)" expanded="true">
    <proof prover="0" timelimit="35"><result status="timeout" time="34.82"/></proof>
    <proof prover="1"><result status="timeout" time="34.87"/></proof>
    <proof prover="2" timelimit="35"><result status="timeout" time="34.78"/></proof>
@@ -97,32 +106,23 @@
    </goal>
   </transf>
   </goal>
-  <goal name="WP_parameter main_safety.10" expl="10. Pointer dereference (Assignment with offset)" expanded="true">
-  <transf name="inline_goal" expanded="true">
-   <goal name="WP_parameter main_safety.10.1" expl="1. Pointer dereference (Assignment with offset)" expanded="true">
-   <proof prover="0" timelimit="35"><result status="timeout" time="34.86"/></proof>
-   <proof prover="1" timelimit="23"><result status="timeout" time="22.92"/></proof>
-   <proof prover="2" timelimit="35"><result status="timeout" time="34.75"/></proof>
-   <proof prover="3"><result status="timeout" time="34.74"/></proof>
-   </goal>
-  </transf>
-  </goal>
   <goal name="WP_parameter main_safety.11" expl="11. Postcondition (Ensures clause)" expanded="true">
-  <proof prover="2"><result status="valid" time="0.29"/></proof>
+  <proof prover="2"><result status="valid" time="0.30"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.12" expl="12. Postcondition (Ensures clause)" expanded="true">
-  <proof prover="2"><result status="valid" time="0.29"/></proof>
-  </goal>
-  <goal name="WP_parameter main_safety.13" expl="13. Pointer dereference (Assignment with offset)" expanded="true">
-  <proof prover="0" timelimit="35"><result status="timeout" time="34.91"/></proof>
-  <proof prover="2" timelimit="35"><result status="timeout" time="35.05"/></proof>
-  <proof prover="3" timelimit="5"><result status="timeout" time="4.93"/></proof>
-  </goal>
-  <goal name="WP_parameter main_safety.14" expl="14. Postcondition (Ensures clause)" expanded="true">
   <proof prover="2"><result status="valid" time="0.24"/></proof>
   </goal>
+  <goal name="WP_parameter main_safety.13" expl="13. Pointer dereference (Assignment with offset)" expanded="true">
+  <proof prover="0" timelimit="35"><result status="timeout" time="34.66"/></proof>
+  <proof prover="1"><result status="timeout" time="34.79"/></proof>
+  <proof prover="2" timelimit="35"><result status="timeout" time="34.82"/></proof>
+  <proof prover="3"><result status="timeout" time="34.80"/></proof>
+  </goal>
+  <goal name="WP_parameter main_safety.14" expl="14. Postcondition (Ensures clause)" expanded="true">
+  <proof prover="2"><result status="valid" time="0.29"/></proof>
+  </goal>
   <goal name="WP_parameter main_safety.15" expl="15. Postcondition (Ensures clause)" expanded="true">
-  <proof prover="2"><result status="valid" time="0.17"/></proof>
+  <proof prover="2"><result status="valid" time="0.29"/></proof>
   </goal>
  </transf>
  </goal>

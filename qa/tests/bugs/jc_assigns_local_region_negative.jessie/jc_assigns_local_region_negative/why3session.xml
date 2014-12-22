@@ -8,7 +8,7 @@
 <file name="../jc_assigns_local_region_negative.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="4241599b59bdd333bc35c61fcfa01a3f" expanded="true">
+<theory name="Jessie_program" sum="1066bf4808971674dbb172e726ee3a86" expanded="true">
  <goal name="WP_parameter strange_loop_ensures_default" expl="Function strange_loop, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter strange_loop_ensures_default.1" expl="1. loop invariant init" expanded="true">
@@ -66,12 +66,12 @@
   <goal name="WP_parameter strange_loop_safety.1" expl="1. Arithmetic overflow (Bounded uint32)" expanded="true">
   <transf name="split_goal_wp" expanded="true">
    <goal name="WP_parameter strange_loop_safety.1.1" expl="1.">
-   <proof prover="1"><result status="valid" time="0.11"/></proof>
-   <proof prover="2"><result status="valid" time="0.11"/></proof>
+   <proof prover="1"><result status="valid" time="0.10"/></proof>
+   <proof prover="2"><result status="valid" time="0.10"/></proof>
    </goal>
    <goal name="WP_parameter strange_loop_safety.1.2" expl="2.">
-   <proof prover="1"><result status="valid" time="0.15"/></proof>
-   <proof prover="2"><result status="valid" time="0.12"/></proof>
+   <proof prover="1"><result status="valid" time="0.11"/></proof>
+   <proof prover="2"><result status="valid" time="0.22"/></proof>
    </goal>
   </transf>
   </goal>
@@ -94,12 +94,12 @@
   <goal name="WP_parameter strange_loop_safety.4" expl="4. Arithmetic overflow (Bounded int32)" expanded="true">
   <transf name="split_goal_wp" expanded="true">
    <goal name="WP_parameter strange_loop_safety.4.1" expl="1.">
-   <proof prover="1"><result status="valid" time="0.10"/></proof>
-   <proof prover="2"><result status="valid" time="0.10"/></proof>
+   <proof prover="1"><result status="valid" time="0.11"/></proof>
+   <proof prover="2"><result status="valid" time="0.11"/></proof>
    </goal>
    <goal name="WP_parameter strange_loop_safety.4.2" expl="2.">
-   <proof prover="1"><result status="valid" time="0.11"/></proof>
-   <proof prover="2"><result status="valid" time="0.22"/></proof>
+   <proof prover="1"><result status="valid" time="0.15"/></proof>
+   <proof prover="2"><result status="valid" time="0.12"/></proof>
    </goal>
   </transf>
   </goal>

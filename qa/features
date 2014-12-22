@@ -30,3 +30,4 @@ tests/features/jessie_variadic_functions2.c
 tests/features/jessie_variadic_functions_normalized.c
 tests/features/test1.c
 tests/features/why3ide_highlight_branching.c
+tests/features/jc_embedded_allocates.c

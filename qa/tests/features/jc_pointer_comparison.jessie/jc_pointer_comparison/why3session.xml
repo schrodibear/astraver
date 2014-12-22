@@ -9,7 +9,7 @@
 <file name="../jc_pointer_comparison.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="0f11929e980a672474bec382dc66bae6" expanded="true">
+<theory name="Jessie_program" sum="f767624c2b7a4ad5398dbf9f287f3d2f" expanded="true">
  <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter main_ensures_default.1" expl="1. Assertion in line 39">
@@ -180,26 +180,30 @@
   <goal name="WP_parameter main_safety.6" expl="6. Pointer dereference (Assignment)" expanded="true">
   <transf name="inline_goal" expanded="true">
    <goal name="WP_parameter main_safety.6.1" expl="1. Pointer dereference (Assignment)" expanded="true">
+   <proof prover="2" timelimit="25"><result status="valid" time="18.08"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="WP_parameter main_safety.7" expl="7. Pointer dereference (Validity)" expanded="true">
+  <transf name="inline_goal" expanded="true">
+   <goal name="WP_parameter main_safety.7.1" expl="1. Pointer dereference (Validity)" expanded="true">
    <transf name="inline_goal" expanded="true">
-    <goal name="WP_parameter main_safety.6.1.1" expl="1. Pointer dereference (Assignment)" expanded="true">
-    <proof prover="0"><result status="valid" time="13.31"/></proof>
-    <proof prover="2" timelimit="46"><result status="valid" time="11.63"/></proof>
+    <goal name="WP_parameter main_safety.7.1.1" expl="1. Pointer dereference (Validity)" expanded="true">
+    <proof prover="0"><result status="valid" time="0.33"/></proof>
+    <proof prover="2" timelimit="46"><result status="valid" time="0.36"/></proof>
     </goal>
    </transf>
    </goal>
   </transf>
   </goal>
-  <goal name="WP_parameter main_safety.7" expl="7. Pointer dereference (Validity)">
-  <proof prover="2" timelimit="45"><result status="valid" time="0.67"/></proof>
-  </goal>
   <goal name="WP_parameter main_safety.8" expl="8. Pointer dereference (Assignment)">
   <proof prover="2" timelimit="45"><result status="valid" time="0.72"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.9" expl="9. Pointer dereference (Validity)">
-  <proof prover="2" timelimit="45"><result status="valid" time="30.51"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="33.97"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.10" expl="10. Pointer dereference (Assignment)">
-  <proof prover="2" timelimit="45"><result status="valid" time="44.62"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="45.94"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.11" expl="11. Deallocation">
   <proof prover="2" timelimit="45"><result status="valid" time="0.16"/></proof>

@@ -6,7 +6,7 @@
 <file name="../jessie_invalid_mempory_loc.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="c7e5995ab55138f82e7b1e34b03facc7" expanded="true">
+<theory name="Jessie_program" sum="48e25b9fa69a15e5bebcfc4e915d94c0" expanded="true">
  <goal name="WP_parameter test_ensures_default" expl="Function test, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="0.12"/></proof>
  </goal>

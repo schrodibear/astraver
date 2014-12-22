@@ -6,7 +6,7 @@
 <file name="../jc_frame_allocates_simplest.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="3ad8a54dbd2b9bf47c8e9f63b5dd1e75" expanded="true">
+<theory name="Jessie_program" sum="677d7f5de05971c38a2b9c49f6f6e520" expanded="true">
  <goal name="WP_parameter fobj_ensures_default" expl="Function fobj, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="0.27"/></proof>
  </goal>

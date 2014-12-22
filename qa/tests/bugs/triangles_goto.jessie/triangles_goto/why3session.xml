@@ -8,7 +8,7 @@
 <file name="../triangles_goto.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="ef594642f1825de486fc9e96a3d084cb" expanded="true">
+<theory name="Jessie_program" sum="613de6d9efa8e006c6ad1c081c7622bf" expanded="true">
  <goal name="WP_parameter test01_ensures_default" expl="Function test01, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="0.06"/></proof>
  </goal>

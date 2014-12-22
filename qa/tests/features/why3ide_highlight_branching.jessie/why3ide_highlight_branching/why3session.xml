@@ -8,11 +8,11 @@
 <file name="../why3ide_highlight_branching.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="802dffb879b76b22c1aa8bc4c63f02ca" expanded="true">
+<theory name="Jessie_program" sum="e5b0e5f5741e359d5469d9df478497c4" expanded="true">
  <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter main_ensures_default.1" expl="1. Assertion in line 7">
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="43"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.2" expl="2. Assertion in line 9">
   <proof prover="0"><result status="valid" time="0.12"/></proof>
@@ -30,7 +30,7 @@
   <proof prover="1"><result status="valid" time="0.16"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.7" expl="7. Assertion in line 7">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="44"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.8" expl="8. Assertion in line 9">
   <proof prover="0"><result status="valid" time="0.09"/></proof>
@@ -120,7 +120,7 @@
   <proof prover="1"><result status="valid" time="0.17"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.37" expl="37. loop invariant init">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="51"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.38" expl="38. Assertion in line 31">
   <proof prover="1"><result status="valid" time="0.17"/></proof>
@@ -132,19 +132,19 @@
   <proof prover="1"><result status="valid" time="0.18"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.41" expl="41. Assertion in line 36">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="54"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.42" expl="42. Assertion in line 50">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="55"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.43" expl="43. Assertion in line 36">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="53"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.44" expl="44. Assertion in line 50">
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="53"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.45" expl="45. loop invariant init">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="50"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.46" expl="46. Assertion in line 31">
   <proof prover="1"><result status="valid" time="0.16"/></proof>
@@ -156,16 +156,16 @@
   <proof prover="1"><result status="valid" time="0.17"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.49" expl="49. Assertion in line 36">
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="53"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.50" expl="50. Assertion in line 50">
-  <proof prover="2"><result status="valid" time="0.04"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="53"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.51" expl="51. Assertion in line 36">
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="52"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.52" expl="52. Assertion in line 50">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="52"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.53" expl="53. loop invariant init">
   <proof prover="1"><result status="valid" time="0.16"/></proof>
@@ -204,7 +204,7 @@
   <proof prover="1"><result status="valid" time="0.17"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.65" expl="65. loop invariant init">
-  <proof prover="2"><result status="valid" time="0.04"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="49"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.66" expl="66. Assertion in line 31">
   <proof prover="1"><result status="valid" time="0.16"/></proof>
@@ -216,19 +216,19 @@
   <proof prover="1"><result status="valid" time="0.16"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.69" expl="69. Assertion in line 36">
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="52"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.70" expl="70. Assertion in line 50">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="52"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.71" expl="71. Assertion in line 36">
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="51"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.72" expl="72. Assertion in line 50">
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="51"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.73" expl="73. loop invariant init">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="48"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.74" expl="74. Assertion in line 31">
   <proof prover="1"><result status="valid" time="0.16"/></proof>
@@ -240,16 +240,16 @@
   <proof prover="1"><result status="valid" time="0.17"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.77" expl="77. Assertion in line 36">
-  <proof prover="2"><result status="valid" time="0.04"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="51"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.78" expl="78. Assertion in line 50">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="51"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.79" expl="79. Assertion in line 36">
-  <proof prover="2"><result status="valid" time="0.04"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="50"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.80" expl="80. Assertion in line 50">
-  <proof prover="2"><result status="valid" time="0.04"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="50"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.81" expl="81. loop invariant init">
   <proof prover="1"><result status="valid" time="0.16"/></proof>
@@ -288,7 +288,7 @@
   <proof prover="1"><result status="valid" time="0.16"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.93" expl="93. loop invariant init">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="49"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.94" expl="94. Assertion in line 31">
   <proof prover="1"><result status="valid" time="0.16"/></proof>
@@ -300,19 +300,19 @@
   <proof prover="1"><result status="valid" time="0.17"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.97" expl="97. Assertion in line 36">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="52"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.98" expl="98. Assertion in line 50">
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="52"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.99" expl="99. Assertion in line 36">
-  <proof prover="2"><result status="valid" time="0.04"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="51"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.100" expl="100. Assertion in line 50">
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="51"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.101" expl="101. loop invariant init">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="48"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.102" expl="102. Assertion in line 31">
   <proof prover="1"><result status="valid" time="0.16"/></proof>
@@ -324,16 +324,16 @@
   <proof prover="1"><result status="valid" time="0.16"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.105" expl="105. Assertion in line 36">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="51"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.106" expl="106. Assertion in line 50">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="51"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.107" expl="107. Assertion in line 36">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="50"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.108" expl="108. Assertion in line 50">
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="50"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.109" expl="109. loop invariant init">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
@@ -433,7 +433,7 @@
   </goal>
   <goal name="WP_parameter main_ensures_default.133" expl="133. loop invariant init">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="49"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.134" expl="134. Assertion in line 31">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
@@ -449,23 +449,23 @@
   </goal>
   <goal name="WP_parameter main_ensures_default.137" expl="137. Assertion in line 36">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="52"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.138" expl="138. Assertion in line 50">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="53"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.139" expl="139. Assertion in line 36">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="51"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.140" expl="140. Assertion in line 50">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="51"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.141" expl="141. loop invariant init">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.04"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="48"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.142" expl="142. Assertion in line 31">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
@@ -481,19 +481,19 @@
   </goal>
   <goal name="WP_parameter main_ensures_default.145" expl="145. Assertion in line 36">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="51"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.146" expl="146. Assertion in line 50">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.04"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="51"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.147" expl="147. Assertion in line 36">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="50"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.148" expl="148. Assertion in line 50">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="50"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.149" expl="149. loop invariant init">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
@@ -545,7 +545,7 @@
   </goal>
   <goal name="WP_parameter main_ensures_default.161" expl="161. loop invariant init">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="48"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.162" expl="162. Assertion in line 31">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
@@ -561,23 +561,23 @@
   </goal>
   <goal name="WP_parameter main_ensures_default.165" expl="165. Assertion in line 36">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="51"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.166" expl="166. Assertion in line 50">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.04"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="52"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.167" expl="167. Assertion in line 36">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="50"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.168" expl="168. Assertion in line 50">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="50"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.169" expl="169. loop invariant init">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="47"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.170" expl="170. Assertion in line 31">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
@@ -593,19 +593,19 @@
   </goal>
   <goal name="WP_parameter main_ensures_default.173" expl="173. Assertion in line 36">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.04"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="50"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.174" expl="174. Assertion in line 50">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="50"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.175" expl="175. Assertion in line 36">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="49"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.176" expl="176. Assertion in line 50">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="49"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.177" expl="177. loop invariant init">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
@@ -657,7 +657,7 @@
   </goal>
   <goal name="WP_parameter main_ensures_default.189" expl="189. loop invariant init">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="47"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.190" expl="190. Assertion in line 31">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
@@ -673,23 +673,23 @@
   </goal>
   <goal name="WP_parameter main_ensures_default.193" expl="193. Assertion in line 36">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="50"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.194" expl="194. Assertion in line 50">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="50"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.195" expl="195. Assertion in line 36">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="49"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.196" expl="196. Assertion in line 50">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="49"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.197" expl="197. loop invariant init">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="46"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.198" expl="198. Assertion in line 31">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
@@ -705,22 +705,22 @@
   </goal>
   <goal name="WP_parameter main_ensures_default.201" expl="201. Assertion in line 36">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="49"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.202" expl="202. Assertion in line 50">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
-  <proof prover="2"><result status="valid" time="0.02"/></proof>
+  <proof prover="2"><result status="valid" time="0.02" steps="49"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.203" expl="203. Assertion in line 36">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="48"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.204" expl="204. Assertion in line 50">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
-  <proof prover="2"><result status="valid" time="0.03"/></proof>
+  <proof prover="2"><result status="valid" time="0.03" steps="48"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.205" expl="205. loop invariant init">
-  <proof prover="2"><result status="valid" time="0.01"/></proof>
+  <proof prover="2"><result status="valid" time="0.01" steps="43"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.206" expl="206. Assertion in line 45">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
@@ -745,13 +745,13 @@
   <proof prover="0"><result status="valid" time="0.16"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.3" expl="3. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.20"/></proof>
+  <proof prover="0"><result status="valid" time="0.22"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.4" expl="4. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.5" expl="5. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.03"/></proof>
+  <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.6" expl="6. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
@@ -772,13 +772,13 @@
   <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.12" expl="12. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.06"/></proof>
+  <proof prover="2"><result status="valid" time="0.06" steps="77"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.13" expl="13. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.16"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.14" expl="14. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.03"/></proof>
+  <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.15" expl="15. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
@@ -793,16 +793,16 @@
   <proof prover="0"><result status="valid" time="0.19"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.19" expl="19. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.06"/></proof>
+  <proof prover="2"><result status="valid" time="0.06" steps="78"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.20" expl="20. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.04"/></proof>
+  <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.21" expl="21. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.04"/></proof>
+  <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.22" expl="22. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.05"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="64"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.23" expl="23. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
@@ -811,10 +811,10 @@
   <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.25" expl="25. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.05"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="63"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.26" expl="26. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.03"/></proof>
+  <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.27" expl="27. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.18"/></proof>
@@ -829,31 +829,31 @@
   <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.31" expl="31. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.04"/></proof>
+  <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.32" expl="32. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.04"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="76"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.33" expl="33. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.34" expl="34. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.04"/></proof>
+  <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.35" expl="35. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.05"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="62"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.36" expl="36. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.19"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.37" expl="37. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.04"/></proof>
+  <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.38" expl="38. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.05"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="61"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.39" expl="39. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.02"/></proof>
+  <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.40" expl="40. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
@@ -865,71 +865,71 @@
   <proof prover="1"><result status="valid" time="0.09"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.43" expl="43. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.03"/></proof>
+  <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.44" expl="44. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.45" expl="45. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.06"/></proof>
+  <proof prover="2"><result status="valid" time="0.06" steps="76"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.46" expl="46. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.03"/></proof>
+  <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.47" expl="47. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.03"/></proof>
+  <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.48" expl="48. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.04"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="62"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.49" expl="49. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.50" expl="50. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.03"/></proof>
+  <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.51" expl="51. loop variant decrease" expanded="true">
   <transf name="split_goal_wp" expanded="true">
    <goal name="WP_parameter main_safety.51.1" expl="1.">
-   <proof prover="2"><result status="valid" time="0.05"/></proof>
+   <proof prover="2"><result status="valid" time="0.05" steps="61"/></proof>
    </goal>
    <goal name="WP_parameter main_safety.51.2" expl="2.">
-   <proof prover="2"><result status="valid" time="0.05"/></proof>
+   <proof prover="2"><result status="valid" time="0.05" steps="61"/></proof>
    </goal>
   </transf>
   </goal>
   <goal name="WP_parameter main_safety.52" expl="52. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.04"/></proof>
+  <proof prover="0"><result status="valid" time="0.02"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.53" expl="53. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.23"/></proof>
+  <proof prover="0"><result status="valid" time="0.16"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.54" expl="54. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.04"/></proof>
+  <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.55" expl="55. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.03"/></proof>
+  <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.56" expl="56. loop variant decrease">
   <proof prover="1"><result status="valid" time="0.08"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.57" expl="57. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.13"/></proof>
+  <proof prover="0"><result status="valid" time="0.14"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.58" expl="58. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.16"/></proof>
+  <proof prover="0"><result status="valid" time="0.23"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.59" expl="59. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.05"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="75"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.60" expl="60. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.22"/></proof>
+  <proof prover="0"><result status="valid" time="0.20"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.61" expl="61. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.03"/></proof>
+  <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.62" expl="62. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.04"/></proof>
+  <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.63" expl="63. loop variant decrease">
   <proof prover="1"><result status="valid" time="0.09"/></proof>
@@ -938,76 +938,76 @@
   <proof prover="0"><result status="valid" time="0.10"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.65" expl="65. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.10"/></proof>
+  <proof prover="0"><result status="valid" time="0.11"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.66" expl="66. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.05"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="76"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.67" expl="67. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.22"/></proof>
-  </goal>
-  <goal name="WP_parameter main_safety.68" expl="68. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.21"/></proof>
   </goal>
+  <goal name="WP_parameter main_safety.68" expl="68. Arithmetic overflow (Bounded int32)">
+  <proof prover="0"><result status="valid" time="0.22"/></proof>
+  </goal>
   <goal name="WP_parameter main_safety.69" expl="69. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.06"/></proof>
+  <proof prover="2"><result status="valid" time="0.06" steps="62"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.70" expl="70. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.71" expl="71. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.04"/></proof>
+  <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.72" expl="72. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.06"/></proof>
+  <proof prover="2"><result status="valid" time="0.06" steps="61"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.73" expl="73. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.74" expl="74. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.11"/></proof>
+  <proof prover="0"><result status="valid" time="0.12"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.75" expl="75. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.12"/></proof>
+  <proof prover="0"><result status="valid" time="0.13"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.76" expl="76. loop variant decrease">
   <proof prover="1"><result status="valid" time="0.10"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.77" expl="77. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.12"/></proof>
-  </goal>
-  <goal name="WP_parameter main_safety.78" expl="78. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.11"/></proof>
   </goal>
+  <goal name="WP_parameter main_safety.78" expl="78. Arithmetic overflow (Bounded int32)">
+  <proof prover="0"><result status="valid" time="0.10"/></proof>
+  </goal>
   <goal name="WP_parameter main_safety.79" expl="79. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.06"/></proof>
+  <proof prover="2"><result status="valid" time="0.06" steps="75"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.80" expl="80. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.28"/></proof>
-  </goal>
-  <goal name="WP_parameter main_safety.81" expl="81. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.13"/></proof>
   </goal>
+  <goal name="WP_parameter main_safety.81" expl="81. Arithmetic overflow (Bounded int32)">
+  <proof prover="0"><result status="valid" time="0.12"/></proof>
+  </goal>
   <goal name="WP_parameter main_safety.82" expl="82. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.05"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="61"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.83" expl="83. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.10"/></proof>
+  <proof prover="0"><result status="valid" time="0.11"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.84" expl="84. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.85" expl="85. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.05"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="60"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.86" expl="86. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.04"/></proof>
+  <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.87" expl="87. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.10"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.88" expl="88. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.03"/></proof>
+  <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.89" expl="89. loop variant decrease">
   <proof prover="1"><result status="valid" time="0.09"/></proof>
@@ -1019,7 +1019,7 @@
   <proof prover="0"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.92" expl="92. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.05"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="74"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.93" expl="93. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.04"/></proof>
@@ -1028,22 +1028,22 @@
   <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.95" expl="95. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.04"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="60"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.96" expl="96. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.11"/></proof>
+  <proof prover="0"><result status="valid" time="0.10"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.97" expl="97. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.98" expl="98. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.05"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="59"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.99" expl="99. Arithmetic overflow (Bounded int32)">
-  <proof prover="0"><result status="valid" time="0.04"/></proof>
+  <proof prover="0"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.100" expl="100. loop variant decrease">
-  <proof prover="2"><result status="valid" time="0.04"/></proof>
+  <proof prover="2"><result status="valid" time="0.04" steps="50"/></proof>
   </goal>
  </transf>
  </goal>

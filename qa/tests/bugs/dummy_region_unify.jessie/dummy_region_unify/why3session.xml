@@ -8,14 +8,14 @@
 <file name="../dummy_region_unify.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="0ee53e7c4e479d5787a8772f6c412da3" expanded="true">
+<theory name="Jessie_program" sum="02b382cc23ac85e7a7ff7aba5d97d689" expanded="true">
  <goal name="WP_parameter fff_ensures_default" expl="Function fff, default behavior" expanded="true">
  <proof prover="2"><result status="valid" time="0.06"/></proof>
  </goal>
  <goal name="WP_parameter fff_safety" expl="Function fff, safety" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter fff_safety.1" expl="1. Arithmetic overflow (Bounded int32)" expanded="true">
-  <proof prover="0"><result status="timeout" time="47.82"/></proof>
+  <proof prover="0" timelimit="30"><result status="outofmemory" time="9.17"/></proof>
   <proof prover="1"><result status="timeout" time="47.73"/></proof>
   <proof prover="2" timelimit="48"><result status="timeout" time="47.74"/></proof>
   </goal>
@@ -58,10 +58,10 @@
   <proof prover="2"><result status="valid" time="0.06"/></proof>
   </goal>
   <goal name="WP_parameter ggg_safety.2" expl="2. Pointer index bounds">
-  <proof prover="2"><result status="valid" time="0.10"/></proof>
+  <proof prover="2"><result status="valid" time="0.22"/></proof>
   </goal>
   <goal name="WP_parameter ggg_safety.3" expl="3. Reinterpret cast">
-  <proof prover="2"><result status="valid" time="0.12"/></proof>
+  <proof prover="2"><result status="valid" time="0.24"/></proof>
   </goal>
   <goal name="WP_parameter ggg_safety.4" expl="4. Pointer cast (Prefix or reinterpret)">
   <proof prover="2"><result status="valid" time="0.26"/></proof>

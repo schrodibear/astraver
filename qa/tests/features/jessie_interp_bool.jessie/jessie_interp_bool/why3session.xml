@@ -6,7 +6,7 @@
 <file name="../jessie_interp_bool.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="7bdff38c19f2ef47f9e866e28c9cc029" expanded="true">
+<theory name="Jessie_program" sum="66d66becb00d95eac667ee9bc13d9df5" expanded="true">
  <goal name="WP_parameter btest_ensures_default" expl="Function btest, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="0.06"/></proof>
  </goal>

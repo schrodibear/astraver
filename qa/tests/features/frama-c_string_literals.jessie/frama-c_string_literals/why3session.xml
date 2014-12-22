@@ -8,7 +8,7 @@
 <file name="../frama-c_string_literals.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="71ed8a4b899e169c25c4f8d05c5247f7" expanded="true">
+<theory name="Jessie_program" sum="85c1e1a4218d6b7395fe64b8fb0e3e63" expanded="true">
  <goal name="WP_parameter f1_ensures_default" expl="Function f1, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="3.15"/></proof>
  </goal>
@@ -36,30 +36,30 @@
   <goal name="WP_parameter main_safety.1" expl="1. Pointer index bounds">
   <proof prover="0"><result status="valid" time="0.23"/></proof>
   </goal>
-  <goal name="WP_parameter main_safety.2" expl="2. Pointer cast (Prefix or reinterpret)">
-  <proof prover="1"><result status="valid" time="1.53"/></proof>
+  <goal name="WP_parameter main_safety.2" expl="2. Pointer cast (Prefix or reinterpret)" expanded="true">
+  <transf name="inline_goal" expanded="true">
+   <goal name="WP_parameter main_safety.2.1" expl="1. Pointer cast (Prefix or reinterpret)">
+   <proof prover="1"><result status="valid" time="1.19"/></proof>
+   </goal>
+  </transf>
   </goal>
   <goal name="WP_parameter main_safety.3" expl="3. Pointer dereference (Assignment)" expanded="true">
-  <proof prover="1"><result status="valid" time="0.37"/></proof>
-  <proof prover="2"><result status="valid" time="0.12"/></proof>
-  </goal>
-  <goal name="WP_parameter main_safety.4" expl="4. Pointer cast (Prefix or reinterpret)" expanded="true">
   <transf name="inline_goal" expanded="true">
-   <goal name="WP_parameter main_safety.4.1" expl="1. Pointer cast (Prefix or reinterpret)">
-   <proof prover="1"><result status="valid" time="2.05"/></proof>
+   <goal name="WP_parameter main_safety.3.1" expl="1. Pointer dereference (Assignment)">
+   <proof prover="1"><result status="valid" time="0.38"/></proof>
    </goal>
   </transf>
+  </goal>
+  <goal name="WP_parameter main_safety.4" expl="4. Pointer cast (Prefix or reinterpret)">
+  <proof prover="1"><result status="valid" time="1.53"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.5" expl="5. Pointer dereference (Assignment)" expanded="true">
-  <transf name="inline_goal" expanded="true">
-   <goal name="WP_parameter main_safety.5.1" expl="1. Pointer dereference (Assignment)">
-   <proof prover="1"><result status="valid" time="2.12"/></proof>
-   </goal>
-  </transf>
+  <proof prover="1"><result status="valid" time="1.58"/></proof>
+  <proof prover="2"><result status="valid" time="1.10" steps="490"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.6" expl="6. Precondition for printf (External. Requires clause)" expanded="true">
   <proof prover="0"><result status="valid" time="0.28"/></proof>
-  <proof prover="2"><result status="valid" time="0.06"/></proof>
+  <proof prover="2"><result status="valid" time="0.06" steps="116"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.7" expl="7. Deallocation">
   <proof prover="0"><result status="valid" time="0.27"/></proof>

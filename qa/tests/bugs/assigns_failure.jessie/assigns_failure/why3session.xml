@@ -6,7 +6,7 @@
 <file name="../assigns_failure.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="78ee676e6486134f1f6865c41fa21f70" expanded="true">
+<theory name="Jessie_program" sum="0d292b9bcaf74224c416437fbbbceb8d" expanded="true">
  <goal name="WP_parameter zeroValues_ensures_default" expl="Function zeroValues, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter zeroValues_ensures_default.1" expl="1. loop invariant init" expanded="true">
@@ -35,11 +35,11 @@
   <goal name="WP_parameter zeroValues_safety.1" expl="1. Pointer dereference (Validity)">
   <proof prover="0"><result status="valid" time="0.11"/></proof>
   </goal>
-  <goal name="WP_parameter zeroValues_safety.2" expl="2. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.12"/></proof>
-  </goal>
-  <goal name="WP_parameter zeroValues_safety.3" expl="3. Pointer dereference (Assignment with offset)" expanded="true">
+  <goal name="WP_parameter zeroValues_safety.2" expl="2. Pointer dereference (Validity)" expanded="true">
   <proof prover="0"><result status="valid" time="0.16"/></proof>
+  </goal>
+  <goal name="WP_parameter zeroValues_safety.3" expl="3. Pointer dereference (Assignment with offset)">
+  <proof prover="0"><result status="valid" time="0.12"/></proof>
   </goal>
   <goal name="WP_parameter zeroValues_safety.4" expl="4. Arithmetic overflow (Bounded int32)">
   <proof prover="0"><result status="valid" time="0.16"/></proof>

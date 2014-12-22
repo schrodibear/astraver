@@ -7,7 +7,7 @@
 <file name="../jc_local_allocation_ref_bug.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="4d848429831fde8fc90271c479eb4f5a" expanded="true">
+<theory name="Jessie_program" sum="15301b9efbdaddc51755c69362c8b752" expanded="true">
  <goal name="WP_parameter has_value_ensures_default" expl="Function has_value, default behavior" expanded="true">
  <proof prover="0"><result status="timeout" time="4.97"/></proof>
  <transf name="split_goal_wp" expanded="true">

@@ -6,7 +6,7 @@
 <file name="../jc_allocates_bug.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="cf0c12782566cc243ad58ba1eb6153ed" expanded="true">
+<theory name="Jessie_program" sum="3b8abb398ea840c9f90b4afc92be6dc7" expanded="true">
  <goal name="WP_parameter t_ensures_default" expl="Function t, default behavior" expanded="true">
  <proof prover="0"><result status="timeout" time="4.96"/></proof>
  </goal>

@@ -6,7 +6,7 @@
 <file name="../jc_frame_allocates.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="17a2f19725b6b5cfa2db56dc08a3cae0" expanded="true">
+<theory name="Jessie_program" sum="3ff28a658cb7b180ce2d153b113d1067" expanded="true">
  <goal name="WP_parameter alloc_ensures_default" expl="Function alloc, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter alloc_ensures_default.1" expl="1. Postcondition" expanded="true">
