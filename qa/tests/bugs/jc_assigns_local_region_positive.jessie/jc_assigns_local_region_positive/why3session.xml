@@ -6,7 +6,7 @@
 <file name="../jc_assigns_local_region_positive.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="0fe8457888c19a056142bd797d93332d" expanded="true">
+<theory name="Jessie_program" sum="a6da79deb6eab48599172183ed90472d" expanded="true">
  <goal name="WP_parameter strange_loop_ensures_default" expl="Function strange_loop, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter strange_loop_ensures_default.1" expl="1. loop invariant init" expanded="true">
@@ -31,7 +31,7 @@
   <goal name="WP_parameter strange_loop_ensures_default.2" expl="2. loop invariant preservation" expanded="true">
   <transf name="split_goal_wp" expanded="true">
    <goal name="WP_parameter strange_loop_ensures_default.2.1" expl="1.">
-   <proof prover="0"><result status="valid" time="0.14"/></proof>
+   <proof prover="0"><result status="valid" time="0.27"/></proof>
    </goal>
    <goal name="WP_parameter strange_loop_ensures_default.2.2" expl="2.">
    <proof prover="0"><result status="valid" time="0.12"/></proof>
@@ -40,10 +40,10 @@
    <proof prover="0"><result status="valid" time="0.11"/></proof>
    </goal>
    <goal name="WP_parameter strange_loop_ensures_default.2.4" expl="4. Assigns clause">
-   <proof prover="0"><result status="valid" time="0.18"/></proof>
+   <proof prover="0"><result status="valid" time="0.30"/></proof>
    </goal>
    <goal name="WP_parameter strange_loop_ensures_default.2.5" expl="5. Assigns clause">
-   <proof prover="0"><result status="valid" time="0.16"/></proof>
+   <proof prover="0"><result status="valid" time="0.29"/></proof>
    </goal>
   </transf>
   </goal>
@@ -54,10 +54,10 @@
   <goal name="WP_parameter strange_loop_safety.1" expl="1. Arithmetic overflow (Bounded uint32)" expanded="true">
   <transf name="split_goal_wp" expanded="true">
    <goal name="WP_parameter strange_loop_safety.1.1" expl="1.">
-   <proof prover="0"><result status="valid" time="0.09"/></proof>
+   <proof prover="0"><result status="valid" time="0.11"/></proof>
    </goal>
    <goal name="WP_parameter strange_loop_safety.1.2" expl="2.">
-   <proof prover="0"><result status="valid" time="0.11"/></proof>
+   <proof prover="0"><result status="valid" time="0.12"/></proof>
    </goal>
   </transf>
   </goal>
@@ -77,10 +77,10 @@
   <goal name="WP_parameter strange_loop_safety.4" expl="4. Arithmetic overflow (Bounded int32)" expanded="true">
   <transf name="split_goal_wp" expanded="true">
    <goal name="WP_parameter strange_loop_safety.4.1" expl="1.">
-   <proof prover="0"><result status="valid" time="0.11"/></proof>
+   <proof prover="0"><result status="valid" time="0.09"/></proof>
    </goal>
    <goal name="WP_parameter strange_loop_safety.4.2" expl="2.">
-   <proof prover="0"><result status="valid" time="0.12"/></proof>
+   <proof prover="0"><result status="valid" time="0.11"/></proof>
    </goal>
   </transf>
   </goal>

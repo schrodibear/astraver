@@ -3,12 +3,12 @@
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="4">
 <prover id="0" name="CVC3" version="2.4.1" timelimit="5" memlimit="1000"/>
-<prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
-<prover id="2" name="CVC4 FULL" version="1.4" timelimit="21" memlimit="1000"/>
+<prover id="1" name="CVC4 &apos;14" version="1.4" timelimit="21" memlimit="1000"/>
+<prover id="2" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
 <file name="../triangles_goto.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="c166267583176376d09e8855e0ee631d" expanded="true">
+<theory name="Jessie_program" sum="ef594642f1825de486fc9e96a3d084cb" expanded="true">
  <goal name="WP_parameter test01_ensures_default" expl="Function test01, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="0.06"/></proof>
  </goal>
@@ -29,13 +29,13 @@
  </goal>
  <goal name="WP_parameter test04_ensures_default" expl="Function test04, default behavior" expanded="true">
  <proof prover="0"><result status="timeout" time="4.98"/></proof>
- <proof prover="1"><result status="timeout" time="4.97"/></proof>
+ <proof prover="2"><result status="timeout" time="4.97"/></proof>
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter test04_ensures_default.1" expl="1. Postcondition (Ensures clause)" expanded="true">
   <transf name="inline_goal" expanded="true">
    <goal name="WP_parameter test04_ensures_default.1.1" expl="1. Postcondition (Ensures clause)" expanded="true">
-   <proof prover="1"><result status="timeout" time="4.97"/></proof>
-   <proof prover="2"><result status="timeout" time="20.93"/></proof>
+   <proof prover="1"><result status="timeout" time="20.93"/></proof>
+   <proof prover="2"><result status="timeout" time="4.97"/></proof>
    </goal>
   </transf>
   </goal>

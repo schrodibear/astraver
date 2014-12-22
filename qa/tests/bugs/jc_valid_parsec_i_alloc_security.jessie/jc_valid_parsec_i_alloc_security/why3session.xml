@@ -6,54 +6,54 @@
 <file name="../jc_valid_parsec_i_alloc_security.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="3e5227dedf35916045391869c389f7a2" expanded="true">
+<theory name="Jessie_program" sum="661e98b6d7bf2c3820e6934ca2a96988" expanded="true">
  <goal name="WP_parameter parsec_i_alloc_security_ensures_FAILURE" expl="Function parsec_i_alloc_security, behavior FAILURE" expanded="true">
  <proof prover="0"><result status="valid" time="0.26"/></proof>
  </goal>
  <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS" expl="Function parsec_i_alloc_security, behavior SUCCESS" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.1" expl="1. Postcondition (Ensures clause)">
-  <proof prover="0"><result status="valid" time="0.28"/></proof>
+  <proof prover="0"><result status="valid" time="0.26"/></proof>
   </goal>
   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.2" expl="2. Postcondition (Ensures clause)">
-  <proof prover="0"><result status="valid" time="0.25"/></proof>
+  <proof prover="0"><result status="valid" time="0.21"/></proof>
   </goal>
   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.3" expl="3. Postcondition (Ensures clause)">
-  <proof prover="0"><result status="valid" time="0.27"/></proof>
+  <proof prover="0"><result status="valid" time="0.28"/></proof>
   </goal>
-  <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.4" expl="4. Postcondition (Ensures clause)" expanded="true">
+  <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.4" expl="4. Postcondition (Ensures clause)">
+  <proof prover="0"><result status="valid" time="0.35"/></proof>
+  </goal>
+  <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.5" expl="5. Postcondition (Ensures clause)" expanded="true">
   <transf name="split_goal_wp" expanded="true">
-   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.4.1" expl="1. Postcondition (Ensures clause)">
+   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.5.1" expl="1. Postcondition (Ensures clause)">
    <proof prover="0"><result status="valid" time="0.23"/></proof>
    </goal>
-   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.4.2" expl="2. Postcondition (Ensures clause)">
+   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.5.2" expl="2. Postcondition (Ensures clause)">
    <proof prover="0"><result status="valid" time="0.23"/></proof>
    </goal>
-   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.4.3" expl="3. Postcondition (Ensures clause)">
+   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.5.3" expl="3. Postcondition (Ensures clause)">
    <proof prover="0"><result status="valid" time="0.23"/></proof>
    </goal>
-   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.4.4" expl="4. Postcondition (Ensures clause)">
-   <proof prover="0"><result status="valid" time="0.35"/></proof>
-   </goal>
-   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.4.5" expl="5. Postcondition (Ensures clause)">
-   <proof prover="0"><result status="valid" time="0.23"/></proof>
-   </goal>
-   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.4.6" expl="6. Postcondition (Ensures clause)">
+   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.5.4" expl="4. Postcondition (Ensures clause)">
    <proof prover="0"><result status="valid" time="0.25"/></proof>
+   </goal>
+   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.5.5" expl="5. Postcondition (Ensures clause)">
+   <proof prover="0"><result status="valid" time="0.23"/></proof>
+   </goal>
+   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.5.6" expl="6. Postcondition (Ensures clause)">
+   <proof prover="0"><result status="valid" time="0.21"/></proof>
    </goal>
   </transf>
   </goal>
-  <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.5" expl="5. Postcondition (Ensures clause)">
-  <proof prover="0"><result status="valid" time="0.35"/></proof>
-  </goal>
   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.6" expl="6. Postcondition (Ensures clause)">
-  <proof prover="0"><result status="valid" time="0.28"/></proof>
+  <proof prover="0"><result status="valid" time="0.27"/></proof>
   </goal>
   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.7" expl="7. Postcondition (Ensures clause)">
-  <proof prover="0"><result status="valid" time="0.21"/></proof>
+  <proof prover="0"><result status="valid" time="0.25"/></proof>
   </goal>
   <goal name="WP_parameter parsec_i_alloc_security_ensures_SUCCESS.8" expl="8. Postcondition (Ensures clause)">
-  <proof prover="0"><result status="valid" time="0.26"/></proof>
+  <proof prover="0"><result status="valid" time="0.28"/></proof>
   </goal>
  </transf>
  </goal>

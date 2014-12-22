@@ -7,7 +7,7 @@
 <file name="../jessie_behaviors.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="e0618d88283e90b07db6a9e614ea9038" expanded="true">
+<theory name="Jessie_program" sum="3bc73d237e41045543fbc691ddf941c9" expanded="true">
  <goal name="WP_parameter my_add_ensures_default" expl="Function my_add, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter my_add_ensures_default.1" expl="1. Behavior disjointness check">
@@ -37,17 +37,17 @@
  <goal name="WP_parameter my_add_ensures_non_full" expl="Function my_add, behavior non_full" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter my_add_ensures_non_full.1" expl="1. Postcondition (Ensures clause)">
-  <proof prover="1"><result status="valid" time="0.06"/></proof>
+  <proof prover="1"><result status="valid" time="0.12"/></proof>
   </goal>
   <goal name="WP_parameter my_add_ensures_non_full.2" expl="2. Postcondition (Ensures clause)">
-  <proof prover="1"><result status="valid" time="0.12"/></proof>
+  <proof prover="1"><result status="valid" time="0.06"/></proof>
   </goal>
  </transf>
  </goal>
  <goal name="WP_parameter my_add_safety" expl="Function my_add, safety" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter my_add_safety.1" expl="1. Postcondition (Ensures clause)">
-  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  <proof prover="1"><result status="valid" time="0.05"/></proof>
   </goal>
   <goal name="WP_parameter my_add_safety.2" expl="2. Arithmetic overflow (Bounded uint32)">
   <proof prover="1"><result status="valid" time="0.04"/></proof>
@@ -56,16 +56,16 @@
   <proof prover="1"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter my_add_safety.4" expl="4. Arithmetic overflow (Bounded uint32)">
-  <proof prover="1"><result status="valid" time="0.08"/></proof>
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter my_add_safety.5" expl="5. Pointer dereference (Assignment with offset)">
   <proof prover="1"><result status="valid" time="0.11"/></proof>
   </goal>
   <goal name="WP_parameter my_add_safety.6" expl="6. Arithmetic overflow (Bounded uint32)">
-  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  <proof prover="1"><result status="valid" time="0.08"/></proof>
   </goal>
   <goal name="WP_parameter my_add_safety.7" expl="7. Postcondition (Ensures clause)">
-  <proof prover="1"><result status="valid" time="0.05"/></proof>
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
   </goal>
  </transf>
  </goal>
@@ -98,26 +98,26 @@
  <goal name="WP_parameter my_remove_ensures_non_empty" expl="Function my_remove, behavior non_empty" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter my_remove_ensures_non_empty.1" expl="1. Postcondition (Ensures clause)">
-  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  <proof prover="0"><result status="valid" time="0.11"/></proof>
   </goal>
   <goal name="WP_parameter my_remove_ensures_non_empty.2" expl="2. Postcondition (Ensures clause)">
-  <proof prover="0"><result status="valid" time="1.26"/></proof>
+  <proof prover="1"><result status="timeout" time="4.97"/></proof>
   </goal>
  </transf>
  </goal>
  <goal name="WP_parameter my_remove_safety" expl="Function my_remove, safety" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter my_remove_safety.1" expl="1. Postcondition (Ensures clause)">
-  <proof prover="1"><result status="valid" time="0.07"/></proof>
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter my_remove_safety.2" expl="2. Pointer dereference (Dereference by offset. Validity)">
-  <proof prover="1"><result status="valid" time="0.07"/></proof>
-  </goal>
-  <goal name="WP_parameter my_remove_safety.3" expl="3. Pointer dereference (Assignment)">
   <proof prover="1"><result status="valid" time="0.06"/></proof>
   </goal>
+  <goal name="WP_parameter my_remove_safety.3" expl="3. Pointer dereference (Assignment)">
+  <proof prover="1"><result status="valid" time="0.07"/></proof>
+  </goal>
   <goal name="WP_parameter my_remove_safety.4" expl="4. Arithmetic overflow (Bounded uint32)">
-  <proof prover="1"><result status="valid" time="0.08"/></proof>
+  <proof prover="1"><result status="valid" time="0.06"/></proof>
   </goal>
   <goal name="WP_parameter my_remove_safety.5" expl="5. Division by zero (precondition)">
   <proof prover="1"><result status="valid" time="0.06"/></proof>
@@ -126,10 +126,10 @@
   <proof prover="1"><result status="valid" time="0.18"/></proof>
   </goal>
   <goal name="WP_parameter my_remove_safety.7" expl="7. Arithmetic overflow (Bounded uint32)">
-  <proof prover="1"><result status="valid" time="0.06"/></proof>
+  <proof prover="1"><result status="valid" time="0.08"/></proof>
   </goal>
   <goal name="WP_parameter my_remove_safety.8" expl="8. Postcondition (Ensures clause)">
-  <proof prover="1"><result status="valid" time="0.34"/></proof>
+  <proof prover="1"><result status="valid" time="0.21"/></proof>
   </goal>
  </transf>
  </goal>
@@ -171,10 +171,10 @@
  <goal name="WP_parameter exists_safety" expl="Function exists, safety" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter exists_safety.1" expl="1. Postcondition (Ensures clause)">
-  <proof prover="1"><result status="valid" time="0.07"/></proof>
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter exists_safety.2" expl="2. Arithmetic overflow (Bounded uint32)">
-  <proof prover="1"><result status="valid" time="0.06"/></proof>
+  <proof prover="1"><result status="valid" time="0.03"/></proof>
   </goal>
   <goal name="WP_parameter exists_safety.3" expl="3. Pointer dereference (Dereference by offset. Validity)">
   <proof prover="1"><result status="valid" time="0.26"/></proof>
@@ -183,22 +183,22 @@
   <proof prover="1"><result status="valid" time="0.06"/></proof>
   </goal>
   <goal name="WP_parameter exists_safety.5" expl="5. Arithmetic overflow (Bounded uint32)">
-  <proof prover="1"><result status="valid" time="0.20"/></proof>
+  <proof prover="1"><result status="valid" time="0.06"/></proof>
   </goal>
   <goal name="WP_parameter exists_safety.6" expl="6. Division by zero (precondition)">
   <proof prover="1"><result status="valid" time="0.05"/></proof>
   </goal>
   <goal name="WP_parameter exists_safety.7" expl="7. Arithmetic overflow (Bounded uint32)">
-  <proof prover="1"><result status="valid" time="0.10"/></proof>
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter exists_safety.8" expl="8. Arithmetic overflow (Bounded int32)">
-  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  <proof prover="1"><result status="valid" time="0.10"/></proof>
   </goal>
   <goal name="WP_parameter exists_safety.9" expl="9. loop variant decrease">
   <proof prover="1"><result status="valid" time="0.06"/></proof>
   </goal>
   <goal name="WP_parameter exists_safety.10" expl="10. Postcondition (Ensures clause)">
-  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  <proof prover="1"><result status="valid" time="0.07"/></proof>
   </goal>
  </transf>
  </goal>
@@ -221,26 +221,26 @@
  <goal name="WP_parameter ready_ensures_in_queue" expl="Function ready, behavior in_queue" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter ready_ensures_in_queue.1" expl="1. Postcondition (Ensures clause)">
-  <proof prover="1"><result status="valid" time="0.07"/></proof>
+  <proof prover="1"><result status="valid" time="0.05"/></proof>
   </goal>
   <goal name="WP_parameter ready_ensures_in_queue.2" expl="2. Postcondition (Ensures clause)">
   <proof prover="1"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter ready_ensures_in_queue.3" expl="3. Postcondition (Ensures clause)">
-  <proof prover="1"><result status="valid" time="0.05"/></proof>
+  <proof prover="1"><result status="valid" time="0.07"/></proof>
   </goal>
  </transf>
  </goal>
  <goal name="WP_parameter ready_ensures_not_in_queue" expl="Function ready, behavior not_in_queue" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter ready_ensures_not_in_queue.1" expl="1. Postcondition (Ensures clause)">
-  <proof prover="1"><result status="valid" time="0.07"/></proof>
+  <proof prover="1"><result status="valid" time="0.04"/></proof>
   </goal>
   <goal name="WP_parameter ready_ensures_not_in_queue.2" expl="2. Postcondition (Ensures clause)">
   <proof prover="1"><result status="valid" time="0.05"/></proof>
   </goal>
   <goal name="WP_parameter ready_ensures_not_in_queue.3" expl="3. Postcondition (Ensures clause)">
-  <proof prover="1"><result status="valid" time="0.04"/></proof>
+  <proof prover="1"><result status="valid" time="0.07"/></proof>
   </goal>
  </transf>
  </goal>
