@@ -581,10 +581,10 @@ let free_param ~safe ac pc =
     List.fold_right (fun (n, ty') acc -> Prod_type (n, ty', acc)) params @@
     Annot_type (
       (if not safe then
-        (* allowed, see man 3 free *)
+         (* allowed, see man 3 free *)
          mk_positioned Position.dummy ~kind:(JCVCpre "Deallocation") @@
          LOr (p_is_null,
-              LPred ("allocable", [LDeref (Name.alloc_table (ac, dummy_region)); p]))
+              LPred ("freeable", [LDeref (Name.alloc_table (ac, dummy_region)); p]))
        else LTrue),
       (* argument pointer type *)
       unit_type,
