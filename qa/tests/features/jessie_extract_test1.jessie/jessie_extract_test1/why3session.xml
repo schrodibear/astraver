@@ -7,7 +7,7 @@
 <file name="../jessie_extract_test1.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="46df1d8b17d6300c85e6a2424ae1b831" expanded="true">
+<theory name="Jessie_program" sum="bf142884a8a0d42da77b16433c62c30f" expanded="true">
  <goal name="WP_parameter main2_ensures_default" expl="Function main2, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="0.13"/></proof>
  </goal>

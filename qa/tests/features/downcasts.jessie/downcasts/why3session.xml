@@ -7,7 +7,7 @@
 <file name="../downcasts.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="c6b706e190fa0a006e5337dbd0997459" expanded="true">
+<theory name="Jessie_program" sum="0653c46ab26addbd15dff0abe1abc15d" expanded="true">
  <goal name="WP_parameter acc_ensures_default" expl="Function acc, default behavior" expanded="true">
  <proof prover="1"><result status="valid" time="0.05"/></proof>
  </goal>

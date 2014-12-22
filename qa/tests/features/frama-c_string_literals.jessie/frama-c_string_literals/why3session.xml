@@ -8,7 +8,7 @@
 <file name="../frama-c_string_literals.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="9a125f684b135e330d5352d192b6599f" expanded="true">
+<theory name="Jessie_program" sum="71ed8a4b899e169c25c4f8d05c5247f7" expanded="true">
  <goal name="WP_parameter f1_ensures_default" expl="Function f1, default behavior" expanded="true">
  <proof prover="0"><result status="valid" time="3.15"/></proof>
  </goal>
@@ -21,7 +21,7 @@
  <goal name="WP_parameter f2_safety" expl="Function f2, safety" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter f2_safety.1" expl="1. Pointer cast (Prefix or reinterpret)">
-  <proof prover="0"><result status="valid" time="0.88"/></proof>
+  <proof prover="0"><result status="valid" time="1.35"/></proof>
   </goal>
   <goal name="WP_parameter f2_safety.2" expl="2. Postcondition (Ensures clause)">
   <proof prover="0"><result status="valid" time="0.23"/></proof>
@@ -36,26 +36,26 @@
   <goal name="WP_parameter main_safety.1" expl="1. Pointer index bounds">
   <proof prover="0"><result status="valid" time="0.23"/></proof>
   </goal>
-  <goal name="WP_parameter main_safety.2" expl="2. Pointer cast (Prefix or reinterpret)" expanded="true">
-  <transf name="inline_goal" expanded="true">
-   <goal name="WP_parameter main_safety.2.1" expl="1. Pointer cast (Prefix or reinterpret)">
-   <proof prover="1"><result status="valid" time="1.21"/></proof>
-   </goal>
-  </transf>
-  </goal>
-  <goal name="WP_parameter main_safety.3" expl="3. Pointer dereference (Assignment)" expanded="true">
-  <transf name="inline_goal" expanded="true">
-   <goal name="WP_parameter main_safety.3.1" expl="1. Pointer dereference (Assignment)">
-   <proof prover="1"><result status="valid" time="0.37"/></proof>
-   </goal>
-  </transf>
-  </goal>
-  <goal name="WP_parameter main_safety.4" expl="4. Pointer cast (Prefix or reinterpret)">
+  <goal name="WP_parameter main_safety.2" expl="2. Pointer cast (Prefix or reinterpret)">
   <proof prover="1"><result status="valid" time="1.53"/></proof>
   </goal>
+  <goal name="WP_parameter main_safety.3" expl="3. Pointer dereference (Assignment)" expanded="true">
+  <proof prover="1"><result status="valid" time="0.37"/></proof>
+  <proof prover="2"><result status="valid" time="0.12"/></proof>
+  </goal>
+  <goal name="WP_parameter main_safety.4" expl="4. Pointer cast (Prefix or reinterpret)" expanded="true">
+  <transf name="inline_goal" expanded="true">
+   <goal name="WP_parameter main_safety.4.1" expl="1. Pointer cast (Prefix or reinterpret)">
+   <proof prover="1"><result status="valid" time="2.05"/></proof>
+   </goal>
+  </transf>
+  </goal>
   <goal name="WP_parameter main_safety.5" expl="5. Pointer dereference (Assignment)" expanded="true">
-  <proof prover="1"><result status="valid" time="1.57"/></proof>
-  <proof prover="2"><result status="valid" time="1.11"/></proof>
+  <transf name="inline_goal" expanded="true">
+   <goal name="WP_parameter main_safety.5.1" expl="1. Pointer dereference (Assignment)">
+   <proof prover="1"><result status="valid" time="2.12"/></proof>
+   </goal>
+  </transf>
   </goal>
   <goal name="WP_parameter main_safety.6" expl="6. Precondition for printf (External. Requires clause)" expanded="true">
   <proof prover="0"><result status="valid" time="0.28"/></proof>

@@ -6,7 +6,7 @@
 <file name="../frama-c_asm_goto2.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="ba8479acfb74e6b448dd4b041a122551" expanded="true">
+<theory name="Jessie_program" sum="a6fe11642c3d4803f5bb395c805ea51e" expanded="true">
  <goal name="WP_parameter __static_cpu_has_ensures_default" expl="Function __static_cpu_has, default behavior" expanded="true">
  <transf name="compute_in_goal" expanded="true">
  </transf>

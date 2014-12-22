@@ -7,7 +7,7 @@
 <file name="../frama-c_redefinition.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="b03615dd1c0b4dc80e9e46287f4a52c9" expanded="true">
+<theory name="Jessie_program" sum="386b6b3f394f1df115035d2c5be145a7" expanded="true">
  <goal name="WP_parameter f_ensures_default" expl="Function f, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter f_ensures_default.1" expl="1." expanded="true">

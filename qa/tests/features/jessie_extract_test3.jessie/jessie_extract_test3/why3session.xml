@@ -2,20 +2,20 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="4">
-<prover id="0" name="CVC4" version="1.4" timelimit="30" memlimit="1000"/>
-<prover id="1" name="CVC4 FULL" version="1.4" timelimit="30" memlimit="1000"/>
+<prover id="0" name="CVC4 &apos;14" version="1.4" timelimit="30" memlimit="1000"/>
+<prover id="1" name="CVC4" version="1.4" timelimit="30" memlimit="1000"/>
 <prover id="2" name="Z3" version="4.3.2" timelimit="30" memlimit="1000"/>
 <file name="../jessie_extract_test3.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="d64daef7b9bd2333233be397dee9092a" expanded="true">
+<theory name="Jessie_program" sum="f74197b04f3f5eed97c3a5ad7e15a87f" expanded="true">
  <goal name="WP_parameter main2_ensures_default" expl="Function main2, default behavior" expanded="true">
  <proof prover="0"><result status="timeout" time="29.89"/></proof>
  <proof prover="1"><result status="timeout" time="29.89"/></proof>
  <proof prover="2"><result status="timeout" time="29.89"/></proof>
  </goal>
  <goal name="WP_parameter main2_safety" expl="Function main2, safety" expanded="true">
- <proof prover="0" timelimit="5"><result status="valid" time="0.10"/></proof>
+ <proof prover="1" timelimit="5"><result status="valid" time="0.10"/></proof>
  </goal>
 </theory>
 </file>

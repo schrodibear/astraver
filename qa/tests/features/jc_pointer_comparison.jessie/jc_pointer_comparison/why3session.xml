@@ -2,42 +2,42 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="4">
-<prover id="0" name="CVC3" version="2.4.1" timelimit="57" memlimit="1000"/>
-<prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
-<prover id="2" name="CVC4 FULL" version="1.4" timelimit="57" memlimit="1000"/>
+<prover id="0" name="CVC3" version="2.4.1" timelimit="46" memlimit="1000"/>
+<prover id="1" name="CVC4 &apos;14" version="1.4" timelimit="57" memlimit="1000"/>
+<prover id="2" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
 <prover id="3" name="Z3" version="4.3.2" timelimit="57" memlimit="1000"/>
 <file name="../jc_pointer_comparison.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="829fa2cd2b0c2d1ed78426411fc5fc13" expanded="true">
+<theory name="Jessie_program" sum="0f11929e980a672474bec382dc66bae6" expanded="true">
  <goal name="WP_parameter main_ensures_default" expl="Function main, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter main_ensures_default.1" expl="1. Assertion in line 39">
   <transf name="inline_goal">
    <goal name="WP_parameter main_ensures_default.1.1" expl="1. Assertion in line 39">
-   <proof prover="1"><result status="valid" time="0.19"/></proof>
+   <proof prover="2"><result status="valid" time="0.34"/></proof>
    </goal>
   </transf>
   </goal>
   <goal name="WP_parameter main_ensures_default.2" expl="2. Assertion in line 40">
   <transf name="inline_goal">
    <goal name="WP_parameter main_ensures_default.2.1" expl="1. Assertion in line 40">
-   <proof prover="1"><result status="valid" time="1.67"/></proof>
+   <proof prover="2"><result status="valid" time="2.45"/></proof>
    </goal>
   </transf>
   </goal>
   <goal name="WP_parameter main_ensures_default.3" expl="3. Assertion in line 41">
-  <proof prover="1"><result status="valid" time="1.88"/></proof>
+  <proof prover="2"><result status="valid" time="2.27"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.4" expl="4. Assertion in line 42">
-  <proof prover="1"><result status="valid" time="1.25"/></proof>
+  <proof prover="2"><result status="valid" time="2.26"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.5" expl="5. Assertion in line 43">
   <transf name="inline_goal">
    <goal name="WP_parameter main_ensures_default.5.1" expl="1. Assertion in line 43">
    <transf name="inline_goal">
     <goal name="WP_parameter main_ensures_default.5.1.1" expl="1. Assertion in line 43">
-    <proof prover="1"><result status="valid" time="0.91"/></proof>
+    <proof prover="2"><result status="valid" time="0.91"/></proof>
     </goal>
    </transf>
    </goal>
@@ -48,21 +48,21 @@
    <goal name="WP_parameter main_ensures_default.6.1" expl="1. Assertion in line 45">
    <transf name="inline_goal">
     <goal name="WP_parameter main_ensures_default.6.1.1" expl="1. Assertion in line 45">
-    <proof prover="1"><result status="valid" time="0.46"/></proof>
+    <proof prover="2"><result status="valid" time="0.46"/></proof>
     </goal>
    </transf>
    </goal>
   </transf>
   </goal>
   <goal name="WP_parameter main_ensures_default.7" expl="7. Assertion in line 47">
-  <proof prover="1"><result status="valid" time="0.18"/></proof>
+  <proof prover="2"><result status="valid" time="0.18"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.8" expl="8. Assertion in line 48">
   <transf name="inline_goal">
    <goal name="WP_parameter main_ensures_default.8.1" expl="1. Assertion in line 48">
    <transf name="inline_goal">
     <goal name="WP_parameter main_ensures_default.8.1.1" expl="1. Assertion in line 48">
-    <proof prover="1"><result status="valid" time="0.47"/></proof>
+    <proof prover="2"><result status="valid" time="0.47"/></proof>
     </goal>
    </transf>
    </goal>
@@ -73,7 +73,7 @@
    <goal name="WP_parameter main_ensures_default.9.1" expl="1. Assertion in line 49">
    <transf name="inline_goal">
     <goal name="WP_parameter main_ensures_default.9.1.1" expl="1. Assertion in line 49">
-    <proof prover="1" timelimit="45"><result status="valid" time="11.23"/></proof>
+    <proof prover="2" timelimit="45"><result status="valid" time="13.67"/></proof>
     </goal>
    </transf>
    </goal>
@@ -82,7 +82,7 @@
   <goal name="WP_parameter main_ensures_default.10" expl="10. Assertion in line 50">
   <transf name="inline_goal">
    <goal name="WP_parameter main_ensures_default.10.1" expl="1. Assertion in line 50">
-   <proof prover="1"><result status="valid" time="2.40"/></proof>
+   <proof prover="2"><result status="valid" time="2.40"/></proof>
    </goal>
   </transf>
   </goal>
@@ -91,7 +91,7 @@
    <goal name="WP_parameter main_ensures_default.11.1" expl="1. Assertion in line 52">
    <transf name="inline_goal">
     <goal name="WP_parameter main_ensures_default.11.1.1" expl="1. Assertion in line 52">
-    <proof prover="1"><result status="valid" time="2.41"/></proof>
+    <proof prover="2"><result status="valid" time="2.78"/></proof>
     </goal>
    </transf>
    </goal>
@@ -102,29 +102,29 @@
    <goal name="WP_parameter main_ensures_default.12.1" expl="1. Assertion in line 53">
    <transf name="inline_goal">
     <goal name="WP_parameter main_ensures_default.12.1.1" expl="1. Assertion in line 53">
-    <proof prover="1" timelimit="58"><result status="valid" time="10.84"/></proof>
+    <proof prover="2" timelimit="58"><result status="valid" time="13.50"/></proof>
     </goal>
    </transf>
    </goal>
   </transf>
   </goal>
   <goal name="WP_parameter main_ensures_default.13" expl="13. Assertion in line 54">
-  <proof prover="1"><result status="valid" time="0.19"/></proof>
+  <proof prover="2"><result status="valid" time="0.19"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.14" expl="14. Assertion in line 58">
-  <proof prover="1"><result status="valid" time="0.22"/></proof>
+  <proof prover="2"><result status="valid" time="0.22"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.15" expl="15. Assertion in line 59">
-  <proof prover="1"><result status="valid" time="0.19"/></proof>
+  <proof prover="2"><result status="valid" time="0.19"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.16" expl="16. Assertion in line 60">
-  <proof prover="1"><result status="valid" time="0.25"/></proof>
+  <proof prover="2"><result status="valid" time="0.25"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.17" expl="17. Assertion in line 61">
-  <proof prover="1"><result status="valid" time="0.22"/></proof>
+  <proof prover="2"><result status="valid" time="0.22"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.18" expl="18. Assertion in line 62" expanded="true">
-  <proof prover="1"><result status="valid" time="0.28"/></proof>
+  <proof prover="2"><result status="valid" time="0.28"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.19" expl="19. Assertion in line 63" expanded="true">
   <transf name="inline_goal" expanded="true">
@@ -137,9 +137,9 @@
       <goal name="WP_parameter main_ensures_default.19.1.1.1.1" expl="1. Assertion in line 63" expanded="true">
       <transf name="inline_goal" expanded="true">
        <goal name="WP_parameter main_ensures_default.19.1.1.1.1.1" expl="1. Assertion in line 63" expanded="true">
-       <proof prover="0"><result status="timeout" time="56.72"/></proof>
-       <proof prover="1" timelimit="57"><result status="timeout" time="56.83"/></proof>
-       <proof prover="2"><result status="timeout" time="56.79"/></proof>
+       <proof prover="0" timelimit="57"><result status="timeout" time="56.72"/></proof>
+       <proof prover="1"><result status="timeout" time="56.79"/></proof>
+       <proof prover="2" timelimit="57"><result status="timeout" time="56.83"/></proof>
        <proof prover="3"><result status="timeout" time="56.66"/></proof>
        </goal>
       </transf>
@@ -153,62 +153,71 @@
   </transf>
   </goal>
   <goal name="WP_parameter main_ensures_default.20" expl="20. Assertion in line 65">
-  <proof prover="1"><result status="valid" time="0.19"/></proof>
+  <proof prover="2"><result status="valid" time="0.19"/></proof>
   </goal>
   <goal name="WP_parameter main_ensures_default.21" expl="21. Assertion in line 66">
-  <proof prover="1"><result status="valid" time="0.23"/></proof>
+  <proof prover="2"><result status="valid" time="0.23"/></proof>
   </goal>
  </transf>
  </goal>
  <goal name="WP_parameter main_safety" expl="Function main, safety" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter main_safety.1" expl="1. Pointer index bounds">
-  <proof prover="1" timelimit="45"><result status="valid" time="0.26"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="0.26"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.2" expl="2. Pointer index bounds">
-  <proof prover="1" timelimit="45"><result status="valid" time="0.29"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="0.29"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.3" expl="3. Pointer index bounds">
-  <proof prover="1" timelimit="45"><result status="valid" time="0.33"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="0.33"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.4" expl="4. Pointer index bounds">
-  <proof prover="1" timelimit="45"><result status="valid" time="0.37"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="0.37"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.5" expl="5. Pointer index bounds">
-  <proof prover="1" timelimit="45"><result status="valid" time="0.30"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="0.30"/></proof>
   </goal>
-  <goal name="WP_parameter main_safety.6" expl="6. Pointer dereference (Assignment)">
-  <proof prover="1" timelimit="45"><result status="valid" time="29.07"/></proof>
+  <goal name="WP_parameter main_safety.6" expl="6. Pointer dereference (Assignment)" expanded="true">
+  <transf name="inline_goal" expanded="true">
+   <goal name="WP_parameter main_safety.6.1" expl="1. Pointer dereference (Assignment)" expanded="true">
+   <transf name="inline_goal" expanded="true">
+    <goal name="WP_parameter main_safety.6.1.1" expl="1. Pointer dereference (Assignment)" expanded="true">
+    <proof prover="0"><result status="valid" time="13.31"/></proof>
+    <proof prover="2" timelimit="46"><result status="valid" time="11.63"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
   </goal>
-  <goal name="WP_parameter main_safety.7" expl="7. Pointer dereference (Validity)" expanded="true">
-  <proof prover="1"><result status="valid" time="0.33"/></proof>
+  <goal name="WP_parameter main_safety.7" expl="7. Pointer dereference (Validity)">
+  <proof prover="2" timelimit="45"><result status="valid" time="0.67"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.8" expl="8. Pointer dereference (Assignment)">
-  <proof prover="1" timelimit="45"><result status="valid" time="0.72"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="0.72"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.9" expl="9. Pointer dereference (Validity)">
-  <proof prover="1" timelimit="45"><result status="valid" time="23.87"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="30.51"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.10" expl="10. Pointer dereference (Assignment)">
-  <proof prover="1" timelimit="45"><result status="valid" time="30.51"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="44.62"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.11" expl="11. Deallocation">
-  <proof prover="1" timelimit="45"><result status="valid" time="0.15"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="0.16"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.12" expl="12. Deallocation">
-  <proof prover="1" timelimit="45"><result status="valid" time="0.17"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="0.17"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.13" expl="13. Deallocation">
-  <proof prover="1" timelimit="45"><result status="valid" time="0.17"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="0.17"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.14" expl="14. Deallocation">
-  <proof prover="1" timelimit="45"><result status="valid" time="0.17"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="0.17"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.15" expl="15. Deallocation">
-  <proof prover="1" timelimit="45"><result status="valid" time="0.16"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="0.15"/></proof>
   </goal>
   <goal name="WP_parameter main_safety.16" expl="16. Postcondition (Ensures clause)">
-  <proof prover="1" timelimit="45"><result status="valid" time="0.18"/></proof>
+  <proof prover="2" timelimit="45"><result status="valid" time="0.18"/></proof>
   </goal>
  </transf>
  </goal>

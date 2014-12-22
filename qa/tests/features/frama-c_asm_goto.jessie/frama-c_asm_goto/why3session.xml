@@ -6,7 +6,7 @@
 <file name="../frama-c_asm_goto.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="0caa2f44b9cdb66d582fa961af32988e" expanded="true">
+<theory name="Jessie_program" sum="f76439d84e6e10b57952d2d8b2a2fec9" expanded="true">
  <goal name="WP_parameter f_ensures_default" expl="Function f, default behavior" expanded="true">
  <transf name="inline_goal" expanded="true">
   <goal name="WP_parameter f_ensures_default.1" expl="1." expanded="true">
@@ -29,8 +29,8 @@
    <goal name="WP_parameter f_ensures_default.1.6" expl="6. Assertion in line 49">
    <proof prover="0"><result status="valid" time="0.29"/></proof>
    </goal>
-   <goal name="WP_parameter f_ensures_default.1.7" expl="7. Postcondition (Ensures clause)" expanded="true">
-   <proof prover="0"><result status="valid" time="0.28"/></proof>
+   <goal name="WP_parameter f_ensures_default.1.7" expl="7. Postcondition (Ensures clause)">
+   <proof prover="0"><result status="valid" time="0.27"/></proof>
    </goal>
    <goal name="WP_parameter f_ensures_default.1.8" expl="8. Postcondition (Ensures clause)">
    <proof prover="0"><result status="valid" time="0.28"/></proof>
@@ -38,8 +38,8 @@
    <goal name="WP_parameter f_ensures_default.1.9" expl="9. Assertion in line 39">
    <proof prover="0"><result status="valid" time="0.29"/></proof>
    </goal>
-   <goal name="WP_parameter f_ensures_default.1.10" expl="10. Postcondition (Ensures clause)">
-   <proof prover="0"><result status="valid" time="0.27"/></proof>
+   <goal name="WP_parameter f_ensures_default.1.10" expl="10. Postcondition (Ensures clause)" expanded="true">
+   <proof prover="0"><result status="valid" time="0.28"/></proof>
    </goal>
   </transf>
   </goal>
@@ -57,16 +57,16 @@
   <proof prover="0"><result status="valid" time="0.22"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.4" expl="4. Pointer dereference (Assignment)">
-  <proof prover="0"><result status="valid" time="0.25"/></proof>
+  <proof prover="0"><result status="valid" time="0.23"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.5" expl="5. Precondition for inline_asm_0_0 (Requires clause. External)">
   <proof prover="0"><result status="valid" time="0.22"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.6" expl="6. Pointer dereference (Assignment)">
-  <proof prover="0"><result status="valid" time="0.23"/></proof>
+  <proof prover="0"><result status="valid" time="0.29"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.7" expl="7. Pointer dereference (Assignment)">
-  <proof prover="0"><result status="valid" time="0.22"/></proof>
+  <proof prover="0"><result status="valid" time="0.28"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.8" expl="8. Precondition for inline_asm_3_0 (Requires clause. External)">
   <proof prover="0"><result status="valid" time="0.27"/></proof>
@@ -78,59 +78,59 @@
   <proof prover="0"><result status="valid" time="0.27"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.11" expl="11. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.23"/></proof>
+  <proof prover="0"><result status="valid" time="0.25"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.12" expl="12. Precondition for inline_asm_6_0 (Requires clause. External)">
   <proof prover="0"><result status="valid" time="0.40"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.13" expl="13. Pointer dereference (Assignment)">
-  <proof prover="0"><result status="valid" time="0.23"/></proof>
+  <proof prover="0"><result status="valid" time="0.22"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.14" expl="14. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.28"/></proof>
+  <proof prover="0"><result status="valid" time="0.22"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.15" expl="15. Precondition for inline_asm_7_0 (Requires clause. External)">
   <proof prover="0"><result status="valid" time="0.29"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.16" expl="16. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.29"/></proof>
+  <proof prover="0"><result status="valid" time="0.23"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.17" expl="17. Pointer dereference (Assignment)">
   <proof prover="0"><result status="valid" time="0.30"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.18" expl="18. Pointer dereference (Validity)">
-  <proof prover="0"><result status="valid" time="0.22"/></proof>
+  <proof prover="0"><result status="valid" time="0.23"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.19" expl="19. Deallocation">
-  <proof prover="0"><result status="valid" time="0.24"/></proof>
+  <proof prover="0"><result status="valid" time="0.39"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.20" expl="20. Deallocation">
   <proof prover="0"><result status="valid" time="0.26"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.21" expl="21. Deallocation">
-  <proof prover="0"><result status="valid" time="0.26"/></proof>
+  <transf name="split_goal_wp">
+   <goal name="WP_parameter f_safety.21.1" expl="1. Deallocation">
+   <proof prover="0"><result status="valid" time="0.25"/></proof>
+   </goal>
+  </transf>
   </goal>
   <goal name="WP_parameter f_safety.22" expl="22. Deallocation">
-  <proof prover="0"><result status="valid" time="0.24"/></proof>
+  <proof prover="0"><result status="valid" time="0.26"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.23" expl="23. Deallocation">
   <proof prover="0"><result status="valid" time="0.26"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.24" expl="24. Deallocation">
-  <proof prover="0"><result status="valid" time="0.26"/></proof>
+  <proof prover="0"><result status="valid" time="0.24"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.25" expl="25. Deallocation">
-  <transf name="split_goal_wp">
-   <goal name="WP_parameter f_safety.25.1" expl="1. Deallocation">
-   <proof prover="0"><result status="valid" time="0.25"/></proof>
-   </goal>
-  </transf>
+  <proof prover="0"><result status="valid" time="0.26"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.26" expl="26. Deallocation">
   <proof prover="0"><result status="valid" time="0.26"/></proof>
   </goal>
   <goal name="WP_parameter f_safety.27" expl="27. Deallocation">
-  <proof prover="0"><result status="valid" time="0.39"/></proof>
+  <proof prover="0"><result status="valid" time="0.37"/></proof>
   </goal>
  </transf>
  </goal>

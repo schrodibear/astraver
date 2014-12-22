@@ -2,12 +2,12 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="4">
-<prover id="0" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
-<prover id="1" name="CVC4 FULL" version="1.4" timelimit="26" memlimit="1000"/>
+<prover id="0" name="CVC4 &apos;14" version="1.4" timelimit="26" memlimit="1000"/>
+<prover id="1" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
 <file name="../jc_reinterpretation.mlw" expanded="true">
 <theory name="Jessie_model" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_program" sum="39271b00682fb454c32289d5de2417eb" expanded="true">
+<theory name="Jessie_program" sum="cfd6ffb65d2c55aa7696e744ac34a515" expanded="true">
  <goal name="WP_parameter f_ensures_default" expl="Function f, default behavior" expanded="true">
  <transf name="split_goal_wp" expanded="true">
   <goal name="WP_parameter f_ensures_default.1" expl="1. Postcondition" expanded="true">
@@ -15,35 +15,35 @@
    <goal name="WP_parameter f_ensures_default.1.1" expl="1. Allocates clause" expanded="true">
    <transf name="inline_goal" expanded="true">
     <goal name="WP_parameter f_ensures_default.1.1.1" expl="1. Allocates clause" expanded="true">
-    <proof prover="0" timelimit="26"><result status="valid" time="4.25"/></proof>
-    <proof prover="1"><result status="valid" time="8.00"/></proof>
+    <proof prover="0"><result status="valid" time="8.00"/></proof>
+    <proof prover="1" timelimit="26"><result status="valid" time="4.25"/></proof>
     </goal>
    </transf>
    </goal>
    <goal name="WP_parameter f_ensures_default.1.2" expl="2. Allocates clause">
-   <proof prover="0"><result status="valid" time="0.29"/></proof>
+   <proof prover="1"><result status="valid" time="0.29"/></proof>
    </goal>
    <goal name="WP_parameter f_ensures_default.1.3" expl="3. Assigns clause">
-   <proof prover="0"><result status="valid" time="0.70"/></proof>
+   <proof prover="1"><result status="valid" time="0.70"/></proof>
    </goal>
    <goal name="WP_parameter f_ensures_default.1.4" expl="4. Assigns clause" expanded="true">
-   <proof prover="0"><result status="valid" time="0.70"/></proof>
+   <proof prover="1"><result status="valid" time="0.70"/></proof>
    </goal>
    <goal name="WP_parameter f_ensures_default.1.5" expl="5. Ensures clause" expanded="true">
-   <proof prover="0"><result status="valid" time="0.37"/></proof>
+   <proof prover="1"><result status="valid" time="0.37"/></proof>
    </goal>
   </transf>
   </goal>
  </transf>
  </goal>
  <goal name="WP_parameter f_safety" expl="Function f, safety" expanded="true">
- <proof prover="0"><result status="valid" time="0.78"/></proof>
+ <proof prover="1"><result status="valid" time="0.78"/></proof>
  </goal>
  <goal name="WP_parameter caller_ensures_default" expl="Function caller, default behavior" expanded="true">
- <proof prover="0"><result status="timeout" time="4.96"/></proof>
+ <proof prover="1"><result status="timeout" time="4.96"/></proof>
  </goal>
  <goal name="WP_parameter caller_safety" expl="Function caller, safety" expanded="true">
- <proof prover="0"><result status="valid" time="0.46"/></proof>
+ <proof prover="1"><result status="valid" time="0.46"/></proof>
  </goal>
 </theory>
 </file>
