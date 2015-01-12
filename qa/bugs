@@ -47,3 +47,4 @@ tests/bugs/jc_assigns_local_region_positive.c
 tests/bugs/jc_statement_simple_contract_positive.c
 tests/bugs/jc_local_allocation_ref_bug.c
 tests/bugs/jessie_behaviors.c
+tests/bugs/jessie_packed_padding_fields.c
