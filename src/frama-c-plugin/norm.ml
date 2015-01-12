@@ -328,13 +328,14 @@ class array_variables_retyping_visitor ~attach self =
     method! vterm t = Visit.to_visit_action @@ Do.on_term ~pre:preaction_expr t
 end
 
-let retype_array_variables =
+let retype_array_variables file =
   (* Enforce the prototype of malloc to exist before visiting anything.
    * It might be useful for allocation pointers from arrays
    *)
   ignore (Ast.Vi.Function.malloc ());
   ignore (Ast.Vi.Function.free ());
-  (Visit.inserting_statements_and_attaching_globs { Visit.mk = new array_variables_retyping_visitor })[@warning "-42"]
+  (Visit.inserting_statements_and_attaching_globs { Visit.mk = new array_variables_retyping_visitor } file)
+    [@warning "-42"]
 
 (*****************************************************************************)
 (* Retype logic functions/predicates with structure parameters or return.    *)
