@@ -108,6 +108,7 @@ bin
 /src/jc/jc_parser.ml
 /src/jc/jc_parser.mli
 /src/jc/jc_numconst.ml
+/src/jc/jc_version.ml
 
 /c/cconst.ml
 /c/clexer.ml

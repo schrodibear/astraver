@@ -1,3 +1,48 @@
+Jessie2
+=======
+version alpha0, January 12, 2015
+================================
+
+  o [Frama-C plugin] Jessie-specific \offset_min() and \offset_max() logic functions support in ACSL
+
+  o [Frama-C plugin] Partial support for memcpy(), memmove() and memcmp() external (library) functions through specification patterns
+  o [Frama-C plugin] Re-enabled composite terms expansion in \assigns clause and hierarchical type casts (up- and down-casting)
+  o [Jessie/Why3ML output] Added several (incomplete) axioms stating the absence of arithmetic overflow in bitwise operations
+  o [Jessie/Why3ML output] Partial axiomatization for bitwise operations (on integers rather than bit-vectors)
+    WARNING: there are currently known major issues with the bitwise operations axiomatization,
+    mainly regarding bitwise complement (~) operation
+  o [Frama-C plugin] Partial support for memset() library function (only for zeroes)
+  o [Frama-C plugin] Kernel memory (de)allocating functions support (kmalloc()/kzalloc(), kfree())
+  o [Frama-C plugin] Partial support for builtin __Bool type (sizeof is unsupported)
+  o [Frama-C plugin] Partial support for inline assembly through undefined function calls
+  o [Frama-C plugin] Partial (correct, but incomplete) function pointer support through exhaustive checking
+    for all possible fp aliases
+  o [Frama-C plugin] kzalloc function support (kmalloc + memset)
+  o [Jessie/Why3ML output] False assumptions highlighting for C code in Why3IDE (propagated necessary location information)
+  o [Frama-C plugin] Improved scalability on very large files (> 100_000 LoC) through relevant global declarations extraction and
+    unused fields elimination (-jessie-extract, enabled by default)
+  o [Frama-C plugin] Variadic functions support through additional array argument
+  o [Frama-C plugin, Jessie] Re-enabled typeacasts in \assigns clauses
+  o [Frama-C plugin] Proxy variables for string literals and corresponding invariants
+  o [Jessie] Partial support for low-level type casts ("reinterpret_casts") in non-bitvector regions
+  o [Jessie/WhyML output] More detailed explanations in Why3ML output
+
+  o [Jessie/WhyML output] Separated WhyML and Why3ML outputs into two distinct modules that can be switched using first-class modules
+  o [Frama-C plugin] Refactoring of Common module
+
+  o [Frama-C plugin] Fix: different values of sizeof in code vs annotations due to embedded fields transformation
+  o [Frama-C plugin] Fix: establishing the type inheritance relation (subtyping hierarchy) -- including first substructure inlining
+  o [Jessie] Fix: incomplete frame conditions for memory operations (allocation/deallocation)
+  o [Jessie] Fix: incomplete translation of allocates clauses
+  o [Jessie] Fix: segmentation faults due to stack overflows in the native code caused by polymorphic comparison of enum_infos (recursive)
+  o [Jessie] Fix: model arguments of functions with unaliased internal memory allocations (local regions)
+  o [Frama-C plugin] Fix: type tags retyping isn't needed anymore
+  o [Jessie] Fix: assigns clause translation for global references
+  o [Jessie/WhyML output] Fix: dropping dereferences on local immutable variables (similar to function arguments)
+  o Compatibility with OCaml 4.02.1
+  o [Jessie/WhyML output] Fix: if clause in Why3ML -- conditions are now predicates (rather than terms)
+  o [Frama-C plugin] Fix: \valid(p+(a..b)) translation according to ACSL specification
+
 version 2.34, March 16, 2014
 ==========================
 
@@ -9,7 +54,7 @@ version 2.34, March 16, 2014
   o [Krakatoa] Fixed a bug in the order of logic definitions
   o [Jessie] Synchronized with Why3 0.83, to benefit from all Why3
     recent improvements, in particular regarding efficiency, both in
-    term of execution time and memory comsumption. 
+    term of execution time and memory comsumption.
 
 version 2.33, April 20, 2013
 ==========================

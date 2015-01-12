@@ -120,11 +120,11 @@ let pos_files = ref []
 let pos_table = Hashtbl.create 97
 
 let version () =
-  Printf.printf "This is Jessie version %s, compiled on %s
-Copyright (c) 2006-2014 - CNRS/INRIA/Univ Paris-Sud
-This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
-"
-    Why_version.version Why_version.date;
+  Printf.printf "This is Jessie2 (ISP RAS Jessie fork) version %s, compiled on %s.\n\
+                 Copyright (c) 2006-2015 - CNRS/INRIA/Univ Paris-Sud/ISP RAS.\n\
+                 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty).\n"
+    Jc_version.version
+    Jc_version.date;
   exit 0
 
 let usage = "jessie [options] files"

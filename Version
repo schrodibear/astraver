@@ -1,4 +1,6 @@
-# Why/Jessie/Krakatoa version
-VERSION=2.34
-# Caduceus version (no more maintained)
-CVERSION=1.29
+# Why version (not maintained in this project, to be eliminated)
+WHY_VERSION=2.34
+
+# Jessie2 version
+JC_VERSION=alpha0
+

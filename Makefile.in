@@ -91,6 +91,7 @@ PVSFILES = lib/pvs/jessie.pvs
 PVSLIB = $(DESTDIR)@PVSLIB@
 
 GENERATED = src/why/why_version.ml \
+	    src/jc/jc_version.ml \
 	    src/jc/jc_ai.ml \
             lib/why3/why3.conf
 
@@ -197,7 +198,7 @@ pvs-yes: $(PVSFILES)
 
 include Version
 
-doc/version.tex src/why/why_version.ml: Version version.sh config.status
+doc/version.tex src/why/why_version.ml src/jc/jc_version.ml: Version version.sh config.status
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) COQVER=$(COQVER) ./version.sh
 
 # installation
