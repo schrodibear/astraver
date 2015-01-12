@@ -3237,9 +3237,8 @@ let rewrite file =
   let open Config in
   (* Insert declarations for kmalloc and jessie_nondet_int if necessary *)
   apply declare_jessie_nondet_int "inserting declaration for jessie_nondet_int (if necessary)";
-  (* Add definitions for undefined composite tags in extract mode. *)
-  if Extract.get () then
-    apply define_dummy_structs "defining dummy structs";
+  (* Add definitions for undefined composite tags. *)
+  apply define_dummy_structs "defining dummy structs";
   (* Eliminate function pointers through dummy variables, assertions and if-then-else statements *)
   apply eliminate_fps "eliminating function pointers";
   (* Eliminate va_lists by replacing it with void * *)
