@@ -1452,10 +1452,15 @@ struct
         | None -> Console.fatal "Type.Composite.Struct.void: called before normalization"
 
       let of_typ ty =
-        match ty with
+        match unrollType ty with
         | TComp ({ cstruct = true }, _, _) ->
           Some ty
         | _ -> None
+
+      let is_struct ty =
+        match of_typ ty with
+        | Some _ -> true
+        | None -> false
 
       let of_typ_exn ty =
         match of_typ ty with

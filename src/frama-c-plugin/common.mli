@@ -413,6 +413,7 @@ sig
       type t = private composite Type.t
       val of_typ : typ -> t option
       val of_typ_exn : typ -> t
+      val is_struct : typ -> bool
       val void : unit -> t
       val init_void : t -> unit
     end

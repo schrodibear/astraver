@@ -914,13 +914,14 @@ class embed_first_substructs_visitor =
   object
     inherit frama_c_inplace
 
-    method! vcompinfo ci =
-      match ci.cfields with
-      | { ftype; fattr } :: _ ->
+    method! vcompinfo =
+      function
+      | { cfields = { ftype; fattr } :: _; cstruct = true } as ci ->
         begin match Type.Ref.of_typ ftype with
         | Some ftype
           when Type.Ref.(size ftype = Int64.one &&
                          isStructOrUnionType (typ ftype) &&
+                         Type.Composite.Struct.is_struct (typ ftype) &&
                          not (hasAttribute Name.Of.Attr.wrapper @@ typeAttrs @@ typ ftype)) &&
                not (hasAttribute Name.Of.Attr.noembed fattr) ->
           begin match unrollType (Type.Ref.typ ftype) with
