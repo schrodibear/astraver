@@ -352,6 +352,7 @@ struct
       struct
         let embedded = "embedded_from"
         let noembed = "noembed"
+        let packed = "packed"
         let padding = "padding"
         let wrapper = "wrapper"
         let arraylen = "arraylen"
@@ -1356,7 +1357,7 @@ struct
             fname = Name.unique "padding";
             ftype = padding_type;
             fbitfield = fsize_in_bits;
-            fattr = [Attr ("const", []); Attr (Name.Of.Attr.padding, [])];
+            fattr = [Attr ("const", []); Attr (Name.Of.Attr.padding, []); Attr (Name.Of.Attr.packed, [])];
             floc = Location.unknown;
             faddrof = false;
             fsize_in_bits;
@@ -1658,8 +1659,10 @@ struct
   let retaining_size_of_field fi f =
     let original_size = bitsSizeOf fi.ftype in
     let result = f fi in
-    if bitsSizeOf fi.ftype <> original_size then
+    if bitsSizeOf fi.ftype <> original_size then begin
       fi.fbitfield <- Some original_size;
+      fi.fattr <- addAttribute (Attr (Name.Of.Attr.packed, [])) fi.fattr
+    end;
     result
 
   (* Delaying updates to the file until after the action function has

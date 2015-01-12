@@ -161,6 +161,7 @@ sig
     sig
       val embedded : string
       val noembed : string
+      val packed : string
       val padding : string
       val wrapper : string
       val arraylen : string
