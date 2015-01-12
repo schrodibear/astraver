@@ -136,14 +136,14 @@ module TypeUF = Union_find (Type_elem) (Typ.Set) (Typ.Hashtbl)
 let add_inheritance_relation ty parentty = TypeUF.unify ty parentty
 
 let same_fields fi1 fi2 =
-  let norm = typeRemoveAttributes [Name.Of.Attr.embedded] in
+  let norm = typeRemoveAttributes [Name.Attr.embedded] in
   fi1.forig_name = fi2.forig_name &&
   Typ.equal (norm fi1.ftype) (norm fi2.ftype)
 
 let struct_fields_exn ty =
   match unrollType ty with
   | TComp (compinfo, _, _) ->
-    List.filter (fun fi -> not @@ hasAttribute Name.Of.Attr.padding fi.fattr) compinfo.cfields |>
+    List.filter (fun fi -> not @@ hasAttribute Name.Attr.padding fi.fattr) compinfo.cfields |>
     begin function [] when compinfo.cfields <> [] -> [List.hd compinfo.cfields] | fields -> fields end
   | t -> Console.fatal "struct_fields: non-composite type %a" Printer.pp_typ t
 
@@ -183,7 +183,7 @@ let cmp_subtype =
   else if ty1_length = ty2_length && ty2_length = prefix_length && prefix_length > 0 then
     let ty1_n_embedded_attrs, ty2_n_embedded_attrs =
       map_pair
-        List.(length % filterAttributes Name.Of.Attr.embedded % (fun fi -> fi.fattr) % hd)
+        List.(length % filterAttributes Name.Attr.embedded % (fun fi -> fi.fattr) % hd)
         (ty1_fields, ty2_fields)
     in
     if ty1_n_embedded_attrs < ty2_n_embedded_attrs then

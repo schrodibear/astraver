@@ -155,67 +155,64 @@ val mkStmt : ?ghost:bool -> stmtkind -> stmt
 
 module Name :
 sig
-  module Of :
+  module Attr :
   sig
-    module Attr :
-    sig
-      val embedded : string
-      val noembed : string
-      val packed : string
-      val padding : string
-      val wrapper : string
-      val arraylen : string
-      val string_declspec : string
-    end
+    val embedded : string
+    val noembed : string
+    val packed : string
+    val padding : string
+    val wrapper : string
+    val arraylen : string
+    val string_declspec : string
+  end
 
-    module Predicate :
-    sig
-      val valid_string : string
-      val valid_wstring : string
-    end
+  module Predicate :
+  sig
+    val valid_string : string
+    val valid_wstring : string
+  end
 
-    module Logic_function :
-    sig
-      val strlen : string
-      val wcslen : string
-      val nondet_int : string
-    end
+  module Logic_function :
+  sig
+    val strlen : string
+    val wcslen : string
+    val nondet_int : string
+  end
 
-    module Function :
-    sig
-      val assert_ : string
-      val free : string
-      val kfree : string
-      val malloc : string
-      val kmalloc : string
-      val kzalloc : string
-      val calloc : string
-      val realloc : string
-    end
+  module Function :
+  sig
+    val assert_ : string
+    val free : string
+    val kfree : string
+    val malloc : string
+    val kmalloc : string
+    val kzalloc : string
+    val calloc : string
+    val realloc : string
+  end
 
-    module File :
-    sig
-      val blockfuns_include : string
-    end
+  module File :
+  sig
+    val blockfuns_include : string
+  end
 
-    val typ : typ -> string
-    val logic_type : logic_type -> string
+  val typ : typ -> string
+  val logic_type : logic_type -> string
 
-    module Logic_type :
-    sig
-      val padding : string
-    end
+  module Logic_type :
+  sig
+    val padding : string
+  end
 
-    module Behavior :
-    sig
-      val safety : string
-      val default : string
-    end
+  module Behavior :
+  sig
+    val safety : string
+    val default : string
+  end
 
-    module Jc_specific :
-    sig
-      val hint : string
-    end
+  module Jc_specific :
+  sig
+    val hint : string
   end
 
   val is_predefined : string -> bool

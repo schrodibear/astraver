@@ -306,14 +306,14 @@ class string_constants_visitor ~attach =
       match
         Logic_env.find_all_logic_functions
           (match s with
-           | `Wstring _ -> Name.Of.Predicate.valid_wstring
-           | `String _ -> Name.Of.Predicate.valid_string)
+           | `Wstring _ -> Name.Predicate.valid_wstring
+           | `String _ -> Name.Predicate.valid_string)
       with
         | [i] -> i
         | _  -> raise Exit
     in
     let strlen =
-      match Logic_env.find_all_logic_functions Name.Of.Logic_function.strlen
+      match Logic_env.find_all_logic_functions Name.Logic_function.strlen
       with
         | [i] -> i
         | _  -> raise Exit
@@ -322,7 +322,7 @@ class string_constants_visitor ~attach =
       match strlen.l_type with Some t -> t | None -> assert false
     in
     let wcslen =
-      match Logic_env.find_all_logic_functions Name.Of.Logic_function.wcslen
+      match Logic_env.find_all_logic_functions Name.Logic_function.wcslen
       with
         | [i] -> i
         | _  -> raise Exit
@@ -708,7 +708,7 @@ class kzalloc_expanding_visitor =
     method! vstmt stmt =
       match stmt.skind with
       | Instr (Call (Some lv as lv_opt, { enode = Lval (Var fv, NoOffset); eloc }, ([size; _] as args), loc))
-        when isFunctionType fv.vtype && fv.vname = Name.Of.Function.kzalloc ->
+        when isFunctionType fv.vtype && fv.vname = Name.Function.kzalloc ->
         let get_function name =
           try
             Kernel_function.get_vi (Globals.Functions.find_by_name name)
@@ -719,7 +719,7 @@ class kzalloc_expanding_visitor =
                 Please provide a declaration for %s with minimal specification (will be ignored)")
               name name
         in
-        let vi_kmalloc = get_function Name.Of.Function.kmalloc in
+        let vi_kmalloc = get_function Name.Function.kmalloc in
         let vi_memset = get_function "memset" in
         let lv = new_exp ~loc (Lval lv) in
         let z = zero ~loc in
@@ -743,7 +743,7 @@ let expand_kzallocs file = visitFramacFile (new kzalloc_expanding_visitor) file
 let get_specialized_name (*_type*) (*original_name*) =
   let type_regexp = Str.regexp_string "_type" in
   fun typ ->
-    Str.replace_first type_regexp (Name.Of.typ typ)
+    Str.replace_first type_regexp (Name.typ typ)
 
 let is_pattern_type =
   function
@@ -874,7 +874,7 @@ class specialize_blockfuns_visitor =
   in
   let is_block_function = function
     | { fundec = Declaration (_, _, _, ({ Lexing.pos_fname }, _)) } ->
-        Filename.basename pos_fname = Name.Of.File.blockfuns_include
+        Filename.basename pos_fname = Name.File.blockfuns_include
     | _ -> false
   in
   let match_arg_types ftype tl_opt tacts =
@@ -1019,7 +1019,7 @@ class specialize_blockfuns_visitor =
             match match_arg_types fvtype lval_type_opt arg_types with
             | Some typ ->
               let f =
-                let fname = fvar.vname ^ "_" ^ Name.Of.typ typ in
+                let fname = fvar.vname ^ "_" ^ Name.typ typ in
                 match self#find_specialized_function fname with
                 | Some f -> f
                 | None ->
@@ -2577,14 +2577,14 @@ class strlen_annotator (strlen : logic_info) =
                    pand (pred_of_id_pred rel1,
                          pred_of_id_pred rel2))
     in
-    Logic_const.pred_of_id_pred { app with ip_name = [ Name.Of.Jc_specific.hint ] }
+    Logic_const.pred_of_id_pred { app with ip_name = [ Name.Jc_specific.hint ] }
   in
   let reach_upper_bound ~loose v off =
     let tv = Ast.Term.of_var v in
     let app = Ast.Term.mk ~loc:v.vdecl ~typ:strlen_type @@ Tapp (strlen, [], [tv]) in
     let op = if loose then Rle else Req in
     let rel = Logic_const.(new_predicate @@ Logic_const.prel (op, app, off)) in
-    Logic_const.pred_of_id_pred { rel with ip_name = [ Name.Of.Jc_specific.hint ] }
+    Logic_const.pred_of_id_pred { rel with ip_name = [ Name.Jc_specific.hint ] }
   in
   object(self)
 
@@ -2594,7 +2594,7 @@ class strlen_annotator (strlen : logic_info) =
       begin match destruct_string_access e with
       | None -> ()
       | Some (v, off) ->
-        if hasAttribute Name.Of.Attr.string_declspec (typeAttrs v.vtype) then
+        if hasAttribute Name.Attr.string_declspec (typeAttrs v.vtype) then
           (* A string should be accessed within its bounds *)
           let off = Ast.Term.of_exp off in
           let app = within_bounds ~strict:false v off in
@@ -2611,7 +2611,7 @@ class strlen_annotator (strlen : logic_info) =
           begin match destruct_string_test e with
           | _, None -> ()
           | test_to_null, Some (neg, v, off) ->
-            if hasAttribute Name.Of.Attr.string_declspec (typeAttrs v.vtype) then
+            if hasAttribute Name.Attr.string_declspec (typeAttrs v.vtype) then
               (* A string should be tested within its bounds, and
                  depending on the result, the offset is either before
                  or equal to the length of the string *)
@@ -2646,7 +2646,7 @@ class strlen_annotator (strlen : logic_info) =
               let e' = Ast.Term.of_exp e in
               let lvt = Ast.Term.mk ~loc:loc ~typ:strlen_type @@ TLval lv' in
               let rel = Logic_const.(new_predicate @@ prel (Req, lvt, e')) in
-              let prel = Logic_const.pred_of_id_pred { rel with ip_name = [ Name.Of.Jc_specific.hint ] } in
+              let prel = Logic_const.pred_of_id_pred { rel with ip_name = [ Name.Jc_specific.hint ] } in
               let kf = Option.value_fatal ~in_:"strlen_annotator:vstmt_aux:current_kf" self#current_kf in
               Annotations.add_assert Emitters.jessie ~kf s prel;
               (* If setting a character to zero in a buffer, this should
@@ -2672,7 +2672,7 @@ class strlen_annotator (strlen : logic_info) =
 let annotate_strlen file =
   try
     let strlen =
-      match Logic_env.find_all_logic_functions Name.Of.Logic_function.strlen with
+      match Logic_env.find_all_logic_functions Name.Logic_function.strlen with
       | [i] -> i
       | _  -> assert false
     in
@@ -3198,7 +3198,7 @@ let declare_jessie_nondet_int file =
                    prevents return type to be implicitly treated as int *)
                   ignore (Ast.Vi.Function.malloc ~kernel:true () :> varinfo);
                   let f =
-                    makeGlobalVar ~generated:true Name.Of.Logic_function.nondet_int @@
+                    makeGlobalVar ~generated:true Name.Logic_function.nondet_int @@
                       TFun (intType, Some [], false, [Attr ("extern", []); Attr ("const", [])])
                   in
                   f_opt <- Some f;

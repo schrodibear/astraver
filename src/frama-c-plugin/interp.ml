@@ -197,7 +197,7 @@ let rec name_with_profile s prof =
   match prof with
   | [] -> s
   | v :: rem ->
-    let n = Name.Of.logic_type v.lv_type in
+    let n = Name.logic_type v.lv_type in
     name_with_profile (s^"_"^n) rem
 
 let translated_names_table = Hashtbl.create 257
@@ -372,7 +372,7 @@ let translated_name linfo largs =
 (* Cil to Jessie translation of types                                        *)
 (*****************************************************************************)
 
-let type_of_padding = mktype (JCPTidentifier (Name.Of.Logic_type.padding, []))
+let type_of_padding = mktype (JCPTidentifier (Name.Logic_type.padding, []))
 
 let type_conversion_table = Hashtbl.create 0
 
@@ -443,7 +443,7 @@ let ltype t =
   | Lvar _  -> Console.unsupported "logic type variable"
   | Larrow _ -> Console.unsupported "function type in logic"
 
-let wrapper_name t = Name.Of.typ (unrollType t) ^ "P"
+let wrapper_name t = Name.typ (unrollType t) ^ "P"
 
 (*****************************************************************************)
 (* Cil to Jessie translation of constants                                    *)
@@ -1145,9 +1145,9 @@ let spec _fname funspec =
       Console.warn_once "abrupt clause(s) ignored";
     let name =
       if b.b_name = Cil.default_behavior_name then
-        Name.Of.Behavior.default
-      else if b.b_name = Name.Of.Behavior.default then
-        Name.Of.Behavior.default ^ "_jessie"
+        Name.Behavior.default
+      else if b.b_name = Name.Behavior.default then
+        Name.Behavior.default ^ "_jessie"
       else b.b_name
     in
     let loc =
@@ -1190,7 +1190,7 @@ let spec _fname funspec =
                 (fun acc b ->
                    match b with
                    | JCCbehavior(_,name,_,Some a,_,_,_,_) ->
-                     if (bnames = [] && name <> Name.Of.Behavior.default)
+                     if (bnames = [] && name <> Name.Behavior.default)
                      || List.mem name bnames
                      then
                        a :: acc
@@ -1211,7 +1211,7 @@ let spec _fname funspec =
                 match b with
                   | JCCbehavior(_,name,_,Some a,_,_,_,_) ->
                     if (bnames = [] &&
-                        name <> Name.Of.Behavior.default) ||
+                        name <> Name.Behavior.default) ||
                        List.mem name bnames
                     then a :: acc
                     else acc
@@ -1257,13 +1257,13 @@ let spec _fname funspec =
   disjoint_behaviors_assertions
 
 let built_behavior_ids = function
-  | [] -> [new identifier Name.Of.Behavior.default]
+  | [] -> [new identifier Name.Behavior.default]
   | l ->
     List.map
       (fun i ->
          new identifier
-           (if i = Name.Of.Behavior.default then
-              Name.Of.Behavior.default ^ "_jessie"
+           (if i = Name.Behavior.default then
+              Name.Behavior.default ^ "_jessie"
             else
               i))
       l
@@ -1656,7 +1656,7 @@ let instruction = function
     | Some v ->
       let open Ast.Vi.Function in
       if is_assert v then
-        JCPEassert ([new identifier Name.Of.Behavior.default],
+        JCPEassert ([new identifier Name.Behavior.default],
                     Aassert, locate (boolean_expr (as_singleton eargs)))
       else
         let enode =
@@ -1739,7 +1739,7 @@ let instruction = function
           if is_kmalloc v then
             let cond =
               mkexpr
-                (JCPEbinary (mkexpr (JCPEapp (Name.Of.Logic_function.nondet_int, [], [])) pos, `Bneq, zero_expr))
+                (JCPEbinary (mkexpr (JCPEapp (Name.Logic_function.nondet_int, [], [])) pos, `Bneq, zero_expr))
                 pos
             in
             JCPEif (cond, mkexpr alloc pos, null_expr)
@@ -2314,7 +2314,7 @@ let rec annotation is_axiomatic annot =
       []
   | Dcustom_annot _ -> Console.unsupported "custom annotation"
   | Daxiomatic(id,l,pos) ->
-    if not (Filename.basename (fst pos).Lexing.pos_fname = Name.Of.File.blockfuns_include) then begin
+    if not (Filename.basename (fst pos).Lexing.pos_fname = Name.File.blockfuns_include) then begin
       CurrentLoc.set pos;
       let l = List.fold_left (fun acc d -> (annotation true d)@acc) [] l in
       if l <> [] then
@@ -2341,7 +2341,7 @@ let global vardefs g =
           else
             acc
         in
-        if hasAttribute Name.Of.Attr.padding fi.fattr then
+        if hasAttribute Name.Attr.padding fi.fattr then
           opt_fold add_padding fi.fsize_in_bits [] |>
           opt_fold add_padding fi.fpadding_in_bits
         else
@@ -2365,7 +2365,7 @@ let global vardefs g =
              let is_embedded_padding =
                (* Padding fields (always at the end) are not taken into account in inheritance relation,
                   therefore they are representants of themselves anyway *)
-               hasAttribute Name.Of.Attr.embedded fi.fattr && hasAttribute Name.Of.Attr.padding fi.fattr
+               hasAttribute Name.Attr.embedded fi.fattr && hasAttribute Name.Attr.padding fi.fattr
              in
              let parentty = Retype.parent_type ty in
              if Fieldinfo.equal fi repfi && (not is_embedded_padding || not @@ has_some parentty)
@@ -2445,7 +2445,7 @@ let global vardefs g =
 
     | GVarDecl (_, v, pos) ->
       let excluded_function_names =
-        Name.Of.
+        Name.
           [Predicate.valid_string;
            Predicate.valid_wstring;
            Function.assert_;
@@ -2464,7 +2464,7 @@ let global vardefs g =
           with Not_found -> false
         in
         let is_specialization_template vi =
-          Filename.basename (fst vi.vdecl).Lexing.pos_fname = Name.Of.File.blockfuns_include
+          Filename.basename (fst vi.vdecl).Lexing.pos_fname = Name.File.blockfuns_include
         in
         (* Keep only declarations for which there is no definition *)
         if List.mem v vardefs ||
@@ -2504,8 +2504,8 @@ let global vardefs g =
 
     | GFun(f,pos) ->
         set_curFundec f;
-        if f.svar.vname = Name.Of.Function.assert_
-          || f.svar.vname = Name.Of.Function.free then []
+        if f.svar.vname = Name.Function.assert_
+          || f.svar.vname = Name.Function.free then []
         else
           let rty =
             match unrollType f.svar.vtype with
@@ -2867,7 +2867,7 @@ let file f =
   in
   let get_compinfo = get_compinfo globals in
   mkdecl (JCDaxiomatic("Padding",
-                       [mkdecl (JCDlogic_type (Name.Of.Logic_type.padding, []))
+                       [mkdecl (JCDlogic_type (Name.Logic_type.padding, []))
                           Why_loc.dummy_position]))
     Why_loc.dummy_position
   ::

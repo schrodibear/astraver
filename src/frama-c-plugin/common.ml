@@ -346,83 +346,80 @@ let mkStmt = mkStmt ~valid_sid:true
 
 module Name =
 struct
-  module Of =
-    struct
-      module Attr =
-      struct
-        let embedded = "embedded_from"
-        let noembed = "noembed"
-        let packed = "packed"
-        let padding = "padding"
-        let wrapper = "wrapper"
-        let arraylen = "arraylen"
-        let string_declspec = "valid_string"
-      end
+  module Attr =
+  struct
+    let embedded = "embedded_from"
+    let noembed = "noembed"
+    let packed = "packed"
+    let padding = "padding"
+    let wrapper = "wrapper"
+    let arraylen = "arraylen"
+    let string_declspec = "valid_string"
+  end
 
-      module Predicate =
-      struct
-        let valid_string = "valid_string"
-        let valid_wstring = "valid_wstring"
-      end
+  module Predicate =
+  struct
+    let valid_string = "valid_string"
+    let valid_wstring = "valid_wstring"
+  end
 
-      module Logic_function =
-      struct
-        let strlen = "strlen"
-        let wcslen = "wcslen"
-        let nondet_int = "jessie_nondet_int"
-      end
+  module Logic_function =
+  struct
+    let strlen = "strlen"
+    let wcslen = "wcslen"
+    let nondet_int = "jessie_nondet_int"
+  end
 
-      module Function =
-      struct
-        let assert_ = "assert"
-        let free = "free"
-        let kfree = "kfree"
-        let malloc = "malloc"
-        let kmalloc = "kmalloc"
-        let kzalloc = "kzalloc"
-        let calloc = "calloc"
-        let realloc = "realloc"
-      end
+  module Function =
+  struct
+    let assert_ = "assert"
+    let free = "free"
+    let kfree = "kfree"
+    let malloc = "malloc"
+    let kmalloc = "kmalloc"
+    let kzalloc = "kzalloc"
+    let calloc = "calloc"
+    let realloc = "realloc"
+  end
 
-      module File =
-      struct
-        let blockfuns_include = "jessie_spec_prolog.h"
-      end
+  module File =
+  struct
+    let blockfuns_include = "jessie_spec_prolog.h"
+  end
 
-      let typ ty =
-        ignore (flush_str_formatter ());
-        fprintf str_formatter "%a" Printer.pp_typ ty;
-        let name = flush_str_formatter () in
-        String.filter_alphanumeric ~assoc:['*', 'x'] ~default:'_' name
+  let typ ty =
+    ignore (flush_str_formatter ());
+    fprintf str_formatter "%a" Printer.pp_typ ty;
+    let name = flush_str_formatter () in
+    String.filter_alphanumeric ~assoc:['*', 'x'] ~default:'_' name
 
-      let logic_type ty =
-        ignore (flush_str_formatter ());
-        let old_mode = Kernel.Unicode.get() in
-        Kernel.Unicode.set false;
-        fprintf str_formatter "%a" Printer.pp_logic_type ty;
-        let name = flush_str_formatter () in
-        Kernel.Unicode.set old_mode;
-        String.filter_alphanumeric ~assoc:['*', 'x'] ~default:'_' name
+  let logic_type ty =
+    ignore (flush_str_formatter ());
+    let old_mode = Kernel.Unicode.get() in
+    Kernel.Unicode.set false;
+    fprintf str_formatter "%a" Printer.pp_logic_type ty;
+    let name = flush_str_formatter () in
+    Kernel.Unicode.set old_mode;
+    String.filter_alphanumeric ~assoc:['*', 'x'] ~default:'_' name
 
-      module Logic_type =
-        struct
-          let padding = "padding"
-        end
+  module Logic_type =
+  struct
+    let padding = "padding"
+  end
 
-      module Behavior =
-      struct
-         let safety = "safety"
-         let default = "default"
-      end
+  module Behavior =
+  struct
+    let safety = "safety"
+    let default = "default"
+  end
 
-      module Jc_specific =
-        struct
-          let hint = "hint"
-        end
-    end
+  module Jc_specific =
+  struct
+    let hint = "hint"
+  end
 
   let predefined_name =
-    Of.Function.[ (* coding functions *)
+    Function.[ (* coding functions *)
       assert_;
       malloc;
       kmalloc;
@@ -431,7 +428,7 @@ struct
       realloc;
       free;
       kfree;
-      Of.Logic_function.nondet_int
+      Logic_function.nondet_int
     ]
 
   let is_predefined s = List.mem s predefined_name
@@ -557,7 +554,7 @@ struct
         with
         | Not_found -> invalid_arg "Ast.Vi.Function.of_vi_exn: no function for varinfo"
 
-      open Name.Of.Function
+      open Name.Function
       let is_assert v = isFunctionType v.vtype && v.vname = assert_
       let is_free v = isFunctionType v.vtype && v.vname = free
       let is_kfree v = isFunctionType v.vtype && v.vname = kfree
@@ -1220,7 +1217,7 @@ struct
       let size = Ast.Exp.const Integer.one and attr = [] in
       (* Do the same as in [mkTRefArray] *)
       let siz = expToAttrParam size in
-      let attr = addAttribute (Attr (Name.Of.Attr.arraylen, [siz])) attr in
+      let attr = addAttribute (Attr (Name.Attr.arraylen, [siz])) attr in
       (* Avoid creating an array for single pointed elements that do not
        * originate in a C array, to avoid having to access to the first
        * element everywhere.  *)
@@ -1230,17 +1227,17 @@ struct
       (* Check the array size is of a correct form *)
       ignore (lenOfArray64 (Some size));
       let siz = expToAttrParam size in
-      let attrs = addAttribute (Attr (Name.Of.Attr.arraylen, [siz])) attrs in
+      let attrs = addAttribute (Attr (Name.Attr.arraylen, [siz])) attrs in
       (* Make the underlying type an array so that indexing it is still valid C. *)
       TPtr (TArray (typ, Some size, empty_size_cache (), []), attrs)
 
     let size ty =
-      match findAttribute Name.Of.Attr.arraylen (typeAttrs ty) with
+      match findAttribute Name.Attr.arraylen (typeAttrs ty) with
       | [AInt i] -> Integer.to_int64 i
       | _ -> Console.fatal "Type.Ref.size: non-reference type: %a" Printer.pp_typ ty
 
     let of_typ ty =
-      match findAttribute Name.Of.Attr.arraylen (typeAttrs ty) with
+      match findAttribute Name.Attr.arraylen (typeAttrs ty) with
       | [AInt _] -> Some ty
       | _ -> None
 
@@ -1255,7 +1252,7 @@ struct
       | _ -> Console.fatal "Type.Ref.typ: non-reference type: %a" Printer.pp_typ ty
 
     let is_ref ty =
-      isPointerType ty && hasAttribute Name.Of.Attr.arraylen (typeAttrs ty)
+      isPointerType ty && hasAttribute Name.Attr.arraylen (typeAttrs ty)
 
     let is_array_ref ty =
       is_ref ty && isArrayType (unrollType (direct_pointed_type ty))
@@ -1357,7 +1354,7 @@ struct
             fname = Name.unique "padding";
             ftype = padding_type;
             fbitfield = fsize_in_bits;
-            fattr = [Attr ("const", []); Attr (Name.Of.Attr.padding, []); Attr (Name.Of.Attr.packed, [])];
+            fattr = [Attr ("const", []); Attr (Name.Attr.padding, []); Attr (Name.Attr.packed, [])];
             floc = Location.unknown;
             faddrof = false;
             fsize_in_bits;
@@ -1382,8 +1379,8 @@ struct
               List.fold_left
                 (fun size_fix fi ->
                    if size_fix > 0 &&
-                      not (hasAttribute Name.Of.Attr.embedded fi.fattr) &&
-                      hasAttribute Name.Of.Attr.padding fi.fattr
+                      not (hasAttribute Name.Attr.embedded fi.fattr) &&
+                      hasAttribute Name.Attr.padding fi.fattr
                    then
                      let bitsize =
                        match fi.fsize_in_bits with
@@ -1439,7 +1436,7 @@ struct
           end
         | _ -> ()
 
-      let proper_fields ci = List.filter (fun fi -> not @@ hasAttribute Name.Of.Attr.padding fi.fattr) ci.cfields
+      let proper_fields ci = List.filter (fun fi -> not @@ hasAttribute Name.Attr.padding fi.fattr) ci.cfields
     end
 
     module Struct =
@@ -1666,7 +1663,7 @@ struct
     let result = f fi in
     if bitsSizeOf fi.ftype <> original_size then begin
       fi.fbitfield <- Some original_size;
-      fi.fattr <- addAttribute (Attr (Name.Of.Attr.packed, [])) fi.fattr
+      fi.fattr <- addAttribute (Attr (Name.Attr.packed, [])) fi.fattr
     end;
     result
 

@@ -892,7 +892,7 @@ class embed_first_substructs_visitor =
                   fcomp = ci;
                   fname = subfield_name ci' fi;
                   fattr =
-                    addAttribute (Attr (Name.Of.Attr.embedded,
+                    addAttribute (Attr (Name.Attr.embedded,
                                         [AStr efi.forig_name; AStr (compFullName ci'); AStr fi.forig_name])) fi.fattr }
               in
               let fs =
@@ -923,8 +923,8 @@ class embed_first_substructs_visitor =
           when Type.Ref.(size ftype = Int64.one &&
                          isStructOrUnionType (typ ftype) &&
                          Type.Composite.Struct.is_struct (typ ftype) &&
-                         not (hasAttribute Name.Of.Attr.wrapper @@ typeAttrs @@ typ ftype)) &&
-               not (hasAttribute Name.Of.Attr.noembed fattr) ->
+                         not (hasAttribute Name.Attr.wrapper @@ typeAttrs @@ typ ftype)) &&
+               not (hasAttribute Name.Attr.noembed fattr) ->
           begin match unrollType (Type.Ref.typ ftype) with
           | TComp (ci', _, _) when ci'.cstruct ->
             embed_first_substruct ci ci';
@@ -1702,7 +1702,7 @@ class base_retyping_visitor ~attach =
 
   let new_wrapper_for_type_no_sharing typ =
     (* Choose name t_P for the wrapper and t_M for the field *)
-    let name = Name.Of.typ typ in
+    let name = Name.typ typ in
     let sname = name ^ "P" in
     let fname = name ^ "M" in
     let compinfo =
@@ -1714,7 +1714,7 @@ class base_retyping_visitor ~attach =
     let tattrs =
       if isStructOrUnionType typ || isVoidType typ
       then []
-      else [Attr (Name.Of.Attr.wrapper, [])]
+      else [Attr (Name.Attr.wrapper, [])]
     in
     let tdecl = TComp (compinfo, empty_size_cache (), tattrs) in
     attach#global tdef;
