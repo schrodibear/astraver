@@ -22,7 +22,7 @@ version alpha0, January 12, 2015
   o [Frama-C plugin] Improved scalability on very large files (> 100_000 LoC) through relevant global declarations extraction and
     unused fields elimination (-jessie-extract, enabled by default)
   o [Frama-C plugin] Variadic functions support through additional array argument
-  o [Frama-C plugin, Jessie] Re-enabled typeacasts in \assigns clauses
+  o [Frama-C plugin, Jessie] Re-enabled typecasts in \assigns clauses
   o [Frama-C plugin] Proxy variables for string literals and corresponding invariants
   o [Jessie] Partial support for low-level type casts ("reinterpret_casts") in non-bitvector regions
   o [Jessie/WhyML output] More detailed explanations in Why3ML output
@@ -631,7 +631,7 @@ version 1.40, December 19th, 2003
 ================================
   o disabled C support: C is now supported by an external tool, Caduceus
     (to be released soon with Why)
-  o support for polymorphism (contribution by C. March�)
+  o support for polymorphism (contribution by C. Marché)
   o syntax of haRVey output now uses integer constants, predefined
     arithmetic operators, and does not change capitalization of
     variables, to be conform with the syntax of the next version of
@@ -746,7 +746,7 @@ version 0.72, November 12th, 2002
     (customized with --ocaml-annot, --ocaml-ext, --output)
   o quantifier "exists" added to the logic syntax
   o manual: added lexical conventions
-  o examples: added maximum sort (by Sylvain Boulm�)
+  o examples: added maximum sort (by Sylvain Boulmé)
   o new feature: exceptions (beta test)
 
 version 0.71, October 15th, 2002 (bug fix release)

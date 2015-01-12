@@ -2,15 +2,11 @@
 INSTALLATION
 ============
 
-  You need Objective Caml >= 3.08 to compile the sources.
- 
-  To compile the graphical user interface gwhy (optional) you also need the 
-  Lablgtk2 library (http://wwwfun.kurims.kyoto-u.ac.jp/soft/olabl/lablgtk.html)
-  There is a Debian package (liblablgtk2-ocaml-dev).
+  You need OCaml >= 4.02.1 and Frama-C Neon to compile the sources.
 
   1. Configure with "./configure"
 
-  2. Compile with "make".  
+  2. Compile with "make".
 
   2. Install with "make install".  You may need superuser permissions.
 
