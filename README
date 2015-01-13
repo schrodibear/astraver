@@ -29,8 +29,11 @@
 *                                                                        *
 **************************************************************************
 
-Why is a certification tool.  It takes annotated programs as input and
-outputs proof obligations for the proof assistants PVS and Coq.
+Jessie2 is a fork of Jessie plug-in that allows deductive verification of
+C programs annotated with ACSL. It uses the language and tools of the Why3
+platform (http://why3.lri.fr/). Unlike original Jessie, Jessie2 is not
+a part of the Why2 certification platform and is compiled/installed
+separately.
 
 
 DOCUMENTATION
@@ -49,13 +52,13 @@ or	caduceus-request@serveur-listes.lri.fr
 
 with "subscribe your@email" in the mail body. These lists are mainly
 used to announce the releases of Why and Caduceus. Emails can be sent
-to the list at why@serveur-listes.lri.fr and caduceus@serveur-listes.lri.fr. 
+to the list at why@serveur-listes.lri.fr and caduceus@serveur-listes.lri.fr.
 Only the lists members can send emails to the list.
 
 COPYRIGHT
 =========
 
-This program is distributed under the GNU GPL. 
+This program is distributed under the GNU GPL.
 See the enclosed file COPYING.
 
 

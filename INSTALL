@@ -2,7 +2,7 @@
 INSTALLATION
 ============
 
-  You need OCaml >= 4.02.1 and Frama-C Neon to compile the sources.
+  You need OCaml >= 4.02.1 and Frama-C Neon 20140301 to compile the sources.
 
   1. Configure with "./configure"
 
