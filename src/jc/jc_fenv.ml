@@ -2,7 +2,7 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2014                                               *)
+(*  Copyright (C) 2002-2015                                               *)
 (*                                                                        *)
 (*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud                   *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud                              *)
@@ -18,6 +18,9 @@
 (*    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     *)
 (*    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          *)
 (*                                                                        *)
+(*  Jessie2 fork:                                                         *)
+(*    Mikhail MANDRYKIN, ISP RAS       (adaptation for Linux sources)     *)
+(*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Lesser General Public            *)
 (*  License version 2.1, with the special exception on linking            *)
@@ -28,8 +31,6 @@
 (*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
 (*                                                                        *)
 (**************************************************************************)
-
-
 
 open Stdlib
 open Env
