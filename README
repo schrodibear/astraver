@@ -32,12 +32,12 @@
 *                                                                        *
 **************************************************************************
 
-Jessie2 is a fork of Jessie plug-in that allows deductive verification of
-C programs annotated with ACSL and primarily targeted at Linux kernel
-modules source code. It uses the language and tools of the Why3
-platform (http://why3.lri.fr/). Unlike original Jessie, Jessie2 is not
-distributed as a part of the Why2 certification platform and is
-compiled/installed separately.
+Jessie2 is a fork of the Jessie plug-in that allows deductive verification
+of C programs annotated with ACSL and is primarily targeted at
+Linux kernel modules source code. It uses the language and tools
+of the Why3 platform (http://why3.lri.fr/). Unlike original Jessie,
+Jessie2 is not distributed as a part of the Why2 certification platform
+and is compiled/installed separately.
 
 DOCUMENTATION
 =============

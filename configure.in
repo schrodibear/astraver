@@ -351,7 +351,7 @@ fi
 AC_CHECK_PROG(WHY3,why3,yes,no)
 if test "$WHY3" = no ; then
   WHY3MSG="command 'why3' not found"
-  AC_MSG_ERROR($WHY3MSG)
+  AC_MSG_WARN($WHY3MSG)
 else
   AC_MSG_CHECKING(Why3 version)
   WHY3VERSION=`why3 --version | sed -n -e 's|.*version \([[^ ]]\+\) .*$|\1|p'`
