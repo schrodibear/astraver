@@ -1,0 +1,3 @@
+[submodule "qa"]
+	path = qa
+	url = https://forge.ispras.ru/git/astraver.qa.git
