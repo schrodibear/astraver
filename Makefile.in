@@ -61,10 +61,6 @@ OCAMLVERSION = @OCAMLVERSION@
 OCAMLBUILD = @OCAMLBUILD@
 CAMLP4   = @CAMLP4O@
 
-APRONLIB = @APRONLIB@
-APRONLIBS = @APRONLIBS@
-APRONBYTLIBS = $(APRONLIBS:.cmxa=.cma)
-
 export FRAMAC = @FRAMAC@
 FRAMACPLUGIN = @FRAMACPLUGIN@
 
@@ -206,9 +202,7 @@ doc/version.tex src/why/why_version.ml src/jc/jc_version.ml: Version version.sh 
 
 install: install-binary install-lib install-man install-coq-@COQ@ install-pvs-@PVS@
 
-BINARYFILES = $(BINARY) $(WHYCONFIG) $(JESSIE) $(KRAKATOA) \
-	$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) bin/gwhy.$(OCAMLBEST) \
-	$(WHYSTAT) $(TOOLSTAT) $(WHYOBFUSCATOR) $(SIMPLIFY2WHY)
+BINARYFILES = $(JESSIE)
 
 # install-binary should not depend on $(BINARYFILES); otherwise it
 # enforces the compilation of gwhy, even when lablgtk2 is not installed
@@ -227,8 +221,6 @@ install-lib: $(JCLIB) lib/why3/why3.conf
 	find $(LIBDIR) -name CVS | xargs $(RM) -r
 
 install-man:
-	mkdir -p $(MANDIR)/man1
-	cp -f doc/*.1 $(MANDIR)/man1
 
 install-coq-no:
 install-coq-yes: install-coq-@COQVER@
@@ -286,12 +278,9 @@ zip:
 
 # doc
 
-DOC=doc/manual.ps doc/manual.html \
-	doc/jessie.pdf doc/jessie.html \
-	doc/main.pdf doc/main.html
+DOC=doc/jessie.pdf doc/jessie.html
 
 doc:: $(DOC)
-
 
 doc/manual.ps: doc/manual.tex doc/version.tex
 	make -C doc manual.ps
