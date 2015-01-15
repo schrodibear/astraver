@@ -1047,17 +1047,28 @@ class side_cast_rewriter =
     | t -> t
   in
   let subtype t1 t2 =
+    let rec is_first_substruct t1 t2 =
+      let first_field_type t = (List.hd Type.Composite.(compinfo @@ of_typ_exn t).cfields).ftype in
+      not (need_cast t1 t2) ||
+      (let t1 = first_field_type t1 in
+       Type.Composite.Struct.is_struct t1 &&
+       is_first_substruct t1 t2) ||
+      (let t2 = first_field_type t2 in
+       Type.Composite.Struct.is_struct t2 &&
+       is_first_substruct t2 t1)
+    in
     isVoidPtrType t2 ||
     let t1, t2 = map_pair pointed_type (t1, t2) in
     Cil_datatype.Typ.equal t1 t2 ||
     isStructOrUnionType t1 && isStructOrUnionType t2 &&
-    let fields1, fields2 = map_pair struct_fields (t1, t2) in
-    let len1, len2 = map_pair List.length (fields1, fields2) in
-    len1 > len2 &&
-    List.for_all2
-      (fun fi1 fi2 -> Retype.same_fields fi1 fi2)
-      (List.take len2 fields1)
-      fields2
+    (is_first_substruct t1 t2 ||
+     let fields1, fields2 = map_pair struct_fields (t1, t2) in
+     let len1, len2 = map_pair List.length (fields1, fields2) in
+     len1 > len2 &&
+     List.for_all2
+       (fun fi1 fi2 -> Retype.same_fields fi1 fi2)
+       (List.take len2 fields1)
+       fields2)
   in
 object(self)
   inherit frama_c_inplace
