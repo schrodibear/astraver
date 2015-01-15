@@ -975,7 +975,8 @@ class embed_first_substructs_visitor =
 
              method! vexpr e =
                match e.enode with
-               | Lval (Mem e, Field (fi, NoOffset)) when is_embedded fi -> ChangeTo e
+               | Lval (Mem e', Field (fi, NoOffset)) when is_embedded fi ->
+                 ChangeTo { e with enode = CastE (fi.ftype, e') }
                | _ -> DoChildren
            end))
 
@@ -987,7 +988,11 @@ class embed_first_substructs_visitor =
 
              method! vterm t =
                match t.term_node with
-               | TLval (TMem t, TField (fi, TNoOffset)) when is_embedded fi -> ChangeTo t
+               | TLval (TMem t', TField (fi, TNoOffset)) when is_embedded fi ->
+                 (* TODO: FIXME: This `term_type =' fix is an ugly workaround of a major bug in term typing
+                  * after transformations: due to dummy_info that inserts dummy void where actual typing is necessary.
+                  *)
+                 ChangeTo { t with term_node = TCastE (fi.ftype, t'); term_type = Ctype fi.ftype }
                | _ -> DoChildren
            end))
   end
@@ -1048,7 +1053,7 @@ class side_cast_rewriter =
   in
   let subtype t1 t2 =
     let rec is_first_substruct t1 t2 =
-      let first_field_type t = (List.hd Type.Composite.(compinfo @@ of_typ_exn t).cfields).ftype in
+      let first_field_type t = unrollType (List.hd Type.Composite.(compinfo @@ of_typ_exn t).cfields).ftype in
       not (need_cast t1 t2) ||
       (let t1 = first_field_type t1 in
        Type.Composite.Struct.is_struct t1 &&
@@ -1616,7 +1621,7 @@ class fields_retyping_visitor =
            Console.fatal "lift_offset: unexpected NoOffset"
          | Field (_, _)
          | Index (_, Field (_ ,_))
-         | Index(_, NoOffset) as nextoff ->
+         | Index (_, NoOffset) as nextoff ->
            Mem (Ast.Exp.dummy_info @@ new_exp ~loc:(Cil_const.CurrentLoc.get ()) @@ Lval curlv), nextoff
          | Index (_, Index _) ->
            Console.fatal "lift_offset: unexpected index")
