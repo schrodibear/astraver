@@ -760,7 +760,7 @@ let rec type_labels env ~result_label label e =
 	  (fun (dec,_) ->
 	     ignore (type_labels env ~result_label:None (Some LabelHere) dec)) dec;
 	List.iter (behavior_labels env) behs;
-	type_labels env ~result_label None e
+	type_labels env ~result_label (Some LabelHere) e
     | JCNEapp(_, l, _) ->
         List.iter (check e) l;
         iter_subs label;
