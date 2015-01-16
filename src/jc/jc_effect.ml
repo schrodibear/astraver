@@ -1806,8 +1806,8 @@ let check_li_effects_from_axiomatic li =
     | Typing.ABaxiom (pos, name, _, a) ->
       let check_app = check_app pos name in
       Iterators.iter_term_and_assertion
-        (fun t -> match t#node with JCTapp app -> check_app t#pos app | _ -> ())
-        (fun a -> match a#node with JCAapp app -> check_app a#pos app | _ -> ())
+        (fun t -> match t#node with JCTapp app when Logic_info.equal app.app_fun li -> check_app t#pos app | _ -> ())
+        (fun a -> match a#node with JCAapp app when Logic_info.equal app.app_fun li -> check_app a#pos app | _ -> ())
         a
   in
   try
