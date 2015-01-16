@@ -36,7 +36,7 @@ open Env
 open Fenv
 open Ast
 open Stdlib
-open Pervasives
+open Common
 open Constructors
 
 let invoke_static : 'a. < .. > -> < .. > -> string -> 'a = fun o e name ->
@@ -128,7 +128,7 @@ object
     | JCTrange_cast (t, ei)   ->   JCTrange_cast (wrap t, ei)
     | JCTreal_cast (t, rc)    ->   JCTreal_cast (wrap t, rc)
     | JCTif (ti, tt, te)      ->   JCTif (wrap ti, wrap tt, wrap te)
-    | JCTrange (top1, top2)   ->   JCTrange (Option_misc.map wrap top1, Option_misc.map wrap top2)
+    | JCTrange (top1, top2)   ->   JCTrange (Option.map ~f:wrap top1, Option.map ~f:wrap top2)
     | JCTlet (vi, t1, t2)     ->   JCTlet (vi, wrap t1, wrap t2)
     | JCTmatch (t, l)         ->   JCTmatch (wrap t, List.map (fun (p, t) -> pwrap p, wrap t) l)
 end
@@ -196,9 +196,9 @@ object
   method node = match invoke_static o ls "node" with
     | JCLSvar _ as ls -> ls
     | JCLSderef (ls, lab, fi, r) ->       JCLSderef (wrap ls, lab, fi, r)
-    | JCLSrange (ls, topt1, topt2) ->     JCLSrange (wrap ls, Option_misc.map twrap topt1, Option_misc.map twrap topt2)
+    | JCLSrange (ls, topt1, topt2) ->     JCLSrange (wrap ls, Option.map ~f:twrap topt1, Option.map ~f:twrap topt2)
     | JCLSrange_term (t, topt1, topt2) ->
-      JCLSrange_term (twrap t, Option_misc.map twrap topt1, Option_misc.map twrap topt2)
+      JCLSrange_term (twrap t, Option.map ~f:twrap topt1, Option.map ~f:twrap topt2)
     | JCLSat (ls, lab) ->                 JCLSat (wrap ls, lab)
 end
 
@@ -255,18 +255,18 @@ object
     | JCEfree e ->                   JCEfree (wrap e)
     | JCEreinterpret (e, si) ->      JCEreinterpret (wrap e, si)
     | JCEfresh e ->                  JCEfresh (wrap e)
-    | JCElet (vi, eo, e) ->          JCElet (vi, Option_misc.map wrap eo, wrap e)
+    | JCElet (vi, eo, e) ->          JCElet (vi, Option.map ~f:wrap eo, wrap e)
     | JCEassert (il, ak, a) ->       JCEassert (List.map iwrap il, ak, awrap a)
     | JCEcontract (ao, tioo, vi, psbl, e) ->
-      JCEcontract (Option_misc.map awrap ao,
-                   Option_misc.map (fun (t, io) -> twrap t, Option_misc.map iwrap io) tioo,
+      JCEcontract (Option.map ~f:awrap ao,
+                   Option.map ~f:(fun (t, io) -> twrap t, Option.map ~f:iwrap io) tioo,
                    vi,
                    ListLabels.map psbl ~f:(fun (p, s, b) ->
-                     p, s, { b with b_assumes = Option_misc.map awrap b.b_assumes;
+                     p, s, { b with b_assumes = Option.map ~f:awrap b.b_assumes;
                                     b_assigns =
-                                      Option_misc.map (fun (p, ll) -> p, List.map lwrap ll) b.b_assigns;
+                                      Option.map ~f:(fun (p, ll) -> p, List.map lwrap ll) b.b_assigns;
                                     b_allocates =
-                                      Option_misc.map (fun (p, ll) -> p, List.map lwrap ll) b.b_allocates;
+                                      Option.map ~f:(fun (p, ll) -> p, List.map lwrap ll) b.b_allocates;
                                     b_ensures = awrap b.b_ensures;
                                     b_free_ensures = awrap b.b_free_ensures }),
                    wrap e)
@@ -274,14 +274,14 @@ object
     | JCEloop (la, e) ->
       JCEloop ( { la with loop_behaviors = ListLabels.map la.loop_behaviors ~f:(fun (il, ao, llo) ->
                                                                                  List.map iwrap il,
-                                                                                 Option_misc.map awrap ao,
-                                                                                 Option_misc.map (List.map lwrap) llo);
+                                                                                 Option.map ~f:awrap ao,
+                                                                                 Option.map ~f:(List.map lwrap) llo);
                           loop_free_invariant = awrap la.loop_free_invariant;
-                          loop_variant = Option_misc.map (fun (t, lio) -> twrap t, lio) la.loop_variant },
+                          loop_variant = Option.map ~f:(fun (t, lio) -> twrap t, lio) la.loop_variant },
                 wrap e)
     | JCEreturn (ty, e) ->           JCEreturn (ty, wrap e)
     | JCEtry (e1, l, e2) ->          JCEtry (wrap e1, List.map (fun (ei, vi, e) -> ei, vi, wrap e) l, wrap e2)
-    | JCEthrow (ei, eo) ->           JCEthrow (ei, Option_misc.map wrap eo)
+    | JCEthrow (ei, eo) ->           JCEthrow (ei, Option.map ~f:wrap eo)
     | JCEpack (si1, e, si2) ->       JCEpack (si1, wrap e, si2)
     | JCEunpack (si1, e, si2) ->     JCEunpack (si1, wrap e, si2)
     | JCEmatch (e, pel) ->           JCEmatch (wrap e, List.map (fun (p, e) -> pwrap p, wrap e) pel)
@@ -290,13 +290,13 @@ end
 
 let ewrap : expr -> expr = new expr_wrapper expr_dummy
 
-let expr fmt = Output.expr fmt % ewrap
-let term fmt = Output.term fmt % twrap
-let assertion fmt = Output.assertion fmt % awrap
-let location fmt = Output.location fmt % lwrap
-let location_set fmt = Output.location_set fmt % lswrap
+let expr fmt = Print.expr fmt % ewrap
+let term fmt = Print.term fmt % twrap
+let assertion fmt = Print.assertion fmt % awrap
+let location fmt = Print.location fmt % lwrap
+let location_set fmt = Print.location_set fmt % lswrap
 
-let string_set fmt ss = Format.fprintf fmt "%a" Pp.(print_list comma string) @@ Envset.StringSet.elements ss
+let string_set fmt ss = Format.fprintf fmt "%a" Why_pp.(print_list comma string) @@ Envset.StringSet.elements ss
 
 (*
   Local Variables:

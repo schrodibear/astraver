@@ -4,32 +4,32 @@ BUILDSRC=$(dirname $(readlink -f $0))/_build/src
 
 make -C $BUILDSRC/../.. -j byte
 
-ocamlc -c -I "$BUILDSRC/why" -I "$BUILDSRC/jc" -o "$BUILDSRC/jc/jc_debug_output.cmo" "$BUILDSRC/../../src/jc/jc_debug_output.ml"
+ocamlc -c -no-alias-deps -open Aliases -I "$BUILDSRC/why" -I "$BUILDSRC/jc" -o "$BUILDSRC/jc/jc_debug_print.cmo" "$BUILDSRC/../../src/jc/jc_debug_print.ml"
 
 SCRIPT='load_printer nums.cma
-load_printer pp.cmo
+load_printer why_pp.cmo
 load_printer jc_stdlib.cmo
 load_printer jc_envset.cmo
-load_printer option_misc.cmo
 load_printer jc_common_options.cmo
 load_printer jc_region.cmo
 load_printer jc_fenv.cmo
-load_printer loc.cmo
+load_printer why_loc.cmo
 load_printer jc_constructors.cmo
-load_printer jc_pervasives.cmo
-load_printer jc_output_misc.cmo
+load_printer jc_common.cmo
+load_printer jc_print_misc.cmo
 load_printer jc_iterators.cmo
 load_printer jc_type_var.cmo
-load_printer jc_poutput.cmo
-load_printer jc_output.cmo
-load_printer jc_debug_output.cmo
+load_printer jc_print_p.cmo
+load_printer jc_print.cmo
+load_printer jc_debug_print.cmo
 
-load_printer jc_noutput.cmo
-load_printer rc.cmo
-load_printer version.cmo
-load_printer lib.cmo
+load_printer jc_print_n.cmo
+load_printer why_rc.cmo
+load_printer why_version.cmo
+load_printer jc_version.cmo
+load_printer why_lib.cmo
 load_printer jc_position.cmo
-load_printer jc_why_output_misc.cmo
+load_printer jc_output_misc.cmo
 load_printer why3_kw.cmo
 load_printer jc_why3_output.cmo
 load_printer jc_why_output.cmo
@@ -41,12 +41,12 @@ load_printer jc_typing.cmo
 load_printer jc_effect.cmo
 install_printer Jc_effect.print_effect
 
-install_printer Jc_debug_output.expr
-install_printer Jc_debug_output.assertion
-install_printer Jc_debug_output.term
-install_printer Jc_debug_output.string_set
-install_printer Jc_debug_output.location
-install_printer Jc_debug_output.location_set
+install_printer Jc_debug_print.expr
+install_printer Jc_debug_print.assertion
+install_printer Jc_debug_print.term
+install_printer Jc_debug_print.string_set
+install_printer Jc_debug_print.location
+install_printer Jc_debug_print.location_set
 set print_depth 3
 '
 rlwrap -P "$SCRIPT" ocamldebug -I "$BUILDSRC/why" -I "$BUILDSRC/jc" -I "$BUILDSRC/../../src/why" -I "$BUILDSSRC/../../src/jc"\
