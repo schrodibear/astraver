@@ -1534,6 +1534,21 @@ let rec expr fef e =
                  Typing.typing_error e#pos "Unsupported discriminated union, sorry" (* TODO *)
                | RplainUnion -> [ac]
            in
+           let all_mems =
+             match ac with
+             | JCalloc_bitvector -> []
+             | JCalloc_root rt ->
+               match rt.ri_kind with
+               | Rvariant -> all_memories ~select:fully_allocated pc
+               | RdiscrUnion -> assert false (* TODO *)
+               | RplainUnion -> []
+           in
+           let fef =
+             List.fold_left
+               (fun fef mc -> add_memory_reads LabelHere fef (mc,e#region))
+               fef
+               all_mems
+           in
            true,
            List.fold_left
              (add_alloc_writes LabelHere %% Fn.id @@ Pair.cons' e#region)
