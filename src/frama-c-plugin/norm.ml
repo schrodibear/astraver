@@ -2134,31 +2134,9 @@ object
 
   method! vglob_aux = function
     | GCompTag (compinfo, _loc) ->
-      let basety = TComp (compinfo,empty_size_cache () ,[]) in
-      let field fi nextoff =
-        let size_in_bits =
-          match fi.fbitfield with
-          | Some siz -> siz
-          | None -> bitsSizeOf fi.ftype
-        in
-        let offset_in_bits = fst (bitsOffset basety (Field (fi, NoOffset))) in
-        let padding_in_bits = nextoff - (offset_in_bits + size_in_bits) in
-        assert (padding_in_bits >= 0);
-        fi.fsize_in_bits <- Some size_in_bits;
-        fi.foffset_in_bits <- Some offset_in_bits;
-        fi.fpadding_in_bits <- Some padding_in_bits;
-        if compinfo.cstruct then
-          offset_in_bits
-        else nextoff (* union type *)
-      in
-      begin try
-        ignore (List.fold_right field compinfo.cfields (bitsSizeOf basety))
-      with
-      | SizeOfError _ -> ()
-      end;
-        SkipChildren
+      Type.Composite.Ci.fill_jessie_fields compinfo;
+      SkipChildren
     | _ -> SkipChildren
-
 end
 
 let fill_offset_size_in_fields file =

@@ -1347,6 +1347,29 @@ struct
         if ci.cdefined then Some (bitsSizeOf @@ TComp (ci, empty_size_cache (), []))
         else None
 
+      let fill_jessie_fields ci =
+        let basety = TComp (ci, empty_size_cache (), []) in
+        let field fi nextoff =
+          let size_in_bits =
+            match fi.fbitfield with
+            | Some siz -> siz
+            | None -> bitsSizeOf fi.ftype
+          in
+          let offset_in_bits = fst (bitsOffset basety (Field (fi, NoOffset))) in
+          let padding_in_bits = nextoff - (offset_in_bits + size_in_bits) in
+          assert (padding_in_bits >= 0);
+          fi.fsize_in_bits <- Some size_in_bits;
+          fi.foffset_in_bits <- Some offset_in_bits;
+          fi.fpadding_in_bits <- Some padding_in_bits;
+          if ci.cstruct then offset_in_bits
+          else nextoff (* union type *)
+        in
+        begin try
+          ignore (List.fold_right field ci.cfields (bitsSizeOf basety))
+        with
+        | SizeOfError _ -> ()
+        end
+
       let padding_field =
         let padding_type = intType in
         fun ~fsize_in_bits ci ->
@@ -1662,9 +1685,16 @@ struct
     result
 
   let retaining_size_of_field fi f =
-    let original_size = bitsSizeOf fi.ftype in
+    let size_determinants fi =
+      fi.fbitfield, bitsSizeOf fi.ftype, hasAttribute Name.Attr.packed fi.fattr
+    in
+    let originals, original_size =
+      size_determinants fi,
+        Option.value_fatal ~in_:"retaining_size_of_composite:fsize_in_bits" fi.fsize_in_bits +
+        Option.value_fatal ~in_:"retaining_size_of_composite:fpadding_in_bits" fi.fpadding_in_bits
+    in
     let result = f fi in
-    if bitsSizeOf fi.ftype <> original_size then begin
+    if size_determinants fi <> originals then begin
       fi.fbitfield <- Some original_size;
       fi.fattr <- addAttribute (Attr (Name.Attr.packed, [])) fi.fattr
     end;

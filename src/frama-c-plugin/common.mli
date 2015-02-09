@@ -434,6 +434,7 @@ sig
       end
 
       val size : compinfo -> int option
+      val fill_jessie_fields : compinfo -> unit
       val padding_field : fsize_in_bits:int -> compinfo -> fieldinfo
       val fix_size : ?original_size:int -> compinfo -> unit
       val proper_fields : compinfo -> fieldinfo list

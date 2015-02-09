@@ -449,18 +449,17 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } =
       | GType (ti, _) when Set.mem types ti -> SkipChildren
       | GCompTag (ci, _) | GCompTagDecl (ci, _) when Set.mem comps ci ->
         Do.retaining_size_of_composite ci @@ fun ci ->
+        Type.Composite.Ci.fill_jessie_fields ci;
         ci.cfields <-
           ListLabels.map ci.cfields
             ~f:(fun fi ->
-              if fi.faddrof || Set.mem fields fi then begin
-                fi.fsize_in_bits <- None;
-                fi.foffset_in_bits <- None;
-                fi.fpadding_in_bits <- None;
-                fi
-              end else
-                Type.Composite.Ci.padding_field
-                  ~fsize_in_bits:(Option.value ~default:(bitsSizeOf fi.ftype) fi.fsize_in_bits)
-                  ci);
+              if fi.faddrof || Set.mem fields fi then fi
+              else
+                let fsize_in_bits =
+                  Option.value_fatal ~in_:"extractor:vglob_aux:fsize_in_bits" fi.fsize_in_bits +
+                  Option.value_fatal ~in_:"extractor:vglob_aux:fpadding_in_bits" fi.fpadding_in_bits
+                in
+                Type.Composite.Ci.padding_field ~fsize_in_bits ci);
         SkipChildren
       | GCompTag (ci, _) | GCompTagDecl (ci, _) when Set.mem dcomps ci ->
         (* The composite is dummy i.e. only used as an abstract type, so *)
