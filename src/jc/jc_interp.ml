@@ -3147,7 +3147,7 @@ let tr_fun f funpos spec body acc =
            let all_effects = ef_union f.fun_effects.fe_reads f.fun_effects.fe_writes in
            make_and
              (Interp_struct.valid_pre ~in_param:true all_effects vi)
-             (Interp_struct.instanceof_pre ~in_param:true all_effects vi)
+             (Interp_struct.instanceof_pre all_effects vi)
          in
          make_and argument_req acc)
       internal_requires
@@ -3201,7 +3201,7 @@ let tr_fun f funpos spec body acc =
                let all_effects = ef_union f.fun_effects.fe_reads f.fun_effects.fe_writes in
                make_and
                  (Interp_struct.valid_pre ~in_param:true all_effects f.fun_result)
-                 (Interp_struct.instanceof_pre ~in_param:true all_effects f.fun_result)
+                 (Interp_struct.instanceof_pre all_effects f.fun_result)
              else LTrue
          in
          let internal_post = make_post ~type_safe:false ~internal:true in

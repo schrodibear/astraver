@@ -48,4 +48,4 @@ val free : safe:bool -> alloc_class * region -> pointer_class -> expr -> expr
 
 val valid_pre : in_param:bool -> effect -> var_info -> assertion
 
-val instanceof_pre : in_param:bool -> effect -> var_info -> assertion
+val instanceof_pre : effect -> var_info -> assertion

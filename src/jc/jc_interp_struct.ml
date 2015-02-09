@@ -757,11 +757,11 @@ let valid_pre ~in_param all_effects (* vi *) =
       valid ~in_param ~equal:false (ac, vi_region) pc v None (Some (const_of_num n))
     | Some n1, Some n2 ->
       let ac = alloc_class_of_pointer_class pc in
-      valid  ~in_param ~equal:false (ac, vi_region) pc v (Some (const_of_num n1)) (Some (const_of_num n2))
+      valid ~in_param ~equal:false (ac, vi_region) pc v (Some (const_of_num n1)) (Some (const_of_num n2))
     end
   |  _ -> LTrue
 
-let instanceof_pre ~in_param all_effects (* vi *) =
+let instanceof_pre all_effects (* vi *) =
   function
   | { vi_type = JCTpointer (pc, lo, ro) as vi_type; vi_region } as vi
     when
@@ -777,5 +777,10 @@ let instanceof_pre ~in_param all_effects (* vi *) =
         ((lo, "offset_min"), (ro, "offset_max"))
         ~f:(function Some n, _ -> const_of_num n | None, f -> LApp (f, [at; v]))
     in
-    LImpl (pre, instanceof ~exact:si.si_final ~in_param (ac, vi_region) pc v ~arg:Range_l_r l r)
+    let instanceof_pre =
+      let _, tt = ttag_table_var ~label_in_name:false LabelHere (pointer_class_root pc, vi_region) in
+      let f = if si.si_final then make_typeeq else make_instanceof in
+      fun p -> f tt p si
+    in
+    LImpl (pre, LAnd (instanceof_pre v, forall_offset_in_range v l r ~f:(fun p -> [instanceof_pre p])))
   | _ -> LTrue
