@@ -657,6 +657,12 @@ Definition alloc_extends {t:Type} {t_WT:WhyType t} (a1:(alloc_table t))
   p) = (offset_max a2 p))).
 
 (* Why3 assumption *)
+Definition free_extends {t:Type} {t_WT:WhyType t} (a1:(alloc_table t))
+  (a2:(alloc_table t)): Prop := forall (p:(pointer t)), (~ (allocated a1
+  p)) -> (((offset_min a1 p) = (offset_min a2 p)) /\ ((offset_max a1
+  p) = (offset_max a2 p))).
+
+(* Why3 assumption *)
 Definition alloc_block {t:Type} {t_WT:WhyType t} (a1:(alloc_table t))
   (a2:(alloc_table t)) (p:(pointer t)) (n:Z): Prop := forall (q:(pointer t)),
   ((~ (same_block q p)) -> (((offset_min a2 q) = (offset_min a1 q)) /\
