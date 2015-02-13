@@ -1,0 +1,518 @@
+theory Enum_intf
+  use import int.Int
+
+  type t
+
+  function to_int t : int
+
+  predicate in_bounds int
+
+  function normalize int : int
+end
+
+theory Enum
+  use import int.Int
+  use import int.ComputerDivision
+
+  constant min : int
+  constant max : int
+
+  constant range : int = max - min + 1
+
+  function normalize (x : int) : int = min + (mod (x - min) range)
+
+  predicate in_bounds (n:int) = min <= n <= max
+
+  clone export Enum_intf with
+    function normalize = normalize,
+    predicate in_bounds = in_bounds
+
+  axiom to_int:
+    forall x : t. min <= to_int x <= max
+
+  axiom to_int_in_bounds: forall n:t. in_bounds (to_int n)
+
+  function of_int int : t
+
+  axiom of_int_:
+    forall x : int. min <= x <= max -> to_int (of_int x) = x
+
+  function (+) (a b : t) : t = of_int (Int.(+) (to_int a) (to_int b))
+
+  function (+%) (a b : t) : t = of_int (normalize (Int.(+) (to_int a) (to_int b)))
+
+  function (-_) (a : t) : t = of_int (Int.(-_) (to_int a))
+
+  function (-%_) (a : t) : t = of_int (normalize (Int.(-_) (to_int a)))
+
+  function (-) (a b : t) : t = of_int (Int.(-) (to_int a) (to_int b))
+
+  function (-%) (a b : t) : t = of_int (normalize (Int.(-) (to_int a) (to_int b)))
+
+  function ( *) (a b : t) : t = of_int (Int.( *) (to_int a) (to_int b))
+
+  function ( *%) (a b : t) : t = of_int (normalize (Int.( *) (to_int a) (to_int b)))
+
+  predicate equal (a b : t) = to_int a = to_int b
+
+  predicate ne (a b : t) = to_int a <> to_int b
+
+  axiom extensionality1: forall x y : t. to_int x = to_int y -> x = y
+
+  axiom extensionality2:
+    forall x y : int. of_int x = of_int y ->
+      min <= x <= max /\ min <= y <= max ->
+        x = y
+
+  predicate (<=) (a b : t) = Int.(<=) (to_int a) (to_int b)
+
+  predicate (<) (a b : t) = Int.(<) (to_int a) (to_int b)
+
+  predicate (>=) (a b : t) = Int.(>=) (to_int a) (to_int b)
+
+  predicate (>) (a b : t) = Int.(>) (to_int a) (to_int b)
+
+  function (/) (a b : t) : t = of_int (div (to_int a) (to_int b))
+
+  function (/%) (a b : t) : t = of_int (normalize (div (to_int a) (to_int b)))
+
+  function (%) (a b : t) : t = of_int (mod (to_int a) (to_int b))
+
+  function (%%) (a b : t) : t = of_int (normalize (mod (to_int a) (to_int b)))
+end
+
+module Generic_enum
+  use import int.Int
+
+  clone export Enum_intf
+
+  val (+%) (a b : t) : t
+    ensures { to_int result = normalize (Int.(+) (to_int a) (to_int b)) }
+
+  val (-%) (a b : t) : t
+    ensures { to_int result = normalize (Int.(-) (to_int a) (to_int b)) }
+
+  val ( *%) (a b : t) : t
+    ensures { to_int result = normalize (Int.( *) (to_int a) (to_int b)) }
+
+  val (-%_) (a : t) : t
+    ensures { to_int result = normalize (Int.(-_) (to_int a)) }
+end
+
+module Safe_bounded_int
+  use import int.Int
+
+  clone export Enum_intf
+
+  val of_int (n:int) : t
+    requires { "expl:integer overflow" in_bounds n }
+    ensures  { to_int result = n }
+
+  val (+) (a b : t) : t
+    requires { "expl:integer overflow" in_bounds (to_int a + to_int b) }
+    ensures   { to_int result = to_int a + to_int b }
+
+  val (-) (a b : t) : t
+    requires { "expl:integer overflow" in_bounds (to_int a - to_int b) }
+    ensures  { to_int result = to_int a - to_int b }
+
+  val ( *) (a b : t) : t
+    requires { "expl:integer overflow" in_bounds (to_int a * to_int b) }
+    ensures  { to_int result = to_int a * to_int b }
+
+  val (-_) (a : t) : t
+    requires { "expl:integer overflow" in_bounds (- to_int a) }
+    ensures  { to_int result = - to_int a }
+
+  val eq (a b : t) : bool
+    ensures { result <-> to_int a = to_int b }
+
+  val ne (a b : t) : bool
+    ensures { result <-> to_int a <> to_int b }
+
+  val (<=) (a b : t) : bool
+    ensures  { result <-> to_int a <= to_int b }
+
+  val (<) (a b : t) : bool
+    ensures  { result <-> to_int a < to_int b }
+
+  val (>=) (a b : t) : bool
+    ensures  { result <-> to_int a >= to_int b }
+
+  val (>) (a b : t) : bool
+    ensures  { result <-> to_int a > to_int b }
+
+  use import int.ComputerDivision
+
+  val (/) (a b : t) : t
+    requires { "expl:division by zero" to_int b <> 0 }
+    requires { "expl:integer overflow" in_bounds (div (to_int a) (to_int b)) }
+    ensures  { to_int result = div (to_int a) (to_int b) }
+
+  val (%) (a b : t) : t
+    requires { "expl:division by zero" to_int b <> 0 }
+    requires { "expl:integer overflow" in_bounds (mod (to_int a) (to_int b)) }
+    ensures  { to_int result = mod (to_int a) (to_int b) }
+end
+
+module Safe_enum
+  clone export Generic_enum
+
+  clone export Safe_bounded_int with
+    namespace . = .
+
+  use import int.ComputerDivision
+
+  val (/%) (a b : t) : t
+    requires { "expl:division by zero" to_int b <> 0 }
+    ensures  { to_int result = normalize (div (to_int a) (to_int b)) }
+
+  val (%%) (a b : t) : t
+    requires { "expl:division by zero" to_int b <> 0 }
+    ensures  { to_int result = normalize (mod (to_int a) (to_int b)) }
+end
+
+module Unsafe_bounded_int
+  use import int.Int
+
+  clone export Enum_intf
+
+  val of_int (n : int) : t
+    ensures  { to_int result = n }
+
+  val (+) (a b : t) : t
+    ensures   { to_int result = to_int a + to_int b }
+
+  val (-) (a b : t) : t
+    ensures  { to_int result = to_int a - to_int b }
+
+  val ( *) (a b : t) : t
+    ensures  { to_int result = to_int a * to_int b }
+
+  val (-_) (a : t) : t
+    ensures  { to_int result = - to_int a }
+
+  val eq (a b : t) : bool
+    ensures { result <-> to_int a = to_int b }
+
+  val ne (a b : t) : bool
+    ensures { result <-> to_int a <> to_int b }
+
+  axiom extensionality: forall x y : t. to_int x = to_int y -> x = y
+
+  val (<=) (a b : t) : bool
+    ensures  { result <-> to_int a <= to_int b }
+
+  val (<) (a b : t) : bool
+    ensures  { result <-> to_int a < to_int b }
+
+  val (>=) (a b : t) : bool
+    ensures  { result <-> to_int a >= to_int b }
+
+  val (>) (a b : t) : bool
+    ensures  { result <-> to_int a > to_int b }
+
+  use import int.ComputerDivision
+
+  val (/) (a b : t) : t
+    ensures  { to_int result = div (to_int a) (to_int b) }
+
+  val (%) (a b : t) : t
+    ensures  { to_int result = mod (to_int a) (to_int b) }
+end
+
+module Unsafe_enum
+  clone export Generic_enum
+
+  clone export Unsafe_bounded_int with
+    namespace . = .
+
+  use import int.ComputerDivision
+
+  val (/%) (a b : t) : t
+    ensures  { to_int result = normalize (div (to_int a) (to_int b)) }
+
+  val (%%) (a b : t) : t
+    ensures  { to_int result = normalize (mod (to_int a) (to_int b)) }
+end
+
+module Power2
+  use export int.Power
+
+  lemma powers_of_2:
+    power 2 0 = 1 /\
+    power 2 1 = 2 /\
+    power 2 2 = 4 /\
+    power 2 3 = 8 /\
+    power 2 4 = 16 /\
+    power 2 5 = 32 /\
+    power 2 6 = 64 /\
+    power 2 7 = 128 /\
+
+    power 2 8 = 256 /\
+    power 2 9 = 512 /\
+    power 2 10 = 1024 /\
+    power 2 11 = 2048 /\
+    power 2 12 = 4096 /\
+    power 2 13 = 8192 /\
+    power 2 14 = 16384 /\
+    power 2 15 = 32768 /\
+
+    power 2 16 = 65536 /\
+    power 2 17 = 131072 /\
+    power 2 18 = 262144 /\
+    power 2 19 = 524288 /\
+    power 2 20 = 1048576 /\
+    power 2 21 = 2097152 /\
+    power 2 22 = 4194304 /\
+    power 2 23 = 8388608 /\
+
+    power 2 24 = 16777216 /\
+    power 2 25 = 33554432 /\
+    power 2 26 = 67108864 /\
+    power 2 27 = 134217728 /\
+    power 2 28 = 268435456 /\
+    power 2 29 = 536870912 /\
+    power 2 30 = 1073741824 /\
+    power 2 31 = 2147483648
+end
+
+theory Bit_enum_intf
+  type t
+
+  constant size : int
+
+  predicate signed
+
+  function (&) t t : t
+  function (|.) t t : t
+  function (~_) t : t
+  function (^) t t : t
+  function lsl t t : t
+  function lsr t t : t
+  function asr t t : t
+end
+
+theory Bit_enum
+  use import int.Int
+
+  clone export Enum
+
+  clone export Bit_enum_intf with
+    type t = t
+
+  constant zero : t = of_int 0
+
+  constant ones : t = if signed then of_int (Int.(-_) 1) else of_int (Int.(-) range 1)
+
+  function to_uint (a : t) : int =
+    if signed /\ Int.(<) (to_int a) 0 then Int.(-) range (to_int a) else to_int a
+
+  function of_int_modulo (n : int) : t = of_int (normalize n)
+
+  function lsl_int t int : t
+
+  function lsr_int t int : t
+
+  function asr_int t int : t
+
+  clone export bv.BitVector with
+    type t = t,
+    constant size = size,
+    constant two_power_size = range,
+    constant zero = zero,
+    constant ones = ones,
+    function bw_and = (&),
+    function bw_or = (|.),
+    function bw_xor = (^),
+    function bw_not = (~_),
+    function lsl = lsl_int,
+    function lsr = lsr_int,
+    function asr = asr_int,
+    function lsl_bv = lsl,
+    function lsr_bv = lsr,
+    function asr_bv = asr,
+    function to_uint = to_uint,
+    function to_int = to_int,
+    function of_int = of_int_modulo
+
+  use import int.ComputerDivision
+  use import Power2
+
+  axiom nth:
+    forall a : t.
+      forall n : int.
+        Int.(<=) 0 n /\ Int.(<) n size ->
+          nth a n <->
+            Int.(>=) (to_int a) 0 /\ Int.(>=) (mod (to_int a) (power 2 n)) (power 2 n) \/
+            Int.(<) (to_int a) 0 /\ Int.(>=) (mod (Int.(+)range (to_int a)) (power 2 n)) (power 2 n)
+
+  axiom eq:
+    forall a b : t.
+      equal a b -> eq a b
+end
+
+module Generic_bit_enum
+  clone export Bit_enum_intf
+
+  val (&) (x y : t) : t
+    ensures { result = x & y }
+
+  val (|^) (x y : t) : t
+    ensures { result = x |. y }
+
+  val (~_) (x : t) : t
+    ensures { result = ~ x }
+
+  val (^) (x y : t) : t
+    ensures { result = x ^ y }
+end
+
+module Safe_bit_enum
+  use import int.Int
+  clone export Safe_enum
+
+  clone export Generic_bit_enum with
+    type t = t
+
+  use import Power2
+
+  val lsl (x y : t) : t
+    requires { "expl:<< second operand" 0 <= to_int y < size }
+    requires { "expl:integer overflow" in_bounds (to_int x * (power 2 (to_int y))) }
+    ensures { result = lsl x y }
+    ensures { to_int result = to_int x * (power 2 (to_int y)) }
+
+  val lsl_modulo (x y : t) : t
+    requires { "expl:<< second operand" 0 <= to_int y < size }
+    ensures { result = lsl x y }
+    ensures { to_int result = normalize (to_int x * (power 2 (to_int y))) }
+
+  use import int.EuclideanDivision
+
+  val lsr (x y : t) : t
+    requires { "expl:>> second operand" 0 <= to_int y < size }
+    ensures { result = lsr x y }
+    ensures { to_int x >= 0 -> to_int result = div (to_int x) (power 2 (to_int y)) }
+
+  val asr (x y : t) : t
+    requires { "expl:>> second operand" 0 <= to_int y < size }
+    ensures { result = asr x y }
+    ensures { to_int result = div (to_int x) (power 2 (to_int y)) }
+end
+
+module Unsafe_bit_enum
+  use import int.Int
+  clone export Unsafe_enum
+
+  clone export Generic_bit_enum with
+    type t = t
+
+  use import Power2
+
+  val lsl (x y : t) : t
+    ensures { result = lsl x y }
+    ensures { to_int result = to_int x * (power 2 (to_int y)) }
+
+  val lsl_modulo (x y : t) : t
+    ensures { result = lsl x y }
+    ensures { to_int result = normalize (to_int x * (power 2 (to_int y))) }
+
+  use import int.EuclideanDivision
+
+  val lsr (x y : t) : t
+    ensures { result = lsr x y }
+    ensures { to_int x >= 0 -> to_int result = div (to_int x) (power 2 (to_int y)) }
+
+  val asr (x y : t) : t
+    ensures { result = asr x y }
+    ensures { to_int result = div (to_int x) (power 2 (to_int y)) }
+end
+
+theory Signed_enum
+  use import int.Int
+  use import Power2
+
+  constant size : int
+
+  constant min : int = - power 2 (size - 1)
+  constant max : int = power 2 (size - 1) - 1
+
+  clone export Bit_enum with
+    constant size = size,
+    constant min = min,
+    constant max = max
+end
+
+module Unsigned_enum
+  use import int.Int
+  use import Power2
+  
+  constant size : int
+
+  constant min : int = 0
+  constant max : int = power 2 size - 1
+
+  clone export Bit_enum with
+    constant size = size,
+    constant min = min,
+    constant max = max
+end
+
+theory Int32
+  constant size : int = 32
+  clone export Signed_enum with
+    constant size = size
+end
+
+theory Int8
+  constant size : int = 8
+  clone export Bit_enum with
+    constant size = size
+end
+
+theory T1
+  use Int32
+  use Int8
+end
+
+module Safe_int32
+  use export Int32
+  clone export Safe_bit_enum with
+    namespace . = .
+end
+
+module Safe_int8
+  use export Int8
+  clone export Safe_bit_enum with
+    namespace . = .
+end
+
+module Unsafe_int32
+  use export Int32
+  clone export Unsafe_bit_enum with
+    namespace . = .
+end
+
+module Unsafe_int8
+  use export Int8
+  clone export Unsafe_bit_enum with
+    namespace . = .
+end
+
+module M1
+  use import int.Int
+
+  use Int8
+  use Safe_int8
+  use Int32
+  use Safe_int32
+  
+  use Unsafe_int8
+  use Unsafe_int32
+
+  let func (a : int) : int
+    requires { Int32.min <= 2 * a <= Int32.max }
+    ensures { result = Int32.to_int (Int32.(+) (Int32.of_int a) (Int32.of_int a)) } =
+    Int32.to_int (Safe_int32.(+) (Safe_int32.of_int a) (Safe_int32.of_int a))
+end
