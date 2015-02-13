@@ -1040,8 +1040,13 @@ class specialize_blockfuns_visitor =
                 in
                 stmt.skind <- Instr (Call (lval_opt, evar ~loc f, args, loc));
                 SkipChildren
+              | Some _ ->
+                Console.unsupported
+                  "Can't specialize %s applied (or assigned) to arguments (or lvalue) of type `void': %a"
+                  fvar.vname Printer.pp_stmt stmt
               | _ ->
-                Console.abort "Can't specialize %s applied (or assigned) to arguments (or lvalue) of incorrect types: %a"
+                Console.unsupported
+                  "Can't specialize %s applied (or assigned) to arguments (or lvalue) of incorrect types: %a"
                   fvar.vname Printer.pp_stmt stmt
           else DoChildren
         with Not_found -> DoChildren
