@@ -1019,25 +1019,30 @@ class specialize_blockfuns_visitor =
               | Declaration (_, { vtype }, _ ,_) -> vtype
               | _ -> assert false (* is_block_function == true *)
             in
-            match match_arg_types fvtype lval_type_opt arg_types with
-            | Some typ when not (isVoidType typ) ->
-              let f =
-                let fname = fvar.vname ^ "_" ^ Name.typ typ in
-                match self#find_specialized_function fname with
-                | Some f -> f
-                | None ->
-                  if fname <> Name.unique fname then
-                    Console.fatal "Can't introduce specialized function due to name conflict: %s" fname;
-                  self#specialize_function fpatt fname typ
-              in
-              stmt.skind <- Instr (Call (lval_opt, evar ~loc f, args, loc));
-              SkipChildren
-            | Some _ ->
-              Console.unsupported "Can't specialize %s applied (or assigned) to arguments (or lvalue) of type `void': %a"
-                fvar.vname Printer.pp_stmt stmt
-            | _ ->
-              Console.fatal "Can't specialize %s applied (or assigned) to arguments (or lvalue) of incorrect types: %a"
-                fvar.vname Printer.pp_stmt stmt
+            let fparams = match fvtype with
+             | TFun (_, Some formals, _, _) -> formals
+             | _ -> []
+            in
+            if (List.length fparams) <> (List.length arg_types) then
+              Console.abort "Can't specialize %s applied to incorrect arguments: %a"
+                  fvar.vname Printer.pp_stmt stmt
+            else
+              match match_arg_types fvtype lval_type_opt arg_types with
+              | Some typ when not (isVoidType typ) ->
+                let f =
+                  let fname = fvar.vname ^ "_" ^ Name.typ typ in
+                  match self#find_specialized_function fname with
+                  | Some f -> f
+                  | None ->
+                    if fname <> Name.unique fname then
+                      Console.fatal "Can't introduce specialized function due to name conflict: %s" fname;
+                    self#specialize_function fpatt fname typ
+                in
+                stmt.skind <- Instr (Call (lval_opt, evar ~loc f, args, loc));
+                SkipChildren
+              | _ ->
+                Console.abort "Can't specialize %s applied (or assigned) to arguments (or lvalue) of incorrect types: %a"
+                  fvar.vname Printer.pp_stmt stmt
           else DoChildren
         with Not_found -> DoChildren
         end
