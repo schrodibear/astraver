@@ -21,7 +21,7 @@ theory Enum
 
   function normalize (x : int) : int = min + (mod (x - min) range)
 
-  predicate in_bounds (n:int) = min <= n <= max
+  predicate in_bounds (n : int) = min <= n <= max
 
   clone export Enum_intf with
     function normalize = normalize,
@@ -104,7 +104,7 @@ module Safe_bounded_int
 
   clone export Enum_intf
 
-  val of_int (n:int) : t
+  val of_int (n : int) : t
     requires { "expl:integer overflow" in_bounds n }
     ensures  { to_int result = n }
 
@@ -282,7 +282,13 @@ theory Bit_enum_intf
 
   constant size : int
 
+  constant range : int
+
   predicate signed
+
+  predicate equal t t
+
+  function of_int int : t
 
   function (&) t t : t
   function (|.) t t : t
@@ -296,7 +302,7 @@ end
 theory Bit_enum
   use import int.Int
 
-  clone export Enum
+  clone export Enum_intf
 
   clone export Bit_enum_intf with
     type t = t
@@ -306,7 +312,7 @@ theory Bit_enum
   constant ones : t = if signed then of_int (Int.(-_) 1) else of_int (Int.(-) range 1)
 
   function to_uint (a : t) : int =
-    if signed /\ Int.(<) (to_int a) 0 then Int.(-) range (to_int a) else to_int a
+    if signed /\ Int.(<) (to_int a) 0 then Int.(+) range (to_int a) else to_int a
 
   function of_int_modulo (n : int) : t = of_int (normalize n)
 
@@ -344,8 +350,8 @@ theory Bit_enum
       forall n : int.
         Int.(<=) 0 n /\ Int.(<) n size ->
           nth a n <->
-            Int.(>=) (to_int a) 0 /\ Int.(>=) (mod (to_int a) (power 2 n)) (power 2 n) \/
-            Int.(<) (to_int a) 0 /\ Int.(>=) (mod (Int.(+)range (to_int a)) (power 2 n)) (power 2 n)
+            Int.(>=) (to_int a) 0 /\ Int.(>=) (mod (to_int a) (power 2 (n + 1))) (power 2 n) \/
+            Int.(<) (to_int a) 0 /\ Int.(>=) (mod (Int.(+) range (to_int a)) (power 2 (n + 1))) (power 2 n)
 
   axiom eq:
     forall a b : t.
@@ -370,7 +376,7 @@ end
 
 module Safe_bit_enum
   use import int.Int
-  clone export Safe_enum
+  clone export Enum_intf
 
   clone export Generic_bit_enum with
     type t = t
@@ -403,7 +409,7 @@ end
 
 module Unsafe_bit_enum
   use import int.Int
-  clone export Unsafe_enum
+  clone export Enum_intf
 
   clone export Generic_bit_enum with
     type t = t
@@ -429,73 +435,111 @@ module Unsafe_bit_enum
     ensures { to_int result = div (to_int x) (power 2 (to_int y)) }
 end
 
-theory Signed_enum
-  use import int.Int
-  use import Power2
-
-  constant size : int
-
-  constant min : int = - power 2 (size - 1)
-  constant max : int = power 2 (size - 1) - 1
-
-  clone export Bit_enum with
-    constant size = size,
-    constant min = min,
-    constant max = max
-end
-
-module Unsigned_enum
-  use import int.Int
-  use import Power2
-  
-  constant size : int
-
-  constant min : int = 0
-  constant max : int = power 2 size - 1
-
-  clone export Bit_enum with
-    constant size = size,
-    constant min = min,
-    constant max = max
-end
-
 theory Int32
-  constant size : int = 32
-  clone export Signed_enum with
-    constant size = size
+  use import int.Int
+  constant min : int = -2147483648
+  constant max : int = 2147483647
+
+  clone export Enum with
+    constant min = min,
+    constant max = max
 end
 
-theory Int8
-  constant size : int = 8
+theory Bit_int32
+  use export Int32
+
+  constant size : int = 32
+  predicate signed = true
   clone export Bit_enum with
-    constant size = size
+    type t = t,
+    predicate signed = signed,
+    constant size = size,
+    constant range = range,
+    function to_int = to_int,
+    function of_int = of_int,
+    function normalize = normalize,
+    predicate in_bounds = in_bounds,
+    predicate equal = equal
+end
+
+theory Uint8
+  use import int.Int
+  constant min : int = 0
+  constant max : int = 255
+
+  clone export Enum with
+    constant min = min,
+    constant max = max
+end
+
+theory Bit_uint8
+  clone export Uint8
+
+  constant size : int = 8
+  predicate signed = false
+  clone export Bit_enum with
+    type t = t,
+    predicate signed = signed,
+    constant size = size,
+    constant range = range,
+    function to_int = to_int,
+    function of_int = of_int,
+    function normalize = normalize,
+    predicate in_bounds = in_bounds,
+    predicate equal = equal
 end
 
 theory T1
+  use import int.Int
+
   use Int32
-  use Int8
+  use Uint8
 end
 
 module Safe_int32
   use export Int32
+  clone export Safe_enum with
+    namespace . = .
+end
+
+module Safe_bit_int32
+  use export Bit_int32
   clone export Safe_bit_enum with
     namespace . = .
 end
 
-module Safe_int8
-  use export Int8
+module Safe_uint8
+  use export Uint8
+  clone export Safe_enum with
+    namespace . = .
+end
+
+module Safe_bit_uint8
+  use export Bit_uint8
   clone export Safe_bit_enum with
     namespace . = .
 end
 
 module Unsafe_int32
   use export Int32
+  clone export Unsafe_enum with
+    namespace . = .
+end
+
+module Unsafe_bit_int32
+  use export Bit_int32
   clone export Unsafe_bit_enum with
     namespace . = .
 end
 
-module Unsafe_int8
-  use export Int8
+module Unsafe_uint8
+  use export Uint8
+  clone export Unsafe_enum with
+    namespace . = .
+end
+
+module Unsafe_bit_uint8
+  use export Bit_uint8
   clone export Unsafe_bit_enum with
     namespace . = .
 end
@@ -503,16 +547,28 @@ end
 module M1
   use import int.Int
 
-  use Int8
-  use Safe_int8
   use Int32
   use Safe_int32
-  
-  use Unsafe_int8
   use Unsafe_int32
 
   let func (a : int) : int
     requires { Int32.min <= 2 * a <= Int32.max }
     ensures { result = Int32.to_int (Int32.(+) (Int32.of_int a) (Int32.of_int a)) } =
     Int32.to_int (Safe_int32.(+) (Safe_int32.of_int a) (Safe_int32.of_int a))
+end
+
+module M2
+  use import int.Int
+
+  use Bit_int32
+  use Bit_uint8
+
+  lemma l1:
+    Bit_int32.(~_) (Bit_int32.of_int 2) = Bit_int32.of_int (-3)
+
+  lemma l2:
+    Bit_uint8.(~_) (Bit_uint8.of_int 2) = Bit_uint8.of_int 253
+
+  lemma l3:
+    Bit_int32.(~_) (Bit_int32.of_int 2) = Bit_int32.of_int (-4)
 end
