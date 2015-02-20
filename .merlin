@@ -1,4 +1,4 @@
-FLG -w +Z -short-paths -strict-formats -safe-string
+FLG -w +Z -open Aliases -short-paths -strict-formats -safe-string
 
 S src/jc
 S src/why
