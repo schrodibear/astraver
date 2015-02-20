@@ -35,17 +35,6 @@
 open Lexing
 open Format
 
-type constant =
-  | Prim_void
-  | Prim_int of string
-  | Prim_real of string
-  | Prim_bool of bool
-
-type logic_type = {
-  lt_name : string;
-  lt_args : logic_type list;
-}
-
 type vc_kind =
   | JCVCvar_decr
   | JCVCarith_overflow
@@ -77,81 +66,165 @@ type why_label = {
   l_pos      : Position.t
 }
 
-type term =
-  | LConst of constant
-  | LApp of string * term list
-  | LVar of string  (** immutable logic var *)
-  | LDeref of string (** [!r] *)
-  | LDerefAtLabel of string * string  (** [(at !x L)] *)
-  | TLabeled of why_label * term
-  | TIf of term * term * term
-  | TLet of string * term * term
 
-type assertion =
-  | LTrue | LFalse
-  | LAnd of assertion * assertion
-  | LOr of assertion * assertion
-  | LIff of assertion * assertion
-  | LNot of assertion
-  | LImpl of assertion * assertion
-  | LIf of term * assertion * assertion
-  | LLet of string * term * assertion
-  | LForall of string * logic_type * trigger list list * assertion (** [forall x : t. a] *)
-  | LExists of string * logic_type * trigger list list * assertion (** [exists x : t. a] *)
-  | LPred of string * term list
-  | LLabeled of why_label * assertion
+type real
+
+type enum_name = private string
+
+type ints = [ `int8 | `uint8 | `int16 | `uint16 | `int32 | `uint32 | `int64 | `uint64 ]
+
+type 'a bounded = [< ints | `enum of enum_name ] as 'a
+
+type 'a integer =
+  | Int8 : [`int8] integer
+  | Uint8 : [`uint8] integer
+  | Int16 : [`int16] integer
+  | Uintnt16 : [`uint16] integer
+  | Int32 : [`int32] integer
+  | Uint32 : [`uint32] integer
+  | Int64 : [`int64] integer
+  | Uint64 : [`uint64] integer
+  | Enum : enum_name -> [`enum of enum_name] integer
+  | Unbounded : [`unbounded] integer
+  constraint 'a = [< ints | `enum of enum_name | `unbounded ]
+
+type 'a number =
+  | Integer : 'a integer -> 'a integer number
+  | Real : real number
+
+type void
+
+type boolean
+
+type ('params, 'result) func =
+  | B_int_op :
+      [ `Add | `Sub | `Mul | `Div | `Mod ] ->
+    ([`unbounded] integer number * ([`unbounded] integer number * unit), [`unbounded] integer number) func
+  | U_int_op : [ `Neg ] -> ([`unbounded] integer number * unit, [`unbounded] integer number) func
+  | B_bint_op :
+      [ `Add | `Sub | `Mul | `Div | `Mod ] * (_ bounded as 'a) integer * bool ->
+    ('a integer number * ('a integer number * unit), 'a integer number) func
+  | U_bint_op :
+      [ `Neg ] * (_ bounded as 'a) integer * bool -> ('a integer number * unit, 'a integer number) func
+  | Of_int : (_ bounded as 'a) integer -> ([`unbounded] integer number * unit, 'a integer number) func
+  | To_int : (_ bounded as 'a) integer -> ('a integer number * unit, [`unbounded] integer number) func
+  | B_bint_bop :
+      [`And | `Or | `Xor | `Lsr | `Asr ] * ([< ints ] as 'a) integer ->
+    ('a integer number * ('a integer number * unit), 'a integer number) func
+  | U_bint_bop :
+    [ `Compl ] * ([< ints ] as 'a) integer -> ('a integer number * unit, 'a integer number) func
+  | Lsl_bint :
+      ([< ints ] as 'a) integer * bool ->
+    ('a integer number * ('a integer number * unit), 'a integer number) func
+  | B_num_pred : [ `Lt | `Le | `Gt | `Ge | `Eq | `Ne ] * 'a number -> ('a number * ('a number * unit), boolean) func
+  | Poly : [`Eq | `Neq] -> ('a * ('a * unit), boolean) func
+  | User : string * bool * string -> ('a, 'b) func (** theory * use qualified name * name *)
+
+type 'typ constant =
+  | Void : void constant
+  | Int : string -> [`unbounded] integer number constant
+  | Real : string -> real number constant
+  | Bool : boolean constant
+
+type 'a term_hlist =
+  | Nil : unit term_hlist
+  | Cons : 'a term * 'b term_hlist -> ('a * 'b) term_hlist
+
+and 'typ term =
+  | Const : 'a constant -> 'a term
+  | App : ('a, 'b) func * 'a term_hlist -> 'b term
+  | Var : string -> 'a term  (** immutable logic var *)
+  | Deref : string -> 'a term  (** [!r] *)
+  | Deref_at : string * string -> 'a term  (** [(at !x L)] *)
+  | Labeled : why_label * 'a term -> 'a term
+  | If : 'a term * 'b term * 'b term -> 'b term
+  | Let : string * 'a term * 'b term -> 'b term
+
+type ('params, 'result) tconstr =
+  | Numeric : ('a number * unit, 'a number) tconstr
+  | Bool : (unit, boolean) tconstr
+  | Void : (unit, void) tconstr
+  | User : string -> ('a, 'b) tconstr
+
+type 'a ltype_hlist =
+  | Nil : unit ltype_hlist
+  | Cons : 'a logic_type * 'b ltype_hlist -> ('a * 'b) ltype_hlist
+
+and 'a logic_type = Type : ('a, 'b) tconstr * 'a ltype_hlist -> 'b logic_type
+
+type pred =
+  | True | False
+  | And : pred * pred -> pred
+  | Or : pred * pred -> pred
+  | Iff : pred * pred -> pred
+  | Not : pred -> pred
+  | Impl : pred * pred -> pred
+  | If : 'a term * pred * pred -> pred
+  | Let : string * 'a term * pred -> pred
+  | Forall : string * 'a logic_type * trigger list list * pred -> pred (** [forall x : t. a] *)
+  | Exists : string * 'a logic_type * trigger list list * pred -> pred (** [exists x : t. a] *)
+  | App : ('a, boolean) func * 'a term_hlist -> pred
+  | Labeled : why_label * pred -> pred
 
 and trigger =
-  | LPatP of assertion
-  | LPatT of term
+  | Pred : pred -> trigger
+  | Term : 'a term -> trigger
 
-type why_type =
-  | Prod_type of string * why_type * why_type (** (x : t1) -> t2 *)
-  | Base_type of logic_type
-  | Ref_type of why_type
-  | Annot_type of
-      assertion * why_type *
-      string list * string list * assertion * ((string * assertion) list)
-      (** [{ P } t reads r writes w raises E { Q | E => R }] *)
+type 'a why_type =
+  | Prod_type : string * 'a why_type * 'b why_type -> ('a * 'b) why_type (** (x : t1) -> t2 *)
+  | Base_type : 'a logic_type -> 'a why_type
+  | Ref_type : 'a why_type -> 'a ref why_type
+  | Annot_type : pred * 'a why_type * string list * string list * pred * (string * pred) list -> 'a why_type
+    (** [{ P } t reads r writes w raises E { Q | E => R }] *)
 
-type variant = term * string option
+type any_logic_type = Logic_type : 'a logic_type -> any_logic_type
+
+type any_why_type = Why_type : 'a why_type -> any_why_type
+
+type 'a variant = 'a term * string option
 
 type opaque = bool
 
 type assert_kind = [ `ASSERT | `CHECK | `ASSUME ]
 
-type expr_node =
-  | Cte of constant
-  | Var of string
-  | And of expr * expr
-  | Or of expr * expr
-  | Not of expr
-  | Void
-  | Deref of string
-  | If of expr * expr * expr
-  | While of
-        expr (** loop condition *)
-      * assertion (** invariant *)
-      * variant option (** variant *)
-      * expr list (** loop body *)
-  | Block of expr list
-  | Assign of string * expr
-  | Let of string * expr * expr
-  | Let_ref of string * expr * expr
-  | App of expr * expr * why_type option
-  | Raise of string * expr option
-  | Try of expr * string * string option * expr
-  | Fun of (string * why_type) list * assertion * expr * assertion * bool * ((string * assertion) list)
-           (** params * pre * body * post * diverges * signals *)
-  | Triple of opaque * assertion * expr * assertion * ((string * assertion) list)
-  | Assert of assert_kind * assertion * expr
-  | BlackBox of why_type
-  | Absurd
-  | Labeled of why_label * expr
+type 'a expr_hlist =
+  | Nil : unit expr_hlist
+  | Cons : 'a expr * 'b expr_hlist -> ('a * 'b) expr_hlist
 
-and expr = {
+and 'typ expr_node =
+  | Cte : 'a constant -> 'a expr_node
+  | Var : string -> 'a expr_node
+  | And : boolean expr * boolean expr -> boolean expr_node
+  | Or : boolean expr * boolean expr -> boolean expr_node
+  | Not : boolean expr -> boolean expr_node
+  | Void : void expr_node
+  | Deref : string -> 'a expr_node
+  | If : 'a expr * 'b expr * 'b expr -> 'b expr_node
+  | While :
+        boolean expr (** loop condition *)
+      * pred (** invariant *)
+      * 'a variant option (** variant *)
+      * void expr list (** loop body *) ->
+      void expr_node
+  | Block : void expr list -> void expr_node
+  | Assign : string * 'a expr -> void expr_node
+  | Let : string * 'a expr * 'b expr -> 'b expr_node
+  | Let_ref : string * 'a expr * 'b expr -> 'b expr_node
+  | App : ('a, 'b) func * 'a expr_hlist * 'b why_type option -> 'b expr_node
+  | Raise : string * 'a expr option -> 'b expr_node
+  | Try : 'a expr * string * string option * 'a expr -> 'a expr_node
+  | Fun : (string * any_why_type) list * 'b why_type * pred * 'b expr * pred * bool * ((string * pred) list) ->
+    'b expr_node
+    (** params * result_type * pre * body * post * diverges * signals *)
+  | Triple : opaque * pred * 'a expr * pred * ((string * pred) list) -> 'a expr_node
+  | Assert : assert_kind * pred * boolean expr -> void expr_node
+  | BlackBox : 'a why_type -> 'a expr_node
+  | Absurd : void expr_node
+  | Labeled : why_label * 'a expr -> 'a expr_node
+
+and 'a expr = {
   expr_labels     : string list;
-  expr_node       : expr_node;
+  expr_node       : 'a expr_node;
 }
 
 type why_id = {
@@ -160,18 +233,37 @@ type why_id = {
   why_pos  : Position.t
 }
 
+type decl_kind = [ `Theory | `Module ]
+
 type goal_kind = KAxiom | KLemma | KGoal
 
-type why_decl =
-  | Param of bool * why_id * why_type  (** parameter in why *)
-  | Def of why_id * expr (** global let in why *)
-  | Logic of bool * why_id * (string * logic_type) list * logic_type  (** logic decl in why *)
-  | Predicate of bool * why_id * (string * logic_type) list * assertion
-  | Inductive of bool * why_id * (string * logic_type) list * (string * assertion) list (** inductive definition *)
-  | Goal of goal_kind * why_id * assertion  (** Goal *)
-  | Function of bool * why_id * (string * logic_type) list * logic_type * term
-  | Type of why_id * string list
-  | Exception of why_id * logic_type option
+type 'kind why_decl =
+  | Param : bool * why_id * 'a why_type ->  [`Module] why_decl (** parameter in why *)
+  | Def : why_id * 'a expr -> [`Module] why_decl (** global let in why *)
+  | Logic : bool * why_id * (string * any_logic_type) list * 'a logic_type -> [`Theory] why_decl
+    (** logic decl in why *)
+  | Predicate : bool * why_id * (string * any_logic_type) list * pred -> [`Theory] why_decl
+  | Inductive : bool * why_id * (string * any_logic_type) list * (string * pred) list -> [`Theory] why_decl
+    (** inductive definition *)
+  | Goal : goal_kind * why_id * pred -> [`Theory] why_decl  (** Goal *)
+  | Function : bool * why_id * (string * any_logic_type) list * 'a logic_type * 'a term -> [`Theory] why_decl
+  | Type : why_id * string list -> [`Theory] why_decl
+  | Exception : why_id * any_logic_type option -> [`Module] why_decl
+
+type dependency =
+  | Use of [`Import | `Export | `As of string option] * entry
+  | Clone of [`Import | `Export | `As of string option] * entry *
+             [`Constant of string * string |
+              `Type of string * string |
+              `Function of string * string |
+              `Predicate of string * string |
+               `Namespace of string option * string option |
+              `Lemma of string |
+              `Goal of string] list
+
+and entry =
+  | Theory of string * (dependency list * [`Theory] why_decl list) option
+  | Module of string * (dependency list * [`Module] why_decl list) option
 
 (*
   Local Variables:
