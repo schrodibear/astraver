@@ -66,64 +66,88 @@ type why_label = {
   l_pos      : Position.t
 }
 
+type single = Single
+type double = Double
 
-type real
+type 'prec precision =
+  | Single : single precision
+  | Double : double precision
 
-type enum_name = private string
+type arbitrary_precision = Arbitrary_precision
 
-type ints = [ `int8 | `uint8 | `int16 | `uint16 | `int32 | `uint32 | `int64 | `uint64 ]
+type 'prec real =
+  | Float : 'prec precision -> 'prec precision real
+  | Real : arbitrary_precision real
 
-type 'a bounded = [< ints | `enum of enum_name ] as 'a
+type _8 = S8
+type _16 = S16
+type _32 = S32
+type _64 = S64
 
-type 'a integer =
-  | Int8 : [`int8] integer
-  | Uint8 : [`uint8] integer
-  | Int16 : [`int16] integer
-  | Uintnt16 : [`uint16] integer
-  | Int32 : [`int32] integer
-  | Uint32 : [`uint32] integer
-  | Int64 : [`int64] integer
-  | Uint64 : [`uint64] integer
-  | Enum : enum_name -> [`enum of enum_name] integer
-  | Unbounded : [`unbounded] integer
-  constraint 'a = [< ints | `enum of enum_name | `unbounded ]
+type 'a bit =
+  | X8 : _8 bit
+  | X16 : _16 bit
+  | X32 : _32 bit
+  | X64 : _64 bit
+
+type signed = Signed
+type unsigned = Unsigned
+
+type 'a range =
+  | Signed : signed range
+  | Unsigned : unsigned range
+
+type 'a enum = Enum : 'a enum
+
+type unbounded = Unbounded
+
+type ('range, 'size) integer  =
+  | Int : 'a range * 'b bit -> ('a range, 'b bit) integer
+  | Enum : ('a enum, 'b bit) integer
+  | Integer : (unbounded, unbounded) integer
 
 type 'a number =
-  | Integer : 'a integer -> 'a integer number
-  | Real : real number
+  | Integral : ('range, 'size) integer -> ('range, 'size) integer number
+  | Real : 'prec real -> 'prec real number
 
-type void
+type void = Void
 
-type boolean
+type boolean = Boolean
 
 type ('params, 'result) func =
   | B_int_op :
       [ `Add | `Sub | `Mul | `Div | `Mod ] ->
-    ([`unbounded] integer number * ([`unbounded] integer number * unit), [`unbounded] integer number) func
-  | U_int_op : [ `Neg ] -> ([`unbounded] integer number * unit, [`unbounded] integer number) func
+    ((unbounded, unbounded) integer number * ((unbounded, unbounded) integer number * unit),
+     (unbounded, unbounded) integer number) func
+  | U_int_op : [ `Neg ] -> ((unbounded, unbounded) integer number * unit, (unbounded, unbounded) integer number) func
   | B_bint_op :
-      [ `Add | `Sub | `Mul | `Div | `Mod ] * (_ bounded as 'a) integer * bool ->
-    ('a integer number * ('a integer number * unit), 'a integer number) func
+      [ `Add | `Sub | `Mul | `Div | `Mod ] * ('a, 'b bit) integer * bool ->
+    (('a, 'b bit) integer number * (('a, 'b bit) integer number * unit), ('a, 'b bit) integer number) func
   | U_bint_op :
-      [ `Neg ] * (_ bounded as 'a) integer * bool -> ('a integer number * unit, 'a integer number) func
-  | Of_int : (_ bounded as 'a) integer -> ([`unbounded] integer number * unit, 'a integer number) func
-  | To_int : (_ bounded as 'a) integer -> ('a integer number * unit, [`unbounded] integer number) func
+      [ `Neg ] * ('a, 'b bit) integer * bool -> (('a, 'b bit) integer number * unit, ('a, 'b bit) integer number) func
+  | Of_int : ('a, 'b bit) integer -> ((unbounded, unbounded) integer number * unit, ('a, 'b bit) integer number) func
+  | To_int : ('a, 'b bit) integer -> (('a, 'b bit) integer number * unit, (unbounded, unbounded) integer number) func
+  | To_float : 'a precision real -> (arbitrary_precision real * unit, 'a precision real) func
+  | Of_float : 'a precision real -> ('a precision real * unit, arbitrary_precision real) func
   | B_bint_bop :
-      [`And | `Or | `Xor | `Lsr | `Asr ] * ([< ints ] as 'a) integer ->
-    ('a integer number * ('a integer number * unit), 'a integer number) func
+      [`And | `Or | `Xor | `Lsr | `Asr ] * ('a range, 'b bit) integer ->
+    (('a range, 'b bit) integer number * (('a range, 'b bit) integer number * unit),
+     ('a range, 'b bit) integer number) func
   | U_bint_bop :
-    [ `Compl ] * ([< ints ] as 'a) integer -> ('a integer number * unit, 'a integer number) func
+      [ `Compl ] * ('a range, 'b bit) integer ->
+    (('a range, 'b bit) integer number * unit, ('a range, 'b bit) integer number) func
   | Lsl_bint :
-      ([< ints ] as 'a) integer * bool ->
-    ('a integer number * ('a integer number * unit), 'a integer number) func
+      ('a range, 'b bit) integer * bool ->
+    (('a range, 'b bit) integer number * (('a range, 'b bit) integer number * unit),
+     ('a range, 'b bit) integer number) func
   | B_num_pred : [ `Lt | `Le | `Gt | `Ge | `Eq | `Ne ] * 'a number -> ('a number * ('a number * unit), boolean) func
   | Poly : [`Eq | `Neq] -> ('a * ('a * unit), boolean) func
   | User : string * bool * string -> ('a, 'b) func (** theory * use qualified name * name *)
 
 type 'typ constant =
   | Void : void constant
-  | Int : string -> [`unbounded] integer number constant
-  | Real : string -> real number constant
+  | Int : string -> (unbounded, unbounded) integer number constant
+  | Real : string -> arbitrary_precision real number constant
   | Bool : boolean constant
 
 type 'a term_hlist =
@@ -144,7 +168,8 @@ type ('params, 'result) tconstr =
   | Numeric : ('a number * unit, 'a number) tconstr
   | Bool : (unit, boolean) tconstr
   | Void : (unit, void) tconstr
-  | User : string -> ('a, 'b) tconstr
+  | Var : string -> (unit, 'b) tconstr
+  | User : string * bool * string -> ('a, 'b) tconstr
 
 type 'a ltype_hlist =
   | Nil : unit ltype_hlist
