@@ -1690,8 +1690,8 @@ struct
     in
     let originals, original_size =
       size_determinants fi,
-        Option.value_fatal ~in_:"retaining_size_of_composite:fsize_in_bits" fi.fsize_in_bits +
-        Option.value_fatal ~in_:"retaining_size_of_composite:fpadding_in_bits" fi.fpadding_in_bits
+        Option.value_fatal ~in_:__LOC__ fi.fsize_in_bits +
+        Option.value_fatal ~in_:__LOC__ fi.fpadding_in_bits
     in
     let result = f fi in
     if size_determinants fi <> originals then begin

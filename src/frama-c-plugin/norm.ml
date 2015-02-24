@@ -790,7 +790,7 @@ object
 (*                 let skind = Return(Some(Cabs2cil.mkAddrOfAndMark lv),loc) in *)
 (*                 ChangeTo { s with skind = skind; } *)
 (*             | _ -> assert false (\* Should not be possible *\) *)
-      let lv = Var (Option.value_fatal ~in_:"struct_assign_expander:vstmt_aux:return_var" !return_var), NoOffset in
+      let lv = Var (Option.value_fatal ~in_:__LOC__ !return_var), NoOffset in
       let ret = mkStmt (Return (Some (Cabs2cil.mkAddrOfAndMark loc lv), loc)) in
       let assigns = expand_assign lv e (typeOf e) loc in
       let assigns = List.map (fun i -> mkStmt (Instr i)) assigns in
@@ -1977,7 +1977,7 @@ class unions_translator =
   let new_field_type fi =
     let sname = Name.unique (fi.fname ^ "P") in
     let fname = Name.unique (fi.fname ^ "M") in
-    let padding = Option.value_fatal ~in_:"union_translator:new_field_type:fpaddding_in_bits" fi.fpadding_in_bits in
+    let padding = Option.value_fatal ~in_:__LOC__ fi.fpadding_in_bits in
     let mcomp = (Type.Composite.Ci.Struct.singleton ~padding ~sname ~fname fi.ftype :> compinfo) in
     let tdef = GCompTag (mcomp, CurrentLoc.get ()) in
     let tdecl = TComp (mcomp, empty_size_cache (), []) in

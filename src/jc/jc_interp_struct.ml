@@ -651,7 +651,7 @@ let struc si =
       (fun () ->
          List.append @@
          [Goal (KAxiom, id_no_loc (si.si_name ^ "_is_final"),
-                let ri = Option.value_fail ~in_:"Interp_struct.struc" si.si_hroot.si_root in
+                let ri = Option.value_fail ~in_:__LOC__ si.si_hroot.si_root in
                 let t = "t" and p = "p" in
                 let lt = LVar t and lp = LVar p in
                 LForall (t, tag_table_type ri, [],

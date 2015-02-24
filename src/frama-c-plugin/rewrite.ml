@@ -1458,8 +1458,8 @@ class fp_eliminating_visitor ~attach =
             else
               None)
       in
-      let kf = Option.value_fatal ~in_:"fp_eliminating_visitor:vstmt_aux:current_kf" self#current_kf in
-      let fundec = Option.value_fatal ~in_:"fp_eliminating_visitor:vstmt_aux:current_func" self#current_func in
+      let kf = Option.value_fatal ~in_:__LOC__ self#current_kf in
+      let fundec = Option.value_fatal ~in_:__LOC__ self#current_func in
       let f =
         function
         | { skind = Instr (Call (lv_opt, f, args, loc)) } as s ->
@@ -1609,7 +1609,7 @@ class va_list_rewriter () =
                    loc)]
             when unrollType va_list.vtype == va_list_type ->
             let current_func =
-              Option.value_fatal ~in_:"va_list_rewriter:vinst:current_func" self#current_func
+              Option.value_fatal ~in_:__LOC__ self#current_func
             in
             begin
               match List.rev current_func.sformals with
@@ -1675,7 +1675,7 @@ class va_list_rewriter () =
             when va_list_in formals ->
             let nformals = List.length formals - 1 in
             let actuals = List.drop nformals args in
-            let current_func = Option.value_fatal ~in_:"va_list_rewriter:current_func" self#current_func in
+            let current_func = Option.value_fatal ~in_:__LOC__ self#current_func in
             let vtmp = makeTempVar current_func ~name:"va_list" (va_list_var_type ~loc (List.length actuals)) in
             if not flat then
               let assignments =
@@ -1890,7 +1890,7 @@ class cursor_pointers_collector ~signal
                Choose the first one in the list of parameters
                as base. *)
             let vbbase, vboff =
-              Option.value_fatal ~in_:"cursor_pointers_collector:preaction_exp" @@
+              Option.value_fatal ~in_:__LOC__ @@
               List.find_map
                 !curFundec.sformals
                 ~f:(fun v ->
@@ -2607,8 +2607,8 @@ class strlen_annotator (strlen : logic_info) =
           (* A string should be accessed within its bounds *)
           let off = Ast.Term.of_exp off in
           let app = within_bounds ~strict:false v off in
-          let cur_stmt = Option.value_fatal ~in_:"strlen_annotator:vexpr:current_stmt" self#current_stmt in
-          let kf = Option.value_fatal ~in_:"strlen_annotator:vexpr:current_kf" self#current_kf in
+          let cur_stmt = Option.value_fatal ~in_:__LOC__ self#current_stmt in
+          let kf = Option.value_fatal ~in_:__LOC__ self#current_kf in
           Annotations.add_assert Emitters.jessie ~kf cur_stmt app
       end;
       DoChildren
@@ -2627,7 +2627,7 @@ class strlen_annotator (strlen : logic_info) =
               let off = Ast.Term.of_exp off in
               let rel1 = within_bounds ~strict:true v off in
               let supst = mkStmt @@ Instr (Skip (CurrentLoc.get())) in
-              let kf = Option.value_fatal ~in_:"strlen_annotator:vstmt_aux:current_kf" self#current_kf in
+              let kf = Option.value_fatal ~in_:__LOC__ self#current_kf in
               Annotations.add_assert Emitters.jessie ~kf supst rel1;
               let rel2 = reach_upper_bound ~loose:false v off in
               let eqst = mkStmt @@ Instr (Skip (CurrentLoc.get())) in
@@ -2656,7 +2656,7 @@ class strlen_annotator (strlen : logic_info) =
               let lvt = Ast.Term.mk ~loc:loc ~typ:strlen_type @@ TLval lv' in
               let rel = Logic_const.(new_predicate @@ prel (Req, lvt, e')) in
               let prel = Logic_const.pred_of_id_pred { rel with ip_name = [ Name.Jc_specific.hint ] } in
-              let kf = Option.value_fatal ~in_:"strlen_annotator:vstmt_aux:current_kf" self#current_kf in
+              let kf = Option.value_fatal ~in_:__LOC__ self#current_kf in
               Annotations.add_assert Emitters.jessie ~kf s prel;
               (* If setting a character to zero in a buffer, this should
                  be the new length of a string *)
@@ -2701,8 +2701,8 @@ class overflow_annotator =
     method! vexpr e =
       match e.enode with
       | BinOp ((Shiftlt | Shiftrt as op), e1, e2, _ty) ->
-        let kf = Option.value_fatal ~in_:"overflow_annotator:vexpr:current_kf" self#current_kf in
-        let cur_stmt = Option.value_fatal ~in_:"overflow_annotator:vexpr:current_stmt" self#current_stmt in
+        let kf = Option.value_fatal ~in_:__LOC__ self#current_kf in
+        let cur_stmt = Option.value_fatal ~in_:__LOC__ self#current_stmt in
         let is_left_shift =
           match op with
           |  Shiftlt -> true

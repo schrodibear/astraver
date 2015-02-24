@@ -456,8 +456,8 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } =
               if fi.faddrof || Set.mem fields fi then fi
               else
                 let fsize_in_bits =
-                  Option.value_fatal ~in_:"extractor:vglob_aux:fsize_in_bits" fi.fsize_in_bits +
-                  Option.value_fatal ~in_:"extractor:vglob_aux:fpadding_in_bits" fi.fpadding_in_bits
+                  Option.value_fatal ~in_:__LOC__ fi.fsize_in_bits +
+                  Option.value_fatal ~in_:__LOC__ fi.fpadding_in_bits
                 in
                 Type.Composite.Ci.padding_field ~fsize_in_bits ci);
         SkipChildren
