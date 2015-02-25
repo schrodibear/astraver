@@ -16,9 +16,11 @@ theory Enum
 
   constant range : int = max - min + 1
 
-  use import int.ComputerDivision
+  use int.EuclideanDivision
 
-  function normalize (x : int) : int = min + (mod (x - min) range)
+  function normalize (x : int) : int = min + (EuclideanDivision.mod (x - min) range)
+
+  use import int.ComputerDivision
 
   predicate in_bounds (n : int) = min <= n <= max
 

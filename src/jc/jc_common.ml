@@ -81,7 +81,7 @@ let operator_of_native t =
 let operator_of_type =
   function
   | JCTnative n -> operator_of_native n
-  | JCTenum _ -> `Integer
+  | JCTenum ei -> `Enum ei
   | JCTlogic _ -> `Logic
   | JCTany | JCTtype_var _ -> assert false (* TODO? *)
   | JCTnull | JCTpointer _ -> `Pointer
@@ -636,7 +636,7 @@ let raw_tag_compare tag1 tag2 =
 
 (* Special comparison for enum_infos (contains Num i.e. an external data type!) *)
 
-module EnumInfo = struct
+module Enum_info = struct
     let equal ?(by_name=true) ei1 ei2 =
       String.compare ei1.ei_name ei2.ei_name = 0 &&
       (by_name ||

@@ -42,9 +42,6 @@
   let loc lexbuf : location = (lexeme_start_p lexbuf, lexeme_end_p lexbuf)
 
   exception Lexical_error of location * string
-(*
-  exception Syntax_error of location
-*)
 
   let lex_error lexbuf s =
     raise (Lexical_error(loc lexbuf,s))
@@ -130,14 +127,6 @@
 		| "Oct" -> Env.AbsOct
 		| "Pol" -> Env.AbsPol
 		| _ -> lex_error lexbuf ("unknown abstract domain " ^ v)
-	  end
-      | "IntModel" ->
-	  begin
-	    Options.set_int_model
-	      (match v with
-		 | "bounded" -> Env.IMbounded
-		 | "modulo" -> Env.IMmodulo
-		 | _ -> lex_error lexbuf ("unknown int model " ^ v))
 	  end
       | "FloatModel" ->
 	  begin
@@ -327,24 +316,10 @@ rule token = parse
       (* character constants *)
 
   | '"'                     { Buffer.clear buf; STRING_LITERAL(string lexbuf) }
-
-(*
-  | ">>="                   { RIGHT_ASSIGN }
-  | "<<="                   { LEFT_ASSIGN }
-*)
-  | "+="                    { PLUSEQ }
-  | "-="                    { MINUSEQ }
-  | "*="                    { STAREQ }
-  | "/="                    { SLASHEQ }
-  | "%="                    { PERCENTEQ }
-  | "&="                    { AMPEQ }
-  | "^="                    { CARETEQ }
-  | "|="                    { BAREQ }
   | ">>>"                   { ARSHIFT }
   | ">>"                    { LRSHIFT }
   | "<<"                    { LSHIFT }
-  | "++"                    { PLUSPLUS }
-  | "--"                    { MINUSMINUS }
+  | "<<%"                   { LSHIFTM }
   | "&&"                    { AMPAMP }
   | "||"                    { BARBAR }
   | "==>"                   { EQEQGT }
@@ -370,13 +345,18 @@ rule token = parse
   | "..."                   { DOTDOTDOT }
   | "<:"                    { LTCOLON }
   | ":>"                    { COLONGT }
+  | ":%>"                   { COLONPGT }
   | "&"                     { AMP }
   | "!"                     { EXCLAM }
   | "~"                     { TILDE }
   | "-"                     { MINUS }
+  | "-%"                    { MINUSM }
   | "+"                     { PLUS }
+  | "+%"                    { PLUSM }
   | "*"                     { STAR }
+  | "*%"                    { STARM }
   | "/"                     { SLASH }
+  | "/%"                    { SLASHM }
   | "%"                     { PERCENT }
   | "<"                     { LT }
   | ">"                     { GT }

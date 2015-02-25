@@ -97,13 +97,13 @@ type 'a range =
   | Signed : signed range
   | Unsigned : unsigned range
 
-type 'a enum = Enum : 'a enum
+type 'a enum = Enum : string -> 'a enum
 
 type unbounded = Unbounded
 
 type ('range, 'size) integer  =
   | Int : 'a range * 'b bit -> ('a range, 'b bit) integer
-  | Enum : ('a enum, 'b bit) integer
+  | Enum : string -> ('a enum, 'b bit) integer
   | Integer : (unbounded, unbounded) integer
 
 type 'a number =

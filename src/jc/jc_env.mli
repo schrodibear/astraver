@@ -29,6 +29,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Output_ast
 
 type termination_policy = TPalways | TPnever | TPuser
 
@@ -54,6 +55,10 @@ type float_instruction_set = FISstrictIEEE754 | FISx87
 
 type root_kind = Rvariant | RplainUnion | RdiscrUnion
 
+type any_enum =
+  | Int : 'a range * 'b bit -> any_enum
+  | Enum : string -> any_enum
+
 type jc_type =
   | JCTnative of native_type
   | JCTlogic of (string * jc_type list)
@@ -76,9 +81,9 @@ and pointer_class =
   | JCroot of root_info
 
 and enum_info = {
-  ei_name : string;
+  ei_type : any_enum;
   ei_min  : Num.num;
-  ei_max  : Num.num;
+  ei_max  : Num.num
 }
 
 and struct_info = {

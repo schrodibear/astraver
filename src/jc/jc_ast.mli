@@ -29,8 +29,6 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
-
 open Stdlib
 open Env
 open Region
@@ -95,27 +93,26 @@ and ptype = ptype_node node_positioned
 
 type comparison_op = [ `Blt | `Bgt | `Ble | `Bge | `Beq | `Bneq ]
 type arithmetic_op = [ `Badd | `Bsub | `Bmul | `Bdiv | `Bmod ]
+type mod_arithmetic_op = [ `Badd_mod | `Bsub_mod | `Bmul_mod | `Bdiv_mod ]
 type logical_op = [ `Bland | `Blor | `Bimplies | `Biff ]
 type bitwise_op =
     [ `Bbw_and | `Bbw_or | `Bbw_xor
-    | `Bshift_left | `Blogical_shift_right | `Barith_shift_right ]
+    | `Bshift_left | `Bshift_left_mod | `Blogical_shift_right | `Barith_shift_right ]
 
 type basic_op = [ comparison_op | arithmetic_op ]
-type operational_op = [ basic_op | bitwise_op | `Bconcat | `Bland | `Blor ]
+type operational_op = [ basic_op | mod_arithmetic_op | bitwise_op | `Bconcat | `Bland | `Blor ]
 type bin_op = [ operational_op | logical_op ]
 
-type pre_unary_op = [ `Uprefix_inc | `Uprefix_dec ]
-type post_unary_op = [ `Upostfix_inc | `Upostfix_dec ]
-type pm_unary_op = [ pre_unary_op | post_unary_op | `Uplus ]
-type unary_op = [ `Uminus | `Unot | `Ubw_not ]
+type pm_unary_op = [ `Uplus ]
+type unary_op = [ `Uminus | `Uminus_mod | `Unot | `Ubw_not ]
 
 type pexpr_unary_op = [ pm_unary_op | unary_op ]
 
 type native_operator_type = [ `Unit | `Boolean | `Integer | `Real | float_format ]
-type operator_type = [ native_operator_type | `Pointer | `Logic ]
+type operator_type = [ native_operator_type | `Enum of enum_info | `Pointer | `Logic ]
 
-type pred_bin_op = [comparison_op | logical_op] * operator_type
-type expr_unary_op = unary_op * native_operator_type
+type pred_bin_op = [ comparison_op | logical_op ] * operator_type
+type expr_unary_op = unary_op * operator_type
 type term_unary_op = expr_unary_op
 type expr_bin_op = operational_op * operator_type
 type term_bin_op = bin_op * operator_type
@@ -177,7 +174,7 @@ and pexpr_node =
   | JCPEassign_op of pexpr * bin_op * pexpr
   | JCPEinstanceof of pexpr * string
   | JCPEcast of pexpr * ptype
-  | JCPEreinterpret_cast of pexpr * ptype
+  | JCPEcast_mod of pexpr * ptype
   | JCPEquantifier of quantifier * ptype * identifier list * pexpr list list * pexpr
   | JCPEfresh of pexpr
   | JCPEold of pexpr
@@ -274,7 +271,6 @@ type 'expr decl_node =
   | JCDtermination_policy of Env.termination_policy
   | JCDannotation_policy of Env.annotation_sem
   | JCDabstract_domain of Env.abstract_domain
-  | JCDint_model of Env.int_model
   | JCDpragma_gen_sep of string * string * (ptype * string list) list
   | JCDpragma_gen_frame of string * string
   | JCDpragma_gen_sub of string * string
@@ -304,7 +300,7 @@ type nexpr_node =
   | JCNEassign of nexpr * nexpr
   | JCNEinstanceof of nexpr * string
   | JCNEcast of nexpr * ptype
-  | JCNEreinterpret_cast of nexpr * ptype
+  | JCNEcast_mod of nexpr * ptype
   | JCNEif of nexpr * nexpr * nexpr
   | JCNEoffset of offset_kind * nexpr
   | JCNEaddress of address_kind * nexpr
@@ -393,8 +389,8 @@ and 'li term_node =
   | JCTbase_block of 'li term
   | JCTinstanceof of 'li term * label * struct_info
   | JCTcast of 'li term * label * struct_info
-  | JCTbitwise_cast of 'li term * label * struct_info
   | JCTrange_cast of 'li term * enum_info option
+  | JCTrange_cast_mod of 'li term * enum_info
   | JCTreal_cast of 'li term * real_conversion
   | JCTif of 'li term * 'li term * 'li term
   | JCTrange of 'li term option * 'li term option
@@ -541,8 +537,8 @@ type ('li,'fi) expr_node =
   | JCEassign_heap of ('li,'fi) expr * field_info * ('li,'fi) expr
   | JCEinstanceof of ('li,'fi) expr * struct_info
   | JCEcast of ('li,'fi) expr * struct_info
-  | JCEbitwise_cast of ('li,'fi) expr * struct_info
   | JCErange_cast of ('li,'fi) expr * enum_info option
+  | JCErange_cast_mod of ('li,'fi) expr * enum_info
   | JCEreal_cast of ('li,'fi) expr * real_conversion
   | JCEif of ('li,'fi) expr * ('li,'fi) expr * ('li,'fi) expr
   | JCEoffset of offset_kind * ('li,'fi) expr * struct_info

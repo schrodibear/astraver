@@ -35,7 +35,6 @@ open Stdlib
 open Env
 open Region
 open Ast
-(*open Fenv*)
 open Common
 
 open Format

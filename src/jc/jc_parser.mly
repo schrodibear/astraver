@@ -81,14 +81,11 @@
 /* ; ;; , : . ? */
 %token SEMICOLON SEMISEMI COMMA COLON DOT QUESTION
 
-/* - -- + ++ * / % */
-%token MINUS MINUSMINUS PLUS PLUSPLUS STAR SLASH PERCENT
+/* - -% + +% * *% / /% % */
+%token MINUS MINUSM PLUS PLUSM STAR STARM SLASH SLASHM PERCENT
 
-/* = <= >= > < == != <: :> */
-%token EQ LTEQ GTEQ GT LT EQEQ BANGEQ LTCOLON COLONGT
-
-/* += -= *= /= %= */
-%token PLUSEQ MINUSEQ STAREQ SLASHEQ PERCENTEQ
+/* = <= >= > < == != <: :> :%> */
+%token EQ LTEQ GTEQ GT LT EQEQ BANGEQ LTCOLON COLONGT COLONPGT
 
 /* && || => <=> ! */
 %token AMPAMP BARBAR EQEQGT LTEQEQGT EXCLAM
@@ -123,13 +120,10 @@
 /* as _ match -> end */
 %token AS UNDERSCORE MATCH MINUSGT END
 
-/* & ~ ^ | << >> >>> */
-%token AMP TILDE HAT PIPE LSHIFT LRSHIFT ARSHIFT
+/* & ~ ^ | << <<% >> >>> */
+%token AMP TILDE HAT PIPE LSHIFT LSHIFTM LRSHIFT ARSHIFT
 /* | with greater priority */
 %token ALT
-
-/* |= &= ^= */
-%token BAREQ AMPEQ CARETEQ
 
 /* @ (string concat) */
 %token AT
@@ -177,8 +171,8 @@
 %left AMP
 %left LT GT LTEQ GTEQ EQEQ BANGEQ LTCOLON COLONGT
 %nonassoc DOTDOT
-/* unary -, unary +, ++, --, ! ~ */
-%nonassoc UMINUS UPLUS PLUSPLUS MINUSMINUS EXCLAM TILDE
+/* unary -, unary +, ! ~ */
+%nonassoc UMINUS UPLUS EXCLAM TILDE
 /* . */
 %nonassoc DOT
 
@@ -579,58 +573,52 @@ primary_expression:
 | STRING_LITERAL
     { locate (JCPEconst (JCCstring $1)) }
 | LPAR expression COLONGT type_expr RPAR
-    { locate (JCPEcast($2, $4)) }
-| LPAR expression AS type_expr RPAR
-    { locate (JCPEreinterpret_cast ($2, $4)) }
+  { locate (JCPEcast ($2, $4)) }
+| LPAR expression COLONPGT type_expr RPAR
+  { locate (JCPEcast_mod ($2, $4)) }
 | LPAR expression RPAR
     { $2 }
 | LPAR IDENTIFIER COLON expression RPAR
-    { locate (JCPElabel($2,$4)) }
+    { locate (JCPElabel ($2, $4)) }
 ;
 
 postfix_expression:
 | primary_expression
     { $1 }
 | IDENTIFIER label_binders LPAR argument_expression_list_opt RPAR
-    { locate (JCPEapp($1, $2, $4)) }
+    { locate (JCPEapp ($1, $2, $4)) }
 | IDENTIFIER label_binders LPARRPAR
-    { locate (JCPEapp($1, $2, [])) }
+    { locate (JCPEapp ($1, $2, [])) }
 | BSFRESH LPAR expression RPAR
-    { locate (JCPEfresh($3)) }
+    { locate (JCPEfresh $3) }
 | BSOLD LPAR expression RPAR
-    { locate (JCPEold($3)) }
+    { locate (JCPEold $3) }
 | BSAT LPAR expression COMMA IDENTIFIER RPAR
-    { locate (JCPEat($3,label $5)) }
+    { locate (JCPEat ($3, label $5)) }
 | BSOFFSET_MAX LPAR expression RPAR
-    { locate (JCPEoffset(Offset_max,$3)) }
+    { locate (JCPEoffset (Offset_max, $3)) }
 | BSOFFSET_MIN LPAR expression RPAR
-    { locate (JCPEoffset(Offset_min,$3)) }
+    { locate (JCPEoffset (Offset_min, $3)) }
 | BSADDRESS LPAR expression RPAR
-    { locate (JCPEaddress(Addr_pointer,$3)) }
+    { locate (JCPEaddress (Addr_pointer, $3)) }
 | BSABSOLUTE_ADDRESS LPAR expression RPAR
-    { locate (JCPEaddress(Addr_absolute,$3)) }
+    { locate (JCPEaddress (Addr_absolute, $3)) }
 | BSBASE_BLOCK LPAR expression RPAR
-    { locate (JCPEbase_block($3)) }
+    { locate (JCPEbase_block ($3)) }
 | postfix_expression DOT IDENTIFIER
     { locate (JCPEderef ($1, $3)) }
-| postfix_expression PLUSPLUS
-    { locate (JCPEunary (`Upostfix_inc, $1)) }
-| postfix_expression MINUSMINUS
-    { locate (JCPEunary (`Upostfix_dec, $1)) }
-| PLUSPLUS postfix_expression
-    { locate (JCPEunary (`Uprefix_inc, $2)) }
-| MINUSMINUS postfix_expression
-    { locate (JCPEunary (`Uprefix_dec, $2)) }
 | PLUS postfix_expression %prec UPLUS
     { locate (JCPEunary (`Uplus, $2)) }
 | MINUS postfix_expression %prec UMINUS
     { locate (JCPEunary (`Uminus, $2)) }
+| MINUSM postfix_expression %prec UMINUS
+    { locate (JCPEunary (`Uminus_mod, $2)) }
 | TILDE postfix_expression
     { locate (JCPEunary (`Ubw_not, $2)) }
 | EXCLAM postfix_expression
     { locate (JCPEunary (`Unot, $2)) }
 | LSQUARE expression DOTDOT expression RSQUARE
-    { locate (JCPErange(Some $2,Some $4)) }
+    { locate (JCPErange (Some $2,Some $4)) }
 | LSQUARE DOTDOT expression RSQUARE
     { locate (JCPErange(None,Some $3)) }
 | LSQUARE expression DOTDOT RSQUARE
@@ -669,8 +657,12 @@ multiplicative_expression:
     { $1 }
 | multiplicative_expression STAR postfix_expression
     { locate (JCPEbinary ($1, `Bmul, $3)) }
+| multiplicative_expression STARM postfix_expression
+    { locate (JCPEbinary ($1, `Bmul_mod, $3)) }
 | multiplicative_expression SLASH postfix_expression
     { locate (JCPEbinary ($1, `Bdiv, $3)) }
+| multiplicative_expression SLASHM postfix_expression
+    { locate (JCPEbinary ($1, `Bdiv_mod, $3)) }
 | multiplicative_expression PERCENT postfix_expression
     { locate (JCPEbinary ($1, `Bmod, $3)) }
 ;
@@ -680,8 +672,12 @@ additive_expression:
     { $1 }
 | additive_expression PLUS multiplicative_expression
     { locate (JCPEbinary ($1, `Badd, $3)) }
+| additive_expression PLUSM multiplicative_expression
+    { locate (JCPEbinary ($1, `Badd_mod, $3)) }
 | additive_expression MINUS multiplicative_expression
     { locate (JCPEbinary ($1, `Bsub, $3)) }
+| additive_expression MINUSM multiplicative_expression
+    { locate (JCPEbinary ($1, `Bsub_mod, $3)) }
 | additive_expression AT multiplicative_expression
     { locate (JCPEbinary ($1, `Bconcat, $3)) }
 ;
@@ -691,6 +687,8 @@ shift_expression:
     { $1 }
 | shift_expression LSHIFT additive_expression
     { locate (JCPEbinary ($1, `Bshift_left, $3)) }
+| shift_expression LSHIFTM additive_expression
+    { locate (JCPEbinary ($1, `Bshift_left_mod, $3)) }
 | shift_expression LRSHIFT additive_expression
     { locate (JCPEbinary ($1, `Blogical_shift_right, $3)) }
 | shift_expression ARSHIFT additive_expression
@@ -699,20 +697,7 @@ shift_expression:
 
 assignment_operator:
 | EQ { `Aeq }
-| PLUSEQ { `Aadd }
-| MINUSEQ { `Asub }
-| STAREQ { `Amul }
-| SLASHEQ { `Adiv }
-| PERCENTEQ { `Amod }
-/*
-| LEFT_ASSIGN { Aleft }
-| RIGHT_ASSIGN { Aright }
-*/
-| AMPEQ { `Aand }
-| CARETEQ { `Axor }
-| BAREQ { `Aor }
 ;
-
 
 expression:
 | compound_expr
@@ -741,9 +726,6 @@ expression:
     { $1 }
 | declaration
     { $1 }
-/*
-| SPEC expression { locate (CSspec ($1,$2)) }
-*/
 | pack_expression { $1 }
 | exception_expression { $1 }
 | shift_expression
@@ -790,36 +772,18 @@ expression:
 | LET type_expr IDENTIFIER EQ expression IN expression %prec PRECFORALL
     { locate (JCPElet (Some $2, $3, Some $5, $7)) }
 | postfix_expression assignment_operator expression %prec ASSIGNOP
-    { let a  =
-	match $2 with
-		| `Aeq -> JCPEassign ($1, $3)
-		| `Aadd -> JCPEassign_op ($1, `Badd, $3)
-		| `Asub -> JCPEassign_op ($1, `Bsub, $3)
-		| `Amul -> JCPEassign_op ($1, `Bmul, $3)
-		| `Adiv -> JCPEassign_op ($1, `Bdiv, $3)
-		| `Amod -> JCPEassign_op ($1, `Bmod, $3)
-		| `Aand -> JCPEassign_op ($1, `Bbw_and, $3)
-		| `Axor -> JCPEassign_op ($1, `Bbw_xor, $3)
-		| `Aor -> JCPEassign_op ($1, `Bbw_or, $3)
-(*
-		| Aleft -> CEassign_op ($1, `Bshift_left, $3)
-		| Aright -> CEassign_op ($1, `Bshift_right, $3)
-*)
-      in locate a }
+    { locate (JCPEassign ($1, $3) }
 
 | BSFORALL type_expr identifier_list triggers SEMICOLON expression
     %prec PRECFORALL
-    { locate (JCPEquantifier(Forall,$2,$3,$4,$6)) }
+    { locate (JCPEquantifier (Forall, $2, $3, $4, $6)) }
 | BSEXISTS type_expr identifier_list triggers SEMICOLON expression
     %prec PRECFORALL
-    { locate (JCPEquantifier(Exists,$2,$3,$4,$6)) }
+    { locate (JCPEquantifier (Exists, $2, $3, $4, $6)) }
 | expression EQEQGT expression
-    { locate (JCPEbinary($1,`Bimplies,$3)) }
+    { locate (JCPEbinary ($1, `Bimplies, $3)) }
 | expression LTEQEQGT expression
-    { locate (JCPEbinary($1,`Biff,$3)) }
-/*
-| expression COMMA assignment_expression { locate (CEseq ($1, $3)) }
-*/
+    { locate (JCPEbinary ($1, `Biff, $3)) }
 | BSMUTABLE LPAR expression COMMA tag RPAR
     { locate (JCPEmutable($3, $5)) }
 | BSMUTABLE LPAR expression RPAR
@@ -874,9 +838,9 @@ trigger:
 
 declaration:
 | VAR type_expr IDENTIFIER
-    { locate (JCPEdecl($2, $3, None)) }
+    { locate (JCPEdecl ($2, $3, None)) }
 | VAR type_expr IDENTIFIER EQ expression
-    { locate (JCPEdecl($2, $3, Some $5)) }
+    { locate (JCPEdecl ($2, $3, Some $5)) }
 ;
 
 
@@ -904,7 +868,7 @@ switch_block:
 | switch_labels
     { [($1, locate (JCPEblock []))] }
 | switch_labels expression_list switch_block
-    { ($1, locate (JCPEblock $2))::$3 }
+    { ($1, locate (JCPEblock $2)) :: $3 }
 ;
 
 switch_labels:
@@ -925,50 +889,41 @@ iteration_expression:
 | loop_annot WHILE LPAR expression RPAR expression %prec precwhile
     { let (i,v) = $1 in
       locate (JCPEwhile ($4, i, v, $6)) }
-| loop_annot DO expression WHILE LPAR expression RPAR
-    { assert false (* TODO locate (JCPEdowhile ($1, $3, $6)) *) }
 | loop_annot FOR LPAR argument_expression_list_opt SEMICOLON expression SEMICOLON
     argument_expression_list_opt RPAR expression %prec precwhile
-    { let (i,v) = $1 in
-      (*
-	let i = match i with
-	| [] -> locate (JCPEconst(JCCboolean true))
-	| [_,p] -> p
-	|  _ -> assert false
-      in
-      *)
+    { let i, v = $1 in
       locate (JCPEfor($4, $6, $8, i, v, $10)) }
 ;
 
 
 loop_behavior:
 | INVARIANT expression SEMICOLON assigns_opt
-    { (Some $2,$4) }
+    { Some $2, $4 }
 | assigns
-    { (None,$1) }
+    { None, $1 }
 ;
 
 loop_for_behavior_list:
 | BEHAVIOR identifier_list COLON loop_behavior loop_for_behavior_list
-    { let (i,a) = $4 in ($2,i,a) :: $5 }
+    { let i, a = $4 in ($2, i, a) :: $5 }
 | /* epsilon */
     { [] }
 ;
 
 loop_behaviors:
 | loop_behavior loop_for_behavior_list
-    { let (i,a) = $1 in ([],i,a)::$2 }
+    { let i, a = $1 in ([], i, a) :: $2 }
 | loop_for_behavior_list
     { $1 }
 ;
 
 loop_annot:
 | LOOP loop_behaviors VARIANT expression SEMICOLON
-    { ($2, Some ($4,None)) }
+    { $2, Some ($4, None) }
 | LOOP loop_behaviors VARIANT expression FOR identifier SEMICOLON
-    { ($2, Some ($4, Some $6)) }
+    { $2, Some ($4, Some $6) }
 | LOOP loop_behaviors
-    { ($2, None) }
+    { $2, None }
 ;
 
 jump_expression:
@@ -1034,26 +989,6 @@ logic_definition:
 | PREDICATE IDENTIFIER logic_type_arg label_binders parameters EQ expression
     { let p = lparams $5 in
       locate (JCDlogic(None, $2, $3  ,$4, p, JCexpr $7)) }
-/* logic fun reads */
-/*
-| LOGIC type_expr IDENTIFIER logic_type_arg label_binders parameters reads %prec PRECLOGIC
-    { locate (JCDlogic(Some $2, $3, $4 ,$5, $6, JCreads $7)) }
-*/
-/* logic pred reads */
-/*
-| PREDICATE IDENTIFIER logic_type_arg label_binders parameters reads %prec PRECLOGIC
-    { locate (JCDlogic(None, $2, $3 ,$4, $5, JCreads $6)) }
-*/
-/* logic fun axiomatic def */
-/*
-| LOGIC type_expr IDENTIFIER logic_type_arg label_binders parameters LBRACE axioms RBRACE
-    { locate (JCDlogic(Some $2, $3, $4 ,$5, $6, JCaxiomatic $8)) }
-*/
-/* logic pred axiomatic def */
-/*
-| PREDICATE IDENTIFIER logic_type_arg label_binders parameters LBRACE axioms RBRACE
-    { locate (JCDlogic(None, $2, $3, $4, $5, JCaxiomatic $7)) }
-*/
 /* logic pred inductive def */
 | PREDICATE IDENTIFIER logic_type_arg label_binders parameters LBRACE indcases RBRACE
     { let p = lparams $5 in
@@ -1064,33 +999,26 @@ logic_definition:
     { locate( JCDlemma($2,false,$3,$4,$6)) }
 ;
 
-
-
-
 logic_declarations:
 | logic_declaration
     { [$1] }
 | logic_declaration logic_declarations
-    { $1::$2 }
+    { $1 :: $2 }
 ;
 
 string_list:
-| IDENTIFIER {[$1]}
-| IDENTIFIER COMMA string_list {$1::$3}
+| IDENTIFIER { [$1] }
+| IDENTIFIER COMMA string_list { $1 :: $3 }
 
 logic_type_arg:
 | {[]}
-| LT string_list GT {$2}
+| LT string_list GT { $2 }
 
 logic_declaration:
 | logic_definition
     { $1 }
 | LOGIC TYPE IDENTIFIER logic_type_arg
-    { locate (JCDlogic_type($3,$4)) }
-/* remove this comment if removed from logic_definition
-| LOGIC type_expr IDENTIFIER
-    { locate (JCDlogic(Some $2, $3, [], [], JCnone)) }
-*/
+    { locate (JCDlogic_type ($3, $4)) }
 | PREDICATE IDENTIFIER logic_type_arg label_binders parameters reads
     { let p = lparams $5 in
       locate (JCDlogic(None, $2, $3, $4, p, $6)) }
@@ -1140,36 +1068,29 @@ field_patterns:
     { [] }
 ;
 
-/*Multiply defined : Does ocamlyacc take the last. In fact it seems to take the first (cf. variant.jc)*/
+/* Multiply defined : Does ocamlyacc take the last. In fact it seems to take the first (cf. variant.jc) */
 pattern_expression_list:
 | pattern MINUSGT expression SEMICOLON pattern_expression_list
-    { ($1, $3)::$5 }
+    { ($1, $3) :: $5 }
 | pattern MINUSGT expression SEMICOLON
     { [$1, $3] }
 ;
 
 
-/*pattern_expression_list:
-| pattern MINUSGT compound_expr pattern_expression_list
-    { ($1, $3)::$4 }
-| pattern MINUSGT compound_expr
-    { [$1, $3] }
-;*/
-
-/**************/
+/******************/
 /* pragma_gen_sep */
-/**************/
+/******************/
 pragma_gen_sep:
 | PRAGMA_GEN_SEP IDENTIFIER type_expr_parameters
-    { locate (JCDpragma_gen_sep("",$2, $3)) }
+    { locate (JCDpragma_gen_sep ("", $2, $3)) }
 | PRAGMA_GEN_SEP IDENTIFIER IDENTIFIER type_expr_parameters
-    { locate (JCDpragma_gen_sep($2,$3, $4)) }
+    { locate (JCDpragma_gen_sep ($2, $3, $4)) }
 | PRAGMA_GEN_FRAME IDENTIFIER IDENTIFIER
-    { locate (JCDpragma_gen_frame($2,$3)) }
+    { locate (JCDpragma_gen_frame ($2, $3)) }
 | PRAGMA_GEN_SUB IDENTIFIER IDENTIFIER
-    { locate (JCDpragma_gen_sub($2,$3)) }
+    { locate (JCDpragma_gen_sub ($2, $3)) }
 | PRAGMA_GEN_SAME IDENTIFIER IDENTIFIER
-    { locate (JCDpragma_gen_same($2,$3)) }
+    { locate (JCDpragma_gen_same ($2, $3)) }
 ;
 
 type_expr_parameters:
@@ -1182,7 +1103,7 @@ type_expr_parameters:
 ;
 
 type_expr_restreint:
-|type_expr {$1,[]}
+|type_expr { $1, [] }
 |type_expr PIPE LPAR type_parameter_names RPAR {$1,$4}
 
 type_expr_comma_list:
