@@ -148,7 +148,7 @@ type 'typ constant =
   | Void : void constant
   | Int : string -> (unbounded, unbounded) integer number constant
   | Real : string -> arbitrary_precision real number constant
-  | Bool : boolean constant
+  | Bool : bool -> boolean constant
 
 type 'a term_hlist =
   | Nil : unit term_hlist
@@ -165,7 +165,7 @@ and 'typ term =
   | Let : string * 'a term * 'b term -> 'b term
 
 type ('params, 'result) tconstr =
-  | Numeric : ('a number * unit, 'a number) tconstr
+  | Numeric : 'a number -> (unit, 'a number) tconstr
   | Bool : (unit, boolean) tconstr
   | Void : (unit, void) tconstr
   | Var : string -> (unit, 'b) tconstr
@@ -242,7 +242,7 @@ and 'typ expr_node =
     'b expr_node
     (** params * result_type * pre * body * post * diverges * signals *)
   | Triple : opaque * pred * 'a expr * pred * ((string * pred) list) -> 'a expr_node
-  | Assert : assert_kind * pred * boolean expr -> void expr_node
+  | Assert : assert_kind * pred -> void expr_node
   | BlackBox : 'a why_type -> 'a expr_node
   | Absurd : void expr_node
   | Labeled : why_label * 'a expr -> 'a expr_node
@@ -262,18 +262,23 @@ type decl_kind = [ `Theory | `Module ]
 
 type goal_kind = KAxiom | KLemma | KGoal
 
-type 'kind why_decl =
-  | Param : bool * why_id * 'a why_type ->  [`Module] why_decl (** parameter in why *)
-  | Def : why_id * 'a expr -> [`Module] why_decl (** global let in why *)
-  | Logic : bool * why_id * (string * any_logic_type) list * 'a logic_type -> [`Theory] why_decl
+type 'kind decl =
+  | Param : 'a why_type ->  [`Module] decl (** parameter in why *)
+  | Def : 'a expr -> [`Module] decl (** global let in why *)
+  | Logic : why_id * (string * any_logic_type) list * 'a logic_type -> [`Theory] decl
     (** logic decl in why *)
-  | Predicate : bool * why_id * (string * any_logic_type) list * pred -> [`Theory] why_decl
-  | Inductive : bool * why_id * (string * any_logic_type) list * (string * pred) list -> [`Theory] why_decl
+  | Predicate : (string * any_logic_type) list * pred -> [`Theory] decl
+  | Inductive : (string * any_logic_type) list * (string * pred) list -> [`Theory] decl
     (** inductive definition *)
-  | Goal : goal_kind * why_id * pred -> [`Theory] why_decl  (** Goal *)
-  | Function : bool * why_id * (string * any_logic_type) list * 'a logic_type * 'a term -> [`Theory] why_decl
-  | Type : why_id * string list -> [`Theory] why_decl
-  | Exception : why_id * any_logic_type option -> [`Module] why_decl
+  | Goal : goal_kind * pred -> [`Theory] decl  (** Goal *)
+  | Function : (string * any_logic_type) list * 'a logic_type * 'a term -> [`Theory] decl
+  | Type : string list -> [`Theory] decl
+  | Exception : any_logic_type option -> [`Module] decl
+
+type 'a why_decl = {
+  why_id : why_id;
+  why_decl : 'a decl
+}
 
 type dependency =
   | Use of [`Import | `Export | `As of string option] * entry
