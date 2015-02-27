@@ -33,36 +33,153 @@
 (**************************************************************************)
 
 open Format
-open Why_pp
+(*open Why_pp*)
 
 open Stdlib
-open Envset
+(*open Envset*)
 
 open Output_ast
-open Output_misc
+module O = Output
+(*open Output_misc*)
 
-let fprintf_constant fmttr =
+let fprintf_constant fmttr (type a) =
   let pr fmt = fprintf fmttr fmt in
   function
-  | Prim_void -> pr "()"
-  | Prim_int n -> pr "(%s)" n
-  | Prim_real f -> pr "%s" f
-  | Prim_bool true -> pr "Bool.True"
-  | Prim_bool false -> pr "Bool.False"
+  | (Void : a constant) -> pr "()"
+  | Int n -> pr "(%s)" n
+  | Real f -> pr "%s" f
+  | Bool true -> pr "Bool.True"
+  | Bool false -> pr "Bool.False"
 
-let why3_id s =
-  match s.[0] with
-  | 'A' .. 'Z' -> "_" ^ s
-  | _ when Why3_kw.is_why3_keyword s -> s ^ "_why3"
-  | _ -> s
+let fprintf_id fmttr id =
+  fprintf fmttr "%s" @@
+  match id.[0] with
+  | 'A' .. 'Z' -> "_" ^ id
+  | _ when Why3_kw.is_why3_keyword id -> id ^ "_why3"
+  | _ -> id
 
-let why3_constr s =
-  match s.[0] with
-  | 'A' .. 'Z' -> s
-  | 'a' .. 'z' -> String.capitalize s
-  | _ -> "U_" ^ s
+let fprintf_uid fmttr uid =
+  fprintf fmttr "%s" @@
+  match uid.[0] with
+  | 'A' .. 'Z' -> uid
+  | 'a' .. 'z' -> String.capitalize uid
+  | _ -> "U_" ^ uid
 
-let why3_ident =
+let fprintf_int_ty ~how fmttr (type r) (type b) (ty : (r range, b bit) integer) =
+  let (module Int_ty) = O.module_of_int_ty ty in
+  fprintf fmttr "%s" @@
+  match how with
+  | `Name -> Int_ty.name
+  | `Theory false -> Int_ty.theory
+  | `Theory true -> Int_ty.bit_theory
+  | `Module (false, false) -> Int_ty.unsafe_module
+  | `Module (false, true) -> Int_ty.safe_module
+  | `Module (true, false) -> Int_ty.unsafe_bit_module
+  | `Module (true, true) -> Int_ty.safe_bit_module
+
+let fprintf_enum_ty ~how fmttr (Enum name) =
+  let pr fmt = fprintf fmttr fmt in
+  match how with
+  | `Name -> pr "%s" name
+  | `Theory -> pr "%a" fprintf_uid name
+  | `Module false -> pr "%s" ("Unsafe_" ^ name)
+  | `Module true -> pr "%s" ("Safe_" ^ name)
+
+let fprintf_modulo fmttr modulo =
+  fprintf fmttr "%s" @@
+  match modulo with
+  | true -> "%"
+  | false -> ""
+
+let fprintf_op fmttr op =
+  fprintf fmttr "%s" @@
+  match op with
+  | `Add -> "+"
+  | `Sub -> "-"
+  | `Mul -> "*"
+  | `Div -> "/"
+  | `Mod -> "%%"
+  | `Neg -> "-"
+  | `And -> "&"
+  | `Or -> "|^"
+  | `Xor -> "^"
+  | `Lsl -> "<<"
+  | `Lsr -> ">>"
+  | `Asr -> ">>>"
+  | `Compl -> "~"
+  | `Lt -> "<"
+  | `Le -> "<="
+  | `Gt -> ">"
+  | `Ge -> ">="
+  | `Eq -> "="
+  | `Ne -> "<>"
+  | `Neq -> "<>"
+
+type any_integer = Int : ('r, 's) integer -> any_integer
+
+module S =
+  Set.Make
+    (struct
+      type t = any_integer
+      let compare = compare
+    end)
+
+let fprintf_func ~where ~bw_set fmttr (type a) (type b) =
+  let pr fmt = fprintf fmttr fmt in
+  let pr_bop fp ty = pr "%a.(%a%a)" fp ty in
+  let pr_uop fp ty = pr "%a.(%a%a_)" fp ty in
+  let pr_f fp ty = pr "%a.%s" fp ty in
+  let fprintf_int_ty fmttr ty =
+    fprintf_int_ty
+      ~how:
+        (match where, S.mem (Int ty) bw_set with
+         | `Logic, bit -> `Theory bit
+         | `Behavior safe, bit -> `Module (safe, bit))
+      fmttr
+      ty
+  in
+  let fprintf_enum_ty fmttr ty =
+    fprintf_enum_ty
+      ~how:
+        (match where with
+         | `Logic -> `Theory
+         | `Behavior safe -> `Module safe)
+      fmttr
+      ty
+  in
+  let fail_on_real () =
+    failwith "floating point operations are not yet supported in GADT encoding, \
+              please use the User generic constructor"
+  in
+  function
+  | (B_int_op op : (a, b) func) -> pr "Int.(%a)" fprintf_op op
+  | U_int_op op -> pr "Int.(%a_)" fprintf_op op
+  | B_bint_op (op, (Int _ as ty), modulo) ->
+    pr_bop fprintf_int_ty ty fprintf_op op fprintf_modulo modulo
+  | B_bint_op (op, (Enum _ as ty), modulo) ->
+    pr_bop fprintf_enum_ty ty fprintf_op op fprintf_modulo modulo
+  | U_bint_op (op, (Int _ as ty), modulo) ->
+    pr_uop fprintf_int_ty ty fprintf_op op fprintf_modulo modulo
+  | U_bint_op (op, (Enum _ as ty), modulo) ->
+    pr_uop fprintf_enum_ty ty fprintf_op op fprintf_modulo modulo
+  | Of_int (Int _ as ty) -> pr_f fprintf_int_ty ty "of_int"
+  | Of_int (Enum _ as ty) -> pr_f fprintf_enum_ty ty "of_int"
+  | To_int (Int _ as ty) -> pr_f fprintf_int_ty ty "to_int"
+  | To_int (Enum _ as ty) -> pr_f fprintf_enum_ty ty "to_int"
+  | B_bint_bop (op, ty) -> pr_bop fprintf_int_ty ty fprintf_op op fprintf_modulo false
+  | U_bint_bop (op, ty) -> pr_uop fprintf_int_ty ty fprintf_op op fprintf_modulo false
+  | Lsl_bint (ty, modulo) -> pr_bop fprintf_int_ty ty fprintf_op `Lsl fprintf_modulo modulo
+  | B_num_pred (pred, Integral Integer) -> pr "%a" fprintf_op pred
+  | B_num_pred (pred, Integral (Int _ as ty)) -> pr_bop fprintf_int_ty ty fprintf_op pred fprintf_modulo false
+  | B_num_pred (pred, Integral (Enum _ as ty)) -> pr_bop fprintf_enum_ty ty fprintf_op pred fprintf_modulo false
+  | Poly op -> pr "%a" fprintf_op op
+  | User (_, false, name) -> pr "%a" fprintf_id name
+  | User (where, true, name) -> pr "%a.%a" fprintf_uid where fprintf_id name
+  | To_float _ -> fail_on_real ()
+  | Of_float _  -> fail_on_real ()
+  | B_num_pred (_, Real _) -> fail_on_real ()
+
+(*let why3_ident =
   function
   (* booleans *)
   | "not" -> "not"
@@ -782,4 +899,5 @@ let print_to_file = print_to_file (fun f -> f ^ ".mlw") fprintf_vc_kind fprintf_
   Local Variables:
   compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_why3_output.ml"
   End:
+*)
 *)

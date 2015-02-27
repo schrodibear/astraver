@@ -37,14 +37,14 @@ open Format
 open Output_ast
 
 val fprintf_vc_kind : formatter -> vc_kind -> unit
-val fprintf_logic_type : formatter -> logic_type -> unit
-val fprintf_term : formatter -> term -> unit
-val fprintf_assertion : formatter -> assertion -> unit
-val fprintf_expr : formatter -> expr -> unit
-val fprintf_why_decl : formatter -> why_decl -> unit
-val fprintf_why_decls : ?float_model:Env.float_model -> Format.formatter -> why_decl list -> unit
+val fprintf_logic_type : formatter -> _ logic_type -> unit
+val fprintf_term : formatter -> _ term -> unit
+val fprintf_assertion : formatter -> pred -> unit
+val fprintf_expr : formatter -> _ expr -> unit
+val fprintf_why_decl : formatter -> _ why_decl -> unit
+val fprintf_why_decls : ?float_model:Env.float_model -> Format.formatter -> 'a why_decl list -> unit
 
-val print_to_file : ?float_model:Env.float_model -> string -> why_decl list -> unit
+val print_to_file : ?float_model:Env.float_model -> string -> _ why_decl list -> unit
 
 (*
   Local Variables:

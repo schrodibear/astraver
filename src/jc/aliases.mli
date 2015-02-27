@@ -73,4 +73,5 @@ module Typing = Jc_typing
 module Why3_output = Jc_why3_output
 module Why_output = Jc_why_output
 module Output_ast = Jc_output_ast
+module Output = Jc_output
 module Output_misc = Jc_output_misc

@@ -44,11 +44,15 @@ sig
   type range
   type b
   val ty : (range, b bit) integer
+  val name : string
 end
 
 module Make_enum (I : Enum_sig) =
 struct
   include I
+  let theory = String.capitalize name
+  let safe_module = "Safe_" ^ name
+  let unsafe_module = "Unsafe_" ^ name
   type t = (I.range, I.b bit) integer
   let bin_t op flag t1 t2 = B_bint_op (op, I.ty, flag) @$ t1 @. t2
   let un_t op flag t = U_bint_op (op, I.ty, flag) @$. t
@@ -74,7 +78,12 @@ struct
 end
 
 module Enum (I : sig type range' type b' end) =
-  struct type range = I.range' type b = I.b' let ty : _ integer = (Obj.magic 0 : (range, b bit) integer) end
+struct
+  type range = I.range'
+  type b = I.b'
+  let ty = failwith "The dummy functor Enum should never be applied"
+  let name = "enum"
+end
 
 module type Enum =
 sig
@@ -89,6 +98,7 @@ sig
   type r
   type b
   val ty : (r range, b bit) integer
+  val name : string
 end
 
 module Make_int (I : Int_sig) =
@@ -96,10 +106,12 @@ struct
   type r = I.r
   include Make_enum
       (struct
+        include I
         type range = r Output_ast.range
-        type b = I.b
-        let ty = I.ty
       end)
+  let bit_theory = "Bit" ^ name
+  let safe_bit_module = "Safe_bit_" ^ name
+  let unsafe_bit_module = "Unsafe_bit_" ^ name
   let bin_bop op t1 t2 = B_bint_bop (op, I.ty) @$ t1 @. t2
   let un_bop op t = U_bint_bop (op, I.ty) @$. t
   let (&) = bin_bop `And
@@ -113,7 +125,12 @@ struct
 end
 
 module Int (I : sig type r' type b' end) =
-  struct type r = I.r' type b = I.b' let ty : _ integer = (Obj.magic 0 : (r range, b bit) integer) end
+struct
+  type r = I.r'
+  type b = I.b'
+  let ty = failwith "The dummy functor Int should never be applied"
+  let name = "int"
+end
 
 module type Int =
 sig
@@ -128,6 +145,7 @@ module Int8 =
       type r = signed
       type b = _8
       let ty : _ integer = Int (Signed, X8)
+      let name = "int8"
     end)
 
 module Uint8 =
@@ -136,6 +154,7 @@ module Uint8 =
       type r = unsigned
       type b = _8
       let ty : _ integer = Int (Unsigned, X8)
+      let name = "uint8"
     end)
 
 module Int16 =
@@ -144,6 +163,7 @@ module Int16 =
       type r = signed
       type b = _16
       let ty : _ integer = Int (Signed, X16)
+      let name = "int16"
     end)
 
 module Uint16 =
@@ -152,6 +172,7 @@ module Uint16 =
       type r = unsigned
       type b = _16
       let ty : _ integer = Int (Unsigned, X16)
+      let name = "uint16"
     end)
 
 module Int32 =
@@ -160,6 +181,7 @@ module Int32 =
       type r = signed
       type b = _32
       let ty : _ integer = Int (Signed, X32)
+      let name = "int32"
     end)
 
 module Uint32 =
@@ -168,6 +190,7 @@ module Uint32 =
       type r = unsigned
       type b = _32
       let ty : _ integer = Int (Unsigned, X32)
+      let name = "uint32"
     end)
 
 module Int64 =
@@ -176,6 +199,7 @@ module Int64 =
       type r = signed
       type b = _64
       let ty : _ integer = Int (Signed, X64)
+      let name = "int64"
     end)
 
 module Uint64 =
@@ -184,9 +208,10 @@ module Uint64 =
       type r = unsigned
       type b = _64
       let ty : _ integer = Int (Unsigned, X64)
+      let name = "uint64"
     end)
 
-let module_of_ty : type r b. (r range, b bit) integer -> (module Int with type r = r and type b = b) =
+let module_of_int_ty : type r b. (r range, b bit) integer -> (module Int with type r = r and type b = b) =
   function
   | Int (Signed, X8) -> (module Int8)
   | Int (Unsigned, X8) -> (module Uint8)
@@ -201,7 +226,13 @@ let int n = Const (Int (string_of_int n))
 
 let num n = Const (Int (Num.string_of_num n))
 
-let var_lt s : _ logic_type = Type (Var s, Nil)
+let var_lt s : _ logic_type = Var s @@@$ Nil
+
+let bool_lt = Bool @@@$ Nil
+
+let void_lt = Void @@@$ Nil
+
+let lt s ~from:(name, import) = User (name, import, s)
 
 let var_t s : _ term = Var s
 
@@ -252,6 +283,16 @@ let (-~)  =
   function
   | Const Int "0" -> int 0
   | t -> U_int_op `Neg @$. t
+
+let (!) v = Deref v
+
+let at_t v ~lab = Deref_at (v, lab)
+
+let if_t cond ~then_ ~else_ = If (cond, then_, else_)
+
+let let_t v ~equal ~in_ = Let (v, equal, in_)
+
+let f s ~from:(name, import) = (User (name, import, s) : _ func)
 
 let bin_p op t1 t2 : pred = App (B_num_pred (op, Integral Integer), t1 @. t2)
 
@@ -419,14 +460,3 @@ and append l1 l2 =
   | e1 :: e1s -> e1 :: append e1s l2
 
 let id { why_id } = why_id
-
-let conv : type a b. (a, b) integer number -> (a, b) integer number term =
-  fun ty ->
-  let t = Of_int Int8.ty @$. int 24 in
-  match ty with
-  | Integral (Int (Signed, X8))  -> t
-  | _ -> failwith "incorrect type"
-
-let x = conv (Integral Int8.ty)
-
-let y = conv (Integral Uint16.ty)

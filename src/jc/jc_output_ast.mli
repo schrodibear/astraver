@@ -130,7 +130,7 @@ type ('params, 'result) func =
   | To_float : 'a precision real -> (arbitrary_precision real * unit, 'a precision real) func
   | Of_float : 'a precision real -> ('a precision real * unit, arbitrary_precision real) func
   | B_bint_bop :
-      [`And | `Or | `Xor | `Lsr | `Asr ] * ('a range, 'b bit) integer ->
+      [ `And | `Or | `Xor | `Lsr | `Asr ] * ('a range, 'b bit) integer ->
     (('a range, 'b bit) integer number * (('a range, 'b bit) integer number * unit),
      ('a range, 'b bit) integer number) func
   | U_bint_bop :
@@ -141,7 +141,7 @@ type ('params, 'result) func =
     (('a range, 'b bit) integer number * (('a range, 'b bit) integer number * unit),
      ('a range, 'b bit) integer number) func
   | B_num_pred : [ `Lt | `Le | `Gt | `Ge | `Eq | `Ne ] * 'a number -> ('a number * ('a number * unit), boolean) func
-  | Poly : [`Eq | `Neq] -> ('a * ('a * unit), boolean) func
+  | Poly : [ `Eq | `Neq ] -> ('a * ('a * unit), boolean) func
   | User : string * bool * string -> ('a, 'b) func (** theory * use qualified name * name *)
 
 type 'typ constant =
