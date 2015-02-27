@@ -36,7 +36,7 @@ open Format
 (*open Why_pp*)
 
 open Stdlib
-(*open Envset*)
+open Envset
 
 open Output_ast
 module O = Output
@@ -124,7 +124,11 @@ module S =
       let compare = compare
     end)
 
-let fprintf_func ~where ~bw_set fmttr (type a) (type b) =
+let fail_on_real () =
+  failwith "floating point operations are not yet supported in GADT encoding, \
+            please use the User generic constructor"
+
+let fprintf_func ~where ~bw_ints fmttr (type a) (type b) =
   let pr fmt = fprintf fmttr fmt in
   let pr_bop fp ty = pr "%a.(%a%a)" fp ty in
   let pr_uop fp ty = pr "%a.(%a%a_)" fp ty in
@@ -132,7 +136,7 @@ let fprintf_func ~where ~bw_set fmttr (type a) (type b) =
   let fprintf_int_ty fmttr ty =
     fprintf_int_ty
       ~how:
-        (match where, S.mem (Int ty) bw_set with
+        (match where, S.mem (Int ty) bw_ints with
          | `Logic, bit -> `Theory bit
          | `Behavior safe, bit -> `Module (safe, bit))
       fmttr
@@ -146,10 +150,6 @@ let fprintf_func ~where ~bw_set fmttr (type a) (type b) =
          | `Behavior safe -> `Module safe)
       fmttr
       ty
-  in
-  let fail_on_real () =
-    failwith "floating point operations are not yet supported in GADT encoding, \
-              please use the User generic constructor"
   in
   function
   | (B_int_op op : (a, b) func) -> pr "Int.(%a)" fprintf_op op
@@ -178,193 +178,6 @@ let fprintf_func ~where ~bw_set fmttr (type a) (type b) =
   | To_float _ -> fail_on_real ()
   | Of_float _  -> fail_on_real ()
   | B_num_pred (_, Real _) -> fail_on_real ()
-
-(*let why3_ident =
-  function
-  (* booleans *)
-  | "not" -> "not"
-  | "bool_and" -> "Bool.andb"
-  | "bool_or" -> "Bool.orb"
-  | "bool_xor" -> "Bool.xorb"
-  | "bool_not" -> "Bool.notb"
-  (* integers *)
-  | "le_int" -> "Int.(<=)"
-  | "le_int_" -> "Int.(<=)"
-  | "le_int_bool" -> "Int.(<=)"
-  | "ge_int" -> "Int.(>=)"
-  | "ge_int_" -> "Int.(>=)"
-  | "ge_int_bool" -> "Int.(>=)"
-  | "lt_int" -> "Int.(<)"
-  | "lt_int_" -> "Int.(<)"
-  | "lt_int_bool" -> "Int.(<)"
-  | "gt_int" -> "Int.(>)"
-  | "gt_int_" -> "Int.(>)"
-  | "gt_int_bool" -> "Int.(>)"
-  | "add_int" -> "Int.(+)"
-  | "sub_int" -> "Int.(-)"
-  | "neg_int" -> "Int.(-_)"
-  | "mul_int" -> "Int.(*)"
-  | "computer_div" -> "ComputerDivision.div"
-  | "computer_mod" -> "ComputerDivision.mod"
-  | "int_min" -> "IntMinMax.min"
-  | "int_max" -> "IntMinMax.max"
-  (* reals *)
-  | "le_real" -> "Real.(<=)"
-  | "le_real_" -> "Real.(<=)"
-  | "le_real_bool" -> "Real.(<=)"
-  | "ge_real" -> "Real.(>=)"
-  | "ge_real_" -> "Real.(>=)"
-  | "ge_real_bool" -> "Real.(>=)"
-  | "lt_real" -> "Real.(<)"
-  | "lt_real_" -> "Real.(<)"
-  | "lt_real_bool" -> "Real.(<)"
-  | "gt_real" -> "Real.(>)"
-  | "gt_real_" -> "Real.(>)"
-  | "gt_real_bool" -> "Real.(>)"
-  | "add_real" -> "Real.(+)"
-  | "sub_real" -> "Real.(-)"
-  | "neg_real" -> "Real.(-_)"
-  | "mul_real" -> "Real.(*)"
-  | "div_real" -> "Real.(/)"
-  (* real functions *)
-  | "real_of_int" -> "FromInt.from_int"
-  | "truncate_real_to_int" -> "Truncate.truncate"
-  | "real_min" -> "RealMinMax.min"
-  | "real_max" -> "RealMinMax.max"
-  | "abs_int" -> "AbsInt.abs"
-  | "abs_real" -> "AbsReal.abs"
-  | "sqrt_real" -> "Square.sqrt"
-  | "pow_int" -> "Power.power"
-  | "pow_real" -> "PowerReal.pow"
-  | "pow_real_int" -> "PowerInt.power"
-  | "exp" -> "ExpLog.exp"
-  | "log" -> "ExpLog.log"
-  | "cos" -> "Trigonometry.cos"
-  | "sin" -> "Trigonometry.sin"
-  | "tan" -> "Trigonometry.tan"
-  | "atan" -> "Trigonometry.atan"
-  (* floats *)
-  | "nearest_even" -> "Rounding.NearestTiesToEven"
-  | "down" -> "Rounding.Down"
-  | "single_value" -> "Single.value"
-  | "single_exact" -> "Single.exact"
-  | "single_round_error" -> "Single.round_error"
-  | "round_single" -> "Single.round"
-  | "round_single_logic" -> "Single.round_logic"
-  | "no_overflow_single" -> "Single.no_overflow"
-  | "double_value" -> "Double.value"
-  | "double_exact" -> "Double.exact"
-  | "double_round_error" -> "Double.round_error"
-  | "round_double" -> "Double.round"
-  | "round_double_logic" -> "Double.round_logic"
-  | "no_overflow_double" -> "Double.no_overflow"
-  (* floats full *)
-  | "le_double_full" -> "Double.le"
-  | "lt_double_full" -> "Double.lt"
-  | "ge_double_full" -> "Double.ge"
-  | "gt_double_full" -> "Double.gt"
-  | "eq_double_full" -> "Double.eq"
-  | "ne_double_full" -> "Double.ne"
-  | "double_is_finite" -> "Double.is_finite"
-  | "double_is_infinite" -> "Double.is_infinite"
-  | "double_is_plus_infinity" -> "Double.is_plus_infinity"
-  | "double_is_minus_infinity" -> "Double.is_minus_infinity"
-  | "double_is_NaN" -> "Double.is_NaN"
-  | "double_sign" -> "Double.sign"
-  | "Positive" -> "SpecialValues.Pos"
-  | "Negative" -> "SpecialValues.Neg"
-  | s -> why3_id s
-
-let why3_param =
-  function
-  | "le_int_" -> "Int.(<=)"
-  | "ge_int_" -> "Int.(>=)"
-  | "lt_int_" -> "Int.(<)"
-  | "gt_int_" -> "Int.(>)"
-  (* reals *)
-  | "le_real_" -> "Real.(<=)"
-  | "ge_real_" -> "Real.(>=)"
-  | "lt_real_" -> "Real.(<)"
-  | "gt_real_" -> "Real.(>)"
-  | s -> why3_ident s
-
-type why3_dependencies = {
-  mutable why3_ComputerDivision : bool;
-  mutable why3_IntMinMax        : bool;
-  mutable why3_reals            : bool;
-  mutable why3_FromInt          : bool;
-  mutable why3_Truncate         : bool;
-  mutable why3_Square           : bool;
-  mutable why3_Power            : bool;
-  mutable why3_PowerInt         : bool;
-  mutable why3_PowerReal        : bool;
-  mutable why3_RealMinMax       : bool;
-  mutable why3_AbsInt           : bool;
-  mutable why3_AbsReal          : bool;
-  mutable why3_ExpLog           : bool;
-  mutable why3_Trigonometry     : bool;
-}
-
-let empty_why3_dependencies =
-  {
-    why3_ComputerDivision = false;
-    why3_IntMinMax        = false;
-    why3_reals            = false;
-    why3_FromInt          = false;
-    why3_Truncate         = false;
-    why3_Square           = false;
-    why3_Power            = false;
-    why3_PowerInt         = false;
-    why3_PowerReal        = false;
-    why3_RealMinMax       = false;
-    why3_AbsInt           = false;
-    why3_AbsReal          = false;
-    why3_ExpLog           = false;
-    why3_Trigonometry     = false
-  }
-
-let add_why3_dependencies d f =
-  match f with
-  | "computer_div"
-  | "computer_mod" ->
-    d.why3_ComputerDivision <- true
-  | "int_min"
-  | "int_max" ->
-    d.why3_IntMinMax <- true
-  | "add_real"
-  | "sub_real"
-  | "neg_real"
-  | "mul_real"
-  | "div_real" ->
-    d.why3_reals <- true
-  | "sqrt_real" ->
-    d.why3_Square <- true
-  | "pow_int" ->
-    d.why3_Power <- true
-  | "pow_real_int" ->
-    d.why3_PowerInt <- true
-  | "pow_real" ->
-    d.why3_PowerReal <- true
-  | "real_of_int" ->
-    d.why3_FromInt <- true
-  | "truncate_real_to_int" ->
-    d.why3_Truncate <- true
-  | "real_min"
-  | "real_max" ->
-    d.why3_RealMinMax <- true
-  | "abs_int" ->
-    d.why3_AbsInt <- true
-  | "abs_real" ->
-    d.why3_AbsReal <- true
-  | "exp"
-  | "log" ->
-    d.why3_ExpLog <- true
-  | "cos"
-  | "sin"
-  | "tan"
-  | "atan" ->
-    d.why3_Trigonometry <- true
-  | _ -> ()
 
 let fprintf_vc_kind fmttr k =
   fprintf fmttr "%s"
@@ -421,121 +234,132 @@ let fprintf_why_label fmttr { l_kind; l_behavior; l_pos } =
     with_behavior @@ (fun b -> pr "\"for behavior %s\"@ " b)
   end
 
-let lt_name t =
-  match t.lt_name with
-  | "unit" -> "()"
-  | "bool" -> "Bool.bool"
-  | s -> why3_ident s
-
-let rec fprintf_logic_type fmttr t =
+let fprintf_tconstr fmttr (type a) (type b) =
   let pr fmt = fprintf fmttr fmt in
-  match t.lt_args with
-  | [] -> pr "%s" (lt_name t)
-  | [x] -> pr "(%s@ %a)" (lt_name t) fprintf_logic_type x
-  | l ->
-    pr
-      "(%s@ %a)"
-      (lt_name t)
-      (print_list space fprintf_logic_type)
-      l
+  function
+  | (Numeric (Integral Integer) : (a, b) tconstr) -> pr "int"
+  | Numeric (Integral (Int _  as ty)) -> pr "%a.t" (fprintf_int_ty ~how:(`Theory false)) ty
+  | Numeric (Integral (Enum _  as ty)) -> pr "%a.t" (fprintf_enum_ty ~how:`Theory) ty
+  | Numeric (Real _) -> fail_on_real ()
+  | Bool -> pr "Bool.bool"
+  | Void -> pr "()"
+  | Var v -> pr "'%a" fprintf_id v
+  | User (_, false, name) -> pr "%a" fprintf_id name
+  | User (where, true, name) -> pr "%a.%a" fprintf_uid where fprintf_id name
 
-let is_why3_poly_eq, is_why3_poly_neq =
-  let eqs = ["eq_int"; "eq_bool"; "eq_real"; "eq_int_"; "eq_bool_"; "eq_real_"; "eq_int_bool"; "eq_pointer_bool"] in
-  ListLabels.(mem ~set:eqs, mem ~set:(List.map ((^) "n") eqs))
+let rec fprintf_ltype_hlist : type a. _ -> a ltype_hlist -> _  = fun fmttr ->
+  function
+  | Nil -> ()
+  | Cons (lt, ts) ->
+    fprintf fmttr " %a" fprintf_logic_type lt;
+    fprintf_ltype_hlist fmttr ts
+
+and fprintf_logic_type : type a. _ -> a logic_type -> _ = fun fmttr ->
+  function
+  | Type (c, tps) ->
+    fprintf fmttr "%a%a" fprintf_tconstr c fprintf_ltype_hlist tps
 
 let why3_builtin_locals = StringSet.singleton "result"
 
-let rec fprintf_term ~locals fmttr =
+let rec fprintf_term_hlist : type a. bw_ints:_ -> consts:_ -> _ -> a term_hlist -> _ = fun ~bw_ints ~consts fmttr ->
+  function
+  | Nil -> ()
+  | Cons (t, ts) ->
+    fprintf fmttr "@ %a" (fprintf_term ~bw_ints ~consts) t;
+    fprintf_term_hlist ~bw_ints ~consts fmttr ts
+
+and fprintf_term : type a. bw_ints: _ -> consts:_ -> _ -> a term -> _ = fun ~bw_ints ~consts fmttr ->
   let pr fmt = fprintf fmttr fmt in
-  let fprintf_term = fprintf_term ~locals
-  and fprintf_assertion = fprintf_assertion ~locals
+  let fprintf_term_hlist fmttr = fprintf_term_hlist ~bw_ints ~consts fmttr
+  and fprintf_term fmttr = fprintf_term ~bw_ints ~consts fmttr
+  and fprintf_func fmttr = fprintf_func ~where:`Logic ~bw_ints fmttr
   in
   function
-  | LConst c -> fprintf_constant fmttr c
-  | LApp (id, [t1; t2]) when id = "eq" || is_why3_poly_eq id ->
-    pr "@[(%a@ =@ %a)@]" fprintf_term t1 fprintf_term t2
-  | LApp (id, [t1; t2]) when id = "neq" || is_why3_poly_neq id ->
-    pr "@[(%a@ <>@ %a)@]" fprintf_term t1 fprintf_term t2
-  | LApp (id, t :: tl) ->
-    pr "@[(%s@ %a" (why3_ident id) fprintf_term t;
-    List.iter (pr "@ %a" fprintf_term) tl;
-    pr ")@]"
-  | LApp (id, []) -> pr "%s" (why3_ident id)
-  | LVar id -> pr "%s" (why3_ident id)
-  | LDeref id | LDerefAtLabel (id, _) when StringSet.mem id locals ->
-    pr "%s" (why3_ident id)
-  | LDeref id ->
-    pr "!%s" (why3_ident id)
-  | LDerefAtLabel (id, "") ->
-    pr "(old@ !%s)" (why3_ident id)
-  | LDerefAtLabel (id, l) ->
-    pr "(at@ !%s@ '%s)" (why3_ident id) (why3_constr l)
-  | TLabeled (l, t) ->
+  | Const c -> fprintf_constant fmttr c
+  | App (f, Nil) -> pr "%a" fprintf_func f
+  | App (f, (Cons _ as ts)) ->
+    pr "@[(%a%a)@]" fprintf_func f fprintf_term_hlist ts
+  | Var v -> pr "%a" fprintf_id v
+  | Deref v | Deref_at (v, _) when StringSet.mem v consts ->
+    pr "%a" fprintf_id v
+  | Deref v -> pr "!%a" fprintf_id v
+  | Deref_at (v, "") -> pr "(old@ !%a)" fprintf_id v
+  | Deref_at (v, l) -> pr "(at@ !%a@ '%a)" fprintf_id v fprintf_uid l
+  | Labeled (l, t) ->
     pr "(%a%a)" fprintf_why_label l fprintf_term t
-  | TIf (t1, t2, t3) ->
+  | If (t1, t2, t3) ->
     pr "@[<hov 1>(if@ %a@ then@ %a@ else@ %a)@]"
-      fprintf_assertion (assertion_of_term t1) fprintf_term t2 fprintf_term t3
-  | TLet (v, t1, t2) ->
-    pr "@[<hov 1>(let@ %s@ =@ %a@ in@ %a)@]"
-      v fprintf_term t1 fprintf_term t2
+      fprintf_term t1 fprintf_term t2 fprintf_term t3
+  | Let (v, t1, t2) ->
+    pr "@[<hov 1>(let@ %a@ =@ %a@ in@ %a)@]"
+      fprintf_id v fprintf_term t1 fprintf_term t2
 
-and fprintf_assertion ~locals fmttr =
+let rec fprintf_pred ~bw_ints ~consts fmttr =
   let pr fmt = fprintf fmttr fmt in
-  let fprintf_term = fprintf_term ~locals
-  and fprintf_assertion = fprintf_assertion ~locals
-  and fprintf_triggers = fprintf_triggers ~locals
+  let fprintf_term_hlist fmttr = fprintf_term_hlist ~bw_ints ~consts fmttr
+  and fprintf_term fmttr = fprintf_term ~bw_ints ~consts fmttr
+  and fprintf_pred = fprintf_pred ~bw_ints ~consts
+  and fprintf_triggers = fprintf_triggers ~bw_ints ~consts
+  and fprintf_func fmttr = fprintf_func ~where:`Logic ~bw_ints fmttr
   in
   function
-  | LTrue -> pr "true"
-  | LFalse -> pr "false"
-  | LAnd (a1, a2) ->
-    pr "@[(%a@ /\\@ %a)@]" fprintf_assertion a1 fprintf_assertion a2
-  | LOr (a1, a2) ->
-    pr "@[(%a@ \\/@ %a)@]" fprintf_assertion a1 fprintf_assertion a2
-  | LIff (a1, a2) ->
-    pr "@[(%a@ <->@ %a)@]" fprintf_assertion a1 fprintf_assertion a2
-  | LNot a1 -> pr "@[(not@ %a)@]" fprintf_assertion a1
-  | LImpl (a1, a2) ->
-    pr "@[<hov 1>(%a@ ->@ %a)@]" fprintf_assertion a1 fprintf_assertion a2
-  | LIf (t, a1, a2) ->
+  | True -> pr "true"
+  | False -> pr "false"
+  | And (p1, p2) ->
+    pr "@[(%a@ /\\@ %a)@]" fprintf_pred p1 fprintf_pred p2
+  | Or (p1, p2) ->
+    pr "@[(%a@ \\/@ %a)@]" fprintf_pred p1 fprintf_pred p2
+  | Iff (p1, p2) ->
+    pr "@[(%a@ <->@ %a)@]" fprintf_pred p1 fprintf_pred p2
+  | Not p -> pr "@[(not@ %a)@]" fprintf_pred p
+  | Impl (p1, p2) ->
+    pr "@[<hov 1>(%a@ ->@ %a)@]" fprintf_pred p1 fprintf_pred p2
+  | If (t, p1, p2) ->
     pr "@[<hov 1>(if@ %a@ then@ %a@ else@ %a)@]"
-      fprintf_term t fprintf_assertion a1 fprintf_assertion a2
-  | LLet (id, t, a) ->
-    pr "@[<hov 1>(let@ @[<hov 1>%s@ =@ %a@ in@]@ %a)@]"
-      id fprintf_term t fprintf_assertion a
-  | LForall (id, t, trigs, a) ->
-    pr "@[<hov 1>(forall@ %s:@,%a@,%a@,.@ %a)@]"
-      (why3_ident id) fprintf_logic_type t fprintf_triggers trigs fprintf_assertion a
-  | LExists (id, t, trigs, a) ->
-    pr "@[<hov 1>(exists@ %s:%a%a.@ %a)@]"
-      id fprintf_logic_type t fprintf_triggers trigs fprintf_assertion a
-  | LPred ("le", [t1; t2]) ->
-    pr "@[(%a@ <=@ %a)@]" fprintf_term t1 fprintf_term t2
-  | LPred ("ge", [t1; t2]) ->
-    pr "@[(%a@ >=@ %a)@]"  fprintf_term t1 fprintf_term t2
-  | LPred (id, [t1; t2]) when id = "eq" || is_why3_poly_eq id ->
-    pr "@[(%a@ =@ %a)@]" fprintf_term t1 fprintf_term t2
-  | LPred (id, [t1; t2]) when id = "neq" || is_why3_poly_neq id ->
-    pr "@[(%a@ <>@ %a)@]" fprintf_term t1 fprintf_term t2
-  | LPred (id, t :: tl) ->
-    pr "@[(%s@ %a" (why3_ident id) fprintf_term t;
-    List.iter (pr "@ %a" fprintf_term) tl;
-    pr ")@]"
-  | LPred (id, []) -> pr "%s" (why3_ident id)
-  | LLabeled (l, a) ->
-    pr "@[(%a%a)@]" fprintf_why_label l fprintf_assertion a
+      fprintf_term t fprintf_pred p1 fprintf_pred p2
+  | Let (v, t, p) ->
+    pr "@[<hov 1>(let@ @[<hov 1>%a@ =@ %a@ in@]@ %a)@]"
+      fprintf_id v fprintf_term t fprintf_pred p
+  | Forall (v, t, trigs, p) ->
+    pr "@[<hov 1>(forall@ %a:@,%a@,%a@,.@ %a)@]"
+      fprintf_id v fprintf_logic_type t fprintf_triggers trigs fprintf_pred p
+  | Exists (v, t, trigs, p) ->
+    pr "@[<hov 1>(exists@ %a:%a%a.@ %a)@]"
+      fprintf_id v fprintf_logic_type t fprintf_triggers trigs fprintf_pred p
+  | App (f, Nil) -> pr "%a" fprintf_func f
+  | App (f, (Cons _ as ts)) ->
+    pr "@[(%a%a)@]" fprintf_func f fprintf_term_hlist ts
+  | Labeled (l, p) ->
+    pr "@[(%a%a)@]" fprintf_why_label l fprintf_pred p
 
-and fprintf_triggers ~locals fmttr trigs =
-  let fprintf_term = fprintf_term ~locals
-  and fprintf_assertion = fprintf_assertion ~locals
+and fprintf_triggers ~bw_ints ~consts fmttr =
+  let pr fmt = fprintf fmttr fmt in
+  let fprintf_term fmttr = fprintf_term ~bw_ints ~consts fmttr
+  and fprintf_pred = fprintf_pred ~bw_ints ~consts
   in
-  let pat fmttr =
+  let fprintf_pat fmttr =
     function
-    | LPatT t -> fprintf_term fmttr t
-    | LPatP p -> fprintf_assertion fmttr p
+    | Term t -> fprintf_term fmttr t
+    | Pred p -> fprintf_pred fmttr p
   in
-  print_list_delim lsquare rsquare alt (print_list comma pat) fmttr trigs
-
+  let rec fprintf_pats fmttr =
+    function
+    | [] -> ()
+    | [p] -> pr "%a" fprintf_pat p
+    | p :: ps ->
+      pr "%a,@ " fprintf_pat p;
+      fprintf_pats fmttr ps
+  in
+  let rec fprintf_alts fmttr =
+    function
+    | [] -> ()
+    | [p] -> pr "%a" fprintf_pats p
+    | p :: ps ->
+      pr "%a@ |@ " fprintf_pats p;
+      fprintf_alts fmttr ps
+  in
+  fprintf_alts fmttr
+(*
 let rec fprintf_type ~locals ~need_colon anon fmttr t =
   let pr fmt = fprintf fmttr fmt in
   let fprintf_assertion = fprintf_assertion ~locals in
