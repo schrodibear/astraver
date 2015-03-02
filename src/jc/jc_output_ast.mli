@@ -196,7 +196,7 @@ and trigger =
   | Term : 'a term -> trigger
 
 type 'a why_type =
-  | Prod_type : string * 'a why_type * 'b why_type -> ('a * 'b) why_type (** (x : t1) -> t2 *)
+  | Prod_type : string * 'a why_type * 'b why_type -> ('a -> 'b) why_type (** (x : t1) -> t2 *)
   | Base_type : 'a logic_type -> 'a why_type
   | Ref_type : 'a why_type -> 'a ref why_type
   | Annot_type : pred * 'a why_type * string list * string list * pred * (string * pred) list -> 'a why_type
@@ -263,9 +263,9 @@ type decl_kind = [ `Theory | `Module ]
 type goal_kind = KAxiom | KLemma | KGoal
 
 type 'kind decl =
-  | Param : 'a why_type ->  [`Module] decl (** parameter in why *)
+  | Param : 'a why_type -> [`Module] decl (** parameter in why *)
   | Def : 'a expr -> [`Module] decl (** global let in why *)
-  | Logic : why_id * (string * any_logic_type) list * 'a logic_type -> [`Theory] decl
+  | Logic : (string * any_logic_type) list * 'a logic_type -> [`Theory] decl
     (** logic decl in why *)
   | Predicate : (string * any_logic_type) list * pred -> [`Theory] decl
   | Inductive : (string * any_logic_type) list * (string * pred) list -> [`Theory] decl
@@ -273,7 +273,7 @@ type 'kind decl =
   | Goal : goal_kind * pred -> [`Theory] decl  (** Goal *)
   | Function : (string * any_logic_type) list * 'a logic_type * 'a term -> [`Theory] decl
   | Type : string list -> [`Theory] decl
-  | Exception : any_logic_type option -> [`Module] decl
+  | Exception : 'a logic_type option -> [`Module] decl
 
 type 'a why_decl = {
   why_id : why_id;
