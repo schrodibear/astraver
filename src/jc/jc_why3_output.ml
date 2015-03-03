@@ -425,7 +425,7 @@ and fprintf_expr_node : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_n
         fprintf_pred post
         (fprintf_list ~sep:"" @@
          fun _ (e, r) ->
-         pr "@[<hov 2>raises@ {@ %s@ result@ ->@ %a@ }@]" e fprintf_pred r)
+         pr "@[<hov 2>raises@ {@ %a@ result@ ->@ %a@ }@]" fprintf_uid e fprintf_pred r)
         l
     end;
     if diverges then pr "diverges@ ";
@@ -506,7 +506,7 @@ and fprintf_expr_node : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_n
     pr "@[<hov 0>(%s@ {@ %a@ })@]"
       (match k with `ASSERT -> "assert" | `ASSUME -> "assume" | `CHECK -> "check")
       fprintf_pred p
-  | BlackBox t ->
+  | Black_box t ->
     pr "@[<hov 0>any@ %a@ @]" fprintf_type t
   | Absurd -> pr "@[<hov 0>absurd@ @]"
   | Labeled (l, e) -> pr "@[(%a%a)@]" fprintf_why_label l fprintf_expr e
@@ -604,6 +604,264 @@ let fprintf_why_decl ~safe ~bw_ints ~consts fmttr (type a) { why_id; why_decl } 
     pr "exception@ %a" pr_why_uid why_id
   | Exception (Some t) ->
     pr "exception@ %a@ %a" pr_why_uid why_id fprintf_logic_type t
+
+let split c s =
+  try
+    let pos = String.index s c in
+    String.(sub s 0 pos, sub s (pos + 1) @@ length s - pos - 1)
+  with
+  | Not_found -> "", s
+
+let split_str_formatter ~f () =
+  let theory, name = split '.' @@ flush_str_formatter () in
+  (if theory <> "" then f theory else `Current), name
+
+let expand_func : _ func -> _ func =
+  function
+  | User (where, false, name) -> User (where, true, name)
+  | f -> f
+
+let expand_tconstr : _ tconstr -> _ tconstr =
+  function
+  | User (where, false, name) -> User (where, true, name)
+  | f -> f
+
+let (|~>) init f = f ~init
+
+let (%~>) f' f ~init = f ~init:(f' ~init)
+
+module Term =
+struct
+  type 'a t = 'a term
+  let rec fold : type a. bw_ints:_ -> f:_ -> init:_ -> a term -> _ = fun ~bw_ints ~f ~init ->
+    let fold t = fold ~bw_ints ~f t
+    and fold_hlist hl = fold_hlist ~bw_ints ~f hl in
+    let split_str_formatter = split_str_formatter ~f:(fun th -> `Theory th) in
+    function
+    | Const _ -> init
+    | App (f', thl) ->
+      let f' = expand_func f' in
+      fprintf_func ~where:`Logic ~bw_ints str_formatter f';
+      f ~acc:init (split_str_formatter ()) |~>
+      fold_hlist thl
+    | Var v -> f ~acc:init (`Current, v)
+    | Deref v -> f ~acc:init (`Current, v)
+    | Deref_at (v, _) -> f ~acc:init (`Current, v)
+    | Labeled (_, t) -> fold ~init t
+    | If (i, t, e) ->
+      fold ~init i |~>
+      fold t |~>
+      fold e
+    | Let (_, t1, t2) ->
+      fold ~init t1 |~>
+      fold t2
+  and fold_hlist : type a. bw_ints:_ -> f:_ -> init:_ -> a term_hlist -> _ = fun ~bw_ints ~f ~init ->
+    let fold t = fold ~bw_ints ~f t
+    and fold_hlist hl = fold_hlist ~bw_ints ~f hl in
+    function
+    | Nil -> init
+    | Cons (t, ts) ->
+      fold ~init t |~>
+      fold_hlist ts
+
+  let iter ~f = fold ~init:() ~f:(fun ~acc:_ -> f)
+end
+
+module Logic_type =
+struct
+  type 'a t = 'a logic_type
+  let rec fold : type a. bw_ints:_ -> f:_ -> init:_ -> a logic_type -> _ = fun ~bw_ints ~f ~init ->
+    let fold lt = fold ~bw_ints ~f lt in
+    let split_str_formatter = split_str_formatter ~f:(fun th -> `Theory th) in
+    function
+    | Type (tc, lthl) ->
+      let tc = expand_tconstr tc in
+      fprintf_tconstr str_formatter tc;
+      f ~acc:init (split_str_formatter ()) |~>
+      let rec fold' : type a. init:_ -> a ltype_hlist -> _ = fun ~init ->
+        function
+        | Nil -> init
+        | Cons (lt, lts) ->
+          fold ~init lt |~>
+          fold' lts
+      in
+      fold' lthl
+
+  let iter ~f = fold ~init:() ~f:(fun ~acc:_ -> f)
+end
+
+module Pred =
+struct
+  type t = pred
+  let rec fold ~bw_ints ~f ~init =
+    let fold = fold ~bw_ints ~f
+    and fold_term t = Term.fold ~bw_ints ~f t
+    and fold_term_hlist hl = Term.fold_hlist ~bw_ints ~f hl
+    and fold_logic_type lt = Logic_type.fold ~bw_ints ~f lt in
+    let split_str_formatter = split_str_formatter ~f:(fun th -> `Theory th) in
+    let fold_quant lt trigs p =
+      fold_logic_type ~init lt |~>
+      (let f init =
+        function
+        | Pred p -> fold ~init p
+        | Term t -> fold_term ~init t
+       in
+       ListLabels.fold_left ~f:(List.fold_left f) trigs) |~>
+      fold p
+    in
+    function
+    | True | False -> init
+    | And (p1, p2)
+    | Or (p1, p2)
+    | Iff (p1, p2)
+    | Impl (p1, p2) ->
+      fold ~init p1 |~>
+      fold p2
+    | Not p
+    | Labeled (_, p) -> fold ~init p
+    | If (t, p1, p2) ->
+      fold_term ~init t |~>
+      fold p1 |~>
+      fold p2
+    | Let (_, t, p) ->
+      fold_term ~init t |~>
+      fold p
+    | Forall (_, lt, trigs, p) ->
+      fold_quant lt trigs p
+    | Exists (_, lt, trigs, p) ->
+      fold_quant lt trigs p
+    | App (p, thl) ->
+      let p = expand_func p in
+      fprintf_func ~where:`Logic str_formatter ~bw_ints p;
+      f ~acc:init (split_str_formatter ()) |~>
+      fold_term_hlist thl
+
+  let iter ~f = fold ~init:() ~f:(fun ~acc:_ -> f)
+end
+
+module Why_type =
+struct
+  type 'a t = 'a why_type
+  let rec fold : type a. bw_ints:_ -> f:_ -> init:_ -> a why_type -> _ = fun ~bw_ints ~f ~init ->
+    let fold wt = fold ~bw_ints ~f wt in
+    let fold_logic_type lt = Logic_type.fold ~bw_ints ~f lt in
+    let fold_pred  = Pred.fold ~bw_ints ~f in
+    function
+    | Prod_type (_, wt1, wt2) ->
+      fold ~init wt1 |~>
+      fold wt2
+    | Base_type lt ->
+      fold_logic_type ~init lt
+    | Ref_type wt ->
+      fold ~init wt
+    | Annot_type (pre, wt, reads, writes, post, exns) ->
+      fold_pred ~init pre |~>
+      fold wt |~>
+      let f acc name = f ~acc (`Current, name) in
+      let open ListLabels in
+      fold_left ~f reads %~>
+      fold_left ~f writes %~>
+      fold_pred post %~>
+      fold_left ~f:(fun acc (name, p) -> f acc name |~> fold_pred p) exns
+
+  let iter ~f = fold ~init:() ~f:(fun ~acc:_ -> f)
+end
+
+module Expr =
+struct
+  type 'a t = 'a expr
+  let rec fold : type a. safe:_ -> bw_ints:_ -> f:_ -> init:_ -> a expr -> _ = fun ~safe ~bw_ints ~f ~init e ->
+    let fold ~init e = fold ~safe ~bw_ints ~f ~init e
+    and fold_hlist hl = fold_hlist ~safe ~bw_ints ~f hl
+    and fold_pred = Pred.fold ~bw_ints ~f
+    and fold_term t = Term.fold ~bw_ints ~f t
+    and fold_why_type wt = Why_type.fold ~bw_ints ~f wt
+    in
+    let fold' init e = fold ~init e in
+    let split_str_formatter' = split_str_formatter ~f:(fun mod_ -> `Module mod_) in
+    match e.expr_node with
+    | Cte _ -> init
+    | Var v
+    | Deref v ->
+      f ~acc:init (`Current, v)
+    | And (e1, e2) ->
+      fold ~init e1 |~>
+      fold e2
+    | Or (e1, e2) ->
+      fold ~init e1 |~>
+      fold e2
+    | Not e -> fold ~init e
+    | Void -> init
+    | If (i, t, e) ->
+      fold ~init i |~>
+      fold t |~>
+      fold e
+    | While (cond, inv, var, exprs) ->
+      fold ~init cond |~>
+      fold_pred inv |~>
+      Option.fold
+        var
+        ~f:(fun init (var, rel) ->
+          fold_term ~init var |~>
+          Option.fold
+            rel
+            ~f:(fun acc rel ->
+              fprintf str_formatter "%s" rel;
+              f ~acc @@ split_str_formatter ~f:(fun th -> `Theory th) ())) |~>
+      ListLabels.fold_left ~f:fold' exprs
+    | Block l ->
+      List.fold_left fold' init l
+    | Assign (v, e) ->
+      f ~acc:init (`Current, v) |~>
+      fold e
+    | Let (_, e1, e2) ->
+      fold ~init e1 |~>
+      fold e2
+    | Let_ref (_, e1, e2) ->
+      fold ~init e1 |~>
+      fold e2
+    | App (f', hl, wt_opt) ->
+      let f' = expand_func f' in
+      fprintf_func ~where:(`Behavior safe) str_formatter ~bw_ints f';
+      f ~acc:init (split_str_formatter' ()) |~>
+      fold_hlist hl |~>
+      Option.fold ~f:(fun init wt -> fold_why_type ~init wt) wt_opt
+    | Raise (id, e_opt) ->
+      f ~acc:init (`Current, id) |~>
+      Option.fold ~f:fold' e_opt
+    | Try (e, id, v, h) ->
+      let f ~init:acc = f ~acc in
+      fold ~init e |~>
+      f (`Current, id) |~>
+      Option.fold ~f:(fun init v -> f ~init (`Current, v)) v |~>
+      fold h
+    | Fun (args, rt, pre, e, post, _, exns) ->
+      List.fold_left (fun init (_, Why_type t) -> fold_why_type ~init t) init args |~>
+      fold_why_type rt |~>
+      fold_pred pre |~>
+      fold e |~>
+      fold_pred post |~>
+      ListLabels.fold_left ~f:(fun acc (id, p) -> f ~acc (`Current, id) |~> fold_pred p) exns
+    | Triple (_, pre, e, post, exns) ->
+      fold_pred ~init pre |~>
+      fold e |~>
+      fold_pred post |~>
+      ListLabels.fold_left ~f:(fun acc (id, p) -> f ~acc (`Current, id) |~> fold_pred p) exns
+    | Assert (_, p) ->
+      fold_pred ~init p
+    | Black_box wt -> fold_why_type ~init wt
+    | Absurd -> init
+    | Labeled (_, e) -> fold ~init e
+  and fold_hlist : type a. safe:_ -> bw_ints:_ -> f:_ -> init:_ -> a expr_hlist -> _ = fun ~safe ~bw_ints ~f ~init ->
+    let fold t = fold ~safe ~bw_ints ~f t
+    and fold_hlist hl = fold_hlist ~safe ~bw_ints ~f hl in
+    function
+    | Nil -> init
+    | Cons (t, ts) ->
+      fold ~init t |~>
+      fold_hlist ts
+end
+
 (*
 (* Drop auxiliary arguments to satisfy common output interface *)
 let globalize f = f ~locals:why3_builtin_locals

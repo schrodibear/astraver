@@ -243,7 +243,7 @@ and 'typ expr_node =
     (** params * result_type * pre * body * post * diverges * signals *)
   | Triple : opaque * pred * 'a expr * pred * ((string * pred) list) -> 'a expr_node
   | Assert : assert_kind * pred -> void expr_node
-  | BlackBox : 'a why_type -> 'a expr_node
+  | Black_box : 'a why_type -> 'a expr_node
   | Absurd : void expr_node
   | Labeled : why_label * 'a expr -> 'a expr_node
 
