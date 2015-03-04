@@ -42,7 +42,7 @@ val fprintf_term : formatter -> _ term -> unit
 val fprintf_assertion : formatter -> pred -> unit
 val fprintf_expr : formatter -> _ expr -> unit
 val fprintf_why_decl : formatter -> _ why_decl -> unit
-val fprintf_why_decls : ?float_model:Env.float_model -> Format.formatter -> 'a why_decl list -> unit
+val fprintf_why_decls : ?float_model:Env.float_model -> Format.formatter -> _ why_decl list -> unit
 
 val print_to_file : ?float_model:Env.float_model -> string -> _ why_decl list -> unit
 
