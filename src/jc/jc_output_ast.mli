@@ -258,31 +258,29 @@ type why_id = {
   why_pos  : Position.t
 }
 
-type decl_kind = [ `Theory | `Module ]
-
 type goal_kind = KAxiom | KLemma | KGoal
 
-type ('kind, 'a, 'b, _) decl =
-  | Param : 'a why_type -> ([`Module], 'a, 'b, 'a) decl (** parameter in why *)
-  | Def : 'a expr -> ([`Module], 'a, 'b, 'a) decl (** global let in why *)
-  | Logic : (string * any_logic_type) list * 'a logic_type -> ([`Theory], 'a, 'b, 'b) decl
+type 'kind decl =
+  | Param : 'a why_type -> [`Module of bool] decl (** parameter in why *)
+  | Def : 'a expr -> [`Module of bool] decl (** global let in why *)
+  | Logic : (string * any_logic_type) list * 'a logic_type -> [`Theory] decl
     (** logic decl in why *)
-  | Predicate : (string * any_logic_type) list * pred -> ([`Theory], 'a, 'b,' b) decl
-  | Inductive : (string * any_logic_type) list * (string * pred) list -> ([`Theory], 'a, 'b, 'b) decl
+  | Predicate : (string * any_logic_type) list * pred -> [`Theory] decl
+  | Inductive : (string * any_logic_type) list * (string * pred) list -> [`Theory] decl
     (** inductive definition *)
-  | Goal : goal_kind * pred -> ([`Theory], 'a, 'b, 'b) decl  (** Goal *)
-  | Function : (string * any_logic_type) list * 'a logic_type * 'a term -> ([`Theory], 'a, 'b, 'b) decl
-  | Type : string list -> ([`Theory], 'a, 'b, 'b) decl
-  | Exception : 'a logic_type option -> ([`Module], 'a, 'b, 'a) decl
+  | Goal : goal_kind * pred -> [`Theory] decl  (** Goal *)
+  | Function : (string * any_logic_type) list * 'a logic_type * 'a term -> [`Theory] decl
+  | Type : string list -> [`Theory] decl
+  | Exception : 'a logic_type option -> [`Module of bool] decl
 
-type ('kind, 'a, 'b, 'c) why_decl = {
+type 'kind why_decl = {
   why_id : why_id;
-  why_decl :  ('kind, 'a, 'b, 'c) decl
+  why_decl :  'kind decl
 }
 
-type ('kind, 'a, 'b)  dependency =
-  | Use of [`Import | `Export | `As of string option] * ('kind, 'a, 'b) entry
-  | Clone of [`Import | `Export | `As of string option] * ('kind, 'a, 'b) entry *
+type 'kind dependency =
+  | Use of [`Import | `Export | `As of string option] * 'kind entry
+  | Clone of [`Import | `Export | `As of string option] * 'kind entry *
              [`Constant of string * string |
               `Type of string * string |
               `Function of string * string |
@@ -290,12 +288,15 @@ type ('kind, 'a, 'b)  dependency =
               `Namespace of string option * string option |
               `Lemma of string |
               `Goal of string] list
-and module_dependency = Dependency : ([< `Theory | `Module], _, _) dependency -> module_dependency
-and ('kind, 'a, 'b) entry =
-  | Theory : string * (([`Theory], 'a, 'b) dependency list * ([`Theory], 'a, 'b ,'b) why_decl list) option ->
-    ([`Theory], 'a, 'b) entry
-  | Module : string * (module_dependency list * bool * ([`Module], 'a, 'b, 'a) why_decl list) option ->
-    ([`Module], 'a, 'b) entry
+and module_dependency = Dependency : [< `Theory | `Module of bool] dependency -> module_dependency
+and 'kind entry =
+  | Theory : string * ([`Theory] dependency list * [`Theory] why_decl list) option -> [`Theory] entry
+  | Module : string * (module_dependency list * bool * [`Module of bool] why_decl list) option ->
+    [`Module of bool] entry
+
+type any_entry = Entry : 'kind entry -> any_entry
+
+type file = any_entry list
 
 (*
   Local Variables:

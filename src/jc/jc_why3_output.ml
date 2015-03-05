@@ -549,7 +549,7 @@ let fprintf_why_decl ~safe ~bw_ints ~consts fmttr (type a) (type r) { why_id; wh
   let pr_args = fprintf_list ~sep:"@ " @@ fun fmt (_id, t) -> fprintf_any_logic_type fmt t in
   let fprintf_global_pred = fprintf_pred ~bw_ints ~consts:why3_builtin_locals in
   let fprintf_global_expr = fprintf_expr ~bw_ints ~consts:why3_builtin_locals in
-  match (why_decl : (a, _, _, r) decl) with
+  match (why_decl : a decl) with
   | Param t ->
     let consts =
       let rec collect_consts : type a. consts:_ -> a why_type -> _ = fun ~consts ->
@@ -612,9 +612,29 @@ let split c s =
   with
   | Not_found -> "", s
 
-let split_str_formatter ~f () =
-  let theory, name = split '.' @@ flush_str_formatter () in
-  (if theory <> "" then f theory else `Current), name
+module Staged :
+sig
+  type 'a t
+  val stage : 'a -> 'a t
+  val unstage : 'a t -> 'a
+end = struct
+  type 'a t = 'a
+  let stage = Fn.id
+  let unstage = Fn.id
+end
+
+open Staged
+
+let split_fprintf ~cons =
+  let open Buffer in
+  let buf = create 10 in
+  let buf_formatter = formatter_of_buffer buf in
+  stage @@
+  fun f x ->
+    fprintf buf_formatter "%a%!" f x;
+    let theory, name = split '.' @@ contents buf in
+    clear buf;
+    (if theory <> "" then cons theory else `Current), name
 
 let expand_func : _ func -> _ func =
   function
@@ -637,13 +657,11 @@ struct
     let fold t = fold ~bw_ints ~f t
     and fold_hlist hl = fold_hlist ~bw_ints ~f hl in
     let fold_id ~init id = f ~acc:init (`Current, id) in
-    let split_str_formatter = split_str_formatter ~f:(fun th -> `Theory th) in
+    let split_fprintf f = unstage (split_fprintf ~cons:(fun th -> `Theory th)) f in
     function
     | Const _ -> init
     | App (f', thl) ->
-      let f' = expand_func f' in
-      fprintf_func ~where:`Logic ~bw_ints str_formatter f';
-      f ~acc:init (split_str_formatter ()) |~>
+      f ~acc:init (split_fprintf (fprintf_func ~where:`Logic ~bw_ints) @@ expand_func f') |~>
       fold_hlist thl
     | Var v -> fold_id ~init v
     | Deref v -> fold_id ~init v
@@ -673,12 +691,12 @@ struct
   type 'a t = 'a logic_type
   let rec fold : type a. bw_ints:_ -> f:_ -> init:_ -> a logic_type -> _ = fun ~bw_ints ~f ~init ->
     let fold lt = fold ~bw_ints ~f lt in
-    let split_str_formatter = split_str_formatter ~f:(fun th -> `Theory th) in
+    let split_fprintf f = unstage (split_fprintf ~cons:(fun th -> `Theory th)) f in
     function
     | Type (tc, lthl) ->
       let tc = expand_tconstr tc in
       fprintf_tconstr str_formatter tc;
-      f ~acc:init (split_str_formatter ()) |~>
+      f ~acc:init (split_fprintf fprintf_tconstr tc) |~>
       let rec fold' : type a. init:_ -> a ltype_hlist -> _ = fun ~init ->
         function
         | Nil -> init
@@ -699,7 +717,7 @@ struct
     and fold_term t = Term.fold ~bw_ints ~f t
     and fold_term_hlist hl = Term.fold_hlist ~bw_ints ~f hl
     and fold_logic_type lt = Logic_type.fold ~bw_ints ~f lt in
-    let split_str_formatter = split_str_formatter ~f:(fun th -> `Theory th) in
+    let split_fprintf f = unstage (split_fprintf ~cons:(fun th -> `Theory th)) f in
     let fold_quant lt trigs p =
       fold_logic_type ~init lt |~>
       (let f init =
@@ -732,9 +750,7 @@ struct
     | Exists (_, lt, trigs, p) ->
       fold_quant lt trigs p
     | App (p, thl) ->
-      let p = expand_func p in
-      fprintf_func ~where:`Logic str_formatter ~bw_ints p;
-      f ~acc:init (split_str_formatter ()) |~>
+      f ~acc:init (split_fprintf (fprintf_func ~where:`Logic ~bw_ints) @@ expand_func p) |~>
       fold_term_hlist thl
 
   let iter ~f = fold ~init:() ~f:(fun ~acc:_ -> f)
@@ -778,7 +794,8 @@ struct
     and fold_term t = Term.fold ~bw_ints ~f t
     and fold_why_type wt = Why_type.fold ~bw_ints ~f wt in
     let fold' init e = fold ~init e in
-    let split_str_formatter' = split_str_formatter ~f:(fun mod_ -> `Module mod_) in
+    let split_fprintf_th f = unstage (split_fprintf ~cons:(fun th -> `Theory th)) f in
+    let split_fprintf_mod f = unstage (split_fprintf ~cons:(fun th -> `Module th)) f in
     match e.expr_node with
     | Cte _ -> init
     | Var v
@@ -806,8 +823,7 @@ struct
           Option.fold
             rel
             ~f:(fun acc rel ->
-              fprintf str_formatter "%s" rel;
-              f ~acc @@ split_str_formatter ~f:(fun th -> `Theory th) ())) |~>
+              f ~acc @@ split_fprintf_th pp_print_string rel)) |~>
       ListLabels.fold_left ~f:fold' exprs
     | Block l ->
       List.fold_left fold' init l
@@ -821,9 +837,7 @@ struct
       fold ~init e1 |~>
       fold e2
     | App (f', hl, wt_opt) ->
-      let f' = expand_func f' in
-      fprintf_func ~where:(`Behavior safe) str_formatter ~bw_ints f';
-      f ~acc:init (split_str_formatter' ()) |~>
+      f ~acc:init (split_fprintf_mod (fprintf_func ~where:(`Behavior safe) ~bw_ints) @@ expand_func f') |~>
       fold_hlist hl |~>
       Option.fold ~f:(fun init wt -> fold_why_type ~init wt) wt_opt
     | Raise (id, e_opt) ->
@@ -866,8 +880,8 @@ end
 
 module Why_decl =
 struct
-  type ('kind, 'a, 'b, 'c) t = ('kind, 'a, 'b, 'c) decl
-  let fold ~bw_ints (type a) ~f ~(init : a) (type b) (type r) d =
+  type 'kind t = 'kind why_decl
+  let fold ~bw_ints ~f ~init (type a) ~(kind : a) (d : a why_decl) =
     let fold_why_type wt = Why_type.fold ~bw_ints ~f wt
     and fold_logic_type t = Logic_type.fold ~bw_ints ~f t
     and fold_pred = Pred.fold ~bw_ints ~f
@@ -876,123 +890,226 @@ struct
     let fold_args ~init =
       List.fold_left (fun init (_, Logic_type lt) -> fold_logic_type ~init lt) init
     in
-    match (d.why_decl : (b, safe:bool -> a, a, r)  decl) with
-    | Param wt -> (fun ~safe:_ -> fold_why_type ~init wt : r)
-    | Def e -> fun ~safe -> Expr.fold ~safe ~bw_ints ~f ~init e
+    match d.why_decl with
+    | Param wt -> fold_why_type ~init wt
+    | Def e -> let `Module safe = kind in Expr.fold ~safe ~bw_ints ~f ~init e
     | Logic (args, rt) ->
-      (fold_args ~init args |~>
-      fold_logic_type rt : a)
+      fold_args ~init args |~>
+      fold_logic_type rt
     | Predicate (args, p) ->
-      (fold_args ~init args |~>
-       fold_pred p : a)
+      fold_args ~init args |~>
+      fold_pred p
     | Inductive (args, preds) ->
-      (fold_args ~init args |~>
-       ListLabels.fold_left preds ~f:(fun init (_, p) -> fold_pred ~init p) : a)
+      fold_args ~init args |~>
+      ListLabels.fold_left preds ~f:(fun init (_, p) -> fold_pred ~init p)
     | Goal (_, p) ->
-      (fold_pred ~init p : a)
+      fold_pred ~init p
     | Function (args, rt, t) ->
-      (fold_args ~init args |~>
-       fold_logic_type rt |~>
-       fold_term t : a)
+      fold_args ~init args |~>
+      fold_logic_type rt |~>
+      fold_term t
     | Type _ -> init
     | Exception lt_opt ->
-      fun ~safe:_ ->
       Option.fold lt_opt ~init ~f:(fun init -> fold_logic_type ~init)
 
   let iter ~f = fold ~init:() ~f:(fun ~acc:_ -> f)
 end
 
-module Staged :
-sig
-  type 'a t
-  val stage : 'a -> 'a t
-  val unstage : 'a t -> 'a
-end = struct
-  type 'a t = 'a
-  let stage = Fn.id
-  let unstage = Fn.id
-end
+type 's for_any_entry = { f : 'a. 's -> 'a entry -> 's }
+type 's for_any_why_decl = { f : 'a. 's -> 'a why_decl -> 's }
 
-open Staged
-
-type _ approximation =
-  | Entries : _ entry approximation
-  | Decls : _ why_decl approximation
+type ('ret1, 'ret2, 'ret, 'kind, 'target, 'f, 's) approximation =
+  | Entries : ('ret1, 'ret2, 'ret1, _, any_entry, 's for_any_entry, 's) approximation
+  | Decls : ('ret1, 'ret2, 'ret2, 'kind, 'kind why_decl, 's for_any_why_decl, 's) approximation
 
 module Entry =
 struct
-  type ('kind, 'a, 'b) t = ('kind, 'a, 'b) entry
+  type 'kind t = 'kind entry
 
-  module M =
-    Map.Make
+  module M = Map.Make (String)
+
+  module H =
+    Hashtbl.Make
       (struct
-          type t = string
-          let compare = String.compare
+        type t = string
+        let equal a b = String.compare a b = 0
+        let hash = Hashtbl.hash
       end)
 
   let iter =
-    let map ~how =
-      List.fold_left
-        (fun m (Int ty as typ) ->
-           fprintf_int_ty
-             ~how:(match how with `Theory -> `Theory false | `Module safe -> `Module (safe, false))
-             str_formatter
-             ty;
-           M.add (flush_str_formatter ()) typ m)
-        M.empty
-        O.([Int Int8.ty;
-            Int Uint8.ty;
-            Int Int16.ty;
-            Int Uint16.ty;
-            Int Int32.ty;
-            Int Uint32.ty;
-            Int Int64.ty;
-            Int Uint64.ty])
-    in
-    fun (type a) entry ->
-      let bw_ints =
-        let fold_decls map init =
-          Why_decl.fold
-            ~bw_ints:S.empty
-            ~init
-            ~f:(fun ~acc ->
-              function
-              | (`Theory name | `Module name), ("&" | "|^" | "^" | "~_" | "<<" | ">>" | ">>>") ->
-                S.add (M.find name map) acc
-              | _ -> acc)
-        in
-        match (entry : (a, safe:_ -> S.t, S.t) entry) with
-        | Theory (_, None) -> S.empty
-        | Module (_, None) -> S.empty
-        | Theory (_, Some (_, decls)) ->
-          List.fold_left (fold_decls @@ map ~how:`Theory) S.empty decls
-        | Module (_, Some (_, safe, decls)) ->
-          let map = M.fold M.add (map ~how:`Theory) @@ map ~how:(`Module safe) in
-          List.fold_left (fold_decls ~safe map) S.empty decls
+    fun (type r) (type t) (type k) (type f) (type s)
+      ~(approx :
+          (file:t list -> entry:k entry -> (enter:s -> f:f -> unit) Staged.t,
+           entry:k entry -> (enter:s -> f:f -> unit) Staged.t,
+           r, k, t, f, s) approximation)
+      ~(init : s)
+      ->
+      let continue : (state:(s * t) H.t -> entry:k entry -> (enter:s -> f:f -> unit) Staged.t) -> r =
+        let state = (H.create 10 : (s * t) H.t) in
+        match approx with
+        | Entries ->
+          fun continue ~file ~entry ->
+            let f (type a) e =
+              let add name = H.add state name (init, Entry e) in
+              match (e : a entry) with
+              | Theory (name, _) -> add name
+              | Module (name, _) -> add name
+            in
+            List.iter (fun (Entry e) -> f e) file;
+            continue ~state ~entry
+        | Decls ->
+          fun continue ~entry ->
+            let (l : k why_decl list) =
+              match entry with
+              | Theory (_, None) -> []
+              | Module (_, None) -> []
+              | Theory (_, Some (_, decls)) -> decls
+              | Module (_, Some (_, _, decls)) -> decls
+            in
+            let compare_why_decls
+                { why_id = { why_name = id1; why_pos = pos1 } }
+                { why_id = { why_name = id2; why_pos = pos2 } }
+              =
+              let c = Position.compare pos1 pos2 in
+              if c = 0 then compare id1 id2 else c
+            in
+            List.iter
+              (fun ({ why_id = { why_name } } as d) -> H.add state why_name (init, d))
+              (List.sort compare_why_decls l);
+            continue ~state ~entry
       in
-      bw_ints
-    (*let bw_ints =
-      List.fold_left
-        (Why_decl.
-    function
-    | Theory (_, None)
-    | Module (_, None) ->
-      fun _ ~f:_ -> ()
-    | Theory (_, Some (deps, decls)
-    let bw_ints =
-      match entry with
-      approximation (type a) =
-    stage @@
-    let states = Hashtbl.create () in
-    
-      
-    fun ~f ~init ->
-    function
-    | Theory (_, None)
-    | Module (_, None) ->
-      init
-      | Theory (_, Some (deps, decls)) -> *)
-      
+      let map_ints ~how =
+        List.fold_left
+          (fun m (Int ty as typ) ->
+             fprintf_int_ty
+               ~how:(match how with `Theory -> `Theory false | `Module safe -> `Module (safe, false))
+               str_formatter
+               ty;
+             M.add (flush_str_formatter ()) typ m)
+          M.empty
+          O.([Int Int8.ty;
+              Int Uint8.ty;
+              Int Int16.ty;
+              Int Uint16.ty;
+              Int Int32.ty;
+              Int Uint32.ty;
+              Int Int64.ty;
+              Int Uint64.ty])
+      in
+      let bw_ints_cache = H.create 50 in
+      let continuation ~(state : (s * t) H.t) ~(entry : k entry) =
+        let bw_ints =
+          let fold_decls map init =
+            Why_decl.fold
+              ~bw_ints:S.empty
+              ~init
+              ~f:(fun ~acc ->
+                function
+                | (`Theory name | `Module name), ("&" | "|^" | "^" | "~_" | "<<" | ">>" | ">>>") ->
+                  begin try
+                    S.add (M.find name map) acc
+                  with
+                  | Not_found -> failwith ("Unrecognized theory containing integer bitwise operators: " ^ name)
+                  end
+                | _ -> acc)
+          in
+          let memo name r =
+          try
+            H.find bw_ints_cache name
+          with
+          | Not_found ->
+            let r = r () in
+            H.add bw_ints_cache name r;
+            r
+          in
+          match entry with
+          | Theory (_, None) -> S.empty
+          | Module (_, None) -> S.empty
+          | Theory (name, Some (_, decls)) ->
+            memo name @@ fun () -> List.fold_left (fold_decls ~kind:`Theory @@ map_ints ~how:`Theory) S.empty decls
+          | Module (name, Some (_, safe, decls)) ->
+            memo name @@
+            fun () ->
+            let map = M.fold M.add (map_ints ~how:`Theory) @@ map_ints ~how:(`Module safe) in
+            List.fold_left (fold_decls ~kind:(`Module safe) map) S.empty decls
+        in
+        stage @@
+        fun ~(enter : s) ~(f : f) ->
+        match (approx : (_, _, _, _, _, f, s) approximation) with
+        | Entries ->
+          let f : 'a. s -> 'a entry -> s = f.f in
+          let enter name =
+            try
+              let s, (Entry e' as e) = H.find state name in
+              H.replace state name (enter, e);
+              H.replace state name (f s e', e)
+            with
+            | Not_found -> failwith ("Unrecognized Why3ML file entry: " ^ name)
+          in
+          let f ~name d =
+            Why_decl.iter
+              ~bw_ints
+              ~f:(function
+                | `Current, _ -> ()
+                | `Module name', _
+                | `Theory name', _ when name' <> name ->
+                  enter name'
+                | (`Module _ | `Theory _), _ -> ())
+              d
+          in
+          begin match entry with
+          | Theory (_, None) -> ()
+          | Module (_, None) -> ()
+          | Theory (name, Some (deps, decls)) ->
+            List.iter
+              (function
+                | Use (_, Theory (name', _))
+                | Clone (_, Theory (name', _), _) ->
+                  enter name')
+              deps;
+            List.iter (f ~kind:`Theory ~name) decls
+          | Module (name, Some (deps, safe, decls)) ->
+            List.iter
+              (fun (Dependency d) ->
+                 let enter (type a) =
+                   function
+                   | (Theory (name', _) : a entry) -> enter name'
+                   | Module (name', _) -> enter name'
+                 in
+                 match d with
+                 | Use (_, e) | Clone (_, e, _) -> enter e)
+              deps;
+            List.iter (f ~kind:(`Module safe) ~name) decls
+          end
+        | Decls ->
+          let f : 'a. s -> 'a why_decl -> s = f.f in
+          let enter name =
+            try
+              let s, d = H.find state name in
+              H.replace state name (enter, d);
+              H.replace state name (f s d, d)
+            with
+            | Not_found -> ()
+          in
+          let f ~name d =
+            Why_decl.iter
+              ~bw_ints
+              ~f:(function
+                | (`Module name' | `Theory name'), name'' when name = name' -> enter name''
+                | (`Module _ | `Theory _), _ -> ()
+                | `Current, name'' -> enter name'')
+              d
+          in
+          match entry with
+          | Theory (_, None) -> ()
+          | Module (_, None) -> ()
+          | Theory (name, Some (_, decls)) ->
+            List.iter (f ~kind:`Theory ~name) decls
+          | Module (name, Some (_, safe, decls)) ->
+            List.iter (f ~kind:(`Module safe) ~name) decls
+      in
+      continue continuation
+
 end
 
 (*
