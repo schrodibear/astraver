@@ -275,12 +275,12 @@ type 'kind decl =
 
 type 'kind why_decl = {
   why_id : why_id;
-  why_decl :  'kind decl
+  why_decl : 'kind decl
 }
 
 type 'kind dependency =
-  | Use of [`Import | `Export | `As of string option] * 'kind entry
-  | Clone of [`Import | `Export | `As of string option] * 'kind entry *
+  | Use of [`Import of string option | `Export | `As of string option] * 'kind entry
+  | Clone of [`Import of string option | `Export | `As of string option] * 'kind entry *
              [`Constant of string * string |
               `Type of string * string |
               `Function of string * string |
@@ -290,8 +290,8 @@ type 'kind dependency =
               `Goal of string] list
 and module_dependency = Dependency : [< `Theory | `Module of bool] dependency -> module_dependency
 and 'kind entry =
-  | Theory : string * ([`Theory] dependency list * [`Theory] why_decl list) option -> [`Theory] entry
-  | Module : string * (module_dependency list * bool * [`Module of bool] why_decl list) option ->
+  | Theory : string * ([`Theory] dependency list ref * [`Theory] why_decl list) option -> [`Theory] entry
+  | Module : string * (module_dependency list ref * bool * [`Module of bool] why_decl list) option ->
     [`Module of bool] entry
 
 type any_entry = Entry : 'kind entry -> any_entry
