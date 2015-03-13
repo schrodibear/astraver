@@ -42,7 +42,7 @@ open Output_ast
 module O = Output
 (*open Output_misc*)
 
-let fprintf_constant fmttr (type a) =
+let constant fmttr (type a) =
   let pr fmt = fprintf fmttr fmt in
   function
   | (Void : a constant) -> pr "()"
@@ -51,21 +51,21 @@ let fprintf_constant fmttr (type a) =
   | Bool true -> pr "Bool.True"
   | Bool false -> pr "Bool.False"
 
-let fprintf_id fmttr id =
+let id fmttr id =
   fprintf fmttr "%s" @@
   match id.[0] with
   | 'A' .. 'Z' -> "_" ^ id
   | _ when Why3_kw.is_why3_keyword id -> id ^ "_why3"
   | _ -> id
 
-let fprintf_uid fmttr uid =
+let uid fmttr uid =
   fprintf fmttr "%s" @@
   match uid.[0] with
   | 'A' .. 'Z' -> uid
   | 'a' .. 'z' -> String.capitalize uid
   | _ -> "U_" ^ uid
 
-let fprintf_int_ty ~how fmttr (type r) (type b) (ty : (r range, b bit) integer) =
+let int_ty ~how fmttr (type r) (type b) (ty : (r range, b bit) integer) =
   let (module Int_ty) = O.module_of_int_ty ty in
   fprintf fmttr "%s" @@
   match how with
@@ -77,21 +77,21 @@ let fprintf_int_ty ~how fmttr (type r) (type b) (ty : (r range, b bit) integer) 
   | `Module (true, false) -> Int_ty.unsafe_bit_module
   | `Module (true, true) -> Int_ty.safe_bit_module
 
-let fprintf_enum_ty ~how fmttr (Enum name) =
+let enum_ty ~how fmttr (Enum name) =
   let pr fmt = fprintf fmttr fmt in
   match how with
   | `Name -> pr "%s" name
-  | `Theory -> pr "%a" fprintf_uid name
+  | `Theory -> pr "%a" uid name
   | `Module false -> pr "%s" ("Unsafe_" ^ name)
   | `Module true -> pr "%s" ("Safe_" ^ name)
 
-let fprintf_modulo fmttr modulo =
+let modulo fmttr modulo =
   fprintf fmttr "%s" @@
   match modulo with
   | true -> "%"
   | false -> ""
 
-let fprintf_op fmttr op =
+let op fmttr op =
   fprintf fmttr "%s" @@
   match op with
   | `Add -> "+"
@@ -128,13 +128,13 @@ let fail_on_real () =
   failwith "floating point operations are not yet supported in GADT encoding, \
             please use the User generic constructor"
 
-let fprintf_func ~where ~bw_ints fmttr (type a) (type b) =
+let func ~where ~bw_ints fmttr (type a) (type b) =
   let pr fmt = fprintf fmttr fmt in
   let pr_bop fp ty = pr "%a.(%a%a)" fp ty in
   let pr_uop fp ty = pr "%a.(%a%a_)" fp ty in
   let pr_f fp ty = pr "%a.%s" fp ty in
-  let fprintf_int_ty fmttr ty =
-    fprintf_int_ty
+  let int_ty fmttr ty =
+    int_ty
       ~how:
         (match where, S.mem (Int ty) bw_ints with
          | `Logic, bit -> `Theory bit
@@ -142,8 +142,8 @@ let fprintf_func ~where ~bw_ints fmttr (type a) (type b) =
       fmttr
       ty
   in
-  let fprintf_enum_ty fmttr ty =
-    fprintf_enum_ty
+  let enum_ty fmttr ty =
+    enum_ty
       ~how:
         (match where with
          | `Logic -> `Theory
@@ -152,34 +152,34 @@ let fprintf_func ~where ~bw_ints fmttr (type a) (type b) =
       ty
   in
   function
-  | (B_int_op op : (a, b) func) -> pr "Int.(%a)" fprintf_op op
-  | U_int_op op -> pr "Int.(%a_)" fprintf_op op
-  | B_bint_op (op, (Int _ as ty), modulo) ->
-    pr_bop fprintf_int_ty ty fprintf_op op fprintf_modulo modulo
-  | B_bint_op (op, (Enum _ as ty), modulo) ->
-    pr_bop fprintf_enum_ty ty fprintf_op op fprintf_modulo modulo
-  | U_bint_op (op, (Int _ as ty), modulo) ->
-    pr_uop fprintf_int_ty ty fprintf_op op fprintf_modulo modulo
-  | U_bint_op (op, (Enum _ as ty), modulo) ->
-    pr_uop fprintf_enum_ty ty fprintf_op op fprintf_modulo modulo
-  | Of_int (Int _ as ty) -> pr_f fprintf_int_ty ty "of_int"
-  | Of_int (Enum _ as ty) -> pr_f fprintf_enum_ty ty "of_int"
-  | To_int (Int _ as ty) -> pr_f fprintf_int_ty ty "to_int"
-  | To_int (Enum _ as ty) -> pr_f fprintf_enum_ty ty "to_int"
-  | B_bint_bop (op, ty) -> pr_bop fprintf_int_ty ty fprintf_op op fprintf_modulo false
-  | U_bint_bop (op, ty) -> pr_uop fprintf_int_ty ty fprintf_op op fprintf_modulo false
-  | Lsl_bint (ty, modulo) -> pr_bop fprintf_int_ty ty fprintf_op `Lsl fprintf_modulo modulo
-  | B_num_pred (pred, Integral Integer) -> pr "%a" fprintf_op pred
-  | B_num_pred (pred, Integral (Int _ as ty)) -> pr_bop fprintf_int_ty ty fprintf_op pred fprintf_modulo false
-  | B_num_pred (pred, Integral (Enum _ as ty)) -> pr_bop fprintf_enum_ty ty fprintf_op pred fprintf_modulo false
-  | Poly op -> pr "%a" fprintf_op op
-  | User (_, false, name) -> pr "%a" fprintf_id name
-  | User (where, true, name) -> pr "%a.%a" fprintf_uid where fprintf_id name
+  | (B_int_op op' : (a, b) func) -> pr "Int.(%a)" op op'
+  | U_int_op op' -> pr "Int.(%a_)" op op'
+  | B_bint_op (op', (Int _ as ty), modulo') ->
+    pr_bop int_ty ty op op' modulo modulo'
+  | B_bint_op (op', (Enum _ as ty), modulo') ->
+    pr_bop enum_ty ty op op' modulo modulo'
+  | U_bint_op (op', (Int _ as ty), modulo') ->
+    pr_uop int_ty ty op op' modulo modulo'
+  | U_bint_op (op', (Enum _ as ty), modulo') ->
+    pr_uop enum_ty ty op op' modulo modulo'
+  | Of_int (Int _ as ty) -> pr_f int_ty ty "of_int"
+  | Of_int (Enum _ as ty) -> pr_f enum_ty ty "of_int"
+  | To_int (Int _ as ty) -> pr_f int_ty ty "to_int"
+  | To_int (Enum _ as ty) -> pr_f enum_ty ty "to_int"
+  | B_bint_bop (op', ty) -> pr_bop int_ty ty op op' modulo false
+  | U_bint_bop (op', ty) -> pr_uop int_ty ty op op' modulo false
+  | Lsl_bint (ty, modulo') -> pr_bop int_ty ty op `Lsl modulo modulo'
+  | B_num_pred (pred, Integral Integer) -> pr "%a" op pred
+  | B_num_pred (pred, Integral (Int _ as ty)) -> pr_bop int_ty ty op pred modulo false
+  | B_num_pred (pred, Integral (Enum _ as ty)) -> pr_bop enum_ty ty op pred modulo false
+  | Poly op' -> pr "%a" op op'
+  | User (_, false, name) -> pr "%a" id name
+  | User (where, true, name) -> pr "%a.%a" uid where id name
   | To_float _ -> fail_on_real ()
   | Of_float _  -> fail_on_real ()
   | B_num_pred (_, Real _) -> fail_on_real ()
 
-let fprintf_vc_kind fmttr k =
+let vc_kind fmttr k =
   fprintf fmttr "%s"
     (match k with
      | JCVCvar_decr -> "Variant decreases"
@@ -211,345 +211,347 @@ let fprintf_vc_kind fmttr k =
      | JCVCglobal_invariant s -> "Global invariant " ^ s
      | JCVCrequires -> "Requires clause")
 
-let fprintf_jc_position fmttr pos =
+let jc_position fmttr pos =
   let f, l, b, e as loc = Position.to_loc pos in
   if loc <> Why_loc.dummy_floc then
     fprintf fmttr "#\"%s\" %d %d %d#" f l b e
 
-let fprintf_why_label fmttr { l_kind; l_behavior; l_pos } =
+let why_label fmttr { l_kind; l_behavior; l_pos } =
   let pr fmt = fprintf fmttr fmt in
   let with_behavior =
     match l_behavior with
     | "default" | "" -> ignore
     | b -> fun f -> f b
   in
-  fprintf_jc_position fmttr l_pos;
+  jc_position fmttr l_pos;
   if not (Position.is_dummy l_pos) then pr "@ ";
   begin match l_kind with
-  | Some vc_kind ->
-    pr "\"expl:%a" fprintf_vc_kind vc_kind;
+  | Some vc_kind' ->
+    pr "\"expl:%a" vc_kind vc_kind';
     with_behavior @@ pr ", behavior %s";
     pr "\"@ ";
   | None ->
     with_behavior @@ (fun b -> pr "\"for behavior %s\"@ " b)
   end
 
-let fprintf_tconstr fmttr (type a) (type b) =
+let tconstr fmttr (type a) (type b) =
   let pr fmt = fprintf fmttr fmt in
   function
   | (Numeric (Integral Integer) : (a, b) tconstr) -> pr "int"
-  | Numeric (Integral (Int _  as ty)) -> pr "%a.t" (fprintf_int_ty ~how:(`Theory false)) ty
-  | Numeric (Integral (Enum _  as ty)) -> pr "%a.t" (fprintf_enum_ty ~how:`Theory) ty
+  | Numeric (Integral (Int _  as ty)) -> pr "%a.t" (int_ty ~how:(`Theory false)) ty
+  | Numeric (Integral (Enum _  as ty)) -> pr "%a.t" (enum_ty ~how:`Theory) ty
   | Numeric (Real _) -> fail_on_real ()
   | Bool -> pr "Bool.bool"
   | Void -> pr "()"
-  | Var v -> pr "'%a" fprintf_id v
-  | User (_, false, name) -> pr "%a" fprintf_id name
-  | User (where, true, name) -> pr "%a.%a" fprintf_uid where fprintf_id name
+  | Var v -> pr "'%a" id v
+  | User (_, false, name) -> pr "%a" id name
+  | User (where, true, name) -> pr "%a.%a" uid where id name
 
-let rec fprintf_ltype_hlist : type a. _ -> a ltype_hlist -> _  = fun fmttr ->
+let rec ltype_hlist : type a. _ -> a ltype_hlist -> _  = fun fmttr ->
   function
   | Nil -> ()
   | Cons (lt, ts) ->
-    fprintf fmttr "@ %a" fprintf_logic_type lt;
-    fprintf_ltype_hlist fmttr ts
+    fprintf fmttr "@ %a" logic_type lt;
+    ltype_hlist fmttr ts
 
-and fprintf_logic_type : type a. _ -> a logic_type -> _ = fun fmttr ->
+and logic_type : type a. _ -> a logic_type -> _ = fun fmttr ->
   function
   | Type (c, tps) ->
-    fprintf fmttr "%a%a" fprintf_tconstr c fprintf_ltype_hlist tps
+    fprintf fmttr "%a%a" tconstr c ltype_hlist tps
 
-let rec fprintf_term_hlist : type a. bw_ints:_ -> consts:_ -> _ -> a term_hlist -> _ = fun ~bw_ints ~consts fmttr ->
+let rec term_hlist : type a. bw_ints:_ -> consts:_ -> _ -> a term_hlist -> _ = fun ~bw_ints ~consts fmttr ->
   function
   | Nil -> ()
   | Cons (t, ts) ->
-    fprintf fmttr "@ %a" (fprintf_term ~bw_ints ~consts) t;
-    fprintf_term_hlist ~bw_ints ~consts fmttr ts
+    fprintf fmttr "@ %a" (term ~bw_ints ~consts) t;
+    term_hlist ~bw_ints ~consts fmttr ts
 
-and fprintf_term : type a. bw_ints: _ -> consts:_ -> _ -> a term -> _ = fun ~bw_ints ~consts fmttr ->
+and term : type a. bw_ints: _ -> consts:_ -> _ -> a term -> _ = fun ~bw_ints ~consts fmttr ->
   let pr fmt = fprintf fmttr fmt in
-  let fprintf_term_hlist fmttr = fprintf_term_hlist ~bw_ints ~consts fmttr
-  and fprintf_term fmttr = fprintf_term ~bw_ints ~consts fmttr
-  and fprintf_func fmttr = fprintf_func ~where:`Logic ~bw_ints fmttr
+  let term_hlist fmttr = term_hlist ~bw_ints ~consts fmttr
+  and term fmttr = term ~bw_ints ~consts fmttr
+  and func fmttr = func ~where:`Logic ~bw_ints fmttr
   in
   function
-  | Const c -> fprintf_constant fmttr c
-  | App (f, Nil) -> pr "%a" fprintf_func f
+  | Const c -> constant fmttr c
+  | App (f, Nil) -> pr "%a" func f
   | App (f, (Cons _ as ts)) ->
-    pr "@[(%a%a)@]" fprintf_func f fprintf_term_hlist ts
-  | Var v -> pr "%a" fprintf_id v
+    pr "@[(%a%a)@]" func f term_hlist ts
+  | Var v -> pr "%a" id v
   | Deref v | Deref_at (v, _) when StringSet.mem v consts ->
-    pr "%a" fprintf_id v
-  | Deref v -> pr "!%a" fprintf_id v
-  | Deref_at (v, "") -> pr "(old@ !%a)" fprintf_id v
-  | Deref_at (v, l) -> pr "(at@ !%a@ '%a)" fprintf_id v fprintf_uid l
+    pr "%a" id v
+  | Deref v -> pr "!%a" id v
+  | Deref_at (v, "") -> pr "(old@ !%a)" id v
+  | Deref_at (v, l) -> pr "(at@ !%a@ '%a)" id v uid l
   | Labeled (l, t) ->
-    pr "(%a%a)" fprintf_why_label l fprintf_term t
+    pr "(%a%a)" why_label l term t
   | If (t1, t2, t3) ->
     pr "@[<hov 1>(if@ %a@ then@ %a@ else@ %a)@]"
-      fprintf_term t1 fprintf_term t2 fprintf_term t3
+      term t1 term t2 term t3
   | Let (v, t1, t2) ->
     pr "@[<hov 1>(let@ %a@ =@ %a@ in@ %a)@]"
-      fprintf_id v fprintf_term t1 fprintf_term t2
+      id v term t1 term t2
 
-let rec fprintf_list fprintf_element ~sep fmttr =
+let rec list element ~sep fmttr =
   function
   | [] -> ()
-  | [x] -> fprintf_element fmttr x
+  | [x] -> element fmttr x
   | x :: xs ->
-    fprintf fmttr "%a%( fmt %)" fprintf_element x sep;
-    fprintf_list fprintf_element ~sep fmttr xs
+    fprintf fmttr "%a%( fmt %)" element x sep;
+    list element ~sep fmttr xs
 
-let rec fprintf_pred ~bw_ints ~consts fmttr =
+let rec pred ~bw_ints ~consts fmttr =
   let pr fmt = fprintf fmttr fmt in
-  let fprintf_term_hlist fmttr = fprintf_term_hlist ~bw_ints ~consts fmttr
-  and fprintf_term fmttr = fprintf_term ~bw_ints ~consts fmttr
-  and fprintf_pred = fprintf_pred ~bw_ints ~consts
-  and fprintf_triggers = fprintf_triggers ~bw_ints ~consts
-  and fprintf_func fmttr = fprintf_func ~where:`Logic ~bw_ints fmttr
+  let term_hlist fmttr = term_hlist ~bw_ints ~consts fmttr
+  and term fmttr = term ~bw_ints ~consts fmttr
+  and pred = pred ~bw_ints ~consts
+  and triggers = triggers ~bw_ints ~consts
+  and func fmttr = func ~where:`Logic ~bw_ints fmttr
   in
   function
   | True -> pr "true"
   | False -> pr "false"
   | And (p1, p2) ->
-    pr "@[(%a@ /\\@ %a)@]" fprintf_pred p1 fprintf_pred p2
+    pr "@[(%a@ /\\@ %a)@]" pred p1 pred p2
   | Or (p1, p2) ->
-    pr "@[(%a@ \\/@ %a)@]" fprintf_pred p1 fprintf_pred p2
+    pr "@[(%a@ \\/@ %a)@]" pred p1 pred p2
   | Iff (p1, p2) ->
-    pr "@[(%a@ <->@ %a)@]" fprintf_pred p1 fprintf_pred p2
-  | Not p -> pr "@[(not@ %a)@]" fprintf_pred p
+    pr "@[(%a@ <->@ %a)@]" pred p1 pred p2
+  | Not p -> pr "@[(not@ %a)@]" pred p
   | Impl (p1, p2) ->
-    pr "@[<hov 1>(%a@ ->@ %a)@]" fprintf_pred p1 fprintf_pred p2
+    pr "@[<hov 1>(%a@ ->@ %a)@]" pred p1 pred p2
   | If (t, p1, p2) ->
     pr "@[<hov 1>(if@ %a@ then@ %a@ else@ %a)@]"
-      fprintf_term t fprintf_pred p1 fprintf_pred p2
+      term t pred p1 pred p2
   | Let (v, t, p) ->
     pr "@[<hov 1>(let@ @[<hov 1>%a@ =@ %a@ in@]@ %a)@]"
-      fprintf_id v fprintf_term t fprintf_pred p
+      id v term t pred p
   | Forall (v, t, trigs, p) ->
     pr "@[<hov 1>(forall@ %a:@,%a@,%a@,.@ %a)@]"
-      fprintf_id v fprintf_logic_type t fprintf_triggers trigs fprintf_pred p
+      id v logic_type t triggers trigs pred p
   | Exists (v, t, trigs, p) ->
     pr "@[<hov 1>(exists@ %a:%a%a.@ %a)@]"
-      fprintf_id v fprintf_logic_type t fprintf_triggers trigs fprintf_pred p
-  | App (f, Nil) -> pr "%a" fprintf_func f
+      id v logic_type t triggers trigs pred p
+  | App (f, Nil) -> pr "%a" func f
   | App (f, (Cons _ as ts)) ->
-    pr "@[(%a%a)@]" fprintf_func f fprintf_term_hlist ts
+    pr "@[(%a%a)@]" func f term_hlist ts
   | Labeled (l, p) ->
-    pr "@[(%a%a)@]" fprintf_why_label l fprintf_pred p
+    pr "@[(%a%a)@]" why_label l pred p
 
-and fprintf_triggers ~bw_ints ~consts fmttr =
-  let fprintf_term fmttr = fprintf_term ~bw_ints ~consts fmttr
-  and fprintf_pred = fprintf_pred ~bw_ints ~consts
+and triggers ~bw_ints ~consts fmttr =
+  let term fmttr = term ~bw_ints ~consts fmttr
+  and pred = pred ~bw_ints ~consts
   in
-  let fprintf_pat fmttr =
+  let pat fmttr =
     function
-    | Term t -> fprintf_term fmttr t
-    | Pred p -> fprintf_pred fmttr p
+    | Term t -> term fmttr t
+    | Pred p -> pred fmttr p
   in
-  fprintf_list ~sep:"@ |@ " (fprintf_list fprintf_pat ~sep:",@ ") fmttr
+  list ~sep:"@ |@ " (list pat ~sep:",@ ") fmttr
 
-let rec fprintf_type : type a. bw_ints:_ -> consts:_ -> _ -> a why_type -> _ = fun ~bw_ints ~consts fmttr ->
+let rec why_type : type a. bw_ints:_ -> consts:_ -> _ -> a why_type -> _ = fun ~bw_ints ~consts fmttr ->
   let pr fmt = fprintf fmttr fmt in
-  let fprintf_pred = fprintf_pred ~bw_ints ~consts in
-  let fprintf_type fmttr = fprintf_type ~bw_ints ~consts fmttr in
+  let pred = pred ~bw_ints ~consts in
+  let why_type fmttr = why_type ~bw_ints ~consts fmttr in
   function
-  | Prod_type (id, t1, t2) ->
-    let id = if id = "" then "_" else id in
-    pr "@[<hov 1>(%a@ :@ %a)@ %a@]" fprintf_id id fprintf_type t1 fprintf_type t2
-  | Base_type t -> fprintf_logic_type fmttr t
-  | Ref_type t -> pr "ref@ %a" fprintf_type t
+  | Prod_type (id', t1, t2) ->
+    let id' = if id' = "" then "_" else id' in
+    pr "@[<hov 1>(%a@ :@ %a)@ %a@]" id id' why_type t1 why_type t2
+  | Base_type t -> logic_type fmttr t
+  | Ref_type t -> pr "ref@ %a" why_type t
   | Annot_type (p, t, reads, writes, q, signals) ->
-    pr "%a@ " fprintf_type t;
-    pr "@[@[<hov 2>requires@ {@ %a@ }@]" fprintf_pred p;
-    let fprintf_ids = fprintf_list fprintf_id ~sep:",@ "  in
+    pr "%a@ " why_type t;
+    pr "@[@[<hov 2>requires@ {@ %a@ }@]" pred p;
+    let ids = list id ~sep:",@ "  in
     begin match List.sort compare reads with
     | [] -> ()
     | reads ->
-      pr "@ reads@ {@ %a@ }" fprintf_ids reads
+      pr "@ reads@ {@ %a@ }" ids reads
     end;
     begin match List.sort compare writes with
       | [] -> ()
       | writes ->
-        pr "@ writes@ {@ %a@ }" fprintf_ids writes
+        pr "@ writes@ {@ %a@ }" ids writes
     end;
-    pr "@[<hov 2>ensures@ {@ %a@ }@]" fprintf_pred q;
+    pr "@[<hov 2>ensures@ {@ %a@ }@]" pred q;
     begin match signals with
       | [] -> pr "@]"
       | l ->
         pr "@ ";
-        List.iter (fun (e, r) -> pr "@[<hov 2>raises@ {@ %s@ result@ ->@ %a@ }@]@]" e fprintf_pred r) l
+        List.iter (fun (e, r) -> pr "@[<hov 2>raises@ {@ %s@ result@ ->@ %a@ }@]@]" e pred r) l
     end
 
-let fprintf_variant ~bw_ints ~consts fmttr =
+let variant ~bw_ints ~consts fmttr =
   let pr fmt = fprintf fmttr fmt in
   function
   | None -> ()
   | Some (t, r_opt) ->
-    pr "variant@ {@ %a@ }" (fprintf_term ~bw_ints ~consts) t;
+    pr "variant@ {@ %a@ }" (term ~bw_ints ~consts) t;
     Option.iter (pr "@ with@ %s") r_opt
 
-let fprintf_option fprintf_val fmttr =
+let option value fmttr =
   function
   | None -> ()
   | Some v ->
-    fprintf_val fmttr v
+    value fmttr v
 
-let fprintf_any_type ~bw_ints ~consts fmttr = function Why_type t -> fprintf_type ~bw_ints ~consts fmttr t
+let any_type ~bw_ints ~consts fmttr = function Why_type t -> why_type ~bw_ints ~consts fmttr t
 
-let rec fprintf_expr_hlist : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_hlist -> _ =
+let rec expr_hlist : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_hlist -> _ =
   fun ~safe ~bw_ints ~consts fmttr ->
   function
   | Nil -> ()
   | Cons (e, es) ->
-    fprintf fmttr "@ %a" (fprintf_expr ~safe ~bw_ints ~consts) e;
-    fprintf_expr_hlist ~safe ~bw_ints ~consts fmttr es
+    fprintf fmttr "@ %a" (expr ~safe ~bw_ints ~consts) e;
+    expr_hlist ~safe ~bw_ints ~consts fmttr es
 
-and fprintf_expr_node : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_node -> _ =
+and expr_node : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_node -> _ =
   fun ~safe ~bw_ints ~consts fmttr ->
   let pr fmt = fprintf fmttr fmt in
   let pr_fun params ty pre body post diverges signals =
     let consts = List.fold_right (function _, Why_type (Ref_type _) -> Fn.id | x, _ -> StringSet.add x) params consts in
-    let fprintf_pred = fprintf_pred ~bw_ints ~consts
-    and fprintf_type fmttr = fprintf_type ~bw_ints ~consts fmttr
-    and fprintf_any_type = fprintf_any_type ~bw_ints ~consts
+    let pred = pred ~bw_ints ~consts
+    and why_type fmttr = why_type ~bw_ints ~consts fmttr
+    and any_type = any_type ~bw_ints ~consts
     in
     pr "@[<hov 1>fun@ @[";
-    List.iter (fun (x, t) -> pr "(%a@ :@ %a)@ " fprintf_id x fprintf_any_type t) params;
-    pr ":@ %a" fprintf_type ty;
-    pr "@]@ ->@ @[<hov 0>requires@ {@ %a@ }@ " fprintf_pred pre;
+    List.iter (fun (x, t) -> pr "(%a@ :@ %a)@ " id x any_type t) params;
+    pr ":@ %a"  why_type ty;
+    pr "@]@ ->@ @[<hov 0>requires@ {@ %a@ }@ " pred pre;
     begin match signals with
-    | [] -> pr "@[<hov 2>ensures@ {@ %a@ }@]@]@ " fprintf_pred post
+    | [] -> pr "@[<hov 2>ensures@ {@ %a@ }@]@]@ " pred post
     | l ->
       pr "@[<hov 2>ensures@ {@ %a@ }@ %a@]@ "
-        fprintf_pred post
-        (fprintf_list ~sep:"" @@
+        pred post
+        (list ~sep:"" @@
          fun _ (e, r) ->
-         pr "@[<hov 2>raises@ {@ %a@ result@ ->@ %a@ }@]" fprintf_uid e fprintf_pred r)
+         pr "@[<hov 2>raises@ {@ %a@ result@ ->@ %a@ }@]" uid e pred r)
         l
     end;
     if diverges then pr "diverges@ ";
-    pr "%a@]" (fprintf_expr ~safe ~bw_ints ~consts) body
+    pr "%a@]" (expr ~safe ~bw_ints ~consts) body
   in
-  let pr_let id e1 e2 =
-    let consts = StringSet.add id consts in
-    let fprintf_expr fmttr = fprintf_expr ~safe ~bw_ints ~consts fmttr in
-    pr "@[<hov 0>(let@ %a@ =@ %a@ in@ %a)@]" fprintf_id id fprintf_expr e1 fprintf_expr e2
+  let pr_let id' e1 e2 =
+    let consts = StringSet.add id' consts in
+    let expr fmttr = expr ~safe ~bw_ints ~consts fmttr in
+    pr "@[<hov 0>(let@ %a@ =@ %a@ in@ %a)@]" id id' expr e1 expr e2
   in
-  let fprintf_pred = fprintf_pred ~bw_ints ~consts
-  and fprintf_type fmttr = fprintf_type ~bw_ints ~consts fmttr
-  and fprintf_variant fmttr = fprintf_variant ~bw_ints ~consts fmttr
-  and fprintf_expr fmttr = fprintf_expr ~safe ~bw_ints ~consts fmttr
+  let pred = pred ~bw_ints ~consts
+  and why_type fmttr = why_type ~bw_ints ~consts fmttr
+  and variant fmttr = variant ~bw_ints ~consts fmttr
+  and expr fmttr = expr ~safe ~bw_ints ~consts fmttr
   in
-  let fprintf_expr_list = fprintf_list fprintf_expr ~sep:";@ " in
+  let expr_list = list expr ~sep:";@ " in
   function
-  | Cte c -> fprintf_constant fmttr c
-  | Var v ->  pr "%a" fprintf_id v
-  | And (e1, e2) -> pr "@[(%a@ &&@ %a)@]" fprintf_expr e1 fprintf_expr e2
-  | Or (e1, e2) -> pr "@[(%a@ ||@ %a)@]" fprintf_expr e1 fprintf_expr e2
-  | Not e -> pr "@[(not@ %a)@]" fprintf_expr e
+  | Cte c -> constant fmttr c
+  | Var v ->  pr "%a" id v
+  | And (e1, e2) -> pr "@[(%a@ &&@ %a)@]" expr e1 expr e2
+  | Or (e1, e2) -> pr "@[(%a@ ||@ %a)@]" expr e1 expr e2
+  | Not e -> pr "@[(not@ %a)@]" expr e
   | Void -> pr "()"
-  | Deref id -> pr "!%a" fprintf_id id
+  | Deref id' -> pr "!%a" id id'
   | If (e1, e2, e3) ->
     pr "@[<hov 0>(if@ %a@ @[<hov 1>then@ %a@]@ @[<hov 1>else@ %a@])@]"
-      fprintf_expr e1 fprintf_expr e2 fprintf_expr e3
+      expr e1 expr e2 expr e3
   | While ({ expr_node = Cte (Bool true) }, inv, var, e2) ->
     pr
       "@[<hov 0>loop@ @[<hov 1>@[<hov 2>@[<hov 2>invariant@ { %a }@]@ @[<hov 2>%a@]@]@ %a@]@ end@]"
-      fprintf_pred inv
-      fprintf_variant var
-      fprintf_expr_list e2
+      pred inv
+      variant var
+      expr_list e2
   | While (e1, inv, var, e2) ->
     pr
       "@[<hov 0>while@ %a@ do@ @[<hov 1>@[<hov 2>@[<hov 2>invariant@ { %a }@]@ @[<hov 2>%a@]@]@ %a@]@ done@]"
-      fprintf_expr e1
-      fprintf_pred inv
-      fprintf_variant var
-      fprintf_expr_list e2
+      expr e1
+      pred inv
+      variant var
+      expr_list e2
   | Block [] -> pr "void"
-  | Block el -> pr "@[<hov 0>begin@ @[<hov 1>%a@]@ end@]" fprintf_expr_list el
-  | Assign (id, e) -> pr "@[<hov 1>(%a@ :=@ %a)@]" fprintf_id id fprintf_expr e
+  | Block el -> pr "@[<hov 0>begin@ @[<hov 1>%a@]@ end@]" expr_list el
+  | Assign (id', e) -> pr "@[<hov 1>(%a@ :=@ %a)@]" id id' expr e
   | Let (id, e1, e2) -> pr_let id e1 e2
-  | Let_ref (id, e1, e2) ->
-    pr "@[<hov 0>(let@ %a@ =@ ref@ %a@ in@ %a)@]" fprintf_id id fprintf_expr e1 fprintf_expr e2
+  | Let_ref (id', e1, e2) ->
+    pr "@[<hov 0>(let@ %a@ =@ ref@ %a@ in@ %a)@]" id id' expr e1 expr e2
   | App (f, ehl, ty_opt)  ->
     pr "@[<hov 1>(%a@ %a@ %a)@]"
-      (fprintf_func ~where:(`Behavior safe) ~bw_ints) f
-      (fprintf_expr_hlist ~safe ~bw_ints ~consts) ehl
-      (fprintf_option @@ fun fmttr -> fprintf fmttr ":@ %a" fprintf_type) ty_opt
+      (func ~where:(`Behavior safe) ~bw_ints) f
+      (expr_hlist ~safe ~bw_ints ~consts) ehl
+      (option @@ fun fmttr -> fprintf fmttr ":@ %a" why_type) ty_opt
   | Raise (id, None) ->
     pr "@[<hov 1>(raise@ %s)@]" id
   | Raise (id, Some e) ->
-    pr "@[<hov 1>(raise@ (%a@ %a))@]" fprintf_uid id fprintf_expr e
+    pr "@[<hov 1>(raise@ (%a@ %a))@]" uid id expr e
   | Try (e1, exc, None, e2) ->
-    pr "@[<hov 1>try@ %a@ with@ %a@ ->@ %a@ end@]" fprintf_expr e1 fprintf_uid exc fprintf_expr e2
-  | Try (e1, exc, Some id, e2) ->
-    pr "@[<hov 1>try@ %a@ with@ %a@ %a@ ->@ %a@ end@]" fprintf_expr e1 fprintf_uid exc fprintf_id id fprintf_expr e2
+    pr "@[<hov 1>try@ %a@ with@ %a@ ->@ %a@ end@]" expr e1 uid exc expr e2
+  | Try (e1, exc, Some id', e2) ->
+    pr "@[<hov 1>try@ %a@ with@ %a@ %a@ ->@ %a@ end@]" expr e1 uid exc id id' expr e2
   | Fun (params, ty, pre, body, post, diverges, signals) ->
     pr_fun params ty pre body post diverges signals
   | Triple (_, pre, e, True, []) ->
-    pr "@[<hov 0>(assert@ {@ %a@ };@ (%a))@]" fprintf_pred pre fprintf_expr e
+    pr "@[<hov 0>(assert@ {@ %a@ };@ (%a))@]" pred pre expr e
   | Triple (true, pre, e, post, exceps) ->
-    pr "@[<hov 0>(assert@ {@ %a@ };@ " fprintf_pred pre;
-    pr "abstract@ ensures@ {@ %a@ }@ " fprintf_pred post;
-    List.iter (fun (e, r) -> pr "@[<hov 2>raises@ {@ %a@ ->@ %a@ }@]" fprintf_uid e fprintf_pred r) exceps;
-    pr "@ %a@ end)@]" fprintf_expr e
+    pr "@[<hov 0>(assert@ {@ %a@ };@ " pred pre;
+    pr "abstract@ ensures@ {@ %a@ }@ " pred post;
+    List.iter (fun (e, r) -> pr "@[<hov 2>raises@ {@ %a@ ->@ %a@ }@]" uid e pred r) exceps;
+    pr "@ %a@ end)@]" expr e
   | Triple (false, pre, e, post, exceps) ->
-    pr "@[<hov 0>(assert@ {@ %a@ };@ " fprintf_pred pre;
+    pr "@[<hov 0>(assert@ {@ %a@ };@ " pred pre;
     begin match exceps with
     | [] ->
-      pr "let@ _@ =@ %a@ in@ assert@ {@ %a@ }" fprintf_expr e fprintf_pred post
-    | _ -> failwith "fprintf_expr_node: unsupported non-empty exceps clause in Hoare triple" (* TODO *)
+      pr "let@ _@ =@ %a@ in@ assert@ {@ %a@ }" expr e pred post
+    | _ -> failwith "expr_node: unsupported non-empty exceps clause in Hoare triple" (* TODO *)
     end;
     pr ")@]"
   | Assert (k, p) ->
     pr "@[<hov 0>(%s@ {@ %a@ })@]"
       (match k with `ASSERT -> "assert" | `ASSUME -> "assume" | `CHECK -> "check")
-      fprintf_pred p
+      pred p
   | Black_box t ->
-    pr "@[<hov 0>any@ %a@ @]" fprintf_type t
+    pr "@[<hov 0>any@ %a@ @]" why_type t
   | Absurd -> pr "@[<hov 0>absurd@ @]"
-  | Labeled (l, e) -> pr "@[(%a%a)@]" fprintf_why_label l fprintf_expr e
+  | Labeled (l, e) -> pr "@[(%a%a)@]" why_label l expr e
 
-and fprintf_expr : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr -> _ = fun ~safe ~bw_ints ~consts fmttr e ->
+and expr : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr -> _ = fun ~safe ~bw_ints ~consts fmttr e ->
   let pr fmt = fprintf fmttr fmt in
   let rec aux =
     function
-    | [] -> fprintf_expr_node ~safe ~bw_ints ~consts fmttr e.expr_node
+    | [] -> expr_node ~safe ~bw_ints ~consts fmttr e.expr_node
     | s :: l ->
-      pr "@[<hov 0>('%a:@ " fprintf_uid s;
+      pr "@[<hov 0>('%a:@ " uid s;
       aux l;
       pr ")@]"
   in
   aux e.expr_labels
 
-let fprintf_any_logic_type fmttr = function Logic_type t -> fprintf_logic_type fmttr t
+let any_logic_type fmttr = function Logic_type t -> logic_type fmttr t
 
-let fprint_logic_arg fmttr (id, t) = fprintf fmttr "(%a@ :@ %a)" fprintf_id id fprintf_any_logic_type t
+let logic_arg fmttr (id', t) = fprintf fmttr "(%a@ :@ %a)" id id' any_logic_type t
 
-let fprintf_goal_kind fmttr =
+let goal_kind fmttr =
   fprintf fmttr "%s" %
   function
   | KAxiom -> "axiom"
   | KLemma -> "lemma"
   | KGoal -> "goal"
 
-let fprintf_why_id ?(constr=false) fmttr { why_name; why_expl; why_pos } =
+let why_id ?(constr=false) fmttr { why_name; why_expl; why_pos } =
   let pr fmt = fprintf fmttr fmt in
-  pr "%a" (if not constr then fprintf_id else fprintf_uid) why_name;
-  if not (Position.is_dummy why_pos) then pr "@ %a" fprintf_jc_position why_pos;
+  pr "%a" (if not constr then id else uid) why_name;
+  if not (Position.is_dummy why_pos) then pr "@ %a" jc_position why_pos;
   if why_expl <> "" then pr "@ \"expl:%s\"" why_expl
 
-let why3_builtin_locals = StringSet.singleton "result"
+type 'kind kind =
+  | Theory : [`Theory] kind
+  | Module : bool -> [`Module of bool] kind
 
-let fprintf_why_decl ~safe ~bw_ints ~consts fmttr (type a) (type r) { why_id; why_decl } =
+let why_decl (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = why_id'; why_decl } =
   let pr fmt = fprintf fmttr fmt in
-  let pr_why_id = fprintf_why_id ~constr:false
-  and pr_why_uid = fprintf_why_id ~constr:true in
-  let pr_args = fprintf_list ~sep:"@ " @@ fun fmt (_id, t) -> fprintf_any_logic_type fmt t in
-  let fprintf_global_pred = fprintf_pred ~bw_ints ~consts:why3_builtin_locals in
-  let fprintf_global_expr = fprintf_expr ~bw_ints ~consts:why3_builtin_locals in
-  match (why_decl : a decl) with
+  let why_id = why_id ~constr:false
+  and why_uid = why_id ~constr:true in
+  let args = list ~sep:"@ " @@ fun fmt (_id, t) -> any_logic_type fmt t in
+  let pred = pred ~bw_ints in
+  let expr = expr ~bw_ints in
+  match (why_decl : k decl) with
   | Param t ->
     let consts =
       let rec collect_consts : type a. consts:_ -> a why_type -> _ = fun ~consts ->
@@ -568,42 +570,43 @@ let fprintf_why_decl ~safe ~bw_ints ~consts fmttr (type a) (type r) { why_id; wh
       in
       collect_consts ~consts t
     in
-    pr "val@ %a@ %a" pr_why_id why_id (fprintf_type ~bw_ints ~consts) t
-  | Logic (args, Type (Bool, Nil)) ->
-    pr "predicate@ %a@ %a" pr_why_id why_id pr_args args
-  | Logic (args, t) ->
-    pr "function@ %a@ %a@ :@ %a" pr_why_id why_id pr_args args fprintf_logic_type t
-  | Inductive (args, cases) ->
+    pr "val@ %a@ %a" why_id why_id' (why_type ~bw_ints ~consts) t
+  | Logic (args', Type (Bool, Nil)) ->
+    pr "predicate@ %a@ %a" why_id why_id' args args'
+  | Logic (args', t) ->
+    pr "function@ %a@ %a@ :@ %a" why_id why_id' args args' logic_type t
+  | Inductive (args', cases) ->
     pr "inductive@ %a@ @[%a@]@ =@\n@[<v 0>%a@]"
-      pr_why_id why_id
-      pr_args args
-      (fprintf_list ~sep:"@ " @@ fun _ (id, p) -> pr "|@ %a:@ @[%a@]" fprintf_id id fprintf_global_pred p) cases
+      why_id why_id'
+      args args'
+      (list ~sep:"@ " @@ fun _ (id', p) -> pr "|@ %a:@ @[%a@]" id id' (pred ~consts) p) cases
   | Goal (k, p) ->
     pr "%a@ %a@ :@ %a"
-      fprintf_goal_kind k
-      pr_why_id why_id
-      fprintf_global_pred p
+      goal_kind k
+      why_id why_id'
+      (pred ~consts) p
   | Def e ->
+    let Module safe = kind in
     pr "let@ %a@ =@ %a"
-      pr_why_id why_id
-      (fprintf_global_expr ~safe) e
+      why_id why_id'
+      (expr ~consts ~safe) e
   | Predicate (args, p) ->
     pr "predicate@ %a@ %a@ =@ %a"
-      pr_why_id why_id
-      (fprintf_list ~sep:"@ " fprint_logic_arg) args
-      (fprintf_pred ~bw_ints ~consts:(List.fold_right (StringSet.add % fst) args why3_builtin_locals)) p
+      why_id why_id'
+      (list ~sep:"@ " logic_arg) args
+      (pred ~consts:(List.fold_right (StringSet.add % fst) args consts)) p
   | Function (args, t, e) ->
     pr "function@ %a@ %a@ :@ %a =@ %a"
-      pr_why_id why_id
-      (fprintf_list ~sep:"@ " fprint_logic_arg) args
-      fprintf_logic_type t
-      (fprintf_term ~bw_ints ~consts:(List.fold_right (StringSet.add % fst) args why3_builtin_locals)) e
+      why_id why_id'
+      (list ~sep:"@ " logic_arg) args
+      logic_type t
+      (term ~bw_ints ~consts:(List.fold_right (StringSet.add % fst) args consts)) e
   | Type tvs ->
-    pr "type@ %a %a" pr_why_id why_id (fprintf_list ~sep:"@ " fprintf_id) tvs
+    pr "type@ %a %a" why_id why_id' (list ~sep:"@ " id) tvs
   | Exception None ->
-    pr "exception@ %a" pr_why_uid why_id
+    pr "exception@ %a" why_uid why_id'
   | Exception (Some t) ->
-    pr "exception@ %a@ %a" pr_why_uid why_id fprintf_logic_type t
+    pr "exception@ %a@ %a" why_uid why_id' logic_type t
 
 let split c s =
   try
@@ -614,7 +617,7 @@ let split c s =
 
 module Staged :
 sig
-  type 'a t
+  type +'a t
   val stage : 'a -> 'a t
   val unstage : 'a t -> 'a
 end = struct
@@ -663,7 +666,7 @@ struct
     function
     | Const _ -> init
     | App (f', thl) ->
-      f ~acc:init (split_fprintf (fprintf_func ~where:`Logic ~bw_ints) expand_func f') |~>
+      f ~acc:init (split_fprintf (func ~where:`Logic ~bw_ints) expand_func f') |~>
       fold_hlist thl
     | Var v -> fold_id ~init v
     | Deref v -> fold_id ~init v
@@ -698,7 +701,7 @@ struct
     fun ~init ->
     function
     | Type (tc, lthl) ->
-      f ~acc:init (split_fprintf fprintf_tconstr expand_tconstr tc) |~>
+      f ~acc:init (split_fprintf tconstr expand_tconstr tc) |~>
       let rec fold' : type a. init:_ -> a ltype_hlist -> _ = fun ~init ->
         function
         | Nil -> init
@@ -753,7 +756,7 @@ struct
     | Exists (_, lt, trigs, p) ->
       fold_quant lt trigs p
     | App (p, thl) ->
-      f ~acc:init (split_fprintf (fprintf_func ~where:`Logic ~bw_ints) expand_func p) |~>
+      f ~acc:init (split_fprintf (func ~where:`Logic ~bw_ints) expand_func p) |~>
       fold_term_hlist thl
 
   let iter ~f = fold ~init:() ~f:(fun ~acc:_ -> f)
@@ -842,7 +845,7 @@ struct
       fold ~init e1 |~>
       fold e2
     | App (f', hl, wt_opt) ->
-      f ~acc:init (split_fprintf_mod (fprintf_func ~where:(`Behavior safe) ~bw_ints) expand_func f') |~>
+      f ~acc:init (split_fprintf_mod (func ~where:(`Behavior safe) ~bw_ints) expand_func f') |~>
       fold_hlist hl |~>
       Option.fold ~f:(fun init wt -> fold_why_type ~init wt) wt_opt
     | Raise (id, e_opt) ->
@@ -887,6 +890,7 @@ end
 module Why_decl =
 struct
   type 'kind t = 'kind why_decl
+
   type ('kind, 'deps) kind =
     | Theory : ([`Theory], [> `Theory of string * bool | `Current]) kind
     | Module : bool -> ([`Module of bool], [> `Theory of string * bool | `Module of string * bool | `Current ]) kind
@@ -932,34 +936,38 @@ struct
   let iter ~f = fold ~init:() ~f:(fun ~acc:_ -> f)
 end
 
-type 's for_any_entry = { f : 'a. 's -> 'a entry -> 's }
-type 's for_any_why_decl = { f : 'a. 's -> 'a why_decl -> 's }
-
-type 'a over =
-  | Entries :
-      <
-        iter_entries : 'iter_entries;
-        iter_decls   : _;
-        iter         : 'iter_entries;
-        decl_kind    : _;
-        value        : any_entry;
-        f            : 'state for_any_entry;
-        state        : 'state
-      > over
-  | Decls :
-      <
-        iter_entries : _;
-        iter_decls   : 'iter_decls;
-        iter         : 'iter_decls;
-        decl_kind    : 'decl_kind;
-        value        : 'decl_kind why_decl;
-        f            : 'state for_any_why_decl;
-        state        : 'state
-      > over
-
 module Entry =
 struct
   type 'kind t = 'kind entry
+
+  type 's for_any_entry =
+    { f : 'a. state:'s -> consts:StringSet.t -> enter:(consts:StringSet.t -> StringSet.t) ->
+        'a entry -> 's * StringSet.t }
+  type ('s, 'k) for_why_decl =
+    state:'s -> consts:StringSet.t -> enter:(consts:StringSet.t -> StringSet.t) ->
+    print:(consts:StringSet.t -> formatter -> unit) -> 'k why_decl -> 's * StringSet.t
+
+  type 'a over =
+    | Entries :
+        <
+          iter_entries : 'iter_entries;
+          iter_decls   : _;
+          iter         : 'iter_entries;
+          decl_kind    : _;
+          value        : any_entry;
+          f            : 'state for_any_entry;
+          state        : 'state
+        > over
+    | Decls :
+        <
+          iter_entries : _;
+          iter_decls   : 'iter_decls;
+          iter         : 'iter_decls;
+          decl_kind    : 'decl_kind;
+          value        : 'decl_kind why_decl;
+          f            : ('state, 'decl_kind) for_why_decl;
+          state        : 'state
+        > over
 
   module M = Map.Make (String)
 
@@ -971,11 +979,23 @@ struct
         let hash = Hashtbl.hash
       end)
 
+  type ('s, 'f) iter_entries =
+    { iter : 'a. consts:StringSet.t -> entry:'a entry -> (enter:'s -> f:'f -> StringSet.t) Staged.t }
+
+  type ('s, 'v, 'k, 'f) continuation =
+    { continue :
+        'a.
+          state:('s * 'v) H.t ->
+        consts:StringSet.t ->
+        entry:(unit -> 'k entry) ->
+        entry':'a entry ->
+        (enter:'s -> f:'f -> StringSet.t) Staged.t }
+
   let iter =
     fun (type iter) (type value) (type decl_kind) (type f) (type state)
       ~(over : <
-        iter_entries : file:value list -> (entry:decl_kind entry -> (enter:state -> f:f -> unit) Staged.t) Staged.t;
-        iter_decls   : entry:decl_kind entry -> (enter:state -> f:f -> unit) Staged.t;
+        iter_entries : file:value list -> (state, f) iter_entries;
+        iter_decls   : consts:StringSet.t -> entry:decl_kind entry -> (enter:state -> f:f -> StringSet.t) Staged.t;
         iter         : iter;
         decl_kind    : decl_kind;
         value        : value;
@@ -984,24 +1004,21 @@ struct
           > over)
       ~(init : state)
       ->
-        let continue :
-          (state:(state * value) H.t -> entry:decl_kind entry -> (enter:state -> f:f -> unit) Staged.t) ->
-          iter
-          = fun continue ->
-            let state : (state * value) H.t = H.create 100 in
-            match over with
-            | Entries ->
-              fun ~file ->
-                let f (type k) (e : k entry) =
-                  let add name = H.add state name (init, Entry e) in
-                  match e with
-                  | Theory (name, _) -> add name
+        let continue : (state, value, decl_kind, f) continuation -> iter = fun { continue } ->
+          let state : (state * value) H.t = H.create 100 in
+          match over with
+          | Entries ->
+            fun ~file ->
+              let f (type k) (e : k entry) =
+                let add name = H.add state name (init, Entry e) in
+                match e with
+                | Theory (name, _) -> add name
                 | Module (name, _) -> add name
-                in
-                List.iter (fun (Entry e) -> f e) file;
-                stage @@ continue ~state
+              in
+              List.iter (fun (Entry e) -> f e) file;
+              { iter = fun ~consts ~entry -> continue ~state ~consts ~entry:(fun () -> assert false) ~entry':entry }
             | Decls ->
-              fun ~entry ->
+              fun ~consts ~entry ->
                 let (l : decl_kind why_decl list) =
                   match entry with
                   | Theory (_, None) -> []
@@ -1009,24 +1026,17 @@ struct
                   | Theory (_, Some (_, decls)) -> decls
                   | Module (_, Some (_, _, decls)) -> decls
                 in
-                let compare_why_decls
-                    { why_id = { why_name = id1; why_pos = pos1 } }
-                    { why_id = { why_name = id2; why_pos = pos2 } }
-                  =
-                  let c = Position.compare pos1 pos2 in
-                  if c <> 0 then c else compare id1 id2
-                in
                 List.iter
                   (fun ({ why_id = { why_name } } as d) -> H.add state why_name (init, d))
-                  (List.sort compare_why_decls l);
-                continue ~state ~entry
+                  l;
+                continue ~state ~consts ~entry:(fun () -> entry) ~entry':entry
         in
         let map_ints ~how =
           let b = Buffer.create 25 in
           let b_formatter = formatter_of_buffer b in
           List.fold_left
             (fun m (Int ty as typ) ->
-               fprintf_int_ty
+               int_ty
                  ~how:(match how with `Theory -> `Theory false | `Module safe -> `Module (safe, false))
                  b_formatter
                  ty;
@@ -1045,7 +1055,11 @@ struct
                 Int Uint64.ty])
         in
         let bw_ints_cache = H.create 50 in
-        let continuation ~(state : (state * value) H.t) = fun ~(entry : decl_kind entry) ->
+        let rec continuation
+          : type kind.
+            state: (state * value) H.t -> consts:_ -> entry:(unit -> decl_kind entry) -> entry':kind entry ->
+          (enter:state -> f:f -> StringSet.t) Staged.t =
+          fun ~state ~consts ~entry ~entry' ->
           let bw_ints =
             let fold_decls map init =
               Why_decl.fold
@@ -1071,7 +1085,7 @@ struct
                 r
             in
             let open Why_decl in
-            match entry with
+            match entry' with
             | Theory (_, None) -> S.empty
             | Module (_, None) -> S.empty
             | Theory (name, Some (_, decls)) ->
@@ -1086,12 +1100,20 @@ struct
           fun ~(enter : state) ~(f : f) ->
           match over with
           | Entries ->
-            let f : 'a. state -> 'a entry -> state = f.f in
-            let enter acc name imported =
+            let f' : 'a. state:state -> consts:_ -> enter:_ -> 'a entry -> state * _ = f.f in
+            let enter (consts, acc) name imported =
               try
                 let s, (Entry e' as e) = H.find state name in
                 if s = init then H.replace state name (enter, e);
-                H.replace state name (f s e', e);
+                let s, consts =
+                  f'
+                    ~state:s
+                    ~consts
+                    ~enter:(fun ~consts -> unstage (continuation ~state ~consts ~entry ~entry':e') ~enter ~f)
+                    e'
+                in
+                H.replace state name (s, e);
+                consts,
                 match M.find name acc with
                 | None | Some true -> acc
                 | Some false when not imported -> acc
@@ -1114,9 +1136,9 @@ struct
                 d
             in
             let open Why_decl in
-            begin match entry with
-            | Theory (_, None) -> ()
-            | Module (_, None) -> ()
+            begin match entry' with
+            | Theory (_, None) -> consts
+            | Module (_, None) -> consts
             | Theory (name, Some (deps, decls)) ->
               List.fold_left
                 (fun acc ->
@@ -1124,16 +1146,18 @@ struct
                    | Use (_, Theory (name', _))
                    | Clone (_, Theory (name', _), _) ->
                      enter acc name' false)
-                M.empty
+                (consts, M.empty)
                 !deps |~>
               ListLabels.fold_left ~f:(f ~kind:Theory ~name) decls |>
-              M.iter
-                (fun name import ->
-                   match H.find state name, import with
-                   | (_, Entry (Theory _ as e)), Some import ->
-                     deps := Use ((if import then `Import None else `As None), e) :: !deps
-                   | _ -> ()
-                   | exception Not_found -> assert false (* already checked during map initialization *))
+              map_snd
+                (M.iter
+                   (fun name import ->
+                      match H.find state name, import with
+                      | (_, Entry (Theory _ as e)), Some import ->
+                        deps := Use ((if import then `Import None else `As None), e) :: !deps
+                      | _ -> ()
+                      | exception Not_found -> assert false (* already checked during map initialization *))) |>
+              fst
             | Module (name, Some (deps, safe, decls)) ->
               List.fold_left
                 (fun acc ->
@@ -1145,50 +1169,204 @@ struct
                      in
                      match d with
                      | Use (_, e) | Clone (_, e, _) -> enter e)
-                M.empty
+                (consts, M.empty)
                 !deps |~>
               ListLabels.fold_left ~f:(f ~kind:(Module safe) ~name) decls |>
-              M.iter
-                (fun name import ->
-                   let add import e =
-                     deps := Dependency (Use ((if import then `Import None else `As None), e)) :: !deps
-                   in
-                   match H.find state name, import with
-                   | (_, Entry (Theory _ as e)), Some import -> add import e
-                   | (_, Entry (Module _ as e)), Some import  -> add import e
-                   | _ -> ()
-                   | exception Not_found -> assert false (* already checked during map initialization *))
+              map_snd
+                (M.iter
+                   (fun name import ->
+                      let add import e =
+                        deps := Dependency (Use ((if import then `Import None else `As None), e)) :: !deps
+                      in
+                      match H.find state name, import with
+                      | (_, Entry (Theory _ as e)), Some import -> add import e
+                      | (_, Entry (Module _ as e)), Some import  -> add import e
+                      | _ -> ()
+                      | exception Not_found -> assert false (* already checked during map initialization *))) |>
+              fst
             end
           | Decls ->
-            let f : 'a. state -> 'a why_decl -> state = f.f in
-            let enter name =
+            let f : state:state -> consts:_ -> enter:_ -> print:_ -> decl_kind why_decl -> state * _ = f in
+            let enter ~self ~why_decl consts name =
               try
                 let s, d = H.find state name in
                 if s = init then H.replace state name (enter, d);
-                H.replace state name (f s d, d)
+                let s, consts =
+                  f
+                    ~state:s
+                    ~consts
+                    ~enter:(fun ~consts -> self ~consts d)
+                    ~print:(fun ~consts fmttr -> why_decl ~consts fmttr d)
+                    d
+                in
+                H.replace state name (s, d);
+                consts
               with
-              | Not_found -> ()
+              | Not_found -> consts
             in
-            let f ~name d =
-              Why_decl.iter
+            let f ~name ~self ~why_decl ~consts d =
+              Why_decl.fold
                 ~bw_ints
-                ~f:(function
-                  | (`Module (name', _) | `Theory (name', _)), name'' when name = name' -> enter name''
-                  | (`Module _ | `Theory _), _ -> ()
-                  | `Current, name'' -> enter name'')
+                ~init:consts
+                ~f:(fun ~acc:consts ->
+                  function
+                  | (`Module (name', _) | `Theory (name', _)), name'' when name = name' ->
+                    enter ~self ~why_decl consts name''
+                  | (`Module _ | `Theory _), _ -> consts
+                  | `Current, name'' -> enter ~self ~why_decl consts name'')
                 d
             in
+            let sort l =
+              List.sort
+              (fun
+                { why_id = { why_name = id1; why_pos = pos1 } }
+                { why_id = { why_name = id2; why_pos = pos2 } }
+                ->
+                  let c = Position.compare pos1 pos2 in
+                  if c <> 0 then c else compare id1 id2)
+              l
+            in
             let open Why_decl in
-            match entry with
-            | Theory (_, None) -> ()
-            | Module (_, None) -> ()
+            match entry () with
+            | Theory (_, None) -> consts
+            | Module (_, None) -> consts
             | Theory (name, Some (_, decls)) ->
-              List.iter (f ~kind:Theory ~name) decls
+              let why_decl = why_decl ~kind:Theory ~bw_ints in
+              let rec self ~consts d = f ~kind:Theory ~name ~self ~why_decl ~consts d in
+              List.fold_left (fun consts -> self ~consts) consts @@ sort decls
             | Module (name, Some (_, safe, decls)) ->
-              List.iter (f ~kind:(Module safe) ~name) decls
+              let why_decl = why_decl ~kind:(Module safe) ~bw_ints in
+              let rec self ~consts d = f ~kind:(Module safe) ~name ~self ~why_decl ~consts d in
+              List.fold_left (fun consts -> self ~consts) consts @@ sort decls
         in
-        continue continuation
+        continue { continue = continuation }
 end
+
+let dependency fmttr =
+  let dependency_spec ~name fmttr =
+    let pr fmt = fprintf fmttr fmt in
+    let alias = option @@ fun fmt -> fprintf fmt "as@ %s" in
+    function
+    | `Import name_opt -> pr "import@ %s@ %a" name alias name_opt
+    | `Export -> pr "export@ %s" name
+    | `As name_opt -> alias fmttr name_opt
+  in
+  let substs fmttr =
+    function
+    | [] -> ()
+    | substs ->
+      fprintf
+        fmttr
+        "@ with@[<hov 2>%a@]"
+        (list
+           ~sep:",@ " @@
+         fun fmttr ->
+         let pr fmt = fprintf fmttr fmt in
+         let subst kind ~name ~name' = fprintf fmttr "%s@ %s@ =@ %s" kind name name' in
+         function
+         | `Constant (name, name') -> subst "constant" ~name ~name'
+         | `Type (name, name') -> subst "type" ~name  ~name'
+         | `Function (name, name') -> subst "function" ~name ~name'
+         | `Predicate (name, name') -> subst "predicate" ~name ~name'
+         | `Namespace (name, name') ->
+           let name, name' = Pair.map ~f:(Option.value ~default:".") (name, name') in
+           subst "namespace" ~name ~name'
+         | `Lemma name -> pr "lemma %s" name
+         | `Goal name -> pr "goal %s" name)
+        substs
+  in
+  let pr fmt = fprintf fmttr fmt in
+  let name (type a) =
+    function
+    | (Theory (name, _) : a entry) -> name
+    | Module (name, _) -> name
+  in
+  function
+  | Use (spec, entry) ->
+    let name = name entry in
+    pr "use@ %a" (dependency_spec ~name) spec
+  | Clone (spec, entry, substs') ->
+    let name = name entry in
+    pr "clone@ %a%a" (dependency_spec ~name) spec substs substs'
+
+let module_dependency fmttr = function Dependency d -> dependency fmttr d
+
+let entry ~consts fmttr (type k) (entry : k entry) =
+  let pr fmt = fprintf fmttr fmt in
+  let decls () =
+    unstage
+      (Entry.iter
+         ~over:Entry.Decls
+         ~init:`TODO
+         ~consts
+         ~entry)
+      ~enter:`Running
+      ~f:(fun ~state ~consts ~enter ~print d ->
+        match state with
+        | `TODO ->
+          let consts = enter ~consts in
+          pr "%t@\n@." @@ print ~consts;
+          let add (type k) d =
+            let add () = StringSet.add d.why_id.why_name consts in
+            match (d.why_decl : k decl) with
+            | Def  _ -> add ()
+            | Param (Base_type _) -> add ()
+            | _ -> consts
+          in
+          `Done, add d
+        | `Running ->
+          (* Cyclic dependencies can be spurious due to local names treated as declarations *)
+          `Running, consts
+        | `Done -> `Done, consts)
+  in
+  let pr_entry kind name dep deps =
+    pr "%s@ %a@\n@\n@[<hov 2>%a" kind uid name (list dep ~sep:"@\n@\n") deps;
+    let consts = decls () in
+    pr "@]@\nend";
+    consts
+  in
+  match entry with
+  | Theory (_, None) -> consts
+  | Module (_, None) -> consts
+  | Theory (name, Some (deps, _)) ->
+    pr_entry "theory" name dependency !deps
+  | Module (name, Some (deps, _, _)) ->
+    pr_entry "module" name module_dependency !deps
+
+let why3_builtin_locals = StringSet.singleton "result"
+
+let file fmttr file =
+  let open Entry in
+  let entry fmttr =
+    let pr_entry = entry fmttr in
+    let { iter } =
+      iter
+        ~over:Entry.Entries
+        ~init:`TODO
+        ~file
+    in
+    fun ~consts entry ->
+      unstage
+        (iter
+           ~consts
+           ~entry)
+        ~enter:`Running
+        ~f:{ f = fun ~state ~consts ~enter e ->
+          match state with
+          | `TODO ->
+            let consts = enter ~consts in
+            `Done, pr_entry ~consts e
+          | `Running ->
+            failwith "Cyclic dependency between resulting Why3ML modules/theories"
+          | `Done -> `Done, consts }
+  in
+  let consts = ref why3_builtin_locals in
+  list
+    ~sep:"@\n@."
+    (fun fmttr ->
+       function
+       | Entry entry' -> consts := entry fmttr ~consts:!consts entry')
+    fmttr
 
 (*
 (* Drop auxiliary arguments to satisfy common output interface *)

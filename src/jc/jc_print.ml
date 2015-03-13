@@ -59,14 +59,14 @@ type jc_decl =
   | JCglobinv_def of string * assertion
   | JClogic_const_def of jc_type * string * type_var_info list * term option
   | JClogic_type_def of string * type_var_info list
-  | JCinvariant_policy of Env.inv_sem
-  | JCseparation_policy of Env.separation_sem
-  | JCannotation_policy of Env.annotation_sem
-  | JCabstract_domain of Env.abstract_domain
-  | JCfloat_rounding_mode of Env.float_rounding_mode
-  | JCfloat_model of Env.float_model
+  | JCinvariant_policy of inv_sem
+  | JCseparation_policy of separation_sem
+  | JCannotation_policy of annotation_sem
+  | JCabstract_domain of abstract_domain
+  | JCfloat_rounding_mode of float_rounding_mode
+  | JCfloat_model of float_model
   | JCfloat_instruction_set of string
-  | JCtermination_policy of Env.termination_policy
+  | JCtermination_policy of termination_policy
 
 let identifier fmt id =
   fprintf fmt "%s" id#name
@@ -115,7 +115,7 @@ let real_conversion fmt rc =
   | Integer_to_real -> fprintf fmt "real"
   | Double_to_real -> fprintf fmt "double_value"
   | Float_to_real -> fprintf fmt "single_value"
-  | Round(_f, _m) -> (* fprintf fmt "r_to_s" ou "r_to_" *)
+  | Round (_f, _m) -> (* fprintf fmt "r_to_s" ou "r_to_" *)
     (* TODO ? parameter rounding mode *)
     assert false
 
