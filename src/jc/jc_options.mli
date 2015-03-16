@@ -47,8 +47,6 @@ val print_graph : bool
 val debug : bool
 val verbose : bool
 val werror : bool
-module type Backend = module type of Why_output
-val backend : (module Backend)
 val why_opt : string
 val why3_opt : string
 

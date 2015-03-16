@@ -236,8 +236,8 @@ let replace_sub_pexpr e el =
       JCPEinstanceof (as1 el, st)
     | JCPEcast (_, st) ->
       JCPEcast (as1 el, st)
-    | JCPEreinterpret_cast (_e, st) ->
-      JCPEreinterpret_cast (as1 el, st)
+    | JCPEcast_mod (_, ei) ->
+      JCPEcast_mod (as1 el, ei)
     | JCPEif (_, _, _) ->
       let e1, e2, e3 = as3 el in
       JCPEif (e1, e2, e3)
@@ -336,7 +336,7 @@ module PExprAst = struct
       | JCPEunary(_, e)
       | JCPEinstanceof(e, _)
       | JCPEcast(e, _)
-      | JCPEreinterpret_cast (e, _)
+      | JCPEcast_mod(e, _)
       | JCPEoffset(_, e)
       | JCPEaddress(_,e)
       | JCPEbase_block(e)
@@ -433,8 +433,8 @@ let rec subst_term (subst : term_subst) t =
     | JCTbase_block(t1) -> JCTbase_block(f t1)
     | JCTinstanceof(t1,lab,st) -> JCTinstanceof(f t1,lab,st)
     | JCTcast(t1,lab,st) -> JCTcast(f t1,lab,st)
-    | JCTbitwise_cast(t1,lab,st) -> JCTbitwise_cast(f t1,lab,st)
     | JCTrange_cast(t1,ei) -> JCTrange_cast(f t1,ei)
+    | JCTrange_cast_mod (t1, ei) -> JCTrange_cast_mod (f t1, ei)
     | JCTreal_cast(t1,rconv) -> JCTreal_cast(f t1,rconv)
     | JCTapp app ->
         JCTapp({app with app_args = List.map f app.app_args})
@@ -458,8 +458,8 @@ module TermAst = struct
           [t1;t2]
       | JCTunary(_,t1) | JCTderef(t1,_,_) | JCTold t1 | JCTat(t1,_)
       | JCToffset(_,t1,_) | JCTaddress(_,t1) | JCTbase_block(t1)
-      | JCTinstanceof(t1,_,_) | JCTcast(t1,_,_) | JCTbitwise_cast(t1,_,_)
-      | JCTrange_cast(t1,_)
+      | JCTinstanceof(t1,_,_) | JCTcast(t1,_,_)
+      | JCTrange_cast(t1,_) | JCTrange_cast_mod (t1, _)
       | JCTreal_cast(t1,_) | JCTrange(Some t1,None)
       | JCTrange(None,Some t1) ->
           [t1]
@@ -497,9 +497,9 @@ let fold_sub_term it f acc t =
     | JCTbase_block(t1)
     | JCTinstanceof(t1,_,_)
     | JCTcast(t1,_,_)
-    | JCTbitwise_cast(t1,_,_)
     | JCTreal_cast(t1,_)
     | JCTrange_cast(t1,_)
+    | JCTrange_cast_mod (t1, _)
     | JCTat(t1,_) ->
         it acc t1
     | JCTapp app ->
@@ -556,10 +556,10 @@ let rec map_term f t =
         JCTinstanceof(map_term f t,lab,st)
     | JCTcast(t,lab,st) ->
         JCTcast(map_term f t,lab,st)
-    | JCTbitwise_cast(t,lab,st) ->
-        JCTbitwise_cast(map_term f t,lab,st)
     | JCTrange_cast(t,ei) ->
         JCTrange_cast(map_term f t,ei)
+    | JCTrange_cast_mod (t, ei) ->
+        JCTrange_cast_mod (map_term f t, ei)
     | JCTreal_cast(t,rc) ->
         JCTreal_cast(map_term f t,rc)
     | JCTif(t1,t2,t3) ->
@@ -1149,12 +1149,12 @@ let replace_sub_expr e el =
         let e1 = as1 el in JCEinstanceof(e1,st)
     | JCEcast(_e,st) ->
         let e1 = as1 el in JCEcast(e1,st)
-    | JCEbitwise_cast(_e,st) ->
-        let e1 = as1 el in JCEbitwise_cast(e1,st)
     | JCEreal_cast(_e,st) ->
         let e1 = as1 el in JCEreal_cast(e1,st)
     | JCErange_cast(_e,st) ->
         let e1 = as1 el in JCErange_cast(e1,st)
+    | JCErange_cast_mod (_e, st) ->
+        let e1 = as1 el in JCErange_cast_mod (e1, st)
     | JCEif(_e1,_e2,_e3) ->
         let e1,e2,e3 = as3 el in JCEif(e1,e2,e3)
     | JCEmatch(_e1,ptl) ->
@@ -1213,8 +1213,8 @@ module ExprAst = struct
       | JCEassign_var(_, e)
       | JCEinstanceof(e, _)
       | JCEcast(e, _)
-      | JCEbitwise_cast(e, _)
-      | JCErange_cast(e, _)
+      | JCErange_cast (e, _)
+      | JCErange_cast_mod (e, _)
       | JCEreal_cast(e, _)
       | JCEoffset(_, e, _)
       | JCEaddress(_,e)
@@ -1276,8 +1276,8 @@ let fold_sub_expr_and_term_and_assertion
     | JCEbase_block(e1)
     | JCEfresh(e1)
     | JCEcast(e1,_)
-    | JCEbitwise_cast(e1,_)
     | JCErange_cast(e1,_)
+    | JCErange_cast_mod (e1, _)
     | JCEinstanceof(e1,_)
     | JCEreal_cast(e1,_)
     | JCEunpack(_,e1,_)
@@ -1378,7 +1378,7 @@ module NExprAst = struct
       | JCNEunary(_, e)
       | JCNEinstanceof(e, _)
       | JCNEcast(e, _)
-      | JCNEreinterpret_cast (e, _)
+      | JCNEcast_mod (e, _)
       | JCNEoffset(_, e)
       | JCNEaddress(_,e)
       | JCNEfresh(e)

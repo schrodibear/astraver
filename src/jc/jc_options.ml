@@ -89,10 +89,6 @@ let verify_invariants_only = ref false
 let verify = ref []
 let behavior = ref []
 
-module type Backend = module type of Why_output
-
-let backend = ref (module Why_output : Backend)
-
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 let add_why3_opt s = why3_opt := !why3_opt ^ " " ^ s
 
@@ -145,9 +141,6 @@ let _ =
           "  <f> reads source locations from file f" ;
         "-behavior", Arg.String (fun s -> behavior := s::!behavior),
           "  verify only specified behavior (safety, variant, default or user-defined behavior)";
-
-        "-why3ml", Arg.Unit (fun () -> backend := (module Why3_output)),
-          "  (experimental) produce a program in why3ml syntax" ;
 
         "-why-opt", Arg.String add_why_opt,
           "  <why options>  passes options to Why";
@@ -214,7 +207,6 @@ let print_graph = !print_graph
 let debug = !debug
 let verbose = !verbose
 let werror = !werror
-let backend = !backend
 let why_opt = !why_opt
 let why3_opt = !why3_opt
 let inv_sem = inv_sem

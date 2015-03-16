@@ -34,6 +34,7 @@ open Stdlib
 open Format
 open Env
 open Ast
+open Output_ast
 open Fenv
 open Common
 open Constructors
@@ -139,6 +140,8 @@ let rec pattern fmt p =
   | JCPconst c ->
     fprintf fmt "%a" const c
 
+let any_enum fmttr ae = fprintf fmttr "%s" (string_of_any_enum ae)
+
 let rec term fmt t =
   if t#mark <> "" then
     fprintf fmt "@[(%s : %a)@]"
@@ -157,10 +160,12 @@ let rec term fmt t =
         vi.vi_name term t1 term t2
     | JCTcast (t, _, si) ->
       fprintf fmt "(%a :> %s)" term t si.si_name
-    | JCTrange_cast (t, ei) ->
-      fprintf fmt "(%a :> %s)" term t (Option.map_default ~default:"integer" ~f:(fun r -> r.ei_name) ei)
+    | JCTrange_cast (t, None) ->
+      fprintf fmt "(%a :> integer)" term t
+    | JCTrange_cast (t, Some ei) ->
+      fprintf fmt "(%a :> %a)" term t any_enum ei.ei_type
     | JCTrange_cast_mod (t, ei) ->
-      fprintf fmt "(%a :%> %s)" term t ei.ei_name
+      fprintf fmt "(%a :%%> %a)" term t any_enum ei.ei_type
     | JCTreal_cast (t, rc) ->
       fprintf fmt "(%a :> %a)" term t real_conversion rc
     | JCTinstanceof (t, _, si) ->
@@ -339,10 +344,12 @@ let rec expr fmt e =
       fprintf fmt "(%a <: %s)" expr e si.si_name
     | JCEcast (e, si) ->
       fprintf fmt "(%a :> %s)" expr e  si.si_name
-    | JCErange_cast(e, ri) ->
-      fprintf fmt "(%a :> %s)" expr e (Option.map_default ~f:(fun r -> r.ei_name) ~default:"integer" ri)
-    | JCErange_cast_mod (e, ri) ->
-      fprintf fmt "(%a :%> %s)" expr e ei.ei_name
+    | JCErange_cast (e, None) ->
+      fprintf fmt "(%a :> integer)" expr e
+    | JCErange_cast (e, Some ei) ->
+      fprintf fmt "(%a :> %a)" expr e any_enum ei.ei_type
+    | JCErange_cast_mod (e, ei) ->
+      fprintf fmt "(%a :%%> %a)" expr e any_enum ei.ei_type
     | JCEreal_cast(e, rc) ->
       fprintf fmt "(%a :> %a)" expr e real_conversion rc
     | JCEif(e1,e2,e3) ->
@@ -637,9 +644,14 @@ let rec print_decls fmt d =
 
 let jc_reg_pos, jc_print_pos =
   let open Hashtbl in
+  let abs_fname f =
+    if Filename.is_relative f
+    then Filename.concat (Unix.getcwd ()) f
+    else f
+  in
   let jc_pos_table = create 97 in
   let name_counter = ref 0 in
-  (fun prefix ?id ?kind ?name ?formula pos ->
+  (fun prefix ?id ?name ?formula pos ->
     let id =
       match id with
       | None ->
@@ -647,14 +659,13 @@ let jc_reg_pos, jc_print_pos =
         prefix ^ "_" ^ string_of_int !name_counter
       | Some n -> n
     in
-    add jc_pos_table id (kind, name, formula, pos);
+    add jc_pos_table id (name, formula, pos);
     id),
-   fun fprintf_kind fmttr ->
+   fun fmttr ->
      let pr fmt = fprintf fmttr fmt in
      iter
-       (fun id (kind, name, formula, (f, l, fc, lc)) ->
+       (fun id (name, formula, (f, l, fc, lc)) ->
           pr "[%s]@\n" id;
-          Option.iter (pr "kind = %a@\n" fprintf_kind) kind;
           Option.iter (pr "name = \"%s\"@\n") name;
           Option.iter (pr "formula = \"%s\"@\n") formula;
           pr "file = \"%s\"@\n" (String.escaped (abs_fname f));

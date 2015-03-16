@@ -33,6 +33,7 @@ open Stdlib
 open Env
 open Envset
 open Region
+open Output_ast
 open Ast
 open Fenv
 
@@ -122,11 +123,28 @@ let string_of_native t =
 
 let print_type_var fmt v = fprintf fmt "(var_%s_%d)" v.tvi_name v.tvi_tag
 
+let string_of_any_enum =
+  let range  (type a) =
+    function
+    | (Signed : a range) -> ""
+    | Unsigned -> "u"
+  in
+  let bit (type a) =
+    function
+    | (X8 : a bit) -> "8"
+    | X16 -> "16"
+    | X32 -> "32"
+    | X64 -> "64"
+  in
+  function
+  | (Int (r, b) : any_enum) -> range r ^ "int" ^ bit b
+  | Enum s -> s
+
 let rec print_type fmt t =
   match t with
   | JCTnative n -> fprintf fmt "%s" (string_of_native n)
   | JCTlogic (s,l) -> fprintf fmt "%s%a" s Why_pp.(print_list_delim lchevron rchevron comma print_type) l
-  | JCTenum ri -> fprintf fmt "%s" ri.ei_name
+  | JCTenum ri -> fprintf fmt "%s" (string_of_any_enum ri.ei_type)
   | JCTpointer(pc, ao, bo) ->
     begin match pc with
     | JCtag({ si_name = name }, [])
@@ -431,7 +449,7 @@ let rec is_constant_term t =
     | JCTvar _ | JCTshift _ | JCTderef _
     | JCTapp _ | JCTold _ | JCTat _ | JCToffset _ | JCTaddress _
     | JCTbase_block _
-    | JCTinstanceof _ | JCTcast _ | JCTbitwise_cast _ | JCTrange_cast _
+    | JCTinstanceof _ | JCTcast _ | JCTrange_cast _ | JCTrange_cast_mod _
     | JCTreal_cast _ | JCTif _ | JCTlet _ | JCTmatch _ -> false
     | JCTbinary (t1, _, t2) | JCTrange (Some t1, Some t2) ->
         is_constant_term t1 && is_constant_term t2
@@ -454,13 +472,13 @@ module TermOrd = struct
     | JCTaddress _ -> 25
     | JCTinstanceof _ -> 31
     | JCTcast _ -> 37
-    | JCTbitwise_cast _ -> 39
     | JCTrange _ -> 41
     | JCTapp _ -> 43
     | JCTif _ -> 47
     | JCTat _ -> 53
     | JCTmatch _ -> 59
     | JCTrange_cast _ -> 61
+    | JCTrange_cast_mod _ -> 62
     | JCTreal_cast _ -> 67
     | JCTbase_block _ -> 71
     | JCTlet _ -> 73
@@ -504,8 +522,7 @@ module TermOrd = struct
             if compst = 0 then compare t11 t21 else compst
           else compok
       | JCTinstanceof(t11,lab1,st1),JCTinstanceof(t21,lab2,st2)
-      | JCTcast(t11,lab1,st1),JCTcast(t21,lab2,st2)
-      | JCTbitwise_cast(t11,lab1,st1),JCTbitwise_cast(t21,lab2,st2) ->
+      | JCTcast(t11,lab1,st1),JCTcast(t21,lab2,st2) ->
           let compst =
             Pervasives.compare st1.si_name st2.si_name
           in
@@ -526,7 +543,7 @@ module TermOrd = struct
       | JCTrange_cast(_, None), JCTrange_cast(_, Some _) -> -1
       | JCTrange_cast(t11, Some ri1),JCTrange_cast(t21, Some ri2) ->
           let comp =
-            Pervasives.compare ri1.ei_name ri2.ei_name
+            Pervasives.compare ri1.ei_type ri2.ei_type
           in
           if comp <> 0 then comp else
             compare t11 t21
@@ -590,9 +607,9 @@ module TermOrd = struct
       | JCTinstanceof(t11,_,_)
       | JCTcast(t11,_,_)
       | JCTbase_block(t11)
-      | JCTbitwise_cast(t11,_,_)
       | JCTreal_cast(t11,_)
       | JCTrange_cast(t11,_)
+      | JCTrange_cast_mod (t11, _)
       | JCTat(t11,_) ->
           hash t11
       | JCTrange (t11opt, t12opt) ->
@@ -638,7 +655,7 @@ let raw_tag_compare tag1 tag2 =
 
 module Enum_info = struct
     let equal ?(by_name=true) ei1 ei2 =
-      String.compare ei1.ei_name ei2.ei_name = 0 &&
+      Pervasives.compare ei1.ei_type ei2.ei_type = 0 &&
       (by_name ||
         ei1.ei_min =/ ei2.ei_min &&
         ei1.ei_max =/ ei2.ei_max)
@@ -759,8 +776,8 @@ let rec is_numeric_term t =
     | JCToffset _ | JCTaddress _ | JCTinstanceof _ | JCTrange _ -> false
     | JCTbinary (t1, _, t2) -> is_numeric_term t1 && is_numeric_term t2
     | JCTunary (_, t) | JCTold t | JCTat(t,_) | JCTcast (t, _, _)
-    | JCTbitwise_cast (t, _, _) | JCTbase_block t
-    | JCTrange_cast (t, _) | JCTreal_cast (t, _) -> is_numeric_term t
+    | JCTbase_block t
+    | JCTrange_cast (t, _) | JCTrange_cast_mod (t, _) | JCTreal_cast (t, _) -> is_numeric_term t
     | JCTapp _ -> false (* TODO ? *)
     | JCTif _ | JCTlet _ | JCTmatch _ -> false (* TODO ? *)
 
@@ -998,9 +1015,13 @@ let string_of_op = function
   | `Beq -> "=="
   | `Bneq -> "!="
   | `Badd -> "+"
+  | `Badd_mod -> "+%"
   | `Bsub -> "-"
+  | `Bsub_mod -> "-%"
   | `Bmul -> "*"
+  | `Bmul_mod -> "*%"
   | `Bdiv -> "/"
+  | `Bdiv_mod -> "/%"
   | `Bmod -> "%"
   | `Bland -> "&&"
   | `Blor -> "||"
@@ -1010,20 +1031,18 @@ let string_of_op = function
   | `Bbw_or -> "|"
   | `Bbw_xor -> "xor"
   | `Bshift_left -> "shift_left"
+  | `Bshift_left_mod -> "shift_left_mod"
   | `Blogical_shift_right -> "logical_shift_right"
   | `Barith_shift_right -> "arith_shift_right"
-  | `Uprefix_inc -> "prefix ++"
-  | `Uprefix_dec -> "prefix --"
-  | `Upostfix_inc -> "postfix ++"
-  | `Upostfix_dec -> "prefix --"
-  | `Uplus -> "unary +"
   | `Uminus -> "unary -"
+  | `Uminus_mod -> "unary -%"
   | `Unot -> "not"
   | `Ubw_not -> "bw not"
   | `Bconcat -> "strcat"
 
 let string_of_op_type = function
   | `Integer -> "integer"
+  | `Enum ei -> string_of_any_enum ei.ei_type
   | `Unit -> "unit"
   | `Real -> "real"
   | `Double -> "double"

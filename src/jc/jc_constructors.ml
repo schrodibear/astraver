@@ -349,7 +349,6 @@ either with (~expr1 AND ~expr2) OR ~list only."
       | Some op -> mk ~node:(JCPEassign_op(location, op, value))
   let mkinstanceof ~expr ~typ = mk ~node:(JCPEinstanceof(expr, typ))
   let mkcast ~expr ~typ = mk ~node:(JCPEcast(expr, typ))
-  let mkreinterpret_cast ~expr ~typ = mk ~node:(JCPEreinterpret_cast (expr, typ))
   let mkquantifier ~quantifier ~typ ~vars ?(triggers=[]) ~body =
     mk ~node:(JCPEquantifier(quantifier, typ, vars, triggers, body))
   let mkforall = mkquantifier ~quantifier:Forall
@@ -413,8 +412,6 @@ either with (~expr1 AND ~expr2) OR ~list only."
   let mkeq = mkbinary ~op:`Beq
   let mkimplies = mkbinary ~op:`Bimplies
   let mkiff = mkbinary ~op:`Biff
-  let mkincr_heap ~expr ~field ?(op = `Upostfix_inc) =
-    mkunary ~op ~expr:(mkderef ~expr ~field ())
 
   let mkcontract ~requires ~decreases ~behaviors ~expr =
     mk ~node:(JCPEcontract(requires, decreases, behaviors, expr))
@@ -467,7 +464,6 @@ module PDecl = struct
   let mktermination_policy_def ~value = mk ~node:(JCDtermination_policy value)
   let mkannotation_policy_def ~value = mk ~node:(JCDannotation_policy value)
   let mkabstract_domain_def ~value = mk ~node:(JCDabstract_domain value)
-  let mkint_model_def ~value = mk ~node:(JCDint_model value)
 
   let mkbehavior ?(pos = Why_loc.dummy_position) ~name ?throws ?assumes ?requires
       ?assigns ?allocates ?(ensures = mkboolean ~value:true ()) () =

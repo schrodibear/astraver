@@ -33,29 +33,6 @@ open Env
 open Ast
 open Fenv
 
-(*
-class positioned :
-  pos:Why_loc.position option -> object method pos : Why_loc.position end
-class typed : typ:Env.jc_type -> object method typ : Env.jc_type end
-class labeled :
-  label:Env.label option ->
-  object
-    val mutable llab : Env.label option
-    method label : Env.label option
-    method set_label : Env.label option -> unit
-  end
-class marked :
-  mark:string -> object method mark : string end
-class regioned :
-  region:Env.region ->
-  object
-    val mutable r : Env.region
-    method region : Env.region
-    method set_region : Env.region -> unit
-  end
-*)
-
-
 class identifier :
   ?pos:Why_loc.position ->
   string -> object method pos : Why_loc.position method name : string end
@@ -91,15 +68,6 @@ class nexpr :
     method set_label : label option -> unit
   end
 
-(*
-class nexpr_with :
-  ?pos:Why_loc.position ->
-  ?node:nexpr_node ->
-  < pos : Why_loc.position; label : label;
-    node : nexpr_node; .. > ->
-  nexpr
-*)
-
 class pattern :
   ?pos:Why_loc.position ->
   typ:jc_type ->
@@ -109,17 +77,6 @@ class pattern :
     method node : pattern_node
     method typ : jc_type
   end
-
-(*
-class pattern_with :
-  ?pos:Why_loc.position ->
-  ?node:pattern_node ->
-  ?typ:jc_type ->
-  < pos : Why_loc.position; node : pattern_node; typ : jc_type;
-    .. > ->
-  pattern
-*)
-
 
 class term :
   ?pos:Why_loc.position ->
@@ -348,28 +305,9 @@ class ['a] decl :
   'a decl_node ->
   object method pos : Why_loc.position method node : 'a decl_node end
 
-(*
-
-class ['a] decl_with :
-  ?pos:Why_loc.position ->
-  ?node:'a decl_node ->
-  < pos : Why_loc.position; node : 'a decl_node; .. > -> ['a] decl
-module Const :
-  sig
-    val mkvoid : const
-    val mknull : const
-    val mkboolean : bool -> const
-    val mkint : ?value:int -> ?valuestr:string -> unit -> const
-    val mkreal : ?value:float -> ?valuestr:string -> unit -> const
-  end
-val oo : 'a option -> 'a -> 'a
-*)
-
 module PExpr :
   sig
-(*
-    val mk : ?pos:Why_loc.position -> node:pexpr_node -> unit -> pexpr
-*)
+
     val mkconst : const:const -> ?pos:Why_loc.position -> unit -> pexpr
 
     val mkvoid : ?pos:Why_loc.position -> unit -> pexpr
@@ -381,22 +319,11 @@ module PExpr :
     val mkint :
       ?value:int -> ?valuestr:string -> ?pos:Why_loc.position -> unit -> pexpr
 
-(*
-    val mkreal :
-      ?value:float -> ?valuestr:string -> ?pos:Why_loc.position -> unit -> pexpr
-*)
     val mkbinary :
       expr1:pexpr ->
       op:bin_op ->
       expr2:pexpr -> ?pos:Why_loc.position -> unit -> pexpr
-(*
-    val mkbinary_list :
-      default:pexpr ->
-      op:bin_op ->
-      ?expr1:pexpr ->
-      ?expr2:pexpr ->
-      ?list:pexpr list -> ?pos:Why_loc.position -> unit -> pexpr
-*)
+
     val mkand :
       ?expr1:pexpr ->
       ?expr2:pexpr ->
@@ -441,9 +368,6 @@ module PExpr :
     val mkcast :
       expr:pexpr -> typ:ptype -> ?pos:Why_loc.position -> unit -> pexpr
 
-    val mkreinterpret_cast :
-      expr:pexpr -> typ:ptype -> ?pos:Why_loc.position -> unit -> pexpr
-
     val mkquantifier :
       quantifier:quantifier ->
       typ:ptype ->
@@ -457,23 +381,10 @@ module PExpr :
       ?triggers:pexpr list list ->
       body:pexpr -> ?pos:Why_loc.position -> unit -> pexpr
 
-(*
-    val mkexists :
-      typ:ptype ->
-      vars:string list ->
-      body:pexpr -> ?pos:Why_loc.position -> unit -> pexpr
-    val mkold : expr:pexpr -> ?pos:Why_loc.position -> unit -> pexpr
-*)
-
     val mkat :
       expr:pexpr ->
       label:label -> ?pos:Why_loc.position -> unit -> pexpr
 
-(*
-    val mkoffset :
-      kind:offset_kind ->
-      expr:pexpr -> ?pos:Why_loc.position -> unit -> pexpr
-*)
     val mkoffset_min :
       expr:pexpr -> ?pos:Why_loc.position -> unit -> pexpr
 
@@ -491,11 +402,6 @@ module PExpr :
     val mkblock :
       exprs:pexpr list -> ?pos:Why_loc.position -> unit -> pexpr
 
-(*
-    val mkdecl :
-      typ:ptype ->
-      var:string -> ?init:pexpr -> ?pos:Why_loc.position -> unit -> pexpr
-*)
     val mklet :
       ?typ:ptype ->
       var:string ->
@@ -515,20 +421,6 @@ module PExpr :
 
     val mkalloc :
       ?count:pexpr -> typ:string -> ?pos:Why_loc.position -> unit -> pexpr
-
-(*
-    val mkfree : expr:pexpr -> ?pos:Why_loc.position -> unit -> pexpr
-    val mkmutable :
-      expr:pexpr ->
-      tag:pexpr ptag -> ?pos:Why_loc.position -> unit -> pexpr
-    val mktag_equality :
-      tag1:pexpr ptag ->
-      tag2:pexpr ptag -> ?pos:Why_loc.position -> unit -> pexpr
-    val mkmatch :
-      expr:pexpr ->
-      cases:(ppattern * pexpr) list ->
-      ?pos:Why_loc.position -> unit -> pexpr
-*)
 
     val mkreinterpret :
       expr:pexpr -> typ:string -> ?pos:Why_loc.position -> unit -> pexpr
@@ -555,11 +447,6 @@ module PExpr :
 
     val mkcontinue : ?label:string -> ?pos:Why_loc.position -> unit -> pexpr
 
-(*
-    val mkgoto : label:string -> ?pos:Why_loc.position -> unit -> pexpr
-
-*)
-
     val mktry :
       expr:pexpr ->
       ?catches:(identifier * string * pexpr) list ->
@@ -568,15 +455,6 @@ module PExpr :
     val mkthrow :
       exn:identifier ->
       ?argument:pexpr -> ?pos:Why_loc.position -> unit -> pexpr
-
-(*
-    val mkpack :
-      expr:pexpr ->
-      ?tag:identifier -> ?pos:Why_loc.position -> unit -> pexpr
-    val mkunpack :
-      expr:pexpr ->
-      ?tag:identifier -> ?pos:Why_loc.position -> unit -> pexpr
-*)
 
     val mkswitch :
       expr:pexpr ->
@@ -607,11 +485,6 @@ module PExpr :
       expr1:pexpr ->
       expr2:pexpr -> ?pos:Why_loc.position -> unit -> pexpr
 
-    val mkincr_heap :
-      expr:pexpr ->
-      field:string ->
-      ?op:pexpr_unary_op -> ?pos:Why_loc.position -> unit -> pexpr
-
     val mkcontract :
       requires:pexpr option ->
       decreases:(pexpr * Ast.identifier option) option ->
@@ -628,9 +501,6 @@ module NExpr :
 
 module PDecl :
   sig
-(*
-    val mk : ?pos:Why_loc.position -> node:'a -> unit -> 'a node_positioned
-*)
     val mkfun_def :
       ?result_type:ptype ->
       name:identifier ->
@@ -730,14 +600,6 @@ module PDecl :
       value:abstract_domain ->
       ?pos:Why_loc.position -> unit -> 'a decl_node node_positioned
 
-(*
-
-    val mkint_model_def :
-      value:int_model ->
-      ?pos:Why_loc.position -> unit -> 'a decl_node node_positioned
-
-*)
-
     val mkbehavior :
       ?pos:Why_loc.position ->
       name:string ->
@@ -762,25 +624,10 @@ module PDecl :
       ?allocates:Why_loc.position * pexpr list ->
       ?ensures:pexpr -> unit -> pexpr clause
 
-(*
-    val mkbehavior_with :
-      ?pos:Why_loc.position ->
-      ?name:string ->
-      ?throws:identifier option ->
-      ?assumes:'a option ->
-      ?requires:'a option ->
-      ?assigns:(Why_loc.position * 'a list) option ->
-      ?ensures:'a -> 'a clause -> 'a clause
-*)
-
     val mkassigns :
       ?pos:Why_loc.position ->
       ?locations:'a list -> unit -> Why_loc.position * 'a list
 
-(*
-    val mktag_invariant : name:'a -> var:'b -> body:'c -> 'a * 'b * 'c
-    val behavior_ensures : 'a clause -> 'a
-*)
   end
 
 
@@ -827,13 +674,6 @@ module Expr :
 
 module Term :
   sig
-(*
-    val mk :
-      ?pos:Why_loc.position ->
-      typ:jc_type ->
-      ?mark:string ->
-      ?region:region -> node:term_node -> unit -> term
-*)
     val mkconst :
       const: const ->
       ?pos:Why_loc.position ->
@@ -863,12 +703,6 @@ module Term :
 
 module Assertion :
   sig
-(*
-    val mk :
-      ?pos:Why_loc.position ->
-      ?mark:string -> node:assertion_node -> unit -> assertion
-    val fake : ?pos:'a -> ?mark:'b -> value:'c -> unit -> 'c
-*)
 
     val is_true : assertion -> bool
     val is_false : assertion -> bool

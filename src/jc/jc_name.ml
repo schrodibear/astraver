@@ -190,8 +190,6 @@ struct
     (if safe then "safe_" else "") ^ prefix ^ "_" ^ (Class.pointer pc)
 end
 
-let simple_logic_type s = { lt_name = s; lt_args = [] }
-
 let root_alloc_table_name vi = vi.ri_name ^ "_alloc_table"
 
 let root_tag_table_name vi = vi.ri_name ^ "_tag_table"
@@ -308,17 +306,6 @@ let reinterpret_cast_name op =
   | `Retain -> "retain"
   | `Merge _ -> "merge"
   | `Split _ -> "split"
-
-let logic_enum_of_int_name ri = ri.ei_name ^ "_of_integer"
-let safe_fun_enum_of_int_name ri = "safe_" ^ ri.ei_name ^ "_of_integer_"
-let fun_enum_of_int_name ri = ri.ei_name ^ "_of_integer_"
-let logic_int_of_enum_name ri = "integer_of_" ^ ri.ei_name
-let mod_of_enum_name ri = "mod_" ^ ri.ei_name ^ "_of_integer"
-let fun_any_enum_name ri = "any_" ^ ri.ei_name
-let eq_of_enum_name ri = "eq_" ^ ri.ei_name
-
-let logic_bitvector_of_enum_name ri = "bitvector_of_" ^ ri.ei_name
-let logic_enum_of_bitvector_name ri = ri.ei_name  ^ "_of_bitvector"
 
 let logic_integer_of_bitvector_name = "integer_of_bitvector"
 let logic_bitvector_of_integer_name = "bitvector_of_integer"
