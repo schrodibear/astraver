@@ -76,6 +76,7 @@ bin
 
 /lib/coq/WhyCoqCompat.v
 /lib/why3/why3.conf
+/lib/why3/enum*
 
 /src/why/why_lexer.ml
 /src/why/why_linenum.ml

@@ -265,7 +265,6 @@ and triggers fmt trigs =
   in
   print_list_delim lsquare rsquare semi (print_list comma pat) fmt trigs
 
-
 let rec location_set fmt locs =
   match locs#node with
   | JCLSvar vi->
@@ -507,8 +506,6 @@ let term_or_assertion fmt =
               assertion e))
       l
 
-
-
 let print_super fmt =
   function
   | None -> ()
@@ -634,6 +631,37 @@ let rec print_decls fmt d =
   | [] -> ()
   | d::r -> print_decl fmt d; print_decls fmt r
 
+(*******************************************************************************)
+(* Jessie plugin compatibility ( *.loc files)                                  *)
+(*******************************************************************************)
+
+let jc_reg_pos, jc_print_pos =
+  let open Hashtbl in
+  let jc_pos_table = create 97 in
+  let name_counter = ref 0 in
+  (fun prefix ?id ?kind ?name ?formula pos ->
+    let id =
+      match id with
+      | None ->
+        incr name_counter;
+        prefix ^ "_" ^ string_of_int !name_counter
+      | Some n -> n
+    in
+    add jc_pos_table id (kind, name, formula, pos);
+    id),
+   fun fprintf_kind fmttr ->
+     let pr fmt = fprintf fmttr fmt in
+     iter
+       (fun id (kind, name, formula, (f, l, fc, lc)) ->
+          pr "[%s]@\n" id;
+          Option.iter (pr "kind = %a@\n" fprintf_kind) kind;
+          Option.iter (pr "name = \"%s\"@\n") name;
+          Option.iter (pr "formula = \"%s\"@\n") formula;
+          pr "file = \"%s\"@\n" (String.escaped (abs_fname f));
+          pr "line = %d@\n" l;
+          pr "begin = %d@\n" fc;
+          pr "end = %d@\n@\n" lc)
+       jc_pos_table
 
 (*
 Local Variables:

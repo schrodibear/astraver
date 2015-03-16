@@ -71,7 +71,6 @@ module Struct_tools = Jc_struct_tools
 module Type_var = Jc_type_var
 module Typing = Jc_typing
 module Print_why3 = Jc_print_why3
-module Why_output = Jc_why_output
 module Output_ast = Jc_output_ast
 module Output = Jc_output
 module Output_misc = Jc_output_misc

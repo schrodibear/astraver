@@ -33,14 +33,12 @@
 (**************************************************************************)
 
 open Format
-(*open Why_pp*)
 
 open Stdlib
 open Envset
 
 open Output_ast
 module O = Output
-(*open Output_misc*)
 
 let constant fmttr (type a) =
   let pr fmt = fprintf fmttr fmt in
@@ -987,8 +985,8 @@ struct
         'a.
           state:('s * 'v) H.t ->
         consts:StringSet.t ->
-        entry:(unit -> 'k entry) ->
-        entry':'a entry ->
+        entry:(unit -> 'k entry) -> (* Exactly the same entry as was passed to the outer iter function *)
+        entry':'a entry -> (* Possibly different entry for further implicit self-recursion *)
         (enter:'s -> f:'f -> StringSet.t) Staged.t }
 
   let iter =
@@ -1017,19 +1015,19 @@ struct
               in
               List.iter (fun (Entry e) -> f e) file;
               { iter = fun ~consts ~entry -> continue ~state ~consts ~entry:(fun () -> assert false) ~entry':entry }
-            | Decls ->
-              fun ~consts ~entry ->
-                let (l : decl_kind why_decl list) =
-                  match entry with
-                  | Theory (_, None) -> []
-                  | Module (_, None) -> []
-                  | Theory (_, Some (_, decls)) -> decls
-                  | Module (_, Some (_, _, decls)) -> decls
-                in
-                List.iter
-                  (fun ({ why_id = { why_name } } as d) -> H.add state why_name (init, d))
-                  l;
-                continue ~state ~consts ~entry:(fun () -> entry) ~entry':entry
+          | Decls ->
+            fun ~consts ~entry ->
+              let (l : decl_kind why_decl list) =
+                match entry with
+                | Theory (_, None) -> []
+                | Module (_, None) -> []
+                | Theory (_, Some (_, decls)) -> decls
+                | Module (_, Some (_, _, decls)) -> decls
+              in
+              List.iter
+                (fun ({ why_id = { why_name } } as d) -> H.add state why_name (init, d))
+                l;
+              continue ~state ~consts ~entry:(fun () -> entry) ~entry':entry
         in
         let map_ints ~how =
           let b = Buffer.create 25 in
@@ -1180,7 +1178,7 @@ struct
                       in
                       match H.find state name, import with
                       | (_, Entry (Theory _ as e)), Some import -> add import e
-                      | (_, Entry (Module _ as e)), Some import  -> add import e
+                      | (_, Entry (Module _ as e)), Some import -> add import e
                       | _ -> ()
                       | exception Not_found -> assert false (* already checked during map initialization *))) |>
               fst
@@ -1337,25 +1335,26 @@ let why3_builtin_locals = StringSet.singleton "result"
 
 let file fmttr file =
   let open Entry in
-  let entry fmttr =
-    let pr_entry = entry fmttr in
-    let { iter } =
-      iter
-        ~over:Entry.Entries
-        ~init:`TODO
-        ~file
-    in
-    fun ~consts entry ->
+  let iter =
+    iter
+      ~over:Entry.Entries
+      ~init:`TODO
+      ~file
+  in
+  let entry =
+    fun fmttr ~consts e ->
       unstage
-        (iter
+        (iter.iter
            ~consts
-           ~entry)
+           ~entry:e)
         ~enter:`Running
         ~f:{ f = fun ~state ~consts ~enter e ->
           match state with
           | `TODO ->
             let consts = enter ~consts in
-            `Done, pr_entry ~consts e
+            let consts = entry fmttr ~consts e in
+            fprintf fmttr "@\n@.";
+            `Done, consts
           | `Running ->
             failwith "Cyclic dependency between resulting Why3ML modules/theories"
           | `Done -> `Done, consts }
@@ -1367,109 +1366,18 @@ let file fmttr file =
        function
        | Entry entry' -> consts := entry fmttr ~consts:!consts entry')
     fmttr
+    file
 
-(*
-(* Drop auxiliary arguments to satisfy common output interface *)
-let globalize f = f ~locals:why3_builtin_locals
-let fprintf_term = globalize fprintf_term
-let fprintf_assertion = globalize fprintf_assertion
-let fprintf_expr = globalize fprintf_expr
+let entry ~consts fmttr e = ignore (entry ~consts fmttr e)
 
-let pr_use fmttr f ?(import = false) ?as_ s =
-  let pr fmt = fprintf fmttr fmt in
-  if f then begin
-    pr "use %s%s" (if import then "import " else "") s;
-    Option.iter (pr " as %s") as_;
-    pr "@\n@\n"
-  end
-and import = true
-
-let fprintf_why3_imports ?float_model fmttr d =
-  let pr = pr_use fmttr in
-  pr ~import true "int.Int";
-  pr         true "bool.Bool";
-  pr         d.why3_IntMinMax         ~as_:"IntMinMax"  "int.MinMax";
-  pr         d.why3_ComputerDivision                    "int.ComputerDivision";
-  pr ~import d.why3_reals                               "real.RealInfix";
-  pr         d.why3_FromInt                             "real.FromInt";
-  pr         d.why3_Truncate                            "real.Truncate";
-  pr         d.why3_Square                              "real.Square";
-  pr         d.why3_Power                               "int.Power";
-  pr         d.why3_PowerInt                            "real.PowerInt";
-  pr         d.why3_PowerReal                           "real.PowerReal";
-  pr         d.why3_RealMinMax        ~as_:"RealMinMax" "real.MinMax";
-  pr         d.why3_AbsInt            ~as_:"AbsInt"     "int.Abs";
-  pr         d.why3_AbsReal           ~as_:"AbsReal"    "real.Abs";
-  pr         d.why3_ExpLog                              "real.ExpLog";
-  pr         d.why3_Trigonometry                        "real.Trigonometry";
-  begin match float_model with
-  | Some Env.FMfull ->
-    pr ~import true ~as_:"Single" "floating_point.SingleFull";
-    pr ~import true ~as_:"Double" "floating_point.DoubleFull"
-  | Some Env.FMdefensive ->
-    pr ~import true ~as_:"Single" "floating_point.Single";
-    pr ~import true ~as_:"Double" "floating_point.Double"
-  | Some Env.FMmultirounding ->
-    pr ~import true ~as_:"Double" "floating_point.DoubleMultiRounding"
-  | Some Env.FMmath ->
-    failwith "unsupported \"math\" floating-point model" (* TODO *)
-  | None -> ()
-  end;
-  pr ~import true                                       "jessie3theories.Jessie_memory_model"
-
-let fprintf_why_decls ?float_model fmttr decls =
-  let deps = empty_why3_dependencies in
-  List.iter (iter_why_decl @@ add_why3_dependencies deps) decls;
-  (* Partitioning -- needed due to possible name clashes (from different Why3ML scopes) *)
-  let types, params, defs, others =
-    List.fold_left
-      (fun (t, p, d, o) ->
-         function
-         | Type _ as t'   ->   t' :: t, p,         d,         o
-         | Exception _
-         | Param _  as p' ->   t,       p' :: p,   d,         o
-         | Def _ as d'    ->   t,       p,         d' :: d,   o
-         | _ as o'        ->   t,       p,         d,         o' :: o)
-      ([], [], [], [])
-      decls
-  in
-  let pr fmt = fprintf fmttr fmt in
-  let pr_use = pr_use fmttr true in
-  pr "theory Jessie_model@\n@\n";
-  fprintf_why3_imports ?float_model fmttr deps;
-  pr_use ~import "jessie3_integer.Integer";
-  output_decls get_why_id iter_why_decl (fprintf_why_decl fmttr) types;
-  output_decls get_why_id iter_why_decl (fprintf_why_decl fmttr) others;
-  pr "end@\n@\n";
-  pr "module Jessie_program@\n@\n";
-  fprintf_why3_imports ?float_model fmttr deps;
-  pr_use ~import "Jessie_model";
-  pr_use ~import "ref.Ref";
-  pr_use ~import "jessie3.JessieDivision";
-  Option.iter (fun _ ->
-    pr_use ~import "floating_point.Rounding")
-    float_model;
-  begin match float_model with
-  | Some Env.FMfull ->
-    pr_use ~import "jessie3.JessieFloatsFull"
-  | Some Env.FMdefensive ->
-    pr_use ~import "jessie3.JessieFloats"
-  | Some Env.FMmultirounding ->
-    pr_use ~import "jessie3.JessieFloatsMultiRounding"
-  | Some Env.FMmath -> failwith "unsupported \"math\" floating-point model" (* TODO *)
-  | None -> ()
-  end;
-  pr_use ~import "jessie3.Jessie_memory_model_parameters";
-  pr_use ~import "jessie3_integer.Integer";
-  output_decls get_why_id iter_why_decl (fprintf_why_decl fmttr) params;
-  output_decls get_why_id iter_why_decl (fprintf_why_decl fmttr) defs;
-  pr "end@\n@\n"
-
-let print_to_file = print_to_file (fun f -> f ^ ".mlw") fprintf_vc_kind fprintf_why_decls
+let file ~filename f =
+  Why_pp.print_in_file
+    (fun fmttr -> fprintf fmttr "%a@." file f)
+    filename
 
 (*
   Local Variables:
-  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_why3_output.ml"
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_print_why3.ml"
   End:
 *)
-*)
+
