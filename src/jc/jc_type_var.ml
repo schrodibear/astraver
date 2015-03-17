@@ -33,47 +33,57 @@ open Env
 open Envset
 open Common
 
+open Why_loc
+open Format
+
 type t = type_var_info
 
-let type_var_from_string = let c = ref 0 in fun ?(univ=false) n -> incr c;
-  { tvi_name = n;
-    tvi_tag = !c;
-    tvi_univ = univ}
+let type_var_from_string =
+  let c = ref 0 in
+  fun ?(univ = false) n ->
+    incr c;
+    {
+      tvi_name = n;
+      tvi_tag = !c;
+      tvi_univ = univ
+    }
 
 let uid x = x.tvi_tag
 
 let name x = x.tvi_name
 
-let uname x =
-  name x ^ string_of_int (uid x)
+let uname x = name x ^ string_of_int (uid x)
 
-type typing_error = {f : 'a. Why_loc.position -> ('a, Format.formatter, unit, unit) format4 -> 'a}
+type 'a typing_error = loc:position -> ('a, formatter, unit, unit) format4 -> 'a
 
-type env = { typing_error : typing_error;
-             mutable smap : t StringMap.t;
-             mutable vmap : jc_type TypeVarMap.t}
+type typing_error_arg = { f : 'a. 'a typing_error }
 
-let create x = {typing_error = x;
-                smap = StringMap.empty;
-                vmap = TypeVarMap.empty}
+type env =
+  {
+    typing_error : 'a. 'a typing_error;
+    mutable smap : t StringMap.t;
+    mutable vmap : jc_type TypeVarMap.t
+  }
 
-let reset env = env.smap <- StringMap.empty;env.vmap <- TypeVarMap.empty
+let create typing_error =
+  {
+    typing_error = typing_error.f;
+    smap = StringMap.empty;
+    vmap = TypeVarMap.empty
+  }
 
+let reset env =
+  env.smap <- StringMap.empty;
+  env.vmap <- TypeVarMap.empty
 
 (** Add substitution from string to type *)
 let add_type_var env s =
   if StringMap.mem s env.smap
-  then invalid_arg ("The same identifier appear twice as polymorphic variable in a function")
+  then invalid_arg "The same identifier appear twice as polymorphic variable in a function"
   else
-    (let n = (type_var_from_string ~univ:true s) in
+    let n = type_var_from_string ~univ:true s in
     env.smap <- StringMap.add s n env.smap;
-    n)
-
-(*                    if subtype_strict te#typ ty then te
-                     else
-                       typing_error e#pos
-                         "type %a expected instead of %a"
-                         print_type ty print_type te#typ*)
+    n
 
 let find_type_var env s = StringMap.find s env.smap
 
@@ -158,12 +168,12 @@ and add_aux ~subtype env t1 t2 =
 (*let subtype_strict = subtype ~allow_implicit_cast:false*)
 
 (** Add an equality for unification *)
-let add ?(subtype=true) env pos x y =
-  (*Format.printf "%a=%a@." print_type x print_type y;*)
+let add ?(subtype=true) env loc x y =
   try
     add_aux ~subtype env x y
-  with Not_subtype (t1,t2) ->
-    env.typing_error.f pos "%a and %a can't be unified" print_type t1 print_type t2
+  with
+  | Not_subtype (t1, t2) ->
+    env.typing_error ~loc "%a and %a can't be unified" print_type t1 print_type t2
 
 (** Get instances of a list of type variables,
     return a substitution function *)

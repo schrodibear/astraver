@@ -1185,6 +1185,19 @@ let builtin_function_symbols =
     float_type, "\\neg_float", "neg_single", [float_type], treatfloat ;
 ]
 
+let builtin_enum_symbols =
+  let (~+) = Num.num_of_string in
+  [
+    "int8",   { ei_min = ~+ "-128";                 ei_max = ~+ "127";                  ei_type = Int (Signed, X8) };
+    "uint8",  { ei_min = ~+ "0";                    ei_max = ~+ "255";                  ei_type = Int (Unsigned, X8) };
+    "int16",  { ei_min = ~+ "-32768";               ei_max = ~+ "32767";                ei_type = Int (Signed, X16) };
+    "uint16", { ei_min = ~+ "0";                    ei_max = ~+ "65535";                ei_type = Int (Unsigned, X16) };
+    "int32",  { ei_min = ~+ "-2147483648";          ei_max = ~+ "2147483647";           ei_type = Int (Signed, X32) };
+    "uint32", { ei_min = ~+ "0";                    ei_max = ~+ "4294967295";           ei_type = Int (Unsigned, X32) };
+    "int64",  { ei_min = ~+ "-9223372036854775808"; ei_max = ~+ "9223372036854775807";  ei_type = Int (Signed, X64) };
+    "uint64", { ei_min = ~+ "0";                    ei_max = ~+ "18446744073709551615"; ei_type = Int (Unsigned, X64) };
+  ]
+
 module StringSet = Set.Make(String)
 
 module IntSet = Set.Make(struct type t = int let compare = compare end)

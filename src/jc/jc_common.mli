@@ -176,6 +176,8 @@ val builtin_logic_symbols :
 val builtin_function_symbols :
   (Env.jc_type * string * string * Env.jc_type list * Fenv.builtin_treatment) list
 
+val builtin_enum_symbols : (string * Env.enum_info) list
+
 module TermOrd : OrderedHashedType with type t = term
 
 module TermSet : Set.S with type elt = term

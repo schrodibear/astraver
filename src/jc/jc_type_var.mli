@@ -59,16 +59,18 @@ val uname: t -> string
 type env
 
 (** The type of function used in case of unification error *)
-type typing_error = {f : 'a. Why_loc.position -> ('a, Format.formatter, unit, unit) format4 -> 'a}
+type 'a typing_error = loc:Why_loc.position -> ('a, Format.formatter, unit, unit) format4 -> 'a
 
-val create : typing_error -> env
+type typing_error_arg = { f : 'a. 'a typing_error }
+
+val create : typing_error_arg -> env
 val reset : env -> unit
 
 (** Add a universally quantified type var to substitute with the string
     invalid_argument is raised if the string is yet bind *)
 val add_type_var : env -> string -> t
 
-(** Try to get a universally quantified var from a string 
+(** Try to get a universally quantified var from a string
     Not_found is raised if there is no binding*)
 val find_type_var : env -> string -> t
 
@@ -77,7 +79,7 @@ val add : ?subtype:bool -> env ->  Why_loc.position -> jc_type -> jc_type -> uni
 
 val subst : env -> jc_type -> jc_type
 
-(** Get instances of a list of type variables, 
+(** Get instances of a list of type variables,
     return a substitution function *)
 val instance : t list -> (jc_type -> jc_type)
 
@@ -87,13 +89,13 @@ val print : Format.formatter -> env -> unit
 
 (** Substitute in an assertion the type variable which are in
     the environnement env *)
-val subst_type_in_assertion : 
-  env -> 
-  Fenv.logic_info Ast.assertion -> 
+val subst_type_in_assertion :
+  env ->
+  Fenv.logic_info Ast.assertion ->
   Fenv.logic_info Ast.assertion
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "unset LANG ; make -C .. byte"
-End: 
+End:
 *)
