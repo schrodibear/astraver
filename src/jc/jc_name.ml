@@ -190,6 +190,15 @@ struct
     (if safe then "safe_" else "") ^ prefix ^ "_" ^ (Class.pointer pc)
 end
 
+module Theory =
+struct
+  let root ri = String.capitalize (Type.root ri) ^ "_root", false
+  (* ATTENTION: this theory is non-existent, there is no more "obsolete" support for BV,
+     new implementation of Why3 support for BV should be implemented in Jessie2. *)
+  let bitvector = "Bitvector", false
+  let jessie = "Jc_memory_model", false
+end
+
 let root_alloc_table_name vi = vi.ri_name ^ "_alloc_table"
 
 let root_tag_table_name vi = vi.ri_name ^ "_tag_table"

@@ -43,11 +43,10 @@ open Common
 open Struct_tools
 
 open Output_ast
-open Output_misc
 open Why_pp
 open Format
 
-module Output = (val Options.backend)
+module O = Output
 
 let find_struct a = fst @@ StringHashtblIter.find Typing.structs_table a
 
@@ -65,112 +64,15 @@ let mutable_name2 a =
 let committed_name2 a =
   committed_name (JCtag (find_struct a, []))
 
-(*******************************************************************************)
-(* Functions to make Why expressions                                           *)
-(*******************************************************************************)
-
-let make_if_term cond a b = LApp ("ite", [cond; a; b])
-
-let make_eq_term ty a b =
-  let eq =
-    match ty with
-    | JCTpointer _
-    | JCTnull -> "eq_pointer_bool"
-    | JCTenum _
-    | JCTlogic _ -> invalid_arg "make_eq_term"
-    | JCTany -> failwith "make_eq_term: equality for wildcard type"
-    | JCTnative Tunit -> "eq_unit_bool"
-    | JCTnative Tboolean -> "eq_bool_bool"
-    | JCTnative Tinteger -> "eq_int_bool"
-    | JCTnative Treal -> "eq_real_bool"
-    | JCTnative (Tgenfloat f) -> "eq_" ^ native_name (Tgenfloat f)
-    | JCTnative Tstring -> "eq_string_bool"
-    | JCTtype_var _ ->
-      Options.jc_error Why_loc.dummy_position "Unsupported equality for poly type" (* TODO: need environment *)
-  in
-  LApp (eq, [a; b])
-
-let make_eq_pred ty a b =
-  let eq =
-    match ty with
-    | JCTpointer _ | JCTnull -> "eq"
-    | JCTenum ri -> eq_of_enum_name ri
-    | JCTlogic _ -> invalid_arg "make_eq_pred"
-    | JCTany -> failwith "make_eq_pred: equality for wildcard type"
-    | JCTnative Tunit -> "eq_unit"
-    | JCTnative Tboolean -> "eq_bool"
-    | JCTnative Tinteger -> "eq_int"
-    | JCTnative Treal -> "eq_real"
-    | JCTnative (Tgenfloat f) -> "eq_" ^ native_name (Tgenfloat f)
-    | JCTnative Tstring -> "eq_string"
-    | JCTtype_var _ ->
-      Options.jc_error Why_loc.dummy_position "Unsupported equality for poly type" (* TODO: need environment *)
-  in
-  LPred (eq, [a; b])
-
-let make_and_term a b =
-  make_if_term a b @@ LConst (Prim_bool false)
-
-let make_or_term a b =
-  make_if_term a (LConst (Prim_bool true)) b
-
-let make_not_term a =
-  make_if_term a (LConst (Prim_bool false)) (LConst (Prim_bool true))
-
-let make_eq a b =
-  LPred ("eq", [a; b])
-
-let make_le a b =
-  LPred ("le", [a; b])
-
-let make_ge a b =
-  LPred ("ge", [a; b])
-
-let make_select f this =
-  LApp ("select", [f; this])
-
-let make_select_fi fi =
-  make_select (LVar (field_memory_name fi))
-
-let make_select_committed pc =
-  make_select (LVar (committed_name pc))
-
-let make_typeof t x =
-  LApp ("typeof", [t; x])
-
-let make_typeeq t x st =
-  LPred ("eq", [make_typeof t x; LVar (Name.tag st)])
-
-let make_subtag t u =
-  LPred ("subtag", [t; u])
-
-let make_subtag_bool t u =
-  LApp ("subtag_bool", [t; u])
-
-let make_instanceof t p st =
-  LPred ("instanceof", [t; p; LVar (Name.tag st)])
-
-let make_instanceof_bool t p st =
-  LApp ("instanceof_bool", [t; p; LVar (Name.tag st)])
-
-let make_offset_min ac p =
-  LApp ("offset_min", [LVar (Name.Generic.alloc_table ac); p])
-
-let make_offset_max ac p =
-  LApp ("offset_max", [LVar (Name.Generic.alloc_table ac); p])
-
-let make_int_of_tag st =
-  LApp ("int_of_tag", [LVar (Name.tag st)])
-
 let pc_of_name name = JCtag (find_struct name, []) (* TODO: parameters *)
 
-let const c =
+let const t c =
   match c with
-  | JCCvoid -> Prim_void
+  | JCCvoid -> O.(const (ty t) Void)
   | JCCnull -> invalid_arg "const"
-  | JCCreal s -> Prim_real s
-  | JCCinteger s -> Prim_int (Num.string_of_num (Numconst.integer s))
-  | JCCboolean b -> Prim_bool b
+  | JCCreal s -> O.(const (ty t) (Real s))
+  | JCCinteger s -> O.(const (ty t) (Int s))
+  | JCCboolean b -> O.(const (ty t) (Bool b))
   | JCCstring _s ->
     Options.jc_error Why_loc.dummy_position "Unsupported string constant" (* TODO *)
 
@@ -225,53 +127,34 @@ let fresh_statement_label = make_label_counter "l__before_statement_"
 
 (* basic model types *)
 
-let why_integer_type = simple_logic_type "int"
-let why_unit_type = simple_logic_type "unit"
+let root_model_type ri = O.(lt ~from:(Name.Theory.root ri) (Name.Type.root ri) @@@$ Nil)
 
-let root_model_type vi =
-  simple_logic_type (Name.Type.root vi)
+let struct_model_type st = root_model_type (struct_root st)
 
-let struct_model_type st =
-  root_model_type (struct_root st)
+let pointer_class_model_type pc = root_model_type (pointer_class_root pc)
 
-let pointer_class_model_type pc =
-  root_model_type (pointer_class_root pc)
-
-let bitvector_type = simple_logic_type Name.Type.bitvector
+let bitvector_type = O.(lt ~from:(Name.Theory.bitvector) Name.Type.bitvector @@@$ Nil)
 
 let alloc_class_type =
   function
   | JCalloc_root vi -> root_model_type vi
-  | JCalloc_bitvector -> why_unit_type
+  | JCalloc_bitvector -> O.void_lt
 
-let memory_class_type mc =
-  alloc_class_type (alloc_class_of_mem_class mc)
+let memory_class_type mc = alloc_class_type (alloc_class_of_mem_class mc)
 
 (* raw types *)
 
-let raw_pointer_type ty' =
-  { lt_name = pointer_type_name;
-    lt_args = [ty']; }
+let raw_pointer_type ty' = O.(jc_lt pointer_type_name @@@$. ty')
 
-let raw_pset_type ty' =
-  { lt_name = pset_type_name;
-    lt_args = [ty']; }
+let raw_pset_type ty' = O.(jc_lt pset_type_name @@@$. ty')
 
-let raw_alloc_table_type ty' =
-  { lt_name = Name.Type.alloc_table;
-    lt_args = [ty']; }
+let raw_alloc_table_type ty' = O.(jc_lt Name.Type.alloc_table @@@$. ty')
 
-let raw_tag_table_type ty' =
-  { lt_name = Name.Type.tag_table;
-    lt_args = [ty']; }
+let raw_tag_table_type ty' = O.(jc_lt Name.Type.tag_table @@@$. ty')
 
-let raw_tag_id_type ty' =
-  { lt_name = tag_id_type_name;
-    lt_args = [ty']; }
+let raw_tag_id_type ty' = O.(jc_lt tag_id_type_name @@@$. ty')
 
-let raw_memory_type ty1' ty2' =
-  { lt_name = Name.Type.memory;
-    lt_args = [ty1';ty2'] }
+let raw_memory_type ty1' ty2' = O.(jc_lt Name.Type.memory @@@$ ty1' @@@. ty2')
 
 (* pointer model types *)
 
@@ -280,20 +163,20 @@ let pointer_type ac pc =
   | JCalloc_root _ ->
     raw_pointer_type (pointer_class_model_type pc)
   | JCalloc_bitvector ->
-    raw_pointer_type why_unit_type
+    raw_pointer_type O.void_lt
 
 (* translation *)
 
-let tr_native_type =
+let tr_native_type t =
   function
-  | Tunit -> "unit"
-  | Tboolean -> "bool"
-  | Tinteger -> "int"
-  | Treal -> "real"
-  | Tgenfloat `Double -> "double"
-  | Tgenfloat `Float -> "single"
-  | Tgenfloat `Binary80 -> "binary80"
-  | Tstring -> "string"
+  | Tunit -> O.(logic_type (ty t) void_lt)
+  | Tboolean -> O.(logic_type (ty t) bool_lt)
+  | Tinteger -> O.(logic_type (ty t) integer_lt)
+  | Treal -> O.(logic_type (ty t) real_lt)
+  | Tgenfloat `Double -> O.(logic_type (ty t) double_lt)
+  | Tgenfloat `Float -> O.(logic_type (ty t) single_lt)
+  | Tgenfloat `Binary80 -> O.(logic_type t (jc_lt "binary80" @@@$ Nil))
+  | Tstring -> O.(logic_type t (jc_lt "string" @@@$ Nil))
 
 let rec tr_base_type ?region =
   function

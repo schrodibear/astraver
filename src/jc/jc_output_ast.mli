@@ -127,8 +127,8 @@ type ('params, 'result) func =
       [ `Neg ] * ('a, 'b bit) integer * bool -> (('a, 'b bit) integer number * unit, ('a, 'b bit) integer number) func
   | Of_int : ('a, 'b bit) integer -> ((unbounded, unbounded) integer number * unit, ('a, 'b bit) integer number) func
   | To_int : ('a, 'b bit) integer -> (('a, 'b bit) integer number * unit, (unbounded, unbounded) integer number) func
-  | To_float : 'a precision real -> (arbitrary_precision real * unit, 'a precision real) func
-  | Of_float : 'a precision real -> ('a precision real * unit, arbitrary_precision real) func
+  | To_float : 'a precision real -> (arbitrary_precision real * unit, 'a precision real number) func
+  | Of_float : 'a precision real -> ('a precision real * unit, arbitrary_precision real number) func
   | B_bint_bop :
       [ `And | `Or | `Xor | `Lsr | `Asr ] * ('a range, 'b bit) integer ->
     (('a range, 'b bit) integer number * (('a range, 'b bit) integer number * unit),

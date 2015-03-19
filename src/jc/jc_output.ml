@@ -1,5 +1,6 @@
 
 open Stdlib
+open Common
 open Output_ast
 
 module P = Pervasives
@@ -222,15 +223,29 @@ let module_of_int_ty : type r b. (r range, b bit) integer -> (module Int with ty
   | Int (Signed, X64) -> (module Int64)
   | Int (Unsigned, X64) -> (module Uint64)
 
-let int n = Const (Int (string_of_int n))
+let int_t n = Const (Int (string_of_int n))
 
-let num n = Const (Int (Num.string_of_num n))
+let num_t n = Const (Int (Num.string_of_num n))
+
+let void_t = Const Void
+
+let real_t s = Const (Real s)
+
+let bool_t b = Const (Bool b)
 
 let var_lt s : _ logic_type = Var s @@@$ Nil
 
 let bool_lt = Bool @@@$ Nil
 
 let void_lt = Void @@@$ Nil
+
+let integer_lt = Numeric (Integral Integer) @@@$ Nil
+
+let real_lt = Numeric (Real Real) @@@$ Nil
+
+let single_lt = Numeric (Real (Float Single)) @@@$ Nil
+
+let double_lt = Numeric (Real (Float Double)) @@@$ Nil
 
 let lt s ~from:(name, import) = User (name, import, s)
 
@@ -260,7 +275,7 @@ let (-) t1 t2 =
 let ( * ) t1 t2 =
   match t1, t2 with
   | Const Int "0", _
-  | _, Const Int "0" -> int 0
+  | _, Const Int "0" -> int_t 0
   | Const Int "1", _ -> t2
   | _, Const Int "1" -> t1
   | _ -> bin_t `Mul t1 t2
@@ -268,7 +283,7 @@ let ( * ) t1 t2 =
 let (/) t1 t2 =
   match t1, t2 with
   | _, Const Int "0" -> failwith "/: division by zero in integer term"
-  | Const Int "0", _ -> int 0
+  | Const Int "0", _ -> int_t 0
   | _, Const Int "1" -> t1
   | _ -> bin_t `Div t1 t2
 
@@ -276,12 +291,12 @@ let (%) t1 t2 =
   match t1, t2 with
   | _, Const Int "0" -> failwith "/: division by zero in integer term"
   | Const Int "0", _
-  | _, Const Int "1" -> int 0
+  | _, Const Int "1" -> int_t 0
   | _ -> bin_t `Mod t1 t2
 
 let (-~)  =
   function
-  | Const Int "0" -> int 0
+  | Const Int "0" -> int_t 0
   | t -> U_int_op `Neg @$. t
 
 let (!) v = Deref v
@@ -301,8 +316,8 @@ let (>=) = bin_p `Ge
 let (<) = bin_p `Lt
 let (<=) = bin_p `Le
 
-let (=) t1 t2 = Poly `Eq @$ t1 @. t2
-let (<>) t1 t2 = Poly `Neq @$ t1 @. t2
+let (=) t1 t2 : pred = App (Poly `Eq, t1 @. t2)
+let (<>) t1 t2 : pred = App (Poly `Neq, t1 @. t2)
 
 let rec unlabel_p : pred -> pred =
   function
@@ -460,3 +475,167 @@ and append l1 l2 =
   | e1 :: e1s -> e1 :: append e1s l2
 
 let id { why_id } = why_id
+
+let jc_lt = lt ~from:Name.Theory.jessie
+
+let jc_f = f ~from:Name.Theory.jessie
+
+let select mem p =
+  jc_f "select" @$ mem @. p
+
+open Name
+
+let ( **>) fi = select (var_t (field_memory_name fi))
+
+let select_commited pc = select (var_t (committed_name pc))
+
+let typeof tt p = jc_f "typeof" @$ tt @. p
+
+let typeeq tt p st = typeof tt p = var_t (Name.tag st)
+
+let (<:) t1 t2 : pred = App (jc_f "subtag", t1 @. t2)
+
+let instanceof tt p st : pred = App (jc_f "instanceof", tt @ p @. var_t (Name.tag st))
+
+let alloc_table ?r ac =
+  var_t (Option.map_default r ~default:(Name.Generic.alloc_table ac) ~f:(fun r -> Name.alloc_table (ac, r)))
+
+let offset_min ac ?r p =
+  jc_f "offset_min" @$ alloc_table ?r ac @. p
+
+let offset_max ac ?r p =
+  jc_f "offset_max" @$ alloc_table ?r ac @. p
+
+let int_of_tag st = jc_f "int_of_tag" @$. var_t (Name.tag st)
+
+type (_, _) eq = Eq : ('a, 'a) eq
+
+let cast : type a b. (a, b) eq -> a -> b = fun Eq x -> x
+
+type 't ty =
+  | Numeric : 'a number -> 'a number ty
+  | Bool : boolean ty
+  | Void : void ty
+
+let eq_ty : type a b. a ty -> b ty -> (a, b) eq option =
+  let yes = Some Eq in
+  let no = None in
+  fun a b ->
+    match a, b with
+    | Numeric (Integral Integer),               Numeric (Integral Integer) -> yes
+    | Numeric (Integral (Int (Signed, X8))),    Numeric (Integral (Int (Signed, X8))) -> yes
+    | Numeric (Integral (Int (Unsigned, X8))),  Numeric (Integral (Int (Unsigned, X8))) -> yes
+    | Numeric (Integral (Int (Signed, X16))),   Numeric (Integral (Int (Signed, X16))) -> yes
+    | Numeric (Integral (Int (Unsigned, X16))), Numeric (Integral (Int (Unsigned, X16))) -> yes
+    | Numeric (Integral (Int (Signed, X32))),   Numeric (Integral (Int (Signed, X32))) -> yes
+    | Numeric (Integral (Int (Unsigned, X32))), Numeric (Integral (Int (Unsigned, X32))) -> yes
+    | Numeric (Integral (Int (Signed, X64))),   Numeric (Integral (Int (Signed, X64))) -> yes
+    | Numeric (Integral (Int (Unsigned, X64))), Numeric (Integral (Int (Unsigned, X64))) -> yes
+    | Numeric (Integral (Enum _)),              _ -> assert false
+    | _,                                        Numeric (Integral (Enum _)) -> assert false
+    | Numeric (Real Real),                      Numeric (Real Real) -> yes
+    | Numeric (Real (Float Single)),            Numeric (Real (Float Single)) -> yes
+    | Numeric (Real (Float Double)),            Numeric (Real (Float Double)) -> yes
+    | Bool,                                     Bool -> yes
+    | Void,                                     Void -> yes
+    | _ -> no
+
+let string_of_ty (type a) =
+  function
+  | (Numeric (Integral Integer) : a ty) -> "integer"
+  | Numeric (Integral (Int (r, b))) -> string_of_any_enum (Env.Int (r, b))
+  | Numeric (Integral (Enum s)) -> string_of_any_enum (Env.Enum s)
+  | Numeric (Real Real) -> "real"
+  | Numeric (Real (Float Single)) -> "single"
+  | Numeric (Real (Float Double)) -> "double"
+  | Bool -> "bool"
+  | Void -> "void"
+
+type ('expected, 'got) ty_opt =
+  | Ty : 'expected ty -> ('expected, 'got) ty_opt
+  | Enum : string -> (('a enum, 'b bit) integer number, ('a enum, 'b bit) integer number) ty_opt
+  | Any : ('got, 'got) ty_opt
+
+let ty (type a) (type b) =
+  function
+  | (Ty ty : (a, b) ty_opt) -> Ty ty
+  | Enum _ ->
+    failwith "Enum type was expected when typing non-enum AST node"
+  | Any ->
+    failwith "Instantiated polymorphic (`some' vs. `any') type was expected when typing monomorphic AST node"
+
+module Return (T : sig type 'a t end) =
+struct
+  let return (type a) (type b) (t : (a, b) ty_opt) (f : b T.t) (t' : b ty) : a T.t =
+    let fail e g =
+      failwith ("Invalid function application in Why3ML output : expected `" ^ e ^ "', got `" ^ g ^ "'")
+    in
+    match t, t' with
+    | Any, _ -> f
+    | Enum s, Numeric (Integral (Enum s')) when P.(s = s') -> f
+    | Enum s, _ -> fail s (string_of_ty t')
+    | Ty t, Numeric (Integral (Enum s)) -> fail (string_of_ty t) s
+    | Ty t, _ ->
+      match eq_ty t t' with
+      | Some Eq -> f
+      | None -> fail (string_of_ty t) (string_of_ty t')
+
+  let boolean = Bool
+  let integer = Numeric (Integral Integer)
+  let int i = Numeric (Integral i)
+  let float r = Numeric (Real r)
+  let real = Numeric (Real Real)
+end
+
+let func : type a b c. (a, b) ty_opt -> (c, b) func -> (c, a) func = fun t f ->
+  let module R = Return (struct type 'a t = (c, 'a) func end) in
+  let open R in
+  let return = return t f in
+  match f with
+  | B_int_op _ -> return integer
+  | U_int_op _ -> return integer
+  | B_bint_op (_, i, _) -> return (int i)
+  | U_bint_op (_, i, _) -> return (int i)
+  | Of_int i -> return (int i)
+  | To_int _ -> return integer
+  | To_float r -> return (float r)
+  | Of_float _ -> return real
+  | B_bint_bop (_, i) -> return (int i)
+  | U_bint_bop (_, i) -> return (int i)
+  | Lsl_bint (i, _) -> return (int i)
+  | B_num_pred _ -> return Bool
+  | Poly _ -> return Bool
+  | User _ as f -> f
+
+module R_const = Return (struct type 'a t = 'a constant end)
+let const : type a b. (a, b) ty_opt -> b constant -> a constant = fun t c ->
+  let open R_const in
+  let return = return t c in
+  match c with
+  | Void -> return Void
+  | Int _ -> return integer
+  | Real _ -> return real
+  | Bool _ -> return boolean
+
+let tconstr : type a b c. (a, b) ty_opt -> (c, b) tconstr -> (c, a) tconstr = fun t tc ->
+  let module R = Return (struct type 'a t = (c, 'a) tconstr end) in
+  let open R in
+  let return = return t tc in
+  match tc with
+  | Numeric n -> return (Numeric n)
+  | Bool -> return boolean
+  | Void -> return Void
+  | Var _ as v -> v
+  | User _ as u -> u
+
+let logic_type ty (Type (tc, args) : _ logic_type) = (Type (tconstr ty tc, args) : _ logic_type)
+
+module R_term = Return (struct type 'a t = 'a term end)
+let term (type a) (type b) : (a, b) ty_opt -> b term -> a term =
+  let open R_term in
+  fun ty t ->
+    let _return x = return ty t x in
+    match t with
+    | Const c -> Const (const ty c)
+    | Var _ as v -> v
+    | _ -> assert false
