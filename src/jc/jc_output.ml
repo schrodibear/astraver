@@ -42,9 +42,8 @@ let (@@@$.) : _ tconstr -> _ logic_type -> _ logic_type = fun x y -> Type (x, Co
 
 module type Enum_sig =
 sig
-  type range
-  type b
-  val ty : (range, b bit) integer
+  type bound
+  val ty : bound bounded integer
   val name : string
 end
 
@@ -54,7 +53,7 @@ struct
   let theory = String.capitalize name
   let safe_module = "Safe_" ^ name
   let unsafe_module = "Unsafe_" ^ name
-  type t = (I.range, I.b bit) integer
+  type t = I.bound bounded integer
   let bin_t op flag t1 t2 = B_bint_op (op, I.ty, flag) @$ t1 @. t2
   let un_t op flag t = U_bint_op (op, I.ty, flag) @$. t
   let (+) = bin_t `Add false
@@ -78,37 +77,36 @@ struct
   let (<>) = bin_p `Ne
 end
 
-module Enum (I : sig type range' type b' end) =
+module Enum (I : sig type bound' end) =
 struct
-  type range = I.range'
-  type b = I.b'
+  type bound = I.bound'
   let ty = failwith "The dummy functor Enum should never be applied"
   let name = "enum"
 end
 
 module type Enum =
 sig
-  type range
-  type b
-  include module type of Make_enum (Enum (struct type range' = range type b' = b end))
-  with type range := range and type b := b
+  type bound
+  include module type of Make_enum (Enum (struct type bound' = bound end))
+  with type bound := bound
 end
 
 module type Int_sig =
 sig
   type r
   type b
-  val ty : (r range, b bit) integer
+  val ty : (r repr, b bit) xintx bounded integer
   val name : string
 end
 
 module Make_int (I : Int_sig) =
 struct
   type r = I.r
+  type b = I.b
   include Make_enum
       (struct
         include I
-        type range = r Output_ast.range
+        type bound = (I.r repr, I.b bit) xintx
       end)
   let bit_theory = "Bit" ^ name
   let safe_bit_module = "Safe_bit_" ^ name
@@ -212,7 +210,7 @@ module Uint64 =
       let name = "uint64"
     end)
 
-let module_of_int_ty : type r b. (r range, b bit) integer -> (module Int with type r = r and type b = b) =
+let module_of_int_ty : type r b. (r repr, b bit) xintx bounded integer -> (module Int with type r = r and type b = b) =
   function
   | Int (Signed, X8) -> (module Int8)
   | Int (Unsigned, X8) -> (module Uint8)
@@ -241,11 +239,17 @@ let void_lt = Void @@@$ Nil
 
 let integer_lt = Numeric (Integral Integer) @@@$ Nil
 
+let int_lt i = Numeric (Integral i) @@@$ Nil
+
+let enum_lt s = Numeric (Integral (Enum s)) @@@$ Nil
+
 let real_lt = Numeric (Real Real) @@@$ Nil
 
 let single_lt = Numeric (Real (Float Single)) @@@$ Nil
 
 let double_lt = Numeric (Real (Float Double)) @@@$ Nil
+
+let var_lt v = Var v @@@$ Nil
 
 let lt s ~from:(name, import) = User (name, import, s)
 
@@ -480,6 +484,8 @@ let jc_lt = lt ~from:Name.Theory.jessie
 
 let jc_f = f ~from:Name.Theory.jessie
 
+let jc_v = f ~from:Name.Module.jessie
+
 let select mem p =
   jc_f "select" @$ mem @. p
 
@@ -508,39 +514,7 @@ let offset_max ac ?r p =
 
 let int_of_tag st = jc_f "int_of_tag" @$. var_t (Name.tag st)
 
-type (_, _) eq = Eq : ('a, 'a) eq
-
-let cast : type a b. (a, b) eq -> a -> b = fun Eq x -> x
-
-type 't ty =
-  | Numeric : 'a number -> 'a number ty
-  | Bool : boolean ty
-  | Void : void ty
-
-let eq_ty : type a b. a ty -> b ty -> (a, b) eq option =
-  let yes = Some Eq in
-  let no = None in
-  fun a b ->
-    match a, b with
-    | Numeric (Integral Integer),               Numeric (Integral Integer) -> yes
-    | Numeric (Integral (Int (Signed, X8))),    Numeric (Integral (Int (Signed, X8))) -> yes
-    | Numeric (Integral (Int (Unsigned, X8))),  Numeric (Integral (Int (Unsigned, X8))) -> yes
-    | Numeric (Integral (Int (Signed, X16))),   Numeric (Integral (Int (Signed, X16))) -> yes
-    | Numeric (Integral (Int (Unsigned, X16))), Numeric (Integral (Int (Unsigned, X16))) -> yes
-    | Numeric (Integral (Int (Signed, X32))),   Numeric (Integral (Int (Signed, X32))) -> yes
-    | Numeric (Integral (Int (Unsigned, X32))), Numeric (Integral (Int (Unsigned, X32))) -> yes
-    | Numeric (Integral (Int (Signed, X64))),   Numeric (Integral (Int (Signed, X64))) -> yes
-    | Numeric (Integral (Int (Unsigned, X64))), Numeric (Integral (Int (Unsigned, X64))) -> yes
-    | Numeric (Integral (Enum _)),              _ -> assert false
-    | _,                                        Numeric (Integral (Enum _)) -> assert false
-    | Numeric (Real Real),                      Numeric (Real Real) -> yes
-    | Numeric (Real (Float Single)),            Numeric (Real (Float Single)) -> yes
-    | Numeric (Real (Float Double)),            Numeric (Real (Float Double)) -> yes
-    | Bool,                                     Bool -> yes
-    | Void,                                     Void -> yes
-    | _ -> no
-
-let string_of_ty (type a) =
+let rec string_of_ty : type a. a ty -> string =
   function
   | (Numeric (Integral Integer) : a ty) -> "integer"
   | Numeric (Integral (Int (r, b))) -> string_of_any_enum (Env.Int (r, b))
@@ -550,92 +524,264 @@ let string_of_ty (type a) =
   | Numeric (Real (Float Double)) -> "double"
   | Bool -> "bool"
   | Void -> "void"
+  | Ref r -> "ref " ^ string_of_ty r
+  | Arrow (t1, t2) -> string_of_ty t1 ^ " -> " ^ string_of_ty t2
+  | Ex -> "\"existential, i.e. some distinct type\""
 
-type ('expected, 'got) ty_opt =
-  | Ty : 'expected ty -> ('expected, 'got) ty_opt
-  | Enum : string -> (('a enum, 'b bit) integer number, ('a enum, 'b bit) integer number) ty_opt
-  | Any : ('got, 'got) ty_opt
+type (_, _) eq = Eq : ('a, 'a) eq
 
-let ty (type a) (type b) =
+let rec eq_ty : type a b. a ty -> b ty -> (a, b) eq = fun a b ->
+  match a, b with
+  | Numeric (Integral Integer),               Numeric (Integral Integer) -> Eq
+  | Numeric (Integral (Int (Signed, X8))),    Numeric (Integral (Int (Signed, X8))) -> Eq
+  | Numeric (Integral (Int (Unsigned, X8))),  Numeric (Integral (Int (Unsigned, X8))) -> Eq
+  | Numeric (Integral (Int (Signed, X16))),   Numeric (Integral (Int (Signed, X16))) -> Eq
+  | Numeric (Integral (Int (Unsigned, X16))), Numeric (Integral (Int (Unsigned, X16))) -> Eq
+  | Numeric (Integral (Int (Signed, X32))),   Numeric (Integral (Int (Signed, X32))) -> Eq
+  | Numeric (Integral (Int (Unsigned, X32))), Numeric (Integral (Int (Unsigned, X32))) -> Eq
+  | Numeric (Integral (Int (Signed, X64))),   Numeric (Integral (Int (Signed, X64))) -> Eq
+  | Numeric (Integral (Int (Unsigned, X64))), Numeric (Integral (Int (Unsigned, X64))) -> Eq
+  | Numeric (Integral (Enum s)),              Numeric (Integral (Enum s')) when P.(s = s') -> Eq
+  | Numeric (Integral (Enum s)),              Numeric (Integral (Enum s')) ->
+    failwith ("Enum mismatch in Why3ML output: expected: `" ^ s ^ "', got: `" ^ s' ^ "'")
+  | Numeric (Real Real),                      Numeric (Real Real) -> Eq
+  | Numeric (Real (Float Single)),            Numeric (Real (Float Single)) -> Eq
+  | Numeric (Real (Float Double)),            Numeric (Real (Float Double)) -> Eq
+  | Bool,                                     Bool -> Eq
+  | Void,                                     Void -> Eq
+  | Ref ty,                                   Ref ty' -> let Eq = eq_ty ty ty' in Eq
+  | Arrow (t1, t2),                           Arrow (t1', t2') ->
+    let Eq = eq_ty t1 t1' in
+    let Eq = eq_ty t2 t2' in
+    Eq
+  | _ ->
+    failwith ("Type mismatch in Why3ML output: expected: `" ^ string_of_ty a ^ "', got: `" ^ string_of_ty b ^ "'")
+
+let ty (type a) (type b) : (a, b) ty_opt -> _ =
   function
-  | (Ty ty : (a, b) ty_opt) -> Ty ty
-  | Enum _ ->
-    failwith "Enum type was expected when typing non-enum AST node"
+  | Ty _ as t -> t
   | Any ->
     failwith "Instantiated polymorphic (`some' vs. `any') type was expected when typing monomorphic AST node"
 
-module Return (T : sig type 'a t end) =
+module Ty =
 struct
-  let return (type a) (type b) (t : (a, b) ty_opt) (f : b T.t) (t' : b ty) : a T.t =
-    let fail e g =
-      failwith ("Invalid function application in Why3ML output : expected `" ^ e ^ "', got `" ^ g ^ "'")
-    in
-    match t, t' with
-    | Any, _ -> f
-    | Enum s, Numeric (Integral (Enum s')) when P.(s = s') -> f
-    | Enum s, _ -> fail s (string_of_ty t')
-    | Ty t, Numeric (Integral (Enum s)) -> fail (string_of_ty t) s
-    | Ty t, _ ->
-      match eq_ty t t' with
-      | Some Eq -> f
-      | None -> fail (string_of_ty t) (string_of_ty t')
-
-  let boolean = Bool
-  let integer = Numeric (Integral Integer)
-  let int i = Numeric (Integral i)
-  let float r = Numeric (Real r)
-  let real = Numeric (Real Real)
+  let integer : _ ty = Numeric (Integral Integer)
+  let int i : _ ty = Numeric (Integral i)
+  let float r : _ ty = Numeric (Real r)
+  let real : _ ty = Numeric (Real Real)
 end
 
-let func : type a b c. (a, b) ty_opt -> (c, b) func -> (c, a) func = fun t f ->
-  let module R = Return (struct type 'a t = (c, 'a) func end) in
-  let open R in
-  let return = return t f in
-  match f with
-  | B_int_op _ -> return integer
-  | U_int_op _ -> return integer
-  | B_bint_op (_, i, _) -> return (int i)
-  | U_bint_op (_, i, _) -> return (int i)
-  | Of_int i -> return (int i)
-  | To_int _ -> return integer
-  | To_float r -> return (float r)
-  | Of_float _ -> return real
-  | B_bint_bop (_, i) -> return (int i)
-  | U_bint_bop (_, i) -> return (int i)
-  | Lsl_bint (i, _) -> return (int i)
-  | B_num_pred _ -> return Bool
-  | Poly _ -> return Bool
-  | User _ as f -> f
+type 'a poly_func = { func : 'b. ('a, 'b) func }
 
-module R_const = Return (struct type 'a t = 'a constant end)
+type ('a, 'b) typed_func =
+  | Ty of 'a ty
+  | Poly of 'b poly_func
+
+let ty_func (type a) (type b) (type c) : (a, b) func -> (b, a) typed_func =
+  let open Ty in
+  function
+  | B_int_op _ -> Ty integer
+  | U_int_op _ -> Ty integer
+  | B_bint_op (_, i, _) -> Ty (int i)
+  | U_bint_op (_, i, _) -> Ty (int i)
+  | Of_int i -> Ty (int i)
+  | To_int _ -> Ty integer
+  | To_float r -> Ty (float r)
+  | Of_float _ -> Ty real
+  | B_bint_bop (_, i) -> Ty (int i)
+  | U_bint_bop (_, i) -> Ty (int i)
+  | Lsl_bint (i, _) -> Ty (int i)
+  | B_num_pred _ -> Ty Bool
+  | Poly _ -> Ty Bool
+  | User _ as f -> Poly { func = f }
+
+let func : type a b c. (a, b) ty_opt -> (c, b) func -> (c, a) func = fun t f ->
+  match t with
+  | Any -> f
+  | Ty ty ->
+    match ty_func f with
+    | Poly { func } -> func
+    | Ty ty' -> let Eq = eq_ty ty ty' in f
+
+let ty_const (type a) (type b) : a constant -> a ty =
+  let open Ty in
+  function
+  | Void -> Void
+  | Int _ -> integer
+  | Real _ -> real
+  | Bool _ -> Bool
+
 let const : type a b. (a, b) ty_opt -> b constant -> a constant = fun t c ->
-  let open R_const in
-  let return = return t c in
-  match c with
-  | Void -> return Void
-  | Int _ -> return integer
-  | Real _ -> return real
-  | Bool _ -> return boolean
+  match t with
+  | Any -> c
+  | Ty ty ->
+    let Eq = eq_ty ty (ty_const c) in c
+
+type 'a poly_tconstr = { tconstr : 'b. ('a, 'b) tconstr }
+
+type ('a, 'b) typed_tconstr =
+  | Ty of 'a ty
+  | Poly of 'b poly_tconstr
+
+let ty_tconstr (type a) (type b) : (a, b) tconstr -> (b, a) typed_tconstr =
+  function
+  | Numeric n -> Ty (Numeric n)
+  | Bool -> Ty Bool
+  | Void -> Ty Void
+  | Var _ as v -> Poly { tconstr = v }
+  | User _ as u -> Poly { tconstr = u }
 
 let tconstr : type a b c. (a, b) ty_opt -> (c, b) tconstr -> (c, a) tconstr = fun t tc ->
-  let module R = Return (struct type 'a t = (c, 'a) tconstr end) in
-  let open R in
-  let return = return t tc in
-  match tc with
-  | Numeric n -> return (Numeric n)
-  | Bool -> return boolean
-  | Void -> return Void
-  | Var _ as v -> v
-  | User _ as u -> u
+  match t with
+  | Any -> tc
+  | Ty ty ->
+    match ty_tconstr tc with
+    | Poly { tconstr } -> tconstr
+    | Ty ty' -> let Eq = eq_ty ty ty' in tc
+
+type poly_logic_type = { logic_type : 'a. 'a logic_type }
+
+type 'a typed_logic_type =
+  | Ty of 'a ty
+  | Poly of poly_logic_type
+
+let ty_logic_type (Type (tc, args) : _ logic_type) =
+  match ty_tconstr tc with
+  | Ty ty -> Ty ty
+  | Poly { tconstr } -> Poly { logic_type = Type (tconstr, args) }
 
 let logic_type ty (Type (tc, args) : _ logic_type) = (Type (tconstr ty tc, args) : _ logic_type)
 
-module R_term = Return (struct type 'a t = 'a term end)
-let term (type a) (type b) : (a, b) ty_opt -> b term -> a term =
-  let open R_term in
-  fun ty t ->
-    let _return x = return ty t x in
-    match t with
-    | Const c -> Const (const ty c)
-    | Var _ as v -> v
-    | _ -> assert false
+type 'a typed_term =
+  | Ty of 'a ty
+  | Ty' of 'a ty
+  | Poly of poly_term
+  | Poly' of poly_term
+
+let rec ty_term : type a. a term -> a typed_term =
+  function
+  | Const c -> Ty (ty_const c)
+  | Var _ as v -> Poly { term = v }
+  | App (f, args) ->
+    begin match ty_func f with
+    | Ty ty -> Ty ty
+    | Poly { func } -> Poly { term = App (func, args) }
+    end
+  | Deref _
+  | Deref_at _ as d -> Poly { term = d }
+  | Typed (_, t') -> Ty t'
+  | Poly _ as term -> Poly { term }
+  | Labeled (lab, t) ->
+    begin match ty_term t with
+    | Ty ty | Ty' ty -> Ty' ty
+    | Poly { term } | Poly' { term } -> Poly' { term = Labeled (lab, term) }
+    end
+  | If (i, t, e) ->
+    begin match ty_term t with
+    | Ty ty | Ty' ty -> Ty' ty
+    | Poly { term = t } | Poly' { term = t } ->
+      match ty_term e with
+      | Ty _ | Ty' _ -> failwith "Cannot type term: branches have different type order"
+      | Poly { term = e } | Poly' { term = e } ->
+        Poly' { term = If (i, t, e) }
+    end
+  | Let (v, e, e') ->
+    match ty_term e' with
+    | Ty ty | Ty' ty -> Ty' ty
+    | Poly { term } | Poly' { term } -> Poly' { term = Let (v, e, term) }
+
+let rec term : type a b. (a, b) ty_opt -> b term -> a term = fun ty t ->
+  match ty with
+  | Any -> t
+  | Ty ty ->
+    match ty_term t with
+    | Poly { term } -> term
+    | Poly' { term } -> Poly { term }
+    | Ty ty' -> let Eq = eq_ty ty ty' in t
+    | Ty' ty' -> let Eq = eq_ty ty ty' in Typed (t, ty')
+
+type 'a typed_why_type =
+  | Ty of 'a ty
+  | Ty' of 'a ty
+  | Poly of poly_why_type
+  | Poly' of poly_why_type
+
+let rec ty_why_type : type a. a why_type -> a typed_why_type =
+  function
+  | Prod_type (_, t1, t2) ->
+    begin match ty_why_type t1, ty_why_type t2 with
+    | (Ty ty1 | Ty' ty1), (Ty ty2 | Ty' ty2) -> Ty' (Arrow (ty1, ty2))
+    | (Ty ty1 | Ty' ty1), (Poly _ | Poly' _) -> Ty' (Arrow (ty1, Ex))
+    | (Poly _ | Poly' _), (Ty ty1 | Ty' ty1) -> Ty' (Arrow (Ex, ty1))
+    | (Poly _ | Poly' _), (Poly _ | Poly' _) -> Ty' (Arrow (Ex, Ex))
+    end
+  | Base_type lt ->
+    begin match ty_logic_type lt with
+    | Ty ty -> Ty ty
+    | Poly { logic_type } -> Poly { why_type = Base_type logic_type }
+    end
+  | Ref_type r ->
+    begin match ty_why_type r with
+    | Ty ty | Ty' ty -> Ty' (Ref ty)
+    | Poly _ | Poly' _ -> Ty' (Ref Ex)
+    end
+  | Annot_type (_ , wt, _, _, _, _) ->
+    begin match ty_why_type wt with
+    | Ty ty | Ty' ty -> Ty' ty
+    | Poly poly | Poly' poly -> Poly' poly
+    end
+  | Typed (_, ty) -> Ty ty
+  | Poly _ as why_type -> Poly { why_type }
+
+let why_type : type a b. (a, b) ty_opt -> b why_type -> a why_type = fun t wt ->
+  match t with
+  | Any -> wt
+  | Ty ty ->
+    match ty_why_type wt with
+    | Poly { why_type } -> why_type
+    | Poly' { why_type } -> Poly { why_type }
+    | Ty ty' -> let Eq = eq_ty ty ty' in wt
+    | Ty' ty' -> let Eq = eq_ty ty ty' in Typed (wt, ty')
+
+type 'a typed_expr =
+  | Ty of 'a ty
+  | Ty' of 'a ty
+  | Poly of poly_expr
+  | Poly' of poly_expr
+
+
+
+(*
+module R_expr = Return (struct type 'a t = 'a expr end)
+let rec expr : type a b. (a, b) ty_opt -> b expr -> a expr = fun t e ->
+  let open R_expr in
+  let return = return t e in
+  let return' expr_node = { e with expr_node } in
+  match e.expr_node with
+  | Cte c -> return' (Cte (const t c))
+  | Var _ as v -> return' v
+  | And _
+  | Or _
+  | Not _ -> return boolean
+  | Void -> return void
+  | Deref _ as d -> d
+  | If (i, t', e) -> If (i, expr t t', expr t e)
+  | While _
+  | Block _
+  | Assign _ -> return void
+  | Let (v, e, e') -> Let (v, e, expr t e')
+  | Let_ref (v, e, e') -> Let_ref (v, e, expr t e')
+  | _ -> assert false
+
+  (*| App : ('a, 'b) func * 'a expr_hlist * 'b why_type option -> 'b expr_node
+  | Raise : string * 'a expr option -> 'b expr_node
+  | Try : 'a expr * string * string option * 'a expr -> 'a expr_node
+  | Fun : (string * any_why_type) list * 'b why_type * pred * 'b expr * pred * bool * ((string * pred) list) ->
+    'b expr_node
+    (** params * result_type * pre * body * post * diverges * signals *)
+  | Triple : opaque * pred * 'a expr * pred * ((string * pred) list) -> 'a expr_node
+  | Assert : assert_kind * pred -> void expr_node
+  | Black_box : 'a why_type -> 'a expr_node
+  | Absurd : void expr_node
+    | Labeled : why_label * 'a expr -> 'a expr_node*)
+*)

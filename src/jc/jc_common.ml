@@ -126,7 +126,7 @@ let print_type_var fmt v = fprintf fmt "(var_%s_%d)" v.tvi_name v.tvi_tag
 let string_of_any_enum =
   let range  (type a) =
     function
-    | (Signed : a range) -> ""
+    | (Signed : a repr) -> ""
     | Unsigned -> "u"
   in
   let bit (type a) =

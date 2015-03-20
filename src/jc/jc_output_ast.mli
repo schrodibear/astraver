@@ -84,7 +84,7 @@ type _16 = S16
 type _32 = S32
 type _64 = S64
 
-type 'a bit =
+type _ bit =
   | X8 : _8 bit
   | X16 : _16 bit
   | X32 : _32 bit
@@ -93,21 +93,27 @@ type 'a bit =
 type signed = Signed
 type unsigned = Unsigned
 
-type 'a range =
-  | Signed : signed range
-  | Unsigned : unsigned range
+type _ repr =
+  | Signed : signed repr
+  | Unsigned : unsigned repr
 
-type 'a enum = Enum : string -> 'a enum
+type ('repr, 'bit) xintx = Xintx of 'repr repr * 'bit bit
+
+type enum = Enum of string
+
+type _ bounded =
+  | Int : ('repr, 'bit) xintx -> ('repr, 'bit) xintx bounded
+  | Enum : string -> enum bounded
 
 type unbounded = Unbounded
 
-type ('range, 'size) integer  =
-  | Int : 'a range * 'b bit -> ('a range, 'b bit) integer
-  | Enum : string -> ('a enum, 'b bit) integer
-  | Integer : (unbounded, unbounded) integer
+type 'bounded integer =
+  | Int : 'a repr * 'b bit -> ('a repr, 'b bit) xintx bounded integer
+  | Enum : string -> enum bounded integer
+  | Integer : unbounded integer
 
 type 'a number =
-  | Integral : ('range, 'size) integer -> ('range, 'size) integer number
+  | Integral : 'bounded integer -> 'bounded integer number
   | Real : 'prec real -> 'prec real number
 
 type void = Void
@@ -117,40 +123,53 @@ type boolean = Boolean
 type ('params, 'result) func =
   | B_int_op :
       [ `Add | `Sub | `Mul | `Div | `Mod ] ->
-    ((unbounded, unbounded) integer number * ((unbounded, unbounded) integer number * unit),
-     (unbounded, unbounded) integer number) func
-  | U_int_op : [ `Neg ] -> ((unbounded, unbounded) integer number * unit, (unbounded, unbounded) integer number) func
+    (unbounded integer number * (unbounded integer number * unit), unbounded integer number) func
+  | U_int_op : [ `Neg ] -> (unbounded integer number * unit, unbounded integer number) func
   | B_bint_op :
-      [ `Add | `Sub | `Mul | `Div | `Mod ] * ('a, 'b bit) integer * bool ->
-    (('a, 'b bit) integer number * (('a, 'b bit) integer number * unit), ('a, 'b bit) integer number) func
+      [ `Add | `Sub | `Mul | `Div | `Mod ] * 'a bounded integer * bool ->
+    ('a bounded integer number * ('a bounded integer number * unit), 'a bounded integer number) func
   | U_bint_op :
-      [ `Neg ] * ('a, 'b bit) integer * bool -> (('a, 'b bit) integer number * unit, ('a, 'b bit) integer number) func
-  | Of_int : ('a, 'b bit) integer -> ((unbounded, unbounded) integer number * unit, ('a, 'b bit) integer number) func
-  | To_int : ('a, 'b bit) integer -> (('a, 'b bit) integer number * unit, (unbounded, unbounded) integer number) func
+      [ `Neg ] * 'a bounded integer * bool -> ('a bounded integer number * unit, 'a bounded integer number) func
+  | Of_int : 'a bounded integer -> (unbounded integer number * unit, 'a bounded integer number) func
+  | To_int : 'a bounded integer -> ('a bounded integer number * unit, unbounded integer number) func
   | To_float : 'a precision real -> (arbitrary_precision real * unit, 'a precision real number) func
   | Of_float : 'a precision real -> ('a precision real * unit, arbitrary_precision real number) func
   | B_bint_bop :
-      [ `And | `Or | `Xor | `Lsr | `Asr ] * ('a range, 'b bit) integer ->
-    (('a range, 'b bit) integer number * (('a range, 'b bit) integer number * unit),
-     ('a range, 'b bit) integer number) func
+      [ `And | `Or | `Xor | `Lsr | `Asr ] * ('a repr, 'b bit) xintx bounded integer ->
+    (('a repr, 'b bit) xintx bounded integer number * (('a repr, 'b bit) xintx bounded integer number * unit),
+     ('a repr, 'b bit) xintx bounded integer number) func
   | U_bint_bop :
-      [ `Compl ] * ('a range, 'b bit) integer ->
-    (('a range, 'b bit) integer number * unit, ('a range, 'b bit) integer number) func
+      [ `Compl ] * ('a repr, 'b bit) xintx bounded integer ->
+    (('a repr, 'b bit) xintx bounded integer number * unit, ('a repr, 'b bit) xintx bounded integer number) func
   | Lsl_bint :
-      ('a range, 'b bit) integer * bool ->
-    (('a range, 'b bit) integer number * (('a range, 'b bit) integer number * unit),
-     ('a range, 'b bit) integer number) func
+      ('a repr, 'b bit) xintx bounded integer * bool ->
+    (('a repr, 'b bit) xintx bounded integer number * (('a repr, 'b bit) xintx bounded integer number * unit),
+     ('a repr, 'b bit) xintx bounded integer number) func
   | B_num_pred : [ `Lt | `Le | `Gt | `Ge | `Eq | `Ne ] * 'a number -> ('a number * ('a number * unit), boolean) func
   | Poly : [ `Eq | `Neq ] -> ('a * ('a * unit), boolean) func
-  | User : string * bool * string -> ('a, 'b) func (** theory * use qualified name * name *)
+  | User : string * bool * string -> (_, _) func (** theory * use qualified name * name *)
 
 type 'typ constant =
   | Void : void constant
-  | Int : string -> (unbounded, unbounded) integer number constant
+  | Int : string -> unbounded integer number constant
   | Real : string -> arbitrary_precision real number constant
   | Bool : bool -> boolean constant
 
-type 'a term_hlist =
+type 't ty =
+  | Numeric : 'a number -> 'a number ty
+  | Bool : boolean ty
+  | Void : void ty
+  | Ref : 'a ty -> 'a ref ty
+  | Arrow : 'a ty * 'b ty -> ('a -> 'b) ty
+  | Ex : _ ty
+
+type ('expected, 'got) ty_opt =
+  | Ty : 'expected ty -> ('expected, 'got) ty_opt
+  | Any : ('got, 'got) ty_opt
+
+type poly_term = { term : 'a. 'a term }
+
+and 'a term_hlist =
   | Nil : unit term_hlist
   | Cons : 'a term * 'b term_hlist -> ('a * 'b) term_hlist
 
@@ -160,6 +179,8 @@ and 'typ term =
   | Var : string -> 'a term  (** immutable logic var *)
   | Deref : string -> 'a term  (** [!r] *)
   | Deref_at : string * string -> 'a term  (** [(at !x L)] *)
+  | Typed : 'a term * 'a ty -> 'a term
+  | Poly : poly_term -> _ term
   | Labeled : why_label * 'a term -> 'a term
   | If : 'a term * 'b term * 'b term -> 'b term
   | Let : string * 'a term * 'b term -> 'b term
@@ -195,12 +216,16 @@ and trigger =
   | Pred : pred -> trigger
   | Term : 'a term -> trigger
 
-type 'a why_type =
+type poly_why_type = { why_type : 'a. 'a why_type }
+
+and 'a why_type =
   | Prod_type : string * 'a why_type * 'b why_type -> ('a -> 'b) why_type (** (x : t1) -> t2 *)
   | Base_type : 'a logic_type -> 'a why_type
   | Ref_type : 'a why_type -> 'a ref why_type
   | Annot_type : pred * 'a why_type * string list * string list * pred * (string * pred) list -> 'a why_type
     (** [{ P } t reads r writes w raises E { Q | E => R }] *)
+  | Typed : 'a why_type * 'a ty -> 'a why_type
+  | Poly : poly_why_type -> _ why_type
 
 type any_logic_type = Logic_type : 'a logic_type -> any_logic_type
 
@@ -212,7 +237,9 @@ type opaque = bool
 
 type assert_kind = [ `ASSERT | `CHECK | `ASSUME ]
 
-type 'a expr_hlist =
+type poly_expr = { expr : 'a. 'a expr }
+
+and 'a expr_hlist =
   | Nil : unit expr_hlist
   | Cons : 'a expr * 'b expr_hlist -> ('a * 'b) expr_hlist
 
@@ -224,6 +251,8 @@ and 'typ expr_node =
   | Not : boolean expr -> boolean expr_node
   | Void : void expr_node
   | Deref : string -> 'a expr_node
+  | Typed : 'a expr * 'a ty -> 'a expr_node
+  | Poly : poly_expr -> 'a expr_node
   | If : 'a expr * 'b expr * 'b expr -> 'b expr_node
   | While :
         boolean expr (** loop condition *)

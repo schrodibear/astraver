@@ -63,7 +63,7 @@ let uid fmttr uid =
   | 'a' .. 'z' -> String.capitalize uid
   | _ -> "U_" ^ uid
 
-let int_ty ~how fmttr (type r) (type b) (ty : (r range, b bit) integer) =
+let int_ty ~how fmttr (type r) (type b) (ty : (r repr, b bit) xintx bounded integer) =
   let (module Int_ty) = O.module_of_int_ty ty in
   fprintf fmttr "%s" @@
   match how with
@@ -113,7 +113,7 @@ let op fmttr op =
   | `Ne -> "<>"
   | `Neq -> "<>"
 
-type any_integer = Int : ('r range, 'b bit) integer -> any_integer
+type any_integer = Int : ('r repr, 'b bit) xintx bounded integer -> any_integer
 
 module S =
   Set.Make

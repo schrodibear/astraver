@@ -197,6 +197,12 @@ struct
      new implementation of Why3 support for BV should be implemented in Jessie2. *)
   let bitvector = "Bitvector", false
   let jessie = "Jc_memory_model", false
+  let current = "", false
+end
+
+module Module =
+struct
+  let jessie = "Jessie3", false
 end
 
 let root_alloc_table_name vi = vi.ri_name ^ "_alloc_table"

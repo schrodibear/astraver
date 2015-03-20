@@ -178,15 +178,28 @@ let tr_native_type t =
   | Tgenfloat `Binary80 -> O.(logic_type t (jc_lt "binary80" @@@$ Nil))
   | Tstring -> O.(logic_type t (jc_lt "string" @@@$ Nil))
 
-let rec tr_base_type ?region =
+type any_ltype_hlist =
+  | Ltype_hlist : 'a ltype_hlist -> any_ltype_hlist
+
+let rec tr_base_type : type a b. (a, b) O.ty_opt -> ?region:_ ->  _ -> a logic_type =
+  fun t ?region ->
+  let tr_ltype_hlist =
+    List.fold_left
+      (fun (Ltype_hlist lhl) t -> Ltype_hlist O.(tr_base_type Any ?region t @@@ lhl))
+      (Ltype_hlist Nil)
+  in
   function
-  | JCTnative ty ->
-    simple_logic_type (tr_native_type ty)
-  | JCTlogic (s,l) ->
-    { lt_name = s;
-      lt_args = List.map (tr_base_type ?region)  l }
-  | JCTenum ri ->
-    simple_logic_type ri.ei_name
+  | JCTnative ty -> tr_native_type t ty
+  | JCTlogic (s, l) ->
+    O.(logic_type t (let Ltype_hlist lhl = tr_ltype_hlist l in lt ~from:Name.Theory.current s @@@$ lhl))
+  | JCTenum ei ->
+    begin match ei.ei_type, t with
+      | Int (r, b), _ -> O.(logic_type (ty t) (int_lt (Int (r, b))))
+      | Enum s, O.Enum s' when s = s' -> O.(logic_type (Enum s) (enum_lt s))
+      | Enum s, O.Enum s' -> failwith ("tr_base_type: enum type mismatch: expected `" ^ s ^ "', got " ^ s')
+      | Enum s, O.Any -> failwith ("tr_base_type: enum type mismatch: expected `" ^ s ^ "', got \"some type\"")
+      | Enum s, O.Ty t -> failwith ("tr_base_type: type mismatch: expected enum `" ^ s ^ "', got " ^ O.string_of_ty t)
+    end
   | JCTpointer (pc, _, _) ->
     let ac =
       match region with
@@ -195,23 +208,21 @@ let rec tr_base_type ?region =
       | Some r when Region.bitwise r -> JCalloc_bitvector
       | Some _ -> alloc_class_of_pointer_class pc
     in
-    pointer_type ac pc
+    O.(logic_type Any (pointer_type ac pc))
   | JCTnull | JCTany -> invalid_arg "tr_base_type"
-  | JCTtype_var t -> logic_type_var (Type_var.uname t)
+  | JCTtype_var tv -> O.(logic_type t (var_lt (Type_var.uname tv)))
 
-let tr_type ~region ty = Base_type (tr_base_type ~region ty)
+let tr_type t ~region ty = Base_type (tr_base_type t ~region ty)
 
-let tr_var_base_type v =
-  tr_base_type ~region:v.vi_region v.vi_type
+let tr_var_base_type t v = tr_base_type t ~region:v.vi_region v.vi_type
 
-let tr_var_type v =
-  tr_type ~region:v.vi_region v.vi_type
+let tr_var_type t v = tr_type t ~region:v.vi_region v.vi_type
 
-let any_value region t =
-  match t with
+let any_value t region jct =
+  match jct with
   | JCTnative ty ->
     begin match ty with
-    | Tunit -> void
+    | Tunit -> O.void_e
     | Tboolean -> make_app "any_bool" [void]
     | Tinteger -> make_app "any_int" [void]
     | Treal -> make_app "any_real" [void]

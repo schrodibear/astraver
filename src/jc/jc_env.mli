@@ -56,7 +56,7 @@ type float_instruction_set = FISstrictIEEE754 | FISx87
 type root_kind = Rvariant | RplainUnion | RdiscrUnion
 
 type any_enum =
-  | Int : 'a range * 'b bit -> any_enum
+  | Int : 'a repr * 'b bit -> any_enum
   | Enum : string -> any_enum
 
 type jc_type =
