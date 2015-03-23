@@ -281,6 +281,8 @@ and term : type a. bw_ints: _ -> consts:_ -> _ -> a term -> _ = fun ~bw_ints ~co
   | Deref v -> pr "!%a" id v
   | Deref_at (v, "") -> pr "(old@ !%a)" id v
   | Deref_at (v, l) -> pr "(at@ !%a@ '%a)" id v uid l
+  | Typed (t, _) -> term fmttr t
+  | Poly { term = t } -> term fmttr t
   | Labeled (l, t) ->
     pr "(%a%a)" why_label l term t
   | If (t1, t2, t3) ->
@@ -357,6 +359,8 @@ let rec why_type : type a. bw_ints:_ -> consts:_ -> _ -> a why_type -> _ = fun ~
     pr "@[<hov 1>(%a@ :@ %a)@ %a@]" id id' why_type t1 why_type t2
   | Base_type t -> logic_type fmttr t
   | Ref_type t -> pr "ref@ %a" why_type t
+  | Typed (wt, _) -> why_type fmttr wt
+  | Poly { why_type = wt } -> why_type fmttr wt
   | Annot_type (p, t, reads, writes, q, signals) ->
     pr "%a@ " why_type t;
     pr "@[@[<hov 2>requires@ {@ %a@ }@]" pred p;
@@ -448,6 +452,8 @@ and expr_node : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_node -> _
   | Not e -> pr "@[(not@ %a)@]" expr e
   | Void -> pr "()"
   | Deref id' -> pr "!%a" id id'
+  | Typed (e, _) -> expr fmttr e
+  | Poly { expr_node = en } -> expr_node ~safe ~bw_ints ~consts fmttr en
   | If (e1, e2, e3) ->
     pr "@[<hov 0>(if@ %a@ @[<hov 1>then@ %a@]@ @[<hov 1>else@ %a@])@]"
       expr e1 expr e2 expr e3
@@ -556,6 +562,8 @@ let why_decl (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = why_id'
         function
         | Base_type _ -> consts
         | Ref_type _ -> consts
+        | Typed (wt, _) -> collect_consts ~consts wt
+        | Poly { why_type } -> collect_consts ~consts why_type
         | Prod_type (id, t1, t2) ->
           let collect_consts' () = collect_consts ~consts:(StringSet.add id consts) t2 in
           begin match t1 with
@@ -563,6 +571,8 @@ let why_decl (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = why_id'
           | Base_type _ -> collect_consts' ()
           | Prod_type _ -> collect_consts' ()
           | Annot_type _ -> collect_consts' ()
+          | Typed (wt, _) -> collect_consts ~consts wt
+          | Poly { why_type } -> collect_consts ~consts why_type
           end
         | Annot_type (_, t, _, _, _, _) -> collect_consts ~consts t
       in
@@ -669,6 +679,8 @@ struct
     | Var v -> fold_id ~init v
     | Deref v -> fold_id ~init v
     | Deref_at (v, _) -> fold_id ~init v
+    | Typed (t, _) -> fold ~init t
+    | Poly { term } -> fold ~init term
     | Labeled (_, t) -> fold ~init t
     | If (i, t, e) ->
       fold ~init i |~>
@@ -776,6 +788,8 @@ struct
       fold_logic_type ~init lt
     | Ref_type wt ->
       fold ~init wt
+    | Typed (wt, _) -> fold ~init wt
+    | Poly { why_type } -> fold ~init why_type
     | Annot_type (pre, wt, reads, writes, post, exns) ->
       fold_pred ~init pre |~>
       fold wt |~>
@@ -815,6 +829,8 @@ struct
       fold e2
     | Not e -> fold ~init e
     | Void -> init
+    | Typed (e, _) -> fold ~init e
+    | Poly { expr_node } -> fold ~init { e with expr_node }
     | If (i, t, e) ->
       fold ~init i |~>
       fold t |~>

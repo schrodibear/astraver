@@ -681,7 +681,7 @@ let rec ty_term : type a. a term -> a typed_term =
     | Ty ty | Ty' ty -> Ty' ty
     | Poly { term = t } | Poly' { term = t } ->
       match ty_term e with
-      | Ty _ | Ty' _ -> failwith "Cannot type term: branches have different type order"
+      | Ty ty | Ty' ty -> Ty' ty
       | Poly { term = e } | Poly' { term = e } ->
         Poly' { term = If (i, t, e) }
     end
@@ -746,42 +746,103 @@ let why_type : type a b. (a, b) ty_opt -> b why_type -> a why_type = fun t wt ->
 type 'a typed_expr =
   | Ty of 'a ty
   | Ty' of 'a ty
-  | Poly of poly_expr
-  | Poly' of poly_expr
+  | Poly of poly_expr_node
+  | Poly' of poly_expr_node
 
-
-
-(*
-module R_expr = Return (struct type 'a t = 'a expr end)
-let rec expr : type a b. (a, b) ty_opt -> b expr -> a expr = fun t e ->
-  let open R_expr in
-  let return = return t e in
-  let return' expr_node = { e with expr_node } in
+let rec ty_expr : type a. a expr -> a typed_expr = fun e ->
   match e.expr_node with
-  | Cte c -> return' (Cte (const t c))
-  | Var _ as v -> return' v
-  | And _
-  | Or _
-  | Not _ -> return boolean
-  | Void -> return void
-  | Deref _ as d -> d
-  | If (i, t', e) -> If (i, expr t t', expr t e)
-  | While _
-  | Block _
-  | Assign _ -> return void
-  | Let (v, e, e') -> Let (v, e, expr t e')
-  | Let_ref (v, e, e') -> Let_ref (v, e, expr t e')
-  | _ -> assert false
+  | Cte c -> Ty (ty_const c)
+  | Var _ as expr_node -> Poly { expr_node }
+  | And _ -> Ty Bool
+  | Or _ -> Ty Bool
+  | Not _ -> Ty Bool
+  | Void  -> Ty Void
+  | Deref _ as expr_node -> Poly { expr_node }
+  | Typed (_, ty) -> Ty ty
+  | Poly _ as expr_node -> Poly { expr_node }
+  | If (i, t, e) ->
+    begin match ty_expr t with
+    | Ty ty | Ty' ty -> Ty' ty
+    | Poly { expr_node = t_expr_node } | Poly' { expr_node = t_expr_node } ->
+      match ty_expr e with
+      | Ty ty | Ty' ty -> Ty' ty
+      | Poly { expr_node } | Poly' { expr_node } ->
+        Poly' { expr_node = If (i, { t with expr_node = t_expr_node }, { e with expr_node }) }
+    end
+  | While _ -> Ty Void
+  | Block _ -> Ty Void
+  | Assign _ -> Ty Void
+  | Let (v, e, e') ->
+    begin match ty_expr e' with
+    | Ty ty | Ty' ty -> Ty' ty
+    | Poly { expr_node } | Poly' { expr_node } -> Poly' { expr_node = Let (v, e, { e' with expr_node }) }
+    end
+  | Let_ref (v, e, e') ->
+    begin match ty_expr e' with
+    | Ty ty | Ty' ty -> Ty' ty
+    | Poly { expr_node } | Poly' { expr_node } -> Poly' { expr_node = Let_ref (v, e, { e' with expr_node }) }
+    end
+  | App (f, args, rt) ->
+    begin match ty_func f with
+    | Ty ty -> Ty ty
+    | Poly { func } ->
+      match Option.map ty_why_type rt with
+      | None -> Poly { expr_node = App (func, args, None) }
+      | Some (Ty ty) -> Ty ty
+      | Some (Ty' ty) -> Ty' ty
+      | Some (Poly { why_type }) -> Poly { expr_node = App (func, args, Some why_type) }
+      | Some (Poly' { why_type }) -> Poly' { expr_node = App (func, args, Some why_type) }
+    end
+  | Raise (ex, eo) -> Poly { expr_node = Raise (ex, eo) }
+  | Try (e, ex, v, e') ->
+    begin match ty_expr e with
+    | Ty ty | Ty' ty -> Ty' ty
+    | Poly { expr_node = e_expr_node } | Poly' { expr_node = e_expr_node } ->
+      match ty_expr e' with
+      | Ty ty | Ty' ty -> Ty' ty
+      | Poly { expr_node } | Poly' { expr_node } ->
+        Poly' { expr_node = Try ({ e with expr_node = e_expr_node }, ex, v, { e' with expr_node }) }
+    end
+  | Fun (args, rt, pre, e, post, div, raises) ->
+    begin match ty_why_type rt with
+    | Ty ty -> Ty ty
+    | Ty' ty -> Ty' ty
+    | Poly { why_type } | Poly' { why_type } ->
+      match ty_expr e with
+      | Ty ty | Ty' ty -> Ty' ty
+      | Poly { expr_node } | Poly' { expr_node } ->
+        Poly' { expr_node = Fun (args, why_type, pre, { e with expr_node }, post, div, raises) }
+    end
+  | Triple (opaq, pre, e, post, raises) ->
+    begin match ty_expr e with
+    | Ty ty | Ty' ty -> Ty' ty
+    | Poly { expr_node } | Poly' { expr_node } ->
+      Poly' { expr_node = Triple (opaq, pre, { e with expr_node }, post, raises) }
+    end
+  | Assert _ -> Ty Void
+  | Black_box rt ->
+    begin match ty_why_type rt with
+    | Ty ty -> Ty ty
+    | Ty' ty -> Ty' ty
+    | Poly { why_type } ->
+      Poly { expr_node = Black_box why_type }
+    | Poly' { why_type } ->
+      Poly' { expr_node = Black_box why_type }
+    end
+  | Absurd -> Ty Void
+  | Labeled (lab, e) ->
+    begin match ty_expr e with
+    | Ty ty | Ty' ty -> Ty' ty
+    | Poly { expr_node } | Poly' { expr_node } -> Poly' { expr_node = Labeled (lab, { e with expr_node }) }
+    end
 
-  (*| App : ('a, 'b) func * 'a expr_hlist * 'b why_type option -> 'b expr_node
-  | Raise : string * 'a expr option -> 'b expr_node
-  | Try : 'a expr * string * string option * 'a expr -> 'a expr_node
-  | Fun : (string * any_why_type) list * 'b why_type * pred * 'b expr * pred * bool * ((string * pred) list) ->
-    'b expr_node
-    (** params * result_type * pre * body * post * diverges * signals *)
-  | Triple : opaque * pred * 'a expr * pred * ((string * pred) list) -> 'a expr_node
-  | Assert : assert_kind * pred -> void expr_node
-  | Black_box : 'a why_type -> 'a expr_node
-  | Absurd : void expr_node
-    | Labeled : why_label * 'a expr -> 'a expr_node*)
-*)
+let rec expr : type a b. (a, b) ty_opt -> b expr -> a expr = fun t e ->
+  match t with
+  | Any -> e
+  | Ty ty ->
+    match ty_expr e with
+    | Poly { expr_node } -> { e with expr_node }
+    | Poly' pen -> { e with expr_node = Poly pen }
+    | Ty ty' -> let Eq = eq_ty ty ty' in e
+    | Ty' ty' -> let Eq = eq_ty ty ty' in { e with expr_node = Typed (e, ty') }
+

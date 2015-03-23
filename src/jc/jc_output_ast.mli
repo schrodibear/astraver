@@ -237,7 +237,9 @@ type opaque = bool
 
 type assert_kind = [ `ASSERT | `CHECK | `ASSUME ]
 
-type poly_expr = { expr : 'a. 'a expr }
+[@@@warning "-30"]
+
+type poly_expr_node = { expr_node : 'a. 'a expr_node }
 
 and 'a expr_hlist =
   | Nil : unit expr_hlist
@@ -252,7 +254,7 @@ and 'typ expr_node =
   | Void : void expr_node
   | Deref : string -> 'a expr_node
   | Typed : 'a expr * 'a ty -> 'a expr_node
-  | Poly : poly_expr -> 'a expr_node
+  | Poly : poly_expr_node -> 'a expr_node
   | If : 'a expr * 'b expr * 'b expr -> 'b expr_node
   | While :
         boolean expr (** loop condition *)

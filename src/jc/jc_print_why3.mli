@@ -10,13 +10,12 @@ val uid : formatter -> string -> unit
 val int_ty :
   how:[< `Module of bool * bool | `Name | `Theory of bool ] ->
   formatter ->
-  ('a range, 'b bit) integer ->
+  ('a repr, 'b bit) xintx bounded integer ->
   unit
 
 val enum_ty :
   how:[< `Module of bool | `Name | `Theory ] ->
-  formatter ->
-  ('a enum, 'b bit) integer -> unit
+  formatter -> enum bounded integer -> unit
 
 val modulo : formatter -> bool -> unit
 
@@ -46,7 +45,7 @@ val op :
 
 type any_integer =
     Int :
-      ('r range, 'b bit) integer ->
+      ('r repr, 'b bit) xintx bounded integer ->
       any_integer
 
 module S : Set.S with type elt = any_integer
