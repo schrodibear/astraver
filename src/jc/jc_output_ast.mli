@@ -99,17 +99,24 @@ type _ repr =
 
 type ('repr, 'bit) xintx = Xintx of 'repr repr * 'bit bit
 
-type enum = Enum of string
+type _ enum = ..
+
+module type Enum =
+sig
+  type t
+  type 'a enum += E : t enum
+  val name : string
+end
 
 type _ bounded =
   | Int : ('repr, 'bit) xintx -> ('repr, 'bit) xintx bounded
-  | Enum : string -> enum bounded
+  | Enum : (module Enum with type t = 'a) -> 'a enum bounded
 
 type unbounded = Unbounded
 
 type 'bounded integer =
   | Int : 'a repr * 'b bit -> ('a repr, 'b bit) xintx bounded integer
-  | Enum : string -> enum bounded integer
+  | Enum : (module Enum with type t = 'a) -> 'a enum bounded integer
   | Integer : unbounded integer
 
 type 'a number =
@@ -167,6 +174,8 @@ type ('expected, 'got) ty_opt =
   | Ty : 'expected ty -> ('expected, 'got) ty_opt
   | Any : ('got, 'got) ty_opt
 
+type some_ty_opt = Typ : (_, _) ty_opt -> some_ty_opt
+
 type poly_term = { term : 'a. 'a term }
 
 and 'a term_hlist =
@@ -184,6 +193,8 @@ and 'typ term =
   | Labeled : why_label * 'a term -> 'a term
   | If : 'a term * 'b term * 'b term -> 'b term
   | Let : string * 'a term * 'b term -> 'b term
+
+type some_term = Term : _ term -> some_term
 
 type ('params, 'result) tconstr =
   | Numeric : 'a number -> (unit, 'a number) tconstr
@@ -227,9 +238,9 @@ and 'a why_type =
   | Typed : 'a why_type * 'a ty -> 'a why_type
   | Poly : poly_why_type -> _ why_type
 
-type any_logic_type = Logic_type : 'a logic_type -> any_logic_type
+type some_logic_type = Logic_type : 'a logic_type -> some_logic_type
 
-type any_why_type = Why_type : 'a why_type -> any_why_type
+type some_why_type = Why_type : 'a why_type -> some_why_type
 
 type 'a variant = 'a term * string option
 
@@ -269,7 +280,7 @@ and 'typ expr_node =
   | App : ('a, 'b) func * 'a expr_hlist * 'b why_type option -> 'b expr_node
   | Raise : string * 'a expr option -> 'b expr_node
   | Try : 'a expr * string * string option * 'a expr -> 'a expr_node
-  | Fun : (string * any_why_type) list * 'b why_type * pred * 'b expr * pred * bool * ((string * pred) list) ->
+  | Fun : (string * some_why_type) list * 'b why_type * pred * 'b expr * pred * bool * ((string * pred) list) ->
     'b expr_node
     (** params * result_type * pre * body * post * diverges * signals *)
   | Triple : opaque * pred * 'a expr * pred * ((string * pred) list) -> 'a expr_node
@@ -294,13 +305,13 @@ type goal_kind = KAxiom | KLemma | KGoal
 type 'kind decl =
   | Param : 'a why_type -> [`Module of bool] decl (** parameter in why *)
   | Def : 'a expr -> [`Module of bool] decl (** global let in why *)
-  | Logic : (string * any_logic_type) list * 'a logic_type -> [`Theory] decl
+  | Logic : (string * some_logic_type) list * 'a logic_type -> [`Theory] decl
     (** logic decl in why *)
-  | Predicate : (string * any_logic_type) list * pred -> [`Theory] decl
-  | Inductive : (string * any_logic_type) list * (string * pred) list -> [`Theory] decl
+  | Predicate : (string * some_logic_type) list * pred -> [`Theory] decl
+  | Inductive : (string * some_logic_type) list * (string * pred) list -> [`Theory] decl
     (** inductive definition *)
   | Goal : goal_kind * pred -> [`Theory] decl  (** Goal *)
-  | Function : (string * any_logic_type) list * 'a logic_type * 'a term -> [`Theory] decl
+  | Function : (string * some_logic_type) list * 'a logic_type * 'a term -> [`Theory] decl
   | Type : string list -> [`Theory] decl
   | Exception : 'a logic_type option -> [`Module of bool] decl
 
@@ -325,9 +336,9 @@ and 'kind entry =
   | Module : string * (module_dependency list ref * bool * [`Module of bool] why_decl list) option ->
     [`Module of bool] entry
 
-type any_entry = Entry : 'kind entry -> any_entry
+type some_entry = Entry : 'kind entry -> some_entry
 
-type file = any_entry list
+type file = some_entry list
 
 (*
   Local Variables:

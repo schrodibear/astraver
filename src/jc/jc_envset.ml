@@ -33,6 +33,7 @@
 
 open Stdlib
 open Env
+open Output_ast
 
 module type OrderedType =
 sig
@@ -292,6 +293,24 @@ module TypeVarOrd =
      end)
 
 module TypeVarMap = Map.Make (TypeVarOrd)
+
+let enum =
+  let h = Hashtbl.create 10 in
+  fun name ->
+    try
+      Hashtbl.find h name
+    with
+    | Not_found ->
+      let e =
+        (module
+        struct
+          type t
+          type _ enum += E : t enum
+          let name = name
+        end : Enum)
+      in
+      Hashtbl.add h name e;
+      e
 
 (*
 Local Variables:

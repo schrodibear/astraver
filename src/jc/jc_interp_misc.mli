@@ -69,54 +69,26 @@ val fresh_reinterpret_label : unit -> label_info
 
 val fresh_statement_label : unit -> label_info
 
-(** {1 helpers for Output module} *)
-
-val make_subtag : term -> term -> assertion
-
-val make_eq : term -> term -> assertion
-(** builds eq(t1,t2) *)
-
-val make_le : term -> term -> assertion
-val make_ge : term -> term -> assertion
-
-val make_offset_min : alloc_class -> term -> term
-val make_offset_max : alloc_class -> term -> term
-
-val make_select: term -> term -> term
-(** builds select(t1,t2) *)
-
-val make_or_term : term -> term -> term
-
-val make_and_term : term -> term -> term
-
-val make_not_term : term -> term
-
-val make_eq_term : jc_type -> term -> term -> term
-
-val make_eq_pred : jc_type -> term -> term -> assertion
-
-val make_if_term : term -> term -> term -> term
-
 (** {1 Types} *)
 
-val why_unit_type : logic_type
+val why_unit_type : void logic_type
 
-val why_integer_type : logic_type
+val why_integer_type : unbounded integer number logic_type
 
-val tr_base_type : ?region:RegionTable.key -> jc_type -> logic_type
+val tr_base_type : ('a, 'b) ty_opt -> ?region:RegionTable.key -> jc_type -> 'a logic_type
 
-val tr_var_base_type : var_info -> logic_type
+val tr_var_base_type : ('a, 'b) ty_opt -> var_info -> 'a logic_type
 
-val tr_var_type : var_info -> why_type
+val tr_var_type : ('a, 'b) ty_opt -> var_info -> 'a why_type
 
-val raw_pset_type : logic_type -> logic_type
+val raw_pset_type : 'a logic_type -> 'b logic_type
 
-val raw_memory_type : logic_type -> logic_type -> logic_type
+val raw_memory_type : 'a logic_type -> 'b logic_type -> 'c logic_type
 
-val memory_type : mem_class -> logic_type
+val memory_type : mem_class -> 'a logic_type
 
-val is_memory_type : logic_type -> bool
-
+val is_memory_type : 'a logic_type -> bool
+(*
 val tr_li_model_mem_arg_3 :
   label_in_name:bool -> label -> MemClass.t * RegionTable.key -> string * term * logic_type
 
@@ -334,4 +306,4 @@ val specialized_functions : (string * string StringMap.t) Common.StringHashtblIt
   Local Variables:
   compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_interp_misc.mli"
   End:
-*)
+*)*)

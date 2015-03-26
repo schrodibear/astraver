@@ -55,9 +55,9 @@ type float_instruction_set = FISstrictIEEE754 | FISx87
 
 type root_kind = Rvariant | RplainUnion | RdiscrUnion
 
-type any_enum =
-  | Int : 'a repr * 'b bit -> any_enum
-  | Enum : string -> any_enum
+type some_enum =
+  | Int : 'a repr * 'b bit -> some_enum
+  | Enum : (module Enum with type t = 'a) -> some_enum
 
 type jc_type =
   | JCTnative of native_type
@@ -81,7 +81,7 @@ and pointer_class =
   | JCroot of root_info
 
 and enum_info = {
-  ei_type : any_enum;
+  ei_type : some_enum;
   ei_min  : Num.num;
   ei_max  : Num.num
 }

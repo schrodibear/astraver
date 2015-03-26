@@ -26,7 +26,7 @@ let (@@$) : _ func -> _ expr_hlist -> _ expr = fun x y -> expr (App (x, y, None)
 
 let (@@$.) : _ func -> _ expr -> _ expr = fun x y -> expr (App (x, Cons (y, Nil), None))
 
-let (@@:) : _ expr -> _ why_type -> _ expr =
+let (>:) : _ expr -> _ why_type -> _ expr =
   fun e t ->
   match e.expr_node with
   | App (x, y, None) -> { e with expr_node = App (x, y, Some t) }
@@ -303,7 +303,7 @@ let (-~)  =
   | Const Int "0" -> int_t 0
   | t -> U_int_op `Neg @$. t
 
-let (!) v = Deref v
+let (!) v = (Deref v : _ term)
 
 let at_t v ~lab = Deref_at (v, lab)
 
@@ -416,7 +416,13 @@ let positioned'_e l = positioned_e (Position.of_pos l)
 
 let var_e v = expr (Var v)
 
+let (!@) v = expr (Deref v)
+
 let void_e = expr Void
+
+let let_e v ~equal ~in_ = expr (Let (v, equal, in_))
+
+let let_ref_e v ~equal ~in_ = expr (Let_ref (v, equal, in_))
 
 let or_e e1 e2 =
   match e1.expr_node, e2.expr_node with
@@ -478,7 +484,12 @@ and append l1 l2 =
     end
   | e1 :: e1s -> e1 :: append e1s l2
 
+let expr' = expr
+
 let id { why_id } = why_id
+
+let why_decl ~name:why_name ?expl:(why_expl="") ?pos:(why_pos = Position.dummy) why_decl =
+  { why_id = { why_name; why_expl; why_pos }; why_decl }
 
 let jc_lt = lt ~from:Name.Theory.jessie
 
@@ -503,6 +514,8 @@ let (<:) t1 t2 : pred = App (jc_f "subtag", t1 @. t2)
 
 let instanceof tt p st : pred = App (jc_f "instanceof", tt @ p @. var_t (Name.tag st))
 
+let disjoint ps1 ps2 : pred = App (jc_f "pset_disjoint", ps1 @. ps2)
+
 let alloc_table ?r ac =
   var_t (Option.map_default r ~default:(Name.Generic.alloc_table ac) ~f:(fun r -> Name.alloc_table (ac, r)))
 
@@ -517,8 +530,8 @@ let int_of_tag st = jc_f "int_of_tag" @$. var_t (Name.tag st)
 let rec string_of_ty : type a. a ty -> string =
   function
   | (Numeric (Integral Integer) : a ty) -> "integer"
-  | Numeric (Integral (Int (r, b))) -> string_of_any_enum (Env.Int (r, b))
-  | Numeric (Integral (Enum s)) -> string_of_any_enum (Env.Enum s)
+  | Numeric (Integral (Int (r, b))) -> string_of_some_enum (Env.Int (r, b))
+  | Numeric (Integral (Enum e)) -> string_of_some_enum (Env.Enum e)
   | Numeric (Real Real) -> "real"
   | Numeric (Real (Float Single)) -> "single"
   | Numeric (Real (Float Double)) -> "double"
@@ -541,9 +554,11 @@ let rec eq_ty : type a b. a ty -> b ty -> (a, b) eq = fun a b ->
   | Numeric (Integral (Int (Unsigned, X32))), Numeric (Integral (Int (Unsigned, X32))) -> Eq
   | Numeric (Integral (Int (Signed, X64))),   Numeric (Integral (Int (Signed, X64))) -> Eq
   | Numeric (Integral (Int (Unsigned, X64))), Numeric (Integral (Int (Unsigned, X64))) -> Eq
-  | Numeric (Integral (Enum s)),              Numeric (Integral (Enum s')) when P.(s = s') -> Eq
-  | Numeric (Integral (Enum s)),              Numeric (Integral (Enum s')) ->
-    failwith ("Enum mismatch in Why3ML output: expected: `" ^ s ^ "', got: `" ^ s' ^ "'")
+  | Numeric (Integral (Enum (module E1))),    Numeric (Integral (Enum (module E2))) ->
+    begin match E1.E with
+    | E2.E -> Eq
+    | _ -> failwith ("Enum mismatch in Why3ML output: expected: `" ^ E1.name ^ "', got: `" ^ E2.name ^ "'")
+    end
   | Numeric (Real Real),                      Numeric (Real Real) -> Eq
   | Numeric (Real (Float Single)),            Numeric (Real (Float Single)) -> Eq
   | Numeric (Real (Float Double)),            Numeric (Real (Float Double)) -> Eq

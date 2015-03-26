@@ -51,7 +51,7 @@ open Stdlib
 
 module StringSet : Set.S with type elt = string
 
-module StringMap : Map.S with type key = string 
+module StringMap : Map.S with type key = string
 
 val get_unique_name : ?local_names:StringSet.t -> string -> string
 
@@ -106,9 +106,11 @@ module LogicLabelSet : Set.S with type elt = label
 module TypeVarOrd : OrderedHashedType with type t = type_var_info
 module TypeVarMap : Map.S with type key = type_var_info
 
+val enum : string -> (module Output_ast.Enum)
+
 (*
-Local Variables: 
+Local Variables:
 compile-command: "make -C .. bin/jessie.byte"
-End: 
+End:
 *)
 

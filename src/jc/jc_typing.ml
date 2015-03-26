@@ -2995,9 +2995,10 @@ let rec decl_aux ~only_types ~axiomatic acc d =
           typing_error ~loc:d#pos "duplicate range type `%s'" id
         with
         | Not_found ->
-            let ri =
+          let ri =
+            let (module E) = enum id in
               {
-                ei_type = Enum id;
+                ei_type = Enum (module E);
                 ei_min = min;
                 ei_max = max;
               }

@@ -29,9 +29,6 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
-
-
 open Stdlib
 open Env
 open Envset
@@ -1041,7 +1038,7 @@ let rec term_of_location_set locs =
           JCTderef (term_of_location_set locs, lab, fi)
       | JCLSderef (_, _, _, r), r' ->
           Typing.typing_error
-            locs#pos
+            ~loc:locs#pos
             "Failed to transform location set to term: %a: different regions: %a != %a"
             Print.location_set locs Region.print r Region.print r'
       | JCLSrange (locs, t1_opt, t2_opt), _ -> JCTshift (term_of_location_set locs, range_term t1_opt t2_opt)
@@ -1056,7 +1053,7 @@ let rec term_of_location ?(label=LabelHere) loc =
           JCTderef (term_of_location_set locs, lab, fi)
       | JCLderef (_, _, _, r), r' ->
           Typing.typing_error
-            loc#pos
+            ~loc:loc#pos
             "Failed to transform location to term: %a: different regions: %a != %a"
             Print.location loc Region.print r Region.print r'
       | JCLderef_term (t, fi), _ -> JCTderef (t, label, fi)
@@ -1201,7 +1198,7 @@ let rec single_term ef t =
         List.fold_left pattern ef (List.map fst ptl)
     | JCTconst _ | JCTrange _ | JCTbinary _ | JCTunary _
     | JCTshift _ | JCTold _ | JCTat _ | JCTaddress _ | JCTbase_block _
-    | JCTbitwise_cast _ | JCTrange_cast _ | JCTreal_cast _ | JCTif _ | JCTlet _ ->
+    | JCTrange_cast _ | JCTrange_cast_mod _ | JCTreal_cast _ | JCTif _ | JCTlet _ ->
         true, ef
 
 and term ef t =
@@ -1473,7 +1470,7 @@ let rec expr fef e =
            let st =
              match e1#typ with
              | JCTpointer (JCtag (st, _), _, _) -> st
-             | _ -> Typing.typing_error e1#pos "Shifting of a non-pointer"
+             | _ -> Typing.typing_error ~loc:e1#pos "Shifting of a non-pointer"
            in
            add_tag_reads LabelHere fef (struct_root st, e#region)
        | JCEalloc(_e1,st) ->
@@ -1485,7 +1482,7 @@ let rec expr fef e =
                  match rt.ri_kind with
                    | Rvariant -> all_allocs ~select:fully_allocated pc
                    | RdiscrUnion ->
-                       Typing.typing_error e#pos "Unsupported discriminated union, sorry" (* TODO *)
+                       Typing.typing_error ~loc:e#pos "Unsupported discriminated union, sorry" (* TODO *)
                    | RplainUnion -> [ ac ]
            in
            let all_mems = match ac with
@@ -1531,7 +1528,7 @@ let rec expr fef e =
                match rt.ri_kind with
                | Rvariant -> all_allocs ~select:fully_allocated pc
                | RdiscrUnion ->
-                 Typing.typing_error e#pos "Unsupported discriminated union, sorry" (* TODO *)
+                 Typing.typing_error ~loc:e#pos "Unsupported discriminated union, sorry" (* TODO *)
                | RplainUnion -> [ac]
            in
            let all_mems =
@@ -1560,7 +1557,7 @@ let rec expr fef e =
           *  for pointers to structures with a single non-embedded field of an integral type.
           *  So actually only conversions between char <--> short <--> int <--> long and such are supported.
           *)
-         let error msg = Typing.typing_error e#pos ("Unsupported reinterpretation " ^^ msg) in
+         let error msg = Typing.typing_error ~loc:e#pos ("Unsupported reinterpretation " ^^ msg) in
          let check_equal (type t) (module O : OrderedType with type t = t) v1 v2 =
            if O.equal v1 v2 then
              v1
@@ -1696,9 +1693,9 @@ let rec expr fef e =
          List.fold_left (add_alloc_reads LabelHere) fef |>
          fun fef -> true, fef
        | JCEloop _ | JCElet _ | JCEassert _ | JCEcontract _ | JCEblock _
-       | JCEconst _  | JCEif _ | JCErange_cast _
+       | JCEconst _  | JCEif _ | JCErange_cast _ | JCErange_cast_mod _
        | JCEreal_cast _ | JCEunary _ | JCEaddress _ | JCEbinary _
-       | JCEreturn_void  | JCEreturn _ | JCEbitwise_cast _ | JCEbase_block _ | JCEfresh _ ->
+       | JCEreturn_void  | JCEreturn _ | JCEbase_block _ | JCEfresh _ ->
            true, fef
     ) fef e
 

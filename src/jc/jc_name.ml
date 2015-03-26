@@ -188,6 +188,8 @@ struct
       | JCalloc_bitvector -> "free_bitvector"
     in
     (if safe then "safe_" else "") ^ prefix ^ "_" ^ (Class.pointer pc)
+
+  let any_enum ae = "any" ^ string_of_some_enum ae
 end
 
 module Theory =

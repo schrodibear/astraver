@@ -63,10 +63,10 @@ let rec expr fmt e =
     out "(@[<hv 2>%a =@ %a@])" expr e1 expr e2
   | JCNEinstanceof(_e1, _id) ->
     out "(TODO instanceof)"
-  | JCNEcast(_e1, _id) ->
+  | JCNEcast (_e1, _id) ->
     out "(TODO cast)"
-  | JCNEreinterpret_cast (_e1, _id) ->
-    out "(TODO reinterpret_cast)"
+  | JCNEcast_mod (_e1, _id) ->
+    out "(TODO cast_mod)"
   | JCNEif(_e1, _e2, _e3) ->
     out "(TODO if)"
   | JCNEoffset(k, e1) ->

@@ -37,8 +37,7 @@ open Common
 
 val default_label : label list -> label option
 
-val typing_error :
-    Why_loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
+val typing_error : loc:Why_loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
 
 val is_root_struct : struct_info -> bool
 
@@ -64,11 +63,6 @@ val roots_table: (root_info) StringHashtblIter.t
 
 val enum_types_table: enum_info StringHashtblIter.t
 
-(*
-val enum_conversion_functions_table : (fun_info, string) Hashtbl.t
-val enum_conversion_logic_functions_table : (logic_info, string) Hashtbl.t
-*)
-
 val lemmas_table :
   (Why_loc.position * bool * type_var_info list * label list * assertion)
   StringHashtblIter.t
@@ -91,7 +85,7 @@ val exceptions_table: exception_info StringHashtblIter.t
 
 exception Typing_error of Why_loc.position * string
 
-val coerce : jc_type -> native_type -> expr -> expr
+val implicit_coerce : jc_type -> jc_type -> expr -> expr
 
 val type_range_of_term : jc_type -> term -> assertion
 

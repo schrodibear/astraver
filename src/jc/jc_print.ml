@@ -140,7 +140,7 @@ let rec pattern fmt p =
   | JCPconst c ->
     fprintf fmt "%a" const c
 
-let any_enum fmttr ae = fprintf fmttr "%s" (string_of_any_enum ae)
+let any_enum fmttr ae = fprintf fmttr "%s" (string_of_some_enum ae)
 
 let rec term fmt t =
   if t#mark <> "" then

@@ -69,7 +69,7 @@ val string_type : Env.jc_type
 val any_type: jc_type
 
 val string_of_native: Env.native_type -> string
-val string_of_any_enum : Env.any_enum -> string
+val string_of_some_enum : Env.some_enum -> string
 val print_type : Format.formatter -> Env.jc_type -> unit
 val print_type_var : Format.formatter -> Env.type_var_info -> unit
 

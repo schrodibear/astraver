@@ -225,7 +225,7 @@ let duplicable =
                   match e#node with
                   | JCPEconst _ | JCPEvar _ | JCPErange _ | JCPEderef _ | JCPEfresh _
                   | JCPEunary _ | JCPEoffset _ | JCPEaddress _ | JCPEold _ | JCPEat _
-                  | JCPEbinary _ | JCPEcast _ | JCPEreinterpret_cast _ | JCPEsubtype _ | JCPEbase_block _ -> true
+                  | JCPEbinary _ | JCPEcast _ | JCPEcast_mod _ | JCPEsubtype _ | JCPEbase_block _ -> true
                   | JCPEassert _ | JCPEthrow _ | JCPEreturn _ | JCPEeqtype _
                   | JCPEbreak _ | JCPEcontinue _  | JCPEgoto _  | JCPEdecl _
                   | JCPElabel _ | JCPEinstanceof _ | JCPEalloc _
@@ -291,17 +291,10 @@ let normalize_locvardecl pos elist =
 (** Apply normalizations recursively *)
 let normalize =
   Iterators.map_pexpr
-    ~before:(fun e ->
-      match e#node with
-      | JCPEblock elist ->
-        normalize_postaction e#pos elist
-      | _ -> e)
     ~after:(fun e ->
       match e#node with
       | JCPEassign_op(e1,op,e2) ->
         normalize_assign_op e#pos e1 op e2
-      | JCPEunary(#pm_unary_op as op,e') ->
-        normalize_pmunary e#pos op e'
       | JCPEswitch(e',caselist) ->
         normalize_switch e#pos e' caselist
       | JCPEwhile(test,inv,var,body) ->
@@ -482,7 +475,6 @@ let rec expr e =
     | JCPEinstanceof(e,id) -> JCNEinstanceof(expr e,id)
     | JCPEcast (e, id) -> JCNEcast(expr e,id)
     | JCPEcast_mod (e, id) -> JCNEcast_mod (expr e, id)
-    | JCPEreinterpret_cast (e, id) -> JCNEreinterpret_cast (expr e, id)
     | JCPEquantifier(q,ty,idlist,trigs,e) ->
       JCNEquantifier(q,ty,idlist,List.map (List.map expr) trigs,expr e)
     | JCPEold e -> JCNEold(expr e)

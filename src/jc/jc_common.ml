@@ -123,7 +123,7 @@ let string_of_native t =
 
 let print_type_var fmt v = fprintf fmt "(var_%s_%d)" v.tvi_name v.tvi_tag
 
-let string_of_any_enum =
+let string_of_some_enum =
   let range  (type a) =
     function
     | (Signed : a repr) -> ""
@@ -137,14 +137,14 @@ let string_of_any_enum =
     | X64 -> "64"
   in
   function
-  | (Int (r, b) : any_enum) -> range r ^ "int" ^ bit b
-  | Enum s -> s
+  | (Int (r, b) : some_enum) -> range r ^ "int" ^ bit b
+  | Enum (module E) -> E.name
 
 let rec print_type fmt t =
   match t with
   | JCTnative n -> fprintf fmt "%s" (string_of_native n)
   | JCTlogic (s,l) -> fprintf fmt "%s%a" s Why_pp.(print_list_delim lchevron rchevron comma print_type) l
-  | JCTenum ri -> fprintf fmt "%s" (string_of_any_enum ri.ei_type)
+  | JCTenum ri -> fprintf fmt "%s" (string_of_some_enum ri.ei_type)
   | JCTpointer(pc, ao, bo) ->
     begin match pc with
     | JCtag({ si_name = name }, [])
@@ -1042,7 +1042,7 @@ let string_of_op = function
 
 let string_of_op_type = function
   | `Integer -> "integer"
-  | `Enum ei -> string_of_any_enum ei.ei_type
+  | `Enum ei -> string_of_some_enum ei.ei_type
   | `Unit -> "unit"
   | `Real -> "real"
   | `Double -> "double"
