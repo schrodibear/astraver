@@ -178,14 +178,34 @@ let tr_native_type t =
   | Tgenfloat `Binary80 -> O.(logic_type t (jc_lt "binary80" @@@$ Nil))
   | Tstring -> O.(logic_type t (jc_lt "string" @@@$ Nil))
 
-type any_ltype_hlist =
-  | Ltype_hlist : 'a ltype_hlist -> any_ltype_hlist
+let ty_opt =
+  function
+  | JCTnative Tunit -> Typ (Ty Void)
+  | JCTnative Tboolean -> Typ (Ty Bool)
+  | JCTnative Tinteger -> Typ (Ty (Numeric (Integral Integer)))
+  | JCTnative Treal -> Typ (Ty (Numeric (Real Real)))
+  | JCTnative (Tgenfloat `Double) -> Typ (Ty (Numeric (Real (Float Double))))
+  | JCTnative (Tgenfloat `Float) -> Typ (Ty (Numeric (Real (Float Single))))
+  | JCTnative (Tgenfloat `Binary80) -> Typ Any
+  | JCTnative Tstring -> Typ Any
+  | JCTlogic _ -> Typ Any
+  | JCTenum { ei_type = Int (r, b) } -> Typ (Ty (Numeric (Integral (Int (r, b)))))
+  | JCTenum { ei_type = Enum e } -> Typ (Ty (Numeric (Integral (Enum e))))
+  | JCTpointer _ -> Typ Any
+  | JCTnull -> Typ Any
+  | JCTany -> Typ Any
+  | JCTtype_var _ -> Typ Any
+
+type some_ltype_hlist =
+  | Ltype_hlist : 'a ltype_hlist -> some_ltype_hlist
 
 let rec tr_base_type : type a b. (a, b) ty_opt -> ?region:_ ->  _ -> a logic_type =
   fun t ?region ->
   let tr_ltype_hlist =
     List.fold_left
-      (fun (Ltype_hlist lhl) t -> Ltype_hlist O.(tr_base_type Any ?region t @@@ lhl))
+      (fun (Ltype_hlist lhl) t ->
+         let Typ ty_opt = ty_opt t in
+         Ltype_hlist O.(tr_base_type ty_opt ?region t @@@ lhl))
       (Ltype_hlist Nil)
   in
   function
@@ -231,9 +251,9 @@ let any_value t region jct =
   | JCTenum ei -> O.(expr t (jc_v (Name.Param.any_enum ei.ei_type) @@$. void_e))
   | JCTlogic _ as ty ->
     let t' =
-      Annot_type (True, Base_type (tr_base_type Any ty), [], [], True, [])
+      Annot_type (True, Base_type (tr_base_type t ty), [], [], True, [])
     in
-    O.(expr t (expr' (Black_box t')))
+    O.(expr Any (expr' (Black_box t')))
   | JCTany -> failwith "any_value: value of wilcard type"
   | JCTtype_var _ ->
     Options.jc_error Why_loc.dummy_position "Usnupported value of poly type" (* TODO: need environment *)
@@ -249,13 +269,13 @@ let tag_table_type vi = raw_tag_table_type (root_model_type vi)
 let tag_id_type vi = raw_tag_id_type (root_model_type vi)
 
 let memory_type mc =
-  let value_type =
-    match mc with
-    | JCmem_field fi -> tr_base_type Any fi.fi_type
-    | JCmem_plain_union _
-    | JCmem_bitvector -> bitvector_type
-  in
-  raw_memory_type (memory_class_type mc) value_type
+  let mk value_type = raw_memory_type (memory_class_type mc) value_type in
+  match mc with
+  | JCmem_field fi ->
+    let Typ ty_opt = ty_opt fi.fi_type in
+    mk (tr_base_type ty_opt fi.fi_type)
+  | JCmem_plain_union _
+  | JCmem_bitvector -> mk bitvector_type
 
 (* query model types *)
 
@@ -277,7 +297,7 @@ let is_memory_type lt = is_jessie_user_type Name.Type.memory lt
 let transpose_label ~label_assoc lab =
   match label_assoc with
   | None -> lab
-  | Some l ->  try List.assoc lab l with Not_found -> lab
+  | Some l -> try List.assoc lab l with Not_found -> lab
 
 let lvar_name ~label_in_name ?label_assoc lab n =
   let lab = transpose_label ~label_assoc lab in
@@ -339,10 +359,10 @@ let tparam t ~label_in_name lab v =
   tvar ~label_in_name lab v,
   tr_base_type t v.vi_type
 
-let local_of_parameter (v', ty') = (var_name' v',ty')
-let effect_of_parameter (v', _ty') = var_name' v'
-let wparam_of_parameter (v', ty') = (v',Ref_type(Base_type ty'))
-let rparam_of_parameter (v', ty') = (v',Base_type ty')
+let local_of_parameter (Expr v', ty') = (var_name' v', ty')
+let effect_of_parameter (Expr v', _ty') = var_name' v'
+let wparam_of_parameter (v', Logic_type ty') = (v', Why_type (Ref_type (Base_type ty')))
+let rparam_of_parameter (v', Logic_type ty') = (v', Why_type (Base_type ty'))
 
 (* model variables *)
 
@@ -448,65 +468,68 @@ let term  = { term =
                        assert (VarMap.is_empty subst);
                        assert false }
 
-let ty_opt =
-  function
-  | JCTnative Tunit -> Typ (Ty Void)
-  | JCTnative Tboolean -> Typ (Ty Bool)
-  | JCTnative Tinteger -> Typ (Ty (Numeric (Integral Integer)))
-  | JCTnative Treal -> Typ (Ty (Numeric (Real Real)))
-  | JCTnative (Tgenfloat `Double) -> Typ (Ty (Numeric (Real (Float Double))))
-  | JCTnative (Tgenfloat `Float) -> Typ (Ty (Numeric (Real (Float Single))))
-  | JCTnative (Tgenfloat `Binary80) -> Typ Any
-  | JCTnative Tstring -> Typ Any
-  | JCTlogic _ -> Typ Any
-  | JCTenum { ei_type = Int (r, b) } -> Typ (Ty (Numeric (Integral (Int (r, b)))))
-  | JCTenum { ei_type = Enum e } -> Typ (Ty (Numeric (Integral (Enum e))))
-  | JCTpointer _ -> Typ Any
-  | JCTnull -> Typ Any
-  | JCTany -> Typ Any
-  | JCTtype_var _ -> Typ Any
+let rec location : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ -> _ -> _ -> a Output_ast.term =
+  fun t ~type_safe ~global_assertion lab loc ->
+    let flocs : type a. (a, _) ty_opt -> _ -> a Output_ast.term = fun t -> location_set t ~type_safe ~global_assertion lab in
+    let ft t : some_term =
+      let Typ ty_opt = ty_opt t#typ in
+      Term (term.term ty_opt ~type_safe ~global_assertion ~relocate:false lab lab t)
+    in
+    match loc#node with
+    | JCLvar _v ->
+      O.(term t (var_t "pset_empty"))
+    | JCLderef (locs, _lab, _fi, _r) ->
+      flocs t locs
+    | JCLderef_term (t1, _fi) ->
+      let Term t1 = ft t1 in
+      O.(term t (jc_f "pset_singleton" @$. t1))
+    | _ -> Options.jc_error loc#pos "Unsupported location" (* TODO *)
 
-let rec location t ~type_safe ~global_assertion lab loc =
-  let flocs t = location_set t ~type_safe ~global_assertion lab in
-  let ft t = term.term t ~type_safe ~global_assertion ~relocate:false lab lab in
-  match loc#node with
-  | JCLvar _v ->
-    O.(term t (var_t "pset_empty"))
-  | JCLderef (locs, _lab, _fi, _r) ->
-    O.(term t (flocs Any locs))
-  | JCLderef_term (t1, _fi) ->
-    O.(term t (jc_f "pset_singleton" @$. ft Any t1))
-  | _ -> Options.jc_error loc#pos "Unsupported location" (* TODO *)
-
-and location_set : 'b. ('a, 'b) ty_opt -> _ = fun t ~type_safe ~global_assertion lab locs ->
-  let flocs t = location_set t ~type_safe ~global_assertion lab in
-  let ft t = term.term t ~type_safe ~global_assertion ~relocate:false lab lab in
-  let f name args = O.(term t (jc_f name @$ args)) in
-  let f' name args = O.(term Any (jc_f name @$ args)) in
-  match locs#node with
-  | JCLSvar v ->
-    f "pset_singleton" O.(tvar ~label_in_name:global_assertion lab v @ Nil)
-  | JCLSderef (locs, lab, fi, _r) ->
-    let mc, _fi_opt = lderef_mem_class ~type_safe locs fi in
-    let mem = tmemory_var ~label_in_name:global_assertion lab (mc, locs#region) in
-    f "pset_deref" O.(mem @. flocs Any locs)
-  | JCLSrange (locs, Some t1, Some t2) ->
-    f "pset_range" O.(flocs Any locs @ ft Any t1 @. ft Any t2)
-  | JCLSrange (locs, None, Some t2) ->
-    f "pset_range_left" O.(flocs Any locs @. ft Any t2)
-  | JCLSrange (locs, Some t1, None) ->
-    f "pset_range_right" O.(flocs Any locs @. ft Any t1)
-  | JCLSrange (locs, None, None) ->
-    f "pset_all" O.(flocs Any locs @ Nil)
-  | JCLSrange_term (locs, Some t1, Some t2) ->
-    f "pset_range" O.(f' "pset_singleton" (ft Any locs @ Nil) @ ft Any t1 @. ft Any t2)
-  | JCLSrange_term (locs, None, Some t2) ->
-    f "pset_range_left" O.(f' "pset_singleton" (ft Any locs @ Nil) @. ft Any t2)
-  | JCLSrange_term (locs, Some t1, None) ->
-    f "pset_range_right" O.(f' "pset_singleton" (ft Any locs @ Nil) @. ft Any t1)
-  | JCLSrange_term (locs, None, None) ->
-    f "pset_all" O.(f' "pset_singleton" (ft Any locs @ Nil) @ Nil)
-  | JCLSat (locs, _lab) -> flocs t locs
+and location_set : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ -> _ -> _ -> a Output_ast.term =
+  fun t ~type_safe ~global_assertion lab locs ->
+    let flocs locs : some_term =
+      let Typ ty_opt = ty_opt locs#typ in
+      Term (location_set ty_opt ~type_safe ~global_assertion lab locs)
+    in
+    let ft t : some_term =
+      let Typ ty_opt = ty_opt locs#typ in
+      Term (term.term ty_opt ~type_safe ~global_assertion ~relocate:false lab lab t)
+    in
+    let f t name args = O.(term t (jc_f name @$ args)) in
+    let f' name args = O.(term Any (jc_f name @$ args)) in
+    match locs#node with
+    | JCLSvar v ->
+      f t "pset_singleton" O.(tvar ~label_in_name:global_assertion lab v @ Nil)
+    | JCLSderef (locs, lab, fi, _r) ->
+      let mc, _fi_opt = lderef_mem_class ~type_safe locs fi in
+      let mem = tmemory_var ~label_in_name:global_assertion lab (mc, locs#region) in
+      let Term locs = flocs locs in
+      f t "pset_deref" O.(mem @. locs)
+    | JCLSrange (locs, Some t1, Some t2) ->
+      let Term locs, Term t1, Term t2 = flocs locs, ft t1, ft t2 in
+      f t "pset_range" O.(locs @ t1 @. t2)
+    | JCLSrange (locs, None, Some t2) ->
+      let Term locs, Term t2 = flocs locs, ft t2 in
+      f t "pset_range_left" O.(locs @. t2)
+    | JCLSrange (locs, Some t1, None) ->
+      let Term locs, Term t1 = flocs locs, ft t1 in
+      f t "pset_range_right" O.(locs @. t1)
+    | JCLSrange (locs, None, None) ->
+      let Term locs = flocs locs in
+      f t "pset_all" O.(locs @ Nil)
+    | JCLSrange_term (locs, Some t1, Some t2) ->
+      let Term locs, Term t1, Term t2 = ft locs, ft t1, ft t2 in
+      f t "pset_range" O.(f' "pset_singleton" (locs @ Nil) @ t1 @. t2)
+    | JCLSrange_term (locs, None, Some t2) ->
+       let Term locs, Term t2 = ft locs, ft t2 in
+      f t "pset_range_left" O.(f' "pset_singleton" (locs @ Nil) @. t2)
+    | JCLSrange_term (locs, Some t1, None) ->
+       let Term locs, Term t1 = ft locs, ft t1 in
+      f t "pset_range_right" O.(f' "pset_singleton" (locs @ Nil) @. t1)
+    | JCLSrange_term (locs, None, None) ->
+      let Term locs = ft locs in
+      f t "pset_all" O.(f' "pset_singleton" (locs @ Nil) @ Nil)
+    | JCLSat (locs, _lab) -> location_set t ~type_safe ~global_assertion lab locs
 
 let rec pset_union_of_list =
   function
@@ -771,7 +794,7 @@ let make_param ~name ~writes ~reads ~pre ~post ~return_type =
   in
   let Why_type annot_type =
     List.fold_right
-      (fun (n, ty') (Why_type acc) -> Why_type (Prod_type (n, ty', acc)))
+      (fun (n, Why_type ty') (Why_type acc) -> Why_type (Prod_type (n, ty', acc)))
       params
       (Why_type annot_type)
   in
@@ -784,7 +807,7 @@ let conv_bw_alloc_parameters ~deref r _pc =
     then alloc_table_var ~test_current_function:true (ac, r)
     else plain_alloc_table_var (ac, r)
   in
-  let alloc = (allocv, alloc_table_type ac) in
+  let alloc = Expr allocv, Logic_type (alloc_table_type ac) in
   [alloc]
 
 let conv_bw_mem_parameters ~deref r _pc =
@@ -794,18 +817,18 @@ let conv_bw_mem_parameters ~deref r _pc =
     then memory_var ~test_current_function:true (mc, r)
     else plain_memory_var (mc, r)
   in
-  let mem = memv, memory_type mc in
+  let mem = Expr memv, Logic_type (memory_type mc) in
   [mem]
 
 let conv_typ_alloc_parameters r (* pc *) =
   function
   | JCtag _ as pc ->
     let ac = alloc_class_of_pointer_class pc in
-    let alloc = plain_alloc_table_var (ac, r), alloc_table_type ac in
+    let alloc = Expr (plain_alloc_table_var (ac, r)), Logic_type (alloc_table_type ac) in
     [alloc]
   | JCroot vi ->
     let ac = JCalloc_root vi in
-    let alloc = plain_alloc_table_var (ac, r), alloc_table_type ac in
+    let alloc = Expr (plain_alloc_table_var (ac, r)), Logic_type (alloc_table_type ac) in
     [alloc]
 
 let conv_typ_mem_parameters ~deref r (* pc *) =
@@ -813,14 +836,14 @@ let conv_typ_mem_parameters ~deref r (* pc *) =
   function
   | JCtag _ as pc ->
     let all_mems = all_memories pc in
-    List.map (fun mc -> memvar (mc, r), memory_type mc) all_mems
+    List.map (fun mc -> Expr (memvar (mc, r)), Logic_type (memory_type mc)) all_mems
   | JCroot rt ->
     match rt.ri_kind with
     | Rvariant -> []
     | RdiscrUnion -> Options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
     | RplainUnion ->
       let mc = JCmem_plain_union rt in
-      let mem = memvar (mc, r), memory_type mc in
+      let mem = Expr (memvar (mc, r)), Logic_type (memory_type mc) in
       [mem]
 
 let make_ofbit_alloc_param_app r pc =
@@ -830,10 +853,11 @@ let make_ofbit_alloc_param_app r pc =
   let app =
     match pc with
     | JCtag _ ->
-      O.(jc_f (alloc_of_bitvector_param_name pc)) args
+      let O.Expr_hlist args = O.args_e args in
+      Expr O.(jc_f (alloc_of_bitvector_param_name pc) @@$ args)
     | JCroot rt ->
       match rt.ri_kind with
-      | Rvariant -> void
+      | Rvariant -> Expr O.void_e
       | RdiscrUnion -> Options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
       | RplainUnion -> Options.jc_error Why_loc.dummy_position "Unsupported plain union" (* TODO *)
   in
@@ -847,10 +871,11 @@ let make_ofbit_mem_param_app r pc =
   let app =
     match pc with
     | JCtag _ ->
-      make_app (mem_of_bitvector_param_name pc) args
+      let O.Expr_hlist args = O.args_e args in
+      Expr O.(jc_f (mem_of_bitvector_param_name pc) @@$ args)
     | JCroot rt ->
       match rt.ri_kind with
-      | Rvariant -> void
+      | Rvariant -> Expr O.void_e
       | RdiscrUnion -> Options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
       | RplainUnion -> Options.jc_error Why_loc.dummy_position "Unsupported plain union" (* TODO *)
   in
@@ -864,10 +889,11 @@ let make_tobit_alloc_param_app r pc =
   let app =
     match pc with
     | JCtag _ ->
-      make_app (alloc_to_bitvector_param_name pc) args
+      let O.Expr_hlist args = O.args_e args in
+      Expr O.(jc_f (alloc_to_bitvector_param_name pc) @@$ args)
     | JCroot rt ->
       match rt.ri_kind with
-      | Rvariant -> void
+      | Rvariant -> Expr O.void_e
       | RdiscrUnion -> Options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
       | RplainUnion -> Options.jc_error Why_loc.dummy_position "Unsupported plain union" (* TODO *)
   in
@@ -880,21 +906,24 @@ let make_tobit_mem_param_app r pc =
   let app =
     match pc with
     | JCtag _ ->
-      make_app (mem_to_bitvector_param_name pc) args
+      let O.Expr_hlist args = O.args_e args in
+      Expr O.(jc_f (mem_to_bitvector_param_name pc) @@$ args)
     | JCroot rt ->
       match rt.ri_kind with
-      | Rvariant -> void
+      | Rvariant -> Expr O.void_e
       | RdiscrUnion -> Options.jc_error Why_loc.dummy_position "Unsupported discriminated union" (* TODO *)
       | RplainUnion -> Options.jc_error Why_loc.dummy_position "Unsupported plain union" (* TODO *)
   in
   app
 
-let make_of_bitvector_app fi e' =
+let make_of_bitvector_app fi e' : some_term =
   (* Convert bitvector into appropriate type *)
   match fi.fi_type with
-  | JCTenum ri -> LApp (logic_enum_of_bitvector_name ri, [e'])
+  | JCTenum ei ->
+    Options.jc_error Why_loc.dummy_position "Unsupported type of field %s.%s" fi.fi_hroot.si_name fi.fi_name (* TODO *)
+    (*Term O.(jc_f (logic_enum_of_bitvector_name ei) @$. e')*)
   | JCTpointer (pc, _, _) ->
-    LApp (logic_variant_of_bitvector_name (pointer_class_root pc), [e'])
+    Term O.(jc_f (logic_variant_of_bitvector_name (pointer_class_root pc)) @$. e')
   | _ty ->
     Options.jc_error Why_loc.dummy_position "Unsupported type of field %s.%s" fi.fi_hroot.si_name fi.fi_name (* TODO *)
 
@@ -902,114 +931,118 @@ let make_conversion_params pc =
   let p = "p" in
   let bv_mem = Name.Generic.memory JCmem_bitvector in
   let bv_alloc = Name.Generic.alloc_table JCalloc_bitvector in
-
   (* postcondition *)
-  let post_alloc = match pc with
-    | JCtag(st,_) ->
-        if struct_has_size st then
-          let post_alloc =
-            let ac = alloc_class_of_pointer_class pc in
-            let alloc = Name.Generic.alloc_table ac in
-            let s = string_of_int (struct_size_in_bytes st) in
-            let post_min =
-              make_eq_pred integer_type
-                (LApp("offset_min",[ LVar alloc; LVar p ]))
-                (LApp("offset_min_bytes",[ LVar bv_alloc;
-                                           LApp("pointer_address",[ LVar p ]);
-                                           LConst(Prim_int s)]))
-            in
-            let post_max =
-              make_eq_pred integer_type
-                (LApp("offset_max",[ LVar alloc; LVar p ]))
-                (LApp("offset_max_bytes",[ LVar bv_alloc;
-                                           LApp("pointer_address",[ LVar p ]);
-                                           LConst(Prim_int s)]))
-            in
-            let ty' = pointer_type ac pc in
-            let post = make_and post_min post_max in
-            LForall(p,ty',[],post)
+  let post_alloc =
+    match pc with
+    | JCtag (st, _) ->
+      if struct_has_size st then
+        let post_alloc =
+          let ac = alloc_class_of_pointer_class pc in
+          let s = struct_size_in_bytes st in
+          let post_min =
+            O.(
+              offset_min ac (var_t p) =
+                jc_f "offset_min_bytes" @$
+                  var_t bv_alloc @
+                  (jc_f "pointer_address" @$. var_t p) @.
+                  int_t s)
           in
-          post_alloc
-        else LTrue
+          let post_max =
+            O.(
+              offset_max ac (var_t p) =
+                jc_f "offset_max_bytes" @$
+                  var_t bv_alloc @
+                  (jc_f "pointer_address" @$. var_t p) @.
+                  int_t s)
+          in
+          let ty' = pointer_type ac pc in
+          let post = O.(post_min && post_max) in
+          O.forall [p, ty'] post
+        in
+        post_alloc
+      else
+        True
     | JCroot _ -> assert false (* TODO *)
   in
-  let post_mem = match pc with
-    | JCtag(st,_) ->
-        if struct_has_size st then
-          let fields = all_fields pc in
-          let post_mem,_ =
-            List.fold_left
-              (fun (acc,i) fi ->
-                 if field_type_has_bitvector_representation fi then
-                   let pi = p ^ (string_of_int i) in
-                   let mc = JCmem_field fi in
-                   let ac = alloc_class_of_mem_class mc in
-                   let mem =
-                     tmemory_var ~label_in_name:true LabelHere
-                       (mc,dummy_region)
-                   in
-                   let off =
-                     match field_offset_in_bytes fi with
-                       | Some x -> x
-                       | None ->
-                          Typing.typing_error
-                            Why_loc.dummy_position
-                            "Field %s of structure %s \
-has bitvector representation, but its bit offset (%d) is not a multiple of 8. \
-The axioms for pointer-arithmetic operations with pointers to structure %s \
-thus turn out to be considerably hard and are currently unsupported."
-                          fi.fi_name
-                          st.si_name
-                          (field_offset fi)
-                          st.si_name
+  let post_mem =
+    match pc with
+    | JCtag (st, _) ->
+      if struct_has_size st then
+        let fields = all_fields pc in
+        let post_mem,_ =
+          List.fold_left
+            (fun (acc, i) fi ->
+               if field_type_has_bitvector_representation fi then
+                 let pi = p ^ (string_of_int i) in
+                 let mc = JCmem_field fi in
+                 let ac = alloc_class_of_mem_class mc in
+                 let mem =
+                   tmemory_var
+                     ~label_in_name:true
+                     LabelHere
+                     (mc, dummy_region)
+                 in
+                 let off =
+                   match field_offset_in_bytes fi with
+                   | Some x -> x
+                   | None ->
+                     Typing.typing_error
+                       ~loc:Why_loc.dummy_position
+                       "Field %s of structure %s \
+                        has bitvector representation, but its bit offset (%d) is not a multiple of 8. \
+                        The axioms for pointer-arithmetic operations with pointers to structure %s \
+                        thus turn out to be considerably hard and are currently unsupported."
+                       fi.fi_name
+                       st.si_name
+                       (field_offset fi)
+                       st.si_name
                    in
                    let size =
                      match fi.fi_bitsize with
-                       | Some x -> x / 8
-                       | None ->
-                           Typing.typing_error
-                             Why_loc.dummy_position
-                             "Field %s of structure %s \
-has bitvector representation, but its bit size is unknown. \
-Can't encode proper axioms for accessing the field."
-                          fi.fi_name
-                          st.si_name
-                          st.si_name
+                     | Some x -> x / 8
+                     | None ->
+                       Typing.typing_error
+                         ~loc:Why_loc.dummy_position
+                         "Field %s of structure %s \
+                          has bitvector representation, but its bit size is unknown. \
+                          Can't encode proper axioms for accessing the field."
+                         fi.fi_name
+                         st.si_name
+                         st.si_name
                    in
-                   let off = string_of_int off and size = string_of_int size in
                    let posti =
-                     make_eq_pred fi.fi_type
-                       (LApp("select",[ mem; LVar pi ]))
-                       (make_of_bitvector_app fi
-                          (LApp("select_bytes",
-                                [ LVar bv_mem;
-                                  LApp("pointer_address",[ LVar pi ]);
-                                  LConst(Prim_int off); LConst(Prim_int size) ])))
+                     let Term converted =
+                       make_of_bitvector_app
+                         fi
+                         O.(jc_f "select_bytes" @$
+                            var_t bv_mem @
+                            (jc_f "pointer_address" @$. var_t pi) @
+                            int_t off @.
+                            int_t size)
+                     in
+                     O.(select mem (var_t pi) = converted)
                    in
                    let ty' = pointer_type ac pc in (* Correct pc *)
-                   let posti = LForall(pi,ty',[],posti) in
-                   make_and acc posti, i+1
-                 else acc, i
-              ) (LTrue,0) fields
-          in
-          post_mem
-        else LTrue
+                   let posti = O.forall [pi, ty'] posti in
+                   O.(acc && posti), i + 1
+               else
+                 acc, i)
+            (True, 0)
+            fields
+        in
+        post_mem
+      else
+        True
     | JCroot _ -> assert false (* TODO *)
   in
-
   (* Invariant linking typed and byte views *)
-
-(*   let mem_logic = *)
-(*     Logic(false, mem_bitvector_logic_name pc, params, result_ty')  *)
-(*   in *)
-
   (* Conversion from bitvector *)
   let writes = conv_typ_alloc_parameters dummy_region pc in
   let reads = conv_bw_alloc_parameters ~deref:true dummy_region pc in
   let name = alloc_of_bitvector_param_name pc in
   let alloc_ofbit_param =
-    make_param ~name ~writes ~reads ~pre:LTrue ~post:post_alloc
-      ~return_type:why_unit_type
+    make_param ~name ~writes ~reads ~pre:True ~post:post_alloc
+      ~return_type:void_wt
   in
 
   let writes = conv_typ_mem_parameters ~deref:false dummy_region pc in

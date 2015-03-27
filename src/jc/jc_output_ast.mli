@@ -257,7 +257,7 @@ and 'a expr_hlist =
   | Cons : 'a expr * 'b expr_hlist -> ('a * 'b) expr_hlist
 
 and 'typ expr_node =
-  | Cte : 'a constant -> 'a expr_node
+  | Const : 'a constant -> 'a expr_node
   | Var : string -> 'a expr_node
   | And : boolean expr * boolean expr -> boolean expr_node
   | Or : boolean expr * boolean expr -> boolean expr_node
@@ -293,6 +293,8 @@ and 'a expr = {
   expr_labels     : string list;
   expr_node       : 'a expr_node;
 }
+
+type some_expr = Expr : _ expr -> some_expr
 
 type why_id = {
   why_name : string;
