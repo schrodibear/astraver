@@ -3,7 +3,6 @@ open Stdlib
 open Common
 open Output_ast
 
-module P = Pervasives
 module S = Stdlib
 
 module Ty =
@@ -60,6 +59,12 @@ let rec eq : type a b. a ty -> b ty -> (a, b) eq = fun a b ->
   | _ ->
     failwith ("Type mismatch in Why3ML output: expected: `" ^ string_of_ty a ^ "', got: `" ^ string_of_ty b ^ "'")
 
+let some (type a) (type b) : (a, b) ty_opt -> _ =
+  function
+  | Ty _ as t -> t
+  | Any ->
+    failwith "Polymorphic type was expected, but monomorphic AST node was encountered"
+
 module C =
 struct
   type 'a t = 'a constant
@@ -77,6 +82,8 @@ struct
     | Any -> c
     | Ty ty' ->
       let Eq = eq ty' (ty c) in c
+
+  let some = some
 end
 
 let f s ~from:(name, import) = (User (name, import, s) : _ func)
@@ -90,6 +97,8 @@ struct
   let jc = f ~from:Name.Theory.jessie
 
   let jc_val = f ~from:Name.Module.jessie
+
+  let user = f
 
   type ('a, 'b) typed =
     | Ty of 'a ty
@@ -120,6 +129,8 @@ struct
       match ty f with
       | Poly { func } -> func
       | Ty ty'' -> let Eq = eq ty' ty'' in f
+
+  let some = some
 end
 
 module T =
@@ -135,6 +146,13 @@ struct
   let (@$) : _ func -> _ term_hlist -> _ term = fun x y -> App (x, y)
 
   let (@$.) : _ func -> _ term -> _ term = fun x y -> App (x, Cons (y, Nil))
+
+  module F = F
+
+  type some_hlist = Hlist : _ term_hlist -> some_hlist
+
+  let hlist_of_list =
+    List.fold_left (fun (Hlist thl) (Term t : some_term) -> Hlist (t @ thl)) (Hlist Nil)
 
   let int n : _ term = Const (Int (string_of_int n))
 
@@ -206,7 +224,24 @@ struct
 
   let select mem p = F.jc "select" @$ mem @. p
 
+  let alloc_table ?r ac =
+    var (Option.map_default r ~default:(Name.Generic.alloc_table ac) ~f:(fun r -> Name.alloc_table (ac, r)))
+
+  let offset_min ac ?r p = F.jc "offset_min" @$ alloc_table ?r ac @. p
+
+  let offset_max ac ?r p = F.jc "offset_max" @$ alloc_table ?r ac @. p
+
   let ( **>) fi = select (var (Name.field_memory_name fi))
+
+  let rel op t1 t2 : pred = App (B_num_pred (op, Integral Integer), t1 @. t2)
+
+  let (>) = rel `Gt
+  let (>=) = rel `Ge
+  let (<) = rel `Lt
+  let (<=) = rel `Le
+
+  let (=) t1 t2 : pred = App (Poly `Eq, t1 @. t2)
+  let (<>) t1 t2 : pred = App (Poly `Neq, t1 @. t2)
 
   type 'a typed =
     | Ty of 'a ty
@@ -246,7 +281,7 @@ struct
       | Ty ty | Ty' ty -> Ty' ty
       | Poly { term } | Poly' { term } -> Poly' { term = Let (v, e, term) }
 
-  let rec term : type a b. (a, b) ty_opt -> b term -> a term = fun typ t ->
+  let rec check : type a b. (a, b) ty_opt -> b term -> a term = fun typ t ->
     match typ with
     | Any -> t
     | Ty ty' ->
@@ -255,6 +290,8 @@ struct
       | Poly' { term } -> Poly { term }
       | Ty ty'' -> let Eq = eq ty' ty'' in t
       | Ty' ty'' -> let Eq = eq ty' ty'' in Typed (t, ty')
+
+  let some = some
 end
 
 module Tc =
@@ -282,6 +319,8 @@ struct
       match ty tc with
       | Poly { tconstr } -> tconstr
       | Ty ty'' -> let Eq = eq ty' ty'' in tc
+
+  let some = some
 end
 
 let lt s ~from:(name, import) = User (name, import, s)
@@ -318,6 +357,10 @@ struct
 
   let var v = Var v @$ Nil
 
+  let user = lt
+
+  let jc = lt ~from:Name.Theory.jessie
+
   type poly_logic_type = { logic_type : 'a. 'a logic_type }
 
   type 'a typed =
@@ -329,7 +372,9 @@ struct
     | Tc.Ty ty -> Ty ty
     | Tc.Poly { Tc.tconstr } -> Poly { logic_type = Type (tconstr, args) }
 
-  let logic_type ty (Type (tc, args) : _ logic_type) = (Type (Tc.check ty tc, args) : _ logic_type)
+  let check ty (Type (tc, args) : _ logic_type) = (Type (Tc.check ty tc, args) : _ logic_type)
+
+  let some = some
 end
 
 module Wt =
@@ -338,7 +383,7 @@ struct
 
   let base t = Base_type Lt.(t @$ Nil)
 
-  let integer = P.(base @@ Numeric (Integral Integer))
+  let integer = Pervasives.(base @@ Numeric (Integral Integer))
 
   let bool = base Bool
 
@@ -386,6 +431,8 @@ struct
       | Poly' { why_type } -> Poly { why_type }
       | Ty ty'' -> let Eq = eq ty' ty'' in wt
       | Ty' ty'' -> let Eq = eq ty' ty'' in Typed (wt, ty')
+
+  let some = some
 end
 
 module E =
@@ -396,7 +443,7 @@ struct
 
   let mk ?labels:(expr_labels=[]) node = { expr_labels; expr_node = node }
 
-  let (@:) labels ({ expr_labels } as e) = { e with expr_labels = P.(labels @ expr_labels) }
+  let (@:) labels ({ expr_labels } as e) = { e with expr_labels = Pervasives.(labels @ expr_labels) }
 
   let (@) : _ expr -> _ expr_hlist -> _ expr_hlist = fun x xs -> Cons (x, xs)
 
@@ -411,6 +458,13 @@ struct
     match e.expr_node with
     | App (x, y, None) -> { e with expr_node = App (x, y, Some t) }
     | _ -> e
+
+  module F = F
+
+  type some_hlist = Hlist : _ expr_hlist -> some_hlist
+
+  let hlist_of_list =
+    List.fold_left (fun (Hlist ehl) (Expr e) -> Hlist (e @ ehl)) (Hlist Nil)
 
   let positioned l_pos ?behavior:(l_behavior = "default") ?kind:l_kind e =
     { e with expr_node = Labeled ({ l_kind; l_behavior; l_pos }, e) }
@@ -503,8 +557,6 @@ struct
     match e.expr_node with
     | Const Int "0" -> int 0
     | _ -> U_int_op `Neg @$. e
-
-  let (!) v = (Deref v : _ term)
 
   let select mem p = F.jc "select" @$ mem @. p
 
@@ -612,6 +664,8 @@ struct
       | Poly' pen -> { e with expr_node = Poly pen }
       | Ty ty'' -> let Eq = eq ty' ty'' in e
       | Ty' ty'' -> let Eq = eq ty' ty'' in { e with expr_node = Typed (e, ty') }
+
+  let some = some
 end
 
 module type Bounded =
@@ -859,30 +913,36 @@ let module_of_int_ty : type r b. (r repr, b bit) xintx bounded integer -> (modul
   | Int (Signed, X64) -> (module Int64)
   | Int (Unsigned, X64) -> (module Uint64)
 
-let rel op t1 t2 : pred = T.(App (B_num_pred (op, Integral Integer), t1 @. t2))
+let rel = T.rel
 
-let (>) = rel `Gt
-let (>=) = rel `Ge
-let (<) = rel `Lt
-let (<=) = rel `Le
+let (>) = T.(>)
+let (>=) = T.(>=)
+let (<) = T.(<)
+let (<=) = T.(<=)
 
-let (=) t1 t2 : pred = T.(App (Poly `Eq, t1 @. t2))
-let (<>) t1 t2 : pred = T.(App (Poly `Neq, t1 @. t2))
+let (=) = T.(=)
+let (<>) = T.(<>)
 
 module P =
-  struct
-    let rec unlabel : pred -> pred =
-      function
-      | Labeled (_, p) -> unlabel p
-      | p -> p
+struct
+  type t = pred
 
-    let positioned l_pos ?behavior:(l_behavior = "default") ?kind:l_kind p =
-      (Labeled ({ l_kind; l_behavior; l_pos }, p) : pred)
+  let (@$) : _ func -> _ term_hlist -> pred = fun x y -> App (x, y)
 
-    let located = S.(positioned % Position.of_loc)
+  let (@$.) : _ func -> _ term -> pred = fun x y -> App (x, Cons (y, Nil))
 
-    let positioned'  = S.(positioned % Position.of_pos)
-  end
+  let rec unlabel : pred -> pred =
+    function
+    | Labeled (_, p) -> unlabel p
+    | p -> p
+
+  let positioned l_pos ?behavior:(l_behavior = "default") ?kind:l_kind p =
+    (Labeled ({ l_kind; l_behavior; l_pos }, p) : pred)
+
+  let located = S.(positioned % Position.of_loc)
+
+  let positioned'  = S.(positioned % Position.of_pos)
+end
 
 let is_not_true p =
   match P.unlabel p with
@@ -980,17 +1040,10 @@ and append l1 l2 =
     end
   | e1 :: e1s -> e1 :: append e1s l2
 
-type some_expr_hlist = Expr_hlist : _ expr_hlist -> some_expr_hlist
-
-let args_e =
-  List.fold_left (fun (Expr_hlist ehl) (Expr e) -> Expr_hlist E.(e @ ehl)) (Expr_hlist Nil)
-
 let id { why_id } = why_id
 
 let why_decl ~name:why_name ?expl:(why_expl="") ?pos:(why_pos = Position.dummy) why_decl =
   { why_id = { why_name; why_expl; why_pos }; why_decl }
-
-let jc_lt = lt ~from:Name.Theory.jessie
 
 open Name
 
@@ -1006,17 +1059,10 @@ let instanceof tt p st : pred = App (F.jc "instanceof", T.(tt @ p @. var (Name.t
 
 let disjoint ps1 ps2 : pred = App (F.jc "pset_disjoint", T.(ps1 @. ps2))
 
-let alloc_table ?r ac =
-  T.var (Option.map_default r ~default:(Name.Generic.alloc_table ac) ~f:(fun r -> Name.alloc_table (ac, r)))
-
-let offset_min ac ?r p = T.(F.jc "offset_min" @$ alloc_table ?r ac @. p)
-
-let offset_max ac ?r p = T.(F.jc "offset_max" @$ alloc_table ?r ac @. p)
-
 let int_of_tag st = T.(F.jc "int_of_tag" @$. var (Name.tag st))
 
-let some (type a) (type b) : (a, b) ty_opt -> _ =
-  function
-  | Ty _ as t -> t
-  | Any ->
-    failwith "Polymorphic type was expected, but monomorphic AST node was encountered"
+let alloc_table = T.alloc_table
+
+let offset_max = T.offset_max
+
+let offset_min = T.offset_min

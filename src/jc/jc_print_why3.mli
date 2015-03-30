@@ -15,7 +15,7 @@ val int_ty :
 
 val enum_ty :
   how:[< `Module of bool | `Name | `Theory ] ->
-  formatter -> enum bounded integer -> unit
+  formatter -> 'a enum bounded integer -> unit
 
 val modulo : formatter -> bool -> unit
 
@@ -105,7 +105,7 @@ val option : ('a -> 'b -> unit) -> 'a -> 'b option -> unit
 val any_type :
   bw_ints:S.t ->
   consts:StringSet.t ->
-  formatter -> any_why_type -> unit
+  formatter -> some_why_type -> unit
 
 val expr_hlist :
   safe:bool ->
@@ -125,10 +125,10 @@ val expr :
   consts:StringSet.t ->
   formatter -> 'a expr -> unit
 
-val any_logic_type : formatter -> any_logic_type -> unit
+val any_logic_type : formatter -> some_logic_type -> unit
 
 val logic_arg :
-  formatter -> string * any_logic_type -> unit
+  formatter -> string * some_logic_type -> unit
 
 val goal_kind : formatter -> goal_kind -> unit
 
@@ -154,4 +154,4 @@ val why3_builtin_locals : StringSet.t
 val entry :
   consts:StringSet.t -> formatter -> 'a entry -> unit
 
-val file : filename:string -> any_entry list -> unit
+val file : filename:string -> some_entry list -> unit

@@ -75,13 +75,13 @@ let int_ty ~how fmttr (type r) (type b) (ty : (r repr, b bit) xintx bounded inte
   | `Module (true, false) -> Int_ty.unsafe_bit_module
   | `Module (true, true) -> Int_ty.safe_bit_module
 
-let enum_ty ~how fmttr (Enum name) =
+let enum_ty ~how fmttr (type a) (Enum (module E : Enum with type t = a)) =
   let pr fmt = fprintf fmttr fmt in
   match how with
-  | `Name -> pr "%s" name
-  | `Theory -> pr "%a" uid name
-  | `Module false -> pr "%s" ("Unsafe_" ^ name)
-  | `Module true -> pr "%s" ("Safe_" ^ name)
+  | `Name -> pr "%s" E.name
+  | `Theory -> pr "%a" uid E.name
+  | `Module false -> pr "%s" ("Unsafe_" ^ E.name)
+  | `Module true -> pr "%s" ("Safe_" ^ E.name)
 
 let modulo fmttr modulo =
   fprintf fmttr "%s" @@
@@ -445,7 +445,7 @@ and expr_node : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_node -> _
   in
   let expr_list = list expr ~sep:";@ " in
   function
-  | Cte c -> constant fmttr c
+  | Const c -> constant fmttr c
   | Var v ->  pr "%a" id v
   | And (e1, e2) -> pr "@[(%a@ &&@ %a)@]" expr e1 expr e2
   | Or (e1, e2) -> pr "@[(%a@ ||@ %a)@]" expr e1 expr e2
@@ -457,7 +457,7 @@ and expr_node : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_node -> _
   | If (e1, e2, e3) ->
     pr "@[<hov 0>(if@ %a@ @[<hov 1>then@ %a@]@ @[<hov 1>else@ %a@])@]"
       expr e1 expr e2 expr e3
-  | While ({ expr_node = Cte (Bool true) }, inv, var, e2) ->
+  | While ({ expr_node = Const (Bool true) }, inv, var, e2) ->
     pr
       "@[<hov 0>loop@ @[<hov 1>@[<hov 2>@[<hov 2>invariant@ { %a }@]@ @[<hov 2>%a@]@]@ %a@]@ end@]"
       pred inv
@@ -817,7 +817,7 @@ struct
     let split_fprintf_mod f = unstage (split_fprintf ~cons:(fun th imported -> `Module (th, imported))) f in
     fun ~init e ->
     match e.expr_node with
-    | Cte _ -> init
+    | Const _ -> init
     | Var v
     | Deref v ->
       f ~acc:init (`Current, v)
@@ -968,7 +968,7 @@ struct
           iter_decls   : _;
           iter         : 'iter_entries;
           decl_kind    : _;
-          value        : any_entry;
+          value        : some_entry;
           f            : 'state for_any_entry;
           state        : 'state
         > over

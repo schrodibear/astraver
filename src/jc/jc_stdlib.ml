@@ -85,6 +85,9 @@ struct
     let snd (_, b, _) = b
     let trd (_, _, c) = c
     let fdup3 ~f ~g ~h x = f x, g x, h x
+    let map1 ~f (a, b, c) = f a, b, c
+    let map2 ~f (a, b, c) = a, f b, c
+    let map3 ~f (a, b, c) = a, b, f c
   end
 end
 
