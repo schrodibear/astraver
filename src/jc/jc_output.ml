@@ -98,6 +98,16 @@ struct
 
   let jc_val = f ~from:Name.Module.jessie
 
+  let bool = f ~from:Name.Theory.bool
+
+  let single = f ~from:Name.Theory.single
+
+  let double = f ~from:Name.Theory.double
+
+  let real = f ~from:Name.Theory.real
+
+  let binary80 = f ~from:Name.Theory.binary80
+
   let user = f
 
   type ('a, 'b) typed =
@@ -474,6 +484,12 @@ struct
   let positioned' l = positioned (Position.of_pos l)
 
   let int n : _ t = mk (Const (Int (string_of_int n)))
+
+  let void : _ t = mk (Const Void)
+
+  let real s : _ t = mk (Const (Real s))
+
+  let bool b : _ t = mk (Const (Bool b))
 
   let num n : _ t = mk (Const (Int (Num.string_of_num n)))
 

@@ -47,15 +47,16 @@ open Common
 open Separation
 open Struct_tools
 open Interp_misc
-open Invariants
-open Pattern
+(*open Invariants
+  open Pattern*)
 
 open Output_ast
-open Output_misc
 
 open Format
 open Num
 open Why_pp
+
+module O = Output
 
 let unsupported = Typing.typing_error
 
@@ -71,51 +72,66 @@ let lookup_pos e =
   with
   | Not_found -> Position.of_pos e#pos
 
-let make_vc_app_e ?behavior ~e ~kind f args =
-  let pos = lookup_pos e in
-  make_positioned_e ?behavior ~kind pos (make_app f args)
+module T =
+struct
+  let locate ~t = O.T.positioned (lookup_pos t)
+end
 
-let make_positioned_lex ~e = make_positioned (lookup_pos e)
+module P =
+struct
+  let locate ~p = O.T.positioned (lookup_pos p)
+end
 
-let mk_positioned_lex ~e = mk_positioned (lookup_pos e)
-
-let make_positioned_lex_e ~e = make_positioned_e (lookup_pos e)
+module E =
+struct
+  let locate ~e = O.E.positioned (lookup_pos e)
+end
 
 (******************************************************************************)
 (*                                 Operators                                  *)
 (******************************************************************************)
 
-let native_operator_type op =
-  match snd op with
-  | `Unit -> Common.unit_type
-  | `Boolean -> boolean_type
-  | `Integer -> integer_type
-  | `Real -> real_type
-  | `Double -> double_type
-  | `Float -> float_type
-  | `Binary80 -> JCTnative (Tgenfloat `Binary80)
+type unary = Unary : ('a * unit, 'a) func * 'a ty -> unary
 
-let unary_op: expr_unary_op -> string =
+let unary_op ~e : expr_unary_op -> _ =
+  let return f t = Unary (f, Numeric t) in
   function
-  | `Uminus, `Integer -> "neg_int"
-  | `Uminus, `Real -> "neg_real"
-  | `Unot, `Boolean -> "not"
-  | `Ubw_not, `Integer -> "bw_compl"
-  | _ -> invalid_arg "unary_op: not a proper type"
-
-let term_unary_op: expr_unary_op -> string =
-  function
-  | `Uminus, `Integer -> "neg_int"
-  | `Uminus, `Real -> "neg_real"
-  | `Unot, `Boolean -> "bool_not"
-  | `Ubw_not, `Integer -> "bw_compl"
-  | _ -> invalid_arg "term_unary_op: not a proper type"
+  | `Uminus, `Integer ->
+    return (U_int_op `Neg) (Integral Integer)
+  | `Ubw_not, `Enum { ei_type = Int (r, b); _ } ->
+    let i : _ integer = Int (r, b) in
+    return (U_bint_bop (`Compl, i)) (Integral i)
+  | `Uminus, `Enum { ei_type = Int (r, b); _ } ->
+    let i : _ integer = Int (r, b) in
+    return (U_bint_op (`Neg, i, false)) (Integral i)
+  | `Uminus, `Enum { ei_type = Enum e; _ } ->
+    let i = Enum e in
+    return (U_bint_op (`Neg, i, false)) (Integral i)
+  | `Uminus_mod, `Enum { ei_type = Int (r, b); _ } ->
+    let i : _ integer = Int (r, b) in
+    return (U_bint_op (`Neg, i, true)) (Integral i)
+  | `Uminus_mod, `Enum { ei_type = Enum e; _ } ->
+    let i = Enum e in
+    return (U_bint_op (`Neg, i, true)) (Integral i)
+  | `Unot, `Boolean ->
+    Unary (O.F.bool "notb", Bool)
+  | `Uminus, `Float ->
+    return (O.F.single "(-_)") (Real (Float Single))
+  | `Uminus, `Double ->
+    return (O.F.double "(-_)") (Real (Float Double))
+  | `Uminus, `Real ->
+    return (O.F.real "(-_)") (Real Real)
+  | op, op_ty ->
+    unsupported
+      ~loc:e#pos
+      "unary_op: no unary operation `%s' for type `%s'"
+      (string_of_op op)
+      (string_of_op_type op_ty)
 
 let float_model_has_safe_functions () =
   match !Options.float_model with
   | FMdefensive | FMmultirounding -> true
   | FMmath | FMfull -> false
-
 
 let float_format f =
   match f with
@@ -136,326 +152,271 @@ let float_operator f t =
   if float_model_has_safe_functions () && not @@ safety_checking ()
   then s ^ float_format t ^ "_safe" else s ^ float_format t
 
+type ('a, 'b, 'ax, 'bx) form =
+  | Term : ('a, 'b, 'a term, 'b term) form
+  | Expr : ('a, 'b, 'a expr, 'b expr) form
 
-
-let logic_current_rounding_mode () =
+let current_rounding_mode : type a ax. (a, a, ax, ax) form -> ax =
+  fun form ->
+  let var v : ax =
+    match form with
+    | Term -> O.T.var v
+    | Expr -> O.E.var v
+  in
   match !Options.current_rounding_mode with
-  | FRMNearestEven -> LVar "nearest_even"
-  | FRMDown -> LVar "down"
-  | FRMUp -> LVar "up"
-  | FRMToZero -> LVar "to_zero"
-  | FRMNearestAway -> LVar "nearest_away"
+  | FRMNearestEven -> var "nearest_even"
+  | FRMDown -> var "down"
+  | FRMUp -> var "up"
+  | FRMToZero -> var "to_zero"
+  | FRMNearestAway -> var "nearest_away"
 
-let current_rounding_mode () =
-  match !Options.current_rounding_mode with
-  | FRMNearestEven -> mk_var "nearest_even"
-  | FRMDown -> mk_var "down"
-  | FRMUp -> mk_var "up"
-  | FRMToZero -> mk_var "to_zero"
-  | FRMNearestAway -> mk_var "nearest_away"
+type binary =
+  | Op : ('a * ('a * unit), 'a) func * ('a, 'b) ty_opt -> binary
+  | Rel : ('a * ('a * unit), boolean) func * ('a, 'b) ty_opt -> binary
 
-let bin_op: expr_bin_op -> string =
+let bin_op ~e : bin_op * operator_type -> _ =
+  let op f t = Op (f, Ty (Numeric t)) in
+  let rel f t = Rel (f, Ty (Numeric t)) in
+  let r =
+    function
+    | `Bgt -> `Gt
+    | `Blt -> `Lt
+    | `Bge -> `Ge
+    | `Ble -> `Le
+    | `Beq -> `Eq
+    | `Bneq -> `Ne
+  in
+  let o =
+    function
+    | `Badd -> `Add
+    | `Bsub -> `Sub
+    | `Bmul -> `Mul
+    | `Bdiv -> `Div
+    | `Bmod -> `Mod
+    | `Badd_mod -> `Add
+    | `Bsub_mod -> `Sub
+    | `Bdiv_mod -> `Div
+  in
   function
-    (* integer *)
-  | `Bgt, `Integer -> "gt_int_"
-  | `Blt, `Integer -> "lt_int_"
-  | `Bge, `Integer -> "ge_int_"
-  | `Ble, `Integer -> "le_int_"
-  | `Beq, `Integer -> "eq_int_"
-  | `Bneq, `Integer -> "neq_int_"
-  | `Badd, `Integer -> "add_int"
-  | `Bsub, `Integer -> "sub_int"
-  | `Bmul, `Integer -> "mul_int"
-  | `Bdiv, `Integer
-    when safety_checking () -> "computer_div_"
-  | `Bdiv, `Integer         -> "computer_div"
-  | `Bmod, `Integer
-    when safety_checking () -> "computer_mod_"
-  | `Bmod, `Integer         -> "computer_mod"
-      (* pointer *)
-  | `Beq, `Pointer
-    when safety_checking () -> "eq_pointer"
-  | `Beq, `Pointer          -> "safe_eq_pointer"
-  | `Bneq, `Pointer
-    when safety_checking () -> "neq_pointer"
-  | `Bneq, `Pointer         -> "safe_neq_pointer"
-  | `Bsub, `Pointer
-    when safety_checking () -> "sub_pointer_"
-  | `Bsub, `Pointer         -> "safe_sub_pointer_"
-      (* real *)
-  | `Bgt, `Real -> "gt_real_"
-  | `Blt, `Real -> "lt_real_"
-  | `Bge, `Real -> "ge_real_"
-  | `Ble, `Real -> "le_real_"
-  | `Beq, `Real -> "eq_real_"
-  | `Bneq, `Real -> "neq_real_"
-  | `Bgt, `Float -> "gt_single_"
-  | `Blt, `Float -> "lt_single_"
-  | `Bge, `Float -> "ge_single_"
-  | `Ble, `Float -> "le_single_"
-  | `Beq, `Float -> "eq_single_"
-  | `Bneq,`Float -> "ne_single_"
-  | `Bgt, `Double -> "gt_double_"
-  | `Blt, `Double -> "lt_double_"
-  | `Bge, `Double -> "ge_double_"
-  | `Ble, `Double -> "le_double_"
-  | `Beq, `Double -> "eq_double_"
-  | `Bneq, `Double -> "ne_double_"
-  | `Badd, `Real -> "add_real"
-  | `Bsub, `Real -> "sub_real"
-  | `Bmul, `Real -> "mul_real"
-  | `Bdiv, `Real
-    when safety_checking () -> "div_real_"
-  | `Bdiv, `Real            -> "div_real"
-      (* bool *)
-  | `Beq, `Boolean -> "eq_bool_"
-  | `Bneq, `Boolean -> "neq_bool_"
-      (* bitwise *)
-  | `Bbw_and, `Integer -> "bw_and"
-  | `Bbw_or, `Integer -> "bw_or"
-  | `Bbw_xor, `Integer -> "bw_xor"
-  | `Bbw_and, `Boolean -> "bool_and"
-  | `Bbw_or, `Boolean -> "bool_or"
-  | `Bbw_xor, `Boolean -> "bool_xor"
-      (* shift *)
-  | `Bshift_left, `Integer -> "lsl"
-  | `Blogical_shift_right, `Integer -> "lsr"
-  | `Barith_shift_right, `Integer -> "asr"
-  | `Bland, _ -> invalid_arg "bin_op: unnormalized `Bland"
-  | `Blor, _ -> invalid_arg "bin_op: unnormalized `Blor"
-  | `Bconcat, _ -> "string_concat"
-  | op, opty ->
+  (* integers *)
+  | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq |
+    `Badd | `Bsub | `Bmul | `Bdiv | `Bmod as op',
+    `Integer ->
+    let int = Integral Integer in
+    let rel r = rel (B_num_pred (r, int)) int in
+    let op o = op (B_int_op o) int in
+    begin match op' with
+    | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq as op' -> rel (r op')
+    | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod as op' -> op (o op')
+    end
+  (* ints *)
+  | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq |
+    `Badd | `Bsub | `Bmul | `Bdiv | `Bmod |
+    `Badd_mod | `Bsub_mod | `Bdiv_mod |
+    `Bbw_and | `Bbw_or | `Bbw_xor |
+    `Bshift_left | `Bshift_left_mod | `Blogical_shift_right | `Barith_shift_right as op',
+    `Enum { ei_type = Int (repr, b) } ->
+    let t : _ integer = Int (repr, b) in
+    let it = Integral t in
+    let rel, bop, mop, bwop =
+      (fun r -> rel (B_num_pred (r, it)) it),
+      (fun o -> op (B_bint_op (o, t, false)) it),
+      (fun o -> op (B_bint_op (o, t, true)) it),
+      fun o -> op (B_bint_bop (o, t)) it
+    in
+    begin match op' with
+    | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq as op' -> rel (r op')
+    | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod as op' -> bop (o op')
+    | `Badd_mod | `Bsub_mod | `Bdiv_mod as op' -> mop (o op')
+    | `Bbw_and -> bwop `And
+    | `Bbw_or -> bwop `Or
+    | `Bbw_xor -> bwop `Xor
+    | `Blogical_shift_right -> bwop `Lsr
+    | `Barith_shift_right -> bwop `Asr
+    | `Bshift_left -> op (Lsl_bint (t, false)) it
+    | `Bshift_left_mod -> op (Lsl_bint (t, true)) it
+    end
+  (* enums *)
+  | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq |
+    `Badd | `Bsub | `Bmul | `Bdiv | `Bmod |
+    `Badd_mod | `Bsub_mod | `Bdiv_mod as op',
+    `Enum { ei_type = Enum e } ->
+    let t : _ integer = Enum e in
+    let it = Integral t in
+    let rel, op, mop =
+      (fun r -> rel (B_num_pred (r, it)) it),
+      (fun o -> op (B_bint_op (o, t, false)) it),
+      fun o -> op (B_bint_op (o, t, true)) it
+    in
+    begin match op' with
+    | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq as op' -> rel (r op')
+    | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod as op' -> op (o op')
+    | `Badd_mod | `Bsub_mod | `Bdiv_mod as op' -> mop (o op')
+    end
+  (* pointers *)
+  | `Beq | `Bneq | `Bsub as op', `Pointer ->
+    begin match op' with
+    | `Beq -> Rel (Poly `Eq, Any)
+    | `Bneq -> Rel (Poly `Eq, Any)
+    | `Bsub -> Op (O.F.jc "sub_pointer", Any)
+    end
+  (* reals *)
+  | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq |
+    `Badd | `Bsub | `Bmul | `Bdiv | `Bmod as op',
+    (`Real | `Double | `Float as t) ->
+    let rel, op =
+      let return t f =
+        (fun r -> rel (B_num_pred (r, t)) t), fun o -> op (f o) t
+      in
+      match t with
+      | `Real ->
+        return (Real Real) O.F.real
+      | `Double ->
+        return (Real (Float Single)) O.F.real
+      | `Float ->
+        return (Real (Float Double)) O.F.real
+    in
+    begin match op' with
+    | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq as op' -> rel (r op')
+    | `Badd -> op "(+)"
+    | `Bsub -> op "(-)"
+    | `Bmul -> op "(*)"
+    | `Bdiv -> op "(/)"
+    | `Bmod -> op "(%)"
+    end
+  (* bool *)
+  | `Beq | `Bneq | `Blor | `Bland | `Biff | `Bimplies as op', `Boolean ->
+    let op o = Op (O.F.bool o, Ty Bool) in
+    begin match op' with
+    | `Beq -> Rel (Poly `Eq, Ty Bool)
+    | `Bneq -> Rel (Poly `Neq, Ty Bool)
+    | `Blor -> op "orb"
+    | `Bland -> op "andb"
+    | `Biff -> op "iffb"
+    | `Bimplies -> op "implb"
+    end
+  | `Bconcat, _ -> Op (O.F.jc "string_concat", Any)
+  | op, op_ty ->
     unsupported
-      Why_loc.dummy_position
-      "Can't use operator %s with type %s in expressions"
-      (string_of_op op) (string_of_op_type opty)
-
-let term_bin_op: term_bin_op -> string =
-  function
-    (* integer *)
-  | `Bgt, `Integer -> "gt_int_bool"
-  | `Blt, `Integer -> "lt_int_bool"
-  | `Bge, `Integer -> "ge_int_bool"
-  | `Ble, `Integer -> "le_int_bool"
-  | `Beq, `Integer -> "eq_int_bool"
-  | `Bneq, `Integer -> "neq_int_bool"
-  | `Badd, `Integer -> "add_int"
-  | `Bsub, `Integer -> "sub_int"
-  | `Bmul, `Integer -> "mul_int"
-  | `Bdiv, `Integer -> "computer_div"
-  | `Bmod, `Integer -> "computer_mod"
-      (* pointer *)
-  | `Beq, `Pointer -> "eq_pointer_bool"
-  | `Bneq, `Pointer -> "neq_pointer_bool"
-  | `Bsub, `Pointer -> "sub_pointer"
-      (* logic *)
-  | `Beq, `Logic -> "eq"
-  | `Bneq, `Logic -> "neq"
-      (* real *)
-  | `Bgt, `Real -> "gt_real_bool"
-  | `Blt, `Real -> "lt_real_bool"
-  | `Bge, `Real -> "ge_real_bool"
-  | `Ble, `Real -> "le_real_bool"
-  | `Beq, `Real -> "eq_real_bool"
-  | `Bneq, `Real -> "neq_real_bool"
-  | `Badd, `Real -> "add_real"
-  | `Bsub, `Real -> "sub_real"
-  | `Bmul, `Real -> "mul_real"
-  | `Bdiv, `Real -> "div_real"
-      (* bool *)
-(*
-  | `Beq_bool, `Boolean -> "eq_bool"
-  | `Bneq_bool, `Boolean -> "neq_bool"
-*)
-      (* bitwise *)
-  | `Bbw_and, `Integer -> "bw_and"
-  | `Bbw_or, `Integer -> "bw_or"
-  | `Bbw_xor, `Integer -> "bw_xor"
-  | `Bshift_left, `Integer -> "lsl"
-  | `Blogical_shift_right, `Integer -> "lsr"
-  | `Barith_shift_right, `Integer -> "asr"
-      (* logical *)
-  | `Blor, `Boolean -> "bool_or"
-  | `Bland, `Boolean ->  "bool_and"
-  | `Biff, _ | `Bimplies, _ -> invalid_arg "term_bin_op: unimplemented: `Biff, `Bimplies" (* TODO *)
-  | op, opty ->
-    unsupported
-      Why_loc.dummy_position
-      "Can't use operator %s with type %s in terms"
-      (string_of_op op) (string_of_op_type opty)
-
-let pred_bin_op: pred_bin_op -> string =
-  function
-    (* integer *)
-  | `Bgt, `Integer -> "gt_int"
-  | `Blt, `Integer -> "lt_int"
-  | `Bge, `Integer -> "ge_int"
-  | `Ble, `Integer -> "le_int"
-  | `Beq, `Integer -> "eq"
-  | `Bneq, `Integer -> "neq"
-      (* pointer *)
-  | `Beq, (`Pointer | `Logic) -> "eq"
-  | `Bneq, (`Pointer | `Logic) -> "neq"
-      (* real *)
-  | `Beq, `Real -> "eq"
-  | `Bneq, `Real -> "neq"
-  | `Bgt, `Real -> "gt_real"
-  | `Blt, `Real -> "lt_real"
-  | `Bge, `Real -> "ge_real"
-  | `Ble, `Real -> "le_real"
-      (* logical *)
-  | `Blor, `Boolean -> "bor"
-  | `Bland, `Boolean -> "band"
-  | `Biff, `Boolean
-  | `Bimplies, `Boolean -> invalid_arg "pred_bin_op: unimplemented: `Biff, `Bimplies" (* TODO *)
-      (* boolean *)
-  | `Beq, `Boolean -> "eq"
-  | `Bneq, `Boolean -> "neq"
-  | op, opty ->
-    unsupported
-      Why_loc.dummy_position
-      "Can't use operator %s with type %s in assertions"
+      ~loc:e#pos
+      "bin_op: no binary operation `%s' for type `%s'"
       (string_of_op op)
-      (string_of_op_type opty)
-
-
-(******************************************************************************)
-(*                                   types                                    *)
-(******************************************************************************)
-
-let has_equality_op =
-  function
-  | JCTnative Tunit -> false
-  | JCTnative Tboolean -> true
-  | JCTnative Tinteger -> true
-  | JCTnative Treal -> true
-  | JCTnative (Tgenfloat _) -> true
-  | JCTnative Tstring -> true
-  | JCTlogic _s -> (* TODO *) false
-  | JCTenum _ei -> true
-  | JCTpointer _
-  | JCTnull ->  true
-  | JCTany -> false
-  | JCTtype_var _ -> false (* TODO ? *)
-
-let equality_op_for_type =
-  function
-  | JCTnative Tunit -> invalid_arg "equality_op_for_type: equality op for unit type requested"
-  | JCTnative Tboolean -> "eq_bool"
-  | JCTnative Tinteger -> "eq_int"
-  | JCTnative Treal -> "eq_real"
-  | JCTnative (Tgenfloat f) -> "eq_" ^ float_format f
-  | JCTnative Tstring -> "eq"
-  | JCTlogic _s -> invalid_arg "equality_op_for_type: unimplemented: equality for logic types" (* TODO *)
-  | JCTenum ei -> eq_of_enum_name ei
-  | JCTpointer _
-  | JCTnull ->  "eq"
-  | JCTany -> invalid_arg "equality_op_for_type: equality op for `any' type requested"
-  | JCTtype_var _ -> invalid_arg "equality_op_for_type: unimplemented: equality for type variables" (* TODO ? *)
-
+      (string_of_op_type op_ty)
 
 (******************************************************************************)
 (*                                 Coercions                                  *)
 (******************************************************************************)
 
-let float_of_real f x =
+let float_of_real (type a) (f : a precision) x =
   (* TODO: Mpfr.settofr etc *)
   if Str.string_match (Str.regexp "\\([0-9]+\\)\\.0*$") x 0 then
     let s = Str.matched_group 1 x in
     match f with
-    | `Float ->
+    | Single ->
       if String.length s <= 7 (* x < 10^7 < 2^24 *) then x
       else raise Not_found
-    | `Double ->
+    | Double ->
        if String.length s <= 15 (* x < 10^15 < 2^53 *) then x
        else raise Not_found
-    | `Binary80 -> raise Not_found
   else
     match f, x with
     | _ , "0.5" -> x
-    | `Float, "0.1" -> "0x1.99999ap-4"
-    | `Double, "0.1" -> "0x1.999999999999ap-4"
+    | Single, "0.1" -> "0x1.99999ap-4"
+    | Double, "0.1" -> "0x1.999999999999ap-4"
     | _ -> raise Not_found
 
-let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src e e' =
-  let rec aux a b =
-    match a, b with
-    | JCTlogic (t, tl), JCTlogic (u, ul) when t = u -> List.for_all2 aux tl ul
-    | JCTtype_var _, JCTtype_var _ -> true (*jc_typing take care of that*)
-    | (JCTtype_var _, _) | (_, JCTtype_var _) -> true
-    | JCTpointer (JCroot rt1, _, _), JCTpointer (JCroot rt2, _, _) -> rt1 == rt2
-    | _ -> false
-  in
-  match ty_dst, ty_src with
-  (* identity *)
-  | JCTnative t, JCTnative u when t = u -> e'
-  | (JCTlogic _ | JCTtype_var _), (JCTlogic _ | JCTtype_var _) when aux ty_dst ty_src -> e'
-  | (JCTtype_var _, JCTpointer _) -> e'
-  | JCTpointer _, JCTpointer _ when aux ty_dst ty_src -> e'
-  | JCTany, JCTany -> e'
-    (* between integer/enum and real *)
-  | JCTnative Treal, JCTnative Tinteger ->
-    begin match e' with
-    | LConst (Prim_int n) ->
-      LConst (Prim_real (n ^ ".0"))
-    | _ ->
-      LApp ("real_of_int", [e'])
-    end
-  | JCTnative Treal, JCTenum ri ->
-    begin match e' with
-    | LConst (Prim_int n) ->
-      LConst (Prim_real (n ^ ".0"))
-    | _ ->
-      let e' = LApp (logic_int_of_enum_name ri, [e']) in
-      LApp ("real_of_int", [e'])
-    end
-  | JCTnative Treal, JCTnative (Tgenfloat f) ->
-    begin match e' with
-    | LApp (f, [LConst (Prim_real _) as c])
-      when f = "single_of_real_exact" || f = "single_of_real_exact" -> c
-    | _ -> LApp (float_format f ^ "_value", [e'])
-    end
-  | JCTnative (Tgenfloat f), JCTnative Treal ->
-    begin try
-      match e' with
-      | LConst (Prim_real x) ->
-        LApp (float_format f ^ "_of_real_exact",
-              [LConst (Prim_real (float_of_real f x))])
-      | _ -> raise Not_found
-    with
-    | Not_found ->
-      LApp ("round_" ^ float_format f ^ "_logic",
-            [logic_current_rounding_mode () ; e' ])
-    end
-  | JCTnative (Tgenfloat _f), (JCTnative Tinteger | JCTenum _) ->
-    term_coerce ~type_safe ~global_assertion lab pos ty_dst (JCTnative Treal) e
-      (term_coerce ~type_safe ~global_assertion lab pos (JCTnative Treal) ty_src e e')
-  | JCTnative Tinteger, JCTnative Treal ->
-    (* LApp ("int_of_real", [e']) *)
-    unsupported pos "unsupported convertion from integer to real in logic"
-    (* between enums and integer *)
-  | JCTenum ri1, JCTenum ri2
-    when ri1.ei_name = ri2.ei_name -> e'
-  | JCTenum ri1, JCTenum ri2 ->
-    assert cast; (* Typing should have inserted an explicit cast *)
-    let e' = LApp (logic_int_of_enum_name ri2, [e']) in
-    LApp (logic_enum_of_int_name ri1, [e'])
-  | JCTnative Tinteger, JCTenum ri ->
-    LApp (logic_int_of_enum_name ri, [e'])
-  | JCTenum ri, JCTnative Tinteger ->
-    LApp (logic_enum_of_int_name ri, [e'])
-      (* between pointers and null *)
-  | JCTpointer _ , JCTnull -> e'
-  | JCTpointer(pc1, _, _), JCTpointer (JCtag (st2, _), _, _)
-    when Typing.substruct st2 pc1 -> e'
-  | JCTpointer (JCtag (st1, _), _, _), JCTpointer _ ->
-    let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st1, e#region) in
-    LApp ("downcast", [tag; e'; LVar (Name.tag st1)])
-  |  _ ->
-     unsupported
-       pos
-       "can't (term_)coerce type %a to type %a"
-       print_type ty_src print_type ty_dst
+let rec coerce :
+  type a b ax bx c. (b, a) ty_opt -> (a, c) ty_opt -> (a, b, ax, bx) form -> e:_ -> e1:_ -> ax -> bx =
+  fun ty_dst ty_src form ->
+    let apply : (a * unit, b) func -> ax -> bx =
+      fun f e ->
+      match form with
+      | Term -> O.T.(f @$. e)
+      | Expr -> O.E.(f @$. e)
+    in
+    let return (e : ax) : bx =
+      match form, ty_dst, ty_src with
+      | Term, Any, _ -> e
+      | Expr, Any, _ -> e
+      | Term, Ty t1, Ty t2 ->
+        let O.Eq = O.eq t1 t2 in e
+      | Expr, Ty t1, Ty t2 ->
+        let O.Eq = O.eq t1 t2 in e
+      | _ -> assert false
+    in
+    let rec same a b =
+      match a, b with
+      | JCTlogic (t, tl), JCTlogic (u, ul) when t = u -> List.for_all2 same tl ul
+      | JCTtype_var _, JCTtype_var _ -> true (*jc_typing takes care of that*)
+      | JCTtype_var _, _ | _, JCTtype_var _ -> true
+      | JCTpointer (JCroot rt1, _, _), JCTpointer (JCroot rt2, _, _) -> rt1 == rt2
+      | _ -> false
+    in
+    fun ~e ~e1 e' ->
+      let apply' f = apply f e' in
+      let return = return e' in
+      match ty_src, ty_dst with
+      | Any, Any when
+        (match e#typ, e1#typ with
+        (* identity *)
+        | JCTnative t, JCTnative u when t = u -> true
+        | (JCTlogic _ | JCTtype_var _ as t1), (JCTlogic _ | JCTtype_var _ as t2) when same t1 t2 -> true
+        | JCTtype_var _, JCTpointer _ -> true
+        | JCTpointer _, JCTnull -> true
+        | JCTpointer _ as t1, (JCTpointer _ as t2) when same t1 t2 -> true
+        | JCTpointer (pc1, _, _), JCTpointer (JCtag (st2, _), _, _) when Typing.substruct st2 pc1 -> true
+        | JCTany, JCTany -> true
+        | _ -> false) -> return
+      (* between integer/enum and real *)
+      | Ty (Numeric (Integral Integer)), Ty (Numeric (Real Real)) ->
+        begin match form, e' with
+        | Term, Const (Int n) ->
+          O.T.(real (n ^ ".0"))
+        | Expr, { expr_node = Const (Int n) } ->
+          O.E.(real (n ^ ".0"))
+        | _ -> apply' @@ O.F.real "from_int"
+        end
+      | Ty (Numeric (Real (Float _ as f))), Ty (Numeric (Real Real)) ->
+        begin match form, e' with
+        | Term, App (User (_, _, "of_real_exact"), Cons (Const (Real _) as c, Nil)) -> c
+        | Expr, { expr_node = App (User (_, _, "of_real_exact"), Cons ({ expr_node = Const (Real _) } as c, Nil), _) }
+          -> c
+        | _ -> apply' @@ Of_float f
+        end
+      | Ty (Numeric (Real Real)), Ty (Numeric (Real (Float f))) ->
+        begin try
+          match form, e' with
+          | Term, Const (Real n) ->
+            apply ((match f with Single -> O.F.single | Double -> O.F.double) "of_real_exact")
+              (Const (Real (float_of_real f n)))
+          | _ -> raise Not_found
+        with
+        | Not_found -> apply' @@ To_float (Float f)
+        end
+      (* between enums and integer *)
+      | Ty (Numeric (Integral (Enum (module E1)))), Ty (Numeric (Integral (Enum (module E2))))
+        when (match E1.E with E2.E -> true | _ -> false) ->
+        begin match E1.E with E2.E -> return | _ -> assert false end
+      | Ty (Numeric (Integral Integer)), Ty (Numeric (Integral (Int _ as i))) ->
+        apply' @@ Of_int i
+      | Ty (Numeric (Integral (Int _ as i))), Ty (Numeric (Integral Integer))  ->
+        apply' @@ To_int i
+      | Ty t1, Ty t2 ->
+        begin try
+          match O.eq t1 t2 with O.Eq -> return
+        with
+        | Failure _ ->
+          unsupported
+            ~loc:e#pos
+            "can't coerce type %s to type %s"
+            (O.string_of_ty t1) (O.string_of_ty t2)
+        end
+      | _, Any -> return
+      | Any, Ty t ->
+        unsupported
+          ~loc:e#pos
+          "can't coerce type %a to type %s"
+          print_type e1#yp (O.string_of_ty t)
 
 let eval_integral_const e =
   let rec eval e =

@@ -198,7 +198,12 @@ struct
   (* ATTENTION: this theory is non-existent, there is no more "obsolete" support for BV,
      new implementation of Why3 support for BV should be implemented in Jessie2. *)
   let bitvector = "Bitvector", false
-  let jessie = "Jc_memory_model", false
+  let jessie = "jessie3theories.Jc_memory_model", false
+  let bool = "bool.Bool", true
+  let single = "jessie3theories.Single", true
+  let double = "jessie3theories.Double", true
+  let binary80 = "jessie3theories.Binary80", true
+  let real = "real.Real", true
   let current = "", false
 end
 

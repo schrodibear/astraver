@@ -976,13 +976,13 @@ let rec term env (e : nexpr) =
           bad_type ~loc:e#pos ty "bad cast to integer"
       | JCTnative Treal ->
         if is_integer te1#typ then
-          real_type, te1#region, JCTreal_cast(te1,Integer_to_real)
+          real_type, te1#region, JCTreal_cast (te1, Integer_to_real)
         else if is_real te1#typ then
           real_type, te1#region, te1#node
         else if is_double te1#typ then
-          real_type, te1#region, JCTreal_cast(te1,Double_to_real)
+          real_type, te1#region, JCTreal_cast (te1, Double_to_real)
         else if is_float te1#typ then
-          real_type, te1#region, JCTreal_cast(te1,Float_to_real)
+          real_type, te1#region, JCTreal_cast (te1, Float_to_real)
         else
           bad_type ~loc:e#pos te1#typ "bad cast to real"
       | JCTnative (Tgenfloat f) ->

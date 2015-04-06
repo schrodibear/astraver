@@ -950,12 +950,12 @@ let make_conversion_params pc =
                   int s)
           in
           let post_max =
-            O.(T.(
+            O.T.(
               offset_max ac (var p) =
                 F.jc "offset_max_bytes" @$
                   var bv_alloc @
                   (F.jc "pointer_address" @$. var p) @.
-                  int s))
+                  int s)
           in
           let ty' = pointer_type ac pc in
           let post = O.(post_min && post_max) in

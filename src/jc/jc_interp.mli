@@ -29,7 +29,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Output_ast
+(*open Output_ast
 
 
 (** {1 Main translation functions} *)
@@ -171,4 +171,5 @@ val print_locs : Format.formatter -> unit
   Local Variables:
   compile-command: "unset LANG; make -j -C .. bin/jessie.byte"
   End:
+*)
 *)
