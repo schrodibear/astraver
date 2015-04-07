@@ -133,7 +133,7 @@ let struct_model_type st = root_model_type (struct_root st)
 
 let pointer_class_model_type pc = root_model_type (pointer_class_root pc)
 
-let bitvector_type = O.Lt.(user ~from:(Name.Theory.bitvector) Name.Type.bitvector @$ Nil)
+let bitvector_type () = O.Lt.(user ~from:(Name.Theory.bitvector) Name.Type.bitvector @$ Nil)
 
 let alloc_class_type =
   function
@@ -275,7 +275,7 @@ let memory_type mc =
     let Typ ty_opt = ty fi.fi_type in
     mk (tr_base_type ty_opt fi.fi_type)
   | JCmem_plain_union _
-  | JCmem_bitvector -> mk bitvector_type
+  | JCmem_bitvector -> mk (bitvector_type ())
 
 (* query model types *)
 
@@ -958,8 +958,8 @@ let make_conversion_params pc =
                   int s)
           in
           let ty' = pointer_type ac pc in
-          let post = O.(post_min && post_max) in
-          O.forall [p, ty'] post
+          let post _ = O.(post_min && post_max) in
+          O.forall p ty' post
         in
         post_alloc
       else
@@ -1012,7 +1012,7 @@ let make_conversion_params pc =
                          st.si_name
                          st.si_name
                    in
-                   let posti =
+                   let posti _ =
                      let Term converted =
                        make_of_bitvector_app
                          fi
@@ -1025,7 +1025,7 @@ let make_conversion_params pc =
                      O.T.(select mem (var pi) = converted)
                    in
                    let ty' = pointer_type ac pc in (* Correct pc *)
-                   let posti = O.forall [pi, ty'] posti in
+                   let posti = O.forall pi ty' posti in
                    O.(acc && posti), i + 1
                else
                  acc, i)
@@ -1933,12 +1933,12 @@ let tr_li_model_arg_3 is_mutable get_name get_type ~label_in_name lab (c, _ as c
     | Some f -> not (is_mutable f cr)
   in
   lvar_name ~label_in_name lab name,
-  lvar ~constant ~label_in_name lab name,
-  get_type c
+  (Term (lvar ~constant ~label_in_name lab name) : some_term),
+  Logic_type (get_type c)
 
 let tr_li_model_mem_arg_3, tr_li_model_at_arg_3, tr_li_model_tt_arg_3 =
   let tr = tr_li_model_arg_3 in
-  tr mutable_memory      memory_name              memory_type,
+  tr mutable_memory      memory_name           memory_type,
   tr mutable_alloc_table Name.alloc_table      alloc_table_type,
   tr mutable_tag_table   Name.tag_table        tag_table_type
 
@@ -2001,10 +2001,9 @@ let tr_li_model_glob_args_3 ~label_in_name ?region_assoc ?label_assoc reads =
 
 let tr_li_model_args_3 ~label_in_name ?region_assoc ?label_assoc reads =
   let tr f = f ~label_in_name ?region_assoc ?label_assoc reads in
-  let wrap = List.map (fun (v, t, lt) -> (v, (Term t : some_term), Logic_type lt)) in
-  wrap (tr tr_li_model_at_args_3) @
-  wrap (tr tr_li_model_tt_args_3) @
-  wrap (tr tr_li_model_mem_args_3) @
+  tr tr_li_model_at_args_3 @
+  tr tr_li_model_tt_args_3 @
+  tr tr_li_model_mem_args_3 @
   tr tr_li_model_glob_args_3
 
 let tr_li_args ~label_in_name ~region_assoc ~label_assoc f args =
@@ -2017,10 +2016,10 @@ let tr_logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
   let O.T.Hlist args = O.T.hlist_of_list @@ tr_li_args ~label_in_name ~region_assoc ~label_assoc f args in
   O.T.(F.user ~from:(f.li_axiomatic |? "", Option.is_some f.li_axiomatic) f.li_final_name @$ args)
 
-let tr_logic_pred_call ~label_in_name ~region_assoc ~label_assoc f args =
-  if Options.debug then printf "logic pred call to %s@." f.li_name;
-  let O.T.Hlist args = O.T.hlist_of_list @@ tr_li_args ~label_in_name ~region_assoc ~label_assoc f args in
-  O.T.(F.user ~from:(f.li_axiomatic |? "", Option.is_some f.li_axiomatic) f.li_final_name @$ args)
+let tr_logic_pred_call ~label_in_name ~region_assoc ~label_assoc f' args =
+  if Options.debug then printf "logic pred call to %s@." f'.li_name;
+  let O.T.Hlist args = O.T.hlist_of_list @@ tr_li_args ~label_in_name ~region_assoc ~label_assoc f' args in
+  O.((App (F.user ~from:(f'.li_axiomatic |? "", Option.is_some f'.li_axiomatic) f'.li_final_name, args) : pred))
 
 let collect_li_reads acc li =
   let add fold get_name get_map acc =

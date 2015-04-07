@@ -71,10 +71,6 @@ val fresh_statement_label : unit -> label_info
 
 (** {1 Types} *)
 
-val why_unit_type : void logic_type
-
-val why_integer_type : unbounded integer number logic_type
-
 val tr_base_type : ('a, 'b) ty_opt -> ?region:RegionTable.key -> jc_type -> 'a logic_type
 
 val tr_var_base_type : ('a, 'b) ty_opt -> var_info -> 'a logic_type
@@ -88,87 +84,85 @@ val raw_memory_type : 'a logic_type -> 'b logic_type -> 'c logic_type
 val memory_type : mem_class -> 'a logic_type
 
 val is_memory_type : 'a logic_type -> bool
-(*
+
 val tr_li_model_mem_arg_3 :
-  label_in_name:bool -> label -> MemClass.t * RegionTable.key -> string * term * logic_type
+  label_in_name:bool -> label -> MemClass.t * RegionTable.key -> string * some_term * some_logic_type
 
-val deconstruct_memory_type_args : logic_type -> logic_type * logic_type
+val pointer_class_model_type : pointer_class -> 'a logic_type
 
-val pointer_class_model_type : pointer_class -> logic_type
+val tag_id_type : root_info -> 'a logic_type
 
-val tag_id_type : root_info -> logic_type
+val tag_table_type : root_info -> 'a logic_type
 
-val tag_table_type : root_info -> logic_type
+val raw_alloc_table_type : 'a logic_type -> 'b logic_type
 
-val raw_alloc_table_type : logic_type -> logic_type
+val alloc_table_type : alloc_class -> 'a logic_type
 
-val alloc_table_type : alloc_class -> logic_type
+val is_alloc_table_type : 'a logic_type -> bool
 
-val is_alloc_table_type : logic_type -> bool
-
-val raw_tag_table_type: logic_type -> logic_type
+val raw_tag_table_type: 'a logic_type -> 'b logic_type
 
 (**  {1 Variables} *)
 
 (** {1 others} *)
 
 (* horror... *)
-val ref_term :
-  (?subst:(term VarMap.t) ->
-    type_safe:bool ->
-    global_assertion:bool ->
-    relocate:bool ->
-    label -> label -> Fenv.term -> term)
-  ref
+type term = { mutable term : 'a 'b.
+                       ('a, 'b) ty_opt ->
+                ?subst:(some_term Envset.VarMap.t) ->
+                type_safe:bool -> global_assertion:bool -> relocate:bool
+                -> label -> label -> Fenv.term -> 'a Output_ast.term }
 
-val any_value : region -> jc_type -> expr
+val term : term
 
-val make_conversion_params : pointer_class -> why_decl list
+val any_value : ('a, 'b) ty_opt -> region -> jc_type -> 'a expr
 
-val param : type_safe:bool -> var_info -> string * logic_type
+val make_conversion_params : pointer_class -> [`Module of bool] why_decl list
 
-val tparam : label_in_name:bool -> label -> var_info -> string * term * logic_type
+val param : ('a, 'b) ty_opt -> type_safe:bool -> var_info -> string * 'a logic_type
+
+val tparam : ('a, 'b) ty_opt -> label_in_name:bool -> label -> var_info -> string * 'a Output_ast.term * 'a logic_type
 
 val tr_li_model_args_3 :
   label_in_name:bool ->
   ?region_assoc:(RegionTable.key * RegionTable.key) list ->
   ?label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->
-  effect -> (string * term * logic_type) list
+  effect -> (string * some_term * some_logic_type) list
 
 val tr_li_model_mem_args_5 :
   label_in_name:bool ->
   ?region_assoc:(RegionTable.key * RegionTable.key) list ->
   ?label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->
   effect ->
-  ((MemClass.t * InternalRegion.t) * (string * term * logic_type)) list
+  ((MemClass.t * InternalRegion.t) * (string * some_term * some_logic_type)) list
 
-val tag_table_var : VariantOrd.t * RegionTable.key -> expr
+val tag_table_var : VariantOrd.t * RegionTable.key -> 'a expr
 
-val tvar : label_in_name:bool -> label -> var_info -> term
+val tvar : label_in_name:bool -> label -> var_info -> 'a Output_ast.term
 
-val var: var_info -> expr
+val var: var_info -> 'a expr
 
-val plain_var : string -> expr
+val plain_var : string -> 'a expr
 
-val ttag_table_var : label_in_name:bool -> label -> VariantOrd.t * RegionTable.key -> bool * term
+val ttag_table_var : label_in_name:bool -> label -> VariantOrd.t * RegionTable.key -> bool * 'a Output_ast.term
 
-val talloc_table_var : label_in_name:bool -> label -> AllocClass.t * RegionTable.key -> bool * term
+val talloc_table_var : label_in_name:bool -> label -> AllocClass.t * RegionTable.key -> bool * 'a Output_ast.term
 
-val tmemory_var : label_in_name:bool -> label -> MemClass.t * RegionTable.key -> term
+val tmemory_var : label_in_name:bool -> label -> MemClass.t * RegionTable.key -> 'a Output_ast.term
 
-val lvar : constant:bool -> label_in_name:bool -> label -> string -> term
+val lvar : constant:bool -> label_in_name:bool -> label -> string -> 'a Output_ast.term
 
 val lvar_name : label_in_name:bool -> ?label_assoc:(label * label) list -> label -> string -> string
 
-val plain_memory_var : mem_class * RegionTable.key -> expr
+val plain_memory_var : mem_class * RegionTable.key -> 'a expr
 
-val memory_var : ?test_current_function:bool -> MemClass.t * RegionTable.key -> expr
+val memory_var : ?test_current_function:bool -> MemClass.t * RegionTable.key -> 'a expr
 
-val alloc_table_var : ?test_current_function:bool -> AllocClass.t * RegionTable.key -> expr
+val alloc_table_var : ?test_current_function:bool -> AllocClass.t * RegionTable.key -> 'a expr
 
-val plain_alloc_table_var : alloc_class * RegionTable.key -> expr
+val plain_alloc_table_var : alloc_class * RegionTable.key -> 'a expr
 
-val plain_tag_table_var : root_info * RegionTable.key -> expr
+val plain_tag_table_var : root_info * RegionTable.key -> 'a expr
 
 val make_arguments :
   callee_reads:effect ->
@@ -178,68 +172,47 @@ val make_arguments :
   with_globals:bool ->
   with_body:bool ->
   string ->
-  expr list ->
-  assertion * string * (StringSet.elt * logic_type) list * expr * expr * expr list
+  'a expr list ->
+  pred * string * (StringSet.elt * some_logic_type) list * some_expr * some_expr * 'a expr list
 
 val define_locals :
-  ?reads:(string * logic_type) list ->
-  ?writes:(string * logic_type) list ->
-  expr -> expr
+  ?reads:(string * 'a logic_type) list ->
+  ?writes:(string * 'b logic_type) list ->
+  'c expr -> 'c expr
 
 
 val tr_li_model_at_args_3 :
   label_in_name:bool ->
   ?region_assoc:(RegionTable.key * RegionTable.key) list ->
   ?label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->
-  effect -> (string * term * logic_type) list
+  effect -> (string * some_term * some_logic_type) list
 
-val root_model_type : root_info -> logic_type
+val root_model_type : root_info -> 'a logic_type
 
-val pointer_type : alloc_class -> pointer_class -> logic_type
+val pointer_type : alloc_class -> pointer_class -> 'a logic_type
 
-val raw_pointer_type : logic_type -> logic_type
+val raw_pointer_type : 'a logic_type -> 'b logic_type
 
-val bitvector_type : logic_type
+val bitvector_type : unit -> 'a logic_type
 
 (** {2 building output terms} *)
 
-val const : Ast.const -> constant
+val const : ('a, 'b) ty_opt -> Ast.const -> 'a constant
 (** constant *)
-
-val make_select : term -> term -> term
-
-val make_select_fi : field_info -> term -> term
-(** dereferencing, builds select(f.name,t) *)
-
-val make_select_committed : pointer_class -> term -> term
-(** builds select("committed",t) *)
-
-val make_subtag_bool : term -> term -> term
 
 val tr_logic_pred_call :
   label_in_name:bool ->
   region_assoc:(RegionTable.key * RegionTable.key) list ->
   label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->
   logic_info ->
-  term list -> assertion
+  some_term list -> pred
 (** call logic predicate, handling regions and labels *)
 
 val tr_logic_fun_call :
   label_in_name:bool ->
   region_assoc:(RegionTable.key * RegionTable.key) list ->
   label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->
-  logic_info -> term list -> term
-
-val make_int_of_tag : struct_info -> term
-
-val make_typeof : term -> term -> term
-(** typeof expression in logic *)
-
-val make_instanceof : term -> term -> struct_info -> assertion
-
-val make_typeeq : term -> term -> struct_info -> assertion
-
-val make_instanceof_bool : term -> term -> struct_info -> term
+  logic_info -> some_term list -> 'a Output_ast.term
 
 (** {2 helpers for effects information} *)
 
@@ -248,7 +221,7 @@ val collect_li_reads : StringSet.t -> logic_info -> StringSet.t
 
 val all_effects : effect -> string list
 
-val pset_union_of_list : term list -> term
+val pset_union_of_list : 'a Output_ast.term list -> 'a Output_ast.term
 
 val local_read_effects : callee_reads:effect -> callee_writes:effect -> string list
 
@@ -272,7 +245,7 @@ val write_parameters :
   callee_reads:effect ->
   callee_writes:effect ->
   params:var_info list ->
-  (string * logic_type) list
+  (string * some_logic_type) list
 
 val read_parameters :
   type_safe:bool ->
@@ -281,21 +254,21 @@ val read_parameters :
   callee_writes:effect ->
   params:var_info list ->
   already_used:StringSet.elt list ->
-  (string * logic_type) list
+  (string * some_logic_type) list
 
 val write_locals :
   region_list:RegionTable.key list ->
   callee_reads:effect ->
   callee_writes:effect ->
   params:var_info list ->
-  (string * logic_type) list
+  (string * some_logic_type) list
 
 val read_locals :
   region_list:RegionTable.key list ->
   callee_reads:effect ->
   callee_writes:effect ->
   params:var_info list ->
-  (string * logic_type) list
+  (string * some_logic_type) list
 
 
 (** {1 Misc} *)
@@ -306,4 +279,4 @@ val specialized_functions : (string * string StringMap.t) Common.StringHashtblIt
   Local Variables:
   compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_interp_misc.mli"
   End:
-*)*)
+*)

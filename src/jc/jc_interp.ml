@@ -418,174 +418,16 @@ let rec coerce :
           "can't coerce type %a to type %s"
           print_type e1#yp (O.string_of_ty t)
 
-let eval_integral_const e =
-  let rec eval e =
-    match e#node with
-    | JCEconst(JCCinteger s) -> Numconst.integer s
-    | JCErange_cast(e,_ri2) -> eval e
-    | JCEunary(op,e) ->
-      let v = eval e in
-      begin match op with
-      | `Uminus, `Integer -> minus_num v
-      | `Uminus, (`Real | `Binary80 | `Double | `Float | `Boolean | `Unit)
-      | `Unot, _
-      | `Ubw_not, _ -> raise Exit
-      end
-    | JCEbinary(e1,op,e2) ->
-      let v1 = eval e1 in
-      let v2 = eval e2 in
-      begin match op with
-      | `Badd, `Integer -> v1 +/ v2
-      | `Bsub, `Integer -> v1 -/ v2
-      | `Bmul, `Integer -> v1 */ v2
-      | `Bdiv, `Integer ->
-        if eq_num (mod_num v1 v2) Numconst.zero then quo_num v1 v2 else raise Exit
-      | `Bmod, `Integer -> mod_num v1 v2
-      | (`Badd | `Barith_shift_right | `Bbw_and | `Bbw_or | `Bbw_xor
-        | `Bdiv | `Beq | `Bge | `Bgt | `Ble | `Blogical_shift_right
-        | `Blt | `Bmod | `Bmul | `Bneq | `Bshift_left | `Bsub), _ -> raise Exit
-      | `Bconcat, _ -> raise Exit
-      | `Bland, _ -> raise Exit
-      | `Blor, _ -> raise Exit
-      end
-    | JCEif(_e1,_e2,_e3) ->
-      (* TODO: write [eval_boolean_const] *)
-      raise Exit
-    | JCEconst _ | JCEvar _ | JCEshift _ | JCEderef _
-    | JCEinstanceof _ | JCEcast _ | JCEbitwise_cast _ | JCEreal_cast _
-    | JCEoffset _ | JCEbase_block _
-    | JCEaddress _
-    | JCEalloc _ | JCEfree _ | JCEreinterpret _ | JCEmatch _ |JCEunpack _ |JCEpack _
-    | JCEthrow _ | JCEtry _ | JCEreturn _ | JCEloop _ | JCEblock _
-    | JCEcontract _ | JCEassert _ | JCEfresh _
-    | JCElet _ | JCEassign_heap _ | JCEassign_var _ | JCEapp _
-    | JCEreturn_void -> raise Exit
-  in
-  try Some (eval e) with Exit | Division_by_zero -> None
-
-let fits_in_enum ri e =
-  match eval_integral_const e with
-  | Some c -> ri.ei_min <=/ c && c <=/ ri.ei_max
-  | None -> false
-
-let rec coerce ~check_int_overflow ~e ty_dst ty_src e1 e1' =
-  match ty_dst, ty_src with
-    (* identity *)
-  | JCTnative t, JCTnative u when t = u -> e1'
-  | JCTlogic t, JCTlogic u when t = u -> e1'
-  | JCTany, JCTany -> e1'
-    (* between integer/enum and real *)
-  | JCTnative Treal, JCTnative Tinteger ->
-    begin match e1'.expr_node with
-    | Cte (Prim_int n) ->
-      { e1' with expr_node = Cte (Prim_real (n ^ ".0")) }
-    | _ -> make_app "real_of_int" [e1']
-    end
-  | JCTnative Treal, JCTenum ri ->
-    begin match e1'.expr_node with
-    | Cte (Prim_int n) ->
-      { e1' with expr_node = Cte (Prim_real (n ^ ".0")) }
-    | _ -> make_app "real_of_int" [make_app (logic_int_of_enum_name ri) [e1']]
-    end
-  | JCTnative Tinteger, JCTnative Treal ->
-    (* make_app "int_of_real" [e'] *)
-    unsupported e#pos "coerce: unsupported cast from integer to real"
-  | JCTnative (Tgenfloat _), (JCTnative Tinteger | JCTenum _) ->
-    coerce ~check_int_overflow ~e ty_dst (JCTnative Treal) e1
-      (coerce ~check_int_overflow ~e (JCTnative Treal) ty_src e1 e1')
-  | JCTnative (Tgenfloat f1), JCTnative (Tgenfloat f2) ->
-    let enlarge =
-      match f2, f1 with
-      | `Float, _ -> true
-      | _, `Float -> false
-      | `Double, _ -> true
-      | _, _ -> false in
-    let name = float_format f1 ^ "_of_" ^ float_format f2 in
-    if enlarge then
-      make_app name [e1']
-    else if check_int_overflow then
-      make_vc_app_e ~e ~kind:JCVCfp_overflow name [current_rounding_mode (); e1']
-    else
-      make_app (name ^ "_safe") [current_rounding_mode (); e1']
-  | JCTnative (Tgenfloat f), JCTnative Treal ->
-    begin try
-      match e1'.expr_node with
-      | Cte (Prim_real x) ->
-        let s = float_of_real f x in
-        make_app (float_format f  ^ "_of_real_exact")  [{ e1' with expr_node = Cte (Prim_real s) }]
-      | _ -> raise Not_found
-      with
-      | Not_found ->
-        if check_int_overflow then
-          make_vc_app_e ~e ~kind:JCVCfp_overflow (float_format f ^ "_of_real") [current_rounding_mode (); e1']
-        else
-          make_app (float_format f ^ "_of_real_safe") [current_rounding_mode (); e1']
-    end
-  | JCTnative Treal, JCTnative (Tgenfloat f) -> make_app (float_format f ^ "_value") [e1']
-    (* between enums and integer *)
-  | JCTenum ri1, JCTenum ri2
-    when ri1.ei_name = ri2.ei_name -> e1'
-  | JCTenum ri1, JCTenum ri2 ->
-    let e1' = make_app (logic_int_of_enum_name ri2) [e1'] in
-    if not check_int_overflow || fits_in_enum ri1 e1 then
-      make_app (safe_fun_enum_of_int_name ri1) [e1']
-    else
-      make_vc_app_e ~e ~kind:JCVCarith_overflow (fun_enum_of_int_name ri1) [e1']
-  | JCTnative Tinteger, JCTenum ri ->
-    make_app (logic_int_of_enum_name ri) [e1']
-  | JCTenum ri, JCTnative Tinteger ->
-    if not check_int_overflow || fits_in_enum ri e1 then
-      make_app (safe_fun_enum_of_int_name ri) [e1']
-    else
-      make_vc_app_e ~e ~kind:JCVCarith_overflow (fun_enum_of_int_name ri) [e1']
-    (* between pointers and null *)
-  | JCTpointer _ , JCTnull -> e1'
-  | JCTpointer(pc1, _, _), JCTpointer (JCtag (st2, _), _, _)
-    when Typing.substruct st2 pc1 -> e1'
-  | JCTpointer (JCtag (st1, _), _, _), JCTpointer _  ->
-    let downcast_fun =
-      if safety_checking () then "downcast_" else "safe_downcast_"
-    in
-    let tag = tag_table_var (struct_root st1, e#region) in
-    make_app downcast_fun [tag; e1'; mk_var (Name.tag st1)]
-  | _ ->
-    unsupported
-      e#pos
-      "can't coerce type %a to type %a"
-      print_type ty_src print_type ty_dst
-
-
 (******************************************************************************)
 (*                                   terms                                    *)
 (******************************************************************************)
 
-(* [pattern_lets] is a list of (id, value), which should be binded
- * at the assertion level. *)
-let pattern_lets = ref []
-let concat_pattern_lets lets = pattern_lets := lets @ !pattern_lets
-let bind_pattern_lets body =
-  let binds =
-    List.fold_left
-      (fun body bind ->
-         match bind with
-           | `Forall (id, ty) -> LForall (id, ty, [], body)
-           | `Let (id, value) -> LLet (id, value, body))
-      body (List.rev !pattern_lets)
-  in
-  pattern_lets := [];
-  binds
-
-let is_base_block t =
-  match t#node with
-  | JCTbase_block _ -> true
-  | _ -> false
-
-let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab oldlab t =
-  let ft = term ~subst ~type_safe ~global_assertion ~relocate lab oldlab in
-  let term_coerce = term_coerce ~type_safe ~global_assertion lab in
+let rec term typ ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab oldlab t =
+  let ft = term typ ~subst ~type_safe ~global_assertion ~relocate lab oldlab in
+  let coerce = coerce typ ~e:t in
   let t' =
     match t#node with
-    | JCTconst JCCnull -> LVar "null"
+    | JCTconst JCCnull -> O.T.(check typ (var "null"))
     | JCTvar v ->
       begin try
         VarMap.find v subst
@@ -782,6 +624,28 @@ let named_term ~type_safe ~global_assertion ~relocate lab oldlab t =
 (******************************************************************************)
 (*                                assertions                                  *)
 (******************************************************************************)
+
+(* [pattern_lets] is a list of (id, value), which should be binded
+ * at the assertion level. *)
+let pattern_lets = ref []
+let concat_pattern_lets lets = pattern_lets := lets @ !pattern_lets
+let bind_pattern_lets body =
+  let binds =
+    List.fold_left
+      (fun body bind ->
+         match bind with
+         | `Forall (id, Logic_type ty) -> O.forall id ty (fun _ -> body)
+         | `Let (id, (Term value : some_term)) -> O.let_ id ~equal:value ~in_:(fun _ -> body))
+      body
+      (List.rev !pattern_lets)
+  in
+  pattern_lets := [];
+  binds
+
+let is_base_block t =
+  match t#node with
+  | JCTbase_block _ -> true
+  | _ -> false
 
 let tag ~type_safe ~global_assertion ~relocate lab oldlab tag =
   match tag#node with

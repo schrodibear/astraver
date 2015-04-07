@@ -189,7 +189,7 @@ struct
 
   let if_ cond ~then_ ~else_ = If (cond, then_, else_)
 
-  let let_ v ~equal ~in_ = Let (v, equal, in_ (var v))
+  let let_ v ~(equal : 'a t) ~in_ : _ t = Let (v, equal, in_ (var v : 'a t))
 
   let (+) (t1 : _ term) (t2 : _ term) =
     match t1, t2 with
@@ -499,9 +499,9 @@ struct
 
   let void = mk Void
 
-  let let_ v ~equal ~in_ = mk (Let (v, equal, in_ (var v)))
+  let let_ v ~(equal : 'a t) ~in_ = mk (Let (v, equal, in_ (var v : 'a t)))
 
-  let let_ref v ~equal ~in_ = mk (Let_ref (v, equal, in_ (var v)))
+  let let_ref v ~(equal : 'a t) ~in_ = mk (Let_ref (v, equal, in_ (var v : 'a ref t)))
 
   let (||) e1 e2 =
     match e1.expr_node, e2.expr_node with
@@ -997,11 +997,11 @@ let rec disj =
   | [] -> False
   | p :: ps -> p || disj ps
 
-let rec forall vs ?(trigs=[]) p =
-  match vs with
-  | [] -> p
-  | [v, ty] -> Forall (v, ty, trigs, p)
-  | (v, ty) :: vs -> Forall (v, ty, [], forall vs ~trigs p)
+let let_ v ~(equal : 'a term) ~in_ : pred = Let (v, equal, in_ (T.var v : 'a term))
+
+let forall v (ty : 'a logic_type) ?(trigs=[]) p = Forall (v, ty, trigs, p (T.var v : 'a term))
+
+let exists v (ty : 'a logic_type) ?(trigs=[]) p = Exists (v, ty, trigs, p (T.var v : 'a term))
 
 let impl p1 p2 =
   match P.unlabel p1, P.unlabel p2 with
