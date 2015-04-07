@@ -67,12 +67,13 @@ let committed_name2 a =
 let pc_of_name name = JCtag (find_struct name, []) (* TODO: parameters *)
 
 let const t c =
+  let return c = O.C.return t c in
   match c with
-  | JCCvoid -> O.(C.check (some t) Void)
+  | JCCvoid -> return Void
   | JCCnull -> invalid_arg "const"
-  | JCCreal s -> O.(C.check (some t) (Real s))
-  | JCCinteger s -> O.(C.check (some t) (Int s))
-  | JCCboolean b -> O.(C.check (some t) (Bool b))
+  | JCCreal s -> return (Real s)
+  | JCCinteger s -> return (Int s)
+  | JCCboolean b -> return (Bool b)
   | JCCstring _s ->
     Options.jc_error Why_loc.dummy_position "Unsupported string constant" (* TODO *)
 
@@ -168,15 +169,17 @@ let pointer_type ac pc =
 (* translation *)
 
 let tr_native_type t =
+  let open O.Lt in
+  let return lt = return t lt in
   function
-  | Tunit -> O.Lt.(check (some t) void)
-  | Tboolean -> O.Lt.(check (some t) bool)
-  | Tinteger -> O.Lt.(check (some t) integer)
-  | Treal -> O.Lt.(check (some t) real)
-  | Tgenfloat `Double -> O.Lt.(check (some t) double)
-  | Tgenfloat `Float -> O.Lt.(check (some t) single)
-  | Tgenfloat `Binary80 -> O.Lt.(check t (jc "binary80" @$ Nil))
-  | Tstring -> O.Lt.(check t (jc "string" @$ Nil))
+  | Tunit -> return void
+  | Tboolean -> return bool
+  | Tinteger -> return integer
+  | Treal -> return real
+  | Tgenfloat `Double -> return double
+  | Tgenfloat `Float -> return single
+  | Tgenfloat `Binary80 -> return (jc "binary80" @$ Nil)
+  | Tstring -> return (jc "string" @$ Nil)
 
 let ty =
   function
@@ -208,14 +211,16 @@ let rec tr_base_type : type a b. (a, b) ty_opt -> ?region:_ ->  _ -> a logic_typ
          Ltype_hlist O.Lt.(tr_base_type ty_opt ?region t @ lhl))
       (Ltype_hlist Nil)
   in
+  let open O.Lt in
+  let return lt = return t lt in
   function
   | JCTnative ty -> tr_native_type t ty
   | JCTlogic (s, l) ->
-    O.Lt.(check t (let Ltype_hlist lhl = tr_ltype_hlist l in user ~from:Name.Theory.current s @$ lhl))
+    return (let Ltype_hlist lhl = tr_ltype_hlist l in user ~from:Name.Theory.current s @$ lhl)
   | JCTenum { ei_type = Int (r, b) } ->
-    O.Lt.(check (some t) (int (Int (r, b))))
+    return (int (Int (r, b)))
   | JCTenum { ei_type = Enum e } ->
-    O.Lt.(check (some t) (int (Enum e)))
+    return (int (Enum e))
   | JCTpointer (pc, _, _) ->
     let ac =
       match region with
@@ -224,9 +229,9 @@ let rec tr_base_type : type a b. (a, b) ty_opt -> ?region:_ ->  _ -> a logic_typ
       | Some r when Region.bitwise r -> JCalloc_bitvector
       | Some _ -> alloc_class_of_pointer_class pc
     in
-    O.Lt.(check Any (pointer_type ac pc))
+    return (pointer_type ac pc)
   | JCTnull | JCTany -> invalid_arg "tr_base_type"
-  | JCTtype_var tv -> O.Lt.(check t (var (Type_var.uname tv)))
+  | JCTtype_var tv -> return (var (Type_var.uname tv))
 
 let tr_type t ~region ty = Base_type (tr_base_type t ~region ty)
 
@@ -235,11 +240,13 @@ let tr_var_base_type t v = tr_base_type t ~region:v.vi_region v.vi_type
 let tr_var_type t v = tr_type t ~region:v.vi_region v.vi_type
 
 let any_value t region jct =
+  let open O.E in
+  let return e = return t e in
   match jct with
   | JCTnative ty ->
-    let jc_val v = O.E.(check t (F.jc v @$. void)) in
+    let jc_val v = return (F.jc v @$. void) in
     begin match ty with
-    | Tunit -> O.E.(check (some t) void)
+    | Tunit -> return void
     | Tboolean -> jc_val "any_bool"
     | Tinteger -> jc_val "any_int"
     | Treal -> jc_val "any_real"
@@ -247,13 +254,13 @@ let any_value t region jct =
     | Tstring -> jc_val "any_string"
     end
   | JCTnull
-  | JCTpointer _ -> O.E.(check t (F.jc_val "any_pointer" @$. void >: tr_type Any ~region jct))
-  | JCTenum ei -> O.E.(check t (F.jc_val (Name.Param.any_enum ei.ei_type) @$. void))
+  | JCTpointer _ -> return (F.jc_val "any_pointer" @$. void >: tr_type Any ~region jct)
+  | JCTenum ei -> return (F.jc_val (Name.Param.any_enum ei.ei_type) @$. void)
   | JCTlogic _ as ty ->
     let t' =
       Annot_type (True, Base_type (tr_base_type t ty), [], [], True, [])
     in
-    O.E.(check Any (mk (Black_box t')))
+    return (mk (Black_box t'))
   | JCTany -> failwith "any_value: value of wilcard type"
   | JCTtype_var _ ->
     Options.jc_error Why_loc.dummy_position "Usnupported value of poly type" (* TODO: need environment *)
@@ -477,14 +484,16 @@ let rec location : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ 
       let Typ ty_opt = ty t#typ in
       Term (term.term ty_opt ~type_safe ~global_assertion ~relocate:false lab lab t)
     in
+    let open O.T in
+    let return term = return t term in
     match loc#node with
     | JCLvar _v ->
-      O.T.(check t (var "pset_empty"))
+      return (var "pset_empty")
     | JCLderef (locs, _lab, _fi, _r) ->
       flocs t locs
     | JCLderef_term (t1, _fi) ->
       let Term t1 = ft t1 in
-      O.T.(check t (F.jc "pset_singleton" @$. t1))
+      return (F.jc "pset_singleton" @$. t1)
     | _ -> Options.jc_error loc#pos "Unsupported location" (* TODO *)
 
 and location_set : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ -> _ -> _ -> a Output_ast.term =
@@ -497,8 +506,8 @@ and location_set : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ 
       let Typ ty_opt = ty locs#typ in
       Term (term.term ty_opt ~type_safe ~global_assertion ~relocate:false lab lab t)
     in
-    let f t name args = O.T.(check t (F.jc name @$ args)) in
-    let f' name args = O.T.(check Any (F.jc name @$ args)) in
+    let f t name args = O.T.(return t (F.jc name @$ args)) in
+    let f' name args = O.T.(return Any (F.jc name @$ args)) in
     match locs#node with
     | JCLSvar v ->
       f t "pset_singleton" O.T.(tvar ~label_in_name:global_assertion lab v @ Nil)

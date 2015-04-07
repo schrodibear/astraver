@@ -93,7 +93,7 @@ end
 
 type unary = Unary : ('a * unit, 'a) func * 'a ty -> unary
 
-let unary_op ~e : expr_unary_op -> _ =
+let un_op ~e : expr_unary_op -> _ =
   let return f t = Unary (f, Numeric t) in
   function
   | `Uminus, `Integer ->
@@ -326,7 +326,7 @@ let float_of_real (type a) (f : a precision) x =
     | _ -> raise Not_found
 
 let rec coerce :
-  type a b ax bx c. (b, a) ty_opt -> (a, c) ty_opt -> (a, b, ax, bx) form -> e:_ -> e1:_ -> ax -> bx =
+  type a b ax bx c d. (b, c) ty_opt -> (a, d) ty_opt -> (a, b, ax, bx) form -> e:_ -> e1:_ -> ax -> bx =
   fun ty_dst ty_src form ->
     let apply : (a * unit, b) func -> ax -> bx =
       fun f e ->
@@ -336,8 +336,8 @@ let rec coerce :
     in
     let return (e : ax) : bx =
       match form, ty_dst, ty_src with
-      | Term, Any, _ -> e
-      | Expr, Any, _ -> e
+      | Term, Any, Any -> O.T.return Any e
+      | Expr, Any, Any -> O.E.return Any e
       | Term, Ty t1, Ty t2 ->
         let O.Eq = O.eq t1 t2 in e
       | Expr, Ty t1, Ty t2 ->
@@ -398,7 +398,7 @@ let rec coerce :
         when (match E1.E with E2.E -> true | _ -> false) ->
         begin match E1.E with E2.E -> return | _ -> assert false end
       | Ty (Numeric (Integral Integer)), Ty (Numeric (Integral (Int _ as i))) ->
-        apply' @@ Of_int i
+        apply' @@ Of_int (i, false)
       | Ty (Numeric (Integral (Int _ as i))), Ty (Numeric (Integral Integer))  ->
         apply' @@ To_int i
       | Ty t1, Ty t2 ->
@@ -416,45 +416,51 @@ let rec coerce :
         unsupported
           ~loc:e#pos
           "can't coerce type %a to type %s"
-          print_type e1#yp (O.string_of_ty t)
+          print_type e1#typ (O.string_of_ty t)
 
 (******************************************************************************)
 (*                                   terms                                    *)
 (******************************************************************************)
 
-let rec term typ ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab oldlab t =
-  let ft = term typ ~subst ~type_safe ~global_assertion ~relocate lab oldlab in
-  let coerce = coerce typ ~e:t in
+let rec term :
+  type a b. (a, b) ty_opt -> ?subst:_ -> type_safe:_ -> global_assertion:_ -> relocate:_ -> _ -> _ -> _ -> a term =
+  fun typ ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab oldlab t ->
+  let ft typ = term typ ~subst ~type_safe ~global_assertion ~relocate lab oldlab in
+  let un_op = un_op ~e:t in
+  let bin_op = bin_op ~e:t in
+  let coerce = coerce ~e:t in
+  let return t = O.T.return typ t in
   let t' =
     match t#node with
     | JCTconst JCCnull -> O.T.(check typ (var "null"))
     | JCTvar v ->
       begin try
-        VarMap.find v subst
+        let (Term t : some_term) = VarMap.find v subst in
+        return t
       with
       | Not_found ->
-        tvar ~label_in_name:global_assertion lab v
+        return (tvar ~label_in_name:global_assertion lab v)
       end
-    | JCTconst c -> LConst (const c)
+    | JCTconst c -> Const (const typ c)
     | JCTunary (op, t1) ->
-      LApp (term_unary_op op,
-            [term_coerce t#pos (native_operator_type op) t1#typ t1 @@ ft t1])
-    | JCTbinary (t1, (_, (`Pointer | `Logic) as op), t2) ->
-      LApp (term_bin_op op, [ft t1; ft t2])
-    | JCTbinary(t1, (_, #native_operator_type as op), t2) ->
-      let ty = native_operator_type op in
-      LApp (term_bin_op op,
-           [term_coerce t1#pos ty t1#typ t1 @@ ft t1;
-            term_coerce t2#pos ty t2#typ t2 @@ ft t2])
+      let Unary (f, ty') = un_op op in
+      return O.T.(f @$ ft (Ty ty') t1 @ Nil)
+    | JCTbinary (t1, op, t2) ->
+      begin match bin_op op with
+      | Op (f, ty_opt) -> return O.T.(f @$ ft ty_opt t1 @. ft ty_opt t2)
+      | Rel (f, ty_opt) -> return O.T.(f @$ ft ty_opt t1 @. ft ty_opt t2)
+      end
     | JCTshift (t1, t2) ->
-      LApp ("shift", [ft t1; term_coerce t2#pos integer_type t2#typ t2 @@ ft t2])
+      return O.T.(O.F.jc "shift" @$ ft Any t1 @. ft (Ty O.Ty.integer) t2)
     | JCTif (t1, t2, t3) ->
-      (** type of t2 and t3 are equal or one is the subtype of the other *)
-      TIf (ft t1,
-           term_coerce t2#pos t#typ t2#typ t2 @@ ft t2,
-           term_coerce t3#pos t#typ t3#typ t3 @@ ft t3)
+      return @@
+        O.T.if_
+          (ft (Ty Bool) t1)
+          (ft typ t2)
+          (ft typ t3)
     | JCTlet (vi, t1, t2) ->
-      TLet (vi.vi_final_name, ft t1, ft t2)
+      let Typ typ' = ty t1#typ in
+      return @@ O.T.let_ vi.vi_final_name (ft typ' t1) (fun _ -> ft typ t2)
     | JCToffset (k, t1, st) ->
       let ac = tderef_alloc_class ~type_safe t1 in
       let _, alloc = talloc_table_var ~label_in_name:global_assertion lab (ac, t1#region) in
@@ -465,7 +471,7 @@ let rec term typ ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate la
           | Offset_min -> "offset_min"
           | Offset_max -> "offset_max"
         in
-        LApp (f, [alloc; ft t1])
+        return @@ O.T.(O.F.jc f @$ alloc @. ft Any t1)
       | JCalloc_bitvector ->
         let f =
           match k with
@@ -473,46 +479,47 @@ let rec term typ ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate la
           | Offset_max -> "offset_max_bytes"
         in
         let s = string_of_int (struct_size_in_bytes st) in
-        LApp (f, [alloc; ft t1; LConst (Prim_int s)])
+        return @@ O.T.(O.F.jc f @$ alloc @ ft Any t1 @. Const (Int s))
       end
     | JCTaddress (Addr_absolute, t1) ->
-      LApp ("absolute_address",[ft t1])
+      return @@ O.T.(O.F.jc "absolute_address" @$. ft Any t1)
     | JCTaddress (Addr_pointer, t1) ->
-      LApp ("address", [ft t1])
+      return @@ O.T.(O.F.jc "address" @$. ft Any t1)
     | JCTbase_block t1 ->
-      let t1' = ft t1 in
+      let t1' = ft Any t1 in
       let _, alloc =
         let ac = tderef_alloc_class ~type_safe t1 in
         talloc_table_var ~label_in_name:global_assertion lab (ac, t1#region)
       in
-      LApp ("shift", [t1'; LApp ("offset_min", [alloc; t1'])])
+      return @@ O.T.(O.F.jc "shift" @$ t1'@. O.F.jc "offset_min" @$ alloc @. t1')
     | JCTinstanceof (t1, lab', st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
       let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
-      LApp ("instanceof", [tag; ft t1; LVar (Name.tag st)])
+      O.T.(O.F.jc "instanceof" @$ tag @ ft Any t1 @. var (Name.tag st))
     | JCTcast (t1, lab', st) ->
       if struct_of_union st
-      then ft t1
+      then ft Any t1
       else
         let lab = if relocate && lab' = LabelHere then lab else lab' in
         let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
-        LApp ("downcast", [tag; ft t1; LVar (Name.tag st)])
-    | JCTbitwise_cast (t1, _lab, _st) -> ft t1
-    | JCTrange_cast (t1, ri) ->
-      let to_type = Option.map_default ~f:(fun e -> JCTenum e) ~default:(JCTnative Tinteger) ri in
-      term_coerce ~cast:true t1#pos to_type t1#typ t1 @@ ft t1
-    | JCTreal_cast (t1, rc) ->
-      let t1' = ft t1 in
-      begin match rc with
-      | Integer_to_real ->
-        term_coerce t1#pos real_type t1#typ t1 t1'
-      | Double_to_real ->
-        term_coerce t1#pos real_type t1#typ t1 t1'
-      | Float_to_real ->
-        term_coerce t1#pos real_type t1#typ t1 t1'
-      | Round (f, _rm) ->
-        term_coerce t1#pos (JCTnative (Tgenfloat f)) t1#typ t1 t1'
+        O.T.(O.F.jc "downcast" @$ tag @ ft Any t1 @. var (Name.tag st))
+    | JCTrange_cast (t1, ei_opt) ->
+      let Typ typ, Typ typ' =
+        let to_type = Option.map_default ~f:(fun e -> JCTenum e) ~default:(JCTnative Tinteger) ei_opt in
+        ty t1#typ, ty to_type
+      in
+      return @@ coerce typ' typ Term ~e1:t1 @@ ft typ t1
+    | JCTrange_cast_mod (t1, ei) ->
+      let t1 = ft (Ty (Numeric (Integral Integer))) t1 in
+      let return i = return O.T.(Of_int (i, true) @$. t1) in
+      begin match ei.ei_type with
+        | Enum e -> return (Enum e)
+        | Int (r, b) -> return (Int (r, b))
       end
+    | JCTreal_cast (t1, _rc) ->
+      let Typ typ' = ty t1#typ in
+      let t1' = ft typ' t1 in
+      coerce typ typ' Term ~e1:t1 t1'
     | JCTderef (t1, lab', fi) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
       let mc, _ufi_opt = tderef_mem_class ~type_safe t1 fi in
@@ -520,13 +527,13 @@ let rec term typ ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate la
       | JCmem_field fi' ->
         assert (fi.fi_tag = fi'.fi_tag);
         let mem = tmemory_var ~label_in_name:global_assertion lab (JCmem_field fi, t1#region) in
-        LApp ("select", [mem; ft t1])
+        return O.T.(O.F.jc "select" @$ mem @. ft Any t1)
       | JCmem_plain_union vi ->
         let t1, off = tdestruct_union_access t1 (Some fi) in
         (* Retrieve bitvector *)
-        let t1' = ft t1 in
+        let t1' = ft Any t1 in
         let mem = tmemory_var ~label_in_name:global_assertion lab (JCmem_plain_union vi, t1#region) in
-        let e' = LApp ("select", [mem; t1']) in
+        let e' = O.T.(O.F.jc "select" @$ mem @. t1') in
         (* Retrieve subpart of bitvector for specific subfield *)
         let off =
           match off with
@@ -539,13 +546,13 @@ let rec term typ ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate la
           | None -> failwith "term: field without bitsize in bv region"
         in
         let off = string_of_int off and size = string_of_int size in
-        let e' =
-          LApp ("extract_bytes", [e'; LConst (Prim_int off); LConst (Prim_int size)])
+        let _e' =
+          O.T.(O.F.jc "extract_bytes" @$ e' @ Const (Int off) @. Const (Int size))
         in
         (* Convert bitvector into appropriate type *)
         begin match fi.fi_type with
-        | JCTenum ri -> LApp (logic_enum_of_bitvector_name ri, [e'])
-        | JCTnative Tinteger -> LApp (logic_integer_of_bitvector_name, [e'])
+        | JCTenum _
+        | JCTnative Tinteger
         | JCTnative _
         | JCTtype_var _
         | JCTpointer (_, _, _)
@@ -555,7 +562,7 @@ let rec term typ ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate la
         end
       | JCmem_bitvector ->
         (* Retrieve bitvector *)
-        let t1' = ft t1 in
+        let t1' = ft Any t1 in
         let mem = tmemory_var ~label_in_name:global_assertion lab (JCmem_bitvector, t1#region) in
         let off =
           match field_offset_in_bytes fi with
@@ -568,19 +575,21 @@ let rec term typ ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate la
           | None -> failwith "term: field without bitsize in bv region"
         in
         let off = string_of_int off and size = string_of_int size in
-        let e' = LApp ("select_bytes", [mem; t1'; LConst(Prim_int off); LConst(Prim_int size)]) in
+        let _e' = O.T.(O.F.jc "select_bytes" @$ mem @ t1' @ Const (Int off) @. Const (Int size)) in
         (* Convert bitvector into appropriate type *)
         begin match fi.fi_type with
-        | JCTenum ri -> LApp (logic_enum_of_bitvector_name ri, [e'])
-        | _ty -> Options.jc_error t#pos "Unsupported bv type conversion" (* TODO *)
+        | JCTenum _
+        | _ -> Options.jc_error t#pos "Unsupported bv type conversion" (* TODO *)
         end
       end
     | JCTapp app ->
       let f = app.app_fun in
       let args =
-        List.fold_right (fun arg acc -> ft arg :: acc) app.app_args [] |>
-        List.map2 (fun e e' -> e, e') app.app_args |>
-        List.map2 (fun v (t, t') -> term_coerce t#pos v.vi_type t#typ t t') f.li_parameters
+        List.fold_right2
+          (fun vi arg acc -> let Typ typ = ty vi.vi_type in (Term (ft typ arg) : some_term) :: acc)
+          f.li_parameters
+          app.app_args
+          []
       in
       let relab (lab1, lab2) = (lab1, if lab2 = LabelHere then lab else lab2) in
       let label_assoc =
@@ -595,32 +604,35 @@ let rec term typ ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate la
         f args
     | JCTold t1 ->
       let lab = if relocate && oldlab = LabelHere then lab else oldlab in
-      term ~type_safe ~global_assertion ~relocate lab oldlab t1
+      term typ ~type_safe ~global_assertion ~relocate lab oldlab t1
     | JCTat (t1, lab') ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
-      term ~type_safe ~global_assertion ~relocate lab oldlab t1
-    | JCTrange(_t1,_t2) ->
-      Typing.typing_error t#pos "Unsupported range in term, sorry" (* TODO ? *)
-    | JCTmatch(t, ptl) ->
-      let t' = ft t in
+      term typ ~type_safe ~global_assertion ~relocate lab oldlab t1
+    | JCTrange (_t1,_t2) ->
+      unsupported ~loc:t#pos "Unsupported range in term, sorry" (* TODO ? *)
+    | JCTmatch (t, ptl) ->
+      let Typ typ' = ty t#typ in
+      let _t' = ft typ' t in
       (* TODO: use a temporary variable for t' *)
       (* if the pattern-matching is incomplete, default value is true *)
-      let ptl', lets = pattern_list_term ft t' t#typ ptl @@ LConst (Prim_bool true) in
+      (*let ptl', lets = pattern_list_term ft t' t#typ ptl @@ LConst (Prim_bool true) in
       concat_pattern_lets lets;
-      ptl'
+        ptl'*)
+      assert false
   in
   if t#mark <> ""
-  then make_positioned_lex t t'
+  then T.locate t t'
   else t'
 
-let () = ref_term := term
+let () = Interp_misc.term.term <- term
 
-let named_term ~type_safe ~global_assertion ~relocate lab oldlab t =
-  let t' = term ~type_safe ~global_assertion ~relocate lab oldlab t in
+let named_term typ ~type_safe ~global_assertion ~relocate lab oldlab t =
+  let t' = term typ ~type_safe ~global_assertion ~relocate lab oldlab t in
   match t' with
-  | TLabeled _ -> t'
-  | _ -> make_positioned_lex t t'
+  | (Labeled _ : _ term) -> t'
+  | _ -> T.locate t t'
 
+(*
 (******************************************************************************)
 (*                                assertions                                  *)
 (******************************************************************************)
@@ -3752,4 +3764,5 @@ include Interp_struct
   Local Variables:
   compile-command: "unset LANG; make -j -C .. bin/jessie.byte"
   End:
+*)
 *)

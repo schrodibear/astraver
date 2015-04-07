@@ -69,7 +69,7 @@ module C =
 struct
   type 'a t = 'a constant
 
-  let ty (type a) (type b) : a constant -> a ty =
+  let ty (type a) (type b) : a t -> a ty =
     let open Ty in
     function
     | Void -> Void
@@ -77,11 +77,16 @@ struct
     | Real _ -> real
     | Bool _ -> Bool
 
-  let check : type a b. (a, b) ty_opt -> b constant -> a constant = fun t c ->
+  let check : type a b. (a, b) ty_opt -> b t -> a t = fun t c ->
     match t with
     | Any -> c
     | Ty ty' ->
       let Eq = eq ty' (ty c) in c
+
+  let return : type a b. (a, b) ty_opt -> _ -> a t = fun t c ->
+    match t with
+    | Ty _ as t -> check t c
+    | Any -> failwith "C.return: Any"
 
   let some = some
 end
@@ -114,14 +119,14 @@ struct
     | Ty of 'a ty
     | Poly of 'b poly
 
-  let ty : type a b c. (a, b) func -> (b, a) typed =
+  let ty : type a b c. (a, b) t -> (b, a) typed =
     let open Ty in
     function
     | B_int_op _ -> Ty integer
     | U_int_op _ -> Ty integer
     | B_bint_op (_, i, _) -> Ty (int i)
     | U_bint_op (_, i, _) -> Ty (int i)
-    | Of_int i -> Ty (int i)
+    | Of_int (i, _) -> Ty (int i)
     | To_int _ -> Ty integer
     | To_float r -> Ty (float r)
     | Of_float _ -> Ty real
@@ -132,13 +137,21 @@ struct
     | Poly _ -> Ty Bool
     | User _ as f -> Poly { func = f }
 
-  let check : type a b c. (a, b) ty_opt -> (c, b) func -> (c, a) func = fun t f ->
+  let check : type a b c. (a, b) ty_opt -> (c, b) t -> (c, a) t = fun t f ->
     match t with
     | Any -> f
     | Ty ty' ->
       match ty f with
       | Poly { func } -> func
       | Ty ty'' -> let Eq = eq ty' ty'' in f
+
+  let return : type a b. (a, b) ty_opt -> _ -> (_, a) t = fun t f ->
+    match t with
+    | Ty _ as t -> check t f
+    | Any ->
+      match ty f with
+      | Poly { func } -> func
+      | Ty _ -> failwith "F.return: Any"
 
   let some = some
 end
@@ -187,7 +200,7 @@ struct
 
   let at v ~lab = Deref_at (v, lab)
 
-  let if_ cond ~then_ ~else_ = If (cond, then_, else_)
+  let if_ cond ~then_ ~else_ : _ term = If (cond, then_, else_)
 
   let let_ v ~(equal : 'a t) ~in_ : _ t = Let (v, equal, in_ (var v : 'a t))
 
@@ -259,7 +272,7 @@ struct
     | Poly of poly_term
     | Poly' of poly_term
 
-  let rec ty : type a. a term -> a typed =
+  let rec ty : type a. a t -> a typed =
     function
     | Const c -> Ty (C.ty c)
     | Var _ as v -> Poly { term = v }
@@ -291,7 +304,7 @@ struct
       | Ty ty | Ty' ty -> Ty' ty
       | Poly { term } | Poly' { term } -> Poly' { term = Let (v, e, term) }
 
-  let rec check : type a b. (a, b) ty_opt -> b term -> a term = fun typ t ->
+  let rec check : type a b. (a, b) ty_opt -> b t -> a t = fun typ t ->
     match typ with
     | Any -> t
     | Ty ty' ->
@@ -300,6 +313,15 @@ struct
       | Poly' { term } -> Poly { term }
       | Ty ty'' -> let Eq = eq ty' ty'' in t
       | Ty' ty'' -> let Eq = eq ty' ty'' in Typed (t, ty')
+
+  let return : type a b. (a, b) ty_opt -> _ -> a t = fun typ t ->
+    match typ with
+    | Ty _ as typ -> check typ t
+    | Any ->
+      match ty t with
+      | Poly { term } -> term
+      | Poly' { term } -> Poly { term }
+      | Ty _ | Ty' _ -> failwith "T.return: Any"
 
   let some = some
 end
@@ -314,7 +336,7 @@ struct
     | Ty of 'a ty
     | Poly of 'b poly
 
-  let ty (type a) (type b) : (a, b) tconstr -> (b, a) typed =
+  let ty (type a) (type b) : (a, b) t -> (b, a) typed =
     function
     | Numeric n -> Ty (Numeric n)
     | Bool -> Ty Bool
@@ -322,13 +344,21 @@ struct
     | Var _ as v -> Poly { tconstr = v }
     | User _ as u -> Poly { tconstr = u }
 
-  let check : type a b c. (a, b) ty_opt -> (c, b) tconstr -> (c, a) tconstr = fun t tc ->
+  let check : type a b c. (a, b) ty_opt -> (c, b) t -> (c, a) t = fun t tc ->
     match t with
     | Any -> tc
     | Ty ty' ->
       match ty tc with
       | Poly { tconstr } -> tconstr
       | Ty ty'' -> let Eq = eq ty' ty'' in tc
+
+  let return : type a b. (a, b) ty_opt -> _ -> (_, a) t = fun typ t ->
+    match typ with
+    | Ty _ as typ -> check typ t
+    | Any ->
+      match ty t with
+      | Poly { tconstr } -> tconstr
+      | Ty _  -> failwith "Tc.return: Any"
 
   let some = some
 end
@@ -377,12 +407,20 @@ struct
     | Ty of 'a ty
     | Poly of poly_logic_type
 
-  let ty (Type (tc, args) : _ logic_type) =
+  let ty (Type (tc, args) : _ t) =
     match Tc.ty tc with
     | Tc.Ty ty -> Ty ty
     | Tc.Poly { Tc.tconstr } -> Poly { logic_type = Type (tconstr, args) }
 
-  let check ty (Type (tc, args) : _ logic_type) = (Type (Tc.check ty tc, args) : _ logic_type)
+  let check ty (Type (tc, args) : _ t) = (Type (Tc.check ty tc, args) : _ logic_type)
+
+  let return : type a b. (a, b) ty_opt -> _ -> a t = fun typ t ->
+    match typ with
+    | Ty _ as typ -> check typ t
+    | Any ->
+      match ty t with
+      | Poly { logic_type } -> logic_type
+      | Ty _ -> failwith "Lt.return: Any"
 
   let some = some
 end
@@ -405,7 +443,7 @@ struct
     | Poly of poly_why_type
     | Poly' of poly_why_type
 
-  let rec ty : type a. a why_type -> a typed =
+  let rec ty : type a. a t -> a typed =
     function
     | Prod_type (_, t1, t2) ->
       begin match ty t1, ty t2 with
@@ -432,7 +470,7 @@ struct
     | Typed (_, ty) -> Ty ty
     | Poly _ as why_type -> Poly { why_type }
 
-  let check : type a b. (a, b) ty_opt -> b why_type -> a why_type = fun t wt ->
+  let check : type a b. (a, b) ty_opt -> b t -> a t = fun t wt ->
     match t with
     | Any -> wt
     | Ty ty' ->
@@ -441,6 +479,15 @@ struct
       | Poly' { why_type } -> Poly { why_type }
       | Ty ty'' -> let Eq = eq ty' ty'' in wt
       | Ty' ty'' -> let Eq = eq ty' ty'' in Typed (wt, ty')
+
+  let return : type a b. (a, b) ty_opt -> _ -> a t = fun typ t ->
+    match typ with
+    | Ty _ as typ -> check typ t
+    | Any ->
+      match ty t with
+      | Poly { why_type } -> why_type
+      | Poly' { why_type } -> Poly { why_type }
+      | Ty _ | Ty' _ -> failwith "Wt.return: Any"
 
   let some = some
 end
@@ -584,7 +631,7 @@ struct
     | Poly of poly_expr_node
     | Poly' of poly_expr_node
 
-  let rec ty : type a. a expr -> a typed = fun e ->
+  let rec ty : type a. a t -> a typed = fun e ->
     match e.expr_node with
     | Const c -> Ty (C.ty c)
     | Var _ as expr_node -> Poly { expr_node }
@@ -671,7 +718,7 @@ struct
       | Poly { expr_node } | Poly' { expr_node } -> Poly' { expr_node = Labeled (lab, { e with expr_node }) }
       end
 
-  let rec check : type a b. (a, b) ty_opt -> b expr -> a expr = fun t e ->
+  let rec check : type a b. (a, b) ty_opt -> b t -> a t = fun t e ->
     match t with
     | Any -> e
     | Ty ty' ->
@@ -680,6 +727,15 @@ struct
       | Poly' pen -> { e with expr_node = Poly pen }
       | Ty ty'' -> let Eq = eq ty' ty'' in e
       | Ty' ty'' -> let Eq = eq ty' ty'' in { e with expr_node = Typed (e, ty') }
+
+  let return : type a b. (a, b) ty_opt -> _ -> a t = fun t e ->
+    match t with
+    | Ty _ as t -> check t e
+    | Any ->
+      match ty e with
+      | Poly { expr_node } -> { e with expr_node }
+      | Poly' pen -> { e with expr_node = Poly pen }
+      | Ty _ | Ty' _ -> failwith "E.return: Any"
 
   let some = some
 end
@@ -741,14 +797,16 @@ struct
   module T =
   struct
     include Make_ops (I) (T)
-    let of_int t = T.(Of_int I.ty @$. t)
+    let of_int t = T.(Of_int (I.ty, false) @$. t)
+    let of_int_mod t = T.(Of_int (I.ty, true) @$. t)
     let to_int t = T.(To_int I.ty @$. t)
     module B = O.M (T)
   end
   module E =
   struct
     include Make_ops (I) (E)
-    let of_int t = E.(Of_int I.ty @$. t)
+    let of_int t = E.(Of_int (I.ty, false) @$. t)
+    let of_int_mod t = E.(Of_int (I.ty, true) @$. t)
     let to_int t = E.(To_int I.ty @$. t)
     module B = O.M (E)
   end

@@ -71,6 +71,8 @@ val fresh_statement_label : unit -> label_info
 
 (** {1 Types} *)
 
+val ty : jc_type -> some_ty_opt
+
 val tr_base_type : ('a, 'b) ty_opt -> ?region:RegionTable.key -> jc_type -> 'a logic_type
 
 val tr_var_base_type : ('a, 'b) ty_opt -> var_info -> 'a logic_type

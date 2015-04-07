@@ -89,6 +89,12 @@ let modulo fmttr modulo =
   | true -> "%"
   | false -> ""
 
+let modulo' fmttr modulo =
+  fprintf fmttr "%s" @@
+  match modulo with
+  | true -> "modulo"
+  | false -> ""
+
 let op fmttr op =
   fprintf fmttr "%s" @@
   match op with
@@ -131,6 +137,7 @@ let func ~where ~bw_ints fmttr (type a) (type b) =
   let pr_bop fp ty = pr "%a.(%a%a)" fp ty in
   let pr_uop fp ty = pr "%a.(%a%a_)" fp ty in
   let pr_f fp ty = pr "%a.%s" fp ty in
+  let pr_f' fp ty = pr "%a.%s%a" fp ty in
   let int_ty fmttr ty =
     int_ty
       ~how:
@@ -160,8 +167,8 @@ let func ~where ~bw_ints fmttr (type a) (type b) =
     pr_uop int_ty ty op op' modulo modulo'
   | U_bint_op (op', (Enum _ as ty), modulo') ->
     pr_uop enum_ty ty op op' modulo modulo'
-  | Of_int (Int _ as ty) -> pr_f int_ty ty "of_int"
-  | Of_int (Enum _ as ty) -> pr_f enum_ty ty "of_int"
+  | Of_int (Int _ as ty, modulo) -> pr_f' int_ty ty "of_int%a" modulo' modulo
+  | Of_int (Enum _ as ty, modulo) -> pr_f' enum_ty ty "of_int%a" modulo' modulo
   | To_int (Int _ as ty) -> pr_f int_ty ty "to_int"
   | To_int (Enum _ as ty) -> pr_f enum_ty ty "to_int"
   | B_bint_bop (op', ty) -> pr_bop int_ty ty op op' modulo false

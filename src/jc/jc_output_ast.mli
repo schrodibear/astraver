@@ -137,7 +137,7 @@ type ('params, 'result) func =
     ('a bounded integer number * ('a bounded integer number * unit), 'a bounded integer number) func
   | U_bint_op :
       [ `Neg ] * 'a bounded integer * bool -> ('a bounded integer number * unit, 'a bounded integer number) func
-  | Of_int : 'a bounded integer -> (unbounded integer number * unit, 'a bounded integer number) func
+  | Of_int : 'a bounded integer * bool -> (unbounded integer number * unit, 'a bounded integer number) func
   | To_int : 'a bounded integer -> ('a bounded integer number * unit, unbounded integer number) func
   | To_float : 'a precision real -> (arbitrary_precision real number * unit, 'a precision real number) func
   | Of_float : 'a precision real -> ('a precision real number * unit, arbitrary_precision real number) func
@@ -191,7 +191,7 @@ and 'typ term =
   | Typed : 'a term * 'a ty -> 'a term
   | Poly : poly_term -> _ term
   | Labeled : why_label * 'a term -> 'a term
-  | If : 'a term * 'b term * 'b term -> 'b term
+  | If : boolean term * 'b term * 'b term -> 'b term
   | Let : string * 'a term * 'b term -> 'b term
 
 type some_term = Term : _ term -> some_term
@@ -216,7 +216,7 @@ type pred =
   | Iff : pred * pred -> pred
   | Not : pred -> pred
   | Impl : pred * pred -> pred
-  | If : 'a term * pred * pred -> pred
+  | If : boolean term * pred * pred -> pred
   | Let : string * 'a term * pred -> pred
   | Forall : string * 'a logic_type * trigger list list * pred -> pred (** [forall x : t. a] *)
   | Exists : string * 'a logic_type * trigger list list * pred -> pred (** [exists x : t. a] *)
@@ -266,7 +266,7 @@ and 'typ expr_node =
   | Deref : string -> 'a expr_node
   | Typed : 'a expr * 'a ty -> 'a expr_node
   | Poly : poly_expr_node -> 'a expr_node
-  | If : 'a expr * 'b expr * 'b expr -> 'b expr_node
+  | If : boolean expr * 'b expr * 'b expr -> 'b expr_node
   | While :
         boolean expr (** loop condition *)
       * pred (** invariant *)
