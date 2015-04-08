@@ -1055,6 +1055,8 @@ let rec disj =
   | [] -> False
   | p :: ps -> p || disj ps
 
+let if_ cond ~then_ ~else_ : pred = If (cond, then_, else_)
+
 let let_ v ~(equal : 'a term) ~in_ : pred = Let (v, equal, in_ (T.var v : 'a term))
 
 let forall v (ty : 'a logic_type) ?(trigs=[]) p = Forall (v, ty, trigs, p (T.var v : 'a term))

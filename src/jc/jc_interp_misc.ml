@@ -506,40 +506,35 @@ and location_set : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ 
       let Typ ty_opt = ty locs#typ in
       Term (term.term ty_opt ~type_safe ~global_assertion ~relocate:false lab lab t)
     in
-    let f t name args = O.T.(return t (F.jc name @$ args)) in
-    let f' name args = O.T.(return Any (F.jc name @$ args)) in
+    let f' t name args =
+      let open O.T in
+      let Hlist args = hlist_of_list args in
+      return t (F.jc name @$ args)
+    in
+    let f = f' t and f' f t : some_term = Term (f' Any f t) in
     match locs#node with
     | JCLSvar v ->
-      f t "pset_singleton" O.T.(tvar ~label_in_name:global_assertion lab v @ Nil)
+      f "pset_singleton" [Term (tvar ~label_in_name:global_assertion lab v)]
     | JCLSderef (locs, lab, fi, _r) ->
       let mc, _fi_opt = lderef_mem_class ~type_safe locs fi in
       let mem = tmemory_var ~label_in_name:global_assertion lab (mc, locs#region) in
-      let Term locs = flocs locs in
-      f t "pset_deref" O.T.(mem @. locs)
+      f "pset_deref" [Term mem; flocs locs]
     | JCLSrange (locs, Some t1, Some t2) ->
-      let Term locs, Term t1, Term t2 = flocs locs, ft t1, ft t2 in
-      f t "pset_range" O.T.(locs @ t1 @. t2)
+      f "pset_range" [flocs locs; ft t1; ft t2]
     | JCLSrange (locs, None, Some t2) ->
-      let Term locs, Term t2 = flocs locs, ft t2 in
-      f t "pset_range_left" O.T.(locs @. t2)
+      f "pset_range_left" [flocs locs; ft t2]
     | JCLSrange (locs, Some t1, None) ->
-      let Term locs, Term t1 = flocs locs, ft t1 in
-      f t "pset_range_right" O.T.(locs @. t1)
+      f "pset_range_right" [flocs locs; ft t1]
     | JCLSrange (locs, None, None) ->
-      let Term locs = flocs locs in
-      f t "pset_all" O.T.(locs @ Nil)
+      f "pset_all" [flocs locs]
     | JCLSrange_term (locs, Some t1, Some t2) ->
-      let Term locs, Term t1, Term t2 = ft locs, ft t1, ft t2 in
-      f t "pset_range" O.T.(f' "pset_singleton" (locs @ Nil) @ t1 @. t2)
+      f "pset_range" [f' "pset_singleton" [ft locs]; ft t1; ft t2]
     | JCLSrange_term (locs, None, Some t2) ->
-       let Term locs, Term t2 = ft locs, ft t2 in
-      f t "pset_range_left" O.T.(f' "pset_singleton" (locs @ Nil) @. t2)
+      f "pset_range_left" [f' "pset_singleton" [ft locs]; ft t2]
     | JCLSrange_term (locs, Some t1, None) ->
-       let Term locs, Term t1 = ft locs, ft t1 in
-      f t "pset_range_right" O.T.(f' "pset_singleton" (locs @ Nil) @. t1)
+      f "pset_range_right" [f' "pset_singleton" [ft locs]; ft t1]
     | JCLSrange_term (locs, None, None) ->
-      let Term locs = ft locs in
-      f t "pset_all" O.T.(f' "pset_singleton" (locs @ Nil) @ Nil)
+      f "pset_all" [f' "pset_singleton" [ft locs]]
     | JCLSat (locs, _lab) -> location_set t ~type_safe ~global_assertion lab locs
 
 let rec pset_union_of_list =

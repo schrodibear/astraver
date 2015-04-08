@@ -79,7 +79,7 @@ end
 
 module P =
 struct
-  let locate ~p = O.T.positioned (lookup_pos p)
+  let locate ~p = O.P.positioned (lookup_pos p)
 end
 
 module E =
@@ -174,7 +174,7 @@ type binary =
   | Op : ('a * ('a * unit), 'a) func * ('a, 'b) ty_opt -> binary
   | Rel : ('a * ('a * unit), boolean) func * ('a, 'b) ty_opt -> binary
 
-let bin_op ~e : bin_op * operator_type -> _ =
+let bin_op ~e : [< bin_op] * operator_type -> _ =
   let op f t = Op (f, Ty (Numeric t)) in
   let rel f t = Rel (f, Ty (Numeric t)) in
   let r =
@@ -296,7 +296,11 @@ let bin_op ~e : bin_op * operator_type -> _ =
     | `Bimplies -> op "implb"
     end
   | `Bconcat, _ -> Op (O.F.jc "string_concat", Any)
-  | op, op_ty ->
+  | `Beq, `Logic -> Rel (Poly `Eq, Any)
+  | `Bneq, `Logic -> Rel (Poly `Neq, Any)
+  | `Beq, `Unit -> Rel (Poly `Eq, Ty Void)
+  | `Bneq, `Unit -> Rel (Poly `Neq, Ty Void)
+  | #bin_op as op, op_ty ->
     unsupported
       ~loc:e#pos
       "bin_op: no binary operation `%s' for type `%s'"
@@ -610,7 +614,7 @@ let rec term :
       term typ ~type_safe ~global_assertion ~relocate lab oldlab t1
     | JCTrange (_t1,_t2) ->
       unsupported ~loc:t#pos "Unsupported range in term, sorry" (* TODO ? *)
-    | JCTmatch (t, ptl) ->
+    | JCTmatch (t, _ptl) ->
       let Typ typ' = ty t#typ in
       let _t' = ft typ' t in
       (* TODO: use a temporary variable for t' *)
@@ -632,11 +636,12 @@ let named_term typ ~type_safe ~global_assertion ~relocate lab oldlab t =
   | (Labeled _ : _ term) -> t'
   | _ -> T.locate t t'
 
-(*
+
 (******************************************************************************)
 (*                                assertions                                  *)
 (******************************************************************************)
 
+(*
 (* [pattern_lets] is a list of (id, value), which should be binded
  * at the assertion level. *)
 let pattern_lets = ref []
@@ -653,6 +658,7 @@ let bind_pattern_lets body =
   in
   pattern_lets := [];
   binds
+*)
 
 let is_base_block t =
   match t#node with
@@ -661,56 +667,66 @@ let is_base_block t =
 
 let tag ~type_safe ~global_assertion ~relocate lab oldlab tag =
   match tag#node with
-  | JCTtag st -> LVar (Name.tag st)
-  | JCTbottom -> LVar "bottom_tag"
+  | JCTtag st -> O.T.(var (Name.tag st))
+  | JCTbottom -> O.T.(var "bottom_tag")
   | JCTtypeof (t, st) ->
-    let t' = term ~type_safe ~global_assertion ~relocate lab oldlab t in
+    let t' = term Any ~type_safe ~global_assertion ~relocate lab oldlab t in
     let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t#region) in
-    make_typeof tag t'
+    O.typeof tag t'
 
-let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
+let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
   let f f = f ~type_safe ~global_assertion ~relocate lab oldlab in
-  let fa = f assertion
-  and ft = f (term ?subst:None)
+  let fp = f predicate
+  and ft t = f (term t ?subst:None)
   and ftag = f tag
-  and term_coerce = term_coerce ~type_safe ~global_assertion lab
   in
-  let a' =
-    match a#node with
-    | JCAtrue -> LTrue
-    | JCAfalse -> LFalse
-    | JCAif (t1, a2, a3) ->
-      LIf (ft t1, fa a2, fa a3)
-    | JCAand al -> make_and_list (List.map fa al)
-    | JCAor al -> make_or_list (List.map fa al)
-    | JCAimplies (a1, a2) ->
-      make_impl (fa a1) (fa a2)
-    | JCAiff (a1, a2) ->
-      make_equiv (fa a1) (fa a2)
-    | JCAnot a1 ->
-      LNot (fa a1)
+  let bin_op = bin_op ~e:p in
+  let triggers trigs =
+    let pat =
+      function
+      | JCAPatT t -> let Typ typ = ty t#typ in (Term (ft typ t) : trigger)
+      | JCAPatP p -> Pred (fp p)
+    in
+    List.map (List.map pat) trigs
+  in
+  let p' =
+    match p#node with
+    | JCAtrue -> True
+    | JCAfalse -> False
+    | JCAif (t1, pt, pe) ->
+      O.if_
+        (ft (Ty Bool) t1)
+        (fp pt)
+        (fp pe)
+    | JCAand ps -> O.conj (List.map fp ps)
+    | JCAor ps -> O.disj (List.map fp ps)
+    | JCAimplies (p1, p2) -> O.impl (fp p1) (fp p2)
+    | JCAiff (p1, p2) -> O.iff (fp p1) (fp p2)
+    | JCAnot p1 -> O.not (fp p1)
     | JCArelation (t1, ((`Beq | `Bneq as op), _), t2)
       when is_base_block t1 && is_base_block t2 ->
       let base_block t = match t#node with JCTbase_block t -> t | _ -> assert false in
       let t1, t2 = Pair.map base_block (t1, t2) in
-      let p = LPred ("same_block", [ft t1; ft t2]) in
+      let p : pred = App (O.F.jc "same_block", O.T.(ft Any t1 @. ft Any t2)) in
       begin match op with
       | `Beq -> p
-      | `Bneq -> LNot p
+      | `Bneq -> O.not p
       end
-    | JCArelation(t1,(_,(`Pointer | `Logic) as op),t2) ->
-      LPred (pred_bin_op (op :> pred_bin_op), [ft t1; ft t2])
-    | JCArelation(t1,(_, #native_operator_type as op),t2) ->
-      let ty = native_operator_type op in
-      LPred (pred_bin_op (op :> pred_bin_op),
-             [term_coerce t1#pos ty t1#typ t1 @@ ft t1;
-              term_coerce t2#pos ty t2#typ t2 @@ ft t2])
+    | JCArelation (t1, op, t2) ->
+      begin match bin_op op with
+      | Rel (f, typ) -> App (f, O.T.(ft typ t1 @. ft typ t2))
+      | Op (f, typ) -> App (O.F.check (Ty Bool) f, O.T.(ft typ t2 @. ft typ t2))
+      end
     | JCAapp app ->
       let f = app.app_fun in
       let args =
-        List.fold_right (fun arg -> List.cons (ft arg)) app.app_args [] |>
-        List.map2 (fun e e' -> (e, e')) app.app_args |>
-        List.map2 (fun v (t,t') -> term_coerce t#pos v.vi_type t#typ t t') f.li_parameters
+        List.fold_right2
+          (fun v arg ->
+             let Typ typ = ty v.vi_type in
+             List.cons (Term (ft typ arg) : some_term))
+          f.li_parameters
+          app.app_args
+          []
       in
       let label_assoc =
         if relocate
@@ -728,153 +744,142 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
       |>
       Fn.on
         (IntHashtblIter.mem Typing.global_invariants_table app.app_fun.li_tag) @@
-        mk_positioned_lex ~e:a ?behavior:None ~kind:(JCVCglobal_invariant app.app_fun.li_name)
-    | JCAquantifier (Forall, v, trigs, a1) ->
-      LForall (v.vi_final_name,
-               tr_var_base_type v,
-               triggers fa ft trigs,
-               fa a1)
-    | JCAquantifier (Exists, v, trigs, a1) ->
-      LExists (v.vi_final_name,
-               tr_var_base_type v,
-               triggers fa ft trigs,
-               fa a1)
+        P.locate ~p ?behavior:None ~kind:(JCVCglobal_invariant app.app_fun.li_name)
+    | JCAquantifier (Forall | Exists as q, v, trigs, p1) ->
+      let Typ typ = (ty v.vi_type) in
+      (match q with Forall -> O.forall | Exists -> O.exists)
+        v.vi_final_name
+        (tr_var_base_type typ v)
+        ~trigs:(triggers trigs)
+        (fun _ -> fp p1)
     | JCAold a1 ->
       let lab = if relocate && oldlab = LabelHere then lab else oldlab in
-      assertion ~type_safe ~global_assertion ~relocate lab oldlab a1
+      predicate ~type_safe ~global_assertion ~relocate lab oldlab a1
     | JCAat (a1, lab') ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
-      assertion ~type_safe ~global_assertion ~relocate lab oldlab a1
+      predicate ~type_safe ~global_assertion ~relocate lab oldlab a1
     | JCAfresh t1 ->
       let ac = tderef_alloc_class ~type_safe t1 in
       let lab = if relocate && oldlab = LabelHere then lab else oldlab in
       let _, alloc = talloc_table_var ~label_in_name:global_assertion lab (ac, t1#region) in
-      LPred ("allocable", [alloc; ft t1])
+      App (O.F.jc "allocable", O.T.(alloc @. ft Any t1))
     | JCAbool_term t1 ->
-      LPred ("eq", [ft t1; LConst (Prim_bool true)])
+      App (Poly `Eq, O.T.(ft (Ty Bool) t1 @. Const (Bool true)))
     | JCAinstanceof (t1, lab', st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
       let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
-      LPred ("instanceof", [tag; ft t1; LVar (Name.tag st)])
-    | JCAmutable(te, st, ta) ->
-      let te' = ft te in
+      O.instanceof tag (ft Any t1) st
+    | JCAmutable (_te, _st, _ta) -> assert false
+      (*let te' = ft te in
       let tag = ftag ta in
       let mutable_field = LVar (mutable_name (JCtag(st, []))) in
-      LPred ("eq", [LApp ("select", [mutable_field; te']); tag])
+        LPred ("eq", [LApp ("select", [mutable_field; te']); tag])*)
     | JCAeqtype (tag1, tag2, _st_opt) ->
-      LPred ("eq", [ftag tag1; ftag tag2])
-    | JCAsubtype(tag1,tag2,_st_opt) ->
-      LPred ("subtag", [ftag tag1; ftag tag2])
+      App (Poly `Eq, O.T.(ftag tag1 @. ftag tag2))
+    | JCAsubtype (tag1, tag2, _st_opt) ->
+      App (O.F.jc "subtag", O.T.(ftag tag1 @. ftag tag2))
     | JCAlet (vi, t, p) ->
-      LLet (vi.vi_final_name, ft t, fa p)
-    | JCAmatch (arg, pal) ->
-      let arg' = ft arg in
+      let Typ typ = ty t#typ in
+      O.let_ vi.vi_final_name (ft typ t) (fun _ -> fp p)
+    | JCAmatch (_arg, _pal) ->
+      assert false
+      (*let arg' = ft arg in
       (* TODO: use a temporary variable for arg' *)
       let pal', _ = pattern_list_assertion fa arg' arg#typ pal LTrue in
-      pal'
+        pal'*)
   in
-  let a' = bind_pattern_lets a' in
-  if a#mark = ""
-  then a'
-  else mk_positioned_lex a a'
+  (*let a' = bind_pattern_lets a' in*)
+  if p#mark = ""
+  then p'
+  else P.locate p p'
 
-and triggers fa ft trigs =
-  let pat =
+let rec mark_predicate ?(recursively=true) ~e ?kind p =
+  let mark_predicate' =
     function
-    | JCAPatT t -> LPatT (ft t)
-    | JCAPatP a -> LPatP (fa a)
-  in
-  List.map (List.map pat) trigs
-
-let rec mark_assertion ?(recursively=true) ~e ?kind a =
-  let mark_assertion' =
-    function
-    | LLabeled ({ l_kind; l_pos } as l, a) ->
-      LLabeled ({ l with
+    | (Labeled ({ l_kind; l_pos } as l, p) : pred) ->
+      (Labeled ({ l with
                   l_kind = if l_kind = None then kind else l_kind;
                   l_pos = if Position.is_dummy l_pos then lookup_pos e else l_pos },
-                a)
-    | a -> mk_positioned_lex ~e ?kind a
+                p) : pred)
+    | p -> P.locate ~p:e ?kind p
   in
-  if not recursively then mark_assertion' a
+  if not recursively then mark_predicate' p
   else
-    let mark_assertion = mark_assertion ~e ?kind in
-    match a with
-    | LAnd (a1, a2) ->
-      mark_assertion' (LAnd (mark_assertion a1, mark_assertion a2))
-    | LLet (v, a1, a2) ->
-      LLet (v, a1, mark_assertion a2)
-    | LLabeled (l, (LAnd _ as a)) | LLabeled (l, (LLet _ as a)) ->
-      mark_assertion' (LLabeled (l, mark_assertion a))
-    | LLabeled (_, (LLabeled _ as a)) ->
-      mark_assertion a
+    let mark_predicate = mark_predicate ~e ?kind in
+    match p with
+    | (And (p1, p2) : pred) ->
+      mark_predicate' (And (mark_predicate p1, mark_predicate p2))
+    | Let (v, p1, p2) ->
+      Let (v, p1, mark_predicate p2)
+    | Labeled (l, (And _ as p)) | Labeled (l, (Let _ as p)) ->
+      mark_predicate' (Labeled (l, mark_predicate p))
+    | Labeled (_, (Labeled _ as p)) ->
+      mark_predicate p
     | _ ->
-      mark_assertion' a
+      mark_predicate' p
 
-let named_assertion ~type_safe ~global_assertion ?kind ?mark_recursively ~relocate lab oldlab a =
-  mark_assertion ?recursively:mark_recursively ~e:a ?kind @@
-    assertion ~type_safe ~global_assertion ~relocate lab oldlab a
+let named_predicate ~type_safe ~global_assertion ?kind ?mark_recursively ~relocate lab oldlab a =
+  mark_predicate ?recursively:mark_recursively ~e:a ?kind @@
+    predicate ~type_safe ~global_assertion ~relocate lab oldlab a
+
 
 (******************************************************************************)
 (*                                  Locations                                 *)
 (******************************************************************************)
 
-let rec pset ~type_safe ~global_assertion before loc =
+let rec pset : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ -> _ -> _ -> a term =
+  fun t ~type_safe ~global_assertion before loc ->
   let f f = f ~type_safe ~global_assertion before in
-  let fpset = f pset
-  and ft = f (term ?subst:None ~relocate:false) before
-  and term_coerce = f term_coerce
+  let fpset loc : some_term =
+    let Typ typ = ty loc#typ in
+    Term (f (pset typ) loc)
+  and ft t : some_term =
+    let Typ typ = ty t#typ in
+    Term (f (term typ ?subst:None ~relocate:false) before t)
   in
+  let f' t name args =
+    let open O.T in
+    let Hlist args = hlist_of_list args in
+    return t (F.jc name @$ args)
+  in
+  let f = f' t and f' f t : some_term = Term (f' Any f t) in
   match loc#node with
   | JCLSderef (locs, lab, fi, _r) ->
     let m = tmemory_var ~label_in_name:global_assertion lab (JCmem_field fi, locs#region) in
-    LApp ("pset_deref", [m; fpset locs])
+    f "pset_deref" [Term m; fpset locs]
   | JCLSvar vi ->
     let m = tvar ~label_in_name:global_assertion before vi in
-    LApp ("pset_singleton", [m])
+    f "pset_singleton" [Term m]
   | JCLSrange (ls, None, None) ->
-    LApp ("pset_all", [fpset ls])
+    f "pset_all" [fpset ls]
   | JCLSrange (ls, None, Some b) ->
-    LApp ("pset_range_left",
-          [fpset ls; term_coerce b#pos integer_type b#typ b @@ ft b])
+    f "pset_range_left" [fpset ls; ft b]
   | JCLSrange (ls, Some a, None) ->
-    LApp ("pset_range_right",
-          [fpset ls; term_coerce a#pos integer_type a#typ a @@ ft a])
+    f "pset_range_right" [fpset ls; ft a]
   | JCLSrange (ls, Some a, Some b) ->
-    LApp ("pset_range",
-          [fpset ls;
-           term_coerce a#pos integer_type a#typ a @@ ft a;
-           term_coerce b#pos integer_type b#typ b @@ ft b])
+    f "pset_range" [fpset ls; ft a; ft b]
   | JCLSrange_term (ls, None, None) ->
-    let ls = LApp ("pset_singleton", [ft ls]) in
-    LApp ("pset_all", [ls])
+    f "pset_all" [f' "pset_singleton" [ft ls]]
   | JCLSrange_term (ls, None, Some b) ->
-    let ls = LApp ("pset_singleton", [ft ls]) in
-    LApp ("pset_range_left",
-          [ls; term_coerce b#pos integer_type b#typ b @@ ft b])
+    f "pset_range_left" [f' "pset_singleton" [ft ls]; ft b]
   | JCLSrange_term (ls, Some a, None) ->
-    let ls = LApp ("pset_singleton", [ft ls]) in
-    LApp ("pset_range_right",
-          [ls; term_coerce a#pos integer_type a#typ a @@ ft a])
+    f "pset_range_right" [f' "pset_singleton" [ft ls]; ft a]
   | JCLSrange_term (ls, Some a, Some b) ->
-    let ls = LApp ("pset_singleton", [ft ls]) in
-    LApp ("pset_range",
-          [ls;
-           term_coerce a#pos integer_type a#typ a @@ ft a;
-           term_coerce b#pos integer_type b#typ b @@ ft b])
-  | JCLSat (locs, _) -> fpset locs
+    f "pset_range" [f' "pset_singleton" [ft ls]; ft a; ft b]
+  | JCLSat (locs, _) -> let Term t' = fpset locs in O.T.return t t'
 
 let rec collect_locations ~type_safe ~global_assertion ~in_clause before loc (refs, mems) =
-  let ft = term ~type_safe ~global_assertion ~relocate:false before before in
   let ef = Effect.location ~in_clause empty_fun_effect loc in
   match loc#node with
   | JCLderef (e, lab, fi, _fr) ->
-    let iloc = pset ~type_safe ~global_assertion lab e in
+    let iloc = pset Any ~type_safe ~global_assertion lab e in
     (* ...?  if field_of_union fi then FVvariant (union_of_field fi) else *)
     let mcr = JCmem_field fi, location_set_region e in
     refs, MemoryMap.add_merge (@) mcr [iloc, ef] mems
   | JCLderef_term (t1, fi) ->
-    let iloc = LApp ("pset_singleton", [ft t1]) in
+    let Typ typ = ty t1#typ in
+    let t1' = term typ ~type_safe ~global_assertion ~relocate:false before before t1 in
+    let iloc = O.T.(O.F.jc "pset_singleton" @$. t1') in
     let mcr = JCmem_field fi, t1#region in
     refs, MemoryMap.add_merge (@) mcr [iloc, ef] mems
   | JCLvar vi ->
@@ -883,24 +888,32 @@ let rec collect_locations ~type_safe ~global_assertion ~in_clause before loc (re
   | JCLat (loc, _lab) ->
     collect_locations ~type_safe ~global_assertion ~in_clause before loc (refs, mems)
 
-let rec collect_pset_locations ~type_safe ~global_assertion lab loc =
-  let ft = term ~type_safe ~global_assertion ~relocate:false in
+let rec collect_pset_locations t ~type_safe ~global_assertion lab loc =
+  let ft lab lab' t : some_term =
+    let Typ typ = ty t#typ in
+    Term (term typ ~type_safe ~global_assertion ~relocate:false lab lab' t)
+  in
+  let f f args =
+    let open O.T in
+    let Hlist args = hlist_of_list args in
+    return t O.T.(O.F.jc f @$ args)
+  in
   match loc#node with
   | JCLderef (e, lab, fi, _fr) ->
     let m = tmemory_var ~label_in_name:global_assertion lab (JCmem_field fi, e#region) in
-    LApp ("pset_deref", [m; pset ~type_safe ~global_assertion lab e])
+    f "pset_deref" [Term m; Term (pset Any ~type_safe ~global_assertion lab e)]
   | JCLderef_term (t1, fi) ->
     let lab = match t1#label with Some l -> l | None -> lab in
     let m = tmemory_var ~label_in_name:global_assertion lab (JCmem_field fi, t1#region) in
-    LApp ("pset_deref", [m; LApp ("pset_singleton", [ft lab lab t1])])
+    f "pset_deref" [Term m; Term (f "pset_singleton" [ft lab lab t1])]
   | JCLvar ({ vi_type = JCTpointer _ } as vi)  ->
-    LApp ("pset_singleton", [tvar ~label_in_name:global_assertion lab vi])
+    f "pset_singleton" [Term (tvar ~label_in_name:global_assertion lab vi)]
   | JCLvar vi ->
     Options.jc_warning loc#pos "Non-pointer variable `%s' found as location in pointer-set context, ignoring"
       vi.vi_name;
-    LVar "pset_empty"
+    O.T.var "pset_empty"
   | JCLat (loc, lab) ->
-    collect_pset_locations ~type_safe ~global_assertion lab loc
+    collect_pset_locations t ~type_safe ~global_assertion lab loc
 
 let external_region ?region_list (_, r) =
   (* More exact apprixmation (at least fixes both previously encountered bugs): *)
@@ -914,9 +927,9 @@ let external_region ?region_list (_, r) =
 
 let tr_assigns ~type_safe ?region_list before ef =
   function
-  | None -> LTrue
+  | None -> True
   | Some (pos, locs) ->
-    let e = (new assertion ~pos JCAtrue :> < mark : _; pos : _ > ) in
+    let p = (new assertion ~pos JCAtrue :> < mark : _; pos : _ > ) in
     (VarMap.fold
        (fun v _labs m -> StringMap.add v.vi_final_name false m)
        ef.fe_writes.e_globals
@@ -934,36 +947,37 @@ let tr_assigns ~type_safe ?region_list before ef =
       (collect_locations ~type_safe ~in_clause:`Assigns ~global_assertion:false before)
       locs
     |> fun (refs, mems) ->
-    LTrue |>
+    True |>
     StringMap.fold
-      (fun v p ->
+      (fun v const ->
          Fn.on'
-           (not p) @@
-         fun () -> make_and @@
-           let at = lvar ~constant:false ~label_in_name:false in
-           mk_positioned_lex ~e ~kind:JCVCassigns @@ LPred ("eq", [at LabelHere v; at before v]))
+           (not const) @@
+         fun () -> O.(&&) @@
+           let at' = lvar ~constant:false ~label_in_name:false in
+           P.locate ~p ~kind:JCVCassigns @@ App (Poly `Eq, O.T.(at' LabelHere v @. at' before v)))
       refs
     |>
     MemoryMap.fold
       (fun (mc, r) pes acc ->
-         let args =
+         let O.T.Hlist args =
            let mem = memory_name (mc, r) in
            let at = Name.alloc_table (alloc_class_of_mem_class mc, r) in
-           let lvar_at = lvar ~constant:false ~label_in_name:false in
-           [lvar_at before at;
-            lvar_at LabelHere at;
-            lvar_at before mem;
-            lvar_at LabelHere mem]
+           let lvar_at lab v : some_term = Term (lvar ~constant:false ~label_in_name:false lab v) in
+           let ps, _ = List.split pes in
+           O.T.hlist_of_list
+             [lvar_at before at;
+              lvar_at LabelHere at;
+              lvar_at before mem;
+              lvar_at LabelHere mem;
+              Term (pset_union_of_list ps)]
          in
-         let ps, _ = List.split pes in
-         make_and acc @@
-           mk_positioned_lex ~e ~kind:JCVCassigns @@
-               LPred ("not_assigns", args @ [pset_union_of_list ps]))
+         let mem_assigns = P.locate ~p ~kind:JCVCassigns @@ App (O.F.jc "not_assigns", args) in
+         O.(acc && mem_assigns))
       mems
 
 let tr_loop_assigns ~type_safe ?region_list before ef =
   Option.map_default
-    ~default:LTrue
+    ~default:True
     ~f:(fun locs -> tr_assigns ~type_safe ?region_list before ef @@ Some (Why_loc.dummy_position, locs))
 
 let reads ~type_safe ~global_assertion locs (mc, r) =
@@ -975,6 +989,7 @@ let reads ~type_safe ~global_assertion locs (mc, r) =
   let ps, _efs = List.split @@ MemoryMap.find_or_default (mc, r) [] mems in
   pset_union_of_list ps
 
+(*
 (******************************************************************************)
 (*                                Expressions                                 *)
 (******************************************************************************)
