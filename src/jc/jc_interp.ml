@@ -335,17 +335,17 @@ let rec coerce :
     let apply : (a * unit, b) func -> ax -> bx =
       fun f e ->
       match form with
-      | Term -> O.T.(f @$. e)
-      | Expr -> O.E.(f @$. e)
+      | Term -> O.T.(f $. e)
+      | Expr -> O.E.(f $. e)
     in
     let return (e : ax) : bx =
       match form, ty_dst, ty_src with
       | Term, Any, Any -> O.T.return Any e
       | Expr, Any, Any -> O.E.return Any e
       | Term, Ty t1, Ty t2 ->
-        let O.Eq = O.eq t1 t2 in e
+        let O.Ty.Eq = O.Ty.eq t1 t2 in e
       | Expr, Ty t1, Ty t2 ->
-        let O.Eq = O.eq t1 t2 in e
+        let O.Ty.Eq = O.Ty.eq t1 t2 in e
       | _ -> assert false
     in
     let rec same a b =
@@ -375,9 +375,9 @@ let rec coerce :
       | Ty (Numeric (Integral Integer)), Ty (Numeric (Real Real)) ->
         begin match form, e' with
         | Term, Const (Int n) ->
-          O.T.(real (n ^ ".0"))
+          O.T.(real P.(n ^ ".0"))
         | Expr, { expr_node = Const (Int n) } ->
-          O.E.(real (n ^ ".0"))
+          O.E.(real P.(n ^ ".0"))
         | _ -> apply' @@ O.F.real "from_int"
         end
       | Ty (Numeric (Real (Float _ as f))), Ty (Numeric (Real Real)) ->
@@ -407,20 +407,20 @@ let rec coerce :
         apply' @@ To_int i
       | Ty t1, Ty t2 ->
         begin try
-          match O.eq t1 t2 with O.Eq -> return
+          match O.Ty.eq t1 t2 with O.Ty.Eq -> return
         with
         | Failure _ ->
           unsupported
             ~loc:e#pos
             "can't coerce type %s to type %s"
-            (O.string_of_ty t1) (O.string_of_ty t2)
+            (O.Ty.to_string t1) (O.Ty.to_string t2)
         end
       | _, Any -> return
       | Any, Ty t ->
         unsupported
           ~loc:e#pos
           "can't coerce type %a to type %s"
-          print_type e1#typ (O.string_of_ty t)
+          print_type e1#typ (O.Ty.to_string t)
 
 (******************************************************************************)
 (*                                   terms                                    *)
@@ -448,14 +448,14 @@ let rec term :
     | JCTconst c -> Const (const typ c)
     | JCTunary (op, t1) ->
       let Unary (f, ty') = un_op op in
-      return O.T.(f @$ ft (Ty ty') t1 @ Nil)
+      return O.T.(f $. ft (Ty ty') t1)
     | JCTbinary (t1, op, t2) ->
       begin match bin_op op with
-      | Op (f, ty_opt) -> return O.T.(f @$ ft ty_opt t1 @. ft ty_opt t2)
-      | Rel (f, ty_opt) -> return O.T.(f @$ ft ty_opt t1 @. ft ty_opt t2)
+      | Op (f, ty_opt) -> return O.T.(f $ ft ty_opt t1 ^. ft ty_opt t2)
+      | Rel (f, ty_opt) -> return O.T.(f $ ft ty_opt t1 ^. ft ty_opt t2)
       end
     | JCTshift (t1, t2) ->
-      return O.T.(O.F.jc "shift" @$ ft Any t1 @. ft (Ty O.Ty.integer) t2)
+      return O.T.(O.F.jc "shift" $ ft Any t1 ^. ft (Ty O.Ty.integer) t2)
     | JCTif (t1, t2, t3) ->
       return @@
         O.T.if_
@@ -475,7 +475,7 @@ let rec term :
           | Offset_min -> "offset_min"
           | Offset_max -> "offset_max"
         in
-        return @@ O.T.(O.F.jc f @$ alloc @. ft Any t1)
+        return @@ O.T.(F.jc f $ alloc ^. ft Any t1)
       | JCalloc_bitvector ->
         let f =
           match k with
@@ -483,30 +483,30 @@ let rec term :
           | Offset_max -> "offset_max_bytes"
         in
         let s = string_of_int (struct_size_in_bytes st) in
-        return @@ O.T.(O.F.jc f @$ alloc @ ft Any t1 @. Const (Int s))
+        return @@ O.T.(F.jc f $ alloc ^ ft Any t1 ^. Const (Int s))
       end
     | JCTaddress (Addr_absolute, t1) ->
-      return @@ O.T.(O.F.jc "absolute_address" @$. ft Any t1)
+      return @@ O.T.(F.jc "absolute_address" $. ft Any t1)
     | JCTaddress (Addr_pointer, t1) ->
-      return @@ O.T.(O.F.jc "address" @$. ft Any t1)
+      return @@ O.T.(O.F.jc "address" $. ft Any t1)
     | JCTbase_block t1 ->
       let t1' = ft Any t1 in
       let _, alloc =
         let ac = tderef_alloc_class ~type_safe t1 in
         talloc_table_var ~label_in_name:global_assertion lab (ac, t1#region)
       in
-      return @@ O.T.(O.F.jc "shift" @$ t1'@. O.F.jc "offset_min" @$ alloc @. t1')
+      return @@ O.T.(F.jc "shift" $ t1' ^. (F.jc "offset_min" $ alloc ^. t1'))
     | JCTinstanceof (t1, lab', st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
       let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
-      O.T.(O.F.jc "instanceof" @$ tag @ ft Any t1 @. var (Name.tag st))
+      O.T.(O.F.jc "instanceof" $ tag ^ ft Any t1 ^. var (Name.tag st))
     | JCTcast (t1, lab', st) ->
       if struct_of_union st
       then ft Any t1
       else
         let lab = if relocate && lab' = LabelHere then lab else lab' in
         let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
-        O.T.(O.F.jc "downcast" @$ tag @ ft Any t1 @. var (Name.tag st))
+        O.T.(O.F.jc "downcast" $ tag @ ft Any t1 ^. var (Name.tag st))
     | JCTrange_cast (t1, ei_opt) ->
       let Typ typ, Typ typ' =
         let to_type = Option.map_default ~f:(fun e -> JCTenum e) ~default:(JCTnative Tinteger) ei_opt in
@@ -515,7 +515,7 @@ let rec term :
       return @@ coerce typ' typ Term ~e1:t1 @@ ft typ t1
     | JCTrange_cast_mod (t1, ei) ->
       let t1 = ft (Ty (Numeric (Integral Integer))) t1 in
-      let return i = return O.T.(Of_int (i, true) @$. t1) in
+      let return i = return O.T.(Of_int (i, true) $. t1) in
       begin match ei.ei_type with
         | Enum e -> return (Enum e)
         | Int (r, b) -> return (Int (r, b))
@@ -531,13 +531,13 @@ let rec term :
       | JCmem_field fi' ->
         assert (fi.fi_tag = fi'.fi_tag);
         let mem = tmemory_var ~label_in_name:global_assertion lab (JCmem_field fi, t1#region) in
-        return O.T.(O.F.jc "select" @$ mem @. ft Any t1)
+        return O.T.(O.F.jc "select" $ mem ^. ft Any t1)
       | JCmem_plain_union vi ->
         let t1, off = tdestruct_union_access t1 (Some fi) in
         (* Retrieve bitvector *)
         let t1' = ft Any t1 in
         let mem = tmemory_var ~label_in_name:global_assertion lab (JCmem_plain_union vi, t1#region) in
-        let e' = O.T.(O.F.jc "select" @$ mem @. t1') in
+        let e' = O.T.(O.F.jc "select" $ mem ^. t1') in
         (* Retrieve subpart of bitvector for specific subfield *)
         let off =
           match off with
@@ -551,7 +551,7 @@ let rec term :
         in
         let off = string_of_int off and size = string_of_int size in
         let _e' =
-          O.T.(O.F.jc "extract_bytes" @$ e' @ Const (Int off) @. Const (Int size))
+          O.T.(O.F.jc "extract_bytes" $ e' @ Const (Int off) ^. Const (Int size))
         in
         (* Convert bitvector into appropriate type *)
         begin match fi.fi_type with
@@ -579,7 +579,7 @@ let rec term :
           | None -> failwith "term: field without bitsize in bv region"
         in
         let off = string_of_int off and size = string_of_int size in
-        let _e' = O.T.(O.F.jc "select_bytes" @$ mem @ t1' @ Const (Int off) @. Const (Int size)) in
+        let _e' = O.T.(F.jc "select_bytes" $ mem ^ t1' ^ Const (Int off) ^. Const (Int size)) in
         (* Convert bitvector into appropriate type *)
         begin match fi.fi_type with
         | JCTenum _
@@ -672,7 +672,7 @@ let tag ~type_safe ~global_assertion ~relocate lab oldlab tag =
   | JCTtypeof (t, st) ->
     let t' = term Any ~type_safe ~global_assertion ~relocate lab oldlab t in
     let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t#region) in
-    O.typeof tag t'
+    O.T.(F.jc "typeof" $ tag ^. t')
 
 let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
   let f f = f ~type_safe ~global_assertion ~relocate lab oldlab in
@@ -694,28 +694,28 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
     | JCAtrue -> True
     | JCAfalse -> False
     | JCAif (t1, pt, pe) ->
-      O.if_
+      O.P.if_
         (ft (Ty Bool) t1)
         (fp pt)
         (fp pe)
-    | JCAand ps -> O.conj (List.map fp ps)
-    | JCAor ps -> O.disj (List.map fp ps)
-    | JCAimplies (p1, p2) -> O.impl (fp p1) (fp p2)
-    | JCAiff (p1, p2) -> O.iff (fp p1) (fp p2)
-    | JCAnot p1 -> O.not (fp p1)
+    | JCAand ps -> O.P.conj (List.map fp ps)
+    | JCAor ps -> O.P.disj (List.map fp ps)
+    | JCAimplies (p1, p2) -> O.P.impl (fp p1) (fp p2)
+    | JCAiff (p1, p2) -> O.P.iff (fp p1) (fp p2)
+    | JCAnot p1 -> O.P.not (fp p1)
     | JCArelation (t1, ((`Beq | `Bneq as op), _), t2)
       when is_base_block t1 && is_base_block t2 ->
       let base_block t = match t#node with JCTbase_block t -> t | _ -> assert false in
       let t1, t2 = Pair.map base_block (t1, t2) in
-      let p : pred = App (O.F.jc "same_block", O.T.(ft Any t1 @. ft Any t2)) in
+      let p = O.P.(F.jc "same_block" $ ft Any t1 ^. ft Any t2) in
       begin match op with
       | `Beq -> p
-      | `Bneq -> O.not p
+      | `Bneq -> O.P.not p
       end
     | JCArelation (t1, op, t2) ->
       begin match bin_op op with
-      | Rel (f, typ) -> App (f, O.T.(ft typ t1 @. ft typ t2))
-      | Op (f, typ) -> App (O.F.check (Ty Bool) f, O.T.(ft typ t2 @. ft typ t2))
+      | Rel (f, typ) -> O.P.(f $ ft typ t1 ^. ft typ t2)
+      | Op (f, typ) -> O.P.(F.check (Ty Bool) f $ ft typ t2 ^. ft typ t2)
       end
     | JCAapp app ->
       let f = app.app_fun in
@@ -747,7 +747,7 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
         P.locate ~p ?behavior:None ~kind:(JCVCglobal_invariant app.app_fun.li_name)
     | JCAquantifier (Forall | Exists as q, v, trigs, p1) ->
       let Typ typ = (ty v.vi_type) in
-      (match q with Forall -> O.forall | Exists -> O.exists)
+      (match q with Forall -> O.P.forall | Exists -> O.P.exists)
         v.vi_final_name
         (tr_var_base_type typ v)
         ~trigs:(triggers trigs)
@@ -762,25 +762,25 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
       let ac = tderef_alloc_class ~type_safe t1 in
       let lab = if relocate && oldlab = LabelHere then lab else oldlab in
       let _, alloc = talloc_table_var ~label_in_name:global_assertion lab (ac, t1#region) in
-      App (O.F.jc "allocable", O.T.(alloc @. ft Any t1))
+      O.P.(F.jc "allocable" $ alloc ^. ft Any t1)
     | JCAbool_term t1 ->
-      App (Poly `Eq, O.T.(ft (Ty Bool) t1 @. Const (Bool true)))
+      App (Poly `Eq, O.T.(ft (Ty Bool) t1 ^. Const (Bool true)))
     | JCAinstanceof (t1, lab', st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
       let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
-      O.instanceof tag (ft Any t1) st
+      O.P.(F.jc "instanceof" $ tag ^ ft Any t1 ^. T.var (Name.tag st))
     | JCAmutable (_te, _st, _ta) -> assert false
       (*let te' = ft te in
       let tag = ftag ta in
       let mutable_field = LVar (mutable_name (JCtag(st, []))) in
         LPred ("eq", [LApp ("select", [mutable_field; te']); tag])*)
     | JCAeqtype (tag1, tag2, _st_opt) ->
-      App (Poly `Eq, O.T.(ftag tag1 @. ftag tag2))
+      O.P.(Poly `Eq $ ftag tag1 ^. ftag tag2)
     | JCAsubtype (tag1, tag2, _st_opt) ->
-      App (O.F.jc "subtag", O.T.(ftag tag1 @. ftag tag2))
+      O.P.(F.jc "subtag" $ ftag tag1 ^. ftag tag2)
     | JCAlet (vi, t, p) ->
       let Typ typ = ty t#typ in
-      O.let_ vi.vi_final_name (ft typ t) (fun _ -> fp p)
+      O.P.let_ vi.vi_final_name (ft typ t) (fun _ -> fp p)
     | JCAmatch (_arg, _pal) ->
       assert false
       (*let arg' = ft arg in
@@ -840,7 +840,7 @@ let rec pset : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ -> _
   let f' t name args =
     let open O.T in
     let Hlist args = hlist_of_list args in
-    return t (F.jc name @$ args)
+    return t (F.jc name $ args)
   in
   let f = f' t and f' f t : some_term = Term (f' Any f t) in
   match loc#node with
@@ -879,7 +879,7 @@ let rec collect_locations ~type_safe ~global_assertion ~in_clause before loc (re
   | JCLderef_term (t1, fi) ->
     let Typ typ = ty t1#typ in
     let t1' = term typ ~type_safe ~global_assertion ~relocate:false before before t1 in
-    let iloc = O.T.(O.F.jc "pset_singleton" @$. t1') in
+    let iloc = O.T.(F.jc "pset_singleton" $. t1') in
     let mcr = JCmem_field fi, t1#region in
     refs, MemoryMap.add_merge (@) mcr [iloc, ef] mems
   | JCLvar vi ->
@@ -896,7 +896,7 @@ let rec collect_pset_locations t ~type_safe ~global_assertion lab loc =
   let f f args =
     let open O.T in
     let Hlist args = hlist_of_list args in
-    return t O.T.(O.F.jc f @$ args)
+    return t O.T.(F.jc f $ args)
   in
   match loc#node with
   | JCLderef (e, lab, fi, _fr) ->
@@ -952,9 +952,9 @@ let tr_assigns ~type_safe ?region_list before ef =
       (fun v const ->
          Fn.on'
            (not const) @@
-         fun () -> O.(&&) @@
+         fun () -> O.P.(&&) @@
            let at' = lvar ~constant:false ~label_in_name:false in
-           P.locate ~p ~kind:JCVCassigns @@ App (Poly `Eq, O.T.(at' LabelHere v @. at' before v)))
+           P.locate ~p ~kind:JCVCassigns @@ O.P.(Poly `Eq $ at' LabelHere v ^. at' before v))
       refs
     |>
     MemoryMap.fold
@@ -972,7 +972,7 @@ let tr_assigns ~type_safe ?region_list before ef =
               Term (pset_union_of_list ps)]
          in
          let mem_assigns = P.locate ~p ~kind:JCVCassigns @@ App (O.F.jc "not_assigns", args) in
-         O.(acc && mem_assigns))
+         O.P.(acc && mem_assigns))
       mems
 
 let tr_loop_assigns ~type_safe ?region_list before ef =
@@ -989,7 +989,7 @@ let reads ~type_safe ~global_assertion locs (mc, r) =
   let ps, _efs = List.split @@ MemoryMap.find_or_default (mc, r) [] mems in
   pset_union_of_list ps
 
-(*
+
 (******************************************************************************)
 (*                                Expressions                                 *)
 (******************************************************************************)
@@ -1003,159 +1003,166 @@ let lbounded lb s =
 let rbounded rb s =
   let n = Num.num_of_int s in Num.le_num n rb
 
+let normalize ei n =
+  ei.ei_min +/ Num.mod_num (n -/ ei.ei_min) (ei.ei_max -/ ei.ei_min +/ Int 1)
+
 let rec const_int_term t =
-  match t # node with
-    | JCTconst (JCCinteger s) -> Some (Numconst.integer s)
-    | JCTvar vi ->
-        begin
-          try
-            let _, init =
-              Stdlib.Hashtbl.find
-                Typing.logic_constants_table
-                vi.vi_tag
-            in
-              const_int_term init
-          with Not_found -> None
-        end
-    | JCTapp app ->
-        begin
-          try
-            let _, init =
-              Stdlib.Hashtbl.find
-                Typing.logic_constants_table
-                app.app_fun.li_tag
-            in
-              const_int_term init
-          with Not_found -> None
-        end
-    | JCTunary (uop, t) ->
-        let no = const_int_term t in
-          Option.fold_right'
-            ~f:(fun n _ -> match uop with
-               | `Uminus, `Integer -> Some (Num.minus_num n)
-               | _ -> None)
-            no
-            None
-    | JCTbinary (t1, bop, t2) ->
-        let no1 = const_int_term t1 in
-        let no2 = const_int_term t2 in
-          begin match no1, no2 with
-            | Some n1, Some n2 ->
-                begin match bop with
-                  | `Badd, `Integer -> Some (n1 +/ n2)
-                  | `Bsub, `Integer -> Some (n1 -/ n2)
-                  | `Bmul, `Integer -> Some (n1 */ n2)
-                  | `Bdiv, `Integer ->
-                      let n = n1 // n2 in
-                        if Num.is_integer_num n then
-                          Some n
-                        else
-                          None
-                  | `Bmod, `Integer -> Some (Num.mod_num n1 n2)
-                  | _ -> None
-                end
-            | _ -> None
-          end
-    | JCTrange_cast (t, _) -> const_int_term t
-    | JCTconst _ | JCTshift _ | JCTderef _
-    | JCTold _ | JCTat _
-    | JCToffset _ | JCTaddress _ | JCTinstanceof _ | JCTbase_block _
-    | JCTreal_cast _ | JCTif _ | JCTrange _
-    | JCTcast _ | JCTmatch _ | JCTlet _ | JCTbitwise_cast _ ->
-        assert false
+  match t#node with
+  | JCTconst (JCCinteger s) -> Some (Numconst.integer s)
+  | JCTvar vi ->
+    begin try
+      let _, init =
+        Stdlib.Hashtbl.find
+          Typing.logic_constants_table
+          vi.vi_tag
+      in
+      const_int_term init
+    with
+    | Not_found -> None
+    end
+  | JCTapp app ->
+    begin try
+      let _, init =
+        Stdlib.Hashtbl.find
+          Typing.logic_constants_table
+          app.app_fun.li_tag
+      in
+      const_int_term init
+    with
+    | Not_found -> None
+    end
+  | JCTunary (uop, t) ->
+    let no = const_int_term t in
+    Option.fold_right'
+      ~f:(fun n _ -> match uop with
+        | `Uminus, `Integer -> Some (Num.minus_num n)
+        | _ -> None)
+      no
+      None
+  | JCTbinary (t1, bop, t2) ->
+    let no1 = const_int_term t1 in
+    let no2 = const_int_term t2 in
+    begin match no1, no2 with
+    | Some n1, Some n2 ->
+      begin match bop with
+      | `Badd, `Integer -> Some (n1 +/ n2)
+      | `Bsub, `Integer -> Some (n1 -/ n2)
+      | `Bmul, `Integer -> Some (n1 */ n2)
+      | `Bdiv, `Integer ->
+        let n = n1 // n2 in
+        if Num.is_integer_num n then
+          Some n
+        else
+          None
+      | `Bmod, `Integer -> Some (Num.mod_num n1 n2)
+      | _ -> None
+      end
+    | _ -> None
+    end
+  | JCTrange_cast (t, _) -> const_int_term t
+  | JCTrange_cast_mod (t, ei) -> Option.map (normalize ei) (const_int_term t)
+  | JCTconst _ | JCTshift _ | JCTderef _
+  | JCTold _ | JCTat _
+  | JCToffset _ | JCTaddress _ | JCTinstanceof _ | JCTbase_block _
+  | JCTreal_cast _ | JCTif _ | JCTrange _
+  | JCTcast _ | JCTmatch _ | JCTlet _ ->
+    assert false
 
 let rec const_int_expr e =
   match e # node with
-    | JCEconst (JCCinteger s) -> Some (Numconst.integer s)
-    | JCEvar vi ->
-        begin
-          try
-            let _, init =
-              Stdlib.Hashtbl.find
-                Typing.logic_constants_table
-                vi.vi_tag
-            in
-              const_int_term init
-          with Not_found -> None
-        end
-    | JCEapp call ->
-        begin match call.call_fun with
-          | JClogic_fun li ->
-              begin
-                try
-                  let _, init =
-                    Stdlib.Hashtbl.find
-                      Typing.logic_constants_table
-                      li.li_tag
-                  in
-                    const_int_term init
-                with Not_found -> None
-              end
-          | JCfun _ -> None
-        end
-    | JCErange_cast (e, _) -> const_int_expr e
-    | JCEunary (uop, e) ->
-        let no = const_int_expr e in
-          Option.fold_right'
-            ~f:(fun n _ -> match uop with
-               | `Uminus, `Integer -> Some (Num.minus_num n)
-               | _ -> None)
-            no
-            None
-    | JCEbinary (e1, bop, e2) ->
-        let no1 = const_int_expr e1 in
-        let no2 = const_int_expr e2 in
-          begin match no1, no2 with
-            | Some n1, Some n2 ->
-                begin match bop with
-                  | `Badd, `Integer -> Some (n1 +/ n2)
-                  | `Bsub, `Integer -> Some (n1 -/ n2)
-                  | `Bmul, `Integer -> Some (n1 */ n2)
-                  | `Bdiv, `Integer ->
-                      let n = n1 // n2 in
-                        if Num.is_integer_num n then
-                          Some n
-                        else
-                          None
-                  | `Bmod, `Integer -> Some (Num.mod_num n1 n2)
-                  | _ -> None
-                end
-            | _ -> None
-          end
-    | JCEderef _ | JCEoffset _ | JCEbase_block _
-    | JCEaddress _ | JCElet _ | JCEassign_var _
-    | JCEassign_heap _ ->
-        None
-    | JCEif _ ->
-        None (* TODO *)
-    | JCEconst _ | JCEinstanceof _ | JCEreal_cast _
-    | JCEalloc _ | JCEfree _ | JCEreinterpret _ | JCEassert _
-    | JCEcontract _ | JCEblock _ | JCEloop _
-    | JCEreturn_void | JCEreturn _ | JCEtry _
-    | JCEthrow _ | JCEpack _ | JCEunpack _
-    | JCEcast _ | JCEmatch _ | JCEshift _
-    | JCEbitwise_cast _ | JCEfresh _ ->
-        assert false
+  | JCEconst (JCCinteger s) -> Some (Numconst.integer s)
+  | JCEvar vi ->
+    begin try
+      let _, init =
+        Stdlib.Hashtbl.find
+          Typing.logic_constants_table
+          vi.vi_tag
+      in
+      const_int_term init
+    with
+    | Not_found -> None
+    end
+  | JCEapp call ->
+    begin match call.call_fun with
+    | JClogic_fun li ->
+      begin try
+        let _, init =
+          Stdlib.Hashtbl.find
+            Typing.logic_constants_table
+            li.li_tag
+        in
+        const_int_term init
+      with
+      | Not_found -> None
+      end
+    | JCfun _ -> None
+    end
+  | JCErange_cast (e, _) -> const_int_expr e
+  | JCErange_cast_mod (e, ei) -> Option.map (normalize ei) (const_int_expr e)
+  | JCEunary (uop, e) ->
+    let no = const_int_expr e in
+    Option.fold_right'
+      ~f:(fun n _ -> match uop with
+        | `Uminus, `Integer -> Some (Num.minus_num n)
+        | _ -> None)
+      no
+      None
+  | JCEbinary (e1, bop, e2) ->
+    let no1 = const_int_expr e1 in
+    let no2 = const_int_expr e2 in
+    begin match no1, no2 with
+    | Some n1, Some n2 ->
+      begin match bop with
+      | `Badd, `Integer -> Some (n1 +/ n2)
+      | `Bsub, `Integer -> Some (n1 -/ n2)
+      | `Bmul, `Integer -> Some (n1 */ n2)
+      | `Bdiv, `Integer ->
+        let n = n1 // n2 in
+        if Num.is_integer_num n then
+          Some n
+        else
+          None
+      | `Bmod, `Integer -> Some (Num.mod_num n1 n2)
+      | _ -> None
+      end
+    | _ -> None
+    end
+  | JCEderef _ | JCEoffset _ | JCEbase_block _
+  | JCEaddress _ | JCElet _ | JCEassign_var _
+  | JCEassign_heap _ ->
+    None
+  | JCEif _ ->
+    None (* TODO *)
+  | JCEconst _ | JCEinstanceof _ | JCEreal_cast _
+  | JCEalloc _ | JCEfree _ | JCEreinterpret _ | JCEassert _
+  | JCEcontract _ | JCEblock _ | JCEloop _
+  | JCEreturn_void | JCEreturn _ | JCEtry _
+  | JCEthrow _ | JCEpack _ | JCEunpack _
+  | JCEcast _ | JCEmatch _ | JCEshift _
+  | JCEfresh _ ->
+    assert false
 
 let destruct_pointer e =
-  let ptre, off = match e # node with
+  let ptre, off =
+    match e # node with
     | JCEshift (e1, e2) ->
-        e1,
-        (match const_int_expr e2 with
-           | Some n -> Int_offset (Num.int_of_num n)
-           | None -> Expr_offset e2)
+      e1,
+      (match const_int_expr e2 with
+       | Some n -> Int_offset (Num.int_of_num n)
+       | None -> Expr_offset e2)
     | _ -> e, Int_offset 0
   in
-    match ptre # typ with
-      | JCTpointer (_, lb, rb) -> ptre, off, lb, rb
-      | _ -> assert false
+  match ptre#typ with
+  | JCTpointer (_, lb, rb) -> ptre, off, lb, rb
+  | _ -> assert false
 
 let rec make_lets l e =
   match l with
-    | [] -> e
-    | (tmp,a)::l -> mk_expr (Let(tmp,a,make_lets l e))
+  | [] -> e
+  | (tmp, (Expr e' : some_expr)) :: l -> O.E.let_ tmp e' (fun _ -> make_lets l e)
 
-let old_to_pre = function
+let old_to_pre =
+  function
   | LabelOld -> LabelPre
   | lab -> lab
 
@@ -1165,11 +1172,9 @@ let old_to_pre_term =
        match t#node with
        | JCTold t'
        | JCTat (t', LabelOld) ->
-         new term_with
-           ~node:(JCTat (t', LabelPre)) t
+         new term_with ~node:(JCTat (t', LabelPre)) t
        | JCTderef (t', LabelOld, fi) ->
-         new term_with
-           ~node:(JCTderef (t', LabelPre, fi)) t
+         new term_with ~node:(JCTderef (t', LabelPre, fi)) t
        | _ -> t)
 
 let rec old_to_pre_lset lset =
@@ -1183,16 +1188,18 @@ let rec old_to_pre_lset lset =
   | JCLSrange (lset, t1, t2) ->
     new location_set_with
       ~typ:lset#typ
-      ~node:(JCLSrange (old_to_pre_lset lset,
-                        Option.map old_to_pre_term t1,
-                        Option.map old_to_pre_term t2))
+      ~node:(JCLSrange
+               (old_to_pre_lset lset,
+                Option.map old_to_pre_term t1,
+                Option.map old_to_pre_term t2))
       lset
   | JCLSrange_term (lset, t1, t2) ->
     new location_set_with
       ~typ:lset#typ
-      ~node:(JCLSrange_term (old_to_pre_term lset,
-                             Option.map old_to_pre_term t1,
-                             Option.map old_to_pre_term t2))
+      ~node:(JCLSrange_term
+               (old_to_pre_term lset,
+                Option.map old_to_pre_term t1,
+                Option.map old_to_pre_term t2))
       lset
   | JCLSat (lset, lab) ->
     new location_set_with
@@ -1221,43 +1228,43 @@ let rec old_to_pre_loc loc =
 
 let assumption al a' =
   let ef = List.fold_left Effect.assertion empty_effects al in
-  let read_effects =
-    local_read_effects ~callee_reads:ef ~callee_writes:empty_effects
-  in
-  mk_expr (BlackBox(Annot_type(LTrue, unit_type, read_effects, [], a', [])))
+  let read_effects = local_read_effects ~callee_reads:ef ~callee_writes:empty_effects in
+  O.E.mk (Black_box (Annot_type (True, O.Wt.void, read_effects, [], a', [])))
 
 let check al a' =
   let ef = List.fold_left Effect.assertion empty_effects al in
-  let read_effects =
-    local_read_effects ~callee_reads:ef ~callee_writes:empty_effects
-  in
-  mk_expr (BlackBox(Annot_type(a', unit_type, read_effects, [], LTrue, [])))
+  let read_effects = local_read_effects ~callee_reads:ef ~callee_writes:empty_effects in
+  O.E.mk (Black_box (Annot_type (a', O.Wt.void, read_effects, [], True, [])))
 
 (* decreases clauses: stored in global table for later use at each call sites *)
 
 let decreases_clause_table = Hashtbl.create 17
 
-let term_zero = new term ~typ:integer_type (JCTconst(JCCinteger "0"))
+let term_zero = new term ~typ:integer_type (JCTconst (JCCinteger "0"))
 
 let dummy_measure = (term_zero, None)
 
 let get_measure_for f =
   match !Options.termination_policy with
-    | TPalways ->
-        (try
-          Hashtbl.find decreases_clause_table (f.fun_tag)
-        with Not_found ->
-          Hashtbl.add decreases_clause_table (f.fun_tag) dummy_measure;
-          eprintf
+  | TPalways ->
+    begin try
+       Hashtbl.find decreases_clause_table (f.fun_tag)
+     with
+     | Not_found ->
+       Hashtbl.add decreases_clause_table (f.fun_tag) dummy_measure;
+       eprintf
             "Warning: generating dummy decrease variant for recursive \
              function %s. Please provide a real variant or set \
              termination policy to user or never\n%!" f.fun_name;
-          dummy_measure)
-    | TPuser ->
-        (try
-          Hashtbl.find decreases_clause_table (f.fun_tag)
-         with Not_found -> raise Exit)
-    | TPnever -> raise Exit
+       dummy_measure
+    end
+  | TPuser ->
+    begin try
+      Hashtbl.find decreases_clause_table (f.fun_tag)
+    with
+    | Not_found -> raise Exit
+    end
+  | TPnever -> raise Exit
 
 (* Translate the heap update `e1.fi = tmp2'
 
@@ -1290,34 +1297,35 @@ let rec make_upd_simple ~e e1 fi tmp2 =
   let p' = expr p in
   let i' = offset off in
   let shift, upd =
+    let open O.E in
     if safety_checking () then
       let tag = tag_table_var (struct_root fi.fi_struct, e1#region) in
-      let tag_id = mk_var (Name.tag fi.fi_struct) in
+      let tag_id = var (Name.tag fi.fi_struct) in
       let typesafe = (pointer_struct e1#typ).si_final in
       (if off = Int_offset 0 then
-         mk_var tmpp
+         var tmpp
        else if not typesafe then
-         make_vc_app_e ~e ~kind:JCVCpointer_shift "shift_" [tag; mk_var tmpp; tag_id; mk_var tmpi]
+         E.locate ~e ~kind:JCVCpointer_shift (O.F.jc_val "shift_" $ tag ^ var tmpp ^ tag_id ^. var tmpi)
        else
-         make_app "safe_shift_" [mk_var tmpp; mk_var tmpi]),
+         O.F.jc_val "safe_shift_" $ var tmpp ^. var tmpi),
 
       if off = Int_offset 0 then
-        make_vc_app_e ~e ~kind:JCVCpointer_deref "upd_" [alloc; mk_var mem; mk_var tmpp; mk_var tmp2]
+        E.locate ~e ~kind:JCVCpointer_deref (O.F.jc_val "upd_" $ alloc ^ var mem ^ var tmpp ^. var tmp2)
       else if not typesafe then
-        make_vc_app_e ~e ~kind:JCVCpointer_deref "offset_upd_"
-          [alloc; tag; mk_var mem; mk_var tmpp; tag_id; mk_var tmpi; mk_var tmp2]
+        E.locate ~e ~kind:JCVCpointer_deref
+          (O.F.jc_val "offset_upd_" $ alloc ^ tag ^ var mem ^ var tmpp ^ tag_id ^ var tmpi ^. var tmp2)
       else
-        make_vc_app_e ~e ~kind:JCVCpointer_deref "offset_typesafe_upd_"
-          [alloc; mk_var mem; mk_var tmpp; mk_var tmpi; mk_var tmp2]
+        E.locate ~e ~kind:JCVCpointer_deref
+          (O.F.jc_val "offset_typesafe_upd_" $ alloc ^ var mem ^ var tmpp ^ var tmpi ^. var tmp2)
     else
-      make_app "safe_shift_" [mk_var tmpp; mk_var tmpi],
-      make_app "safe_upd_" [mk_var mem; mk_var tmp1; mk_var tmp2]
+      O.F.jc_val "safe_shift_" $ var tmpp ^. var tmpi,
+      O.F.jc_val "safe_upd_" $ var mem ^ var tmp1 ^. var tmp2
   in
   let letspi = [tmpp, p'; tmpi, i'; tmp1, shift] in
   tmp1, letspi, upd
 
-and make_upd_union ~e off e1 fi tmp2 =
-  let e1' = expr e1 in
+and make_upd_union ~e off e1 fi tmp2 = assert false
+  (*let e1' = expr e1 in
   (* Convert value assigned into bitvector *)
   let e2' =
     match fi.fi_type with
@@ -1361,10 +1369,10 @@ and make_upd_union ~e off e1 fi tmp2 =
   in
   let lets = [tmp1, e1'; tmp2, e2'] in
   let tmp1, lets', e' = make_upd_simple ~e e1 fi tmp2 in
-  tmp1, lets @ lets', e'
+  tmp1, lets @ lets', e'*)
 
-and make_upd_bytes ~e e1 fi tmp2 =
-  let e1' = expr e1 in
+and make_upd_bytes ~e e1 fi tmp2 = assert false
+  (*let e1' = expr e1 in
   (* Convert value assigned into bitvector *)
   let e2' =
     match fi.fi_type with
@@ -1402,7 +1410,7 @@ and make_upd_bytes ~e e1 fi tmp2 =
           mk_expr @@ Cte (Prim_int size); mk_var tmp2]
   in
   let lets = [tmp1, e1'; tmp2, e2'] in
-  tmp1, lets, e'
+    tmp1, lets, e'*)
 
 and make_upd ~e e1 fi e2 =
   (* Value assigned stored in temporary at that point *)
@@ -1425,8 +1433,8 @@ and make_upd ~e e1 fi e2 =
         mems
     in
     let write_effects = local_write_effects ~callee_reads:empty_effects ~callee_writes:ef in
-    let e2' = mk_expr (BlackBox (Annot_type (LTrue, unit_type, [], write_effects, LTrue, []))) in
-    tmp1, lets, append e1' e2'
+    let e2' = O.E.mk (Black_box (Annot_type (True, O.Wt.void, [], write_effects, True, []))) in
+    tmp1, lets, O.E.(e1' ^^ e2')
   | JCmem_plain_union _vi, _ ->
     let e1, off = destruct_union_access e1 (Some fi) in
     make_upd_union ~e off e1 fi tmp2
@@ -1445,43 +1453,43 @@ and make_deref_simple ~e e1 fi =
   let mem = memory_var (mc, e1#region) in
   let ac = alloc_class_of_mem_class mc in
   let alloc = alloc_table_var (ac, e1#region) in
+  let open O.E in
   if safety_checking () then
     let tag = tag_table_var (struct_root fi.fi_struct, e1#region) in
-    let tag_id = mk_var (Name.tag fi.fi_struct) in
+    let tag_id = var (Name.tag fi.fi_struct) in
     match destruct_pointer e1, (pointer_struct e1#typ).si_final with
     | (_, (Int_offset s as off), Some lb, Some rb), false when bounded lb rb s ->
-      make_vc_app_e ~e ~kind:JCVCpointer_deref "safe_acc_requires_" [tag; mem; expr e1; tag_id; offset off]
-
+      E.locate ~e ~kind:JCVCpointer_deref
+        (O.F.jc_val "safe_acc_requires_" $ tag ^ mem ^ expr e1 ^ tag_id ^. offset off)
     | (_, Int_offset s, Some lb, Some rb),        true when bounded lb rb s ->
-      make_vc_app_e ~e ~kind:JCVCpointer_deref "safe_typesafe_acc_requires_" [mem; expr e1]
-
+      E.locate ~e ~kind:JCVCpointer_deref
+        (O.F.jc_val "safe_typesafe_acc_requires_" $ mem ^. expr e1)
     | (p, (Int_offset s as off), Some lb, _), false when lbounded lb s ->
-      make_vc_app_e ~e ~kind:JCVCpointer_deref_bounds "lsafe_lbound_acc_" [tag; alloc; mem; expr p; tag_id; offset off]
-
+      E.locate ~e ~kind:JCVCpointer_deref_bounds
+        (O.F.jc_val "lsafe_lbound_acc_" $ tag ^ alloc ^ mem ^ expr p ^ tag_id ^. offset off)
     | (p, (Int_offset s as off), Some lb, _), true when lbounded lb s ->
-      make_vc_app_e ~e ~kind:JCVCpointer_deref_bounds "lsafe_lbound_typesafe_acc_"
-        [alloc; mem; expr p; offset off]
-
+      E.locate ~e ~kind:JCVCpointer_deref_bounds
+        (O.F.jc_val "lsafe_lbound_typesafe_acc_" $ alloc ^ mem ^ expr p ^. offset off)
     | (p, (Int_offset s as off), _, Some rb), false when rbounded rb s ->
-      make_vc_app_e ~e ~kind:JCVCpointer_deref_bounds "rsafe_rbound_acc_" [tag; alloc; mem; expr p; tag_id; offset off]
-
+      E.locate ~e ~kind:JCVCpointer_deref_bounds
+        (O.F.jc_val "rsafe_rbound_acc_" $ tag ^ alloc ^ mem ^ expr p ^ tag_id ^. offset off)
     | (p, (Int_offset s as off), _, Some rb), true when rbounded rb s ->
-      make_vc_app_e ~e ~kind:JCVCpointer_deref_bounds "rsafe_rbound_typesafe_acc_"
-        [tag; alloc; mem; expr p; tag_id; offset off]
-
+      E.locate ~e ~kind:JCVCpointer_deref_bounds
+        (O.F.jc_val "rsafe_rbound_typesafe_acc_" $ tag ^ alloc ^ mem ^ expr p ^ tag_id ^. offset off)
     | (p, Int_offset 0, None, None), _ ->
-      make_vc_app_e ~e ~kind:JCVCpointer_deref "acc_"  [alloc; mem; expr p]
-
+      E.locate ~e ~kind:JCVCpointer_deref
+        (O.F.jc_val "acc_"  $ alloc ^ mem ^. expr p)
     | (p, off, _, _), false ->
-      make_vc_app_e ~e ~kind:JCVCpointer_deref "offset_acc_" [alloc; tag; mem ; expr p; tag_id; offset off]
-
+      E.locate ~e ~kind:JCVCpointer_deref
+        (O.F.jc_val "offset_acc_" $ alloc ^ tag ^ mem ^ expr p ^ tag_id ^. offset off)
     | (p, off, _, _), true ->
-      make_vc_app_e ~e ~kind:JCVCpointer_deref "offset_typesafe_acc_" [alloc; mem ; expr p; offset off]
+      E.locate ~e ~kind:JCVCpointer_deref
+        (O.F.jc_val "offset_typesafe_acc_" $ alloc ^ mem ^ expr p ^. offset off)
   else
-    make_app "safe_acc_" [mem; expr e1]
+    O.F.jc_val "safe_acc_" $ mem ^. expr e1
 
-and make_deref_union ~e off e1 fi =
-  (* Retrieve bitvector *)
+and make_deref_union ~e off e1 fi = assert false
+  (*(* Retrieve bitvector *)
   let e' = make_deref_simple ~e e1 fi in
   (* Retrieve subpart of bitvector for specific subfield *)
   let off =
@@ -1499,10 +1507,10 @@ and make_deref_union ~e off e1 fi =
   (* Convert bitvector into appropriate type *)
   match fi.fi_type with
   | JCTenum ri -> make_app (logic_enum_of_bitvector_name ri) [e']
-  | _ty -> Options.jc_error e#pos "Unsupported field type in bv update" (* TODO *)
+  | _ty -> Options.jc_error e#pos "Unsupported field type in bv update" (* TODO *)*)
 
-and make_deref_bytes ~e e1 fi =
-  (* Define memory and allocation table *)
+and make_deref_bytes ~_e _e1 _fi = assert false
+  (*(* Define memory and allocation table *)
   let mem = memory_var (JCmem_bitvector, e1#region) in
   let alloc = alloc_table_var (JCalloc_bitvector, e1#region) in
   (* Retrieve bitvector *)
@@ -1541,27 +1549,26 @@ and make_deref_bytes ~e e1 fi =
   | JCTpointer (_, _, _)
   | JCTlogic _
   | JCTany
-  | JCTnull -> unsupported e#pos "Unsupported type in bit-dependent cast" (* TODO *)
+  | JCTnull -> unsupported e#pos "Unsupported type in bit-dependent cast" (* TODO *)*)
 
 and make_deref ~e e1 fi =
   (* Dispatch depending on kind of memory *)
   let mc, _uif_opt = deref_mem_class ~type_safe:false e1 fi in
   match mc with
   | JCmem_field _ -> make_deref_simple ~e e1 fi
-  | JCmem_plain_union _vi ->
-    let e1, off = destruct_union_access e1 (Some fi) in
-    make_deref_union ~e off e1 fi
-  | JCmem_bitvector ->
-    make_deref_bytes ~e e1 fi
+  | JCmem_plain_union _vi -> assert false
+    (*let e1, off = destruct_union_access e1 (Some fi) in
+      make_deref_union ~e off e1 fi*)
+  | JCmem_bitvector -> assert false
+    (*make_deref_bytes ~e e1 fi*)
 
 and offset =
   function
-  | Int_offset s -> mk_expr (Cte (Prim_int (string_of_int s)))
-  | Expr_offset e ->
-    coerce ~e ~check_int_overflow:(safety_checking ()) integer_type e#typ e (expr e)
+  | Int_offset s -> O.E.mk (Const (Int (string_of_int s)))
+  | Expr_offset e -> expr e
   | Term_offset _ -> invalid_arg "offset"
 
-and type_assert tmp ty e =
+and type_assert tmp ty' e =
   let offset k e1 ty tmp =
     let ac = deref_alloc_class ~type_safe:false e1 in
     let _, alloc = talloc_table_var ~label_in_name:false LabelHere (ac, e1#region) in
@@ -1572,7 +1579,7 @@ and type_assert tmp ty e =
         | Offset_min -> "offset_min"
         | Offset_max -> "offset_max"
       in
-      LApp (f, [alloc; LVar tmp])
+      O.T.(O.F.jc f $ alloc ^. var tmp)
     | JCalloc_bitvector ->
       let st = pointer_struct ty in
       let f =
@@ -1581,103 +1588,92 @@ and type_assert tmp ty e =
         | Offset_max -> "offset_max_bytes"
       in
       let s = string_of_int (struct_size_in_bytes st) in
-      LApp(f, [alloc; LVar tmp; LConst (Prim_int s)])
+      O.T.(F.jc f $ alloc ^ var tmp ^. Const (Int s))
   in
   let a =
-    match ty with
+    match ty' with
     | JCTpointer(_pc,n1o,n2o) ->
       let offset_mina n =
-        LPred ("le_int",
-               [offset Offset_min e ty tmp;
-                LConst (Prim_int (string_of_num n))])
+        O.P.(F.jc "le_int" $ offset Offset_min e ty' tmp ^. Const (Int (string_of_num n)))
       in
       let offset_maxa n =
-        LPred ("ge_int",
-               [offset Offset_max e ty tmp;
-                LConst (Prim_int (string_of_num n))])
+        O.P.(F.jc "ge_int" $ offset Offset_max e ty' tmp ^. Const (Int (string_of_num n)))
       in
       begin match e#typ with
       | JCTpointer (_si', n1o', n2o') ->
         begin match n1o, n2o with
-        | None, None -> LTrue
+        | None, None -> True
         | Some n, None ->
           begin match n1o' with
           | Some n'
-            when n' <=/ n && not Options.verify_all_offsets -> LTrue
+            when n' <=/ n && not Options.verify_all_offsets -> True
           | _ -> offset_mina n
           end
         | None, Some n ->
           begin match n2o' with
           | Some n'
-            when n' >=/ n && not Options.verify_all_offsets -> LTrue
+            when n' >=/ n && not Options.verify_all_offsets -> True
           | _ -> offset_maxa n
           end
         | Some n1, Some n2 ->
           begin match n1o', n2o' with
-          | None, None -> make_and (offset_mina n1) (offset_maxa n2)
+          | None, None -> O.P.(offset_mina n1 && offset_maxa n2)
           | Some n1', None ->
             if n1' <=/ n1 && not Options.verify_all_offsets
             then offset_maxa n2
-            else make_and (offset_mina n1) (offset_maxa n2)
+            else O.P.(offset_mina n1 && offset_maxa n2)
           | None, Some n2' ->
             if n2' >=/ n2 && not Options.verify_all_offsets
             then offset_mina n1
-            else make_and (offset_mina n1) (offset_maxa n2)
+            else O.P.(offset_mina n1 && offset_maxa n2)
           | Some n1', Some n2' ->
             if Options.verify_all_offsets
-            then make_and (offset_mina n1) (offset_maxa n2)
+            then O.P.(offset_mina n1 && offset_maxa n2)
             else if n1' <=/ n1 then
               if n2' >=/ n2
-              then  LTrue
+              then True
               else offset_maxa n2
             else if n2' >=/ n2
             then offset_mina n1
-            else make_and (offset_mina n1) (offset_maxa n2)
+            else O.P.(offset_mina n1 && offset_maxa n2)
           end
         end
       | JCTnull ->
         begin match n1o, n2o with
-        | None, None -> LTrue
+        | None, None -> True
         | Some n, None -> offset_mina n
         | None, Some n -> offset_maxa n
-        | Some n1, Some n2 -> make_and (offset_mina n1) (offset_maxa n2)
+        | Some n1, Some n2 -> O.P.(offset_mina n1 && offset_maxa n2)
         end
-      | _ -> LTrue
+      | _ -> True
       end
-    | _ -> LTrue
+    | _ -> True
   in
-  coerce
-    ~check_int_overflow:(safety_checking ())
-    ~e
-    ty
-    e#typ
-    e
-    (expr e),
-  a
+  (Expr (expr e) : some_expr), a
 
 and list_type_assert vi e (lets, params) =
   let ty = vi.vi_type in
   let tmp = tmp_var_name () (* vi.vi_name *) in
-  let e,a = type_assert tmp ty e in
-  (tmp, e, a) :: lets , (mk_var tmp) :: params
+  let e, a = type_assert tmp ty e in
+  (tmp, e, a) :: lets , O.E.(var tmp) :: params
 
 and value_assigned ~e ty e1 =
   let tmp = tmp_var_name () in
-  let e1, a = map_snd (mk_positioned_lex ~e ~kind:JCVCindex_bounds) @@ type_assert tmp ty e1 in
-  if a <> LTrue && safety_checking ()
-  then mk_expr @@ Let (tmp, e1, mk_expr @@ Assert (`ASSERT, a, mk_var tmp))
-  else e1
+  let Expr e1, a = map_snd (P.locate ~p:e ~kind:JCVCindex_bounds) @@ type_assert tmp ty e1 in
+  if a <> True && safety_checking ()
+  then (Expr (O.E.let_ tmp e1 O.E.(fun _ -> mk (Assert (`ASSERT, a)) ^^ var tmp)) : some_expr)
+  else Expr e1
 
 and make_reinterpret ~e e1 st =
   let get_fi st =
     match st.si_fields with
     | [fi] -> fi
-    | _ -> unsupported e1#pos "reinterpretation for structure with several fields"
+    | _ -> unsupported ~loc:e1#pos "reinterpretation for structure with several fields"
   in
   let s_from, fi_from = (* src. subtag & field info *)
     match e1#typ with
     | JCTpointer (JCtag (st, _), _, _) -> Name.tag st, get_fi st
-    | _ -> unsupported e1#pos "reinterpretation for a root pointer or a non-pointer"
+    | _ -> unsupported ~loc:e1#pos "reinterpretation for a root pointer or a non-pointer"
   in
   let s_to, fi_to = Name.tag st, get_fi st in (* dest. subtag & field_info *)
   let ac = deref_alloc_class ~type_safe:false e1 in
@@ -1689,20 +1685,22 @@ and make_reinterpret ~e e1 st =
     let alloc = plain_alloc_table_var (ac, e1#region) in
     let tag = tag_table_var (struct_root st, e1#region) in
     let mem_to = plain_memory_var (mc_to, e1#region) in
-    make_label before.lab_final_name @@
-      match !Options.inv_sem with
-      | InvOwnership -> unsupported e1#pos "reinterpret .. as construct is not supported when inv_sem = InvOwnership"
-      | InvNone | InvArguments ->
-        make_positioned_lex_e ~e @@
-          make_app (reinterpret_parameter_name ~safety_checking)
-                   [alloc; tag; mk_var s_from; mk_var s_to; mem_to; expr e1]
+    let open O.E in
+    [before.lab_final_name] @:
+    match P.(!Options.inv_sem) with
+    | InvOwnership ->
+      unsupported ~loc:e1#pos "reinterpret .. as construct is not supported when inv_sem = InvOwnership"
+    | InvNone | InvArguments ->
+      E.locate ~e
+        (O.F.jc_val (reinterpret_parameter_name ~safety_checking) $
+         alloc ^ tag ^ var s_from ^ var s_to ^ mem_to ^. expr e1)
   in
 
   (* Let's now switch to terms and assume predicates instead of calling params... *)
   let before = LabelName before in
   let _, tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, e1#region) in
   let alloc = Name.alloc_table (ac, e1#region) in
-  let at = lvar ~constant:false ~label_in_name:false in
+  let at' = lvar ~constant:false ~label_in_name:false in
   (* reinterpretation kind (operation):
      merging (e.g. char -> int) / splitting (e.g. int -> char) / plain (e.g. int -> long) *)
   let op =
@@ -1711,7 +1709,7 @@ and make_reinterpret ~e e1 st =
         (fi_from, fi_to)
         ~f:(function
          | { fi_bitsize = Some s } -> s
-         | _ -> unsupported e1#pos "reinterpretation for field with no bitsize specified")
+         | _ -> unsupported ~loc:e1#pos "reinterpretation for field with no bitsize specified")
     in
     match compare from_bitsize to_bitsize with
     | 0 -> `Retain
@@ -1720,6 +1718,7 @@ and make_reinterpret ~e e1 st =
   in
   let e' =
     term
+      Any
       ~type_safe:(safety_checking ())
       ~global_assertion:false
       ~relocate:false
@@ -1728,82 +1727,91 @@ and make_reinterpret ~e e1 st =
         match term_of_expr e1 with
         | Some e -> e
         | None ->
-          unsupported e1#pos "the argument for reinterpret .. as should be an expression without side effects"
+          unsupported ~loc:e1#pos "the argument for reinterpret .. as should be an expression without side effects"
   in
 
   let alloc_assumption =
-    let app l = LPred (reinterpret_cast_name op, [tag; at before alloc; at LabelHere alloc; e'; LVar s_to] @ l) in
+    let app l =
+      O.P.(F.jc (reinterpret_cast_name op) $ tag ^ at' before alloc ^ at' LabelHere alloc ^ e' ^ T.var s_to ^ l)
+    in
     match op with
-    | `Retain -> app []
-    | `Merge c | `Split c -> app [const_of_int c]
+    | `Retain -> app Nil
+    | `Merge c | `Split c -> app O.T.(int c ^ Nil)
   in
 
   let mem =
     let old_mem, new_mem = Pair.map (fun mc -> memory_name (mc, e1#region)) (mc_from, mc_to) in
     function
-    | `Old -> at before old_mem
-    | `New -> at LabelHere new_mem
+    | `Old -> at' before old_mem
+    | `New -> at' LabelHere new_mem
   in
 
   (* Assume reinterpretation predicates for all corresponingly shifted pointers *)
   let memory_assumption =
-    let p, ps = "p", "ps" in
-    let lp, lps = LVar p, LVar ps in
-    let omin_omax =
-      let app f =
-        function
-        | `Old -> LApp (f, [at before alloc; lp])
-        | `New -> LApp (f, [at LabelHere alloc; lps])
-      in
-      (Fn.uncurry fdup2) @@ Pair.map app ("offset_min", "offset_max")
-    in
-    let deref (where, p) ?boff offs =
-      let shift t o1 o2 =
-        match o1, o2 with
-        | None, None -> t
-        | Some o, None
-        | None, Some o -> LApp ("shift", [t; o])
-        | Some o1, Some o2 -> LApp ("shift", [t; LApp ("add_int", [o1; o2])])
-      in
-      LApp ("select", [mem where; shift p boff @@ match offs with 0 -> None | o -> Some (const_of_int o)])
-    in
-    let pred_names =
-      let enum_name =
-        function
-        | { fi_type = JCTenum { ei_name = name } } -> name
-        | _ -> unsupported e1#pos "reinterpretation for structure with a non-enum field"
-      in
-      let from_name, to_name = Pair.map enum_name (fi_from, fi_to) in
-      [from_name ^ "_as_" ^ to_name; to_name ^ "_as_" ^ from_name]
-    in
-    let assumptions =
-      let (dwhole, dpart), (omin, omax), c =
-        let ret ((w, _), _ as w_p) c = Pair.map deref w_p, omin_omax w, c in
-        let merge, split = fdup2 ret (ret % swap) ((`New, lps), (`Old, lp)) in
-        match op with
-        | `Merge c -> merge c
-        | `Retain when (List.hd pred_names).[0] = 'u' -> merge 1
-        | `Retain -> split 1
-        | `Split c -> split c
-      in
-      let dparts boff = List.map (dpart ?boff) (List.range 0 `To (c - 1)) in
-      ListLabels.map pred_names
-        ~f:(fun pred_name ->
-          make_and
-            (LPred (pred_name, dwhole 0 :: dparts None)) @@
-            let i = "i" in
-            let li = LVar i in
-            LForall (i, why_integer_type, [],
-                      let pred_app =
-                        let imul = if c > 1 then LApp ("mul_int", [li; const_of_int c]) else li in
-                        LPred (pred_name, dwhole ~boff:li 0 :: dparts (Some imul))
-                      in
-                      if false (* change to enbale the antecedent (both ways are correct) *) then
-                        LImpl (make_and (LPred ("le_int", [omin; li])) @@ LPred ("le_int", [li; omax]),  pred_app)
-                      else
-                        pred_app))
-    in
-    LLet (p, e', LLet (ps, LApp ("downcast", [tag; e'; LVar s_to]), make_and_list assumptions))
+    let open O.P in
+    let_ "p" e'
+      (fun p ->
+         let_ "ps" T.(F.jc "downcast" $ tag ^ e' ^. var s_to)
+           (fun ps ->
+              let omin_omax =
+                let app f =
+                  let open O.T in
+                  function
+                  | `Old -> O.F.jc f $ at' before alloc ^. p
+                  | `New -> O.F.jc f $ at' LabelHere alloc ^. ps
+                in
+                (Fn.uncurry fdup2) @@ Pair.map app ("offset_min", "offset_max")
+              in
+              let deref (where, p) ?boff offs =
+                let shift t o1 o2 =
+                  let open O.T in
+                  match o1, o2 with
+                  | None, None -> t
+                  | Some o, None
+                  | None, Some o -> F.jc "shift" $ t ^. o
+                  | Some o1, Some o2 -> F.jc "shift" $ t ^. o1 + o2
+                in
+                O.T.(select (mem where) (shift p boff @@ match offs with 0 -> None | o -> Some (int o)))
+              in
+              let pred_names =
+                let enum_name =
+                  function
+                  | { fi_type = JCTenum { ei_type } } -> string_of_some_enum ei_type
+                  | _ -> unsupported ~loc:e1#pos "reinterpretation for structure with a non-enum field"
+                in
+                let from_name, to_name = Pair.map enum_name (fi_from, fi_to) in
+                P.[from_name ^ "_as_" ^ to_name; to_name ^ "_as_" ^ from_name]
+              in
+              let assumptions =
+                let (dwhole, dpart), (omin, omax), c =
+                  let ret ((w, _), _ as w_p) c = Pair.map deref w_p, omin_omax w, c in
+                  let merge, split = fdup2 ret (ret % swap) ((`New, ps), (`Old, p)) in
+                  match op with
+                  | `Merge c -> merge c
+                  | `Retain when P.((List.hd pred_names).[0] = 'u') -> merge 1
+                  | `Retain -> split 1
+                  | `Split c -> split c
+                in
+                let dparts boff = List.map (O.T.some % dpart ?boff) (List.range 0 `To (c - 1)) in
+                ListLabels.map
+                  pred_names
+                  ~f:(fun pred_name ->
+                    (("Jc_reinterpret", true), pred_name) $.. dwhole 0 ^.. hlist_of_list @@ dparts None &&
+                    forall
+                      "i"
+                      O.Lt.integer
+                      (fun i ->
+                         let pred_app =
+                           let imul = if P.(c > 1) then T.(i * int c) else i in
+                           (("Jc_reinterpret", true), pred_name) $..
+                           dwhole ~boff:i 0 ^.. hlist_of_list @@ dparts (Some imul)
+                         in
+                         if false (* change to enbale the antecedent (both ways are correct) *) then
+                           impl (omin <= i && i <= omax) pred_app
+                         else
+                           pred_app))
+              in
+              conj assumptions))
   in
 
   let c =
@@ -1814,23 +1822,21 @@ and make_reinterpret ~e e1 st =
   in
 
   let not_assigns_assumption =
-    make_and_list @@
-      [LPred ("eq", [LApp ("rmem", [mem `Old]); mem `New]);
-       LPred ("eq_int", [LApp ("rfactor", [mem `Old]); const_of_int c]);
-       LPred ("eq_pointer_bool", [LApp ("rpointer_new", [mem `Old; e']); LApp ("downcast", [tag; e'; LVar s_to])])]
+    O.P.conj
+      O.T.[F.jc "rmem" $. mem `Old = mem `New;
+           F.jc "rfactor" $. mem `Old = int c;
+           F.jc "rpointer_new" $ mem `Old ^. e' = (F.jc "downcast" $ tag ^ e' ^. var s_to)]
   in
 
-  let cast_factor_assumption =
-    LPred ("eq_int", [LApp (cast_factor_name, [LVar s_from; LVar s_to]); const_of_int c])
-  in
+  let cast_factor_assumption = O.T.(F.jc cast_factor_name $ var s_from ^. var s_to = int c) in
 
   let ensures_assumption =
-    mk_expr @@ Assert (`ASSUME, alloc_assumption,
-      mk_expr @@ Assert (`ASSUME, memory_assumption,
-        mk_expr @@ Assert (`ASSUME, not_assigns_assumption, void)))
+    let open O.E in
+    assert_ `ASSUME alloc_assumption ^^
+    assert_ `ASSUME memory_assumption ^^
+    assert_ `ASSUME not_assigns_assumption
   in
-  append (mk_expr @@ Assert (`ASSUME, cast_factor_assumption, void)) @@
-    append call_parameter ensures_assumption
+  O.E.(assert_ `ASSUME cast_factor_assumption ^^ call_parameter ^^ ensures_assumption)
 
 and expr e =
   let infunction = get_current_function () in
@@ -2759,6 +2765,7 @@ let make_not_assigns mem t l =
   in
   LPred ("not_assigns", [LDerefAtLabel(mem, ""); LDeref mem; pset])
 
+(*
 (*****************************)
 (* axioms, lemmas, goals     *)
 (*****************************)

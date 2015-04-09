@@ -12,58 +12,67 @@ struct
   let int i : _ ty = Numeric (Integral i)
   let float r : _ ty = Numeric (Real r)
   let real : _ ty = Numeric (Real Real)
+
+  let rec to_string : type a. a ty -> string =
+    function
+    | (Numeric (Integral Integer) : a ty) -> "integer"
+    | Numeric (Integral (Int (r, b))) -> string_of_some_enum (Env.Int (r, b))
+    | Numeric (Integral (Enum e)) -> string_of_some_enum (Env.Enum e)
+    | Numeric (Real Real) -> "real"
+    | Numeric (Real (Float Single)) -> "single"
+    | Numeric (Real (Float Double)) -> "double"
+    | Bool -> "bool"
+    | Void -> "void"
+    | Ref r -> "ref " ^ to_string r
+    | Arrow (t1, t2) -> to_string t1 ^ " -> " ^ to_string t2
+    | Ex -> "\"existential, i.e. some distinct type\""
+
+  type (_, _) eq = Eq : ('a, 'a) eq
+
+  let rec eq : type a b. a ty -> b ty -> (a, b) eq = fun a b ->
+    match a, b with
+    | Numeric (Integral Integer),               Numeric (Integral Integer) -> Eq
+    | Numeric (Integral (Int (Signed, X8))),    Numeric (Integral (Int (Signed, X8))) -> Eq
+    | Numeric (Integral (Int (Unsigned, X8))),  Numeric (Integral (Int (Unsigned, X8))) -> Eq
+    | Numeric (Integral (Int (Signed, X16))),   Numeric (Integral (Int (Signed, X16))) -> Eq
+    | Numeric (Integral (Int (Unsigned, X16))), Numeric (Integral (Int (Unsigned, X16))) -> Eq
+    | Numeric (Integral (Int (Signed, X32))),   Numeric (Integral (Int (Signed, X32))) -> Eq
+    | Numeric (Integral (Int (Unsigned, X32))), Numeric (Integral (Int (Unsigned, X32))) -> Eq
+    | Numeric (Integral (Int (Signed, X64))),   Numeric (Integral (Int (Signed, X64))) -> Eq
+    | Numeric (Integral (Int (Unsigned, X64))), Numeric (Integral (Int (Unsigned, X64))) -> Eq
+    | Numeric (Integral (Enum (module E1))),    Numeric (Integral (Enum (module E2))) ->
+      begin match E1.E with
+      | E2.E -> Eq
+      | _ -> failwith ("Enum mismatch in Why3ML output: expected: `" ^ E1.name ^ "', got: `" ^ E2.name ^ "'")
+      end
+    | Numeric (Real Real),                      Numeric (Real Real) -> Eq
+    | Numeric (Real (Float Single)),            Numeric (Real (Float Single)) -> Eq
+    | Numeric (Real (Float Double)),            Numeric (Real (Float Double)) -> Eq
+    | Bool,                                     Bool -> Eq
+    | Void,                                     Void -> Eq
+    | Ref ty,                                   Ref ty' -> let Eq = eq ty ty' in Eq
+    | Arrow (t1, t2),                           Arrow (t1', t2') ->
+      let Eq = eq t1 t1' in
+      let Eq = eq t2 t2' in
+      Eq
+    | _ ->
+      failwith ("Type mismatch in Why3ML output: expected: `" ^ to_string a ^ "', got: `" ^ to_string b ^ "'")
 end
 
-let rec string_of_ty : type a. a ty -> string =
-  function
-  | (Numeric (Integral Integer) : a ty) -> "integer"
-  | Numeric (Integral (Int (r, b))) -> string_of_some_enum (Env.Int (r, b))
-  | Numeric (Integral (Enum e)) -> string_of_some_enum (Env.Enum e)
-  | Numeric (Real Real) -> "real"
-  | Numeric (Real (Float Single)) -> "single"
-  | Numeric (Real (Float Double)) -> "double"
-  | Bool -> "bool"
-  | Void -> "void"
-  | Ref r -> "ref " ^ string_of_ty r
-  | Arrow (t1, t2) -> string_of_ty t1 ^ " -> " ^ string_of_ty t2
-  | Ex -> "\"existential, i.e. some distinct type\""
+module Ty_opt =
+struct
+  type ('a, 'b) t = ('a, 'b) ty_opt
 
-type (_, _) eq = Eq : ('a, 'a) eq
+  type some = some_ty_opt
 
-let rec eq : type a b. a ty -> b ty -> (a, b) eq = fun a b ->
-  match a, b with
-  | Numeric (Integral Integer),               Numeric (Integral Integer) -> Eq
-  | Numeric (Integral (Int (Signed, X8))),    Numeric (Integral (Int (Signed, X8))) -> Eq
-  | Numeric (Integral (Int (Unsigned, X8))),  Numeric (Integral (Int (Unsigned, X8))) -> Eq
-  | Numeric (Integral (Int (Signed, X16))),   Numeric (Integral (Int (Signed, X16))) -> Eq
-  | Numeric (Integral (Int (Unsigned, X16))), Numeric (Integral (Int (Unsigned, X16))) -> Eq
-  | Numeric (Integral (Int (Signed, X32))),   Numeric (Integral (Int (Signed, X32))) -> Eq
-  | Numeric (Integral (Int (Unsigned, X32))), Numeric (Integral (Int (Unsigned, X32))) -> Eq
-  | Numeric (Integral (Int (Signed, X64))),   Numeric (Integral (Int (Signed, X64))) -> Eq
-  | Numeric (Integral (Int (Unsigned, X64))), Numeric (Integral (Int (Unsigned, X64))) -> Eq
-  | Numeric (Integral (Enum (module E1))),    Numeric (Integral (Enum (module E2))) ->
-    begin match E1.E with
-    | E2.E -> Eq
-    | _ -> failwith ("Enum mismatch in Why3ML output: expected: `" ^ E1.name ^ "', got: `" ^ E2.name ^ "'")
-    end
-  | Numeric (Real Real),                      Numeric (Real Real) -> Eq
-  | Numeric (Real (Float Single)),            Numeric (Real (Float Single)) -> Eq
-  | Numeric (Real (Float Double)),            Numeric (Real (Float Double)) -> Eq
-  | Bool,                                     Bool -> Eq
-  | Void,                                     Void -> Eq
-  | Ref ty,                                   Ref ty' -> let Eq = eq ty ty' in Eq
-  | Arrow (t1, t2),                           Arrow (t1', t2') ->
-    let Eq = eq t1 t1' in
-    let Eq = eq t2 t2' in
-    Eq
-  | _ ->
-    failwith ("Type mismatch in Why3ML output: expected: `" ^ string_of_ty a ^ "', got: `" ^ string_of_ty b ^ "'")
+  let some ty_opt = Typ ty_opt
 
-let some (type a) (type b) : (a, b) ty_opt -> _ =
+  let mono (type a) (type b) : (a, b) ty_opt -> _ =
   function
   | Ty _ as t -> t
   | Any ->
     failwith "Polymorphic type was expected, but monomorphic AST node was encountered"
+end
 
 module C =
 struct
@@ -81,17 +90,13 @@ struct
     match t with
     | Any -> c
     | Ty ty' ->
-      let Eq = eq ty' (ty c) in c
+      let Ty.Eq = Ty.eq ty' (ty c) in c
 
   let return : type a b. (a, b) ty_opt -> _ -> a t = fun t c ->
     match t with
     | Ty _ as t -> check t c
     | Any -> failwith "C.return: Any"
-
-  let some = some
 end
-
-let f s ~from:(name, import) = (User (name, import, s) : _ func)
 
 module F =
 struct
@@ -99,21 +104,21 @@ struct
 
   type 'a poly = { func : 'b. ('a, 'b) func }
 
-  let jc = f ~from:Name.Theory.jessie
+  let user s ~from:(name, import) = (User (name, import, s) : _ t)
 
-  let jc_val = f ~from:Name.Module.jessie
+  let jc = user ~from:Name.Theory.jessie
 
-  let bool = f ~from:Name.Theory.bool
+  let jc_val = user ~from:Name.Module.jessie
 
-  let single = f ~from:Name.Theory.single
+  let bool = user ~from:Name.Theory.bool
 
-  let double = f ~from:Name.Theory.double
+  let single = user ~from:Name.Theory.single
 
-  let real = f ~from:Name.Theory.real
+  let double = user ~from:Name.Theory.double
 
-  let binary80 = f ~from:Name.Theory.binary80
+  let real = user ~from:Name.Theory.real
 
-  let user = f
+  let binary80 = user ~from:Name.Theory.binary80
 
   type ('a, 'b) typed =
     | Ty of 'a ty
@@ -143,7 +148,7 @@ struct
     | Ty ty' ->
       match ty f with
       | Poly { func } -> func
-      | Ty ty'' -> let Eq = eq ty' ty'' in f
+      | Ty ty'' -> let Ty.Eq = Ty.eq ty' ty'' in f
 
   let return : type a b. (a, b) ty_opt -> _ -> (_, a) t = fun t f ->
     match t with
@@ -152,8 +157,6 @@ struct
       match ty f with
       | Poly { func } -> func
       | Ty _ -> failwith "F.return: Any"
-
-  let some = some
 end
 
 module T =
@@ -162,20 +165,30 @@ struct
 
   type 'a hlist = 'a term_hlist
 
-  let (@) : _ term -> _ term_hlist -> _ term_hlist = fun x xs -> Cons (x, xs)
+  let (^) : _ term -> _ term_hlist -> _ term_hlist = fun x xs -> Cons (x, xs)
 
-  let (@.) : _ term -> _ term -> _ term_hlist = fun x y -> Cons (x, Cons (y, Nil))
+  let (^.) : _ term -> _ term -> _ term_hlist = fun x y -> Cons (x, Cons (y, Nil))
 
-  let (@$) : _ func -> _ term_hlist -> _ term = fun x y -> App (x, y)
+  let ($) : _ func -> _ term_hlist -> _ term = fun x y -> App (x, y)
 
-  let (@$.) : _ func -> _ term -> _ term = fun x y -> App (x, Cons (y, Nil))
+  let ($.) : _ func -> _ term -> _ term = fun x y -> App (x, Cons (y, Nil))
 
   module F = F
 
+  module P = Pervasives
+
   type some_hlist = Hlist : _ term_hlist -> some_hlist
 
-  let hlist_of_list =
-    List.fold_left (fun (Hlist thl) (Term t : some_term) -> Hlist (t @ thl)) (Hlist Nil)
+  type some = some_ty_opt
+
+  let some t : some_term = Term t
+
+  let hlist_of_list ?(init=Hlist Nil) =
+    List.fold_left (fun (Hlist thl) (Term t : some_term) -> Hlist (t ^ thl)) init
+
+  let (^..) arg init = hlist_of_list ~init [some arg]
+
+  let ($..) (from, name) (Hlist args) = F.user ~from name $ args
 
   let int n : _ term = Const (Int (string_of_int n))
 
@@ -196,7 +209,7 @@ struct
 
   let positioned' l = positioned (Position.of_pos l)
 
-  let bin op t1 t2 = B_int_op op @$ t1 @. t2
+  let bin op t1 t2 = B_int_op op $ t1 ^. t2
 
   let at v ~lab = Deref_at (v, lab)
 
@@ -241,30 +254,30 @@ struct
   let (-~) =
     function
     | (Const Int "0" : _ term) -> int 0
-    | t -> U_int_op `Neg @$. t
+    | t -> U_int_op `Neg $. t
 
-  let (!) v = (Deref v : _ term)
+  let (!.) v = (Deref v : _ term)
 
-  let select mem p = F.jc "select" @$ mem @. p
+  let select mem p = F.jc "select" $ mem ^. p
 
   let alloc_table ?r ac =
     var (Option.map_default r ~default:(Name.Generic.alloc_table ac) ~f:(fun r -> Name.alloc_table (ac, r)))
 
-  let offset_min ac ?r p = F.jc "offset_min" @$ alloc_table ?r ac @. p
+  let offset_min ac ?r p = F.jc "offset_min" $ alloc_table ?r ac ^. p
 
-  let offset_max ac ?r p = F.jc "offset_max" @$ alloc_table ?r ac @. p
+  let offset_max ac ?r p = F.jc "offset_max" $ alloc_table ?r ac ^. p
 
   let ( **>) fi = select (var (Name.field_memory_name fi))
 
-  let rel op t1 t2 : pred = App (B_num_pred (op, Integral Integer), t1 @. t2)
+  let rel op t1 t2 : pred = App (B_num_pred (op, Integral Integer), t1 ^. t2)
 
   let (>) = rel `Gt
   let (>=) = rel `Ge
   let (<) = rel `Lt
   let (<=) = rel `Le
 
-  let (=) t1 t2 : pred = App (Poly `Eq, t1 @. t2)
-  let (<>) t1 t2 : pred = App (Poly `Neq, t1 @. t2)
+  let (=) t1 t2 : pred = App (Poly `Eq, t1 ^. t2)
+  let (<>) t1 t2 : pred = App (Poly `Neq, t1 ^. t2)
 
   type 'a typed =
     | Ty of 'a ty
@@ -311,8 +324,8 @@ struct
       match ty t with
       | Poly { term } -> term
       | Poly' { term } -> Poly { term }
-      | Ty ty'' -> let Eq = eq ty' ty'' in t
-      | Ty' ty'' -> let Eq = eq ty' ty'' in Typed (t, ty')
+      | Ty ty'' -> let Ty.Eq = Ty.eq ty' ty'' in t
+      | Ty' ty'' -> let Ty.Eq = Ty.eq ty' ty'' in Typed (t, ty')
 
   let return : type a b. (a, b) ty_opt -> _ -> a t = fun typ t ->
     match typ with
@@ -322,8 +335,6 @@ struct
       | Poly { term } -> term
       | Poly' { term } -> Poly { term }
       | Ty _ | Ty' _ -> failwith "T.return: Any"
-
-  let some = some
 end
 
 module Tc =
@@ -350,7 +361,7 @@ struct
     | Ty ty' ->
       match ty tc with
       | Poly { tconstr } -> tconstr
-      | Ty ty'' -> let Eq = eq ty' ty'' in tc
+      | Ty ty'' -> let Ty.Eq = Ty.eq ty' ty'' in tc
 
   let return : type a b. (a, b) ty_opt -> _ -> (_, a) t = fun typ t ->
     match typ with
@@ -359,47 +370,51 @@ struct
       match ty t with
       | Poly { tconstr } -> tconstr
       | Ty _  -> failwith "Tc.return: Any"
-
-  let some = some
 end
-
-let lt s ~from:(name, import) = User (name, import, s)
 
 module Lt =
 struct
   type 'a t = 'a logic_type
 
-  let (@) : _ logic_type -> _ ltype_hlist -> _ ltype_hlist = fun x xs -> Cons (x, xs)
+  let (^) : _ logic_type -> _ ltype_hlist -> _ ltype_hlist = fun x xs -> Cons (x, xs)
 
-  let (@.) : _ logic_type -> _ logic_type -> _ ltype_hlist = fun x y -> Cons (x, Cons (y, Nil))
+  let (^.) : _ logic_type -> _ logic_type -> _ ltype_hlist = fun x y -> Cons (x, Cons (y, Nil))
 
-  let (@$) : _ tconstr -> _ ltype_hlist -> _ logic_type = fun x y -> Type (x, y)
+  let ($) : _ tconstr -> _ ltype_hlist -> _ logic_type = fun x y -> Type (x, y)
 
-  let (@$.) : _ tconstr -> _ logic_type -> _ logic_type = fun x y -> Type (x, Cons (y, Nil))
+  let ($.) : _ tconstr -> _ logic_type -> _ logic_type = fun x y -> Type (x, Cons (y, Nil))
 
-  let var s : _ logic_type = Var s @$ Nil
+  module Tc = Tc
 
-  let bool = Bool @$ Nil
+  module P = Pervasives
 
-  let void = Void @$ Nil
+  type some = some_logic_type
 
-  let integer = Numeric (Integral Integer) @$ Nil
+  let some lt = Logic_type lt
 
-  let int i = Numeric (Integral i) @$ Nil
+  let var s : _ logic_type = Var s $ Nil
 
-  let enum s = Numeric (Integral (Enum s)) @$ Nil
+  let bool = Bool $ Nil
 
-  let real = Numeric (Real Real) @$ Nil
+  let void = Void $ Nil
 
-  let single = Numeric (Real (Float Single)) @$ Nil
+  let integer = Numeric (Integral Integer) $ Nil
 
-  let double = Numeric (Real (Float Double)) @$ Nil
+  let int i = Numeric (Integral i) $ Nil
 
-  let var v = Var v @$ Nil
+  let enum s = Numeric (Integral (Enum s)) $ Nil
 
-  let user = lt
+  let real = Numeric (Real Real) $ Nil
 
-  let jc = lt ~from:Name.Theory.jessie
+  let single = Numeric (Real (Float Single)) $ Nil
+
+  let double = Numeric (Real (Float Double)) $ Nil
+
+  let var v = Var v $ Nil
+
+  let user s ~from:(name, import) = User (name, import, s)
+
+  let jc = user ~from:Name.Theory.jessie
 
   type poly_logic_type = { logic_type : 'a. 'a logic_type }
 
@@ -421,21 +436,23 @@ struct
       match ty t with
       | Poly { logic_type } -> logic_type
       | Ty _ -> failwith "Lt.return: Any"
-
-  let some = some
 end
 
 module Wt =
 struct
   type 'a t = 'a why_type
 
-  let base t = Base_type Lt.(t @$ Nil)
+  let base t = Base_type Lt.(t $ Nil)
 
   let integer = Pervasives.(base @@ Numeric (Integral Integer))
 
   let bool = base Bool
 
   let void = base Void
+
+  type some = some_why_type
+
+  let some wt = Why_type wt
 
   type 'a typed =
     | Ty of 'a ty
@@ -477,8 +494,8 @@ struct
       match ty wt with
       | Poly { why_type } -> why_type
       | Poly' { why_type } -> Poly { why_type }
-      | Ty ty'' -> let Eq = eq ty' ty'' in wt
-      | Ty' ty'' -> let Eq = eq ty' ty'' in Typed (wt, ty')
+      | Ty ty'' -> let Ty.Eq = Ty.eq ty' ty'' in wt
+      | Ty' ty'' -> let Ty.Eq = Ty.eq ty' ty'' in Typed (wt, ty')
 
   let return : type a b. (a, b) ty_opt -> _ -> a t = fun typ t ->
     match typ with
@@ -488,8 +505,6 @@ struct
       | Poly { why_type } -> why_type
       | Poly' { why_type } -> Poly { why_type }
       | Ty _ | Ty' _ -> failwith "Wt.return: Any"
-
-  let some = some
 end
 
 module E =
@@ -502,13 +517,13 @@ struct
 
   let (@:) labels ({ expr_labels } as e) = { e with expr_labels = Pervasives.(labels @ expr_labels) }
 
-  let (@) : _ expr -> _ expr_hlist -> _ expr_hlist = fun x xs -> Cons (x, xs)
+  let (^) : _ expr -> _ expr_hlist -> _ expr_hlist = fun x xs -> Cons (x, xs)
 
-  let (@.) : _ expr -> _ expr -> _ expr_hlist = fun x y -> Cons (x, Cons (y, Nil))
+  let (^.) : _ expr -> _ expr -> _ expr_hlist = fun x y -> Cons (x, Cons (y, Nil))
 
-  let (@$) : _ func -> _ expr_hlist -> _ expr = fun x y -> mk (App (x, y, None))
+  let ($) : _ func -> _ expr_hlist -> _ expr = fun x y -> mk (App (x, y, None))
 
-  let (@$.) : _ func -> _ expr -> _ expr = fun x y -> mk (App (x, Cons (y, Nil), None))
+  let ($.) : _ func -> _ expr -> _ expr = fun x y -> mk (App (x, Cons (y, Nil), None))
 
   let (>:) : _ expr -> _ why_type -> _ expr =
     fun e t ->
@@ -518,10 +533,20 @@ struct
 
   module F = F
 
+  module P = Pervasives
+
   type some_hlist = Hlist : _ expr_hlist -> some_hlist
 
-  let hlist_of_list =
-    List.fold_left (fun (Hlist ehl) (Expr e) -> Hlist (e @ ehl)) (Hlist Nil)
+  type some = some_expr
+
+  let some e = Expr e
+
+  let hlist_of_list ?(init=Hlist Nil) =
+    List.fold_left (fun (Hlist ehl) (Expr e) -> Hlist (e ^ ehl)) init
+
+  let (^..) arg init = hlist_of_list ~init [some arg]
+
+  let ($..) (from, name) (Hlist args) = F.user ~from name $ args
 
   let positioned l_pos ?behavior:(l_behavior = "default") ?kind:l_kind e =
     { e with expr_node = Labeled ({ l_kind; l_behavior; l_pos }, e) }
@@ -542,7 +567,7 @@ struct
 
   let var v = mk (Var v)
 
-  let (!) v = mk (Deref v)
+  let (!.) v = mk (Deref v)
 
   let void = mk Void
 
@@ -580,7 +605,9 @@ struct
     | [e] -> labs @: e
     | l -> labs @: mk (Block l)
 
-  let bin op t1 t2 = B_int_op op @$ t1 @. t2
+  let bin op t1 t2 = B_int_op op $ t1 ^. t2
+
+  let assert_ k p = mk (Assert (k, p))
 
   let (+) e1 e2 =
     match e1.expr_node, e2.expr_node with
@@ -619,11 +646,41 @@ struct
   let (-~) e =
     match e.expr_node with
     | Const Int "0" -> int 0
-    | _ -> U_int_op `Neg @$. e
+    | _ -> U_int_op `Neg $. e
 
-  let select mem p = F.jc "select" @$ mem @. p
+  let select mem p = F.jc "select" $ mem ^. p
 
   let ( **>) fi = select (var (Name.field_memory_name fi))
+
+  let rec (^^) e1 e2 =
+    match e1.expr_labels, e1.expr_node, e2.expr_labels, e2.expr_node with
+    | labs1, Void, _, _ -> labs1 @: e2
+    | _, _, [], Void -> e1
+    | labs1, Block [], _, _ -> (labs1 @: void) ^^ e2
+    | _, _, labs2, Block [] -> e1 ^^ labs2 @: void
+    | labs1, Block [e1], _, _ -> (labs1 @: e1) ^^ e2
+    | _, _, labs2, Block [e2] -> e1 ^^ labs2 @: e2
+    | labs, Block l1, _, _ ->
+      block ~labs (append l1 [e2])
+    | labs, _, labs2, Block (e2 :: e2s) ->
+      block ~labs (append [e1] ((labs2 @: e2) :: e2s))
+    | labs, _, _, _ ->
+      block ~labs [{ e1 with expr_labels = [] }; e2]
+
+  and append l1 l2 =
+    match l1 with
+    | [] -> l2
+    | [e1] ->
+      begin match l2 with
+      | [] -> [e1]
+      | e2 :: e2s ->
+        match e1 ^^ e2 with
+        | { expr_labels; expr_node = Block (e1 :: e1s) } ->
+          append ((expr_labels @: e1) :: e1s) e2s
+        | e ->
+          append [e] e2s
+      end
+    | e1 :: e1s -> e1 :: append e1s l2
 
   type 'a typed =
     | Ty of 'a ty
@@ -725,8 +782,8 @@ struct
       match ty e with
       | Poly { expr_node } -> { e with expr_node }
       | Poly' pen -> { e with expr_node = Poly pen }
-      | Ty ty'' -> let Eq = eq ty' ty'' in e
-      | Ty' ty'' -> let Eq = eq ty' ty'' in { e with expr_node = Typed (e, ty') }
+      | Ty ty'' -> let Ty.Eq = Ty.eq ty' ty'' in e
+      | Ty' ty'' -> let Ty.Eq = Ty.eq ty' ty'' in { e with expr_node = Typed (e, ty') }
 
   let return : type a b. (a, b) ty_opt -> _ -> a t = fun t e ->
     match t with
@@ -736,8 +793,6 @@ struct
       | Poly { expr_node } -> { e with expr_node }
       | Poly' pen -> { e with expr_node = Poly pen }
       | Ty _ | Ty' _ -> failwith "E.return: Any"
-
-  let some = some
 end
 
 module type Bounded =
@@ -751,16 +806,16 @@ module type Form =
 sig
   type 'a t
   type 'a hlist
-  val (@.) : 'a t -> 'b t -> ('a * ('b * unit)) hlist
-  val (@$) : ('a, 'b) F.t -> 'a hlist -> 'b t
-  val (@$.) : ('a * unit, 'b) F.t -> 'a t -> 'b t
+  val (^.) : 'a t -> 'b t -> ('a * ('b * unit)) hlist
+  val ($) : ('a, 'b) F.t -> 'a hlist -> 'b t
+  val ($.) : ('a * unit, 'b) F.t -> 'a t -> 'b t
 end
 
 module Make_ops (I : Bounded) (F : Form) =
 struct
   open F
-  let bin op flag t1 t2 = T.(B_bint_op (op, I.ty, flag) @$ t1 @. t2)
-  let un op flag t = T.(U_bint_op (op, I.ty, flag) @$. t)
+  let bin op flag t1 t2 = T.(B_bint_op (op, I.ty, flag) $ t1 ^. t2)
+  let un op flag t = T.(U_bint_op (op, I.ty, flag) $. t)
   let (+) = bin `Add false
   let (+%) = bin `Add true
   let (-) = bin `Sub false
@@ -793,21 +848,21 @@ struct
   let safe_module = "Safe_" ^ name
   let unsafe_module = "Unsafe_" ^ name
   type t = I.bound bounded integer
-  let rel pred t1 t2 : pred = App (B_num_pred (pred, Integral I.ty), T.(t1 @. t2))
+  let rel pred t1 t2 : pred = App (B_num_pred (pred, Integral I.ty), T.(t1 ^. t2))
   module T =
   struct
     include Make_ops (I) (T)
-    let of_int t = T.(Of_int (I.ty, false) @$. t)
-    let of_int_mod t = T.(Of_int (I.ty, true) @$. t)
-    let to_int t = T.(To_int I.ty @$. t)
+    let of_int t = T.(Of_int (I.ty, false) $. t)
+    let of_int_mod t = T.(Of_int (I.ty, true) $. t)
+    let to_int t = T.(To_int I.ty $. t)
     module B = O.M (T)
   end
   module E =
   struct
     include Make_ops (I) (E)
-    let of_int t = E.(Of_int (I.ty, false) @$. t)
-    let of_int_mod t = E.(Of_int (I.ty, true) @$. t)
-    let to_int t = E.(To_int I.ty @$. t)
+    let of_int t = E.(Of_int (I.ty, false) $. t)
+    let of_int_mod t = E.(Of_int (I.ty, true) $. t)
+    let to_int t = E.(To_int I.ty $. t)
     module B = O.M (E)
   end
   let (>) = rel `Gt
@@ -859,10 +914,10 @@ struct
         struct
           type 'a t = 'a T.t
           open T
-          let bin op t1 t2 = T.(B_bint_bop (op, I.ty) @$ t1 @. t2)
-          let un op t = T.(U_bint_bop (op, I.ty) @$. t)
-          let (<<) (*>>)*) t1 t2 = T.(Lsl_bint (I.ty, false) @$ t1 @. t2)
-          let (<<%) t1 t2 = T.(Lsl_bint (I.ty, true) @$ t1 @. t2)
+          let bin op t1 t2 = T.(B_bint_bop (op, I.ty) $ t1 ^. t2)
+          let un op t = T.(U_bint_bop (op, I.ty) $. t)
+          let (<<) (*>>)*) t1 t2 = T.(Lsl_bint (I.ty, false) $ t1 ^. t2)
+          let (<<%) t1 t2 = T.(Lsl_bint (I.ty, true) $ t1 ^. t2)
           let (&) = bin `And
           let (||) = bin `Or
           let xor = bin `Xor
@@ -874,9 +929,9 @@ struct
         struct
           type 'a t = 'a D.t'
           type 'a hlist
-          let (@.) : 'a t -> 'b t -> ('a * ('b * unit)) hlist = fun _ _ -> assert false
-          let (@$) : ('a, 'b) F.t -> 'a hlist -> 'b t = fun _ _ -> assert false
-          let (@$.) : ('a * unit, 'b) F.t -> 'a t -> 'b t = fun _ _ -> assert false
+          let (^.) : 'a t -> 'b t -> ('a * ('b * unit)) hlist = fun _ _ -> assert false
+          let ($) : ('a, 'b) F.t -> 'a hlist -> 'b t = fun _ _ -> assert false
+          let ($.) : ('a * unit, 'b) F.t -> 'a t -> 'b t = fun _ _ -> assert false
         end
         module type O =
         sig
@@ -987,23 +1042,29 @@ let module_of_int_ty : type r b. (r repr, b bit) xintx bounded integer -> (modul
   | Int (Signed, X64) -> (module Int64)
   | Int (Unsigned, X64) -> (module Uint64)
 
-let rel = T.rel
-
-let (>) = T.(>)
-let (>=) = T.(>=)
-let (<) = T.(<)
-let (<=) = T.(<=)
-
-let (=) = T.(=)
-let (<>) = T.(<>)
-
 module P =
 struct
   type t = pred
 
-  let (@$) : _ func -> _ term_hlist -> pred = fun x y -> App (x, y)
+  let ($) : _ func -> _ term_hlist -> pred = fun x y -> App (x, y)
 
-  let (@$.) : _ func -> _ term -> pred = fun x y -> App (x, Cons (y, Nil))
+  let ($.) : _ func -> _ term -> pred = fun x y -> App (x, Cons (y, Nil))
+
+  let (^) = T.(^)
+
+  let (^.) = T.(^.)
+
+  let (^..) = T.(^..)
+
+  let ($..) (from, name) (T.Hlist args) = F.user ~from name $ args
+
+  let hlist_of_list = T.hlist_of_list
+
+  module F = F
+
+  module T = T
+
+  module P = Pervasives
 
   let rec unlabel : pred -> pred =
     function
@@ -1016,129 +1077,90 @@ struct
   let located = S.(positioned % Position.of_loc)
 
   let positioned'  = S.(positioned % Position.of_pos)
+
+  let is_not_true p =
+    match unlabel p with
+    | True -> false
+    | _ -> true
+
+  let not p =
+    match unlabel p with
+    | True -> False
+    | False -> True
+    | _ -> Not p
+
+  let rel = T.rel
+
+  let (>) = T.(>)
+  let (>=) = T.(>=)
+  let (<) = T.(<)
+  let (<=) = T.(<=)
+
+  let (=) = T.(=)
+  let (<>) = T.(<>)
+
+  let (&&) p1 p2 =
+    match unlabel p1, unlabel p2 with
+    | True, _ -> True
+    | _, True -> True
+    | False, _ -> p2
+    | _, False -> p1
+    | _, _ -> Or (p1, p2)
+
+  let (||) p1 p2 =
+    match unlabel p1, unlabel p2 with
+    | True, _ -> p2
+    | _, True -> p1
+    | False, _ -> False
+    | _, False -> False
+    | _, _ -> And (p1, p2)
+
+  let rec conj =
+    function
+    | [] -> True
+    | p :: ps -> p && conj ps
+
+  let rec disj =
+    function
+    | [] -> False
+    | p :: ps -> p || disj ps
+
+  let (<:) t1 t2 : pred = App (F.jc "subtag", T.(t1 ^. t2))
+
+  let if_ cond ~then_ ~else_ : pred = If (cond, then_, else_)
+
+  let let_ v ~(equal : 'a term) ~in_ : pred = Let (v, equal, in_ (T.var v : 'a term))
+
+  let forall v (ty : 'a logic_type) ?(trigs=[]) p = Forall (v, ty, trigs, p (T.var v : 'a term))
+
+  let exists v (ty : 'a logic_type) ?(trigs=[]) p = Exists (v, ty, trigs, p (T.var v : 'a term))
+
+  let impl p1 p2 =
+    match unlabel p1, unlabel p2 with
+    | True, _ -> p2
+    | _, True -> True
+    | False, _ -> True
+    | _, False -> Not p1
+    | _, _ -> Impl (p1, p2)
+
+  let rec impls conclu =
+    function
+    | [] -> conclu
+    | p :: ps -> Impl (p, impls conclu ps)
+
+  let iff p1 p2 =
+    match unlabel p1, unlabel p2 with
+    | True, _ -> p2
+    | _, True -> p1
+    | False, _ -> not p2
+    | _, False -> not p1
+    | _, _ -> Iff (p1, p2)
 end
 
-let is_not_true p =
-  match P.unlabel p with
-  | True -> false
-  | _ -> true
+module Wd =
+struct
+  let id { why_id } = why_id
 
-let not p =
-  match P.unlabel p with
-  | True -> False
-  | False -> True
-  | _ -> Not p
-
-let (&&) p1 p2 =
-  match P.unlabel p1, P.unlabel p2 with
-  | True, _ -> True
-  | _, True -> True
-  | False, _ -> p2
-  | _, False -> p1
-  | _, _ -> Or (p1, p2)
-
-let (||) p1 p2 =
-  match P.unlabel p1, P.unlabel p2 with
-  | True, _ -> p2
-  | _, True -> p1
-  | False, _ -> False
-  | _, False -> False
-  | _, _ -> And (p1, p2)
-
-let rec conj =
-  function
-  | [] -> True
-  | p :: ps -> p && conj ps
-
-let rec disj =
-  function
-  | [] -> False
-  | p :: ps -> p || disj ps
-
-let if_ cond ~then_ ~else_ : pred = If (cond, then_, else_)
-
-let let_ v ~(equal : 'a term) ~in_ : pred = Let (v, equal, in_ (T.var v : 'a term))
-
-let forall v (ty : 'a logic_type) ?(trigs=[]) p = Forall (v, ty, trigs, p (T.var v : 'a term))
-
-let exists v (ty : 'a logic_type) ?(trigs=[]) p = Exists (v, ty, trigs, p (T.var v : 'a term))
-
-let impl p1 p2 =
-  match P.unlabel p1, P.unlabel p2 with
-  | True, _ -> p2
-  | _, True -> True
-  | False, _ -> True
-  | _, False -> Not p1
-  | _, _ -> Impl (p1, p2)
-
-let rec impls conclu =
-  function
-  | [] -> conclu
-  | p :: ps -> Impl (p, impls conclu ps)
-
-let iff p1 p2 =
-  match P.unlabel p1, P.unlabel p2 with
-  | True, _ -> p2
-  | _, True -> p1
-  | False, _ -> not p2
-  | _, False -> not p1
-  | _, _ -> Iff (p1, p2)
-
-let rec (^@) e1 e2 =
-  let open E in
-  match e1.expr_labels, e1.expr_node, e2.expr_labels, e2.expr_node with
-  | labs1, Void, _, _ -> labs1 @: e2
-  | _, _, [], Void -> e1
-  | labs1, Block [], _, _ -> (labs1 @: void) ^@ e2
-  | _, _, labs2, Block [] -> e1 ^@ labs2 @: void
-  | labs1, Block [e1], _, _ -> (labs1 @: e1) ^@ e2
-  | _, _, labs2, Block [e2] -> e1 ^@ labs2 @: e2
-  | labs, Block l1, _, _ ->
-    block ~labs (append l1 [e2])
-  | labs, _, labs2, Block (e2 :: e2s) ->
-    block ~labs (append [e1] ((labs2 @: e2) :: e2s))
-  | labs, _, _, _ ->
-    block ~labs [{ e1 with expr_labels = [] }; e2]
-
-and append l1 l2 =
-  let open E in
-  match l1 with
-  | [] -> l2
-  | [e1] ->
-    begin match l2 with
-    | [] -> [e1]
-    | e2 :: e2s ->
-      match e1 ^@ e2 with
-      | { expr_labels; expr_node = Block (e1 :: e1s) } ->
-        append ((expr_labels @: e1) :: e1s) e2s
-      | e ->
-        append [e] e2s
-    end
-  | e1 :: e1s -> e1 :: append e1s l2
-
-let id { why_id } = why_id
-
-let why_decl ~name:why_name ?expl:(why_expl="") ?pos:(why_pos = Position.dummy) why_decl =
-  { why_id = { why_name; why_expl; why_pos }; why_decl }
-
-open Name
-
-let select_commited pc = T.(select (var (committed_name pc)))
-
-let typeof tt p = T.(F.jc "typeof" @$ tt @. p)
-
-let typeeq tt p st = typeof tt p = T.var (Name.tag st)
-
-let (<:) t1 t2 : pred = App (F.jc "subtag", T.(t1 @. t2))
-
-let instanceof tt p st : pred = App (F.jc "instanceof", T.(tt @ p @. var (Name.tag st)))
-
-let disjoint ps1 ps2 : pred = App (F.jc "pset_disjoint", T.(ps1 @. ps2))
-
-let int_of_tag st = T.(F.jc "int_of_tag" @$. var (Name.tag st))
-
-let alloc_table = T.alloc_table
-
-let offset_max = T.offset_max
-
-let offset_min = T.offset_min
+  let mk ~name:why_name ?expl:(why_expl="") ?pos:(why_pos = Position.dummy) why_decl =
+    { why_id = { why_name; why_expl; why_pos }; why_decl }
+end

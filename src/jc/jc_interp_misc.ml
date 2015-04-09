@@ -58,13 +58,29 @@ let find_pointer_class a =
   with Not_found ->
     JCroot (find_variant a)
 
-let mutable_name2 a =
-  mutable_name (JCtag (find_struct a, []))
+let mutable_name2 a = mutable_name (JCtag (find_struct a, []))
 
-let committed_name2 a =
-  committed_name (JCtag (find_struct a, []))
+let committed_name2 a = committed_name (JCtag (find_struct a, []))
 
 let pc_of_name name = JCtag (find_struct name, []) (* TODO: parameters *)
+
+let ty =
+  function
+  | JCTnative Tunit -> Typ (Ty Void)
+  | JCTnative Tboolean -> Typ (Ty Bool)
+  | JCTnative Tinteger -> Typ (Ty (Numeric (Integral Integer)))
+  | JCTnative Treal -> Typ (Ty (Numeric (Real Real)))
+  | JCTnative (Tgenfloat `Double) -> Typ (Ty (Numeric (Real (Float Double))))
+  | JCTnative (Tgenfloat `Float) -> Typ (Ty (Numeric (Real (Float Single))))
+  | JCTnative (Tgenfloat `Binary80) -> Typ Any
+  | JCTnative Tstring -> Typ Any
+  | JCTlogic _ -> Typ Any
+  | JCTenum { ei_type = Int (r, b) } -> Typ (Ty (Numeric (Integral (Int (r, b)))))
+  | JCTenum { ei_type = Enum e } -> Typ (Ty (Numeric (Integral (Enum e))))
+  | JCTpointer _ -> Typ Any
+  | JCTnull -> Typ Any
+  | JCTany -> Typ Any
+  | JCTtype_var _ -> Typ Any
 
 let const t c =
   let return c = O.C.return t c in
@@ -128,13 +144,13 @@ let fresh_statement_label = make_label_counter "l__before_statement_"
 
 (* basic model types *)
 
-let root_model_type ri = O.Lt.(user ~from:(Name.Theory.root ri) (Name.Type.root ri) @$ Nil)
+let root_model_type ri = O.Lt.(user ~from:(Name.Theory.root ri) (Name.Type.root ri) $ Nil)
 
 let struct_model_type st = root_model_type (struct_root st)
 
 let pointer_class_model_type pc = root_model_type (pointer_class_root pc)
 
-let bitvector_type () = O.Lt.(user ~from:(Name.Theory.bitvector) Name.Type.bitvector @$ Nil)
+let bitvector_type () = O.Lt.(user ~from:(Name.Theory.bitvector) Name.Type.bitvector $ Nil)
 
 let alloc_class_type =
   function
@@ -145,17 +161,17 @@ let memory_class_type mc = alloc_class_type (alloc_class_of_mem_class mc)
 
 (* raw types *)
 
-let raw_pointer_type ty' = O.Lt.(jc pointer_type_name @$. ty')
+let raw_pointer_type ty' = O.Lt.(jc pointer_type_name $. ty')
 
-let raw_pset_type ty' = O.Lt.(jc pset_type_name @$. ty')
+let raw_pset_type ty' = O.Lt.(jc pset_type_name $. ty')
 
-let raw_alloc_table_type ty' = O.Lt.(jc Name.Type.alloc_table @$. ty')
+let raw_alloc_table_type ty' = O.Lt.(jc Name.Type.alloc_table $. ty')
 
-let raw_tag_table_type ty' = O.Lt.(jc Name.Type.tag_table @$. ty')
+let raw_tag_table_type ty' = O.Lt.(jc Name.Type.tag_table $. ty')
 
-let raw_tag_id_type ty' = O.Lt.(jc tag_id_type_name @$. ty')
+let raw_tag_id_type ty' = O.Lt.(jc tag_id_type_name $. ty')
 
-let raw_memory_type ty1' ty2' = O.Lt.(jc Name.Type.memory @$ ty1' @. ty2')
+let raw_memory_type ty1' ty2' = O.Lt.(jc Name.Type.memory $ ty1' ^. ty2')
 
 (* pointer model types *)
 
@@ -168,7 +184,7 @@ let pointer_type ac pc =
 
 (* translation *)
 
-let tr_native_type t =
+let native_type t =
   let open O.Lt in
   let return lt = return t lt in
   function
@@ -178,92 +194,82 @@ let tr_native_type t =
   | Treal -> return real
   | Tgenfloat `Double -> return double
   | Tgenfloat `Float -> return single
-  | Tgenfloat `Binary80 -> return (jc "binary80" @$ Nil)
-  | Tstring -> return (jc "string" @$ Nil)
+  | Tgenfloat `Binary80 -> return (jc "binary80" $ Nil)
+  | Tstring -> return (jc "string" $ Nil)
 
-let ty =
-  function
-  | JCTnative Tunit -> Typ (Ty Void)
-  | JCTnative Tboolean -> Typ (Ty Bool)
-  | JCTnative Tinteger -> Typ (Ty (Numeric (Integral Integer)))
-  | JCTnative Treal -> Typ (Ty (Numeric (Real Real)))
-  | JCTnative (Tgenfloat `Double) -> Typ (Ty (Numeric (Real (Float Double))))
-  | JCTnative (Tgenfloat `Float) -> Typ (Ty (Numeric (Real (Float Single))))
-  | JCTnative (Tgenfloat `Binary80) -> Typ Any
-  | JCTnative Tstring -> Typ Any
-  | JCTlogic _ -> Typ Any
-  | JCTenum { ei_type = Int (r, b) } -> Typ (Ty (Numeric (Integral (Int (r, b)))))
-  | JCTenum { ei_type = Enum e } -> Typ (Ty (Numeric (Integral (Enum e))))
-  | JCTpointer _ -> Typ Any
-  | JCTnull -> Typ Any
-  | JCTany -> Typ Any
-  | JCTtype_var _ -> Typ Any
+let some_native_type t =
+  let Typ typ = ty (JCTnative t) in
+  O.Lt.some @@ native_type typ t
 
 type some_ltype_hlist =
   | Ltype_hlist : 'a ltype_hlist -> some_ltype_hlist
 
-let rec tr_base_type : type a b. (a, b) ty_opt -> ?region:_ ->  _ -> a logic_type =
-  fun t ?region ->
+let rec type_ : type a b. (a, b) ty_opt -> _ -> a logic_type =
+  fun t ->
   let tr_ltype_hlist =
     List.fold_left
       (fun (Ltype_hlist lhl) t ->
          let Typ ty_opt = ty t in
-         Ltype_hlist O.Lt.(tr_base_type ty_opt ?region t @ lhl))
+         Ltype_hlist O.Lt.(type_ ty_opt t ^ lhl))
       (Ltype_hlist Nil)
   in
   let open O.Lt in
   let return lt = return t lt in
   function
-  | JCTnative ty -> tr_native_type t ty
+  | JCTnative ty -> native_type t ty
   | JCTlogic (s, l) ->
-    return (let Ltype_hlist lhl = tr_ltype_hlist l in user ~from:Name.Theory.current s @$ lhl)
+    return (let Ltype_hlist lhl = tr_ltype_hlist l in user ~from:Name.Theory.current s $ lhl)
   | JCTenum { ei_type = Int (r, b) } ->
     return (int (Int (r, b)))
   | JCTenum { ei_type = Enum e } ->
     return (int (Enum e))
   | JCTpointer (pc, _, _) ->
-    let ac =
-      match region with
-      | None ->
-        alloc_class_of_pointer_class pc
-      | Some r when Region.bitwise r -> JCalloc_bitvector
-      | Some _ -> alloc_class_of_pointer_class pc
-    in
+    let ac = alloc_class_of_pointer_class pc in
     return (pointer_type ac pc)
   | JCTnull | JCTany -> invalid_arg "tr_base_type"
   | JCTtype_var tv -> return (var (Type_var.uname tv))
 
-let tr_type t ~region ty = Base_type (tr_base_type t ~region ty)
+let some_type t =
+  let Typ typ = ty t in
+  O.Lt.some @@ type_ typ t
 
-let tr_var_base_type t v = tr_base_type t ~region:v.vi_region v.vi_type
+let base_type t ty = Base_type (type_ t ty)
 
-let tr_var_type t v = tr_type t ~region:v.vi_region v.vi_type
+let some_base_type t =
+  let Typ typ = ty t in
+  O.Wt.some @@ base_type typ t
 
-let any_value t region jct =
+let some_var_base_type v = some_base_type v.vi_type
+
+let some_var_type v = some_type v.vi_type
+
+let nondet_value t jct =
   let open O.E in
   let return e = return t e in
   match jct with
   | JCTnative ty ->
-    let jc_val v = return (F.jc v @$. void) in
+    let jc_val v = return (F.jc v $. void) in
     begin match ty with
     | Tunit -> return void
     | Tboolean -> jc_val "any_bool"
     | Tinteger -> jc_val "any_int"
     | Treal -> jc_val "any_real"
-    | Tgenfloat _ -> jc_val ("any_" ^ native_name ty)
+    | Tgenfloat _ -> jc_val P.("any_" ^ native_name ty)
     | Tstring -> jc_val "any_string"
     end
   | JCTnull
-  | JCTpointer _ -> return (F.jc_val "any_pointer" @$. void >: tr_type Any ~region jct)
-  | JCTenum ei -> return (F.jc_val (Name.Param.any_enum ei.ei_type) @$. void)
+  | JCTpointer _ -> return (F.jc_val "any_pointer" $. void >: base_type Any jct)
+  | JCTenum ei -> return (F.jc_val (Name.Param.any_enum ei.ei_type) $. void)
   | JCTlogic _ as ty ->
-    let t' =
-      Annot_type (True, Base_type (tr_base_type t ty), [], [], True, [])
-    in
+    let t' = Annot_type (True, base_type t ty, [], [], True, []) in
     return (mk (Black_box t'))
   | JCTany -> failwith "any_value: value of wilcard type"
   | JCTtype_var _ ->
     Options.jc_error Why_loc.dummy_position "Usnupported value of poly type" (* TODO: need environment *)
+
+let some_nondet_value jct =
+  let Typ typ = ty jct in
+  O.E.some @@ nondet_value typ jct
 
 (* model types *)
 
@@ -280,7 +286,7 @@ let memory_type mc =
   match mc with
   | JCmem_field fi ->
     let Typ ty_opt = ty fi.fi_type in
-    mk (tr_base_type ty_opt fi.fi_type)
+    mk (type_ ty_opt fi.fi_type)
   | JCmem_plain_union _
   | JCmem_bitvector -> mk (bitvector_type ())
 
@@ -319,20 +325,21 @@ let lvar_name ~label_in_name ?label_assoc lab n =
 
 let lvar ~constant ~label_in_name lab n =
   let n = lvar_name ~label_in_name lab n in
-  if constant then O.T.var n
-  else if label_in_name then O.T.(!n)
+  let open O.T in
+  if constant then var n
+  else if label_in_name then !.n
   else
     match lab with
-    | LabelHere -> O.T.(!n)
-    | LabelOld -> O.T.(at ~lab:"" n)
-    | LabelPre -> O.T.(at ~lab:"init" n)
-    | LabelPost -> O.T.(!n)
-    | LabelName lab -> O.T.(at n ~lab:lab.lab_final_name)
+    | LabelHere -> !.n
+    | LabelOld -> at ~lab:"" n
+    | LabelPre -> at ~lab:"init" n
+    | LabelPost -> !.n
+    | LabelName lab -> at n ~lab:lab.lab_final_name
 
 (* simple variables *)
 
 let plain_var n = O.E.var n
-let deref_var n = O.E.(!n)
+let deref_var n = O.E.(!.n)
 
 let var_name' e =
   match e.expr_node with
@@ -344,27 +351,20 @@ let var v =
   then deref_var v.vi_final_name
   else plain_var v.vi_final_name
 
-let param t ~type_safe v =
-  v.vi_final_name,
-  if type_safe then
-    tr_base_type t v.vi_type
-  else
-    tr_base_type t ~region:v.vi_region v.vi_type
+let param t v = v.vi_final_name, type_ t v.vi_type
 
 let tvar_name ~label_in_name lab v =
   let constant = not v.vi_assigned in
-  lvar_name ~label_in_name:(label_in_name && not constant)
-    lab v.vi_final_name
+  lvar_name ~label_in_name:(label_in_name && not constant) lab v.vi_final_name
 
 let tvar ~label_in_name lab v =
   let constant = not v.vi_assigned in
-  lvar ~constant ~label_in_name:(label_in_name && not constant)
-    lab v.vi_final_name
+  lvar ~constant ~label_in_name:(label_in_name && not constant) lab v.vi_final_name
 
 let tparam t ~label_in_name lab v =
   tvar_name ~label_in_name lab v,
   tvar ~label_in_name lab v,
-  tr_base_type t v.vi_type
+  type_ t v.vi_type
 
 let local_of_parameter (Expr v', ty') = (var_name' v', ty')
 let effect_of_parameter (Expr v', _ty') = var_name' v'
@@ -404,7 +404,7 @@ let mutable_tag_table infunction (vi, r) =
   else true
 
 let plain_memory_var (mc, r) = O.E.(var (memory_name (mc, r)))
-let deref_memory_var (mc, r) = O.E.(! (memory_name (mc, r)))
+let deref_memory_var (mc, r) = O.E.(!. (memory_name (mc, r)))
 
 let memory_var ?(test_current_function=false) (mc, r) =
   if test_current_function && !current_function = None then
@@ -423,7 +423,7 @@ let tmemory_var ~label_in_name lab (mc,r) =
   lvar ~constant ~label_in_name lab mem
 
 let plain_alloc_table_var (ac, r) = O.E.(var (Name.alloc_table (ac, r)))
-let deref_alloc_table_var (ac, r) = O.E.(! (Name.alloc_table (ac, r)))
+let deref_alloc_table_var (ac, r) = O.E.(!. (Name.alloc_table (ac, r)))
 
 let alloc_table_var ?(test_current_function=false) (ac, r) =
   if test_current_function && !current_function = None then
@@ -443,7 +443,7 @@ let talloc_table_var ~label_in_name lab (ac, r) =
 
 
 let plain_tag_table_var (vi, r) = O.E.(var (Name.tag_table (vi, r)))
-let deref_tag_table_var (vi, r) = O.E.(! (Name.tag_table (vi, r)))
+let deref_tag_table_var (vi, r) = O.E.(!. (Name.tag_table (vi, r)))
 
 let tag_table_var (vi, r) =
   if mutable_tag_table (get_current_function ()) (vi, r) then
@@ -475,15 +475,16 @@ let term  = { term =
                        assert (VarMap.is_empty subst);
                        assert false }
 
+let some_term ~type_safe ~global_assertion ~relocate lab lab' t =
+  let Typ typ = ty t#typ in
+  O.T.some @@ term.term typ ~type_safe ~global_assertion ~relocate lab lab' t
+
 let rec location : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ -> _ -> _ -> a Output_ast.term =
   fun t ~type_safe ~global_assertion lab loc ->
     let flocs : type a. (a, _) ty_opt -> _ -> a Output_ast.term = fun t ->
       location_set t ~type_safe ~global_assertion lab
     in
-    let ft t : some_term =
-      let Typ ty_opt = ty t#typ in
-      Term (term.term ty_opt ~type_safe ~global_assertion ~relocate:false lab lab t)
-    in
+    let ft = some_term ~type_safe ~global_assertion ~relocate:false lab lab in
     let open O.T in
     let return term = return t term in
     match loc#node with
@@ -493,25 +494,15 @@ let rec location : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ 
       flocs t locs
     | JCLderef_term (t1, _fi) ->
       let Term t1 = ft t1 in
-      return (F.jc "pset_singleton" @$. t1)
+      return (F.jc "pset_singleton" $. t1)
     | _ -> Options.jc_error loc#pos "Unsupported location" (* TODO *)
 
 and location_set : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ -> _ -> _ -> a Output_ast.term =
   fun t ~type_safe ~global_assertion lab locs ->
-    let flocs locs : some_term =
-      let Typ ty_opt = ty locs#typ in
-      Term (location_set ty_opt ~type_safe ~global_assertion lab locs)
-    in
-    let ft t : some_term =
-      let Typ ty_opt = ty locs#typ in
-      Term (term.term ty_opt ~type_safe ~global_assertion ~relocate:false lab lab t)
-    in
-    let f' t name args =
-      let open O.T in
-      let Hlist args = hlist_of_list args in
-      return t (F.jc name @$ args)
-    in
-    let f = f' t and f' f t : some_term = Term (f' Any f t) in
+    let flocs = some_location_set ~type_safe ~global_assertion lab in
+    let ft = some_term ~type_safe ~global_assertion ~relocate:false lab lab in
+    let f' t name args = O.T.return t O.T.((Name.Theory.jessie, name) $.. hlist_of_list args) in
+    let f = f' t and f' f t = O.T.some @@ f' Any f t in
     match locs#node with
     | JCLSvar v ->
       f "pset_singleton" [Term (tvar ~label_in_name:global_assertion lab v)]
@@ -536,17 +527,20 @@ and location_set : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ 
     | JCLSrange_term (locs, None, None) ->
       f "pset_all" [f' "pset_singleton" [ft locs]]
     | JCLSat (locs, _lab) -> location_set t ~type_safe ~global_assertion lab locs
+and some_location_set ~type_safe ~global_assertion lab locs =
+  let Typ typ = ty locs#typ in
+  O.T.some @@ location_set typ ~type_safe ~global_assertion lab locs
 
 let rec pset_union_of_list =
   function
   | [] -> O.T.var "pset_empty"
   | [e'] -> e'
-  | e' :: el' -> O.T.(F.jc "pset_union" @$ e' @. pset_union_of_list el')
+  | e' :: el' -> O.T.(F.jc "pset_union" $ e' ^. pset_union_of_list el')
 
 let separation_condition loclist1 loclist2 =
   let floc = location Any ~type_safe:false ~global_assertion:false LabelHere in
   let pset1, pset2 = Pair.map (pset_union_of_list % List.map floc) (loclist1, loclist2) in
-  O.(disjoint pset1 pset2)
+  O.P.(F.jc "pset_disjoint" $ pset1 ^. pset2)
 
 type memory_effect = RawMemory of Memory.t | PreciseMemory of Location.t
 
@@ -659,7 +653,7 @@ let write_read_separation_condition
                  in
                  if loclist <> [] && loclist' <> [] then
                    let pre = separation_condition loclist loclist' in
-                   O.(pre && acc)
+                   O.P.(pre && acc)
                  else acc
                else acc)
        else acc)
@@ -696,7 +690,7 @@ let write_write_separation_condition
           in
           if loclist <> [] && loclist' <> [] then
             let pre = separation_condition loclist loclist' in
-            O.(pre && acc)
+            O.P.(pre && acc)
           else acc
         else acc)
 
@@ -766,7 +760,7 @@ let any_value' typ =
     else if is_jessie_user_type memory typ then "any_memory"
     else invalid_arg "any_value: requested any avalue of unsupported type"
   in
-  O.E.(F.jc_val v @$. void >: Base_type typ)
+  O.E.(F.jc_val v $. void >: Base_type typ)
 
 let define_locals ?(reads=[]) ?(writes=[]) e' =
   let e' = List.fold_left (fun acc (n, ty') -> O.E.(let_ n ~equal:(any_value' ty') ~in_:(Fn.const acc))) e' reads in
@@ -804,7 +798,7 @@ let make_param ~name ~writes ~reads ~pre ~post ~return_type =
       params
       (Why_type annot_type)
   in
-  O.why_decl ~name (Param annot_type)
+  O.Wd.mk ~name (Param annot_type)
 
 let conv_bw_alloc_parameters ~deref r _pc =
   let ac = JCalloc_bitvector in
@@ -859,8 +853,7 @@ let make_ofbit_alloc_param_app r pc =
   let app =
     match pc with
     | JCtag _ ->
-      let O.E.Hlist args = O.E.hlist_of_list args in
-      Expr O.E.(F.jc (alloc_of_bitvector_param_name pc) @$ args)
+      Expr O.E.((Name.Theory.jessie, alloc_of_bitvector_param_name pc) $.. hlist_of_list args)
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> Expr O.E.void
@@ -877,8 +870,7 @@ let make_ofbit_mem_param_app r pc =
   let app =
     match pc with
     | JCtag _ ->
-      let O.E.Hlist args = O.E.hlist_of_list args in
-      Expr O.E.(F.jc (mem_of_bitvector_param_name pc) @$ args)
+      Expr O.E.((Name.Theory.jessie, mem_of_bitvector_param_name pc) $.. hlist_of_list args)
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> Expr O.E.void
@@ -895,8 +887,7 @@ let make_tobit_alloc_param_app r pc =
   let app =
     match pc with
     | JCtag _ ->
-      let O.E.Hlist args = O.E.hlist_of_list args in
-      Expr O.E.(F.jc (alloc_to_bitvector_param_name pc) @$ args)
+      Expr O.E.((Name.Theory.jessie, alloc_to_bitvector_param_name pc) $.. hlist_of_list args)
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> Expr O.E.void
@@ -912,8 +903,7 @@ let make_tobit_mem_param_app r pc =
   let app =
     match pc with
     | JCtag _ ->
-      let O.E.Hlist args = O.E.hlist_of_list args in
-      Expr O.E.(F.jc (mem_to_bitvector_param_name pc) @$ args)
+      Expr O.E.((Name.Theory.jessie, mem_to_bitvector_param_name pc) $.. hlist_of_list args)
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> Expr O.E.void
@@ -927,9 +917,9 @@ let make_of_bitvector_app fi e' : some_term =
   match fi.fi_type with
   | JCTenum _ ->
     Options.jc_error Why_loc.dummy_position "Unsupported type of field %s.%s" fi.fi_hroot.si_name fi.fi_name (* TODO *)
-    (*Term O.(jc_f (logic_enum_of_bitvector_name ei) @$. e')*)
+    (*Term O.(jc_f (logic_enum_of_bitvector_name ei) $. e')*)
   | JCTpointer (pc, _, _) ->
-    Term O.T.(F.jc (logic_variant_of_bitvector_name (pointer_class_root pc)) @$. e')
+    Term O.T.(F.jc (logic_variant_of_bitvector_name (pointer_class_root pc)) $. e')
   | _ty ->
     Options.jc_error Why_loc.dummy_position "Unsupported type of field %s.%s" fi.fi_hroot.si_name fi.fi_name (* TODO *)
 
@@ -946,24 +936,22 @@ let make_conversion_params pc =
           let ac = alloc_class_of_pointer_class pc in
           let s = struct_size_in_bytes st in
           let post_min =
-            O.T.(
-              offset_min ac (var p) =
-                F.jc "offset_min_bytes" @$
-                  var bv_alloc @
-                  (F.jc "pointer_address" @$. var p) @.
-                  int s)
+            O.T.(offset_min ac (var p) =
+                 (F.jc "offset_min_bytes" $
+                    var bv_alloc ^
+                    (F.jc "pointer_address" $. var p) ^.
+                    int s))
           in
           let post_max =
-            O.T.(
-              offset_max ac (var p) =
-                F.jc "offset_max_bytes" @$
-                  var bv_alloc @
-                  (F.jc "pointer_address" @$. var p) @.
-                  int s)
+            O.T.(offset_max ac (var p) =
+                 (F.jc "offset_max_bytes" $
+                   var bv_alloc ^
+                   (F.jc "pointer_address" $. var p) ^.
+                   int s))
           in
           let ty' = pointer_type ac pc in
-          let post _ = O.(post_min && post_max) in
-          O.forall p ty' post
+          let post _ = O.P.(post_min && post_max) in
+          O.P.forall p ty' post
         in
         post_alloc
       else
@@ -1020,17 +1008,17 @@ let make_conversion_params pc =
                      let Term converted =
                        make_of_bitvector_app
                          fi
-                         O.T.(F.jc "select_bytes" @$
-                            var bv_mem @
-                            (F.jc "pointer_address" @$. var pi) @
-                            int off @.
+                         O.T.(F.jc "select_bytes" $
+                            var bv_mem ^
+                            (F.jc "pointer_address" $. var pi) ^
+                            int off ^.
                             int size)
                      in
                      O.T.(select mem (var pi) = converted)
                    in
                    let ty' = pointer_type ac pc in (* Correct pc *)
-                   let posti = O.forall pi ty' posti in
-                   O.(acc && posti), i + 1
+                   let posti = O.P.forall pi ty' posti in
+                   O.P.(acc && posti), i + 1
                else
                  acc, i)
             (True, 0)
@@ -1511,7 +1499,7 @@ let global_writes ~callee_writes =
   VarMap.fold
     (fun v _labs acc ->
        let Typ ty = ty v.vi_type in
-       let n, ty' = param ty ~type_safe:false v in
+       let n, ty' = param ty v in
        (plain_var n, Logic_type ty') :: acc)
     callee_writes.e_globals
     []
@@ -1520,7 +1508,7 @@ let global_reads ~callee_reads =
   VarMap.fold
     (fun v _labs acc ->
        let Typ ty = ty v.vi_type in
-       let n, ty' = param ty ~type_safe:false v in
+       let n, ty' = param ty v in
        (plain_var n, Logic_type ty') :: acc)
     callee_reads.e_globals
     []
@@ -1529,7 +1517,7 @@ let local_reads ~callee_reads =
   VarMap.fold
     (fun v _labs acc ->
        let Typ ty = ty v.vi_type in
-       let n, ty' = param ty ~type_safe:false v in
+       let n, ty' = param ty v in
        (plain_var n, Logic_type ty') :: acc)
     callee_reads.e_locals
     []
@@ -1781,7 +1769,7 @@ let memory_arguments ~callee_reads ~callee_writes ~region_assoc
         ~callee_reads ~callee_writes ~region_assoc ~param_assoc
         ww_inter_names writes' reads'
   in
-  let pre = O.(rw_pre && ww_pre) in
+  let pre = O.P.(rw_pre && ww_pre) in
   if pre = True then
     let writes = List.map (fst % snd) writes in
     let reads = List.map (fst % snd) reads in
@@ -1869,7 +1857,7 @@ let make_bitwise_arguments alloc_wpointers alloc_rpointers
          let locals = alloc_locals @ mem_locals in
          let (^@) (Expr e1) (Expr e2) =
            let e1, e2 = O.E.check (Ty Void) e1, O.E.check (Ty Void) e2 in
-           Expr O.(e1 ^@ e2)
+           Expr O.E.(e1 ^^ e2)
          in
          let ofapp = alloc_ofapp ^@ mem_ofapp in
          let toapp = alloc_toapp ^@ mem_toapp in
@@ -2017,13 +2005,13 @@ let tr_li_args ~label_in_name ~region_assoc ~label_assoc f args =
 
 let tr_logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
   if Options.debug then printf "logic call to %s@." f.li_name;
-  let O.T.Hlist args = O.T.hlist_of_list @@ tr_li_args ~label_in_name ~region_assoc ~label_assoc f args in
-  O.T.(F.user ~from:(f.li_axiomatic |? "", Option.is_some f.li_axiomatic) f.li_final_name @$ args)
+  let args = tr_li_args ~label_in_name ~region_assoc ~label_assoc f args in
+  O.T.(((f.li_axiomatic |? "", Option.is_some f.li_axiomatic), f.li_final_name) $.. hlist_of_list args)
 
 let tr_logic_pred_call ~label_in_name ~region_assoc ~label_assoc f' args =
   if Options.debug then printf "logic pred call to %s@." f'.li_name;
-  let O.T.Hlist args = O.T.hlist_of_list @@ tr_li_args ~label_in_name ~region_assoc ~label_assoc f' args in
-  O.((App (F.user ~from:(f'.li_axiomatic |? "", Option.is_some f'.li_axiomatic) f'.li_final_name, args) : pred))
+  let args = tr_li_args ~label_in_name ~region_assoc ~label_assoc f' args in
+  O.P.(((f'.li_axiomatic |? "", Option.is_some f'.li_axiomatic), f'.li_final_name) $.. hlist_of_list args)
 
 let collect_li_reads acc li =
   let add fold get_name get_map acc =
