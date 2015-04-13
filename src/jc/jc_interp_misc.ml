@@ -501,7 +501,7 @@ and location_set : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ 
   fun t ~type_safe ~global_assertion lab locs ->
     let flocs = some_location_set ~type_safe ~global_assertion lab in
     let ft = some_term ~type_safe ~global_assertion ~relocate:false lab lab in
-    let f' t name args = O.T.return t O.T.((Name.Theory.jessie, name) $.. hlist_of_list args) in
+    let f' t name args = O.T.return t O.T.((Name.Theory.jessie, name) $.. args) in
     let f = f' t and f' f t = O.T.some @@ f' Any f t in
     match locs#node with
     | JCLSvar v ->
@@ -853,7 +853,7 @@ let make_ofbit_alloc_param_app r pc =
   let app =
     match pc with
     | JCtag _ ->
-      Expr O.E.((Name.Theory.jessie, alloc_of_bitvector_param_name pc) $.. hlist_of_list args)
+      Expr O.E.((Name.Theory.jessie, alloc_of_bitvector_param_name pc) $.. args)
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> Expr O.E.void
@@ -870,7 +870,7 @@ let make_ofbit_mem_param_app r pc =
   let app =
     match pc with
     | JCtag _ ->
-      Expr O.E.((Name.Theory.jessie, mem_of_bitvector_param_name pc) $.. hlist_of_list args)
+      Expr O.E.((Name.Theory.jessie, mem_of_bitvector_param_name pc) $.. args)
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> Expr O.E.void
@@ -887,7 +887,7 @@ let make_tobit_alloc_param_app r pc =
   let app =
     match pc with
     | JCtag _ ->
-      Expr O.E.((Name.Theory.jessie, alloc_to_bitvector_param_name pc) $.. hlist_of_list args)
+      Expr O.E.((Name.Theory.jessie, alloc_to_bitvector_param_name pc) $.. args)
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> Expr O.E.void
@@ -903,7 +903,7 @@ let make_tobit_mem_param_app r pc =
   let app =
     match pc with
     | JCtag _ ->
-      Expr O.E.((Name.Theory.jessie, mem_to_bitvector_param_name pc) $.. hlist_of_list args)
+      Expr O.E.((Name.Theory.jessie, mem_to_bitvector_param_name pc) $.. args)
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> Expr O.E.void
@@ -2006,12 +2006,12 @@ let tr_li_args ~label_in_name ~region_assoc ~label_assoc f args =
 let tr_logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
   if Options.debug then printf "logic call to %s@." f.li_name;
   let args = tr_li_args ~label_in_name ~region_assoc ~label_assoc f args in
-  O.T.(((f.li_axiomatic |? "", Option.is_some f.li_axiomatic), f.li_final_name) $.. hlist_of_list args)
+  O.T.(((f.li_axiomatic |? "", Option.is_some f.li_axiomatic), f.li_final_name) $.. args)
 
 let tr_logic_pred_call ~label_in_name ~region_assoc ~label_assoc f' args =
   if Options.debug then printf "logic pred call to %s@." f'.li_name;
   let args = tr_li_args ~label_in_name ~region_assoc ~label_assoc f' args in
-  O.P.(((f'.li_axiomatic |? "", Option.is_some f'.li_axiomatic), f'.li_final_name) $.. hlist_of_list args)
+  O.P.(((f'.li_axiomatic |? "", Option.is_some f'.li_axiomatic), f'.li_final_name) $.. args)
 
 let collect_li_reads acc li =
   let add fold get_name get_map acc =

@@ -255,7 +255,9 @@ type poly_expr_node = { expr_node : 'a. 'a expr_node }
 and 'a expr_hlist =
   | Nil : unit expr_hlist
   | Cons : 'a expr * 'b expr_hlist -> ('a * 'b) expr_hlist
-
+and 'a expr_result =
+  | Void : void expr_result
+  | Return : 'a expr -> 'a expr_result
 and 'typ expr_node =
   | Const : 'a constant -> 'a expr_node
   | Var : string -> 'a expr_node
@@ -273,7 +275,7 @@ and 'typ expr_node =
       * 'a variant option (** variant *)
       * void expr list (** loop body *) ->
       void expr_node
-  | Block : void expr list -> void expr_node
+  | Block : void expr list * 'a expr_result -> 'a expr_node
   | Assign : string * 'a expr -> void expr_node
   | Let : string * 'a expr * 'b expr -> 'b expr_node
   | Let_ref : string * 'a expr * 'b expr -> 'b expr_node

@@ -106,6 +106,32 @@ struct
   let int_of_tag st = st.si_name ^ "_int"
 end
 
+module Theory =
+struct
+  type t = string * bool
+  let root ri = String.capitalize (Type.root ri) ^ "_root", false
+  (* ATTENTION: this theory is non-existent, there is no more "obsolete" support for BV,
+     new implementation of Why3 support for BV should be implemented in Jessie2. *)
+  let bitvector = "Bitvector", false
+  let jessie = "jessie3theories.Jc_memory_model", false
+  let bool = "bool.Bool", true
+  let single = "jessie3theories.Single", true
+  let double = "jessie3theories.Double", true
+  let binary80 = "jessie3theories.Binary80", true
+  let real = "real.Real", true
+  let current = "", false
+  let struct_ =
+    function
+    | JCtag (si, _) -> "Struct_" ^ si.si_name, true
+    | JCroot ri -> "Root_" ^ ri.ri_name, true
+end
+
+module Module =
+struct
+  type t = string * bool
+  let jessie = "Jessie3", false
+end
+
 module Pred =
 struct
   let valid ~equal ~left ~right ac pc =
@@ -123,7 +149,7 @@ struct
           end
       | JCalloc_bitvector -> "valid_bitvector" (* TODO ? *)
     in
-    prefix ^ "_" ^ (Class.pointer pc)
+    Theory.struct_ pc, prefix ^ "_" ^ (Class.pointer pc)
 
   let fresh ~for_ ac pc =
     let for_ =
@@ -136,7 +162,7 @@ struct
       | JCalloc_root _ -> "fresh_" ^ for_
       | JCalloc_bitvector -> "fresh_bitvector" (* TODO *)
     in
-    prefix ^ "_" ^ (Class.pointer pc)
+    Theory.struct_ pc, prefix ^ "_" ^ (Class.pointer pc)
 
   let instanceof ~exact
       (type t1) (type t2) (type t3) (type t4) (type t5) : arg:(t1, t2, t3, _, t4, t5) arg -> _ =
@@ -148,7 +174,7 @@ struct
           pred_name ^ (match arg with Singleton -> "_singleton" | Range_l_r -> "")
         | JCalloc_bitvector -> pred_name ^ "_bitvector" (* TODO *)
       in
-      prefix ^ "_" ^ (Class.pointer pc)
+      Theory.struct_ pc, prefix ^ "_" ^ (Class.pointer pc)
 
   let frame ~for_ ac pc =
     let for_ =
@@ -162,12 +188,13 @@ struct
       | JCalloc_root _ -> "frame_" ^ for_
       | JCalloc_bitvector -> "frame_" ^ for_ ^ "_bitvector" (* TODO *)
     in
-    prefix ^ "_" ^ (Class.pointer pc)
+    Theory.struct_ pc, prefix ^ "_" ^ (Class.pointer pc)
 end
 
 module Param =
 struct
-  let alloc (type t1) (type t2) : arg:(string, check_size:bool -> string, _, _, t1, t2) arg -> _ -> _ -> t2 =
+  let alloc (type t1) (type t2) :
+    arg:(Theory.t * string, check_size:bool -> Theory.t * string, _, _, t1, t2) arg -> _ -> _ -> t2 =
     fun ~arg ac pc ->
       let prefix =
         match ac with
@@ -177,9 +204,9 @@ struct
       in
       let n = prefix ^ "_" ^ (Class.pointer pc) in
       match arg with
-      | Singleton -> n
+      | Singleton -> Theory.struct_ pc, n
       | Range_0_n ->
-        fun ~check_size -> if check_size then n ^ "_requires" else n
+        fun ~check_size -> Theory.struct_ pc, if check_size then n ^ "_requires" else n
 
   let free ~safe ac pc =
     let prefix =
@@ -187,29 +214,9 @@ struct
       | JCalloc_root _ -> "free"
       | JCalloc_bitvector -> "free_bitvector"
     in
-    (if safe then "safe_" else "") ^ prefix ^ "_" ^ (Class.pointer pc)
+    Theory.struct_ pc, (if safe then "safe_" else "") ^ prefix ^ "_" ^ (Class.pointer pc)
 
   let any_enum ae = "any" ^ string_of_some_enum ae
-end
-
-module Theory =
-struct
-  let root ri = String.capitalize (Type.root ri) ^ "_root", false
-  (* ATTENTION: this theory is non-existent, there is no more "obsolete" support for BV,
-     new implementation of Why3 support for BV should be implemented in Jessie2. *)
-  let bitvector = "Bitvector", false
-  let jessie = "jessie3theories.Jc_memory_model", false
-  let bool = "bool.Bool", true
-  let single = "jessie3theories.Single", true
-  let double = "jessie3theories.Double", true
-  let binary80 = "jessie3theories.Binary80", true
-  let real = "real.Real", true
-  let current = "", false
-end
-
-module Module =
-struct
-  let jessie = "Jessie3", false
 end
 
 let root_alloc_table_name vi = vi.ri_name ^ "_alloc_table"

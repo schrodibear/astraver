@@ -477,8 +477,11 @@ and expr_node : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_node -> _
       pred inv
       variant var
       expr_list e2
-  | Block [] -> pr "void"
-  | Block el -> pr "@[<hov 0>begin@ @[<hov 1>%a@]@ end@]" expr_list el
+  | Block ([], Void) -> pr "void"
+  | Block ([], Return e) -> pr "%a" expr e
+  | Block ([e], Void) -> pr "%a" expr e
+  | Block (el, Void) -> pr "@[<hov 0>begin@ @[<hov 1>%a@]@ end@]" expr_list el
+  | Block (el, Return e) -> pr "@[<hov 0>begin@ @[<hov 1>%a;@ %a@]@ end@]" expr_list el expr e
   | Assign (id', e) -> pr "@[<hov 1>(%a@ :=@ %a)@]" id id' expr e
   | Let (id, e1, e2) -> pr_let id e1 e2
   | Let_ref (id', e1, e2) ->
@@ -854,8 +857,12 @@ struct
             ~f:(fun acc rel ->
               f ~acc @@ split_fprintf_th pp_print_string (fun s -> s, false) rel)) |~>
       ListLabels.fold_left ~f:fold' exprs
-    | Block l ->
-      List.fold_left fold' init l
+    | Block (l, e) ->
+      List.fold_left fold' init l |~>
+      begin match e with
+      | Void -> fun ~init -> init
+      | Return e -> fold e
+      end
     | Assign (v, e) ->
       f ~acc:init (`Current, v) |~>
       fold e

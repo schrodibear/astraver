@@ -186,9 +186,11 @@ struct
   let hlist_of_list ?(init=Hlist Nil) =
     List.fold_left (fun (Hlist thl) (Term t : some_term) -> Hlist (t ^ thl)) init
 
-  let (^..) arg init = hlist_of_list ~init [some arg]
+  let (^..) arg args = some arg :: args
 
-  let ($..) (from, name) (Hlist args) = F.user ~from name $ args
+  let ($..) (from, name) args =
+    let Hlist args = hlist_of_list args in
+    F.user ~from name $ args
 
   let int n : _ term = Const (Int (string_of_int n))
 
@@ -267,7 +269,7 @@ struct
 
   let offset_max ac ?r p = F.jc "offset_max" $ alloc_table ?r ac ^. p
 
-  let ( **>) fi = select (var (Name.field_memory_name fi))
+  let ( **>) mem fi = select mem (var (Name.field_memory_name fi))
 
   let rel op t1 t2 : pred = App (B_num_pred (op, Integral Integer), t1 ^. t2)
 
@@ -544,9 +546,13 @@ struct
   let hlist_of_list ?(init=Hlist Nil) =
     List.fold_left (fun (Hlist ehl) (Expr e) -> Hlist (e ^ ehl)) init
 
-  let (^..) arg init = hlist_of_list ~init [some arg]
+  let (^..) arg args = some arg :: args
 
-  let ($..) (from, name) (Hlist args) = F.user ~from name $ args
+  let ($..) (from, name) args =
+    let Hlist args = hlist_of_list args in
+    F.user ~from name $ args
+
+  type 'a result = 'a expr_result
 
   let positioned l_pos ?behavior:(l_behavior = "default") ?kind:l_kind e =
     { e with expr_node = Labeled ({ l_kind; l_behavior; l_pos }, e) }
@@ -591,19 +597,16 @@ struct
     | _, Const (Bool false) -> e2
     | _, _ -> mk (And (e1, e2))
 
-  let while_ cond ~inv ~var e =
-    let body =
-      match e.expr_node with
-      | Block l -> l
-      | _ -> [e]
-    in
-    mk (While (cond, inv, var, body))
+  let while_ cond ~inv ~var es = mk (While (cond, inv, var, es))
 
-  let block ?(labs=[]) =
-    function
-    | [] -> labs @: void
-    | [e] -> labs @: e
-    | l -> labs @: mk (Block l)
+  let block ?(labs=[]) (type a) ~(result : a result) (l : void t list) : a t =
+    match l, result with
+    | [], Void -> labs @: void
+    | [], Return e -> labs @: e
+    | [e], Void -> labs @: e
+    | l, _ -> labs @: mk (Block (l, result))
+
+  let if_ cond ~then_ ~else_ : _ t = mk (If (cond, then_, else_))
 
   let bin op t1 t2 = B_int_op op $ t1 ^. t2
 
@@ -650,37 +653,24 @@ struct
 
   let select mem p = F.jc "select" $ mem ^. p
 
-  let ( **>) fi = select (var (Name.field_memory_name fi))
+  let ( **>) mem fi = select mem (var (Name.field_memory_name fi))
 
-  let rec (^^) e1 e2 =
+  let rec (^^) : type a. void expr -> a expr -> a expr = fun e1 e2 ->
     match e1.expr_labels, e1.expr_node, e2.expr_labels, e2.expr_node with
     | labs1, Void, _, _ -> labs1 @: e2
     | _, _, [], Void -> e1
-    | labs1, Block [], _, _ -> (labs1 @: void) ^^ e2
-    | _, _, labs2, Block [] -> e1 ^^ labs2 @: void
-    | labs1, Block [e1], _, _ -> (labs1 @: e1) ^^ e2
-    | _, _, labs2, Block [e2] -> e1 ^^ labs2 @: e2
-    | labs, Block l1, _, _ ->
-      block ~labs (append l1 [e2])
-    | labs, _, labs2, Block (e2 :: e2s) ->
-      block ~labs (append [e1] ((labs2 @: e2) :: e2s))
+    | labs1, Block ([], Void), _, _ -> (labs1 @: void) ^^ e2
+    | _, _, labs2, Block ([], Void) -> e1 ^^ labs2 @: void
+    | labs1, (Block ([e1], Void) | Block ([], Return e1)), _, _ -> (labs1 @: e1) ^^ e2
+    | _, _, labs2, Block ([e2], Void) -> e1 ^^ labs2 @: e2
+    | _, _, labs2, Block ([], Return e2) -> e1 ^^ labs2 @: e2
+    | labs, Block (l1, e1o), _, _ ->
+      let l1 = match e1o with Return e1 -> l1 @ [e1] | Void -> l1 in
+      block ~labs l1 ~result:(Return e2)
+    | labs, _, labs2, Block (e2 :: e2s, result) ->
+      block ~labs (e1 :: (labs2 @: e2) :: e2s) ~result
     | labs, _, _, _ ->
-      block ~labs [{ e1 with expr_labels = [] }; e2]
-
-  and append l1 l2 =
-    match l1 with
-    | [] -> l2
-    | [e1] ->
-      begin match l2 with
-      | [] -> [e1]
-      | e2 :: e2s ->
-        match e1 ^^ e2 with
-        | { expr_labels; expr_node = Block (e1 :: e1s) } ->
-          append ((expr_labels @: e1) :: e1s) e2s
-        | e ->
-          append [e] e2s
-      end
-    | e1 :: e1s -> e1 :: append e1s l2
+      block ~labs [{ e1 with expr_labels = [] }] ~result:(Return e2)
 
   type 'a typed =
     | Ty of 'a ty
@@ -709,7 +699,12 @@ struct
           Poly' { expr_node = If (i, { t with expr_node = t_expr_node }, { e with expr_node }) }
       end
     | While _ -> Ty Void
-    | Block _ -> Ty Void
+    | Block (es, Return e) ->
+      begin match ty e with
+      | Ty ty | Ty' ty -> Ty' ty
+      | Poly { expr_node } | Poly' { expr_node } -> Poly' { expr_node = Block (es, Return { e with expr_node }) }
+      end
+    | Block (_, Void) -> Ty Void
     | Assign _ -> Ty Void
     | Let (v, e, e') ->
       begin match ty e' with
@@ -1056,7 +1051,9 @@ struct
 
   let (^..) = T.(^..)
 
-  let ($..) (from, name) (T.Hlist args) = F.user ~from name $ args
+  let ($..) (from, name) args =
+    let T.Hlist args = T.hlist_of_list args in
+    F.user ~from name $ args
 
   let hlist_of_list = T.hlist_of_list
 

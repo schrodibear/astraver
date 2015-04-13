@@ -39,9 +39,8 @@ open Struct_tools
 open Region
 open Interp_misc
 open Output_ast
-open Output_misc
 
-module Output = (val Options.backend)
+module O = Output
 
 (* Helper functions *)
 
@@ -63,38 +62,45 @@ let all_mems_ac = select_all ~on_bv:[] all_memories
 let all_tags_ac = select_all ~on_bv:[] all_tags
 
 let deref_if_needed ~in_param lab (is_not_cte, v) =
-  match v with
-  | LDeref _ when is_not_cte -> v
-  | LDeref x -> LVar x
-  | LVar x when in_param -> lvar ~constant:false ~label_in_name:false lab x
-  | LVar _ -> v
-  | t -> failwith @@ Format.asprintf "deref_if_needed got unexpected expression: %a" Output.fprintf_term t
+  O.T.some @@
+  match (v : _ term) with
+  | Deref _ when is_not_cte -> v
+  | Deref x -> O.T.(var x)
+  | Var x when in_param -> lvar ~constant:false ~label_in_name:false lab x
+  | Var _ -> v
+  | _ -> failwith "deref_if_needed got unexpected expression"
 
 type ('a, 'b, 'c) where =
   | In_app : ('b, 'b, 'c) where
   | In_pred : ('c, 'b, 'c) where
 
-let mems ac pc (type t) : (t, region -> term list, (string * logic_type) list) where -> t =
+let mems : type t. _ -> _ -> (t, region -> some_term list, (string * some_logic_type) list) where -> t = fun ac pc ->
   let map f = List.map f (all_mems_ac ac pc) in
   function
-  | In_app -> fun r -> map @@ fun mc -> tmemory_var ~label_in_name:false LabelHere (mc, r)
-  | In_pred -> map (fdup2 Name.Generic.memory memory_type)
+  | In_app -> fun r -> map @@ fun mc -> O.T.some @@ tmemory_var ~label_in_name:false LabelHere (mc, r)
+  | In_pred -> map (fdup2 Name.Generic.memory (O.Lt.some % memory_type))
 
-let allocs ac pc (type t) : (t, region -> in_param:bool -> label -> term list, (string * logic_type) list) where -> t =
+let allocs :
+  type t.
+  _ -> _ -> (t, region -> in_param:bool -> label -> some_term list, (string * some_logic_type) list) where -> t =
+  fun ac pc ->
   let map f = List.map f (all_allocs_ac ac pc) in
   function
   | In_app ->
     fun r ~in_param lab ->
     map @@ fun ac -> deref_if_needed ~in_param lab @@ talloc_table_var ~label_in_name:false LabelHere (ac, r)
-  | In_pred -> map (fdup2 Name.Generic.alloc_table alloc_table_type)
+  | In_pred -> map (fdup2 Name.Generic.alloc_table (O.Lt.some % alloc_table_type))
 
-let tags ac pc (type t) : (t, region -> in_param:bool -> label -> term list, (string * logic_type) list) where -> t =
+let tags :
+  type t.
+  _ -> _ -> (t, region -> in_param:bool -> label -> some_term list, (string * some_logic_type) list) where -> t =
+  fun ac pc ->
   let map f = List.map f (all_tags_ac ac pc) in
   function
   | In_app ->
     fun r ~in_param lab ->
     map @@ fun ac -> deref_if_needed ~in_param lab @@ ttag_table_var ~label_in_name:false LabelHere (ac, r)
-  | In_pred -> map @@ fdup2 (Name.tag_table % Pair.cons' dummy_region) tag_table_type
+  | In_pred -> map @@ fdup2 (Name.tag_table % Pair.cons' dummy_region) (O.Lt.some % tag_table_type)
 
 let map_st ~f ac pc =
   match ac with
@@ -113,22 +119,22 @@ let map_st ~f ac pc =
 let map_embedded_fields ~f ~p ac =
   map_st ac
     ~f:(fun st ->
-          ListLabels.map
-            st.si_fields
-            ~f:(function
-                | { fi_type = JCTpointer (fpc, Some fa, Some fb) } as fi ->
-                  f ~acr:(alloc_class_of_pointer_class fpc, dummy_region) ~pc:fpc ~p:(make_select_fi fi p) ~l:fa ~r:fb
-                | _ -> []))
+      ListLabels.map
+        st.si_fields
+        ~f:(function
+          | { fi_type = JCTpointer (fpc, Some fa, Some fb) } as fi ->
+            f ~acr:(alloc_class_of_pointer_class fpc, dummy_region) ~pc:fpc ~p:O.T.(p **> fi) ~l:fa ~r:fb
+          | _ -> []))
 
 (* Validity *)
 
 let valid ~in_param ~equal (ac, r) pc p ao bo =
   let params =
     allocs ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r |>
-    Option.fold_right' ~f:List.cons bo |>
-    Option.fold_right' ~f:List.cons ao
+    Option.fold_right' ~f:(List.cons % O.T.some) bo |>
+    Option.fold_right' ~f:(List.cons % O.T.some) ao
   in
-  LPred (Name.Pred.valid ~equal ~left:(ao <> None) ~right:(bo <> None) ac pc, p :: params)
+  O.P.(Name.Pred.valid ~equal ~left:P.(ao <> None) ~right:P.(bo <> None) ac pc $.. p ^.. params)
 
 (* If T is a structure:
      valid_T(p, a, b, allocs ...) =
@@ -145,9 +151,9 @@ let valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
   let a = "a" in
   let b = "b" in
   let params =
-    let p = p, pointer_type ac pc in
-    let a = a, why_integer_type in
-    let b = b, why_integer_type in
+    let p = p, O.Lt.some (pointer_type ac pc) in
+    let a = a, O.Lt.(some integer) in
+    let b = b, O.Lt.(some integer) in
     p :: (
       allocs ac pc In_pred @ mems ac pc In_pred |>
       Fn.on right (List.cons b) |>
@@ -158,32 +164,34 @@ let valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
       match pc with
       | JCtag ({ si_parent = Some(st, pp) }, _) ->
         let super_valid =
+          let open O.T in
           valid ~in_param ~equal
-            (ac, dummy_region) (JCtag (st, pp)) (LVar p)
-            (if left then Some (LVar a) else None)
-            (if right then Some (LVar b) else None)
+            (ac, dummy_region) (JCtag (st, pp)) (var p)
+            (if left then Some (var a) else None)
+            (if right then Some (var b) else None)
         in
-        LTrue, LTrue, super_valid
+        True, True, super_valid
       | JCtag ({ si_parent = None }, _)
       | JCroot _ ->
-        (if equal then make_eq else make_le) (make_offset_min ac (LVar p)) (LVar a),
-        (if equal then make_eq else make_ge) (make_offset_max ac (LVar p)) (LVar b),
-        LTrue
+        let open O.T in
+        (if equal then (=) else (<=)) (offset_min ac (var p)) (var a),
+        (if equal then (=) else (>=)) (offset_max ac (var p)) (var b),
+        True
     in
     let fields_valid =
       List.flatten @@
-        map_embedded_fields ac pc ~p:(LVar p)
+        map_embedded_fields ac pc ~p:O.T.(var p)
           ~f:(fun ~acr ~pc ~p ~l ~r ->
             [valid ~in_param ~equal:false acr pc p
-               (if left then Some (const_of_num l) else None)
-               (if right then Some (const_of_num r) else None)])
+               (if left then Some O.T.(num l) else None)
+               (if right then Some O.T.(num r) else None)])
     in
     let validity = super_valid :: fields_valid in
     let validity = if right then omax :: validity else validity in
     let validity = if left then omin :: validity else validity in
-    make_and_list validity
+    O.P.conj validity
   in
-  Predicate (false, id_no_loc (Name.Pred.valid ~equal ~left ~right ac pc), params, validity)
+  O.Wd.mk ~name:(snd @@ Name.Pred.valid ~equal ~left ~right ac pc) @@ Predicate (params, validity)
 
 (* Freshness *)
 
@@ -202,12 +210,12 @@ let fresh ~for_ ~in_param (ac, r) pc p =
     | `alloc_tables_in _ -> `alloc_tables
     | `tag_tables -> `tag_tables
   in
-  LPred (Name.Pred.fresh ~for_:(drop_in for_) ac pc, p :: params)
+  O.P.(Name.Pred.fresh ~for_:(drop_in for_) ac pc $.. p ^.. params)
 
 let fresh_pred ~for_ ac pc =
   let p = "p" in
   let params =
-    let p = p, pointer_type ac pc in
+    let p = p, O.Lt.some (pointer_type ac pc) in
     let tables =
       match for_ with
       | `alloc_tables -> allocs
@@ -223,7 +231,7 @@ let fresh_pred ~for_ ac pc =
   let super_fresh =
     match pc with
     | JCtag ({ si_parent = Some (st, pp) }, _) ->
-      [fresh ~for_:for_' ~in_param:false (ac, dummy_region) (JCtag (st, pp)) (LVar p)]
+      [fresh ~for_:for_' ~in_param:false (ac, dummy_region) (JCtag (st, pp)) O.T.(var p)]
     | JCtag ({ si_parent = None }, _)
     | JCroot _ ->
       map_st ac pc
@@ -233,25 +241,27 @@ let fresh_pred ~for_ ac pc =
               | `alloc_tables -> "alloc_fresh", Name.Generic.alloc_table ac
               | `tag_tables -> "tag_fresh", Name.Generic.tag_table (struct_root st)
             in
-            [LPred (predicate, [LVar table; LVar p])])
+            [O.P.(F.jc predicate $ T.var table ^. T.var p)])
   in
   let fields_fresh p =
     List.flatten @@
       map_embedded_fields ac pc ~p
         ~f:(fun ~acr ~pc ~p ~l:_ ~r:_ -> [fresh ~for_:for_' ~in_param:false acr pc p])
   in
-  let freshness = make_and_list @@ super_fresh @ fields_fresh (LVar p) in
-  Predicate (false, id_no_loc (Name.Pred.fresh ~for_ ac pc), params, freshness)
+  let freshness = O.P.conj @@ super_fresh @ fields_fresh O.P.(T.var p) in
+  O.Wd.mk ~name:(snd @@ Name.Pred.fresh ~for_ ac pc) @@ Predicate (params, freshness)
 
 (* Instanceof *)
 
 let forall_offset_in_range p l r ~f =
-  if f (LConst Prim_void) <> [] then
-    let i = "i" in
-      LForall (i, why_integer_type, [],
-        LImpl (make_and (LPred ("le_int", [l; LVar i])) @@ LPred ("lt_int", [LVar i; r]),
-               make_and_list @@ f @@ LApp ("shift", [p; LVar i])))
-  else LTrue
+  if f (Const Void : _ term) <> [] then
+    O.P.(
+      forall "i" O.Lt.integer @@
+      fun i ->
+      impl
+        (l <= i && i < r)
+        (conj (f T.(F.jc "shift" $ p ^. i))))
+  else True
 
 type (_, 'a) param =
   | Void : ([`Singleton], 'a) param
@@ -265,15 +275,17 @@ let get_l = function L_R (l, _) -> l
 let get_r = function L_R (_, r) -> r
 
 let instanceof ~exact (type t1) (type t2) :
-  arg:(assertion, _, term -> term -> assertion, _, t1, t2) arg -> in_param:_ -> _ -> _ -> _ -> t2 =
+  arg:(pred, _, unbounded integer number term -> unbounded integer number term -> pred, _, t1, t2) arg ->
+  in_param:_ -> _ -> _ -> _ -> t2 =
   fun ~arg ~in_param (ac, r) pc p ->
   let params = tags ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r in
   match arg with
-  | Singleton -> LPred (Name.Pred.instanceof ~exact ~arg ac pc, p :: params)
-  | Range_l_r -> fun l r -> LPred (Name.Pred.instanceof ~exact ~arg ac pc, p :: l :: r :: params)
+  | Singleton -> O.P.(Name.Pred.instanceof ~exact ~arg ac pc $.. p ^.. params)
+  | Range_l_r -> fun l r ->
+    O.P.(Name.Pred.instanceof ~exact ~arg ac pc $.. p ^.. l ^.. r ^.. params)
 
-let instanceof_pred ~exact
-    (type t1) (type t2) : arg : (assertion, _, term -> term -> assertion, _, t1, t2) arg -> _ =
+let instanceof_pred ~exact (type t1) (type t2) :
+  arg : (pred, _, unbounded integer number term -> unbounded integer number term -> pred, _, t1, t2) arg -> _ =
   fun ~arg ac pc ->
   let p = "p" in
   let l_r : (t1, _) param =
@@ -282,20 +294,20 @@ let instanceof_pred ~exact
     | Range_l_r -> L_R ("l", "r")
   in
   let params =
-    let p = p, pointer_type ac pc in
+    let p = p, O.Lt.some (pointer_type ac pc) in
     let l_r =
       match arg with
       | Singleton -> []
-      | Range_l_r -> List.map (fun a -> a, why_integer_type) [get_l l_r; get_r l_r]
+      | Range_l_r -> List.map (fun a -> a, O.Lt.(some integer)) [get_l l_r; get_r l_r]
     in
     p :: l_r @ tags ac pc In_pred @ mems ac pc In_pred
   in
-  let pred_name = if exact then "eq" else "subtag" in
+  let pred = O.F.jc (if exact then "typeof" else "typeeq") in
   let self_instanceof p =
     map_st ac pc
       ~f:(fun st ->
           let tag = Name.Generic.tag_table (struct_root st) in
-          [LPred (pred_name, [make_typeof (LVar tag) p; LVar (Name.tag st)])])
+          [O.P.(pred $ T.var tag ^ p ^. T.var (Name.tag st))])
   in
   let fields_instanceof p =
     List.flatten @@
@@ -308,25 +320,26 @@ let instanceof_pred ~exact
                 in
                 instanceof p ::
                   (List.(range ~-1 `Downto (int_of_num l) @ range 1 `To (int_of_num r)) |>
-                   List.map @@ fun i -> instanceof @@ LApp ("shift", [p; const_of_int i]))
+                   List.map @@ fun i -> instanceof @@ O.T.(F.jc "shift" $ p ^. int i))
               else
                 let r = r +/ Int 1 in
-                let l, r = Pair.map const_of_num (l, r) in
+                let l, r = Pair.map O.T.num (l, r) in
                 [instanceof ~exact ~arg:Range_l_r ~in_param:false acr pc p l r])
   in
   match arg with
   | Singleton ->
-    let instanceof = make_and_list @@ self_instanceof (LVar p) @ fields_instanceof (LVar p) in
-    Predicate (false, id_no_loc (Name.Pred.instanceof ~exact ~arg ac pc), params, instanceof)
+    let instanceof = O.P.conj @@ self_instanceof O.T.(var p) @ fields_instanceof O.T.(var p) in
+    O.Wd.mk ~name:(snd @@ Name.Pred.instanceof ~exact ~arg ac pc) @@ Predicate (params, instanceof)
   | Range_l_r ->
     let instanceof =
       let instanceof p = self_instanceof p @ fields_instanceof p in
-      make_and_list @@
-        instanceof (LVar p) @
-        [forall_offset_in_range (LVar p) (LVar (get_l l_r)) (LVar (get_r l_r))
-          ~f:(fun p -> instanceof p)]
+      O.P.(
+        conj @@
+        instanceof O.T.(var p) @
+        [forall_offset_in_range O.T.(var p) O.T.(var (get_l l_r)) O.T.(var (get_r l_r))
+          ~f:(fun p -> instanceof p)])
     in
-    Predicate (false, id_no_loc (Name.Pred.instanceof ~exact ~arg ac pc), params, instanceof)
+    O.Wd.mk ~name:(snd @@ Name.Pred.instanceof ~exact ~arg ac pc) @@ Predicate (params, instanceof)
 
 (* Alloc *)
 
@@ -341,7 +354,7 @@ let frame ~for_ ~in_param (ac, r) pc p =
           [deref LabelOld xt; deref LabelHere xt]
         else
           let xt = name_of_x xc in
-          [LVar (Name.old xt); LVar xt]
+          O.T.[some @@ var (Name.old xt); some @@ var xt]
       in
       match for_ with
       | `alloc_tables_in _ ->
@@ -359,7 +372,7 @@ let frame ~for_ ~in_param (ac, r) pc p =
     | `alloc_tables_in (`alloc _) -> `alloc_tables_in `alloc
     | `alloc_tables_in `free | `tag_tables as f -> f
   in
-  LPred (Name.Pred.frame ~for_ ac pc, p :: params)
+  O.P.(Name.Pred.frame ~for_ ac pc $.. p ^.. params)
 
 let frame_pred ~for_ ac pc =
   let p = "p" in
@@ -379,7 +392,7 @@ let frame_pred ~for_ ac pc =
         map (all_tags_ac ac pc)
           ~f:(tables_for ~name_of_x:Name.Generic.tag_table ~x_table_type:tag_table_type)
     in
-    let n = match for_ with `alloc_tables_in `alloc -> [n, why_integer_type] | _ -> [] in
+    let n = match for_ with `alloc_tables_in `alloc -> [n, O.Lt.(some integer)] | _ -> [] in
     (p, pointer_type ac pc) :: n @ tables @ mems ac pc In_pred
   in
   let frame =
