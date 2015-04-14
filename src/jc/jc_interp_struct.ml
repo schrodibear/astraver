@@ -235,13 +235,13 @@ let fresh_pred ~for_ ac pc =
     | JCtag ({ si_parent = None }, _)
     | JCroot _ ->
       map_st ac pc
-        ~f:(fun st ->
-            let predicate, table =
+        ~f:(fun si ->
+            let predicate =
               match for_ with
-              | `alloc_tables -> "alloc_fresh", Name.Generic.alloc_table ac
-              | `tag_tables -> "tag_fresh", Name.Generic.tag_table (struct_root st)
+              | `alloc_tables -> O.P.alloc_fresh ac
+              | `tag_tables -> O.P.tag_fresh (struct_root si)
             in
-            [O.P.(F.jc predicate $ T.var table ^. T.var p)])
+            [predicate O.T.(var p)])
   in
   let fields_fresh p =
     List.flatten @@
@@ -260,7 +260,7 @@ let forall_offset_in_range p l r ~f =
       fun i ->
       impl
         (l <= i && i < r)
-        (conj (f T.(F.jc "shift" $ p ^. i))))
+        (conj (f T.(shift p i))))
   else True
 
 type (_, 'a) param =
@@ -302,13 +302,8 @@ let instanceof_pred ~exact (type t1) (type t2) :
     in
     p :: l_r @ tags ac pc In_pred @ mems ac pc In_pred
   in
-  let pred = O.F.jc (if exact then "typeof" else "typeeq") in
-  let self_instanceof p =
-    map_st ac pc
-      ~f:(fun st ->
-          let tag = Name.Generic.tag_table (struct_root st) in
-          [O.P.(pred $ T.var tag ^ p ^. T.var (Name.tag st))])
-  in
+  let pred = O.P.(if exact then typeeq else instanceof) in
+  let self_instanceof p = map_st ac pc ~f:(fun si -> O.P.[pred (struct_root si) p si]) in
   let fields_instanceof p =
     List.flatten @@
       map_embedded_fields ac pc ~p
@@ -320,7 +315,7 @@ let instanceof_pred ~exact (type t1) (type t2) :
                 in
                 instanceof p ::
                   (List.(range ~-1 `Downto (int_of_num l) @ range 1 `To (int_of_num r)) |>
-                   List.map @@ fun i -> instanceof @@ O.T.(F.jc "shift" $ p ^. int i))
+                   List.map @@ fun i -> instanceof @@ O.T.(shift p @@ int i))
               else
                 let r = r +/ Int 1 in
                 let l, r = Pair.map O.T.num (l, r) in
@@ -332,12 +327,12 @@ let instanceof_pred ~exact (type t1) (type t2) :
     O.Wd.mk ~name:(snd @@ Name.Pred.instanceof ~exact ~arg ac pc) @@ Predicate (params, instanceof)
   | Range_l_r ->
     let instanceof =
-      let instanceof p = self_instanceof p @ fields_instanceof p in
+      let instanceof' p = self_instanceof p @ fields_instanceof p in
       O.P.(
         conj @@
-        instanceof O.T.(var p) @
+        instanceof' O.T.(var p) @
         [forall_offset_in_range O.T.(var p) O.T.(var (get_l l_r)) O.T.(var (get_r l_r))
-          ~f:(fun p -> instanceof p)])
+          ~f:(fun p -> instanceof' p)])
     in
     O.Wd.mk ~name:(snd @@ Name.Pred.instanceof ~exact ~arg ac pc) @@ Predicate (params, instanceof)
 
@@ -382,7 +377,7 @@ let frame_pred ~for_ ac pc =
       let map  ~f l = List.(flatten @@ map f l) in
       let tables_for ~name_of_x ~x_table_type =
           (fun name_type -> [map_fst Name.old name_type; name_type])
-        % fdup2 name_of_x x_table_type
+        % fdup2 name_of_x (O.Lt.some % x_table_type)
       in
       match for_ with
       | `alloc_tables_in _ ->
@@ -393,12 +388,12 @@ let frame_pred ~for_ ac pc =
           ~f:(tables_for ~name_of_x:Name.Generic.tag_table ~x_table_type:tag_table_type)
     in
     let n = match for_ with `alloc_tables_in `alloc -> [n, O.Lt.(some integer)] | _ -> [] in
-    (p, pointer_type ac pc) :: n @ tables @ mems ac pc In_pred
+    (p, O.Lt.some @@ pointer_type ac pc) :: n @ tables @ mems ac pc In_pred
   in
   let frame =
     let assc =
-      let p = LVar p in
-      let n = LVar n in
+      let p = O.T.var p in
+      let n = O.T.var n in
       let name_of_x ac =
         match for_ with
         | `alloc_tables_in _ -> Name.Generic.alloc_table ac
@@ -409,7 +404,7 @@ let frame_pred ~for_ ac pc =
           | JCalloc_root ri ->
             Name.Generic.tag_table ri
       in
-      let assoc ac p = name_of_x ac, p, None in
+      let assoc ac p = name_of_x ac, O.T.some p, None in
       let rec frame ac pc p =
         assoc ac p ::
         (List.flatten @@
@@ -418,7 +413,7 @@ let frame_pred ~for_ ac pc =
                 if Num.(l <=/ r) then frame ac pc p else []))
       in
       frame ac pc p |>
-      fun l -> List.(let xt, p, _ = hd l in (xt, p, Some n) :: tl l)
+      fun l -> List.(let xt, p, _ = hd l in (xt, p, Some (O.T.some n)) :: tl l)
     in
     let cmp (a1, _, _) (a2, _, _) = compare a1 a2 in
     List.(group_consecutive ~p:(fun x -> cmp x %> (=) 0) @@ sort cmp assc) |>
@@ -428,9 +423,11 @@ let frame_pred ~for_ ac pc =
       | `free -> "free"
      in
      let make_predicates pred xt args =
-       let tables = [LVar (Name.old xt); LVar xt] in
-       [LPred ((match for_ with `alloc_tables_in x -> prefix x | `tag_tables -> "tag") ^ "_extends", tables);
-        LPred (pred, tables @ args)]
+       let tables = O.T.[some @@ var (Name.old xt); some @@ var xt] in
+       O.P.[
+         P.(Name.Theory.jessie, (match for_ with `alloc_tables_in x -> prefix x | `tag_tables -> "tag") ^ "_extends")
+         $.. tables;
+         (Name.Theory.jessie, pred) $.. tables @ args]
      in
      List.map
        (function
@@ -444,34 +441,42 @@ let frame_pred ~for_ ac pc =
          | (xt, p, _) :: ps ->
            let f = "alloc" ^ (match for_ with `alloc_tables_in _ -> "" | `tag_tables -> "_tag") ^ "_blockset" in
            make_predicates f xt
-             [let pset_singleton p = LApp ("pset_singleton", [p]) in
+             [let pset_singleton p = O.T.(some ((Name.Theory.jessie, "pset_singleton") $.. [p])) in
               List.fold_left
-                (fun acc (_, p, _) -> LApp ("pset_union", [acc; pset_singleton p]))
+                (fun acc (_, p, _) -> O.T.(some ((Name.Theory.jessie, "pset_union") $.. [acc; pset_singleton p])))
                 (pset_singleton p)
                 ps]
         | _ -> assert false (* group_consecutive doesn't return [[]], it instead returns just [] *)))
     |>
     List.flatten |>
-    make_and_list
+    O.P.conj
   in
-  Predicate (false, id_no_loc (Name.Pred.frame ~for_ ac pc), params, frame)
+  O.Wd.mk ~name:(snd @@ Name.Pred.frame ~for_ ac pc) @@ Predicate (params, frame)
 
 (* Allocation *)
 
 let alloc_write_parameters (ac, r) pc =
-  let allocs = List.map (fdup2 (plain_alloc_table_var % Pair.cons' r) alloc_table_type) @@ all_allocs_ac ac pc in
-  let tags = List.map (fdup2 (plain_tag_table_var % Pair.cons' r) tag_table_type) @@ all_tags_ac ac pc in
+  let allocs =
+    List.map
+      (fdup2 (O.E.some % plain_alloc_table_var % Pair.cons' r) (O.Lt.some % alloc_table_type))
+      (all_allocs_ac ac pc)
+  in
+  let tags =
+    List.map
+      (fdup2 (O.E.some % plain_tag_table_var % Pair.cons' r) (O.Lt.some % tag_table_type))
+      (all_tags_ac ac pc)
+  in
   allocs @ tags
 
 let alloc_read_parameters (ac, r) pc =
   let mems =
-    List.map (fdup2 (memory_var ~test_current_function:true % Pair.cons' r) memory_type) @@
+    List.map (fdup2 (O.E.some % memory_var ~test_current_function:true % Pair.cons' r) (O.Lt.some % memory_type)) @@
       all_mems_ac ac pc
   in
   mems
 
-let alloc (type t1) (type t2) :
-  arg:((expr, check_size:bool -> expr -> expr, _, _, t1, t2) arg) -> _ -> _ -> t2 =
+let alloc : type t1 t2 a.
+  arg:((a expr, check_size:bool -> unbounded integer number expr -> a expr, _, _, t1, t2) arg) -> _ -> _ -> t2 =
   fun ~arg (ac, r) pc ->
     let args =
       let writes = alloc_write_parameters (ac, r) pc in
@@ -480,17 +485,15 @@ let alloc (type t1) (type t2) :
     in
     match arg with
     | Singleton ->
-      make_app (Name.Param.alloc ~arg:Singleton ac pc) args
+      O.E.(Name.Param.alloc ~arg:Singleton ac pc $.. args)
     | Range_0_n ->
       fun ~check_size e ->
-        make_app
-          (Name.Param.alloc ~arg:Range_0_n ~check_size ac pc)
-          (e :: args)
+        O.E.(Name.Param.alloc ~arg:Range_0_n ~check_size ac pc $.. e ^.. args)
 
-let alloc_param (type t1) (type t2) :
-  arg:(why_decl, check_size:bool -> why_decl, _, _, t1, t2) arg -> _ -> _ -> t2 =
+let alloc_param : type t1 t2.
+  arg:([`Module of bool] why_decl, check_size:bool -> [`Module of bool] why_decl, _, _, t1, t2) arg -> _ -> _ -> t2 =
   fun ~arg ac pc ->
-  let error = failwith % Format.asprintf "unexpected parameter expression in alloc_param: %a" Output.fprintf_expr in
+  let error () = failwith "unexpected parameter expression in alloc_param" in
   let n : (t1, _) param =
     match arg with
     | Singleton -> Void
@@ -498,31 +501,32 @@ let alloc_param (type t1) (type t2) :
   in
   (* parameters and effects *)
   let writes = alloc_write_parameters (ac, dummy_region) pc in
-  let write_effects = List.map (function ({ expr_node = Var n }, _ty') -> n | (e, _) -> error e) writes in
+  let write_effects = List.map (function (Expr { expr_node = Var n }, _ty') -> n |  _ -> error ()) writes in
   let params =
-    let write_params = List.map (fun (n, ty') -> (n, Ref_type (Base_type ty'))) writes in
+    let write_params = List.map (fun (n, Logic_type ty') -> (n, Why_type (Ref_type (Base_type ty')))) writes in
     let reads = alloc_read_parameters (ac, dummy_region) pc in
-    let read_params = List.map (fun (n, ty') -> (n, Base_type ty')) reads in
+    let read_params = List.map (fun (n, Logic_type ty') -> (n, Why_type (Base_type ty'))) reads in
     (match arg with
      | Singleton -> []
-     | Range_0_n -> [(mk_var (get_n n), Base_type why_integer_type)])
+     | Range_0_n -> [O.E.(some @@ var (get_n n)), O.Wt.(some integer)])
     @ write_params @ read_params
     |>
-    List.map (function ({expr_node = Var n}, ty') -> (n, ty') | (e, _) -> error e)
+    List.map (function (Expr { expr_node = Var n }, ty') -> (n, ty') |  _ -> error ())
   in
-  let lresult = LVar "result" in
+  let lresult = O.T.var "result" in
   (* postcondition *)
   let instanceof_post =
     let f ~arg = instanceof ~exact:true ~arg ~in_param:true (ac, dummy_region) pc lresult in
     let f =
       match arg with
       | Singleton -> fun _ -> [f ~arg:Singleton]
-      | Range_0_n -> fun _ -> [f ~arg:Range_l_r (const_of_int 0) @@ LVar (get_n n)]
+      | Range_0_n -> fun _ -> [f ~arg:Range_l_r (O.T.int 0) @@ O.T.var (get_n n)]
     in
     map_st ~f ac pc
   in
   let alloc_type pre =
-    List.fold_right (fun (n, ty') acc -> Prod_type (n, ty', acc)) params @@
+    List.fold_right (fun (n, Why_type ty') (Why_type acc) -> Why_type (Prod_type (n, ty', acc))) params @@
+    O.Wt.some @@
     Annot_type
      ((* [n >= 0] *)
       pre,
@@ -531,15 +535,16 @@ let alloc_param (type t1) (type t2) :
       (* reads and writes *)
       [], write_effects,
       (* normal post *)
-      make_and_list (
+      O.P.conj (
         (* [valid_st(result, 0, n-1, alloc ...)] *)
         let rbound, size =
+          map_snd O.T.some @@
           match arg with
-          | Singleton -> Pair.map const_of_int (0, 1)
-          | Range_0_n -> LApp ("sub_int", [LVar (get_n n); const_of_int 1]), LVar (get_n n)
+          | Singleton -> Pair.map O.T.int (0, 1)
+          | Range_0_n -> O.T.(var (get_n n) - int 1, var (get_n n))
         in
         [valid ~in_param:true ~equal:true (ac, dummy_region) pc lresult
-           (Some (const_of_int 0)) (Some rbound);
+           (Some (O.T.int 0)) (Some rbound);
          frame ~for_:(`alloc_tables_in (`alloc size)) ~in_param:true (ac, dummy_region) pc lresult;
          frame ~for_:`tag_tables ~in_param:true (ac, dummy_region) pc lresult;
          fresh ~for_:(`alloc_tables_in `alloc) ~in_param:true (ac, dummy_region) pc lresult;
@@ -550,23 +555,30 @@ let alloc_param (type t1) (type t2) :
   in
   let name = Name.Param.alloc ac pc in
   match arg with
-  | Singleton -> Param (false, id_no_loc @@ name ~arg:Singleton, alloc_type LTrue)
+  | Singleton ->
+    let Why_type alloc_type = alloc_type True in
+    O.Wd.mk ~name:(snd @@ name ~arg:Singleton) @@ Param alloc_type
   | Range_0_n ->
     fun ~check_size ->
-    (* precondition *)
-    let pre =
-      if check_size then LPred ("ge_int", [LVar (get_n n); const_of_int 0])
-                    else LTrue
-    in
-    Param (false, id_no_loc @@ name ~arg:Range_0_n ~check_size, alloc_type pre)
+      (* precondition *)
+      let Why_type alloc_type =
+        alloc_type @@
+        if check_size then O.T.(var (get_n n) >= int 0)
+                      else True
+      in
+      O.Wd.mk ~name:(snd @@ name ~arg:Range_0_n ~check_size) @@ Param alloc_type
 
 (* Deallocation *)
 
 let free_write_parameters (ac, r) pc =
-  List.map (fdup2 (plain_alloc_table_var % Pair.cons' r) alloc_table_type) @@ all_allocs_ac ac pc
+  List.map
+    (fdup2 (O.E.some % plain_alloc_table_var % Pair.cons' r) (O.Lt.some % alloc_table_type))
+    (all_allocs_ac ac pc)
 
 let free_read_parameters (ac, r) pc =
-  List.map (fdup2 (memory_var ~test_current_function:true % Pair.cons' r) memory_type) @@ all_mems_ac ac pc
+  List.map
+    (fdup2 (O.E.some % memory_var ~test_current_function:true % Pair.cons' r) (O.Lt.some % memory_type))
+    (all_mems_ac ac pc)
 
 let free ~safe (ac, r) pc p =
   let args =
@@ -574,121 +586,117 @@ let free ~safe (ac, r) pc p =
     let reads = free_read_parameters (ac, r) pc in
     p :: List.map fst (writes @ reads)
   in
-  make_app (Name.Param.free ~safe ac pc) args
+  O.E.(Name.Param.free ~safe ac pc $.. args)
 
 let free_param ~safe ac pc =
-  let error = failwith % Format.asprintf "unexpected parameter expression in free_param: %a" Output.fprintf_expr in
+  let error () = failwith "unexpected parameter expression in free_param: %a" in
   (* parameters and effects *)
   let writes = free_write_parameters (ac, dummy_region) pc in
-  let write_effects = List.map (function ({ expr_node = Var n }, _ty') -> n | (e, _) -> error e) writes in
+  let write_effects = List.map (function (Expr { expr_node = Var n }, _ty') -> n | _ -> error ()) writes in
   let p = "p" in
   let params =
-    let write_params = List.map (fun (n, ty') -> n, Ref_type (Base_type ty')) writes in
+    let write_params = List.map (fun (n, Logic_type ty') -> n, O.Wt.some @@ Ref_type (Base_type ty')) writes in
     let reads = free_read_parameters (ac, dummy_region) pc in
-    let read_params = List.map (fun (n, ty') -> (n, Base_type ty')) reads in
+    let read_params = List.map (fun (n, Logic_type ty') -> (n, O.Wt.some @@ Base_type ty')) reads in
     write_params @ read_params |>
-    List.map (function ({ expr_node = Var n }, ty') -> (n, ty') | (e, _) -> error e) |>
-    List.cons (p, Base_type (pointer_type ac pc))
+    List.map (function (Expr { expr_node = Var n }, ty') -> (n, ty') |  _ -> error ()) |>
+    List.cons (p, O.Wt.some @@ Base_type (pointer_type ac pc))
   in
-  let p = LVar p in
-  let p_is_null = LPred ("eq", [p; LVar "null"]) in
+  let p = O.T.var p in
+  let p_is_null = O.T.(p = var "null") in
   (* postcondition *)
-  let free_type =
-    List.fold_right (fun (n, ty') acc -> Prod_type (n, ty', acc)) params @@
+  let Why_type free_type =
+    List.fold_right (fun (n, Why_type ty') (Why_type acc) -> O.Wt.some @@ Prod_type (n, ty', acc)) params @@
+    O.Wt.some @@
+    let open O.P in
     Annot_type (
-      (if not safe then
+      (if P.not safe then
          (* allowed, see man 3 free *)
-         mk_positioned Position.dummy ~kind:(JCVCpre "Deallocation") @@
-         LOr (p_is_null,
-              LPred ("freeable", [LDeref (Name.alloc_table (ac, dummy_region)); p]))
-       else LTrue),
+         positioned Position.dummy ~kind:(JCVCpre "Deallocation") @@
+         p_is_null ||
+         freeable ac ~r:dummy_region p
+       else True),
       (* argument pointer type *)
-      unit_type,
+      O.Wt.void,
       (* reads and writes *)
       [], write_effects,
       (* normal post *)
-      LOr
-        (* null *)
-        (LAnd (p_is_null,
-               make_and_list (List.map (fun a -> LPred ("eq", [LDeref a; LDerefAtLabel (a, "")])) write_effects)),
-        (* non-null *)
-         LAnd (frame ~for_:(`alloc_tables_in `free) ~in_param:true (ac, dummy_region) pc p,
-               fresh ~for_:(`alloc_tables_in `free) ~in_param:true (ac, dummy_region) pc p)),
+      (* null *)
+      p_is_null &&
+      conj (List.map (fun a -> T.(!. a = at a "")) write_effects) ||
+      (* non-null *)
+      frame ~for_:(`alloc_tables_in `free) ~in_param:true (ac, dummy_region) pc p &&
+      fresh ~for_:(`alloc_tables_in `free) ~in_param:true (ac, dummy_region) pc p,
       (* no exceptional post *)
       [])
   in
-  Param (false, id_no_loc @@ Name.Param.free ~safe ac pc, free_type)
+  O.Wd.mk ~name:(snd @@ Name.Param.free ~safe ac pc) @@ Param free_type
 
 let struc si =
   let tag_id_type =
-    List.cons
-      (let tagid_type = tag_id_type (struct_root si) in
-       Logic (false, id_no_loc (Name.tag si), [], tagid_type))
+      let tagid_type = tag_id_type (struct_root si) in
+      O.Wd.mk ~name:(Name.tag si) @@ Logic ([], tagid_type)
   in
-  let alloc_free_preds_and_params =
-    Fn.on'
-      (not @@ struct_of_union si)
-      (fun () ->
-         List.append @@
-         let pc = JCtag (si, []) in
-         let ac = alloc_class_of_pointer_class pc in
-         let in_param = false in
+  let preds, safe_params, unsafe_params =
+      if not @@ struct_of_union si then
+        let pc = JCtag (si, []) in
+        let ac = alloc_class_of_pointer_class pc in
+        let in_param = false in
 
-         valid_pred ~in_param ~equal:true ac pc ::
-         valid_pred ~in_param ~equal:false ac pc ::
-         valid_pred ~in_param ~equal:false ~right:false ac pc ::
-         valid_pred ~in_param ~equal:false ~left:false ac pc ::
+        [valid_pred ~in_param ~equal:true ac pc;
+         valid_pred ~in_param ~equal:false ac pc;
+         valid_pred ~in_param ~equal:false ~right:false ac pc;
+         valid_pred ~in_param ~equal:false ~left:false ac pc;
 
-         instanceof_pred ~exact:false ~arg:Range_l_r ac pc ::
-         instanceof_pred ~exact:false ~arg:Singleton ac pc ::
-         instanceof_pred ~exact:true ~arg:Range_l_r ac pc ::
-         instanceof_pred ~exact:true ~arg:Singleton ac pc ::
+         instanceof_pred ~exact:false ~arg:Range_l_r ac pc;
+         instanceof_pred ~exact:false ~arg:Singleton ac pc;
+         instanceof_pred ~exact:true ~arg:Range_l_r ac pc;
+         instanceof_pred ~exact:true ~arg:Singleton ac pc;
 
-         fresh_pred ~for_:`alloc_tables ac pc ::
-         fresh_pred ~for_:`tag_tables ac pc ::
+         fresh_pred ~for_:`alloc_tables ac pc;
+         fresh_pred ~for_:`tag_tables ac pc;
 
-         frame_pred ~for_:(`alloc_tables_in `alloc) ac pc ::
-         frame_pred ~for_:(`alloc_tables_in `free) ac pc ::
-         frame_pred ~for_:`tag_tables ac pc ::
-
-         alloc_param ~arg:Singleton ac pc ::
-         alloc_param ~arg:Range_0_n ~check_size:true ac pc ::
-         alloc_param ~arg:Range_0_n ~check_size:false ac pc ::
-
-         free_param ~safe:true ac pc ::
-         free_param ~safe:false ac pc :: [])
+         frame_pred ~for_:(`alloc_tables_in `alloc) ac pc;
+         frame_pred ~for_:(`alloc_tables_in `free) ac pc;
+         frame_pred ~for_:`tag_tables ac pc],
+        [alloc_param ~arg:Singleton ac pc;
+         alloc_param ~arg:Range_0_n ~check_size:false ac pc;
+         free_param ~safe:true ac pc],
+        [alloc_param ~arg:Range_0_n ~check_size:true ac pc;
+         free_param ~safe:false ac pc]
+      else
+        [], [], []
   in
   let instanceof_implies_typeof_if_final =
-    Fn.on'
-      si.si_final
-      (fun () ->
-         List.append @@
-         [Goal (KAxiom, id_no_loc (si.si_name ^ "_is_final"),
-                let ri = Option.value_fail ~in_:__LOC__ si.si_hroot.si_root in
-                let t = "t" and p = "p" in
-                let lt = LVar t and lp = LVar p in
-                LForall (t, tag_table_type ri, [],
-                         LForall (p, pointer_type (JCalloc_root ri) (JCtag (si, [])), [],
-                                  LImpl (make_instanceof lt lp si,
-                                         make_typeeq lt lp si))))])
+    if si.si_final then
+      [O.Wd.mk ~name:(si.si_name ^ "_is_final") @@
+       Goal (KAxiom,
+             let ri = Option.value_fail ~in_:__LOC__ si.si_hroot.si_root in
+             O.P.(forall (Name.Generic.tag_table (struct_root si)) (tag_table_type ri) @@ fun _t ->
+                  forall "p" (pointer_type (JCalloc_root ri) (JCtag (si, []))) @@ fun p ->
+                  impl
+                    (instanceof (struct_root si)  p si)
+                    (typeeq (struct_root si) p si)))]
+    else
+      []
   in
   let parent_tag_axiom =
-    List.cons
-      begin match si.si_parent with
-      | None ->
-        let name = si.si_name ^ "_parenttag_bottom" in
-        let p = LPred ("parenttag", [LVar (Name.tag si); LVar "bottom_tag" ]) in
-        Goal (KAxiom, id_no_loc name, p)
-      | Some (p, _) ->
-        let name = si.si_name ^ "_parenttag_" ^ p.si_name in
-        let p = LPred ("parenttag", [LVar (Name.tag si); LVar (Name.tag p)]) in
-        Goal (KAxiom, id_no_loc name, p)
-      end
+    begin match si.si_parent with
+    | None ->
+      let p = O.(P.parenttag T.(var @@ Name.tag si) T.(var "bottom_tag")) in
+      O.Wd.mk ~name:(si.si_name ^ "_parenttag_bottom") @@ Goal (KAxiom, p)
+    | Some (parent, _) ->
+      let p = O.(P.parenttag T.(var @@ Name.tag si) T.(var @@ Name.tag parent)) in
+      O.Wd.mk ~name:(si.si_name ^ "_parenttag_" ^ parent.si_name) @@ Goal (KAxiom, p)
+    end
   in
-  tag_id_type %>
-  alloc_free_preds_and_params %>
-  instanceof_implies_typeof_if_final %>
-  parent_tag_axiom
+  O.[Entry.some @@
+     Th.mk ~name:(fst @@ Name.Theory.struct_ (JCtag (si, []))) @@
+     tag_id_type :: preds @ instanceof_implies_typeof_if_final @ parent_tag_axiom :: [];
+     Entry.some @@
+     Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:true (JCtag (si, []))) ~safe:true safe_params;
+     Entry.some @@
+     Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:false (JCtag (si, []))) ~safe:false unsafe_params]
 
 let root =
   let fresh_tag_id =
@@ -697,62 +705,61 @@ let root =
   in
   fun ri ->
     let tag_id_type =
-      List.cons @@ Type (id_no_loc (Name.Type.root ri), [])
+      O.Wd.mk ~name:(Name.Type.root ri) @@ Type []
     in
-    let preds_and_params =
+    let preds, safe_params, unsafe_params =
       let ac = JCalloc_root ri and pc = JCroot ri in
       let in_param = false in
-      List.append @@
       if root_is_union ri then
-        valid_pred ~in_param ~equal:true ac pc ::
-        valid_pred ~in_param ~equal:false ac pc ::
-        valid_pred ~in_param ~equal:false ~right:false ac pc ::
-        valid_pred ~in_param ~equal:false ~left:false ac pc ::
-
-        alloc_param ~arg:Singleton ac pc ::
-        alloc_param ~arg:Range_0_n ~check_size:true ac pc ::
-        alloc_param ~arg:Range_0_n ~check_size:false ac pc ::
-
-        free_param ~safe:true ac pc ::
-        free_param ~safe:false ac pc :: []
+        [valid_pred ~in_param ~equal:true ac pc;
+         valid_pred ~in_param ~equal:false ac pc;
+         valid_pred ~in_param ~equal:false ~right:false ac pc;
+         valid_pred ~in_param ~equal:false ~left:false ac pc],
+        [alloc_param ~arg:Singleton ac pc;
+         alloc_param ~arg:Range_0_n ~check_size:false ac pc;
+         free_param ~safe:true ac pc],
+        [alloc_param ~arg:Range_0_n ~check_size:true ac pc;
+         free_param ~safe:false ac pc]
       else if ri.ri_hroots = [] then
-        valid_pred ~in_param:false ~equal:true ac pc ::
-        valid_pred ~in_param:false ~equal:false ac pc :: []
-      else
+        [valid_pred ~in_param:false ~equal:true ac pc;
+         valid_pred ~in_param:false ~equal:false ac pc],
+        [],
         []
+      else
+        [], [], []
     in
     let int_of_tag_axioms =
-      List.append @@
       ListLabels.fold_left
         ri.ri_hroots
         ~init:[]
         ~f:(fun acc st ->
-          Goal (KAxiom,
-                id_no_loc (Name.Axiom.int_of_tag st),
-                make_eq
-                  (make_int_of_tag st)
-                  (LConst (Prim_int (string_of_int @@ fresh_tag_id ()))))
-          :: acc)
+          (O.Wd.mk
+             ~name:(Name.Axiom.int_of_tag st) @@
+           Goal (KAxiom,
+                 O.T.(int_of_tag (var (Name.tag st)) = int (fresh_tag_id ()))))
+           :: acc)
     in
     let same_typeof_in_block_if_struct =
-      Fn.on'
-        (not @@ root_is_union ri)
-        (fun () ->
-           List.cons @@
-           Goal (KAxiom, id_no_loc (ri.ri_name ^ "_whole_block_tag"),
-                 let t = "t" and p = "p" and q = "q" in
-                 let lt = LVar t and lp = LVar p and lq = LVar q in
+      if not (root_is_union ri) then
+        [O.Wd.mk ~name:(ri.ri_name ^ "_whole_block_tag") @@
+          Goal (KAxiom,
                  let ri_pointer_type = pointer_type (JCalloc_root ri) (JCroot ri) in
-                 LForall (t, tag_table_type ri, [],
-                          LForall (p, ri_pointer_type, [],
-                                   LForall (q, ri_pointer_type, [],
-                                            LImpl (LPred ("same_block", [lp; lq]),
-                                                   LPred ("eq", [make_typeof lt lp; make_typeof lt lq])))))))
+                 O.P.(
+                   forall (Name.Generic.tag_table ri) (tag_table_type ri) @@ fun _ ->
+                   forall "p" ri_pointer_type @@ fun p ->
+                   forall "q" ri_pointer_type @@ fun q ->
+                   impl (same_block p q)
+                     T.(typeof ri p = typeof ri q)))]
+      else
+        []
     in
-    tag_id_type %>
-    preds_and_params %>
-    int_of_tag_axioms %>
-    same_typeof_in_block_if_struct
+    O.[Entry.some @@
+     Th.mk ~name:(fst @@ Name.Theory.struct_ (JCroot ri)) @@
+     tag_id_type :: preds @ int_of_tag_axioms @ same_typeof_in_block_if_struct;
+     Entry.some @@
+     Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:true (JCroot ri)) ~safe:true safe_params;
+     Entry.some @@
+     Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:false (JCroot ri)) ~safe:false unsafe_params]
 
 let valid_pre ~in_param all_effects (* vi *) =
   function
@@ -761,18 +768,18 @@ let valid_pre ~in_param all_effects (* vi *) =
     (* TODO: what about bitwise? *)
     let v = tvar ~label_in_name:false LabelHere vi in
     begin match lo, ro with
-    | None, None -> LTrue
+    | None, None -> True
     | Some n, None ->
       let ac = alloc_class_of_pointer_class pc in
-      valid ~in_param ~equal:false (ac, vi_region) pc v (Some (const_of_num n)) None
+      valid ~in_param ~equal:false (ac, vi_region) pc v (Some (O.T.num n)) None
     | None, Some n ->
       let ac = alloc_class_of_pointer_class pc in
-      valid ~in_param ~equal:false (ac, vi_region) pc v None (Some (const_of_num n))
+      valid ~in_param ~equal:false (ac, vi_region) pc v None (Some (O.T.num n))
     | Some n1, Some n2 ->
       let ac = alloc_class_of_pointer_class pc in
-      valid ~in_param ~equal:false (ac, vi_region) pc v (Some (const_of_num n1)) (Some (const_of_num n2))
+      valid ~in_param ~equal:false (ac, vi_region) pc v (Some (O.T.num n1)) (Some (O.T.num n2))
     end
-  |  _ -> LTrue
+  |  _ -> True
 
 let instanceof_pre all_effects (* vi *) =
   function
@@ -784,16 +791,14 @@ let instanceof_pre all_effects (* vi *) =
     let si = pointer_struct vi_type in
     let v = tvar ~label_in_name:false LabelHere vi in
     let pre, (l, r) =
-      let _, at = talloc_table_var ~label_in_name:false LabelHere (ac, vi_region) in
-      LPred ("allocated", [at; v]),
+      O.P.allocated ac ~r:vi_region v,
       Pair.map
-        ((lo, "offset_min"), (ro, "offset_max"))
-        ~f:(function Some n, _ -> const_of_num n | None, f -> LApp (f, [at; v]))
+        ((lo, O.T.offset_min), (ro, O.T.offset_max))
+        ~f:(function Some n, _ -> O.T.num n | None, f -> f ac ?r:(Some vi_region) v)
     in
     let instanceof_pre =
-      let _, tt = ttag_table_var ~label_in_name:false LabelHere (pointer_class_root pc, vi_region) in
-      let f = if si.si_final then make_typeeq else make_instanceof in
-      fun p -> f tt p si
+      let f = if si.si_final then O.P.typeeq else O.P.instanceof in
+      fun p -> f (pointer_class_root pc) ?r:(Some vi_region) p si
     in
-    LImpl (pre, LAnd (instanceof_pre v, forall_offset_in_range v l r ~f:(fun p -> [instanceof_pre p])))
-  | _ -> LTrue
+    O.P.impl pre O.P.(instanceof_pre v && forall_offset_in_range v l r ~f:(fun p -> [instanceof_pre p]))
+  | _ -> True

@@ -111,7 +111,7 @@ struct
   type t = string * bool
   let root ri = String.capitalize (Type.root ri) ^ "_root", false
   (* ATTENTION: this theory is non-existent, there is no more "obsolete" support for BV,
-     new implementation of Why3 support for BV should be implemented in Jessie2. *)
+     the new implementation of BV in Why3 should become supported by Jessie2. *)
   let bitvector = "Bitvector", false
   let jessie = "jessie3theories.Jc_memory_model", false
   let bool = "bool.Bool", true
@@ -130,6 +130,7 @@ module Module =
 struct
   type t = string * bool
   let jessie = "Jessie3", false
+  let struct_ ~safe si = (fst (Theory.struct_ si) ^ if safe then "safe" else "unsafe"), true
 end
 
 module Pred =
@@ -194,7 +195,7 @@ end
 module Param =
 struct
   let alloc (type t1) (type t2) :
-    arg:(Theory.t * string, check_size:bool -> Theory.t * string, _, _, t1, t2) arg -> _ -> _ -> t2 =
+    arg:(Module.t * string, check_size:bool -> Module.t * string, _, _, t1, t2) arg -> _ -> _ -> t2 =
     fun ~arg ac pc ->
       let prefix =
         match ac with
@@ -204,9 +205,9 @@ struct
       in
       let n = prefix ^ "_" ^ (Class.pointer pc) in
       match arg with
-      | Singleton -> Theory.struct_ pc, n
+      | Singleton -> Module.struct_ ~safe:true pc, n
       | Range_0_n ->
-        fun ~check_size -> Theory.struct_ pc, if check_size then n ^ "_requires" else n
+        fun ~check_size -> Module.struct_ ~safe:(not check_size) pc, if check_size then n ^ "_requires" else n
 
   let free ~safe ac pc =
     let prefix =
@@ -214,7 +215,7 @@ struct
       | JCalloc_root _ -> "free"
       | JCalloc_bitvector -> "free_bitvector"
     in
-    Theory.struct_ pc, (if safe then "safe_" else "") ^ prefix ^ "_" ^ (Class.pointer pc)
+    Module.struct_ ~safe pc, (if safe then "safe_" else "") ^ prefix ^ "_" ^ (Class.pointer pc)
 
   let any_enum ae = "any" ^ string_of_some_enum ae
 end

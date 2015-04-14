@@ -120,6 +120,36 @@ struct
 
   let binary80 = user ~from:Name.Theory.binary80
 
+  let instanceof () : (_ * (_ * (_ * unit)), boolean) func = jc "instanceof"
+
+  let typeof () : (_ * (_ * unit), _) func = jc "typeof"
+
+  let allocable () : (_ * (_ * unit), boolean) func = jc "allocable"
+
+  let freeable () : (_ * (_ * unit), boolean) func = jc "freeable"
+
+  let allocated () : (_ * (_ * unit), boolean) func = jc "allocated"
+
+  let shift () : (_ * (unbounded integer number * unit), _) func  = jc "shift"
+
+  let same_block () : (_ * (_ * unit), boolean) func = jc "same_block"
+
+  let select () : (_ * (_ * unit), _) func = jc "select"
+
+  let subtag () : (_ * (_ * unit), boolean) func = jc "subtag"
+
+  let parenttag () : (_ * (_ * unit), boolean) func = jc "parenttag"
+
+  let int_of_tag () : (_ * unit, unbounded integer number) func = jc "int_of_tag"
+
+  let offset_min () : (_ * (_ * unit), unbounded integer number) func = jc "offset_min"
+
+  let offset_max () : (_ * (_ * unit), unbounded integer number) func = jc "offset_max"
+
+  let alloc_fresh () : (_ * (_ * unit), boolean) func = jc "alloc_fresh"
+
+  let tag_fresh () : (_ * (_ * unit), boolean) func = jc "tag_fresh"
+
   type ('a, 'b) typed =
     | Ty of 'a ty
     | Poly of 'b poly
@@ -260,16 +290,31 @@ struct
 
   let (!.) v = (Deref v : _ term)
 
-  let select mem p = F.jc "select" $ mem ^. p
+  let select mem p = F.select () $ mem ^. p
 
   let alloc_table ?r ac =
-    var (Option.map_default r ~default:(Name.Generic.alloc_table ac) ~f:(fun r -> Name.alloc_table (ac, r)))
+    Option.map_default
+      r
+      ~default:(var (Name.Generic.alloc_table ac))
+      ~f:(fun r -> !. (Name.alloc_table (ac, r)))
 
-  let offset_min ac ?r p = F.jc "offset_min" $ alloc_table ?r ac ^. p
+  let tag_table ?r ri =
+    Option.map_default
+      r
+      ~default:(var (Name.Generic.tag_table ri))
+      ~f:(fun r -> !. (Name.tag_table (ri, r)))
 
-  let offset_max ac ?r p = F.jc "offset_max" $ alloc_table ?r ac ^. p
+  let offset_min ac ?r p = F.offset_min () $ alloc_table ?r ac ^. p
+
+  let offset_max ac ?r p = F.offset_max () $ alloc_table ?r ac ^. p
+
+  let typeof ri ?r p = F.typeof () $ tag_table ?r ri ^. p
 
   let ( **>) mem fi = select mem (var (Name.field_memory_name fi))
+
+  let shift p i = F.shift () $ p ^. i
+
+  let int_of_tag t = F.int_of_tag () $. t
 
   let rel op t1 t2 : pred = App (B_num_pred (op, Integral Integer), t1 ^. t2)
 
@@ -651,7 +696,17 @@ struct
     | Const Int "0" -> int 0
     | _ -> U_int_op `Neg $. e
 
-  let select mem p = F.jc "select" $ mem ^. p
+  let rel op t1 t2 : _ t = mk (App (B_num_pred (op, Integral Integer), t1 ^. t2, None))
+
+  let (>) = rel `Gt
+  let (>=) = rel `Ge
+  let (<) = rel `Lt
+  let (<=) = rel `Le
+
+  let (=) t1 t2 : _ t = mk (App (Poly `Eq, t1 ^. t2, None))
+  let (<>) t1 t2 : _ t = mk (App (Poly `Neq, t1 ^. t2, None))
+
+  let select mem p = F.select () $ mem ^. p
 
   let ( **>) mem fi = select mem (var (Name.field_memory_name fi))
 
@@ -1122,7 +1177,7 @@ struct
     | [] -> False
     | p :: ps -> p || disj ps
 
-  let (<:) t1 t2 : pred = App (F.jc "subtag", T.(t1 ^. t2))
+  let (<:) t1 t2 = F.subtag () $ t1 ^. t2
 
   let if_ cond ~then_ ~else_ : pred = If (cond, then_, else_)
 
@@ -1152,6 +1207,26 @@ struct
     | False, _ -> not p2
     | _, False -> not p1
     | _, _ -> Iff (p1, p2)
+
+  let instanceof ri p ?r si = F.instanceof () $ (T.tag_table ?r ri) ^ p ^. T.var (Name.tag si)
+
+  let typeeq ri p ?r si = T.(F.typeof () $ (T.tag_table ?r ri) ^. p = var @@ Name.tag si)
+
+  let subtag t1 t2 = F.subtag () $ t1 ^. t2
+
+  let parenttag t1 t2 = F.parenttag () $ t1 ^. t2
+
+  let allocable ac ?r p = F.allocable () $ T.(alloc_table ?r ac) ^. p
+
+  let freeable ac ?r p = F.allocable () $ T.(alloc_table ?r ac) ^. p
+
+  let allocated ac ?r p = F.allocated () $ T.(alloc_table ?r ac) ^. p
+
+  let same_block p1 p2 = F.same_block () $ p1 ^. p2
+
+  let alloc_fresh ac ?r p = F.alloc_fresh () $ T.(alloc_table ?r ac) ^. p
+
+  let tag_fresh si ?r p = F.tag_fresh () $ T.(tag_table ?r si) ^. p
 end
 
 module Wd =
@@ -1160,4 +1235,21 @@ struct
 
   let mk ~name:why_name ?expl:(why_expl="") ?pos:(why_pos = Position.dummy) why_decl =
     { why_id = { why_name; why_expl; why_pos }; why_decl }
+end
+
+module Th =
+struct
+  let mk ~name ?(deps=[]) decls = Theory (name, Some (ref deps, decls))
+  let dummy name = Theory (name, None)
+end
+
+module Mod =
+struct
+  let mk ~name ~safe ?(deps=[]) decls = Module (name, Some (ref deps, safe, decls))
+  let dummy name = Module (name, None)
+end
+
+module Entry =
+struct
+  let some e = Entry e
 end
