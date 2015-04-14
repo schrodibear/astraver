@@ -580,11 +580,11 @@ let free_read_parameters (ac, r) pc =
     (fdup2 (O.E.some % memory_var ~test_current_function:true % Pair.cons' r) (O.Lt.some % memory_type))
     (all_mems_ac ac pc)
 
-let free ~safe (ac, r) pc p =
+let free ~safe (ac, r) pc p : void expr =
   let args =
     let writes = free_write_parameters (ac, r) pc in
     let reads = free_read_parameters (ac, r) pc in
-    p :: List.map fst (writes @ reads)
+    (O.E.some p) :: List.map fst (writes @ reads)
   in
   O.E.(Name.Param.free ~safe ac pc $.. args)
 

@@ -36,16 +36,17 @@ open Env
 open Fenv
 open Output_ast
 
-val struc : struct_info -> why_decl list -> why_decl list
+val struc : struct_info -> some_entry list
 
-val root : root_info -> why_decl list -> why_decl list
+val root : root_info -> some_entry list
 
 val alloc :
-  arg:(expr, check_size:bool -> expr -> expr, _, [ `Range_0_n | `Singleton ], _, 'a) arg ->
-  alloc_class * region -> pointer_class -> 'a
+  arg:('a expr, check_size:bool -> unbounded integer number expr -> 'a expr,
+       _, [ `Range_0_n | `Singleton ], _, 'r) arg ->
+  alloc_class * region -> pointer_class -> 'r
 
-val free : safe:bool -> alloc_class * region -> pointer_class -> expr -> expr
+val free : safe:bool -> alloc_class * region -> pointer_class -> 'a expr -> void expr
 
-val valid_pre : in_param:bool -> effect -> var_info -> assertion
+val valid_pre : in_param:bool -> effect -> var_info -> pred
 
-val instanceof_pre : effect -> var_info -> assertion
+val instanceof_pre : effect -> var_info -> pred

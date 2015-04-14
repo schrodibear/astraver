@@ -73,11 +73,11 @@ val fresh_statement_label : unit -> label_info
 
 val ty : jc_type -> some_ty_opt
 
-val tr_base_type : ('a, 'b) ty_opt -> ?region:RegionTable.key -> jc_type -> 'a logic_type
+val base_type : ('a, 'b) ty_opt -> jc_type -> 'a why_type
 
-val tr_var_base_type : ('a, 'b) ty_opt -> var_info -> 'a logic_type
+val some_var_base_type : var_info -> some_why_type
 
-val tr_var_type : ('a, 'b) ty_opt -> var_info -> 'a why_type
+val some_var_type : var_info -> some_logic_type
 
 val raw_pset_type : 'a logic_type -> 'b logic_type
 
@@ -117,11 +117,11 @@ type term = { mutable term : 'a 'b.
 
 val term : term
 
-val any_value : ('a, 'b) ty_opt -> region -> jc_type -> 'a expr
+val nondet_value : ('a, 'b) ty_opt -> jc_type -> 'a expr
 
 val make_conversion_params : pointer_class -> [`Module of bool] why_decl list
 
-val param : ('a, 'b) ty_opt -> type_safe:bool -> var_info -> string * 'a logic_type
+val param : ('a, 'b) ty_opt -> var_info -> string * 'a logic_type
 
 val tparam : ('a, 'b) ty_opt -> label_in_name:bool -> label -> var_info -> string * 'a Output_ast.term * 'a logic_type
 
@@ -174,13 +174,13 @@ val make_arguments :
   with_globals:bool ->
   with_body:bool ->
   string ->
-  'a expr list ->
-  pred * string * (StringSet.elt * some_logic_type) list * some_expr * some_expr * 'a expr list
+  some_expr list ->
+  pred * string * (StringSet.elt * some_logic_type) list * some_expr * some_expr * some_expr list
 
 val define_locals :
-  ?reads:(string * 'a logic_type) list ->
-  ?writes:(string * 'b logic_type) list ->
-  'c expr -> 'c expr
+  ?reads:(string * some_logic_type) list ->
+  ?writes:(string * some_logic_type) list ->
+  'a expr -> 'a expr
 
 
 val tr_li_model_at_args_3 :

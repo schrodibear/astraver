@@ -763,8 +763,18 @@ let any_value' typ =
   O.E.(F.jc_val v $. void >: Base_type typ)
 
 let define_locals ?(reads=[]) ?(writes=[]) e' =
-  let e' = List.fold_left (fun acc (n, ty') -> O.E.(let_ n ~equal:(any_value' ty') ~in_:(Fn.const acc))) e' reads in
-  let e' = List.fold_left (fun acc (n, ty') -> O.E.(let_ref n ~equal:(any_value' ty') ~in_:(Fn.const acc))) e' writes in
+  let e' =
+    List.fold_left
+      (fun acc (n, Logic_type ty') -> O.E.(let_ n ~equal:(any_value' ty') ~in_:(Fn.const acc)))
+      e'
+      reads
+  in
+  let e' =
+    List.fold_left
+      (fun acc (n, Logic_type ty') -> O.E.(let_ref n ~equal:(any_value' ty') ~in_:(Fn.const acc)))
+      e'
+      writes
+  in
   e'
 
 (******************************************************************************)
@@ -1907,8 +1917,9 @@ let make_arguments
   (* Return complete list of arguments *)
   (* TODO: add mutable and committed effects *)
   let args =
-    args
-    @ write_allocs @ write_tags @ write_mems @ write_globs
+    args @
+    List.map O.E.some @@
+    write_allocs @ write_tags @ write_mems @ write_globs
     @ read_allocs @ read_tags @ read_mems @ read_globs
   in
   pre_mems, fname, locals, prolog, epilog, args

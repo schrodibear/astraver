@@ -747,9 +747,10 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
         P.locate ~p ?behavior:None ~kind:(JCVCglobal_invariant app.app_fun.li_name)
     | JCAquantifier (Forall | Exists as q, v, trigs, p1) ->
       let Typ typ = (ty v.vi_type) in
+      let Logic_type lt = some_var_type v in
       (match q with Forall -> O.P.forall | Exists -> O.P.exists)
         v.vi_final_name
-        (tr_var_base_type typ v)
+        lt
         ~trigs:(triggers trigs)
         (fun _ -> fp p1)
     | JCAold a1 ->
@@ -1302,14 +1303,14 @@ let rec make_upd_simple ~e e1 fi tmp2 =
       let tag = tag_table_var (struct_root fi.fi_struct, e1#region) in
       let tag_id = var (Name.tag fi.fi_struct) in
       let typesafe = (pointer_struct e1#typ).si_final in
-      (if off = Int_offset 0 then
+      (if P.(off = Int_offset 0) then
          var tmpp
        else if not typesafe then
          E.locate ~e ~kind:JCVCpointer_shift (O.F.jc_val "shift_" $ tag ^ var tmpp ^ tag_id ^. var tmpi)
        else
          O.F.jc_val "safe_shift_" $ var tmpp ^. var tmpi),
 
-      if off = Int_offset 0 then
+      if P.(off = Int_offset 0) then
         E.locate ~e ~kind:JCVCpointer_deref (O.F.jc_val "upd_" $ alloc ^ var mem ^ var tmpp ^. var tmp2)
       else if not typesafe then
         E.locate ~e ~kind:JCVCpointer_deref
@@ -1656,7 +1657,7 @@ and list_type_assert vi e (lets, params) =
   let ty' = vi.vi_type in
   let tmp = tmp_var_name () (* vi.vi_name *) in
   let a = type_assert tmp ty' e in
-  (tmp, some_expr e, a) :: lets , O.E.(var tmp) :: params
+  (tmp, some_expr e, a) :: lets, O.E.(some @@ var tmp) :: params
 
 and value_assigned ~e ty' e1 =
   let Typ typ = ty ty' in
@@ -1766,15 +1767,15 @@ and make_reinterpret ~e e1 st =
                 (Fn.uncurry fdup2) @@ Pair.map app ("offset_min", "offset_max")
               in
               let deref (where, p) ?boff offs =
-                let shift t o1 o2 =
+                let shift' t o1 o2 =
                   let open O.T in
                   match o1, o2 with
                   | None, None -> t
                   | Some o, None
-                  | None, Some o -> F.jc "shift" $ t ^. o
-                  | Some o1, Some o2 -> F.jc "shift" $ t ^. o1 + o2
+                  | None, Some o -> shift t o
+                  | Some o1, Some o2 -> shift t (o1 + o2)
                 in
-                O.T.(select (mem where) (shift p boff @@ match offs with 0 -> None | o -> Some (int o)))
+                O.T.(select (mem where) (shift' p boff @@ match offs with 0 -> None | o -> Some (int o)))
               in
               let pred_names =
                 let enum_name =
@@ -1865,7 +1866,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
     | JCEbinary (e1, ((`Beq | `Bneq as o), `Pointer), e2) when safety_checking () ->
       let is_null e = e#node = JCEconst JCCnull in
       if is_null e1 && is_null e2 then
-         O.E.mk @@ Const (Bool true)
+         return @@ O.E.mk @@ Const (Bool true)
       else
         let dummy e1 e2 = if is_null e1 then e2 else e1 in
         let e1, e1', e2, e2' = dummy e1 e2, expr Any e1, dummy e2 e1, expr Any e2 in
@@ -1995,7 +1996,6 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
     | JCEalloc (e1, st) ->
       let e1' = expr Any e1 in
       let ac = deref_alloc_class ~type_safe:false e in
-      let alloc = plain_alloc_table_var (ac, e#region) in
       let pc = JCtag (st, []) in
       if !Options.inv_sem = InvOwnership then
         assert false
@@ -2005,31 +2005,25 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
           when (try let n = int_of_string s in n == 1 with Failure "int_of_string" -> false) ->
           Interp_struct.alloc ~arg:Singleton (ac, e#region) pc
         | _ ->
-          make_positioned_lex_e
+          E.locate
             ~e
             ~kind:JCVCalloc_size
-            (Interp_struct.alloc ~arg:Range_0_n ~check_size:(safety_checking ()) (ac, e#region) pc @@
-             coerce
-               ~check_int_overflow:(safety_checking())
-               ~e:e1
-               integer_type
-               e1#typ
-               e1
-               e1')
+            (Interp_struct.alloc ~arg:Range_0_n ~check_size:(safety_checking ()) (ac, e#region) pc e1')
         end
     | JCEfree e1 ->
-      let e1' = expr e1 in
+      let e1' = expr Any e1 in
       let ac = deref_alloc_class ~type_safe:false e1 in
       let pc = pointer_class e1#typ in
       if !Options.inv_sem = InvOwnership then
         assert false
       else
-        make_positioned_lex_e ~e @@
+        return @@
+        E.locate ~e @@
         Interp_struct.free ~safe:(not @@ safety_checking ()) (ac, e1#region) pc e1'
     | JCEreinterpret (e1, st) -> return @@ make_reinterpret ~e e1 st
     | JCEapp call ->
       begin match call.call_fun with
-      | JClogic_fun f ->
+      | JClogic_fun _f ->
         assert false
         (*let arg_types_asserts, args =
           match f.li_parameters with
@@ -2083,23 +2077,9 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
             let params = List.map snd params in
             List.fold_right2 list_type_assert params call.call_args ([] ,[])
         in
-        let args =
-          List.fold_right2
-            (fun e e' acc ->
-               let e' =
-                 if is_pointer_type e#typ && Region.bitwise e#region
-                 then
-                   let st = pointer_struct e#typ in
-                   let vi = struct_root st in
-                   O.E.(F.jc (of_pointer_address_name vi) $. e')
-                 else e'
-               in
-               e' :: acc)
-            call.call_args args
-            []
-        in
         let param_assoc = List.map2 (fun (_, param) arg -> param, arg) f.fun_parameters call.call_args in
-        let fname = f.fun_final_name ^ if safety_checking () then  "_requires" else "" in
+        let mod_ = f.fun_final_name ^ if safety_checking () then  "_requires" else "" in
+        let fname = f.fun_final_name in
         let with_body =
           try
             let _f, _loc, _s, body = IntHashtblIter.find Typing.functions_table f.fun_tag in
@@ -2111,24 +2091,20 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
           match f.fun_builtin_treatment with
           | TreatNothing -> args
           | TreatGenFloat format ->
-            (O.E.var @@ float_format format) :: current_rounding_mode Expr :: args
+            O.E.(some (var (float_format format)) :: some (current_rounding_mode Expr) :: args)
         in
-        let pre, fname, locals, prolog, epilog, new_args =
+        let pre, fname, locals, _prolog, _epilog, new_args =
           make_arguments
-            ~callee_reads: f.fun_effects.fe_reads
-            ~callee_writes: f.fun_effects.fe_writes
-            ~region_assoc: call.call_region_assoc
+            ~callee_reads:f.fun_effects.fe_reads
+            ~callee_writes:f.fun_effects.fe_writes
+            ~region_assoc:call.call_region_assoc
             ~param_assoc
             ~with_globals:false
             ~with_body
             fname
             args
         in
-        make_vc_app_e ~e ~kind:(JCVCuser_call f.fun_name) fname new_args |>
-        Fn.on
-          (is_pointer_type e#typ && Region.bitwise e#region)
-          (fun call -> make_app "pointer_address" [call])
-        |>
+        E.locate ~e ~kind:(JCVCuser_call f.fun_name) O.E.(((mod_, true), fname) $.. new_args) |>
         (* decreases *)
         (let this_comp = f.fun_component in
          let current_comp = (get_current_function ()).fun_component in
@@ -2164,7 +2140,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
                LabelHere LabelHere
                this_measure
            in
-           let r, ty =
+           let r, _ty =
              assert (this_r = cur_r);
              match this_r with
              | None -> "zwf_zero", integer_type
@@ -2220,7 +2196,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
       let v2 = Common.var fi.fi_type tmp2 in
       let e2 = new expr_with ~typ:fi.fi_type ~node:(JCEvar v2) e2 in
       (* Translate assignment *)
-      let tmp1, lets, e' = make_upd ~e e1 fi e2 in
+      let _tmp1, lets, e' = make_upd ~e e1 fi e2 in
       let e' =
         if (safety_checking()) && !Options.inv_sem = InvOwnership
         then assert false
@@ -2240,7 +2216,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
       let Typ typ = ty v.vi_type in
       let e1' =
         match e1 with
-        | None -> any_value typ v.vi_region v.vi_type
+        | None -> nondet_value typ v.vi_type
         | Some e1 ->
           let Expr e = value_assigned ~e v.vi_type e1 in
           O.E.return typ e
@@ -2543,13 +2519,14 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
               O.E.(label (mk @@ Black_box (Annot_type (True, O.Wt.void, [], [], r, []))) ^^
                    mk @@ Triple (true, True, expr typ e, post, []))
         else
+          let Why_type result_type = some_var_base_type vi_result in
           return @@
           O.E.(label (mk @@ Black_box (Annot_type (True, O.Wt.void, [], [], r, []))) ^^
                let tmp = tmp_var_name () in
                let_
                  tmp
                  (mk @@ Triple (true, True, expr typ e, True, []))
-                 (fun _ -> mk @@ Black_box (Annot_type (True, tr_var_type typ vi_result, [], [], post, []))))
+                 (fun _ -> mk @@ Black_box (Annot_type (True, result_type, [], [], post, []))))
         | _ -> assert false
         end
     | JCEthrow (exc, Some e1) ->
