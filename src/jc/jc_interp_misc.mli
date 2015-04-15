@@ -73,7 +73,13 @@ val fresh_statement_label : unit -> label_info
 
 val ty : jc_type -> some_ty_opt
 
+val type_ : ('a, _) ty_opt -> jc_type -> 'a logic_type
+
 val base_type : ('a, 'b) ty_opt -> jc_type -> 'a why_type
+
+val some_type : jc_type -> some_logic_type
+
+val some_base_type: jc_type -> some_why_type
 
 val some_var_base_type : var_info -> some_why_type
 
@@ -124,6 +130,8 @@ val make_conversion_params : pointer_class -> [`Module of bool] why_decl list
 val param : ('a, 'b) ty_opt -> var_info -> string * 'a logic_type
 
 val tparam : ('a, 'b) ty_opt -> label_in_name:bool -> label -> var_info -> string * 'a Output_ast.term * 'a logic_type
+
+val some_param : label_in_name:bool -> label -> var_info -> string * some_term * some_logic_type
 
 val tr_li_model_args_3 :
   label_in_name:bool ->

@@ -627,6 +627,9 @@ let rec term :
   if t#mark <> ""
   then T.locate t t'
   else t'
+and some_term ?subst ~type_safe ~global_assertion ~relocate lab oldlab t =
+  let Typ typ = ty t#typ in
+  O.T.some @@ term typ ?subst ~type_safe ~global_assertion ~relocate lab oldlab t
 
 let () = Interp_misc.term.term <- term
 
@@ -746,7 +749,6 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
         (IntHashtblIter.mem Typing.global_invariants_table app.app_fun.li_tag) @@
         P.locate ~p ?behavior:None ~kind:(JCVCglobal_invariant app.app_fun.li_name)
     | JCAquantifier (Forall | Exists as q, v, trigs, p1) ->
-      let Typ typ = (ty v.vi_type) in
       let Logic_type lt = some_var_type v in
       (match q with Forall -> O.P.forall | Exists -> O.P.exists)
         v.vi_final_name
@@ -2677,43 +2679,101 @@ let make_not_assigns mem t l =
   LPred ("not_assigns", [LDerefAtLabel(mem, ""); LDeref mem; pset])
 *)
 
-(*
 (*****************************)
 (* axioms, lemmas, goals     *)
 (*****************************)
 
-let tr_axiom pos id ~is_axiom labels a acc =
-
-  if Options.debug then
-    Format.printf "[interp] axiom %s@." id;
-
+let tr_axiom pos id ~is_axiom labels a =
   let lab = match labels with [lab] -> lab | _ -> LabelHere in
   (* Special (local) translation of effects for predicates with polymorphic memories.
      We first entirely exclude their effects from the assertion, then only restore the effects that
      are relevant in this axiom. So the effects from other axioms won't be translated. *)
   let ef = Effect.assertion empty_effects (restrict_poly_mems_in_assertion MemoryMap.empty a) in
   let a' =
-    assertion ~type_safe:false ~global_assertion:true ~relocate:false lab lab @@
+    predicate ~type_safe:false ~global_assertion:true ~relocate:false lab lab @@
       restrict_poly_mems_in_assertion ef.e_memories a
   in
   let params = tr_li_model_args_3 ~label_in_name:true ef in
-  let new_id = get_unique_name id in
-  let a' = List.fold_right (fun (n, _v, ty') a' -> LForall (n, ty', [], a')) params a' in
-  Goal ((if is_axiom then KAxiom else KLemma),
-        { why_name = new_id;
-          why_expl = (if is_axiom then "Axiom " else "Lemma ") ^ id;
-          why_pos = Position.of_pos pos},
-        a')
-  :: acc
+  let name = get_unique_name id in
+  let a' = List.fold_right (fun (n, _v, Logic_type ty') a' -> O.P.forall n ty' (fun _ -> a')) params a' in
+  [O.Wd.mk
+     ~name
+     ~expl:((if is_axiom then "Axiom " else "Lemma ") ^ id)
+     ~pos:(Position.of_pos pos)
+     (Goal ((if is_axiom then KAxiom else KLemma), a'))]
 
-(***********************************)
-(*             axiomatic decls     *)
-(***********************************)
-
-let tr_axiomatic_decl acc d =
+let tr_axiomatic_decl d =
   match d with
-    | Typing.ABaxiom(loc,id,labels,p) ->
-        tr_axiom loc ~is_axiom:true id labels p acc
+  | Typing.ABaxiom (loc, id, labels, p) ->
+      tr_axiom loc ~is_axiom:true id labels p
+
+let tr_logic_fun f ta =
+  let lab = match f.li_labels with [lab] -> lab | _ -> LabelHere in
+  let fp = predicate ~type_safe:false ~global_assertion:true ~relocate:false lab lab in
+  let ft typ = term typ ~type_safe:false ~global_assertion:true ~relocate:false lab lab in
+  let params =
+    let lab =
+      match f.li_labels with [lab] -> lab | _ -> LabelHere
+    in
+    let model_params = tr_li_model_args_3 ~label_in_name:true f.li_effects in
+    let usual_params = List.map (some_param ~label_in_name:true lab) f.li_parameters in
+    List.map (fun (n, _v, ty') -> n, ty') @@ usual_params @ model_params
+  in
+  (* definition of the function *)
+  let th = Name.Theory.axiomatic f in
+  (* Function definition *)
+  match f.li_result_type, ta with
+  (* Predicate *)
+  | None, JCAssertion a ->
+    let body = fp a in
+    [O.Wd.mk ~name:f.li_final_name @@ Predicate (params, body)]
+  (* Function *)
+  | Some ty', JCTerm t ->
+    let Typ typ = ty ty' in
+    let ty' = type_ typ ty' in
+    let t' = ft typ t in
+    if List.mem f f.li_calls then
+      let logic = O.Wd.mk ~name:f.li_final_name @@ Logic (params, ty') in
+      let axiom =
+        let trig =
+          let params = List.map O.(T.some % T.var % fst) params in
+          O.T.((th, f.li_final_name) $.. params)
+        in
+        O.Wd.mk
+          ~name:(f.li_final_name ^ "_definition")
+          (Goal (KAxiom,
+                 List.fold_right
+                   (fun (v, Logic_type lty) acc -> O.P.(forall v lty ~trigs:[[Term trig]] @@ Fn.const acc))
+                   params
+                   O.P.(trig = t')))
+      in
+      [logic; axiom]
+    else
+      [O.Wd.mk ~name:f.li_final_name @@ Function (params, ty', t')]
+  | ty', (JCNone | JCReads _) -> (* Logic *)
+    let Logic_type ty' = Option.map_default ~default:O.Lt.(some bool) ~f:some_type ty' in
+    [O.Wd.mk ~name:f.li_final_name @@ Logic (params, ty')]
+  | None, JCInductive l ->
+    [O.Wd.mk
+       ~name:f.li_final_name
+       (Inductive
+          (params,
+           List.map
+            (fun (id,_labels,a) ->
+              let ef = Effect.assertion empty_effects a in
+              let a' = fp a in
+              let params = tr_li_model_args_3 ~label_in_name:true ef in
+              let a' =
+                List.fold_right
+                  (fun (n, _v, Logic_type ty') a' -> O.P.forall n ty' (Fn.const a'))
+                  params
+                  a'
+               in
+               get_unique_name id#name, a')
+            l))]
+  | Some _, JCInductive _
+  | None, JCTerm _
+  | Some _, JCAssertion _ -> assert false
 
 (******************************************************************************)
 (*                                 Functions                                  *)
@@ -3367,6 +3427,7 @@ let tr_fun f funpos spec body acc =
   reset_current_function ();
   acc
 
+(*
 let tr_specialized_fun n fname param_name_assoc acc =
 
   let rec modif_why_type = function
@@ -3436,14 +3497,13 @@ let tr_specialized_fun n fname param_name_assoc acc =
   let fun_type = Hashtbl.find function_prototypes fname in
   let new_fun_type = modif_why_type fun_type in
   Param(false, id_no_loc n, new_fun_type) :: acc
-
+*)
 
 (******************************************************************************)
 (*                               Logic entities                               *)
 (******************************************************************************)
 
 let tr_logic_type (id,l) acc = Type(id_no_loc id,List.map Type_var.name l) :: acc
-
 
 let tr_exception ei acc =
   Options.lprintf "producing exception '%s'@." ei.exi_name;

@@ -366,6 +366,11 @@ let tparam t ~label_in_name lab v =
   tvar ~label_in_name lab v,
   type_ t v.vi_type
 
+let some_param ~label_in_name lab v =
+  tvar_name ~label_in_name lab v,
+  O.T.some @@ tvar ~label_in_name lab v,
+  some_type v.vi_type
+
 let local_of_parameter (Expr v', ty') = (var_name' v', ty')
 let effect_of_parameter (Expr v', _ty') = var_name' v'
 let wparam_of_parameter (v', Logic_type ty') = (v', Why_type (Ref_type (Base_type ty')))

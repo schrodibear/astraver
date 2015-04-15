@@ -32,7 +32,10 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Stdlib
+
 open Env
+open Fenv
 open Ast
 open Region
 open Common
@@ -124,6 +127,8 @@ struct
     function
     | JCtag (si, _) -> "Struct_" ^ si.si_name, true
     | JCroot ri -> "Root_" ^ ri.ri_name, true
+  let axiomatic li =
+    Option.map_default li.li_axiomatic ~default:("Logic_" ^ li.li_final_name) ~f:((^) "Axiomatic_"), true
 end
 
 module Module =

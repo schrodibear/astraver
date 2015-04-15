@@ -1010,17 +1010,8 @@ let tr_logic_model_params f =
       return @@ lazy (initial_params @ poly_params @ final_params)
   end
 
-let tr_params_usual_model_aux f =
-  let lab =
-    match f.li_labels with [lab] -> lab | _ -> LabelHere
-  in
-  let usual_params =
-    List.map (tparam ~label_in_name:true lab) f.li_parameters
-  in
-  let _3to2 = List.map (fun (n,_v,ty') -> (n,ty')) in
-  let model_params = _3to2 (tr_logic_model_params f) in
-  let usual_params = _3to2 usual_params in
-  usual_params, model_params
+
+
 
 (*
 module Def_in :
@@ -2286,10 +2277,6 @@ let lemma_disjoint_cases ta_conv acc =
 
 
 
-let tr_params_usual_model f =
-  let usual_params,model_params = tr_params_usual_model_aux f in
-  let params = usual_params @ model_params in
-  params
 
 let tr_logic_fun_aux f ta acc =
 
