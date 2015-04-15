@@ -2716,7 +2716,7 @@ let tr_logic_fun f ta =
       match f.li_labels with [lab] -> lab | _ -> LabelHere
     in
     let model_params = tr_li_model_args_3 ~label_in_name:true f.li_effects in
-    let usual_params = List.map (some_param ~label_in_name:true lab) f.li_parameters in
+    let usual_params = List.map (some_tparam ~label_in_name:true lab) f.li_parameters in
     List.map (fun (n, _v, ty') -> n, ty') @@ usual_params @ model_params
   in
   (* definition of the function *)
@@ -2775,6 +2775,17 @@ let tr_logic_fun f ta =
   | None, JCTerm _
   | Some _, JCAssertion _ -> assert false
 
+let tr_aximatic name data =
+  let open Typing in
+  let logics =
+    List.map
+      (fun li ->
+         tr_logic_fun li (snd @@ IntHashtblIter.find logic_functions_table li.li_tag))
+      data.axiomatics_defined_ids
+  in
+  let goals = List.map tr_axiomatic_decl data.axiomatics_decls in
+  O.[Entry.some (Th.mk ~name @@ List.flatten @@ logics @ goals)]
+
 (******************************************************************************)
 (*                                 Functions                                  *)
 (******************************************************************************)
@@ -2783,37 +2794,36 @@ let excep_posts_for_others exc_opt excep_behaviors =
   ExceptionMap.fold
     (fun exc _bl acc ->
        match exc_opt with
-         | Some exc' ->
-             if exc.exi_tag = exc'.exi_tag then
-               acc
-             else
-               (exception_name exc, LTrue) :: acc
-         | None -> (exception_name exc, LTrue) :: acc)
+       | Some exc' ->
+         if exc.exi_tag = exc'.exi_tag then
+           acc
+         else
+           (exception_name exc, True) :: acc
+       | None -> (exception_name exc, True) :: acc)
     excep_behaviors
     []
 
-let fun_parameters ~type_safe params write_params read_params =
-  let write_params =
-    List.map (fun (n,ty') -> (n,Ref_type(Base_type ty'))) write_params
-  in
-  let read_params =
-    List.map (fun (n,ty') -> (n,Base_type ty')) read_params
-  in
+let fun_parameters params write_params read_params =
+  let write_params = List.map (fun (n, Logic_type ty') -> (n, O.Wt.some @@ Ref_type (Base_type ty'))) write_params in
+  let read_params = List.map (fun (n, Logic_type ty') -> (n, O.Wt.some @@ Base_type ty')) read_params in
   let params =
-    List.map (fun v ->
-                let n,ty' = param ~type_safe v in
-                (n, Base_type ty')
-             ) params
+    List.map
+      (fun v ->
+         let n, Logic_type ty' = some_param v in
+         n, O.Wt.some @@ Base_type ty')
+      params
   in
   let params = params @ write_params @ read_params in
   match params with
-    | [] -> [ ("tt", unit_type) ]
-    | _ -> params
+  | [] -> ["tt", O.Wt.(some void)]
+  | _ -> params
 
 let annot_fun_parameters params write_params read_params annot_type =
-  let params = fun_parameters ~type_safe:true params write_params read_params in
-  List.fold_right (fun (n,ty') acc -> Prod_type(n, ty', acc))
-    params annot_type
+  let params = fun_parameters params write_params read_params in
+  List.fold_right
+    (fun (n, Why_type ty') (Why_type acc) -> O.Wt.some @@ Prod_type (n, ty', acc))
+    params
+    annot_type
 
 let function_body _f spec behavior_name body =
   set_current_behavior behavior_name;
@@ -2826,24 +2836,24 @@ let function_body _f spec behavior_name body =
 (* Only used for internal function, hence type-safe parameter set to false *)
 let assume_in_precondition b pre =
   match b.b_assumes with
-    | None -> pre
-    | Some a ->
-        let a' =
-          assertion ~type_safe:false ~global_assertion:false ~relocate:false
-            LabelHere LabelHere a
-        in
-        make_and a' pre
+  | None -> pre
+  | Some a ->
+    let a' =
+      predicate ~type_safe:false ~global_assertion:false ~relocate:false
+        LabelHere LabelHere a
+    in
+    O.P.(a' && pre)
 
 (* Only used for external prototype, hence type-safe parameter set to true *)
 let assume_in_postcondition b post =
   match b.b_assumes with
-    | None -> post
-    | Some a ->
-        let a' =
-          assertion ~type_safe:true ~global_assertion:false ~relocate:true
-            LabelOld LabelOld a
-        in
-        make_impl a' post
+  | None -> post
+  | Some a ->
+    let a' =
+      predicate ~type_safe:true ~global_assertion:false ~relocate:true
+        LabelOld LabelOld a
+    in
+    O.P.(impl a' post)
 
 let function_prototypes = Hashtbl.create 7
 
@@ -2860,18 +2870,18 @@ let map_embedded_fields ~f x =
 
 let tr_allocates ~internal ~type_safe ?region_list ef =
   function
-  | None -> LTrue
+  | None -> True
   | Some (pos, locs) ->
     let mk_positioned =
-      let e = (new assertion ~pos JCAtrue :> < mark : _; pos : _ > ) in
-      mk_positioned_lex ~e ~kind:JCVCallocates
+      let p = (new assertion ~pos JCAtrue :> < mark : _; pos : _ > ) in
+      P.locate ~p ~kind:JCVCallocates
     in
     let tr tables f =
       tables |>
       List.filter ((=) (internal = None) % external_region ?region_list) |>
       List.map f |>
       List.map mk_positioned |>
-      make_and_list
+      O.P.conj
     in
     let alloc_frame =
       let at_locs =
@@ -2887,31 +2897,26 @@ let tr_allocates ~internal ~type_safe ?region_list ef =
         List.map (fun loc -> Name.alloc_table (lderef_alloc_class ~type_safe loc, loc#region), loc)
       in
       tr (AllocMap.keys ef.fe_writes.e_alloc_tables) @@
-      fun acr ->
-      let at = Name.alloc_table acr in
-      let args = [LDerefAtLabel (at, internal |? ""); LDeref at]  in
-      match List.fold_left (fun acc (at', loc) -> if at = at' then loc :: acc else acc) [] at_locs with
-      | [] -> LPred ("alloc_same_except", args @ [LVar "pset_empty"])
+      fun (ac, r) ->
+      let alloc_same_except ps = O.P.alloc_same_except ac ~r ~old:(internal |? LabelOld) ps in
+      match
+        List.fold_left (fun acc (a_t', loc) -> if a_t' = Name.alloc_table (ac, r) then loc :: acc else acc) [] at_locs
+      with
+      | [] -> alloc_same_except (O.T.pset_empty ())
       | locs ->
         let pset =
           pset_union_of_list @@
           List.map
-            (fun ls -> LApp ("pset_all",
-                             [collect_pset_locations ~type_safe ~global_assertion:false LabelPost ls]))
+            (fun ls -> O.T.pset_all @@ collect_pset_locations Any ~type_safe ~global_assertion:false LabelPost ls)
             locs
         in
-        LPred ("alloc_same_except", args @ [pset])
+        alloc_same_except pset
     in
     let tag_frame =
       tr (TagMap.keys ef.fe_writes.e_tag_tables) @@
-      fun pcr ->
-      let args =
-        let tt = Name.tag_table pcr in
-        [LDerefAtLabel (tt, internal |? ""); LDeref tt]
-      in
-      LPred ("tag_extends", args)
+      fun (pc, r) -> O.P.tag_extends ~r ~old:(internal |? LabelOld) pc
     in
-    mk_positioned @@ make_and alloc_frame tag_frame
+    mk_positioned @@ O.P.(alloc_frame && tag_frame)
 
 let pre_tr_fun f _funpos spec _body acc =
   begin
@@ -2941,14 +2946,14 @@ let tr_fun f funpos spec body acc =
       f.fun_parameters
   in
   (* global variables valid predicates *)
-  let variables_valid_pred_apps = LTrue in
+  let variables_valid_pred_apps = True in
   (* precondition for calling the function and extra one for analyzing it *)
   let external_requires =
     let kind = JCVCpre (if Option.is_some body then "Internal" else "External") in
-    mk_positioned_lex
-      ~e:(new assertion JCAtrue :> < mark : _; pos: _ >)
+    P.locate
+      ~p:(new assertion JCAtrue :> < mark : _; pos: _ >)
       ~kind @@
-      named_assertion ~type_safe:true ~global_assertion:false ~kind:JCVCrequires ~relocate:false
+      named_predicate ~type_safe:true ~global_assertion:false ~kind:JCVCrequires ~relocate:false
         LabelHere LabelHere spec.fs_requires
   in
   let external_requires =
@@ -2956,31 +2961,29 @@ let tr_fun f funpos spec body acc =
       external_requires
     else
       let free_requires =
-        named_assertion ~type_safe:true ~global_assertion:false ~relocate:false
+        named_predicate ~type_safe:true ~global_assertion:false ~relocate:false
           LabelHere LabelHere spec.fs_free_requires
       in
-      make_and external_requires free_requires
+      O.P.(external_requires && free_requires)
   in
   let internal_requires =
-    named_assertion ~type_safe:false ~global_assertion:false ~relocate:false
+    named_predicate ~type_safe:false ~global_assertion:false ~relocate:false
       LabelHere LabelHere spec.fs_requires
   in
   let free_requires =
-    named_assertion ~type_safe:false ~global_assertion:false ~relocate:false
+    named_predicate ~type_safe:false ~global_assertion:false ~relocate:false
       LabelHere LabelHere spec.fs_free_requires
   in
-  let free_requires = make_and variables_valid_pred_apps free_requires in
-  let internal_requires = make_and internal_requires free_requires in
+  let free_requires = O.P.(variables_valid_pred_apps && free_requires) in
+  let internal_requires = O.P.(internal_requires && free_requires) in
   let internal_requires =
     List.fold_left
       (fun acc (_, vi) ->
          let argument_req =
            let all_effects = ef_union f.fun_effects.fe_reads f.fun_effects.fe_writes in
-           make_and
-             (Interp_struct.valid_pre ~in_param:true all_effects vi)
-             (Interp_struct.instanceof_pre all_effects vi)
+           O.P.(Interp_struct.valid_pre ~in_param:true all_effects vi && Interp_struct.instanceof_pre all_effects vi)
          in
-         make_and argument_req acc)
+         O.P.(argument_req && acc))
       internal_requires
       f.fun_parameters
   in
@@ -3005,8 +3008,8 @@ let tr_fun f funpos spec body acc =
                  b.b_free_ensures]
                 ())
            |>
-           named_assertion ~type_safe ~global_assertion:false ~kind:JCVCensures ~relocate:false LabelPost LabelOld |>
-           make_and @@
+           named_predicate ~type_safe ~global_assertion:false ~kind:JCVCensures ~relocate:false LabelPost LabelOld |>
+           O.P.(&&) @@
              tr_assigns
                ~type_safe
                ~region_list:f.fun_param_regions
@@ -3019,7 +3022,7 @@ let tr_fun f funpos spec body acc =
            (* We except psets of locations specified in the allocates clause i.e. b.b_allocates. *)
            (* IMPORTANT: We should add the predicates BOTH to the external and internal postconditions, *)
            (* otherwise safety might be violated. *)
-           make_and @@
+           O.P.(&&) @@
              tr_allocates
                ~internal:None
                ~type_safe
@@ -3027,13 +3030,13 @@ let tr_fun f funpos spec body acc =
                f.fun_effects
                b.b_allocates
            |>
-           make_and @@
+           O.P.(&&) @@
              if not internal && id = "safety" then
                let all_effects = ef_union f.fun_effects.fe_reads f.fun_effects.fe_writes in
-               make_and
-                 (Interp_struct.valid_pre ~in_param:true all_effects f.fun_result)
-                 (Interp_struct.instanceof_pre all_effects f.fun_result)
-             else LTrue
+               O.P.(Interp_struct.valid_pre ~in_param:true all_effects f.fun_result &&
+                    Interp_struct.instanceof_pre all_effects f.fun_result)
+             else
+               True
          in
          let internal_post = make_post ~type_safe:false ~internal:true in
          let external_post = make_post ~type_safe:true ~internal:false in
@@ -3044,10 +3047,10 @@ let tr_fun f funpos spec body acc =
            | "safety" ->
              assert (b.b_assumes = None);
              let internal_post =
-               make_and variables_valid_pred_apps internal_post
+               O.P.(variables_valid_pred_apps && internal_post)
              in
              let external_post =
-               make_and variables_valid_pred_apps external_post
+               O.P.(variables_valid_pred_apps && external_post)
              in
              (id, b, internal_post, external_post) :: safety,
              normal_inferred, normal, excep_inferred, excep
@@ -3085,7 +3088,7 @@ let tr_fun f funpos spec body acc =
                  b_ensures = (new assertion JCAtrue); }
            in
            ExceptionMap.add
-             exc [exc.exi_name ^ "_b", b, LTrue, LTrue] acc)
+             exc [exc.exi_name ^ "_b", b, True, True] acc)
       f.fun_effects.fe_raises
       excep_behaviors
   in
@@ -3162,31 +3165,31 @@ let tr_fun f funpos spec body acc =
   let add_modif_postcondition
       ~internal f (_id,b,internal_post,external_post) acc =
     let post = if internal then internal_post else external_post in
-    make_and (f b post) acc
+    O.P.(f b post && acc)
   in
   let add_postcondition ~internal =
     add_modif_postcondition ~internal (fun _b post -> post)
   in
   let internal_safety_post =
-    List.fold_right (add_postcondition ~internal:true) safety_behavior LTrue
+    List.fold_right (add_postcondition ~internal:true) safety_behavior True
   in
   let external_safety_post =
-    List.fold_right (add_postcondition ~internal:false) safety_behavior LTrue
+    List.fold_right (add_postcondition ~internal:false) safety_behavior True
   in
   let normal_post =
     List.fold_right
       (add_modif_postcondition ~internal:false assume_in_postcondition)
-      normal_behaviors LTrue
+      normal_behaviors True
   in
   let normal_post_inferred =
     List.fold_right (add_postcondition ~internal:false)
-      normal_behaviors_inferred LTrue
+      normal_behaviors_inferred True
   in
   let excep_posts =
     ExceptionMap.fold
       (fun exc bl acc ->
          let a' =
-           List.fold_right (add_postcondition ~internal:false) bl LTrue
+           List.fold_right (add_postcondition ~internal:false) bl True
          in
          (exception_name exc, a') :: acc)
       excep_behaviors
@@ -3198,7 +3201,8 @@ let tr_fun f funpos spec body acc =
          let a' =
            List.fold_right
              (add_modif_postcondition ~internal:false assume_in_postcondition)
-             bl LTrue
+             bl
+             True
          in
          (exception_name exc, a') :: acc)
       excep_behaviors_inferred
@@ -3207,22 +3211,23 @@ let tr_fun f funpos spec body acc =
 
   (* Function type *)
 
-  let ret_type = tr_var_type f.fun_result in
+  let Why_type ret_type = some_var_base_type f.fun_result in
   let fparams = List.map snd f.fun_parameters in
   let param_normal_post =
-    if is_purely_exceptional_fun spec then LFalse else
-      make_and_list [external_safety_post; normal_post; normal_post_inferred]
+    if is_purely_exceptional_fun spec then False
+    else O.P.conj [external_safety_post; normal_post; normal_post_inferred]
   in
   let param_excep_posts = excep_posts @ excep_posts_inferred in
   acc |>
   (let annot_type = (* function declaration with precondition *)
-    Annot_type (
-      external_requires,
-      ret_type,
-      external_read_effects,
-      external_write_effects,
-      param_normal_post,
-      param_excep_posts)
+     O.Wt.some @@
+     Annot_type (
+       external_requires,
+       ret_type,
+       external_read_effects,
+       external_write_effects,
+       param_normal_post,
+       param_excep_posts)
    in
    let fun_type =
      annot_fun_parameters fparams

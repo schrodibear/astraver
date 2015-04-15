@@ -129,9 +129,11 @@ val make_conversion_params : pointer_class -> [`Module of bool] why_decl list
 
 val param : ('a, 'b) ty_opt -> var_info -> string * 'a logic_type
 
+val some_param : var_info -> string * some_logic_type
+
 val tparam : ('a, 'b) ty_opt -> label_in_name:bool -> label -> var_info -> string * 'a Output_ast.term * 'a logic_type
 
-val some_param : label_in_name:bool -> label -> var_info -> string * some_term * some_logic_type
+val some_tparam : label_in_name:bool -> label -> var_info -> string * some_term * some_logic_type
 
 val tr_li_model_args_3 :
   label_in_name:bool ->

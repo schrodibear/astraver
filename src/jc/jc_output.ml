@@ -15,7 +15,7 @@ struct
 
   let rec to_string : type a. a ty -> string =
     function
-    | (Numeric (Integral Integer) : a ty) -> "integer"
+    | Numeric (Integral Integer) -> "integer"
     | Numeric (Integral (Int (r, b))) -> string_of_some_enum (Env.Int (r, b))
     | Numeric (Integral (Enum e)) -> string_of_some_enum (Env.Enum e)
     | Numeric (Real Real) -> "real"
@@ -120,35 +120,43 @@ struct
 
   let binary80 = user ~from:Name.Theory.binary80
 
-  let instanceof () : (_ * (_ * (_ * unit)), boolean) func = jc "instanceof"
+  let instanceof () : (_ * (_ * (_ * unit)), boolean) t = jc "instanceof"
 
-  let typeof () : (_ * (_ * unit), _) func = jc "typeof"
+  let typeof () : (_ * (_ * unit), _) t = jc "typeof"
 
-  let allocable () : (_ * (_ * unit), boolean) func = jc "allocable"
+  let allocable () : (_ * (_ * unit), boolean) t = jc "allocable"
 
-  let freeable () : (_ * (_ * unit), boolean) func = jc "freeable"
+  let freeable () : (_ * (_ * unit), boolean) t = jc "freeable"
 
-  let allocated () : (_ * (_ * unit), boolean) func = jc "allocated"
+  let allocated () : (_ * (_ * unit), boolean) t = jc "allocated"
 
-  let shift () : (_ * (unbounded integer number * unit), _) func  = jc "shift"
+  let shift () : (_ * (unbounded integer number * unit), _) t = jc "shift"
 
-  let same_block () : (_ * (_ * unit), boolean) func = jc "same_block"
+  let same_block () : (_ * (_ * unit), boolean) t = jc "same_block"
 
-  let select () : (_ * (_ * unit), _) func = jc "select"
+  let select () : (_ * (_ * unit), _) t = jc "select"
 
-  let subtag () : (_ * (_ * unit), boolean) func = jc "subtag"
+  let subtag () : (_ * (_ * unit), boolean) t = jc "subtag"
 
-  let parenttag () : (_ * (_ * unit), boolean) func = jc "parenttag"
+  let parenttag () : (_ * (_ * unit), boolean) t = jc "parenttag"
 
-  let int_of_tag () : (_ * unit, unbounded integer number) func = jc "int_of_tag"
+  let int_of_tag () : (_ * unit, unbounded integer number) t = jc "int_of_tag"
 
-  let offset_min () : (_ * (_ * unit), unbounded integer number) func = jc "offset_min"
+  let offset_min () : (_ * (_ * unit), unbounded integer number) t = jc "offset_min"
 
-  let offset_max () : (_ * (_ * unit), unbounded integer number) func = jc "offset_max"
+  let offset_max () : (_ * (_ * unit), unbounded integer number) t = jc "offset_max"
 
-  let alloc_fresh () : (_ * (_ * unit), boolean) func = jc "alloc_fresh"
+  let alloc_fresh () : (_ * (_ * unit), boolean) t = jc "alloc_fresh"
 
-  let tag_fresh () : (_ * (_ * unit), boolean) func = jc "tag_fresh"
+  let tag_fresh () : (_ * (_ * unit), boolean) t = jc "tag_fresh"
+
+  let alloc_same_except () : (_ * (_ * (_ * unit)), boolean) t = jc "alloc_same_except"
+
+  let tag_extends () : (_ * (_ * unit), boolean) t = jc "tag_extends"
+
+  let pset_all () : (_ * unit, _) t = jc "pset_all"
+
+  let pset_empty () : (unit, _) t = jc "pset_empty"
 
   type ('a, 'b) typed =
     | Ty of 'a ty
@@ -209,9 +217,9 @@ struct
 
   type some_hlist = Hlist : _ term_hlist -> some_hlist
 
-  type some = some_ty_opt
+  type some = some_term
 
-  let some t : some_term = Term t
+  let some t : some = Term t
 
   let hlist_of_list ?(init=Hlist Nil) =
     List.fold_left (fun (Hlist thl) (Term t : some_term) -> Hlist (t ^ thl)) init
@@ -222,17 +230,17 @@ struct
     let Hlist args = hlist_of_list args in
     F.user ~from name $ args
 
-  let int n : _ term = Const (Int (string_of_int n))
+  let int n : _ t = Const (Int (string_of_int n))
 
-  let num n : _ term = Const (Int (Num.string_of_num n))
+  let num n : _ t = Const (Int (Num.string_of_num n))
 
-  let void : _ term = Const Void
+  let void : _ t = Const Void
 
-  let real s : _ term = Const (Real s)
+  let real s : _ t = Const (Real s)
 
-  let bool b : _ term = Const (Bool b)
+  let bool b : _ t = Const (Bool b)
 
-  let var s : _ term = Var s
+  let var s : _ t = Var s
 
   let positioned l_pos ?behavior:(l_behavior = "default") ?kind:l_kind t =
     (Labeled ({ l_kind; l_behavior; l_pos }, t) : _ term)
@@ -243,25 +251,23 @@ struct
 
   let bin op t1 t2 = B_int_op op $ t1 ^. t2
 
-  let at v ~lab = Deref_at (v, lab)
-
   let if_ cond ~then_ ~else_ : _ term = If (cond, then_, else_)
 
   let let_ v ~(equal : 'a t) ~in_ : _ t = Let (v, equal, in_ (var v : 'a t))
 
-  let (+) (t1 : _ term) (t2 : _ term) =
+  let (+) (t1 : _ t) (t2 : _ t) =
     match t1, t2 with
     | Const Int "0", _ -> t2
     | _, Const Int "0" -> t1
     | _ -> bin `Add t1 t2
 
-  let (-) (t1 : _ term) (t2 : _ term) =
+  let (-) (t1 : _ t) (t2 : _ t) =
     match t1, t2 with
     | Const Int "0", _ -> t2
     | _, Const Int "0" -> t1
     | _ -> bin `Sub t1 t2
 
-  let ( * ) (t1 : _ term) (t2 : _ term) =
+  let ( * ) (t1 : _ t) (t2 : _ t) =
     match t1, t2 with
     | Const Int "0", _
     | _, Const Int "0" -> int 0
@@ -269,14 +275,14 @@ struct
     | _, Const Int "1" -> t1
     | _ -> bin `Mul t1 t2
 
-  let (/) (t1 : _ term) (t2 : _ term) =
+  let (/) (t1 : _ t) (t2 : _ t) =
     match t1, t2 with
     | _, Const Int "0" -> failwith "/: division by zero in integer term"
     | Const Int "0", _ -> int 0
     | _, Const Int "1" -> t1
     | _ -> bin `Div t1 t2
 
-  let (%) (t1 : _ term) (t2 : _ term) =
+  let (%) (t1 : _ t) (t2 : _ t) =
     match t1, t2 with
     | _, Const Int "0" -> failwith "/: division by zero in integer term"
     | Const Int "0", _
@@ -285,36 +291,49 @@ struct
 
   let (-~) =
     function
-    | (Const Int "0" : _ term) -> int 0
+    | (Const Int "0" : _ t) -> int 0
     | t -> U_int_op `Neg $. t
 
-  let (!.) v = (Deref v : _ term)
+  let (!.) v = (Deref v : _ t)
 
   let select mem p = F.select () $ mem ^. p
 
-  let alloc_table ?r ac =
-    Option.map_default
-      r
-      ~default:(var (Name.Generic.alloc_table ac))
-      ~f:(fun r -> !. (Name.alloc_table (ac, r)))
+  let at v ~lab =
+    let open Env in
+    match lab with
+    | LabelHere
+    | LabelPost -> !. v
+    | LabelOld -> Deref_at (v, "")
+    | LabelPre -> Deref_at (v, "init")
+    | LabelName { lab_final_name } -> Deref_at (v, lab_final_name)
 
-  let tag_table ?r ri =
-    Option.map_default
-      r
-      ~default:(var (Name.Generic.tag_table ri))
-      ~f:(fun r -> !. (Name.tag_table (ri, r)))
+  let alloc_table ?(deref=true) ?(lab=Env.LabelHere) ?(r=Region.dummy_region) ac =
+    let v = Name.alloc_table (ac, r) in
+    if deref
+    then at v ~lab
+    else var P.(v ^ "_at_" ^ Name.label lab)
 
-  let offset_min ac ?r p = F.offset_min () $ alloc_table ?r ac ^. p
+  let tag_table ?(deref=true) ?(lab=Env.LabelHere) ?(r=Region.dummy_region) ri =
+    let v = Name.tag_table (ri, r) in
+    if deref
+    then at v ~lab
+    else var P.(v ^ "_at_" ^ Name.label lab)
 
-  let offset_max ac ?r p = F.offset_max () $ alloc_table ?r ac ^. p
+  let offset_min ac ?r ?code:deref ?lab p = F.offset_min () $ alloc_table ?deref ?lab ?r ac ^. p
 
-  let typeof ri ?r p = F.typeof () $ tag_table ?r ri ^. p
+  let offset_max ac ?r ?code:deref ?lab p = F.offset_max () $ alloc_table ?deref ?lab ?r ac ^. p
+
+  let typeof ri ?r ?code:deref ?lab p = F.typeof () $ tag_table ?deref ?lab ?r ri ^. p
 
   let ( **>) mem fi = select mem (var (Name.field_memory_name fi))
 
   let shift p i = F.shift () $ p ^. i
 
   let int_of_tag t = F.int_of_tag () $. t
+
+  let pset_all ps = F.pset_all () $. ps
+
+  let pset_empty () = F.pset_empty () $ Nil
 
   let rel op t1 t2 : pred = App (B_num_pred (op, Integral Integer), t1 ^. t2)
 
@@ -1208,25 +1227,32 @@ struct
     | _, False -> not p1
     | _, _ -> Iff (p1, p2)
 
-  let instanceof ri p ?r si = F.instanceof () $ (T.tag_table ?r ri) ^ p ^. T.var (Name.tag si)
+  let instanceof ri ?r ?code:deref ?lab p si =
+    F.instanceof () $ (T.tag_table ?deref ?lab ?r ri) ^ p ^. T.var (Name.tag si)
 
-  let typeeq ri p ?r si = T.(F.typeof () $ (T.tag_table ?r ri) ^. p = var @@ Name.tag si)
+  let typeeq ri ?r ?code:deref ?lab p si = T.(F.typeof () $ T.tag_table ?deref ?lab ?r ri ^. p = var @@ Name.tag si)
 
   let subtag t1 t2 = F.subtag () $ t1 ^. t2
 
   let parenttag t1 t2 = F.parenttag () $ t1 ^. t2
 
-  let allocable ac ?r p = F.allocable () $ T.(alloc_table ?r ac) ^. p
+  let allocable ac ?code:deref ?r ?lab p = F.allocable () $ T.alloc_table ?deref ?lab ?r ac ^. p
 
-  let freeable ac ?r p = F.allocable () $ T.(alloc_table ?r ac) ^. p
+  let freeable ac ?r ?code:deref ?lab p = F.allocable () $ T.alloc_table ?deref ?lab ?r ac ^. p
 
-  let allocated ac ?r p = F.allocated () $ T.(alloc_table ?r ac) ^. p
+  let allocated ac ?r ?code:deref ?lab p = F.allocated () $ T.alloc_table ?deref ?lab ?r ac ^. p
 
   let same_block p1 p2 = F.same_block () $ p1 ^. p2
 
-  let alloc_fresh ac ?r p = F.alloc_fresh () $ T.(alloc_table ?r ac) ^. p
+  let alloc_fresh ac ?r ?code:deref ?lab p = F.alloc_fresh () $ T.alloc_table ?deref ?lab ?r ac ^. p
 
-  let tag_fresh si ?r p = F.tag_fresh () $ T.(tag_table ?r si) ^. p
+  let tag_fresh ri ?r ?code:deref ?lab p = F.tag_fresh () $ T.tag_table ?deref ?lab ?r ri ^. p
+
+  let alloc_same_except ac ?r ?code:deref ~old ?lab p =
+    F.alloc_same_except () $ T.alloc_table ?r ?deref ~lab:old ac ^ T.alloc_table ?r ?deref ?lab ac ^. p
+
+  let tag_extends ?r ?code:deref ~old ?lab ri =
+    F.tag_extends () $ T.tag_table ?r ?deref ~lab:old ri ^. T.tag_table ?r ?deref ?lab ri
 end
 
 module Wd =

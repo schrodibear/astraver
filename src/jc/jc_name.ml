@@ -81,6 +81,15 @@ struct
     | JCmem_bitvector -> Type.bitvector
 end
 
+let label =
+  let open Env in
+  function
+  | LabelHere -> "Here"
+  | LabelOld -> ""
+  | LabelPre -> "Pre"
+  | LabelPost -> "Post"
+  | LabelName lab -> lab.lab_final_name
+
 let tag st = st.si_name ^ "_tag"
 
 let tag_table (ri, r) =
@@ -96,6 +105,13 @@ let alloc_table (ac, r) =
     (Class.alloc ac) ^ "_" ^ (Region.name r) ^ "_alloc_table"
   else
     (Class.alloc ac) ^ "_alloc_table"
+
+let memory (fi, r) =
+  if !Common_options.separation_sem = SepRegions && not (is_dummy_region r)
+  then
+    fi.fi_final_name ^ "_" ^ (Region.name r)
+  else
+    fi.fi_final_name
 
 module Generic =
 struct

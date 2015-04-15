@@ -331,10 +331,10 @@ let lvar ~constant ~label_in_name lab n =
   else
     match lab with
     | LabelHere -> !.n
-    | LabelOld -> at ~lab:"" n
-    | LabelPre -> at ~lab:"init" n
+    | LabelOld -> at ~lab n
+    | LabelPre -> at ~lab n
     | LabelPost -> !.n
-    | LabelName lab -> at n ~lab:lab.lab_final_name
+    | LabelName _ -> at n ~lab
 
 (* simple variables *)
 
@@ -353,6 +353,8 @@ let var v =
 
 let param t v = v.vi_final_name, type_ t v.vi_type
 
+let some_param v = v.vi_final_name, some_type v.vi_type
+
 let tvar_name ~label_in_name lab v =
   let constant = not v.vi_assigned in
   lvar_name ~label_in_name:(label_in_name && not constant) lab v.vi_final_name
@@ -366,7 +368,7 @@ let tparam t ~label_in_name lab v =
   tvar ~label_in_name lab v,
   type_ t v.vi_type
 
-let some_param ~label_in_name lab v =
+let some_tparam ~label_in_name lab v =
   tvar_name ~label_in_name lab v,
   O.T.some @@ tvar ~label_in_name lab v,
   some_type v.vi_type

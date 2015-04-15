@@ -623,7 +623,7 @@ let free_param ~safe ac pc =
       (* normal post *)
       (* null *)
       p_is_null &&
-      conj (List.map (fun a -> T.(!. a = at a "")) write_effects) ||
+      conj (List.map (fun a -> T.(!. a = at ~lab:LabelOld a)) write_effects) ||
       (* non-null *)
       frame ~for_:(`alloc_tables_in `free) ~in_param:true (ac, dummy_region) pc p &&
       fresh ~for_:(`alloc_tables_in `free) ~in_param:true (ac, dummy_region) pc p,
@@ -794,7 +794,7 @@ let instanceof_pre all_effects (* vi *) =
       O.P.allocated ac ~r:vi_region v,
       Pair.map
         ((lo, O.T.offset_min), (ro, O.T.offset_max))
-        ~f:(function Some n, _ -> O.T.num n | None, f -> f ac ?r:(Some vi_region) v)
+        ~f:(function Some n, _ -> O.T.num n | None, f -> f ac ?r:(Some vi_region) ?code:None ?lab:None v)
     in
     let instanceof_pre =
       let f = if si.si_final then O.P.typeeq else O.P.instanceof in
