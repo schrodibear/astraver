@@ -2828,7 +2828,7 @@ let annot_fun_parameters params write_params read_params annot_type =
 let function_body _f spec behavior_name body =
   set_current_behavior behavior_name;
   set_current_spec spec;
-  let e' = expr body in
+  let e' = some_expr body in
   reset_current_behavior ();
   reset_current_spec ();
   e'
@@ -2927,7 +2927,7 @@ let pre_tr_fun f _funpos spec _body acc =
   end;
   acc
 
-let tr_fun f funpos spec body acc =
+let tr_fun f funpos spec body =
   if Options.debug then
     Format.printf "[interp] function %s@." f.fun_name;
   Options.lprintf "Interp: function %s@." f.fun_name;
@@ -3210,227 +3210,242 @@ let tr_fun f funpos spec body acc =
   in
 
   (* Function type *)
-
-  let Why_type ret_type = some_var_base_type f.fun_result in
+  let Typ ret_typ = ty f.fun_result.vi_type in
+  let ret_type = base_type ret_typ f.fun_result.vi_type in
   let fparams = List.map snd f.fun_parameters in
   let param_normal_post =
     if is_purely_exceptional_fun spec then False
     else O.P.conj [external_safety_post; normal_post; normal_post_inferred]
   in
   let param_excep_posts = excep_posts @ excep_posts_inferred in
-  acc |>
-  (let annot_type = (* function declaration with precondition *)
-     O.Wt.some @@
-     Annot_type (
-       external_requires,
-       ret_type,
-       external_read_effects,
-       external_write_effects,
+  let annot_type = (* function declaration with precondition *)
+    O.Wt.some @@
+    Annot_type (
+      external_requires,
+      ret_type,
+      external_read_effects,
+      external_write_effects,
        param_normal_post,
-       param_excep_posts)
+      param_excep_posts)
    in
-   let fun_type =
+   let Why_type fun_type =
      annot_fun_parameters fparams
        external_write_params external_read_params annot_type
    in
-   let newid = f.fun_final_name ^ "_requires" in
-   Hashtbl.add function_prototypes newid fun_type;
-   List.cons (Param (false, id_no_loc newid, fun_type)))
-  |>
-  (let annot_type =
-    Annot_type(LTrue, ret_type,
+   let external_unsafe =
+     let name = f.fun_final_name in
+     Hashtbl.add function_prototypes name (O.Wt.some fun_type);
+     O.Entry.some @@
+     O.Mod.mk
+       ~name:(Name.Module.func ~extern:true ~safe:false f)
+       ~safe:false
+       [O.Wd.mk ~name @@ Param fun_type]
+   in
+   let annot_type =
+     O.Wt.some @@
+     Annot_type (True, ret_type,
                external_read_effects, external_write_effects,
                param_normal_post, param_excep_posts)
    in
-   let fun_type =
+   let Why_type fun_type =
      annot_fun_parameters fparams
        external_write_params external_read_params annot_type
    in
-   let newid = f.fun_final_name in
-   Hashtbl.add function_prototypes newid fun_type;
-   List.cons (Param (false, id_no_loc newid, fun_type)))
-  |>
+   let external_safe =
+     let name = f.fun_final_name in
+     Hashtbl.add function_prototypes name (O.Wt.some fun_type);
+     O.Entry.some @@
+     O.Mod.mk
+       ~name:(Name.Module.func ~extern:true ~safe:true f)
+       ~safe:false
+       [O.Wd.mk ~name @@ Param fun_type]
+   in
   (* restore assigned status for parameters assigned in the body *)
-  Fn.tap (Fn.const @@ List.iter (fun v -> v.vi_assigned <- true) assigned_params)
-  |>
+  List.iter (fun v -> v.vi_assigned <- true) assigned_params;
   (* Function body *)
-  Option.map_default body
-    ~default:Fn.id
-    ~f:(fun body ->
-      Fn.on'
-        (Options.verify = [] ||
-         List.mem f.fun_name Options.verify) @@
-      fun () ->
-      Fn.tap (Fn.const @@ printf "Generating Why function %s@." f.fun_final_name) %>
-      (* parameters *)
-      let params =
-        fun_parameters ~type_safe:false fparams
-          internal_write_params internal_read_params
-      in
-      let wrap_body f spec bname body =
-        (* rename formals after parameters are computed and before body is treated *)
-        let list_of_refs =
-          List.fold_right
-            (fun id ->
-               Fn.on id.vi_assigned @@
-               fun bl ->
-               let n = id.vi_final_name in
-               let newn = "mutable_" ^ n in
-               id.vi_final_name <- newn;
-                  (newn, n) :: bl)
-            fparams
-            []
-        in
-        body |>
-        function_body f spec bname |>
-        Fn.on
-          (!Options.inv_sem = InvOwnership)
-          (fun e -> append (assume_all_invariants fparams) e)
-        |>
-        (let assert_internal_allocates =
-          Fn.on'
-            (bname = "default") @@
-          fun () ->
-          let allocates =
-            tr_allocates
-              ~internal:(Some "init")
-              ~type_safe:true
-              ~region_list:f.fun_param_regions
-              f.fun_effects
-              (Triple.trd spec.fs_default_behavior).b_allocates
+  let behaviors =
+    Option.map_default
+      body
+      ~default:[]
+      ~f:(fun body ->
+        if Options.verify = [] || List.mem f.fun_name Options.verify then
+          (* parameters *)
+          let params = fun_parameters fparams internal_write_params internal_read_params in
+          let wrap_body f spec bname body =
+            (* rename formals after parameters are computed and before body is treated *)
+            let list_of_refs =
+              List.fold_right
+                (fun id ->
+                   Fn.on id.vi_assigned @@
+                   fun bl ->
+                   let n = id.vi_final_name in
+                   let newn = "mutable_" ^ n in
+                   id.vi_final_name <- newn;
+                   (newn, n) :: bl)
+                fparams
+                []
+            in
+            body |>
+            function_body f spec bname |>
+            (let assert_internal_allocates =
+               Fn.on'
+                 (bname = "default") @@
+               fun () ->
+               let allocates =
+                 tr_allocates
+                   ~internal:(Some LabelPre)
+                   ~type_safe:true
+                   ~region_list:f.fun_param_regions
+                   f.fun_effects
+                   (Triple.trd spec.fs_default_behavior).b_allocates
+               in
+               Fn.on
+                 (O.P.is_not_true allocates)
+                 O.E.((^^) @@ mk @@ Assert (`ASSERT, allocates))
+             in
+             fun (Expr body) ->
+               (match f.fun_result.vi_type with
+                | JCTnative Tunit ->
+                  O.E.(return ret_typ @@ mk @@
+                       Try (O.E.check (Ty Void) body ^^ mk (Raise (jessie_return_exception, None)),
+                            jessie_return_exception,
+                            None,
+                            assert_internal_allocates void))
+                | _ ->
+                  let result = f.fun_result in
+                  let Typ typ = ty result.vi_type in
+                  let e' = nondet_value typ result.vi_type in
+                  O.E.(return ret_typ @@ mk @@
+                       Let_ref (jessie_return_variable, e',
+                                mk @@
+                                Try (O.E.check (Ty Void) body ^^ (mk Absurd),
+                                     jessie_return_exception,
+                                     None,
+                                     assert_internal_allocates @@ mk @@ Deref jessie_return_variable))))
+               |>
+               define_locals |>
+               O.E.(@:) ["init"] |>
+               List.fold_right
+                 (fun (mut_id, id) e' ->
+                 O.E.mk (Let_ref (mut_id, plain_var id, e')))
+              list_of_refs
+            |>
+            (* FS#393: restore parameter real names *)
+            Fn.tap
+              (Fn.const @@
+               List.iter
+                 (fun v ->
+                    let n = v.vi_final_name in
+                    if List.mem_assoc n list_of_refs then
+                      v.vi_final_name <- List.assoc n list_of_refs)
+                 fparams))
           in
-          Fn.on
-            (is_not_true allocates) @@
-          fun e -> mk_expr @@ Assert (`ASSERT, allocates, e)
-         in
-         fun body ->
-           match f.fun_result.vi_type with
-           | JCTnative Tunit ->
-             mk_expr @@
-             Try (append body @@ mk_expr @@ Raise (jessie_return_exception, None),
-                  jessie_return_exception,
-                  None,
-                  assert_internal_allocates void)
-           | _ ->
-             let result = f.fun_result in
-             let e' = any_value result.vi_region result.vi_type in
-             mk_expr @@
-             Let_ref (jessie_return_variable, e',
-                      mk_expr @@
-                      Try (append body (mk_expr Absurd),
-                           jessie_return_exception, None,
-                           assert_internal_allocates @@ mk_expr @@ Deref jessie_return_variable)))
-        |>
-        define_locals |>
-        make_label "init" |>
-        List.fold_right
-          (fun (mut_id, id) e' ->
-             mk_expr (Let_ref (mut_id, plain_var id, e')))
-          list_of_refs
-        |>
-        (* FS#393: restore parameter real names *)
-        Fn.tap
-          (Fn.const @@
-           List.iter
-             (fun v ->
-                let n = v.vi_final_name in
-                if List.mem_assoc n list_of_refs then
-                  v.vi_final_name <- List.assoc n list_of_refs)
-             fparams)
-      in
-      (* safety behavior *)
-      Fn.on'
-        (Options.verify_behavior "safety" ||
-         Options.verify_behavior "variant")
-        (fun () ->
-         let behav =
-           if Options.verify_behavior "safety" then "safety"
-           else "variant"
-         in
-         let newid = f.fun_name ^ "_safety" in
-         Fn.on'
-           (not (is_purely_exceptional_fun spec) && not Options.verify_invariants_only)
-           (fun () ->
-              let safety_body = wrap_body f spec behav body in
-              List.cons @@
-              Def (
-                { why_name = newid;
-                  why_expl = "Function " ^ f.fun_name ^ ", safety";
-                  why_pos = Position.of_pos funpos},
-                mk_expr @@
-                Fun (
-                  params,
-                  internal_requires,
-                  safety_body,
-                  mk_positioned_lex
-                    ~e:(new assertion JCAtrue :> < mark : _; pos: _ >)
-                    ~kind:JCVCpost
-                    internal_safety_post,
-                  false (* we require termination proofs, also Why3 now checks possible divergence *),
-                  excep_posts_for_others None excep_behaviors))))
-      %>
-      List.fold_right
-        (fun (id, b, internal_post, _) ->
-           Fn.on'
-             (Options.verify_behavior id) @@
-           fun () ->
-           let normal_body = wrap_body f spec id body in
-           let newid = f.fun_name ^ "_ensures_" ^ id in
-           let beh =
-             if id = "default"
-             then "default behavior"
-             else "behavior " ^ id
-           in
-           List.cons @@
-           Def (
-             { why_name = newid;
-               why_expl = "Function " ^ f.fun_name ^ ", " ^ beh;
-               why_pos = Position.of_pos funpos },
-             mk_expr @@
-             Fun (
-               params,
-               assume_in_precondition b internal_requires,
-               normal_body,
-               mk_positioned_lex
-                 ~e:(new assertion JCAtrue :> < mark : _; pos: _ >)
-                 ~kind:JCVCpost
-                 internal_post,
-               f.fun_may_diverge, (* Adding `diverges' clause for recursive and looping functions *)
-               excep_posts_for_others None excep_behaviors)))
-        normal_behaviors
-      (* exceptional behaviors *)
-      %>
-      ExceptionMap.fold
-        (fun exc ->
-           List.fold_right
-             (fun (id, b, internal_post, _) ->
-                Fn.on'
-                  (Options.verify_behavior id) @@
-                fun () ->
-                let except_body = wrap_body f spec id body in
-                let newid = f.fun_name ^ "_exsures_" ^ id in
-                List.cons @@
-                Def (
-                  { why_name = newid;
-                    why_expl = "Function " ^ f.fun_name ^ ", behavior " ^ id;
-                    why_pos = Position.of_pos funpos },
-                  mk_expr @@
-                  Fun (
-                    params,
-                    assume_in_precondition b internal_requires,
-                    except_body,
-                    LTrue,
-                    false,
-                    (exception_name exc, internal_post) ::
-                    excep_posts_for_others (Some exc)
-                      excep_behaviors))))
-        user_excep_behaviors)
+          (* safety behavior *)
+          (if (Options.verify_behavior "safety" || Options.verify_behavior "variant") &&
+              not (is_purely_exceptional_fun spec) && not Options.verify_invariants_only
+           then
+             let name = f.fun_final_name in
+             let behav =
+               if Options.verify_behavior "safety" then "safety"
+               else "variant"
+             in
+             let safety_body = wrap_body f spec behav body in
+             [O.Entry.some @@
+              O.Mod.mk
+                ~name:(Name.Module.func ~safe:false ~extern:false f)
+                ~safe:false
+                [O.Wd.mk
+                   ~name
+                   ~expl:("Function " ^ f.fun_name ^ ", safety")
+                   ~pos:(Position.of_pos funpos)
+                   (Def
+                      (O.E.mk @@ Fun (
+                         params,
+                         ret_type,
+                         internal_requires,
+                         safety_body,
+                         P.locate
+                           ~p:(new assertion JCAtrue :> < mark : _; pos: _ >)
+                           ~kind:JCVCpost
+                           internal_safety_post,
+                         false (* we require termination proofs, also Why3 now checks possible divergence *),
+                         excep_posts_for_others None excep_behaviors)))]]
+           else
+             [])
+          @
+          [O.Entry.some @@
+           O.Mod.mk
+             ~name:(Name.Module.func ~safe:true ~extern:false f)
+             ~safe:true
+             (List.fold_right
+                (fun (id, b, internal_post, _) ->
+                   Fn.on'
+                     (Options.verify_behavior id) @@
+                   fun () ->
+                   let normal_body = wrap_body f spec id body in
+                   let name = f.fun_name ^ "_ensures_" ^ id in
+                   let beh =
+                     if id = "default"
+                     then "default behavior"
+                     else "behavior " ^ id
+                   in
+                   List.cons
+                     (O.Wd.mk
+                        ~name
+                        ~expl:("Function " ^ f.fun_name ^ ", " ^ beh)
+                        ~pos:(Position.of_pos funpos)
+                        (Def
+                           (O.E.mk @@ Fun (
+                              params,
+                              ret_type,
+                              assume_in_precondition b internal_requires,
+                              normal_body,
+                              P.locate
+                                ~p:(new assertion JCAtrue :> < mark : _; pos: _ >)
+                                ~kind:JCVCpost
+                                internal_post,
+                              f.fun_may_diverge, (* Adding `diverges' clause for recursive and looping functions *)
+                              excep_posts_for_others None excep_behaviors)))))
+                normal_behaviors
+                []
+              @
+              ExceptionMap.fold
+                (fun exc ->
+                   List.fold_right
+                     (fun (id, b, internal_post, _) ->
+                        Fn.on'
+                          (Options.verify_behavior id) @@
+                        fun () ->
+                        let except_body = wrap_body f spec id body in
+                        let name = f.fun_name ^ "_exsures_" ^ id in
+                        List.cons
+                          (O.Wd.mk
+                             ~name
+                             ~expl:("Function " ^ f.fun_name ^ ", behavior " ^ id)
+                             ~pos:(Position.of_pos funpos)
+                             (Def
+                                (O.E.mk @@ Fun (
+                                   params,
+                                   ret_type,
+                                   assume_in_precondition b internal_requires,
+                                   except_body,
+                                   True,
+                                   false,
+                                   (exception_name exc, internal_post) ::
+                                   excep_posts_for_others (Some exc) excep_behaviors))))))
+                user_excep_behaviors
+                [])]
+        else
+          [])
+  in
+  external_safe :: external_unsafe :: behaviors
 
-let tr_fun f funpos spec body acc =
+
+let tr_fun f funpos spec body =
   set_current_function f;
-  let acc = tr_fun f funpos spec body acc in
+  let r = tr_fun f funpos spec body in
   reset_current_function ();
-  acc
+  r
 
 (*
 let tr_specialized_fun n fname param_name_assoc acc =

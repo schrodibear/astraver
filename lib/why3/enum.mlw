@@ -29,14 +29,14 @@ theory Enum
     predicate in_bounds = in_bounds
 
   axiom To_int:
-    forall x : t. min <= to_int x <= max
+    forall x : t [to_int x]. min <= to_int x <= max
 
-  axiom To_int_in_bounds: forall n:t. in_bounds (to_int n)
+  axiom To_int_in_bounds: forall n : t [to_int n]. in_bounds (to_int n)
 
   function of_int int : t
 
   axiom Of_int:
-    forall x : int. min <= x <= max -> to_int (of_int x) = x
+    forall x : int [of_int x]. min <= x <= max -> to_int (of_int x) = x
 
   function (+) (a b : t) : t = of_int (Int.(+) (to_int a) (to_int b))
 
@@ -58,12 +58,13 @@ theory Enum
 
   predicate ne (a b : t) = to_int a <> to_int b
 
-  axiom Extensionality1: forall x y : t. to_int x = to_int y -> x = y
+  axiom Extensionality1: forall x y : t [to_int x, to_int y]. to_int x = to_int y -> x = y
 
   axiom Extensionality2:
-    forall x y : int. of_int x = of_int y ->
-      min <= x <= max /\ min <= y <= max ->
-        x = y
+    forall x y : int [of_int x, of_int y].
+      of_int x = of_int y ->
+        min <= x <= max /\ min <= y <= max ->
+          x = y
 
   predicate (<=) (a b : t) = Int.(<=) (to_int a) (to_int b)
 
@@ -251,7 +252,43 @@ theory Powers_of_2
     power 2 29 = 536870912 /\
     power 2 30 = 1073741824 /\
     power 2 31 = 2147483648 /\
+
+    power 2 32 = 4294967296 /\
+    power 2 33 = 8589934592 /\
+    power 2 34 = 17179869184 /\
+    power 2 35 = 34359738368 /\
+    power 2 36 = 68719476736 /\
+    power 2 37 = 137438953472 /\
+    power 2 38 = 274877906944 /\
+    power 2 39 = 549755813888 /\
+
+    power 2 40 = 1099511627776 /\
+    power 2 41 = 2199023255552 /\
+    power 2 42 = 4398046511104 /\
+    power 2 43 = 8796093022208 /\
+    power 2 44 = 17592186044416 /\
+    power 2 45 = 35184372088832 /\
+    power 2 46 = 70368744177664 /\
+    power 2 47 = 140737488355328 /\
+
+    power 2 48 = 281474976710656 /\
+    power 2 49 = 562949953421312 /\
+    power 2 50 = 1125899906842624 /\
+    power 2 51 = 2251799813685248 /\
+    power 2 52 = 4503599627370496 /\
+    power 2 53 = 9007199254740992 /\
+    power 2 54 = 18014398509481984 /\
+    power 2 55 = 36028797018963968 /\
+
+    power 2 56 = 72057594037927936 /\
+    power 2 57 = 144115188075855872 /\
+    power 2 58 = 288230376151711744 /\
+    power 2 59 = 576460752303423488 /\
+    power 2 60 = 1152921504606846976 /\
+    power 2 61 = 2305843009213693952 /\
+    power 2 62 = 4611686018427387904 /\
     power 2 63 = 9223372036854775808 /\
+
     power 2 64 = 18446744073709551616
 end
 
@@ -271,6 +308,11 @@ theory Bit_enum_intf
     function ( *%) t t : t
     function (/%) t t : t
     function (%%) t t : t
+
+    predicate (<) t t
+    predicate (<=) t t
+    predicate (>) t t
+    predicate (>=) t t
   end
 
   constant size : int
@@ -289,10 +331,10 @@ theory Bit_enum_intf
   function sub t t : t
   function neg t : t
   function mul t t : t
-  function udiv t t : t
-  function urem t t : t
   function sdiv t t : t
   function srem t t : t
+  function udiv t t : t
+  function urem t t : t
 end
 
 theory Bit_enum_intf2
@@ -311,11 +353,26 @@ theory Bit_enum_intf2
   function (/%) t t : t
   function (%%) t t : t
 
+  predicate (<) t t
+  predicate (<=) t t
+  predicate (>) t t
+  predicate (>=) t t
+
   clone export Bit_enum_intf with
     namespace E = .
 
   predicate eq t t
   predicate ne t t
+
+  predicate slt t t
+  predicate sle t t
+  predicate sgt t t
+  predicate sge t t
+
+  predicate ult t t
+  predicate ule t t
+  predicate ugt t t
+  predicate uge t t
 end
 
 theory Bit_enum
@@ -344,7 +401,7 @@ theory Bit_enum
     type t = E.t,
     constant size = size,
     (*goal Size_pos,
-      lemma Val_two_power_size,*)
+     lemma Val_two_power_size,*)
     constant two_power_size = E.range,
     constant zero = zero,
     constant ones = ones,
@@ -374,30 +431,32 @@ theory Bit_enum
 
   axiom Nth:
     forall a : E.t.
-      forall n : int.
+      forall n : int [nth a n].
         0 <= n < size ->
           nth a n <->
             E.to_int a >= 0 /\ mod (E.to_int a) (power 2 (n + 1)) >= power 2 n \/
             E.to_int a < 0 /\ mod (E.range  + E.to_int a) (power 2 (n + 1)) >= power 2 n
 
+  function ith (a : E.t) (i : int) : int = if nth a i then 1 else 0
+
   axiom Eq:
-    forall a b : E.t.
+    forall a b : E.t [E.equal a b | eq a b].
       E.equal a b -> eq a b
 
   axiom Add_eq:
-    forall a b : E.t.
+    forall a b : E.t [E.(+%) a b | add a b].
       E.(+%) a b = add a b
 
   axiom Sub_eq:
-    forall a b : E.t.
+    forall a b : E.t [E.(-%) a b | sub a b].
       E.(-%) a b = sub a b
 
   axiom Neg_eq:
-    forall a : E.t.
+    forall a : E.t [E.(-%_) a | neg a].
       E.(-%_) a = neg a
 
   axiom Mul_eq:
-    forall a b : E.t.
+    forall a b : E.t [E.( *%) a b | mul a b].
       E.( *%) a b = mul a b
 end
 
@@ -405,24 +464,56 @@ theory Signed_enum
   clone export Bit_enum_intf2
 
   axiom Div_eq:
-    forall a b : t.
+    forall a b : t [a /% b | sdiv a b].
       a /% b = sdiv a b
 
   axiom Mod_eq:
-    forall a b : t.
+    forall a b : t [a %%b | srem a b].
       a %% b = srem a b
+
+  axiom Lt_eq:
+    forall a b : t [a < b | slt a b].
+      a < b <-> slt a b
+
+  axiom Le_eq:
+    forall a b : t [a <= b | sle a b].
+      a <= b <-> sle a b
+
+  axiom Gt_eq:
+    forall a b : t [a > b | sgt a b].
+      a > b <-> sgt a b
+
+  axiom Ge_eq:
+    forall a b : t [a >= b | sge a b].
+      a > b <-> sge a b
 end
 
 theory Unsigned_enum
   clone export Bit_enum_intf2
 
   axiom Div_eq:
-    forall a b : t.
+    forall a b : t [a /% b | udiv a b].
       a /% b = udiv a b
 
   axiom Mod_eq:
-    forall a b : t.
+    forall a b : t [a %% b | urem a b].
       a %% b = urem a b
+
+  axiom Lt_eq:
+    forall a b : t [a < b | ult a b].
+      a < b <-> ult a b
+
+  axiom Le_eq:
+    forall a b : t [a <= b | ule a b].
+      a <= b <-> ule a b
+
+  axiom Gt_eq:
+    forall a b : t [a > b | ugt a b].
+      a > b <-> ugt a b
+
+  axiom Ge_eq:
+    forall a b : t [a >= b | uge a b].
+      a > b <-> uge a b
 end
 
 module Generic_bit_enum
@@ -440,59 +531,75 @@ module Generic_bit_enum
   val (^) (x y : t) : t
     ensures { result = x ^ y }
 
-  use import int.Int
+  use int.Int
 
   val (+%) (a b : t) : t
-    ensures { to_int result = normalize (to_int a + to_int b) }
+    ensures { to_int result = normalize (Int.(+) (to_int a) (to_int b)) }
     ensures { result = add a b }
 
   val (-%) (a b : t) : t
-    ensures { to_int result = normalize (to_int a - to_int b) }
+    ensures { to_int result = normalize (Int.(-) (to_int a) (to_int b)) }
     ensures { result = sub a b }
 
   val ( *%) (a b : t) : t
-    ensures { to_int result = normalize (to_int a * to_int b) }
+    ensures { to_int result = normalize (Int.( *) (to_int a) (to_int b)) }
     ensures { result = mul a b }
 
   val (-%_) (a : t) : t
-    ensures { to_int result = normalize (- to_int a) }
+    ensures { to_int result = normalize (Int.(-_) (to_int a)) }
     ensures { result = neg a }
 
   val eq (a b : t) : bool
-    ensures { result <-> to_int a = to_int b }
+    ensures { result <-> Int.(=) (to_int a) (to_int b) }
     ensures { result <-> eq a b }
 
   val ne (a b : t) : bool
     ensures { result <-> to_int a <> to_int b }
     ensures { result <-> ne a b }
+
+  val (<=) (a b : t) : bool
+    ensures  { result <-> Int.(<=) (to_int a) (to_int b) }
+    ensures  { result <-> if signed then sle a b else ule a b }
+
+  val (<) (a b : t) : bool
+    ensures  { result <-> Int.(<) (to_int a) (to_int b) }
+    ensures  { result <-> if signed then slt a b else ult a b }
+
+  val (>=) (a b : t) : bool
+    ensures  { result <-> Int.(>=) (to_int a) (to_int b) }
+    ensures  { result <-> if signed then sge a b else uge a b }
+
+  val (>) (a b : t) : bool
+    ensures  { result <-> Int.(>) (to_int a) (to_int b) }
+    ensures  { result <-> if signed then sgt a b else ugt a b }
 end
 
 module Safe_bit_enum
   clone export Bit_enum_intf2
 
   use import Powers_of_2
-  use import int.Int
+  use int.Int
 
   val lsl (x y : t) : t
-    requires { "expl:<< second operand" 0 <= to_int y < size }
-    requires { "expl:integer overflow" in_bounds (to_int x * (power 2 (to_int y))) }
+    requires { "expl:<< second operand" Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size }
+    requires { "expl:integer overflow" in_bounds (Int.( *) (to_int x) (power 2 (to_int y))) }
     ensures { result = lsl x y }
-    ensures { to_int result = to_int x * (power 2 (to_int y)) }
+    ensures { to_int result = Int.( *) (to_int x) (power 2 (to_int y)) }
 
   val lsl_modulo (x y : t) : t
-    requires { "expl:<< second operand" 0 <= to_int y < size }
+    requires { "expl:<< second operand" Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size }
     ensures { result = lsl x y }
-    ensures { to_int result = normalize (to_int x * (power 2 (to_int y))) }
+    ensures { to_int result = normalize (Int.( *) (to_int x) (power 2 (to_int y))) }
 
   use import int.EuclideanDivision
 
   val lsr (x y : t) : t
-    requires { "expl:>> second operand" 0 <= to_int y < size }
+    requires { "expl:>> second operand" Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size }
     ensures { result = lsr x y }
-    ensures { to_int x >= 0 -> to_int result = div (to_int x) (power 2 (to_int y)) }
+    ensures { Int.(>=) (to_int x) 0 -> to_int result = div (to_int x) (power 2 (to_int y)) }
 
   val asr (x y : t) : t
-    requires { "expl:>> second operand" 0 <= to_int y < size }
+    requires { "expl:>> second operand" Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size }
     ensures { result = asr x y }
     ensures { to_int result = div (to_int x) (power 2 (to_int y)) }
 
@@ -510,22 +617,22 @@ end
 module Unsafe_bit_enum
   clone export Bit_enum_intf2
 
-  use import int.Int
+  use int.Int
   use import Powers_of_2
 
   val lsl (x y : t) : t
     ensures { result = lsl x y }
-    ensures { to_int result = to_int x * (power 2 (to_int y)) }
+    ensures { to_int result = Int.( *) (to_int x) (power 2 (to_int y)) }
 
   val lsl_modulo (x y : t) : t
     ensures { result = lsl x y }
-    ensures { to_int result = normalize (to_int x * (power 2 (to_int y))) }
+    ensures { to_int result = normalize (Int.( *) (to_int x) (power 2 (to_int y))) }
 
   use import int.EuclideanDivision
 
   val lsr (x y : t) : t
     ensures { result = lsr x y }
-    ensures { to_int x >= 0 -> to_int result = div (to_int x) (power 2 (to_int y)) }
+    ensures { Int.(>=) (to_int x) 0 -> to_int result = div (to_int x) (power 2 (to_int y)) }
 
   val asr (x y : t) : t
     ensures { result = asr x y }

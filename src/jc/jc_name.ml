@@ -152,6 +152,13 @@ struct
   type t = string * bool
   let jessie = "Jessie3", false
   let struct_ ~safe si = (fst (Theory.struct_ si) ^ if safe then "safe" else "unsafe"), true
+  let func ~extern ~safe f =
+    "Function_" ^ f.fun_final_name ^
+    match extern, safe with
+    | true, true -> ""
+    | true, false -> "_requires"
+    | false, true -> "_behaviors"
+    | false, false -> "_safety"
 end
 
 module Pred =
