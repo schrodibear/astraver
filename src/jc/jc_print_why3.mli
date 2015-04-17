@@ -51,6 +51,7 @@ type any_integer =
 module S : Set.S with type elt = any_integer
 
 val func :
+  entry:string ->
   where:[< `Behavior of bool | `Logic ] ->
   bw_ints:S.t -> formatter -> ('a, 'b) func -> unit
 
@@ -60,18 +61,20 @@ val jc_position : formatter -> Jc_position.t -> unit
 
 val why_label : formatter -> why_label -> unit
 
-val tconstr : formatter -> ('a, 'b) tconstr -> unit
+val tconstr : entry:string -> formatter -> ('a, 'b) tconstr -> unit
 
-val ltype_hlist : formatter -> 'a ltype_hlist -> unit
+val ltype_hlist : entry:string -> formatter -> 'a ltype_hlist -> unit
 
-val logic_type : formatter -> 'a logic_type -> unit
+val logic_type : entry:string -> formatter -> 'a logic_type -> unit
 
 val term_hlist :
+  entry:string ->
   bw_ints:S.t ->
   consts:StringSet.t ->
   formatter -> 'a term_hlist -> unit
 
 val term :
+  entry:string ->
   bw_ints:S.t ->
   consts:StringSet.t ->
   formatter -> 'a term -> unit
@@ -81,21 +84,25 @@ val list :
   sep:('b, 'c, 'd, 'e, 'e, 'b) format6 -> formatter -> 'a list -> unit
 
 val pred :
+  entry:string ->
   bw_ints:S.t ->
   consts:StringSet.t ->
   formatter -> pred -> unit
 
 val triggers :
+  entry:string ->
   bw_ints:S.t ->
   consts:StringSet.t ->
   formatter -> trigger list list -> unit
 
 val why_type :
+  entry:string ->
   bw_ints:S.t ->
   consts:StringSet.t ->
   formatter -> 'a why_type -> unit
 
 val variant :
+  entry:string ->
   bw_ints:S.t ->
   consts:StringSet.t ->
   formatter -> ('a term * string option) option -> unit
@@ -103,32 +110,36 @@ val variant :
 val option : ('a -> 'b -> unit) -> 'a -> 'b option -> unit
 
 val any_type :
+  entry:string ->
   bw_ints:S.t ->
   consts:StringSet.t ->
   formatter -> some_why_type -> unit
 
 val expr_hlist :
+  entry:string ->
   safe:bool ->
   bw_ints:S.t ->
   consts:StringSet.t ->
   formatter -> 'a expr_hlist -> unit
 
 val expr_node :
+  entry:string ->
   safe:bool ->
   bw_ints:S.t ->
   consts:StringSet.t ->
   formatter -> 'a expr_node -> unit
 
 val expr :
+  entry:string ->
   safe:bool ->
   bw_ints:S.t ->
   consts:StringSet.t ->
   formatter -> 'a expr -> unit
 
-val any_logic_type : formatter -> some_logic_type -> unit
+val any_logic_type : entry:string -> formatter -> some_logic_type -> unit
 
 val logic_arg :
-  formatter -> string * some_logic_type -> unit
+  entry:string -> formatter -> string * some_logic_type -> unit
 
 val goal_kind : formatter -> goal_kind -> unit
 
@@ -139,6 +150,7 @@ type 'kind kind =
   | Module : bool -> [ `Module of bool ] kind
 
 val why_decl :
+  entry:string ->
   kind:'a kind ->
   bw_ints:S.t ->
   consts:StringSet.t ->

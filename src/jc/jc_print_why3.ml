@@ -92,7 +92,7 @@ let modulo fmttr modulo =
 let modulo' fmttr modulo =
   fprintf fmttr "%s" @@
   match modulo with
-  | true -> "modulo"
+  | true -> "_modulo"
   | false -> ""
 
 let op fmttr op =
@@ -132,7 +132,7 @@ let fail_on_real () =
   failwith "floating point operations are not yet supported in GADT encoding, \
             please use the User generic constructor"
 
-let func ~where ~bw_ints fmttr (type a) (type b) =
+let func ~entry ~where ~bw_ints fmttr (type a) (type b) =
   let pr fmt = fprintf fmttr fmt in
   let pr_bop fp ty = pr "%a.(%a%a)" fp ty in
   let pr_uop fp ty = pr "%a.(%a%a_)" fp ty in
@@ -156,6 +156,14 @@ let func ~where ~bw_ints fmttr (type a) (type b) =
       fmttr
       ty
   in
+  let conv_tys : type a b. _ -> a bounded integer * b bounded integer -> _ = fun fmttr (ty_to, ty_from) ->
+    let pr f1 ty1 f2 ty2 = fprintf fmttr "%a_of_%a" f1 ty1 f2 ty2 in
+    match ty_to, ty_from with
+    | Int _, Int _ -> pr int_ty ty_to int_ty ty_from
+    | Int _, Enum _ -> pr int_ty ty_to enum_ty ty_from
+    | Enum _, Int _ -> pr enum_ty ty_to int_ty ty_from
+    | Enum _, Enum _ -> pr enum_ty ty_to enum_ty ty_from
+  in
   function
   | (B_int_op op' : (a, b) func) -> pr "Int.(%a)" op op'
   | U_int_op op' -> pr "Int.(%a_)" op op'
@@ -171,6 +179,7 @@ let func ~where ~bw_ints fmttr (type a) (type b) =
   | Of_int (Enum _ as ty, modulo) -> pr_f' enum_ty ty "of_int%a" modulo' modulo
   | To_int (Int _ as ty) -> pr_f int_ty ty "to_int"
   | To_int (Enum _ as ty) -> pr_f enum_ty ty "to_int"
+  | Cast (ty_to, ty_from, modulo) -> pr_f' conv_tys (ty_to, ty_from) "cast" modulo' modulo
   | B_bint_bop (op', ty) -> pr_bop int_ty ty op op' modulo false
   | U_bint_bop (op', ty) -> pr_uop int_ty ty op op' modulo false
   | Lsl_bint (ty, modulo') -> pr_bop int_ty ty op `Lsl modulo modulo'
@@ -178,8 +187,8 @@ let func ~where ~bw_ints fmttr (type a) (type b) =
   | B_num_pred (pred, Integral (Int _ as ty)) -> pr_bop int_ty ty op pred modulo false
   | B_num_pred (pred, Integral (Enum _ as ty)) -> pr_bop enum_ty ty op pred modulo false
   | Poly op' -> pr "%a" op op'
-  | User (_, false, name) -> pr "%a" id name
-  | User (where, true, name) -> pr "%a.%a" uid where id name
+  | User (where, true, name) when where <> entry-> pr "%a.%a" uid where id name
+  | User (_, _, name) -> pr "%a" id name
   | To_float _ -> fail_on_real ()
   | Of_float _  -> fail_on_real ()
   | B_num_pred (_, Real _) -> fail_on_real ()
@@ -239,7 +248,7 @@ let why_label fmttr { l_kind; l_behavior; l_pos } =
     with_behavior @@ (fun b -> pr "\"for behavior %s\"@ " b)
   end
 
-let tconstr fmttr (type a) (type b) =
+let tconstr ~entry fmttr (type a) (type b) =
   let pr fmt = fprintf fmttr fmt in
   function
   | (Numeric (Integral Integer) : (a, b) tconstr) -> pr "int"
@@ -249,33 +258,34 @@ let tconstr fmttr (type a) (type b) =
   | Bool -> pr "Bool.bool"
   | Void -> pr "()"
   | Var v -> pr "'%a" id v
-  | User (_, false, name) -> pr "%a" id name
-  | User (where, true, name) -> pr "%a.%a" uid where id name
+  | User (where, true, name) when where <> entry-> pr "%a.%a" uid where id name
+  | User (_, _, name) -> pr "%a" id name
 
-let rec ltype_hlist : type a. _ -> a ltype_hlist -> _  = fun fmttr ->
+let rec ltype_hlist : type a. entry:_ -> _ -> a ltype_hlist -> _  = fun ~entry fmttr ->
   function
   | Nil -> ()
   | Cons (lt, ts) ->
-    fprintf fmttr "@ %a" logic_type lt;
-    ltype_hlist fmttr ts
+    fprintf fmttr "@ %a" (logic_type ~entry) lt;
+    ltype_hlist ~entry fmttr ts
 
-and logic_type : type a. _ -> a logic_type -> _ = fun fmttr ->
+and logic_type : type a. entry:_ -> _ -> a logic_type -> _ = fun ~entry fmttr ->
   function
   | Type (c, tps) ->
-    fprintf fmttr "%a%a" tconstr c ltype_hlist tps
+    fprintf fmttr "%a%a" (tconstr ~entry) c (ltype_hlist ~entry) tps
 
-let rec term_hlist : type a. bw_ints:_ -> consts:_ -> _ -> a term_hlist -> _ = fun ~bw_ints ~consts fmttr ->
+let rec term_hlist : type a. entry:_ ->  bw_ints:_ -> consts:_ -> _ -> a term_hlist -> _ =
+  fun ~entry ~bw_ints ~consts fmttr ->
   function
   | Nil -> ()
   | Cons (t, ts) ->
-    fprintf fmttr "@ %a" (term ~bw_ints ~consts) t;
-    term_hlist ~bw_ints ~consts fmttr ts
+    fprintf fmttr "@ %a" (term ~entry ~bw_ints ~consts) t;
+    term_hlist ~entry ~bw_ints ~consts fmttr ts
 
-and term : type a. bw_ints: _ -> consts:_ -> _ -> a term -> _ = fun ~bw_ints ~consts fmttr ->
+and term : type a. entry:_ -> bw_ints: _ -> consts:_ -> _ -> a term -> _ = fun ~entry ~bw_ints ~consts fmttr ->
   let pr fmt = fprintf fmttr fmt in
-  let term_hlist fmttr = term_hlist ~bw_ints ~consts fmttr
-  and term fmttr = term ~bw_ints ~consts fmttr
-  and func fmttr = func ~where:`Logic ~bw_ints fmttr
+  let term_hlist fmttr = term_hlist ~entry ~bw_ints ~consts fmttr
+  and term fmttr = term ~entry ~bw_ints ~consts fmttr
+  and func fmttr = func ~entry ~where:`Logic ~bw_ints fmttr
   in
   function
   | Const c -> constant fmttr c
@@ -307,13 +317,14 @@ let rec list element ~sep fmttr =
     fprintf fmttr "%a%( fmt %)" element x sep;
     list element ~sep fmttr xs
 
-let rec pred ~bw_ints ~consts fmttr =
+let rec pred ~entry ~bw_ints ~consts fmttr =
   let pr fmt = fprintf fmttr fmt in
-  let term_hlist fmttr = term_hlist ~bw_ints ~consts fmttr
-  and term fmttr = term ~bw_ints ~consts fmttr
-  and pred = pred ~bw_ints ~consts
-  and triggers = triggers ~bw_ints ~consts
-  and func fmttr = func ~where:`Logic ~bw_ints fmttr
+  let term_hlist fmttr = term_hlist ~entry ~bw_ints ~consts fmttr
+  and term fmttr = term ~entry ~bw_ints ~consts fmttr
+  and pred = pred ~entry ~bw_ints ~consts
+  and triggers = triggers ~entry ~bw_ints ~consts
+  and func fmttr = func ~entry ~where:`Logic ~bw_ints fmttr
+  and logic_type fmttr = logic_type ~entry fmttr
   in
   function
   | True -> pr "true"
@@ -345,9 +356,9 @@ let rec pred ~bw_ints ~consts fmttr =
   | Labeled (l, p) ->
     pr "@[(%a%a)@]" why_label l pred p
 
-and triggers ~bw_ints ~consts fmttr =
-  let term fmttr = term ~bw_ints ~consts fmttr
-  and pred = pred ~bw_ints ~consts
+and triggers ~entry ~bw_ints ~consts fmttr =
+  let term fmttr = term ~entry ~bw_ints ~consts fmttr
+  and pred = pred ~entry ~bw_ints ~consts
   in
   let pat fmttr =
     function
@@ -356,10 +367,13 @@ and triggers ~bw_ints ~consts fmttr =
   in
   list ~sep:"@ |@ " (list pat ~sep:",@ ") fmttr
 
-let rec why_type : type a. bw_ints:_ -> consts:_ -> _ -> a why_type -> _ = fun ~bw_ints ~consts fmttr ->
-  let pr fmt = fprintf fmttr fmt in
-  let pred = pred ~bw_ints ~consts in
-  let why_type fmttr = why_type ~bw_ints ~consts fmttr in
+let rec why_type : type a. entry:_ -> bw_ints:_ -> consts:_ -> _ -> a why_type -> _ =
+  fun ~entry ~bw_ints ~consts fmttr ->
+  let pr fmt = fprintf fmttr fmt
+  and pred = pred ~entry ~bw_ints ~consts
+  and logic_type fmttr = logic_type ~entry fmttr
+  and why_type fmttr = why_type ~entry ~bw_ints ~consts fmttr
+  in
   function
   | Prod_type (id', t1, t2) ->
     let id' = if id' = "" then "_" else id' in
@@ -390,12 +404,12 @@ let rec why_type : type a. bw_ints:_ -> consts:_ -> _ -> a why_type -> _ = fun ~
         List.iter (fun (e, r) -> pr "@[<hov 2>raises@ {@ %s@ result@ ->@ %a@ }@]@]" e pred r) l
     end
 
-let variant ~bw_ints ~consts fmttr =
+let variant ~entry ~bw_ints ~consts fmttr =
   let pr fmt = fprintf fmttr fmt in
   function
   | None -> ()
   | Some (t, r_opt) ->
-    pr "variant@ {@ %a@ }" (term ~bw_ints ~consts) t;
+    pr "variant@ {@ %a@ }" (term ~entry ~bw_ints ~consts) t;
     Option.iter (pr "@ with@ %s") r_opt
 
 let option value fmttr =
@@ -404,24 +418,24 @@ let option value fmttr =
   | Some v ->
     value fmttr v
 
-let any_type ~bw_ints ~consts fmttr = function Why_type t -> why_type ~bw_ints ~consts fmttr t
+let any_type ~entry ~bw_ints ~consts fmttr = function Why_type t -> why_type ~entry ~bw_ints ~consts fmttr t
 
-let rec expr_hlist : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_hlist -> _ =
-  fun ~safe ~bw_ints ~consts fmttr ->
+let rec expr_hlist : type a. entry:_ -> safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_hlist -> _ =
+  fun ~entry ~safe ~bw_ints ~consts fmttr ->
   function
   | Nil -> ()
   | Cons (e, es) ->
-    fprintf fmttr "@ %a" (expr ~safe ~bw_ints ~consts) e;
-    expr_hlist ~safe ~bw_ints ~consts fmttr es
+    fprintf fmttr "@ %a" (expr ~entry ~safe ~bw_ints ~consts) e;
+    expr_hlist ~entry ~safe ~bw_ints ~consts fmttr es
 
-and expr_node : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_node -> _ =
-  fun ~safe ~bw_ints ~consts fmttr ->
+and expr_node : type a. entry:_ -> safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_node -> _ =
+  fun ~entry ~safe ~bw_ints ~consts fmttr ->
   let pr fmt = fprintf fmttr fmt in
   let pr_fun params ty pre body post diverges signals =
     let consts = List.fold_right (function _, Why_type (Ref_type _) -> Fn.id | x, _ -> StringSet.add x) params consts in
-    let pred = pred ~bw_ints ~consts
-    and why_type fmttr = why_type ~bw_ints ~consts fmttr
-    and any_type = any_type ~bw_ints ~consts
+    let pred = pred ~entry ~bw_ints ~consts
+    and why_type fmttr = why_type ~entry ~bw_ints ~consts fmttr
+    and any_type = any_type ~entry ~bw_ints ~consts
     in
     pr "@[<hov 1>fun@ @[";
     List.iter (fun (x, t) -> pr "(%a@ :@ %a)@ " id x any_type t) params;
@@ -438,17 +452,17 @@ and expr_node : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_node -> _
         l
     end;
     if diverges then pr "diverges@ ";
-    pr "%a@]" (expr ~safe ~bw_ints ~consts) body
+    pr "%a@]" (expr ~entry ~safe ~bw_ints ~consts) body
   in
   let pr_let id' e1 e2 =
     let consts = StringSet.add id' consts in
-    let expr fmttr = expr ~safe ~bw_ints ~consts fmttr in
+    let expr fmttr = expr ~entry ~safe ~bw_ints ~consts fmttr in
     pr "@[<hov 0>(let@ %a@ =@ %a@ in@ %a)@]" id id' expr e1 expr e2
   in
-  let pred = pred ~bw_ints ~consts
-  and why_type fmttr = why_type ~bw_ints ~consts fmttr
-  and variant fmttr = variant ~bw_ints ~consts fmttr
-  and expr fmttr = expr ~safe ~bw_ints ~consts fmttr
+  let pred = pred ~entry ~bw_ints ~consts
+  and why_type fmttr = why_type ~entry ~bw_ints ~consts fmttr
+  and variant fmttr = variant ~entry ~bw_ints ~consts fmttr
+  and expr fmttr = expr ~entry ~safe ~bw_ints ~consts fmttr
   in
   let expr_list = list expr ~sep:";@ " in
   function
@@ -460,7 +474,7 @@ and expr_node : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_node -> _
   | Void -> pr "()"
   | Deref id' -> pr "!%a" id id'
   | Typed (e, _) -> expr fmttr e
-  | Poly { expr_node = en } -> expr_node ~safe ~bw_ints ~consts fmttr en
+  | Poly { expr_node = en } -> expr_node ~entry ~safe ~bw_ints ~consts fmttr en
   | If (e1, e2, e3) ->
     pr "@[<hov 0>(if@ %a@ @[<hov 1>then@ %a@]@ @[<hov 1>else@ %a@])@]"
       expr e1 expr e2 expr e3
@@ -488,8 +502,8 @@ and expr_node : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_node -> _
     pr "@[<hov 0>(let@ %a@ =@ ref@ %a@ in@ %a)@]" id id' expr e1 expr e2
   | App (f, ehl, ty_opt)  ->
     pr "@[<hov 1>(%a@ %a@ %a)@]"
-      (func ~where:(`Behavior safe) ~bw_ints) f
-      (expr_hlist ~safe ~bw_ints ~consts) ehl
+      (func ~entry ~where:(`Behavior safe) ~bw_ints) f
+      (expr_hlist ~entry ~safe ~bw_ints ~consts) ehl
       (option @@ fun fmttr -> fprintf fmttr ":@ %a" why_type) ty_opt
   | Raise (id, None) ->
     pr "@[<hov 1>(raise@ %s)@]" id
@@ -525,11 +539,12 @@ and expr_node : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr_node -> _
   | Absurd -> pr "@[<hov 0>absurd@ @]"
   | Labeled (l, e) -> pr "@[(%a%a)@]" why_label l expr e
 
-and expr : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr -> _ = fun ~safe ~bw_ints ~consts fmttr e ->
+and expr : type a. entry:_ -> safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr -> _ =
+  fun ~entry ~safe ~bw_ints ~consts fmttr e ->
   let pr fmt = fprintf fmttr fmt in
   let rec aux =
     function
-    | [] -> expr_node ~safe ~bw_ints ~consts fmttr e.expr_node
+    | [] -> expr_node ~entry ~safe ~bw_ints ~consts fmttr e.expr_node
     | s :: l ->
       pr "@[<hov 0>('%a:@ " uid s;
       aux l;
@@ -537,9 +552,9 @@ and expr : type a. safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr -> _ = fun ~sa
   in
   aux e.expr_labels
 
-let any_logic_type fmttr = function Logic_type t -> logic_type fmttr t
+let any_logic_type ~entry fmttr = function Logic_type t -> logic_type ~entry fmttr t
 
-let logic_arg fmttr (id', t) = fprintf fmttr "(%a@ :@ %a)" id id' any_logic_type t
+let logic_arg ~entry fmttr (id', t) = fprintf fmttr "(%a@ :@ %a)" id id' (any_logic_type ~entry) t
 
 let goal_kind fmttr =
   fprintf fmttr "%s" %
@@ -558,13 +573,16 @@ type 'kind kind =
   | Theory : [`Theory] kind
   | Module : bool -> [`Module of bool] kind
 
-let why_decl (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = why_id'; why_decl } =
+let why_decl ~entry (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = why_id'; why_decl } =
   let pr fmt = fprintf fmttr fmt in
   let why_id = why_id ~constr:false
   and why_uid = why_id ~constr:true in
-  let args = list ~sep:"@ " @@ fun fmt (_id, t) -> any_logic_type fmt t in
-  let pred = pred ~bw_ints in
-  let expr = expr ~bw_ints in
+  let args = list ~sep:"@ " @@ fun fmt (_id, t) -> any_logic_type ~entry fmt t
+  and logic_type fmttr = logic_type ~entry fmttr
+  and logic_arg fmttr = logic_arg ~entry fmttr
+  and pred = pred ~entry ~bw_ints
+  and expr ~safe = expr ~entry ~safe ~bw_ints
+  in
   match (why_decl : k decl) with
   | Param t ->
     let consts =
@@ -588,7 +606,7 @@ let why_decl (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = why_id'
       in
       collect_consts ~consts t
     in
-    pr "val@ %a@ %a" why_id why_id' (why_type ~bw_ints ~consts) t
+    pr "val@ %a@ %a" why_id why_id' (why_type ~entry ~bw_ints ~consts) t
   | Logic (args', Type (Bool, Nil)) ->
     pr "predicate@ %a@ %a" why_id why_id' args args'
   | Logic (args', t) ->
@@ -618,7 +636,7 @@ let why_decl (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = why_id'
       why_id why_id'
       (list ~sep:"@ " logic_arg) args
       logic_type t
-      (term ~bw_ints ~consts:(List.fold_right (StringSet.add % fst) args consts)) e
+      (term ~entry ~bw_ints ~consts:(List.fold_right (StringSet.add % fst) args consts)) e
   | Type tvs ->
     pr "type@ %a %a" why_id why_id' (list ~sep:"@ " id) tvs
   | Exception None ->
@@ -675,16 +693,16 @@ let (%~>) f' f ~init = f ~init:(f' ~init)
 module Term =
 struct
   type 'a t = 'a term
-  let rec fold : type a. bw_ints:_ -> f:_ -> init:_ -> a term -> _ = fun ~bw_ints ~f ->
-    let fold t = fold ~bw_ints ~f t
-    and fold_hlist hl = fold_hlist ~bw_ints ~f hl in
+  let rec fold : type a. entry:_ -> bw_ints:_ -> f:_ -> init:_ -> a term -> _ = fun ~entry ~bw_ints ~f ->
+    let fold t = fold ~entry ~bw_ints ~f t
+    and fold_hlist hl = fold_hlist ~entry ~bw_ints ~f hl in
     let fold_id ~init id = f ~acc:init (`Current, id) in
     let split_fprintf f = unstage (split_fprintf ~cons:(fun th imported -> `Theory (th, imported))) f in
     fun ~init ->
     function
     | Const _ -> init
     | App (f', thl) ->
-      f ~acc:init (split_fprintf (func ~where:`Logic ~bw_ints) expand_func f') |~>
+      f ~acc:init (split_fprintf (func ~entry ~where:`Logic ~bw_ints) expand_func f') |~>
       fold_hlist thl
     | Var v -> fold_id ~init v
     | Deref v -> fold_id ~init v
@@ -699,9 +717,9 @@ struct
     | Let (_, t1, t2) ->
       fold ~init t1 |~>
       fold t2
-  and fold_hlist : type a. bw_ints:_ -> f:_ -> init:_ -> a term_hlist -> _ = fun ~bw_ints ~f ->
-    let fold t = fold ~bw_ints ~f t
-    and fold_hlist hl = fold_hlist ~bw_ints ~f hl in
+  and fold_hlist : type a. entry:_ -> bw_ints:_ -> f:_ -> init:_ -> a term_hlist -> _ = fun ~entry ~bw_ints ~f ->
+    let fold t = fold ~entry ~bw_ints ~f t
+    and fold_hlist hl = fold_hlist ~entry ~bw_ints ~f hl in
     fun ~init ->
     function
     | Nil -> init
@@ -715,13 +733,13 @@ end
 module Logic_type =
 struct
   type 'a t = 'a logic_type
-  let rec fold : type a. bw_ints:_ -> f:_ -> init:_ -> a logic_type -> _ = fun ~bw_ints ~f ->
-    let fold lt = fold ~bw_ints ~f lt in
+  let rec fold : type a. entry:_ -> bw_ints:_ -> f:_ -> init:_ -> a logic_type -> _ = fun ~entry ~bw_ints ~f ->
+    let fold lt = fold ~entry ~bw_ints ~f lt in
     let split_fprintf f = unstage (split_fprintf ~cons:(fun th imported -> `Theory (th, imported))) f in
     fun ~init ->
     function
     | Type (tc, lthl) ->
-      f ~acc:init (split_fprintf tconstr expand_tconstr tc) |~>
+      f ~acc:init (split_fprintf (tconstr ~entry) expand_tconstr tc) |~>
       let rec fold' : type a. init:_ -> a ltype_hlist -> _ = fun ~init ->
         function
         | Nil -> init
@@ -737,11 +755,11 @@ end
 module Pred =
 struct
   type t = pred
-  let rec fold ~bw_ints ~f =
-    let fold = fold ~bw_ints ~f
-    and fold_term t = Term.fold ~bw_ints ~f t
-    and fold_term_hlist hl = Term.fold_hlist ~bw_ints ~f hl
-    and fold_logic_type lt = Logic_type.fold ~bw_ints ~f lt in
+  let rec fold ~entry ~bw_ints ~f =
+    let fold = fold ~entry ~bw_ints ~f
+    and fold_term t = Term.fold ~entry ~bw_ints ~f t
+    and fold_term_hlist hl = Term.fold_hlist ~entry ~bw_ints ~f hl
+    and fold_logic_type lt = Logic_type.fold ~entry ~bw_ints ~f lt in
     let split_fprintf f = unstage (split_fprintf ~cons:(fun th imported -> `Theory (th, imported))) f in
     fun ~init ->
     let fold_quant lt trigs p =
@@ -776,7 +794,7 @@ struct
     | Exists (_, lt, trigs, p) ->
       fold_quant lt trigs p
     | App (p, thl) ->
-      f ~acc:init (split_fprintf (func ~where:`Logic ~bw_ints) expand_func p) |~>
+      f ~acc:init (split_fprintf (func ~entry ~where:`Logic ~bw_ints) expand_func p) |~>
       fold_term_hlist thl
 
   let iter ~f = fold ~init:() ~f:(fun ~acc:_ -> f)
@@ -785,10 +803,10 @@ end
 module Why_type =
 struct
   type 'a t = 'a why_type
-  let rec fold : type a. bw_ints:_ -> f:_ -> init:_ -> a why_type -> _ = fun ~bw_ints ~f ->
-    let fold wt = fold ~bw_ints ~f wt
-    and fold_logic_type lt = Logic_type.fold ~bw_ints ~f lt
-    and fold_pred = Pred.fold ~bw_ints ~f in
+  let rec fold : type a. entry:_ -> bw_ints:_ -> f:_ -> init:_ -> a why_type -> _ = fun ~entry ~bw_ints ~f ->
+    let fold wt = fold ~entry ~bw_ints ~f wt
+    and fold_logic_type lt = Logic_type.fold ~entry ~bw_ints ~f lt
+    and fold_pred = Pred.fold ~entry ~bw_ints ~f in
     fun ~init ->
     function
     | Prod_type (_, wt1, wt2) ->
@@ -816,12 +834,13 @@ end
 module Expr =
 struct
   type 'a t = 'a expr
-  let rec fold : type a. safe:_ -> bw_ints:_ -> f:_ -> init:_ -> a expr -> _ = fun ~safe ~bw_ints ~f ->
-    let fold ~init e = fold ~safe ~bw_ints ~f ~init e
-    and fold_hlist hl = fold_hlist ~safe ~bw_ints ~f hl
-    and fold_pred = Pred.fold ~bw_ints ~f
-    and fold_term t = Term.fold ~bw_ints ~f t
-    and fold_why_type wt = Why_type.fold ~bw_ints ~f wt in
+  let rec fold : type a. entry:_ -> safe:_ -> bw_ints:_ -> f:_ -> init:_ -> a expr -> _ =
+    fun ~entry ~safe ~bw_ints ~f ->
+    let fold ~init e = fold ~entry ~safe ~bw_ints ~f ~init e
+    and fold_hlist hl = fold_hlist ~entry ~safe ~bw_ints ~f hl
+    and fold_pred = Pred.fold ~entry ~bw_ints ~f
+    and fold_term t = Term.fold ~entry ~bw_ints ~f t
+    and fold_why_type wt = Why_type.fold ~entry ~bw_ints ~f wt in
     let fold' init e = fold ~init e in
     let split_fprintf_th f = unstage (split_fprintf ~cons:(fun th imported -> `Theory (th, imported))) f in
     let split_fprintf_mod f = unstage (split_fprintf ~cons:(fun th imported -> `Module (th, imported))) f in
@@ -873,7 +892,7 @@ struct
       fold ~init e1 |~>
       fold e2
     | App (f', hl, wt_opt) ->
-      f ~acc:init (split_fprintf_mod (func ~where:(`Behavior safe) ~bw_ints) expand_func f') |~>
+      f ~acc:init (split_fprintf_mod (func ~entry ~where:(`Behavior safe) ~bw_ints) expand_func f') |~>
       fold_hlist hl |~>
       Option.fold ~f:(fun init wt -> fold_why_type ~init wt) wt_opt
     | Raise (id, e_opt) ->
@@ -902,9 +921,10 @@ struct
     | Black_box wt -> fold_why_type ~init wt
     | Absurd -> init
     | Labeled (_, e) -> fold ~init e
-  and fold_hlist : type a. safe:_ -> bw_ints:_ -> f:_ -> init:_ -> a expr_hlist -> _ = fun ~safe ~bw_ints ~f ->
-    let fold t = fold ~safe ~bw_ints ~f t
-    and fold_hlist hl = fold_hlist ~safe ~bw_ints ~f hl in
+  and fold_hlist : type a. entry:_ -> safe:_ -> bw_ints:_ -> f:_ -> init:_ -> a expr_hlist -> _ =
+    fun ~entry ~safe ~bw_ints ~f ->
+    let fold t = fold ~entry ~safe ~bw_ints ~f t
+    and fold_hlist hl = fold_hlist ~entry ~safe ~bw_ints ~f hl in
     fun ~init ->
     function
     | Nil -> init
@@ -923,11 +943,11 @@ struct
     | Theory : ([`Theory], [> `Theory of string * bool | `Current]) kind
     | Module : bool -> ([`Module of bool], [> `Theory of string * bool | `Module of string * bool | `Current ]) kind
 
-  let fold ~bw_ints (type a) (type b) (type s) ~(kind : (a, b) kind) ~(f : acc:s -> b * string -> s) =
-    let fold_why_type ~f wt = Why_type.fold ~bw_ints ~f wt
-    and fold_logic_type ~f t = Logic_type.fold ~bw_ints ~f t
-    and fold_pred ~f = Pred.fold ~bw_ints ~f
-    and fold_term ~f t = Term.fold ~bw_ints ~f t
+  let fold ~entry ~bw_ints (type a) (type b) (type s) ~(kind : (a, b) kind) ~(f : acc:s -> b * string -> s) =
+    let fold_why_type ~f wt = Why_type.fold ~entry ~bw_ints ~f wt
+    and fold_logic_type ~f t = Logic_type.fold ~entry ~bw_ints ~f t
+    and fold_pred ~f = Pred.fold ~entry ~bw_ints ~f
+    and fold_term ~f t = Term.fold ~entry ~bw_ints ~f t
     in
     let fold_args ~f ~init =
       List.fold_left (fun init (_, Logic_type lt) -> fold_logic_type ~f ~init lt) init
@@ -935,7 +955,7 @@ struct
     fun ~(init : s) (d : a why_decl) ->
     match d.why_decl with
     | Param wt -> let Module _ = kind in fold_why_type ~f ~init wt
-    | Def e -> let Module safe = kind in Expr.fold ~safe ~bw_ints ~f ~init e
+    | Def e -> let Module safe = kind in Expr.fold ~entry ~safe ~bw_ints ~f ~init e
     | Logic (args, rt) ->
       let Theory = kind in
       fold_args ~f ~init args |~>
@@ -1019,6 +1039,49 @@ struct
         entry':'a entry -> (* Possibly different entry for further implicit self-recursion *)
         (enter:'s -> f:'f -> StringSet.t) Staged.t }
 
+  let expansions = ref []
+
+  let add_expansion pat expansion = expansions := (Str.regexp pat, expansion) :: !expansions
+
+  let () =
+    add_expansion "\\(Safe_|Unsafe_\\)?\\([Bb]it_\\)?[Ii]nt[0-9]+" (`Prefix "enum");
+    add_expansion "Int" (`Prefix "int");
+    add_expansion "Jessie_theory" (`Prefix "core");
+    add_expansion "Jessie_module" (`Prefix "core")
+
+  let expansion_acts = H.create 25
+
+  let register name =
+    ListLabels.iter
+      !expansions
+      ~f:(fun (pat, expansion) ->
+        if Str.string_match pat name 0 then H.add expansion_acts name expansion);
+    name
+
+  let expand =
+    let apply expansion name =
+      match expansion with
+      | `Prefix p -> String.lowercase p ^ "." ^ name
+      | `Subst s -> s
+    in
+    fun name->
+    try apply (H.find expansion_acts name) name with Not_found -> name
+
+  let dep ~name =
+    let no_subst =
+      match H.find expansion_acts name with
+      | `Prefix _ -> false
+      | `Subst _ -> true
+      | exception Not_found -> false
+    in
+    function
+    | `Import None | `Export as r -> r
+    | `As None as r when no_subst -> r
+    | `As None -> `As (Some name)
+    | `Import _ | `As _ as r when no_subst -> r
+    | `Import (Some name') | `As Some (name') ->
+      failwith ("dep: conflicting `as' imports: `" ^ name' ^"' vs. `" ^ name ^ "'")
+
   let iter =
     fun (type iter) (type value) (type decl_kind) (type f) (type state)
       ~(over : <
@@ -1040,8 +1103,8 @@ struct
               let f (type k) (e : k entry) =
                 let add name = H.add state name (init, Entry e) in
                 match e with
-                | Theory (name, _) -> add name
-                | Module (name, _) -> add name
+                | Theory (name, _) -> add (register name)
+                | Module (name, _) -> add (register name)
               in
               List.iter (fun (Entry e) -> f e) file;
               { iter = fun ~consts ~entry -> continue ~state ~consts ~entry:(fun () -> assert false) ~entry':entry }
@@ -1095,7 +1158,8 @@ struct
                 ~init
                 ~f:(fun ~acc ->
                   function
-                  | (`Theory (name, _) | `Module (name, _)), ("&" | "|^" | "^" | "~_" | "<<" | ">>" | ">>>") ->
+                  | (`Theory (name, _) | `Module (name, _)),
+                    ("(&)" | "(|^)" | "(^)" | "(~_)" | "(<<)" | "(>>)" | "(>>>)") ->
                     begin try
                       S.add (M.find name map) acc
                     with
@@ -1117,12 +1181,13 @@ struct
             | Theory (_, None) -> S.empty
             | Module (_, None) -> S.empty
             | Theory (name, Some (_, decls)) ->
-              memo name @@ fun () -> List.fold_left (fold_decls ~kind:Theory @@ map_ints ~how:`Theory) S.empty decls
+              memo name @@
+              fun () -> List.fold_left (fold_decls ~entry:name ~kind:Theory @@ map_ints ~how:`Theory) S.empty decls
             | Module (name, Some (_, safe, decls)) ->
               memo name @@
               fun () ->
               let map = M.fold M.add (map_ints ~how:`Theory) @@ map_ints ~how:(`Module safe) in
-              List.fold_left (fold_decls ~kind:(Module safe) map) S.empty decls
+              List.fold_left (fold_decls ~entry:name ~kind:(Module safe) map) S.empty decls
           in
           stage @@
           fun ~(enter : state) ~(f : f) ->
@@ -1144,9 +1209,9 @@ struct
                 consts,
                 match M.find name acc with
                 | None | Some true -> acc
-                | Some false when not imported -> acc
+                | Some false when imported = Some false -> acc
                 | Some false -> M.add name (Some true) acc
-                | exception Not_found -> M.add name None acc
+                | exception Not_found -> M.add name imported acc
               with
               | Not_found -> failwith ("Unrecognized Why3ML file entry: " ^ name)
             in
@@ -1158,7 +1223,7 @@ struct
                   | `Current, _ -> acc
                   | `Module (name', imported), _
                   | `Theory (name', imported), _ when name' <> name ->
-                    enter acc name' imported
+                    enter acc name' (Some imported)
                   | (`Module _ | `Theory _), _ -> acc)
                 ~init
                 d
@@ -1173,10 +1238,10 @@ struct
                    function
                    | Use (_, Theory (name', _))
                    | Clone (_, Theory (name', _), _) ->
-                     enter acc name' false)
+                     enter acc name' None)
                 (consts, M.empty)
                 !deps |~>
-              ListLabels.fold_left ~f:(f ~kind:Theory ~name) decls |>
+              ListLabels.fold_left ~f:(f ~entry:name ~kind:Theory ~name) decls |>
               map_snd
                 (M.iter
                    (fun name import ->
@@ -1192,14 +1257,14 @@ struct
                    fun (Dependency d) ->
                      let enter (type k) =
                        function
-                       | (Theory (name', _) : k entry) -> enter acc name' false
-                       | Module (name', _) -> enter acc name' false
+                       | (Theory (name', _) : k entry) -> enter acc name' None
+                       | Module (name', _) -> enter acc name' None
                      in
                      match d with
                      | Use (_, e) | Clone (_, e, _) -> enter e)
                 (consts, M.empty)
                 !deps |~>
-              ListLabels.fold_left ~f:(f ~kind:(Module safe) ~name) decls |>
+              ListLabels.fold_left ~f:(f ~entry:name ~kind:(Module safe) ~name) decls |>
               map_snd
                 (M.iter
                    (fun name import ->
@@ -1234,6 +1299,7 @@ struct
             in
             let f ~name ~self ~why_decl ~consts d =
               Why_decl.fold
+                ~entry:name
                 ~bw_ints
                 ~init:consts
                 ~f:(fun ~acc:consts ->
@@ -1259,11 +1325,11 @@ struct
             | Theory (_, None) -> consts
             | Module (_, None) -> consts
             | Theory (name, Some (_, decls)) ->
-              let why_decl = why_decl ~kind:Theory ~bw_ints in
+              let why_decl = why_decl ~entry:name ~kind:Theory ~bw_ints in
               let rec self ~consts d = f ~kind:Theory ~name ~self ~why_decl ~consts d in
               List.fold_left (fun consts -> self ~consts) consts @@ sort decls
             | Module (name, Some (_, safe, decls)) ->
-              let why_decl = why_decl ~kind:(Module safe) ~bw_ints in
+              let why_decl = why_decl ~entry:name ~kind:(Module safe) ~bw_ints in
               let rec self ~consts d = f ~kind:(Module safe) ~name ~self ~why_decl ~consts d in
               List.fold_left (fun consts -> self ~consts) consts @@ sort decls
         in
@@ -1312,9 +1378,9 @@ let dependency fmttr =
   function
   | Use (spec, entry) ->
     let name = name entry in
-    pr "use@ %a" (dependency_spec ~name) spec
+    pr "use@ %a" (dependency_spec ~name:(Entry.expand name)) (Entry.dep ~name spec)
   | Clone (spec, entry, substs') ->
-    let name = name entry in
+    let name = Entry.expand (name entry) in
     pr "clone@ %a%a" (dependency_spec ~name) spec substs substs'
 
 let module_dependency fmttr = function Dependency d -> dependency fmttr d

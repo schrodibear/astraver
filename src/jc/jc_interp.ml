@@ -3523,7 +3523,7 @@ let tr_specialized_fun n fname param_name_assoc acc =
 (*                               Logic entities                               *)
 (******************************************************************************)
 
-let tr_logic_type (id,l) acc = Type(id_no_loc id,List.map Type_var.name l) :: acc
+let tr_logic_type (name, l) = O.Wd.mk ~name @@ Type (List.map Type_var.name l)
 
 let tr_exception ei acc =
   Options.lprintf "producing exception '%s'@." ei.exi_name;

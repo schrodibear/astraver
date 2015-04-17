@@ -171,6 +171,7 @@ struct
     | U_bint_op (_, i, _) -> Ty (int i)
     | Of_int (i, _) -> Ty (int i)
     | To_int _ -> Ty integer
+    | Cast (i, _, _) -> Ty (int i)
     | To_float r -> Ty (float r)
     | Of_float _ -> Ty real
     | B_bint_bop (_, i) -> Ty (int i)
@@ -306,6 +307,8 @@ struct
     | LabelOld -> Deref_at (v, "")
     | LabelPre -> Deref_at (v, "init")
     | LabelName { lab_final_name } -> Deref_at (v, lab_final_name)
+
+  let cast ?(modulo=false) ~from ~to_ t = Cast (to_, from, modulo) $. t
 
   let alloc_table ?(deref=true) ?(lab=Env.LabelHere) ?(r=Region.dummy_region) ac =
     let v = Name.alloc_table (ac, r) in
@@ -1008,7 +1011,7 @@ struct
           include module type of M (F (struct type 'a t' =  'a t end)) with type 'a t := 'a t
         end
       end)
-  let bit_theory = "Bit" ^ name
+  let bit_theory = "Bit_" ^ name
   let safe_bit_module = "Safe_bit_" ^ name
   let unsafe_bit_module = "Unsafe_bit_" ^ name
 end
