@@ -75,13 +75,14 @@ let int_ty ~how fmttr (type r) (type b) (ty : (r repr, b bit) xintx bounded inte
   | `Module (true, false) -> Int_ty.unsafe_bit_module
   | `Module (true, true) -> Int_ty.safe_bit_module
 
-let enum_ty ~how fmttr (type a) (Enum (module E : Enum with type t = a)) =
-  let pr fmt = fprintf fmttr fmt in
+let enum_ty ~how fmttr (type e) (Enum _ as ty : e enum bounded integer) =
+  let (module Enum_ty) = O.module_of_enum_ty ty in
+  fprintf fmttr "%s" @@
   match how with
-  | `Name -> pr "%s" E.name
-  | `Theory -> pr "%a" uid E.name
-  | `Module false -> pr "%s" ("Unsafe_" ^ E.name)
-  | `Module true -> pr "%s" ("Safe_" ^ E.name)
+  | `Name -> Enum_ty.name
+  | `Theory -> Enum_ty.theory
+  | `Module false -> Enum_ty.unsafe_module
+  | `Module true -> Enum_ty.safe_module
 
 let modulo fmttr modulo =
   fprintf fmttr "%s" @@
@@ -138,10 +139,12 @@ let func ~entry ~where ~bw_ints fmttr (type a) (type b) =
   let pr_uop fp ty = pr "%a.(%a%a_)" fp ty in
   let pr_f fp ty = pr "%a.%s" fp ty in
   let pr_f' fp ty = pr "%a.%s%a" fp ty in
-  let int_ty fmttr ty =
+  let int_ty ?(default=true) ?ty' fmttr ty =
     int_ty
       ~how:
-        (match where, S.mem (Int ty) bw_ints with
+        (match where,
+               S.mem (Int ty) bw_ints && Option.map_default ~default ~f:(fun ty -> S.mem (Int ty) bw_ints) ty'
+         with
          | `Logic, bit -> `Theory bit
          | `Behavior safe, bit -> `Module (safe, bit))
       fmttr
@@ -159,9 +162,9 @@ let func ~entry ~where ~bw_ints fmttr (type a) (type b) =
   let conv_tys : type a b. _ -> a bounded integer * b bounded integer -> _ = fun fmttr (ty_to, ty_from) ->
     let pr f1 ty1 f2 ty2 = fprintf fmttr "%a_of_%a" f1 ty1 f2 ty2 in
     match ty_to, ty_from with
-    | Int _, Int _ -> pr int_ty ty_to int_ty ty_from
-    | Int _, Enum _ -> pr int_ty ty_to enum_ty ty_from
-    | Enum _, Int _ -> pr enum_ty ty_to int_ty ty_from
+    | Int _, Int _ -> pr (int_ty ~ty':ty_from) ty_to (int_ty ~ty':ty_to) ty_from
+    | Int _, Enum _ -> pr (int_ty ~default:false) ty_to enum_ty ty_from
+    | Enum _, Int _ -> pr enum_ty ty_to (int_ty ~default:false) ty_from
     | Enum _, Enum _ -> pr enum_ty ty_to enum_ty ty_from
   in
   function
@@ -375,14 +378,14 @@ let rec why_type : type a. entry:_ -> bw_ints:_ -> consts:_ -> _ -> a why_type -
   and why_type fmttr = why_type ~entry ~bw_ints ~consts fmttr
   in
   function
-  | Prod_type (id', t1, t2) ->
+  | Arrow (id', t1, t2) ->
     let id' = if id' = "" then "_" else id' in
     pr "@[<hov 1>(%a@ :@ %a)@ %a@]" id id' why_type t1 why_type t2
-  | Base_type t -> logic_type fmttr t
-  | Ref_type t -> pr "ref@ %a" why_type t
+  | Logic t -> logic_type fmttr t
+  | Ref t -> pr "ref@ %a" why_type t
   | Typed (wt, _) -> why_type fmttr wt
   | Poly { why_type = wt } -> why_type fmttr wt
-  | Annot_type (p, t, reads, writes, q, signals) ->
+  | Annot (p, t, reads, writes, q, signals) ->
     pr "%a@ " why_type t;
     pr "@[@[<hov 2>requires@ {@ %a@ }@]" pred p;
     let ids = list id ~sep:",@ "  in
@@ -432,7 +435,7 @@ and expr_node : type a. entry:_ -> safe:_ -> bw_ints:_ -> consts:_ -> _ -> a exp
   fun ~entry ~safe ~bw_ints ~consts fmttr ->
   let pr fmt = fprintf fmttr fmt in
   let pr_fun params ty pre body post diverges signals =
-    let consts = List.fold_right (function _, Why_type (Ref_type _) -> Fn.id | x, _ -> StringSet.add x) params consts in
+    let consts = List.fold_right (function _, Why_type (Ref _) -> Fn.id | x, _ -> StringSet.add x) params consts in
     let pred = pred ~entry ~bw_ints ~consts
     and why_type fmttr = why_type ~entry ~bw_ints ~consts fmttr
     and any_type = any_type ~entry ~bw_ints ~consts
@@ -588,21 +591,21 @@ let why_decl ~entry (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = 
     let consts =
       let rec collect_consts : type a. consts:_ -> a why_type -> _ = fun ~consts ->
         function
-        | Base_type _ -> consts
-        | Ref_type _ -> consts
+        | Logic _ -> consts
+        | Ref _ -> consts
         | Typed (wt, _) -> collect_consts ~consts wt
         | Poly { why_type } -> collect_consts ~consts why_type
-        | Prod_type (id, t1, t2) ->
+        | Arrow (id, t1, t2) ->
           let collect_consts' () = collect_consts ~consts:(StringSet.add id consts) t2 in
           begin match t1 with
-          | Ref_type _ -> collect_consts ~consts t2
-          | Base_type _ -> collect_consts' ()
-          | Prod_type _ -> collect_consts' ()
-          | Annot_type _ -> collect_consts' ()
+          | Ref _ -> collect_consts ~consts t2
+          | Logic _ -> collect_consts' ()
+          | Arrow _ -> collect_consts' ()
+          | Annot _ -> collect_consts' ()
           | Typed (wt, _) -> collect_consts ~consts wt
           | Poly { why_type } -> collect_consts ~consts why_type
           end
-        | Annot_type (_, t, _, _, _, _) -> collect_consts ~consts t
+        | Annot (_, t, _, _, _, _) -> collect_consts ~consts t
       in
       collect_consts ~consts t
     in
@@ -809,16 +812,16 @@ struct
     and fold_pred = Pred.fold ~entry ~bw_ints ~f in
     fun ~init ->
     function
-    | Prod_type (_, wt1, wt2) ->
+    | Arrow (_, wt1, wt2) ->
       fold ~init wt1 |~>
       fold wt2
-    | Base_type lt ->
+    | Logic lt ->
       fold_logic_type ~init lt
-    | Ref_type wt ->
+    | Ref wt ->
       fold ~init wt
     | Typed (wt, _) -> fold ~init wt
     | Poly { why_type } -> fold ~init why_type
-    | Annot_type (pre, wt, reads, writes, post, exns) ->
+    | Annot (pre, wt, reads, writes, post, exns) ->
       fold_pred ~init pre |~>
       fold wt |~>
       let f acc name = f ~acc (`Current, name) in
@@ -1044,10 +1047,11 @@ struct
   let add_expansion pat expansion = expansions := (Str.regexp pat, expansion) :: !expansions
 
   let () =
-    add_expansion "\\(Safe_|Unsafe_\\)?\\([Bb]it_\\)?[Ii]nt[0-9]+" (`Prefix "enum");
+    add_expansion "\\(Safe_\\|Unsafe_\\)?\\([Bb]it_\\)?[Ii]nt[0-9]+" (`Prefix "enum");
     add_expansion "Int" (`Prefix "int");
     add_expansion "Jessie_theory" (`Prefix "core");
-    add_expansion "Jessie_module" (`Prefix "core")
+    add_expansion "Jessie_module" (`Prefix "core");
+    add_expansion "\\([A-Za-z_]+_enum$\\|[A-Za-z_]+_enum_\\(ext\\)?\\|Enum\\)" (`Prefix "enum")
 
   let expansion_acts = H.create 25
 
@@ -1404,7 +1408,7 @@ let entry ~consts fmttr (type k) (entry : k entry) =
             let add () = StringSet.add d.why_id.why_name consts in
             match (d.why_decl : k decl) with
             | Def  _ -> add ()
-            | Param (Base_type _) -> add ()
+            | Param (Logic _) -> add ()
             | _ -> consts
           in
           `Done, add d

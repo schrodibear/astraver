@@ -206,7 +206,7 @@ type some_ltype_hlist =
 
 let rec type_ : type a b. (a, b) ty_opt -> _ -> a logic_type =
   fun t ->
-  let tr_ltype_hlist =
+  let ltype_hlist =
     List.fold_left
       (fun (Ltype_hlist lhl) t ->
          let Typ ty_opt = ty t in
@@ -218,7 +218,7 @@ let rec type_ : type a b. (a, b) ty_opt -> _ -> a logic_type =
   function
   | JCTnative ty -> native_type t ty
   | JCTlogic (s, l) ->
-    return (let Ltype_hlist lhl = tr_ltype_hlist l in user ~from:Name.Theory.current s $ lhl)
+    return (let Ltype_hlist lhl = ltype_hlist l in user ~from:Name.Theory.current s $ lhl)
   | JCTenum { ei_type = Int (r, b) } ->
     return (int (Int (r, b)))
   | JCTenum { ei_type = Enum e } ->
@@ -226,22 +226,22 @@ let rec type_ : type a b. (a, b) ty_opt -> _ -> a logic_type =
   | JCTpointer (pc, _, _) ->
     let ac = alloc_class_of_pointer_class pc in
     return (pointer_type ac pc)
-  | JCTnull | JCTany -> invalid_arg "tr_base_type"
+  | JCTnull | JCTany -> invalid_arg "type_"
   | JCTtype_var tv -> return (var (Type_var.uname tv))
 
-let some_type t =
+let some_logic_type t =
   let Typ typ = ty t in
   O.Lt.some @@ type_ typ t
 
-let base_type t ty = Base_type (type_ t ty)
+let why_type t ty : _ why_type = Logic (type_ t ty)
 
-let some_base_type t =
+let some_why_type t =
   let Typ typ = ty t in
-  O.Wt.some @@ base_type typ t
+  O.Wt.some @@ why_type typ t
 
-let some_var_base_type v = some_base_type v.vi_type
+let some_var_why_type v = some_why_type v.vi_type
 
-let some_var_type v = some_type v.vi_type
+let some_var_logic_type v = some_logic_type v.vi_type
 
 let nondet_value t jct =
   let open O.E in
@@ -258,10 +258,10 @@ let nondet_value t jct =
     | Tstring -> jc_val "any_string"
     end
   | JCTnull
-  | JCTpointer _ -> return (F.jc_val "any_pointer" $. void >: base_type Any jct)
+  | JCTpointer _ -> return (F.jc_val "any_pointer" $. void >: why_type Any jct)
   | JCTenum ei -> return (F.jc_val (Name.Param.any_enum ei.ei_type) $. void)
   | JCTlogic _ as ty ->
-    let t' = Annot_type (True, base_type t ty, [], [], True, []) in
+    let t' = Annot (True, why_type t ty, [], [], True, []) in
     return (mk (Black_box t'))
   | JCTany -> failwith "any_value: value of wilcard type"
   | JCTtype_var _ ->
@@ -353,7 +353,7 @@ let var v =
 
 let param t v = v.vi_final_name, type_ t v.vi_type
 
-let some_param v = v.vi_final_name, some_type v.vi_type
+let some_param v = v.vi_final_name, some_logic_type v.vi_type
 
 let tvar_name ~label_in_name lab v =
   let constant = not v.vi_assigned in
@@ -371,12 +371,12 @@ let tparam t ~label_in_name lab v =
 let some_tparam ~label_in_name lab v =
   tvar_name ~label_in_name lab v,
   O.T.some @@ tvar ~label_in_name lab v,
-  some_type v.vi_type
+  some_logic_type v.vi_type
 
 let local_of_parameter (Expr v', ty') = (var_name' v', ty')
 let effect_of_parameter (Expr v', _ty') = var_name' v'
-let wparam_of_parameter (v', Logic_type ty') = (v', Why_type (Ref_type (Base_type ty')))
-let rparam_of_parameter (v', Logic_type ty') = (v', Why_type (Base_type ty'))
+let wparam_of_parameter (v', Logic_type ty') = (v', Why_type (Ref (Logic ty')))
+let rparam_of_parameter (v', Logic_type ty') = (v', Why_type (Logic ty'))
 
 (* model variables *)
 
@@ -767,7 +767,7 @@ let any_value' typ =
     else if is_jessie_user_type memory typ then "any_memory"
     else invalid_arg "any_value: requested any avalue of unsupported type"
   in
-  O.E.(F.jc_val v $. void >: Base_type typ)
+  O.E.(F.jc_val v $. void >: Logic typ)
 
 let define_locals ?(reads=[]) ?(writes=[]) e' =
   let e' =
@@ -788,8 +788,6 @@ let define_locals ?(reads=[]) ?(writes=[]) e' =
 (*                                 Structures                                 *)
 (******************************************************************************)
 
-(* Conversion to and from bitvector *)
-
 let make_param ~name ~writes ~reads ~pre ~post ~return_type =
   (* parameters and effects *)
   let write_effects = List.map effect_of_parameter writes in
@@ -799,9 +797,9 @@ let make_param ~name ~writes ~reads ~pre ~post ~return_type =
   let params = List.map local_of_parameter params in
   (* type *)
   let annot_type =
-    Annot_type (
+    Annot (
       pre,
-      Base_type return_type,
+      Logic return_type,
       (* reads and writes *)
       [], write_effects,
       (* normal post *)
@@ -811,11 +809,13 @@ let make_param ~name ~writes ~reads ~pre ~post ~return_type =
   in
   let Why_type annot_type =
     List.fold_right
-      (fun (n, Why_type ty') (Why_type acc) -> Why_type (Prod_type (n, ty', acc)))
+      (fun (n, Why_type ty') (Why_type acc) -> Why_type (Arrow (n, ty', acc)))
       params
       (Why_type annot_type)
   in
   O.Wd.mk ~name (Param annot_type)
+
+(* Conversion to and from bitvector *)
 
 let conv_bw_alloc_parameters ~deref r _pc =
   let ac = JCalloc_bitvector in
@@ -1661,7 +1661,7 @@ let read_locals ~region_list ~callee_reads ~callee_writes ~params =
     (function
       | ({ expr_node = Var n }, ty') -> (n, ty')
       | ({ expr_node = Deref n }, Logic_type ty') ->
-        printf "Deref %s with type %a@." n Print_why3.logic_type ty';
+        printf "Deref %s with type %a@." n (Print_why3.logic_type ~entry:"") ty';
         assert false
       | _ ->
         assert false)
@@ -1935,7 +1935,7 @@ let make_arguments
 (* Logic arguments translation                                                 *)
 (*******************************************************************************)
 
-let tr_li_model_arg_3 is_mutable get_name get_type ~label_in_name lab (c, _ as cr) =
+let li_model_arg_3 is_mutable get_name get_type ~label_in_name lab (c, _ as cr) =
   let name = get_name cr in
   let constant =
     match !current_function with
@@ -1946,13 +1946,13 @@ let tr_li_model_arg_3 is_mutable get_name get_type ~label_in_name lab (c, _ as c
   (Term (lvar ~constant ~label_in_name lab name) : some_term),
   Logic_type (get_type c)
 
-let tr_li_model_mem_arg_3, tr_li_model_at_arg_3, tr_li_model_tt_arg_3 =
-  let tr = tr_li_model_arg_3 in
+let li_model_mem_arg_3, li_model_at_arg_3, li_model_tt_arg_3 =
+  let tr = li_model_arg_3 in
   tr mutable_memory      memory_name           memory_type,
   tr mutable_alloc_table Name.alloc_table      alloc_table_type,
   tr mutable_tag_table   Name.tag_table        tag_table_type
 
-let tr_li_model_args_5 fold tr_arg_3 get_map ~label_in_name ?region_assoc ?label_assoc reads =
+let li_model_args_5 fold tr_arg_3 get_map ~label_in_name ?region_assoc ?label_assoc reads =
   let tr_region =
     Option.(
       map_default
@@ -1978,21 +1978,21 @@ let tr_li_model_args_5 fold tr_arg_3 get_map ~label_in_name ?region_assoc ?label
     (get_map reads)
     []
 
-let tr_li_model_mem_args_5, tr_li_model_at_args_5, tr_li_model_tt_args_5 =
-  let tr = tr_li_model_args_5 in
-  tr MemoryMap.fold tr_li_model_mem_arg_3 (fun e -> e.e_memories),
-  tr AllocMap.fold  tr_li_model_at_arg_3  (fun e -> e.e_alloc_tables),
-  tr TagMap.fold    tr_li_model_tt_arg_3  (fun e -> e.e_tag_tables)
+let li_model_mem_args_5, li_model_at_args_5, li_model_tt_args_5 =
+  let tr = li_model_args_5 in
+  tr MemoryMap.fold li_model_mem_arg_3 (fun e -> e.e_memories),
+  tr AllocMap.fold  li_model_at_arg_3  (fun e -> e.e_alloc_tables),
+  tr TagMap.fold    li_model_tt_arg_3  (fun e -> e.e_tag_tables)
 
-let tr_li_model_mem_args_3, tr_li_model_at_args_3, tr_li_model_tt_args_3 =
+let li_model_mem_args_3, li_model_at_args_3, li_model_tt_args_3 =
   let f tr ~label_in_name ?region_assoc ?label_assoc reads =
     List.map snd @@ tr ~label_in_name ?region_assoc ?label_assoc reads
   in
-  f tr_li_model_mem_args_5,
-  f tr_li_model_at_args_5,
-  f tr_li_model_tt_args_5
+  f li_model_mem_args_5,
+  f li_model_at_args_5,
+  f li_model_tt_args_5
 
-let tr_li_model_glob_args_4 ~label_in_name ?region_assoc:_ ?label_assoc reads =
+let li_model_glob_args_4 ~label_in_name ?region_assoc:_ ?label_assoc reads =
   VarMap.fold
     (fun v labs acc ->
        LogicLabelSet.fold
@@ -2006,29 +2006,29 @@ let tr_li_model_glob_args_4 ~label_in_name ?region_assoc:_ ?label_assoc reads =
     reads.e_globals
     []
 
-let tr_li_model_glob_args_3 ~label_in_name ?region_assoc ?label_assoc reads =
-  List.map snd (tr_li_model_glob_args_4 ~label_in_name ?region_assoc ?label_assoc reads)
+let li_model_glob_args_3 ~label_in_name ?region_assoc ?label_assoc reads =
+  List.map snd (li_model_glob_args_4 ~label_in_name ?region_assoc ?label_assoc reads)
 
-let tr_li_model_args_3 ~label_in_name ?region_assoc ?label_assoc reads =
+let li_model_args_3 ~label_in_name ?region_assoc ?label_assoc reads =
   let tr f = f ~label_in_name ?region_assoc ?label_assoc reads in
-  tr tr_li_model_at_args_3 @
-  tr tr_li_model_tt_args_3 @
-  tr tr_li_model_mem_args_3 @
-  tr tr_li_model_glob_args_3
+  tr li_model_at_args_3 @
+  tr li_model_tt_args_3 @
+  tr li_model_mem_args_3 @
+  tr li_model_glob_args_3
 
-let tr_li_args ~label_in_name ~region_assoc ~label_assoc f args =
+let li_args ~label_in_name ~region_assoc ~label_assoc f args =
   args @
   List.map (fun (_, term, _) -> term) @@
-    tr_li_model_args_3 ~label_in_name ~region_assoc ~label_assoc f.li_effects
+    li_model_args_3 ~label_in_name ~region_assoc ~label_assoc f.li_effects
 
-let tr_logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
+let logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
   if Options.debug then printf "logic call to %s@." f.li_name;
-  let args = tr_li_args ~label_in_name ~region_assoc ~label_assoc f args in
+  let args = li_args ~label_in_name ~region_assoc ~label_assoc f args in
   O.T.(((f.li_axiomatic |? "", Option.is_some f.li_axiomatic), f.li_final_name) $.. args)
 
-let tr_logic_pred_call ~label_in_name ~region_assoc ~label_assoc f' args =
+let logic_pred_call ~label_in_name ~region_assoc ~label_assoc f' args =
   if Options.debug then printf "logic pred call to %s@." f'.li_name;
-  let args = tr_li_args ~label_in_name ~region_assoc ~label_assoc f' args in
+  let args = li_args ~label_in_name ~region_assoc ~label_assoc f' args in
   O.P.(((f'.li_axiomatic |? "", Option.is_some f'.li_axiomatic), f'.li_final_name) $.. args)
 
 let collect_li_reads acc li =

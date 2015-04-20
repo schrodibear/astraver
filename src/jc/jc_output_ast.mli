@@ -232,10 +232,10 @@ and trigger =
 type poly_why_type = { why_type : 'a. 'a why_type }
 
 and 'a why_type =
-  | Prod_type : string * 'a why_type * 'b why_type -> ('a -> 'b) why_type (** (x : t1) -> t2 *)
-  | Base_type : 'a logic_type -> 'a why_type
-  | Ref_type : 'a why_type -> 'a ref why_type
-  | Annot_type : pred * 'a why_type * string list * string list * pred * (string * pred) list -> 'a why_type
+  | Arrow : string * 'a why_type * 'b why_type -> ('a -> 'b) why_type (** (x : t1) -> t2 *)
+  | Logic : 'a logic_type -> 'a why_type
+  | Ref : 'a why_type -> 'a ref why_type
+  | Annot : pred * 'a why_type * string list * string list * pred * (string * pred) list -> 'a why_type
     (** [{ P } t reads r writes w raises E { Q | E => R }] *)
   | Typed : 'a why_type * 'a ty -> 'a why_type
   | Poly : poly_why_type -> _ why_type

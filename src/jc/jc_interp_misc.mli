@@ -75,15 +75,15 @@ val ty : jc_type -> some_ty_opt
 
 val type_ : ('a, _) ty_opt -> jc_type -> 'a logic_type
 
-val base_type : ('a, 'b) ty_opt -> jc_type -> 'a why_type
+val why_type : ('a, 'b) ty_opt -> jc_type -> 'a why_type
 
-val some_type : jc_type -> some_logic_type
+val some_logic_type : jc_type -> some_logic_type
 
-val some_base_type: jc_type -> some_why_type
+val some_why_type: jc_type -> some_why_type
 
-val some_var_base_type : var_info -> some_why_type
+val some_var_why_type : var_info -> some_why_type
 
-val some_var_type : var_info -> some_logic_type
+val some_var_logic_type : var_info -> some_logic_type
 
 val raw_pset_type : 'a logic_type -> 'b logic_type
 
@@ -93,7 +93,7 @@ val memory_type : mem_class -> 'a logic_type
 
 val is_memory_type : 'a logic_type -> bool
 
-val tr_li_model_mem_arg_3 :
+val li_model_mem_arg_3 :
   label_in_name:bool -> label -> MemClass.t * RegionTable.key -> string * some_term * some_logic_type
 
 val pointer_class_model_type : pointer_class -> 'a logic_type
@@ -135,13 +135,13 @@ val tparam : ('a, 'b) ty_opt -> label_in_name:bool -> label -> var_info -> strin
 
 val some_tparam : label_in_name:bool -> label -> var_info -> string * some_term * some_logic_type
 
-val tr_li_model_args_3 :
+val li_model_args_3 :
   label_in_name:bool ->
   ?region_assoc:(RegionTable.key * RegionTable.key) list ->
   ?label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->
   effect -> (string * some_term * some_logic_type) list
 
-val tr_li_model_mem_args_5 :
+val li_model_mem_args_5 :
   label_in_name:bool ->
   ?region_assoc:(RegionTable.key * RegionTable.key) list ->
   ?label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->
@@ -193,7 +193,7 @@ val define_locals :
   'a expr -> 'a expr
 
 
-val tr_li_model_at_args_3 :
+val li_model_at_args_3 :
   label_in_name:bool ->
   ?region_assoc:(RegionTable.key * RegionTable.key) list ->
   ?label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->
@@ -212,7 +212,7 @@ val bitvector_type : unit -> 'a logic_type
 val const : ('a, 'b) ty_opt -> Ast.const -> 'a constant
 (** constant *)
 
-val tr_logic_pred_call :
+val logic_pred_call :
   label_in_name:bool ->
   region_assoc:(RegionTable.key * RegionTable.key) list ->
   label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->
@@ -220,7 +220,7 @@ val tr_logic_pred_call :
   some_term list -> pred
 (** call logic predicate, handling regions and labels *)
 
-val tr_logic_fun_call :
+val logic_fun_call :
   label_in_name:bool ->
   region_assoc:(RegionTable.key * RegionTable.key) list ->
   label_assoc:(LogicLabelSet.elt * LogicLabelSet.elt) list ->

@@ -35,6 +35,8 @@ theory Enum
 
   function of_int int : t
 
+  function of_int_modulo (n : int) : t = of_int (normalize n)
+
   axiom Of_int:
     forall x : int [of_int x]. min <= x <= max -> to_int (of_int x) = x
 
@@ -299,6 +301,7 @@ theory Bit_enum_intf
     constant range : int
 
     function of_int int : t
+    function of_int_modulo int : t
 
     predicate equal t t
 
@@ -343,6 +346,7 @@ theory Bit_enum_intf2
   constant range : int
 
   function of_int int : t
+  function of_int_modulo int : t
 
   predicate equal t t
 
@@ -387,8 +391,6 @@ theory Bit_enum
   function to_uint (a : E.t) : int =
     if signed /\ E.to_int a < 0 then E.range + E.to_int a else E.to_int a
 
-  function of_int_modulo (n : int) : E.t = E.of_int (E.normalize n)
-
   function lsl_int E.t int : E.t
 
   function lsr_int E.t int : E.t
@@ -417,7 +419,7 @@ theory Bit_enum
     function asr_bv = asr,
     function to_uint = to_uint,
     function to_int = E.to_int,
-    function of_int = of_int_modulo,
+    function of_int = E.of_int_modulo,
     function add = add,
     function sub = sub,
     function neg = neg,

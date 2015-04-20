@@ -503,9 +503,9 @@ let alloc_param : type t1 t2.
   let writes = alloc_write_parameters (ac, dummy_region) pc in
   let write_effects = List.map (function (Expr { expr_node = Var n }, _ty') -> n |  _ -> error ()) writes in
   let params =
-    let write_params = List.map (fun (n, Logic_type ty') -> (n, Why_type (Ref_type (Base_type ty')))) writes in
+    let write_params = List.map (fun (n, Logic_type ty') -> (n, Why_type (Ref (Logic ty')))) writes in
     let reads = alloc_read_parameters (ac, dummy_region) pc in
-    let read_params = List.map (fun (n, Logic_type ty') -> (n, Why_type (Base_type ty'))) reads in
+    let read_params = List.map (fun (n, Logic_type ty') -> (n, Why_type (Logic ty'))) reads in
     (match arg with
      | Singleton -> []
      | Range_0_n -> [O.E.(some @@ var (get_n n)), O.Wt.(some integer)])
@@ -525,13 +525,13 @@ let alloc_param : type t1 t2.
     map_st ~f ac pc
   in
   let alloc_type pre =
-    List.fold_right (fun (n, Why_type ty') (Why_type acc) -> Why_type (Prod_type (n, ty', acc))) params @@
+    List.fold_right (fun (n, Why_type ty') (Why_type acc) -> Why_type (Arrow (n, ty', acc))) params @@
     O.Wt.some @@
-    Annot_type
+    Annot
      ((* [n >= 0] *)
       pre,
       (* argument pointer type *)
-      Base_type (pointer_type ac pc),
+      Logic (pointer_type ac pc),
       (* reads and writes *)
       [], write_effects,
       (* normal post *)
@@ -595,21 +595,21 @@ let free_param ~safe ac pc =
   let write_effects = List.map (function (Expr { expr_node = Var n }, _ty') -> n | _ -> error ()) writes in
   let p = "p" in
   let params =
-    let write_params = List.map (fun (n, Logic_type ty') -> n, O.Wt.some @@ Ref_type (Base_type ty')) writes in
+    let write_params = List.map (fun (n, Logic_type ty') -> n, O.Wt.some @@ Ref (Logic ty')) writes in
     let reads = free_read_parameters (ac, dummy_region) pc in
-    let read_params = List.map (fun (n, Logic_type ty') -> (n, O.Wt.some @@ Base_type ty')) reads in
+    let read_params = List.map (fun (n, Logic_type ty') -> (n, O.Wt.some @@ Logic ty')) reads in
     write_params @ read_params |>
     List.map (function (Expr { expr_node = Var n }, ty') -> (n, ty') |  _ -> error ()) |>
-    List.cons (p, O.Wt.some @@ Base_type (pointer_type ac pc))
+    List.cons (p, O.Wt.some @@ Logic (pointer_type ac pc))
   in
   let p = O.T.var p in
   let p_is_null = O.T.(p = var "null") in
   (* postcondition *)
   let Why_type free_type =
-    List.fold_right (fun (n, Why_type ty') (Why_type acc) -> O.Wt.some @@ Prod_type (n, ty', acc)) params @@
+    List.fold_right (fun (n, Why_type ty') (Why_type acc) -> O.Wt.some @@ Arrow (n, ty', acc)) params @@
     O.Wt.some @@
     let open O.P in
-    Annot_type (
+    Annot (
       (if P.not safe then
          (* allowed, see man 3 free *)
          positioned Position.dummy ~kind:(JCVCpre "Deallocation") @@

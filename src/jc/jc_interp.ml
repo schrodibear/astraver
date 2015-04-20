@@ -601,7 +601,7 @@ let rec term :
         then (LabelHere, lab) :: List.map relab app.app_label_assoc
         else app.app_label_assoc
       in
-      tr_logic_fun_call
+      logic_fun_call
         ~label_in_name:global_assertion
         ~region_assoc:app.app_region_assoc
         ~label_assoc
@@ -739,7 +739,7 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
         else
           app.app_label_assoc
       in
-      tr_logic_pred_call
+      logic_pred_call
         ~label_in_name:global_assertion
         ~region_assoc:app.app_region_assoc
         ~label_assoc
@@ -749,11 +749,11 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
         (IntHashtblIter.mem Typing.global_invariants_table app.app_fun.li_tag) @@
         P.locate ~p ?behavior:None ~kind:(JCVCglobal_invariant app.app_fun.li_name)
     | JCAquantifier (Forall | Exists as q, v, trigs, p1) ->
-      let Logic_type lt = some_var_type v in
+      let Logic_type lt = some_var_logic_type v in
       (match q with Forall -> O.P.forall | Exists -> O.P.exists)
         v.vi_final_name
         lt
-        ~trigs:(triggers trigs)
+        ~trigs:(fun _ -> triggers trigs)
         (fun _ -> fp p1)
     | JCAold a1 ->
       let lab = if relocate && oldlab = LabelHere then lab else oldlab in
@@ -1232,12 +1232,12 @@ let rec old_to_pre_loc loc =
 let assumption al a' =
   let ef = List.fold_left Effect.assertion empty_effects al in
   let read_effects = local_read_effects ~callee_reads:ef ~callee_writes:empty_effects in
-  O.E.mk (Black_box (Annot_type (True, O.Wt.void, read_effects, [], a', [])))
+  O.E.mk (Black_box (Annot (True, O.Wt.void, read_effects, [], a', [])))
 
 let check al a' =
   let ef = List.fold_left Effect.assertion empty_effects al in
   let read_effects = local_read_effects ~callee_reads:ef ~callee_writes:empty_effects in
-  O.E.mk (Black_box (Annot_type (a', O.Wt.void, read_effects, [], True, [])))
+  O.E.mk (Black_box (Annot (a', O.Wt.void, read_effects, [], True, [])))
 
 (* decreases clauses: stored in global table for later use at each call sites *)
 
@@ -1436,7 +1436,7 @@ and make_upd ~e e1 fi e2 =
         mems
     in
     let write_effects = local_write_effects ~callee_reads:empty_effects ~callee_writes:ef in
-    let e2' = O.E.mk (Black_box (Annot_type (True, O.Wt.void, [], write_effects, True, []))) in
+    let e2' = O.E.mk (Black_box (Annot (True, O.Wt.void, [], write_effects, True, []))) in
     tmp1, lets, O.E.(e1' ^^ e2')
   | JCmem_plain_union _vi, _ ->
     let e1, off = destruct_union_access e1 (Some fi) in
@@ -2511,24 +2511,24 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
           let_ tmp
             (mk @@ Triple (true, r, expr typ e, True, []))
             (fun _ ->
-               mk (Black_box (Annot_type (True, O.Wt.void, [], [], post, []))) ^^
+               mk (Black_box (Annot (True, O.Wt.void, [], [], post, []))) ^^
                var tmp)
         end else if is_current_behavior id then
             if r = True
             then return @@ label @@ O.E.mk @@ Triple (true, True, expr typ e, post, [])
             else
               return @@
-              O.E.(label (mk @@ Black_box (Annot_type (True, O.Wt.void, [], [], r, []))) ^^
+              O.E.(label (mk @@ Black_box (Annot (True, O.Wt.void, [], [], r, []))) ^^
                    mk @@ Triple (true, True, expr typ e, post, []))
         else
-          let Why_type result_type = some_var_base_type vi_result in
+          let Why_type result_type = some_var_why_type vi_result in
           return @@
-          O.E.(label (mk @@ Black_box (Annot_type (True, O.Wt.void, [], [], r, []))) ^^
+          O.E.(label (mk @@ Black_box (Annot (True, O.Wt.void, [], [], r, []))) ^^
                let tmp = tmp_var_name () in
                let_
                  tmp
                  (mk @@ Triple (true, True, expr typ e, True, []))
-                 (fun _ -> mk @@ Black_box (Annot_type (True, result_type, [], [], post, []))))
+                 (fun _ -> mk @@ Black_box (Annot (True, result_type, [], [], post, []))))
         | _ -> assert false
         end
     | JCEthrow (exc, Some e1) ->
@@ -2693,7 +2693,7 @@ let tr_axiom pos id ~is_axiom labels a =
     predicate ~type_safe:false ~global_assertion:true ~relocate:false lab lab @@
       restrict_poly_mems_in_assertion ef.e_memories a
   in
-  let params = tr_li_model_args_3 ~label_in_name:true ef in
+  let params = li_model_args_3 ~label_in_name:true ef in
   let name = get_unique_name id in
   let a' = List.fold_right (fun (n, _v, Logic_type ty') a' -> O.P.forall n ty' (fun _ -> a')) params a' in
   [O.Wd.mk
@@ -2715,7 +2715,7 @@ let tr_logic_fun f ta =
     let lab =
       match f.li_labels with [lab] -> lab | _ -> LabelHere
     in
-    let model_params = tr_li_model_args_3 ~label_in_name:true f.li_effects in
+    let model_params = li_model_args_3 ~label_in_name:true f.li_effects in
     let usual_params = List.map (some_tparam ~label_in_name:true lab) f.li_parameters in
     List.map (fun (n, _v, ty') -> n, ty') @@ usual_params @ model_params
   in
@@ -2743,7 +2743,7 @@ let tr_logic_fun f ta =
           ~name:(f.li_final_name ^ "_definition")
           (Goal (KAxiom,
                  List.fold_right
-                   (fun (v, Logic_type lty) acc -> O.P.(forall v lty ~trigs:[[Term trig]] @@ Fn.const acc))
+                   (fun (v, Logic_type lty) acc -> O.P.(forall v lty ~trigs:(fun _ -> [[Term trig]]) @@ Fn.const acc))
                    params
                    O.P.(trig = t')))
       in
@@ -2751,7 +2751,7 @@ let tr_logic_fun f ta =
     else
       [O.Wd.mk ~name:f.li_final_name @@ Function (params, ty', t')]
   | ty', (JCNone | JCReads _) -> (* Logic *)
-    let Logic_type ty' = Option.map_default ~default:O.Lt.(some bool) ~f:some_type ty' in
+    let Logic_type ty' = Option.map_default ~default:O.Lt.(some bool) ~f:some_logic_type ty' in
     [O.Wd.mk ~name:f.li_final_name @@ Logic (params, ty')]
   | None, JCInductive l ->
     [O.Wd.mk
@@ -2762,7 +2762,7 @@ let tr_logic_fun f ta =
             (fun (id,_labels,a) ->
               let ef = Effect.assertion empty_effects a in
               let a' = fp a in
-              let params = tr_li_model_args_3 ~label_in_name:true ef in
+              let params = li_model_args_3 ~label_in_name:true ef in
               let a' =
                 List.fold_right
                   (fun (n, _v, Logic_type ty') a' -> O.P.forall n ty' (Fn.const a'))
@@ -2804,13 +2804,13 @@ let excep_posts_for_others exc_opt excep_behaviors =
     []
 
 let fun_parameters params write_params read_params =
-  let write_params = List.map (fun (n, Logic_type ty') -> (n, O.Wt.some @@ Ref_type (Base_type ty'))) write_params in
-  let read_params = List.map (fun (n, Logic_type ty') -> (n, O.Wt.some @@ Base_type ty')) read_params in
+  let write_params = List.map (fun (n, Logic_type ty') -> (n, O.Wt.some @@ Ref (Logic ty'))) write_params in
+  let read_params = List.map (fun (n, Logic_type ty') -> (n, O.Wt.some @@ Logic ty')) read_params in
   let params =
     List.map
       (fun v ->
          let n, Logic_type ty' = some_param v in
-         n, O.Wt.some @@ Base_type ty')
+         n, O.Wt.some @@ Logic ty')
       params
   in
   let params = params @ write_params @ read_params in
@@ -2821,7 +2821,7 @@ let fun_parameters params write_params read_params =
 let annot_fun_parameters params write_params read_params annot_type =
   let params = fun_parameters params write_params read_params in
   List.fold_right
-    (fun (n, Why_type ty') (Why_type acc) -> O.Wt.some @@ Prod_type (n, ty', acc))
+    (fun (n, Why_type ty') (Why_type acc) -> O.Wt.some @@ Arrow (n, ty', acc))
     params
     annot_type
 
@@ -3211,7 +3211,7 @@ let tr_fun f funpos spec body =
 
   (* Function type *)
   let Typ ret_typ = ty f.fun_result.vi_type in
-  let ret_type = base_type ret_typ f.fun_result.vi_type in
+  let ret_type = why_type ret_typ f.fun_result.vi_type in
   let fparams = List.map snd f.fun_parameters in
   let param_normal_post =
     if is_purely_exceptional_fun spec then False
@@ -3220,7 +3220,7 @@ let tr_fun f funpos spec body =
   let param_excep_posts = excep_posts @ excep_posts_inferred in
   let annot_type = (* function declaration with precondition *)
     O.Wt.some @@
-    Annot_type (
+    Annot (
       external_requires,
       ret_type,
       external_read_effects,
@@ -3243,9 +3243,9 @@ let tr_fun f funpos spec body =
    in
    let annot_type =
      O.Wt.some @@
-     Annot_type (True, ret_type,
-               external_read_effects, external_write_effects,
-               param_normal_post, param_excep_posts)
+     Annot (True, ret_type,
+            external_read_effects, external_write_effects,
+            param_normal_post, param_excep_posts)
    in
    let Why_type fun_type =
      annot_fun_parameters fparams
@@ -3524,6 +3524,173 @@ let tr_specialized_fun n fname param_name_assoc acc =
 (******************************************************************************)
 
 let tr_logic_type (name, l) = O.Wd.mk ~name @@ Type (List.map Type_var.name l)
+
+let enum_entry_name ~how (type a) =
+  function
+  | (Int _ as i : a bounded integer) ->
+    let (module M) = O.module_of_int_ty i in
+    begin match how with
+    | `Theory false -> M.theory
+    | `Theory true -> M.bit_theory
+    | `Module (false, false) -> M.unsafe_module
+    | `Module (false, true) -> M.unsafe_bit_module
+    | `Module (true, false) -> M.safe_module
+    | `Module (true, true) -> M.safe_bit_module
+    end
+  | Enum _ as e ->
+    let (module M) = O.module_of_enum_ty e in
+    match how  with
+    | `Theory _ -> M.theory
+    | `Module (false, _) -> M.unsafe_module
+    | `Module (true, _) -> M.safe_module
+
+let enums eis =
+  let open O in
+  let generic_enum = Mod.dummy "Generic_enum" in
+  let safe_enum = Mod.dummy "Safe_enum" in
+  let unsafe_enum = Mod.dummy "Unsafe_enum" in
+  let safe_enum_ext = Mod.dummy "Safe_enum_ext" in
+  let unsafe_enum_ext = Mod.dummy "Unsafe_enum_ext" in
+  let open O in
+  let here = [`Namespace (None, None)] in
+  let mod_ ~th ~safe ty =
+    Entry.some @@
+    Mod.mk
+      ~name:(enum_entry_name ~how:(`Module (safe, false)) ty)
+      ~safe
+      ~deps:[Dependency (Use (`Import None, th));
+             Dependency (Clone (`Export, generic_enum, here));
+             Dependency (Clone (`Export, (if safe then safe_enum else unsafe_enum), here));
+             Dependency (Clone (`Export, (if safe then safe_enum_ext else unsafe_enum_ext), here))]
+      []
+  in
+  let enum = Th.dummy "Enum" in
+  let safe_bit_enum = Mod.dummy "Safe_bit_enum" in
+  let unsafe_bit_enum = Mod.dummy "Unsafe_bit_enum" in
+  Entry.some enum ::
+  List.map
+    Entry.some
+    [generic_enum; safe_enum; unsafe_enum; safe_enum_ext; unsafe_enum_ext; safe_bit_enum; unsafe_bit_enum] @
+  List.flatten @@
+  ListLabels.map
+    eis
+    ~f:(function
+      | { ei_type = Int (r, b) } ->
+        let i : _ integer = Int (r, b) in
+        let th = Th.dummy (enum_entry_name ~how:(`Theory false) i) in
+        let bw_th = Th.dummy (enum_entry_name ~how:(`Theory true) i) in
+        let bw_mod ~safe =
+          Entry.some
+            (Mod.mk
+               ~name:(enum_entry_name ~how:(`Module (safe, true)) i)
+               ~safe
+               ~deps:[Dependency (Use (`Import None, th));
+                      Dependency (Clone (`Export, (if safe then safe_enum else unsafe_enum), here));
+                      Dependency (Clone (`Export, (if safe then safe_bit_enum else unsafe_bit_enum), here))]
+               [])
+        in
+        Entry.[some th;
+               some bw_th;
+               mod_ ~th ~safe:false i;
+               mod_ ~th ~safe:true i;
+               bw_mod ~safe:false;
+               bw_mod ~safe:true]
+      | { ei_type = Enum e; ei_min; ei_max } ->
+        let e = Enum e in
+        let min = "min" and max = "max" in
+        let enum_aux =
+          Th.mk
+            ~name:(enum_entry_name ~how:(`Theory false) e ^ "_aux")
+            [Wd.mk ~name:min @@ Function ([], Lt.integer, T.num ei_min);
+             Wd.mk ~name:max @@ Function ([], Lt.integer, T.num ei_max)]
+        in
+        let th =
+          Th.mk
+            ~name:(enum_entry_name ~how:(`Theory false) e)
+            ~deps:[Use (`Import None, enum_aux);
+                   Clone (`Export, enum, [`Constant (min, min); `Constant (max, max)])]
+            []
+        in
+        Entry.[some enum_aux; some th; mod_ ~th ~safe:false e; mod_ ~th ~safe:true e])
+
+let enum_cast (ei_to, ei_from) =
+  let return ~bw ~from ~to_ =
+    let open O in
+    let name ~of_ = enum_entry_name ~how:of_ to_ ^ "_of_" ^ enum_entry_name ~how:of_ from in
+    let n = "n" in
+    let lt_from = Lt.int from in
+    let lt_to = Lt.int to_ in
+    let to_int t = T.(To_int from $. t) in
+    let cast_name m = "cast" ^ if m then "_modulo" else "" in
+    let cast ~m =
+      Wd.mk
+        ~name:(cast_name m)
+        (Function ([n, Logic_type lt_from], lt_to, T.(Of_int (to_, m) $. to_int @@ T.var n)))
+    in
+    let bw_cast = "bw_cast" in
+    let bw_cast_def =
+      [Wd.mk
+         ~name:bw_cast
+         (Logic ([n, Logic_type lt_from], lt_to));
+       Wd.mk
+         ~name:"Bw_cast_eq"
+         (let cast = T.cast ~modulo:true ~from ~to_ in
+          let bw_cast = T.($.) (F.local bw_cast) in
+          Goal (KAxiom,
+                P.(forall n lt_from ~trigs:(fun n -> [[Term (cast n)]; [Term (bw_cast n)]])
+                  (fun n -> cast n = bw_cast n))))]
+    in
+    let cast_val ~safe ~bw ~m =
+      let n_t = T.var n in
+      let from = enum_entry_name ~how:(`Theory bw) to_, true in
+      Wd.mk
+        ~name:(cast_name m)
+        (Param (Arrow
+                  (n, Logic lt_from,
+                   (Annot
+                      ((if safe && not m && (ei_to.ei_min > ei_from.ei_min || ei_to.ei_max < ei_from.ei_max)
+                        then P.(F.user ~from "in_bounds" $. n_t)
+                        else True),
+                       Logic lt_to,
+                       [],
+                       [],
+                       P.(T.(To_int to_ $. T.result =
+                             let n_i = to_int n_t in if m then F.user ~from "normalize" $. n_i else n_i) &&
+                          if bw then T.(result = (F.user ~from:(name ~of_:(`Theory true), true) bw_cast $. n_t))
+                          else True),
+                       [])))))
+    in
+    let mods ~bw =
+      [Entry.some @@
+       Mod.mk
+         ~name:(name ~of_:(`Module (false, false)))
+         ~safe:false
+         [cast_val ~safe:false ~bw ~m:false; cast_val ~safe:false ~bw ~m:true];
+       Entry.some @@
+       Mod.mk
+         ~name:(name ~of_:(`Module (true, false)))
+         ~safe:true
+         [cast_val ~safe:true ~bw ~m:false; cast_val ~safe:true ~bw ~m:false]]
+    in
+    Entry.some
+      (Th.mk
+         ~name:(name ~of_:(`Theory false))
+         [cast ~m:false; cast ~m:true]) ::
+    mods false @
+    if bw then
+      Entry.some
+        (Th.mk
+           ~name:(name ~of_:(`Theory true))
+           ([cast ~m:false; cast ~m:true] @ bw_cast_def)) ::
+      mods true
+    else
+      []
+  in
+  match ei_to.ei_type, ei_from.ei_type with
+  | Int (r1, b1), Int (r2, b2) -> return ~from:(Int (r2, b2)) ~to_:(Int (r1, b1)) ~bw:true
+  | Int (r1, b1), Enum e2 -> return ~from:(Enum e2) ~to_:(Int (r1, b1)) ~bw:false
+  | Enum e1, Int (r2, b2) -> return ~from:(Int (r2, b2)) ~to_:(Enum e1) ~bw:false
+  | Enum e1, Enum e2 -> return ~from:(Enum e2) ~to_:(Enum e1) ~bw:false
 
 let tr_exception ei acc =
   Options.lprintf "producing exception '%s'@." ei.exi_name;

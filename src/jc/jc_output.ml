@@ -104,7 +104,9 @@ struct
 
   type 'a poly = { func : 'b. ('a, 'b) func }
 
-  let user s ~from:(name, import) = (User (name, import, s) : _ t)
+  let user s ~from:(name, qualified) = (User (name, qualified, s) : _ t)
+
+  let local s = user ~from:("", false) s
 
   let jc = user ~from:Name.Theory.jessie
 
@@ -242,6 +244,8 @@ struct
   let bool b : _ t = Const (Bool b)
 
   let var s : _ t = Var s
+
+  let result : _ t = Var "result"
 
   let positioned l_pos ?behavior:(l_behavior = "default") ?kind:l_kind t =
     (Labeled ({ l_kind; l_behavior; l_pos }, t) : _ term)
@@ -511,13 +515,13 @@ module Wt =
 struct
   type 'a t = 'a why_type
 
-  let base t = Base_type Lt.(t $ Nil)
+  let logic t : _ why_type = Logic Lt.(t $ Nil)
 
-  let integer = Pervasives.(base @@ Numeric (Integral Integer))
+  let integer = Pervasives.(logic @@ Numeric (Integral Integer))
 
-  let bool = base Bool
+  let bool = logic Bool
 
-  let void = base Void
+  let void = logic Void
 
   type some = some_why_type
 
@@ -531,24 +535,24 @@ struct
 
   let rec ty : type a. a t -> a typed =
     function
-    | Prod_type (_, t1, t2) ->
+    | Arrow (_, t1, t2) ->
       begin match ty t1, ty t2 with
       | (Ty ty1 | Ty' ty1), (Ty ty2 | Ty' ty2) -> Ty' (Arrow (ty1, ty2))
       | (Ty ty1 | Ty' ty1), (Poly _ | Poly' _) -> Ty' (Arrow (ty1, Ex))
       | (Poly _ | Poly' _), (Ty ty1 | Ty' ty1) -> Ty' (Arrow (Ex, ty1))
       | (Poly _ | Poly' _), (Poly _ | Poly' _) -> Ty' (Arrow (Ex, Ex))
       end
-    | Base_type lt ->
+    | Logic lt ->
       begin match Lt.ty lt with
       | Lt.Ty ty -> Ty ty
-      | Lt.Poly { Lt.logic_type } -> Poly { why_type = Base_type logic_type }
+      | Lt.Poly { Lt.logic_type } -> Poly { why_type = Logic logic_type }
       end
-    | Ref_type r ->
+    | Ref r ->
       begin match ty r with
       | Ty ty | Ty' ty -> Ty' (Ref ty)
       | Poly _ | Poly' _ -> Ty' (Ref Ex)
       end
-    | Annot_type (_ , wt, _, _, _, _) ->
+    | Annot (_ , wt, _, _, _, _) ->
       begin match ty wt with
       | Ty ty | Ty' ty -> Ty' ty
       | Poly poly | Poly' poly -> Poly' poly
@@ -909,16 +913,16 @@ end
 module Make_enum (E : Enum) =
 struct
   type bound = E.t enum
-  let ty = Integral (Enum (module E))
+  let ty = Enum (module E)
   let name = E.name
 end
 
 module Make_bounded (I : Bounded) (O : Op_gen) =
 struct
   include I
-  let theory = String.capitalize name
-  let safe_module = "Safe_" ^ name
-  let unsafe_module = "Unsafe_" ^ name
+  let theory = "Enum_" ^ name
+  let safe_module = "Safe_enum_" ^ name
+  let unsafe_module = "Unsafe_enum_" ^ name
   type t = I.bound bounded integer
   let rel pred t1 t2 : pred = App (B_num_pred (pred, Integral I.ty), T.(t1 ^. t2))
   module T =
@@ -963,6 +967,16 @@ sig
   type bound
   include module type of Make_bounded (Enum (struct type bound' = bound end)) (Empty) with type bound := bound
 end
+
+let module_of_enum_ty (type e) = fun (Enum (module E : Output_ast.Enum with type t = e)) ->
+  let cache = Hashtbl.create 10 in
+  try
+    Hashtbl.find cache E.name
+  with
+  | Not_found ->
+    let r = (module Make_bounded (Make_enum (E)) (Empty) : Enum with type bound = e enum) in
+    Hashtbl.replace cache E.name r;
+    r
 
 module type Int_sig =
 sig
@@ -1203,11 +1217,11 @@ struct
 
   let if_ cond ~then_ ~else_ : pred = If (cond, then_, else_)
 
-  let let_ v ~(equal : 'a term) ~in_ : pred = Let (v, equal, in_ (T.var v : 'a term))
+  let let_ v ~equal ~in_ : pred = Let (v, equal, in_ (T.var v))
 
-  let forall v (ty : 'a logic_type) ?(trigs=[]) p = Forall (v, ty, trigs, p (T.var v : 'a term))
+  let forall v ty ?(trigs=(fun _ -> [])) p = let v_t = T.var v in Forall (v, ty, trigs v_t, p v_t)
 
-  let exists v (ty : 'a logic_type) ?(trigs=[]) p = Exists (v, ty, trigs, p (T.var v : 'a term))
+  let exists v ty ?(trigs=(fun _ -> [])) p = let v_t = T.var v in Exists (v, ty, trigs v_t, p v_t)
 
   let impl p1 p2 =
     match unlabel p1, unlabel p2 with
