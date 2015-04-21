@@ -113,7 +113,8 @@ let single_term comp result_region t =
   | JCTrange _ | JCTunary _            | JCTderef _      | JCTold _
   | JCTat _    | JCToffset _           | JCTbase_block _
   | JCTaddress _                       | JCTinstanceof _
-  | JCTcast _  | JCTbitwise_cast _     | JCTrange_cast _ | JCTreal_cast _ ->
+  | JCTcast _  | JCTrange_cast _       | JCTrange_cast_mod _
+  | JCTreal_cast _ ->
     ()
 
 let term comp result_region = Iterators.iter_term (single_term comp result_region)
@@ -212,8 +213,9 @@ let single_expr code_comp logic_comp result_region e =
   | JCEconst _        | JCEvar _        | JCEshift _   | JCEunary _
   | JCEderef _        | JCEoffset _     | JCEaddress _ | JCEinstanceof _
   | JCEcast _         | JCEreinterpret _
-  | JCEbitwise_cast _ | JCEbase_block _ | JCEfresh _
-  | JCErange_cast _   | JCEreal_cast _  | JCEalloc _   | JCEfree _
+  | JCEbase_block _   | JCEfresh _
+  | JCErange_cast _   |JCErange_cast_mod _             | JCEreal_cast _
+  | JCEalloc _        | JCEfree _
   | JCElet (_, None, _)
   | JCEloop (_, _)    | JCEblock _      | JCEtry _
   | JCEreturn_void    | JCEpack _       | JCEunpack _ ->
@@ -341,7 +343,8 @@ let regionalize_assertion a assoc =
          | JCTconst _      | JCTvar _     | JCTshift _
          | JCTderef _      | JCTbinary _  | JCTunary _        | JCTold _        | JCTat _        | JCToffset _
          | JCTaddress _    | JCTbase_block _
-         | JCTinstanceof _ | JCTcast _    | JCTbitwise_cast _ | JCTrange_cast _ | JCTreal_cast _ | JCTif _
+         | JCTinstanceof _ | JCTcast _    | JCTrange_cast _   | JCTrange_cast_mod _
+         | JCTreal_cast _  | JCTif _
          | JCTmatch _      | JCTrange _   | JCTlet _ -> t
        in
        try

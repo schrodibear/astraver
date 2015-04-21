@@ -160,6 +160,21 @@ struct
 
   let pset_empty () : (unit, _) t = jc "pset_empty"
 
+  let cast_factor () = jc "cast_factor"
+
+  let reinterpret ~safe =
+    jc_val @@
+    if safe then "safe_reinterpret"
+    else "reinterpret"
+
+  let reinterpret_cast op =
+    jc @@
+    "reinterpret_cast_" ^
+    match op with
+    | `Retain -> "retain"
+    | `Merge _ -> "merge"
+    | `Split _ -> "split"
+
   type ('a, 'b) typed =
     | Ty of 'a ty
     | Poly of 'b poly

@@ -41,10 +41,6 @@ open Region
 open Common
 open Output_ast
 
-let pointer_type_name = "pointer"
-let pset_type_name = "pset"
-let tag_id_type_name = "tag_id"
-
 let old s = "old_" ^ s
 
 module Type =
@@ -59,6 +55,9 @@ struct
   let memory = "memory"
   let alloc_table = "alloc_table"
   let tag_table = "tag_table"
+  let pointer = "pointer"
+  let pset = "pset"
+  let tag_id = "tag_id"
 end
 
 module Class =
@@ -113,6 +112,9 @@ let memory (fi, r) =
   else
     fi.fi_final_name
 
+let exception_ ei =
+  ei.exi_name ^ "_exc"
+
 module Generic =
 struct
   let tag_table ri =  (Type.root ri) ^ "_tag_table"
@@ -132,12 +134,12 @@ struct
   (* ATTENTION: this theory is non-existent, there is no more "obsolete" support for BV,
      the new implementation of BV in Why3 should become supported by Jessie2. *)
   let bitvector = "Bitvector", false
-  let jessie = "jessie3theories.Jc_memory_model", false
-  let bool = "bool.Bool", true
-  let single = "jessie3theories.Single", true
-  let double = "jessie3theories.Double", true
-  let binary80 = "jessie3theories.Binary80", true
-  let real = "real.Real", true
+  let jessie = "Jessie_theory", false
+  let bool = "Bool", true
+  let single = "Single", true
+  let double = "Double", true
+  let binary80 = "Binary80", true
+  let real = "Real", true
   let current = "", false
   let struct_ =
     function
@@ -150,8 +152,8 @@ end
 module Module =
 struct
   type t = string * bool
-  let jessie = "Jessie3", false
-  let struct_ ~safe si = (fst (Theory.struct_ si) ^ if safe then "safe" else "unsafe"), true
+  let jessie = "Jessie_module", false
+  let struct_ ~safe pc = (fst (Theory.struct_ pc) ^ if safe then "_safe" else "_unsafe"), true
   let func ~extern ~safe f =
     "Function_" ^ f.fun_final_name ^
     match extern, safe with
@@ -159,6 +161,8 @@ struct
     | true, false -> "_requires"
     | false, true -> "_behaviors"
     | false, false -> "_safety"
+  let exceptions = "Exceptions"
+  let globals pc = "Globals_" ^ Option.map_default ~default:"simple" ~f:(String.lowercase % fst % Theory.struct_) pc
 end
 
 module Pred =
@@ -248,12 +252,6 @@ struct
   let any_enum ae = "any" ^ string_of_some_enum ae
 end
 
-let root_alloc_table_name vi = vi.ri_name ^ "_alloc_table"
-
-let root_tag_table_name vi = vi.ri_name ^ "_tag_table"
-
-let root_axiom_on_tags_name vi = vi.ri_name ^ "_tags"
-
 let of_pointer_address_name vi =
   vi.ri_name ^ "_of_pointer_address"
 
@@ -318,9 +316,6 @@ let mem_to_bitvector_param_name pc =
 let jessie_return_variable = "return"
 let jessie_return_exception = "Return"
 
-let exception_name ei =
-  ei.exi_name ^ "_exc"
-
 let mutable_name pc =
   "mutable_" ^ (Class.pointer pc)
 
@@ -351,19 +346,6 @@ let unique_name =
       s ^ "_" ^ (string_of_int !count)
     with Not_found ->
       Hashtbl.add unique_names s (ref 0); s
-
-let cast_factor_name = "cast_factor"
-
-let reinterpret_parameter_name ~safety_checking =
-  if safety_checking () then "reinterpret_parameter"
-                        else "safe_reinterpret_parameter"
-
-let reinterpret_cast_name op =
-  "reinterpret_cast_" ^
-  match op with
-  | `Retain -> "retain"
-  | `Merge _ -> "merge"
-  | `Split _ -> "split"
 
 let logic_integer_of_bitvector_name = "integer_of_bitvector"
 let logic_bitvector_of_integer_name = "bitvector_of_integer"

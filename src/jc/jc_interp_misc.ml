@@ -161,15 +161,15 @@ let memory_class_type mc = alloc_class_type (alloc_class_of_mem_class mc)
 
 (* raw types *)
 
-let raw_pointer_type ty' = O.Lt.(jc pointer_type_name $. ty')
+let raw_pointer_type ty' = O.Lt.(jc Name.Type.pointer $. ty')
 
-let raw_pset_type ty' = O.Lt.(jc pset_type_name $. ty')
+let raw_pset_type ty' = O.Lt.(jc Name.Type.pset $. ty')
 
 let raw_alloc_table_type ty' = O.Lt.(jc Name.Type.alloc_table $. ty')
 
 let raw_tag_table_type ty' = O.Lt.(jc Name.Type.tag_table $. ty')
 
-let raw_tag_id_type ty' = O.Lt.(jc tag_id_type_name $. ty')
+let raw_tag_id_type ty' = O.Lt.(jc Name.Type.tag_id $. ty')
 
 let raw_memory_type ty1' ty2' = O.Lt.(jc Name.Type.memory $ ty1' ^. ty2')
 

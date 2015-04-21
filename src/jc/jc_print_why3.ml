@@ -1049,6 +1049,7 @@ struct
   let () =
     add_expansion "\\(Safe_\\|Unsafe_\\)?\\([Bb]it_\\)?[Ii]nt[0-9]+" (`Prefix "enum");
     add_expansion "Int" (`Prefix "int");
+    add_expansion "Bool" (`Prefix "bool");
     add_expansion "Jessie_theory" (`Prefix "core");
     add_expansion "Jessie_module" (`Prefix "core");
     add_expansion "\\([A-Za-z_]+_enum$\\|[A-Za-z_]+_enum_\\(ext\\)?\\|Enum\\)" (`Prefix "enum")

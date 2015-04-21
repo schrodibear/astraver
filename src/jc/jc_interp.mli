@@ -29,147 +29,159 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*open Output_ast
+open Env
+open Envset
+open Fenv
+open Output_ast
 
+module O = Aliases.Output
 
-(** {1 Main translation functions} *)
+val term :
+  ('a, 'b) ty_opt ->
+  ?subst:some_term VarMap.t ->
+  type_safe:bool ->
+  global_assertion:bool ->
+  relocate:bool ->
+  label -> label -> logic_info Ast.term -> 'a term
 
+val some_term :
+  ?subst:some_term VarMap.t ->
+  type_safe:bool ->
+  global_assertion:bool ->
+  relocate:bool ->
+  label ->
+  label ->
+  < label : label option; mark : string; node : logic_info Ast.term_node;
+    pos : Why_loc.position; region : region;
+    set_label : label option -> unit; set_region : region -> unit;
+    typ : jc_type > ->
+  some_term
 
-(** {2 effects} *)
+val named_term :
+  ('a, 'b) ty_opt ->
+  type_safe:bool ->
+  global_assertion:bool ->
+  relocate:bool ->
+  label -> label -> logic_info Ast.term -> 'a term
+
+val tag :
+  type_safe:bool ->
+  global_assertion:bool ->
+  relocate:bool ->
+  label ->
+  label -> < node : logic_info Ast.tag_node; .. > -> 'a term
+
+val predicate :
+  type_safe:bool ->
+  global_assertion:bool ->
+  relocate:bool -> label -> label -> logic_info Ast.assertion -> pred
+
+val named_predicate :
+  type_safe:bool ->
+  global_assertion:bool ->
+  ?kind:vc_kind ->
+  ?mark_recursively:bool ->
+  relocate:bool -> label -> label -> logic_info Ast.assertion -> pred
+
+val pset :
+  ('a, 'b) ty_opt ->
+  type_safe:bool ->
+  global_assertion:bool ->
+  label ->
+  < label : label option; node : logic_info Ast.location_set_node;
+    pos : Why_loc.position; region : region;
+    set_label : label option -> unit; set_region : region -> unit;
+    typ : jc_type > ->
+  'a term
+
+val collect_locations :
+  type_safe:bool ->
+  global_assertion:bool ->
+  in_clause:[< `Allocates | `Assigns | `Reads > `Allocates ] ->
+  label ->
+  logic_info Ast.location ->
+  bool StringMap.t *
+  ('a term * fun_effect) list Region.MemoryMap.t ->
+  bool StringMap.t *
+  ('a term * fun_effect) list Region.MemoryMap.t
+
+val collect_pset_locations :
+  ('a, 'b) ty_opt ->
+  type_safe:bool ->
+  global_assertion:bool ->
+  label -> logic_info Ast.location -> 'a term
+
+val external_region : ?region_list:region list -> 'a * region -> bool
+
+val assigns :
+  type_safe:bool ->
+  ?region_list:region list ->
+  label ->
+  fun_effect ->
+  (Why_loc.position * logic_info Ast.location list) option -> pred
+
+val loop_assigns :
+  type_safe:bool ->
+  ?region_list:region list ->
+  label -> fun_effect -> logic_info Ast.location list option -> pred
+
 val reads :
   type_safe:bool ->
   global_assertion:bool ->
-  Fenv.logic_info Ast.location list ->
-  Env.mem_class * Env.region -> term
+  logic_info Ast.location list -> mem_class * region -> 'a term
 
-val collect_pset_locations :
-  type_safe:bool ->
-  global_assertion:bool ->
-  Env.label ->
-  Fenv.logic_info Ast.location ->
-  term
-
-(** {2 types} *)
-
-val tr_logic_type :
-  string * Type_var.t list ->
-  why_decl list -> why_decl list
-
-val struc :
-  Env.struct_info -> why_decl list -> why_decl list
-
-val root :
-  Env.root_info -> why_decl list -> why_decl list
-
-val tr_enum_type :
-  Env.enum_info -> why_decl list -> why_decl list
-
-val tr_enum_type_pair :
-  Env.enum_info ->
-  Env.enum_info -> why_decl list -> why_decl list
-
-(** {2 variables and heap} *)
-
-val tr_variable :
-  Env.var_info ->
-  'a -> why_decl list -> why_decl list
-
-val tr_region :
-  Env.region -> why_decl list -> why_decl list
-
-val tr_memory :
-  Env.mem_class * Env.region ->
-  why_decl list -> why_decl list
-
-val tr_alloc_table :
-  Env.alloc_class * Env.region ->
-  why_decl list -> why_decl list
-
-val tr_tag_table :
-  Env.root_info * Env.region ->
-  why_decl list -> why_decl list
-
-(** {2 exceptions} *)
-
-
-val tr_exception :
-  Env.exception_info ->
-  why_decl list -> why_decl list
-
-
-(** {2 terms and propositions} *)
-
-val term_coerce :
-  type_safe:'a ->
-  global_assertion:bool ->
-  Env.label ->
-  ?cast:bool ->
-  Why_loc.position ->
-  Env.jc_type ->
-  Env.jc_type ->
-  < region : Region.RegionTable.key; .. > ->
-    term -> term
-
-val term :
-  ?subst:term Envset.VarMap.t ->
-  type_safe:bool ->
-  global_assertion:bool ->
-  relocate:bool ->
-  Env.label ->
-  Env.label ->
-  Fenv.logic_info Ast.term -> term
-
-val assertion :
-  type_safe:bool ->
-  global_assertion:bool ->
-  relocate:bool ->
-  Env.label ->
-  Env.label ->
-  Fenv.logic_info Ast.assertion -> assertion
-
-
-(** {2 theories} *)
-
-val tr_axiom :
-  Why_loc.position ->
+val assumption :
+  logic_info Ast.assertion list -> pred -> void expr
+val check : logic_info Ast.assertion list -> pred -> void expr
+val expr :
+  ('a, 'b) ty_opt -> (logic_info, fun_info) Ast.expr -> 'a expr
+val some_expr : (logic_info, fun_info) Ast.expr -> some_expr
+val axiom :
+  Lexing.position * Lexing.position ->
   string ->
   is_axiom:bool ->
-  Env.label list ->
-  Fenv.logic_info Ast.assertion ->
-  why_decl list -> why_decl list
-
-val tr_axiomatic_decl :
-  why_decl list ->
-  Typing.axiomatic_decl -> why_decl list
-
-(** {2 functions} *)
-
-val pre_tr_fun :
-  Fenv.fun_info ->
-  'a -> Fenv.logic_info Ast.fun_spec -> 'b -> 'c -> 'c
-
-val tr_fun :
-  Fenv.fun_info ->
-  Why_loc.position ->
-  Fenv.fun_spec ->
-  (Fenv.logic_info, Fenv.fun_info) Ast.expr option ->
-  why_decl list -> why_decl list
-
-val tr_specialized_fun :
-  string ->
-  string ->
-  string Envset.StringMap.t ->
-  why_decl list -> why_decl list
-
-(** {2 locations and explanations} *)
-
-(*
-val print_locs : Format.formatter -> unit
-  *)
+  label list -> logic_info Ast.assertion -> [ `Theory ] why_decl list
+val axiomatic_decl : Typing.axiomatic_decl -> [ `Theory ] why_decl list
+val logic_fun :
+  logic_info ->
+  logic_info Ast.term_or_assertion -> [ `Theory ] why_decl list
+val aximatic : string -> Typing.axiomatic_data -> some_entry list
+val allocates :
+  internal:label option ->
+  type_safe:bool ->
+  ?region_list:region list ->
+  fun_effect -> (Why_loc.position * Fenv.location list) option -> pred
+val func :
+  fun_info ->
+  Lexing.position * Lexing.position ->
+  logic_info Ast.fun_spec ->
+  (logic_info, fun_info) Ast.expr option -> some_entry list
+val logic_type : string * type_var_info list -> [ `Theory ] why_decl
+val enums : enum_info list -> some_entry list
+val enum_cast : enum_info * enum_info -> some_entry list
+val exception_ : exception_info -> [ `Module of bool ] why_decl
+val variable : var_info -> [ `Module of bool ] why_decl
+val memory : mem_class * region -> [ `Module of bool ] why_decl
+val alloc_table : alloc_class * region -> [ `Module of bool ] why_decl
+val tag_table : root_info * region -> [ `Module of bool ] why_decl
+val struc : struct_info -> some_entry list
+val root : root_info -> some_entry list
+val alloc :
+  arg:('a expr,
+       check_size:bool ->
+       unbounded integer number expr -> 'a expr,
+       'b, [ `Range_0_n | `Singleton ], 'c, 'r)
+      arg ->
+  alloc_class * region -> pointer_class -> 'r
+val free :
+  safe:bool ->
+  alloc_class * region ->
+  pointer_class -> 'a expr -> void expr
+val valid_pre : in_param:bool -> effect -> var_info -> pred
+val instanceof_pre : effect -> var_info -> pred
 
 (*
   Local Variables:
-  compile-command: "unset LANG; make -j -C .. bin/jessie.byte"
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_interp.mli"
   End:
-*)
 *)

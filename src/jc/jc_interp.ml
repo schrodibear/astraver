@@ -928,7 +928,7 @@ let external_region ?region_list (_, r) =
   (* passed as argument and counted as effect *)
   Option.map_default ~f:(RegionList.mem r) ~default:true region_list
 
-let tr_assigns ~type_safe ?region_list before ef =
+let assigns ~type_safe ?region_list before ef =
   function
   | None -> True
   | Some (pos, locs) ->
@@ -978,10 +978,10 @@ let tr_assigns ~type_safe ?region_list before ef =
          O.P.(acc && mem_assigns))
       mems
 
-let tr_loop_assigns ~type_safe ?region_list before ef =
+let loop_assigns ~type_safe ?region_list before ef =
   Option.map_default
     ~default:True
-    ~f:(fun locs -> tr_assigns ~type_safe ?region_list before ef @@ Some (Why_loc.dummy_position, locs))
+    ~f:(fun locs -> assigns ~type_safe ?region_list before ef @@ Some (Why_loc.dummy_position, locs))
 
 let reads ~type_safe ~global_assertion locs (mc, r) =
   (StringMap.empty, MemoryMap.empty) |>
@@ -1698,7 +1698,7 @@ and make_reinterpret ~e e1 st =
       unsupported ~loc:e1#pos "reinterpret .. as construct is not supported when inv_sem = InvOwnership"
     | InvNone | InvArguments ->
       E.locate ~e
-        (O.F.jc_val (reinterpret_parameter_name ~safety_checking) $
+        (O.F.reinterpret ~safe:(safety_checking ()) $
          alloc ^ tag ^ var s_from ^ var s_to ^ mem_to ^. expr Any e1)
   in
 
@@ -1738,7 +1738,7 @@ and make_reinterpret ~e e1 st =
 
   let alloc_assumption =
     let app l =
-      O.P.(F.jc (reinterpret_cast_name op) $ tag ^ at' before alloc ^ at' LabelHere alloc ^ e' ^ T.var s_to ^ l)
+      O.P.(F.reinterpret_cast op $ tag ^ at' before alloc ^ at' LabelHere alloc ^ e' ^ T.var s_to ^ l)
     in
     match op with
     | `Retain -> app Nil
@@ -1834,7 +1834,7 @@ and make_reinterpret ~e e1 st =
            F.jc "rpointer_new" $ mem `Old ^. e' = (F.jc "downcast" $ tag ^ e' ^. var s_to)]
   in
 
-  let cast_factor_assumption = O.T.(F.jc cast_factor_name $ var s_from ^. var s_to = int c) in
+  let cast_factor_assumption = O.T.(F.cast_factor () $ var s_from ^. var s_to = int c) in
 
   let ensures_assumption =
     let open O.E in
@@ -2389,25 +2389,16 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
    - otherwise ignored
 
 *)
-        let loop_assigns =
+        let locs =
           List.fold_left
-            (fun acc (names,_inv,ass) ->
+            (fun acc (names, _inv, ass) ->
                match ass with
                  | Some i ->
                    if in_current_behavior names then
                      match acc with
                      | None -> Some i
-                     | Some l -> Some (i@l)
+                     | Some l -> Some (i @ l)
                    else
-                       (*
-                         if List.exists
-                         (fun behav -> behav#name = "default")
-                         names
-                         then
-                         (invariants,i::assumes)
-                       else
-                         (invariants,assumes)
-                       *)
                      acc
                  | None -> acc)
             None
@@ -2417,15 +2408,15 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
         let loop_label = fresh_loop_label() in
 
         let ass =
-          tr_loop_assigns
+          loop_assigns
             ~type_safe:false
             (LabelName loop_label)
             infunction.fun_effects
-            loop_assigns
+            locs
         in
 
         let ass_from_fun =
-          tr_assigns
+          assigns
             ~type_safe:false
             LabelPre
             infunction.fun_effects
@@ -2496,7 +2487,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
         let post =
           O.P.(
             a &&
-            tr_assigns
+            assigns
               ~type_safe:false
               (LabelName before)
               ef (* infunction.fun_effects*)
@@ -2533,16 +2524,16 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
         end
     | JCEthrow (exc, Some e1) ->
       let Expr e1' = some_expr e1 in
-      O.E.(mk @@ Raise (exception_name exc, Some e1'))
+      O.E.(mk @@ Raise (Name.exception_ exc, Some e1'))
     | JCEthrow (exc, None) ->
-      O.E.(mk @@ Raise (exception_name exc, None))
+      O.E.(mk @@ Raise (Name.exception_ exc, None))
     | JCEtry (s, catches, _finally) ->
       let Typ typ = ty s#typ in
       let catch (s, excs) (ei, v_opt, st) =
         if ExceptionSet.mem ei excs then
           O.E.(mk @@
                Try (s,
-                    exception_name ei,
+                    Name.exception_ ei,
                     Option.map (fun v -> v.vi_final_name) v_opt,
                     expr typ st),
            ExceptionSet.remove ei excs)
@@ -2683,7 +2674,7 @@ let make_not_assigns mem t l =
 (* axioms, lemmas, goals     *)
 (*****************************)
 
-let tr_axiom pos id ~is_axiom labels a =
+let axiom pos id ~is_axiom labels a =
   let lab = match labels with [lab] -> lab | _ -> LabelHere in
   (* Special (local) translation of effects for predicates with polymorphic memories.
      We first entirely exclude their effects from the assertion, then only restore the effects that
@@ -2702,12 +2693,12 @@ let tr_axiom pos id ~is_axiom labels a =
      ~pos:(Position.of_pos pos)
      (Goal ((if is_axiom then KAxiom else KLemma), a'))]
 
-let tr_axiomatic_decl d =
+let axiomatic_decl d =
   match d with
   | Typing.ABaxiom (loc, id, labels, p) ->
-      tr_axiom loc ~is_axiom:true id labels p
+      axiom loc ~is_axiom:true id labels p
 
-let tr_logic_fun f ta =
+let logic_fun f ta =
   let lab = match f.li_labels with [lab] -> lab | _ -> LabelHere in
   let fp = predicate ~type_safe:false ~global_assertion:true ~relocate:false lab lab in
   let ft typ = term typ ~type_safe:false ~global_assertion:true ~relocate:false lab lab in
@@ -2775,15 +2766,15 @@ let tr_logic_fun f ta =
   | None, JCTerm _
   | Some _, JCAssertion _ -> assert false
 
-let tr_aximatic name data =
+let aximatic name data =
   let open Typing in
   let logics =
     List.map
       (fun li ->
-         tr_logic_fun li (snd @@ IntHashtblIter.find logic_functions_table li.li_tag))
+          logic_fun li (snd @@ IntHashtblIter.find logic_functions_table li.li_tag))
       data.axiomatics_defined_ids
   in
-  let goals = List.map tr_axiomatic_decl data.axiomatics_decls in
+  let goals = List.map axiomatic_decl data.axiomatics_decls in
   O.[Entry.some (Th.mk ~name @@ List.flatten @@ logics @ goals)]
 
 (******************************************************************************)
@@ -2798,8 +2789,8 @@ let excep_posts_for_others exc_opt excep_behaviors =
          if exc.exi_tag = exc'.exi_tag then
            acc
          else
-           (exception_name exc, True) :: acc
-       | None -> (exception_name exc, True) :: acc)
+           (Name.exception_ exc, True) :: acc
+       | None -> (Name.exception_ exc, True) :: acc)
     excep_behaviors
     []
 
@@ -2868,7 +2859,7 @@ let map_embedded_fields ~f x =
         | _ -> [])
   | _ -> []
 
-let tr_allocates ~internal ~type_safe ?region_list ef =
+let allocates ~internal ~type_safe ?region_list ef =
   function
   | None -> True
   | Some (pos, locs) ->
@@ -2918,7 +2909,7 @@ let tr_allocates ~internal ~type_safe ?region_list ef =
     in
     mk_positioned @@ O.P.(alloc_frame && tag_frame)
 
-let pre_tr_fun f _funpos spec _body acc =
+let prepare_fun f _funpos spec _body acc =
   begin
     match spec.fs_decreases with
       | None -> ()
@@ -2927,10 +2918,7 @@ let pre_tr_fun f _funpos spec _body acc =
   end;
   acc
 
-let tr_fun f funpos spec body =
-  if Options.debug then
-    Format.printf "[interp] function %s@." f.fun_name;
-  Options.lprintf "Interp: function %s@." f.fun_name;
+let func f funpos spec body =
   (* handle parameters that are assigned in the body *)
   let assigned_params =
     List.fold_left
@@ -3010,7 +2998,7 @@ let tr_fun f funpos spec body =
            |>
            named_predicate ~type_safe ~global_assertion:false ~kind:JCVCensures ~relocate:false LabelPost LabelOld |>
            O.P.(&&) @@
-             tr_assigns
+             assigns
                ~type_safe
                ~region_list:f.fun_param_regions
                LabelOld
@@ -3023,7 +3011,7 @@ let tr_fun f funpos spec body =
            (* IMPORTANT: We should add the predicates BOTH to the external and internal postconditions, *)
            (* otherwise safety might be violated. *)
            O.P.(&&) @@
-             tr_allocates
+             allocates
                ~internal:None
                ~type_safe
                ~region_list:f.fun_param_regions
@@ -3191,7 +3179,7 @@ let tr_fun f funpos spec body =
          let a' =
            List.fold_right (add_postcondition ~internal:false) bl True
          in
-         (exception_name exc, a') :: acc)
+         (Name.exception_ exc, a') :: acc)
       excep_behaviors
       []
   in
@@ -3204,7 +3192,7 @@ let tr_fun f funpos spec body =
              bl
              True
          in
-         (exception_name exc, a') :: acc)
+         (Name.exception_ exc, a') :: acc)
       excep_behaviors_inferred
       []
   in
@@ -3292,7 +3280,7 @@ let tr_fun f funpos spec body =
                  (bname = "default") @@
                fun () ->
                let allocates =
-                 tr_allocates
+                 allocates
                    ~internal:(Some LabelPre)
                    ~type_safe:true
                    ~region_list:f.fun_param_regions
@@ -3431,7 +3419,7 @@ let tr_fun f funpos spec body =
                                    except_body,
                                    True,
                                    false,
-                                   (exception_name exc, internal_post) ::
+                                   (Name.exception_ exc, internal_post) ::
                                    excep_posts_for_others (Some exc) excep_behaviors))))))
                 user_excep_behaviors
                 [])]
@@ -3441,89 +3429,17 @@ let tr_fun f funpos spec body =
   external_safe :: external_unsafe :: behaviors
 
 
-let tr_fun f funpos spec body =
+let func f funpos spec body =
   set_current_function f;
-  let r = tr_fun f funpos spec body in
+  let r = func f funpos spec body in
   reset_current_function ();
   r
-
-(*
-let tr_specialized_fun n fname param_name_assoc acc =
-
-  let rec modif_why_type = function
-    | Prod_type(n,t1,t2) ->
-        if StringMap.mem n param_name_assoc then
-          modif_why_type t2
-        else Prod_type(n,t1,modif_why_type t2)
-    | Base_type b -> Base_type b
-    | Ref_type(t) -> Ref_type (modif_why_type t)
-    | Annot_type (pre,t,reads,writes,post,signals) ->
-        Annot_type (modif_assertion pre, modif_why_type t,
-                    modif_namelist reads,
-                    modif_namelist writes,
-                    modif_assertion post,
-                    List.map (fun (x,a) -> (x,modif_assertion a)) signals)
-
-  and modif_assertion a =
-    match a with
-      | LTrue
-      | LFalse -> a
-      | LAnd(a1,a2) -> LAnd(modif_assertion a1,modif_assertion a2)
-      | LOr(a1,a2) -> LOr(modif_assertion a1,modif_assertion a2)
-      | LIff(a1,a2) -> LIff(modif_assertion a1,modif_assertion a2)
-      | LNot(a1) -> LNot(modif_assertion a1)
-      | LImpl(a1,a2) -> LImpl(modif_assertion a1,modif_assertion a2)
-      | LIf(t,a1,a2) -> LIf(modif_term t,modif_assertion a1,modif_assertion a2)
-      | LLet(id,t,a) -> LLet(id,modif_term t,modif_assertion a)
-      | LForall(id,t,trigs,a) -> LForall(id,t,triggers trigs,modif_assertion a)
-      | LExists(id,t,trigs,a) -> LExists(id,t,triggers trigs,modif_assertion a)
-      | LPred(id,l) -> LPred(id,List.map modif_term l)
-      | LLabeled (l, a) -> LLabeled (l, modif_assertion a)
-
-  and triggers trigs =
-    let pat = function
-      | LPatT t -> LPatT (modif_term t)
-      | LPatP a -> LPatP (modif_assertion a) in
-    List.map (List.map pat) trigs
-
-  and modif_term t =
-    match t with
-      | LConst(_c) -> t
-      | LApp(id,l) -> LApp(id,List.map modif_term l)
-      | LVar(id) ->
-          let id = StringMap.find_or_default id id param_name_assoc in
-          LVar id
-      | LDeref(id) ->
-          let id = StringMap.find_or_default id id param_name_assoc in
-          LDeref id
-      | LDerefAtLabel(id,l) ->
-          let id = StringMap.find_or_default id id param_name_assoc in
-          LDerefAtLabel(id,l)
-      | TLabeled (l, t) -> TLabeled (l, modif_term t)
-      | TIf(t1,t2,t3) ->
-          TIf(modif_term t1,modif_term t2,modif_term t3)
-      | TLet(id,t1,t2) ->
-          let id = StringMap.find_or_default id id param_name_assoc in
-          TLet(id,modif_term t1,modif_term t2)
-
-  and modif_namelist names =
-    fst (List.fold_right
-           (fun id (acc,set) ->
-              let id = StringMap.find_or_default id id param_name_assoc in
-              id :: acc, StringSet.add id set
-           ) names ([],StringSet.empty))
-  in
-
-  let fun_type = Hashtbl.find function_prototypes fname in
-  let new_fun_type = modif_why_type fun_type in
-  Param(false, id_no_loc n, new_fun_type) :: acc
-*)
 
 (******************************************************************************)
 (*                               Logic entities                               *)
 (******************************************************************************)
 
-let tr_logic_type (name, l) = O.Wd.mk ~name @@ Type (List.map Type_var.name l)
+let logic_type (name, l) = O.Wd.mk ~name @@ Type (List.map Type_var.name l)
 
 let enum_entry_name ~how (type a) =
   function
@@ -3692,258 +3608,33 @@ let enum_cast (ei_to, ei_from) =
   | Enum e1, Int (r2, b2) -> return ~from:(Int (r2, b2)) ~to_:(Enum e1) ~bw:false
   | Enum e1, Enum e2 -> return ~from:(Enum e2) ~to_:(Enum e1) ~bw:false
 
-let tr_exception ei acc =
-  Options.lprintf "producing exception '%s'@." ei.exi_name;
-  let typ = match ei.exi_type with
-    | Some tei -> Some (tr_base_type tei)
-    | None -> None
+let exception_ ei =
+  let return typ_opt =
+    O.Wd.mk ~name:(Name.exception_ ei) @@ Exception typ_opt
   in
-  Exception(id_no_loc (exception_name ei), typ) :: acc
+  match ei.exi_type with
+  | Some tei -> let Logic_type t = some_logic_type tei in return (Some t)
+  | None -> return None
 
-(* let tr_native_type nty acc = *)
-(*   let lt = tr_base_type (JCTnative nty) in *)
-(*   Logic(false,logic_bitvector_of_native nty,["",lt],bitvector_type) *)
-(*   :: Logic(false,logic_native_of_bitvector nty,["",bitvector_type],lt) *)
-(*   :: Axiom((logic_native_of_bitvector nty)^"_of_"^(logic_bitvector_of_native nty), *)
-(*         LForall("x",lt, *)
-(*                 LPred(equality_op_for_type (JCTnative nty), *)
-(*                          [LApp(logic_native_of_bitvector nty, *)
-(*                                [LApp(logic_bitvector_of_native nty,  *)
-(*                                      [LVar "x"])]); *)
-(*                           LVar "x"]))) *)
-(*   :: Axiom((logic_bitvector_of_native nty)^"_of_"^(logic_native_of_bitvector nty), *)
-(*         LForall("x",bitvector_type, *)
-(*                 LPred("eq", (\* TODO: equality for bitvectors ? *\) *)
-(*                          [LApp(logic_bitvector_of_native nty, *)
-(*                                [LApp(logic_native_of_bitvector nty,  *)
-(*                                      [LVar "x"])]); *)
-(*                           LVar "x"]))) *)
-(*   :: acc *)
+let variable vi =
+  let Why_type wt = some_var_why_type vi in
+  let return wt = O.Wd.mk ~name:vi.vi_final_name @@ Param wt in
+  if vi.vi_assigned then return (Ref wt) else return wt
 
-let range_of_enum ri =
-  Num.add_num (Num.sub_num ri.ei_max ri.ei_min) (Num.Int 1)
+let memory (mc, r) =
+  O.Wd.mk ~name:(memory_name (mc, r)) @@ Param (Ref (Logic (memory_type mc)))
 
-let tr_enum_type =
-  let dummy = new assertion JCAtrue in
-  fun ri (* to_int of_int *) acc ->
-  let name = ri.ei_name in
-  let min = Num.string_of_num ri.ei_min in
-  let max = Num.string_of_num ri.ei_max in
-  let width = Num.string_of_num (range_of_enum ri) in
-  let lt = simple_logic_type name in
-  let in_bounds x =
-    mk_positioned_lex ~e:dummy ~kind:(JCVCpre ("Bounded " ^ name)) @@
-      LAnd (LPred ("le_int", [LConst(Prim_int min); x]),
-            LPred ("le_int", [x; LConst(Prim_int max)]))
-  in
-  let safe_of_int_type =
-    let post =
-      LPred("eq_int",
-            [LApp (logic_int_of_enum_name ri, [LVar "result"]);
-             if !Options.int_model = IMbounded then LVar "x"
-             else LApp (mod_of_enum_name ri, [LVar "x"])])
-    in
-    Prod_type ("x", Base_type (why_integer_type),
-               Annot_type (LTrue,
-                           Base_type lt,
-                           [], [], post, []))
-  in
-  let of_int_type =
-    let pre =
-      if !Options.int_model = IMbounded then in_bounds (LVar "x") else LTrue
-    in
-    let post =
-      LPred ("eq_int",
-             [LApp (logic_int_of_enum_name ri, [LVar "result"]);
-             if !Options.int_model = IMbounded then LVar "x"
-             else LApp (mod_of_enum_name ri, [LVar "x"])])
-    in
-    Prod_type ("x", Base_type (why_integer_type),
-               Annot_type (pre, Base_type lt, [], [], post, []))
-  in
-  let any_type =
-    Prod_type ("", Base_type (simple_logic_type "unit"),
-               Annot_type (LTrue, Base_type lt, [], [], LTrue, []))
-  in
-  let bv_conv =
-    if !Region.some_bitwise_region then
-      [Logic (false, id_no_loc (logic_bitvector_of_enum_name ri),
-              ["", lt], bitvector_type) ;
-       Logic (false, id_no_loc (logic_enum_of_bitvector_name ri),
-              ["", bitvector_type],lt) ;
-       Goal (KAxiom,id_no_loc ((logic_enum_of_bitvector_name ri) ^ "_of_" ^
-                                (logic_bitvector_of_enum_name ri)),
-             LForall ("x", lt, [],
-                    LPred (equality_op_for_type (JCTenum ri),
-                           [LApp (logic_enum_of_bitvector_name ri,
-                                 [LApp (logic_bitvector_of_enum_name ri,
-                                     [LVar "x"])]);
-                            LVar "x"])));
-       Goal (KAxiom, id_no_loc ((logic_bitvector_of_enum_name ri) ^ "_of_" ^
-                                (logic_enum_of_bitvector_name ri)),
-           LForall ("x", bitvector_type, [],
-                   LPred("eq", (* TODO: equality for bitvectors ? *)
-                         [LApp (logic_bitvector_of_enum_name ri,
-                               [LApp (logic_enum_of_bitvector_name ri,
-                                     [LVar "x"])]);
-                          LVar "x"]))) ]
-    else []
-  in
-  Type (id_no_loc name, [])
-  :: Logic (false, id_no_loc (logic_int_of_enum_name ri),
-            [("", lt)], why_integer_type)
-  :: Logic (false, id_no_loc (logic_enum_of_int_name ri),
-            [("", why_integer_type)], lt)
-  :: Predicate (false, id_no_loc (eq_of_enum_name ri), [("x", lt); ("y", lt)],
-                LPred ("eq_int", [LApp (logic_int_of_enum_name ri, [LVar "x"]);
-                                  LApp (logic_int_of_enum_name ri, [LVar "y"])]))
-  :: (if !Options.int_model = IMmodulo then
-        let width = LConst (Prim_int width) in
-        let fmod t = LApp (mod_of_enum_name ri, [t]) in
-        [Logic (false, id_no_loc (mod_of_enum_name ri),
-                ["x", simple_logic_type "int"], simple_logic_type "int");
-         Goal (KAxiom, id_no_loc (name ^ "_mod_def"),
-               LForall ("x", simple_logic_type "int", [],
-                        LPred ("eq_int", [LApp (mod_of_enum_name ri, [LVar "x"]);
-                                          LApp (logic_int_of_enum_name ri,
-                                                [LApp (logic_enum_of_int_name ri,
-                                                       [LVar "x"])])])));
-         Goal (KAxiom, id_no_loc (name ^ "_mod_lb"),
-               LForall ("x", simple_logic_type "int", [],
-                        LPred ("ge_int", [LApp (mod_of_enum_name ri, [LVar "x"]);
-                                          LConst (Prim_int min)])));
-         Goal (KAxiom, id_no_loc (name ^ "_mod_gb"),
-               LForall ("x", simple_logic_type "int", [],
-                        LPred ("le_int", [LApp (mod_of_enum_name ri, [LVar "x"]);
-                                          LConst (Prim_int max)])));
-         Goal (KAxiom, id_no_loc (name ^ "_mod_id"),
-                LForall ("x", simple_logic_type "int", [],
-                         LImpl (in_bounds (LVar "x"),
-                                LPred ("eq_int", [LApp (mod_of_enum_name ri,
-                                                        [LVar "x"]);
-                                                  LVar "x"]))));
-         Goal (KAxiom, id_no_loc (name ^ "_mod_lt"),
-               LForall ("x", simple_logic_type "int", [],
-                        LImpl (LPred ("lt_int", [LVar "x"; LConst (Prim_int min)]),
-                               LPred ("eq_int", [fmod (LVar "x");
-                                                 fmod (LApp ("add_int",
-                                                             [LVar "x"; width]))]))));
-         Goal (KAxiom, id_no_loc (name ^ "_mod_gt"),
-               LForall ("x", simple_logic_type "int", [],
-                        LImpl (LPred ("gt_int", [LVar "x";
-                                                 LConst (Prim_int max)]),
-                                LPred ("eq_int", [fmod (LVar "x");
-                                                  fmod (LApp ("sub_int",
-                                                              [LVar "x"; width]))]))))]
-      else [])
-  @  Param (false, id_no_loc (fun_enum_of_int_name ri), of_int_type)
-  :: Param (false, id_no_loc (safe_fun_enum_of_int_name ri), safe_of_int_type)
-  :: Param (false, id_no_loc (fun_any_enum_name ri), any_type)
-  :: Goal (KAxiom, id_no_loc (name ^ "_range"),
-           LForall ("x", lt, [], in_bounds
-                    (LApp (logic_int_of_enum_name ri, [LVar "x"]))))
-  :: Goal (KAxiom,id_no_loc (name ^ "_coerce"),
-           LForall ("x", why_integer_type, [],
-                    LImpl (in_bounds (LVar "x"),
-                           LPred("eq_int",
-                                 [LApp(logic_int_of_enum_name ri,
-                                       [LApp(logic_enum_of_int_name ri,
-                                             [LVar "x"])]);
-                                  LVar "x"]))))
-  :: Goal (KAxiom, id_no_loc (name ^ "_eq_extensionality"),
-           LForall ("x", lt, [],
-           LForall ("y", lt, [[LPatP (LPred (eq_of_enum_name ri, [LVar "x"; LVar "y"]))]],
-                    LImpl (LPred (eq_of_enum_name ri, [LVar "x"; LVar "y"]),
-                           LPred ("eq", [LVar "x"; LVar "y"])))))
-  :: Goal (KAxiom, id_no_loc (name ^ "_extensionality"),
-           LForall ("x", lt, [],
-           LForall ("y", lt, [[LPatP (LPred ("eq_int_bool",
-                               [LApp (logic_int_of_enum_name ri, [LVar "x"]);
-                                LApp (logic_int_of_enum_name ri, [LVar "y"])]))]],
-                   LImpl (LPred ("eq_int_bool",
-                                 [LApp (logic_int_of_enum_name ri, [LVar "x"]);
-                                  LApp (logic_int_of_enum_name ri, [LVar "y"])]),
-                          LPred ("eq", [LVar "x"; LVar "y"])))))
-  :: bv_conv
-  @ acc
+let alloc_table (pc, r) =
+  O.Wd.mk ~name:(Name.alloc_table (pc, r)) @@ Param (Ref (Logic (alloc_table_type pc)))
 
-let tr_enum_type_pair ri1 ri2 acc =
-  (* Information from first enum *)
-  let name1 = ri1.ei_name in
-  let min1 = ri1.ei_min in
-  let max1 = ri1.ei_max in
-  (* Information from second enum *)
-  let name2 = ri2.ei_name in
-  let min2 = ri2.ei_min in
-  let max2 = ri2.ei_max in
-  if not (!Options.int_model = IMmodulo) then acc else
-    if max1 </ min2 || max2 </ min1 then acc else
-      (* Compute intersection of ranges *)
-      let min = if min1 <=/ min2 && min2 <=/ max1 then min2 else min1 in
-      let max = if min1 <=/ max2 && max2 <=/ max1 then max2 else max1 in
-      let in_bounds x =
-        LAnd(LPred("le_int",[LConst(Prim_int (Num.string_of_num min)); x]),
-             LPred("le_int",[x; LConst(Prim_int (Num.string_of_num max))]))
-      in
-      (* Integer model is modulo and enum ranges intersect. Produce useful
-       * axioms that relate both modulos when they coincide.
-       *)
-      let range1 = range_of_enum ri1 in
-      let range2 = range_of_enum ri2 in
-      let mod_coincide smallri bigri smallname bigname =
-        (* When modulo the big range is in the intersection of the ranges,
-         * both modulos coincide.
-         *)
-        let modsmall = LApp(mod_of_enum_name smallri,[LVar "x"]) in
-        let modbig = LApp(mod_of_enum_name bigri,[LVar "x"]) in
-        Goal(KAxiom,id_no_loc (smallname ^ "_" ^ bigname ^ "_mod_coincide"),
-              LForall("x",why_integer_type, [],
-                      LImpl(in_bounds modbig,
-                            LPred("eq_int",[modsmall;modbig]))))
-      in
-      if range1 </ range2 then
-        mod_coincide ri1 ri2 name1 name2 :: acc
-      else if range2 </ range1 then
-        mod_coincide ri2 ri1 name2 name1 :: acc
-      else
-        mod_coincide ri1 ri2 name1 name2
-        :: mod_coincide ri2 ri1 name2 name1 :: acc
-
-let tr_variable vi _e acc =
-  if vi.vi_assigned then
-    let t = Ref_type(tr_var_type vi) in
-      Param(false,id_no_loc vi.vi_final_name,t)::acc
-  else
-    let t = tr_base_type vi.vi_type in
-      Logic(false,id_no_loc vi.vi_final_name,[],t)::acc
-
-let tr_region r acc =
-  Type(id_no_loc r.r_final_name,[]) :: acc
-
-let tr_memory (mc,r) acc =
-  Param(
-    false,id_no_loc (memory_name(mc,r)),
-    Ref_type(Base_type(memory_type mc))) :: acc
-
-let tr_alloc_table (pc, r) acc =
-  Param (
-    false,
-    id_no_loc @@ Name.alloc_table (pc, r),
-    Ref_type (Base_type (alloc_table_type pc)))
-  :: acc
-
-let tr_tag_table (rt, r) acc =
-  Param (
-    false,
-    id_no_loc @@ Name.tag_table (rt, r),
-    Ref_type (Base_type (tag_table_type rt)))
-  :: acc
+let tag_table (rt, r) =
+  O.Wd.mk ~name:(Name.tag_table (rt, r)) @@ Param (Ref (Logic (tag_table_type rt)))
 
 include Interp_struct
 
 (*
   Local Variables:
-  compile-command: "unset LANG; make -j -C .. bin/jessie.byte"
+  compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_interp.ml"
   End:
 *)
-*)
+
