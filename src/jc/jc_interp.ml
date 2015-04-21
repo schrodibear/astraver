@@ -330,7 +330,7 @@ let float_of_real (type a) (f : a precision) x =
     | _ -> raise Not_found
 
 let rec coerce :
-  type a b ax bx c d. (b, c) ty_opt -> (a, d) ty_opt -> (a, b, ax, bx) form -> e:_ -> e1:_ -> ax -> bx =
+  type a b ax bx c d. (b, c) ty_opt -> (a, d) ty_opt -> (a, b, ax, bx) form -> ?modulo:bool -> e:_ -> e1:_ -> ax -> bx =
   fun ty_dst ty_src form ->
     let apply : (a * unit, b) func -> ax -> bx =
       fun f e ->
@@ -356,7 +356,7 @@ let rec coerce :
       | JCTpointer (JCroot rt1, _, _), JCTpointer (JCroot rt2, _, _) -> rt1 == rt2
       | _ -> false
     in
-    fun ~e ~e1 e' ->
+    fun ?(modulo=false) ~e ~e1 e' ->
       let apply' f = apply f e' in
       let return = return e' in
       match ty_src, ty_dst with
@@ -397,14 +397,36 @@ let rec coerce :
         with
         | Not_found -> apply' @@ To_float (Float f)
         end
-      (* between enums and integer *)
-      | Ty (Numeric (Integral (Enum (module E1)))), Ty (Numeric (Integral (Enum (module E2))))
-        when (match E1.E with E2.E -> true | _ -> false) ->
-        begin match E1.E with E2.E -> return | _ -> assert false end
+      (* between enums and integers *)
+      | Ty (Numeric (Integral (Enum (module E1) as e1))), Ty (Numeric (Integral (Enum (module E2) as e2))) ->
+        begin match E1.E with
+          | E2.E -> return
+          | _ -> apply' @@ Cast (e2, e1, modulo)
+        end
+      | Ty (Numeric (Integral (Int (r1, b1) as i1))), Ty (Numeric (Integral (Int (r2, b2) as i2))) ->
+        begin match r1, b1, r2, b2 with
+        | Signed, X8, Signed, X8 -> return
+        | Unsigned, X8, Unsigned, X8 -> return
+        | Signed, X16, Signed, X16 -> return
+        | Unsigned, X16, Unsigned, X16 -> return
+        | Signed, X32, Signed, X32 -> return
+        | Unsigned, X32, Unsigned, X32 -> return
+        | Signed, X64, Signed, X64 -> return
+        | Unsigned, X64, Unsigned, X64 -> return
+        | _ -> apply' @@ Cast (i2, i1, modulo)
+        end
+      | Ty (Numeric (Integral (Enum _ as e1))), Ty (Numeric (Integral (Int _ as i2))) ->
+        apply' @@ Cast (i2, e1, modulo)
+      | Ty (Numeric (Integral (Int _ as i1))), Ty (Numeric (Integral (Enum _ as e2))) ->
+        apply' @@ Cast (e2, i1, modulo)
       | Ty (Numeric (Integral Integer)), Ty (Numeric (Integral (Int _ as i))) ->
-        apply' @@ Of_int (i, false)
+        apply' @@ Of_int (i, modulo)
+      | Ty (Numeric (Integral Integer)), Ty (Numeric (Integral (Enum _ as e))) ->
+        apply' @@ Of_int (e, modulo)
       | Ty (Numeric (Integral (Int _ as i))), Ty (Numeric (Integral Integer))  ->
         apply' @@ To_int i
+      | Ty (Numeric (Integral (Enum _ as e))), Ty (Numeric (Integral Integer))  ->
+        apply' @@ To_int e
       | Ty t1, Ty t2 ->
         begin try
           match O.Ty.eq t1 t2 with O.Ty.Eq -> return
@@ -514,12 +536,10 @@ let rec term :
       in
       return @@ coerce typ' typ Term ~e1:t1 @@ ft typ t1
     | JCTrange_cast_mod (t1, ei) ->
-      let t1 = ft (Ty (Numeric (Integral Integer))) t1 in
-      let return i = return O.T.(Of_int (i, true) $. t1) in
-      begin match ei.ei_type with
-        | Enum e -> return (Enum e)
-        | Int (r, b) -> return (Int (r, b))
-      end
+      let Typ typ, Typ typ' =
+        ty t1#typ, ty (JCTenum ei)
+      in
+      return @@ coerce typ' typ ~modulo:true Term ~e1:t1 @@ ft typ t1
     | JCTreal_cast (t1, _rc) ->
       let Typ typ' = ty t1#typ in
       let t1' = ft typ' t1 in
@@ -1964,13 +1984,16 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
         ~e
         ~e1
         (expr from_typ e1)
-    | JCErange_cast_mod (e1, ei) ->
-      let e1 = expr (Ty (Numeric (Integral Integer))) e1 in
-      let return i = return O.E.(Of_int (i, true) $. e1) in
-      begin match ei.ei_type with
-        | Enum e -> return (Enum e)
-        | Int (r, b) -> return (Int (r, b))
-      end
+    | JCErange_cast_mod (e1, _) ->
+      let Typ from_typ = ty e1#typ in
+      coerce
+        t
+        from_typ
+        ~modulo:true
+        Expr
+        ~e
+        ~e1
+        (expr from_typ e1)
     | JCEreal_cast (e1, rc) ->
       let Typ typ = ty e1#typ in
       let e1' = expr typ e1 in
@@ -2696,7 +2719,7 @@ let axiom pos id ~is_axiom labels a =
 let axiomatic_decl d =
   match d with
   | Typing.ABaxiom (loc, id, labels, p) ->
-      axiom loc ~is_axiom:true id labels p
+    axiom loc ~is_axiom:true id labels p
 
 let logic_fun f ta =
   let lab = match f.li_labels with [lab] -> lab | _ -> LabelHere in
@@ -2710,8 +2733,6 @@ let logic_fun f ta =
     let usual_params = List.map (some_tparam ~label_in_name:true lab) f.li_parameters in
     List.map (fun (n, _v, ty') -> n, ty') @@ usual_params @ model_params
   in
-  (* definition of the function *)
-  let th = Name.Theory.axiomatic f in
   (* Function definition *)
   match f.li_result_type, ta with
   (* Predicate *)
@@ -2728,7 +2749,7 @@ let logic_fun f ta =
       let axiom =
         let trig =
           let params = List.map O.(T.some % T.var % fst) params in
-          O.T.((th, f.li_final_name) $.. params)
+          O.T.((("", false), f.li_final_name) $.. params)
         in
         O.Wd.mk
           ~name:(f.li_final_name ^ "_definition")
@@ -2750,7 +2771,7 @@ let logic_fun f ta =
        (Inductive
           (params,
            List.map
-            (fun (id,_labels,a) ->
+            (fun (id, _labels, a) ->
               let ef = Effect.assertion empty_effects a in
               let a' = fp a in
               let params = li_model_args_3 ~label_in_name:true ef in
@@ -2766,7 +2787,7 @@ let logic_fun f ta =
   | None, JCTerm _
   | Some _, JCAssertion _ -> assert false
 
-let aximatic name data =
+let axiomatic name data =
   let open Typing in
   let logics =
     List.map
@@ -2776,6 +2797,15 @@ let aximatic name data =
   in
   let goals = List.map axiomatic_decl data.axiomatics_decls in
   O.[Entry.some (Th.mk ~name @@ List.flatten @@ logics @ goals)]
+
+let logic_fun li body =
+  if li.li_axiomatic = None then
+    O.[Entry.some @@ Th.mk ~name:(fst @@ Name.Theory.axiomatic li) @@ logic_fun li body]
+  else
+    []
+
+let lemma pos id ~is_axiom labels p =
+  O.[Entry.some @@ Th.mk ~name:(fst @@ Name.Theory.lemma ~is_axiom id) @@ axiom pos id ~is_axiom labels p]
 
 (******************************************************************************)
 (*                                 Functions                                  *)
@@ -2909,14 +2939,12 @@ let allocates ~internal ~type_safe ?region_list ef =
     in
     mk_positioned @@ O.P.(alloc_frame && tag_frame)
 
-let prepare_fun f _funpos spec _body acc =
-  begin
-    match spec.fs_decreases with
-      | None -> ()
-      | Some(t,r) ->
-          Hashtbl.add decreases_clause_table f.fun_tag (t,r)
-  end;
-  acc
+let prepare_fun f spec  =
+  begin match spec.fs_decreases with
+  | None -> ()
+  | Some (t, r) ->
+    Hashtbl.add decreases_clause_table f.fun_tag (t, r)
+  end
 
 let func f funpos spec body =
   (* handle parameters that are assigned in the body *)
@@ -3439,7 +3467,11 @@ let func f funpos spec body =
 (*                               Logic entities                               *)
 (******************************************************************************)
 
-let logic_type (name, l) = O.Wd.mk ~name @@ Type (List.map Type_var.name l)
+let logic_type (name, l) =
+  O.[Entry.some @@
+     Th.mk
+       ~name:(fst @@ Name.Theory.logic_type name)
+       [Wd.mk ~name @@ Type (List.map Type_var.name l)]]
 
 let enum_entry_name ~how (type a) =
   function
@@ -3616,6 +3648,14 @@ let exception_ ei =
   | Some tei -> let Logic_type t = some_logic_type tei in return (Some t)
   | None -> return None
 
+let exceptions () =
+  O.[Entry.some @@
+     Mod.mk ~safe:false ~name:(fst @@ Name.Module.exceptions) @@
+     StringHashtblIter.fold
+       (fun _ ei acc -> exception_ ei :: acc)
+       Typing.exceptions_table
+       []]
+
 let variable vi =
   let Why_type wt = some_var_why_type vi in
   let return wt = O.Wd.mk ~name:vi.vi_final_name @@ Param wt in
@@ -3629,6 +3669,81 @@ let alloc_table (pc, r) =
 
 let tag_table (rt, r) =
   O.Wd.mk ~name:(Name.tag_table (rt, r)) @@ Param (Ref (Logic (tag_table_type rt)))
+
+let globals () =
+  let wrap, return  =
+    let module H = Hashtbl.Make (PointerClass) in
+    let pcs = H.create 10 in
+    let module Rs = Hashtbl.Make (Region) in
+    let rs = Rs.create 10 in
+    let global = ref [] in
+    (fun f ->
+       f
+         ~add:(fun pc r decls ->
+           if not (Rs.mem rs r) then begin
+             Rs.add rs r ();
+             let decls = decls () in
+             match pc with
+             | Some pc ->
+               begin try
+                 let decls = H.find pcs pc @ decls in
+                  H.replace pcs pc decls
+               with
+               | Not_found -> H.add pcs pc decls
+                end
+             | None -> global := !global @ decls
+           end);
+       Rs.clear rs),
+    fun () ->
+      H.fold
+        (fun pc decls acc ->
+           O.(Entry.some @@ Mod.mk ~safe:false ~name:(fst @@ Name.Module.globals (Some pc)) decls) :: acc)
+        pcs
+        [] @
+      O.[Entry.some @@ Mod.mk ~safe:false ~name:(fst @@ Name.Module.globals None) !global]
+  in
+  wrap
+    (fun ~add ->
+       IntHashtblIter.iter
+         (fun _ (v, _) ->
+            add
+              (match v.vi_type with JCTpointer (pc, _, _) -> Some pc | _ -> None)
+              (Region.representative v.vi_region)
+              (fun () ->  [variable v]))
+         Typing.variables_table);
+  wrap
+    (fun ~add ->
+       StringHashtblIter.iter
+         (fun _ (mc, r) ->
+            add
+              (match mc with
+               | JCmem_field { fi_struct } -> Some (JCtag (fi_struct, []))
+               | JCmem_plain_union ri -> Some (JCroot ri)
+               | JCmem_bitvector -> None)
+              (Region.representative r)
+              (fun () -> [memory (mc, r)]))
+         Effect.constant_memories);
+  wrap
+    (fun ~add ->
+       StringHashtblIter.iter
+         (fun _ (ac, r)  ->
+            add
+              (match ac with
+               | JCalloc_root ri -> Some (JCroot ri)
+               | JCalloc_bitvector -> None)
+              (Region.representative r)
+              (fun () -> [alloc_table (ac, r)]))
+         Effect.constant_alloc_tables);
+  wrap
+    (fun ~add ->
+       StringHashtblIter.iter
+         (fun _ (ri, r) ->
+            add
+              (Some (JCroot ri))
+              (Region.representative r)
+              (fun () -> [tag_table (ri, r)]))
+         Effect.constant_tag_tables);
+  return ()
 
 include Interp_struct
 

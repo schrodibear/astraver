@@ -147,6 +147,8 @@ struct
     | JCroot ri -> "Root_" ^ ri.ri_name, true
   let axiomatic li =
     Option.map_default li.li_axiomatic ~default:("Logic_" ^ li.li_final_name) ~f:((^) "Axiomatic_"), true
+  let logic_type name = "Logic_type_" ^ name, true
+  let lemma ~is_axiom id = (if is_axiom then "Axiom_" else "Lemma_") ^ id, true
 end
 
 module Module =
@@ -161,8 +163,9 @@ struct
     | true, false -> "_requires"
     | false, true -> "_behaviors"
     | false, false -> "_safety"
-  let exceptions = "Exceptions"
-  let globals pc = "Globals_" ^ Option.map_default ~default:"simple" ~f:(String.lowercase % fst % Theory.struct_) pc
+  let exceptions = "Exceptions", true
+  let globals pc =
+    "Globals_" ^ Option.map_default ~default:"simple" ~f:(String.lowercase % fst % Theory.struct_) pc, true
 end
 
 module Pred =

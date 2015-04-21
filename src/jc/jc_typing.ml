@@ -477,7 +477,6 @@ let const c =
   | JCCnull -> null_type, Region.make_var JCTnull "null", c
   | JCCstring _ -> string_type, dummy_region,c
 
-
 let valid_pointer_type st =
   JCTpointer (st, Some (Num.num_of_int 0), Some (Num.num_of_int 0))
 
@@ -1004,7 +1003,7 @@ let rec term env (e : nexpr) =
           end
       | JCTnative _ -> assert false (* TODO *)
       | JCTenum ri ->
-        if is_integer te1#typ then
+        if is_integer te1#typ || is_enum te1#typ then
           JCTenum ri, dummy_region, JCTrange_cast (term_expand te1#typ ty te1, Some ri)
         else
           bad_type ~loc:e#pos te1#typ "integer type expected"
@@ -1014,7 +1013,7 @@ let rec term env (e : nexpr) =
           if superstruct st st1 then
             ty, te1#region, te1#node
           else if substruct st st1 then
-            JCTpointer (JCtag (st, []), a, b), te1#region, JCTcast(te1, label (), st)
+            JCTpointer (JCtag (st, []), a, b), te1#region, JCTcast (te1, label (), st)
           else
             typing_error ~loc:e#pos "invalid cast"
         | JCTnull -> typing_error ~loc:e#pos "invalid cast"
@@ -1028,7 +1027,7 @@ let rec term env (e : nexpr) =
       let te1 = ft e1 in
       let ty = type_type t in
       begin match ty with
-      | JCTenum ri when is_integer te1#typ ->
+      | JCTenum ri when is_integer te1#typ || is_enum te1#typ ->
         JCTenum ri, dummy_region, JCTrange_cast_mod (term_expand te1#typ ty te1, ri)
       | _ -> typing_error ~loc:e#pos "invalid modulo cast"
       end
@@ -2078,7 +2077,7 @@ let rec expr env e =
         end
       | JCTnative _ -> assert false (* TODO *)
       | JCTenum ri ->
-        if is_integer te1#typ then
+        if is_integer te1#typ || is_enum te1#typ then
           JCTenum ri, dummy_region, JCErange_cast (expand ty te1#typ te1, Some ri)
         else
           typing_error ~loc:e#pos "integer type expected"
@@ -2103,7 +2102,7 @@ let rec expr env e =
       let te1 = fe e1 in
       let ty = type_type t in
       begin match ty with
-      | JCTenum ri when is_integer te1#typ ->
+      | JCTenum ri when is_integer te1#typ || is_enum te1#typ ->
         JCTenum ri, dummy_region, JCErange_cast_mod (expand te1#typ ty te1, ri)
       | _ -> typing_error ~loc:e#pos "invalid modulo cast"
       end

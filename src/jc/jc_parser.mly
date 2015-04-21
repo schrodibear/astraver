@@ -772,7 +772,7 @@ expression:
 | LET type_expr IDENTIFIER EQ expression IN expression %prec PRECFORALL
     { locate (JCPElet (Some $2, $3, Some $5, $7)) }
 | postfix_expression assignment_operator expression %prec ASSIGNOP
-    { locate (JCPEassign ($1, $3) }
+    { locate (JCPEassign ($1, $3)) }
 
 | BSFORALL type_expr identifier_list triggers SEMICOLON expression
     %prec PRECFORALL
@@ -977,26 +977,26 @@ exception_expression:
 logic_definition:
 /* constants def */
 | LOGIC type_expr IDENTIFIER logic_type_arg EQ expression
-    { locate (JCDlogic(Some $2, $3, $4, [], [], JCexpr $6)) }
+    { locate (JCDlogic (Some $2, $3, $4, [], [], JCexpr $6)) }
 /* constants no def */
 | LOGIC type_expr IDENTIFIER logic_type_arg
-    { locate (JCDlogic(Some $2, $3, $4 , [], [], JCreads [])) }
+    { locate (JCDlogic (Some $2, $3, $4 , [], [], JCreads [])) }
 /* logic fun def */
 | LOGIC type_expr IDENTIFIER logic_type_arg label_binders parameters EQ expression
     { let p = lparams $6 in
-      locate (JCDlogic(Some $2, $3, $4 , $5, p, JCexpr $8)) }
+      locate (JCDlogic (Some $2, $3, $4 , $5, p, JCexpr $8)) }
 /* logic pred def */
 | PREDICATE IDENTIFIER logic_type_arg label_binders parameters EQ expression
     { let p = lparams $5 in
-      locate (JCDlogic(None, $2, $3  ,$4, p, JCexpr $7)) }
+      locate (JCDlogic (None, $2, $3  ,$4, p, JCexpr $7)) }
 /* logic pred inductive def */
 | PREDICATE IDENTIFIER logic_type_arg label_binders parameters LBRACE indcases RBRACE
     { let p = lparams $5 in
-      locate (JCDlogic(None, $2, $3 ,$4 , p, JCinductive $7)) }
+      locate (JCDlogic (None, $2, $3 ,$4 , p, JCinductive $7)) }
 | AXIOMATIC IDENTIFIER LBRACE logic_declarations RBRACE
-    { locate (JCDaxiomatic($2,$4)) }
+    { locate (JCDaxiomatic ($2, $4)) }
 | LEMMA IDENTIFIER logic_type_arg label_binders COLON expression
-    { locate( JCDlemma($2,false,$3,$4,$6)) }
+    { locate( JCDlemma ($2, false, $3, $4, $6)) }
 ;
 
 logic_declarations:
@@ -1016,24 +1016,24 @@ logic_type_arg:
 
 logic_declaration:
 | logic_definition
-    { $1 }
+  { $1 }
 | LOGIC TYPE IDENTIFIER logic_type_arg
-    { locate (JCDlogic_type ($3, $4)) }
+  { locate (JCDlogic_type ($3, $4)) }
 | PREDICATE IDENTIFIER logic_type_arg label_binders parameters reads
-    { let p = lparams $5 in
-      locate (JCDlogic(None, $2, $3, $4, p, $6)) }
+  { let p = lparams $5 in
+    locate (JCDlogic (None, $2, $3, $4, p, $6)) }
 | LOGIC type_expr IDENTIFIER logic_type_arg label_binders parameters reads
-	{ let p = lparams $6 in
-	  locate (JCDlogic(Some $2, $3, $4, $5, p, $7)) }
+  { let p = lparams $6 in
+    locate (JCDlogic (Some $2, $3, $4, $5, p, $7)) }
 | AXIOM identifier logic_type_arg label_binders COLON expression
-    { locate( JCDlemma($2#name,true,$3,$4,$6)) }
+    { locate( JCDlemma ($2#name, true, $3, $4, $6)) }
 ;
 
 indcases:
 | /* epsilon */
     { [] }
 | CASE identifier label_binders COLON expression SEMICOLON indcases
-    { ($2,$3,$5)::$7 }
+    { ($2, $3, $5) :: $7 }
 ;
 
 /************/
@@ -1042,15 +1042,15 @@ indcases:
 
 pattern:
 | identifier LBRACE field_patterns RBRACE
-    { locate (JCPPstruct($1, $3)) }
+    { locate (JCPPstruct ($1, $3)) }
 | identifier
     { locate (JCPPvar $1) }
 | LPAR pattern RPAR
     { $2 }
 | pattern PIPE pattern
-    { locate (JCPPor($1, $3)) }
+    { locate (JCPPor ($1, $3)) }
 | pattern AS identifier
-    { locate (JCPPas($1, $3)) }
+    { locate (JCPPas ($1, $3)) }
 | UNDERSCORE
     { locate JCPPany }
 | CONSTANT
@@ -1104,7 +1104,7 @@ type_expr_parameters:
 
 type_expr_restreint:
 |type_expr { $1, [] }
-|type_expr PIPE LPAR type_parameter_names RPAR {$1,$4}
+|type_expr PIPE LPAR type_parameter_names RPAR {$1, $4}
 
 type_expr_comma_list:
 | type_expr_restreint

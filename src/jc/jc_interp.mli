@@ -144,26 +144,38 @@ val axiom :
 val axiomatic_decl : Typing.axiomatic_decl -> [ `Theory ] why_decl list
 val logic_fun :
   logic_info ->
-  logic_info Ast.term_or_assertion -> [ `Theory ] why_decl list
-val aximatic : string -> Typing.axiomatic_data -> some_entry list
+  logic_info Ast.term_or_assertion -> some_entry list
+val axiomatic : string -> Typing.axiomatic_data -> some_entry list
 val allocates :
   internal:label option ->
   type_safe:bool ->
   ?region_list:region list ->
   fun_effect -> (Why_loc.position * Fenv.location list) option -> pred
+
+val lemma :
+  Lexing.position * Lexing.position ->
+  string ->
+  is_axiom:bool ->
+  label list ->
+  logic_info Ast.assertion -> some_entry list
+
+val prepare_fun : fun_info -> fun_spec -> unit
+
 val func :
   fun_info ->
   Lexing.position * Lexing.position ->
   logic_info Ast.fun_spec ->
   (logic_info, fun_info) Ast.expr option -> some_entry list
-val logic_type : string * type_var_info list -> [ `Theory ] why_decl
+val logic_type : string * type_var_info list -> some_entry list
 val enums : enum_info list -> some_entry list
 val enum_cast : enum_info * enum_info -> some_entry list
 val exception_ : exception_info -> [ `Module of bool ] why_decl
+val exceptions : unit -> some_entry list
 val variable : var_info -> [ `Module of bool ] why_decl
 val memory : mem_class * region -> [ `Module of bool ] why_decl
 val alloc_table : alloc_class * region -> [ `Module of bool ] why_decl
 val tag_table : root_info * region -> [ `Module of bool ] why_decl
+val globals : unit -> some_entry list
 val struc : struct_info -> some_entry list
 val root : root_info -> some_entry list
 val alloc :
