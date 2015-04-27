@@ -104,9 +104,11 @@ module Generic_enum
 
   val eq (a b : t) : bool
     ensures { result <-> to_int a = to_int b }
+    ensures { result <-> a = b }
 
   val ne (a b : t) : bool
     ensures { result <-> to_int a <> to_int b }
+    ensures { result <-> a <> b }
 
   val (<=) (a b : t) : bool
     ensures  { result <-> to_int a <= to_int b }
@@ -554,10 +556,12 @@ module Generic_bit_enum
   val eq (a b : t) : bool
     ensures { result <-> Int.(=) (to_int a) (to_int b) }
     ensures { result <-> eq a b }
+    ensures { result <-> a = b }
 
   val ne (a b : t) : bool
     ensures { result <-> to_int a <> to_int b }
     ensures { result <-> ne a b }
+    ensures { result <-> a <> b }
 
   val (<=) (a b : t) : bool
     ensures  { result <-> Int.(<=) (to_int a) (to_int b) }
