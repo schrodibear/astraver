@@ -302,17 +302,17 @@ else
    FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
    AC_MSG_RESULT($FRAMACVERSION)
    case $FRAMACVERSION in
-        Neon-rc1|Neon-rc2|Neon-rc3|Neon-rc4|Neon-20140301)
+        Sodium-rc1|Sodium-rc2|Sodium-rc3|Sodium-rc4|Sodium-20150201)
            FRAMACPLUGIN=yes
            ;;
         Neon-*)
-	   FRAMACMSG="Found unknown variant of Frama-C Neon (hope this works)"
+	   FRAMACMSG="Found unknown variant of Frama-C Sodium (hope this works)"
            AC_MSG_WARN($FRAMACMSG)
            FRAMACPLUGIN=yes
            ;;
-        *) FRAMACMSG="you need Frama-C version Neon"
+        *) FRAMACMSG="you need Frama-C version Sodium"
            FRAMACPLUGIN=no
-           AC_MSG_WARN($FRAMACMSG)
+           AC_MSG_ERROR($FRAMACMSG)
            ;;
    esac
 fi
@@ -523,11 +523,6 @@ echo "OCaml version            : $OCAMLVERSION"
 echo "OCaml library path       : $OCAMLLIB"
 echo "OcamlGraph lib           : $OCAMLGRAPHVER"
 echo "Verbose make             : $VERBOSEMAKE"
-echo "Inference of annotations : $enable_apron"
-if test "$enable_apron" = "yes" ; then
-   echo "    APRON lib            : $APRONLIB"
-fi
-
 if test "$WHY3" = "yes" ; then
    echo "Why3 version             : $WHY3VERSION"
 fi
@@ -559,4 +554,3 @@ if test "$PVS" = "yes" ; then
    echo "    Lib                  : $PVSLIB"
 fi
 echo "Mizar support            : $MIZAR"
-echo "Other provers support    : at run-time"

@@ -305,6 +305,7 @@ sig
       type t = var Vi.t
       val of_varinfo : varinfo -> t option
       val of_varinfo_exn : varinfo -> t
+      val pseudo : typ -> t
     end
   end
 

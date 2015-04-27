@@ -401,7 +401,7 @@ class string_constants_visitor ~attach =
               match pair with
               | Index ({ enode = Const (CInt64 (i', _, _)) }, NoOffset),
                 SingleInit ({ enode = Const (CChr _ | CInt64 _ as c)
-                                    | CastE (_, { enode = Const (CChr _ | CInt64 _ as c) }) } as e)
+                                    | CastE (_, _, { enode = Const (CChr _ | CInt64 _ as c) }) } as e)
                 when i = Integer.to_int i' ->
                 let c =
                   match c with
@@ -453,7 +453,7 @@ class literal_proxy_visitor (first_pass_visitor : string_constants_visitor) =
         let s, scope, idx =
           match off, init with
           | NoOffset,
-            SingleInit { enode = Const const | CastE (_, { enode = Const const }) } ->
+            SingleInit { enode = Const const | CastE (_, _, { enode = Const const }) } ->
             let s =
               match const with
               | CStr s ->
@@ -1009,7 +1009,7 @@ class specialize_blockfuns_visitor =
           if is_block_function fpatt then
             let strip_cast e =
               match e.enode with
-              | CastE (_, e) -> e
+              | CastE (_, _, e) -> e
               | _ -> e
             in
             let strip_void_ptr_casts e = if isVoidPtrType @@ typeOf e then strip_cast e else e in
@@ -1084,13 +1084,15 @@ class composite_expanding_visitor =
           term_type = Ctype ty
         }
       | Tat (t, lab) -> tat ~loc (add_term_offset ty offset t, lab)
-      | TCastE (_, ({ term_type } as t))
+      | TCastE (_, oft, ({ term_type } as t))
         when term_type = Linteger || term_type = Lreal ||
              isIntegralType (ctype ~force:false term_type) ||
              isFloatingType (ctype ~force:false term_type) ->
         {
           t with term_node =
-                   TCastE (ty, if isIntegralType ty then tinteger ~loc 0
+                   TCastE (ty,
+                           oft,
+                           if isIntegralType ty then tinteger ~loc 0
                            else if isFloatingType ty then treal_zero ()
                            else if isPointerType ty then term ~loc Tnull (Ctype ty)
                            else t) }
@@ -1258,7 +1260,7 @@ class asms_to_functions_visitor =
       let ret_typ = if int then intType else voidType in
       let attrs = attrs @ List.map (fun a -> Attr (a, [])) ["static"; "inline"] in
       let fname = Name.unique ("inline_asm" ^ (if int then "_goto" else "")) in
-      let f = makeGlobalVar ~generated:true fname @@ TFun (ret_typ, Some params, false, attrs) in
+      let f = makeGlobalVar ~source:false fname @@ TFun (ret_typ, Some params, false, attrs) in
       new_globals <- GVarDecl (empty_funspec (), f, loc) :: new_globals;
       Globals.Functions.replace_by_declaration (empty_funspec ()) f loc;
       (* We've created a new undefined unspecified function. Now let's specify it: *)
@@ -1320,7 +1322,7 @@ class asms_to_functions_visitor =
         let f = self#introduce_function ~int:true attrs outs ins clobs loc in
         begin match self#current_func with
         | Some fundec ->
-          let aux = makeLocalVar fundec ~generated:true (Name.unique "inline_asm_goto_aux") intType in
+          let aux = makeLocalVar fundec ~temp:true (Name.unique "inline_asm_goto_aux") intType in
           self#queueInstr [Call (Some (var aux), evar ~loc f, to_args ~loc ins outs, loc)];
           let labeled lab ({ labels } as stmt) = stmt.labels <- lab :: labels; stmt in
           let cases =
@@ -1385,7 +1387,11 @@ class fp_eliminating_visitor ~attach =
     let new_vis = Hashtbl.create 10 in
     fun ~loc vi ->
       let cast_addr0 vi =
-        mkCast ~force:false ~e:(mkAddrOf ~loc (Var vi, Index (integer ~loc 0, NoOffset))) ~newt:voidConstPtrType
+        mkCast
+          ~overflow:Check
+          ~force:false
+          ~e:(mkAddrOf ~loc (Var vi, Index (integer ~loc 0, NoOffset)))
+          ~newt:voidConstPtrType
       in
       try
         cast_addr0 @@ Hashtbl.find new_vis vi
@@ -1393,7 +1399,7 @@ class fp_eliminating_visitor ~attach =
       | Not_found ->
         let name = Name.unique ("dummy_place_of_" ^ vi.vname) in
         let typ = array_type ~length:(integer ~loc:vi.vdecl 16) charType in
-        let vi' = makeGlobalVar ~generated:true name typ in
+        let vi' = makeGlobalVar ~source:false name typ in
         attach#global @@ GVar (vi', { init = None }, vi.vdecl);
         vi'.vdecl <- vi.vdecl;
         vi.vaddrof <- true;
@@ -1480,7 +1486,7 @@ class fp_eliminating_visitor ~attach =
                              let s =
                                mkStmtOneInstr
                                  ~valid_sid:true
-                                 (Set ((Var vi, NoOffset), mkBinOp ~loc Div z z, loc))
+                                 (Set ((Var vi, NoOffset), mkBinOp ~loc (Div Check) z z, loc))
                              in
                              Annotations.add_assert Emitters.jessie ~kf s @@ Logic_const.pfalse;
                              s)
@@ -1581,7 +1587,7 @@ class va_list_rewriter () =
       | TFun (_, _, true, _), false ->
         DoChildrenPost
           (fun vi ->
-             let va_list = makeVarinfo ~generated:true false true va_list_name va_list_type in
+             let va_list = makeVarinfo ~source:false false true va_list_name va_list_type in
              let formals = getFormalsDecl vi @ [va_list] in
              unsafeSetFormalsDecl vi formals;
              let kf = Globals.Functions.get vi in
@@ -1636,6 +1642,7 @@ class va_list_rewriter () =
               let eva_arg_addr =
                 mkCastT
                   ~force:false
+                  ~overflow:Check
                   ~e:(new_exp ~loc @@ Lval (mkMem ~addr:(mkAddrOrStartOf ~loc lva_list) ~off:NoOffset))
                   ~oldt:va_list_type
                   ~newt:(const_ptr t)
@@ -1643,7 +1650,7 @@ class va_list_rewriter () =
               [Set (lval, new_exp ~loc @@ Lval (mkMem ~addr:eva_arg_addr ~off:NoOffset), loc);
                Set (lva_list, increm eva_list 1, loc)]
             else
-              let eva_list = mkCastT ~force:false ~e:eva_list ~oldt:va_list_type ~newt:(const_ptr t) in
+              let eva_list = mkCastT ~force:false ~overflow:Check ~e:eva_list ~oldt:va_list_type ~newt:(const_ptr t) in
               [Set (lval, new_exp ~loc (Lval (Mem eva_list, NoOffset)), loc);
                Set (lva_list, mkBinOp ~loc PlusPI eva_list (one ~loc), loc)]
           | [Call ( _, { enode = Lval (Var { vname = "__builtin_va_arg" }, _) }, _, _)] ->
@@ -1686,7 +1693,11 @@ class va_list_rewriter () =
                       let va_arg_lval = Var vtmp, Index (integer ~loc i, NoOffset) in
                       let va_arg_type = Type.promote_argument_type (typeOf a) in
                       let va_arg_addr =
-                        mkCast ~force:false ~e:(new_exp ~loc (Lval va_arg_lval)) ~newt:(TPtr (va_arg_type, []))
+                        mkCast
+                          ~force:false
+                          ~overflow:Check
+                          ~e:(new_exp ~loc (Lval va_arg_lval))
+                          ~newt:(TPtr (va_arg_type, []))
                       in
                       let atmp = makeTempVar current_func ~name:"va_arg" (TPtr (va_arg_type, [])) in
                       [Call (Some (var atmp),
@@ -1711,9 +1722,20 @@ class va_list_rewriter () =
                  ~f:(fun acc t ->
                       match acc with
                       | a :: _ ->
-                        mkCastT ~force:false ~e:(mkBinOp ~loc PlusPI a (one ~loc)) ~oldt:(typeOf a) ~newt:(const_ptr t)
+                        mkCastT
+                          ~force:false
+                          ~overflow:Check
+                          ~e:(mkBinOp ~loc PlusPI a (one ~loc))
+                          ~oldt:(typeOf a)
+                          ~newt:(const_ptr t)
                           :: acc
-                      | [] -> [mkCastT ~force:false ~e:(evar ~loc vtmp) ~oldt:va_list_type ~newt:(const_ptr t)]))
+                      | [] ->
+                        [mkCastT
+                           ~force:false
+                           ~overflow:Check
+                           ~e:(evar ~loc vtmp)
+                           ~oldt:va_list_type
+                           ~newt:(const_ptr t)]))
               (List.rev actuals)
           in
           [init] @ assignments @ [Call (lv_opt, f, List.take nformals args @ [evar ~loc vtmp], loc)]
@@ -1809,19 +1831,19 @@ let rec destruct_pointer e =
       | PlusPI
       | IndexPI -> Some (v, Some e2)
       | MinusPI ->
-        Some (v, Some (new_exp ~loc:e.eloc (UnOp (Neg, e2, typeOf e2))))
+        Some (v, Some (new_exp ~loc:e.eloc (UnOp (Neg Check, e2, typeOf e2))))
       | _ -> assert false
       end
     | Some(v,Some off) ->
       begin match op with
       | PlusPI | IndexPI ->
-        Some (v, Some (new_exp ~loc:e.eloc (BinOp(PlusA,off,e2,typeOf e2))))
+        Some (v, Some (new_exp ~loc:e.eloc (BinOp (PlusA Check, off, e2, typeOf e2))))
       | MinusPI ->
-        Some (v, Some (new_exp ~loc:e.eloc (BinOp(MinusA,off,e2,typeOf e2))))
+        Some (v, Some (new_exp ~loc:e.eloc (BinOp (MinusA Check, off, e2, typeOf e2))))
       | _ -> assert false
       end
     end
-  | CastE (ty, e) ->
+  | CastE (ty, _, e) ->
     let ety = typeOf e in
     if isPointerType ty && isPointerType ety &&
        Typ.equal
@@ -1992,7 +2014,7 @@ class cursor_pointers_rewriter
       if H.mem formal_to_base vb then
         let voff2 = H.find cursor_to_offset vb in
         new_exp ~loc
-          (BinOp (PlusA,
+          (BinOp (PlusA Check,
                   new_exp ~loc (Lval (Var voff, NoOffset)),
                   new_exp ~loc (Lval (Var voff2, NoOffset)),
                   theMachine.ptrdiffType))
@@ -2037,7 +2059,7 @@ class cursor_pointers_rewriter
               | Some off, None
               | None, Some off -> Some off
               | Some off1, Some off2 ->
-                Some (new_exp ~loc:e.eloc @@ BinOp (PlusA, off1, off2, theMachine.ptrdiffType))
+                Some (new_exp ~loc:e.eloc @@ BinOp (PlusA Check, off1, off2, theMachine.ptrdiffType))
             in
             let offopt2 =
               match v2offopt,offopt2 with
@@ -2045,15 +2067,15 @@ class cursor_pointers_rewriter
               | Some off, None
               | None, Some off -> Some off
               | Some off1, Some off2 ->
-                Some (new_exp ~loc:e.eloc @@ BinOp (PlusA, off1, off2, theMachine.ptrdiffType))
+                Some (new_exp ~loc:e.eloc @@ BinOp (PlusA Check, off1, off2, theMachine.ptrdiffType))
             in
             match offopt1,offopt2 with
             | Some off1, Some off2 ->
-              new_exp ~loc:e.eloc @@ BinOp (MinusA, off1, off2, theMachine.ptrdiffType)
+              new_exp ~loc:e.eloc @@ BinOp (MinusA Check, off1, off2, theMachine.ptrdiffType)
             | Some off1, None ->
               off1
             | None, Some off2 ->
-              new_exp ~loc:e.eloc @@ UnOp (Neg, off2, theMachine.ptrdiffType)
+              new_exp ~loc:e.eloc @@ UnOp (Neg Check, off2, theMachine.ptrdiffType)
             | None, None ->
               Ast.Exp.const Integer.zero
           else
@@ -2139,7 +2161,7 @@ class cursor_pointers_rewriter
               | None -> assert false
               | Some (v2, Some e) ->
                 begin try
-                  new_exp ~loc:e.eloc (BinOp (PlusA, expr_offset v2, e, (Type.Integral.almost_unbound :> typ)))
+                  new_exp ~loc:e.eloc (BinOp (PlusA Check, expr_offset v2, e, (Type.Integral.almost_unbound :> typ)))
                 with
                 | Not_found -> assert false
                 end
@@ -2166,7 +2188,7 @@ class cursor_pointers_rewriter
               | None -> assert false
               | Some (v2, Some e) ->
                 begin try
-                  new_exp ~loc:e.eloc (BinOp (PlusA, expr_offset v2, e, (Type.Integral.almost_unbound :> typ)))
+                  new_exp ~loc:e.eloc (BinOp (PlusA Check, expr_offset v2, e, (Type.Integral.almost_unbound :> typ)))
                 with
                 | Not_found -> e
                 end
@@ -2237,27 +2259,27 @@ let rewrite_cursor_pointers file =
 let rec destruct_integer e =
   match e.enode with
   | Lval (Var v, NoOffset) -> Some (v, None)
-  | BinOp ((PlusA | MinusA as op), e1, e2, _) ->
+  | BinOp ((PlusA _ | MinusA _ as op), e1, e2, _) ->
     let integer = (Type.Integral.almost_unbound :> typ) in
     begin match destruct_integer e1 with
     | None -> None
     | Some (v, None) ->
       begin match op with
-      | PlusA -> Some(v,Some e2)
-      | MinusA ->
-        Some (v, Some (new_exp ~loc:e.eloc (UnOp (Neg, e2, integer))))
+      | PlusA _ -> Some (v, Some e2)
+      | MinusA oft ->
+        Some (v, Some (new_exp ~loc:e.eloc (UnOp (Neg oft, e2, integer))))
       | _ -> assert false
       end
     | Some (v, Some off) ->
       begin match op with
-      | PlusA ->
-        Some(v, Some (new_exp ~loc:e.eloc (BinOp (PlusA, off, e2, integer))))
-      | MinusA ->
-        Some(v, Some (new_exp ~loc:e.eloc (BinOp (MinusA, off, e2, integer))))
+      | PlusA oft ->
+        Some (v, Some (new_exp ~loc:e.eloc (BinOp (PlusA oft, off, e2, integer))))
+      | MinusA oft ->
+        Some (v, Some (new_exp ~loc:e.eloc (BinOp (MinusA oft, off, e2, integer))))
       | _ -> assert false
       end
     end
-  | CastE (ty, e) ->
+  | CastE (ty, _, e) ->
     let ety = typeOf e in
     if isIntegralType ty && isIntegralType ety then
       destruct_integer e
@@ -2361,7 +2383,7 @@ class cursor_integers_rewriter
           let vb = H.find cursor_to_base v in
           let voff = H.find cursor_to_offset v in
           new_exp ~loc:e.eloc
-            (BinOp (PlusA,
+            (BinOp (PlusA Check,
                     new_exp ~loc:e.eloc (Lval (Var vb, NoOffset)),
                     new_exp ~loc:e.eloc (Lval (Var voff, NoOffset)),
                     v.vtype))
@@ -2379,9 +2401,9 @@ class cursor_integers_rewriter
           let vt1 = Ast.Term.of_var vb in
           let vt2 = Ast.Term.of_var voff in
           let addt =
-            Ast.Term.mk ~loc:t.term_loc ~typ:Linteger @@ TBinOp (PlusA, vt1, vt2)
+            Ast.Term.mk ~loc:t.term_loc ~typ:Linteger @@ TBinOp (PlusA Check, vt1, vt2)
           in
-          Ast.Term.mk ~loc:t.term_loc ~typ:t.term_type @@ TCastE (v.vtype, addt)
+          Ast.Term.mk ~loc:t.term_loc ~typ:t.term_type @@ TCastE (v.vtype, Check, addt)
       with
       | Not_found -> t
       end
@@ -2436,7 +2458,7 @@ class cursor_integers_rewriter
               begin try
                 let voff2 = H.find cursor_to_offset v2 in
                 new_exp ~loc:e.eloc @@
-                  BinOp (PlusA,
+                  BinOp (PlusA Check,
                          new_exp ~loc:e.eloc @@ Lval(Var voff2, NoOffset),
                          e,
                          (Type.Integral.almost_unbound :> typ))
@@ -2540,7 +2562,7 @@ class strlen_annotator (strlen : logic_info) =
   let rec destruct_string_access ?(through_tmp=false) ?(through_cast=false) e =
     match e.enode with
     | Lval lv -> lval_destruct_string_access ~through_tmp lv
-    | CastE (_, e) ->
+    | CastE (_, _, e) ->
       if through_cast then
         destruct_string_access ~through_tmp ~through_cast e
       else None
@@ -2700,12 +2722,12 @@ class overflow_annotator =
 
     method! vexpr e =
       match e.enode with
-      | BinOp ((Shiftlt | Shiftrt as op), e1, e2, _ty) ->
+      | BinOp ((Shiftlt _ | Shiftrt as op), e1, e2, _ty) ->
         let kf = Option.value_fatal ~in_:__LOC__ self#current_kf in
         let cur_stmt = Option.value_fatal ~in_:__LOC__ self#current_stmt in
         let is_left_shift =
           match op with
-          |  Shiftlt -> true
+          |  Shiftlt _ -> true
           | _ -> false
         in
         let ty1 =
@@ -2767,7 +2789,7 @@ class overflow_annotator =
       | _ -> DoChildren
   end
 
-let annotate_overflow file = visitFramacFile (new overflow_annotator) file
+let _annotate_overflow file = visitFramacFile (new overflow_annotator) file
 
 (* Jessie/Why has trouble with Pre labels inside function contracts. *)
 class pre_old_rewriter =
@@ -3180,7 +3202,7 @@ let declare_jessie_nondet_int file =
                 if not (isPointerType vi.vtype) then
                   begin try
                     match (List.hd (Option.value_exn ~exn:Exit self#current_stmt).succs).skind with
-                    | Instr (Set (_, { enode = CastE (t, _) }, _)) when isPointerType t ->
+                    | Instr (Set (_, { enode = CastE (t, _, _) }, _)) when isPointerType t ->
                       vi.vtype <- t
                     | _ -> raise Exit
                   with
@@ -3207,7 +3229,7 @@ let declare_jessie_nondet_int file =
                    prevents return type to be implicitly treated as int *)
                   ignore (Ast.Vi.Function.malloc ~kernel:true () :> varinfo);
                   let f =
-                    makeGlobalVar ~generated:true Name.Logic_function.nondet_int @@
+                    makeGlobalVar ~source:false Name.Logic_function.nondet_int @@
                       TFun (intType, Some [], false, [Attr ("extern", []); Attr ("const", [])])
                   in
                   f_opt <- Some f;
@@ -3294,8 +3316,6 @@ let rewrite file =
   end;
   if Hint_level.get () > 0 then
     apply annotate_strlen "annotating code with strlen";
-  (* Annotate code with overflow checks. *)
-  apply annotate_overflow "annotating code with overflow checks";
   apply remove_unsupported "checking if there are unsupported predicates"
 
 (*

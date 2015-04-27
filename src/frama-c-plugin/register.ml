@@ -42,10 +42,6 @@ open Common
 
 let std_include = Filename.concat Framac.Config.datadir "jessie"
 
-let treat_integer_model () =
-  if Config.Analysis.get () && !Interp.int_model = Interp.IMexact then
-    Kernel.CppExtraArgs.add ("-D JESSIE_EXACT_INT_MODEL")
-
 let treat_jessie_spec_prolog () =
   if Config.Analysis.get () && Config.Specialize.get () then
     let spec_prolog_h_name = Filename.concat std_include Name.File.blockfuns_include in
@@ -56,7 +52,7 @@ let () =
      Preserve the behaviour of svn release <= r5012.
      However it works only if the int-model is set from the command line. *)
   (* Extension -- support for specialized memcpy() versions. *)
-  List.iter Cmdline.run_after_configuring_stage [treat_integer_model; treat_jessie_spec_prolog]
+  List.iter Cmdline.run_after_configuring_stage [treat_jessie_spec_prolog]
 
 let steal_globals () =
   let vis =
@@ -191,7 +187,14 @@ let run () =
     (* if called on 'path/file.c', projname is 'path/file' *)
     (* jessie_subdir is 'path/file.jessie' *)
     let jessie_subdir = projname ^ ".jessie" in
-    Why_lib.mkdir_p jessie_subdir;
+    let mkdir_p dir =
+      if Sys.file_exists dir then begin
+        if (Unix.stat dir).Unix.st_kind <> Unix.S_DIR then
+          failwith ("failed to create directory " ^ dir)
+      end else
+        Unix.mkdir dir 0o777
+    in
+    mkdir_p jessie_subdir;
     Console.feedback "Producing Jessie files in subdir %s" jessie_subdir;
 
     (* basename is 'file' *)
@@ -215,7 +218,7 @@ let run () =
     (* locname is 'file.cloc' *)
     let locname = basename ^ ".cloc" in
     Why_pp.print_in_file
-      (Jc.Output_misc.jc_print_pos Jc.Why_output.fprintf_vc_kind)
+      Jc.Print.jc_print_pos
       (Filename.concat jessie_subdir locname);
     Console.feedback "File %s/%s written." jessie_subdir locname;
 
@@ -243,7 +246,7 @@ let run () =
 	       s);
 	!res
       in
-      let jc_opt = Config.Jc_opt.get_set ~sep:" " () in
+      let jc_opt = Config.Jc_opt.As_string.get () in
       let debug_opt = if Console.debug_at_least 1 then " -d " else " " in
       let behav_opt =
 	if Config.Behavior.get () <> "" then

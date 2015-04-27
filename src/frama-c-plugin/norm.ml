@@ -173,7 +173,7 @@ class array_variables_retyping_visitor ~attach self =
         let subty = direct_element_type ty in
         if isArrayType subty then
           let siz = array_size subty in
-          let e2 = new_exp ~loc:e2.eloc @@ BinOp (Mult, e2, Ast.Exp.const siz, intType) in
+          let e2 = new_exp ~loc:e2.eloc @@ BinOp (Mult Check, e2, Ast.Exp.const siz, intType) in
           new_exp ~loc @@ BinOp (PlusPI, e1, e2, opty)
         else
           e
@@ -209,7 +209,7 @@ class array_variables_retyping_visitor ~attach self =
         in
         attach#globaction (fun () -> v.vtype <- newty);
         (* Create a "straw" variable for this variable, with the correct type *)
-        let strawv = makePseudoVar newty in
+        let strawv = (Ast.Vi.Variable.pseudo newty :> varinfo) in
         Htbl_vi.add var_to_strawvar v strawv;
         Htbl_vi.add strawvar_to_var strawv v
       end;
@@ -976,7 +976,7 @@ class embed_first_substructs_visitor =
              method! vexpr e =
                match e.enode with
                | Lval (Mem e', Field (fi, NoOffset)) when is_embedded fi ->
-                 ChangeTo { e with enode = CastE (fi.ftype, e') }
+                 ChangeTo { e with enode = CastE (fi.ftype, Check, e') }
                | _ -> DoChildren
            end))
 
@@ -992,7 +992,7 @@ class embed_first_substructs_visitor =
                  (* TODO: FIXME: This `term_type =' fix is an ugly workaround of a major bug in term typing
                   * after transformations: due to dummy_info that inserts dummy void where actual typing is necessary.
                   *)
-                 ChangeTo { t with term_node = TCastE (fi.ftype, t'); term_type = Ctype fi.ftype }
+                 ChangeTo { t with term_node = TCastE (fi.ftype, Check, t'); term_type = Ctype fi.ftype }
                | _ -> DoChildren
            end))
   end
@@ -1010,9 +1010,9 @@ object
   method! vexpr e =
     let void_ptr_with_attrs t = typeAddAttributes (typeAttrs t) voidPtrType in
     match e.enode with
-    | CastE (tcharp, ein)
+    | CastE (tcharp, _, ein)
       when isCharPtrType tcharp ->
-        ChangeTo ({ e with enode = CastE (void_ptr_with_attrs tcharp, ein)})
+        ChangeTo ({ e with enode = CastE (void_ptr_with_attrs tcharp, Check, ein)})
     | BinOp _ ->
       DoChildrenPost
         (function
@@ -1031,7 +1031,7 @@ class side_cast_rewriter =
           inherit frama_c_inplace
           method! vexpr =
             function
-            | { enode = CastE (tcharp, _) }
+            | { enode = CastE (tcharp, _, _) }
               when isCharPtrType tcharp -> raise Exit
             | _ -> DoChildren
          end)
@@ -1080,14 +1080,14 @@ object(self)
 
   method! vexpr e =
     match e.enode with
-    | CastE (tto, efrom)
+    | CastE (tto, oft, efrom)
       when isCharPtrType (typeOf efrom) &&
            isPointerType tto &&
            not (isCharPtrType tto) &&
            not (isVoidPtrType tto) &&
            has_charp_casts efrom ->
-      ChangeTo ({ e with enode = CastE (tto, rewrite_char_pointers efrom) })
-    | CastE (tto, efrom) ->
+      ChangeTo ({ e with enode = CastE (tto, oft, rewrite_char_pointers efrom) })
+    | CastE (tto, oft, efrom) ->
       let tfrom = typeOf efrom in
       if (isPointerType tfrom || isArrayType tfrom) &&
          (isPointerType tto || isArrayType tto) &&
@@ -1097,7 +1097,10 @@ object(self)
       then
         let void_ptr_type = typeAddAttributes (typeAttrs tfrom) voidConstPtrType in
         ChangeDoChildrenPost
-          ({ e with enode = CastE (tto, mkCastT ~force:false ~e:efrom ~oldt:tfrom ~newt:void_ptr_type)}, Fn.id)
+          ({ e with enode = CastE (tto,
+                                   oft,
+                                   mkCastT ~overflow:Check ~force:false ~e:efrom ~oldt:tfrom ~newt:void_ptr_type)},
+           Fn.id)
       else
         DoChildren
     | _ -> DoChildren
@@ -1915,7 +1918,7 @@ let retype_base_pointer = (Visit.attaching_globs { Visit.mk = new base_retyping_
 class useless_casts_remover =
   let preaction_expr etop =
     match (stripInfo etop).enode with
-    | CastE (ty, e) ->
+    | CastE (ty, _, e) ->
       let ety = typeOf e in
       if isPointerType ty && isPointerType ety &&
          Cil_datatype.Typ.equal
@@ -1927,7 +1930,7 @@ class useless_casts_remover =
   in
   let preaction_term term =
     match term.term_node with
-    | TCastE (ty, t) when isPointerType ty && Logic_utils.isLogicPointer t ->
+    | TCastE (ty, _, t) when isPointerType ty && Logic_utils.isLogicPointer t ->
       (* Ignore type qualifiers *)
       let pty = Cil.typeDeepDropAllAttributes (pointed_type ty) in
       let ptty =
@@ -2068,7 +2071,7 @@ object
 
   method! vexpr e =
     match e.enode with
-    | CastE (ty, e) ->
+    | CastE (ty, _, e) ->
       if isPointerType ty then
         begin match (stripCastsAndInfo e).enode with
         | Lval (_host, off) ->
@@ -2090,7 +2093,7 @@ class retype_int_field_visitor (cast_field_to_type : typ H.t) =
       begin match lastOffset off with
       | Field(fi, _) ->
         begin try
-          new_exp ~loc:e.eloc @@ CastE (H.find cast_field_to_type fi, e)
+          new_exp ~loc:e.eloc @@ CastE (H.find cast_field_to_type fi, Check, e)
         with
         | Not_found -> e
         end

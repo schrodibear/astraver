@@ -602,7 +602,7 @@ struct
           let typ = Ctype Cil.charPtrType in
           let base =
             Logic_const.term
-              (TCastE(Cil.charPtrType,Logic_const.tresult Cil.charPtrType)) typ
+              (TCastE(Cil.charPtrType, Check, Logic_const.tresult Cil.charPtrType)) typ
           in
           let alloc =
             Logic_const.new_identified_term
@@ -679,6 +679,13 @@ struct
           ignore (Globals.Vars.get_astinfo vi : string * localisation); vi
         with
         | Not_found -> invalid_arg "Ast.Vi.Function.of_vi_exn: no function for varinfo"
+
+      let pseudo =
+        let counter = ref 0 in
+        function ty ->
+          incr counter;
+          let name = "@" ^ (string_of_int !counter) in
+          makeVarinfo ~source:false (* global = *) false (* formal = *) false name ty
     end
   end
 
@@ -756,7 +763,7 @@ struct
             | Ctype ty -> ty
             | _ -> voidType
           in
-          let v = makePseudoVar ty in
+          let v = Vi.Variable.pseudo ty in
           let env = { env with terms = Varinfo.Map.add v t env.terms } in
           Lval (Var v, NoOffset), env
 
@@ -766,17 +773,17 @@ struct
             | Ctype ty -> ty
             | _ -> Console.fatal "Ast.Term.Env.add_var: not a C-typed var: %a" Printer.pp_logic_var v
           in
-          let pv = makePseudoVar ty in
+          let pv = Vi.Variable.pseudo ty in
           let env = { env with vars = Varinfo.Map.add pv v env.vars } in
           Var pv, env
 
         let add_lhost env lhost =
-          let v = makePseudoVar voidType in
+          let v = Vi.Variable.pseudo voidType in
           let env = { env with term_lhosts = Varinfo.Map.add v lhost env.term_lhosts } in
           Var v, env
 
         let add_result env ty =
-          let pv = makePseudoVar ty in
+          let pv = Vi.Variable.pseudo ty in
           let env =
             { env with term_lhosts =
                          Varinfo.Map.add pv (TResult ty) env.term_lhosts }
@@ -822,12 +829,12 @@ struct
         | TSizeOfStr string -> SizeOfStr string, Env.empty
         | TLogic_coerce (Linteger, t) ->
           let e, env = to_exp_env t in
-          CastE (TInt (IInt, [Attr ("integer", [])]), e), env
+          CastE (TInt (IInt, [Attr ("integer", [])]), Check, e), env
         | TLogic_coerce (Lreal, t) ->
           let e, env = to_exp_env t in
-          CastE (TFloat (FFloat, [Attr ("real",[])]), e), env
-        | TCastE (ty, t') ->
-          let e, env = to_exp_env t' in CastE (ty, e), env
+          CastE (TFloat (FFloat, [Attr ("real",[])]), Check, e), env
+        | TCastE (ty, oft, t') ->
+          let e, env = to_exp_env t' in CastE (ty, oft, e), env
         | TAlignOf ty -> AlignOf ty, Env.empty
         | TSizeOf ty -> SizeOf ty, Env.empty
         | TConst c ->
@@ -919,11 +926,11 @@ struct
             TBinOp (op,
                     of_exp_env' (e1, env),
                     of_exp_env' (e2, env))
-          | CastE (TInt (IInt, [Attr ("integer", [])]), e) ->
+          | CastE (TInt (IInt, [Attr ("integer", [])]), _, e) ->
             TLogic_coerce (Linteger, of_exp_env' (e, env))
-          | CastE (TFloat (FFloat, [Attr ("real", [])]), e) ->
+          | CastE (TFloat (FFloat, [Attr ("real", [])]), _, e) ->
             TLogic_coerce (Lreal, of_exp_env' (e, env))
-          | CastE (ty, e) -> TCastE (ty, of_exp_env' (e, env))
+          | CastE (ty, oft, e) -> TCastE (ty, oft, of_exp_env' (e, env))
           | AddrOf lv -> TAddrOf (lval_of_lval_env (lv, env))
           | StartOf lv -> TStartOf (lval_of_lval_env (lv, env))
         in
@@ -971,7 +978,7 @@ struct
         | UnOp (op, e, _) -> TUnOp (op, of_exp e)
         | BinOp (op, e1, e2, _) ->
           TBinOp (op, of_exp e1, of_exp e2)
-        | CastE (ty, e) -> TCastE (ty, of_exp e)
+        | CastE (ty, oft, e) -> TCastE (ty, oft, of_exp e)
         | AddrOf lv -> TAddrOf (lval_of_lval lv)
         | StartOf lv -> TStartOf (lval_of_lval lv)
       in
@@ -1077,7 +1084,7 @@ struct
           let mulidx =
             new_exp
               ~loc:idx2.eloc @@
-              BinOp (Mult, idx1, Exp.const siz, intType)
+              BinOp (Mult Check, idx1, Exp.const siz, intType)
           in
           (* Keep info at top-level for visitors on terms that where
            * translated to expressions. Those expect these info when
@@ -1086,7 +1093,7 @@ struct
           let addidx =
             map_under_info
               (fun e ->
-                 new_exp ~loc:e.eloc @@ BinOp (PlusA, mulidx, idx, intType))
+                 new_exp ~loc:e.eloc @@ BinOp (PlusA Check, mulidx, idx, intType))
               idx1
           in
           Index (addidx, off)
@@ -1102,7 +1109,7 @@ struct
               (fun e ->
                  new_exp
                    ~loc:e.eloc @@
-                   BinOp (Mult, idx1, Exp.const siz, intType))
+                   BinOp (Mult Check, idx1, Exp.const siz, intType))
               idx1
           in
           Index (mulidx, NoOffset)

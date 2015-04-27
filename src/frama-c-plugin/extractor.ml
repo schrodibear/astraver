@@ -209,7 +209,7 @@ let do_expr_post ?state ~on_fun ~exclude_fun e =
     | Lval (Var vi, _) | AddrOf (Var vi, _)
       when isFunctionType vi.vtype ->
       fatal_offset e
-    | CastE (typ, exp) ->
+    | CastE (typ, _, exp) ->
       Option.iter state ~f:(add_hcast ~typ ~exp);
       e
     | _ -> e

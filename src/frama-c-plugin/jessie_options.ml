@@ -38,7 +38,7 @@ include
      end)
 
 module Project_name =
-  EmptyString
+  Empty_string
     (struct
        let option_name = "-jessie-project-name"
        let arg_name = ""
@@ -46,7 +46,7 @@ module Project_name =
      end)
 
 module Behavior =
-  EmptyString
+  Empty_string
     (struct
        let option_name = "-jessie-behavior"
        let arg_name = ""
@@ -102,7 +102,7 @@ let () =
     ~from:Analysis.self [Force_ad_hoc_normalization.self]
 
 module Jc_opt =
-  StringSet
+  String_set
     (struct
       let option_name = "-jessie-jc-opt"
       let arg_name = ""
@@ -110,7 +110,7 @@ module Jc_opt =
     end)
 
 module Why_opt =
-  StringSet
+  String_set
     (struct
        let option_name = "-jessie-why-opt"
        let arg_name = ""
@@ -118,7 +118,7 @@ module Why_opt =
      end)
 
 module Why3_opt =
-  StringSet
+  String_set
     (struct
        let option_name = "-jessie-why3-opt"
        let arg_name = ""
@@ -133,7 +133,7 @@ module Gen_only =
     end)
 
 module Infer_annot =
-  EmptyString
+  Empty_string
     (struct
        let option_name = "-jessie-infer-annot"
        let arg_name = ""

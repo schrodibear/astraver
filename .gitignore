@@ -164,6 +164,7 @@ bin
 /src/frama-c-plugin/tests/jessie/*.jessie/why
 /src/frama-c-plugin/tests/jessie/*.jessie/simplify
 /src/frama-c-plugin/tests/jessie/*.jessie/gappa
+/src/frama-c-plugin/tests/ptests_config
 
 /export
 

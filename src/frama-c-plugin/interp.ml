@@ -90,8 +90,8 @@ let mkdecl dnode pos = new decl ~pos dnode
 (* Locate Jessie expressions on source program.                              *)
 (*****************************************************************************)
 
-let reg_position ?id ?kind ?name pos =
-  Jc.Output_misc.jc_reg_pos "_C" ?id ?kind ?name (Why_loc.extract pos)
+let reg_position ?id ?kind:_ ?name pos =
+  Jc.Print.jc_reg_pos "_C" ?id ?name (Why_loc.extract pos)
 
 (* [locate] should be called on every Jessie expression which we would like to
  * locate in the original source program.
@@ -145,21 +145,27 @@ let locate ?pos e =
 (*****************************************************************************)
 
 let unop = function
-  | Neg -> `Uminus
+  | Neg Check -> `Uminus
+  | Neg Modulo -> `Uminus_mod
   | BNot -> `Ubw_not
   | LNot -> `Unot
 
 let binop = function
-  | PlusA -> `Badd
+  | PlusA Check -> `Badd
+  | PlusA Modulo -> `Badd_mod
   | PlusPI -> `Badd
   | IndexPI -> `Badd
-  | MinusA -> `Bsub
+  | MinusA Check -> `Bsub
+  | MinusA Modulo -> `Bsub_mod
   | MinusPI -> `Bsub
   | MinusPP -> `Bsub
-  | Mult -> `Bmul
-  | Div -> `Bdiv
+  | Mult Check -> `Bmul
+  | Mult Modulo -> `Bmul_mod
+  | Div Check -> `Bdiv
+  | Div Modulo -> `Bdiv_mod
   | Mod -> `Bmod
-  | Shiftlt -> `Bshift_left
+  | Shiftlt Check -> `Bshift_left
+  | Shiftlt Modulo -> `Bshift_left_mod
   | Shiftrt -> assert false (* Should be decided at point used *)
   | Lt -> `Blt
   | Gt -> `Bgt
@@ -660,13 +666,13 @@ and terms ?(in_zone=false) t =
         product (fun x y -> JCPEbinary (x,op,y)) (terms t1) (terms t2)
       end
 
-    | TBinOp (Shiftlt as op, t1, t2) ->
+    | TBinOp (Shiftlt oft as op, t1, t2) ->
       begin match possible_value_of_integral_term t2 with
       | Some i when Integer.ge i Integer.zero &&
                     Integer.lt i (Integer.of_int 63) ->
         (* Left shift by constant is multiplication by constant *)
         let pow = constant_term t2.term_loc (Integer.two_power i) in
-        List.map (fun x -> JCPEbinary (x,`Bmul,term pow)) (terms t1)
+        List.map (fun x -> JCPEbinary (x, (match oft with Check -> `Bmul | Modulo -> `Bmul_mod), term pow)) (terms t1)
       | _ ->
         product (fun x y -> JCPEbinary (x, binop op, y)) (terms t1) (terms t2)
       end
@@ -677,27 +683,29 @@ and terms ?(in_zone=false) t =
         (fun x y -> JCPEbinary(x,binop op,y))
         (coerce_floats t1)
         (coerce_floats t2)
-    | TCastE (ty, t)
+    | TCastE (ty, _, t)
       when isIntegralType ty && isLogicRealType t.term_type ->
       List.map (fun x -> JCPEapp("\\truncate_real_to_int",[],[x])) (terms t)
-    | TCastE (ty, t')
+    | TCastE (ty, oft, t')
       when isIntegralType ty && isLogicArithmeticType t'.term_type ->
       if !int_model = IMexact then
         List.map (fun x -> x#node) (terms t')
       else
-        List.map (fun x -> JCPEcast (x, ctype ty)) (terms t')
-    | TCastE (ty, t)
+        List.map
+          (fun x -> (match oft with Check -> JCPEcast (x, ctype ty) | Modulo -> JCPEcast_mod (x, ctype ty)))
+          (terms t')
+    | TCastE (ty, _, t)
       when isFloatingType ty && isLogicArithmeticType t.term_type ->
       List.map (fun x -> JCPEcast (x, ctype ty)) (terms t)
-    | TCastE (ty, t)
+    | TCastE (ty, _, t)
       when isIntegralType ty && Type.Logic_c_type.map_default ~f:isPointerType t.term_type ~default:false ->
       Console.unsupported "Casting from type %a to type %a not allowed"
         Printer.pp_logic_type t.term_type Printer.pp_typ ty
-    | TCastE (ptrty, _t1) when isPointerType ptrty ->
+    | TCastE (ptrty, _, _t1) when isPointerType ptrty ->
       let rec strip_term_casts ?(cast=true) t =
         match t.term_node with
-        | TCastE (_, t) when cast -> strip_term_casts ~cast:false t
-        | TCastE (_, t') ->
+        | TCastE (_, _, t) when cast -> strip_term_casts ~cast:false t
+        | TCastE (_, _, t') ->
           begin match (stripTermCasts t').term_node with
           | TConst _ -> t'
           | _ -> t
@@ -727,7 +735,7 @@ and terms ?(in_zone=false) t =
                  Printer.pp_logic_type t.term_type Printer.pp_typ ptrty
         end
       end
-    | TCastE (ty, t) ->
+    | TCastE (ty, _, t) ->
       (* TODO: support other casts in Jessie as well, through low-level
        * memory model
        *)
@@ -1086,7 +1094,9 @@ and pred p =
     | Psubtype (t1, t2) ->
       JCPEsubtype (tag t1, tag t2)
 
-    | Pseparated(_seps) -> Console.unsupported "\\separated predicate is unsupported"
+    | Pseparated (_seps) -> Console.unsupported "\\separated predicate is unsupported"
+
+    | Pdangling _ -> Console.unsupported "\\dangling predicate is unsupported"
 
     | Pinitialized _ -> Console.unsupported "\\initialized predicate is unsupported"
   in
@@ -1369,7 +1379,7 @@ let rec expr e =
         in
         e#node
 
-    | CastE(ty,e')
+    | CastE (ty, _, e')
         when isIntegralType ty && isFloatingType (typeOf e') ->
         let e1 =
           locate (mkexpr (JCPEcast(expr e',mktype (JCPTnative Treal))) e.eloc)
@@ -1378,24 +1388,24 @@ let rec expr e =
           locate (mkexpr (JCPEapp("\\truncate_real_to_int",[],[e1])) e.eloc)
         in e#node
 
-    | CastE(ty,e') when isIntegralType ty && isArithmeticType (typeOf e') ->
+    | CastE (ty, _, e') when isIntegralType ty && isArithmeticType (typeOf e') ->
         (integral_expr e)#node
 
-    | CastE(ty,e') when isFloatingType ty && isArithmeticType (typeOf e') ->
+    | CastE(ty, _, e') when isFloatingType ty && isArithmeticType (typeOf e') ->
         let e = locate (mkexpr (JCPEcast(expr e',ctype ty)) e.eloc) in
         e#node
 
-    | CastE(ty,e') when isIntegralType ty && isPointerType (typeOf e') ->
+    | CastE(ty, _, e') when isIntegralType ty && isPointerType (typeOf e') ->
       Console.unsupported "Casting from type %a to type %a not allowed"
         Printer.pp_typ (typeOf e') Printer.pp_typ ty
 
-    | CastE(ptrty,_e1) when isPointerType ptrty ->
+    | CastE(ptrty, _, _e1) when isPointerType ptrty ->
         begin
           let rec strip_cast_and_infos ?(cast=true) e =
             match e.enode with
             | Info (e, _) -> strip_cast_and_infos e
-            | CastE (_, e) when cast -> strip_cast_and_infos ~cast:false e
-            | CastE (_, e) when isConstant (stripCastsAndInfo e) -> e
+            | CastE (_, _, e) when cast -> strip_cast_and_infos ~cast:false e
+            | CastE (_, _, e) when isConstant (stripCastsAndInfo e) -> e
             | _ -> e
           in
           let e = strip_cast_and_infos e in
@@ -1422,7 +1432,7 @@ let rec expr e =
                   Printer.pp_typ (typeOf e) Printer.pp_typ ptrty
         end
 
-    | CastE (ty, e') ->
+    | CastE (ty, _, e') ->
         (* TODO: support other casts in Jessie as well, through low-level
          * memory model
          *)
@@ -1480,30 +1490,30 @@ and boolean_expr ?(to_locate=false) e =
 and integral_expr e =
 
   let rec int_expr e =
-    let node_from_boolean_expr e = JCPEif(e,one_expr,zero_expr) in
+    let node_from_boolean_expr e = JCPEif (e, one_expr, zero_expr) in
 
     let enode = match e.enode with
       | UnOp(LNot,e',_ty) ->
-          let e = mkexpr (JCPEunary(unop LNot,boolean_expr e')) e.eloc in
+          let e = mkexpr (JCPEunary (unop LNot, boolean_expr e')) e.eloc in
           node_from_boolean_expr e
 
       | UnOp(op,e',_ty) ->
           let e =
-            locate (mkexpr (JCPEunary(unop op,expr e')) e.eloc)
+            locate (mkexpr (JCPEunary (unop op, expr e')) e.eloc)
           in
           e#node
 
       | BinOp((LAnd | LOr) as op,e1,e2,_ty) ->
           let e =
-            mkexpr (JCPEbinary(boolean_expr e1,binop op,boolean_expr e2)) e.eloc
+            mkexpr (JCPEbinary (boolean_expr e1, binop op, boolean_expr e2)) e.eloc
           in
           node_from_boolean_expr e
 
       | BinOp((Lt | Gt | Le | Ge as op),e1,e2,_ty)
           when isPointerType (typeOf e1) ->
           (* Pointer comparison is translated as subtraction *)
-          let sube = mkexpr (JCPEbinary(expr e1,`Bsub,expr e2)) e.eloc in
-          let e = mkexpr (JCPEbinary(sube,binop op,zero_expr)) e.eloc in
+          let sube = mkexpr (JCPEbinary (expr e1, `Bsub, expr e2)) e.eloc in
+          let e = mkexpr (JCPEbinary (sube, binop op, zero_expr)) e.eloc in
           node_from_boolean_expr e
 
 (*       | BinOp((Eq | Ne as op),e1,e2,_ty) *)
@@ -1538,13 +1548,14 @@ and integral_expr e =
           in
           e#node
 
-      | BinOp(Shiftlt as op,e1,e2,_ty) ->
+      | BinOp (Shiftlt oft as op,e1,e2,_ty) ->
           let e = match possible_value_of_integral_expr e2 with
             | Some i when Integer.ge i Integer.zero &&
                 Integer.lt i (Integer.of_int 63) ->
                 (* Left shift by constant is multiplication by constant *)
                 let pow = Ast.Exp.const (Integer.two_power i) in
-                locate (mkexpr (JCPEbinary(expr e1,`Bmul,expr pow)) e.eloc)
+                locate
+                  (mkexpr (JCPEbinary(expr e1, (match oft with Check -> `Bmul | Modulo -> `Bmul_mod), expr pow)) e.eloc)
             | _ ->
                 locate (mkexpr (JCPEbinary(expr e1,binop op,expr e2)) e.eloc)
           in
@@ -1556,7 +1567,7 @@ and integral_expr e =
           in
           e#node
 
-      | CastE(ty,e1) when isFloatingType (typeOf e1) ->
+      | CastE (ty, _, e1) when isFloatingType (typeOf e1) ->
           let e1' = locate (mkexpr (JCPEcast(expr e1,ltype Linteger)) e.eloc) in
           if !int_model = IMexact then
             e1'#node
@@ -1564,11 +1575,16 @@ and integral_expr e =
             let e2' = locate (mkexpr (JCPEcast(e1',ctype ty)) e.eloc) in
             e2'#node
 
-      | CastE(ty,e1) when isIntegralType (typeOf e1) ->
+      | CastE (ty, oft, e1) when isIntegralType (typeOf e1) ->
           if !int_model = IMexact then
             (int_expr e1)#node
           else
-            let e = locate (mkexpr (JCPEcast(int_expr e1,ctype ty)) e.eloc) in
+            let cast =
+              match oft with
+              | Check -> JCPEcast (int_expr e1, ctype ty)
+              | Modulo -> JCPEcast_mod (int_expr e1, ctype ty)
+            in
+            let e = locate (mkexpr cast e.eloc) in
             e#node
 
       | _ -> (expr e)#node
@@ -1578,7 +1594,7 @@ and integral_expr e =
 
   match e.enode with
     | CastE _ -> int_expr e
-    | _ -> int_expr (new_exp ~loc:e.eloc (CastE(typeOf e,e)))
+    | _ -> int_expr (new_exp ~loc:e.eloc (CastE (typeOf e, Check, e)))
 
 and lval pos = function
   | Var v, NoOffset -> mkexpr (JCPEvar v.vname) pos
@@ -1713,8 +1729,8 @@ let instruction = function
                   JCPEconst(JCCinteger(Integer.to_string allocsiz))
                 in
                 lvtyp, mkexpr siznode pos
-            | BinOp(Mult,({enode = Const c} as arg),nelem,_ty)
-            | BinOp(Mult,nelem,({enode = Const c} as arg),_ty)
+            | BinOp(Mult oft,({enode = Const c} as arg),nelem,_ty)
+            | BinOp(Mult oft, nelem,({enode = Const c} as arg),_ty)
                 when is_integral_const c ->
                 let factor = Integer.div (value_of_integral_expr arg) lvsiz in
                 let siz =
@@ -1722,14 +1738,14 @@ let instruction = function
                   else
                     let factor = Ast.Exp.const factor in
                     expr
-                      (new_exp ~loc (BinOp (Mult, nelem, factor, typeOf arg)))
+                      (new_exp ~loc (BinOp (Mult oft, nelem, factor, typeOf arg)))
                 in
                 lvtyp, siz
             | _ ->
                 if Integer.equal lvsiz Integer.one then lvtyp, expr arg
                 else
                   let esiz = constant_expr ~loc lvsiz in
-                  lvtyp, expr (new_exp ~loc (BinOp(Div,arg,esiz,typeOf arg)))
+                  lvtyp, expr (new_exp ~loc (BinOp (Div Check, arg, esiz,typeOf arg)))
           in
           let name_of_type = match unrollType ty with
             | TComp(compinfo,_,_) -> compinfo.cname
@@ -1765,7 +1781,7 @@ let instruction = function
                     expr nelem
                   else
                     let factor = constant_expr ~loc factor in
-                    expr (new_exp ~loc (BinOp(Mult,nelem,factor,typeOf arg)))
+                    expr (new_exp ~loc (BinOp (Mult Check,nelem,factor,typeOf arg)))
                 in
                 lvtyp, siz
             | _ ->
@@ -1775,8 +1791,8 @@ let instruction = function
                 lvtyp,
                 expr
                   (new_exp ~loc
-                     (BinOp(Div,
-                            new_exp ~loc (BinOp(Mult,nelem,elsize,typeOf arg)),
+                     (BinOp(Div Check,
+                            new_exp ~loc (BinOp(Mult Check,nelem,elsize,typeOf arg)),
                             esiz,
                             typeOf arg)))
           in
@@ -1804,7 +1820,7 @@ let instruction = function
           let tmpv = makeTempVar (get_curFundec()) (getReturnType (v : _ Ast.Vi.t :> varinfo).vtype) in
           let tmplv = Var tmpv, NoOffset in
           let cast =
-            new_exp ~loc:pos (CastE(lvty,new_exp ~loc:pos (Lval tmplv)))
+            new_exp ~loc:pos (CastE (lvty, Check, new_exp ~loc:pos (Lval tmplv)))
           in
           let tmpassign = JCPEassign(lval pos lv,expr cast) in
           JCPElet(None,tmpv.vname,Some call,locate (mkexpr tmpassign pos))
@@ -1976,7 +1992,7 @@ let rec statement s =
          take into account undefined behavior tied to the effects of the statements... *)
       JCPEblock (statement_list (List.map (fun (x, _, _, _, _) -> x) seq))
 
-    | TryFinally _ | TryExcept _ | AsmGoto _ -> assert false
+    | TryFinally _ | TryExcept _ | Throw _ | TryCatch _ | AsmGoto _ -> assert false
   in
   (* Prefix statement by all non-case labels *)
   let labels = filter_out is_case_label s.labels in
@@ -3012,11 +3028,7 @@ let pragma =
 let pragmas f =
   let l = List.flatten (List.rev (List.rev_map pragma f.globals)) in
 
-  (match !int_model with
-    | IMexact -> []
-    | IMbounded -> [ Jc.Print.JCint_model Jc.Env.IMbounded ]
-    | IMmodulo -> [ Jc.Print.JCint_model Jc.Env.IMmodulo ])
-  @ Jc.Print.JCinvariant_policy !invariant_policy
+  Jc.Print.JCinvariant_policy !invariant_policy
   :: (if !separation_policy_regions then
         Jc.Print.JCseparation_policy Jc.Env.SepRegions
       else
