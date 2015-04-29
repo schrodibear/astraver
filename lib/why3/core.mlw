@@ -1,0 +1,581 @@
+
+theory Jessie_pointer
+  use import int.Int
+
+  type block
+  type pointer 't = (block, int)
+
+  constant null : pointer 't
+
+  function sub_pointer (a : pointer 't) (b : pointer 't) : int = let (_, a) = a in let (_, b) = b in a - b
+  function shift (p : pointer 't) (n : int) : pointer 't = let (b, o) = p in (b, o + n)
+  predicate same_block (p1 : pointer 't) (p2 : pointer 't) = let (b1, _) = p1 in let (b2, _) = p2 in b1 = b2
+end
+
+theory Jessie_zwf
+  use import int.Int
+
+  predicate zwf_zero (a : int) (b : int) = 0 <= a /\ a < b
+end
+
+theory Jessie_alloc_table
+  use import int.Int
+  use import Jessie_pointer
+
+  type alloc_table 't
+
+  function offset_min (alloc_table 't) (pointer 't) : int
+  function offset_max (alloc_table 't) (pointer 't) : int
+
+  axiom Null_pointer:
+    forall a : alloc_table 't [offset_max a null | offset_min a null].
+      offset_max a null = -2 < offset_min a null = 0
+
+  axiom Offset_max_shift:
+    forall a : alloc_table 't. forall p : pointer 't. forall i : int [offset_max a (shift p i) | offset_max a p].
+      offset_max a (shift p i) = offset_max a p - i
+
+  axiom Offset_min_shift:
+    forall a : alloc_table 't. forall p : pointer 't. forall i : int [offset_min a (shift p i) | offset_min a p].
+      offset_min a (shift p i) = offset_min a p - i
+
+  predicate valid (a : alloc_table 't) (p : pointer 't) =
+    offset_min a p <= 0 <= offset_max a p
+end
+
+theory Jessie_memory
+  use map.Map
+  use import Jessie_pointer
+
+  type memory 't 'v = Map.map (pointer 't) 'v
+
+  function select (m : memory 't 'v) (p : pointer 't) : 'v = Map.get m p
+  function store (m : memory 't 'v) (p : pointer 't) (v : 'v) : memory 't 'v = Map.set m p v
+end
+
+theory Jessie_pset
+  use import Jessie_pointer
+
+  type pset 't
+
+  function pset_empty : pset 't
+  function pset_singleton (pointer 't) : pset 't
+
+  predicate in_pset (pointer 't) (pset 't)
+
+  axiom In_pset_empty:
+    forall p : pointer 't [in_pset p (pset_empty : pset 't)]. not (in_pset p (pset_empty : pset 't))
+
+  axiom In_pset_singleton:
+    forall p : pointer 't.
+    forall q : pointer 't [in_pset p (pset_singleton q : pset 't)].
+      in_pset p (pset_singleton q : pset 't) <-> p = q
+end
+
+theory Jessie_pset_range
+  use import int.Int
+  use import Jessie_pointer
+  use import Jessie_pset
+
+  function pset_range (pset 't) int int : pset 't
+
+  axiom In_pset_range:
+    forall p : pointer 't.
+    forall q : pset 't.
+    forall a b : int [in_pset p (pset_range q a b)].
+      in_pset p (pset_range q a b) <->
+        exists i : int. exists r : pointer 't.
+          a <= i /\ i <= b /\ in_pset r q /\ p = shift r i
+
+  lemma In_pset_range_singleton:
+    forall p : pointer 't.
+    forall q : pointer 't.
+    forall a b : int [in_pset p (pset_range (pset_singleton q : pset 't) a b)].
+      in_pset p (pset_range (pset_singleton q : pset 't) a b) <->
+        same_block p q /\ a <= sub_pointer p q <= b
+end
+
+theory Jessie_pset_range_left
+  use import int.Int
+  use import Jessie_pointer
+  use import Jessie_pset
+
+  function pset_range_left (pset 'z) int : pset 'z
+
+  axiom In_pset_range_left:
+    forall p : pointer 't.
+    forall q : pset 't.
+    forall b : int [in_pset p (pset_range_left q b)].
+      in_pset p (pset_range_left q b) <->
+        exists i : int. exists r : pointer 't.
+          i <= b /\ in_pset r q /\ p = shift r i
+end
+
+theory Jessie_pset_range_right
+  use import int.Int
+  use import Jessie_pointer
+  use import Jessie_pset
+
+  function pset_range_right (pset 'z) int : pset 'z (* l(a..) *)
+
+  axiom In_pset_range_right:
+    forall p : pointer 't.
+    forall q : pset 't.
+    forall a : int [in_pset p (pset_range_right q a)].
+      in_pset p (pset_range_right q a) <->
+        exists i : int. exists r : pointer 't.
+          a <= i /\ in_pset r q /\ p = shift r i
+end
+
+theory Jessie_pset_deref
+  use import Jessie_pointer
+  use import Jessie_pset
+  use import Jessie_memory
+
+  function pset_deref (memory 't (pointer 'v)) (pset 't) : pset 'v
+
+  axiom In_pset_deref:
+    forall p : pointer 'v.
+    forall m : memory 't (pointer 'v).
+    forall q : pset 't [in_pset p (pset_deref m q : pset 't)].
+      in_pset p (pset_deref m q : pset 't) <->
+        exists r : pointer 't. in_pset r q /\ p = select m r
+
+  lemma In_pset_deref_singleton:
+    forall p : pointer 'v.
+    forall m : memory 't (pointer 'v).
+    forall q : pointer 't [in_pset p (pset_deref m (pset_singleton q : pset 't) : pset 't)].
+      in_pset p (pset_deref m (pset_singleton q : pset 't) : pset 't) <-> p = select m q
+end
+
+theory Jessie_pset_union
+  use import Jessie_pointer
+  use import Jessie_pset
+
+  function pset_union (pset 't) (pset 't) : pset 't
+
+  axiom In_pset_union:
+    forall p : pointer 't.
+    forall s1 : pset 't.
+    forall s2 : pset 't [in_pset p (pset_union s1 s2) | in_pset p s1 | in_pset p s2].
+      in_pset p (pset_union s1 s2) <-> in_pset p s1 \/ in_pset p s2
+
+  lemma In_pset_union_singleton:
+    forall p1 : pointer 't [pset_singleton p1 : pset 't].
+      forall p2 : pointer 't [pset_singleton p2 : pset 't, pset_union (pset_singleton p1 : pset 't) (pset_singleton p2 : pset 't)].
+        forall p : pointer 't [in_pset p (pset_union (pset_singleton p1) (pset_singleton p2) : pset 't)].
+          in_pset p (pset_union (pset_singleton p1) (pset_singleton p2) : pset 't) <->
+            (p = p1 \/ p = p2)
+end
+
+theory Jessie_pset_all
+  use import Jessie_pointer
+  use import Jessie_pset
+
+  function pset_all (pset 'z) : pset 'z
+
+  axiom In_pset_all:
+    forall p : pointer 't.
+    forall q : pset 't [in_pset p (pset_all q)].
+      in_pset p (pset_all q) <->
+        exists r : pointer 't.
+          in_pset r q /\ same_block p r
+
+  lemma In_pset_all_singleton:
+    forall p : pointer 't.
+    forall q : pointer 't [in_pset p (pset_all (pset_singleton q : pset 't))].
+      in_pset p (pset_all (pset_singleton q : pset 't)) <-> same_block p q
+
+  use import Jessie_pset_union
+
+  lemma In_pset_union_all_singleton:
+    forall p1 : pointer 't [pset_all (pset_singleton p1 : pset 't)].
+      forall p2 : pointer 't
+      [pset_all (pset_singleton p2 : pset 't), (pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2)) : pset 't)].
+        forall p : pointer 't [in_pset p (pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2)) : pset 't)].
+          in_pset p (pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2)) : pset 't) <->
+            same_block p p1 \/ same_block p p2
+end
+
+theory Jessie_pset_disjoint
+  use import Jessie_pointer
+  use import Jessie_pset
+
+  predicate pset_disjoint (ps1 : pset 't) (ps2 : pset 't) =
+    forall p : pointer 't [in_pset p ps1 | in_pset p ps2].
+      not (in_pset p ps1 /\ in_pset p ps2)
+end
+
+theory Jessie_pset_included
+  use import Jessie_pointer
+  use import Jessie_pset
+
+  predicate pset_included (ps1 : pset 't) (ps2 : pset 't) =
+    forall p : pointer 't [in_pset p ps1 | in_pset p ps2].
+      in_pset p ps1 -> in_pset p ps2
+end
+
+theory Jessie_assigns
+  use import Jessie_pointer
+  use import Jessie_alloc_table
+  use import Jessie_memory
+  use import Jessie_pset
+
+  predicate not_assigns (a1 : alloc_table 't) (a2 : alloc_table 't) (m1 : memory 't 'v) (m2 : memory 't 'v ) (l : pset 't) =
+    forall p : pointer 't [in_pset p l | select m2 p | select m1 p].
+      valid a1 p /\ valid a2 p ->
+        not in_pset p l ->
+          select m2 p = select m1 p
+
+  lemma Not_assigns_refl:
+    forall a1 : alloc_table 't.
+      forall a2 : alloc_table 't.
+        forall m : memory 't 'v.
+          forall l : pset 't [not_assigns a1 a2 m m l].
+            not_assigns a1 a2 m m l
+
+  lemma Not_assigns_trans:
+    forall a1 : alloc_table 't.
+      forall a2 : alloc_table 't.
+        forall m1 : memory 't 'v.
+          forall m2 : memory 't 'v.
+            forall m3 : memory 't 'v.
+              forall l : pset 't [not_assigns a1 a2 m1 m2 l, not_assigns a1 a2 m2 m3 l | not_assigns a1 a2 m1 m3 l].
+                not_assigns a1 a2 m1 m2 l ->
+                not_assigns a1 a2 m2 m3 l ->
+                not_assigns a1 a2 m1 m3 l
+end
+
+theory Jessie_tag
+  use import int.Int
+
+  type tag_id 't
+
+  function int_of_tag (tag_id 't) : int
+
+  predicate parenttag (tag_id 't) (tag_id 't)
+
+  axiom Proper_parenttag:
+    forall t1: tag_id 't.
+      forall t2: tag_id 't [parenttag t1 t2].
+        parenttag t1 t2 -> t1 <> t2
+
+  axiom Int_of_parent_tag:
+    forall t1: tag_id 't.
+      forall t2: tag_id 't [parenttag t1 t2].
+        parenttag t1 t2 -> int_of_tag t1 > int_of_tag t2
+
+  predicate subtag (tag_id 't) (tag_id 't)
+
+  axiom Subtag_refl:
+    forall t: tag_id 't [subtag t t].
+      subtag t t
+
+  axiom Subtag_parent:
+    forall t1: (tag_id 't).
+    forall t2: (tag_id 't).
+    forall t3: (tag_id 't) [subtag t1 t2 | parenttag t2 t3 | subtag t1 t3].
+      subtag t1 t2 -> parenttag t2 t3 -> subtag t1 t3
+
+  function bottom_tag: tag_id 'a
+
+  axiom Bottom_tag:
+    forall t : tag_id 't [subtag t bottom_tag].
+      subtag t bottom_tag
+
+  predicate root_tag (t : tag_id 't) = parenttag t bottom_tag
+
+  axiom Root_subtag:
+    forall a: tag_id 't.
+    forall b: tag_id 't.
+    forall c: tag_id 't [subtag c a, root_tag a, subtag c b, root_tag b].
+      root_tag a -> root_tag b -> a <> b -> subtag c a -> not (subtag c b)
+end
+
+theory Jessie_tag_table
+  use map.Map
+  use import Jessie_pointer
+  use import Jessie_tag
+
+  type tag_table 't = Map.map (pointer 't) (tag_id 't)
+
+  function typeof (t : tag_table 't) (p : pointer 't) : tag_id 't = Map.get t p
+
+  predicate instanceof (t : tag_table 't) (p : pointer 't) (s : tag_id 't) = subtag (typeof t p) s
+
+  function downcast (tag_table 't) (pointer 't) (tag_id 't) : pointer 't
+
+  axiom Downcast_instanceof:
+    forall t : tag_table 't.
+    forall p : pointer 't.
+    forall s : tag_id 't [instanceof t p s | downcast t p s].
+      instanceof t p s -> downcast t p s = p
+end
+
+theory Jessie_reinterpret
+  use import int.Int
+  use import Jessie_pointer
+  use import Jessie_tag
+  use import Jessie_tag_table
+
+  function cast_factor (tag_id 't) (tag_id 't) : int
+
+  use import int.ComputerDivision
+
+  axiom Cast_factor_trans:
+    forall t1 : (tag_id 't).
+      forall t2 : (tag_id 't).
+        forall t3 : (tag_id 't).
+          let c12 = cast_factor t1 t2 in
+          let c23 = cast_factor t2 t3 in
+          let c13 = cast_factor t1 t3 in
+          (c12 > 0 /\ c23 > 0 -> c13 = c12 * c23) /\
+          (c12 > 0 /\ c23 < 0 /\ c12 > (-c23) /\ mod c12 (- c23) = 0 -> c13 = div c12 (- c23)) /\
+          (c12 > 0 /\ c23 < 0 /\ c12 < (-c23) /\ mod (- c23) c12 = 0 -> c13 = - (div (- c23) c12)) /\
+          (c12 < 0 /\ c23 > 0 /\ c23 > (- c12) /\ mod c23 (- c12) = 0 -> c13 = div c23 (- c12)) /\
+          (c12 < 0 /\ c23 > 0 /\ c23 < (- c12) /\ mod (- c12) c23 = 0 -> c13 = - (div (- c12) c23)) /\
+          (c12 < 0 /\ c23 < 0 -> c13 = (- c12) * c23)
+
+  axiom Downcast_reduce:
+    forall t : tag_table 't.
+      forall p : pointer 't.
+        forall s2 : tag_id 't [downcast t p s2].
+          forall s1 : tag_id 't [downcast t (downcast t p s1) s2].
+            cast_factor s1 s2 <> 0 -> downcast t (downcast t p s1) s2 = downcast t p s2
+
+  axiom Typeof_sidecast:
+    forall t : tag_table 't.
+    forall p : pointer 't.
+    forall s1 : tag_id 't.
+    forall s2 : tag_id 't [typeof t (downcast t p s2)].
+      cast_factor s1 s2 <> 0 ->
+      typeof t p = s1 ->
+      typeof t (downcast t p s2) = s2
+end
+
+theory Jessie_reinterpret_cast
+  use import int.Int
+  use import Jessie_pointer
+  use import Jessie_alloc_table
+  use import Jessie_tag
+  use import Jessie_tag_table
+
+  use import int.ComputerDivision
+
+  predicate reinterpret_cast_merge
+    (t : tag_table 't)
+    (a1 : alloc_table 't)
+    (a2 : alloc_table 't)
+    (p : pointer 't)
+    (s : tag_id 't)
+    (c : int) =
+      let ps = downcast t p s in
+      (forall i : int [shift p i | shift ps (div i c)]. mod i c = 0 -> downcast t (shift p i) s = shift ps (div i c)) /\
+      (forall i : int [shift ps i | shift p (i * c)]. downcast t (shift p (i * c)) s = shift ps i) /\
+      offset_min a2 ps = div (offset_min a1 p) c /\
+      offset_max a2 ps = div (offset_max a1 p + 1) c - 1
+
+  predicate reinterpret_cast_split
+    (t : tag_table 't)
+    (a1 : alloc_table 't)
+    (a2 : alloc_table 't)
+    (p : pointer 't)
+    (s : tag_id 't)
+    (c : int) =
+      let ps = downcast t p s in
+      (forall i : int [shift p i | shift ps (i * c)]. downcast t (shift p i) s = shift ps (i * c)) /\
+      (forall i : int [shift ps i | shift p (div i c)]. mod i c = 0 -> downcast t (shift p (div i c)) s = shift ps i) /\
+      offset_min a2 ps = c * offset_min a1 p /\
+      offset_max a2 ps = c * (offset_max a1 p + 1) - 1
+
+   predicate reinterpret_cast_retain
+     (t : tag_table 't)
+     (a1 : alloc_table 't)
+     (a2 : alloc_table 't)
+     (p : pointer 't)
+     (s : tag_id 't) =
+       let ps = downcast t p s in
+       (forall i : int [shift p i | shift ps i]. downcast t (shift p i) s = shift ps i) /\
+       offset_min a2 ps = offset_min a1 p /\
+       offset_max a2 ps = offset_max a1 p
+end
+
+theory Jessie_allocable
+  use import int.Int
+  use import Jessie_pointer
+  use import Jessie_alloc_table
+  use import Jessie_tag
+  use import Jessie_tag_table
+
+  predicate allocable (a : alloc_table 't) (p : pointer 't) =
+    offset_max a p = -1 < offset_min a p = 0
+
+  predicate freeable (a : alloc_table 't) (p : pointer 't) =
+    offset_min a p = 0 <= offset_max a p
+
+  predicate allocated (a : alloc_table 't) (p : pointer 't) =
+    offset_min a p <= offset_max a p
+
+  predicate tag_fresh (t : tag_table 't) (p : pointer 't) =
+    typeof t p = bottom_tag
+
+  predicate alloc_fresh (a : alloc_table 't) (p : pointer 't) =
+    allocable a p
+
+  lemma Alloc_fresh_not_same_block:
+    forall p1 : pointer 't.
+      forall p2 : pointer 't [same_block p1 p2].
+        forall a : alloc_table 't [allocable a p1, freeable a p2].
+          allocable a p1 /\ freeable a p2 ->
+           not same_block p1 p2
+end
+
+theory Jessie_alloc
+  use import int.Int
+  use import Jessie_pointer
+  use import Jessie_pset
+  use import Jessie_alloc_table
+  use import Jessie_tag
+  use import Jessie_tag_table
+  use import Jessie_allocable
+
+  predicate alloc_extends (a1 : alloc_table 't) (a2 : alloc_table 't) =
+    forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+      valid a1 p -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
+
+  predicate free_extends (a1 : alloc_table 't) (a2 : alloc_table 't) =
+    forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+      not allocated a1 p -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
+
+  predicate alloc_block (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) (n : int) =
+    forall q : pointer 't [offset_min a2 q | offset_min a1 q | offset_max a1 q | offset_max a1 q].
+        (not same_block q p ->
+          offset_min a2 q = offset_min a1 q /\
+          offset_max a2 q = offset_max a1 q) /\
+       (same_block q p ->
+          offset_min a2 q = 0 - sub_pointer q p /\
+          offset_max a2 q = n - 1 - sub_pointer q p)
+
+  predicate free_block (a1: alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) =
+    forall q : pointer 't [offset_min a2 q | offset_min a1 q | offset_max a2 q | offset_max a1 q].
+        (not same_block q p  ->
+          offset_min a2 q = offset_min a1 q /\
+          offset_max a2 q = offset_max a1 q) /\
+        (same_block q p ->
+          offset_min a2 q = 0 - sub_pointer q p /\
+          offset_max a2 q = -1 - sub_pointer q p)
+
+  predicate switch_blocks (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) (q : pointer 't) (n : int) =
+    forall r : pointer 't [offset_min a2 r | offset_min a1 r | offset_max a2 r | offset_max a1 r].
+       (not same_block r p /\ not same_block r q ->
+          offset_min a2 r = offset_min a1 r /\
+          offset_max a2 r = offset_max a1 r) /\
+       (same_block r p ->
+         offset_min a2 r = 0 - sub_pointer r p /\
+         offset_max a2 r = -1 - sub_pointer r p) /\
+       (same_block r q ->
+         offset_min a2 r = 0 - sub_pointer r q /\
+         offset_max a2 r = n - 1 - sub_pointer r q)
+
+  predicate alloc_blockset (a1 : alloc_table 't) (a2 : alloc_table 't) (q : pset 't) =
+    forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+      (forall r : pointer 't. in_pset r q -> not same_block p r) ->
+        offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
+
+  predicate tag_extends (t1 : tag_table 't) (t2 : tag_table 't) =
+    forall p : pointer 't.
+      typeof t1 p <> bottom_tag -> typeof t2 p = typeof t1 p
+
+  predicate alloc_tag_blockset (t1 : tag_table 't) (t2 : tag_table 't) (q : pset 't) =
+    forall p : pointer 't [typeof t1 p | typeof t2 p].
+      typeof t1 p <> bottom_tag -> typeof t2 p = typeof t1 p
+
+  predicate alloc_tag_block (t1 : tag_table 't) (t2 : tag_table 't) (p : pointer 't) = tag_extends t1 t2
+
+  predicate free_blockset (a1 : alloc_table 't) (a2 : alloc_table 't) (q : pset 't) = alloc_blockset a1 a2 q
+end
+
+theory Jessie_same_except
+  use import Jessie_pointer
+  use import Jessie_pset
+  use import Jessie_alloc_table
+  use import Jessie_tag
+  use import Jessie_tag_table
+
+  predicate alloc_same_except (a1 : alloc_table 't) (a2 : alloc_table 't) (l : pset 't) =
+    forall p: pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+      not in_pset p l ->
+        offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
+
+  lemma Alloc_same_except_trans:
+    forall l : pset 't.
+      forall a1 : alloc_table 't.
+        forall a2 : alloc_table 't [alloc_same_except a1 a2 l].
+          forall a3 : alloc_table 't [alloc_same_except a2 a3 l].
+            alloc_same_except a1 a2 l /\
+            alloc_same_except a2 a3 l ->
+            alloc_same_except a1 a3 l
+
+  predicate tag_same_except (t1 : tag_table 't) (t2 : tag_table 't) (l : pset 't) =
+    forall p : pointer 't.
+      typeof t1 p <> bottom_tag -> typeof t2 p = typeof t1 p
+
+  lemma Tag_same_except_refl:
+    forall t : tag_table 't.
+    forall l : pset 't [tag_same_except t t l].
+      tag_same_except t t l
+end
+
+theory Jessie_rmem
+  use import int.Int
+  use import Jessie_pointer
+  use import Jessie_alloc_table
+  use import Jessie_memory
+  use import Jessie_pset
+  use import Jessie_pset_range
+  use import Jessie_pset_union
+  use import Jessie_assigns
+
+  function rmem (m : memory 't 'v1) : memory 't 'v2
+
+  function rfactor (m : memory 't 'v) : int
+
+  function rpointer_new (m : memory 't 'v) (p : pointer 't) : pointer 't
+
+  function pset_reinterpret (m : memory 't 'v) (l : pset 't) : pset 't
+
+  axiom Pset_reinterpret_empty:
+    forall m : memory 't 'v [pset_reinterpret m pset_empty : pset 't].
+      pset_reinterpret m pset_empty : pset 't = pset_empty
+
+  use import int.ComputerDivision
+
+  axiom Pset_reinterpret_pset_range:
+    forall m : memory 't 'v.
+      forall p : pointer 't.
+        forall a, b : int [pset_reinterpret m (pset_range (pset_singleton p) a b) : pset 't].
+          (rfactor m > 0 ->
+            (pset_reinterpret m (pset_range (pset_singleton p) a b) : pset 't) =
+            pset_range (pset_singleton (rpointer_new m p)) (a * rfactor m) ((b + 1) * rfactor m - 1)) /\
+          (rfactor m < 0 /\ mod a (rfactor m) = 0 /\ mod (b + 1) (rfactor m) = 0 ->
+            (pset_reinterpret m (pset_range (pset_singleton p) a b) : pset 't) =
+            pset_range (pset_singleton (rpointer_new m p)) (div a (rfactor m)) ((div (b + 1) (rfactor  m)) - 1)) /\
+          (rfactor m = 0 ->
+            (pset_reinterpret m (pset_range (pset_singleton p) a b) : pset 't) =
+            pset_range (pset_singleton (rpointer_new m p)) a b)
+
+  axiom Pset_reinterpret_pset_union_distrib:
+    forall m : memory 't 'v.
+      forall l1, l2 : pset 't [pset_reinterpret m (pset_union l1 l2)].
+        pset_reinterpret m (pset_union l1 l2) = pset_union (pset_reinterpret m l1) (pset_reinterpret m l2)
+
+  axiom Rmem_not_assigns:
+    forall m1 : memory 't 'v1 [rmem m1 : memory 't 'v2].
+      forall m3 : memory 't 'v2 [rmem m3 : memory 't 'v1].
+        forall a1, a2 : alloc_table 't.
+          forall l : pset 't [not_assigns a1 a2 (rmem m1) m3 l | not_assigns a1 a2 m1 (rmem m3) l].
+            (not_assigns a1 a2 (rmem m1) m3 l <->
+             not_assigns a1 a2 m1 (rmem m3) (pset_reinterpret m3 l)) /\
+            (not_assigns a1 a2 (rmem m1) m3 (pset_reinterpret m1 l) <->
+             not_assigns a1 a2 m1 (rmem m3) l)
+end
