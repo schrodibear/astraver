@@ -246,6 +246,28 @@ theory Jessie_assigns
                 not_assigns a1 a2 m1 m3 l
 end
 
+theory Jessie_assigns_strong
+  use import Jessie_pointer
+  use import Jessie_memory
+  use import Jessie_pset
+  use import Jessie_alloc_table
+  use import Jessie_assigns
+
+  predicate not_assigns_strong (m1 : memory 't 'v) (m2 : memory 't 'v ) (l : pset 't) =
+    forall p : pointer 't.
+      not in_pset p l ->
+        select m2 p = select m1 p
+
+  lemma not_assigns_strong:
+    forall m1 : memory 't 'v.
+      forall m2 : memory 't 'v.
+        forall l : pset 't [not_assigns_strong m1 m2 l].
+          not_assigns_strong m1 m2 l ->
+            forall a1 : alloc_table 't.
+              forall a2 : alloc_table 't [not_assigns a1 a2 m1 m2 l].
+                not_assigns a1 a2 m1 m2 l
+end
+
 theory Jessie_tag
   use import int.Int
 
@@ -578,4 +600,409 @@ theory Jessie_rmem
              not_assigns a1 a2 m1 (rmem m3) (pset_reinterpret m3 l)) /\
             (not_assigns a1 a2 (rmem m1) m3 (pset_reinterpret m1 l) <->
              not_assigns a1 a2 m1 (rmem m3) l)
+end
+
+module Jessie_sub_pointer_safe
+  use import Jessie_pointer
+
+  val sub_pointer (p : pointer 't) (q : pointer 't) : int
+    requires { "expl:Pointer difference" same_block p q }
+    ensures  { result = sub_pointer p q }
+end
+
+module Jessie_sub_pointer_unsafe
+  use import Jessie_pointer
+
+  val sub_pointer (p : pointer 't) (q : pointer 't) : int
+    requires { true }
+    ensures  { result = sub_pointer p q }
+end
+
+module Jessie_eq_pointer_safe
+  use import Jessie_pointer
+  use import Jessie_alloc_table
+
+  val eq_pointer (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) (q : pointer 't) : bool
+    requires { "expl:Pointer equality"
+                 ("expl:Same block" same_block p q) \/
+                 ("expl:Is null" p = null \/ q = null) \/
+                 ("expl:Both valid" valid a1 p /\ valid a2 q) }
+    ensures  { result = True <-> p = q }
+
+
+  val neq_pointer (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) (q : pointer 't) : bool
+    requires { "expl:Pointer inequality"
+                 ("expl:Same block" same_block p q) \/
+                 ("expl:Is not null" p = null \/ q = null) \/
+                 ("expl:Both valid" valid a1 p /\ valid a2 q) }
+    ensures  { result = True <-> p <> q }
+end
+
+module Jessie_eq_pointer_unsafe
+  use import Jessie_pointer
+
+  val eq_pointer (p : pointer 't) (q : pointer 't) : bool
+    requires { true }
+    ensures  { result = True <-> p = q }
+
+
+  val neq_pointer (p : pointer 't) (q : pointer 't) : bool
+    requires { true }
+    ensures  { result = True <-> p <> q }
+end
+
+module Jessie_acc_safe
+  use import int.Int
+  use import Jessie_pointer
+  use import Jessie_memory
+  use import Jessie_alloc_table
+
+  val acc (alloc : alloc_table 't) (m : memory 't 'v) (p : pointer 't) : 'v
+    requires { "expl:Validity" offset_min alloc p <= 0 <= offset_max alloc p }
+    ensures  { result = select m p }
+
+  val acc_safe (m : memory 't 'v) (p : pointer 't) : 'v
+    requires { "expl:Valid bounded access" true }
+    ensures  { result = select m p }
+end
+
+module Jessie_acc_unsafe
+  use import Jessie_pointer
+  use import Jessie_memory
+
+  val acc (m : memory 't 'v) (p : pointer 't) : 'v
+    requires { true }
+    ensures  { result = select m p }
+end
+
+module Jessie_acc_offset_safe
+  use import int.Int
+  use import Jessie_pointer
+  use import Jessie_tag
+  use import Jessie_tag_table
+  use import Jessie_alloc_table
+  use import Jessie_memory
+
+  val acc_offset
+    (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v)  (p : pointer 't) (s : tag_id 't) (off : int) :  'v
+    requires { "expl:Dereference by offset"
+                 ("expl:Validity" offset_min alloc p <= off <= offset_max alloc p) /\
+                 ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                       ("expl:Non-zero offset" typeof tag p = s))) }
+    ensures  { result = select m (shift p off) }
+
+  val acc_offset_typesafe (alloc : alloc_table 't) (m : memory 't 'v) (p : pointer 't) (off : int) :  'v
+    requires { "expl:Dereference by offset"
+                 ("expl:Validity" offset_min alloc p <= off <= offset_max alloc p) }
+    ensures  { result = select m (shift p off) }
+
+  val acc_offset_bounded (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) : 'v
+    requires { "expl:Valid bounded access"
+                ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                      ("expl:Non-zero offset" typeof tag p = s))) }
+    ensures  { result = select m p }
+
+  val acc_offset_lbounded
+    (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) : 'v
+    requires { "expl:Bounded pointer dereference"
+                 ("expl:Validity" off <= offset_max alloc p) /\
+                 ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                       ("expl:Non-zero offset" typeof tag p = s))) }
+    ensures  { result = select m (shift p off) }
+
+  val acc_offset_lbounded_typesafe
+      (alloc : alloc_table 't) (m : memory 't 'v) (p : pointer 't) (off : int) : 'v
+    requires { "expl:Bounded pointer dereference"
+                 ("expl:Validity" off <= offset_max alloc p) }
+    ensures  { result = select m (shift p off) }
+
+  val acc_offset_rbounded
+      (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v) (p : pointer 't) (s : tag_id 't) (off : int) :  'v
+    requires { "expl:Bounded pointer dereference"
+                 ("expl:Validity" offset_min alloc p <= off) /\
+                 ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                       ("expl:Non-zero offset" typeof tag p = s))) }
+    ensures  { result = select m (shift p off) }
+
+  val acc_offset_rbounded_typesafe
+      (alloc : alloc_table 't) (m : memory 't 'v) (p : pointer 't) (off : int) :  'v
+    requires { "expl:Bounded pointer dereference"
+                 ("expl:Validity" offset_min alloc p <= off) }
+    ensures  { result = select m (shift p off) }
+end
+
+module Jessie_upd_safe
+  use import int.Int
+  use import ref.Ref
+  use import Jessie_pointer
+  use import Jessie_memory
+  use import Jessie_alloc_table
+
+  val upd
+    (alloc : alloc_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (v : 'v) :  unit
+    requires { "expl:Assignment"
+                 ("expl:Left valid" offset_min alloc p <= 0) /\ ("expl:Right valid" 0 <= offset_max alloc p) }
+    reads { m }
+    writes { m }
+    ensures { !m = store (old !m) p v }
+
+  val upd_safe (m : ref (memory 't 'v)) (p : pointer 't) (v : 'v) : unit
+    requires { true }
+    reads    { m  }
+    writes   { m }
+    ensures  { !m = store (old !m) p v }
+end
+
+module Jessie_upd_unsafe
+  use import ref.Ref
+  use import Jessie_pointer
+  use import Jessie_memory
+
+  val upd (m : ref (memory 't 'v)) (p : pointer 't) (v : 'v) : unit
+    requires { true }
+    reads    { m  }
+    writes   { m }
+    ensures  { !m = store (old !m) p v }
+end
+
+module Jessie_upd_offset_safe
+  use import int.Int
+  use import ref.Ref
+  use import Jessie_pointer
+  use import Jessie_memory
+  use import Jessie_alloc_table
+  use import Jessie_tag
+  use import Jessie_tag_table
+
+  val upd_offset
+      (alloc : alloc_table 't) (tag: tag_table 't) (m: ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int)
+      (v : 'v) : unit
+    requires { "expl:Assignment with offset"
+                 ("expl:Left valid" offset_min alloc p <= off) /\ ("expl:Right valid" off <= offset_max alloc p) /\
+                 ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                       ("expl:Non-zero offset" typeof tag p = s))) }
+    reads    { m }
+    writes   { m }
+    ensures  { !m = store (old !m) (shift p off) v }
+
+  val upd_offset_typesafe  (alloc : alloc_table 't) (m: ref (memory 't 'v)) (p : pointer 't) (off : int) (v : 'v) : unit
+    requires { "expl:Assignment with offset"
+               ("expl:Left valid" offset_min alloc p <= off) /\ ("expl:Right valid" off <= offset_max alloc p) }
+    reads    { m }
+    writes   { m }
+    ensures  { !m = store (old !m) (shift p off) v }
+
+  val upd_offset_lbound
+     (alloc : alloc_table 't) (tag : tag_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int) (v : 'v) :  unit
+    reads { m }
+    writes { m }
+    requires { "expl:Assignment"
+                 ("expl:Validity" off <= offset_max alloc p) /\
+                 ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                       ("expl:Non-zero offset" typeof tag p = s))) }
+    ensures  { !m = store (old !m) (shift p off) v }
+
+  val upd_offset_lbound_typesafe (alloc : alloc_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (off : int) (v : 'v) :  unit
+    reads { m }
+    writes { m }
+    requires { "expl:Assignment"
+                 ("expl:Validity" off <= offset_max alloc p) }
+    ensures  { !m = store (old !m) (shift p off) v }
+
+  val upd_offset_rbound
+      (alloc : alloc_table 't) (tag : tag_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int) (v : 'v) :  unit
+      reads { m }
+      writes { m }
+      requires { "expl:Assignment"
+                   ("expl:Validity" offset_min alloc p <= off) /\
+                   ("expl:Correct type" (("expl:Zero offset" off = 0 /\ instanceof tag p s) \/
+                                         ("expl:Non-zero offset" typeof tag p = s))) }
+      ensures  { !m = store (old !m) (shift p off) v }
+
+  val upd_offset_rbound_typesafe (alloc : alloc_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (off : int) (v : 'v) :  unit
+    reads { m }
+    writes { m }
+    requires { "expl:Assignment"
+                 ("expl:Validity" offset_min alloc p <= off) }
+    ensures  { !m = store (old !m) (shift p off) v }
+end
+
+module Jessie_instanceof
+  use import Jessie_pointer
+  use import Jessie_tag
+  use import Jessie_tag_table
+
+  val instanceof (t : tag_table 't) (p : pointer 't) (s: tag_id 't) : bool
+    requires { true }
+    ensures  { result = True <-> instanceof t p s }
+end
+
+module Jessie_downcast_safe
+  use import Jessie_pointer
+  use import Jessie_tag
+  use import Jessie_tag_table
+
+  val downcast (t : tag_table 't) (p : pointer 't) (s : tag_id 't) :  pointer 't
+    requires { "expl:Prefix cast"
+               ("expl:Up/downcast" instanceof t p s) }
+    ensures  { result = downcast t p s }
+end
+
+module Jessie_downcast_safe_reinterpret
+  use import Jessie_pointer
+  use import Jessie_tag
+  use import Jessie_tag_table
+  use import Jessie_reinterpret
+
+  val downcast (t : tag_table 't) (p : pointer 't) (s : tag_id 't) :  pointer 't
+    requires { "expl:Prefix cast or reinterpret"
+               ("expl:Up/downcast" instanceof t p s) \/ ("expl:Reinterpret cast" cast_factor (typeof t p) s <> 0) }
+    ensures  { result = downcast t p s }
+end
+
+module Jessie_downcast_unsafe
+  use import Jessie_pointer
+  use import Jessie_tag
+  use import Jessie_tag_table
+
+  val downcast (t : tag_table 't) (p : pointer 't) (s : tag_id 't) : pointer 't
+    requires { true }
+    ensures  { result = downcast t p s }
+end
+
+module Jessie_shift_safe
+  use import Jessie_pointer
+  use import Jessie_tag
+  use import Jessie_tag_table
+
+  val shift (t : tag_table 't) (p : pointer 't) (s : tag_id 't) (off : int) : pointer 't
+    requires { "expl:Correct type" typeof t p = s }
+    ensures  { result = shift p off }
+end
+
+module Jessie_shift_unsafe
+  use import Jessie_pointer
+  use import Jessie_tag
+  use import Jessie_tag_table
+
+  val shift (p : pointer 't) (off : int) : pointer 't
+    requires { true }
+    ensures  { result = shift p off }
+end
+
+module Jessie_any_int
+  use import int.Int
+  val any_int (_void : unit) :  int
+end
+
+module Jessie_any_real
+  use import real.Real
+  val any_real (_void : unit) :  real
+end
+
+module Jessie_any_bool
+  val any_bool (_void : unit) :  bool
+end
+
+module Jessie_any_pointer
+  use import Jessie_pointer
+  val any_pointer (_void : unit) :  pointer 'z
+end
+
+module Jessie_any_memory
+  use import Jessie_memory
+  val any_memory (_void : unit) :  memory 't 'v
+end
+
+module Jessie_any_alloc_table
+  use import Jessie_alloc_table
+  val any_alloc_table (_void : unit) :  alloc_table 't
+end
+
+module Jessie_any_tag_table
+  use import Jessie_tag_table
+  val any_tag_table (_void : unit) :  tag_table 't
+end
+
+module Jessie_reinterpret_unsafe
+  use import int.Int
+  use import ref.Ref
+  use import Jessie_pointer
+  use import Jessie_pset
+  use import Jessie_pset_range
+  use import Jessie_pset_union
+  use import Jessie_memory
+  use import Jessie_alloc_table
+  use import Jessie_allocable
+  use import Jessie_alloc
+  use import Jessie_tag
+  use import Jessie_tag_table
+  use import Jessie_assigns_strong
+
+  val reinterpret
+    (a : ref (alloc_table 't))
+    (t : tag_table 't)
+    (s1 : tag_id 't)
+    (s2 : tag_id 't)
+    (m : ref (memory 't 'v))
+    (p : pointer 't) :
+    unit
+    writes { a, m }
+    ensures  { let pset_old = pset_singleton p in
+               let ps = downcast t p s2 in
+               let pset_new = pset_singleton ps in
+               alloc_blockset (old !a) !a (pset_union pset_old pset_new) /\
+               switch_blocks (old !a) !a p ps (offset_max !a ps + 1) /\
+               alloc_fresh (old !a) ps /\
+               allocable !a p /\
+               let pset_range_new =
+                 pset_range (pset_singleton ps : pset 't) (offset_min !a ps) (offset_max !a ps)
+               in
+               not_assigns_strong (old !m) !m pset_range_new }
+end
+
+module Jessie_reintepret_safe
+  use import int.Int
+  use import ref.Ref
+  use import Jessie_pointer
+  use import Jessie_pset
+  use import Jessie_pset_range
+  use import Jessie_pset_union
+  use import Jessie_reinterpret
+  use import Jessie_memory
+  use import Jessie_alloc_table
+  use import Jessie_allocable
+  use import Jessie_alloc
+  use import Jessie_tag
+  use import Jessie_tag_table
+  use import Jessie_assigns_strong
+
+  use import int.ComputerDivision
+
+  val reinterpret
+        (a : ref (alloc_table 't))
+        (t : tag_table 't)
+        (s1 : tag_id 't)
+        (s2 : tag_id 't)
+        (m : ref (memory 't 'v))
+        (p : pointer 't) :
+        unit
+    writes { a, m }
+    requires { "expl:Reinterpret cast"
+                 ("expl:Correct type" typeof t (shift p (offset_min !a p - 1)) = s1)
+               /\ ("expl:Validity" (offset_min !a p <= offset_max !a p))
+               /\  ("expl:Valid cast" ("expl:Split" cast_factor s1 s2 > 0) \/
+                    ("expl:Join" mod (offset_max !a p - offset_min !a p + 1) (- cast_factor s1 s2) = 0))
+             }
+    ensures  { let pset_old = pset_singleton p in
+               let ps = downcast t p s2 in
+               let pset_new = pset_singleton ps in
+               alloc_blockset (old !a) !a (pset_union pset_old pset_new) /\
+               switch_blocks (old !a) !a p ps (offset_max !a ps + 1) /\
+               alloc_fresh (old !a) ps /\
+               allocable !a p /\
+               let pset_range_new =
+                 pset_range (pset_singleton ps : pset 't) (offset_min !a ps) (offset_max !a ps)
+               in
+               not_assigns_strong (old !m) !m pset_range_new }
 end
