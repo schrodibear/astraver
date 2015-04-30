@@ -677,8 +677,8 @@ let struc si =
              O.P.(forall (Name.Generic.tag_table (struct_root si)) (tag_table_type ri) @@ fun _t ->
                   forall "p" (pointer_type (JCalloc_root ri) (JCtag (si, []))) @@ fun p ->
                   impl
-                    (instanceof p si)
-                    (typeeq p si)))]
+                    (instanceof ~code:false p si)
+                    (typeeq ~code:false p si)))]
     else
       []
   in
@@ -751,7 +751,7 @@ let root =
                    forall "p" ri_pointer_type @@ fun p ->
                    forall "q" ri_pointer_type @@ fun q ->
                    impl (same_block p q)
-                     T.(typeof ri p = typeof ri q)))]
+                     T.(typeof ~code:false ri p = typeof ~code:false ri q)))]
       else
         []
     in

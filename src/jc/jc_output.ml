@@ -384,13 +384,13 @@ struct
     let v = Name.alloc_table (ac, r) in
     if deref
     then at v ~lab
-    else var P.(v ^ "_at_" ^ Name.label lab)
+    else var P.(v ^ if lab <> Env.LabelHere then "_at_" ^ Name.label lab else "")
 
   let tag_table ?(deref=true) ?(lab=Env.LabelHere) ?(r=Region.dummy_region) ri =
     let v = Name.tag_table (ri, r) in
     if deref
     then at v ~lab
-    else var P.(v ^ "_at_" ^ Name.label lab)
+    else var P.(v ^ if lab <> Env.LabelHere then "_at_" ^ Name.label lab else "")
 
   let offset_min ac ?r ?code:deref ?lab p = F.offset_min () $ alloc_table ?deref ?lab ?r ac ^. p
 
@@ -999,9 +999,18 @@ end
 module Make_bounded (I : Bounded) (O : Op_gen) =
 struct
   include I
-  let theory = "Enum_" ^ name
-  let safe_module = "Safe_enum_" ^ name
-  let unsafe_module = "Unsafe_enum_" ^ name
+  let theory =
+    match I.ty with
+    | Int _ -> String.capitalize name
+    | Enum _ -> "Enum_" ^ name
+  let safe_module =
+    match I.ty with
+    | Int _ -> "Safe_" ^ name
+    | Enum _ -> "Safe_enum_" ^ name
+  let unsafe_module =
+    match I.ty with
+    | Int _ -> "Unsafe_" ^ name
+    | Enum _ -> "Unsafe_enum_" ^ name
   type t = I.bound bounded integer
   let rel pred t1 t2 : pred = App (B_num_pred (pred, Integral I.ty), T.(t1 ^. t2))
   module T =
@@ -1269,19 +1278,19 @@ struct
 
   let (&&) p1 p2 =
     match unlabel p1, unlabel p2 with
-    | True, _ -> True
-    | _, True -> True
-    | False, _ -> p2
-    | _, False -> p1
-    | _, _ -> Or (p1, p2)
-
-  let (||) p1 p2 =
-    match unlabel p1, unlabel p2 with
     | True, _ -> p2
     | _, True -> p1
     | False, _ -> False
     | _, False -> False
     | _, _ -> And (p1, p2)
+
+  let (||) p1 p2 =
+    match unlabel p1, unlabel p2 with
+    | True, _ -> True
+    | _, True -> True
+    | False, _ -> p2
+    | _, False -> p1
+    | _, _ -> Or (p1, p2)
 
   let rec conj =
     function

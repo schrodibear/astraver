@@ -2601,7 +2601,11 @@ let integral_types () =
     []
   else
     Type.Integral.fold_all
-      (fun name (ty, bitsize) acc -> integral_type name ty bitsize :: acc) []
+      (fun name (ty, bitsize) acc ->
+         match unrollType (ty : Type.Integral.t :> typ) with
+         | TInt _ -> acc
+         | _ -> integral_type name ty bitsize :: acc)
+      []
 
 let type_conversions () =
   let typconv_axiom ty1 ty1_to_ty2 ty2_to_ty1 =
@@ -2894,7 +2898,7 @@ let file f =
     then memory_reinterpretation_predicates (get_compinfo : typ -> _ :> 'a Type.t -> _) ()
     else []
   in
- (* Define all integral types as enumerated types in Jessie *)
+  (* Define all integral types as enumerated types in Jessie *)
   integral_types ()
   (* Define conversion functions and identity axiom for back
      and forth conversion *)

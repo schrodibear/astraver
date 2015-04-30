@@ -3438,8 +3438,6 @@ let enums eis =
   let generic_enum = Mod.dummy "Generic_enum" in
   let safe_enum = Mod.dummy "Safe_enum" in
   let unsafe_enum = Mod.dummy "Unsafe_enum" in
-  let safe_enum_ext = Mod.dummy "Safe_enum_ext" in
-  let unsafe_enum_ext = Mod.dummy "Unsafe_enum_ext" in
   let open O in
   let here = [`Namespace (None, None)] in
   let mod_ ~th ~safe ty =
@@ -3449,17 +3447,17 @@ let enums eis =
       ~safe
       ~deps:[Dependency (Use (`Import None, th));
              Dependency (Clone (`Export, generic_enum, here));
-             Dependency (Clone (`Export, (if safe then safe_enum else unsafe_enum), here));
-             Dependency (Clone (`Export, (if safe then safe_enum_ext else unsafe_enum_ext), here))]
+             Dependency (Clone (`Export, (if safe then safe_enum else unsafe_enum), here))]
       []
   in
   let enum = Th.dummy "Enum" in
+  let generic_bit_enum = Mod.dummy "Generic_bit_enum" in
   let safe_bit_enum = Mod.dummy "Safe_bit_enum" in
   let unsafe_bit_enum = Mod.dummy "Unsafe_bit_enum" in
   Entry.some enum ::
   List.map
     Entry.some
-    [generic_enum; safe_enum; unsafe_enum; safe_enum_ext; unsafe_enum_ext; safe_bit_enum; unsafe_bit_enum] @
+    [generic_enum; safe_enum; unsafe_enum; generic_bit_enum; safe_bit_enum; unsafe_bit_enum] @
   List.flatten @@
   ListLabels.map
     eis
@@ -3474,7 +3472,7 @@ let enums eis =
                ~name:(enum_entry_name ~how:(`Module (safe, true)) i)
                ~safe
                ~deps:[Dependency (Use (`Import None, th));
-                      Dependency (Clone (`Export, (if safe then safe_enum else unsafe_enum), here));
+                      Dependency (Clone (`Export, generic_bit_enum, here));
                       Dependency (Clone (`Export, (if safe then safe_bit_enum else unsafe_bit_enum), here))]
                [])
         in
@@ -3537,7 +3535,7 @@ let enum_cast (ei_to, ei_from) =
         (Param (Arrow
                   (n, Logic lt_from,
                    (Annot
-                      ((if safe && not m && (ei_to.ei_min > ei_from.ei_min || ei_to.ei_max < ei_from.ei_max)
+                      ((if safe && not m && (ei_to.ei_min >/ ei_from.ei_min || ei_to.ei_max </ ei_from.ei_max)
                         then P.(F.user ~from "in_bounds" $. n_t)
                         else True),
                        Logic lt_to,
@@ -3685,6 +3683,64 @@ let globals () =
               (fun () -> [tag_table (ri, r)]))
          Effect.constant_tag_tables);
   return ()
+
+let dummies =
+  let open O in
+  List.map
+    Entry.some
+    Th.[
+      dummy "Int";
+      dummy "Bool";
+      dummy "Jessie_pointer";
+      dummy "Jessie_zwf";
+      dummy "Jessie_alloc_table";
+      dummy "Jessie_memory";
+      dummy "Jessie_pset";
+      dummy "Jessie_pset_range";
+      dummy "Jessie_pset_range_left";
+      dummy "Jessie_pset_range_right";
+      dummy "Jessie_pset_deref";
+      dummy "Jessie_pset_union";
+      dummy "Jessie_pset_all";
+      dummy "Jessie_pset_disjoint";
+      dummy "Jessie_pset_included";
+      dummy "Jessie_assigns";
+      dummy "Jessie_tag";
+      dummy "Jessie_tag_table";
+      dummy "Jessie_reinterpret";
+      dummy "Jessie_reinterpret_cast";
+      dummy "Jessie_allocable";
+      dummy "Jessie_alloc";
+      dummy "Jessie_same_except";
+      dummy "Jessie_rmem"] @
+  List.map
+    Entry.some
+    Mod.[
+      dummy "Jessie_sub_pointer_safe";
+      dummy "Jessie_sub_pointer_unsafe";
+      dummy "Jessie_eq_pointer_safe";
+      dummy "Jessie_eq_pointer_unsafe";
+      dummy "Jessie_acc_safe";
+      dummy "Jessie_acc_unsafe";
+      dummy "Jessie_acc_offset_safe";
+      dummy "Jessie_upd_safe";
+      dummy "Jessie_upd_unsafe";
+      dummy "Jessie_upd_offset_safe";
+      dummy "Jessie_instanceof";
+      dummy "Jessie_downcast_safe";
+      dummy "Jessie_downcast_safe_reinterpret";
+      dummy "Jessie_downcast_unsafe";
+      dummy "Jessie_shift_safe";
+      dummy "Jessie_shift_unsafe";
+      dummy "Jessie_any_int";
+      dummy "Jessie_any_real";
+      dummy "Jessie_any_bool";
+      dummy "Jessie_any_pointer";
+      dummy "Jessie_any_memory";
+      dummy "Jessie_any_alloc_table";
+      dummy "Jessie_any_tag_table";
+      dummy "Jessie_reinterpret_unsafe";
+      dummy "Jessie_reintepret_safe"]
 
 include Interp_struct
 

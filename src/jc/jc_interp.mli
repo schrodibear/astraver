@@ -176,6 +176,7 @@ val memory : mem_class * region -> [ `Module of bool ] why_decl
 val alloc_table : alloc_class * region -> [ `Module of bool ] why_decl
 val tag_table : root_info * region -> [ `Module of bool ] why_decl
 val globals : unit -> some_entry list
+val dummies : some_entry list
 val struc : struct_info -> some_entry list
 val root : root_info -> some_entry list
 val alloc :

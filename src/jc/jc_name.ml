@@ -130,7 +130,7 @@ end
 module Theory =
 struct
   type t = string * bool
-  let root ri = String.capitalize (Type.root ri) ^ "_root", false
+  let root ri = "Root_" ^ (Type.root ri), false
   (* ATTENTION: this theory is non-existent, there is no more "obsolete" support for BV,
      the new implementation of BV in Why3 should become supported by Jessie2. *)
   let bitvector = "Bitvector", false
@@ -142,12 +142,12 @@ struct
   let current = "", false
   let struct_ =
     function
-    | JCtag (si, _) -> "Struct_" ^ si.si_name, true
-    | JCroot ri -> "Root_" ^ ri.ri_name, true
+    | JCtag (si, _) -> "Struct_" ^ si.si_name, false
+    | JCroot ri -> "Root_" ^ ri.ri_name, false
   let axiomatic li =
-    Option.map_default li.li_axiomatic ~default:("Logic_" ^ li.li_final_name) ~f:((^) "Axiomatic_"), true
-  let logic_type name = "Logic_type_" ^ name, true
-  let lemma ~is_axiom id = (if is_axiom then "Axiom_" else "Lemma_") ^ id, true
+    Option.map_default li.li_axiomatic ~default:("Logic_" ^ li.li_final_name) ~f:((^) "Axiomatic_"), false
+  let logic_type name = "Logic_type_" ^ name, false
+  let lemma ~is_axiom id = (if is_axiom then "Axiom_" else "Lemma_") ^ id, false
 
   module Jessie =
   struct
@@ -189,7 +189,7 @@ struct
     | false, false -> "_safety"
   let exceptions = "Exceptions", true
   let globals pc =
-    "Globals_" ^ Option.map_default ~default:"simple" ~f:(String.lowercase % fst % Theory.struct_) pc, true
+    "Globals_" ^ Option.map_default ~default:"simple" ~f:(String.lowercase % fst % Theory.struct_) pc, false
 
   module Jessie =
   struct

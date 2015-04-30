@@ -288,7 +288,7 @@ let run () =
       let jessie_opt =
 	match atp with
 	  | "why3" -> ""
-          | "why3ml" | "why3ide" | "why3replay" | "why3autoreplay" -> "-why3ml"
+          | "why3ml" | "why3ide" | "why3replay" | "why3autoreplay" -> ""
 	  | _ -> "-why-opt -split-user-conj"
       in
       let cmd =

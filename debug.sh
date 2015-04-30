@@ -4,7 +4,7 @@ BUILDSRC=$(dirname $(readlink -f $0))/_build/src
 
 make -C $BUILDSRC/../.. -j byte
 
-ocamlc -c -no-alias-deps -open Aliases -I "$BUILDSRC/why" -I "$BUILDSRC/jc" -o "$BUILDSRC/jc/jc_debug_print.cmo" "$BUILDSRC/../../src/jc/jc_debug_print.ml"
+ocamlc -c -g -no-alias-deps -open Aliases -I "$BUILDSRC/why" -I "$BUILDSRC/jc" -o "$BUILDSRC/jc/jc_debug_print.d.cmo" "$BUILDSRC/../../src/jc/jc_debug_print.ml"
 
 SCRIPT='load_printer nums.cma
 load_printer why_pp.cmo
@@ -23,22 +23,18 @@ load_printer jc_print_p.cmo
 load_printer jc_print.cmo
 load_printer jc_debug_print.cmo
 
-load_printer jc_print_n.cmo
-load_printer why_rc.cmo
-load_printer why_version.cmo
-load_printer jc_version.cmo
-load_printer why_lib.cmo
-load_printer jc_position.cmo
-load_printer jc_output_misc.cmo
-load_printer why3_kw.cmo
-load_printer jc_why3_output.cmo
-load_printer jc_why_output.cmo
-load_printer jc_options.cmo
-load_printer jc_norm.cmo
-load_printer jc_name.cmo
-load_printer jc_struct_tools.cmo
-load_printer jc_typing.cmo
-load_printer jc_effect.cmo
+load_printer jc_print_n.d.cmo
+load_printer why_rc.d.cmo
+load_printer why_version.d.cmo
+load_printer jc_version.d.cmo
+load_printer jc_position.d.cmo
+load_printer jc_name.d.cmo
+load_printer jc_output.d.cmo
+load_printer jc_options.d.cmo
+load_printer jc_norm.d.cmo
+load_printer jc_struct_tools.d.cmo
+load_printer jc_typing.d.cmo
+load_printer jc_effect.d.cmo
 install_printer Jc_effect.print_effect
 
 install_printer Jc_debug_print.expr

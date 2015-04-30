@@ -80,8 +80,11 @@ val term :
   formatter -> 'a term -> unit
 
 val list :
-  (formatter -> 'a -> unit) ->
-  sep:('b, 'c, 'd, 'e, 'e, 'b) format6 -> formatter -> 'a list -> unit
+  ?pre:('a, 'b, 'c, 'd, 'd, 'a) format6 ->
+  sep:('e, 'f, 'g, 'h, 'h, 'e) format6 ->
+  ?post:('i, 'j, 'k, 'l, 'l, 'i) format6 ->
+  (Format.formatter -> 'm -> unit) ->
+  Format.formatter -> 'm list -> unit
 
 val pred :
   entry:string ->

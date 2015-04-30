@@ -71,7 +71,7 @@ object
   method set_label = invoke_static o l "set_label"
 end
 
-class marked_wrapper o m : marked =
+class marked_wrapper _o _m : marked =
 object
   (* method mark = unsafe_call m "mark" *)
   method mark = "" (* due to Output implementation, which re-constructs the object in case the label in non-empty *)
@@ -124,8 +124,8 @@ object
     | JCTbase_block t         ->   JCTbase_block (wrap t)
     | JCTinstanceof (t, lab, si) -> JCTinstanceof (wrap t, lab, si)
     | JCTcast (t, lab, si)    ->   JCTcast (wrap t, lab, si)
-    | JCTbitwise_cast (t, lab, si) -> JCTbitwise_cast (wrap t, lab, si)
     | JCTrange_cast (t, ei)   ->   JCTrange_cast (wrap t, ei)
+    | JCTrange_cast_mod (t, ei) -> JCTrange_cast_mod (wrap t, ei)
     | JCTreal_cast (t, rc)    ->   JCTreal_cast (wrap t, rc)
     | JCTif (ti, tt, te)      ->   JCTif (wrap ti, wrap tt, wrap te)
     | JCTrange (top1, top2)   ->   JCTrange (Option.map ~f:wrap top1, Option.map ~f:wrap top2)
@@ -244,8 +244,8 @@ object
     | JCEassign_heap (es, fi, eo) -> JCEassign_heap (wrap es, fi, wrap eo)
     | JCEinstanceof (e, si) ->       JCEinstanceof (wrap e, si)
     | JCEcast (e, si) ->             JCEcast (wrap e, si)
-    | JCEbitwise_cast (e, si) ->     JCEbitwise_cast (wrap e, si)
     | JCErange_cast (e, ei) ->       JCErange_cast (wrap e, ei)
+    | JCErange_cast_mod (e, ei) ->   JCErange_cast_mod (wrap e, ei)
     | JCEreal_cast (e, rc) ->        JCEreal_cast (wrap e, rc)
     | JCEif (ei, et, ee) ->          JCEif (wrap ei, wrap et, wrap ee)
     | JCEoffset (ok, e, si) ->       JCEoffset (ok, wrap e, si)

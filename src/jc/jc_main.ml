@@ -195,6 +195,9 @@ let main () =
        push_entries @@ Interp.enums enums;
        push_entries List.(concat @@ map Interp.enum_cast @@ all_pairs enums));
 
+      Options.lprintf "Translate dummies@.";
+      push_entries @@ Interp.dummies;
+
       (* production phase 4.1: generation of Why logic functions *)
       Options.lprintf "Translate standalone logic functions@.";
       IntHashtblIter.iter
@@ -218,7 +221,7 @@ let main () =
            push_entries @@ Interp.lemma pos id is_axiom labels p)
         Typing.lemmas_table;
 
-    (* production phase 7: generation of Why functions *)
+      (* production phase 7: generation of Why functions *)
       Options.lprintf "Translate functions@.";
       IntHashtblIter.iter
         (fun _ (f, _, spec, _) ->
@@ -244,7 +247,7 @@ let main () =
     let file = pop_entries () in
 
     (* output phase 1: produce Why file *)
-    Print_why3.file ~filename file;
+    Print_why3.file ~filename:(filename ^ ".mlw") file;
 
     (* output phase 3: produce makefile *)
     Options.lprintf "Produce makefile@.";

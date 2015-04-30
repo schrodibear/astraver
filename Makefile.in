@@ -214,7 +214,7 @@ install-lib: $(JCLIB) lib/why3/why3.conf
 	mkdir -p $(LIBDIR)/why/why
 	rm -rf $(LIBDIR)/why/why3
 	mkdir -p $(LIBDIR)/why/why3
-	cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/jessie3theories.why lib/why3/jessie3.mlw lib/why3/jessie3_integer.why $(LIBDIR)/why/why3
+	cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/core.mlw lib/why3/enum.mlw $(LIBDIR)/why/why3
 	mkdir -p $(LIBDIR)/jessie
 	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
 #	remove CVS directories
