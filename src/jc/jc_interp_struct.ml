@@ -303,7 +303,7 @@ let instanceof_pred ~exact (type t1) (type t2) :
     p :: l_r @ tags ac pc In_pred @ mems ac pc In_pred
   in
   let pred = O.P.(if exact then typeeq else instanceof) in
-  let self_instanceof p = map_st ac pc ~f:(fun si -> O.P.[pred (struct_root si) p si]) in
+  let self_instanceof p = map_st ac pc ~f:(fun si -> O.P.[pred p si]) in
   let fields_instanceof p =
     List.flatten @@
       map_embedded_fields ac pc ~p
@@ -425,9 +425,10 @@ let frame_pred ~for_ ac pc =
      let make_predicates pred xt args =
        let tables = O.T.[some @@ var (Name.old xt); some @@ var xt] in
        O.P.[
-         P.(Name.Theory.jessie, (match for_ with `alloc_tables_in x -> prefix x | `tag_tables -> "tag") ^ "_extends")
+         P.(Name.Theory.Jessie.alloc,
+            (match for_ with `alloc_tables_in x -> prefix x | `tag_tables -> "tag") ^ "_extends")
          $.. tables;
-         (Name.Theory.jessie, pred) $.. tables @ args]
+         (Name.Theory.Jessie.alloc, pred) $.. tables @ args]
      in
      List.map
        (function
@@ -441,9 +442,10 @@ let frame_pred ~for_ ac pc =
          | (xt, p, _) :: ps ->
            let f = "alloc" ^ (match for_ with `alloc_tables_in _ -> "" | `tag_tables -> "_tag") ^ "_blockset" in
            make_predicates f xt
-             [let pset_singleton p = O.T.(some ((Name.Theory.jessie, "pset_singleton") $.. [p])) in
+             [let pset_singleton p = O.T.(some ((Name.Theory.Jessie.pset, "pset_singleton") $.. [p])) in
               List.fold_left
-                (fun acc (_, p, _) -> O.T.(some ((Name.Theory.jessie, "pset_union") $.. [acc; pset_singleton p])))
+                (fun acc (_, p, _) ->
+                   O.T.(some ((Name.Theory.Jessie.pset_union, "pset_union") $.. [acc; pset_singleton p])))
                 (pset_singleton p)
                 ps]
         | _ -> assert false (* group_consecutive doesn't return [[]], it instead returns just [] *)))
@@ -675,8 +677,8 @@ let struc si =
              O.P.(forall (Name.Generic.tag_table (struct_root si)) (tag_table_type ri) @@ fun _t ->
                   forall "p" (pointer_type (JCalloc_root ri) (JCtag (si, []))) @@ fun p ->
                   impl
-                    (instanceof (struct_root si)  p si)
-                    (typeeq (struct_root si) p si)))]
+                    (instanceof p si)
+                    (typeeq p si)))]
     else
       []
   in
@@ -798,7 +800,7 @@ let instanceof_pre all_effects (* vi *) =
     in
     let instanceof_pre =
       let f = if si.si_final then O.P.typeeq else O.P.instanceof in
-      fun p -> f (pointer_class_root pc) ?r:(Some vi_region) p si
+      fun p -> f ?r:(Some vi_region) p si
     in
     O.P.impl pre O.P.(instanceof_pre v && forall_offset_in_range v l r ~f:(fun p -> [instanceof_pre p]))
   | _ -> True

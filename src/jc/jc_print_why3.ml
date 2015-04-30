@@ -182,6 +182,8 @@ let func ~entry ~where ~bw_ints fmttr (type a) (type b) =
   | Of_int (Enum _ as ty, modulo) -> pr_f' enum_ty ty "of_int%a" modulo' modulo
   | To_int (Int _ as ty) -> pr_f int_ty ty "to_int"
   | To_int (Enum _ as ty) -> pr_f enum_ty ty "to_int"
+  | Any (Int _ as ty) -> pr_f int_ty ty "any_"
+  | Any (Enum _ as ty) -> pr_f enum_ty ty "any_"
   | Cast (ty_to, ty_from, modulo) -> pr_f' conv_tys (ty_to, ty_from) "cast" modulo' modulo
   | B_bint_bop (op', ty) -> pr_bop int_ty ty op op' modulo false
   | U_bint_bop (op', ty) -> pr_uop int_ty ty op op' modulo false

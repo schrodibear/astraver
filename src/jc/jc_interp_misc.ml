@@ -161,17 +161,17 @@ let memory_class_type mc = alloc_class_type (alloc_class_of_mem_class mc)
 
 (* raw types *)
 
-let raw_pointer_type ty' = O.Lt.(jc Name.Type.pointer $. ty')
+let raw_pointer_type ty' = O.Lt.(Jc.pointer Name.Type.pointer $. ty')
 
-let raw_pset_type ty' = O.Lt.(jc Name.Type.pset $. ty')
+let raw_pset_type ty' = O.Lt.(Jc.pset Name.Type.pset $. ty')
 
-let raw_alloc_table_type ty' = O.Lt.(jc Name.Type.alloc_table $. ty')
+let raw_alloc_table_type ty' = O.Lt.(Jc.alloc_table Name.Type.alloc_table $. ty')
 
-let raw_tag_table_type ty' = O.Lt.(jc Name.Type.tag_table $. ty')
+let raw_tag_table_type ty' = O.Lt.(Jc.tag_table Name.Type.tag_table $. ty')
 
-let raw_tag_id_type ty' = O.Lt.(jc Name.Type.tag_id $. ty')
+let raw_tag_id_type ty' = O.Lt.(Jc.tag Name.Type.tag_id $. ty')
 
-let raw_memory_type ty1' ty2' = O.Lt.(jc Name.Type.memory $ ty1' ^. ty2')
+let raw_memory_type ty1' ty2' = O.Lt.(Jc.memory Name.Type.memory $ ty1' ^. ty2')
 
 (* pointer model types *)
 
@@ -194,8 +194,8 @@ let native_type t =
   | Treal -> return real
   | Tgenfloat `Double -> return double
   | Tgenfloat `Float -> return single
-  | Tgenfloat `Binary80 -> return (jc "binary80" $ Nil)
-  | Tstring -> return (jc "string" $ Nil)
+  | Tgenfloat `Binary80 -> assert false
+  | Tstring -> assert false
 
 let some_native_type t =
   let Typ typ = ty (JCTnative t) in
@@ -248,18 +248,23 @@ let nondet_value t jct =
   let return e = return t e in
   match jct with
   | JCTnative ty ->
-    let jc_val v = return (F.jc v $. void) in
+    let ret f = return (f $. void) in
+    let open F.Jc in
     begin match ty with
     | Tunit -> return void
-    | Tboolean -> jc_val "any_bool"
-    | Tinteger -> jc_val "any_int"
-    | Treal -> jc_val "any_real"
-    | Tgenfloat _ -> jc_val P.("any_" ^ native_name ty)
-    | Tstring -> jc_val "any_string"
+    | Tboolean -> ret (any_bool "any_bool")
+    | Tinteger -> ret (any_int "any_int")
+    | Treal -> ret (any_real "any_real")
+    | Tgenfloat _ -> assert false
+    | Tstring -> assert false
     end
   | JCTnull
-  | JCTpointer _ -> return (F.jc_val "any_pointer" $. void >: why_type Any jct)
-  | JCTenum ei -> return (F.jc_val (Name.Param.any_enum ei.ei_type) $. void)
+  | JCTpointer _ -> return (F.Jc.any_pointer "any_pointer" $. void >: why_type Any jct)
+  | JCTenum ei ->
+    begin match ei.ei_type with
+    | Int (r, b) -> return (Any (Int (r, b)) $. void)
+    | Enum e -> return (Any (Enum e) $. void)
+    end
   | JCTlogic _ as ty ->
     let t' = Annot (True, why_type t ty, [], [], True, []) in
     return (mk (Black_box t'))
@@ -292,16 +297,16 @@ let memory_type mc =
 
 (* query model types *)
 
-let is_jessie_user_type name : 'a logic_type -> _ =
+let is_user_type name : 'a logic_type -> _ =
   function
-  | Type (User (from, imported, typ), _) when (from, imported) = Name.Theory.jessie && typ = name -> true
+  | Type (User (_, _, typ), _) when typ = name -> true
   | _ -> false
 
-let is_alloc_table_type lt = is_jessie_user_type Name.Type.alloc_table lt
+let is_alloc_table_type lt = is_user_type Name.Type.alloc_table lt
 
-let is_tag_table_type lt = is_jessie_user_type Name.Type.tag_table lt
+let is_tag_table_type lt = is_user_type Name.Type.tag_table lt
 
-let is_memory_type lt = is_jessie_user_type Name.Type.memory lt
+let is_memory_type lt = is_user_type Name.Type.memory lt
 
 (******************************************************************************)
 (*                                 variables                                  *)
@@ -496,43 +501,45 @@ let rec location : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ 
     let return term = return t term in
     match loc#node with
     | JCLvar _v ->
-      return (var "pset_empty")
+      return (F.Jc.pset "pset_empty" $ Nil)
     | JCLderef (locs, _lab, _fi, _r) ->
       flocs t locs
     | JCLderef_term (t1, _fi) ->
       let Term t1 = ft t1 in
-      return (F.jc "pset_singleton" $. t1)
+      return (F.Jc.pset "pset_singleton" $. t1)
     | _ -> Options.jc_error loc#pos "Unsupported location" (* TODO *)
 
 and location_set : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ -> _ -> _ -> a Output_ast.term =
   fun t ~type_safe ~global_assertion lab locs ->
-    let flocs = some_location_set ~type_safe ~global_assertion lab in
-    let ft = some_term ~type_safe ~global_assertion ~relocate:false lab lab in
-    let f' t name args = O.T.return t O.T.((Name.Theory.jessie, name) $.. args) in
-    let f = f' t and f' f t = O.T.some @@ f' Any f t in
+    let flocs = location_set Any ~type_safe ~global_assertion lab in
+    let ft t = term.term t ~type_safe ~global_assertion ~relocate:false lab lab in
+    let open O.F.Jc in
+    let open O.T in
+    let return x = return t x in
+    let integer : _ ty_opt = Ty O.Ty.integer in
     match locs#node with
     | JCLSvar v ->
-      f "pset_singleton" [Term (tvar ~label_in_name:global_assertion lab v)]
+      return (pset "pset_singleton" $. tvar ~label_in_name:global_assertion lab v)
     | JCLSderef (locs, lab, fi, _r) ->
       let mc, _fi_opt = lderef_mem_class ~type_safe locs fi in
       let mem = tmemory_var ~label_in_name:global_assertion lab (mc, locs#region) in
-      f "pset_deref" [Term mem; flocs locs]
+      return (pset_deref "pset_deref" $ mem ^. flocs locs)
     | JCLSrange (locs, Some t1, Some t2) ->
-      f "pset_range" [flocs locs; ft t1; ft t2]
+      return (pset_range "pset_range" $ flocs locs ^ ft integer t1 ^. ft integer t2)
     | JCLSrange (locs, None, Some t2) ->
-      f "pset_range_left" [flocs locs; ft t2]
+      return (pset_range_left "pset_range_left" $ flocs locs ^. ft integer t2)
     | JCLSrange (locs, Some t1, None) ->
-      f "pset_range_right" [flocs locs; ft t1]
+      return (pset_range_right "pset_range_right" $ flocs locs ^. ft integer t1)
     | JCLSrange (locs, None, None) ->
-      f "pset_all" [flocs locs]
+      return (pset_all @@ flocs locs)
     | JCLSrange_term (locs, Some t1, Some t2) ->
-      f "pset_range" [f' "pset_singleton" [ft locs]; ft t1; ft t2]
+      return (pset_range "pset_range" $ (pset "pset_singleton" $. ft Any locs) ^ ft integer t1 ^. ft integer t2)
     | JCLSrange_term (locs, None, Some t2) ->
-      f "pset_range_left" [f' "pset_singleton" [ft locs]; ft t2]
+      return (pset_range_left "pset_range_left" $ (pset "pset_singleton" $. ft Any locs) ^. ft integer t2)
     | JCLSrange_term (locs, Some t1, None) ->
-      f "pset_range_right" [f' "pset_singleton" [ft locs]; ft t1]
+      return (pset_range_right "pset_range_right" $ (pset "pset_singleton" $. ft Any locs) ^. ft integer t1)
     | JCLSrange_term (locs, None, None) ->
-      f "pset_all" [f' "pset_singleton" [ft locs]]
+      return (pset_all (pset "pset_singleton" $. ft Any locs))
     | JCLSat (locs, _lab) -> location_set t ~type_safe ~global_assertion lab locs
 and some_location_set ~type_safe ~global_assertion lab locs =
   let Typ typ = ty locs#typ in
@@ -540,14 +547,14 @@ and some_location_set ~type_safe ~global_assertion lab locs =
 
 let rec pset_union_of_list =
   function
-  | [] -> O.T.var "pset_empty"
+  | [] -> O.T.(F.Jc.pset "pset_empty" $ Nil)
   | [e'] -> e'
-  | e' :: el' -> O.T.(F.jc "pset_union" $ e' ^. pset_union_of_list el')
+  | e' :: el' -> O.T.(F.Jc.pset_union "pset_union" $ e' ^. pset_union_of_list el')
 
 let separation_condition loclist1 loclist2 =
   let floc = location Any ~type_safe:false ~global_assertion:false LabelHere in
   let pset1, pset2 = Pair.map (pset_union_of_list % List.map floc) (loclist1, loclist2) in
-  O.P.(F.jc "pset_disjoint" $ pset1 ^. pset2)
+  O.P.(F.Jc.pset_disjoint "pset_disjoint" $ pset1 ^. pset2)
 
 type memory_effect = RawMemory of Memory.t | PreciseMemory of Location.t
 
@@ -760,14 +767,15 @@ let rewrite_effects ~type_safe ~params ef =
     }
 
 let any_value' typ =
-  let v =
+  let f =
+    let open O.F.Jc in
     let open Name.Type in
-    if is_jessie_user_type alloc_table typ then "any_alloc_table"
-    else if is_jessie_user_type tag_table typ then "any_tag_table"
-    else if is_jessie_user_type memory typ then "any_memory"
+    if is_user_type alloc_table typ then any_alloc_table "any_alloc_table"
+    else if is_user_type tag_table typ then any_tag_table "any_tag_table"
+    else if is_user_type memory typ then any_memory "any_memory"
     else invalid_arg "any_value: requested any avalue of unsupported type"
   in
-  O.E.(F.jc_val v $. void >: Logic typ)
+  O.E.(f $. void >: Logic typ)
 
 let define_locals ?(reads=[]) ?(writes=[]) e' =
   let e' =
@@ -866,11 +874,10 @@ let conv_typ_mem_parameters ~deref r (* pc *) =
 let make_ofbit_alloc_param_app r pc =
   let writes = conv_typ_alloc_parameters r pc in
   let reads = conv_bw_alloc_parameters ~deref:true r pc in
-  let args = List.map fst writes @ List.map fst reads in
+  let _args = List.map fst writes @ List.map fst reads in
   let app =
     match pc with
-    | JCtag _ ->
-      Expr O.E.((Name.Theory.jessie, alloc_of_bitvector_param_name pc) $.. args)
+    | JCtag _ -> assert false
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> Expr O.E.void
@@ -883,11 +890,10 @@ let make_ofbit_alloc_param_app r pc =
 let make_ofbit_mem_param_app r pc =
   let writes = conv_typ_mem_parameters ~deref:false r pc in
   let reads = conv_bw_mem_parameters ~deref:true r pc in
-  let args = List.map fst writes @ List.map fst reads in
+  let _args = List.map fst writes @ List.map fst reads in
   let app =
     match pc with
-    | JCtag _ ->
-      Expr O.E.((Name.Theory.jessie, mem_of_bitvector_param_name pc) $.. args)
+    | JCtag _ -> assert false
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> Expr O.E.void
@@ -900,11 +906,10 @@ let make_ofbit_mem_param_app r pc =
 let make_tobit_alloc_param_app r pc =
   let writes = conv_bw_alloc_parameters ~deref:false r pc in
   let reads = conv_typ_alloc_parameters r pc in
-  let args = List.map fst writes @ List.map fst reads in
+  let _args = List.map fst writes @ List.map fst reads in
   let app =
     match pc with
-    | JCtag _ ->
-      Expr O.E.((Name.Theory.jessie, alloc_to_bitvector_param_name pc) $.. args)
+    | JCtag _ -> assert false
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> Expr O.E.void
@@ -916,11 +921,10 @@ let make_tobit_alloc_param_app r pc =
 let make_tobit_mem_param_app r pc =
   let writes = conv_bw_mem_parameters ~deref:false r pc in
   let reads = conv_typ_mem_parameters ~deref:true r pc in
-  let args = List.map fst writes @ List.map fst reads in
+  let _args = List.map fst writes @ List.map fst reads in
   let app =
     match pc with
-    | JCtag _ ->
-      Expr O.E.((Name.Theory.jessie, mem_to_bitvector_param_name pc) $.. args)
+    | JCtag _ -> assert false
     | JCroot rt ->
       match rt.ri_kind with
       | Rvariant -> Expr O.E.void
@@ -929,50 +933,24 @@ let make_tobit_mem_param_app r pc =
   in
   app
 
-let make_of_bitvector_app fi e' : some_term =
+let make_of_bitvector_app fi _e' : some_term =
   (* Convert bitvector into appropriate type *)
   match fi.fi_type with
   | JCTenum _ ->
     Options.jc_error Why_loc.dummy_position "Unsupported type of field %s.%s" fi.fi_hroot.si_name fi.fi_name (* TODO *)
     (*Term O.(jc_f (logic_enum_of_bitvector_name ei) $. e')*)
-  | JCTpointer (pc, _, _) ->
-    Term O.T.(F.jc (logic_variant_of_bitvector_name (pointer_class_root pc)) $. e')
+  | JCTpointer (_pc, _, _) -> assert false
   | _ty ->
     Options.jc_error Why_loc.dummy_position "Unsupported type of field %s.%s" fi.fi_hroot.si_name fi.fi_name (* TODO *)
 
 let make_conversion_params pc =
-  let p = "p" in
-  let bv_mem = Name.Generic.memory JCmem_bitvector in
-  let bv_alloc = Name.Generic.alloc_table JCalloc_bitvector in
+  let _p = "p" in
+  let _bv_mem = Name.Generic.memory JCmem_bitvector in
+  let _bv_alloc = Name.Generic.alloc_table JCalloc_bitvector in
   (* postcondition *)
   let post_alloc =
     match pc with
-    | JCtag (st, _) ->
-      if struct_has_size st then
-        let post_alloc =
-          let ac = alloc_class_of_pointer_class pc in
-          let s = struct_size_in_bytes st in
-          let post_min =
-            O.T.(offset_min ac (var p) =
-                 (F.jc "offset_min_bytes" $
-                    var bv_alloc ^
-                    (F.jc "pointer_address" $. var p) ^.
-                    int s))
-          in
-          let post_max =
-            O.T.(offset_max ac (var p) =
-                 (F.jc "offset_max_bytes" $
-                   var bv_alloc ^
-                   (F.jc "pointer_address" $. var p) ^.
-                   int s))
-          in
-          let ty' = pointer_type ac pc in
-          let post _ = O.P.(post_min && post_max) in
-          O.P.forall p ty' post
-        in
-        post_alloc
-      else
-        True
+    | JCtag (_st, _) -> assert false
     | JCroot _ -> assert false (* TODO *)
   in
   let post_mem =
@@ -984,58 +962,7 @@ let make_conversion_params pc =
           List.fold_left
             (fun (acc, i) fi ->
                if field_type_has_bitvector_representation fi then
-                 let pi = p ^ (string_of_int i) in
-                 let mc = JCmem_field fi in
-                 let ac = alloc_class_of_mem_class mc in
-                 let mem =
-                   tmemory_var
-                     ~label_in_name:true
-                     LabelHere
-                     (mc, dummy_region)
-                 in
-                 let off =
-                   match field_offset_in_bytes fi with
-                   | Some x -> x
-                   | None ->
-                     Typing.typing_error
-                       ~loc:Why_loc.dummy_position
-                       "Field %s of structure %s \
-                        has bitvector representation, but its bit offset (%d) is not a multiple of 8. \
-                        The axioms for pointer-arithmetic operations with pointers to structure %s \
-                        thus turn out to be considerably hard and are currently unsupported."
-                       fi.fi_name
-                       st.si_name
-                       (field_offset fi)
-                       st.si_name
-                   in
-                   let size =
-                     match fi.fi_bitsize with
-                     | Some x -> x / 8
-                     | None ->
-                       Typing.typing_error
-                         ~loc:Why_loc.dummy_position
-                         "Field %s of structure %s \
-                          has bitvector representation, but its bit size is unknown. \
-                          Can't encode proper axioms for accessing the field."
-                         fi.fi_name
-                         st.si_name
-                         st.si_name
-                   in
-                   let posti _ =
-                     let Term converted =
-                       make_of_bitvector_app
-                         fi
-                         O.T.(F.jc "select_bytes" $
-                            var bv_mem ^
-                            (F.jc "pointer_address" $. var pi) ^
-                            int off ^.
-                            int size)
-                     in
-                     O.T.(select mem (var pi) = converted)
-                   in
-                   let ty' = pointer_type ac pc in (* Correct pc *)
-                   let posti = O.P.forall pi ty' posti in
-                   O.P.(acc && posti), i + 1
+                 assert false
                else
                  acc, i)
             (True, 0)

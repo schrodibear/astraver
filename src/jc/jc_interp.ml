@@ -258,7 +258,7 @@ let bin_op ~e : [< bin_op] * operator_type -> _ =
     begin match op' with
     | `Beq -> Rel (Poly `Eq, Any)
     | `Bneq -> Rel (Poly `Eq, Any)
-    | `Bsub -> Op (O.F.jc "sub_pointer", Any)
+    | `Bsub -> Op (O.F.Jc.pointer "sub_pointer", Any)
     end
   (* reals *)
   | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq |
@@ -295,7 +295,7 @@ let bin_op ~e : [< bin_op] * operator_type -> _ =
     | `Biff -> op "iffb"
     | `Bimplies -> op "implb"
     end
-  | `Bconcat, _ -> Op (O.F.jc "string_concat", Any)
+  | `Bconcat, _ -> assert false
   | `Beq, `Logic -> Rel (Poly `Eq, Any)
   | `Bneq, `Logic -> Rel (Poly `Neq, Any)
   | `Beq, `Unit -> Rel (Poly `Eq, Ty Void)
@@ -477,7 +477,7 @@ let rec term :
       | Rel (f, ty_opt) -> return O.T.(f $ ft ty_opt t1 ^. ft ty_opt t2)
       end
     | JCTshift (t1, t2) ->
-      return O.T.(O.F.jc "shift" $ ft Any t1 ^. ft (Ty O.Ty.integer) t2)
+      return O.T.(shift (ft Any t1) @@ ft (Ty O.Ty.integer) t2)
     | JCTif (t1, t2, t3) ->
       return @@
         O.T.if_
@@ -487,48 +487,35 @@ let rec term :
     | JCTlet (vi, t1, t2) ->
       let Typ typ' = ty t1#typ in
       return @@ O.T.let_ vi.vi_final_name (ft typ' t1) (fun _ -> ft typ t2)
-    | JCToffset (k, t1, st) ->
+    | JCToffset (k, t1, _st) ->
       let ac = tderef_alloc_class ~type_safe t1 in
-      let _, alloc = talloc_table_var ~label_in_name:global_assertion lab (ac, t1#region) in
       begin match ac with
       | JCalloc_root _ ->
         let f =
+          let open O.T in
           match k with
-          | Offset_min -> "offset_min"
-          | Offset_max -> "offset_max"
+          | Offset_min -> offset_min
+          | Offset_max -> offset_max
         in
-        return @@ O.T.(F.jc f $ alloc ^. ft Any t1)
-      | JCalloc_bitvector ->
-        let f =
-          match k with
-          | Offset_min -> "offset_min_bytes"
-          | Offset_max -> "offset_max_bytes"
-        in
-        let s = string_of_int (struct_size_in_bytes st) in
-        return @@ O.T.(F.jc f $ alloc ^ ft Any t1 ^. Const (Int s))
+        return @@ f ac ~r:t1#region ~lab @@ ft Any t1
+      | JCalloc_bitvector -> assert false
       end
-    | JCTaddress (Addr_absolute, t1) ->
-      return @@ O.T.(F.jc "absolute_address" $. ft Any t1)
-    | JCTaddress (Addr_pointer, t1) ->
-      return @@ O.T.(O.F.jc "address" $. ft Any t1)
+    | JCTaddress (Addr_absolute, _t1) -> assert false
+    | JCTaddress (Addr_pointer, _t1) -> assert false
     | JCTbase_block t1 ->
+      let ac = tderef_alloc_class ~type_safe t1 in
       let t1' = ft Any t1 in
-      let _, alloc =
-        let ac = tderef_alloc_class ~type_safe t1 in
-        talloc_table_var ~label_in_name:global_assertion lab (ac, t1#region)
-      in
-      return @@ O.T.(F.jc "shift" $ t1' ^. (F.jc "offset_min" $ alloc ^. t1'))
+      return @@ O.T.(shift t1' @@ offset_min ac ~r:t1#region ~lab t1')
     | JCTinstanceof (t1, lab', st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
-      let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
-      O.T.(O.F.jc "instanceof" $ tag ^ ft Any t1 ^. var (Name.tag st))
+      return @@ O.T.(instanceof ~r:t1#region ~lab (ft Any t1) st)
     | JCTcast (t1, lab', st) ->
       if struct_of_union st
       then ft Any t1
       else
         let lab = if relocate && lab' = LabelHere then lab else lab' in
         let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
-        O.T.(F.jc "downcast" $ tag ^ ft Any t1 ^. var (Name.tag st))
+        O.T.(F.Jc.tag_table "downcast" $ tag ^ ft Any t1 ^. var (Name.tag st))
     | JCTrange_cast (t1, ei_opt) ->
       let Typ typ, Typ typ' =
         let to_type = Option.map_default ~f:(fun e -> JCTenum e) ~default:(JCTnative Tinteger) ei_opt in
@@ -551,13 +538,13 @@ let rec term :
       | JCmem_field fi' ->
         assert (fi.fi_tag = fi'.fi_tag);
         let mem = tmemory_var ~label_in_name:global_assertion lab (JCmem_field fi, t1#region) in
-        return O.T.(O.F.jc "select" $ mem ^. ft Any t1)
+        return O.T.(select mem @@ ft Any t1)
       | JCmem_plain_union vi ->
         let t1, off = tdestruct_union_access t1 (Some fi) in
         (* Retrieve bitvector *)
         let t1' = ft Any t1 in
         let mem = tmemory_var ~label_in_name:global_assertion lab (JCmem_plain_union vi, t1#region) in
-        let e' = O.T.(O.F.jc "select" $ mem ^. t1') in
+        let _e' = O.T.(select mem @@ t1') in
         (* Retrieve subpart of bitvector for specific subfield *)
         let off =
           match off with
@@ -569,9 +556,9 @@ let rec term :
           | Some x -> x / 8
           | None -> failwith "term: field without bitsize in bv region"
         in
-        let off = string_of_int off and size = string_of_int size in
+        let _off = string_of_int off and _size = string_of_int size in
         let _e' =
-          O.T.(F.jc "extract_bytes" $ e' ^ Const (Int off) ^. Const (Int size))
+          assert false
         in
         (* Convert bitvector into appropriate type *)
         begin match fi.fi_type with
@@ -586,8 +573,8 @@ let rec term :
         end
       | JCmem_bitvector ->
         (* Retrieve bitvector *)
-        let t1' = ft Any t1 in
-        let mem = tmemory_var ~label_in_name:global_assertion lab (JCmem_bitvector, t1#region) in
+        let _t1' = ft Any t1 in
+        let _mem = tmemory_var ~label_in_name:global_assertion lab (JCmem_bitvector, t1#region) in
         let off =
           match field_offset_in_bytes fi with
           | Some x -> x
@@ -598,8 +585,8 @@ let rec term :
           | Some x -> x / 8
           | None -> failwith "term: field without bitsize in bv region"
         in
-        let off = string_of_int off and size = string_of_int size in
-        let _e' = O.T.(F.jc "select_bytes" $ mem ^ t1' ^ Const (Int off) ^. Const (Int size)) in
+        let _off = string_of_int off and _size = string_of_int size in
+        let _e' = assert false in
         (* Convert bitvector into appropriate type *)
         begin match fi.fi_type with
         | JCTenum _
@@ -694,8 +681,7 @@ let tag ~type_safe ~global_assertion ~relocate lab oldlab tag =
   | JCTbottom -> O.T.(var "bottom_tag")
   | JCTtypeof (t, st) ->
     let t' = term Any ~type_safe ~global_assertion ~relocate lab oldlab t in
-    let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t#region) in
-    O.T.(F.jc "typeof" $ tag ^. t')
+    O.T.(typeof (struct_root st) ~lab ~r:t#region t')
 
 let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
   let f f = f ~type_safe ~global_assertion ~relocate lab oldlab in
@@ -730,7 +716,7 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
       when is_base_block t1 && is_base_block t2 ->
       let base_block t = match t#node with JCTbase_block t -> t | _ -> assert false in
       let t1, t2 = Pair.map base_block (t1, t2) in
-      let p = O.P.(F.jc "same_block" $ ft Any t1 ^. ft Any t2) in
+      let p = O.P.(same_block (ft Any t1) @@ ft Any t2) in
       begin match op with
       | `Beq -> p
       | `Bneq -> O.P.not p
@@ -784,14 +770,12 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
     | JCAfresh t1 ->
       let ac = tderef_alloc_class ~type_safe t1 in
       let lab = if relocate && oldlab = LabelHere then lab else oldlab in
-      let _, alloc = talloc_table_var ~label_in_name:global_assertion lab (ac, t1#region) in
-      O.P.(F.jc "allocable" $ alloc ^. ft Any t1)
+      O.P.(allocable ac ~r:t1#region ~lab @@ ft Any t1)
     | JCAbool_term t1 ->
       App (Poly `Eq, O.T.(ft (Ty Bool) t1 ^. Const (Bool true)))
     | JCAinstanceof (t1, lab', st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
-      let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
-      O.P.(F.jc "instanceof" $ tag ^ ft Any t1 ^. T.var (Name.tag st))
+      O.P.(instanceof ~r:t1#region ~lab  (ft Any t1) st)
     | JCAmutable (_te, _st, _ta) -> assert false
       (*let te' = ft te in
       let tag = ftag ta in
@@ -800,7 +784,7 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
     | JCAeqtype (tag1, tag2, _st_opt) ->
       O.P.(Poly `Eq $ ftag tag1 ^. ftag tag2)
     | JCAsubtype (tag1, tag2, _st_opt) ->
-      O.P.(F.jc "subtag" $ ftag tag1 ^. ftag tag2)
+      O.P.(subtag (ftag tag1) @@ ftag tag2)
     | JCAlet (vi, t, p) ->
       let Typ typ = ty t#typ in
       O.P.let_ vi.vi_final_name (ft typ t) (fun _ -> fp p)
@@ -853,43 +837,37 @@ let named_predicate ~type_safe ~global_assertion ?kind ?mark_recursively ~reloca
 let rec pset : type a b. (a, b) ty_opt -> type_safe:_ -> global_assertion:_ -> _ -> _ -> a term =
   fun t ~type_safe ~global_assertion before loc ->
   let f f = f ~type_safe ~global_assertion before in
-  let fpset loc : some_term =
-    let Typ typ = ty loc#typ in
-    Term (f (pset typ) loc)
-  and ft t : some_term =
-    let Typ typ = ty t#typ in
-    Term (f (term typ ?subst:None ~relocate:false) before t)
-  in
-  let f' t name args =
-    let open O.T in
-    let Hlist args = hlist_of_list args in
-    return t (F.jc name $ args)
-  in
-  let f = f' t and f' f t : some_term = Term (f' Any f t) in
+  let fpset typ loc = f (pset typ) loc
+  and ft typ t = f (term typ ?subst:None ~relocate:false) before t in
+  let fpset_at ~lab = pset t ~type_safe ~global_assertion lab in
+  let open O.F.Jc in
+  let open O.T in
+  let return x = return t x in
+  let integer : _ ty_opt = Ty O.Ty.integer in
   match loc#node with
   | JCLSderef (locs, lab, fi, _r) ->
     let m = tmemory_var ~label_in_name:global_assertion lab (JCmem_field fi, locs#region) in
-    f "pset_deref" [Term m; fpset locs]
+    return (pset_deref "pset_deref" $ m ^. fpset Any locs)
   | JCLSvar vi ->
     let m = tvar ~label_in_name:global_assertion before vi in
-    f "pset_singleton" [Term m]
+    return (pset "pset_singleton" $. m)
   | JCLSrange (ls, None, None) ->
-    f "pset_all" [fpset ls]
+    return (pset_all @@ fpset Any ls)
   | JCLSrange (ls, None, Some b) ->
-    f "pset_range_left" [fpset ls; ft b]
+    return (pset_range_left "pset_range_left" $ fpset Any ls ^. ft integer b)
   | JCLSrange (ls, Some a, None) ->
-    f "pset_range_right" [fpset ls; ft a]
+    return (pset_range_right "pset_range_right" $ fpset Any ls ^. ft integer a)
   | JCLSrange (ls, Some a, Some b) ->
-    f "pset_range" [fpset ls; ft a; ft b]
+    return (pset_range "pset_range" $ fpset Any ls ^ ft integer a ^. ft integer b)
   | JCLSrange_term (ls, None, None) ->
-    f "pset_all" [f' "pset_singleton" [ft ls]]
+    return (pset_all (pset "pset_singleton" $. ft Any ls))
   | JCLSrange_term (ls, None, Some b) ->
-    f "pset_range_left" [f' "pset_singleton" [ft ls]; ft b]
+    return (pset_range_left "pset_range_left" $ (pset "pset_singleton" $. ft Any ls) ^. ft integer b)
   | JCLSrange_term (ls, Some a, None) ->
-    f "pset_range_right" [f' "pset_singleton" [ft ls]; ft a]
+    return (pset_range_right "pset_range_right" $ (pset "pset_singleton" $. ft Any ls) ^. ft integer a)
   | JCLSrange_term (ls, Some a, Some b) ->
-    f "pset_range" [f' "pset_singleton" [ft ls]; ft a; ft b]
-  | JCLSat (locs, _) -> let Term t' = fpset locs in O.T.return t t'
+    return (pset_range "pset_range" $ (pset "pset_singleton" $. ft Any ls) ^ ft integer a ^. ft integer b)
+  | JCLSat (locs, lab) -> fpset_at ~lab locs
 
 let rec collect_locations ~type_safe ~global_assertion ~in_clause before loc (refs, mems) =
   let ef = Effect.location ~in_clause empty_fun_effect loc in
@@ -902,7 +880,7 @@ let rec collect_locations ~type_safe ~global_assertion ~in_clause before loc (re
   | JCLderef_term (t1, fi) ->
     let Typ typ = ty t1#typ in
     let t1' = term typ ~type_safe ~global_assertion ~relocate:false before before t1 in
-    let iloc = O.T.(F.jc "pset_singleton" $. t1') in
+    let iloc = O.T.(F.Jc.pset "pset_singleton" $. t1') in
     let mcr = JCmem_field fi, t1#region in
     refs, MemoryMap.add_merge (@) mcr [iloc, ef] mems
   | JCLvar vi ->
@@ -912,25 +890,21 @@ let rec collect_locations ~type_safe ~global_assertion ~in_clause before loc (re
     collect_locations ~type_safe ~global_assertion ~in_clause before loc (refs, mems)
 
 let rec collect_pset_locations t ~type_safe ~global_assertion lab loc =
-  let ft lab lab' t : some_term =
-    let Typ typ = ty t#typ in
-    Term (term typ ~type_safe ~global_assertion ~relocate:false lab lab' t)
-  in
-  let f f args =
-    let open O.T in
-    let Hlist args = hlist_of_list args in
-    return t O.T.(F.jc f $ args)
-  in
+  let ft typ lab lab' t = term typ ~type_safe ~global_assertion ~relocate:false lab lab' t in
+  let fpset typ e = pset typ ~type_safe ~global_assertion lab e in
+  let open O.F.Jc in
+  let open O.T in
+  let return x = return t x in
   match loc#node with
   | JCLderef (e, lab, fi, _fr) ->
     let m = tmemory_var ~label_in_name:global_assertion lab (JCmem_field fi, e#region) in
-    f "pset_deref" [Term m; Term (pset Any ~type_safe ~global_assertion lab e)]
+    return (pset_deref "pset_deref" $ m ^. fpset Any e)
   | JCLderef_term (t1, fi) ->
     let lab = match t1#label with Some l -> l | None -> lab in
     let m = tmemory_var ~label_in_name:global_assertion lab (JCmem_field fi, t1#region) in
-    f "pset_deref" [Term m; Term (f "pset_singleton" [ft lab lab t1])]
+    return (pset_deref "pset_deref" $ m ^. (pset "pset_singleton" $. ft Any lab lab t1))
   | JCLvar ({ vi_type = JCTpointer _ } as vi)  ->
-    f "pset_singleton" [Term (tvar ~label_in_name:global_assertion lab vi)]
+    return (pset "pset_singleton" $. tvar ~label_in_name:global_assertion lab vi)
   | JCLvar vi ->
     Options.jc_warning loc#pos "Non-pointer variable `%s' found as location in pointer-set context, ignoring"
       vi.vi_name;
@@ -994,7 +968,7 @@ let assigns ~type_safe ?region_list before ef =
               lvar_at LabelHere mem;
               Term (pset_union_of_list ps)]
          in
-         let mem_assigns = P.locate ~p ~kind:JCVCassigns @@ App (O.F.jc "not_assigns", args) in
+         let mem_assigns = P.locate ~p ~kind:JCVCassigns @@ App (O.F.Jc.assigns "not_assigns", args) in
          O.P.(acc && mem_assigns))
       mems
 
@@ -1328,21 +1302,21 @@ let rec make_upd_simple ~e e1 fi tmp2 =
       (if P.(off = Int_offset 0) then
          var tmpp
        else if not typesafe then
-         E.locate ~e ~kind:JCVCpointer_shift (O.F.jc_val "shift_" $ tag ^ var tmpp ^ tag_id ^. var tmpi)
+         E.locate ~e ~kind:JCVCpointer_shift (O.F.Jc.shift_safe "shift" $ tag ^ var tmpp ^ tag_id ^. var tmpi)
        else
-         O.F.jc_val "safe_shift_" $ var tmpp ^. var tmpi),
+         O.F.Jc.shift_safe "shift_typesafe" $ var tmpp ^. var tmpi),
 
       if P.(off = Int_offset 0) then
-        E.locate ~e ~kind:JCVCpointer_deref (O.F.jc_val "upd_" $ alloc ^ var mem ^ var tmpp ^. var tmp2)
+        E.locate ~e ~kind:JCVCpointer_deref (O.F.Jc.upd_safe "upd" $ alloc ^ var mem ^ var tmpp ^. var tmp2)
       else if not typesafe then
         E.locate ~e ~kind:JCVCpointer_deref
-          (O.F.jc_val "offset_upd_" $ alloc ^ tag ^ var mem ^ var tmpp ^ tag_id ^ var tmpi ^. var tmp2)
+          (O.F.Jc.upd_offset_safe "upd_offset" $ alloc ^ tag ^ var mem ^ var tmpp ^ tag_id ^ var tmpi ^. var tmp2)
       else
         E.locate ~e ~kind:JCVCpointer_deref
-          (O.F.jc_val "offset_typesafe_upd_" $ alloc ^ var mem ^ var tmpp ^ var tmpi ^. var tmp2)
+          (O.F.Jc.upd_offset_safe "upd_offset_typesafe" $ alloc ^ var mem ^ var tmpp ^ var tmpi ^. var tmp2)
     else
-      O.F.jc_val "safe_shift_" $ var tmpp ^. var tmpi,
-      O.F.jc_val "safe_upd_" $ var mem ^ var tmp1 ^. var tmp2
+      O.F.Jc.shift_unsafe "shift" $ var tmpp ^. var tmpi,
+      O.F.Jc.upd_unsafe "upd" $ var mem ^ var tmp1 ^. var tmp2
   in
   let letspi = O.E.[tmpp, some p'; tmpi, some i'; tmp1, some shift] in
   tmp1, letspi, upd
@@ -1484,33 +1458,33 @@ and make_deref_simple ~e e1 fi =
     match destruct_pointer e1, (pointer_struct e1#typ).si_final with
     | (_, (Int_offset s as off), Some lb, Some rb), false when bounded lb rb s ->
       E.locate ~e ~kind:JCVCpointer_deref
-        (O.F.jc_val "safe_acc_requires_" $ tag ^ mem ^ expr e1 ^ tag_id ^. offset off)
+        (O.F.Jc.acc_offset_safe "acc_offset_bounded" $ tag ^ mem ^ expr e1 ^ tag_id ^. offset off)
     | (_, Int_offset s, Some lb, Some rb),        true when bounded lb rb s ->
       E.locate ~e ~kind:JCVCpointer_deref
-        (O.F.jc_val "safe_typesafe_acc_requires_" $ mem ^. expr e1)
+        (O.F.Jc.acc_safe "acc_safe" $ mem ^. expr e1)
     | (p, (Int_offset s as off), Some lb, _), false when lbounded lb s ->
       E.locate ~e ~kind:JCVCpointer_deref_bounds
-        (O.F.jc_val "lsafe_lbound_acc_" $ tag ^ alloc ^ mem ^ expr p ^ tag_id ^. offset off)
+        (O.F.Jc.acc_offset_safe "acc_offset_lbounded" $ tag ^ alloc ^ mem ^ expr p ^ tag_id ^. offset off)
     | (p, (Int_offset s as off), Some lb, _), true when lbounded lb s ->
       E.locate ~e ~kind:JCVCpointer_deref_bounds
-        (O.F.jc_val "lsafe_lbound_typesafe_acc_" $ alloc ^ mem ^ expr p ^. offset off)
+        (O.F.Jc.acc_offset_safe "acc_offset_lbounded_typesafe" $ alloc ^ mem ^ expr p ^. offset off)
     | (p, (Int_offset s as off), _, Some rb), false when rbounded rb s ->
       E.locate ~e ~kind:JCVCpointer_deref_bounds
-        (O.F.jc_val "rsafe_rbound_acc_" $ tag ^ alloc ^ mem ^ expr p ^ tag_id ^. offset off)
+        (O.F.Jc.acc_offset_safe "acc_offset_rbounded" $ tag ^ alloc ^ mem ^ expr p ^ tag_id ^. offset off)
     | (p, (Int_offset s as off), _, Some rb), true when rbounded rb s ->
       E.locate ~e ~kind:JCVCpointer_deref_bounds
-        (O.F.jc_val "rsafe_rbound_typesafe_acc_" $ tag ^ alloc ^ mem ^ expr p ^ tag_id ^. offset off)
+        (O.F.Jc.acc_offset_safe "acc_offset_rounded_typesafe" $ tag ^ alloc ^ mem ^ expr p ^. offset off)
     | (p, Int_offset 0, None, None), _ ->
       E.locate ~e ~kind:JCVCpointer_deref
-        (O.F.jc_val "acc_"  $ alloc ^ mem ^. expr p)
+        (O.F.Jc.acc_safe "acc"  $ alloc ^ mem ^. expr p)
     | (p, off, _, _), false ->
       E.locate ~e ~kind:JCVCpointer_deref
-        (O.F.jc_val "offset_acc_" $ alloc ^ tag ^ mem ^ expr p ^ tag_id ^. offset off)
+        (O.F.Jc.acc_offset_safe "acc_offset" $ alloc ^ tag ^ mem ^ expr p ^ tag_id ^. offset off)
     | (p, off, _, _), true ->
       E.locate ~e ~kind:JCVCpointer_deref
-        (O.F.jc_val "offset_typesafe_acc_" $ alloc ^ mem ^ expr p ^. offset off)
+        (O.F.Jc.acc_offset_safe "acc_offset_typesafe" $ alloc ^ mem ^ expr p ^. offset off)
   else
-    O.F.jc_val "safe_acc_" $ mem ^. expr Any e1
+    O.F.Jc.acc_unsafe "acc" $ mem ^. expr Any e1
 
 and make_deref_union ~e:_ _off _e1 _fi = assert false
   (*(* Retrieve bitvector *)
@@ -1592,36 +1566,28 @@ and offset =
   | Expr_offset e -> expr (Ty (O.Ty.integer)) e
   | Term_offset _ -> invalid_arg "offset"
 
-and type_assert  tmp ty' e =
-  let offset k e1 ty tmp =
+and type_assert tmp ty' e =
+  let offset k e1 tmp =
     let ac = deref_alloc_class ~type_safe:false e1 in
-    let _, alloc = talloc_table_var ~label_in_name:false LabelHere (ac, e1#region) in
     match ac with
     | JCalloc_root _ ->
       let f =
+        let open O.T in
         match k with
-        | Offset_min -> "offset_min"
-        | Offset_max -> "offset_max"
+        | Offset_min -> offset_min
+        | Offset_max -> offset_max
       in
-      O.T.(O.F.jc f $ alloc ^. var tmp)
-    | JCalloc_bitvector ->
-      let st = pointer_struct ty in
-      let f =
-        match k with
-        | Offset_min -> "offset_min_bytes"
-        | Offset_max -> "offset_max_bytes"
-      in
-      let s = string_of_int (struct_size_in_bytes st) in
-      O.T.(F.jc f $ alloc ^ var tmp ^. Const (Int s))
+      f ac ~r:e1#region ~lab:LabelHere @@ O.T.var tmp
+    | JCalloc_bitvector -> assert false
   in
   let a =
     match ty' with
-    | JCTpointer(_pc,n1o,n2o) ->
+    | JCTpointer (_pc, n1o, n2o) ->
       let offset_mina n =
-        O.P.(F.jc "le_int" $ offset Offset_min e ty' tmp ^. Const (Int (string_of_num n)))
+        O.P.(offset Offset_min e tmp <= Const (Int (string_of_num n)))
       in
       let offset_maxa n =
-        O.P.(F.jc "ge_int" $ offset Offset_max e ty' tmp ^. Const (Int (string_of_num n)))
+        O.P.(offset Offset_max e tmp >= Const (Int (string_of_num n)))
       in
       begin match e#typ with
       | JCTpointer (_si', n1o', n2o') ->
@@ -1777,14 +1743,14 @@ and make_reinterpret ~e e1 st =
     let open O.P in
     let_ "p" e'
       (fun p ->
-         let_ "ps" T.(F.jc "downcast" $ tag ^ e' ^. var s_to)
+         let_ "ps" T.(F.Jc.tag_table "downcast" $ tag ^ e' ^. var s_to)
            (fun ps ->
               let omin_omax =
                 let app f =
                   let open O.T in
                   function
-                  | `Old -> O.F.jc f $ at' before alloc ^. p
-                  | `New -> O.F.jc f $ at' LabelHere alloc ^. ps
+                  | `Old -> O.F.Jc.alloc_table f $ at' before alloc ^. p
+                  | `New -> O.F.Jc.alloc_table f $ at' LabelHere alloc ^. ps
                 in
                 (Fn.uncurry fdup2) @@ Pair.map app ("offset_min", "offset_max")
               in
@@ -1849,9 +1815,9 @@ and make_reinterpret ~e e1 st =
 
   let not_assigns_assumption =
     O.P.conj
-      O.T.[F.jc "rmem" $. mem `Old = mem `New;
-           F.jc "rfactor" $. mem `Old = int c;
-           F.jc "rpointer_new" $ mem `Old ^. e' = (F.jc "downcast" $ tag ^ e' ^. var s_to)]
+      O.T.[F.Jc.rmem "rmem" $. mem `Old = mem `New;
+           F.Jc.rmem "rfactor" $. mem `Old = int c;
+           F.Jc.rmem "rpointer_new" $ mem `Old ^. e' = (F.Jc.tag_table "downcast" $ tag ^ e' ^. var s_to)]
   in
 
   let cast_factor_assumption = O.T.(F.cast_factor () $ var s_from ^. var s_to = int c) in
@@ -1872,16 +1838,9 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
     | JCEconst JCCnull -> O.E.var "null"
     | JCEconst c -> O.E.mk (Const (const t c))
     | JCEvar v -> var v
-    | JCEunary ((`Uminus, (`Double | `Float as format)), e2) ->
-      let e2' = expr t e2 in
-      if !Options.float_model <> FMmultirounding
-      then
-        E.locate ~e ~kind:JCVCfp_overflow O.E.(F.jc_val P.("neg_" ^ float_format format) $. e2')
-      else
-        E.locate
-          ~e
-          ~kind:JCVCfp_overflow
-          O.E.(F.jc_val P.(float_operator `Uminus format) $ current_rounding_mode Expr ^. e2')
+    | JCEunary ((`Uminus, (`Double | `Float as _format)), e2) ->
+      let _e2' = expr t e2 in
+      assert false
     | JCEunary (op, e1) ->
       let Unary (f, t) = un_op ~e op in
       return O.E.(f $. expr (Ty t) e1)
@@ -1896,8 +1855,12 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
           let ac1, ac2 = Pair.map (deref_alloc_class ~type_safe:false) (e1, e2) in
           Pair.map alloc_table_var ((ac1, e1#region), (ac2, e2#region))
         in
+        let th =
+          if safety_checking () then O.F.Jc.eq_pointer_safe
+          else O.F.Jc.eq_pointer_unsafe
+        in
         E.locate ~e @@
-        O.E.(F.jc_val (match o with `Beq -> "eq_pointer" | `Bneq -> "neq_pointer") $ at1 ^ at2 ^ e1' ^. e2')
+        O.E.(th (match o with `Beq -> "eq_pointer" | `Bneq -> "neq_pointer") $ at1 ^ at2 ^ e1' ^. e2')
     | JCEbinary (e1, (_, (`Pointer | `Logic) as op), e2) ->
       begin match bin_op ~e op with
       | Op (f, t) -> return O.E.(f $ expr t e1 ^. expr t e2)
@@ -1907,9 +1870,8 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
       return O.E.(E.locate ~e:e1 @@ expr (Ty Bool) e1 && E.locate ~e:e2 @@ expr (Ty Bool) e2)
     | JCEbinary (e1, (`Blor, _), e2) ->
       return O.E.(E.locate ~e:e1 @@ expr (Ty Bool) e1 || E.locate ~e:e2 @@ expr (Ty Bool) e2)
-    | JCEbinary (e1, (#arithmetic_op as op, (`Double | `Float | `Binary80 as format)), e2) ->
-      E.locate ~e ~kind:JCVCfp_overflow @@
-      O.E.(F.jc_val (float_operator op format) $ current_rounding_mode Expr ^ expr t e1 ^. expr t e2)
+    | JCEbinary (_e1, (#arithmetic_op as _op, (`Double | `Float | `Binary80 as _format)), _e2) ->
+      assert false
     | JCEbinary (e1, op, e2) ->
       let return e' =
         match fst op with
@@ -1927,53 +1889,32 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
         | JCTpointer (JCtag (st, []), _, _) -> Some (tag_table_var (struct_root st, e1#region), O.E.var @@ Name.tag st)
         | _ -> None
       with
-      | Some (tt, tag) ->
-        O.E.(F.jc_val "shift_" $ tt ^ expr Any e1 ^ tag ^. expr (Ty O.Ty.integer) e2)
-      | None ->
-        O.E.(F.jc_val "safe_shift_" $ expr Any e1 ^. expr (Ty O.Ty.integer) e2)
+      | Some (tt, tag) when safety_checking () ->
+        O.E.(O.F.Jc.shift_safe "shift" $ tt ^ expr Any e1 ^ tag ^. expr (Ty O.Ty.integer) e2)
+      | None when safety_checking() ->
+        O.E.(F.Jc.shift_safe "shift_typesafe" $ expr Any e1 ^. expr (Ty O.Ty.integer) e2)
+      | _ ->
+        O.E.(F.Jc.shift_unsafe "shift" $ expr Any e1 ^. expr (Ty O.Ty.integer) e2)
       end
     | JCEif (e1, e2, e3) ->
       O.E.(if_ (E.locate ~e:e1 @@ expr (Ty Bool) e1) (expr t e2) (expr t e3))
-    | JCEoffset (k, e1, st) ->
-      let ac = deref_alloc_class ~type_safe:false e1 in
-      let alloc = alloc_table_var (ac, e1#region) in
-      begin match ac with
-      | JCalloc_root _ ->
-        let f =
-          match k with
-          | Offset_min -> "offset_min"
-          | Offset_max -> "offset_max"
-        in
-        O.E.(F.jc f $ alloc ^. expr Any e1)
-      | JCalloc_bitvector ->
-        let f =
-          match k with
-          | Offset_min -> "offset_min_bytes"
-          | Offset_max -> "offset_max_bytes"
-        in
-        let s = string_of_int (struct_size_in_bytes st) in
-        O.E.(F.jc f $ alloc ^ expr Any e1 ^. mk (Const (Int s)))
-      end
-    | JCEaddress (Addr_absolute, e1) ->
-      O.E.(F.jc "absolute_address" $. expr Any e1)
-    | JCEaddress (Addr_pointer, e1) ->
-      O.E.(F.jc "address" $. expr Any e1)
-    | JCEbase_block e1 ->
-      O.E.(F.jc "base_block" $. expr Any e1)
+    | JCEoffset _
+    | JCEaddress _
+    | JCEbase_block _ -> assert false
     | JCEfresh _ -> Options.jc_error e#pos "Unsupported \\fresh as expression"
     | JCEinstanceof (e1, st) ->
       let tag = tag_table_var (struct_root st, e1#region) in
       (* always safe *)
-      O.E.(F.jc "instanceof_"  $ tag ^ expr Any e1 ^. var (Name.tag st))
+      O.E.(F.Jc.instanceof "instanceof"  $ tag ^ expr Any e1 ^. var (Name.tag st))
     | JCEcast (e1, st) ->
       let tag = tag_table_var (struct_root st, e1#region) in
       if struct_of_union st
       then expr Any e1
       else
         O.E.((if safety_checking () then
-                (fun args -> E.locate ~e ~kind:JCVCdowncast (F.jc "downcast_" $ args))
+                (fun args -> E.locate ~e ~kind:JCVCdowncast (F.Jc.downcast_safe "downcast" $ args))
               else
-                ($) (F.jc "safe_downcast_"))
+                ($) (F.Jc.downcast_unsafe "downcast"))
                (tag ^ expr Any e1 ^. var (Name.tag st)))
     | JCErange_cast (e1, _ri) ->
       let Typ from_typ = ty e1#typ in
@@ -2178,7 +2119,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
                    "Can't generate termination condition: measure has no arguments (%s)"
                    li.li_name
            in
-           let pre = O.P.(O.F.jc r $ this_measure_why ^. cur_measure_why) in
+           let pre = O.P.(O.F.Jc.zwf r $ this_measure_why ^. cur_measure_why) in
            fun call ->
              E.locate
                ~e

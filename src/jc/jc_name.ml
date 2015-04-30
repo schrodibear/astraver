@@ -134,7 +134,6 @@ struct
   (* ATTENTION: this theory is non-existent, there is no more "obsolete" support for BV,
      the new implementation of BV in Why3 should become supported by Jessie2. *)
   let bitvector = "Bitvector", false
-  let jessie = "Jessie_theory", false
   let bool = "Bool", true
   let single = "Single", true
   let double = "Double", true
@@ -149,12 +148,37 @@ struct
     Option.map_default li.li_axiomatic ~default:("Logic_" ^ li.li_final_name) ~f:((^) "Axiomatic_"), true
   let logic_type name = "Logic_type_" ^ name, true
   let lemma ~is_axiom id = (if is_axiom then "Axiom_" else "Lemma_") ^ id, true
+
+  module Jessie =
+  struct
+    let pointer = "Jessie_pointer", false
+    let zwf = "Jessie_zwf", false
+    let alloc_table = "Jessie_alloc_table", false
+    let memory = "Jessie_memory", false
+    let pset = "Jessie_pset", false
+    let pset_range = "Jessie_pset_range", false
+    let pset_range_left = "Jessie_pset_range_left", false
+    let pset_range_right = "Jessie_pset_range_right", false
+    let pset_deref = "Jessie_pset_deref", false
+    let pset_union = "Jessie_pset_union", false
+    let pset_all = "Jessie_pset_all", false
+    let pset_disjoint = "Jessie_pset_disjoint", false
+    let pset_included = "Jessie_pset_included", false
+    let assigns = "Jessie_assigns", false
+    let tag = "Jessie_tag", false
+    let tag_table = "Jessie_tag_table", false
+    let reinterpret = "Jessie_reinterpret", false
+    let reinterpret_cast = "Jessie_reinterpret_cast", false
+    let allocable = "Jessie_allocable", false
+    let alloc = "Jessie_alloc", false
+    let same_except = "Jessie_same_except", false
+    let rmem = "Jessie_rmem", false
+  end
 end
 
 module Module =
 struct
   type t = string * bool
-  let jessie = "Jessie_module", false
   let struct_ ~safe pc = (fst (Theory.struct_ pc) ^ if safe then "_safe" else "_unsafe"), true
   let func ~extern ~safe f =
     "Function_" ^ f.fun_final_name ^
@@ -166,6 +190,35 @@ struct
   let exceptions = "Exceptions", true
   let globals pc =
     "Globals_" ^ Option.map_default ~default:"simple" ~f:(String.lowercase % fst % Theory.struct_) pc, true
+
+  module Jessie =
+  struct
+    let sub_pointer_safe = "Jessie_sub_pointer_safe", false
+    let sub_pointer_unsafe = "Jessie_sub_pointer_unsafe", false
+    let eq_pointer_safe = "Jessie_eq_pointer_safe", false
+    let eq_pointer_unsafe = "Jessie_eq_pointer_unsafe", false
+    let acc_safe = "Jessie_acc_safe", false
+    let acc_unsafe = "Jessie_acc_unsafe", false
+    let acc_offset_safe = "Jessie_acc_offset_safe", false
+    let upd_safe = "Jessie_upd_safe", false
+    let upd_unsafe = "Jessie_upd_unsafe", false
+    let upd_offset_safe = "Jessie_upd_offset_safe", false
+    let instanceof = "Jessie_instanceof", false
+    let downcast_safe = "Jessie_downcast_safe", false
+    let downcast_safe_reinterpret = "Jessie_downcast_safe_reinterpret", false
+    let downcast_unsafe = "Jessie_downcast_unsafe", false
+    let shift_safe = "Jessie_shift_safe", false
+    let shift_unsafe = "Jessie_shift_unsafe", false
+    let any_int = "Jessie_any_int", false
+    let any_real = "Jessie_any_real", false
+    let any_bool = "Jessie_any_bool", false
+    let any_pointer = "Jessie_any_pointer", false
+    let any_memory = "Jessie_any_memory", false
+    let any_alloc_table = "Jessie_any_alloc_table", false
+    let any_tag_table = "Jessie_any_tag_table", false
+    let reinterpret_unsafe = "Jessie_reinterpret_unsafe", false
+    let reinterpret_safe = "Jessie_reinterpret_safe", false
+  end
 end
 
 module Pred =

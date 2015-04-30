@@ -106,11 +106,7 @@ struct
 
   let user s ~from:(name, qualified) = (User (name, qualified, s) : _ t)
 
-  let local s = user ~from:("", false) s
-
-  let jc = user ~from:Name.Theory.jessie
-
-  let jc_val = user ~from:Name.Module.jessie
+  let local s = user s ~from:("", false)
 
   let bool = user ~from:Name.Theory.bool
 
@@ -122,54 +118,108 @@ struct
 
   let binary80 = user ~from:Name.Theory.binary80
 
-  let instanceof () : (_ * (_ * (_ * unit)), boolean) t = jc "instanceof"
+  module Jc =
+  struct
+    open Name.Theory.Jessie
 
-  let typeof () : (_ * (_ * unit), _) t = jc "typeof"
+    let pointer = user ~from:pointer
+    let zwf = user ~from:zwf
+    let alloc_table = user ~from:alloc_table
+    let memory = user ~from:memory
+    let pset = user ~from:pset
+    let pset_range = user ~from:pset_range
+    let pset_range_left = user ~from:pset_range_left
+    let pset_range_right = user ~from:pset_range_right
+    let pset_deref = user ~from:pset_deref
+    let pset_union = user ~from:pset_union
+    let pset_all = user ~from:pset_all
+    let pset_disjoint = user ~from:pset_disjoint
+    let pset_included = user ~from:pset_included
+    let assigns = user ~from:assigns
+    let tag = user ~from:tag
+    let tag_table = user ~from:tag_table
+    let reinterpret = user ~from:reinterpret
+    let reinterpret_cast = user ~from:reinterpret_cast
+    let allocable = user ~from:allocable
+    let alloc = user ~from:alloc
+    let same_except = user ~from:same_except
+    let rmem = user ~from:rmem
 
-  let allocable () : (_ * (_ * unit), boolean) t = jc "allocable"
+    open Name.Module.Jessie
 
-  let freeable () : (_ * (_ * unit), boolean) t = jc "freeable"
+    let sub_pointer_safe = user ~from:sub_pointer_safe
+    let sub_pointer_unsafe = user ~from:sub_pointer_unsafe
+    let eq_pointer_safe = user ~from:eq_pointer_safe
+    let eq_pointer_unsafe = user ~from:eq_pointer_unsafe
+    let acc_safe = user ~from:acc_safe
+    let acc_unsafe = user ~from:acc_unsafe
+    let acc_offset_safe = user ~from:acc_offset_safe
+    let upd_safe = user ~from:upd_safe
+    let upd_unsafe = user ~from:upd_unsafe
+    let upd_offset_safe = user ~from:upd_offset_safe
+    let instanceof = user ~from:instanceof
+    let downcast_safe = user ~from:downcast_safe
+    let downcast_safe_reinterpret = user ~from:downcast_safe_reinterpret
+    let downcast_unsafe = user ~from:downcast_unsafe
+    let shift_safe = user ~from:shift_safe
+    let shift_unsafe = user ~from:shift_unsafe
+    let any_int = user ~from:any_int
+    let any_real = user ~from:any_real
+    let any_bool = user ~from:any_bool
+    let any_pointer = user ~from:any_pointer
+    let any_memory = user ~from:any_memory
+    let any_alloc_table = user ~from:any_alloc_table
+    let any_tag_table = user ~from:any_tag_table
+    let reinterpret_unsafe = user ~from:reinterpret_unsafe
+    let reinterpret_safe = user ~from:reinterpret_safe
+  end
 
-  let allocated () : (_ * (_ * unit), boolean) t = jc "allocated"
+  let instanceof () : (_ * (_ * (_ * unit)), boolean) t = Jc.tag_table "instanceof"
 
-  let shift () : (_ * (unbounded integer number * unit), _) t = jc "shift"
+  let typeof () : (_ * (_ * unit), _) t = Jc.tag_table "typeof"
 
-  let same_block () : (_ * (_ * unit), boolean) t = jc "same_block"
+  let allocable () : (_ * (_ * unit), boolean) t = Jc.allocable "allocable"
 
-  let select () : (_ * (_ * unit), _) t = jc "select"
+  let freeable () : (_ * (_ * unit), boolean) t = Jc.allocable "freeable"
 
-  let subtag () : (_ * (_ * unit), boolean) t = jc "subtag"
+  let allocated () : (_ * (_ * unit), boolean) t = Jc.allocable "allocated"
 
-  let parenttag () : (_ * (_ * unit), boolean) t = jc "parenttag"
+  let shift () : (_ * (unbounded integer number * unit), _) t = Jc.pointer "shift"
 
-  let int_of_tag () : (_ * unit, unbounded integer number) t = jc "int_of_tag"
+  let same_block () : (_ * (_ * unit), boolean) t = Jc.pointer "same_block"
 
-  let offset_min () : (_ * (_ * unit), unbounded integer number) t = jc "offset_min"
+  let select () : (_ * (_ * unit), _) t = Jc.memory "select"
 
-  let offset_max () : (_ * (_ * unit), unbounded integer number) t = jc "offset_max"
+  let subtag () : (_ * (_ * unit), boolean) t = Jc.tag "subtag"
 
-  let alloc_fresh () : (_ * (_ * unit), boolean) t = jc "alloc_fresh"
+  let parenttag () : (_ * (_ * unit), boolean) t = Jc.tag "parenttag"
 
-  let tag_fresh () : (_ * (_ * unit), boolean) t = jc "tag_fresh"
+  let int_of_tag () : (_ * unit, unbounded integer number) t = Jc.tag "int_of_tag"
 
-  let alloc_same_except () : (_ * (_ * (_ * unit)), boolean) t = jc "alloc_same_except"
+  let offset_min () : (_ * (_ * unit), unbounded integer number) t = Jc.alloc_table "offset_min"
 
-  let tag_extends () : (_ * (_ * unit), boolean) t = jc "tag_extends"
+  let offset_max () : (_ * (_ * unit), unbounded integer number) t = Jc.alloc_table "offset_max"
 
-  let pset_all () : (_ * unit, _) t = jc "pset_all"
+  let alloc_fresh () : (_ * (_ * unit), boolean) t = Jc.allocable "alloc_fresh"
 
-  let pset_empty () : (unit, _) t = jc "pset_empty"
+  let tag_fresh () : (_ * (_ * unit), boolean) t = Jc.allocable "tag_fresh"
 
-  let cast_factor () = jc "cast_factor"
+  let alloc_same_except () : (_ * (_ * (_ * unit)), boolean) t = Jc.same_except "alloc_same_except"
+
+  let tag_extends () : (_ * (_ * unit), boolean) t = Jc.alloc "tag_extends"
+
+  let pset_all () : (_ * unit, _) t = Jc.pset_all "pset_all"
+
+  let pset_empty () : (unit, _) t = Jc.pset "pset_empty"
+
+  let cast_factor () = Jc.reinterpret "cast_factor"
 
   let reinterpret ~safe =
-    jc_val @@
-    if safe then "safe_reinterpret"
-    else "reinterpret"
+    if safe then Jc.reinterpret_safe "reinterpret"
+    else Jc.reinterpret_unsafe "reinterpret"
 
   let reinterpret_cast op =
-    jc @@
-    "reinterpret_cast_" ^
+    Jc.reinterpret_cast @@ "reinterpret_cast_" ^
     match op with
     | `Retain -> "retain"
     | `Merge _ -> "merge"
@@ -188,6 +238,7 @@ struct
     | U_bint_op (_, i, _) -> Ty (int i)
     | Of_int (i, _) -> Ty (int i)
     | To_int _ -> Ty integer
+    | Any i -> Ty (int i)
     | Cast (i, _, _) -> Ty (int i)
     | To_float r -> Ty (float r)
     | Of_float _ -> Ty real
@@ -347,7 +398,10 @@ struct
 
   let typeof ri ?r ?code:deref ?lab p = F.typeof () $ tag_table ?deref ?lab ?r ri ^. p
 
-  let ( **>) mem fi = select mem (var (Name.field_memory_name fi))
+  let instanceof ?r ?code:deref ?lab p si =
+    F.instanceof () $ (tag_table ?deref ?lab ?r @@ struct_root si) ^ p ^. var (Name.tag si)
+
+  let ( **>) p fi = select (var (Name.field_memory_name fi)) p
 
   let shift p i = F.shift () $ p ^. i
 
@@ -502,7 +556,17 @@ struct
 
   let user s ~from:(name, import) = User (name, import, s)
 
-  let jc = user ~from:Name.Theory.jessie
+  module Jc =
+  struct
+    open Name.Theory.Jessie
+
+    let pointer = user ~from:pointer
+    let alloc_table = user ~from:alloc_table
+    let memory = user ~from:memory
+    let pset = user ~from:pset
+    let tag = user ~from:tag
+    let tag_table = user ~from:tag_table
+  end
 
   type poly_logic_type = { logic_type : 'a. 'a logic_type }
 
@@ -954,6 +1018,7 @@ struct
     let of_int t = E.(Of_int (I.ty, false) $. t)
     let of_int_mod t = E.(Of_int (I.ty, true) $. t)
     let to_int t = E.(To_int I.ty $. t)
+    let any = E.(Any I.ty $. void)
     module B = O.M (E)
   end
   let (>) = rel `Gt
@@ -1259,10 +1324,11 @@ struct
     | _, False -> not p1
     | _, _ -> Iff (p1, p2)
 
-  let instanceof ri ?r ?code:deref ?lab p si =
-    F.instanceof () $ (T.tag_table ?deref ?lab ?r ri) ^ p ^. T.var (Name.tag si)
+  let instanceof ?r ?code:deref ?lab p si =
+    F.instanceof () $ (T.tag_table ?deref ?lab ?r @@ struct_root si) ^ p ^. T.var (Name.tag si)
 
-  let typeeq ri ?r ?code:deref ?lab p si = T.(F.typeof () $ T.tag_table ?deref ?lab ?r ri ^. p = var @@ Name.tag si)
+  let typeeq ?r ?code:deref ?lab p si =
+    T.(F.typeof () $ T.tag_table ?deref ?lab ?r (struct_root si) ^. p = var @@ Name.tag si)
 
   let subtag t1 t2 = F.subtag () $ t1 ^. t2
 

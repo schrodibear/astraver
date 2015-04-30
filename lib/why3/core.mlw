@@ -878,6 +878,9 @@ module Jessie_shift_safe
   val shift (t : tag_table 't) (p : pointer 't) (s : tag_id 't) (off : int) : pointer 't
     requires { "expl:Correct type" typeof t p = s }
     ensures  { result = shift p off }
+
+  val shift_typesafe (p : pointer 't) (off : int) : pointer 't
+    ensures  { result = shift p off }
 end
 
 module Jessie_shift_unsafe
@@ -961,7 +964,7 @@ module Jessie_reinterpret_unsafe
                not_assigns_strong (old !m) !m pset_range_new }
 end
 
-module Jessie_reintepret_safe
+module Jessie_reinterpret_safe
   use import int.Int
   use import ref.Ref
   use import Jessie_pointer

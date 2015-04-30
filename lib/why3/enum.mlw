@@ -90,6 +90,11 @@ module Generic_enum
 
   use import int.Int
 
+  val to_int (a : t) : int
+    ensures { result = to_int a }
+
+  val any_ unit : t
+
   val (+%) (a b : t) : t
     ensures { to_int result = normalize (to_int a + to_int b) }
 
@@ -451,6 +456,11 @@ module Generic_bit_enum
     ensures { result = x ^ y }
 
   use int.Int
+
+  val to_int (a : t) : int
+    ensures { result = to_int a }
+
+  val any_ unit : t
 
   val (+%) (a b : t) : t
     ensures { to_int result = normalize (Int.(+) (to_int a) (to_int b)) }

@@ -139,6 +139,7 @@ type ('params, 'result) func =
       [ `Neg ] * 'a bounded integer * bool -> ('a bounded integer number * unit, 'a bounded integer number) func
   | Of_int : 'a bounded integer * bool -> (unbounded integer number * unit, 'a bounded integer number) func
   | To_int : 'a bounded integer -> ('a bounded integer number * unit, unbounded integer number) func
+  | Any : 'a bounded integer -> (void * unit, 'a bounded integer number) func
   | Cast : 'a bounded integer * 'b bounded integer * bool ->
     ('b bounded integer number * unit, 'a bounded integer number) func
   | To_float : 'a precision real -> (arbitrary_precision real number * unit, 'a precision real number) func
