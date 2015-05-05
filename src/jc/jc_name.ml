@@ -112,9 +112,6 @@ let memory (fi, r) =
   else
     fi.fi_final_name
 
-let exception_ ei =
-  ei.exi_name ^ "_exc"
-
 module Generic =
 struct
   let tag_table ri =  (Type.root ri) ^ "_tag_table"
@@ -129,57 +126,57 @@ end
 
 module Theory =
 struct
-  type t = string * bool
-  let root ri = "Root_" ^ (Type.root ri), false
+  type t = string * [ `Short | `Qualified ]
+  let root ri = "Root_" ^ (Type.root ri), `Short
   (* ATTENTION: this theory is non-existent, there is no more "obsolete" support for BV,
      the new implementation of BV in Why3 should become supported by Jessie2. *)
-  let bitvector = "Bitvector", false
-  let bool = "Bool", true
-  let single = "Single", true
-  let double = "Double", true
-  let binary80 = "Binary80", true
-  let real = "Real", true
-  let current = "", false
+  let bitvector = "Bitvector", `Short
+  let bool = "Bool", `Qualified
+  let single = "Single", `Qualified
+  let double = "Double", `Qualified
+  let binary80 = "Binary80", `Qualified
+  let real = "Real", `Qualified
+  let current = "", `Short
   let struct_ =
     function
-    | JCtag (si, _) -> "Struct_" ^ si.si_name, false
-    | JCroot ri -> "Root_" ^ ri.ri_name, false
+    | JCtag (si, _) -> "Struct_" ^ si.si_name, `Short
+    | JCroot ri -> "Root_" ^ ri.ri_name, `Short
   let axiomatic li =
-    Option.map_default li.li_axiomatic ~default:("Logic_" ^ li.li_final_name) ~f:((^) "Axiomatic_"), false
-  let logic_type name = "Logic_type_" ^ name, false
-  let lemma ~is_axiom id = (if is_axiom then "Axiom_" else "Lemma_") ^ id, false
+    Option.map_default li.li_axiomatic ~default:("Logic_" ^ li.li_final_name) ~f:((^) "Axiomatic_"), `Short
+  let logic_type name = "Logic_type_" ^ name, `Short
+  let lemma ~is_axiom id = (if is_axiom then "Axiom_" else "Lemma_") ^ id, `Short
 
   module Jessie =
   struct
-    let pointer = "Jessie_pointer", false
-    let zwf = "Jessie_zwf", false
-    let alloc_table = "Jessie_alloc_table", false
-    let memory = "Jessie_memory", false
-    let pset = "Jessie_pset", false
-    let pset_range = "Jessie_pset_range", false
-    let pset_range_left = "Jessie_pset_range_left", false
-    let pset_range_right = "Jessie_pset_range_right", false
-    let pset_deref = "Jessie_pset_deref", false
-    let pset_union = "Jessie_pset_union", false
-    let pset_all = "Jessie_pset_all", false
-    let pset_disjoint = "Jessie_pset_disjoint", false
-    let pset_included = "Jessie_pset_included", false
-    let assigns = "Jessie_assigns", false
-    let tag = "Jessie_tag", false
-    let tag_table = "Jessie_tag_table", false
-    let reinterpret = "Jessie_reinterpret", false
-    let reinterpret_cast = "Jessie_reinterpret_cast", false
-    let allocable = "Jessie_allocable", false
-    let alloc = "Jessie_alloc", false
-    let same_except = "Jessie_same_except", false
-    let rmem = "Jessie_rmem", false
+    let pointer = "Jessie_pointer", `Short
+    let zwf = "Jessie_zwf", `Short
+    let alloc_table = "Jessie_alloc_table", `Short
+    let memory = "Jessie_memory", `Short
+    let pset = "Jessie_pset", `Short
+    let pset_range = "Jessie_pset_range", `Short
+    let pset_range_left = "Jessie_pset_range_left", `Short
+    let pset_range_right = "Jessie_pset_range_right", `Short
+    let pset_deref = "Jessie_pset_deref", `Short
+    let pset_union = "Jessie_pset_union", `Short
+    let pset_all = "Jessie_pset_all", `Short
+    let pset_disjoint = "Jessie_pset_disjoint", `Short
+    let pset_included = "Jessie_pset_included", `Short
+    let assigns = "Jessie_assigns", `Short
+    let tag = "Jessie_tag", `Short
+    let tag_table = "Jessie_tag_table", `Short
+    let reinterpret = "Jessie_reinterpret", `Short
+    let reinterpret_cast = "Jessie_reinterpret_cast", `Short
+    let allocable = "Jessie_allocable", `Short
+    let alloc = "Jessie_alloc", `Short
+    let same_except = "Jessie_same_except", `Short
+    let rmem = "Jessie_rmem", `Short
   end
 end
 
 module Module =
 struct
-  type t = string * bool
-  let struct_ ~safe pc = (fst (Theory.struct_ pc) ^ if safe then "_safe" else "_unsafe"), true
+  type t = string * [ `Short | `Qualified ]
+  let struct_ ~safe pc = (fst (Theory.struct_ pc) ^ if safe then "_safe" else "_unsafe"), `Short
   let func ~extern ~safe f =
     "Function_" ^ f.fun_final_name ^
     match extern, safe with
@@ -187,39 +184,44 @@ struct
     | true, false -> "_requires"
     | false, true -> "_behaviors"
     | false, false -> "_safety"
-  let exceptions = "Exceptions", true
+  let exceptions = "Exceptions", `Short
   let globals pc =
-    "Globals_" ^ Option.map_default ~default:"simple" ~f:(String.lowercase % fst % Theory.struct_) pc, false
+    "Globals_" ^ Option.map_default ~default:"simple" ~f:(String.lowercase % fst % Theory.struct_) pc, `Short
 
   module Jessie =
   struct
-    let sub_pointer_safe = "Jessie_sub_pointer_safe", false
-    let sub_pointer_unsafe = "Jessie_sub_pointer_unsafe", false
-    let eq_pointer_safe = "Jessie_eq_pointer_safe", false
-    let eq_pointer_unsafe = "Jessie_eq_pointer_unsafe", false
-    let acc_safe = "Jessie_acc_safe", false
-    let acc_unsafe = "Jessie_acc_unsafe", false
-    let acc_offset_safe = "Jessie_acc_offset_safe", false
-    let upd_safe = "Jessie_upd_safe", false
-    let upd_unsafe = "Jessie_upd_unsafe", false
-    let upd_offset_safe = "Jessie_upd_offset_safe", false
-    let instanceof = "Jessie_instanceof", false
-    let downcast_safe = "Jessie_downcast_safe", false
-    let downcast_safe_reinterpret = "Jessie_downcast_safe_reinterpret", false
-    let downcast_unsafe = "Jessie_downcast_unsafe", false
-    let shift_safe = "Jessie_shift_safe", false
-    let shift_unsafe = "Jessie_shift_unsafe", false
-    let any_int = "Jessie_any_int", false
-    let any_real = "Jessie_any_real", false
-    let any_bool = "Jessie_any_bool", false
-    let any_pointer = "Jessie_any_pointer", false
-    let any_memory = "Jessie_any_memory", false
-    let any_alloc_table = "Jessie_any_alloc_table", false
-    let any_tag_table = "Jessie_any_tag_table", false
-    let reinterpret_unsafe = "Jessie_reinterpret_unsafe", false
-    let reinterpret_safe = "Jessie_reinterpret_safe", false
+    let return = "Jessie_return", `Short
+    let sub_pointer_safe = "Jessie_sub_pointer_safe", `Short
+    let sub_pointer_unsafe = "Jessie_sub_pointer_unsafe", `Short
+    let eq_pointer_safe = "Jessie_eq_pointer_safe", `Short
+    let eq_pointer_unsafe = "Jessie_eq_pointer_unsafe", `Short
+    let acc_safe = "Jessie_acc_safe", `Short
+    let acc_unsafe = "Jessie_acc_unsafe", `Short
+    let acc_offset_safe = "Jessie_acc_offset_safe", `Short
+    let upd_safe = "Jessie_upd_safe", `Short
+    let upd_unsafe = "Jessie_upd_unsafe", `Short
+    let upd_offset_safe = "Jessie_upd_offset_safe", `Short
+    let instanceof = "Jessie_instanceof", `Short
+    let downcast_safe = "Jessie_downcast_safe", `Short
+    let downcast_safe_reinterpret = "Jessie_downcast_safe_reinterpret", `Short
+    let downcast_unsafe = "Jessie_downcast_unsafe", `Short
+    let shift_safe = "Jessie_shift_safe", `Short
+    let shift_unsafe = "Jessie_shift_unsafe", `Short
+    let any_int = "Jessie_any_int", `Short
+    let any_real = "Jessie_any_real", `Short
+    let any_bool = "Jessie_any_bool", `Short
+    let any_pointer = "Jessie_any_pointer", `Short
+    let any_memory = "Jessie_any_memory", `Short
+    let any_alloc_table = "Jessie_any_alloc_table", `Short
+    let any_tag_table = "Jessie_any_tag_table", `Short
+    let reinterpret_unsafe = "Jessie_reinterpret_unsafe", `Short
+    let reinterpret_safe = "Jessie_reinterpret_safe", `Short
   end
 end
+
+let exception_ ei =
+  let md, qual = Module.exceptions in
+  md, qual, ei.exi_name ^ "_exc"
 
 module Pred =
 struct
@@ -370,7 +372,7 @@ let mem_to_bitvector_param_name pc =
   (Class.pointer pc) ^ "_mem_to_bitvector"
 
 let jessie_return_variable = "return"
-let jessie_return_exception = "Return"
+let jessie_return_exception = fst Module.Jessie.return, `Short, "Return"
 
 let mutable_name pc =
   "mutable_" ^ (Class.pointer pc)

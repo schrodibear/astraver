@@ -103,16 +103,16 @@ let un_op ~e : expr_unary_op -> _ =
     return (U_bint_bop (`Compl, i)) (Integral i)
   | `Uminus, `Enum { ei_type = Int (r, b); _ } ->
     let i : _ integer = Int (r, b) in
-    return (U_bint_op (`Neg, i, false)) (Integral i)
+    return (U_bint_op (`Neg, i, `Check)) (Integral i)
   | `Uminus, `Enum { ei_type = Enum e; _ } ->
     let i = Enum e in
-    return (U_bint_op (`Neg, i, false)) (Integral i)
+    return (U_bint_op (`Neg, i, `Check)) (Integral i)
   | `Uminus_mod, `Enum { ei_type = Int (r, b); _ } ->
     let i : _ integer = Int (r, b) in
-    return (U_bint_op (`Neg, i, true)) (Integral i)
+    return (U_bint_op (`Neg, i, `Modulo)) (Integral i)
   | `Uminus_mod, `Enum { ei_type = Enum e; _ } ->
     let i = Enum e in
-    return (U_bint_op (`Neg, i, true)) (Integral i)
+    return (U_bint_op (`Neg, i, `Modulo)) (Integral i)
   | `Unot, `Boolean ->
     Unary (O.F.bool "notb", Bool)
   | `Uminus, `Float ->
@@ -220,8 +220,8 @@ let bin_op ~e : [< bin_op] * operator_type -> _ =
     let it = Integral t in
     let rel, bop, mop, bwop =
       (fun r -> rel (B_num_pred (r, it)) it),
-      (fun o -> op (B_bint_op (o, t, false)) it),
-      (fun o -> op (B_bint_op (o, t, true)) it),
+      (fun o -> op (B_bint_op (o, t, `Check)) it),
+      (fun o -> op (B_bint_op (o, t, `Modulo)) it),
       fun o -> op (B_bint_bop (o, t)) it
     in
     begin match op' with
@@ -233,8 +233,8 @@ let bin_op ~e : [< bin_op] * operator_type -> _ =
     | `Bbw_xor -> bwop `Xor
     | `Blogical_shift_right -> bwop `Lsr
     | `Barith_shift_right -> bwop `Asr
-    | `Bshift_left -> op (Lsl_bint (t, false)) it
-    | `Bshift_left_mod -> op (Lsl_bint (t, true)) it
+    | `Bshift_left -> op (Lsl_bint (t, `Check)) it
+    | `Bshift_left_mod -> op (Lsl_bint (t, `Modulo)) it
     end
   (* enums *)
   | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq |
@@ -245,8 +245,8 @@ let bin_op ~e : [< bin_op] * operator_type -> _ =
     let it = Integral t in
     let rel, op, mop =
       (fun r -> rel (B_num_pred (r, it)) it),
-      (fun o -> op (B_bint_op (o, t, false)) it),
-      fun o -> op (B_bint_op (o, t, true)) it
+      (fun o -> op (B_bint_op (o, t, `Check)) it),
+      fun o -> op (B_bint_op (o, t, `Modulo)) it
     in
     begin match op' with
     | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq as op' -> rel (r op')
@@ -357,6 +357,7 @@ let rec coerce :
       | _ -> false
     in
     fun ?(modulo=false) ~e ~e1 e' ->
+      let modulo = if modulo then `Modulo else `Check in
       let apply' f = apply f e' in
       let return = return e' in
       match ty_src, ty_dst with
@@ -1788,14 +1789,14 @@ and make_reinterpret ~e e1 st =
                 ListLabels.map
                   pred_names
                   ~f:(fun pred_name ->
-                    (("Jc_reinterpret", true), pred_name) $.. dwhole 0 ^.. dparts None &&
+                    (("Jc_reinterpret", `Qualified), pred_name) $.. dwhole 0 ^.. dparts None &&
                     forall
                       "i"
                       O.Lt.integer
                       (fun i ->
                          let pred_app =
                            let imul = if P.(c > 1) then T.(i * int c) else i in
-                           (("Jc_reinterpret", true), pred_name) $..
+                           (("Jc_reinterpret", `Qualified), pred_name) $..
                            dwhole ~boff:i 0 ^.. dparts (Some imul)
                          in
                          if false (* change to enbale the antecedent (both ways are correct) *) then
@@ -2070,7 +2071,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
             fname
             args
         in
-        E.locate ~e ~kind:(JCVCuser_call f.fun_name) O.E.(((mod_, true), fname) $.. new_args) |>
+        E.locate ~e ~kind:(JCVCuser_call f.fun_name) O.E.(((mod_, `Qualified), fname) $.. new_args) |>
         (* decreases *)
         (let this_comp = f.fun_component in
          let current_comp = (get_current_function ()).fun_component in
@@ -2464,17 +2465,17 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
           let tmp = tmp_var_name () in
           label @@
           let_ tmp
-            (mk @@ Triple (true, r, expr typ e, True, []))
+            (mk @@ Triple (`Opaque, r, expr typ e, True, []))
             (fun _ ->
                mk (Black_box (Annot (True, O.Wt.void, [], [], post, []))) ^^
                var tmp)
         end else if is_current_behavior id then
             if r = True
-            then return @@ label @@ O.E.mk @@ Triple (true, True, expr typ e, post, [])
+            then return @@ label @@ O.E.mk @@ Triple (`Opaque, True, expr typ e, post, [])
             else
               return @@
               O.E.(label (mk @@ Black_box (Annot (True, O.Wt.void, [], [], r, []))) ^^
-                   mk @@ Triple (true, True, expr typ e, post, []))
+                   mk @@ Triple (`Opaque, True, expr typ e, post, []))
         else
           let Why_type result_type = some_var_why_type vi_result in
           return @@
@@ -2482,7 +2483,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
                let tmp = tmp_var_name () in
                let_
                  tmp
-                 (mk @@ Triple (true, True, expr typ e, True, []))
+                 (mk @@ Triple (`Opaque, True, expr typ e, True, []))
                  (fun _ -> mk @@ Black_box (Annot (True, result_type, [], [], post, []))))
         | _ -> assert false
         end
@@ -2690,7 +2691,7 @@ let logic_fun f ta =
       let axiom =
         let trig =
           let params = List.map O.(T.some % T.var % fst) params in
-          O.T.((("", false), f.li_final_name) $.. params)
+          O.T.((("", `Short), f.li_final_name) $.. params)
         in
         O.Wd.mk
           ~name:(f.li_final_name ^ "_definition")
@@ -3325,7 +3326,7 @@ let func f funpos spec body =
                            ~p:(new assertion JCAtrue :> < mark : _; pos: _ >)
                            ~kind:JCVCpost
                            internal_safety_post,
-                         false (* we require termination proofs, also Why3 now checks possible divergence *),
+                         `Converges (* we require termination proofs, also Why3 now checks possible divergence *),
                          excep_posts_for_others None excep_behaviors)))]]
            else
              [])
@@ -3361,7 +3362,8 @@ let func f funpos spec body =
                                 ~p:(new assertion JCAtrue :> < mark : _; pos: _ >)
                                 ~kind:JCVCpost
                                 internal_post,
-                              f.fun_may_diverge, (* Adding `diverges' clause for recursive and looping functions *)
+                              (if f.fun_may_diverge then `Diverges else `Converges),
+                              (* Adding `diverges' clause for recursive and looping functions *)
                               excep_posts_for_others None excep_behaviors)))))
                 normal_behaviors
                 []
@@ -3387,7 +3389,7 @@ let func f funpos spec body =
                                    assume_in_precondition b internal_requires,
                                    except_body,
                                    True,
-                                   false,
+                                   `Converges,
                                    (Name.exception_ exc, internal_post) ::
                                    excep_posts_for_others (Some exc) excep_behaviors))))))
                 user_excep_behaviors
@@ -3419,19 +3421,19 @@ let enum_entry_name ~how (type a) =
   | (Int _ as i : a bounded integer) ->
     let (module M) = O.module_of_int_ty i in
     begin match how with
-    | `Theory false -> M.theory
-    | `Theory true -> M.bit_theory
-    | `Module (false, false) -> M.unsafe_module
-    | `Module (false, true) -> M.unsafe_bit_module
-    | `Module (true, false) -> M.safe_module
-    | `Module (true, true) -> M.safe_bit_module
+    | `Theory `Abstract -> M.theory
+    | `Theory `Bitvector -> M.bit_theory
+    | `Module (`Abstract, `Unsafe) -> M.unsafe_module
+    | `Module (`Abstract, `Safe) -> M.safe_module
+    | `Module (`Bitvector, `Unsafe) -> M.unsafe_bit_module
+    | `Module (`Bitvector, `Safe) -> M.safe_bit_module
     end
   | Enum _ as e ->
     let (module M) = O.module_of_enum_ty e in
     match how  with
     | `Theory _ -> M.theory
-    | `Module (false, _) -> M.unsafe_module
-    | `Module (true, _) -> M.safe_module
+    | `Module (_, `Safe) -> M.unsafe_module
+    | `Module (_, `Unsafe) -> M.safe_module
 
 let enums eis =
   let open O in
@@ -3443,7 +3445,7 @@ let enums eis =
   let mod_ ~th ~safe ty =
     Entry.some @@
     Mod.mk
-      ~name:(enum_entry_name ~how:(`Module (safe, false)) ty)
+      ~name:(enum_entry_name ~how:(`Module (`Abstract, if safe then `Safe else `Unsafe)) ty)
       ~safe
       ~deps:[Dependency (Use (`Import None, th));
              Dependency (Clone (`Export, generic_enum, here));
@@ -3464,12 +3466,12 @@ let enums eis =
     ~f:(function
       | { ei_type = Int (r, b) } ->
         let i : _ integer = Int (r, b) in
-        let th = Th.dummy (enum_entry_name ~how:(`Theory false) i) in
-        let bw_th = Th.dummy (enum_entry_name ~how:(`Theory true) i) in
+        let th = Th.dummy (enum_entry_name ~how:(`Theory `Abstract) i) in
+        let bw_th = Th.dummy (enum_entry_name ~how:(`Theory `Bitvector) i) in
         let bw_mod ~safe =
           Entry.some
             (Mod.mk
-               ~name:(enum_entry_name ~how:(`Module (safe, true)) i)
+               ~name:(enum_entry_name ~how:(`Module (`Bitvector, if safe then `Safe  else `Unsafe)) i)
                ~safe
                ~deps:[Dependency (Use (`Import None, th));
                       Dependency (Clone (`Export, generic_bit_enum, here));
@@ -3487,13 +3489,13 @@ let enums eis =
         let min = "min" and max = "max" in
         let enum_aux =
           Th.mk
-            ~name:(enum_entry_name ~how:(`Theory false) e ^ "_aux")
+            ~name:(enum_entry_name ~how:(`Theory `Abstract) e ^ "_aux")
             [Wd.mk ~name:min @@ Function ([], Lt.integer, T.num ei_min);
              Wd.mk ~name:max @@ Function ([], Lt.integer, T.num ei_max)]
         in
         let th =
           Th.mk
-            ~name:(enum_entry_name ~how:(`Theory false) e)
+            ~name:(enum_entry_name ~how:(`Theory `Abstract) e)
             ~deps:[Use (`Import None, enum_aux);
                    Clone (`Export, enum, [`Constant (min, min); `Constant (max, max)])]
             []
@@ -3512,7 +3514,8 @@ let enum_cast (ei_to, ei_from) =
     let cast ~m =
       Wd.mk
         ~name:(cast_name m)
-        (Function ([n, Logic_type lt_from], lt_to, T.(Of_int (to_, m) $. to_int @@ T.var n)))
+        (Function ([n, Logic_type lt_from], lt_to,
+                   T.(Of_int (to_, if m then `Modulo else `Check) $. to_int @@ T.var n)))
     in
     let bw_cast = "bw_cast" in
     let bw_cast_def =
@@ -3529,7 +3532,7 @@ let enum_cast (ei_to, ei_from) =
     in
     let cast_val ~safe ~bw ~m =
       let n_t = T.var n in
-      let from = enum_entry_name ~how:(`Theory bw) to_, true in
+      let from = enum_entry_name ~how:(`Theory (if bw then `Bitvector else `Abstract)) to_, `Qualified in
       Wd.mk
         ~name:(cast_name m)
         (Param (Arrow
@@ -3543,31 +3546,33 @@ let enum_cast (ei_to, ei_from) =
                        [],
                        P.(T.(To_int to_ $. T.result =
                              let n_i = to_int n_t in if m then F.user ~from "normalize" $. n_i else n_i) &&
-                          if bw then T.(result = (F.user ~from:(name ~of_:(`Theory true), true) bw_cast $. n_t))
+                          if bw then
+                            T.(result = (F.user ~from:(name ~of_:(`Theory `Bitvector), `Qualified) bw_cast $. n_t))
                           else True),
                        [])))))
     in
     let mods ~bw =
+      let bw' = if bw then `Bitvector else `Abstract in
       [Entry.some @@
        Mod.mk
-         ~name:(name ~of_:(`Module (false, false)))
+         ~name:(name ~of_:(`Module (bw', `Unsafe)))
          ~safe:false
          [cast_val ~safe:false ~bw ~m:false; cast_val ~safe:false ~bw ~m:true];
        Entry.some @@
        Mod.mk
-         ~name:(name ~of_:(`Module (true, false)))
+         ~name:(name ~of_:(`Module (bw', `Safe)))
          ~safe:true
          [cast_val ~safe:true ~bw ~m:false; cast_val ~safe:true ~bw ~m:false]]
     in
     Entry.some
       (Th.mk
-         ~name:(name ~of_:(`Theory false))
+         ~name:(name ~of_:(`Theory `Abstract))
          [cast ~m:false; cast ~m:true]) ::
     mods false @
     if bw then
       Entry.some
         (Th.mk
-           ~name:(name ~of_:(`Theory true))
+           ~name:(name ~of_:(`Theory `Bitvector))
            ([cast ~m:false; cast ~m:true] @ bw_cast_def)) ::
       mods true
     else
@@ -3691,6 +3696,7 @@ let dummies =
     Th.[
       dummy "Int";
       dummy "Bool";
+      dummy "Ref";
       dummy "Jessie_pointer";
       dummy "Jessie_zwf";
       dummy "Jessie_alloc_table";

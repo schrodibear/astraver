@@ -133,14 +133,16 @@ type ('params, 'result) func =
     (unbounded integer number * (unbounded integer number * unit), unbounded integer number) func
   | U_int_op : [ `Neg ] -> (unbounded integer number * unit, unbounded integer number) func
   | B_bint_op :
-      [ `Add | `Sub | `Mul | `Div | `Mod ] * 'a bounded integer * bool ->
+      [ `Add | `Sub | `Mul | `Div | `Mod ] * 'a bounded integer * [ `Check | `Modulo ] ->
     ('a bounded integer number * ('a bounded integer number * unit), 'a bounded integer number) func
   | U_bint_op :
-      [ `Neg ] * 'a bounded integer * bool -> ('a bounded integer number * unit, 'a bounded integer number) func
-  | Of_int : 'a bounded integer * bool -> (unbounded integer number * unit, 'a bounded integer number) func
+      [ `Neg ] * 'a bounded integer * [ `Check | `Modulo ] ->
+    ('a bounded integer number * unit, 'a bounded integer number) func
+  | Of_int : 'a bounded integer * [ `Check | `Modulo ] ->
+    (unbounded integer number * unit, 'a bounded integer number) func
   | To_int : 'a bounded integer -> ('a bounded integer number * unit, unbounded integer number) func
   | Any : 'a bounded integer -> (void * unit, 'a bounded integer number) func
-  | Cast : 'a bounded integer * 'b bounded integer * bool ->
+  | Cast : 'a bounded integer * 'b bounded integer * [ `Check | `Modulo ] ->
     ('b bounded integer number * unit, 'a bounded integer number) func
   | To_float : 'a precision real -> (arbitrary_precision real number * unit, 'a precision real number) func
   | Of_float : 'a precision real -> ('a precision real number * unit, arbitrary_precision real number) func
@@ -152,12 +154,12 @@ type ('params, 'result) func =
       [ `Compl ] * ('a repr, 'b bit) xintx bounded integer ->
     (('a repr, 'b bit) xintx bounded integer number * unit, ('a repr, 'b bit) xintx bounded integer number) func
   | Lsl_bint :
-      ('a repr, 'b bit) xintx bounded integer * bool ->
+      ('a repr, 'b bit) xintx bounded integer * [ `Check | `Modulo ] ->
     (('a repr, 'b bit) xintx bounded integer number * (('a repr, 'b bit) xintx bounded integer number * unit),
      ('a repr, 'b bit) xintx bounded integer number) func
   | B_num_pred : [ `Lt | `Le | `Gt | `Ge | `Eq | `Ne ] * 'a number -> ('a number * ('a number * unit), boolean) func
   | Poly : [ `Eq | `Neq ] -> ('a * ('a * unit), boolean) func
-  | User : string * bool * string -> (_, _) func (** theory * use qualified name * name *)
+  | User : string * [ `Short | `Qualified ] * string -> (_, _) func (** theory * use qualified name * name *)
 
 type 'typ constant =
   | Void : void constant
@@ -204,7 +206,7 @@ type ('params, 'result) tconstr =
   | Bool : (unit, boolean) tconstr
   | Void : (unit, void) tconstr
   | Var : string -> (unit, 'b) tconstr
-  | User : string * bool * string -> ('a, 'b) tconstr
+  | User : string * [ `Short | `Qualified ] * string -> ('a, 'b) tconstr
 
 type 'a ltype_hlist =
   | Nil : unit ltype_hlist
@@ -236,7 +238,10 @@ and 'a why_type =
   | Arrow : string * 'a why_type * 'b why_type -> ('a -> 'b) why_type (** (x : t1) -> t2 *)
   | Logic : 'a logic_type -> 'a why_type
   | Ref : 'a why_type -> 'a ref why_type
-  | Annot : pred * 'a why_type * string list * string list * pred * (string * pred) list -> 'a why_type
+  | Annot :
+      pred * 'a why_type * string list * string list * pred *
+      ((string * [ `Qualified | `Short ] * string) * pred) list ->
+    'a why_type
     (** [{ P } t reads r writes w raises E { Q | E => R }] *)
   | Typed : 'a why_type * 'a ty -> 'a why_type
   | Poly : poly_why_type -> _ why_type
@@ -246,8 +251,6 @@ type some_logic_type = Logic_type : 'a logic_type -> some_logic_type
 type some_why_type = Why_type : 'a why_type -> some_why_type
 
 type 'a variant = 'a term * string option
-
-type opaque = bool
 
 type assert_kind = [ `ASSERT | `CHECK | `ASSUME ]
 
@@ -283,12 +286,13 @@ and 'typ expr_node =
   | Let : string * 'a expr * 'b expr -> 'b expr_node
   | Let_ref : string * 'a expr * 'b expr -> 'b expr_node
   | App : ('a, 'b) func * 'a expr_hlist * 'b why_type option -> 'b expr_node
-  | Raise : string * 'a expr option -> 'b expr_node
-  | Try : 'a expr * string * string option * 'a expr -> 'a expr_node
-  | Fun : (string * some_why_type) list * 'b why_type * pred * 'b expr * pred * bool * ((string * pred) list) ->
+  | Raise : (string * [ `Qualified | `Short ] * string) * 'a expr option -> 'b expr_node
+  | Try : 'a expr * (string * [ `Qualified | `Short ] * string) * string option * 'a expr -> 'a expr_node
+  | Fun : (string * some_why_type) list * 'b why_type * pred * 'b expr * pred *
+          [ `Diverges | `Converges ] * ((string * pred) list) ->
     'b expr_node
-    (** params * result_type * pre * body * post * diverges * signals *)
-  | Triple : opaque * pred * 'a expr * pred * ((string * pred) list) -> 'a expr_node
+  (** params * result_type * pre * body * post * diverges * signals *)
+  | Triple : [ `Opaque | `Transparent ] * pred * 'a expr * pred * ((string * pred) list) -> 'a expr_node
   | Assert : assert_kind * pred -> void expr_node
   | Black_box : 'a why_type -> 'a expr_node
   | Absurd : void expr_node
@@ -310,17 +314,17 @@ type why_id = {
 type goal_kind = KAxiom | KLemma | KGoal
 
 type 'kind decl =
-  | Param : 'a why_type -> [`Module of bool] decl (** parameter in why *)
-  | Def : 'a expr -> [`Module of bool] decl (** global let in why *)
-  | Logic : (string * some_logic_type) list * 'a logic_type -> [`Theory] decl
+  | Param : 'a why_type -> [ `Module of [ `Safe | `Unsafe ] ] decl (** parameter in why *)
+  | Def : 'a expr -> [ `Module of [ `Safe | `Unsafe ] ] decl (** global let in why *)
+  | Logic : (string * some_logic_type) list * 'a logic_type -> [ `Theory ] decl
     (** logic decl in why *)
-  | Predicate : (string * some_logic_type) list * pred -> [`Theory] decl
-  | Inductive : (string * some_logic_type) list * (string * pred) list -> [`Theory] decl
+  | Predicate : (string * some_logic_type) list * pred -> [ `Theory ] decl
+  | Inductive : (string * some_logic_type) list * (string * pred) list -> [ `Theory ] decl
     (** inductive definition *)
-  | Goal : goal_kind * pred -> [`Theory] decl  (** Goal *)
-  | Function : (string * some_logic_type) list * 'a logic_type * 'a term -> [`Theory] decl
-  | Type : string list -> [`Theory] decl
-  | Exception : 'a logic_type option -> [`Module of bool] decl
+  | Goal : goal_kind * pred -> [ `Theory ] decl  (** Goal *)
+  | Function : (string * some_logic_type) list * 'a logic_type * 'a term -> [ `Theory ] decl
+  | Type : string list -> [ `Theory ] decl
+  | Exception : 'a logic_type option -> [ `Module of [ `Safe | `Unsafe ] ] decl
 
 type 'kind why_decl = {
   why_id : why_id;
@@ -328,20 +332,22 @@ type 'kind why_decl = {
 }
 
 type 'kind dependency =
-  | Use of [`Import of string option | `Export | `As of string option] * 'kind entry
-  | Clone of [`Import of string option | `Export | `As of string option] * 'kind entry *
-             [`Constant of string * string |
-              `Type of string * string |
-              `Function of string * string |
-              `Predicate of string * string |
-              `Namespace of string option * string option |
-              `Lemma of string |
-              `Goal of string] list
-and module_dependency = Dependency : [< `Theory | `Module of bool] dependency -> module_dependency
+  | Use of [ `Import of string option | `Export | `As of string option ] * 'kind entry
+  | Clone of [ `Import of string option | `Export | `As of string option ] * 'kind entry *
+             [ `Constant of string * string |
+               `Type of string * string |
+               `Function of string * string |
+               `Predicate of string * string |
+               `Namespace of string option * string option |
+               `Lemma of string |
+               `Goal of string ] list
+and module_dependency = Dependency : [< `Theory | `Module of [ `Safe | `Unsafe ] ] dependency -> module_dependency
 and 'kind entry =
-  | Theory : string * ([`Theory] dependency list ref * [`Theory] why_decl list) option -> [`Theory] entry
-  | Module : string * (module_dependency list ref * bool * [`Module of bool] why_decl list) option ->
-    [`Module of bool] entry
+  | Theory : string * ([ `Theory ] dependency list ref * [ `Theory ] why_decl list) option -> [ `Theory ] entry
+  | Module :
+      string * (module_dependency list ref *
+                [ `Safe | `Unsafe ] * [ `Module of [ `Safe | `Unsafe ] ] why_decl list) option ->
+    [ `Module of [ `Safe | `Unsafe ] ] entry
 
 type some_entry = Entry : 'kind entry -> some_entry
 

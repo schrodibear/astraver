@@ -125,7 +125,7 @@ val term : term
 
 val nondet_value : ('a, 'b) ty_opt -> jc_type -> 'a expr
 
-val make_conversion_params : pointer_class -> [`Module of bool] why_decl list
+val make_conversion_params : pointer_class -> [`Module of [`Safe | `Unsafe]] why_decl list
 
 val param : ('a, 'b) ty_opt -> var_info -> string * 'a logic_type
 

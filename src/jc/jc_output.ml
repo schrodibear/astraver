@@ -106,7 +106,7 @@ struct
 
   let user s ~from:(name, qualified) = (User (name, qualified, s) : _ t)
 
-  let local s = user s ~from:("", false)
+  let local s = user s ~from:("", `Short)
 
   let bool = user ~from:Name.Theory.bool
 
@@ -291,7 +291,7 @@ struct
   let some t : some = Term t
 
   let hlist_of_list ?(init=Hlist Nil) =
-    List.fold_left (fun (Hlist thl) (Term t : some_term) -> Hlist (t ^ thl)) init
+    List.fold_left (fun (Hlist thl) (Term t : some_term) -> Hlist (t ^ thl)) init % List.rev
 
   let (^..) arg args = some arg :: args
 
@@ -378,7 +378,7 @@ struct
     | LabelPre -> Deref_at (v, "init")
     | LabelName { lab_final_name } -> Deref_at (v, lab_final_name)
 
-  let cast ?(modulo=false) ~from ~to_ t = Cast (to_, from, modulo) $. t
+  let cast ?(modulo=false) ~from ~to_ t = Cast (to_, from, if modulo then `Modulo else `Check) $. t
 
   let alloc_table ?(deref=true) ?(lab=Env.LabelHere) ?(r=Region.dummy_region) ac =
     let v = Name.alloc_table (ac, r) in
@@ -694,7 +694,7 @@ struct
   let some e = Expr e
 
   let hlist_of_list ?(init=Hlist Nil) =
-    List.fold_left (fun (Hlist ehl) (Expr e) -> Hlist (e ^ ehl)) init
+    List.fold_left (fun (Hlist ehl) (Expr e) -> Hlist (e ^ ehl)) init % List.rev
 
   let (^..) arg args = some arg :: args
 
@@ -887,15 +887,15 @@ struct
         | Some (Wt.Poly { why_type }) -> Poly { expr_node = App (func, args, Some why_type) }
         | Some (Wt.Poly' { why_type }) -> Poly' { expr_node = App (func, args, Some why_type) }
       end
-    | Raise (ex, eo) -> Poly { expr_node = Raise (ex, eo) }
-    | Try (e, ex, v, e') ->
+    | Raise ((where, qual, ex), eo) -> Poly { expr_node = Raise ((where, qual, ex), eo) }
+    | Try (e, (where, qual, ex), v, e') ->
       begin match ty e with
       | Ty ty | Ty' ty -> Ty' ty
       | Poly { expr_node = e_expr_node } | Poly' { expr_node = e_expr_node } ->
         match ty e' with
         | Ty ty | Ty' ty -> Ty' ty
         | Poly { expr_node } | Poly' { expr_node } ->
-          Poly' { expr_node = Try ({ e with expr_node = e_expr_node }, ex, v, { e' with expr_node }) }
+          Poly' { expr_node = Try ({ e with expr_node = e_expr_node }, (where, qual, ex), v, { e' with expr_node }) }
       end
     | Fun (args, rt, pre, e, post, div, raises) ->
       begin match Wt.ty rt with
@@ -971,16 +971,16 @@ struct
   open F
   let bin op flag t1 t2 = T.(B_bint_op (op, I.ty, flag) $ t1 ^. t2)
   let un op flag t = T.(U_bint_op (op, I.ty, flag) $. t)
-  let (+) = bin `Add false
-  let (+%) = bin `Add true
-  let (-) = bin `Sub false
-  let (-%) = bin `Sub true
-  let ( * ) = bin `Mul false
-  let ( *%) = bin `Mul true
-  let (/) = bin `Div false
-  let (/%) = bin `Div true
-  let (%) = bin `Mod false
-  let (%%) = bin `Mod true
+  let (+) = bin `Add `Check
+  let (+%) = bin `Add `Modulo
+  let (-) = bin `Sub `Check
+  let (-%) = bin `Sub `Modulo
+  let ( * ) = bin `Mul `Check
+  let ( *%) = bin `Mul `Modulo
+  let (/) = bin `Div `Check
+  let (/%) = bin `Div `Modulo
+  let (%) = bin `Mod `Check
+  let (%%) = bin `Mod `Modulo
 end
 
 module type Op_gen =
@@ -1016,16 +1016,16 @@ struct
   module T =
   struct
     include Make_ops (I) (T)
-    let of_int t = T.(Of_int (I.ty, false) $. t)
-    let of_int_mod t = T.(Of_int (I.ty, true) $. t)
+    let of_int t = T.(Of_int (I.ty, `Check) $. t)
+    let of_int_mod t = T.(Of_int (I.ty, `Modulo) $. t)
     let to_int t = T.(To_int I.ty $. t)
     module B = O.M (T)
   end
   module E =
   struct
     include Make_ops (I) (E)
-    let of_int t = E.(Of_int (I.ty, false) $. t)
-    let of_int_mod t = E.(Of_int (I.ty, true) $. t)
+    let of_int t = E.(Of_int (I.ty, `Check) $. t)
+    let of_int_mod t = E.(Of_int (I.ty, `Modulo) $. t)
     let to_int t = E.(To_int I.ty $. t)
     let any = E.(Any I.ty $. void)
     module B = O.M (E)
@@ -1091,8 +1091,8 @@ struct
           open T
           let bin op t1 t2 = T.(B_bint_bop (op, I.ty) $ t1 ^. t2)
           let un op t = T.(U_bint_bop (op, I.ty) $. t)
-          let (<<) (*>>)*) t1 t2 = T.(Lsl_bint (I.ty, false) $ t1 ^. t2)
-          let (<<%) t1 t2 = T.(Lsl_bint (I.ty, true) $ t1 ^. t2)
+          let (<<) (*>>)*) t1 t2 = T.(Lsl_bint (I.ty, `Check) $ t1 ^. t2)
+          let (<<%) t1 t2 = T.(Lsl_bint (I.ty, `Modulo) $ t1 ^. t2)
           let (&) = bin `And
           let (||) = bin `Or
           let xor = bin `Xor
@@ -1378,7 +1378,7 @@ end
 
 module Mod =
 struct
-  let mk ~name ~safe ?(deps=[]) decls = Module (name, Some (ref deps, safe, decls))
+  let mk ~name ~safe ?(deps=[]) decls = Module (name, Some (ref deps, (if safe then `Safe else `Unsafe), decls))
   let dummy name = Module (name, None)
 end
 

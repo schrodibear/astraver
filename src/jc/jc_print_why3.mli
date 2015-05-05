@@ -8,16 +8,18 @@ val constant : formatter -> 'a constant -> unit
 val id : formatter -> string -> unit
 val uid : formatter -> string -> unit
 val int_ty :
-  how:[< `Module of bool * bool | `Name | `Theory of bool ] ->
+  how:[< `Module of [< `Abstract | `Bitvector ] * [< `Safe | `Unsafe ]
+      | `Name
+      | `Theory of [< `Abstract | `Bitvector ] ] ->
   formatter ->
   ('a repr, 'b bit) xintx bounded integer ->
   unit
 
 val enum_ty :
-  how:[< `Module of bool | `Name | `Theory ] ->
+  how:[< `Module of [< `Safe | `Unsafe ] | `Name | `Theory ] ->
   formatter -> 'a enum bounded integer -> unit
 
-val modulo : formatter -> bool -> unit
+val modulo : formatter -> [< `Check | `Modulo ] -> unit
 
 val op :
   formatter ->
@@ -52,7 +54,7 @@ module S : Set.S with type elt = any_integer
 
 val func :
   entry:string ->
-  where:[< `Behavior of bool | `Logic ] ->
+  where:[< `Behavior of [< `Safe | `Unsafe] | `Logic ] ->
   bw_ints:S.t -> formatter -> ('a, 'b) func -> unit
 
 val vc_kind : formatter -> vc_kind -> unit
@@ -120,21 +122,21 @@ val any_type :
 
 val expr_hlist :
   entry:string ->
-  safe:bool ->
+  safe:[< `Safe | `Unsafe] ->
   bw_ints:S.t ->
   consts:StringSet.t ->
   formatter -> 'a expr_hlist -> unit
 
 val expr_node :
   entry:string ->
-  safe:bool ->
+  safe:[< `Safe | `Unsafe] ->
   bw_ints:S.t ->
   consts:StringSet.t ->
   formatter -> 'a expr_node -> unit
 
 val expr :
   entry:string ->
-  safe:bool ->
+  safe:[< `Safe | `Unsafe] ->
   bw_ints:S.t ->
   consts:StringSet.t ->
   formatter -> 'a expr -> unit
@@ -150,7 +152,7 @@ val why_id : ?constr:bool -> formatter -> why_id -> unit
 
 type 'kind kind =
   | Theory : [ `Theory ] kind
-  | Module : bool -> [ `Module of bool ] kind
+  | Module : [ `Safe | `Unsafe ] -> [ `Module of [ `Safe | `Unsafe ] ] kind
 
 val why_decl :
   entry:string ->

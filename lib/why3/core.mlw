@@ -602,6 +602,10 @@ theory Jessie_rmem
              not_assigns a1 a2 m1 (rmem m3) l)
 end
 
+module Jessie_return
+  exception Return
+end
+
 module Jessie_sub_pointer_safe
   use import Jessie_pointer
 

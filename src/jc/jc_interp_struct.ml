@@ -493,7 +493,8 @@ let alloc : type t1 t2 a.
         O.E.(Name.Param.alloc ~arg:Range_0_n ~check_size ac pc $.. e ^.. args)
 
 let alloc_param : type t1 t2.
-  arg:([`Module of bool] why_decl, check_size:bool -> [`Module of bool] why_decl, _, _, t1, t2) arg -> _ -> _ -> t2 =
+  arg:([ `Module of [ `Safe | `Unsafe ] ] why_decl, check_size:bool ->
+       [ `Module of [ `Safe | `Unsafe ] ] why_decl, _, _, t1, t2) arg -> _ -> _ -> t2 =
   fun ~arg ac pc ->
   let error () = failwith "unexpected parameter expression in alloc_param" in
   let n : (t1, _) param =
@@ -636,8 +637,14 @@ let free_param ~safe ac pc =
 
 let struc si =
   let tag_id_type =
+    if
+      not (List.exists (Envset.StructOrd.equal si) @@
+           Option.map_default si.si_root ~default:[] ~f:(fun ri -> ri.ri_hroots))
+    then
       let tagid_type = tag_id_type (struct_root si) in
-      O.Wd.mk ~name:(Name.tag si) @@ Logic ([], tagid_type)
+      [O.Wd.mk ~name:(Name.tag si) @@ Logic ([], tagid_type)]
+    else
+      []
   in
   let preds, safe_params, unsafe_params =
       if not @@ struct_of_union si then
@@ -694,7 +701,7 @@ let struc si =
   in
   O.[Entry.some @@
      Th.mk ~name:(fst @@ Name.Theory.struct_ (JCtag (si, []))) @@
-     tag_id_type :: preds @ instanceof_implies_typeof_if_final @ parent_tag_axiom :: [];
+     tag_id_type @ preds @ instanceof_implies_typeof_if_final @ parent_tag_axiom :: [];
      Entry.some @@
      Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:true (JCtag (si, []))) ~safe:true safe_params;
      Entry.some @@
@@ -706,8 +713,15 @@ let root =
     fun () -> incr counter; !counter
   in
   fun ri ->
-    let tag_id_type =
+    let type_param =
       O.Wd.mk ~name:(Name.Type.root ri) @@ Type []
+    in
+    let tag_ids =
+      ListLabels.map
+        ri.ri_hroots
+        ~f:(fun si ->
+           let tag_id_type = tag_id_type ri in
+           O.Wd.mk ~name:(Name.tag si) @@ Logic ([], tag_id_type))
     in
     let preds, safe_params, unsafe_params =
       let ac = JCalloc_root ri and pc = JCroot ri in
@@ -731,15 +745,13 @@ let root =
         [], [], []
     in
     let int_of_tag_axioms =
-      ListLabels.fold_left
+      ListLabels.map
         ri.ri_hroots
-        ~init:[]
-        ~f:(fun acc st ->
-          (O.Wd.mk
-             ~name:(Name.Axiom.int_of_tag st) @@
-           Goal (KAxiom,
-                 O.T.(int_of_tag (var (Name.tag st)) = int (fresh_tag_id ()))))
-           :: acc)
+        ~f:(fun st ->
+          O.Wd.mk
+            ~name:(Name.Axiom.int_of_tag st)
+            (Goal (KAxiom,
+                   O.T.(int_of_tag (var (Name.tag st)) = int (fresh_tag_id ())))))
     in
     let same_typeof_in_block_if_struct =
       if not (root_is_union ri) then
@@ -756,12 +768,12 @@ let root =
         []
     in
     O.[Entry.some @@
-     Th.mk ~name:(fst @@ Name.Theory.struct_ (JCroot ri)) @@
-     tag_id_type :: preds @ int_of_tag_axioms @ same_typeof_in_block_if_struct;
-     Entry.some @@
-     Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:true (JCroot ri)) ~safe:true safe_params;
-     Entry.some @@
-     Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:false (JCroot ri)) ~safe:false unsafe_params]
+       Th.mk ~name:(fst @@ Name.Theory.struct_ (JCroot ri)) @@
+       type_param :: tag_ids @ preds @ int_of_tag_axioms @ same_typeof_in_block_if_struct;
+       Entry.some @@
+       Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:true (JCroot ri)) ~safe:true safe_params;
+       Entry.some @@
+       Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:false (JCroot ri)) ~safe:false unsafe_params]
 
 let valid_pre ~in_param all_effects (* vi *) =
   function

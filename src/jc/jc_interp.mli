@@ -169,12 +169,12 @@ val func :
 val logic_type : string * type_var_info list -> some_entry list
 val enums : enum_info list -> some_entry list
 val enum_cast : enum_info * enum_info -> some_entry list
-val exception_ : exception_info -> [ `Module of bool ] why_decl
+val exception_ : exception_info -> [ `Module of [ `Safe | `Unsafe ] ] why_decl
 val exceptions : unit -> some_entry list
-val variable : var_info -> [ `Module of bool ] why_decl
-val memory : mem_class * region -> [ `Module of bool ] why_decl
-val alloc_table : alloc_class * region -> [ `Module of bool ] why_decl
-val tag_table : root_info * region -> [ `Module of bool ] why_decl
+val variable : var_info -> [ `Module of [ `Safe | `Unsafe ] ] why_decl
+val memory : mem_class * region -> [ `Module of [ `Safe | `Unsafe ] ] why_decl
+val alloc_table : alloc_class * region -> [ `Module of  [ `Safe | `Unsafe ] ] why_decl
+val tag_table : root_info * region -> [ `Module of  [ `Safe | `Unsafe ] ] why_decl
 val globals : unit -> some_entry list
 val dummies : some_entry list
 val struc : struct_info -> some_entry list
