@@ -635,18 +635,20 @@ let free_param ~safe ac pc =
   in
   O.Wd.mk ~name:(snd @@ Name.Param.free ~safe ac pc) @@ Param free_type
 
-let struc si =
-  let tag_id_type =
-    if
-      not (List.exists (Envset.StructOrd.equal si) @@
-           Option.map_default si.si_root ~default:[] ~f:(fun ri -> ri.ri_hroots))
-    then
-      let tagid_type = tag_id_type (struct_root si) in
-      [O.Wd.mk ~name:(Name.tag si) @@ Logic ([], tagid_type)]
-    else
-      []
+let struc =
+  let fresh_tag_id =
+    let counter = ref 0 in
+    fun () -> incr counter; !counter
   in
-  let preds, safe_params, unsafe_params =
+  fun si ->
+    let tag_id_type = O.Wd.mk ~name:(Name.tag si) @@ Logic ([], tag_id_type (struct_root si)) in
+    let int_of_tag_axiom =
+      O.Wd.mk
+        ~name:(Name.Axiom.int_of_tag si)
+        (Goal (KAxiom,
+               O.T.(int_of_tag (var (Name.tag si)) = int (fresh_tag_id ()))))
+    in
+    let preds, safe_params, unsafe_params =
       if not @@ struct_of_union si then
         let pc = JCtag (si, []) in
         let ac = alloc_class_of_pointer_class pc in
@@ -675,105 +677,82 @@ let struc si =
          free_param ~safe:false ac pc]
       else
         [], [], []
+    in
+    let instanceof_implies_typeof_if_final =
+      if si.si_final then
+        [O.Wd.mk ~name:(si.si_name ^ "_is_final") @@
+         Goal (KAxiom,
+               let ri = Option.value_fail ~in_:__LOC__ si.si_hroot.si_root in
+               O.P.(forall (Name.Generic.tag_table (struct_root si)) (tag_table_type ri) @@ fun _t ->
+                    forall "p" (pointer_type (JCalloc_root ri) (JCtag (si, []))) @@ fun p ->
+                    impl
+                      (instanceof ~code:false p si)
+                      (typeeq ~code:false p si)))]
+      else
+        []
+    in
+    let parent_tag_axiom =
+      begin match si.si_parent with
+      | None ->
+        let p = O.(P.parenttag T.(var @@ Name.tag si) T.(var "bottom_tag")) in
+        O.Wd.mk ~name:(si.si_name ^ "_parenttag_bottom") @@ Goal (KAxiom, p)
+      | Some (parent, _) ->
+        let p = O.(P.parenttag T.(var @@ Name.tag si) T.(var @@ Name.tag parent)) in
+        O.Wd.mk ~name:(si.si_name ^ "_parenttag_" ^ parent.si_name) @@ Goal (KAxiom, p)
+      end
+    in
+    O.[Entry.some @@
+       Th.mk ~name:(fst @@ Name.Theory.struct_ (JCtag (si, []))) @@
+       tag_id_type :: int_of_tag_axiom :: preds @ instanceof_implies_typeof_if_final @ parent_tag_axiom :: [];
+       Entry.some @@
+       Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:true (JCtag (si, []))) ~safe:true safe_params;
+       Entry.some @@
+       Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:false (JCtag (si, []))) ~safe:false unsafe_params]
+
+let root ri =
+  let type_param = O.Wd.mk ~name:(Name.Type.root ri) @@ Type [] in
+  let preds, safe_params, unsafe_params =
+    let ac = JCalloc_root ri and pc = JCroot ri in
+    let in_param = false in
+    if root_is_union ri then
+      [valid_pred ~in_param ~equal:true ac pc;
+         valid_pred ~in_param ~equal:false ac pc;
+       valid_pred ~in_param ~equal:false ~right:false ac pc;
+       valid_pred ~in_param ~equal:false ~left:false ac pc],
+      [alloc_param ~arg:Singleton ac pc;
+       alloc_param ~arg:Range_0_n ~check_size:false ac pc;
+       free_param ~safe:true ac pc],
+      [alloc_param ~arg:Range_0_n ~check_size:true ac pc;
+       free_param ~safe:false ac pc]
+    else if ri.ri_hroots = [] then
+      [valid_pred ~in_param:false ~equal:true ac pc;
+       valid_pred ~in_param:false ~equal:false ac pc],
+      [],
+      []
+    else
+      [], [], []
   in
-  let instanceof_implies_typeof_if_final =
-    if si.si_final then
-      [O.Wd.mk ~name:(si.si_name ^ "_is_final") @@
+  let same_typeof_in_block_if_struct =
+    if not (root_is_union ri) then
+      [O.Wd.mk ~name:(ri.ri_name ^ "_whole_block_tag") @@
        Goal (KAxiom,
-             let ri = Option.value_fail ~in_:__LOC__ si.si_hroot.si_root in
-             O.P.(forall (Name.Generic.tag_table (struct_root si)) (tag_table_type ri) @@ fun _t ->
-                  forall "p" (pointer_type (JCalloc_root ri) (JCtag (si, []))) @@ fun p ->
-                  impl
-                    (instanceof ~code:false p si)
-                    (typeeq ~code:false p si)))]
+             let ri_pointer_type = pointer_type (JCalloc_root ri) (JCroot ri) in
+             O.P.(
+               forall (Name.Generic.tag_table ri) (tag_table_type ri) @@ fun _ ->
+               forall "p" ri_pointer_type @@ fun p ->
+               forall "q" ri_pointer_type @@ fun q ->
+               impl (same_block p q)
+                 T.(typeof ~code:false ri p = typeof ~code:false ri q)))]
     else
       []
   in
-  let parent_tag_axiom =
-    begin match si.si_parent with
-    | None ->
-      let p = O.(P.parenttag T.(var @@ Name.tag si) T.(var "bottom_tag")) in
-      O.Wd.mk ~name:(si.si_name ^ "_parenttag_bottom") @@ Goal (KAxiom, p)
-    | Some (parent, _) ->
-      let p = O.(P.parenttag T.(var @@ Name.tag si) T.(var @@ Name.tag parent)) in
-      O.Wd.mk ~name:(si.si_name ^ "_parenttag_" ^ parent.si_name) @@ Goal (KAxiom, p)
-    end
-  in
   O.[Entry.some @@
-     Th.mk ~name:(fst @@ Name.Theory.struct_ (JCtag (si, []))) @@
-     tag_id_type @ preds @ instanceof_implies_typeof_if_final @ parent_tag_axiom :: [];
+     Th.mk ~name:(fst @@ Name.Theory.struct_ (JCroot ri)) @@
+     type_param :: preds @ same_typeof_in_block_if_struct;
      Entry.some @@
-     Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:true (JCtag (si, []))) ~safe:true safe_params;
+     Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:true (JCroot ri)) ~safe:true safe_params;
      Entry.some @@
-     Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:false (JCtag (si, []))) ~safe:false unsafe_params]
-
-let root =
-  let fresh_tag_id =
-    let counter = ref 0 in
-    fun () -> incr counter; !counter
-  in
-  fun ri ->
-    let type_param =
-      O.Wd.mk ~name:(Name.Type.root ri) @@ Type []
-    in
-    let tag_ids =
-      ListLabels.map
-        ri.ri_hroots
-        ~f:(fun si ->
-           let tag_id_type = tag_id_type ri in
-           O.Wd.mk ~name:(Name.tag si) @@ Logic ([], tag_id_type))
-    in
-    let preds, safe_params, unsafe_params =
-      let ac = JCalloc_root ri and pc = JCroot ri in
-      let in_param = false in
-      if root_is_union ri then
-        [valid_pred ~in_param ~equal:true ac pc;
-         valid_pred ~in_param ~equal:false ac pc;
-         valid_pred ~in_param ~equal:false ~right:false ac pc;
-         valid_pred ~in_param ~equal:false ~left:false ac pc],
-        [alloc_param ~arg:Singleton ac pc;
-         alloc_param ~arg:Range_0_n ~check_size:false ac pc;
-         free_param ~safe:true ac pc],
-        [alloc_param ~arg:Range_0_n ~check_size:true ac pc;
-         free_param ~safe:false ac pc]
-      else if ri.ri_hroots = [] then
-        [valid_pred ~in_param:false ~equal:true ac pc;
-         valid_pred ~in_param:false ~equal:false ac pc],
-        [],
-        []
-      else
-        [], [], []
-    in
-    let int_of_tag_axioms =
-      ListLabels.map
-        ri.ri_hroots
-        ~f:(fun st ->
-          O.Wd.mk
-            ~name:(Name.Axiom.int_of_tag st)
-            (Goal (KAxiom,
-                   O.T.(int_of_tag (var (Name.tag st)) = int (fresh_tag_id ())))))
-    in
-    let same_typeof_in_block_if_struct =
-      if not (root_is_union ri) then
-        [O.Wd.mk ~name:(ri.ri_name ^ "_whole_block_tag") @@
-          Goal (KAxiom,
-                 let ri_pointer_type = pointer_type (JCalloc_root ri) (JCroot ri) in
-                 O.P.(
-                   forall (Name.Generic.tag_table ri) (tag_table_type ri) @@ fun _ ->
-                   forall "p" ri_pointer_type @@ fun p ->
-                   forall "q" ri_pointer_type @@ fun q ->
-                   impl (same_block p q)
-                     T.(typeof ~code:false ri p = typeof ~code:false ri q)))]
-      else
-        []
-    in
-    O.[Entry.some @@
-       Th.mk ~name:(fst @@ Name.Theory.struct_ (JCroot ri)) @@
-       type_param :: tag_ids @ preds @ int_of_tag_axioms @ same_typeof_in_block_if_struct;
-       Entry.some @@
-       Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:true (JCroot ri)) ~safe:true safe_params;
-       Entry.some @@
-       Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:false (JCroot ri)) ~safe:false unsafe_params]
+     Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:false (JCroot ri)) ~safe:false unsafe_params]
 
 let valid_pre ~in_param all_effects (* vi *) =
   function

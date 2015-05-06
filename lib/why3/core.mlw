@@ -889,8 +889,6 @@ end
 
 module Jessie_shift_unsafe
   use import Jessie_pointer
-  use import Jessie_tag
-  use import Jessie_tag_table
 
   val shift (p : pointer 't) (off : int) : pointer 't
     requires { true }
