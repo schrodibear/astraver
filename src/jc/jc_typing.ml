@@ -1721,7 +1721,7 @@ let expand t1 t2 e =
     end
   | _ -> e
 
-let implicit_coerce t1 t2 e =
+let implicit_coerce ?(expand_int=true) t1 t2 e =
   let result () = expand t1 t2 e in
   let fail () =
     typing_error
@@ -1738,7 +1738,7 @@ let implicit_coerce t1 t2 e =
     end
   | JCTenum e1, JCTenum e2 when e1 == e2 -> e
   | JCTenum _, JCTenum _ -> fail ()
-  | JCTenum _, JCTnative Tinteger -> result ()
+  | JCTenum _, JCTnative Tinteger when expand_int -> result ()
   | JCTnative Tinteger, JCTenum _ -> fail ()
   | JCTlogic s1, JCTlogic s2 when s1 = s2 -> e
   | JCTlogic _, JCTlogic _ -> fail ()
@@ -1756,6 +1756,7 @@ let make_bin_op loc (op: operational_op) e1 e2 =
   in
   let return_numeric ?t () =
     let t' = lub_numeric_types ~loc t1 t2 in
+    let implicit_coerce = implicit_coerce ~expand_int:false in
     return
       ~t:(t |? t')
       ~region:dummy_region

@@ -85,7 +85,7 @@ val exceptions_table: exception_info StringHashtblIter.t
 
 exception Typing_error of Why_loc.position * string
 
-val implicit_coerce : jc_type -> jc_type -> expr -> expr
+val implicit_coerce : ?expand_int:bool -> jc_type -> jc_type -> expr -> expr
 
 val type_range_of_term : jc_type -> term -> assertion
 

@@ -487,10 +487,11 @@ let logic_const pos =
 
 let rec const pos =
   function
-  | CInt64 (_, _, Some s) ->
+  | CInt64 (_, ik, Some s) ->
     (* Use the textual representation if available *)
-    JCPEconst (JCCinteger s)
-  | CInt64 (i, _ik, None) -> JCPEconst (JCCinteger (Integer.to_string i))
+    JCPEcast (mkexpr (JCPEconst (JCCinteger s)) pos, ctype @@ TInt (ik, []))
+  | CInt64 (i, ik, None) ->
+    JCPEcast (mkexpr (JCPEconst (JCCinteger (Integer.to_string i))) pos, ctype @@ TInt (ik, []))
   | CStr _ | CWStr _ -> assert false (* Should have been rewritten *)
   | CChr c -> JCPEconst (JCCinteger (string_of_int (Char.code c)))
   | CReal (_f, fk, Some s) ->

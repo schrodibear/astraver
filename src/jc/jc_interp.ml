@@ -359,7 +359,7 @@ let rec coerce :
     fun ?(modulo=false) ~e ~e1 e' ->
       let modulo = if modulo then `Modulo else `Check in
       let apply' f = apply f e' in
-      let return = return e' in
+      let return () = return e' in
       match ty_src, ty_dst with
       | Any, Any when
         (match e#typ, e1#typ with
@@ -371,7 +371,7 @@ let rec coerce :
         | JCTpointer _ as t1, (JCTpointer _ as t2) when same t1 t2 -> true
         | JCTpointer (pc1, _, _), JCTpointer (JCtag (st2, _), _, _) when Typing.substruct st2 pc1 -> true
         | JCTany, JCTany -> true
-        | _ -> false) -> return
+        | _ -> false) -> return ()
       (* between integer/enum and real *)
       | Ty (Numeric (Integral Integer)), Ty (Numeric (Real Real)) ->
         begin match form, e' with
@@ -401,19 +401,19 @@ let rec coerce :
       (* between enums and integers *)
       | Ty (Numeric (Integral (Enum (module E1) as e1))), Ty (Numeric (Integral (Enum (module E2) as e2))) ->
         begin match E1.E with
-          | E2.E -> return
+          | E2.E -> return ()
           | _ -> apply' @@ Cast (e2, e1, modulo)
         end
       | Ty (Numeric (Integral (Int (r1, b1) as i1))), Ty (Numeric (Integral (Int (r2, b2) as i2))) ->
         begin match r1, b1, r2, b2 with
-        | Signed, X8, Signed, X8 -> return
-        | Unsigned, X8, Unsigned, X8 -> return
-        | Signed, X16, Signed, X16 -> return
-        | Unsigned, X16, Unsigned, X16 -> return
-        | Signed, X32, Signed, X32 -> return
-        | Unsigned, X32, Unsigned, X32 -> return
-        | Signed, X64, Signed, X64 -> return
-        | Unsigned, X64, Unsigned, X64 -> return
+        | Signed, X8, Signed, X8 -> return ()
+        | Unsigned, X8, Unsigned, X8 -> return ()
+        | Signed, X16, Signed, X16 -> return ()
+        | Unsigned, X16, Unsigned, X16 -> return ()
+        | Signed, X32, Signed, X32 -> return ()
+        | Unsigned, X32, Unsigned, X32 -> return ()
+        | Signed, X64, Signed, X64 -> return ()
+        | Unsigned, X64, Unsigned, X64 -> return ()
         | _ -> apply' @@ Cast (i2, i1, modulo)
         end
       | Ty (Numeric (Integral (Enum _ as e1))), Ty (Numeric (Integral (Int _ as i2))) ->
@@ -430,7 +430,7 @@ let rec coerce :
         apply' @@ To_int e
       | Ty t1, Ty t2 ->
         begin try
-          match O.Ty.eq t1 t2 with O.Ty.Eq -> return
+          match O.Ty.eq t1 t2 with O.Ty.Eq -> return ()
         with
         | Failure _ ->
           unsupported
@@ -438,7 +438,7 @@ let rec coerce :
             "can't coerce type %s to type %s"
             (O.Ty.to_string t1) (O.Ty.to_string t2)
         end
-      | _, Any -> return
+      | _, Any -> return ()
       | Any, Ty t ->
         unsupported
           ~loc:e#pos
