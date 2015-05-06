@@ -299,7 +299,7 @@ let memory_type mc =
 
 let is_user_type name : 'a logic_type -> _ =
   function
-  | Type (User (_, _, typ), _) when typ = name -> true
+  | Type (User (_, typ), _) when typ = name -> true
   | _ -> false
 
 let is_alloc_table_type lt = is_user_type Name.Type.alloc_table lt

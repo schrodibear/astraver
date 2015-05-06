@@ -257,7 +257,7 @@ let bin_op ~e : [< bin_op] * operator_type -> _ =
   | `Beq | `Bneq | `Bsub as op', `Pointer ->
     begin match op' with
     | `Beq -> Rel (Poly `Eq, Any)
-    | `Bneq -> Rel (Poly `Eq, Any)
+    | `Bneq -> Rel (Poly `Neq, Any)
     | `Bsub -> Op (O.F.Jc.pointer "sub_pointer", Any)
     end
   (* reals *)
@@ -383,8 +383,8 @@ let rec coerce :
         end
       | Ty (Numeric (Real (Float _ as f))), Ty (Numeric (Real Real)) ->
         begin match form, e' with
-        | Term, App (User (_, _, "of_real_exact"), Cons (Const (Real _) as c, Nil)) -> c
-        | Expr, { expr_node = App (User (_, _, "of_real_exact"), Cons ({ expr_node = Const (Real _) } as c, Nil), _) }
+        | Term, App (User (_, "of_real_exact"), Cons (Const (Real _) as c, Nil)) -> c
+        | Expr, { expr_node = App (User (_, "of_real_exact"), Cons ({ expr_node = Const (Real _) } as c, Nil), _) }
           -> c
         | _ -> apply' @@ Of_float f
         end
@@ -3473,7 +3473,7 @@ let enums eis =
             (Mod.mk
                ~name:(enum_entry_name ~how:(`Module (`Bitvector, if safe then `Safe  else `Unsafe)) i)
                ~safe
-               ~deps:[Dependency (Use (`Import None, th));
+               ~deps:[Dependency (Use (`Import None, bw_th));
                       Dependency (Clone (`Export, generic_bit_enum, here));
                       Dependency (Clone (`Export, (if safe then safe_bit_enum else unsafe_bit_enum), here))]
                [])
@@ -3539,7 +3539,7 @@ let enum_cast (ei_to, ei_from) =
                   (n, Logic lt_from,
                    (Annot
                       ((if safe && not m && (ei_to.ei_min >/ ei_from.ei_min || ei_to.ei_max </ ei_from.ei_max)
-                        then P.(F.user ~from "in_bounds" $. n_t)
+                        then P.(F.user ~from "in_bounds" $. to_int n_t)
                         else True),
                        Logic lt_to,
                        [],
@@ -3586,7 +3586,7 @@ let enum_cast (ei_to, ei_from) =
 
 let exception_ ei =
   let return typ_opt =
-    O.Wd.mk ~name:(Name.exception_ ei) @@ Exception typ_opt
+    O.Wd.mk ~name:(snd @@ Name.exception_ ei) @@ Exception typ_opt
   in
   match ei.exi_type with
   | Some tei -> let Logic_type t = some_logic_type tei in return (Some t)
@@ -3722,6 +3722,7 @@ let dummies =
   List.map
     Entry.some
     Mod.[
+      dummy "Jessie_return";
       dummy "Jessie_sub_pointer_safe";
       dummy "Jessie_sub_pointer_unsafe";
       dummy "Jessie_eq_pointer_safe";

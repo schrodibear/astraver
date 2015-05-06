@@ -159,7 +159,7 @@ type ('params, 'result) func =
      ('a repr, 'b bit) xintx bounded integer number) func
   | B_num_pred : [ `Lt | `Le | `Gt | `Ge | `Eq | `Ne ] * 'a number -> ('a number * ('a number * unit), boolean) func
   | Poly : [ `Eq | `Neq ] -> ('a * ('a * unit), boolean) func
-  | User : string * [ `Short | `Qualified ] * string -> (_, _) func (** theory * use qualified name * name *)
+  | User : (string * [ `Short | `Qualified ]) * string -> (_, _) func (** theory * use qualified name * name *)
 
 type 'typ constant =
   | Void : void constant
@@ -206,7 +206,7 @@ type ('params, 'result) tconstr =
   | Bool : (unit, boolean) tconstr
   | Void : (unit, void) tconstr
   | Var : string -> (unit, 'b) tconstr
-  | User : string * [ `Short | `Qualified ] * string -> ('a, 'b) tconstr
+  | User : (string * [ `Short | `Qualified ]) * string -> ('a, 'b) tconstr
 
 type 'a ltype_hlist =
   | Nil : unit ltype_hlist
@@ -240,7 +240,7 @@ and 'a why_type =
   | Ref : 'a why_type -> 'a ref why_type
   | Annot :
       pred * 'a why_type * string list * string list * pred *
-      ((string * [ `Qualified | `Short ] * string) * pred) list ->
+      (((string * [ `Qualified | `Short ]) * string) * pred) list ->
     'a why_type
     (** [{ P } t reads r writes w raises E { Q | E => R }] *)
   | Typed : 'a why_type * 'a ty -> 'a why_type
@@ -286,10 +286,10 @@ and 'typ expr_node =
   | Let : string * 'a expr * 'b expr -> 'b expr_node
   | Let_ref : string * 'a expr * 'b expr -> 'b expr_node
   | App : ('a, 'b) func * 'a expr_hlist * 'b why_type option -> 'b expr_node
-  | Raise : (string * [ `Qualified | `Short ] * string) * 'a expr option -> 'b expr_node
-  | Try : 'a expr * (string * [ `Qualified | `Short ] * string) * string option * 'a expr -> 'a expr_node
+  | Raise : ((string * [ `Qualified | `Short ]) * string) * 'a expr option -> 'b expr_node
+  | Try : 'a expr * ((string * [ `Qualified | `Short ]) * string) * string option * 'a expr -> 'a expr_node
   | Fun : (string * some_why_type) list * 'b why_type * pred * 'b expr * pred *
-          [ `Diverges | `Converges ] * ((string * pred) list) ->
+          [ `Diverges | `Converges ] * (((string * [ `Qualified | `Short ]) * string) * pred) list ->
     'b expr_node
   (** params * result_type * pre * body * post * diverges * signals *)
   | Triple : [ `Opaque | `Transparent ] * pred * 'a expr * pred * ((string * pred) list) -> 'a expr_node

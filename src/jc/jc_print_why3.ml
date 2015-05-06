@@ -64,10 +64,11 @@ let uid fmttr uid =
     | 'a' .. 'z' -> String.capitalize uid
     | _ -> "U_" ^ uid
 
-let qid ~entry fmttr =
+let qid ~entry ~u fmttr =
+  let id = if u then uid else id in
   function
-  | where, `Qualified, name when where <> entry -> fprintf fmttr "%a.%a" uid where id name
-  | _, _, name -> fprintf fmttr "%a" id name
+  | (where, `Qualified), name when where <> entry -> fprintf fmttr "%a.%a" uid where id name
+  | _, name -> fprintf fmttr "%a" id name
 
 let int_ty ~how fmttr (type r) (type b) (ty : (r repr, b bit) xintx bounded integer) =
   let (module Int_ty) = O.module_of_int_ty ty in
@@ -107,17 +108,17 @@ let op fmttr op =
   match op with
   | `Add -> "+"
   | `Sub -> "-"
-  | `Mul -> "*"
+  | `Mul -> " *"
   | `Div -> "/"
   | `Mod -> "%%"
-  | `Neg -> "-"
+  | `Neg -> "-_"
   | `And -> "&"
   | `Or -> "|^"
   | `Xor -> "^"
   | `Lsl -> "<<"
   | `Lsr -> ">>"
   | `Asr -> ">>>"
-  | `Compl -> "~"
+  | `Compl -> "~_"
   | `Lt -> "<"
   | `Le -> "<="
   | `Gt -> ">"
@@ -140,6 +141,7 @@ let fail_on_real () =
             please use the User generic constructor"
 
 let func ~entry ~where ~bw_ints fmttr (type a) (type b) =
+  let qid = qid ~entry ~u:false in
   let pr fmt = fprintf fmttr fmt in
   let pr_bop fp ty = pr "%a.(%a%a)" fp ty in
   let pr_uop fp ty = pr "%a.(%a%a_)" fp ty in
@@ -199,8 +201,7 @@ let func ~entry ~where ~bw_ints fmttr (type a) (type b) =
   | B_num_pred (pred, Integral (Int _ as ty)) -> pr_bop int_ty ty op pred modulo `Check
   | B_num_pred (pred, Integral (Enum _ as ty)) -> pr_bop enum_ty ty op pred modulo `Check
   | Poly op' -> pr "(%a)" op op'
-  | User (where, `Qualified, name) when where <> entry-> pr "%a.%a" uid where id name
-  | User (_, _, name) -> pr "%a" id name
+  | User (where, name) -> pr "%a" qid (where, name)
   | To_float _ -> fail_on_real ()
   | Of_float _  -> fail_on_real ()
   | B_num_pred (_, Real _) -> fail_on_real ()
@@ -261,6 +262,7 @@ let why_label fmttr { l_kind; l_behavior; l_pos } =
   end
 
 let tconstr ~entry fmttr (type a) (type b) =
+  let qid = qid ~entry ~u:false in
   let pr fmt = fprintf fmttr fmt in
   function
   | (Numeric (Integral Integer) : (a, b) tconstr) -> pr "int"
@@ -270,8 +272,7 @@ let tconstr ~entry fmttr (type a) (type b) =
   | Bool -> pr "Bool.bool"
   | Void -> pr "unit"
   | Var v -> pr "'%a" id v
-  | User (where, `Qualified, name) when where <> entry-> pr "%a.%a" uid where id name
-  | User (_, _, name) -> pr "%a" id name
+  | User (where, name) -> pr "%a" qid (where, name)
 
 let rec ltype_hlist : type a. entry:_ -> _ -> a ltype_hlist -> _  = fun ~entry fmttr ->
   function
@@ -387,7 +388,7 @@ and triggers ~entry ~bw_ints ~consts fmttr =
 let rec why_type : type a. entry:_ -> bw_ints:_ -> consts:_ -> _ -> a why_type -> _ =
   fun ~entry ~bw_ints ~consts fmttr ->
   let pr fmt = fprintf fmttr fmt
-  and qid  = qid ~entry
+  and qid  = qid ~entry ~u:true
   and pred = pred ~entry ~bw_ints ~consts
   and logic_type fmttr = logic_type ~entry fmttr
   and why_type fmttr = why_type ~entry ~bw_ints ~consts fmttr in
@@ -458,7 +459,8 @@ and expr_node : type a. entry:_ -> safe:_ -> bw_ints:_ -> consts:_ -> _ -> a exp
   let pr_fun params pre body post diverges signals =
     let consts = List.fold_right (function _, Why_type (Ref _) -> Fn.id | x, _ -> StringSet.add x) params consts in
     let pred = pred ~entry ~bw_ints ~consts
-    and any_type = any_type ~entry ~bw_ints ~consts in
+    and any_type = any_type ~entry ~bw_ints ~consts
+    and qid = qid ~entry ~u:true in
     pr "@[<hov 1>fun@ @[";
     List.iter (fun (x, t) -> pr "(%a@ :@ %a)@ " id x any_type t) params;
     pr "@]@ @[<hov 0>requires@ {@ %a@ }@ " pred pre;
@@ -469,7 +471,7 @@ and expr_node : type a. entry:_ -> safe:_ -> bw_ints:_ -> consts:_ -> _ -> a exp
         pred post
         (list ~sep:"@ " @@
          fun _ (e, r) ->
-         pr "@[<hov 2>raises@ {@ %a@ result@ ->@ %a@ }@]" uid e pred r)
+         pr "@[<hov 2>raises@ {@ %a@ result@ ->@ %a@ }@]" qid e pred r)
         l
     end;
     if diverges = `Diverges then pr "diverges@ ";
@@ -481,7 +483,7 @@ and expr_node : type a. entry:_ -> safe:_ -> bw_ints:_ -> consts:_ -> _ -> a exp
     pr "@[<hov 0>(let@ %a@ =@ %a@ in@ %a)@]" id id' expr e1 expr e2
   in
   let pred = pred ~entry ~bw_ints ~consts
-  and qid = qid ~entry
+  and qid = qid ~entry ~u:true
   and why_type fmttr = why_type ~entry ~bw_ints ~consts fmttr
   and variant fmttr = variant ~entry ~bw_ints ~consts fmttr
   and expr fmttr = expr ~entry ~safe ~bw_ints ~consts fmttr in
@@ -698,12 +700,12 @@ let split_fprintf ~cons =
 
 let expand_func : _ func -> _ func * _ =
   function
-  | User (where, `Short, name) -> User (where, `Qualified, name), true
+  | User ((where, `Short), name) -> User ((where, `Qualified), name), true
   | f -> f, false
 
 let expand_tconstr : _ tconstr -> _ tconstr * _ =
   function
-  | User (where, `Short, name) -> User (where, `Qualified, name), true
+  | User ((where, `Short), name) -> User ((where, `Qualified), name), true
   | f -> f, false
 
 let (|~>) init f = f ~init
@@ -874,13 +876,13 @@ end
 
 module Qid =
 struct
-  type t = string * [ `Qualified | `Short ] * string
+  type t = (string * [ `Qualified | `Short ]) * string
 
   let fold ~entry ~init ~f =
     function
-    | md, qual, ex when md <> entry ->
+    | (md, qual), ex when md <> entry ->
       f ~acc:init (`Module (md, qual = `Short), ex)
-    | _, _, ex ->
+    | _, ex ->
       f ~acc:init (`Current, ex)
 
   let iter ~f = fold ~init:() ~f:(fun ~acc:_ -> f)
@@ -1001,7 +1003,7 @@ struct
       fold_pred pre |~>
       fold e |~>
       fold_pred post |~>
-      ListLabels.fold_left ~f:(fun acc (id, p) -> f ~acc (`Current, id) |~> fold_pred p) exns
+      ListLabels.fold_left ~f:(fun init (qid, p) -> fold_qid ~init qid |~> fold_pred p) exns
     | Triple (_, pre, e, post, exns) ->
       fold_pred ~init pre |~>
       fold e |~>
@@ -1136,12 +1138,12 @@ struct
   let add_expansion pat expansion = expansions := (Str.regexp pat, expansion) :: !expansions
 
   let () =
-    add_expansion "\\([Bb]it_\\)?[Ii]nt[0-9]+" (`Prefix "enum");
+    add_expansion "\\(Bit_u?i\\|Ui\\|I\\)nt[0-9]+" (`Prefix "enum");
     add_expansion "Int" (`Prefix "int");
     add_expansion "Bool" (`Prefix "bool");
     add_expansion "Ref" (`Prefix "ref");
     add_expansion "Jessie_[a-z_]+" (`Prefix "core");
-    add_expansion "\\([A-Za-z_]+_enum$\\|[A-Za-z_]+_enum_\\(ext\\)?\\|Enum\\)" (`Prefix "enum")
+    add_expansion "[A-Za-z_]+_enum\\|Enum" (`Prefix "enum")
 
   let expansion_acts = H.create 25
 
@@ -1149,7 +1151,8 @@ struct
     ListLabels.iter
       !expansions
       ~f:(fun (pat, expansion) ->
-        if Str.string_match pat name 0 then H.add expansion_acts name expansion);
+        if Str.string_match pat name 0 && Str.match_end () = String.length name then
+          H.add expansion_acts name expansion);
     name
 
   let expand =

@@ -104,7 +104,7 @@ struct
 
   type 'a poly = { func : 'b. ('a, 'b) func }
 
-  let user s ~from:(name, qualified) = (User (name, qualified, s) : _ t)
+  let user s ~from : _ t = User (from, s)
 
   let local s = user s ~from:("", `Short)
 
@@ -554,7 +554,7 @@ struct
 
   let var v = Var v $ Nil
 
-  let user s ~from:(name, import) = User (name, import, s)
+  let user s ~from = User (from, s)
 
   module Jc =
   struct
@@ -887,15 +887,15 @@ struct
         | Some (Wt.Poly { why_type }) -> Poly { expr_node = App (func, args, Some why_type) }
         | Some (Wt.Poly' { why_type }) -> Poly' { expr_node = App (func, args, Some why_type) }
       end
-    | Raise ((where, qual, ex), eo) -> Poly { expr_node = Raise ((where, qual, ex), eo) }
-    | Try (e, (where, qual, ex), v, e') ->
+    | Raise (ex, eo) -> Poly { expr_node = Raise (ex, eo) }
+    | Try (e, ex, v, e') ->
       begin match ty e with
       | Ty ty | Ty' ty -> Ty' ty
       | Poly { expr_node = e_expr_node } | Poly' { expr_node = e_expr_node } ->
         match ty e' with
         | Ty ty | Ty' ty -> Ty' ty
         | Poly { expr_node } | Poly' { expr_node } ->
-          Poly' { expr_node = Try ({ e with expr_node = e_expr_node }, (where, qual, ex), v, { e' with expr_node }) }
+          Poly' { expr_node = Try ({ e with expr_node = e_expr_node }, ex, v, { e' with expr_node }) }
       end
     | Fun (args, rt, pre, e, post, div, raises) ->
       begin match Wt.ty rt with

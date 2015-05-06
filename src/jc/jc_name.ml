@@ -220,8 +220,7 @@ struct
 end
 
 let exception_ ei =
-  let md, qual = Module.exceptions in
-  md, qual, ei.exi_name ^ "_exc"
+  Module.exceptions, ei.exi_name ^ "_exc"
 
 module Pred =
 struct
@@ -372,7 +371,7 @@ let mem_to_bitvector_param_name pc =
   (Class.pointer pc) ^ "_mem_to_bitvector"
 
 let jessie_return_variable = "return"
-let jessie_return_exception = fst Module.Jessie.return, `Short, "Return"
+let jessie_return_exception = Module.Jessie.return, "Return"
 
 let mutable_name pc =
   "mutable_" ^ (Class.pointer pc)
