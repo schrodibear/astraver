@@ -4,7 +4,7 @@ BUILDSRC=$(dirname $(readlink -f $0))/_build/src
 
 make -C $BUILDSRC/../.. -j byte
 
-ocamlc -c -g -no-alias-deps -open Aliases -I "$BUILDSRC/why" -I "$BUILDSRC/jc" -o "$BUILDSRC/jc/jc_debug_print.d.cmo" "$BUILDSRC/../../src/jc/jc_debug_print.ml"
+ocamlc -c -g -no-alias-deps -open Aliases -I "$BUILDSRC/why" -I "$BUILDSRC/jc" -o "$BUILDSRC/jc/jc_debug_print.cmo" "$BUILDSRC/../../src/jc/jc_debug_print.ml"
 
 SCRIPT='load_printer nums.cma
 load_printer why_pp.cmo
