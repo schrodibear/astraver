@@ -195,6 +195,7 @@ let bin_op ~e : [< bin_op] * operator_type -> _ =
     | `Bmod -> `Mod
     | `Badd_mod -> `Add
     | `Bsub_mod -> `Sub
+    | `Bmul_mod -> `Mul
     | `Bdiv_mod -> `Div
   in
   function
@@ -212,7 +213,7 @@ let bin_op ~e : [< bin_op] * operator_type -> _ =
   (* ints *)
   | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq |
     `Badd | `Bsub | `Bmul | `Bdiv | `Bmod |
-    `Badd_mod | `Bsub_mod | `Bdiv_mod |
+    `Badd_mod | `Bsub_mod | `Bmul_mod | `Bdiv_mod |
     `Bbw_and | `Bbw_or | `Bbw_xor |
     `Bshift_left | `Bshift_left_mod | `Blogical_shift_right | `Barith_shift_right as op',
     `Enum { ei_type = Int (repr, b) } ->
@@ -227,7 +228,7 @@ let bin_op ~e : [< bin_op] * operator_type -> _ =
     begin match op' with
     | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq as op' -> rel (r op')
     | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod as op' -> bop (o op')
-    | `Badd_mod | `Bsub_mod | `Bdiv_mod as op' -> mop (o op')
+    | `Badd_mod | `Bsub_mod | `Bmul_mod | `Bdiv_mod as op' -> mop (o op')
     | `Bbw_and -> bwop `And
     | `Bbw_or -> bwop `Or
     | `Bbw_xor -> bwop `Xor
@@ -239,7 +240,7 @@ let bin_op ~e : [< bin_op] * operator_type -> _ =
   (* enums *)
   | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq |
     `Badd | `Bsub | `Bmul | `Bdiv | `Bmod |
-    `Badd_mod | `Bsub_mod | `Bdiv_mod as op',
+    `Badd_mod | `Bsub_mod | `Bmul_mod | `Bdiv_mod as op',
     `Enum { ei_type = Enum e } ->
     let t : _ integer = Enum e in
     let it = Integral t in
@@ -251,7 +252,7 @@ let bin_op ~e : [< bin_op] * operator_type -> _ =
     begin match op' with
     | `Bgt | `Blt | `Bge | `Ble | `Beq | `Bneq as op' -> rel (r op')
     | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod as op' -> op (o op')
-    | `Badd_mod | `Bsub_mod | `Bdiv_mod as op' -> mop (o op')
+    | `Badd_mod | `Bsub_mod | `Bmul_mod | `Bdiv_mod as op' -> mop (o op')
     end
   (* pointers *)
   | `Beq | `Bneq | `Bsub as op', `Pointer ->
@@ -1316,7 +1317,10 @@ let rec make_upd_simple ~e e1 fi tmp2 =
         E.locate ~e ~kind:JCVCpointer_deref
           (O.F.Jc.upd_offset_safe "upd_offset_typesafe" $ alloc ^ var mem ^ var tmpp ^ var tmpi ^. var tmp2)
     else
-      O.F.Jc.shift_unsafe "shift" $ var tmpp ^. var tmpi,
+      (if P.(off = Int_offset 0) then
+         var tmpp
+       else
+         O.F.Jc.shift_unsafe "shift" $ var tmpp ^. var tmpi),
       O.F.Jc.upd_unsafe "upd" $ var mem ^ var tmp1 ^. var tmp2
   in
   let letspi = O.E.[tmpp, some p'; tmpi, some i'; tmp1, some shift] in
@@ -3310,8 +3314,8 @@ let func f funpos spec body =
              let safety_body = wrap_body f spec behav body in
              [O.Entry.some @@
               O.Mod.mk
-                ~name:(Name.Module.func ~safe:false ~extern:false f)
-                ~safe:false
+                ~name:(Name.Module.func ~safe:true ~extern:false f)
+                ~safe:true
                 [O.Wd.mk
                    ~name
                    ~expl:("Function " ^ f.fun_name ^ ", safety")
@@ -3333,8 +3337,8 @@ let func f funpos spec body =
           @
           [O.Entry.some @@
            O.Mod.mk
-             ~name:(Name.Module.func ~safe:true ~extern:false f)
-             ~safe:true
+             ~name:(Name.Module.func ~safe:false ~extern:false f)
+             ~safe:false
              (List.fold_right
                 (fun (id, b, internal_post, _) ->
                    Fn.on'

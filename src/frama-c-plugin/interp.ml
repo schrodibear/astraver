@@ -1538,7 +1538,9 @@ and integral_expr e =
             | Some i when Integer.ge i Integer.zero &&
                 Integer.lt i (Integer.of_int 63) ->
                 (* Right shift by constant is division by constant *)
-                let pow = Ast.Exp.const (Integer.two_power i) in
+                let pow =
+                  mkCast ~force:false ~overflow:Check ~e:(Ast.Exp.const (Integer.two_power i)) ~newt:(typeOf e1)
+                in
                 locate (mkexpr (JCPEbinary(expr e1,`Bdiv,expr pow)) e.eloc)
             | _ ->
                 let op =
@@ -1554,7 +1556,9 @@ and integral_expr e =
             | Some i when Integer.ge i Integer.zero &&
                 Integer.lt i (Integer.of_int 63) ->
                 (* Left shift by constant is multiplication by constant *)
-                let pow = Ast.Exp.const (Integer.two_power i) in
+                let pow =
+                  mkCast ~force:false ~overflow:Check ~e:(Ast.Exp.const (Integer.two_power i)) ~newt:(typeOf e1)
+                in
                 locate
                   (mkexpr (JCPEbinary(expr e1, (match oft with Check -> `Bmul | Modulo -> `Bmul_mod), expr pow)) e.eloc)
             | _ ->

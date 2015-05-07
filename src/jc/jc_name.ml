@@ -180,10 +180,10 @@ struct
   let func ~extern ~safe f =
     "Function_" ^ f.fun_final_name ^
     match extern, safe with
-    | true, true -> ""
-    | true, false -> "_requires"
-    | false, true -> "_behaviors"
-    | false, false -> "_safety"
+    | true, false -> ""
+    | true, true -> "_safe"
+    | false, false -> "_behaviors"
+    | false, true -> "_safety"
   let exceptions = "Exceptions", `Short
   let globals pc =
     "Globals_" ^ Option.map_default ~default:"simple" ~f:(String.lowercase % fst % Theory.struct_) pc, `Short

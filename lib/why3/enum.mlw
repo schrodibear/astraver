@@ -298,6 +298,7 @@ theory Bit_enum_intf
     function of_int_modulo int : t
 
     predicate equal t t
+    predicate nequal t t
 
     function (+%) t t : t
     function (-%) t t : t
@@ -349,6 +350,7 @@ theory Bit_enum_intf2
   function of_int_modulo int : t
 
   predicate equal t t
+  predicate nequal t t
 
   function (+%) t t : t
   function (-%) t t : t
@@ -379,7 +381,13 @@ theory Bit_enum
   axiom Val_two_power_size:
     power 2 size = E.range
 
-  function to_int_const (a : E.t) : int = E.to_int a
+  function of_int_const (n : int) : E.t = E.of_int n
+
+  function to_uint (a : E.t) : int
+
+  axiom To_uint:
+    forall a : E.t [E.to_int a].
+      E.to_int a = to_uint a - if lt a (of_int_const 0) then power 2 (size - 1) else 0
 
   use int.ComputerDivision as CD
 
@@ -393,11 +401,13 @@ theory Bit_enum
             E.to_int a >= 0 /\ CD.mod (E.to_int a) (power 2 (n + 1)) >= power 2 n \/
             E.to_int a < 0 /\ CD.mod (E.range  + E.to_int a) (power 2 (n + 1)) >= power 2 n
 
-  function ith (a : E.t) (i : int) : int = if nth a i then 1 else 0
-
   axiom Eq:
     forall a b : E.t [E.equal a b | eq a b].
       E.equal a b -> eq a b
+
+  axiom Neq:
+    forall a b : E.t [E.nequal a b | ne a b].
+      E.nequal a b -> ne a b
 
   axiom Add_eq:
     forall a b : E.t [E.(+%) a b | add a b].
@@ -438,6 +448,102 @@ theory Bit_enum
   axiom Ge_eq:
     forall a b : E.t [E.(>=) a b | ge a b].
       E.(>=) a b <-> ge a b
+
+  (* The following axioms are to be removed by the drivers of solvers with native bitvector support *)
+
+  axiom Nth_bw_and:
+    forall a b : E.t [a & b].
+      forall n : int [nth (a & b) n].
+        0 <= n < size ->
+          nth (a & b) n <-> nth a n /\ nth b n
+
+  axiom Nth_bw_or:
+    forall a b : E.t [a |. b].
+      forall n : int [nth (a |. b) n].
+        0 <= n < size ->
+          nth (a |. b) n <-> nth a n \/ nth b n
+
+  axiom Nth_bw_xor:
+    forall a b : E.t [a ^ b].
+      forall n : int [nth (a ^ b) n].
+        0 <= n < size ->
+          nth (a ^ b) n <-> nth a n <> nth b n
+
+  axiom Nth_bw_not:
+    forall a : E.t [~ a].
+      forall n : int [nth (~ a) n].
+        0 <= n < size ->
+          nth (~ a) n = not (nth a n)
+
+  axiom Lsr_nth_low:
+    forall b : E.t.
+      forall s : E.t [lsr b s].
+        forall n : int [nth (lsr b s) n].
+          0 <= E.to_int s < size ->
+            0 <= n < size ->
+              n + E.to_int s < size ->
+                nth (lsr b s) n = nth b (n + E.to_int s)
+
+  axiom Lsr_nth_high:
+    forall b : E.t.
+      forall s : E.t [lsr b s].
+        forall n : int [nth (lsr b s) n].
+          0 <= E.to_int s < size ->
+            0 <= n < size ->
+              n + E.to_int s >= size ->
+                not (nth (lsr b s) n)
+
+  axiom Asr_nth_low:
+    forall b : E.t.
+      forall s : E.t [asr b s].
+        forall n : int [nth (asr b s) n].
+          0 <= E.to_int s < size ->
+            0 <= n < size ->
+              0 <= n + E.to_int s < size ->
+                nth (asr b s) n = nth b (n + E.to_int s)
+
+  axiom Asr_nth_high:
+    forall b : E.t.
+      forall s : E.t [asr b s].
+        forall n : int [nth (asr b s) n].
+          0 <= E.to_int s < size ->
+            0 <= n < size ->
+              n + E.to_int s >= size ->
+                nth (asr b s) n = nth b (size - 1)
+
+  axiom Lsl_nth_high:
+    forall b : E.t.
+      forall s : E.t [lsl b s].
+        forall n : int [nth (lsl b s) n].
+          0 <= E.to_int s < size ->
+            0 <= n < size ->
+              0 <= n - E.to_int s < size ->
+                nth (lsl b s) n = nth b (n - E.to_int s)
+
+  axiom Lsl_nth_low:
+    forall b : E.t.
+      forall s : E.t [lsl b s].
+        forall n : int [nth (lsl b s) n].
+          0 <= E.to_int s < size ->
+            0 <= n < size ->
+              n - E.to_int s < 0 ->
+                not (nth (lsl b s) n)
+
+  use int.EuclideanDivision as ED
+
+  axiom To_uint_lsr:
+    not signed ->
+      forall a : E.t.
+        forall n : E.t [lsr a n].
+          E.to_int n >= 0 ->
+            E.to_int (lsr a n) = ED.div (E.to_int a) (power 2 (E.to_int n))
+
+  axiom To_uint_lsl:
+    not signed ->
+      forall a : E.t.
+        forall n : E.t [lsl a n].
+          E.to_int n >= 0 ->
+            E.to_int (lsl a n) = ED.mod (Int.( *) (E.to_int a) (power 2 (E.to_int n))) E.range
 end
 
 module Generic_bit_enum
@@ -446,7 +552,7 @@ module Generic_bit_enum
   val (&) (x y : t) : t
     ensures { result = x & y }
 
-  val (|^) (x y : t) : t
+  val (|.) (x y : t) : t
     ensures { result = x |. y }
 
   val (~_) (x : t) : t
@@ -609,7 +715,6 @@ module Unsafe_bit_enum
     ensures { to_int result = ED.div (to_int x) (power 2 (to_int y)) }
 
   val of_int (n : int) : t
-    requires { "expl:integer overflow" in_bounds n }
     ensures  { to_int result = n }
     ensures  { result = of_int n }
 
