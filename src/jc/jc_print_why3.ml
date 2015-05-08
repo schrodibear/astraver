@@ -91,41 +91,50 @@ let enum_ty ~how fmttr (type e) (Enum _ as ty : e enum bounded integer) =
   | `Module `Unsafe -> Enum_ty.unsafe_module
   | `Module `Safe -> Enum_ty.safe_module
 
-let modulo fmttr modulo =
-  fprintf fmttr "%s" @@
-  match modulo with
+let modulo fmttr =
+  fprintf fmttr "%s" %
+  function
   | `Modulo -> "%"
   | `Check -> ""
 
-let modulo' fmttr modulo =
-  fprintf fmttr "%s" @@
-  match modulo with
+let modulo' fmttr =
+  fprintf fmttr "%s" %
+  function
   | `Modulo -> "_modulo"
   | `Check -> ""
 
-let op fmttr op =
-  fprintf fmttr "%s" @@
-  match op with
-  | `Add -> "+"
-  | `Sub -> "-"
-  | `Mul -> " *"
-  | `Div -> "/"
-  | `Mod -> "%"
-  | `Neg -> "-_"
-  | `And -> "&"
-  | `Or -> "|."
-  | `Xor -> "^"
+let op fmttr =
+  fprintf fmttr "%s" %
+  function
+  | `Add -> "(+"
+  | `Sub -> "(-"
+  | `Mul -> "( *"
+  | `Div -> "(/"
+  | `Mod -> "(%"
+  | `Neg -> "(-_"
+  | `And -> "(&"
+  | `Or -> "(|."
+  | `Xor -> "(^"
   | `Lsl -> "lsl"
   | `Lsr -> "lsr"
   | `Asr -> "asr"
-  | `Compl -> "~_"
-  | `Lt -> "<"
-  | `Le -> "<="
-  | `Gt -> ">"
-  | `Ge -> ">="
-  | `Eq -> "="
-  | `Ne -> "<>"
-  | `Neq -> "<>"
+  | `Compl -> "(~_"
+  | `Lt -> "(<"
+  | `Le -> "(<="
+  | `Gt -> "(>"
+  | `Ge -> "(>="
+  | `Eq -> "(="
+  | `Ne -> "(<>"
+  | `Neq -> "(<>"
+
+let rpar fmttr =
+  fprintf fmttr "%s" %
+  function
+  | `Lsl | `Lsr | `Asr -> ""
+  | `Add | `Sub | `Mul | `Div | `Mod
+  | `Neg | `And | `Or | `Xor | `Compl
+  | `Lt | `Le | `Gt | `Ge
+  | `Eq | `Ne | `Neq -> ")"
 
 type any_integer = Int : ('r repr, 'b bit) xintx bounded integer -> any_integer
 
@@ -143,8 +152,8 @@ let fail_on_real () =
 let func ~entry ~where ~bw_ints fmttr (type a) (type b) =
   let qid = qid ~entry ~u:false in
   let pr fmt = fprintf fmttr fmt in
-  let pr_bop fp ty = pr "%a.(%a%a)" fp ty in
-  let pr_uop fp ty = pr "%a.(%a%a_)" fp ty in
+  let pr_bop fp ty op' fmodulo modulo = pr "%a.%a%a%a" fp ty op op' fmodulo modulo rpar op' in
+  let pr_uop fp ty op' fmodulo modulo = pr "%a.%a%a_)" fp ty op op' fmodulo modulo in
   let pr_f fp ty = pr "%a.%s" fp ty in
   let pr_f' fp ty = pr "%a.%s%a" fp ty in
   let int_ty ?(default=true) ?ty' fmttr ty =
@@ -177,16 +186,16 @@ let func ~entry ~where ~bw_ints fmttr (type a) (type b) =
     | Enum _, Enum _ -> pr enum_ty ty_to enum_ty ty_from
   in
   function
-  | (B_int_op op' : (a, b) func) -> pr "Int.(%a)" op op'
-  | U_int_op op' -> pr "Int.(%a_)" op op'
-  | B_bint_op (op', (Int _ as ty), modulo') ->
-    pr_bop int_ty ty op op' modulo modulo'
-  | B_bint_op (op', (Enum _ as ty), modulo') ->
-    pr_bop enum_ty ty op op' modulo modulo'
-  | U_bint_op (op', (Int _ as ty), modulo') ->
-    pr_uop int_ty ty op op' modulo modulo'
-  | U_bint_op (op', (Enum _ as ty), modulo') ->
-    pr_uop enum_ty ty op op' modulo modulo'
+  | (B_int_op op' : (a, b) func) -> pr "Int.%a)" op op'
+  | U_int_op op' -> pr "Int.%a_)" op op'
+  | B_bint_op (op, (Int _ as ty), modulo') ->
+    pr_bop int_ty ty op modulo modulo'
+  | B_bint_op (op, (Enum _ as ty), modulo') ->
+    pr_bop enum_ty ty op modulo modulo'
+  | U_bint_op (op, (Int _ as ty), modulo') ->
+    pr_uop int_ty ty op modulo modulo'
+  | U_bint_op (op, (Enum _ as ty), modulo') ->
+    pr_uop enum_ty ty op modulo modulo'
   | Of_int (Int _ as ty, modulo) -> pr_f' int_ty ty "of_int" modulo' modulo
   | Of_int (Enum _ as ty, modulo) -> pr_f' enum_ty ty "of_int" modulo' modulo
   | To_int (Int _ as ty) -> pr_f int_ty ty "to_int"
@@ -194,13 +203,13 @@ let func ~entry ~where ~bw_ints fmttr (type a) (type b) =
   | Any (Int _ as ty) -> pr_f int_ty ty "any_"
   | Any (Enum _ as ty) -> pr_f enum_ty ty "any_"
   | Cast (ty_to, ty_from, modulo) -> pr_f' conv_tys (ty_to, ty_from) "cast" modulo' modulo
-  | B_bint_bop (op', ty) -> pr_bop int_ty ty op op' modulo `Check
-  | U_bint_bop (op', ty) -> pr_uop int_ty ty op op' modulo `Check
-  | Lsl_bint (ty, modulo') -> pr_bop int_ty ty op `Lsl modulo modulo'
-  | B_num_pred (pred, Integral Integer) -> pr "(%a)" op pred
-  | B_num_pred (pred, Integral (Int _ as ty)) -> pr_bop int_ty ty op pred modulo `Check
-  | B_num_pred (pred, Integral (Enum _ as ty)) -> pr_bop enum_ty ty op pred modulo `Check
-  | Poly op' -> pr "(%a)" op op'
+  | B_bint_bop (op, ty) -> pr_bop int_ty ty op modulo `Check
+  | U_bint_bop (op, ty) -> pr_uop int_ty ty op modulo `Check
+  | Lsl_bint (ty, modulo) -> pr_bop int_ty ty `Lsl modulo' modulo
+  | B_num_pred (pred, Integral Integer) -> pr "%a)" op pred
+  | B_num_pred (pred, Integral (Int _ as ty)) -> pr_bop int_ty ty pred modulo `Check
+  | B_num_pred (pred, Integral (Enum _ as ty)) -> pr_bop enum_ty ty pred modulo `Check
+  | Poly op' -> pr "%a)" op op'
   | User (where, name) -> pr "%a" qid (where, name)
   | To_float _ -> fail_on_real ()
   | Of_float _  -> fail_on_real ()
@@ -1139,6 +1148,7 @@ struct
 
   let () =
     add_expansion "\\(Bit_u?i\\|Ui\\|I\\)nt[0-9]+" (`Prefix "enum");
+    add_expansion "Bit_u?int[0-9]+_of_bit_u?int[0-9]+" (`Prefix "enum");
     add_expansion "Int" (`Prefix "int");
     add_expansion "Bool" (`Prefix "bool");
     add_expansion "Ref" (`Prefix "ref");
@@ -1167,9 +1177,9 @@ struct
   let dep ~name =
     let no_subst =
       match H.find expansion_acts name with
-      | `Prefix _ -> false
-      | `Subst _ -> true
-      | exception Not_found -> false
+      | `Prefix _ -> true
+      | `Subst _ -> false
+      | exception Not_found -> true
     in
     function
     | `Import None | `Export as r -> r
@@ -1256,7 +1266,7 @@ struct
                 ~f:(fun ~acc ->
                   function
                   | (`Theory (name, _) | `Module (name, _)),
-                    ("(&)" | "(|^)" | "(^)" | "(~_)" | "(<<)" | "(>>)" | "(>>>)") ->
+                    ("(&)" | "(|.)" | "(^)" | "(~_)" | "(<<)" | "(>>)" | "(>>>)") ->
                     begin try
                       S.add (M.find name map) acc
                     with

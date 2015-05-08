@@ -15,7 +15,7 @@ theory enum.Bit_{{u}}int{{size}}
   syntax function (^) "(bvxor %1 %2)"
   syntax function (~_) "(bvnot %1)"
 
-  syntax function lsl "(bvshl %1 %2)"
+  syntax function lsl_modulo "(bvshl %1 %2)"
   syntax function lsr "(bvlshr %1 %2)"
   syntax function asr "(bvashr %1 %2)"
 
@@ -42,7 +42,7 @@ theory enum.Bit_{{u}}int{{size}}
   remove prop Neq
 
   remove prop To_uint_lsr
-  remove prop To_uint_lsl
+  remove prop To_uint_lsl_modulo
 
   remove prop Nth_bw_or
   remove prop Nth_bw_and
@@ -52,8 +52,8 @@ theory enum.Bit_{{u}}int{{size}}
   remove prop Lsr_nth_high
   remove prop Asr_nth_low
   remove prop Asr_nth_high
-  remove prop Lsl_nth_low
-  remove prop Lsl_nth_high
+  remove prop Lsl_modulo_nth_low
+  remove prop Lsl_modulo_nth_high
 
   syntax predicate lt "(bv{{us}}lt %1 %2)"
   syntax predicate le "(bv{{us}}le %1 %2)"
@@ -98,7 +98,6 @@ end
 {{ bit (sign, size) }}
 {% endfor -%}
 {% endfor -%}
-(*
 {% for size_from in sizes -%}
 {% for sign_from in signs -%}
 {% for size_to in sizes -%}
@@ -111,4 +110,3 @@ end
 {% endfor -%}
 {% endfor -%}
 {% endfor -%}
-*)

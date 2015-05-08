@@ -3522,18 +3522,6 @@ let enum_cast (ei_to, ei_from) =
                    T.(Of_int (to_, if m then `Modulo else `Check) $. to_int @@ T.var n)))
     in
     let bw_cast = "bw_cast" in
-    let bw_cast_def =
-      [Wd.mk
-         ~name:bw_cast
-         (Logic ([n, Logic_type lt_from], lt_to));
-       Wd.mk
-         ~name:"Bw_cast_eq"
-         (let cast = T.cast ~modulo:true ~from ~to_ in
-          let bw_cast = T.($.) (F.local bw_cast) in
-          Goal (KAxiom,
-                P.(forall n lt_from ~trigs:(fun n -> [[Term (cast n)]; [Term (bw_cast n)]])
-                  (fun n -> cast n = bw_cast n))))]
-    in
     let cast_val ~safe ~bw ~m =
       let n_t = T.var n in
       let from = enum_entry_name ~how:(`Theory (if bw then `Bitvector else `Abstract)) to_, `Qualified in
@@ -3566,7 +3554,7 @@ let enum_cast (ei_to, ei_from) =
        Mod.mk
          ~name:(name ~of_:(`Module (bw', `Safe)))
          ~safe:true
-         [cast_val ~safe:true ~bw ~m:false; cast_val ~safe:true ~bw ~m:false]]
+         [cast_val ~safe:true ~bw ~m:false; cast_val ~safe:true ~bw ~m:true]]
     in
     Entry.some
       (Th.mk
@@ -3574,10 +3562,16 @@ let enum_cast (ei_to, ei_from) =
          [cast ~m:false; cast ~m:true]) ::
     mods false @
     if bw then
+      let how = `Theory `Bitvector in
+      let bw_th =
+        Th.dummy (enum_entry_name ~how to_ ^ "_of_" ^ String.lowercase @@ enum_entry_name ~how from)
+      in
+      Entry.some bw_th ::
       Entry.some
         (Th.mk
-           ~name:(name ~of_:(`Theory `Bitvector))
-           ([cast ~m:false; cast ~m:true] @ bw_cast_def)) ::
+           ~name:(name ~of_:how)
+           ~deps:[Use (`Export, bw_th)]
+           [cast ~m:false]) ::
       mods true
     else
       []

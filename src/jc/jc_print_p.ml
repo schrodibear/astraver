@@ -72,7 +72,7 @@ let bin_op =
   | `Blogical_shift_right -> ">>"
   | `Barith_shift_right -> ">>>"
   | `Bshift_left -> "<<"
-  | `Bshift_left_mod -> "<<"
+  | `Bshift_left_mod -> "<<%"
   | `Bconcat -> "@"
 
 let unary_op =

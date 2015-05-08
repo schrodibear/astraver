@@ -193,7 +193,8 @@ let main () =
       Options.lprintf "Translate enumerated types@.";
       (let enums = StringHashtblIter.fold (fun _ -> List.cons) Typing.enum_types_table [] in
        push_entries @@ Interp.enums enums;
-       push_entries List.(concat @@ map Interp.enum_cast @@ all_pairs enums));
+       push_entries
+         List.(concat @@ map Interp.enum_cast @@ Fn.uncurry (@) @@ fdup2 Fn.id (map swap) @@ all_pairs enums));
 
       Options.lprintf "Translate dummies@.";
       push_entries @@ Interp.dummies;
