@@ -1,28 +1,27 @@
 {% macro th (signed_from, size_from, signed_to, size_to) -%}
 {% if signed_from -%}
   {% set u_from = "" %}
-  {% set pr_from = "I" %}
+  {% set pr_from = "i" %}
 {% else -%}
   {% set u_from = "u" %}
-  {% set pr_from = "Ui" %}
+  {% set pr_from = "ui" %}
 {% endif -%}
 {% if signed_to -%}
   {% set u_to = "" %}
-  {% set pr_to = "I" %}
+  {% set pr_to = "i" %}
 {% else -%}
   {% set u_to = "u" %}
-  {% set pr_to = "Ui" %}
+  {% set pr_to = "ui" %}
 {% endif -%}
-{% set t_from = pr_from + "nt" + size_from %}
-{% set t_to = pr_to + "nt" + size_to %}
+{% set t_from = "Bit_" + pr_from + "nt" + size_from %}
+{% set t_to = "Bit_" + pr_to + "nt" + size_to %}
 theory Bit_{{u_to}}int{{size_to}}_of_bit_{{u_from}}int{{size_from}}
   use {{t_from}}
   use {{t_to}}
-  function bw_cast {{t_from}}.t : {{t_to}}.t
-  function cast_modulo (n : {{t_from}}.t) : {{t_to}}.t = {{t_to}}.of_int_modulo ({{t_from}}.to_int n)
-  axiom Bw_cast_eq:
-    forall n : {{t_from}}.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  function cast_modulo (a : {{t_from}}.t) : {{t_to}}.t
+  axiom Cast_modulo:
+    forall a : {{t_from}}.t [cast_modulo a].
+      cast_modulo a = {{t_to}}.of_int ({{t_to}}.normalize ({{t_from}}.to_int a))
 end
 {% endmacro -%}
 {% set sizes = [8, 16, 32, 64] %}

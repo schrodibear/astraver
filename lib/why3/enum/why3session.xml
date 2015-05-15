@@ -245,7 +245,7 @@
 </theory>
 <theory name="Uint64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Bit_int8" sum="4ad4bb5a7300295f0c2ccad268d3ac9c">
+<theory name="Bit_int8" sum="e9c85d2bf9961da187601c332f374f19">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.01" steps="65"/></proof>
  </goal>
@@ -253,7 +253,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_uint8" sum="e456736da64d3b53895308fb395d2090">
+<theory name="Bit_uint8" sum="cecbbad01527720b1b7c820b3b9a9f46">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -261,7 +261,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_int16" sum="6de42e2e04aef3534279c964b30a8816">
+<theory name="Bit_int16" sum="360b3a1009a00a9af378458ab4dd8333">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -269,7 +269,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_uint16" sum="0247475408077900353db55a8ec7c287">
+<theory name="Bit_uint16" sum="aa84c8e83d90fa52d5330f826ea3cf8b">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -277,7 +277,7 @@
  <proof prover="0"><result status="valid" time="0.01" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_int32" sum="2947aba62873c3deb647bb5e99869e33">
+<theory name="Bit_int32" sum="7affb3d56a2531ec564ff307a595371b">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -285,7 +285,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_uint32" sum="ff355118422fb3096baf219070cfe9b3">
+<theory name="Bit_uint32" sum="15e4e48865bb9281ec3ce3f8edc422c9">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -293,7 +293,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_int64" sum="5c588036fd128ee9c898860acdc97cb7">
+<theory name="Bit_int64" sum="9e6fc0087107170010497964bc4b55b9">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -301,13 +301,125 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_uint64" sum="20f35f65acbbdc44b5c8bb810001ecd5">
+<theory name="Bit_uint64" sum="68a7399e1766e7be9230fa4af6a28250">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
  <goal name="Val_two_power_size">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
+</theory>
+<theory name="Bit_uint8_of_bit_int8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int16_of_bit_int8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint16_of_bit_int8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int32_of_bit_int8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint32_of_bit_int8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int64_of_bit_int8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint64_of_bit_int8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int8_of_bit_uint8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int16_of_bit_uint8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint16_of_bit_uint8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int32_of_bit_uint8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint32_of_bit_uint8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int64_of_bit_uint8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint64_of_bit_uint8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int8_of_bit_int16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint8_of_bit_int16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint16_of_bit_int16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int32_of_bit_int16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint32_of_bit_int16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int64_of_bit_int16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint64_of_bit_int16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int8_of_bit_uint16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint8_of_bit_uint16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int16_of_bit_uint16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int32_of_bit_uint16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint32_of_bit_uint16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int64_of_bit_uint16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint64_of_bit_uint16" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int8_of_bit_int32" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint8_of_bit_int32" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int16_of_bit_int32" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint16_of_bit_int32" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint32_of_bit_int32" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int64_of_bit_int32" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint64_of_bit_int32" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int8_of_bit_uint32" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint8_of_bit_uint32" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int16_of_bit_uint32" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint16_of_bit_uint32" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int32_of_bit_uint32" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int64_of_bit_uint32" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint64_of_bit_uint32" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int8_of_bit_int64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint8_of_bit_int64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int16_of_bit_int64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint16_of_bit_int64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int32_of_bit_int64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint32_of_bit_int64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint64_of_bit_int64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int8_of_bit_uint64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint8_of_bit_uint64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int16_of_bit_uint64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint16_of_bit_uint64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int32_of_bit_uint64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_uint32_of_bit_uint64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Bit_int64_of_bit_uint64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 </file>
 </why3session>

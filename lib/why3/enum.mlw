@@ -4,8 +4,6 @@ theory Enum_intf
   function to_int t : int
 
   predicate in_bounds int
-
-  function normalize int : int
 end
 
 theory Enum
@@ -14,58 +12,41 @@ theory Enum
 
   use import int.Int
 
-  constant range : int = max - min + 1
-
   use int.EuclideanDivision
-
-  function normalize (x : int) : int = min + (EuclideanDivision.mod (x - min) range)
 
   use import int.ComputerDivision
 
   predicate in_bounds (n : int) = min <= n <= max
 
   clone export Enum_intf with
-    function normalize = normalize,
     predicate in_bounds = in_bounds
 
-  axiom To_int:
-    forall x : t [to_int x]. min <= to_int x <= max
-
-  axiom To_int_in_bounds: forall n : t [to_int n]. in_bounds (to_int n)
+  axiom To_int_in_bounds:
+    forall a : t [to_int a]. in_bounds (to_int a)
 
   function of_int int : t
 
-  function of_int_modulo (n : int) : t = of_int (normalize n)
-
   axiom Of_int:
-    forall x : int [of_int x]. min <= x <= max -> to_int (of_int x) = x
+    forall a : int [of_int a]. in_bounds a -> to_int (of_int a) = a
 
   function (+) (a b : t) : t = of_int (Int.(+) (to_int a) (to_int b))
 
-  function (+%) (a b : t) : t = of_int (normalize (Int.(+) (to_int a) (to_int b)))
-
   function (-_) (a : t) : t = of_int (Int.(-_) (to_int a))
-
-  function (-%_) (a : t) : t = of_int (normalize (Int.(-_) (to_int a)))
 
   function (-) (a b : t) : t = of_int (Int.(-) (to_int a) (to_int b))
 
-  function (-%) (a b : t) : t = of_int (normalize (Int.(-) (to_int a) (to_int b)))
-
   function ( *) (a b : t) : t = of_int (Int.( *) (to_int a) (to_int b))
 
-  function ( *%) (a b : t) : t = of_int (normalize (Int.( *) (to_int a) (to_int b)))
+  function (/) (a b : t) : t = of_int (div (to_int a) (to_int b))
 
-  predicate equal (a b : t) = to_int a = to_int b
-
-  predicate nequal (a b : t) = to_int a <> to_int b
+  function (%) (a b : t) : t = of_int (mod (to_int a) (to_int b))
 
   axiom Extensionality1: forall x y : t [to_int x, to_int y]. to_int x = to_int y -> x = y
 
   axiom Extensionality2:
     forall x y : int [of_int x, of_int y].
       of_int x = of_int y ->
-        min <= x <= max /\ min <= y <= max ->
+        in_bounds x /\ in_bounds y ->
           x = y
 
   predicate (<=) (a b : t) = Int.(<=) (to_int a) (to_int b)
@@ -75,14 +56,6 @@ theory Enum
   predicate (>=) (a b : t) = Int.(>=) (to_int a) (to_int b)
 
   predicate (>) (a b : t) = Int.(>) (to_int a) (to_int b)
-
-  function (/) (a b : t) : t = of_int (div (to_int a) (to_int b))
-
-  function (/%) (a b : t) : t = of_int (normalize (div (to_int a) (to_int b)))
-
-  function (%) (a b : t) : t = of_int (mod (to_int a) (to_int b))
-
-  function (%%) (a b : t) : t = of_int (normalize (mod (to_int a) (to_int b)))
 end
 
 module Generic_enum
@@ -95,37 +68,17 @@ module Generic_enum
 
   val any_ unit : t
 
-  val (+%) (a b : t) : t
-    ensures { to_int result = normalize (to_int a + to_int b) }
-
-  val (-%) (a b : t) : t
-    ensures { to_int result = normalize (to_int a - to_int b) }
-
-  val ( *%) (a b : t) : t
-    ensures { to_int result = normalize (to_int a * to_int b) }
-
-  val (-%_) (a : t) : t
-    ensures { to_int result = normalize (- to_int a) }
-
-  val eq (a b : t) : bool
-    ensures { result <-> to_int a = to_int b }
-    ensures { result <-> a = b }
-
-  val ne (a b : t) : bool
-    ensures { result <-> to_int a <> to_int b }
-    ensures { result <-> a <> b }
-
   val (<=) (a b : t) : bool
-    ensures  { result <-> to_int a <= to_int b }
+    ensures  { result = (to_int a <= to_int b) }
 
   val (<) (a b : t) : bool
-    ensures  { result <-> to_int a < to_int b }
+    ensures  { result = (to_int a < to_int b) }
 
   val (>=) (a b : t) : bool
-    ensures  { result <-> to_int a >= to_int b }
+    ensures  { result = (to_int a >= to_int b) }
 
   val (>) (a b : t) : bool
-    ensures  { result <-> to_int a > to_int b }
+    ensures  { result = (to_int a > to_int b) }
 end
 
 module Safe_enum
@@ -164,14 +117,6 @@ module Safe_enum
     requires { "expl:division by zero" to_int b <> 0 }
     requires { "expl:integer overflow" in_bounds (mod (to_int a) (to_int b)) }
     ensures  { to_int result = mod (to_int a) (to_int b) }
-
-  val (/%) (a b : t) : t
-    requires { "expl:division by zero" to_int b <> 0 }
-    ensures  { to_int result = normalize (div (to_int a) (to_int b)) }
-
-  val (%%) (a b : t) : t
-    requires { "expl:division by zero" to_int b <> 0 }
-    ensures  { to_int result = normalize (mod (to_int a) (to_int b)) }
 end
 
 module Unsafe_enum
@@ -201,12 +146,6 @@ module Unsafe_enum
 
   val (%) (a b : t) : t
     ensures  { to_int result = mod (to_int a) (to_int b) }
-
-  val (/%) (a b : t) : t
-    ensures  { to_int result = normalize (div (to_int a) (to_int b)) }
-
-  val (%%) (a b : t) : t
-    ensures  { to_int result = normalize (mod (to_int a) (to_int b)) }
 end
 
 theory Powers_of_2
@@ -292,20 +231,10 @@ theory Bit_enum_intf
   namespace import E
     clone export Enum_intf
 
-    constant range : int
+    constant min : int
+    constant max : int
 
     function of_int int : t
-    function of_int_modulo int : t
-
-    predicate equal t t
-    predicate nequal t t
-
-    function (+%) t t : t
-    function (-%) t t : t
-    function (-%_) t : t
-    function ( *%) t t : t
-    function (/%) t t : t
-    function (%%) t t : t
 
     predicate (<) t t
     predicate (<=) t t
@@ -317,6 +246,17 @@ theory Bit_enum_intf
 
   predicate signed
 
+  function normalize (x : int) : int
+
+  function of_int_modulo int : t
+
+  function (+%) t t : t
+  function (-%) t t : t
+  function (-%_) t : t
+  function ( *%) t t : t
+  function (/%) t t : t
+  function (%%) t t : t
+
   function (&) t t : t
   function (|.) t t : t
   function (~_) t : t
@@ -325,16 +265,6 @@ theory Bit_enum_intf
   function lsl_modulo t t : t
   function lsr t t : t
   function asr t t : t
-
-  function add t t : t
-  function sub t t : t
-  function neg t : t
-  function mul t t : t
-  function div t t : t
-  function rem t t : t
-
-  predicate eq t t
-  predicate ne t t
 
   predicate lt t t
   predicate le t t
@@ -345,20 +275,10 @@ end
 theory Bit_enum_intf2
   clone export Enum_intf
 
-  constant range : int
+  constant min : int
+  constant max : int
 
   function of_int int : t
-  function of_int_modulo int : t
-
-  predicate equal t t
-  predicate nequal t t
-
-  function (+%) t t : t
-  function (-%) t t : t
-  function (-%_) t : t
-  function ( *%) t t : t
-  function (/%) t t : t
-  function (%%) t t : t
 
   predicate (<) t t
   predicate (<=) t t
@@ -370,9 +290,53 @@ theory Bit_enum_intf2
 end
 
 theory Bit_enum
-  clone export Bit_enum_intf
-
   use import int.Int
+
+  namespace E
+    constant max : int
+    constant min : int
+  end
+
+  constant range : int = E.max - E.min + 1
+
+  use int.EuclideanDivision as ED
+
+  function normalize (x : int) : int = E.min + (ED.mod (x - E.min) range)
+
+  clone export Bit_enum_intf with
+    constant E.max = E.max,
+    constant E.min = E.min,
+    function normalize = normalize
+
+  axiom Of_int_modulo:
+    forall n : int [of_int_modulo n].
+      of_int_modulo n = E.of_int (normalize n)
+
+  axiom Add_modulo:
+    forall a, b : E.t [a +% b].
+      a +% b = E.of_int (normalize (Int.(+) (E.to_int a) (E.to_int b)))
+
+  axiom Neg_modulo:
+    forall a : E.t [-% a].
+      -% a = E.of_int (normalize (Int.(-_) (E.to_int a)))
+
+  axiom Sub_modulo:
+    forall a, b : E.t [a -% b].
+      a -% b = E.of_int (normalize (Int.(-) (E.to_int a) (E.to_int b)))
+
+  axiom Mult_modulo:
+    forall a, b : E.t [a *% b].
+      a *% b = E.of_int (normalize (Int.( *) (E.to_int a) (E.to_int b)))
+
+  use int.ComputerDivision as CD
+
+  axiom Div_modulo:
+    forall a, b : E.t [a /% b].
+      a /% b = E.of_int (normalize (CD.div (E.to_int a) (E.to_int b)))
+
+  axiom Mod_modulo:
+    forall a, b : E.t [a %% b].
+      a %% b = E.of_int (CD.mod (E.to_int a) (E.to_int b))
 
   use import Powers_of_2
 
@@ -380,17 +344,20 @@ theory Bit_enum
     Int.(>) size 0
 
   axiom Val_two_power_size:
-    power 2 size = E.range
+    power 2 size = range
 
   function of_int_const (n : int) : E.t = E.of_int n
+
+  axiom Of_int_def:
+    forall n : int [E.of_int n].
+      E.in_bounds n -> E.of_int n = of_int_modulo n
 
   function to_uint (a : E.t) : int
 
   axiom To_uint:
-    forall a : E.t [E.to_int a].
-      E.to_int a = to_uint a - if lt a (of_int_const 0) then power 2 (size - 1) else 0
-
-  use int.ComputerDivision as CD
+    signed ->
+      forall a : E.t [E.to_int a].
+        E.to_int a = to_uint a - if lt a (of_int_const 0) then power 2 size else 0
 
   predicate nth E.t int
 
@@ -398,57 +365,25 @@ theory Bit_enum
     forall a : E.t.
       forall n : int [nth a n].
         0 <= n < size ->
-          nth a n <->
-            E.to_int a >= 0 /\ CD.mod (E.to_int a) (power 2 (n + 1)) >= power 2 n \/
-            E.to_int a < 0 /\ CD.mod (E.range  + E.to_int a) (power 2 (n + 1)) >= power 2 n
-
-  axiom Eq:
-    forall a b : E.t [E.equal a b | eq a b].
-      E.equal a b -> eq a b
-
-  axiom Neq:
-    forall a b : E.t [E.nequal a b | ne a b].
-      E.nequal a b -> ne a b
-
-  axiom Add_eq:
-    forall a b : E.t [E.(+%) a b | add a b].
-      E.(+%) a b = add a b
-
-  axiom Sub_eq:
-    forall a b : E.t [E.(-%) a b | sub a b].
-      E.(-%) a b = sub a b
-
-  axiom Neg_eq:
-    forall a : E.t [E.(-%_) a | neg a].
-      E.(-%_) a = neg a
-
-  axiom Mul_eq:
-    forall a b : E.t [E.( *%) a b | mul a b].
-      E.( *%) a b = mul a b
-
-  axiom Div_eq:
-    forall a b : E.t [E.(/%) a b | div a b].
-      E.(/%) a b = div a b
-
-  axiom Mod_eq:
-    forall a b : E.t [E.(%%) a b | rem a b].
-      E.(%%) a b = rem a b
+          nth a n =
+            (E.to_int a >= 0 /\ CD.mod (E.to_int a) (power 2 (n + 1)) >= power 2 n \/
+             E.to_int a < 0 /\ CD.mod (range  + E.to_int a) (power 2 (n + 1)) >= power 2 n)
 
   axiom Lt_eq:
     forall a b : E.t [E.(<) a b | lt a b].
-      E.(<) a b <-> lt a b
+      E.(<) a b = lt a b
 
   axiom Le_eq:
     forall a b : E.t [E.(<=) a b | le a b].
-      E.(<=) a b <-> le a b
+      E.(<=) a b = le a b
 
   axiom Gt_eq:
     forall a b : E.t [E.(>) a b | gt a b].
-      E.(>) a b <-> gt a b
+      E.(>) a b = gt a b
 
   axiom Ge_eq:
     forall a b : E.t [E.(>=) a b | ge a b].
-      E.(>=) a b <-> ge a b
+      E.(>=) a b = ge a b
 
   (* The following axioms are to be removed by the drivers of solvers with native bitvector support *)
 
@@ -456,19 +391,19 @@ theory Bit_enum
     forall a b : E.t [a & b].
       forall n : int [nth (a & b) n].
         0 <= n < size ->
-          nth (a & b) n <-> nth a n /\ nth b n
+          nth (a & b) n = (nth a n /\ nth b n)
 
   axiom Nth_bw_or:
     forall a b : E.t [a |. b].
       forall n : int [nth (a |. b) n].
         0 <= n < size ->
-          nth (a |. b) n <-> nth a n \/ nth b n
+          nth (a |. b) n = (nth a n \/ nth b n)
 
   axiom Nth_bw_xor:
     forall a b : E.t [a ^ b].
       forall n : int [nth (a ^ b) n].
         0 <= n < size ->
-          nth (a ^ b) n <-> nth a n <> nth b n
+          nth (a ^ b) n = (nth a n <> nth b n)
 
   axiom Nth_bw_not:
     forall a : E.t [~ a].
@@ -536,8 +471,6 @@ theory Bit_enum
               n - E.to_int s < 0 ->
                 not (nth (lsl_modulo b s) n)
 
-  use int.EuclideanDivision as ED
-
   axiom To_uint_lsr:
     not signed ->
       forall a : E.t.
@@ -550,7 +483,7 @@ theory Bit_enum
       forall a : E.t.
         forall n : E.t [lsl_modulo a n].
           E.to_int n >= 0 ->
-            E.to_int (lsl_modulo a n) = ED.mod (Int.( *) (E.to_int a) (power 2 (E.to_int n))) E.range
+            E.to_int (lsl_modulo a n) = ED.mod (Int.( *) (E.to_int a) (power 2 (E.to_int n))) range
 end
 
 module Generic_bit_enum
@@ -570,52 +503,46 @@ module Generic_bit_enum
 
   use int.Int
 
+  val of_int_modulo (n : int) : t
+    ensures { result = of_int_modulo n }
+    ensures { to_int result = normalize n }
+
   val to_int (a : t) : int
     ensures { result = to_int a }
 
   val any_ unit : t
 
   val (+%) (a b : t) : t
+    ensures { result = a +% b }
     ensures { to_int result = normalize (Int.(+) (to_int a) (to_int b)) }
-    ensures { result = add a b }
 
   val (-%) (a b : t) : t
+    ensures { result = a -% b }
     ensures { to_int result = normalize (Int.(-) (to_int a) (to_int b)) }
-    ensures { result = sub a b }
 
   val ( *%) (a b : t) : t
+    ensures { result = a *% b }
     ensures { to_int result = normalize (Int.( *) (to_int a) (to_int b)) }
-    ensures { result = mul a b }
 
   val (-%_) (a : t) : t
+    ensures { result = -% a }
     ensures { to_int result = normalize (Int.(-_) (to_int a)) }
-    ensures { result = neg a }
-
-  val eq (a b : t) : bool
-    ensures { result <-> Int.(=) (to_int a) (to_int b) }
-    ensures { result <-> eq a b }
-    ensures { result <-> a = b }
-
-  val ne (a b : t) : bool
-    ensures { result <-> to_int a <> to_int b }
-    ensures { result <-> ne a b }
-    ensures { result <-> a <> b }
 
   val (<=) (a b : t) : bool
-    ensures  { result <-> Int.(<=) (to_int a) (to_int b) }
-    ensures  { result <-> le a b }
+    ensures  { result = le a b }
+    ensures  { result = Int.(<=) (to_int a) (to_int b) }
 
   val (<) (a b : t) : bool
-    ensures  { result <-> Int.(<) (to_int a) (to_int b) }
-    ensures  { result <-> lt a b }
+    ensures  { result = lt a b }
+    ensures  { result = Int.(<) (to_int a) (to_int b) }
 
   val (>=) (a b : t) : bool
-    ensures  { result <-> Int.(>=) (to_int a) (to_int b) }
-    ensures  { result <-> ge a b }
+    ensures  { result = ge a b }
+    ensures  { result = Int.(>=) (to_int a) (to_int b) }
 
   val (>) (a b : t) : bool
-    ensures  { result <-> Int.(>) (to_int a) (to_int b) }
-    ensures  { result <-> gt a b}
+    ensures  { result = gt a b}
+    ensures  { result = Int.(>) (to_int a) (to_int b) }
 end
 
 module Safe_bit_enum
@@ -649,28 +576,29 @@ module Safe_bit_enum
 
   val of_int (n : int) : t
     requires { "expl:integer overflow" in_bounds n }
+    ensures  { result = of_int_modulo n }
     ensures  { to_int result = n }
     ensures  { result = of_int n }
 
   val (+) (a b : t) : t
     requires { "expl:integer overflow" in_bounds (Int.(+) (to_int a) (to_int b)) }
     ensures  { to_int result = Int.(+) (to_int a) (to_int b) }
-    ensures  { result = add a b }
+    ensures  { result = a +% b }
 
   val (-) (a b : t) : t
     requires { "expl:integer overflow" in_bounds (Int.(-) (to_int a) (to_int b)) }
     ensures  { to_int result = Int.(-) (to_int a) (to_int b) }
-    ensures  { result = sub a b }
+    ensures  { result = a -% b }
 
   val ( *) (a b : t) : t
     requires { "expl:integer overflow" in_bounds (Int.(*) (to_int a) (to_int b)) }
     ensures  { to_int result = Int.(*) (to_int a) (to_int b) }
-    ensures  { result = mul a b }
+    ensures  { result = a *% b }
 
   val (-_) (a : t) : t
     requires { "expl:integer overflow" in_bounds (Int.(-_) (to_int a)) }
     ensures  { to_int result = Int.(-_) (to_int a) }
-    ensures  { result = neg a }
+    ensures  { result = -% a }
 
   use int.ComputerDivision as CD
 
@@ -678,23 +606,23 @@ module Safe_bit_enum
     requires { "expl:division by zero" to_int b <> 0 }
     requires { "expl:integer overflow" in_bounds (CD.div (to_int a) (to_int b)) }
     ensures  { to_int result = CD.div (to_int a) (to_int b) }
-    ensures  { result = div a b }
+    ensures  { result = a /% b }
 
   val (%) (a b : t) : t
     requires { "expl:division by zero" to_int b <> 0 }
     requires { "expl:integer overflow" in_bounds (CD.mod (to_int a) (to_int b)) }
     ensures  { to_int result = CD.mod (to_int a) (to_int b) }
-    ensures  { result = rem a b }
+    ensures  { result = a %% b }
 
   val (/%) (a b : t) : t
     requires { "expl:division by zero" to_int b <> 0 }
     ensures  { to_int result = normalize (CD.div (to_int a) (to_int b)) }
-    ensures  { result = div a b }
+    ensures  { result = a /% b }
 
   val (%%) (a b : t) : t
     requires { "expl:division by zero" to_int b <> 0 }
     ensures  { to_int result = normalize (CD.mod (to_int a) (to_int b)) }
-    ensures  { result = rem a b }
+    ensures  { result = a %% b }
 end
 
 module Unsafe_bit_enum
@@ -722,42 +650,43 @@ module Unsafe_bit_enum
     ensures { to_int result = ED.div (to_int x) (power 2 (to_int y)) }
 
   val of_int (n : int) : t
+    ensures  { result = of_int_modulo n }
     ensures  { to_int result = n }
     ensures  { result = of_int n }
 
   val (+) (a b : t) : t
     ensures   { to_int result = Int.(+) (to_int a) (to_int b) }
-    ensures   { result = add a b }
+    ensures   { result = a +% b }
 
   val (-) (a b : t) : t
     ensures  { to_int result = Int.(-) (to_int a) (to_int b) }
-    ensures  { result = sub a b }
+    ensures  { result = a -% b }
 
   val ( *) (a b : t) : t
     ensures  { to_int result = Int.(*) (to_int a) (to_int b) }
-    ensures  { result = mul a b }
+    ensures  { result = a *% b }
 
   val (-_) (a : t) : t
     ensures  { to_int result = Int.(-_) (to_int a) }
-    ensures  { result = neg a }
+    ensures  { result = -% a }
 
   use int.ComputerDivision as CD
 
   val (/) (a b : t) : t
     ensures  { to_int result = CD.div (to_int a) (to_int b) }
-    ensures  { result = div a b }
+    ensures  { result = a /% b }
 
   val (%) (a b : t) : t
     ensures  { to_int result = CD.mod (to_int a) (to_int b) }
-    ensures  { result = rem a b }
+    ensures  { result = a %% b }
 
   val (/%) (a b : t) : t
     ensures  { to_int result = normalize (CD.div (to_int a) (to_int b)) }
-    ensures  { result = div a b }
+    ensures  { result = a /% b }
 
   val (%%) (a b : t) : t
     ensures  { to_int result = normalize (CD.mod (to_int a) (to_int b)) }
-    ensures  { result = rem a b }
+    ensures  { result = a %% b }
 end
 
 theory Int8
@@ -945,561 +874,505 @@ theory Bit_uint64
 end
 
 theory Bit_uint8_of_bit_int8
-  use Int8
-  use Uint8
-  function bw_cast Int8.t : Uint8.t
-  function cast_modulo (n : Int8.t) : Uint8.t = Uint8.of_int_modulo (Int8.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int8.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int8
+  use Bit_uint8
+  function cast_modulo (a : Bit_int8.t) : Bit_uint8.t
+  axiom Cast_modulo:
+    forall a : Bit_int8.t [cast_modulo a].
+      cast_modulo a = Bit_uint8.of_int (Bit_uint8.normalize (Bit_int8.to_int a))
 end
 
 theory Bit_int16_of_bit_int8
-  use Int8
-  use Int16
-  function bw_cast Int8.t : Int16.t
-  function cast_modulo (n : Int8.t) : Int16.t = Int16.of_int_modulo (Int8.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int8.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int8
+  use Bit_int16
+  function cast_modulo (a : Bit_int8.t) : Bit_int16.t
+  axiom Cast_modulo:
+    forall a : Bit_int8.t [cast_modulo a].
+      cast_modulo a = Bit_int16.of_int (Bit_int16.normalize (Bit_int8.to_int a))
 end
 
 theory Bit_uint16_of_bit_int8
-  use Int8
-  use Uint16
-  function bw_cast Int8.t : Uint16.t
-  function cast_modulo (n : Int8.t) : Uint16.t = Uint16.of_int_modulo (Int8.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int8.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int8
+  use Bit_uint16
+  function cast_modulo (a : Bit_int8.t) : Bit_uint16.t
+  axiom Cast_modulo:
+    forall a : Bit_int8.t [cast_modulo a].
+      cast_modulo a = Bit_uint16.of_int (Bit_uint16.normalize (Bit_int8.to_int a))
 end
 
 theory Bit_int32_of_bit_int8
-  use Int8
-  use Int32
-  function bw_cast Int8.t : Int32.t
-  function cast_modulo (n : Int8.t) : Int32.t = Int32.of_int_modulo (Int8.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int8.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int8
+  use Bit_int32
+  function cast_modulo (a : Bit_int8.t) : Bit_int32.t
+  axiom Cast_modulo:
+    forall a : Bit_int8.t [cast_modulo a].
+      cast_modulo a = Bit_int32.of_int (Bit_int32.normalize (Bit_int8.to_int a))
 end
 
 theory Bit_uint32_of_bit_int8
-  use Int8
-  use Uint32
-  function bw_cast Int8.t : Uint32.t
-  function cast_modulo (n : Int8.t) : Uint32.t = Uint32.of_int_modulo (Int8.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int8.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int8
+  use Bit_uint32
+  function cast_modulo (a : Bit_int8.t) : Bit_uint32.t
+  axiom Cast_modulo:
+    forall a : Bit_int8.t [cast_modulo a].
+      cast_modulo a = Bit_uint32.of_int (Bit_uint32.normalize (Bit_int8.to_int a))
 end
 
 theory Bit_int64_of_bit_int8
-  use Int8
-  use Int64
-  function bw_cast Int8.t : Int64.t
-  function cast_modulo (n : Int8.t) : Int64.t = Int64.of_int_modulo (Int8.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int8.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int8
+  use Bit_int64
+  function cast_modulo (a : Bit_int8.t) : Bit_int64.t
+  axiom Cast_modulo:
+    forall a : Bit_int8.t [cast_modulo a].
+      cast_modulo a = Bit_int64.of_int (Bit_int64.normalize (Bit_int8.to_int a))
 end
 
 theory Bit_uint64_of_bit_int8
-  use Int8
-  use Uint64
-  function bw_cast Int8.t : Uint64.t
-  function cast_modulo (n : Int8.t) : Uint64.t = Uint64.of_int_modulo (Int8.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int8.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int8
+  use Bit_uint64
+  function cast_modulo (a : Bit_int8.t) : Bit_uint64.t
+  axiom Cast_modulo:
+    forall a : Bit_int8.t [cast_modulo a].
+      cast_modulo a = Bit_uint64.of_int (Bit_uint64.normalize (Bit_int8.to_int a))
 end
 
 theory Bit_int8_of_bit_uint8
-  use Uint8
-  use Int8
-  function bw_cast Uint8.t : Int8.t
-  function cast_modulo (n : Uint8.t) : Int8.t = Int8.of_int_modulo (Uint8.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint8.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint8
+  use Bit_int8
+  function cast_modulo (a : Bit_uint8.t) : Bit_int8.t
+  axiom Cast_modulo:
+    forall a : Bit_uint8.t [cast_modulo a].
+      cast_modulo a = Bit_int8.of_int (Bit_int8.normalize (Bit_uint8.to_int a))
 end
 
 theory Bit_int16_of_bit_uint8
-  use Uint8
-  use Int16
-  function bw_cast Uint8.t : Int16.t
-  function cast_modulo (n : Uint8.t) : Int16.t = Int16.of_int_modulo (Uint8.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint8.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint8
+  use Bit_int16
+  function cast_modulo (a : Bit_uint8.t) : Bit_int16.t
+  axiom Cast_modulo:
+    forall a : Bit_uint8.t [cast_modulo a].
+      cast_modulo a = Bit_int16.of_int (Bit_int16.normalize (Bit_uint8.to_int a))
 end
 
 theory Bit_uint16_of_bit_uint8
-  use Uint8
-  use Uint16
-  function bw_cast Uint8.t : Uint16.t
-  function cast_modulo (n : Uint8.t) : Uint16.t = Uint16.of_int_modulo (Uint8.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint8.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint8
+  use Bit_uint16
+  function cast_modulo (a : Bit_uint8.t) : Bit_uint16.t
+  axiom Cast_modulo:
+    forall a : Bit_uint8.t [cast_modulo a].
+      cast_modulo a = Bit_uint16.of_int (Bit_uint16.normalize (Bit_uint8.to_int a))
 end
 
 theory Bit_int32_of_bit_uint8
-  use Uint8
-  use Int32
-  function bw_cast Uint8.t : Int32.t
-  function cast_modulo (n : Uint8.t) : Int32.t = Int32.of_int_modulo (Uint8.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint8.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint8
+  use Bit_int32
+  function cast_modulo (a : Bit_uint8.t) : Bit_int32.t
+  axiom Cast_modulo:
+    forall a : Bit_uint8.t [cast_modulo a].
+      cast_modulo a = Bit_int32.of_int (Bit_int32.normalize (Bit_uint8.to_int a))
 end
 
 theory Bit_uint32_of_bit_uint8
-  use Uint8
-  use Uint32
-  function bw_cast Uint8.t : Uint32.t
-  function cast_modulo (n : Uint8.t) : Uint32.t = Uint32.of_int_modulo (Uint8.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint8.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint8
+  use Bit_uint32
+  function cast_modulo (a : Bit_uint8.t) : Bit_uint32.t
+  axiom Cast_modulo:
+    forall a : Bit_uint8.t [cast_modulo a].
+      cast_modulo a = Bit_uint32.of_int (Bit_uint32.normalize (Bit_uint8.to_int a))
 end
 
 theory Bit_int64_of_bit_uint8
-  use Uint8
-  use Int64
-  function bw_cast Uint8.t : Int64.t
-  function cast_modulo (n : Uint8.t) : Int64.t = Int64.of_int_modulo (Uint8.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint8.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint8
+  use Bit_int64
+  function cast_modulo (a : Bit_uint8.t) : Bit_int64.t
+  axiom Cast_modulo:
+    forall a : Bit_uint8.t [cast_modulo a].
+      cast_modulo a = Bit_int64.of_int (Bit_int64.normalize (Bit_uint8.to_int a))
 end
 
 theory Bit_uint64_of_bit_uint8
-  use Uint8
-  use Uint64
-  function bw_cast Uint8.t : Uint64.t
-  function cast_modulo (n : Uint8.t) : Uint64.t = Uint64.of_int_modulo (Uint8.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint8.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint8
+  use Bit_uint64
+  function cast_modulo (a : Bit_uint8.t) : Bit_uint64.t
+  axiom Cast_modulo:
+    forall a : Bit_uint8.t [cast_modulo a].
+      cast_modulo a = Bit_uint64.of_int (Bit_uint64.normalize (Bit_uint8.to_int a))
 end
 
 theory Bit_int8_of_bit_int16
-  use Int16
-  use Int8
-  function bw_cast Int16.t : Int8.t
-  function cast_modulo (n : Int16.t) : Int8.t = Int8.of_int_modulo (Int16.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int16.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int16
+  use Bit_int8
+  function cast_modulo (a : Bit_int16.t) : Bit_int8.t
+  axiom Cast_modulo:
+    forall a : Bit_int16.t [cast_modulo a].
+      cast_modulo a = Bit_int8.of_int (Bit_int8.normalize (Bit_int16.to_int a))
 end
 
 theory Bit_uint8_of_bit_int16
-  use Int16
-  use Uint8
-  function bw_cast Int16.t : Uint8.t
-  function cast_modulo (n : Int16.t) : Uint8.t = Uint8.of_int_modulo (Int16.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int16.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int16
+  use Bit_uint8
+  function cast_modulo (a : Bit_int16.t) : Bit_uint8.t
+  axiom Cast_modulo:
+    forall a : Bit_int16.t [cast_modulo a].
+      cast_modulo a = Bit_uint8.of_int (Bit_uint8.normalize (Bit_int16.to_int a))
 end
 
 theory Bit_uint16_of_bit_int16
-  use Int16
-  use Uint16
-  function bw_cast Int16.t : Uint16.t
-  function cast_modulo (n : Int16.t) : Uint16.t = Uint16.of_int_modulo (Int16.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int16.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int16
+  use Bit_uint16
+  function cast_modulo (a : Bit_int16.t) : Bit_uint16.t
+  axiom Cast_modulo:
+    forall a : Bit_int16.t [cast_modulo a].
+      cast_modulo a = Bit_uint16.of_int (Bit_uint16.normalize (Bit_int16.to_int a))
 end
 
 theory Bit_int32_of_bit_int16
-  use Int16
-  use Int32
-  function bw_cast Int16.t : Int32.t
-  function cast_modulo (n : Int16.t) : Int32.t = Int32.of_int_modulo (Int16.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int16.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int16
+  use Bit_int32
+  function cast_modulo (a : Bit_int16.t) : Bit_int32.t
+  axiom Cast_modulo:
+    forall a : Bit_int16.t [cast_modulo a].
+      cast_modulo a = Bit_int32.of_int (Bit_int32.normalize (Bit_int16.to_int a))
 end
 
 theory Bit_uint32_of_bit_int16
-  use Int16
-  use Uint32
-  function bw_cast Int16.t : Uint32.t
-  function cast_modulo (n : Int16.t) : Uint32.t = Uint32.of_int_modulo (Int16.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int16.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int16
+  use Bit_uint32
+  function cast_modulo (a : Bit_int16.t) : Bit_uint32.t
+  axiom Cast_modulo:
+    forall a : Bit_int16.t [cast_modulo a].
+      cast_modulo a = Bit_uint32.of_int (Bit_uint32.normalize (Bit_int16.to_int a))
 end
 
 theory Bit_int64_of_bit_int16
-  use Int16
-  use Int64
-  function bw_cast Int16.t : Int64.t
-  function cast_modulo (n : Int16.t) : Int64.t = Int64.of_int_modulo (Int16.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int16.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int16
+  use Bit_int64
+  function cast_modulo (a : Bit_int16.t) : Bit_int64.t
+  axiom Cast_modulo:
+    forall a : Bit_int16.t [cast_modulo a].
+      cast_modulo a = Bit_int64.of_int (Bit_int64.normalize (Bit_int16.to_int a))
 end
 
 theory Bit_uint64_of_bit_int16
-  use Int16
-  use Uint64
-  function bw_cast Int16.t : Uint64.t
-  function cast_modulo (n : Int16.t) : Uint64.t = Uint64.of_int_modulo (Int16.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int16.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int16
+  use Bit_uint64
+  function cast_modulo (a : Bit_int16.t) : Bit_uint64.t
+  axiom Cast_modulo:
+    forall a : Bit_int16.t [cast_modulo a].
+      cast_modulo a = Bit_uint64.of_int (Bit_uint64.normalize (Bit_int16.to_int a))
 end
 
 theory Bit_int8_of_bit_uint16
-  use Uint16
-  use Int8
-  function bw_cast Uint16.t : Int8.t
-  function cast_modulo (n : Uint16.t) : Int8.t = Int8.of_int_modulo (Uint16.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint16.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint16
+  use Bit_int8
+  function cast_modulo (a : Bit_uint16.t) : Bit_int8.t
+  axiom Cast_modulo:
+    forall a : Bit_uint16.t [cast_modulo a].
+      cast_modulo a = Bit_int8.of_int (Bit_int8.normalize (Bit_uint16.to_int a))
 end
 
 theory Bit_uint8_of_bit_uint16
-  use Uint16
-  use Uint8
-  function bw_cast Uint16.t : Uint8.t
-  function cast_modulo (n : Uint16.t) : Uint8.t = Uint8.of_int_modulo (Uint16.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint16.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint16
+  use Bit_uint8
+  function cast_modulo (a : Bit_uint16.t) : Bit_uint8.t
+  axiom Cast_modulo:
+    forall a : Bit_uint16.t [cast_modulo a].
+      cast_modulo a = Bit_uint8.of_int (Bit_uint8.normalize (Bit_uint16.to_int a))
 end
 
 theory Bit_int16_of_bit_uint16
-  use Uint16
-  use Int16
-  function bw_cast Uint16.t : Int16.t
-  function cast_modulo (n : Uint16.t) : Int16.t = Int16.of_int_modulo (Uint16.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint16.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint16
+  use Bit_int16
+  function cast_modulo (a : Bit_uint16.t) : Bit_int16.t
+  axiom Cast_modulo:
+    forall a : Bit_uint16.t [cast_modulo a].
+      cast_modulo a = Bit_int16.of_int (Bit_int16.normalize (Bit_uint16.to_int a))
 end
 
 theory Bit_int32_of_bit_uint16
-  use Uint16
-  use Int32
-  function bw_cast Uint16.t : Int32.t
-  function cast_modulo (n : Uint16.t) : Int32.t = Int32.of_int_modulo (Uint16.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint16.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint16
+  use Bit_int32
+  function cast_modulo (a : Bit_uint16.t) : Bit_int32.t
+  axiom Cast_modulo:
+    forall a : Bit_uint16.t [cast_modulo a].
+      cast_modulo a = Bit_int32.of_int (Bit_int32.normalize (Bit_uint16.to_int a))
 end
 
 theory Bit_uint32_of_bit_uint16
-  use Uint16
-  use Uint32
-  function bw_cast Uint16.t : Uint32.t
-  function cast_modulo (n : Uint16.t) : Uint32.t = Uint32.of_int_modulo (Uint16.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint16.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint16
+  use Bit_uint32
+  function cast_modulo (a : Bit_uint16.t) : Bit_uint32.t
+  axiom Cast_modulo:
+    forall a : Bit_uint16.t [cast_modulo a].
+      cast_modulo a = Bit_uint32.of_int (Bit_uint32.normalize (Bit_uint16.to_int a))
 end
 
 theory Bit_int64_of_bit_uint16
-  use Uint16
-  use Int64
-  function bw_cast Uint16.t : Int64.t
-  function cast_modulo (n : Uint16.t) : Int64.t = Int64.of_int_modulo (Uint16.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint16.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint16
+  use Bit_int64
+  function cast_modulo (a : Bit_uint16.t) : Bit_int64.t
+  axiom Cast_modulo:
+    forall a : Bit_uint16.t [cast_modulo a].
+      cast_modulo a = Bit_int64.of_int (Bit_int64.normalize (Bit_uint16.to_int a))
 end
 
 theory Bit_uint64_of_bit_uint16
-  use Uint16
-  use Uint64
-  function bw_cast Uint16.t : Uint64.t
-  function cast_modulo (n : Uint16.t) : Uint64.t = Uint64.of_int_modulo (Uint16.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint16.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint16
+  use Bit_uint64
+  function cast_modulo (a : Bit_uint16.t) : Bit_uint64.t
+  axiom Cast_modulo:
+    forall a : Bit_uint16.t [cast_modulo a].
+      cast_modulo a = Bit_uint64.of_int (Bit_uint64.normalize (Bit_uint16.to_int a))
 end
 
 theory Bit_int8_of_bit_int32
-  use Int32
-  use Int8
-  function bw_cast Int32.t : Int8.t
-  function cast_modulo (n : Int32.t) : Int8.t = Int8.of_int_modulo (Int32.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int32.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int32
+  use Bit_int8
+  function cast_modulo (a : Bit_int32.t) : Bit_int8.t
+  axiom Cast_modulo:
+    forall a : Bit_int32.t [cast_modulo a].
+      cast_modulo a = Bit_int8.of_int (Bit_int8.normalize (Bit_int32.to_int a))
 end
 
 theory Bit_uint8_of_bit_int32
-  use Int32
-  use Uint8
-  function bw_cast Int32.t : Uint8.t
-  function cast_modulo (n : Int32.t) : Uint8.t = Uint8.of_int_modulo (Int32.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int32.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int32
+  use Bit_uint8
+  function cast_modulo (a : Bit_int32.t) : Bit_uint8.t
+  axiom Cast_modulo:
+    forall a : Bit_int32.t [cast_modulo a].
+      cast_modulo a = Bit_uint8.of_int (Bit_uint8.normalize (Bit_int32.to_int a))
 end
 
 theory Bit_int16_of_bit_int32
-  use Int32
-  use Int16
-  function bw_cast Int32.t : Int16.t
-  function cast_modulo (n : Int32.t) : Int16.t = Int16.of_int_modulo (Int32.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int32.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int32
+  use Bit_int16
+  function cast_modulo (a : Bit_int32.t) : Bit_int16.t
+  axiom Cast_modulo:
+    forall a : Bit_int32.t [cast_modulo a].
+      cast_modulo a = Bit_int16.of_int (Bit_int16.normalize (Bit_int32.to_int a))
 end
 
 theory Bit_uint16_of_bit_int32
-  use Int32
-  use Uint16
-  function bw_cast Int32.t : Uint16.t
-  function cast_modulo (n : Int32.t) : Uint16.t = Uint16.of_int_modulo (Int32.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int32.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int32
+  use Bit_uint16
+  function cast_modulo (a : Bit_int32.t) : Bit_uint16.t
+  axiom Cast_modulo:
+    forall a : Bit_int32.t [cast_modulo a].
+      cast_modulo a = Bit_uint16.of_int (Bit_uint16.normalize (Bit_int32.to_int a))
 end
 
 theory Bit_uint32_of_bit_int32
-  use Int32
-  use Uint32
-  function bw_cast Int32.t : Uint32.t
-  function cast_modulo (n : Int32.t) : Uint32.t = Uint32.of_int_modulo (Int32.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int32.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int32
+  use Bit_uint32
+  function cast_modulo (a : Bit_int32.t) : Bit_uint32.t
+  axiom Cast_modulo:
+    forall a : Bit_int32.t [cast_modulo a].
+      cast_modulo a = Bit_uint32.of_int (Bit_uint32.normalize (Bit_int32.to_int a))
 end
 
 theory Bit_int64_of_bit_int32
-  use Int32
-  use Int64
-  function bw_cast Int32.t : Int64.t
-  function cast_modulo (n : Int32.t) : Int64.t = Int64.of_int_modulo (Int32.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int32.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int32
+  use Bit_int64
+  function cast_modulo (a : Bit_int32.t) : Bit_int64.t
+  axiom Cast_modulo:
+    forall a : Bit_int32.t [cast_modulo a].
+      cast_modulo a = Bit_int64.of_int (Bit_int64.normalize (Bit_int32.to_int a))
 end
 
 theory Bit_uint64_of_bit_int32
-  use Int32
-  use Uint64
-  function bw_cast Int32.t : Uint64.t
-  function cast_modulo (n : Int32.t) : Uint64.t = Uint64.of_int_modulo (Int32.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int32.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int32
+  use Bit_uint64
+  function cast_modulo (a : Bit_int32.t) : Bit_uint64.t
+  axiom Cast_modulo:
+    forall a : Bit_int32.t [cast_modulo a].
+      cast_modulo a = Bit_uint64.of_int (Bit_uint64.normalize (Bit_int32.to_int a))
 end
 
 theory Bit_int8_of_bit_uint32
-  use Uint32
-  use Int8
-  function bw_cast Uint32.t : Int8.t
-  function cast_modulo (n : Uint32.t) : Int8.t = Int8.of_int_modulo (Uint32.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint32.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint32
+  use Bit_int8
+  function cast_modulo (a : Bit_uint32.t) : Bit_int8.t
+  axiom Cast_modulo:
+    forall a : Bit_uint32.t [cast_modulo a].
+      cast_modulo a = Bit_int8.of_int (Bit_int8.normalize (Bit_uint32.to_int a))
 end
 
 theory Bit_uint8_of_bit_uint32
-  use Uint32
-  use Uint8
-  function bw_cast Uint32.t : Uint8.t
-  function cast_modulo (n : Uint32.t) : Uint8.t = Uint8.of_int_modulo (Uint32.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint32.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint32
+  use Bit_uint8
+  function cast_modulo (a : Bit_uint32.t) : Bit_uint8.t
+  axiom Cast_modulo:
+    forall a : Bit_uint32.t [cast_modulo a].
+      cast_modulo a = Bit_uint8.of_int (Bit_uint8.normalize (Bit_uint32.to_int a))
 end
 
 theory Bit_int16_of_bit_uint32
-  use Uint32
-  use Int16
-  function bw_cast Uint32.t : Int16.t
-  function cast_modulo (n : Uint32.t) : Int16.t = Int16.of_int_modulo (Uint32.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint32.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint32
+  use Bit_int16
+  function cast_modulo (a : Bit_uint32.t) : Bit_int16.t
+  axiom Cast_modulo:
+    forall a : Bit_uint32.t [cast_modulo a].
+      cast_modulo a = Bit_int16.of_int (Bit_int16.normalize (Bit_uint32.to_int a))
 end
 
 theory Bit_uint16_of_bit_uint32
-  use Uint32
-  use Uint16
-  function bw_cast Uint32.t : Uint16.t
-  function cast_modulo (n : Uint32.t) : Uint16.t = Uint16.of_int_modulo (Uint32.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint32.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint32
+  use Bit_uint16
+  function cast_modulo (a : Bit_uint32.t) : Bit_uint16.t
+  axiom Cast_modulo:
+    forall a : Bit_uint32.t [cast_modulo a].
+      cast_modulo a = Bit_uint16.of_int (Bit_uint16.normalize (Bit_uint32.to_int a))
 end
 
 theory Bit_int32_of_bit_uint32
-  use Uint32
-  use Int32
-  function bw_cast Uint32.t : Int32.t
-  function cast_modulo (n : Uint32.t) : Int32.t = Int32.of_int_modulo (Uint32.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint32.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint32
+  use Bit_int32
+  function cast_modulo (a : Bit_uint32.t) : Bit_int32.t
+  axiom Cast_modulo:
+    forall a : Bit_uint32.t [cast_modulo a].
+      cast_modulo a = Bit_int32.of_int (Bit_int32.normalize (Bit_uint32.to_int a))
 end
 
 theory Bit_int64_of_bit_uint32
-  use Uint32
-  use Int64
-  function bw_cast Uint32.t : Int64.t
-  function cast_modulo (n : Uint32.t) : Int64.t = Int64.of_int_modulo (Uint32.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint32.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint32
+  use Bit_int64
+  function cast_modulo (a : Bit_uint32.t) : Bit_int64.t
+  axiom Cast_modulo:
+    forall a : Bit_uint32.t [cast_modulo a].
+      cast_modulo a = Bit_int64.of_int (Bit_int64.normalize (Bit_uint32.to_int a))
 end
 
 theory Bit_uint64_of_bit_uint32
-  use Uint32
-  use Uint64
-  function bw_cast Uint32.t : Uint64.t
-  function cast_modulo (n : Uint32.t) : Uint64.t = Uint64.of_int_modulo (Uint32.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint32.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint32
+  use Bit_uint64
+  function cast_modulo (a : Bit_uint32.t) : Bit_uint64.t
+  axiom Cast_modulo:
+    forall a : Bit_uint32.t [cast_modulo a].
+      cast_modulo a = Bit_uint64.of_int (Bit_uint64.normalize (Bit_uint32.to_int a))
 end
 
 theory Bit_int8_of_bit_int64
-  use Int64
-  use Int8
-  function bw_cast Int64.t : Int8.t
-  function cast_modulo (n : Int64.t) : Int8.t = Int8.of_int_modulo (Int64.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int64.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int64
+  use Bit_int8
+  function cast_modulo (a : Bit_int64.t) : Bit_int8.t
+  axiom Cast_modulo:
+    forall a : Bit_int64.t [cast_modulo a].
+      cast_modulo a = Bit_int8.of_int (Bit_int8.normalize (Bit_int64.to_int a))
 end
 
 theory Bit_uint8_of_bit_int64
-  use Int64
-  use Uint8
-  function bw_cast Int64.t : Uint8.t
-  function cast_modulo (n : Int64.t) : Uint8.t = Uint8.of_int_modulo (Int64.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int64.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int64
+  use Bit_uint8
+  function cast_modulo (a : Bit_int64.t) : Bit_uint8.t
+  axiom Cast_modulo:
+    forall a : Bit_int64.t [cast_modulo a].
+      cast_modulo a = Bit_uint8.of_int (Bit_uint8.normalize (Bit_int64.to_int a))
 end
 
 theory Bit_int16_of_bit_int64
-  use Int64
-  use Int16
-  function bw_cast Int64.t : Int16.t
-  function cast_modulo (n : Int64.t) : Int16.t = Int16.of_int_modulo (Int64.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int64.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int64
+  use Bit_int16
+  function cast_modulo (a : Bit_int64.t) : Bit_int16.t
+  axiom Cast_modulo:
+    forall a : Bit_int64.t [cast_modulo a].
+      cast_modulo a = Bit_int16.of_int (Bit_int16.normalize (Bit_int64.to_int a))
 end
 
 theory Bit_uint16_of_bit_int64
-  use Int64
-  use Uint16
-  function bw_cast Int64.t : Uint16.t
-  function cast_modulo (n : Int64.t) : Uint16.t = Uint16.of_int_modulo (Int64.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int64.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int64
+  use Bit_uint16
+  function cast_modulo (a : Bit_int64.t) : Bit_uint16.t
+  axiom Cast_modulo:
+    forall a : Bit_int64.t [cast_modulo a].
+      cast_modulo a = Bit_uint16.of_int (Bit_uint16.normalize (Bit_int64.to_int a))
 end
 
 theory Bit_int32_of_bit_int64
-  use Int64
-  use Int32
-  function bw_cast Int64.t : Int32.t
-  function cast_modulo (n : Int64.t) : Int32.t = Int32.of_int_modulo (Int64.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int64.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int64
+  use Bit_int32
+  function cast_modulo (a : Bit_int64.t) : Bit_int32.t
+  axiom Cast_modulo:
+    forall a : Bit_int64.t [cast_modulo a].
+      cast_modulo a = Bit_int32.of_int (Bit_int32.normalize (Bit_int64.to_int a))
 end
 
 theory Bit_uint32_of_bit_int64
-  use Int64
-  use Uint32
-  function bw_cast Int64.t : Uint32.t
-  function cast_modulo (n : Int64.t) : Uint32.t = Uint32.of_int_modulo (Int64.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int64.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int64
+  use Bit_uint32
+  function cast_modulo (a : Bit_int64.t) : Bit_uint32.t
+  axiom Cast_modulo:
+    forall a : Bit_int64.t [cast_modulo a].
+      cast_modulo a = Bit_uint32.of_int (Bit_uint32.normalize (Bit_int64.to_int a))
 end
 
 theory Bit_uint64_of_bit_int64
-  use Int64
-  use Uint64
-  function bw_cast Int64.t : Uint64.t
-  function cast_modulo (n : Int64.t) : Uint64.t = Uint64.of_int_modulo (Int64.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Int64.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_int64
+  use Bit_uint64
+  function cast_modulo (a : Bit_int64.t) : Bit_uint64.t
+  axiom Cast_modulo:
+    forall a : Bit_int64.t [cast_modulo a].
+      cast_modulo a = Bit_uint64.of_int (Bit_uint64.normalize (Bit_int64.to_int a))
 end
 
 theory Bit_int8_of_bit_uint64
-  use Uint64
-  use Int8
-  function bw_cast Uint64.t : Int8.t
-  function cast_modulo (n : Uint64.t) : Int8.t = Int8.of_int_modulo (Uint64.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint64.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint64
+  use Bit_int8
+  function cast_modulo (a : Bit_uint64.t) : Bit_int8.t
+  axiom Cast_modulo:
+    forall a : Bit_uint64.t [cast_modulo a].
+      cast_modulo a = Bit_int8.of_int (Bit_int8.normalize (Bit_uint64.to_int a))
 end
 
 theory Bit_uint8_of_bit_uint64
-  use Uint64
-  use Uint8
-  function bw_cast Uint64.t : Uint8.t
-  function cast_modulo (n : Uint64.t) : Uint8.t = Uint8.of_int_modulo (Uint64.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint64.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint64
+  use Bit_uint8
+  function cast_modulo (a : Bit_uint64.t) : Bit_uint8.t
+  axiom Cast_modulo:
+    forall a : Bit_uint64.t [cast_modulo a].
+      cast_modulo a = Bit_uint8.of_int (Bit_uint8.normalize (Bit_uint64.to_int a))
 end
 
 theory Bit_int16_of_bit_uint64
-  use Uint64
-  use Int16
-  function bw_cast Uint64.t : Int16.t
-  function cast_modulo (n : Uint64.t) : Int16.t = Int16.of_int_modulo (Uint64.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint64.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint64
+  use Bit_int16
+  function cast_modulo (a : Bit_uint64.t) : Bit_int16.t
+  axiom Cast_modulo:
+    forall a : Bit_uint64.t [cast_modulo a].
+      cast_modulo a = Bit_int16.of_int (Bit_int16.normalize (Bit_uint64.to_int a))
 end
 
 theory Bit_uint16_of_bit_uint64
-  use Uint64
-  use Uint16
-  function bw_cast Uint64.t : Uint16.t
-  function cast_modulo (n : Uint64.t) : Uint16.t = Uint16.of_int_modulo (Uint64.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint64.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint64
+  use Bit_uint16
+  function cast_modulo (a : Bit_uint64.t) : Bit_uint16.t
+  axiom Cast_modulo:
+    forall a : Bit_uint64.t [cast_modulo a].
+      cast_modulo a = Bit_uint16.of_int (Bit_uint16.normalize (Bit_uint64.to_int a))
 end
 
 theory Bit_int32_of_bit_uint64
-  use Uint64
-  use Int32
-  function bw_cast Uint64.t : Int32.t
-  function cast_modulo (n : Uint64.t) : Int32.t = Int32.of_int_modulo (Uint64.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint64.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint64
+  use Bit_int32
+  function cast_modulo (a : Bit_uint64.t) : Bit_int32.t
+  axiom Cast_modulo:
+    forall a : Bit_uint64.t [cast_modulo a].
+      cast_modulo a = Bit_int32.of_int (Bit_int32.normalize (Bit_uint64.to_int a))
 end
 
 theory Bit_uint32_of_bit_uint64
-  use Uint64
-  use Uint32
-  function bw_cast Uint64.t : Uint32.t
-  function cast_modulo (n : Uint64.t) : Uint32.t = Uint32.of_int_modulo (Uint64.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint64.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint64
+  use Bit_uint32
+  function cast_modulo (a : Bit_uint64.t) : Bit_uint32.t
+  axiom Cast_modulo:
+    forall a : Bit_uint64.t [cast_modulo a].
+      cast_modulo a = Bit_uint32.of_int (Bit_uint32.normalize (Bit_uint64.to_int a))
 end
 
 theory Bit_int64_of_bit_uint64
-  use Uint64
-  use Int64
-  function bw_cast Uint64.t : Int64.t
-  function cast_modulo (n : Uint64.t) : Int64.t = Int64.of_int_modulo (Uint64.to_int n)
-  axiom Bw_cast_eq:
-    forall n : Uint64.t [cast_modulo n | bw_cast n].
-      cast_modulo n = bw_cast n
+  use Bit_uint64
+  use Bit_int64
+  function cast_modulo (a : Bit_uint64.t) : Bit_int64.t
+  axiom Cast_modulo:
+    forall a : Bit_uint64.t [cast_modulo a].
+      cast_modulo a = Bit_int64.of_int (Bit_int64.normalize (Bit_uint64.to_int a))
 end
