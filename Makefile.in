@@ -169,6 +169,18 @@ lib/why3/why3.conf: Makefile
 	printf "option=\"-R $(LIBWHY3)/coq Why\"\n" >> $@
 	printf "driver=\"$(LIBWHY3)/why3/coq.drv\"\n" >> $@
 	printf "\n"  >> $@
+	printf "[prover_modifiers]\n" >> $@
+	printf "name=\"CVC4\"\n" >> $@
+	printf "driver=\"$(LIBWHY3)/why3/cvc4_enum.gen\"\n" >> $@
+	printf "\n"  >> $@
+	printf "[prover_modifiers]\n" >> $@
+	printf "name=\"CVC4 '14\"\n" >> $@
+	printf "driver=\"$(LIBWHY3)/why3/cvc4_enum.gen\"\n" >> $@
+	printf "\n"  >> $@
+	printf "[prover_modifiers]\n" >> $@
+	printf "name=\"Z3\"\n" >> $@
+	printf "driver=\"$(LIBWHY3)/why3/z3_enum.gen\"\n" >> $@
+	printf "\n"  >> $@
 	printf "[editor_modifiers coqide]\n" >> $@
 	printf "option=\"-R $(LIBWHY3)/coq Why\"\n" >> $@
 	printf "\n"  >> $@
@@ -211,10 +223,10 @@ install-binary:
 	cp -f $(JESSIE) $(BINDIR)/jessie$(EXE)
 
 install-lib: $(JCLIB) lib/why3/why3.conf
-	mkdir -p $(LIBDIR)/why/why
 	rm -rf $(LIBDIR)/why/why3
 	mkdir -p $(LIBDIR)/why/why3
 	cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/core.mlw lib/why3/enum.mlw $(LIBDIR)/why/why3
+	cp -f lib/why3/cvc4_enum.gen lib/why3/z3_enum.gen $(LIBDIR)/why/why3
 	mkdir -p $(LIBDIR)/jessie
 	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
 #	remove CVS directories
@@ -232,12 +244,12 @@ install-coq-v8 install-coq-v8.1:
 	  rm -f $(COQLIB)/user-contrib/Why*.v* ; \
 	  rm -f $(COQLIB)/user-contrib/jessie*.v* $(COQLIB)/user-contrib/Jessie*.v* ; \
 	  mkdir -p $(COQLIB)/user-contrib/Why ; \
-	  cp -f $(VO8) $(COQLIB)/user-contrib/Why ; \
+	  #cp -f $(VO8) $(COQLIB)/user-contrib/Why ; \
 	else \
 	  echo "Cannot copy to Coq standard library. Add \"-R $(LIBDIR)/why/coq Why\" to Coq options." ;\
 	fi
 	mkdir -p $(LIBDIR)/why/coq
-	cp -f $(VO8) $(LIBDIR)/why/coq
+	#cp -f $(VO8) $(LIBDIR)/why/coq
 
 install-pvs-no:
 install-pvs-yes: $(PVSFILES)

@@ -412,7 +412,6 @@ else
 	  WHY3COQPATH=`why3 --print-libdir`/coq
 	  if test -f "$WHY3COQPATH/int/Int.vo"; then
 	    AC_MSG_RESULT(yes)
-	    JESSIEWHY3LIBCOQ="lib/coq/Jessie_memory_model.vo"
 	  else
 	    AC_MSG_RESULT(no)
 	  fi
