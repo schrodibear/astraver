@@ -167,9 +167,9 @@ let raw_pset_type ty' = O.Lt.(Jc.pset Name.Type.pset $. ty')
 
 let raw_alloc_table_type ty' = O.Lt.(Jc.alloc_table Name.Type.alloc_table $. ty')
 
-let raw_tag_table_type ty' = O.Lt.(Jc.tag_table Name.Type.tag_table $. ty')
+let raw_tag_table_type ty' = O.Lt.(Jc.tag_table_type Name.Type.tag_table $. ty')
 
-let raw_tag_id_type ty' = O.Lt.(Jc.tag Name.Type.tag_id $. ty')
+let raw_tag_id_type ty' = O.Lt.(Jc.tag_id Name.Type.tag_id $. ty')
 
 let raw_memory_type ty1' ty2' = O.Lt.(Jc.memory Name.Type.memory $ ty1' ^. ty2')
 

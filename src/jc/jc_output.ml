@@ -136,7 +136,9 @@ struct
     let pset_disjoint = user ~from:pset_disjoint
     let pset_included = user ~from:pset_included
     let assigns = user ~from:assigns
+    let tag_id = user ~from:tag_id
     let tag = user ~from:tag
+    let tag_table_type = user ~from:tag_table_type
     let tag_table = user ~from:tag_table
     let reinterpret = user ~from:reinterpret
     let reinterpret_cast = user ~from:reinterpret_cast
@@ -176,7 +178,7 @@ struct
 
   let instanceof () : (_ * (_ * (_ * unit)), boolean) t = Jc.tag_table "instanceof"
 
-  let typeof () : (_ * (_ * unit), _) t = Jc.tag_table "typeof"
+  let typeof () : (_ * (_ * unit), _) t = Jc.tag_table_type "typeof"
 
   let allocable () : (_ * (_ * unit), boolean) t = Jc.allocable "allocable"
 
@@ -194,7 +196,7 @@ struct
 
   let parenttag () : (_ * (_ * unit), boolean) t = Jc.tag "parenttag"
 
-  let int_of_tag () : (_ * unit, unbounded integer number) t = Jc.tag "int_of_tag"
+  let int_of_tag () : (_ * unit, unbounded integer number) t = Jc.tag_id "int_of_tag"
 
   let offset_min () : (_ * (_ * unit), unbounded integer number) t = Jc.alloc_table "offset_min"
 
@@ -564,7 +566,9 @@ struct
     let alloc_table = user ~from:alloc_table
     let memory = user ~from:memory
     let pset = user ~from:pset
+    let tag_id = user ~from:tag_id
     let tag = user ~from:tag
+    let tag_table_type = user ~from:tag_table_type
     let tag_table = user ~from:tag_table
   end
 

@@ -19,14 +19,13 @@ theory enum.Bit_{{u}}int{{size}}
   syntax function lsr "(bvlshr %1 %2)"
   syntax function asr "(bvashr %1 %2)"
 
-  syntax function add "(bvadd %1 %2)"
-  syntax function sub "(bvsub %1 %2)"
-  syntax function neg "(bvneg %1)"
-  syntax function mul "(bvmul %1 %2)"
-  syntax function div "(bv{{us}}div %1 %2)"
-  syntax function rem "(bv{{us}}rem %1 %2)"
+  syntax function (+%) "(bvadd %1 %2)"
+  syntax function (-%) "(bvsub %1 %2)"
+  syntax function (-%_) "(bvneg %1)"
+  syntax function ( *%) "(bvmul %1 %2)"
+  syntax function (/%) "(bv{{us}}div %1 %2)"
+  syntax function (%%) "(bv{{us}}rem %1 %2)"
 
-  syntax function of_int "((_ int2bv {{size}}) %1)"
   syntax function of_int_modulo "((_ int2bv {{size}}) %1)"
   syntax converter of_int_const "(_ bv%1 {{size}})"
   {% if signed %}
@@ -35,11 +34,6 @@ theory enum.Bit_{{u}}int{{size}}
   syntax function to_int "(bv2nat %1)"
   remove prop To_uint
   {% endif %}
-
-  syntax predicate eq "(= %1 %2)"
-  remove prop Eq
-  syntax predicate ne "(<> %1 %2)"
-  remove prop Neq
 
   remove prop To_uint_lsr
   remove prop To_uint_lsl_modulo
@@ -81,13 +75,13 @@ end
 {% endif -%}
 theory enum.Bit_{{u_to}}int{{size_to}}_of_bit_{{u_from}}int{{size_from}}
   {% if size_from == size_to %}
-  syntax function bw_cast "%1"
+  syntax function cast_modulo "%1"
   {% elseif size_from > size_to %}
-  syntax function bw_cast "((_ extract {{size_to}} {{0}}) %1)"
+  syntax function cast_modulo "((_ extract {{size_to}} {{0}}) %1)"
   {% elseif signed_from %}
-  syntax function bw_cast "((_ sign_extend {{size_to}}) %1)"
+  syntax function cast_modulo "((_ sign_extend {{size_to}}) %1)"
   {% else %}
-  syntax function bw_cast "((_ zero_extend {{size_to}}) %1)"
+  syntax function cast_modulo "((_ zero_extend {{size_to}}) %1)"
   {% endif %}
 end
 {% endmacro -%}

@@ -297,7 +297,57 @@ and logic_type : type a. entry:_ -> _ -> a logic_type -> _ = fun ~entry fmttr ->
   | Type (c, tps) ->
     fprintf fmttr "(%a%a)" (tconstr ~entry) c (ltype_hlist ~entry) tps
 
-let rec term_hlist : type a. entry:_ ->  bw_ints:_ -> consts:_ -> _ -> a term_hlist -> _ =
+let split c s =
+  try
+    let pos = String.index s c in
+    String.(sub s 0 pos, sub s (pos + 1) @@ length s - pos - 1)
+  with
+  | Not_found -> "", s
+
+let of_int_const ~entry ~where ~bw_ints =
+  let func fmttr = func ~entry ~where ~bw_ints fmttr in
+  fun fmttr
+    (type r) (type b)
+    ((Int _ as ty, modulo), Int s : ((r, b) xintx bounded integer * _) * unbounded integer number constant) ->
+    let pr fmt = fprintf fmttr fmt in
+    let f =
+      let open Buffer in
+      let buf = create 10 in
+      let buf_formatter = formatter_of_buffer buf in
+      let f = Of_int (ty, modulo) in
+      fun ~subst fmttr ->
+        if not subst then
+          fprintf fmttr "%a" func f
+        else begin
+          fprintf buf_formatter "%a%!" func f;
+          let scope, _ = split '.' @@ contents buf in
+          clear buf;
+          fprintf fmttr "%s.%s" scope "of_int_const"
+        end
+    in
+    let fallback () = pr "(%t@ (%s))" (f ~subst:false) s in
+    if not (S.mem (Int ty) bw_ints) then
+      fallback ()
+    else
+      let open Num in
+      let s' = num_of_string s in
+      let min, max =
+        let (module M) = O.module_of_int_ty ty in
+        try
+          let ei = Common.StringHashtblIter.find Typing.enum_types_table M.name in
+          Env.(ei.ei_min, ei.ei_max)
+        with
+        | Not_found -> assert false
+      in
+      if min <=/ s' && s' <=/ max then
+        if s' >=/ Int 0 then
+          pr "(%t@ %s)" (f ~subst:true) (string_of_num s')
+        else
+          pr "(-@ (%t@ %s))" (f ~subst:true) (string_of_num (minus_num s'))
+      else
+        fallback ()
+
+let rec term_hlist : type a. entry:_ -> bw_ints:_ -> consts:_ -> _ -> a term_hlist -> _ =
   fun ~entry ~bw_ints ~consts fmttr ->
   function
   | Nil -> ()
@@ -309,9 +359,12 @@ and term : type a. entry:_ -> bw_ints: _ -> consts:_ -> _ -> a term -> _ = fun ~
   let pr fmt = fprintf fmttr fmt in
   let term_hlist fmttr = term_hlist ~entry ~bw_ints ~consts fmttr
   and term fmttr = term ~entry ~bw_ints ~consts fmttr
-  and func fmttr = func ~entry ~where:`Logic ~bw_ints fmttr in
+  and func fmttr = func ~entry ~where:`Logic ~bw_ints fmttr
+  in
   function
   | Const c -> constant fmttr c
+  | App (Of_int (Int _ as ty, modulo), Cons (Const c, Nil)) ->
+    pr "%a" (of_int_const ~entry ~where:`Logic ~bw_ints) ((ty, modulo), c)
   | App (f, Nil) -> pr "%a" func f
   | App (f, (Cons _ as ts)) ->
     pr "@[(%a%a)@]" func f term_hlist ts
@@ -532,6 +585,8 @@ and expr_node : type a. entry:_ -> safe:_ -> bw_ints:_ -> consts:_ -> _ -> a exp
   | Let (id, e1, e2) -> pr_let id e1 e2
   | Let_ref (id', e1, e2) ->
     pr "@[<hov 0>(let@ %a@ =@ ref@ %a@ in@ %a)@]" id id' expr e1 expr e2
+  | App (Of_int (Int _ as ty, modulo), Cons ({ expr_labels = []; expr_node = Const c }, Nil), _) ->
+    pr "@[<hov 1>%a@]" (of_int_const ~entry ~where:(`Behavior safe) ~bw_ints) ((ty, modulo), c)
   | App (f, ehl, ty_opt)  ->
     pr "@[<hov 1>(%a@ %a@ %a)@]"
       (func ~entry ~where:(`Behavior safe) ~bw_ints) f
@@ -674,13 +729,6 @@ let why_decl ~entry (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = 
     pr "exception@ %a" why_uid why_id'
   | Exception (Some t) ->
     pr "exception@ %a@ %a" why_uid why_id' logic_type t
-
-let split c s =
-  try
-    let pos = String.index s c in
-    String.(sub s 0 pos, sub s (pos + 1) @@ length s - pos - 1)
-  with
-  | Not_found -> "", s
 
 module Staged :
 sig
@@ -1199,7 +1247,7 @@ struct
         value        : value;
         f            : f;
         state        : state
-          > over)
+                       > over)
       ~(init : state)
       ->
         let continue : (state, value, decl_kind, f) continuation -> iter = fun { continue } ->
@@ -1258,197 +1306,259 @@ struct
             state: (state * value) H.t -> consts:_ -> entry:(unit -> decl_kind entry) -> entry':kind entry ->
           (enter:state -> f:f -> StringSet.t) Staged.t =
           fun ~state ~consts ~entry ~entry' ->
-          let bw_ints =
-            let fold_decls map init =
-              Why_decl.fold
-                ~bw_ints:S.empty
-                ~init
-                ~f:(fun ~acc ->
-                  function
-                  | (`Theory (name, _) | `Module (name, _)),
-                    ("(&)" | "(|.)" | "(^)" | "(~_)" | "(<<)" | "(>>)" | "(>>>)") ->
-                    begin try
-                      S.add (M.find name map) acc
+            let bw_ints =
+              let module M' = Map.Make (struct type t = any_integer let compare = compare end) in
+              let fold_decls map init =
+                let parse_conv_entry =
+                  let open Str in
+                  let conv_regexp =
+                    regexp
+                      "\\(Safe_\\|Unsafe_\\)?\\([Bb]it_\\)?\\([Uu]\\)?\\([Ii]nt[0-9]+\\)_of_\
+                       \\(Safe_\\|Unsafe_\\)?\\([Bb]it_\\)?\\([Uu]\\)?\\([Ii]nt[0-9]+\\)"
+                  in
+                  let get s n =
+                    try
+                      matched_group n s
                     with
-                    | Not_found -> acc
+                    | Not_found -> ""
+                  in
+                  fun s ->
+                    if string_match conv_regexp s 0 && match_end () = String.length s then
+                      let get = get s in
+                      Some (String.capitalize (get 2 ^ get 3 ^ get 4),
+                            String.capitalize (get 6 ^ get 7 ^ get 8))
+                    else
+                      None
+                in
+                Why_decl.fold
+                  ~bw_ints:S.empty
+                  ~init
+                  ~f:(fun ~acc:(s, m as acc) ->
+                    let try_int_entry name f =
+                      try
+                        f (M.find name map)
+                      with
+                      | Not_found -> acc
+                    in
+                    let try_conv_entry name f =
+                      match parse_conv_entry name with
+                      | Some (name1, name2) ->
+                        try_int_entry name1 @@ fun ty1 ->
+                        try_int_entry name2 @@ fun ty2 ->
+                        let find ty = try M'.find ty m with Not_found -> [] in
+                        let tys1, tys2 = find ty1, find ty2 in
+                        f ty1 ty2 M'.(add ty1 (ty2 :: tys1) m |> add ty2 (ty1 :: tys2))
+                      | None -> acc
+                    in
+                    function
+                    | (`Theory (name, _) | `Module (name, _)),
+                      ("(&)" | "(|.)" | "(^)" | "(~_)" | "(<<)" | "(>>)" | "(>>>)" |
+                       "(+%)" | "(-%_)" | "(-%)" | "(*%)" | "(/%)" | "(%%)" | "of_int_modulo") ->
+                      try_int_entry name (fun ty -> S.add ty s, m)
+                    | (`Theory (name, _) | `Module (name, _)), "cast" ->
+                      try_conv_entry name (fun _ _ m -> s, m)
+                    | (`Theory (name, _) | `Module (name, _)), "cast_modulo" ->
+                      try_conv_entry name (fun ty1 ty2 m -> S.(add ty1 s |> add ty2), m)
+                    | _ -> acc)
+              in
+              let close_bw_ints (s, deps) =
+                let rec dfs ~deps ty acc =
+                  if not (S.mem ty acc) then
+                    begin match M'.find ty deps with
+                    | tys ->
+                      let acc = S.add ty acc in
+                      List.fold_right (dfs ~deps) tys acc
+                    | exception Not_found -> acc
                     end
-                  | _ -> acc)
-            in
-            let memo name r =
-              try
-                H.find bw_ints_cache name
-              with
-              | Not_found ->
-                let r = r () in
-                H.add bw_ints_cache name r;
-                r
-            in
-            let open Why_decl in
-            match entry' with
-            | Theory (_, None) -> S.empty
-            | Module (_, None) -> S.empty
-            | Theory (name, Some (_, decls)) ->
-              memo name @@
-              fun () -> List.fold_left (fold_decls ~entry:name ~kind:Theory @@ map_ints ~how:`Theory) S.empty decls
-            | Module (name, Some (_, safe, decls)) ->
-              memo name @@
-              fun () ->
-              let map = M.fold M.add (map_ints ~how:`Theory) @@ map_ints ~how:(`Module safe) in
-              List.fold_left (fold_decls ~entry:name ~kind:(Module safe) map) S.empty decls
-          in
-          stage @@
-          fun ~(enter : state) ~(f : f) ->
-          match over with
-          | Entries ->
-            let f' : 'a. state:state -> consts:_ -> enter:_ -> 'a entry -> state * _ = f.f in
-            let enter (consts, acc) name imported =
-              try
-                let s, (Entry e' as e) = H.find state name in
-                if s = init then H.replace state name (enter, e);
-                let s, consts =
-                  f'
-                    ~state:s
-                    ~consts
-                    ~enter:(fun ~consts -> unstage (continuation ~state ~consts ~entry ~entry':e') ~enter ~f)
-                    e'
+                  else
+                    acc
                 in
-                H.replace state name (s, e);
-                consts,
-                match M.find name acc with
-                | None | Some true -> acc
-                | Some false when imported = Some false -> acc
-                | Some false -> M.add name (Some true) acc
-                | exception Not_found -> M.add name imported acc
-              with
-              | Not_found -> failwith ("Unrecognized Why3ML file entry: " ^ name)
+                S.fold (dfs ~deps) S.empty s
+              in
+              let memo name r =
+                try
+                  H.find bw_ints_cache name
+                with
+                | Not_found ->
+                  let r = r () in
+                  H.add bw_ints_cache name r;
+                  r
+              in
+              let open Why_decl in
+              match entry' with
+              | Theory (_, None) -> S.empty
+              | Module (_, None) -> S.empty
+              | Theory (name, Some (_, decls)) ->
+                memo name @@
+                fun () ->
+                List.fold_left
+                  (fold_decls ~entry:name ~kind:Theory @@ map_ints ~how:`Theory)
+                  (S.empty, M'.empty)
+                  decls |>
+                close_bw_ints
+              | Module (name, Some (_, safe, decls)) ->
+                memo name @@
+                fun () ->
+                let map = M.fold M.add (map_ints ~how:`Theory) @@ map_ints ~how:(`Module safe) in
+                List.fold_left
+                  (fold_decls ~entry:name ~kind:(Module safe) map)
+                  (S.empty, M'.empty)
+                  decls |>
+                close_bw_ints
             in
-            let f ~name init d =
-              Why_decl.fold
-                ~bw_ints
-                ~f:(fun ~acc ->
-                  function
-                  | `Current, _ -> acc
-                  | `Module (name', imported), _
-                  | `Theory (name', imported), _ when name' <> name ->
-                    enter acc name' (Some imported)
-                  | (`Module _ | `Theory _), _ -> acc)
-                ~init
-                d
-            in
-            let open Why_decl in
-            begin match entry' with
-            | Theory (_, None) -> consts
-            | Module (_, None) -> consts
-            | Theory (name, Some (deps, decls)) ->
-              List.fold_left
-                (fun acc ->
-                   function
-                   | Use (_, Theory (name', _))
-                   | Clone (_, Theory (name', _), _) ->
-                     enter acc name' None)
-                (consts, M.empty)
-                !deps |~>
-              ListLabels.fold_left ~f:(f ~entry:name ~kind:Theory ~name) decls |>
-              fun (consts, m as acc) ->
-              M.iter
-                (fun name import ->
-                   match H.find state name, import with
-                   | (_, Entry (Theory _ as e)), Some import ->
-                     deps := Use ((if import then `Import None else `As None), e) :: !deps
-                   | _ -> ()
-                   | exception Not_found -> assert false (* already checked during map initialization *))
-                m;
-              if fst (H.find state name) = init then
-                fst @@ enter acc name None
-              else
-                consts
-            | Module (name, Some (deps, safe, decls)) ->
-              List.fold_left
-                (fun acc ->
-                   fun (Dependency d) ->
-                     let enter (type k) =
-                       function
-                       | (Theory (name', _) : k entry) -> enter acc name' None
+            stage @@
+            fun ~(enter : state) ~(f : f) ->
+            match over with
+            | Entries ->
+              let f' : 'a. state:state -> consts:_ -> enter:_ -> 'a entry -> state * _ = f.f in
+              let enter (consts, acc) name imported =
+                try
+                  let s, (Entry e' as e) = H.find state name in
+                  if s = init then H.replace state name (enter, e);
+                  let s, consts =
+                    f'
+                      ~state:s
+                      ~consts
+                      ~enter:(fun ~consts -> unstage (continuation ~state ~consts ~entry ~entry':e') ~enter ~f)
+                      e'
+                  in
+                  H.replace state name (s, e);
+                  consts,
+                  match M.find name acc with
+                  | None | Some true -> acc
+                  | Some false when imported = Some false -> acc
+                  | Some false -> M.add name (Some true) acc
+                  | exception Not_found -> M.add name imported acc
+                with
+                | Not_found -> failwith ("Unrecognized Why3ML file entry: " ^ name)
+              in
+              let f ~name init d =
+                Why_decl.fold
+                  ~bw_ints
+                  ~f:(fun ~acc ->
+                    function
+                    | `Current, _ -> acc
+                    | `Module (name', imported), _
+                    | `Theory (name', imported), _ when name' <> name ->
+                      enter acc name' (Some imported)
+                    | (`Module _ | `Theory _), _ -> acc)
+                  ~init
+                  d
+              in
+              let open Why_decl in
+              begin match entry' with
+              | Theory (_, None) -> consts
+              | Module (_, None) -> consts
+              | Theory (name, Some (deps, decls)) ->
+                List.fold_left
+                  (fun acc ->
+                     function
+                     | Use (_, Theory (name', _))
+                     | Clone (_, Theory (name', _), _) ->
+                       enter acc name' None)
+                  (consts, M.empty)
+                  !deps |~>
+                ListLabels.fold_left ~f:(f ~entry:name ~kind:Theory ~name) decls |>
+                fun (consts, m as acc) ->
+                M.iter
+                  (fun name import ->
+                     match H.find state name, import with
+                     | (_, Entry (Theory _ as e)), Some import ->
+                       deps := Use ((if import then `Import None else `As None), e) :: !deps
+                     | _ -> ()
+                     | exception Not_found -> assert false (* already checked during map initialization *))
+                  m;
+                if fst (H.find state name) = init then
+                  fst @@ enter acc name None
+                else
+                  consts
+              | Module (name, Some (deps, safe, decls)) ->
+                List.fold_left
+                  (fun acc ->
+                     fun (Dependency d) ->
+                       let enter (type k) =
+                         function
+                         | (Theory (name', _) : k entry) -> enter acc name' None
                        | Module (name', _) -> enter acc name' None
+                       in
+                       match d with
+                       | Use (_, e) | Clone (_, e, _) -> enter e)
+                  (consts, M.empty)
+                  !deps |~>
+                ListLabels.fold_left ~f:(f ~entry:name ~kind:(Module safe) ~name) decls |>
+                fun (consts, m as acc) ->
+                M.iter
+                  (fun name import ->
+                     let add import e =
+                       deps := Dependency (Use ((if import then `Import None else `As None), e)) :: !deps
                      in
-                     match d with
-                     | Use (_, e) | Clone (_, e, _) -> enter e)
-                (consts, M.empty)
-                !deps |~>
-              ListLabels.fold_left ~f:(f ~entry:name ~kind:(Module safe) ~name) decls |>
-              fun (consts, m as acc) ->
-              M.iter
-                (fun name import ->
-                   let add import e =
-                     deps := Dependency (Use ((if import then `Import None else `As None), e)) :: !deps
-                   in
-                   match H.find state name, import with
-                   | (_, Entry (Theory _ as e)), Some import -> add import e
-                   | (_, Entry (Module _ as e)), Some import -> add import e
-                   | _ -> ()
-                   | exception Not_found -> assert false (* already checked during map initialization *))
-                m;
-              if fst (H.find state name) = init then
-                fst @@ enter acc name None
-              else
-                consts
-            end
-          | Decls ->
-            let f : state:state -> consts:_ -> enter:_ -> print:_ -> decl_kind why_decl -> state * _ = f in
-            let enter ~self ~why_decl consts name =
-              try
-                let s, d = H.find state name in
-                if s = init then H.replace state name (enter, d);
-                let s, consts =
-                  f
-                    ~state:s
-                    ~consts
-                    ~enter:(fun ~consts -> self ~consts d)
-                    ~print:(fun ~consts fmttr -> why_decl ~consts fmttr d)
-                    d
-                in
-                H.replace state name (s, d);
-                consts
-              with
-              | Not_found -> consts
-            in
-            let f ~name ~self ~why_decl ~consts d =
-              Why_decl.fold
-                ~entry:name
-                ~bw_ints
-                ~init:consts
-                ~f:(fun ~acc:consts ->
-                  function
-                  | (`Module (name', _) | `Theory (name', _)), name'' when name = name' ->
-                    enter ~self ~why_decl consts name''
-                  | (`Module _ | `Theory _), _ -> consts
-                  | `Current, name'' -> enter ~self ~why_decl consts name'')
-                d
-            in
-            let sort l =
-              List.sort
-              (fun
-                { why_id = { why_name = id1; why_pos = pos1 } }
-                { why_id = { why_name = id2; why_pos = pos2 } }
-                ->
-                  let c = Position.compare pos1 pos2 in
-                  if c <> 0 then c else compare id1 id2)
-              l
-            in
-            let open Why_decl in
-            match entry () with
-            | Theory (_, None) -> consts
-            | Module (_, None) -> consts
-            | Theory (name, Some (_, decls)) ->
-              let why_decl = why_decl ~entry:name ~kind:Theory ~bw_ints in
-              let rec self ~consts d = f ~kind:Theory ~name ~self ~why_decl ~consts d in
-              let enter ~consts { why_id = { why_name } } = enter ~self ~why_decl consts why_name in
-              List.fold_left (fun consts d -> enter ~consts:(self ~consts d) d) consts @@ sort decls
-            | Module (name, Some (_, safe, decls)) ->
-              let why_decl = why_decl ~entry:name ~kind:(Module safe) ~bw_ints in
-              let rec self ~consts d = f ~kind:(Module safe) ~name ~self ~why_decl ~consts d in
-              let enter ~consts { why_id = { why_name } } = enter ~self ~why_decl consts why_name in
-              List.fold_left (fun consts d -> enter ~consts:(self ~consts d) d) consts @@ sort decls
+                     match H.find state name, import with
+                     | (_, Entry (Theory _ as e)), Some import -> add import e
+                     | (_, Entry (Module _ as e)), Some import -> add import e
+                     | _ -> ()
+                     | exception Not_found -> assert false (* already checked during map initialization *))
+                  m;
+                if fst (H.find state name) = init then
+                  fst @@ enter acc name None
+                else
+                  consts
+              end
+            | Decls ->
+              let f : state:state -> consts:_ -> enter:_ -> print:_ -> decl_kind why_decl -> state * _ = f in
+              let enter ~self ~why_decl consts name =
+                try
+                  let s, d = H.find state name in
+                  if s = init then H.replace state name (enter, d);
+                  let s, consts =
+                    f
+                      ~state:s
+                      ~consts
+                      ~enter:(fun ~consts -> self ~consts d)
+                      ~print:(fun ~consts fmttr -> why_decl ~consts fmttr d)
+                      d
+                  in
+                  H.replace state name (s, d);
+                  consts
+                with
+                | Not_found -> consts
+              in
+              let f ~name ~self ~why_decl ~consts d =
+                Why_decl.fold
+                  ~entry:name
+                  ~bw_ints
+                  ~init:consts
+                  ~f:(fun ~acc:consts ->
+                    function
+                    | (`Module (name', _) | `Theory (name', _)), name'' when name = name' ->
+                      enter ~self ~why_decl consts name''
+                    | (`Module _ | `Theory _), _ -> consts
+                    | `Current, name'' -> enter ~self ~why_decl consts name'')
+                  d
+              in
+              let sort l =
+                List.sort
+                  (fun
+                    { why_id = { why_name = id1; why_pos = pos1 } }
+                    { why_id = { why_name = id2; why_pos = pos2 } }
+                    ->
+                      let c = Position.compare pos1 pos2 in
+                      if c <> 0 then c else compare id1 id2)
+                  l
+              in
+              let open Why_decl in
+              match entry () with
+              | Theory (_, None) -> consts
+              | Module (_, None) -> consts
+              | Theory (name, Some (_, decls)) ->
+                let why_decl = why_decl ~entry:name ~kind:Theory ~bw_ints in
+                let rec self ~consts d = f ~kind:Theory ~name ~self ~why_decl ~consts d in
+                let enter ~consts { why_id = { why_name } } = enter ~self ~why_decl consts why_name in
+                List.fold_left (fun consts d -> enter ~consts:(self ~consts d) d) consts @@ sort decls
+              | Module (name, Some (_, safe, decls)) ->
+                let why_decl = why_decl ~entry:name ~kind:(Module safe) ~bw_ints in
+                let rec self ~consts d = f ~kind:(Module safe) ~name ~self ~why_decl ~consts d in
+                let enter ~consts { why_id = { why_name } } = enter ~self ~why_decl consts why_name in
+                List.fold_left (fun consts d -> enter ~consts:(self ~consts d) d) consts @@ sort decls
         in
         continue { continue = continuation }
 end

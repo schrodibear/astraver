@@ -268,12 +268,14 @@ theory Jessie_assigns_strong
                 not_assigns a1 a2 m1 m2 l
 end
 
+theory Jessie_tag_id
+  type tag_id 't
+  function int_of_tag (tag_id 't) : int
+end
+
 theory Jessie_tag
   use import int.Int
-
-  type tag_id 't
-
-  function int_of_tag (tag_id 't) : int
+  use export Jessie_tag_id
 
   predicate parenttag (tag_id 't) (tag_id 't)
 
@@ -314,14 +316,20 @@ theory Jessie_tag
       root_tag a -> root_tag b -> a <> b -> subtag c a -> not (subtag c b)
 end
 
-theory Jessie_tag_table
-  use map.Map
+theory Jessie_tag_table_type
+  use import map.Map
   use import Jessie_pointer
-  use import Jessie_tag
+  use import Jessie_tag_id
 
   type tag_table 't = Map.map (pointer 't) (tag_id 't)
 
   function typeof (t : tag_table 't) (p : pointer 't) : tag_id 't = Map.get t p
+end
+
+theory Jessie_tag_table
+  use import Jessie_pointer
+  use import Jessie_tag
+  use export Jessie_tag_table_type
 
   predicate instanceof (t : tag_table 't) (p : pointer 't) (s : tag_id 't) = subtag (typeof t p) s
 

@@ -43,7 +43,7 @@ theory Enum
 
   axiom Extensionality1: forall x y : t [to_int x, to_int y]. to_int x = to_int y -> x = y
 
-  axiom Extensionality2:
+  lemma Extensionality2:
     forall x y : int [of_int x, of_int y].
       of_int x = of_int y ->
         in_bounds x /\ in_bounds y ->
@@ -128,7 +128,7 @@ module Unsafe_enum
   use import int.Int
 
   val (+) (a b : t) : t
-    ensures   { to_int result = to_int a + to_int b }
+    ensures  { to_int result = to_int a + to_int b }
 
   val (-) (a b : t) : t
     ensures  { to_int result = to_int a - to_int b }
@@ -249,6 +249,7 @@ theory Bit_enum_intf
   function normalize (x : int) : int
 
   function of_int_modulo int : t
+  function of_int_const (n : int) : E.t
 
   function (+%) t t : t
   function (-%) t t : t
@@ -346,7 +347,9 @@ theory Bit_enum
   axiom Val_two_power_size:
     power 2 size = range
 
-  function of_int_const (n : int) : E.t = E.of_int n
+  axiom Of_int_const:
+    forall n : int [of_int_const n].
+      of_int_const n = E.of_int n
 
   axiom Of_int_def:
     forall n : int [E.of_int n].
@@ -507,6 +510,10 @@ module Generic_bit_enum
     ensures { result = of_int_modulo n }
     ensures { to_int result = normalize n }
 
+  val of_int_const (n : int) : t
+    ensures { result = of_int_const n }
+    ensures { to_int result = n }
+
   val to_int (a : t) : int
     ensures { result = to_int a }
 
@@ -663,7 +670,7 @@ module Unsafe_bit_enum
     ensures  { result = a -% b }
 
   val ( *) (a b : t) : t
-    ensures  { to_int result = Int.(*) (to_int a) (to_int b) }
+    ensures  { to_int result = Int.( *) (to_int a) (to_int b) }
     ensures  { result = a *% b }
 
   val (-_) (a : t) : t

@@ -3514,14 +3514,12 @@ let enum_cast (ei_to, ei_from) =
     let lt_from = Lt.int from in
     let lt_to = Lt.int to_ in
     let to_int t = T.(To_int from $. t) in
-    let cast_name m = "cast" ^ if m then "_modulo" else "" in
-    let cast ~m =
+    let cast_name ~m = "cast" ^ if m then "_modulo" else "" in
+    let cast =
       Wd.mk
-        ~name:(cast_name m)
-        (Function ([n, Logic_type lt_from], lt_to,
-                   T.(Of_int (to_, if m then `Modulo else `Check) $. to_int @@ T.var n)))
+        ~name:(cast_name ~m:false)
+        (Function ([n, Logic_type lt_from], lt_to, T.(Of_int (to_, `Check) $. to_int @@ T.var n)))
     in
-    let bw_cast = "bw_cast" in
     let cast_val ~safe ~bw ~m =
       let n_t = T.var n in
       let from = enum_entry_name ~how:(`Theory (if bw then `Bitvector else `Abstract)) to_, `Qualified in
@@ -3539,7 +3537,8 @@ let enum_cast (ei_to, ei_from) =
                        P.(T.(To_int to_ $. T.result =
                              let n_i = to_int n_t in if m then F.user ~from "normalize" $. n_i else n_i) &&
                           if bw then
-                            T.(result = (F.user ~from:(name ~of_:(`Theory `Bitvector), `Qualified) bw_cast $. n_t))
+                            T.(result =
+                               (F.user ~from:(name ~of_:(`Theory `Bitvector), `Qualified) (cast_name ~m:true) $. n_t))
                           else True),
                        [])))))
     in
@@ -3549,17 +3548,19 @@ let enum_cast (ei_to, ei_from) =
        Mod.mk
          ~name:(name ~of_:(`Module (bw', `Unsafe)))
          ~safe:false
-         [cast_val ~safe:false ~bw ~m:false; cast_val ~safe:false ~bw ~m:true];
+         (cast_val ~safe:false ~bw ~m:false :: if bw then [cast_val ~safe:false ~bw ~m:true] else []);
        Entry.some @@
        Mod.mk
          ~name:(name ~of_:(`Module (bw', `Safe)))
          ~safe:true
-         [cast_val ~safe:true ~bw ~m:false; cast_val ~safe:true ~bw ~m:true]]
+         (cast_val ~safe:true ~bw ~m:false :: if bw then [cast_val ~safe:true ~bw ~m:true] else [])]
     in
-    Entry.some
-      (Th.mk
-         ~name:(name ~of_:(`Theory `Abstract))
-         [cast ~m:false; cast ~m:true]) ::
+    let th =
+      Th.mk
+        ~name:(name ~of_:(`Theory `Abstract))
+        [cast]
+    in
+    Entry.some th ::
     mods false @
     if bw then
       let how = `Theory `Bitvector in
@@ -3570,8 +3571,8 @@ let enum_cast (ei_to, ei_from) =
       Entry.some
         (Th.mk
            ~name:(name ~of_:how)
-           ~deps:[Use (`Export, bw_th)]
-           [cast ~m:false]) ::
+           ~deps:[Use (`Export, th); Use (`Export, bw_th)]
+           []) ::
       mods true
     else
       []
@@ -3709,7 +3710,9 @@ let dummies =
       dummy "Jessie_pset_disjoint";
       dummy "Jessie_pset_included";
       dummy "Jessie_assigns";
+      dummy "Jessie_tag_id";
       dummy "Jessie_tag";
+      dummy "Jessie_tag_table_type";
       dummy "Jessie_tag_table";
       dummy "Jessie_reinterpret";
       dummy "Jessie_reinterpret_cast";

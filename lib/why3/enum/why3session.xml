@@ -7,7 +7,10 @@
 <file name="../enum.mlw" expanded="true">
 <theory name="Enum_intf" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Enum" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+<theory name="Enum" sum="e4e05a66381fc67bf17e02e850c9f1f7">
+ <goal name="Extensionality2">
+ <proof prover="0" timelimit="60"><result status="valid" time="0.00" steps="9"/></proof>
+ </goal>
 </theory>
 <theory name="Generic_enum" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
@@ -245,7 +248,7 @@
 </theory>
 <theory name="Uint64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Bit_int8" sum="e9c85d2bf9961da187601c332f374f19">
+<theory name="Bit_int8" sum="c6550a0d6f3522aa4d57653bec977133">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.01" steps="65"/></proof>
  </goal>
@@ -253,7 +256,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_uint8" sum="cecbbad01527720b1b7c820b3b9a9f46">
+<theory name="Bit_uint8" sum="ad3af9d27dc04a4700fd1fc34982f147">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -261,7 +264,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_int16" sum="360b3a1009a00a9af378458ab4dd8333">
+<theory name="Bit_int16" sum="b666cda038e54b070bac83d7f613798c">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -269,7 +272,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_uint16" sum="aa84c8e83d90fa52d5330f826ea3cf8b">
+<theory name="Bit_uint16" sum="9826487927914f5a343176d05b9e0567">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -277,7 +280,7 @@
  <proof prover="0"><result status="valid" time="0.01" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_int32" sum="7affb3d56a2531ec564ff307a595371b">
+<theory name="Bit_int32" sum="a612136f711f0bf91d521f009075369e">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -285,7 +288,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_uint32" sum="15e4e48865bb9281ec3ce3f8edc422c9">
+<theory name="Bit_uint32" sum="4113d2742f2bb74aa645f3e528edbfb2">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -293,7 +296,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_int64" sum="9e6fc0087107170010497964bc4b55b9">
+<theory name="Bit_int64" sum="c73282209cc21fa4a9e8a1de576a47cd">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -301,7 +304,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_uint64" sum="68a7399e1766e7be9230fa4af6a28250">
+<theory name="Bit_uint64" sum="600a041d6fa5e232464533b7c905d89c">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>

@@ -6,6 +6,8 @@
 <prover id="1" name="CVC4 &apos;14" version="1.4" timelimit="5" memlimit="1000"/>
 <prover id="2" name="Coq" version="8.4pl5" timelimit="5" memlimit="1000"/>
 <prover id="3" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
+<prover id="4" name="CVC3" version="2.4.1" timelimit="60" memlimit="1000"/>
+<prover id="5" name="Coq" version="8.4pl6" timelimit="5" memlimit="1000"/>
 <file name="../core.mlw" expanded="true">
 <theory name="Jessie_pointer" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
@@ -62,7 +64,11 @@
  <proof prover="3"><result status="valid" time="0.01"/></proof>
  </goal>
 </theory>
+<theory name="Jessie_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
 <theory name="Jessie_tag" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_tag_table_type" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 <theory name="Jessie_tag_table" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
@@ -70,22 +76,24 @@
 </theory>
 <theory name="Jessie_reinterpret_cast" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_allocable" sum="6d9a2d4e1f3ddb42b308ec82a67c1f8a">
+<theory name="Jessie_allocable" sum="05a62ee87abb1d754f49498f3b53e9ae">
  <goal name="Alloc_fresh_not_same_block">
- <proof prover="2" edited="core_Jessie_allocable_Alloc_fresh_not_same_block_1.v"><result status="valid" time="0.80"/></proof>
+ <proof prover="5" edited="core_Jessie_allocable_Alloc_fresh_not_same_block_1.v"><result status="valid" time="0.80"/></proof>
  </goal>
 </theory>
 <theory name="Jessie_alloc" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_same_except" sum="de243531555268b3ad3191db89f11272">
+<theory name="Jessie_same_except" sum="918009d6186e932b1c5bbe982859241f">
  <goal name="Alloc_same_except_trans">
- <proof prover="1"><result status="valid" time="0.00"/></proof>
+ <proof prover="4"><result status="valid" time="0.00"/></proof>
  </goal>
  <goal name="Tag_same_except_refl">
- <proof prover="1"><result status="valid" time="0.01"/></proof>
+ <proof prover="4"><result status="valid" time="0.00"/></proof>
  </goal>
 </theory>
 <theory name="Jessie_rmem" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_return" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 <theory name="Jessie_sub_pointer_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
@@ -135,7 +143,7 @@
 </theory>
 <theory name="Jessie_reinterpret_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_reintepret_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+<theory name="Jessie_reinterpret_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 </file>
 </why3session>

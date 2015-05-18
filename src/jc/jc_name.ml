@@ -162,7 +162,9 @@ struct
     let pset_disjoint = "Jessie_pset_disjoint", `Short
     let pset_included = "Jessie_pset_included", `Short
     let assigns = "Jessie_assigns", `Short
+    let tag_id = "Jessie_tag_id", `Short
     let tag = "Jessie_tag", `Short
+    let tag_table_type = "Jessie_tag_table_type", `Short
     let tag_table = "Jessie_tag_table", `Short
     let reinterpret = "Jessie_reinterpret", `Short
     let reinterpret_cast = "Jessie_reinterpret_cast", `Short
