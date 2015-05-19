@@ -3,7 +3,6 @@
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="4">
 <prover id="0" name="Alt-Ergo" version="0.99.1" timelimit="5" memlimit="1000"/>
-<prover id="1" name="CVC3" version="2.4.1" timelimit="5" memlimit="1000"/>
 <file name="../enum.mlw" expanded="true">
 <theory name="Enum_intf" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
@@ -18,207 +17,7 @@
 </theory>
 <theory name="Unsafe_enum" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Powers_of_2" sum="3d683a432a3b2b1736e51ff55df31d23">
- <goal name="Powers_of_2">
- <proof prover="1"><result status="valid" time="0.09"/></proof>
- <transf name="split_goal_wp">
-  <goal name="Powers_of_2.1" expl="1.">
-  <proof prover="0"><result status="valid" time="0.00" steps="1"/></proof>
-  </goal>
-  <goal name="Powers_of_2.2" expl="2.">
-  <proof prover="0"><result status="valid" time="0.01" steps="1"/></proof>
-  </goal>
-  <goal name="Powers_of_2.3" expl="3.">
-  <proof prover="0"><result status="valid" time="0.00" steps="4"/></proof>
-  </goal>
-  <goal name="Powers_of_2.4" expl="4.">
-  <proof prover="0"><result status="valid" time="0.02" steps="9"/></proof>
-  </goal>
-  <goal name="Powers_of_2.5" expl="5.">
-  <proof prover="0"><result status="valid" time="0.02" steps="11"/></proof>
-  </goal>
-  <goal name="Powers_of_2.6" expl="6.">
-  <proof prover="0"><result status="valid" time="0.02" steps="15"/></proof>
-  </goal>
-  <goal name="Powers_of_2.7" expl="7.">
-  <proof prover="0"><result status="valid" time="0.06" steps="23"/></proof>
-  </goal>
-  <goal name="Powers_of_2.8" expl="8.">
-  <proof prover="0"><result status="valid" time="0.08" steps="26"/></proof>
-  </goal>
-  <goal name="Powers_of_2.9" expl="9.">
-  <proof prover="1"><result status="valid" time="0.01"/></proof>
-  </goal>
-  <goal name="Powers_of_2.10" expl="10.">
-  <proof prover="1"><result status="valid" time="0.02"/></proof>
-  </goal>
-  <goal name="Powers_of_2.11" expl="11.">
-  <proof prover="1"><result status="valid" time="0.02"/></proof>
-  </goal>
-  <goal name="Powers_of_2.12" expl="12.">
-  <proof prover="1"><result status="valid" time="0.02"/></proof>
-  </goal>
-  <goal name="Powers_of_2.13" expl="13.">
-  <proof prover="1"><result status="valid" time="0.03"/></proof>
-  </goal>
-  <goal name="Powers_of_2.14" expl="14.">
-  <proof prover="1"><result status="valid" time="0.04"/></proof>
-  </goal>
-  <goal name="Powers_of_2.15" expl="15.">
-  <proof prover="1"><result status="valid" time="0.04"/></proof>
-  </goal>
-  <goal name="Powers_of_2.16" expl="16.">
-  <proof prover="1"><result status="valid" time="0.04"/></proof>
-  </goal>
-  <goal name="Powers_of_2.17" expl="17.">
-  <proof prover="1"><result status="valid" time="0.04"/></proof>
-  </goal>
-  <goal name="Powers_of_2.18" expl="18.">
-  <proof prover="1"><result status="valid" time="0.05"/></proof>
-  </goal>
-  <goal name="Powers_of_2.19" expl="19.">
-  <proof prover="1"><result status="valid" time="0.05"/></proof>
-  </goal>
-  <goal name="Powers_of_2.20" expl="20.">
-  <proof prover="1"><result status="valid" time="0.06"/></proof>
-  </goal>
-  <goal name="Powers_of_2.21" expl="21.">
-  <proof prover="1"><result status="valid" time="0.04"/></proof>
-  </goal>
-  <goal name="Powers_of_2.22" expl="22.">
-  <proof prover="1"><result status="valid" time="0.05"/></proof>
-  </goal>
-  <goal name="Powers_of_2.23" expl="23.">
-  <proof prover="1"><result status="valid" time="0.06"/></proof>
-  </goal>
-  <goal name="Powers_of_2.24" expl="24.">
-  <proof prover="1"><result status="valid" time="0.07"/></proof>
-  </goal>
-  <goal name="Powers_of_2.25" expl="25.">
-  <proof prover="1"><result status="valid" time="0.06"/></proof>
-  </goal>
-  <goal name="Powers_of_2.26" expl="26.">
-  <proof prover="1"><result status="valid" time="0.06"/></proof>
-  </goal>
-  <goal name="Powers_of_2.27" expl="27.">
-  <proof prover="1"><result status="valid" time="0.08"/></proof>
-  </goal>
-  <goal name="Powers_of_2.28" expl="28.">
-  <proof prover="1"><result status="valid" time="0.08"/></proof>
-  </goal>
-  <goal name="Powers_of_2.29" expl="29.">
-  <proof prover="1"><result status="valid" time="0.08"/></proof>
-  </goal>
-  <goal name="Powers_of_2.30" expl="30.">
-  <proof prover="1"><result status="valid" time="0.10"/></proof>
-  </goal>
-  <goal name="Powers_of_2.31" expl="31.">
-  <proof prover="1"><result status="valid" time="0.16"/></proof>
-  </goal>
-  <goal name="Powers_of_2.32" expl="32.">
-  <proof prover="1"><result status="valid" time="0.17"/></proof>
-  </goal>
-  <goal name="Powers_of_2.33" expl="33.">
-  <proof prover="1"><result status="valid" time="0.18"/></proof>
-  </goal>
-  <goal name="Powers_of_2.34" expl="34.">
-  <proof prover="1"><result status="valid" time="0.19"/></proof>
-  </goal>
-  <goal name="Powers_of_2.35" expl="35.">
-  <proof prover="1"><result status="valid" time="0.19"/></proof>
-  </goal>
-  <goal name="Powers_of_2.36" expl="36.">
-  <proof prover="1"><result status="valid" time="0.21"/></proof>
-  </goal>
-  <goal name="Powers_of_2.37" expl="37.">
-  <proof prover="1"><result status="valid" time="0.22"/></proof>
-  </goal>
-  <goal name="Powers_of_2.38" expl="38.">
-  <proof prover="1"><result status="valid" time="0.20"/></proof>
-  </goal>
-  <goal name="Powers_of_2.39" expl="39.">
-  <proof prover="1"><result status="valid" time="0.26"/></proof>
-  </goal>
-  <goal name="Powers_of_2.40" expl="40.">
-  <proof prover="1"><result status="valid" time="0.19"/></proof>
-  </goal>
-  <goal name="Powers_of_2.41" expl="41.">
-  <proof prover="1"><result status="valid" time="0.20"/></proof>
-  </goal>
-  <goal name="Powers_of_2.42" expl="42.">
-  <proof prover="1"><result status="valid" time="0.29"/></proof>
-  </goal>
-  <goal name="Powers_of_2.43" expl="43.">
-  <proof prover="1"><result status="valid" time="0.18"/></proof>
-  </goal>
-  <goal name="Powers_of_2.44" expl="44.">
-  <proof prover="1"><result status="valid" time="0.33"/></proof>
-  </goal>
-  <goal name="Powers_of_2.45" expl="45.">
-  <proof prover="1"><result status="valid" time="0.25"/></proof>
-  </goal>
-  <goal name="Powers_of_2.46" expl="46.">
-  <proof prover="1"><result status="valid" time="0.27"/></proof>
-  </goal>
-  <goal name="Powers_of_2.47" expl="47.">
-  <proof prover="1"><result status="valid" time="0.34"/></proof>
-  </goal>
-  <goal name="Powers_of_2.48" expl="48.">
-  <proof prover="1"><result status="valid" time="0.37"/></proof>
-  </goal>
-  <goal name="Powers_of_2.49" expl="49.">
-  <proof prover="1"><result status="valid" time="0.32"/></proof>
-  </goal>
-  <goal name="Powers_of_2.50" expl="50.">
-  <proof prover="1"><result status="valid" time="0.27"/></proof>
-  </goal>
-  <goal name="Powers_of_2.51" expl="51.">
-  <proof prover="1"><result status="valid" time="0.23"/></proof>
-  </goal>
-  <goal name="Powers_of_2.52" expl="52.">
-  <proof prover="1"><result status="valid" time="0.26"/></proof>
-  </goal>
-  <goal name="Powers_of_2.53" expl="53.">
-  <proof prover="1"><result status="valid" time="0.25"/></proof>
-  </goal>
-  <goal name="Powers_of_2.54" expl="54.">
-  <proof prover="1"><result status="valid" time="0.24"/></proof>
-  </goal>
-  <goal name="Powers_of_2.55" expl="55.">
-  <proof prover="1"><result status="valid" time="0.24"/></proof>
-  </goal>
-  <goal name="Powers_of_2.56" expl="56.">
-  <proof prover="1"><result status="valid" time="0.25"/></proof>
-  </goal>
-  <goal name="Powers_of_2.57" expl="57.">
-  <proof prover="1"><result status="valid" time="0.26"/></proof>
-  </goal>
-  <goal name="Powers_of_2.58" expl="58.">
-  <proof prover="1"><result status="valid" time="0.26"/></proof>
-  </goal>
-  <goal name="Powers_of_2.59" expl="59.">
-  <proof prover="1"><result status="valid" time="0.31"/></proof>
-  </goal>
-  <goal name="Powers_of_2.60" expl="60.">
-  <proof prover="1"><result status="valid" time="0.33"/></proof>
-  </goal>
-  <goal name="Powers_of_2.61" expl="61.">
-  <proof prover="1"><result status="valid" time="0.32"/></proof>
-  </goal>
-  <goal name="Powers_of_2.62" expl="62.">
-  <proof prover="1"><result status="valid" time="0.32"/></proof>
-  </goal>
-  <goal name="Powers_of_2.63" expl="63.">
-  <proof prover="1"><result status="valid" time="0.33"/></proof>
-  </goal>
-  <goal name="Powers_of_2.64" expl="64.">
-  <proof prover="1"><result status="valid" time="0.35"/></proof>
-  </goal>
-  <goal name="Powers_of_2.65" expl="65.">
-  <proof prover="1"><result status="valid" time="0.35"/></proof>
-  </goal>
- </transf>
- </goal>
+<theory name="Powers_of_2" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
 <theory name="Bit_enum_intf" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
@@ -248,7 +47,7 @@
 </theory>
 <theory name="Uint64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Bit_int8" sum="c6550a0d6f3522aa4d57653bec977133">
+<theory name="Bit_int8" sum="347bd33236f5b996de5950f1f6706a74">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.01" steps="65"/></proof>
  </goal>
@@ -256,7 +55,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_uint8" sum="ad3af9d27dc04a4700fd1fc34982f147">
+<theory name="Bit_uint8" sum="413cec97916bd910132c983eac04f029">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -264,7 +63,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_int16" sum="b666cda038e54b070bac83d7f613798c">
+<theory name="Bit_int16" sum="4b64e9d832323baa23663bf294b47480">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -272,7 +71,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_uint16" sum="9826487927914f5a343176d05b9e0567">
+<theory name="Bit_uint16" sum="6542dd52b838e5ab8ad75d667763a5e8">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -280,7 +79,7 @@
  <proof prover="0"><result status="valid" time="0.01" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_int32" sum="a612136f711f0bf91d521f009075369e">
+<theory name="Bit_int32" sum="54cbf1b99f8a08bb6738caefc3a4dddf">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -288,7 +87,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_uint32" sum="4113d2742f2bb74aa645f3e528edbfb2">
+<theory name="Bit_uint32" sum="9d0b60bf9e350c34a72480d2d17d7066">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -296,7 +95,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_int64" sum="c73282209cc21fa4a9e8a1de576a47cd">
+<theory name="Bit_int64" sum="837f19ac083a85e4a21f96abbd9f69f7">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
@@ -304,7 +103,7 @@
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>
 </theory>
-<theory name="Bit_uint64" sum="600a041d6fa5e232464533b7c905d89c">
+<theory name="Bit_uint64" sum="3618cfe1970e63a333ce176b7bfd2371">
  <goal name="Size_pos">
  <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
  </goal>

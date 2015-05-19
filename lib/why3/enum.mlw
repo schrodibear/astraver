@@ -149,82 +149,82 @@ module Unsafe_enum
 end
 
 theory Powers_of_2
-  use export int.Power
+  function power2 int : int
 
-  lemma Powers_of_2:
-    power 2 0 = 1 /\
-    power 2 1 = 2 /\
-    power 2 2 = 4 /\
-    power 2 3 = 8 /\
-    power 2 4 = 16 /\
-    power 2 5 = 32 /\
-    power 2 6 = 64 /\
-    power 2 7 = 128 /\
+  axiom Powers_of_2:
+    power2 0 = 1 /\
+    power2 1 = 2 /\
+    power2 2 = 4 /\
+    power2 3 = 8 /\
+    power2 4 = 16 /\
+    power2 5 = 32 /\
+    power2 6 = 64 /\
+    power2 7 = 128 /\
 
-    power 2 8 = 256 /\
-    power 2 9 = 512 /\
-    power 2 10 = 1024 /\
-    power 2 11 = 2048 /\
-    power 2 12 = 4096 /\
-    power 2 13 = 8192 /\
-    power 2 14 = 16384 /\
-    power 2 15 = 32768 /\
+    power2 8 = 256 /\
+    power2 9 = 512 /\
+    power2 10 = 1024 /\
+    power2 11 = 2048 /\
+    power2 12 = 4096 /\
+    power2 13 = 8192 /\
+    power2 14 = 16384 /\
+    power2 15 = 32768 /\
 
-    power 2 16 = 65536 /\
-    power 2 17 = 131072 /\
-    power 2 18 = 262144 /\
-    power 2 19 = 524288 /\
-    power 2 20 = 1048576 /\
-    power 2 21 = 2097152 /\
-    power 2 22 = 4194304 /\
-    power 2 23 = 8388608 /\
+    power2 16 = 65536 /\
+    power2 17 = 131072 /\
+    power2 18 = 262144 /\
+    power2 19 = 524288 /\
+    power2 20 = 1048576 /\
+    power2 21 = 2097152 /\
+    power2 22 = 4194304 /\
+    power2 23 = 8388608 /\
 
-    power 2 24 = 16777216 /\
-    power 2 25 = 33554432 /\
-    power 2 26 = 67108864 /\
-    power 2 27 = 134217728 /\
-    power 2 28 = 268435456 /\
-    power 2 29 = 536870912 /\
-    power 2 30 = 1073741824 /\
-    power 2 31 = 2147483648 /\
+    power2 24 = 16777216 /\
+    power2 25 = 33554432 /\
+    power2 26 = 67108864 /\
+    power2 27 = 134217728 /\
+    power2 28 = 268435456 /\
+    power2 29 = 536870912 /\
+    power2 30 = 1073741824 /\
+    power2 31 = 2147483648 /\
 
-    power 2 32 = 4294967296 /\
-    power 2 33 = 8589934592 /\
-    power 2 34 = 17179869184 /\
-    power 2 35 = 34359738368 /\
-    power 2 36 = 68719476736 /\
-    power 2 37 = 137438953472 /\
-    power 2 38 = 274877906944 /\
-    power 2 39 = 549755813888 /\
+    power2 32 = 4294967296 /\
+    power2 33 = 8589934592 /\
+    power2 34 = 17179869184 /\
+    power2 35 = 34359738368 /\
+    power2 36 = 68719476736 /\
+    power2 37 = 137438953472 /\
+    power2 38 = 274877906944 /\
+    power2 39 = 549755813888 /\
 
-    power 2 40 = 1099511627776 /\
-    power 2 41 = 2199023255552 /\
-    power 2 42 = 4398046511104 /\
-    power 2 43 = 8796093022208 /\
-    power 2 44 = 17592186044416 /\
-    power 2 45 = 35184372088832 /\
-    power 2 46 = 70368744177664 /\
-    power 2 47 = 140737488355328 /\
+    power2 40 = 1099511627776 /\
+    power2 41 = 2199023255552 /\
+    power2 42 = 4398046511104 /\
+    power2 43 = 8796093022208 /\
+    power2 44 = 17592186044416 /\
+    power2 45 = 35184372088832 /\
+    power2 46 = 70368744177664 /\
+    power2 47 = 140737488355328 /\
 
-    power 2 48 = 281474976710656 /\
-    power 2 49 = 562949953421312 /\
-    power 2 50 = 1125899906842624 /\
-    power 2 51 = 2251799813685248 /\
-    power 2 52 = 4503599627370496 /\
-    power 2 53 = 9007199254740992 /\
-    power 2 54 = 18014398509481984 /\
-    power 2 55 = 36028797018963968 /\
+    power2 48 = 281474976710656 /\
+    power2 49 = 562949953421312 /\
+    power2 50 = 1125899906842624 /\
+    power2 51 = 2251799813685248 /\
+    power2 52 = 4503599627370496 /\
+    power2 53 = 9007199254740992 /\
+    power2 54 = 18014398509481984 /\
+    power2 55 = 36028797018963968 /\
 
-    power 2 56 = 72057594037927936 /\
-    power 2 57 = 144115188075855872 /\
-    power 2 58 = 288230376151711744 /\
-    power 2 59 = 576460752303423488 /\
-    power 2 60 = 1152921504606846976 /\
-    power 2 61 = 2305843009213693952 /\
-    power 2 62 = 4611686018427387904 /\
-    power 2 63 = 9223372036854775808 /\
+    power2 56 = 72057594037927936 /\
+    power2 57 = 144115188075855872 /\
+    power2 58 = 288230376151711744 /\
+    power2 59 = 576460752303423488 /\
+    power2 60 = 1152921504606846976 /\
+    power2 61 = 2305843009213693952 /\
+    power2 62 = 4611686018427387904 /\
+    power2 63 = 9223372036854775808 /\
 
-    power 2 64 = 18446744073709551616
+    power2 64 = 18446744073709551616
 end
 
 theory Bit_enum_intf
@@ -345,7 +345,7 @@ theory Bit_enum
     Int.(>) size 0
 
   axiom Val_two_power_size:
-    power 2 size = range
+    power2 size = range
 
   axiom Of_int_const:
     forall n : int [of_int_const n].
@@ -360,7 +360,7 @@ theory Bit_enum
   axiom To_uint:
     signed ->
       forall a : E.t [E.to_int a].
-        E.to_int a = to_uint a - if lt a (of_int_const 0) then power 2 size else 0
+        E.to_int a = to_uint a - if lt a (of_int_const 0) then power2 size else 0
 
   predicate nth E.t int
 
@@ -369,8 +369,8 @@ theory Bit_enum
       forall n : int [nth a n].
         0 <= n < size ->
           nth a n =
-            (E.to_int a >= 0 /\ CD.mod (E.to_int a) (power 2 (n + 1)) >= power 2 n \/
-             E.to_int a < 0 /\ CD.mod (range  + E.to_int a) (power 2 (n + 1)) >= power 2 n)
+            (E.to_int a >= 0 /\ CD.mod (E.to_int a) (power2 (n + 1)) >= power2 n \/
+             E.to_int a < 0 /\ CD.mod (range  + E.to_int a) (power2 (n + 1)) >= power2 n)
 
   axiom Lt_eq:
     forall a b : E.t [E.(<) a b | lt a b].
@@ -479,14 +479,14 @@ theory Bit_enum
       forall a : E.t.
         forall n : E.t [lsr a n].
           E.to_int n >= 0 ->
-            E.to_int (lsr a n) = ED.div (E.to_int a) (power 2 (E.to_int n))
+            E.to_int (lsr a n) = ED.div (E.to_int a) (power2 (E.to_int n))
 
   axiom To_uint_lsl_modulo:
     not signed ->
       forall a : E.t.
         forall n : E.t [lsl_modulo a n].
           E.to_int n >= 0 ->
-            E.to_int (lsl_modulo a n) = ED.mod (Int.( *) (E.to_int a) (power 2 (E.to_int n))) range
+            E.to_int (lsl_modulo a n) = ED.mod (Int.( *) (E.to_int a) (power2 (E.to_int n))) range
 end
 
 module Generic_bit_enum
@@ -560,26 +560,26 @@ module Safe_bit_enum
 
   val lsl (x y : t) : t
     requires { "expl:<< second operand" Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size }
-    requires { "expl:integer overflow" in_bounds (Int.( *) (to_int x) (power 2 (to_int y))) }
+    requires { "expl:integer overflow" in_bounds (Int.( *) (to_int x) (power2 (to_int y))) }
     ensures { result = lsl_modulo x y }
-    ensures { to_int result = Int.( *) (to_int x) (power 2 (to_int y)) }
+    ensures { to_int result = Int.( *) (to_int x) (power2 (to_int y)) }
 
   val lsl_modulo (x y : t) : t
     requires { "expl:<< second operand" Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size }
     ensures { result = lsl_modulo x y }
-    ensures { to_int result = normalize (Int.( *) (to_int x) (power 2 (to_int y))) }
+    ensures { to_int result = normalize (Int.( *) (to_int x) (power2 (to_int y))) }
 
   use int.EuclideanDivision as ED
 
   val lsr (x y : t) : t
     requires { "expl:>> second operand" Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size }
     ensures { result = lsr x y }
-    ensures { Int.(>=) (to_int x) 0 -> to_int result = ED.div (to_int x) (power 2 (to_int y)) }
+    ensures { Int.(>=) (to_int x) 0 -> to_int result = ED.div (to_int x) (power2 (to_int y)) }
 
   val asr (x y : t) : t
     requires { "expl:>> second operand" Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size }
     ensures { result = asr x y }
-    ensures { to_int result = ED.div (to_int x) (power 2 (to_int y)) }
+    ensures { to_int result = ED.div (to_int x) (power2 (to_int y)) }
 
   val of_int (n : int) : t
     requires { "expl:integer overflow" in_bounds n }
@@ -640,21 +640,21 @@ module Unsafe_bit_enum
 
   val lsl (x y : t) : t
     ensures { result = lsl_modulo x y }
-    ensures { to_int result = Int.( *) (to_int x) (power 2 (to_int y)) }
+    ensures { to_int result = Int.( *) (to_int x) (power2 (to_int y)) }
 
   val lsl_modulo (x y : t) : t
     ensures { result = lsl_modulo x y }
-    ensures { to_int result = normalize (Int.( *) (to_int x) (power 2 (to_int y))) }
+    ensures { to_int result = normalize (Int.( *) (to_int x) (power2 (to_int y))) }
 
   use int.EuclideanDivision as ED
 
   val lsr (x y : t) : t
     ensures { result = lsr x y }
-    ensures { Int.(>=) (to_int x) 0 -> to_int result = ED.div (to_int x) (power 2 (to_int y)) }
+    ensures { Int.(>=) (to_int x) 0 -> to_int result = ED.div (to_int x) (power2 (to_int y)) }
 
   val asr (x y : t) : t
     ensures { result = asr x y }
-    ensures { to_int result = ED.div (to_int x) (power 2 (to_int y)) }
+    ensures { to_int result = ED.div (to_int x) (power2 (to_int y)) }
 
   val of_int (n : int) : t
     ensures  { result = of_int_modulo n }

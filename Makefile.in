@@ -160,32 +160,69 @@ else
 LIBWHY3=$(PWD)/lib
 endif
 
+WHY3_DATADIR=$(shell why3 --print-datadir)
+
 lib/why3/why3.conf: Makefile
-	printf "[main]\n" > $@
-	printf "loadpath=\"$(LIBWHY3)/why3\"\n" >> $@
-	printf "\n" >> $@
-	printf "[prover_modifiers]\n" >> $@
-	printf "name=\"Coq\"\n" >> $@
-	printf "option=\"-R $(LIBWHY3)/coq Why\"\n" >> $@
-	printf "driver=\"$(LIBWHY3)/why3/coq.drv\"\n" >> $@
-	printf "\n"  >> $@
-	printf "[prover_modifiers]\n" >> $@
-	printf "name=\"CVC4\"\n" >> $@
-	printf "driver=\"$(LIBWHY3)/why3/cvc4_enum.gen\"\n" >> $@
-	printf "\n"  >> $@
-	printf "[prover_modifiers]\n" >> $@
-	printf "name=\"CVC4 '14\"\n" >> $@
-	printf "driver=\"$(LIBWHY3)/why3/cvc4_enum.gen\"\n" >> $@
-	printf "\n"  >> $@
-	printf "[prover_modifiers]\n" >> $@
-	printf "name=\"Z3\"\n" >> $@
-	printf "driver=\"$(LIBWHY3)/why3/z3_enum.gen\"\n" >> $@
-	printf "\n"  >> $@
-	printf "[editor_modifiers coqide]\n" >> $@
-	printf "option=\"-R $(LIBWHY3)/coq Why\"\n" >> $@
-	printf "\n"  >> $@
-	printf "[editor_modifiers proofgeneral-coq]\n" >> $@
-	printf "option=\"--eval \\\\\"(setq coq-load-path (cons '(\\\\\\\\\\\\\"$(LIBWHY3)/coq\\\\\\\\\\\\\" \\\\\\\\\\\\\"Why\\\\\\\\\\\\\") coq-load-path))\\\\\"\"\n"  >> $@
+	@printf "[main]\n" > $@
+	@printf "loadpath=\"$(LIBWHY3)/why3\"\n" >> $@
+	@printf "\n" >> $@
+
+	@printf "[prover_modifiers]\n" >> $@
+	@printf "name=\"Coq\"\n" >> $@
+	@printf "option=\"-R $(LIBWHY3)/coq Why\"\n" >> $@
+	@printf "driver=\"$(LIBWHY3)/why3/coq.drv\"\n" >> $@
+	@printf "\n"  >> $@
+
+	@printf "[prover_modifiers]\n" >> $@
+	@printf "name=\"CVC4.*\"\n" >> $@
+	@printf "driver=\"$(LIBWHY3)/why3/cvc4_enum.gen\"\n" >> $@
+	@printf "\n"  >> $@
+
+	@printf "[prover_modifiers]\n" >> $@
+	@printf "name=\"Z3.*\"\n" >> $@
+	@printf "driver=\"$(LIBWHY3)/why3/z3_enum.gen\"\n" >> $@
+	@printf "\n"  >> $@
+
+	@printf "[prover]\n" >> $@
+	@printf "alternative = \"-trigs\"\n" >> $@
+	@printf "command = \"%%l/why3-cpulimit %%t %%m -s z3 -smt2 parser.ignore_user_patterns=true %%f\"\n" >> $@
+	@printf "driver = \"$(WHY3_DATADIR)/drivers/z3_432.drv\"\n" >> $@
+	@printf "editor = \"\"\n" >> $@
+	@printf "in_place = false\n" >> $@
+	@printf "interactive = false\n" >> $@
+	@printf "name = \"Z3\"\n" >> $@
+	@printf "version = \"4.3.2\"\n" >> $@
+	@printf "\n" >> $@
+
+	@printf "[prover]\n" >> $@
+	@printf "alternative = \"'14\"\n" >> $@
+	@printf "command = \"%%l/why3-cpulimit %%t %%m -s cvc4 --lang=smt2 --simplification=none\
+		--quant-cf --qcf-tconstraint --mbqi=gen-ev --full-saturate-quant --uf-ss-fair %%f\"\n" >> $@
+	@printf "driver = \"$(WHY3_DATADIR)/drivers/cvc4_14.drv\"\n" >> $@
+	@printf "editor = \"\"\n" >> $@
+	@printf "in_place = false\n" >> $@
+	@printf "interactive = false\n" >> $@
+	@printf "name = \"CVC4\"\n" >> $@
+	@printf "version = \"1.4\"\n" >> $@
+	@printf "\n" >> $@
+
+	@printf "[prover]\n" >> $@
+	@printf "alternative = \"-Em\"\n" >> $@
+	@printf "command = \"%%l/why3-cpulimit %%t %%m -s alt-ergo -timelimit %%t -steps-bound %%S %%f -no-Ematching\"\n" >> $@
+	@printf "driver = \"$(WHY3_DATADIR)/drivers/alt_ergo.drv\"\n" >> $@
+	@printf "editor = \"altgr-ergo\"\n" >> $@
+	@printf "in_place = false\n" >> $@
+	@printf "interactive = false\n" >> $@
+	@printf "name = \"Alt-Ergo\"\n" >> $@
+	@printf "version = \"0.99.1\"\n" >> $@
+	@printf "\n" >> $@
+
+	@printf "[editor_modifiers coqide]\n" >> $@
+	@printf "option=\"-R $(LIBWHY3)/coq Why\"\n" >> $@
+	@printf "\n"  >> $@
+
+	@printf "[editor_modifiers proofgeneral-coq]\n" >> $@
+	@printf "option=\"--eval \\\\\"(setq coq-load-path (cons '(\\\\\\\\\\\\\"$(LIBWHY3)/coq\\\\\\\\\\\\\" \\\\\\\\\\\\\"Why\\\\\\\\\\\\\") coq-load-path))\\\\\"\"\n"  >> $@
 
 ########
 # COQ
