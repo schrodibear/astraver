@@ -190,9 +190,9 @@ and 'a term_hlist =
 and 'typ term =
   | Const : 'a constant -> 'a term
   | App : ('a, 'b) func * 'a term_hlist -> 'b term
-  | Var : string -> 'a term  (** immutable logic var *)
-  | Deref : string -> 'a term  (** [!r] *)
-  | Deref_at : string * string -> 'a term  (** [(at !x L)] *)
+  | Var : string -> _ term  (** immutable logic var *)
+  | Deref : string -> _ term  (** [!r] *)
+  | Deref_at : string * string -> _ term  (** [(at !x L)] *)
   | Typed : 'a term * 'a ty -> 'a term
   | Poly : poly_term -> _ term
   | Labeled : why_label * 'a term -> 'a term
@@ -206,7 +206,7 @@ type ('params, 'result) tconstr =
   | Bool : (unit, boolean) tconstr
   | Void : (unit, void) tconstr
   | Var : string -> (unit, 'b) tconstr
-  | User : (string * [ `Short | `Qualified ]) * string -> ('a, 'b) tconstr
+  | User : (string * [ `Short | `Qualified ]) * string -> (_, _) tconstr
 
 type 'a ltype_hlist =
   | Nil : unit ltype_hlist
@@ -266,14 +266,14 @@ and 'a expr_result =
   | Return : 'a expr -> 'a expr_result
 and 'typ expr_node =
   | Const : 'a constant -> 'a expr_node
-  | Var : string -> 'a expr_node
+  | Var : string -> _ expr_node
   | And : boolean expr * boolean expr -> boolean expr_node
   | Or : boolean expr * boolean expr -> boolean expr_node
   | Not : boolean expr -> boolean expr_node
   | Void : void expr_node
-  | Deref : string -> 'a expr_node
+  | Deref : string -> _ expr_node
   | Typed : 'a expr * 'a ty -> 'a expr_node
-  | Poly : poly_expr_node -> 'a expr_node
+  | Poly : poly_expr_node -> _ expr_node
   | If : boolean expr * 'b expr * 'b expr -> 'b expr_node
   | While :
         boolean expr (** loop condition *)
@@ -295,7 +295,7 @@ and 'typ expr_node =
   | Triple : [ `Opaque | `Transparent ] * pred * 'a expr * pred * ((string * pred) list) -> 'a expr_node
   | Assert : assert_kind * pred -> void expr_node
   | Black_box : 'a why_type -> 'a expr_node
-  | Absurd : void expr_node
+  | Absurd : _ expr_node
   | Labeled : why_label * 'a expr -> 'a expr_node
 
 and 'a expr = {

@@ -516,8 +516,8 @@ let rec term :
       then ft Any t1
       else
         let lab = if relocate && lab' = LabelHere then lab else lab' in
-        let _, tag = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
-        O.T.(F.Jc.tag_table "downcast" $ tag ^ ft Any t1 ^. var (Name.tag st))
+        let _, tt = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
+        O.T.(F.Jc.tag_table "downcast" $ tt ^ ft Any t1 ^. tag st)
     | JCTrange_cast (t1, ei_opt) ->
       let Typ typ, Typ typ' =
         let to_type = Option.map_default ~f:(fun e -> JCTenum e) ~default:(JCTnative Tinteger) ei_opt in
@@ -679,7 +679,7 @@ let is_base_block t =
 
 let tag ~type_safe ~global_assertion ~relocate lab oldlab tag =
   match tag#node with
-  | JCTtag st -> O.T.(var (Name.tag st))
+  | JCTtag st -> O.T.tag st
   | JCTbottom -> O.T.(var "bottom_tag")
   | JCTtypeof (t, st) ->
     let t' = term Any ~type_safe ~global_assertion ~relocate lab oldlab t in
@@ -1298,13 +1298,13 @@ let rec make_upd_simple ~e e1 fi tmp2 =
   let shift, upd =
     let open O.E in
     if safety_checking () then
-      let tag = tag_table_var (struct_root fi.fi_struct, e1#region) in
-      let tag_id = var (Name.tag fi.fi_struct) in
+      let tt = tag_table_var (struct_root fi.fi_struct, e1#region) in
+      let tag_id = tag fi.fi_struct in
       let typesafe = (pointer_struct e1#typ).si_final in
       (if P.(off = Int_offset 0) then
          var tmpp
        else if not typesafe then
-         E.locate ~e ~kind:JCVCpointer_shift (O.F.Jc.shift_safe "shift" $ tag ^ var tmpp ^ tag_id ^. var tmpi)
+         E.locate ~e ~kind:JCVCpointer_shift (O.F.Jc.shift_safe "shift" $ tt ^ var tmpp ^ tag_id ^. var tmpi)
        else
          O.F.Jc.shift_safe "shift_typesafe" $ var tmpp ^. var tmpi),
 
@@ -1312,7 +1312,7 @@ let rec make_upd_simple ~e e1 fi tmp2 =
         E.locate ~e ~kind:JCVCpointer_deref (O.F.Jc.upd_safe "upd" $ alloc ^ var mem ^ var tmpp ^. var tmp2)
       else if not typesafe then
         E.locate ~e ~kind:JCVCpointer_deref
-          (O.F.Jc.upd_offset_safe "upd_offset" $ alloc ^ tag ^ var mem ^ var tmpp ^ tag_id ^ var tmpi ^. var tmp2)
+          (O.F.Jc.upd_offset_safe "upd_offset" $ alloc ^ tt ^ var mem ^ var tmpp ^ tag_id ^ var tmpi ^. var tmp2)
       else
         E.locate ~e ~kind:JCVCpointer_deref
           (O.F.Jc.upd_offset_safe "upd_offset_typesafe" $ alloc ^ var mem ^ var tmpp ^ var tmpi ^. var tmp2)
@@ -1680,7 +1680,7 @@ and make_reinterpret ~e e1 st =
   (* call to [safe]_reinterpret_parameter *)
   let call_parameter =
     let alloc = plain_alloc_table_var (ac, e1#region) in
-    let tag = tag_table_var (struct_root st, e1#region) in
+    let tt = tag_table_var (struct_root st, e1#region) in
     let mem_to = plain_memory_var (mc_to, e1#region) in
     let open O.E in
     [before.lab_final_name] @:
@@ -1690,12 +1690,12 @@ and make_reinterpret ~e e1 st =
     | InvNone | InvArguments ->
       E.locate ~e
         (O.F.reinterpret ~safe:(safety_checking ()) $
-         alloc ^ tag ^ var s_from ^ var s_to ^ mem_to ^. expr Any e1)
+         alloc ^ tt ^ var s_from ^ var s_to ^ mem_to ^. expr Any e1)
   in
 
   (* Let's now switch to terms and assume predicates instead of calling params... *)
   let before = LabelName before in
-  let _, tag = ttag_table_var ~label_in_name:false LabelHere (struct_root st, e1#region) in
+  let _, tt = ttag_table_var ~label_in_name:false LabelHere (struct_root st, e1#region) in
   let alloc = Name.alloc_table (ac, e1#region) in
   let at' = lvar ~constant:false ~label_in_name:false in
   (* reinterpretation kind (operation):
@@ -1729,7 +1729,7 @@ and make_reinterpret ~e e1 st =
 
   let alloc_assumption =
     let app l =
-      O.P.(F.reinterpret_cast op $ tag ^ at' before alloc ^ at' LabelHere alloc ^ e' ^ T.var s_to ^ l)
+      O.P.(F.reinterpret_cast op $ tt ^ at' before alloc ^ at' LabelHere alloc ^ e' ^ T.var s_to ^ l)
     in
     match op with
     | `Retain -> app Nil
@@ -1748,7 +1748,7 @@ and make_reinterpret ~e e1 st =
     let open O.P in
     let_ "p" e'
       (fun p ->
-         let_ "ps" T.(F.Jc.tag_table "downcast" $ tag ^ e' ^. var s_to)
+         let_ "ps" T.(F.Jc.tag_table "downcast" $ tt ^ e' ^. var s_to)
            (fun ps ->
               let omin_omax =
                 let app f =
@@ -1822,7 +1822,7 @@ and make_reinterpret ~e e1 st =
     O.P.conj
       O.T.[F.Jc.rmem "rmem" $. mem `Old = mem `New;
            F.Jc.rmem "rfactor" $. mem `Old = int c;
-           F.Jc.rmem "rpointer_new" $ mem `Old ^. e' = (F.Jc.tag_table "downcast" $ tag ^ e' ^. var s_to)]
+           F.Jc.rmem "rpointer_new" $ mem `Old ^. e' = (F.Jc.tag_table "downcast" $ tt ^ e' ^. var s_to)]
   in
 
   let cast_factor_assumption = O.T.(F.cast_factor () $ var s_from ^. var s_to = int c) in
@@ -1894,8 +1894,8 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
         | JCTpointer (JCtag (st, []), _, _) -> Some (tag_table_var (struct_root st, e1#region), O.E.var @@ Name.tag st)
         | _ -> None
       with
-      | Some (tt, tag) when safety_checking () ->
-        O.E.(O.F.Jc.shift_safe "shift" $ tt ^ expr Any e1 ^ tag ^. expr (Ty O.Ty.integer) e2)
+      | Some (tt, tag') when safety_checking () ->
+        O.E.(O.F.Jc.shift_safe "shift" $ tt ^ expr Any e1 ^ tag' ^. expr (Ty O.Ty.integer) e2)
       | None when safety_checking() ->
         O.E.(F.Jc.shift_safe "shift_typesafe" $ expr Any e1 ^. expr (Ty O.Ty.integer) e2)
       | _ ->
@@ -1908,11 +1908,11 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
     | JCEbase_block _ -> assert false
     | JCEfresh _ -> Options.jc_error e#pos "Unsupported \\fresh as expression"
     | JCEinstanceof (e1, st) ->
-      let tag = tag_table_var (struct_root st, e1#region) in
+      let tt = tag_table_var (struct_root st, e1#region) in
       (* always safe *)
-      O.E.(F.Jc.instanceof "instanceof"  $ tag ^ expr Any e1 ^. var (Name.tag st))
+      O.E.(F.Jc.instanceof "instanceof"  $ tt ^ expr Any e1 ^. tag st)
     | JCEcast (e1, st) ->
-      let tag = tag_table_var (struct_root st, e1#region) in
+      let tt = tag_table_var (struct_root st, e1#region) in
       if struct_of_union st
       then expr Any e1
       else
@@ -1920,7 +1920,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
                 (fun args -> E.locate ~e ~kind:JCVCdowncast (F.Jc.downcast_safe "downcast" $ args))
               else
                 ($) (F.Jc.downcast_unsafe "downcast"))
-               (tag ^ expr Any e1 ^. var (Name.tag st)))
+               (tt ^ expr Any e1 ^. tag st))
     | JCErange_cast (e1, _ri) ->
       let Typ from_typ = ty e1#typ in
       coerce
@@ -1965,7 +1965,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
       end
     | JCEderef (e1, fi) -> return @@ make_deref ~e e1 fi
     | JCEalloc (e1, st) ->
-      let e1' = expr Any e1 in
+      let e1' = expr (Ty O.Ty.integer) e1 in
       let ac = deref_alloc_class ~type_safe:false e in
       let pc = JCtag (st, []) in
       if !Options.inv_sem = InvOwnership then
@@ -2049,7 +2049,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
             List.fold_right2 list_type_assert params call.call_args ([] ,[])
         in
         let param_assoc = List.map2 (fun (_, param) arg -> param, arg) f.fun_parameters call.call_args in
-        let mod_ = f.fun_final_name ^ if safety_checking () then  "_requires" else "" in
+        let mod_ = Name.Module.func ~extern:true ~safe:(safety_checking ()) f in
         let fname = f.fun_final_name in
         let with_body =
           try

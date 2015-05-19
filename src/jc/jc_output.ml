@@ -176,6 +176,8 @@ struct
     let reinterpret_safe = user ~from:reinterpret_safe
   end
 
+  let tag si : (unit, _) t = user ~from:(Name.Theory.struct_ (Env.JCtag (si, []))) (Name.tag si)
+
   let instanceof () : (_ * (_ * (_ * unit)), boolean) t = Jc.tag_table "instanceof"
 
   let typeof () : (_ * (_ * unit), _) t = Jc.tag_table_type "typeof"
@@ -398,10 +400,12 @@ struct
 
   let offset_max ac ?r ?code:deref ?lab p = F.offset_max () $ alloc_table ?deref ?lab ?r ac ^. p
 
+  let tag si = F.tag si $ Nil
+
   let typeof ri ?r ?code:deref ?lab p = F.typeof () $ tag_table ?deref ?lab ?r ri ^. p
 
   let instanceof ?r ?code:deref ?lab p si =
-    F.instanceof () $ (tag_table ?deref ?lab ?r @@ struct_root si) ^ p ^. var (Name.tag si)
+    F.instanceof () $ (tag_table ?deref ?lab ?r @@ struct_root si) ^ p ^. tag si
 
   let ( **>) p fi = select (var (Name.field_memory_name fi)) p
 
@@ -815,6 +819,8 @@ struct
   let (=) t1 t2 : _ t = mk (App (Poly `Eq, t1 ^. t2, None))
   let (<>) t1 t2 : _ t = mk (App (Poly `Neq, t1 ^. t2, None))
 
+  let tag si = F.tag si $ Nil
+
   let select mem p = F.select () $ mem ^. p
 
   let ( **>) mem fi = select mem (var (Name.field_memory_name fi))
@@ -927,7 +933,7 @@ struct
       | Wt.Poly' { why_type } ->
         Poly' { expr_node = Black_box why_type }
       end
-    | Absurd -> Ty Void
+    | Absurd as expr_node -> Poly { expr_node }
     | Labeled (lab, e) ->
       begin match ty e with
       | Ty ty | Ty' ty -> Ty' ty
@@ -1338,10 +1344,10 @@ struct
     | _, _ -> Iff (p1, p2)
 
   let instanceof ?r ?code:deref ?lab p si =
-    F.instanceof () $ (T.tag_table ?deref ?lab ?r @@ struct_root si) ^ p ^. T.var (Name.tag si)
+    F.instanceof () $ (T.tag_table ?deref ?lab ?r @@ struct_root si) ^ p ^. T.tag si
 
   let typeeq ?r ?code:deref ?lab p si =
-    T.(F.typeof () $ T.tag_table ?deref ?lab ?r (struct_root si) ^. p = var @@ Name.tag si)
+    T.(F.typeof () $ T.tag_table ?deref ?lab ?r (struct_root si) ^. p = T.tag si)
 
   let subtag t1 t2 = F.subtag () $ t1 ^. t2
 
