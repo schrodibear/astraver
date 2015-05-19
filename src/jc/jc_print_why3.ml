@@ -1364,16 +1364,16 @@ struct
               let close_bw_ints (s, deps) =
                 let rec dfs ~deps ty acc =
                   if not (S.mem ty acc) then
+                    let acc = S.add ty acc in
                     begin match M'.find ty deps with
                     | tys ->
-                      let acc = S.add ty acc in
                       List.fold_right (dfs ~deps) tys acc
                     | exception Not_found -> acc
                     end
                   else
                     acc
                 in
-                S.fold (dfs ~deps) S.empty s
+                S.fold (dfs ~deps) s S.empty
               in
               let memo name r =
                 try

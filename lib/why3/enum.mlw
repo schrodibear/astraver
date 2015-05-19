@@ -787,6 +787,18 @@ theory Bit_int8
     predicate signed = signed,
     goal Size_pos,
     lemma Val_two_power_size
+
+  axiom To_int_def:
+    forall a : t [to_int a].
+      to_int a =
+        (Int.(+) (if nth a 0 then 1 else 0)
+        (Int.(+) (if nth a 1 then 2 else 0)
+        (Int.(+) (if nth a 2 then 4 else 0)
+        (Int.(+) (if nth a 3 then 8 else 0)
+        (Int.(+) (if nth a 4 then 16 else 0)
+        (Int.(+) (if nth a 5 then 32 else 0)
+        (Int.(+) (if nth a 6 then 64 else 0)
+                 (if nth a 7 then Int.(-_) 128 else 0))))))))
 end
 
 theory Bit_uint8
@@ -800,6 +812,18 @@ theory Bit_uint8
     predicate signed = signed,
     goal Size_pos,
     lemma Val_two_power_size
+
+  axiom To_int_def:
+    forall a : t [to_int a].
+      to_int a =
+        (Int.(+) (if nth a 0 then 1 else 0)
+        (Int.(+) (if nth a 1 then 2 else 0)
+        (Int.(+) (if nth a 2 then 4 else 0)
+        (Int.(+) (if nth a 3 then 8 else 0)
+        (Int.(+) (if nth a 4 then 16 else 0)
+        (Int.(+) (if nth a 5 then 32 else 0)
+        (Int.(+) (if nth a 6 then 64 else 0)
+                 (if nth a 7 then 128 else 0))))))))
 end
 
 theory Bit_int16
@@ -813,6 +837,26 @@ theory Bit_int16
     predicate signed = signed,
     goal Size_pos,
     lemma Val_two_power_size
+
+  axiom To_int_def:
+    forall a : t [to_int a].
+      to_int a =
+        (Int.(+) (if nth a 0 then 1 else 0)
+        (Int.(+) (if nth a 1 then 2 else 0)
+        (Int.(+) (if nth a 2 then 4 else 0)
+        (Int.(+) (if nth a 3 then 8 else 0)
+        (Int.(+) (if nth a 4 then 16 else 0)
+        (Int.(+) (if nth a 5 then 32 else 0)
+        (Int.(+) (if nth a 6 then 64 else 0)
+        (Int.(+) (if nth a 7 then 128 else 0)
+        (Int.(+) (if nth a 8 then 256 else 0)
+        (Int.(+) (if nth a 9 then 512 else 0)
+        (Int.(+) (if nth a 10 then 1024 else 0)
+        (Int.(+) (if nth a 11 then 2048 else 0)
+        (Int.(+) (if nth a 12 then 4096 else 0)
+        (Int.(+) (if nth a 13 then 8192 else 0)
+        (Int.(+) (if nth a 14 then 16384 else 0)
+                 (if nth a 15 then Int.(-_) 32768 else 0))))))))))))))))
 end
 
 theory Bit_uint16
@@ -826,6 +870,26 @@ theory Bit_uint16
     predicate signed = signed,
     goal Size_pos,
     lemma Val_two_power_size
+
+  axiom To_int_def:
+    forall a : t [to_int a].
+      to_int a =
+        (Int.(+) (if nth a 0 then 1 else 0)
+        (Int.(+) (if nth a 1 then 2 else 0)
+        (Int.(+) (if nth a 2 then 4 else 0)
+        (Int.(+) (if nth a 3 then 8 else 0)
+        (Int.(+) (if nth a 4 then 16 else 0)
+        (Int.(+) (if nth a 5 then 32 else 0)
+        (Int.(+) (if nth a 6 then 64 else 0)
+        (Int.(+) (if nth a 7 then 128 else 0)
+        (Int.(+) (if nth a 8 then 256 else 0)
+        (Int.(+) (if nth a 9 then 512 else 0)
+        (Int.(+) (if nth a 10 then 1024 else 0)
+        (Int.(+) (if nth a 11 then 2048 else 0)
+        (Int.(+) (if nth a 12 then 4096 else 0)
+        (Int.(+) (if nth a 13 then 8192 else 0)
+        (Int.(+) (if nth a 14 then 16384 else 0)
+                 (if nth a 15 then 32768 else 0))))))))))))))))
 end
 
 theory Bit_int32
@@ -839,6 +903,42 @@ theory Bit_int32
     predicate signed = signed,
     goal Size_pos,
     lemma Val_two_power_size
+
+  axiom To_int_def:
+    forall a : t [to_int a].
+      to_int a =
+        (Int.(+) (if nth a 0 then 1 else 0)
+        (Int.(+) (if nth a 1 then 2 else 0)
+        (Int.(+) (if nth a 2 then 4 else 0)
+        (Int.(+) (if nth a 3 then 8 else 0)
+        (Int.(+) (if nth a 4 then 16 else 0)
+        (Int.(+) (if nth a 5 then 32 else 0)
+        (Int.(+) (if nth a 6 then 64 else 0)
+        (Int.(+) (if nth a 7 then 128 else 0)
+        (Int.(+) (if nth a 8 then 256 else 0)
+        (Int.(+) (if nth a 9 then 512 else 0)
+        (Int.(+) (if nth a 10 then 1024 else 0)
+        (Int.(+) (if nth a 11 then 2048 else 0)
+        (Int.(+) (if nth a 12 then 4096 else 0)
+        (Int.(+) (if nth a 13 then 8192 else 0)
+        (Int.(+) (if nth a 14 then 16384 else 0)
+        (Int.(+) (if nth a 15 then 32768 else 0)
+        (Int.(+) (if nth a 16 then 65536 else 0)
+        (Int.(+) (if nth a 17 then 131072 else 0)
+        (Int.(+) (if nth a 18 then 262144 else 0)
+        (Int.(+) (if nth a 19 then 524288 else 0)
+        (Int.(+) (if nth a 20 then 1048576 else 0)
+        (Int.(+) (if nth a 21 then 2097152 else 0)
+        (Int.(+) (if nth a 22 then 4194304 else 0)
+        (Int.(+) (if nth a 23 then 8388608 else 0)
+        (Int.(+) (if nth a 24 then 16777216 else 0)
+        (Int.(+) (if nth a 25 then 33554432 else 0)
+        (Int.(+) (if nth a 26 then 67108864 else 0)
+        (Int.(+) (if nth a 27 then 134217728 else 0)
+        (Int.(+) (if nth a 28 then 268435456 else 0)
+        (Int.(+) (if nth a 29 then 536870912 else 0)
+        (Int.(+) (if nth a 30 then 1073741824 else 0)
+                 (if nth a 31 then Int.(-_) 2147483648 else 0))))))))))))))))))))))))))))))))
 end
 
 theory Bit_uint32
@@ -852,6 +952,42 @@ theory Bit_uint32
     predicate signed = signed,
     goal Size_pos,
     lemma Val_two_power_size
+
+  axiom To_int_def:
+    forall a : t [to_int a].
+      to_int a =
+        (Int.(+) (if nth a 0 then 1 else 0)
+        (Int.(+) (if nth a 1 then 2 else 0)
+        (Int.(+) (if nth a 2 then 4 else 0)
+        (Int.(+) (if nth a 3 then 8 else 0)
+        (Int.(+) (if nth a 4 then 16 else 0)
+        (Int.(+) (if nth a 5 then 32 else 0)
+        (Int.(+) (if nth a 6 then 64 else 0)
+        (Int.(+) (if nth a 7 then 128 else 0)
+        (Int.(+) (if nth a 8 then 256 else 0)
+        (Int.(+) (if nth a 9 then 512 else 0)
+        (Int.(+) (if nth a 10 then 1024 else 0)
+        (Int.(+) (if nth a 11 then 2048 else 0)
+        (Int.(+) (if nth a 12 then 4096 else 0)
+        (Int.(+) (if nth a 13 then 8192 else 0)
+        (Int.(+) (if nth a 14 then 16384 else 0)
+        (Int.(+) (if nth a 15 then 32768 else 0)
+        (Int.(+) (if nth a 16 then 65536 else 0)
+        (Int.(+) (if nth a 17 then 131072 else 0)
+        (Int.(+) (if nth a 18 then 262144 else 0)
+        (Int.(+) (if nth a 19 then 524288 else 0)
+        (Int.(+) (if nth a 20 then 1048576 else 0)
+        (Int.(+) (if nth a 21 then 2097152 else 0)
+        (Int.(+) (if nth a 22 then 4194304 else 0)
+        (Int.(+) (if nth a 23 then 8388608 else 0)
+        (Int.(+) (if nth a 24 then 16777216 else 0)
+        (Int.(+) (if nth a 25 then 33554432 else 0)
+        (Int.(+) (if nth a 26 then 67108864 else 0)
+        (Int.(+) (if nth a 27 then 134217728 else 0)
+        (Int.(+) (if nth a 28 then 268435456 else 0)
+        (Int.(+) (if nth a 29 then 536870912 else 0)
+        (Int.(+) (if nth a 30 then 1073741824 else 0)
+                 (if nth a 31 then 2147483648 else 0))))))))))))))))))))))))))))))))
 end
 
 theory Bit_int64

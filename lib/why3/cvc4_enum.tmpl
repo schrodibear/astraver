@@ -56,6 +56,11 @@ theory enum.Bit_{{u}}int{{size}}
 
   remove prop Nth
   syntax predicate nth "(= ((_ extract %2 %2) %1) (_ bv1 1))"
+
+  {%- if size <= 32 %}
+  remove prop To_int_def
+  {%- else %}
+  {%- endif %}
 end
 {% endmacro -%}
 {% macro bit_conv (signed_from, size_from, signed_to, size_to) -%}
@@ -77,11 +82,11 @@ theory enum.Bit_{{u_to}}int{{size_to}}_of_bit_{{u_from}}int{{size_from}}
   {% if size_from == size_to %}
   syntax function cast_modulo "%1"
   {% elseif size_from > size_to %}
-  syntax function cast_modulo "((_ extract {{size_to}} {{0}}) %1)"
+  syntax function cast_modulo "((_ extract {{size_to - 1}} {{0}}) %1)"
   {% elseif signed_from %}
-  syntax function cast_modulo "((_ sign_extend {{size_to}}) %1)"
+  syntax function cast_modulo "((_ sign_extend {{size_to - size_from}}) %1)"
   {% else %}
-  syntax function cast_modulo "((_ zero_extend {{size_to}}) %1)"
+  syntax function cast_modulo "((_ zero_extend {{size_to - size_from}}) %1)"
   {% endif %}
 end
 {% endmacro -%}

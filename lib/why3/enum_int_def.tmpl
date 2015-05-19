@@ -1,0 +1,9 @@
+{%- set size = 32 %}
+{%- set signed = true %}
+  axiom To_int_def:
+    forall a : t [to_int a].
+      to_int a =
+        {%- for n in range(0,size-2) %}
+        (Int.(+) (if nth a {{n}} then {{2 ** n|int}} else 0)
+        {%- endfor %}
+                 (if nth a {{size - 1}} then {% if signed %}{{- (2 ** (size - 1))|int}}{%- else %}{{2 ** (size - 1)|int}}{% endif %} else 0){%- for n in range(0,size-2) -%}){%- endfor %}
