@@ -153,7 +153,7 @@ let func ~entry ~where ~bw_ints fmttr (type a) (type b) =
   let qid = qid ~entry ~u:false in
   let pr fmt = fprintf fmttr fmt in
   let pr_bop fp ty op' fmodulo modulo = pr "%a.%a%a%a" fp ty op op' fmodulo modulo rpar op' in
-  let pr_uop fp ty op' fmodulo modulo = pr "%a.%a%a_)" fp ty op op' fmodulo modulo in
+  let pr_uop fp ty op' fmodulo modulo = pr "%a.%a%a)" fp ty op op' fmodulo modulo in
   let pr_f fp ty = pr "%a.%s" fp ty in
   let pr_f' fp ty = pr "%a.%s%a" fp ty in
   let int_ty ?(default=true) ?ty' fmttr ty =
@@ -187,7 +187,7 @@ let func ~entry ~where ~bw_ints fmttr (type a) (type b) =
   in
   function
   | (B_int_op op' : (a, b) func) -> pr "Int.%a)" op op'
-  | U_int_op op' -> pr "Int.%a_)" op op'
+  | U_int_op op' -> pr "Int.%a)" op op'
   | B_bint_op (op, (Int _ as ty), modulo') ->
     pr_bop int_ty ty op modulo modulo'
   | B_bint_op (op, (Enum _ as ty), modulo') ->
