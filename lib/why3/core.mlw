@@ -279,16 +279,6 @@ theory Jessie_tag
 
   predicate parenttag (tag_id 't) (tag_id 't)
 
-  axiom Proper_parenttag:
-    forall t1: tag_id 't.
-      forall t2: tag_id 't [parenttag t1 t2].
-        parenttag t1 t2 -> t1 <> t2
-
-  axiom Int_of_parent_tag:
-    forall t1: tag_id 't.
-      forall t2: tag_id 't [parenttag t1 t2].
-        parenttag t1 t2 -> int_of_tag t1 > int_of_tag t2
-
   predicate subtag (tag_id 't) (tag_id 't)
 
   axiom Subtag_refl:
