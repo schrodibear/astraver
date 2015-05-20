@@ -2213,7 +2213,8 @@ let rec expr env e =
              let r = Option.map
                  (fun id -> find_logic_info id#name) r
              in
-             (ft v,r))
+             let v = ft v in
+             (Option.map_default r ~default:(term_expand v#typ (JCTnative Tinteger) v) ~f:(Fn.const v), r))
           vo
       in
       (unit_type,
