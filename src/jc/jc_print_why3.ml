@@ -46,8 +46,8 @@ let constant fmttr (type a) =
   | (Void : a constant) -> pr "()"
   | Int n -> pr "(%s)" n
   | Real f -> pr "%s" f
-  | Bool true -> pr "Bool.True"
-  | Bool false -> pr "Bool.False"
+  | Bool true -> pr "true"
+  | Bool false -> pr "false"
 
 let id fmttr id =
   fprintf fmttr "%s" @@
