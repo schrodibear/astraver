@@ -65,10 +65,11 @@ class renaming_visitor add_variable add_logic_variable =
     let cis = H.create 17 in
     fun ci ->
     if not (H.mem cis ci)
-    then
+    then begin
       ci.cname <- Name.unique ~force:true ci.cname;
       List.iter (fun fi -> fi.fname <- Name.unique ~force:true fi.fname) ci.cfields;
       H.add cis ci ()
+    end
   in
   object
     inherit frama_c_inplace

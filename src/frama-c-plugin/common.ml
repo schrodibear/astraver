@@ -439,18 +439,24 @@ struct
   let unique_generator is_exception =
     let unique_names = Hashtbl.create 127 in
     let rec aux ?(force=false) s =
-      if not force && is_exception s then s else
+      if not force && is_exception s then s
+      else
+        let s = if s = "" then "unnamed" else s in
+        let s = if s.[0] <> Char.lowercase s.[0] then "_" ^ s else s in
         try
-          let s = if s = "" then "unnamed" else s in
           let count = Hashtbl.find unique_names s in
           let s = s ^ "_" ^ (string_of_int !count) in
           if Hashtbl.mem unique_names s then
             aux s
-          else
-            (Hashtbl.add unique_names s (ref 0);
-             incr count; s)
-        with Not_found ->
-          Hashtbl.add unique_names s (ref 0); s
+          else begin
+            Hashtbl.add unique_names s (ref 0);
+            incr count;
+            s
+          end
+        with
+        | Not_found ->
+          Hashtbl.add unique_names s (ref 0);
+          s
     in
     let add s = Hashtbl.add unique_names s (ref 0) in
     aux, add
