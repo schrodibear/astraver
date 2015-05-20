@@ -2404,7 +2404,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
         (* loop variant *)
         let loop_variant =
           match la.loop_variant with
-            | Some (t,r) when variant_checking () &&
+            | Some (t, r) when variant_checking () &&
                 !Options.termination_policy <> TPnever ->
                 let variant =
                   named_term

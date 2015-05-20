@@ -1355,7 +1355,7 @@ struct
 
   let allocable ac ?code:deref ?r ?lab p = F.allocable () $ T.alloc_table ?deref ?lab ?r ac ^. p
 
-  let freeable ac ?r ?code:deref ?lab p = F.allocable () $ T.alloc_table ?deref ?lab ?r ac ^. p
+  let freeable ac ?r ?code:deref ?lab p = F.freeable () $ T.alloc_table ?deref ?lab ?r ac ^. p
 
   let allocated ac ?r ?code:deref ?lab p = F.allocated () $ T.alloc_table ?deref ?lab ?r ac ^. p
 
