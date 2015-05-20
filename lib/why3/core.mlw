@@ -2,8 +2,8 @@
 theory Jessie_pointer
   use import int.Int
 
-  type block
-  type pointer 't = (block, int)
+  type block 't
+  type pointer 't = (block 't, int)
 
   constant null : pointer 't
 
@@ -64,12 +64,12 @@ theory Jessie_pset
   predicate in_pset (pointer 't) (pset 't)
 
   axiom In_pset_empty:
-    forall p : pointer 't [in_pset p (pset_empty : pset 't)]. not (in_pset p (pset_empty : pset 't))
+    forall p : pointer 't [in_pset p (pset_empty)]. not (in_pset p (pset_empty))
 
   axiom In_pset_singleton:
     forall p : pointer 't.
-    forall q : pointer 't [in_pset p (pset_singleton q : pset 't)].
-      in_pset p (pset_singleton q : pset 't) <-> p = q
+    forall q : pointer 't [in_pset p (pset_singleton q)].
+      in_pset p (pset_singleton q) <-> p = q
 end
 
 theory Jessie_pset_range
@@ -90,8 +90,8 @@ theory Jessie_pset_range
   lemma In_pset_range_singleton:
     forall p : pointer 't.
     forall q : pointer 't.
-    forall a b : int [in_pset p (pset_range (pset_singleton q : pset 't) a b)].
-      in_pset p (pset_range (pset_singleton q : pset 't) a b) <->
+    forall a b : int [in_pset p (pset_range (pset_singleton q) a b)].
+      in_pset p (pset_range (pset_singleton q) a b) <->
         same_block p q /\ a <= sub_pointer p q <= b
 end
 
@@ -137,15 +137,15 @@ theory Jessie_pset_deref
   axiom In_pset_deref:
     forall p : pointer 'v.
     forall m : memory 't (pointer 'v).
-    forall q : pset 't [in_pset p (pset_deref m q : pset 't)].
-      in_pset p (pset_deref m q : pset 't) <->
+    forall q : pset 't [in_pset p (pset_deref m q)].
+      in_pset p (pset_deref m q) <->
         exists r : pointer 't. in_pset r q /\ p = select m r
 
   lemma In_pset_deref_singleton:
     forall p : pointer 'v.
     forall m : memory 't (pointer 'v).
-    forall q : pointer 't [in_pset p (pset_deref m (pset_singleton q : pset 't) : pset 't)].
-      in_pset p (pset_deref m (pset_singleton q : pset 't) : pset 't) <-> p = select m q
+    forall q : pointer 't [in_pset p (pset_deref m (pset_singleton q))].
+      in_pset p (pset_deref m (pset_singleton q)) <-> p = select m q
 end
 
 theory Jessie_pset_union
@@ -161,10 +161,10 @@ theory Jessie_pset_union
       in_pset p (pset_union s1 s2) <-> in_pset p s1 \/ in_pset p s2
 
   lemma In_pset_union_singleton:
-    forall p1 : pointer 't [pset_singleton p1 : pset 't].
-      forall p2 : pointer 't [pset_singleton p2 : pset 't, pset_union (pset_singleton p1 : pset 't) (pset_singleton p2 : pset 't)].
-        forall p : pointer 't [in_pset p (pset_union (pset_singleton p1) (pset_singleton p2) : pset 't)].
-          in_pset p (pset_union (pset_singleton p1) (pset_singleton p2) : pset 't) <->
+    forall p1 : pointer 't [pset_singleton p1].
+      forall p2 : pointer 't [pset_singleton p2, pset_union (pset_singleton p1) (pset_singleton p2)].
+        forall p : pointer 't [in_pset p (pset_union (pset_singleton p1) (pset_singleton p2))].
+          in_pset p (pset_union (pset_singleton p1) (pset_singleton p2)) <->
             (p = p1 \/ p = p2)
 end
 
@@ -183,17 +183,17 @@ theory Jessie_pset_all
 
   lemma In_pset_all_singleton:
     forall p : pointer 't.
-    forall q : pointer 't [in_pset p (pset_all (pset_singleton q : pset 't))].
-      in_pset p (pset_all (pset_singleton q : pset 't)) <-> same_block p q
+    forall q : pointer 't [in_pset p (pset_all (pset_singleton q))].
+      in_pset p (pset_all (pset_singleton q)) <-> same_block p q
 
   use import Jessie_pset_union
 
   lemma In_pset_union_all_singleton:
-    forall p1 : pointer 't [pset_all (pset_singleton p1 : pset 't)].
+    forall p1 : pointer 't [pset_all (pset_singleton p1)].
       forall p2 : pointer 't
-      [pset_all (pset_singleton p2 : pset 't), (pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2)) : pset 't)].
-        forall p : pointer 't [in_pset p (pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2)) : pset 't)].
-          in_pset p (pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2)) : pset 't) <->
+      [pset_all (pset_singleton p2), (pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2)))].
+        forall p : pointer 't [in_pset p (pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2)))].
+          in_pset p (pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2))) <->
             same_block p p1 \/ same_block p p2
 end
 
@@ -565,23 +565,23 @@ theory Jessie_rmem
   function pset_reinterpret (m : memory 't 'v) (l : pset 't) : pset 't
 
   axiom Pset_reinterpret_empty:
-    forall m : memory 't 'v [pset_reinterpret m pset_empty : pset 't].
-      pset_reinterpret m pset_empty : pset 't = pset_empty
+    forall m : memory 't 'v [pset_reinterpret m pset_empty].
+      pset_reinterpret m pset_empty = pset_empty
 
   use import int.ComputerDivision
 
   axiom Pset_reinterpret_pset_range:
     forall m : memory 't 'v.
       forall p : pointer 't.
-        forall a, b : int [pset_reinterpret m (pset_range (pset_singleton p) a b) : pset 't].
+        forall a, b : int [pset_reinterpret m (pset_range (pset_singleton p) a b)].
           (rfactor m > 0 ->
-            (pset_reinterpret m (pset_range (pset_singleton p) a b) : pset 't) =
+            (pset_reinterpret m (pset_range (pset_singleton p) a b)) =
             pset_range (pset_singleton (rpointer_new m p)) (a * rfactor m) ((b + 1) * rfactor m - 1)) /\
           (rfactor m < 0 /\ mod a (rfactor m) = 0 /\ mod (b + 1) (rfactor m) = 0 ->
-            (pset_reinterpret m (pset_range (pset_singleton p) a b) : pset 't) =
+            (pset_reinterpret m (pset_range (pset_singleton p) a b)) =
             pset_range (pset_singleton (rpointer_new m p)) (div a (rfactor m)) ((div (b + 1) (rfactor  m)) - 1)) /\
           (rfactor m = 0 ->
-            (pset_reinterpret m (pset_range (pset_singleton p) a b) : pset 't) =
+            (pset_reinterpret m (pset_range (pset_singleton p) a b)) =
             pset_range (pset_singleton (rpointer_new m p)) a b)
 
   axiom Pset_reinterpret_pset_union_distrib:
@@ -959,7 +959,7 @@ module Jessie_reinterpret_unsafe
                alloc_fresh (old !a) ps /\
                allocable !a p /\
                let pset_range_new =
-                 pset_range (pset_singleton ps : pset 't) (offset_min !a ps) (offset_max !a ps)
+                 pset_range (pset_singleton ps) (offset_min !a ps) (offset_max !a ps)
                in
                not_assigns_strong (old !m) !m pset_range_new }
 end
@@ -1005,7 +1005,7 @@ module Jessie_reinterpret_safe
                alloc_fresh (old !a) ps /\
                allocable !a p /\
                let pset_range_new =
-                 pset_range (pset_singleton ps : pset 't) (offset_min !a ps) (offset_max !a ps)
+                 pset_range (pset_singleton ps) (offset_min !a ps) (offset_max !a ps)
                in
                not_assigns_strong (old !m) !m pset_range_new }
 end

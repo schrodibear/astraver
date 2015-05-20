@@ -3,11 +3,10 @@
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="4">
 <prover id="0" name="Alt-Ergo" version="0.99.1" timelimit="5" memlimit="1000"/>
-<prover id="1" name="CVC4 &apos;14" version="1.4" timelimit="5" memlimit="1000"/>
-<prover id="2" name="Coq" version="8.4pl5" timelimit="5" memlimit="1000"/>
 <prover id="3" name="CVC4" version="1.4" timelimit="5" memlimit="1000"/>
 <prover id="4" name="CVC3" version="2.4.1" timelimit="60" memlimit="1000"/>
 <prover id="5" name="Coq" version="8.4pl6" timelimit="5" memlimit="1000"/>
+<prover id="6" name="CVC4" version="1.4" alternative="&apos;14" timelimit="5" memlimit="1000"/>
 <file name="../core.mlw" expanded="true">
 <theory name="Jessie_pointer" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
@@ -19,47 +18,47 @@
 </theory>
 <theory name="Jessie_pset" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_pset_range" sum="fc7a2c4e9592a5994936234e872643df">
+<theory name="Jessie_pset_range" sum="f4f6d32c1b05967d598a84fd4f9be7c3">
  <goal name="In_pset_range_singleton">
- <proof prover="2" edited="core_Jessie_pset_range_In_pset_range_singleton_1.v"><result status="valid" time="0.78"/></proof>
+ <proof prover="5" edited="core_Jessie_pset_range_In_pset_range_singleton_1.v"><result status="valid" time="0.78"/></proof>
  </goal>
 </theory>
 <theory name="Jessie_pset_range_left" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 <theory name="Jessie_pset_range_right" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_pset_deref" sum="df0d95c8320670d6850726229d6465b0">
+<theory name="Jessie_pset_deref" sum="94a7e43d7c952d6442aa138f66e71da2">
  <goal name="In_pset_deref_singleton">
- <proof prover="1"><result status="valid" time="0.00"/></proof>
+ <proof prover="6"><result status="valid" time="0.00"/></proof>
  </goal>
 </theory>
-<theory name="Jessie_pset_union" sum="14df8ff00a158d7b7ceaa3c126532ee4">
+<theory name="Jessie_pset_union" sum="66d07f0a8d921f0540611c47883a3b3d">
  <goal name="In_pset_union_singleton">
- <proof prover="0" edited="core-Jessie_pset_union-In_pset_union_singleton_1.why"><result status="valid" time="0.01" steps="12"/></proof>
- <proof prover="1"><result status="valid" time="0.00"/></proof>
+ <proof prover="0" edited="core-Jessie_pset_union-In_pset_union_singleton_1.why"><unedited/></proof>
+ <proof prover="6"><result status="valid" time="0.00"/></proof>
  </goal>
 </theory>
-<theory name="Jessie_pset_all" sum="a77bd959617cded4ad07303b19a80523">
+<theory name="Jessie_pset_all" sum="f4e1a76b6f0f9cb0de7871fd058ad7c4">
  <goal name="In_pset_all_singleton">
- <proof prover="1"><result status="valid" time="0.00"/></proof>
+ <proof prover="6"><result status="valid" time="0.00"/></proof>
  </goal>
  <goal name="In_pset_union_all_singleton">
- <proof prover="1"><result status="valid" time="0.00"/></proof>
+ <proof prover="6"><result status="valid" time="0.00"/></proof>
  </goal>
 </theory>
 <theory name="Jessie_pset_disjoint" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 <theory name="Jessie_pset_included" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_assigns" sum="6f851cf0c49fee4c84b9ea3039868275">
+<theory name="Jessie_assigns" sum="ddec2e098490f9e79dd9cf7c424b5af2">
  <goal name="Not_assigns_refl">
- <proof prover="1"><result status="valid" time="0.01"/></proof>
+ <proof prover="6"><result status="valid" time="0.01"/></proof>
  </goal>
  <goal name="Not_assigns_trans">
- <proof prover="1"><result status="valid" time="0.00"/></proof>
+ <proof prover="6"><result status="valid" time="0.00"/></proof>
  </goal>
 </theory>
-<theory name="Jessie_assigns_strong" sum="35c171f4a9353f84a275efc2ccfdb044">
+<theory name="Jessie_assigns_strong" sum="9eb383fa106ab3e2188026e4f303080e">
  <goal name="not_assigns_strong">
  <proof prover="3"><result status="valid" time="0.01"/></proof>
  </goal>
@@ -76,14 +75,14 @@
 </theory>
 <theory name="Jessie_reinterpret_cast" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_allocable" sum="05a62ee87abb1d754f49498f3b53e9ae">
+<theory name="Jessie_allocable" sum="999b2ea17422583dbe4ea13bfca4de10">
  <goal name="Alloc_fresh_not_same_block">
  <proof prover="5" edited="core_Jessie_allocable_Alloc_fresh_not_same_block_1.v"><result status="valid" time="0.80"/></proof>
  </goal>
 </theory>
 <theory name="Jessie_alloc" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_same_except" sum="918009d6186e932b1c5bbe982859241f">
+<theory name="Jessie_same_except" sum="be7f79fc7b00eb556a21da1c7ded2179">
  <goal name="Alloc_same_except_trans">
  <proof prover="4"><result status="valid" time="0.00"/></proof>
  </goal>
