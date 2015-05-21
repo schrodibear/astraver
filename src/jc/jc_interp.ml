@@ -499,7 +499,7 @@ let rec term :
           | Offset_min -> offset_min
           | Offset_max -> offset_max
         in
-        return @@ f ac ~r:t1#region ~lab @@ ft Any t1
+        return @@ f ~code:(not global_assertion) ac ~r:t1#region ~lab @@ ft Any t1
       | JCalloc_bitvector -> assert false
       end
     | JCTaddress (Addr_absolute, _t1) -> assert false
@@ -510,7 +510,7 @@ let rec term :
       return @@ O.T.(shift t1' @@ offset_min ac ~r:t1#region ~lab t1')
     | JCTinstanceof (t1, lab', st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
-      return @@ O.T.(instanceof ~r:t1#region ~lab (ft Any t1) st)
+      return @@ O.T.(instanceof ~code:(not global_assertion) ~r:t1#region ~lab (ft Any t1) st)
     | JCTcast (t1, lab', st) ->
       if struct_of_union st
       then ft Any t1
@@ -683,7 +683,7 @@ let tag ~type_safe ~global_assertion ~relocate lab oldlab tag =
   | JCTbottom -> O.T.(var "bottom_tag")
   | JCTtypeof (t, st) ->
     let t' = term Any ~type_safe ~global_assertion ~relocate lab oldlab t in
-    O.T.(typeof (struct_root st) ~lab ~r:t#region t')
+    O.T.(typeof ~code:(not global_assertion) (struct_root st) ~lab ~r:t#region t')
 
 let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
   let f f = f ~type_safe ~global_assertion ~relocate lab oldlab in
