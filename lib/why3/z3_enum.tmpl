@@ -1,0 +1,111 @@
+{% macro bit (signed, size) -%}
+{% if signed -%}
+  {% set u = "" %}
+  {% set us = "s" %}
+{% else -%}
+  {% set u = "u" %}
+  {% set us = u %}
+{% endif -%}
+theory enum.Bit_{{u}}int{{size}}
+
+  syntax type t "(_ BitVec {{size}})"
+
+  syntax function (&) "(bvand %1 %2)"
+  syntax function (|.) "(bvor %1 %2)"
+  syntax function (^) "(bvxor %1 %2)"
+  syntax function (~_) "(bvnot %1)"
+
+  syntax function lsl_modulo "(bvshl %1 %2)"
+  syntax function lsr "(bvlshr %1 %2)"
+  syntax function asr "(bvashr %1 %2)"
+
+  syntax function (+%) "(bvadd %1 %2)"
+  syntax function (-%) "(bvsub %1 %2)"
+  syntax function (-%_) "(bvneg %1)"
+  syntax function ( *%) "(bvmul %1 %2)"
+  syntax function (/%) "(bv{{us}}div %1 %2)"
+  syntax function (%%) "(bv{{us}}rem %1 %2)"
+
+  syntax function of_int_modulo "((_ int2bv {{size}}) %1)"
+  syntax converter of_int_const "(_ bv%1 {{size}})"
+  {% if signed %}
+  syntax function to_uint "(bv2int %1)"
+  {% else %}
+  syntax function to_int "(bv2int %1)"
+  remove prop To_uint
+  {% endif %}
+
+  remove prop To_uint_lsr
+  remove prop To_uint_lsl_modulo
+
+  remove prop Nth_bw_or
+  remove prop Nth_bw_and
+  remove prop Nth_bw_xor
+  remove prop Nth_bw_not
+  remove prop Lsr_nth_low
+  remove prop Lsr_nth_high
+  remove prop Asr_nth_low
+  remove prop Asr_nth_high
+  remove prop Lsl_modulo_nth_low
+  remove prop Lsl_modulo_nth_high
+
+  syntax predicate lt "(bv{{us}}lt %1 %2)"
+  syntax predicate le "(bv{{us}}le %1 %2)"
+  syntax predicate gt "(bv{{us}}gt %1 %2)"
+  syntax predicate ge "(bv{{us}}ge %1 %2)"
+
+  remove prop Nth
+  syntax predicate nth "(= ((_ extract %2 %2) %1) (_ bv1 1))"
+
+  {%- if size <= 32 %}
+  remove prop To_int_def
+  {%- else %}
+  {%- endif %}
+end
+{% endmacro -%}
+{% macro bit_conv (signed_from, size_from, signed_to, size_to) -%}
+{% if signed_from -%}
+  {% set u_from = "" %}
+  {% set us_from = "s" %}
+{% else -%}
+  {% set u_from = "u" %}
+  {% set us_from = u %}
+{% endif -%}
+{% if signed_to -%}
+  {% set u_to = "" %}
+  {% set us_to = "s" %}
+{% else -%}
+  {% set u_to = "u" %}
+  {% set us_to = u %}
+{% endif -%}
+theory enum.Bit_{{u_to}}int{{size_to}}_of_bit_{{u_from}}int{{size_from}}
+  {% if size_from == size_to %}
+  syntax function cast_modulo "%1"
+  {% elseif size_from > size_to %}
+  syntax function cast_modulo "((_ extract {{size_to - 1}} {{0}}) %1)"
+  {% elseif signed_from %}
+  syntax function cast_modulo "((_ sign_extend {{size_to - size_from}}) %1)"
+  {% else %}
+  syntax function cast_modulo "((_ zero_extend {{size_to - size_from}}) %1)"
+  {% endif %}
+end
+{% endmacro -%}
+{% set sizes = [8, 16, 32, 64] %}
+{% set signs = [true, false] %}
+{% for size in sizes -%}
+{% for sign in signs -%}
+{{ bit (sign, size) }}
+{% endfor -%}
+{% endfor -%}
+{% for size_from in sizes -%}
+{% for sign_from in signs -%}
+{% for size_to in sizes -%}
+{% for sign_to in signs -%}
+{% if !(sign_from == sign_to && size_from == size_to) -%}
+{{ bit_conv (sign_from, size_from, sign_to, size_to) }}
+{% else -%}
+{% endif -%}
+{% endfor -%}
+{% endfor -%}
+{% endfor -%}
+{% endfor -%}
