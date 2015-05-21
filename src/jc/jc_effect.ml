@@ -1144,12 +1144,10 @@ let rec single_term ef t =
   match t#node with
     | JCTvar vi ->
         true,
-        if vi.vi_assigned then
-          if vi.vi_static then
-            add_global_effect lab ef vi
-          else
-            add_local_effect lab ef vi
-        else ef
+        if vi.vi_static then
+          add_global_effect lab ef vi
+        else
+          add_local_effect lab ef vi
     | JCToffset(_k,t,_st) ->
         let ac = tderef_alloc_class ~type_safe:true t in
         true,
@@ -1364,20 +1362,16 @@ let rec expr fef e =
     (fun (fef : fun_effect) e -> match e#node with
        | JCEvar v ->
            true,
-           if v.vi_assigned then
-             if v.vi_static then
-               add_global_reads LabelHere fef v
-             else
-               add_local_reads LabelHere fef v
-           else fef
+           if v.vi_static then
+             add_global_reads LabelHere fef v
+           else
+             add_local_reads LabelHere fef v
        | JCEassign_var(v,_e) ->
            true,
-           if v.vi_assigned then
-             if v.vi_static then
-               add_global_writes LabelHere fef v
-             else
-               add_local_writes LabelHere fef v
-           else fef
+           if v.vi_static then
+             add_global_writes LabelHere fef v
+           else
+             add_local_writes LabelHere fef v
        | JCEoffset(_k,e,_st) ->
            let ac = deref_alloc_class ~type_safe:true e in
            true,
