@@ -10,6 +10,10 @@ theory Jessie_pointer
   function sub_pointer (a : pointer 't) (b : pointer 't) : int = let (_, a) = a in let (_, b) = b in a - b
   function shift (p : pointer 't) (n : int) : pointer 't = let (b, o) = p in (b, o + n)
   predicate same_block (p1 : pointer 't) (p2 : pointer 't) = let (b1, _) = p1 in let (b2, _) = p2 in b1 = b2
+
+  lemma Sub_pointer_shift:
+    forall p q : pointer 't [same_block p q | sub_pointer p q].
+      same_block p q -> p = shift q (sub_pointer p q)
 end
 
 theory Jessie_zwf
