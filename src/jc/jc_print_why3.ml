@@ -692,7 +692,15 @@ let why_decl ~entry (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = 
       in
       collect_consts ~consts t
     in
-    pr "val@ %a@ %a" why_id why_id' (why_type ~entry ~bw_ints ~consts) t
+    let colon =
+      match t with
+      | Arrow _ -> ""
+      | Typed (Arrow _, _) -> ""
+      | Poly { why_type } when (match why_type with Arrow _ -> true | _  -> false) -> ""
+      | Annot (_, Arrow _, _, _, _, _) -> ""
+      | _ -> ":"
+    in
+    pr "val@ %a%s@ %a" why_id why_id' colon (why_type ~entry ~bw_ints ~consts) t
   | Logic (args', Type (Bool, Nil)) ->
     pr "predicate@ %a@ %a" why_id why_id' args args'
   | Logic (args', t) ->
