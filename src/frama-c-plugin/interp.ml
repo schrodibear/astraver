@@ -1767,6 +1767,9 @@ let instruction = function
           let alloc = JCPEalloc (arg, name_of_type) in
           if is_kmalloc v then
             let cond =
+              let zero_expr =
+                mkexpr (JCPEcast (zero_expr, mktype @@ JCPTidentifier ("int32", []))) pos
+              in
               mkexpr
                 (JCPEbinary (mkexpr (JCPEapp (Name.Logic_function.nondet_int, [], [])) pos, `Bneq, zero_expr))
                 pos
