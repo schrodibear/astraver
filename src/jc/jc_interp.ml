@@ -2075,6 +2075,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
             fname
             args
         in
+        let new_args = if new_args = [] then O.E.[some void] else new_args in
         E.locate ~e ~kind:(JCVCuser_call f.fun_name) O.E.(((mod_, `Qualified), fname) $.. new_args) |>
         (* decreases *)
         (let this_comp = f.fun_component in
