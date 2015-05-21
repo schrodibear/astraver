@@ -1146,8 +1146,10 @@ let rec single_term ef t =
         true,
         if vi.vi_static then
           add_global_effect lab ef vi
-        else
+        else if not vi.vi_bound then
           add_local_effect lab ef vi
+        else
+          ef
     | JCToffset(_k,t,_st) ->
         let ac = tderef_alloc_class ~type_safe:true t in
         true,

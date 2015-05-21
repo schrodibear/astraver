@@ -135,6 +135,7 @@ type var_info = {
   mutable vi_formal     : bool;
   mutable vi_assigned   : bool;
           vi_static     : bool;
+          vi_bound      : bool;
 }
 
 type exception_info = {

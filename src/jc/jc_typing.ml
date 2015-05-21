@@ -1405,7 +1405,7 @@ and make_quantifier q loc ty idl env trigs e : assertion =
   match idl with
     | [] -> assertion env e (*Here the triggers disappear if idl start empty*)
     | id :: r ->
-        let vi = var ty id#name in
+        let vi = var ~bound:true ty id#name in
         let env = ((id#name, vi) :: env) in
         let trigs_id,trigs_r =
           match r with

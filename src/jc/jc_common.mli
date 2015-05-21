@@ -94,7 +94,7 @@ val num_of_constant : 'a -> const -> Num.num
 
 (* environment infos *)
 
-val var : ?unique:bool -> ?static:bool -> ?formal:bool -> Env.jc_type -> string -> Env.var_info
+val var : ?unique:bool -> ?static:bool -> ?formal:bool -> ?bound:bool -> Env.jc_type -> string -> Env.var_info
 val copyvar : Env.var_info -> Env.var_info
 
 val tmp_var_name : unit -> string

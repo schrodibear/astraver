@@ -260,7 +260,7 @@ let tmp_var_name () =
 
 let var_tag_counter = ref 0
 
-let var ?(unique=true) ?(static=false) ?(formal=false) ty id =
+let var ?(unique=true) ?(static=false) ?(formal=false) ?(bound=false) ty id =
   incr var_tag_counter;
   let vi = {
     vi_tag = !var_tag_counter;
@@ -273,6 +273,7 @@ let var ?(unique=true) ?(static=false) ?(formal=false) ty id =
     vi_formal = formal;
     vi_assigned = false;
     vi_static = static;
+    vi_bound = bound
   }
   in vi
 
