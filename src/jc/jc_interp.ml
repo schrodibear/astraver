@@ -2734,6 +2734,36 @@ let logic_fun f ta =
   | None, JCTerm _
   | Some _, JCAssertion _ -> assert false
 
+let global_imports ~lookup =
+  let module S = Set.Make (PointerClass) in
+  let add = Fn.const % S.add in
+  let skip _ x = x in
+  let cons_global_import pco = List.cons @@ Use (`Import None, lookup @@ fst @@ Name.Module.globals @@ pco) in
+  fun e ->
+    AllocMap.fold
+      (function
+        | JCalloc_root ri, r when not (Region.polymorphic r) -> add @@ JCroot ri
+        | _ -> skip)
+      e.e_alloc_tables
+      S.empty |>
+    TagMap.fold
+      (function
+        | ri, r when not (Region.polymorphic r) -> add @@ JCroot ri
+        | _ -> skip)
+      e.e_tag_tables |>
+    MemoryMap.fold
+      (function
+        | JCmem_field fi, r when not (Region.polymorphic r) -> add @@ JCtag (fi.fi_struct, [])
+        | _ -> skip)
+      e.e_memories |>
+    VarMap.fold
+      (function
+        | { vi_type = JCTpointer (pc, _, _); vi_region; _ } when not (Region.polymorphic vi_region) -> add pc
+        | _ -> skip)
+      e.e_globals |> fun s ->
+    S.fold (fun pc -> cons_global_import @@ Some pc) s [] |>
+    VarMap.fold (function { vi_type = JCTpointer _ } -> skip | _ -> Fn.const @@ cons_global_import None) e.e_globals
+
 let axiomatic name data =
   let open Typing in
   let logics =
@@ -2747,7 +2777,11 @@ let axiomatic name data =
 
 let logic_fun li body =
   if li.li_axiomatic = None then
-    O.[Entry.some @@ Th.mk ~name:(fst @@ Name.Theory.axiomatic li) @@ logic_fun li body]
+    O.[Entry.some @@
+       Th.mk
+         ~name:(fst @@ Name.Theory.axiomatic li)
+         ~deps:(global_imports ~lookup:Th.dummy li.li_effects)
+         (logic_fun li body)]
   else
     []
 
@@ -3195,6 +3229,11 @@ let func f funpos spec body =
      annot_fun_parameters fparams
        external_write_params external_read_params annot_type
    in
+   let deps =
+     List.map
+       (fun d -> Dependency d)
+       (global_imports ~lookup:O.Mod.dummy @@ Effect.ef_union f.fun_effects.fe_reads f.fun_effects.fe_writes)
+   in
    let external_unsafe =
      let name = f.fun_final_name in
      Hashtbl.add function_prototypes name (O.Wt.some fun_type);
@@ -3202,6 +3241,7 @@ let func f funpos spec body =
      O.Mod.mk
        ~name:(Name.Module.func ~extern:true ~safe:false f)
        ~safe:false
+       ~deps
        [O.Wd.mk ~name @@ Param fun_type]
    in
    let annot_type =
@@ -3221,6 +3261,7 @@ let func f funpos spec body =
      O.Mod.mk
        ~name:(Name.Module.func ~extern:true ~safe:true f)
        ~safe:false
+       ~deps
        [O.Wd.mk ~name @@ Param fun_type]
    in
   (* restore assigned status for parameters assigned in the body *)
@@ -3317,6 +3358,7 @@ let func f funpos spec body =
               O.Mod.mk
                 ~name:(Name.Module.func ~safe:true ~extern:false f)
                 ~safe:true
+                ~deps
                 [O.Wd.mk
                    ~name
                    ~expl:("Function " ^ f.fun_name ^ ", safety")
@@ -3340,6 +3382,7 @@ let func f funpos spec body =
            O.Mod.mk
              ~name:(Name.Module.func ~safe:false ~extern:false f)
              ~safe:false
+             ~deps
              (List.fold_right
                 (fun (id, b, internal_post, _) ->
                    Fn.on'
