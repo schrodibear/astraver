@@ -3234,12 +3234,12 @@ let func f funpos spec body =
        (fun d -> Dependency d)
        (global_imports ~lookup:O.Mod.dummy @@ Effect.ef_union f.fun_effects.fe_reads f.fun_effects.fe_writes)
    in
-   let external_unsafe =
+   let external_safe =
      let name = f.fun_final_name in
      Hashtbl.add function_prototypes name (O.Wt.some fun_type);
      O.Entry.some @@
      O.Mod.mk
-       ~name:(Name.Module.func ~extern:true ~safe:false f)
+       ~name:(Name.Module.func ~extern:true ~safe:true f)
        ~safe:false
        ~deps
        [O.Wd.mk ~name @@ Param fun_type]
@@ -3254,12 +3254,12 @@ let func f funpos spec body =
      annot_fun_parameters fparams
        external_write_params external_read_params annot_type
    in
-   let external_safe =
+   let external_unsafe =
      let name = f.fun_final_name in
      Hashtbl.add function_prototypes name (O.Wt.some fun_type);
      O.Entry.some @@
      O.Mod.mk
-       ~name:(Name.Module.func ~extern:true ~safe:true f)
+       ~name:(Name.Module.func ~extern:true ~safe:false f)
        ~safe:false
        ~deps
        [O.Wd.mk ~name @@ Param fun_type]
