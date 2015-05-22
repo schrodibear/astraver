@@ -1951,12 +1951,12 @@ let li_args ~label_in_name ~region_assoc ~label_assoc f args =
 let logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
   if Options.debug then printf "logic call to %s@." f.li_name;
   let args = li_args ~label_in_name ~region_assoc ~label_assoc f args in
-  O.T.((Name.Theory.axiomatic f, f.li_final_name) $.. args)
+  O.T.((Name.Theory.axiomatic_of f, f.li_final_name) $.. args)
 
 let logic_pred_call ~label_in_name ~region_assoc ~label_assoc f' args =
   if Options.debug then printf "logic pred call to %s@." f'.li_name;
   let args = li_args ~label_in_name ~region_assoc ~label_assoc f' args in
-  O.P.((Name.Theory.axiomatic f', f'.li_final_name) $.. args)
+  O.P.((Name.Theory.axiomatic_of f', f'.li_final_name) $.. args)
 
 let collect_li_reads acc li =
   let add fold get_name get_map acc =

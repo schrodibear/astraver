@@ -2773,13 +2773,13 @@ let axiomatic name data =
       data.axiomatics_defined_ids
   in
   let goals = List.map axiomatic_decl data.axiomatics_decls in
-  O.[Entry.some (Th.mk ~name @@ List.flatten @@ logics @ goals)]
+  O.[Entry.some (Th.mk ~name:(Name.Theory.axiomatic name) @@ List.flatten @@ logics @ goals)]
 
 let logic_fun li body =
   if li.li_axiomatic = None then
     O.[Entry.some @@
        Th.mk
-         ~name:(fst @@ Name.Theory.axiomatic li)
+         ~name:(fst @@ Name.Theory.axiomatic_of li)
          ~deps:(global_imports ~lookup:Th.dummy li.li_effects)
          (logic_fun li body)]
   else

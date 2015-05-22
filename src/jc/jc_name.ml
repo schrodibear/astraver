@@ -141,8 +141,9 @@ struct
     function
     | JCtag (si, _) -> "Struct_" ^ si.si_name, `Short
     | JCroot ri -> "Root_" ^ ri.ri_name, `Short
-  let axiomatic li =
-    Option.map_default li.li_axiomatic ~default:("Logic_" ^ li.li_final_name) ~f:((^) "Axiomatic_"), `Short
+  let axiomatic = (^) "Axiomatic_"
+  let axiomatic_of li =
+    Option.map_default li.li_axiomatic ~default:("Logic_" ^ li.li_final_name) ~f:axiomatic, `Short
   let logic_type name = "Logic_type_" ^ name, `Short
   let lemma ~is_axiom id = (if is_axiom then "Axiom_" else "Lemma_") ^ id, `Short
 
