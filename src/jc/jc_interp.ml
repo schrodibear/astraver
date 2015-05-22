@@ -1880,7 +1880,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
     | JCEbinary (e1, op, e2) ->
       let return e' =
         match fst op with
-        | `Bdiv | `Bmod -> return (E.locate ~e ?behavior:None ~kind:JCVCdiv_by_zero e')
+        | `Bdiv | `Bmod when safety_checking () -> return (E.locate ~e ?behavior:None ~kind:JCVCdiv_by_zero e')
         | _ -> return e'
       in
       begin match bin_op ~e op with
