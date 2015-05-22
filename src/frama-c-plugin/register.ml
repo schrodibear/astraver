@@ -47,12 +47,17 @@ let treat_jessie_spec_prolog () =
     let spec_prolog_h_name = Filename.concat std_include Name.File.blockfuns_include in
     Kernel.CppExtraArgs.append_before ["-include " ^ spec_prolog_h_name]
 
+(* The specifications in the lib force Jessie to handle usnupported features e.g. long double *)
+let avoid_frama_c_stdlib () =
+  if Config.Analysis.get () then
+    Kernel.FramaCStdLib.off ()
+
 let () =
   (* [JS 2009/10/04]
      Preserve the behaviour of svn release <= r5012.
      However it works only if the int-model is set from the command line. *)
   (* Extension -- support for specialized memcpy() versions. *)
-  List.iter Cmdline.run_after_configuring_stage [treat_jessie_spec_prolog]
+  List.iter Cmdline.run_after_configuring_stage [treat_jessie_spec_prolog; avoid_frama_c_stdlib]
 
 let steal_globals () =
   let vis =
