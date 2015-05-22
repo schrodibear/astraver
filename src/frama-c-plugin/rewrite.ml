@@ -3256,6 +3256,22 @@ let declare_jessie_nondet_int file =
   end
 
 (*****************************************************************************)
+(* Remove \from clauses from assigns (not used by Jessie)                    *)
+(*****************************************************************************)
+
+class assigns_from_remover =
+  object
+    inherit frama_c_inplace
+    method! vdeps =
+      function
+      | From _ ->
+        ChangeTo FromAny
+      | FromAny -> SkipChildren
+  end
+
+let remove_assigns_from = visitFramacFile (new assigns_from_remover)
+
+(*****************************************************************************)
 (* Rewrite the C file for Jessie translation.                                *)
 (*****************************************************************************)
 
@@ -3267,6 +3283,8 @@ let apply ~file f msg =
 let rewrite file =
   let apply = apply ~file in
   let open Config in
+  (* Remove assigns \from clauses not used by Jessie but causing failures by void * dereferences *)
+  apply remove_assigns_from "remove assigns from clauses";
   (* Insert declarations for kmalloc and jessie_nondet_int if necessary *)
   apply declare_jessie_nondet_int "inserting declaration for jessie_nondet_int (if necessary)";
   (* Add definitions for undefined composite tags. *)
