@@ -1,4 +1,12 @@
 
+theory Int
+  use export int.Int
+  use import int.EuclideanDivision
+
+  function (/) (a : int) (b : int) : int = div a b
+  function (%) (a : int) (b : int) : int = mod a b
+end
+
 theory Jessie_pointer
   use import int.Int
 

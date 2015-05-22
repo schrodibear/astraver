@@ -343,7 +343,7 @@ let of_int_const ~entry ~where ~bw_ints =
         if s' >=/ Int 0 then
           pr "(%t@ %s)" (f ~subst:true) (string_of_num s')
         else
-          pr "(-@ (%t@ %s))" (f ~subst:true) (string_of_num (minus_num s'))
+          pr "(Int.(-_)@ (%t@ %s))" (f ~subst:true) (string_of_num (minus_num s'))
       else
         fallback ()
 
@@ -1205,7 +1205,7 @@ struct
   let () =
     add_expansion "\\(Bit_u?i\\|Ui\\|I\\)nt[0-9]+" (`Prefix "enum");
     add_expansion "Bit_u?int[0-9]+_of_bit_u?int[0-9]+" (`Prefix "enum");
-    add_expansion "Int" (`Prefix "int");
+    add_expansion "Int" (`Prefix "core");
     add_expansion "Bool" (`Prefix "bool");
     add_expansion "Ref" (`Prefix "ref");
     add_expansion "Jessie_[a-z_]+" (`Prefix "core");

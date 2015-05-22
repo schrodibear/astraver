@@ -8,6 +8,8 @@
 <prover id="4" name="CVC3" version="2.4.1" timelimit="60" memlimit="1000"/>
 <prover id="6" name="CVC4" version="1.4" alternative="&apos;14" timelimit="5" memlimit="1000"/>
 <file name="../core.mlw" expanded="true">
+<theory name="Int" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
 <theory name="Jessie_pointer" sum="9af29e038defe72ca824cd6e219adf49" expanded="true">
  <goal name="Sub_pointer_shift">
  <proof prover="1"><result status="valid" time="0.00"/></proof>
