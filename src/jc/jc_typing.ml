@@ -286,10 +286,11 @@ let subtype ?(strict=false) t1 t2 =
     (match t1, t2 with
      | Tinteger, Treal -> true
      | _ -> false)
-  | JCTenum ri1, JCTenum ri2 ->
+  | JCTenum ei1, JCTenum ei2 ->
+    Enum_info.(ei1 = ei2) ||
     not strict &&
-    Num.ge_num ri1.ei_min ri2.ei_min &&
-    Num.le_num ri1.ei_max ri2.ei_max
+    Num.ge_num ei1.ei_min ei2.ei_min &&
+    Num.le_num ei1.ei_max ei2.ei_max
   | JCTenum _, JCTnative Tinteger -> true
   | JCTnative Tinteger, JCTenum _ -> false
   | JCTlogic s1, JCTlogic s2 -> s1 = s2
