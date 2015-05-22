@@ -1941,19 +1941,6 @@ let function_effects funs =
   current_mode := MApprox;
   Options.lprintf "Effects: fixpoint reached@.";
 
-  (* Global variables that are only read are translated into logic
-     functions in Why, and thus they should not appear in effects. *)
-  Options.lprintf "Effects: removing global reads w/o writes@.";
-  List.iter
-    (fun f ->
-       let fef = f.fun_effects in
-       let efr = fef.fe_reads.e_globals in
-       let efw = fef.fe_writes.e_globals in
-       let ef = VarMap.filter (fun v _labs -> VarMap.mem v efw || v.vi_assigned) efr in
-       let ef = { fef.fe_reads with e_globals = ef } in
-       f.fun_effects <- { fef with fe_reads = ef })
-    funs;
-
   List.iter
     (fun f ->
        Options.lprintf
