@@ -1364,9 +1364,10 @@ struct
         let basety = TComp (ci, empty_size_cache (), []) in
         let field fi nextoff =
           let size_in_bits =
-            match fi.fbitfield with
-            | Some siz -> siz
-            | None -> bitsSizeOf fi.ftype
+            match fi.fbitfield, unrollType fi.ftype with
+            | Some siz, _ -> siz
+            | None, TArray (_, None, _, _) -> 0
+            | None, _ -> bitsSizeOf fi.ftype
           in
           let offset_in_bits = fst (bitsOffset basety (Field (fi, NoOffset))) in
           let padding_in_bits = nextoff - (offset_in_bits + size_in_bits) in
