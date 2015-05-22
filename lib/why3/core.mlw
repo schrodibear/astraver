@@ -2,18 +2,103 @@
 theory Jessie_pointer
   use import int.Int
 
-  type block 't
-  type pointer 't = (block 't, int)
+  (* type block 't *)
+  type pointer 't (* = (block 't, int) *)
 
   constant null : pointer 't
 
-  function sub_pointer (a : pointer 't) (b : pointer 't) : int = let (_, a) = a in let (_, b) = b in a - b
-  function shift (p : pointer 't) (n : int) : pointer 't = let (b, o) = p in (b, o + n)
-  predicate same_block (p1 : pointer 't) (p2 : pointer 't) = let (b1, _) = p1 in let (b2, _) = p2 in b1 = b2
+  function sub_pointer (a : pointer 't) (b : pointer 't) : int (* = let (_, a) = a in let (_, b) = b in a - b *)
+  function shift (p : pointer 't) (n : int) : pointer 't (* = let (b, o) = p in (b, o + n) *)
+  predicate same_block (p1 : pointer 't) (p2 : pointer 't) (* = let (b1, _) = p1 in let (b2, _) = p2 in b1 = b2 *)
+
+  axiom Sub_pointer_def:
+    forall a : pointer 't.
+      forall i, j : int [shift a i, shift a j].
+        sub_pointer (shift a i) (shift a j) = i - j
+
+  axiom Shift_def1:
+    forall a : pointer 't.
+      forall i : int [shift a i].
+        forall j : int [shift (shift a i) j].
+          shift (shift a i) j = shift a (i + j)
+
+  axiom Shift_def2:
+    forall a : pointer 't [shift a 0].
+      shift a 0 = a
+
+  axiom Same_block_def:
+    forall a, b : pointer 't [same_block a b].
+      same_block a b <->
+        exists i : int [shift b i].
+          a = shift b i
 
   lemma Sub_pointer_shift:
     forall p q : pointer 't [same_block p q | sub_pointer p q].
       same_block p q -> p = shift q (sub_pointer p q)
+
+  lemma Sub_pointer_self:
+    forall p : pointer 't [sub_pointer p p].
+      sub_pointer p p = 0
+
+  lemma Sub_pointer_zero:
+    forall p q : pointer 't [sub_pointer p q].
+      same_block p q ->
+        sub_pointer p q = 0 -> p = q
+
+  lemma Sub_pointer_shift_left:
+    forall p q : pointer 't, i : int [sub_pointer (shift p i) q].
+      same_block p q ->
+        sub_pointer (shift p i) q = sub_pointer p q + i
+
+  lemma Sub_pointer_shift_right:
+    forall p q : pointer 't, i : int [sub_pointer p (shift q i)].
+      same_block p q ->
+        sub_pointer p (shift q i) = sub_pointer p q - i
+
+  lemma Sub_pointer_neg:
+    forall p q : pointer 't [sub_pointer p q | sub_pointer q p].
+      same_block p q -> sub_pointer p q = - sub_pointer q p
+
+  lemma Shift_shift:
+    forall p : pointer 't.
+      forall i, j : int [shift (shift p i) j].
+        shift (shift p i) j = shift p (i + j)
+
+  lemma Neq_shift:
+    forall p : pointer 't. forall i : int. forall j : int [shift p i, shift p j].
+      i <> j -> shift p i <> shift p j
+
+  lemma Same_block_refl:
+     forall p : pointer 't.
+       same_block p p
+
+  lemma Same_block_shift:
+    forall p : pointer 't.
+      forall i : int [shift p i].
+        same_block p (shift p i)
+
+  lemma Same_block_symm:
+    forall p : pointer 't.
+      forall q : pointer 't [same_block p q | same_block q p].
+        same_block p q <-> same_block q p
+
+  lemma Same_block_trans:
+    forall p : pointer 't.
+      forall q : pointer 't [same_block p q | same_block q p].
+        forall r : pointer 't [same_block p r].
+          same_block p q /\ same_block q r -> same_block p r
+
+  lemma Same_block_shift_right:
+    forall p : pointer 't.
+      forall q : pointer 't [same_block p q | same_block q p].
+        forall i : int [same_block p (shift q i)].
+          same_block p q -> same_block p (shift q i)
+
+  lemma Same_block_shift_left:
+    forall p : pointer 't.
+      forall q : pointer 't [same_block p q | same_block q p].
+        forall i : int [same_block (shift q i) p].
+          same_block q p -> same_block (shift q i) p
 end
 
 theory Jessie_zwf
