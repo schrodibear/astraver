@@ -247,6 +247,22 @@ let main () =
 
     let file = pop_entries () in
 
+    (* ATTENTION: HACK! *)
+    (* This is the workaround for strange behavior of Why3 failing with undefined type bool on "true <> false" *)
+    let () =
+      let open Output_ast in
+      let open Output in
+      let use_bool = Use (`As None, Th.dummy @@ fst Name.Theory.bool) in
+      List.iter
+        (function
+          | Entry (Theory (_, Some (deps, _))) ->
+            deps :=  use_bool :: !deps
+          | Entry (Module (_, Some (deps, _, _))) ->
+            deps := Dependency use_bool :: !deps
+          | _ -> ())
+        file
+    in
+
     (* output phase 1: produce Why file *)
     Print_why3.file ~filename:(filename ^ ".mlw") file;
 
