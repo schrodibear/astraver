@@ -2028,9 +2028,9 @@ let rec expr env e =
       begin match te1#node with
       | JCEvar v ->
         v.vi_assigned <- true;
-        t1, te2#region, JCEassign_var(v, te2)
+        unit_type, dummy_region, JCEassign_var(v, te2)
       | JCEderef(e, f) ->
-        t1, te2#region, JCEassign_heap(e, f, te2)
+        unit_type, dummy_region, JCEassign_heap(e, f, te2)
       | _ -> typing_error ~loc:e1#pos "not an lvalue"
       end
     | JCNEinstanceof (e1, t) ->
