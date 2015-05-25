@@ -1143,6 +1143,7 @@ let rec single_term ef t =
   in
   match t#node with
     | JCTvar vi ->
+        let lab = if not vi.vi_assigned then LabelHere else lab in
         true,
         if vi.vi_static then
           add_global_effect lab ef vi
