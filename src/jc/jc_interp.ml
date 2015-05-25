@@ -1462,34 +1462,34 @@ and make_deref_simple ~e e1 fi =
   let alloc = alloc_table_var (ac, e1#region) in
   let open O.E in
   if safety_checking () then
-    let tag = tag_table_var (struct_root fi.fi_struct, e1#region) in
-    let tag_id = var (Name.tag fi.fi_struct) in
+    let tt = tag_table_var (struct_root fi.fi_struct, e1#region) in
+    let tag_id = tag fi.fi_struct in
     let expr = expr Any in
     match destruct_pointer e1, (pointer_struct e1#typ).si_final with
     | (_, (Int_offset s as off), Some lb, Some rb), false when bounded lb rb s ->
       E.locate ~e ~kind:JCVCpointer_deref
-        (O.F.Jc.acc_offset_safe "acc_offset_bounded" $ tag ^ mem ^ expr e1 ^ tag_id ^. offset off)
+        (O.F.Jc.acc_offset_safe "acc_offset_bounded" $ tt ^ mem ^ expr e1 ^ tag_id ^. offset off)
     | (_, Int_offset s, Some lb, Some rb),        true when bounded lb rb s ->
       E.locate ~e ~kind:JCVCpointer_deref
         (O.F.Jc.acc_safe "acc_safe" $ mem ^. expr e1)
     | (p, (Int_offset s as off), Some lb, _), false when lbounded lb s ->
       E.locate ~e ~kind:JCVCpointer_deref_bounds
-        (O.F.Jc.acc_offset_safe "acc_offset_lbounded" $ tag ^ alloc ^ mem ^ expr p ^ tag_id ^. offset off)
+        (O.F.Jc.acc_offset_safe "acc_offset_lbounded" $ tt ^ alloc ^ mem ^ expr p ^ tag_id ^. offset off)
     | (p, (Int_offset s as off), Some lb, _), true when lbounded lb s ->
       E.locate ~e ~kind:JCVCpointer_deref_bounds
         (O.F.Jc.acc_offset_safe "acc_offset_lbounded_typesafe" $ alloc ^ mem ^ expr p ^. offset off)
     | (p, (Int_offset s as off), _, Some rb), false when rbounded rb s ->
       E.locate ~e ~kind:JCVCpointer_deref_bounds
-        (O.F.Jc.acc_offset_safe "acc_offset_rbounded" $ tag ^ alloc ^ mem ^ expr p ^ tag_id ^. offset off)
+        (O.F.Jc.acc_offset_safe "acc_offset_rbounded" $ tt ^ alloc ^ mem ^ expr p ^ tag_id ^. offset off)
     | (p, (Int_offset s as off), _, Some rb), true when rbounded rb s ->
       E.locate ~e ~kind:JCVCpointer_deref_bounds
-        (O.F.Jc.acc_offset_safe "acc_offset_rounded_typesafe" $ tag ^ alloc ^ mem ^ expr p ^. offset off)
+        (O.F.Jc.acc_offset_safe "acc_offset_rounded_typesafe" $ tt ^ alloc ^ mem ^ expr p ^. offset off)
     | (p, Int_offset 0, None, None), _ ->
       E.locate ~e ~kind:JCVCpointer_deref
         (O.F.Jc.acc_safe "acc"  $ alloc ^ mem ^. expr p)
     | (p, off, _, _), false ->
       E.locate ~e ~kind:JCVCpointer_deref
-        (O.F.Jc.acc_offset_safe "acc_offset" $ alloc ^ tag ^ mem ^ expr p ^ tag_id ^. offset off)
+        (O.F.Jc.acc_offset_safe "acc_offset" $ alloc ^ tt ^ mem ^ expr p ^ tag_id ^. offset off)
     | (p, off, _, _), true ->
       E.locate ~e ~kind:JCVCpointer_deref
         (O.F.Jc.acc_offset_safe "acc_offset_typesafe" $ alloc ^ mem ^ expr p ^. offset off)
@@ -1896,7 +1896,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
       begin match
         match e1#typ with
         | JCTpointer (JCtag ({ si_final = true }, []), _, _) -> None
-        | JCTpointer (JCtag (st, []), _, _) -> Some (tag_table_var (struct_root st, e1#region), O.E.var @@ Name.tag st)
+        | JCTpointer (JCtag (st, []), _, _) -> Some (tag_table_var (struct_root st, e1#region), O.E.tag st)
         | _ -> None
       with
       | Some (tt, tag') when safety_checking () ->
