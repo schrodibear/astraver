@@ -2131,7 +2131,7 @@ let rec annotation is_axiomatic annot =
         let params = List.map logic_variable info.l_profile in
         let body =
           match info.l_body with
-            | LBnone -> JCnone
+          | LBnone -> JCnone
           | LBreads reads_tsets ->
               let reads =
                 List.flatten
@@ -2145,7 +2145,14 @@ let rec annotation is_axiomatic annot =
                    (new identifier id,logic_labels labs,pred p)) indcases
               in
               JCinductive l
-          | LBterm t -> JCexpr(term t)
+          | LBterm t ->
+            let t =
+              if info.l_type = Some Linteger && t.term_type <> Linteger then
+                Logic_const.term (TLogic_coerce (Linteger, t)) Linteger
+              else
+                t
+            in
+            JCexpr(term t)
         in
         let name =
           try
