@@ -129,9 +129,9 @@ type boolean = Boolean
 
 type ('params, 'result) func =
   | B_int_op :
-      [ `Add | `Sub | `Mul | `Div | `Mod ] ->
+      [ `Add | `Sub | `Mul | `Div | `Mod | `Min | `Max ] ->
     (unbounded integer number * (unbounded integer number * unit), unbounded integer number) func
-  | U_int_op : [ `Neg ] -> (unbounded integer number * unit, unbounded integer number) func
+  | U_int_op : [ `Neg | `Abs ] -> (unbounded integer number * unit, unbounded integer number) func
   | B_bint_op :
       [ `Add | `Sub | `Mul | `Div | `Mod ] * 'a bounded integer * [ `Check | `Modulo ] ->
     ('a bounded integer number * ('a bounded integer number * unit), 'a bounded integer number) func

@@ -252,7 +252,7 @@ let main () =
     let () =
       let open Output_ast in
       let open Output in
-      let use_bool = Use (`As None, Th.dummy @@ fst Name.Theory.bool) in
+      let use_bool = Use (`As None, Th.dummy @@ "why3.Bool.Bool") in
       List.iter
         (function
           | Entry (Theory (_, Some (deps, _))) ->

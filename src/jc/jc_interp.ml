@@ -595,6 +595,11 @@ let rec term :
         | _ -> Options.jc_error t#pos "Unsupported bv type conversion" (* TODO *)
         end
       end
+    | JCTapp { app_fun = { li_name = "\\integer_min" | "\\integer_max" as op }; app_args = [t1; t2] } ->
+      let ft = ft (Ty O.Ty.integer) in
+      return @@ O.(if op = "\\integer_min" then T.min else T.max) (ft t1) @@ ft t2
+    | JCTapp { app_fun = { li_name = "\\integer_abs" }; app_args = [t] } ->
+      return @@ O.(T.abs @@ ft (Ty Ty.integer) t)
     | JCTapp app ->
       let f = app.app_fun in
       let args =
@@ -3749,6 +3754,10 @@ let dummies =
       dummy "Int";
       dummy "Bool";
       dummy "Ref";
+      dummy "why3.Bool.Bool";
+      dummy "ComputerDivision";
+      dummy "Abs";
+      dummy "MinMax";
       dummy "Jessie_pointer";
       dummy "Jessie_zwf";
       dummy "Jessie_alloc_table";

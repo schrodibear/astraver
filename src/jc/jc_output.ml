@@ -176,6 +176,12 @@ struct
     let reinterpret_safe = user ~from:reinterpret_safe
   end
 
+  let min = B_int_op `Min
+
+  let max = B_int_op `Max
+
+  let abs = U_int_op `Abs
+
   let tag si : (unit, _) t = user ~from:(Name.Theory.struct_ (Env.JCtag (si, []))) (Name.tag si)
 
   let instanceof () : (_ * (_ * (_ * unit)), boolean) t = Jc.tag_table "instanceof"
@@ -368,6 +374,12 @@ struct
     function
     | (Const Int "0" : _ t) -> int 0
     | t -> U_int_op `Neg $. t
+
+  let min t1 t2 = F.min $ t1 ^. t2
+
+  let max t1 t2 = F.max $ t1 ^. t2
+
+  let abs t = F.abs $. t
 
   let (!.) v = (Deref v : _ t)
 

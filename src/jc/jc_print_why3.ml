@@ -126,11 +126,14 @@ let op fmttr =
   | `Eq -> "(="
   | `Ne -> "(<>"
   | `Neq -> "(<>"
+  | `Min -> "min"
+  | `Max -> "max"
+  | `Abs -> "abs"
 
 let rpar fmttr =
   fprintf fmttr "%s" %
   function
-  | `Lsl | `Lsr | `Asr -> ""
+  | `Lsl | `Lsr | `Asr | `Min | `Max | `Abs -> ""
   | `Add | `Sub | `Mul | `Div | `Mod
   | `Neg | `And | `Or | `Xor | `Compl
   | `Lt | `Le | `Gt | `Ge
@@ -186,8 +189,11 @@ let func ~entry ~where ~bw_ints fmttr (type a) (type b) =
     | Enum _, Enum _ -> pr enum_ty ty_to enum_ty ty_from
   in
   function
-  | (B_int_op op' : (a, b) func) -> pr "Int.%a)" op op'
-  | U_int_op op' -> pr "Int.%a)" op op'
+  | (B_int_op (`Add | `Sub | `Mul as op') : (a, b) func) -> pr "Int.%a)" op op'
+  | B_int_op (`Div | `Mod as op') -> pr "ComputerDivision.%s" (match op' with `Div -> "div" | `Mod -> "mod")
+  | B_int_op (`Min | `Max as op') -> pr "MinMax.%s" (match op' with `Min -> "min" | `Max -> "max")
+  | U_int_op `Neg -> pr "Int.%a)" op `Neg
+  | U_int_op `Abs -> pr "Abs.abs"
   | B_bint_op (op, (Int _ as ty), modulo') ->
     pr_bop int_ty ty op modulo modulo'
   | B_bint_op (op, (Enum _ as ty), modulo') ->
@@ -299,7 +305,7 @@ and logic_type : type a. entry:_ -> _ -> a logic_type -> _ = fun ~entry fmttr ->
 
 let split c s =
   try
-    let pos = String.index s c in
+    let pos = String.rindex s c in
     String.(sub s 0 pos, sub s (pos + 1) @@ length s - pos - 1)
   with
   | Not_found -> "", s
@@ -1205,7 +1211,10 @@ struct
   let () =
     add_expansion "\\(Bit_u?i\\|Ui\\|I\\)nt[0-9]+" (`Prefix "enum");
     add_expansion "Bit_u?int[0-9]+_of_bit_u?int[0-9]+" (`Prefix "enum");
-    add_expansion "Int" (`Prefix "core");
+    add_expansion "Int" (`Prefix "int");
+    add_expansion "ComputerDivision" (`Prefix "int");
+    add_expansion "Abs" (`Prefix "int");
+    add_expansion "MinMax" (`Prefix "int");
     add_expansion "Bool" (`Prefix "bool");
     add_expansion "Ref" (`Prefix "ref");
     add_expansion "Jessie_[a-z_]+" (`Prefix "core");
