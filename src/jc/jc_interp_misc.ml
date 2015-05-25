@@ -332,7 +332,7 @@ let lvar ~constant ~label_in_name lab n =
   let n = lvar_name ~label_in_name lab n in
   let open O.T in
   if constant then var n
-  else if label_in_name then !.n
+  else if label_in_name then var n
   else
     match lab with
     | LabelHere -> !.n
