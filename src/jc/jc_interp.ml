@@ -3664,22 +3664,28 @@ let globals () =
     let module H = Hashtbl.Make (PointerClass) in
     let pcs = H.create 10 in
     let module Rs = Hashtbl.Make (Region) in
+    let module Ms = Hashtbl.Make (MemClass) in
     let rs = Rs.create 10 in
     let global = ref [] in
     (fun f ->
        f
-         ~add:(fun pc r decls ->
-           if r = dummy_region || not (Rs.mem rs r) then begin
-             Rs.add rs r ();
+         ~add:(fun pc r ?mc decls ->
+           let new_region = not (Rs.mem rs r) in
+           if new_region || r = dummy_region || Option.map_default ~default:false ~f:(not % Ms.mem (Rs.find rs r)) mc
+           then begin
+             if new_region then
+               Rs.add rs r (Ms.create 10)
+             else if r <> dummy_region then
+               Ms.add (Rs.find rs r) (Option.value_fail ~in_:"globals" mc) ();
              let decls = decls () in
              match pc with
              | Some pc ->
                begin try
                  let decls = H.find pcs pc @ decls in
-                  H.replace pcs pc decls
+                 H.replace pcs pc decls
                with
                | Not_found -> H.add pcs pc decls
-                end
+               end
              | None -> global := !global @ decls
            end);
        Rs.clear rs),
@@ -3710,6 +3716,7 @@ let globals () =
                | JCmem_plain_union ri -> Some (JCroot ri)
                | JCmem_bitvector -> None)
               (Region.representative r)
+              ~mc
               (fun () -> [memory (mc, r)]))
          Effect.constant_memories);
   wrap
