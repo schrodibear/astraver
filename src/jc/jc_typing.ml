@@ -1685,7 +1685,8 @@ let make_unary_op ~loc ~(op : Ast.unary_op) e2 =
     t, dummy_region, JCEunary (unary_op (operator_of_type t) op, e2)
   in
   match op with
-  | `Unot when t2 = JCTnative Tboolean -> result ()
+  | `Unot when t2 = JCTnative Tboolean ->
+    t2, dummy_region, JCEunary (unary_op (operator_of_type t2) op, e2)
   | `Unot ->
     typing_error ~loc "boolean expected"
   | `Uminus when is_numeric t2 || is_gen_float t2 -> result ()
