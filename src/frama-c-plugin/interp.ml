@@ -95,11 +95,11 @@ let reg_position ?id ?kind:_ ?name pos =
 
 (* [locate] should be called on every Jessie expression which we would like to
  * locate in the original source program.
- *)
+*)
 let locate ?pos e =
   (* Recursively label conjuncts so that splitting conjuncts in Why still
    * allows to locate the resulting VC.
-   *)
+  *)
   let rec dopos ~toplevel e =
     (* Generate (and store) a label associated to this source location *)
     let pos =
@@ -133,7 +133,7 @@ let locate ?pos e =
       match e#node with
       | JCPEbinary (_e1,`Bland,_e2) when not toplevel -> e
       | _ ->
-      (* Label the expression accordingly *)
+        (* Label the expression accordingly *)
         mkexpr (JCPElabel (lab, e)) pos
     else
       e
@@ -212,15 +212,15 @@ exception CtePredicate of bool
 
 let full_model_function linfo name default =
   match !float_model with
-    | `Math ->
-      Console.warning "\\%s always %b in mode JessieFloatModel(math)" name default;
-      raise (CtePredicate default)
-    | `Defensive | `Full | `Multirounding ->
-      begin match (List.hd linfo.l_profile).lv_type with
-      | Ctype x when x == doubleType -> "\\double_" ^ name
-      | Ctype x when x == floatType -> "\\single_" ^ name
-      | _ -> assert false
-      end
+  | `Math ->
+    Console.warning "\\%s always %b in mode JessieFloatModel(math)" name default;
+    raise (CtePredicate default)
+  | `Defensive | `Full | `Multirounding ->
+    begin match (List.hd linfo.l_profile).lv_type with
+    | Ctype x when x == doubleType -> "\\double_" ^ name
+    | Ctype x when x == floatType -> "\\single_" ^ name
+    | _ -> assert false
+    end
 
 let jessie_builtins = Hashtbl.create 17
 
@@ -394,7 +394,7 @@ let ctype ?bitsize ty =
     | TFloat (fk, _attr) ->
       begin match !float_model with
       | `Math ->
-                (* Mode "math": floats interpreted as reals *)
+        (* Mode "math": floats interpreted as reals *)
         JCPTnative Treal
       | `Defensive | `Full | `Multirounding ->
         begin match fk with
@@ -407,9 +407,9 @@ let ctype ?bitsize ty =
     | TPtr (_elemty, _attr) ->
       begin match Type.Ref.of_typ ty with
       | Some ty ->
-          (* Do not use [_elemty] directly but rather [pointed_type ty] in order
-           * to get to the array element in references, i.e. pointers to arrays.
-           *)
+        (* Do not use [_elemty] directly but rather [pointed_type ty] in order
+         * to get to the array element in references, i.e. pointers to arrays.
+        *)
         begin match unrollType (Type.Ref.typ ty) with
         | TComp (compinfo, _, _) ->
           let min_bound = Num.Int 0 in
@@ -441,7 +441,7 @@ let ltype t =
   match Logic_utils.unroll_type t with
   | Ctype ty -> ctype ty
   | Ltype (s,[]) when s.lt_name = Utf8_logic.boolean ->
-      mktype (JCPTidentifier ("boolean",[]))
+    mktype (JCPTidentifier ("boolean",[]))
   | Ltype (s,[]) -> mktype (JCPTidentifier (s.lt_name,[]))
   | Linteger -> mktype (JCPTnative Tinteger)
   | Lreal -> mktype (JCPTnative Treal)
@@ -627,8 +627,8 @@ and terms ?(in_zone=false) t =
         match label_name with
         | "Here" -> (fun x -> JCPEoffset (offset_kind, x)), terms t1
         | _ ->
-            (fun x -> JCPEat (x, logic_label lab)),
-            terms (f {t1 with term_node = (Tat (t1, lab))})
+          (fun x -> JCPEat (x, logic_label lab)),
+          terms (f {t1 with term_node = (Tat (t1, lab))})
       in
       List.map f start
     | TLval lv ->
@@ -651,7 +651,7 @@ and terms ?(in_zone=false) t =
     | TBinOp (Shiftrt, t1, t2) ->
       begin match possible_value_of_integral_term t2 with
       | Some i when Integer.ge i Integer.zero
-                 && Integer.lt i (Integer.of_int 63)  ->
+                    && Integer.lt i (Integer.of_int 63)  ->
         (* Right shift by constant is division by constant *)
         let pow = constant_term t2.term_loc (Integer.two_power i) in
         List.map (fun x -> JCPEbinary (x, `Bdiv, term pow)) (terms t1)
@@ -680,10 +680,7 @@ and terms ?(in_zone=false) t =
     | TBinOp ((Lt | Gt | Le | Ge) as op, t1, t2) ->
       product (fun x y -> JCPEbinary (x, binop op, y)) (terms t1) (terms t2)
     | TBinOp (op, t1, t2) ->
-      product
-        (fun x y -> JCPEbinary(x,binop op,y))
-        (coerce_floats t1)
-        (coerce_floats t2)
+      product (fun x y -> JCPEbinary (x, binop op, y)) (coerce_floats t1) (coerce_floats t2)
     | TCastE (ty, _, t)
       when isIntegralType ty && isLogicRealType t.term_type ->
       List.map (fun x -> JCPEapp("\\truncate_real_to_int",[],[x])) (terms t)
@@ -739,7 +736,7 @@ and terms ?(in_zone=false) t =
     | TCastE (ty, _, t) ->
       (* TODO: support other casts in Jessie as well, through low-level
        * memory model
-       *)
+      *)
       Console.unsupported "Casting from type %a to type %a not allowed"
         Printer.pp_logic_type t.term_type Printer.pp_typ ty
     | TAddrOf _tlv -> assert false (* Should have been rewritten *)
@@ -812,6 +809,7 @@ and terms ?(in_zone=false) t =
     | Tinter _ -> Console.unsupported " set intersection"
     | Tempty_set -> []
     | TLogic_coerce (Lreal, t) -> List.map (fun x -> x#node) (coerce_floats t)
+    | TLogic_coerce (Linteger, t) -> List.map (fun x -> JCPEcast (x, mktype @@ JCPTnative Tinteger)) (terms t)
     | TLogic_coerce (_, t) -> List.map (fun x -> x#node) (terms t)
   in
   List.map (Fn.flip mkexpr t.term_loc) enode
@@ -849,51 +847,51 @@ and terms_lval pos lv =
     else
       let repfi = Retype.FieldUF.repr fi in
       let e,fi =
-            if Fieldinfo.equal fi repfi then
-              e,fi
-            else
-              let caste =
-                List.map
-                  (fun e ->
-                     mkexpr (
-                       JCPEcast(e,
-                                ctype (TPtr (TComp (repfi.fcomp, empty_size_cache (),[]), [])))) pos)
-                  e
-              in
-              caste,repfi
+        if Fieldinfo.equal fi repfi then
+          e,fi
+        else
+          let caste =
+            List.map
+              (fun e ->
+                 mkexpr (
+                   JCPEcast(e,
+                            ctype (TPtr (TComp (repfi.fcomp, empty_size_cache (),[]), [])))) pos)
+              e
           in
-          List.map (fun e -> mkexpr (JCPEderef(e,fi.fname)) pos) e
-
-    | TMem t, TIndex (it, TField (fi, toff)) ->
-      assert (toff = TNoOffset); (* Others should have been rewritten *)
-      (* Normalization made it equivalent to simple add *)
-      let e =
-        product
-          (fun t it -> mkexpr (JCPEbinary(t,`Badd,it)) pos)
-          (terms t) (terms it)
+          caste,repfi
       in
-      if not fi.fcomp.cstruct then (* field of union *)
-        List.map (fun e -> mkexpr (JCPEcast(e,ctype fi.ftype)) pos) e
-      else
-        let repfi = Retype.FieldUF.repr fi in
-        let e,fi =
-            if Fieldinfo.equal fi repfi then
-              e,fi
-            else
-              let caste =
-                List.map
-                  (fun e ->
-                     mkexpr
-                       (JCPEcast(e, ctype
-                                   (TPtr (TComp (repfi.fcomp, empty_size_cache (), []), [])))) pos)
-                  e
-              in
-              caste, repfi
-        in
-        List.map (fun e -> mkexpr (JCPEderef(e,fi.fname)) pos) e
-    | TMem _e, TIndex _ ->
-      Console.unsupported "cannot interpret this lvalue: %a"
-        Printer.pp_term_lval lv
+      List.map (fun e -> mkexpr (JCPEderef(e,fi.fname)) pos) e
+
+  | TMem t, TIndex (it, TField (fi, toff)) ->
+    assert (toff = TNoOffset); (* Others should have been rewritten *)
+    (* Normalization made it equivalent to simple add *)
+    let e =
+      product
+        (fun t it -> mkexpr (JCPEbinary(t,`Badd,it)) pos)
+        (terms t) (terms it)
+    in
+    if not fi.fcomp.cstruct then (* field of union *)
+      List.map (fun e -> mkexpr (JCPEcast(e,ctype fi.ftype)) pos) e
+    else
+      let repfi = Retype.FieldUF.repr fi in
+      let e,fi =
+        if Fieldinfo.equal fi repfi then
+          e,fi
+        else
+          let caste =
+            List.map
+              (fun e ->
+                 mkexpr
+                   (JCPEcast(e, ctype
+                               (TPtr (TComp (repfi.fcomp, empty_size_cache (), []), [])))) pos)
+              e
+          in
+          caste, repfi
+      in
+      List.map (fun e -> mkexpr (JCPEderef(e,fi.fname)) pos) e
+  | TMem _e, TIndex _ ->
+    Console.unsupported "cannot interpret this lvalue: %a"
+      Printer.pp_term_lval lv
 
 and term t =
   match terms t with
@@ -944,8 +942,10 @@ and pred p =
 
     | Prel (rel,t1,t2) ->
       let res =
-        product (fun t1 t2 -> mkexpr (JCPEbinary(t1,relation rel,t2)) p.loc)
-          (coerce_floats t1) (coerce_floats t2)
+        product
+          (fun t1 t2 -> mkexpr (JCPEbinary (t1, relation rel, t2)) p.loc)
+          (coerce_floats t1)
+          (coerce_floats t2)
       in
       (mkconjunct res p.loc)#node
 
@@ -973,23 +973,23 @@ and pred p =
     | Pif (t, p1, p2) -> JCPEif (term t, pred p1, pred p2)
 
     | Plet (def, body) ->
-        begin
-          let v = def.l_var_info in
-          match def.l_body, def.l_profile with
-          | LBterm t, [] ->
-            let jc_def = term t in
-            let jc_body = pred body in
-            let typ = ltype v.lv_type in
-            JCPElet (Some typ, v.lv_name, Some jc_def, jc_body)
-          | LBpred p, [] ->
-            let jc_def = pred p in
-            let jc_body = pred body in
-            JCPElet (None,v.lv_name, Some jc_def, jc_body)
-          | (LBterm _ | LBpred _), _::_ ->
-            Console.unsupported "local function definition"
-          | (LBnone | LBreads _ | LBinductive _), _ ->
-            Jessie_options.fatal "Unexpected definition for local variable"
-        end
+      begin
+        let v = def.l_var_info in
+        match def.l_body, def.l_profile with
+        | LBterm t, [] ->
+          let jc_def = term t in
+          let jc_body = pred body in
+          let typ = ltype v.lv_type in
+          JCPElet (Some typ, v.lv_name, Some jc_def, jc_body)
+        | LBpred p, [] ->
+          let jc_def = pred p in
+          let jc_body = pred body in
+          JCPElet (None,v.lv_name, Some jc_def, jc_body)
+        | (LBterm _ | LBpred _), _::_ ->
+          Console.unsupported "local function definition"
+        | (LBnone | LBreads _ | LBinductive _), _ ->
+          Jessie_options.fatal "Unexpected definition for local variable"
+      end
 
     | Pforall ([], p) -> (pred p)#node
     | Pforall ([v], p) ->
@@ -1113,7 +1113,7 @@ let zone (tset, _) = terms ~in_zone:true tset.it_content
 (* Distinguish between:
  * - no assign, which is the empty list in Cil and None in Jessie
  * - assigns nothing, which is [Nothing] in Cil and the Some[] in Jessie
- *)
+*)
 let assigns =
   function
   | WritesAny -> None
@@ -1452,9 +1452,9 @@ let rec expr e =
    a test or a sub-expression of an "or" or "and".
 *)
 and boolean_expr ?(to_locate=false) e =
-  let boolean_node_from_expr ty e =
-    if isPointerType ty then JCPEbinary(e,`Bneq,null_expr)
-    else if isArithmeticType ty then JCPEbinary (e,`Bneq,zero_expr)
+  let boolean_node_from_expr ty e' =
+    if isPointerType ty then JCPEbinary(e',`Bneq,null_expr)
+    else if isArithmeticType ty then JCPEbinary (e',`Bneq, mkexpr (JCPEcast (zero_expr, ctype ty)) e.eloc)
     else assert false
   in
 
