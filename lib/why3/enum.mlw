@@ -12,8 +12,6 @@ theory Enum
 
   use import int.Int
 
-  use int.EuclideanDivision
-
   use import int.ComputerDivision
 
   predicate in_bounds (n : int) = min <= n <= max
