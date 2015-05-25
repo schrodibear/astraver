@@ -2186,7 +2186,7 @@ let rec expr env e =
       let te2 = expr ((id, vi)::env) e2 in
       te2#typ,
       te2#region,
-      JCElet (vi, Option.map (implicit_coerce te2#typ ty) te1o, te2)
+      JCElet (vi, Option.map (fun e -> implicit_coerce e#typ ty e) te1o, te2)
     (* old statements *)
     | JCNEassert(behav,asrt,e1) ->
       unit_type, dummy_region, JCEassert(behav,asrt,assertion env e1)
