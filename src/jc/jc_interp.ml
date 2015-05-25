@@ -3669,7 +3669,7 @@ let globals () =
     (fun f ->
        f
          ~add:(fun pc r decls ->
-           if not (Rs.mem rs r) then begin
+           if r = dummy_region || not (Rs.mem rs r) then begin
              Rs.add rs r ();
              let decls = decls () in
              match pc with
@@ -3697,8 +3697,8 @@ let globals () =
          (fun _ (v, _) ->
             add
               (match v.vi_type with JCTpointer (pc, _, _) -> Some pc | _ -> None)
-              (Region.representative v.vi_region)
-              (fun () ->  [variable v]))
+              dummy_region
+              (fun () -> [variable v]))
          Typing.variables_table);
   wrap
     (fun ~add ->
