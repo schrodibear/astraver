@@ -257,7 +257,7 @@ theory Bit_enum_intf
   function (%%) t t : t
 
   function (&) t t : t
-  function (|.) t t : t
+  function (|^) t t : t
   function (~_) t : t
   function (^) t t : t
   function lsl t t : t
@@ -395,10 +395,10 @@ theory Bit_enum
           nth (a & b) n = (nth a n /\ nth b n)
 
   axiom Nth_bw_or:
-    forall a b : E.t [a |. b].
-      forall n : int [nth (a |. b) n].
+    forall a b : E.t [a |^ b].
+      forall n : int [nth (a |^ b) n].
         0 <= n < size ->
-          nth (a |. b) n = (nth a n \/ nth b n)
+          nth (a |^ b) n = (nth a n \/ nth b n)
 
   axiom Nth_bw_xor:
     forall a b : E.t [a ^ b].
@@ -493,8 +493,8 @@ module Generic_bit_enum
   val (&) (x y : t) : t
     ensures { result = x & y }
 
-  val (|.) (x y : t) : t
-    ensures { result = x |. y }
+  val (|^) (x y : t) : t
+    ensures { result = x |^ y }
 
   val (~_) (x : t) : t
     ensures { result = ~ x }

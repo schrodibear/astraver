@@ -3,7 +3,7 @@ theory enum.Bit_int8
   syntax type t "(_ BitVec 8)"
 
   syntax function (&) "(bvand %1 %2)"
-  syntax function (|.) "(bvor %1 %2)"
+  syntax function (|^) "(bvor %1 %2)"
   syntax function (^) "(bvxor %1 %2)"
   syntax function (~_) "(bvnot %1)"
 
@@ -53,7 +53,7 @@ theory enum.Bit_uint8
   syntax type t "(_ BitVec 8)"
 
   syntax function (&) "(bvand %1 %2)"
-  syntax function (|.) "(bvor %1 %2)"
+  syntax function (|^) "(bvor %1 %2)"
   syntax function (^) "(bvxor %1 %2)"
   syntax function (~_) "(bvnot %1)"
 
@@ -104,7 +104,7 @@ theory enum.Bit_int16
   syntax type t "(_ BitVec 16)"
 
   syntax function (&) "(bvand %1 %2)"
-  syntax function (|.) "(bvor %1 %2)"
+  syntax function (|^) "(bvor %1 %2)"
   syntax function (^) "(bvxor %1 %2)"
   syntax function (~_) "(bvnot %1)"
 
@@ -154,7 +154,7 @@ theory enum.Bit_uint16
   syntax type t "(_ BitVec 16)"
 
   syntax function (&) "(bvand %1 %2)"
-  syntax function (|.) "(bvor %1 %2)"
+  syntax function (|^) "(bvor %1 %2)"
   syntax function (^) "(bvxor %1 %2)"
   syntax function (~_) "(bvnot %1)"
 
@@ -205,7 +205,7 @@ theory enum.Bit_int32
   syntax type t "(_ BitVec 32)"
 
   syntax function (&) "(bvand %1 %2)"
-  syntax function (|.) "(bvor %1 %2)"
+  syntax function (|^) "(bvor %1 %2)"
   syntax function (^) "(bvxor %1 %2)"
   syntax function (~_) "(bvnot %1)"
 
@@ -255,7 +255,7 @@ theory enum.Bit_uint32
   syntax type t "(_ BitVec 32)"
 
   syntax function (&) "(bvand %1 %2)"
-  syntax function (|.) "(bvor %1 %2)"
+  syntax function (|^) "(bvor %1 %2)"
   syntax function (^) "(bvxor %1 %2)"
   syntax function (~_) "(bvnot %1)"
 
@@ -306,7 +306,7 @@ theory enum.Bit_int64
   syntax type t "(_ BitVec 64)"
 
   syntax function (&) "(bvand %1 %2)"
-  syntax function (|.) "(bvor %1 %2)"
+  syntax function (|^) "(bvor %1 %2)"
   syntax function (^) "(bvxor %1 %2)"
   syntax function (~_) "(bvnot %1)"
 
@@ -355,7 +355,7 @@ theory enum.Bit_uint64
   syntax type t "(_ BitVec 64)"
 
   syntax function (&) "(bvand %1 %2)"
-  syntax function (|.) "(bvor %1 %2)"
+  syntax function (|^) "(bvor %1 %2)"
   syntax function (^) "(bvxor %1 %2)"
   syntax function (~_) "(bvnot %1)"
 

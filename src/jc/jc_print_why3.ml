@@ -113,7 +113,7 @@ let op fmttr =
   | `Mod -> "(%"
   | `Neg -> "(-_"
   | `And -> "(&"
-  | `Or -> "(|."
+  | `Or -> "(|^"
   | `Xor -> "(^"
   | `Lsl -> "lsl"
   | `Lsr -> "lsr"
@@ -1369,7 +1369,7 @@ struct
                     in
                     function
                     | (`Theory (name, _) | `Module (name, _)),
-                      ("(&)" | "(|.)" | "(^)" | "(~_)" | "(<<)" | "(>>)" | "(>>>)" |
+                      ("(&)" | "(|^)" | "(^)" | "(~_)" | "(<<)" | "(>>)" | "(>>>)" |
                        "(+%)" | "(-%_)" | "(-%)" | "(*%)" | "(/%)" | "(%%)" | "of_int_modulo") ->
                       try_int_entry name (fun ty -> S.add ty s, m)
                     | (`Theory (name, _) | `Module (name, _)), "cast" ->

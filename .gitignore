@@ -75,7 +75,6 @@ bin
 /bin/why.byte
 
 /lib/why3/why3.conf
-/lib/why3/*.gen
 
 /src/why/why_lexer.ml
 /src/why/why_linenum.ml
