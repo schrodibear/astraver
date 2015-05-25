@@ -926,6 +926,7 @@ let rec term env (e : nexpr) =
               (fun vi e ->
                  let ty = subst vi.vi_type in
                  let te = ft e in
+                 let te = term_implicit_coerce te#typ ty te in
                  Type_var.add uenv te#pos te#typ ty;
                  te)
               pi.li_parameters
