@@ -838,7 +838,7 @@ struct
       let l1 = match e1o with Return e1 -> l1 @ [e1] | Void -> l1 in
       block ~labs l1 ~result:(Return e2)
     | labs, _, labs2, Block (e2 :: e2s, result) ->
-      block ~labs (e1 :: (labs2 @: e2) :: e2s) ~result
+      block ~labs ({ e1 with expr_labels = [] } :: (labs2 @: e2) :: e2s) ~result
     | labs, _, _, _ ->
       block ~labs [{ e1 with expr_labels = [] }] ~result:(Return e2)
 

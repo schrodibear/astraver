@@ -1669,10 +1669,10 @@ and make_reinterpret ~e e1 st =
   in
   let s_from, fi_from = (* src. subtag & field info *)
     match e1#typ with
-    | JCTpointer (JCtag (st, _), _, _) -> Name.tag st, get_fi st
+    | JCTpointer (JCtag (st, _), _, _) -> st, get_fi st
     | _ -> unsupported ~loc:e1#pos "reinterpretation for a root pointer or a non-pointer"
   in
-  let s_to, fi_to = Name.tag st, get_fi st in (* dest. subtag & field_info *)
+  let s_to, fi_to = st, get_fi st in (* dest. subtag & field_info *)
   let ac = deref_alloc_class ~type_safe:false e1 in
   let mc_from, mc_to = Pair.map (fst % deref_mem_class ~type_safe:false e1) (fi_from, fi_to) in
   let before = fresh_reinterpret_label () in
@@ -1690,7 +1690,7 @@ and make_reinterpret ~e e1 st =
     | InvNone | InvArguments ->
       E.locate ~e
         (O.F.reinterpret ~safe:(safety_checking ()) $
-         alloc ^ tt ^ var s_from ^ var s_to ^ mem_to ^. expr Any e1)
+         alloc ^ tt ^ tag s_from ^ tag s_to ^ mem_to ^. expr Any e1)
   in
 
   (* Let's now switch to terms and assume predicates instead of calling params... *)
@@ -1729,7 +1729,7 @@ and make_reinterpret ~e e1 st =
 
   let alloc_assumption =
     let app l =
-      O.P.(F.reinterpret_cast op $ tt ^ at' before alloc ^ at' LabelHere alloc ^ e' ^ T.var s_to ^ l)
+      O.P.(F.reinterpret_cast op $ tt ^ at' before alloc ^ at' LabelHere alloc ^ e' ^ T.tag s_to ^ l)
     in
     match op with
     | `Retain -> app Nil
@@ -1748,7 +1748,7 @@ and make_reinterpret ~e e1 st =
     let open O.P in
     let_ "p" e'
       (fun p ->
-         let_ "ps" T.(F.Jc.tag_table "downcast" $ tt ^ e' ^. var s_to)
+         let_ "ps" T.(F.Jc.tag_table "downcast" $ tt ^ e' ^. tag s_to)
            (fun ps ->
               let omin_omax =
                 let app f =
@@ -1793,14 +1793,14 @@ and make_reinterpret ~e e1 st =
                 ListLabels.map
                   pred_names
                   ~f:(fun pred_name ->
-                    (("Jc_reinterpret", `Qualified), pred_name) $.. dwhole 0 ^.. dparts None &&
+                    ((Name.Theory.reinterpret_mem, `Qualified), pred_name) $.. dwhole 0 ^.. dparts None &&
                     forall
                       "i"
                       O.Lt.integer
                       (fun i ->
                          let pred_app =
                            let imul = if P.(c > 1) then T.(i * int c) else i in
-                           (("Jc_reinterpret", `Qualified), pred_name) $..
+                           ((Name.Theory.reinterpret_mem, `Qualified), pred_name) $..
                            dwhole ~boff:i 0 ^.. dparts (Some imul)
                          in
                          if false (* change to enbale the antecedent (both ways are correct) *) then
@@ -1822,10 +1822,10 @@ and make_reinterpret ~e e1 st =
     O.P.conj
       O.T.[F.Jc.rmem "rmem" $. mem `Old = mem `New;
            F.Jc.rmem "rfactor" $. mem `Old = int c;
-           F.Jc.rmem "rpointer_new" $ mem `Old ^. e' = (F.Jc.tag_table "downcast" $ tt ^ e' ^. var s_to)]
+           F.Jc.rmem "rpointer_new" $ mem `Old ^. e' = (F.Jc.tag_table "downcast" $ tt ^ e' ^. tag s_to)]
   in
 
-  let cast_factor_assumption = O.T.(F.cast_factor () $ var s_from ^. var s_to = int c) in
+  let cast_factor_assumption = O.T.(F.cast_factor () $ tag s_from ^. tag s_to = int c) in
 
   let ensures_assumption =
     let open O.E in
@@ -2519,7 +2519,9 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
   in
   (* Ideally, only labels used in logical annotations should be kept *)
   let lab = e#mark in
-  (if lab = ""
+  (if lab = "" ||
+      lab.[0] = '_' && lab.[1] = 'C' && lab.[2] = '_' &&
+      List.(for_all (fun i -> '0' <= lab.[i] && lab.[i] <= '9') @@ range 3 `To (String.length lab - 1))
    then e'
    else O.E.([e#mark] @: e'))
   |>
@@ -3792,7 +3794,7 @@ let dummies =
       dummy "Jessie_any_alloc_table";
       dummy "Jessie_any_tag_table";
       dummy "Jessie_reinterpret_unsafe";
-      dummy "Jessie_reintepret_safe"]
+      dummy "Jessie_reinterpret_safe"]
 
 include Interp_struct
 

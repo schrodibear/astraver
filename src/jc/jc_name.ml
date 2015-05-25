@@ -146,6 +146,7 @@ struct
     Option.map_default li.li_axiomatic ~default:("Logic_" ^ li.li_final_name) ~f:axiomatic, `Short
   let logic_type name = "Logic_type_" ^ name, `Short
   let lemma ~is_axiom id = (if is_axiom then "Axiom_" else "Lemma_") ^ id, `Short
+  let reinterpret_mem = axiomatic "Jessie_memory_reinterpretation_predicates"
 
   module Jessie =
   struct

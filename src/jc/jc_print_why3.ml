@@ -633,9 +633,9 @@ and expr : type a. entry:_ -> safe:_ -> bw_ints:_ -> consts:_ -> _ -> a expr -> 
     function
     | [] -> expr_node ~entry ~safe ~bw_ints ~consts fmttr e.expr_node
     | s :: l ->
-      pr "@[<hov 0>('%a:@ " uid s;
+      pr "@[<hov 0>'%a:@ " uid s;
       aux l;
-      pr ")@]"
+      pr "@]"
   in
   aux e.expr_labels
 
