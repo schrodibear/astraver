@@ -1750,15 +1750,14 @@ let instruction = function
                   if Integer.equal factor Integer.one then expr nelem
                   else
                     let factor = Ast.Exp.const factor in
-                    expr
-                      (new_exp ~loc (BinOp (Mult oft, nelem, factor, typeOf arg)))
+                    expr (mkBinOp ~loc (Mult oft) nelem factor)
                 in
                 lvtyp, siz
             | _ ->
                 if Integer.equal lvsiz Integer.one then lvtyp, expr arg
                 else
                   let esiz = constant_expr ~loc lvsiz in
-                  lvtyp, expr (new_exp ~loc (BinOp (Div Check, arg, esiz,typeOf arg)))
+                  lvtyp, expr (mkBinOp ~loc (Div Check) arg esiz)
           in
           let name_of_type = match unrollType ty with
             | TComp(compinfo,_,_) -> compinfo.cname
@@ -1780,7 +1779,7 @@ let instruction = function
         else if is_calloc v then
           let nelem, elsize =
             match eargs with
-            | [nelem; elsize] -> nelem,elsize
+            | [nelem; elsize] -> nelem, elsize
             | _ -> assert false
           in
           let arg = stripInfo elsize in
@@ -1797,7 +1796,7 @@ let instruction = function
                     expr nelem
                   else
                     let factor = constant_expr ~loc factor in
-                    expr (new_exp ~loc (BinOp (Mult Check,nelem,factor,typeOf arg)))
+                    expr (mkBinOp ~loc (Mult Check) nelem factor)
                 in
                 lvtyp, siz
             | _ ->
@@ -1805,12 +1804,7 @@ let instruction = function
                 let lvsiz = lv_size lvtyp in
                 let esiz = constant_expr ~loc lvsiz in
                 lvtyp,
-                expr
-                  (new_exp ~loc
-                     (BinOp(Div Check,
-                            new_exp ~loc (BinOp(Mult Check,nelem,elsize,typeOf arg)),
-                            esiz,
-                            typeOf arg)))
+                expr (mkBinOp ~loc (Div Check) (mkBinOp ~loc (Mult Check) nelem elsize) esiz)
           in
           let name_of_type = match unrollType ty with
             | TComp(compinfo,_,_) -> compinfo.cname
@@ -2875,7 +2869,7 @@ let memory_reinterpretation_predicates get_compinfo () =
   in
   let decls = List.(flatten @@ map memory_reinterpretation_predicates pairs) in
   if pairs <> [] then
-    [PDecl.mkaxiomatic ~name:"jessie_memory_reinterpretation_predicates" ~decls ()]
+    [PDecl.mkaxiomatic ~name:"Jessie_memory_reinterpretation_predicates" ~decls ()]
   else
     []
 
