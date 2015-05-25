@@ -44,7 +44,7 @@ let constant fmttr (type a) =
   let pr fmt = fprintf fmttr fmt in
   function
   | (Void : a constant) -> pr "()"
-  | Int n -> pr "(%s)" n
+  | Int n -> pr "(%s)" @@ Num.string_of_num @@ Numconst.integer n
   | Real f -> pr "%s" f
   | Bool true -> pr "true"
   | Bool false -> pr "false"
@@ -316,6 +316,7 @@ let of_int_const ~entry ~where ~bw_ints =
     (type r) (type b)
     ((Int _ as ty, modulo), Int s : ((r, b) xintx bounded integer * _) * unbounded integer number constant) ->
     let pr fmt = fprintf fmttr fmt in
+    let s' = Numconst.integer s in
     let f =
       let open Buffer in
       let buf = create 10 in
@@ -331,12 +332,11 @@ let of_int_const ~entry ~where ~bw_ints =
           fprintf fmttr "%s.%s" scope "of_int_const"
         end
     in
-    let fallback () = pr "(%t@ (%s))" (f ~subst:false) s in
+    let fallback () = pr "(%t@ (%s))" (f ~subst:false) (Num.string_of_num s') in
     if not (S.mem (Int ty) bw_ints) then
       fallback ()
     else
       let open Num in
-      let s' = num_of_string s in
       let min, max =
         let (module M) = O.module_of_int_ty ty in
         try
