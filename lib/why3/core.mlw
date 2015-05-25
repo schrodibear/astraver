@@ -1,7 +1,7 @@
 
 theory Int
   use export int.Int
-  use import int.EuclideanDivision
+  use import int.ComputerDivision
 
   function (/) (a : int) (b : int) : int = div a b
   function (%) (a : int) (b : int) : int = mod a b
