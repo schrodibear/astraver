@@ -1403,19 +1403,19 @@ let rec expr fef e =
            fef_union fef_call fef
        | JCEderef(e1,fi) ->
            let mc,ufi_opt = deref_mem_class ~type_safe:true e1 fi in
-           let ac = alloc_class_of_mem_class mc in
+           let ac = deref_alloc_class ~type_safe:true e1 in
            let mem = mc, e1#region in
            begin match expr_immutable_location e with
              | Some loc ->
                  let fef =
-                   add_precise_memory_reads LabelHere fef (loc,mem)
+                   add_precise_memory_reads LabelHere fef (loc, mem)
                  in
-                 let fef = add_alloc_reads LabelHere fef (ac,e1#region) in
+                 let fef = add_alloc_reads LabelHere fef (ac, e1#region) in
                  (* TODO: treat union *)
                  true, fef
              | None ->
                  let fef = add_memory_reads LabelHere fef mem in
-                 let fef = add_alloc_reads LabelHere fef (ac,e1#region) in
+                 let fef = add_alloc_reads LabelHere fef (ac, e1#region) in
                  begin match mc,ufi_opt with
                    | JCmem_plain_union _vi, _ ->
                        false, (* do not call on sub-expressions of union *)
@@ -1427,7 +1427,7 @@ let rec expr fef e =
            end
        | JCEassign_heap(e1,fi,_e2) ->
            let mc,ufi_opt = deref_mem_class ~type_safe:true e1 fi in
-           let ac = alloc_class_of_mem_class mc in
+           let ac = deref_alloc_class ~type_safe:true e1 in
            let deref = new expr_with ~node:(JCEderef(e1,fi)) e in
            let mem = mc, e1#region in
            begin match expr_immutable_location deref with
