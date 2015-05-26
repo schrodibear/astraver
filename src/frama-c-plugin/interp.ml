@@ -1677,8 +1677,17 @@ let keep_only_declared_nb_of_arguments vi l =
 
 let instruction = function
   | Set (lv, e, pos) ->
-      let enode = JCPEassign (lval pos lv, expr e) in
-      (locate (mkexpr enode pos))#node
+    let e =
+      match unrollType (typeOfLval lv) with
+      | TEnum _ as newt ->
+        begin match unrollType (typeOf e) with
+        | TInt _ -> mkCast ~force:true ~overflow:Check ~e ~newt
+        | _ -> e
+        end
+      | _ -> e
+    in
+    let enode = JCPEassign (lval pos lv, expr e) in
+    (locate (mkexpr enode pos))#node
 
   | Call (None, { enode = Lval (Var v, NoOffset) }, eargs, pos) ->
     begin match Ast.Vi.Function.of_varinfo v with
