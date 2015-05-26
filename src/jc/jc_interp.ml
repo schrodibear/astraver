@@ -3665,23 +3665,31 @@ let tag_table (rt, r) =
   O.Wd.mk ~name:(Name.tag_table (rt, r)) @@ Param (Ref (Logic (tag_table_type rt)))
 
 let globals () =
-  let wrap, return  =
+  let module Pair_1st_opt (A : Hashtbl.HashedType) (B : Hashtbl.HashedType) =
+    struct
+      type t = A.t option * B.t
+      let hash (a, b) = Option.map_default ~default:0 ~f:(( * ) 13729 % A.hash) a + B.hash b
+      let equal (a, b) (a', b') = Option.equal ~eq:A.equal a a' && B.equal b b'
+    end
+  in
+  let wrap, return =
     let module H = Hashtbl.Make (PointerClass) in
     let pcs = H.create 10 in
-    let module Rs = Hashtbl.Make (Region) in
+    let module Pcrs = Hashtbl.Make (Pair_1st_opt (PointerClass) (Region)) in
     let module Ms = Hashtbl.Make (MemClass) in
-    let rs = Rs.create 10 in
+    let rs = Pcrs.create 10 in
     let global = ref [] in
     (fun f ->
        f
-         ~add:(fun pc r ?mc decls ->
-           let new_region = not (Rs.mem rs r) in
-           if new_region || r = dummy_region || Option.map_default ~default:false ~f:(not % Ms.mem (Rs.find rs r)) mc
+         ~add:(fun (pc, r as pcr) ?mc decls ->
+           let new_region = not (Pcrs.mem rs pcr) in
+           if new_region || r = dummy_region ||
+              Option.map_default ~default:false ~f:(not % Ms.mem (Pcrs.find rs pcr)) mc
            then begin
              if new_region then
-               Rs.add rs r (Ms.create 10)
+               Pcrs.add rs pcr (Ms.create 10)
              else if r <> dummy_region then
-               Ms.add (Rs.find rs r) (Option.value_fail ~in_:"globals" mc) ();
+               Ms.add (Pcrs.find rs pcr) (Option.value_fail ~in_:"globals" mc) ();
              let decls = decls () in
              match pc with
              | Some pc ->
@@ -3693,7 +3701,7 @@ let globals () =
                end
              | None -> global := !global @ decls
            end);
-       Rs.clear rs),
+       Pcrs.clear rs),
     fun () ->
       H.fold
         (fun pc decls acc ->
@@ -3707,8 +3715,8 @@ let globals () =
        IntHashtblIter.iter
          (fun _ (v, _) ->
             add
-              (match v.vi_type with JCTpointer (pc, _, _) -> Some pc | _ -> None)
-              dummy_region
+              ((match v.vi_type with JCTpointer (pc, _, _) -> Some pc | _ -> None),
+               dummy_region)
               (fun () -> [variable v]))
          Typing.variables_table);
   wrap
@@ -3716,11 +3724,11 @@ let globals () =
        StringHashtblIter.iter
          (fun _ (mc, r) ->
             add
-              (match mc with
+              ((match mc with
                | JCmem_field { fi_struct } -> Some (JCtag (fi_struct, []))
                | JCmem_plain_union ri -> Some (JCroot ri)
-               | JCmem_bitvector -> None)
-              (Region.representative r)
+               | JCmem_bitvector -> None),
+               Region.representative r)
               ~mc
               (fun () -> [memory (mc, r)]))
          Effect.constant_memories);
@@ -3729,10 +3737,10 @@ let globals () =
        StringHashtblIter.iter
          (fun _ (ac, r)  ->
             add
-              (match ac with
+              ((match ac with
                | JCalloc_root ri -> Some (JCroot ri)
-               | JCalloc_bitvector -> None)
-              (Region.representative r)
+               | JCalloc_bitvector -> None),
+               Region.representative r)
               (fun () -> [alloc_table (ac, r)]))
          Effect.constant_alloc_tables);
   wrap
@@ -3740,8 +3748,8 @@ let globals () =
        StringHashtblIter.iter
          (fun _ (ri, r) ->
             add
-              (Some (JCroot ri))
-              (Region.representative r)
+              ((Some (JCroot ri),
+               Region.representative r))
               (fun () -> [tag_table (ri, r)]))
          Effect.constant_tag_tables);
   return ()
