@@ -1700,7 +1700,12 @@ struct
 
   let retaining_size_of_field fi f =
     let size_determinants fi =
-      fi.fbitfield, bitsSizeOf fi.ftype, hasAttribute Name.Attr.packed fi.fattr
+      let bit_size_of { ftype } =
+        match unrollType ftype with
+        | TArray (_, None ,_, _) -> 0
+        | t -> bitsSizeOf t
+      in
+      fi.fbitfield, bit_size_of fi, hasAttribute Name.Attr.packed fi.fattr
     in
     let originals, original_size =
       size_determinants fi,
