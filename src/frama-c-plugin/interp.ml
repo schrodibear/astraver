@@ -1303,9 +1303,7 @@ let code_annot pos ((acc_assert_before, contract) as acc) a =
       let check_supported_type s t =
         let integral_struct_name t =
           match unrollType t with
-          | TComp ({ cname }, _, _) when
-              cname = wrapper_name voidType ||
-              Type.Integral.fold_all (fun _ (ty, _) acc -> acc || wrapper_name (ty : _ Type.t :> typ) = cname) false ->
+          | TComp ({ cname; cfields = [fi] }, _, _) when isIntegralType fi.ftype ->
             Some cname
           | _ -> None
         in
