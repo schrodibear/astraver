@@ -3487,8 +3487,8 @@ let enum_entry_name ~how (type a) =
     let (module M) = O.module_of_enum_ty e in
     match how  with
     | `Theory _ -> M.theory
-    | `Module (_, `Safe) -> M.unsafe_module
-    | `Module (_, `Unsafe) -> M.safe_module
+    | `Module (_, `Safe) -> M.safe_module
+    | `Module (_, `Unsafe) -> M.unsafe_module
 
 let enums eis =
   let open O in
