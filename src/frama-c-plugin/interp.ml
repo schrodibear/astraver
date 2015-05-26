@@ -2611,7 +2611,7 @@ let global vardefs g =
 let integral_type name ty bitsize =
   let min = Integer.to_num (Type.Integral.min_value ?bitsize ty) in
   let max = Integer.to_num (Type.Integral.max_value ?bitsize ty) in
-  mkdecl (JCDenum_type(name,min,max)) Why_loc.dummy_position
+  mkdecl (JCDenum_type (name, min, max)) Why_loc.dummy_position
 
 let integral_types () =
   if !int_model = IMexact then
@@ -2620,7 +2620,7 @@ let integral_types () =
     Type.Integral.fold_all
       (fun name (ty, bitsize) acc ->
          match unrollType (ty : Type.Integral.t :> typ) with
-         | TInt _ -> acc
+         | TInt (ik, _) when ik <> IBool -> acc
          | _ -> integral_type name ty bitsize :: acc)
       []
 
