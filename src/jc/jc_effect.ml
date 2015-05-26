@@ -391,6 +391,7 @@ let fef_reads ef =
     fe_reads = ef;
     fe_writes = empty_effects;
     fe_raises = ExceptionSet.empty;
+    fe_reinterpret = false
   }
 
 let fef_union fef1 fef2 =
@@ -398,6 +399,7 @@ let fef_union fef1 fef2 =
     fe_reads = ef_union fef1.fe_reads fef2.fe_reads;
     fe_writes = ef_union fef1.fe_writes fef2.fe_writes;
     fe_raises = ExceptionSet.union fef1.fe_raises fef2.fe_raises;
+    fe_reinterpret = fef1.fe_reinterpret || fef2.fe_reinterpret
   }
 
 let fef_diff fef1 fef2 =
@@ -405,13 +407,14 @@ let fef_diff fef1 fef2 =
     fe_reads = ef_diff fef1.fe_reads fef2.fe_reads;
     fe_writes = ef_diff fef1.fe_writes fef2.fe_writes;
     fe_raises = ExceptionSet.diff fef1.fe_raises fef2.fe_raises;
+    fe_reinterpret = fef1.fe_reinterpret && not fef2.fe_reinterpret
   }
 
 let fef_filter_by_region f fef =
   {
     fef with
     fe_reads = ef_filter_by_region f fef.fe_reads;
-    fe_writes = ef_filter_by_region f fef.fe_writes;
+    fe_writes = ef_filter_by_region f fef.fe_writes
   }
 
 let fef_assoc ~region_assoc ~region_mem_assoc fef =
@@ -419,6 +422,7 @@ let fef_assoc ~region_assoc ~region_mem_assoc fef =
     fe_reads = ef_assoc ~region_assoc ~region_mem_assoc fef.fe_reads;
     fe_writes = ef_assoc ~region_assoc ~region_mem_assoc fef.fe_writes;
     fe_raises = fef.fe_raises;
+    fe_reinterpret = fef.fe_reinterpret
   }
 
 let same_feffects fef1 fef2 =
@@ -1599,7 +1603,7 @@ let rec expr fef e =
          add_tag_writes' LabelHere (ri, r) |>
          add_memory_reads' LabelHere (JCmem_field fi1, r) |>
          add_memory_writes' LabelHere (JCmem_field fi2, r) |>
-         fun fef -> true, fef
+         fun fef -> true, { fef with fe_reinterpret = true }
        | JCEpack(st,e,_st) ->
            (* Assert the invariants of the structure
               => need the reads of the invariants *)

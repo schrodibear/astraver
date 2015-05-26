@@ -399,7 +399,8 @@ let make_pred name =
 let empty_fun_effect =
   { fe_reads = empty_effects;
     fe_writes = empty_effects;
-    fe_raises = ExceptionSet.empty ;
+    fe_raises = ExceptionSet.empty;
+    fe_reinterpret = false
   }
 
 let fun_tag_counter = ref 0

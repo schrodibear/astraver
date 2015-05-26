@@ -67,9 +67,10 @@ sig
   }
 
   type fun_effect = {
-    fe_reads : effect;
-    fe_writes : effect;
-    fe_raises : ExceptionSet.t;
+    fe_reads        : effect;
+    fe_writes       : effect;
+    fe_raises       : ExceptionSet.t;
+    fe_reinterpret  : bool;
   }
 
   type logic_info = {

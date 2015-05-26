@@ -1922,7 +1922,10 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
       then expr Any e1
       else
         O.E.((if safety_checking () then
-                (fun args -> E.locate ~e ~kind:JCVCdowncast (F.Jc.downcast_safe "downcast" $ args))
+                let downcast_mod =
+                  F.Jc.(if infunction.fun_effects.fe_reinterpret then downcast_safe_reinterpret else downcast_safe)
+                in
+                (fun args -> E.locate ~e ~kind:JCVCdowncast (downcast_mod "downcast" $ args))
               else
                 ($) (F.Jc.downcast_unsafe "downcast"))
                (tt ^ expr Any e1 ^. tag st))
