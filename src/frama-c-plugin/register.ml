@@ -115,6 +115,62 @@ let run () =
   FCProject.copy ~selection:(Parameter_state.get_selection ()) prj;
   FCProject.set_current prj;
   let file = FCAst.get () in
+  (* ATTENTION: Hack! *)
+  (* Recovering sharing lost somewhere in Frama-C ==> TODO: check upstream Frama-C for this problem *)
+  Visitor.visitFramacFile
+    (let open Cil_datatype in
+     let restore_sharing ~find ~add ~f ?(eff=ignore) h x =
+       try
+         let x' = find h x in
+         if x' != x then begin
+           Console.warn_once "This version of Frama-C doesn't respect CIL invariants (sharing is broken)!";
+           ChangeDoChildrenPost (f x', Fn.id)
+         end else
+           DoChildren
+       with
+       | Not_found ->
+         add h x x;
+         eff x;
+         DoChildren
+     in
+     object(self)
+       inherit Visitor.frama_c_inplace
+
+       val cti = Typeinfo.Hashtbl.create 100
+       val cci = Compinfo.Hashtbl.create 100
+       val cfi = Fieldinfo.Hashtbl.create 100
+       val cei = Enuminfo.Hashtbl.create 100
+       val cvi = Varinfo.Hashtbl.create 100
+
+       method! vtype =
+         function
+         | TNamed (ti, attrs) ->
+           Typeinfo.Hashtbl.(restore_sharing ~find ~add ~f:(fun ti -> TNamed (ti, attrs)) cti ti)
+         | _ -> DoChildren
+
+       method! vcompinfo =
+         let eff ci =
+           ci.cfields <-
+             List.map
+               (fun fi ->
+                  match self#vfieldinfo fi with
+                  | ChangeDoChildrenPost (fi, _) -> fi
+                  | _ -> fi)
+               ci.cfields
+         in
+         Compinfo.Hashtbl.(restore_sharing ~find ~add ~f:Fn.id ~eff cci)
+       method! venuminfo = Enuminfo.Hashtbl.(restore_sharing ~find ~add ~f:Fn.id cei)
+       method! vfieldinfo fi =
+         let eff fi =
+           fi.fcomp <-
+             (match self#vcompinfo fi.fcomp with
+              | ChangeDoChildrenPost (ci, _) -> ci
+              | _ -> fi.fcomp)
+         in
+         Fieldinfo.Hashtbl.(restore_sharing ~find ~add ~f:Fn.id ~eff cfi fi)
+       method! vvrbl = Varinfo.Hashtbl.(restore_sharing ~find ~add ~f:Fn.id cvi)
+     end)
+    file;
   try
     if file.globals = [] then
       Console.abort "Nothing to process. There was probably an error before.";
