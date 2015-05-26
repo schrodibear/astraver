@@ -775,30 +775,48 @@ class type_substituting_visitor typ =
           ChangeTo (typeAddAttributes (typeAttrs t) typ)
   end
 
-class virtual logic_var_visitor typ =
-  let get_specialized_name = get_specialized_name typ in
-  object(self)
-    method virtual behavior : visitor_behavior
+module Logic_var_ =
+struct
+  module H = Logic_var.Hashtbl
 
-    method private has_changed lv = (get_original_logic_var self#behavior lv) != lv
+  module Visitor =
+  struct
+    class virtual logic_var_visitor typ =
+      let get_specialized_name = get_specialized_name typ in
+      object(self)
+        method virtual behavior : visitor_behavior
 
-    method private virtual vlogic_var_copying : logic_var -> logic_var visitAction
+        val olds = H.create 10
+        val news = H.create 10
 
-    method private virtual vlogic_var_renaming : logic_var -> logic_var visitAction
+        method private set_old = H.replace olds
+        method private set_new = H.replace news
+        method private is_old = H.mem news
+        method private is_new = H.mem olds
 
-    method vlogic_var_decl : 'a -> 'a visitAction =
-      fun ({ lv_name; lv_origin } as lv) ->
-        if self#has_changed lv then
-          DoChildren
-        else if lv_name = get_specialized_name lv_name then
-          self#vlogic_var_copying lv
-        else
-          match lv_origin with
-          | None -> self#vlogic_var_renaming lv
-          | Some vi -> Console.fatal "Can't handle logic variable with origin: %a" Printer.pp_varinfo vi
+        method private virtual vlogic_var_copying : logic_var -> logic_var visitAction
 
-    method vlogic_var_use = self#vlogic_var_decl
+        method private virtual vlogic_var_renaming : logic_var -> logic_var visitAction
+
+        method vlogic_var_decl : 'a -> 'a visitAction =
+          fun ({ lv_name; lv_origin } as lv) ->
+            if self#is_old lv then      ChangeTo (H.find news lv)
+            else if self#is_new lv then DoChildren
+            else if lv_name = get_specialized_name lv_name then
+              (* logic var name does NOT contain template => just copy it to avoid sharing before retyping *)
+              self#vlogic_var_copying lv
+            else
+              (* logic var name DOES contain template => copy and rename it by substituting _type with type name *)
+              match lv_origin with
+              | None -> self#vlogic_var_renaming lv
+              | Some vi -> Console.fatal "Can't handle logic variable with origin: %a" Printer.pp_varinfo vi
+
+        method vlogic_var_use = self#vlogic_var_decl
+      end
   end
+end
+
+include Logic_var_.Visitor
 
 class virtual logic_var_specializing_visitor update_logic_info typ =
   let update_logic_info = update_logic_info typ in
@@ -806,9 +824,11 @@ class virtual logic_var_specializing_visitor update_logic_info typ =
     inherit logic_var_visitor typ
 
     method private vlogic_var_copying ({ lv_name; lv_type } as lv) =
-      let lv' = Cil_const.make_logic_var_global lv_name lv_type in
+      let lv' = Cil_const.make_logic_var_formal lv_name lv_type in
       set_logic_var self#behavior lv lv';
       set_orig_logic_var self#behavior lv' lv;
+      self#set_old lv' lv;
+      self#set_new lv lv';
       ChangeTo lv'
 
     method private vlogic_var_renaming ({ lv_name } as lv) =
@@ -833,14 +853,14 @@ class virtual logic_var_renaming_visitor typ =
 
     method private vlogic_var_renaming ({ lv_name; lv_type } as lv) =
       let lv_name' = get_specialized_name lv_name in
-      let lv' = Cil_const.make_logic_var_global lv_name' lv_type in
+      let lv' = Cil_const.make_logic_var_formal lv_name' lv_type in
       set_logic_var self#behavior lv lv';
       set_orig_logic_var self#behavior lv' lv;
       ChangeTo lv'
   end
 
 class specialize_blockfuns_visitor =
-  let specialize_logic_info typ (*logic_info*) =
+  let specialize_logic_info typ (* logic_info *) =
     let visitor = object
       inherit frama_c_inplace
       inherit! type_substituting_visitor typ
@@ -850,7 +870,7 @@ class specialize_blockfuns_visitor =
       let logic_info' = visitFramacLogicInfo (new frama_c_copy @@ Project.current ()) logic_info in
       visitFramacLogicInfo visitor logic_info'
   in
-  let specialize_blockfun update_logic_info typ (*kernel_function*) =
+  let specialize_blockfun update_logic_info typ { fundec; spec } =
     let visitor =
       object
         inherit frama_c_copy (Project.current ())
@@ -859,63 +879,62 @@ class specialize_blockfuns_visitor =
         inherit! logic_var_specializing_visitor update_logic_info typ
       end
     in
-    fun { fundec; spec } ->
-      match fundec with
-      | Declaration (spec, fvinfo, Some argvinfos, loc) ->
-        let spec = visitFramacFunspec visitor spec in
-        let fvinfo = visitFramacVarDecl visitor fvinfo in
-        let argvinfos =
-          ListLabels.map
-            argvinfos
-            ~f:(fun vi ->
-              let vi = visitFramacVarDecl visitor vi in
-              vi.vlogic_var_assoc <- Option.map vi.vlogic_var_assoc ~f:(get_logic_var visitor#behavior);
-              Option.iter vi.vlogic_var_assoc ~f:(fun lv -> lv.lv_origin <- Some vi);
-              vi)
-        in
-        (spec, fvinfo, argvinfos, loc)
-      | _ -> Console.fatal "Can't specialize user-defined block function: %a" Printer.pp_funspec spec
+    match fundec with
+    | Declaration (spec, fvinfo, Some argvinfos, loc) ->
+      let spec = visitFramacFunspec visitor spec in
+      let fvinfo = visitFramacVarDecl visitor fvinfo in
+      let argvinfos =
+        ListLabels.map
+          argvinfos
+          ~f:(fun vi ->
+            let vi = visitFramacVarDecl visitor vi in
+            vi.vlogic_var_assoc <- Option.map vi.vlogic_var_assoc ~f:(get_logic_var visitor#behavior);
+            Option.iter vi.vlogic_var_assoc ~f:(fun lv -> lv.lv_origin <- Some vi);
+            vi)
+      in
+      (spec, fvinfo, argvinfos, loc)
+    | _ -> Console.fatal "Can't specialize user-defined block function: %a" Printer.pp_funspec spec
   in
   let is_block_function = function
     | { fundec = Declaration (_, _, _, ({ Lexing.pos_fname }, _)) } ->
-        Filename.basename pos_fname = Name.File.blockfuns_include
+      Filename.basename pos_fname = Name.File.blockfuns_include
     | _ -> false
   in
   let match_arg_types ftype tl_opt tacts =
     match ftype with
-      | TFun (rtype, Some formals, _, _) ->
-          let _type_ref = ref None in
-          let matches ~tf:tf ta =
-            let irrelevant_attrs = ["restrict"; "volatile"] in
-            let const_attr = "const" in
-            let strip = typeRemoveAttributes irrelevant_attrs in
-            let strip_const = typeRemoveAttributes (const_attr :: irrelevant_attrs) in
-            let pointed_type = function
-              | TPtr (t, _) -> t
-              | TArray _ as arrty -> element_type arrty
-              | ty -> ty
-            in
-            if not (is_pattern_type @@ pointed_type tf) then begin
-              not @@ need_cast
-                       ((if not @@ hasAttribute const_attr @@ typeAttrs tf then strip else strip_const) ta)
-                       tf
-            end else
-              let ta = if isPointerType ta then pointed_type ta else ta in
-              if Option.map_default !_type_ref ~default:true ~f:(fun typ -> not (need_cast ta typ)) then begin
-                if not (Option.is_some !_type_ref) then _type_ref := Some ta;
-                true
-              end else
-                false
-          in
-          if
-            List.length formals = List.length tacts &&
-            List.for_all Fn.id @@
-              (Option.map_default tl_opt ~default:true ~f:(matches ~tf:rtype)) ::
-              List.map2 (fun (_, tf, _) ta -> matches ~tf ta) formals tacts
-          then !_type_ref
-          else None
-      | TFun _ -> Console.fatal "Can't specialize the function by its return type: %a" Printer.pp_typ ftype
-      | _ -> Console.fatal "%a is not a function type, can't check if the signature matches" Printer.pp_typ ftype
+    | TFun (rtype, Some formals, _, _) ->
+      let _type_ref = ref None in
+      let matches ~tf:tf ta =
+        let irrelevant_attrs = ["restrict"; "volatile"] in
+        let const_attr = "const" in
+        let strip = typeRemoveAttributes irrelevant_attrs in
+        let strip_const = typeRemoveAttributes (const_attr :: irrelevant_attrs) in
+        let pointed_type = function
+          | TPtr (t, _) -> t
+          | TArray _ as arrty -> element_type arrty
+          | ty -> ty
+        in
+        if not (is_pattern_type @@ pointed_type tf) then begin
+          not @@ need_cast
+            ((if not @@ hasAttribute const_attr @@ typeAttrs tf then strip else strip_const) ta)
+            tf
+        end else
+          let ta = if isPointerType ta then pointed_type ta else ta in
+          if Option.map_default !_type_ref ~default:true ~f:(fun typ -> not (need_cast ta typ)) then begin
+            if not (Option.is_some !_type_ref) then _type_ref := Some ta;
+            true
+          end else
+            false
+      in
+      if
+        List.length formals = List.length tacts &&
+        List.for_all Fn.id @@
+        (Option.map_default tl_opt ~default:true ~f:(matches ~tf:rtype)) ::
+        List.map2 (fun (_, tf, _) ta -> matches ~tf ta) formals tacts
+      then !_type_ref
+      else None
+    | TFun _ -> Console.fatal "Can't specialize the function by its return type: %a" Printer.pp_typ ftype
+    | _ -> Console.fatal "%a is not a function type, can't check if the signature matches" Printer.pp_typ ftype
   in
   object(self)
     inherit frama_c_inplace
@@ -996,7 +1015,7 @@ class specialize_blockfuns_visitor =
       f.vstorage <- fvinfo.vstorage;
       f.vattr <- fvinfo.vattr;
       unsafeSetFormalsDecl f argvinfos;
-      new_globals <- GVarDecl(empty_funspec (), f, loc) :: new_globals;
+      new_globals <- GVarDecl (empty_funspec (), f, loc) :: new_globals;
       Globals.Functions.replace_by_declaration spec f loc;
       let kernel_function = Globals.Functions.get f in
       Annotations.register_funspec ~emitter:Emitters.jessie kernel_function;
