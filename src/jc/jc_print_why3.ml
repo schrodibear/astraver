@@ -332,11 +332,11 @@ let of_int_const ~entry ~where ~bw_ints =
           fprintf fmttr "%s.%s" scope "of_int_const"
         end
     in
-    let fallback () = pr "(%t@ (%s))" (f ~subst:false) (Num.string_of_num s') in
+    let open Num in
+    let fallback () = pr "(%t@ (%s))" (f ~subst:false) (string_of_num s') in
     if not (S.mem (Int ty) bw_ints) then
       fallback ()
     else
-      let open Num in
       let min, max =
         let (module M) = O.module_of_int_ty ty in
         try
