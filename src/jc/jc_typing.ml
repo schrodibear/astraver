@@ -1088,7 +1088,7 @@ let rec term env (e : nexpr) =
           Type_var.add uenv e1#pos te1#typ ty;
           Type_var.subst uenv ty
       in
-      let vi = var ty id in
+      let vi = var ~bound:true ty id in
       let te2 = term ((id, vi) :: env) e2 in
       te2#typ, te2#region, JCTlet (vi, term_implicit_coerce ty te1#typ te1, te2)
     | JCNElet (_ (* Some pty *), _id, None, _e2) ->
@@ -1335,7 +1335,7 @@ let rec assertion env e =
               te1#typ
               "type not compatible with declared type"
       in
-      let vi = var ty1 id in
+      let vi = var ~bound:true ty1 id in
       let env = (id, vi) :: env in
       let te2 = assertion env e2 in
       JCAlet (vi, term_implicit_coerce te1#typ ty1 te1, te2)
@@ -2183,7 +2183,7 @@ let rec expr env e =
               ~loc:e#pos
               "inferred type is not a subtype of declared type"
       in
-      let vi = var ty id in
+      let vi = var ~bound:true ty id in
       let te2 = expr ((id, vi)::env) e2 in
       te2#typ,
       te2#region,
