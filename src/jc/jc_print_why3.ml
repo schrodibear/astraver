@@ -1369,7 +1369,7 @@ struct
                     in
                     function
                     | (`Theory (name, _) | `Module (name, _)),
-                      ("(&)" | "(|^)" | "(^)" | "(~_)" | "(<<)" | "(>>)" | "(>>>)" |
+                      ("(&)" | "(|^)" | "(^)" | "(~_)" | "lsl" | "lsr" | "asr" | "lsl_modulo" |
                        "(+%)" | "(-%_)" | "(-%)" | "(*%)" | "(/%)" | "(%%)" | "of_int_modulo") ->
                       try_int_entry name (fun ty -> S.add ty s, m)
                     | (`Theory (name, _) | `Module (name, _)), "cast" ->
