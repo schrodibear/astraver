@@ -68,7 +68,7 @@ val lemmas_table :
   StringHashtblIter.t
 
 type axiomatic_decl =
-  | ABaxiom of Why_loc.position * string * Env.label list * Constructors.assertion
+  | ADprop of Why_loc.position * string * Env.label list * [ `Axiom | `Lemma ] * Constructors.assertion
 
 type axiomatic_data = private
     {

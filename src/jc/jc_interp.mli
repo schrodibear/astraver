@@ -136,11 +136,6 @@ val check : logic_info Ast.assertion list -> pred -> void expr
 val expr :
   ('a, 'b) ty_opt -> (logic_info, fun_info) Ast.expr -> 'a expr
 val some_expr : (logic_info, fun_info) Ast.expr -> some_expr
-val axiom :
-  Lexing.position * Lexing.position ->
-  string ->
-  is_axiom:bool ->
-  label list -> logic_info Ast.assertion -> [ `Theory ] why_decl list
 val axiomatic_decl : Typing.axiomatic_decl -> [ `Theory ] why_decl list
 val logic_fun :
   logic_info ->
@@ -152,7 +147,7 @@ val allocates :
   ?region_list:region list ->
   fun_effect -> (Why_loc.position * Fenv.location list) option -> pred
 
-val lemma :
+val prop :
   Lexing.position * Lexing.position ->
   string ->
   is_axiom:bool ->

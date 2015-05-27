@@ -1781,7 +1781,7 @@ let li_effects_from_assertion fi ax_effects =
 let axiomatic_decl_effect, li_effects_from_ax_decl =
   let with_axiomatic_decl f acc d =
     match d with
-    | Typing.ABaxiom (_, _, _, a) -> f acc a
+    | Typing.ADprop (_, _, _, _, a) -> f acc a
   in
   with_axiomatic_decl assertion,
   fun fi ax_effects -> with_axiomatic_decl (li_effects_from_assertion fi ax_effects)
@@ -1816,7 +1816,7 @@ let check_li_effects_from_axiomatic li =
         li.li_effects
     in
     match d with
-    | Typing.ABaxiom (pos, name, _, a) ->
+    | Typing.ADprop (pos, name, _, _, a) ->
       let check_app = check_app pos name in
       Iterators.iter_term_and_assertion
         (fun t -> match t#node with JCTapp app when Logic_info.equal app.app_fun li -> check_app t#pos app | _ -> ())
@@ -2010,7 +2010,7 @@ let restrict_poly_mems_in_assertion mm =
       | _ -> t)
 
 let restrict_poly_mems_in_axiomatic_decl mm =
-  Typing.(fun (ABaxiom (pos, name, ls, a)) -> ABaxiom (pos, name, ls, restrict_poly_mems_in_assertion mm a))
+  Typing.(fun (ADprop (pos, name, ls, kind, a)) -> ADprop (pos, name, ls, kind, restrict_poly_mems_in_assertion mm a))
 
 (*
   Local Variables:

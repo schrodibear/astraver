@@ -231,7 +231,7 @@ let expr code_comp logic_comp result_region =
 
 let axiomatic_decl logic_comp d =
   match d with
-  | Typing.ABaxiom (_, _, _, a) ->
+  | Typing.ADprop (_, _, _, _, a) ->
     assertion logic_comp dummy_region a
 
 let axiomatic comp a =
@@ -321,7 +321,7 @@ let code_component comp =
   (* Fill in association table at each call site *)
   List.iter (code_function []) comp
 
-let axiom comp _id (_loc, _is_axiom, _, _labels, a) = assertion comp dummy_region a
+let prop comp _id (_loc, _is_axiom, _, _labels, a) = assertion comp dummy_region a
 
 let regionalize_assertion a assoc =
   Iterators.map_term_in_assertion

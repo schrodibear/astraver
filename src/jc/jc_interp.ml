@@ -2654,7 +2654,7 @@ let make_not_assigns mem t l =
 (* axioms, lemmas, goals     *)
 (*****************************)
 
-let axiom pos id ~is_axiom labels a =
+let prop pos id ~is_axiom labels a =
   let lab = match labels with [lab] -> lab | _ -> LabelHere in
   (* Special (local) translation of effects for predicates with polymorphic memories.
      We first entirely exclude their effects from the assertion, then only restore the effects that
@@ -2675,8 +2675,8 @@ let axiom pos id ~is_axiom labels a =
 
 let axiomatic_decl d =
   match d with
-  | Typing.ABaxiom (loc, id, labels, p) ->
-    axiom loc ~is_axiom:true id labels p
+  | Typing.ADprop (loc, id, labels, kind, p) ->
+    prop loc ~is_axiom:(kind = `Axiom) id labels p
 
 let logic_fun f ta =
   let lab = match f.li_labels with [lab] -> lab | _ -> LabelHere in
@@ -2795,8 +2795,8 @@ let logic_fun li body =
   else
     []
 
-let lemma pos id ~is_axiom labels p =
-  O.[Entry.some @@ Th.mk ~name:(fst @@ Name.Theory.lemma ~is_axiom id) @@ axiom pos id ~is_axiom labels p]
+let prop pos id ~is_axiom labels p =
+  O.[Entry.some @@ Th.mk ~name:(fst @@ Name.Theory.lemma ~is_axiom id) @@ prop pos id ~is_axiom labels p]
 
 (******************************************************************************)
 (*                                 Functions                                  *)

@@ -37,7 +37,7 @@ open Env
 open Fenv
 open Region
 
-val axiom :
+val prop :
   logic_info list ->
   _ ->
   _ * _ * _ * _ *  assertion ->

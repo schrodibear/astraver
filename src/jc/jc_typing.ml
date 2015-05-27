@@ -120,7 +120,7 @@ let real_of_integer =
   Hashtbl.find logic_functions_env "\\real_of_integer"
 
 type axiomatic_decl =
-  | ABaxiom of Why_loc.position * string * Env.label list * Constructors.assertion
+  | ADprop of Why_loc.position * string * Env.label list * [ `Axiom | `Lemma ] * Constructors.assertion
 
 type axiomatic_data = {
   mutable axiomatics_defined_ids : logic_info list;
@@ -2743,34 +2743,36 @@ let rec list_assoc_data lab l =
 let check_consistency id data =
   let pis = data.axiomatics_defined_ids in
   List.iter
-    (fun (ABaxiom(loc,axid,labels,a)) ->
-       let h = Hashtbl.create 17 in
-       List.iter
-         (fun pi -> Hashtbl.add h pi.li_tag [])
-         pis;
-       occurrences h a;
-       Options.lprintf "@[<v 2>occurrences table for axiom %s in axiomatic %s:@\n" axid id;
-       Hashtbl.iter
-         (fun pi l ->
-            Options.lprintf "%d: @[" pi;
-            List.iter
-              (fun label_assoc ->
-                 Options.lprintf "%a ;"
-                   Why_pp.(print_list comma (fun fmt (_l1,l2) -> Print_misc.label fmt l2)) label_assoc)
-              l;
-            Options.lprintf "@]@\n")
-         h;
-       Options.lprintf "@]@.";
-       if Hashtbl.fold (fun _pi l acc -> acc && l=[]) h true then
-         typing_error ~loc:loc
-           "axiom %s should contain at least one occurrence of a symbol declared in axiomatic %s" axid id;
-       List.iter
-         (fun lab ->
-            if not (Hashtbl.fold (fun _pi l acc -> acc || List.exists (list_assoc_data lab) l) h false) then
-              typing_error ~loc:loc
-                "there should be at least one declared symbol depending on label %a in this axiom" Print_misc.label lab)
-         labels
-    )
+    (function
+      | ADprop (loc, axid, labels, `Axiom, a) ->
+        let h = Hashtbl.create 17 in
+        List.iter
+          (fun pi -> Hashtbl.add h pi.li_tag [])
+          pis;
+        occurrences h a;
+        Options.lprintf "@[<v 2>occurrences table for axiom %s in axiomatic %s:@\n" axid id;
+        Hashtbl.iter
+          (fun pi l ->
+             Options.lprintf "%d: @[" pi;
+             List.iter
+               (fun label_assoc ->
+                  Options.lprintf "%a ;"
+                    Why_pp.(print_list comma (fun fmt (_l1,l2) -> Print_misc.label fmt l2)) label_assoc)
+               l;
+             Options.lprintf "@]@\n")
+          h;
+        Options.lprintf "@]@.";
+        if Hashtbl.fold (fun _pi l acc -> acc && l=[]) h true then
+          typing_error ~loc:loc
+            "axiom %s should contain at least one occurrence of a symbol declared in axiomatic %s" axid id;
+        List.iter
+          (fun lab ->
+             if not (Hashtbl.fold (fun _pi l acc -> acc || List.exists (list_assoc_data lab) l) h false) then
+               typing_error ~loc:loc
+                 "there should be at least one declared symbol depending on label %a in this axiom"
+                 Print_misc.label lab)
+          labels
+      | ADprop (_, _, _, `Lemma, _) -> ())
     data.axiomatics_decls
 
 let occurrences tags a =
@@ -3077,8 +3079,8 @@ let rec decl_aux ~only_types ~axiomatic acc d =
         let poly_args = add_poly_args poly_args in
         let te = assertion [] e in
         let te = Type_var.subst_type_in_assertion uenv te in
-        if in_axiomatic && is_axiom then
-          (ABaxiom (d#pos, id, labels, te)) :: acc
+        if in_axiomatic then
+          (ADprop (d#pos, id, labels, (if is_axiom then `Axiom else `Lemma), te)) :: acc
         else begin
           StringHashtblIter.add lemmas_table id (d#pos, is_axiom, poly_args, labels, te);
           acc

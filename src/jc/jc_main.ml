@@ -54,13 +54,13 @@ let compute_regions logic_components components =
     Options.lprintf "Computation of regions@.";
     (* Preserve order between following calls *)
     Array.iter Separation.logic_component logic_components;
-    StringHashtblIter.iter (Separation.axiom []) Typing.lemmas_table;
+    StringHashtblIter.iter (Separation.prop []) Typing.lemmas_table;
     StringHashtblIter.iter
       (fun _id data ->
          List.iter
            (function
-            | Typing.ABaxiom (pos, id, labs, a) ->
-              (Separation.axiom []) id (pos, (* is_axiom = *)true, [], labs, a))
+            | Typing.ADprop (pos, id, labs, kind, a) ->
+              (Separation.prop []) id (pos, (* is_axiom = *)kind = `Axiom, [], labs, a))
            data.Typing.axiomatics_decls)
       Typing.axiomatics_table;
     Array.iter Separation.code_component components
@@ -219,7 +219,7 @@ let main () =
       Options.lprintf "Translate lemmas@.";
       StringHashtblIter.iter
         (fun id (pos, is_axiom, _,labels,p) ->
-           push_entries @@ Interp.lemma pos id is_axiom labels p)
+           push_entries @@ Interp.prop pos id is_axiom labels p)
         Typing.lemmas_table;
 
       (* production phase 7: generation of Why functions *)

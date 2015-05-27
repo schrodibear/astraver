@@ -134,9 +134,7 @@ let expr =
 
 let axiomatic_calls_table = Hashtbl.create 17
 
-let compute_axiomatic_decl_call acc d =
-  match d with
-    | Typing.ABaxiom(_,_,_,a) -> assertion acc a
+let compute_axiomatic_decl_call acc (Typing.ADprop (_, _, _, _, a)) = assertion acc a
 
 let compute_axiomatic_calls a =
   try
