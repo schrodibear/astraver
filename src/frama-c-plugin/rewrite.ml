@@ -1211,6 +1211,30 @@ let expand_composites =
     end)
 
 (*****************************************************************************)
+(* Retype bitwise operations in logic.                                       *)
+(*****************************************************************************)
+
+class term_bw_op_retyping_visitor =
+  object
+    inherit frama_c_inplace
+
+    method! vterm _ =
+      let f t =
+        match t.term_node with
+        | TBinOp (
+          (PlusA Modulo | MinusA Modulo | Mult Modulo | Div Modulo | Shiftlt _ | BAnd | BXor | BOr as op),
+          { term_node = TLogic_coerce (Linteger, ({ term_type = ty1 } as t1 )) },
+          { term_node = TLogic_coerce (Linteger, ({ term_type = ty2 } as t2 )) })
+          when Logic_utils.is_same_type ty1 ty2 ->
+          { t with term_node = TBinOp (op, t1, t2); term_type = ty2 }
+        | _ -> t
+      in
+      DoChildrenPost f
+  end
+
+let retype_bw_ops_in_terms = visitFramacFile @@ new term_bw_op_retyping_visitor
+
+(*****************************************************************************)
 (* Fold constants to avoid incorrect sizeofs.                                *)
 (*****************************************************************************)
 
@@ -3319,6 +3343,8 @@ let rewrite file =
     apply expand_kzallocs "expanding kzallocs to kmalloc+memset";
     apply specialize_blockfuns "using specialized versions for block functions (e.g. memcpy)";
   end;
+  (* Retype bitwise operations in terms. *)
+  apply retype_bw_ops_in_terms "retyping bitwise binary operations in terms";
   (* Expand assigns clauses and equalities for composite types. *)
   apply expand_composites "expanding assigns clauses and equality for composite types";
   (* Fold constants to avoid incorrect sizeofs. *)
