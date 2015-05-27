@@ -694,7 +694,7 @@ let make_logic_bin_op ~loc ~(op : bin_op) e1 e2 =
     return_numeric ()
   | `Badd ->
     typing_error ~loc "unexpected types for +"
-  | `Badd_mod when is_enum t1 && t1 == t2 ->
+  | `Badd_mod when is_enum t1 && same_type_no_coercion t1 t2 ->
     return_numeric ()
   | `Badd_mod ->
     typing_error ~loc "unexpected types for +%%"
@@ -707,7 +707,7 @@ let make_logic_bin_op ~loc ~(op : bin_op) e1 e2 =
     return_numeric ()
   | `Bsub ->
     typing_error ~loc "unexpected types for -"
-  | `Bsub_mod when is_enum t1 && t1 == t2 ->
+  | `Bsub_mod when is_enum t1 && same_type_no_coercion t1 t2 ->
     return_numeric ()
   | `Bsub_mod ->
     typing_error ~loc "unexpected types for +%%"
