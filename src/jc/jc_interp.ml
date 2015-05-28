@@ -782,7 +782,7 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
       App (Poly `Eq, O.T.(ft (Ty Bool) t1 ^. Const (Bool true)))
     | JCAinstanceof (t1, lab', st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
-      O.P.(instanceof ~r:t1#region ~lab  (ft Any t1) st)
+      O.P.(instanceof ~code:(P.not global_assertion) ~r:t1#region ~lab  (ft Any t1) st)
     | JCAmutable (_te, _st, _ta) -> assert false
       (*let te' = ft te in
       let tag = ftag ta in
