@@ -1286,6 +1286,9 @@ class term_bw_op_retyping_visitor =
               Printer.pp_binop op
               Printer.pp_logic_type ty1
               Printer.pp_logic_type ty2
+        | TUnOp (BNot, t) ->
+          let t, ty = strip t in
+          { t with term_node = TLogic_coerce (Linteger, t); term_type = ty }
         | _ -> t
       in
       DoChildrenPost f
