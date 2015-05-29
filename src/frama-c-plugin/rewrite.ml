@@ -71,10 +71,10 @@ class renaming_visitor add_variable add_logic_variable =
       H.add cis ci ()
     end
   in
-  let add_li (type key) (module H : Hashtbl.S with type key = key) ~(upd : key -> key) =
+  let add_li (type key) (module H : Hashtbl.S with type key = key) ~upd =
     let old_lis = H.create 17 in
     let new_lis = H.create 17 in
-    fun (li : key) ->
+    fun li ->
       try
         if H.mem old_lis li then
           DoChildren
@@ -1258,6 +1258,11 @@ class term_bw_op_retyping_visitor =
 
     method! vterm _ =
       let f t =
+        let is_int_type t =
+          match unrollType t with
+          | TInt _ -> true
+          | _ -> false
+        in
         let strip t =
           match t.term_node with
           | TConst (Integer (_, Some s)) when t.term_type = Linteger ->
@@ -1265,8 +1270,20 @@ class term_bw_op_retyping_visitor =
             let lty = Ctype (unrollType ty) in
             Logic_const.term ~loc:t.term_loc (TCastE (ty, Check, t)) lty,
             lty
-          | TLogic_coerce (Linteger, ({ term_type = Ctype ty } as t1)) -> t1, Ctype (unrollType ty)
-          | _ -> t, t.term_type
+          | TLogic_coerce (Linteger, ({ term_type = Ctype ty } as t1))
+            when is_int_type ty ->
+            t1, Ctype (unrollType ty)
+          | _ when Logic_utils.isLogicType is_int_type t.term_type -> t, t.term_type
+          | _ ->
+            Console.unsupported
+              "Can't automatically recover built-in bounded integral type of term %a"
+              Printer.pp_term t
+        in
+        let wrap term_node term_type =
+          Logic_const.term
+            ~loc:t.term_loc
+            (TLogic_coerce (Linteger, { t with term_node; term_type }))
+            Linteger
         in
         match t.term_node with
         | TBinOp (
@@ -1275,10 +1292,7 @@ class term_bw_op_retyping_visitor =
           ({ term_node = TLogic_coerce (Linteger, _) | TConst (Integer (_, Some _)) } as t2)) ->
           let (t1, ty1), (t2, ty2) = map_pair strip (t1, t2) in
           if Logic_utils.is_same_type ty1 ty2 then
-            Logic_const.term
-              ~loc:t.term_loc
-              (TLogic_coerce (Linteger, { t with term_node = TBinOp (op, t1, t2); term_type = ty1 }))
-              Linteger
+            wrap (TBinOp (op, t1, t2)) ty1
           else
             Console.abort
               ~source:(fst @@ t.term_loc)
@@ -1286,9 +1300,9 @@ class term_bw_op_retyping_visitor =
               Printer.pp_binop op
               Printer.pp_logic_type ty1
               Printer.pp_logic_type ty2
-        | TUnOp (BNot, t) ->
-          let t, ty = strip t in
-          { t with term_node = TLogic_coerce (Linteger, t); term_type = ty }
+        | TUnOp (BNot, t1) ->
+          let t1, ty1 = strip t1 in
+          wrap (TUnOp (BNot, t1)) ty1
         | _ -> t
       in
       DoChildrenPost f
