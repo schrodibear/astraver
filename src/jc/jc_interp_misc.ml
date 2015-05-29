@@ -218,7 +218,7 @@ let rec type_ : type a b. (a, b) ty_opt -> _ -> a logic_type =
   function
   | JCTnative ty -> native_type t ty
   | JCTlogic (s, l) ->
-    return (let Ltype_hlist lhl = ltype_hlist l in user ~from:Name.Theory.current s $ lhl)
+    return (let Ltype_hlist lhl = ltype_hlist l in user ~from:(Name.Theory.logic_type s) s $ lhl)
   | JCTenum { ei_type = Int (r, b) } ->
     return (int (Int (r, b)))
   | JCTenum { ei_type = Enum e } ->
