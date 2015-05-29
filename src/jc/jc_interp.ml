@@ -2654,7 +2654,7 @@ let make_not_assigns mem t l =
 (* axioms, lemmas, goals     *)
 (*****************************)
 
-let prop pos id ~is_axiom labels a =
+let prop _pos id ~is_axiom labels a =
   let lab = match labels with [lab] -> lab | _ -> LabelHere in
   (* Special (local) translation of effects for predicates with polymorphic memories.
      We first entirely exclude their effects from the assertion, then only restore the effects that
@@ -2670,7 +2670,7 @@ let prop pos id ~is_axiom labels a =
   [O.Wd.mk
      ~name
      ~expl:((if is_axiom then "Axiom " else "Lemma ") ^ id)
-     ~pos:(Position.of_pos pos)
+     ~pos:(lookup_pos a)
      (Goal ((if is_axiom then KAxiom else KLemma), a'))]
 
 let axiomatic_decl d =
