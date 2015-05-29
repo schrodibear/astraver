@@ -2711,8 +2711,11 @@ let logic_fun f ta =
         O.Wd.mk
           ~name:(f.li_final_name ^ "_definition")
           (Goal (KAxiom,
+                 let once = ref true in
                  List.fold_right
-                   (fun (v, Logic_type lty) acc -> O.P.(forall v lty ~trigs:(fun _ -> [[Term trig]]) @@ Fn.const acc))
+                   (fun (v, Logic_type lty) acc ->
+                      let trigs = if !once then (once := false; Some (Fn.const [[(Term trig : trigger)]])) else None in
+                      O.P.(forall v lty ?trigs @@ Fn.const acc))
                    params
                    O.P.(trig = t')))
       in
