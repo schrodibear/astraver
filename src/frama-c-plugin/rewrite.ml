@@ -71,7 +71,33 @@ class renaming_visitor add_variable add_logic_variable =
       H.add cis ci ()
     end
   in
-  object
+  let add_li (type key) (module H : Hashtbl.S with type key = key) ~(upd : key -> key) =
+    let old_lis = H.create 17 in
+    let new_lis = H.create 17 in
+    fun (li : key) ->
+      try
+        if H.mem old_lis li then
+          DoChildren
+        else
+          ChangeDoChildrenPost (H.find new_lis li, Fn.id)
+      with
+      | Not_found ->
+        let li' = upd li in
+        H.add new_lis li li';
+        H.add old_lis li' li;
+        ChangeDoChildrenPost (li', Fn.id)
+  in
+  let add_ti =
+    add_li
+      (module Logic_type_info.Hashtbl)
+      ~upd:(fun ti -> { ti with lt_name = Name.unique ~force:true ti.lt_name })
+  in
+  let add_lci =
+    add_li
+      (module Logic_ctor_info.Hashtbl)
+      ~upd:(fun lci -> { lci with ctor_name = Name.unique ~force:true lci.ctor_name })
+  in
+  object(self)
     inherit frama_c_inplace
 
     method! vfunc f =
@@ -97,6 +123,18 @@ class renaming_visitor add_variable add_logic_variable =
         v
       in
       ChangeDoChildrenPost (v, postaction)
+
+    method! vlogic_type_info_decl = add_ti
+    method! vlogic_type_info_use = add_ti
+
+    method! vlogic_type_def =
+      function
+      | LTsum _ -> DoChildren
+      | LTsyn lt ->
+        ChangeDoChildrenPost (LTsyn (visitFramacLogicType (self :> frama_c_visitor) lt), Fn.id)
+
+    method! vlogic_ctor_info_decl = add_lci
+    method! vlogic_ctor_info_use = add_lci
   end
 
 let logic_names_overloading = Hashtbl.create 257
