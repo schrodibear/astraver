@@ -2189,13 +2189,13 @@ let rec annotation is_axiomatic annot =
           []
       end
 
-  | Dlemma(name,is_axiom,labels,_poly,property,pos) ->
+  | Dlemma (name, is_axiom, labels, _poly, property, pos) ->
       CurrentLoc.set pos;
       ignore
         (reg_position ~id:name
            ~name:("Lemma " ^ name) pos);
       begin try
-        [JCDlemma(name,is_axiom,[],logic_labels labels,pred property)]
+        [JCDlemma (name, is_axiom, [], logic_labels labels, locate ~pos @@ pred property)]
       with (Unsupported _ | Log.FeatureRequest _)
           when drop_on_unsupported_feature ->
             Console.warning "Dropping lemma %s@." name; []
