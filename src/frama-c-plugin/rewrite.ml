@@ -1258,13 +1258,34 @@ class term_bw_op_retyping_visitor =
 
     method! vterm _ =
       let f t =
+        let strip t =
+          match t.term_node with
+          | TConst (Integer (_, Some s)) when t.term_type = Linteger ->
+            let ty = typeOf @@ parseIntExp ~loc:Location.unknown s in
+            let lty = Ctype (unrollType ty) in
+            Logic_const.term ~loc:t.term_loc (TCastE (ty, Check, t)) lty,
+            lty
+          | TLogic_coerce (Linteger, ({ term_type = Ctype ty } as t1)) -> t1, Ctype (unrollType ty)
+          | _ -> t, t.term_type
+        in
         match t.term_node with
         | TBinOp (
-          (PlusA Modulo | MinusA Modulo | Mult Modulo | Div Modulo | Shiftlt _ | BAnd | BXor | BOr as op),
-          { term_node = TLogic_coerce (Linteger, ({ term_type = ty1 } as t1 )) },
-          { term_node = TLogic_coerce (Linteger, ({ term_type = ty2 } as t2 )) })
-          when Logic_utils.is_same_type ty1 ty2 ->
-          { t with term_node = TBinOp (op, t1, t2); term_type = ty2 }
+          (PlusA Modulo | MinusA Modulo | Mult Modulo | Div Modulo | Shiftlt _ | Shiftrt | BAnd | BXor | BOr as op),
+          ({ term_node = TLogic_coerce (Linteger, _) | TConst (Integer (_, Some _)) } as t1),
+          ({ term_node = TLogic_coerce (Linteger, _) | TConst (Integer (_, Some _)) } as t2)) ->
+          let (t1, ty1), (t2, ty2) = map_pair strip (t1, t2) in
+          if Logic_utils.is_same_type ty1 ty2 then
+            Logic_const.term
+              ~loc:t.term_loc
+              (TLogic_coerce (Linteger, { t with term_node = TBinOp (op, t1, t2); term_type = ty1 }))
+              Linteger
+          else
+            Console.abort
+              ~source:(fst @@ t.term_loc)
+              "Bitwise operation %a applied to arguments of different types: %a and %a"
+              Printer.pp_binop op
+              Printer.pp_logic_type ty1
+              Printer.pp_logic_type ty2
         | _ -> t
       in
       DoChildrenPost f
