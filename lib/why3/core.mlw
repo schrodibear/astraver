@@ -549,11 +549,11 @@ theory Jessie_alloc
   use import Jessie_allocable
 
   predicate alloc_extends (a1 : alloc_table 't) (a2 : alloc_table 't) =
-    forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+    forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p | offset_min a2 p | offset_max a1 p | offset_max a2 p].
       valid a1 p -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
 
   predicate free_extends (a1 : alloc_table 't) (a2 : alloc_table 't) =
-    forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+    forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p | offset_min a2 p | offset_max a1 p | offset_max a2 p].
       not allocated a1 p -> offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
 
   predicate alloc_block (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) (n : int) =
@@ -587,7 +587,7 @@ theory Jessie_alloc
          offset_max a2 r = n - 1 - sub_pointer r q)
 
   predicate alloc_blockset (a1 : alloc_table 't) (a2 : alloc_table 't) (q : pset 't) =
-    forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+    forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p | offset_min a2 p | offset_max a1 p | offset_max a2 p].
       (forall r : pointer 't. in_pset r q -> not same_block p r) ->
         offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
 
@@ -612,7 +612,7 @@ theory Jessie_same_except
   use import Jessie_tag_table
 
   predicate alloc_same_except (a1 : alloc_table 't) (a2 : alloc_table 't) (l : pset 't) =
-    forall p: pointer 't [valid a1 p | valid a2 p | offset_min a1 p, offset_min a2 p | offset_max a1 p, offset_max a2 p].
+    forall p: pointer 't [valid a1 p | valid a2 p | offset_min a1 p | offset_min a2 p | offset_max a1 p | offset_max a2 p].
       not in_pset p l ->
         offset_min a1 p = offset_min a2 p /\ offset_max a1 p = offset_max a2 p
 
