@@ -3036,7 +3036,7 @@ let func f funpos spec body =
              allocates
                ~internal:None
                ~type_safe
-               ~region_list:f.fun_param_regions
+               ~region_list:(f.fun_return_region :: f.fun_param_regions)
                f.fun_effects
                b.b_allocates
            |>
@@ -3312,7 +3312,7 @@ let func f funpos spec body =
                  allocates
                    ~internal:(Some LabelPre)
                    ~type_safe:true
-                   ~region_list:f.fun_param_regions
+                   ~region_list:(f.fun_return_region :: f.fun_param_regions)
                    f.fun_effects
                    (Triple.trd spec.fs_default_behavior).b_allocates
                in
