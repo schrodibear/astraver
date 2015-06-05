@@ -88,7 +88,6 @@ PVSLIB = $(DESTDIR)@PVSLIB@
 
 GENERATED = src/why/why_version.ml \
 	    src/jc/jc_version.ml \
-	    src/jc/jc_ai.ml \
             lib/why3/why3.conf
 
 # main targets
@@ -374,15 +373,6 @@ lib/coq/%.vo: lib/coq/%.v
 
 lib/coq-v7/%.vo: lib/coq-v7/%.v
 	$(COQC7) -I lib/coq-v7 $<
-
-src/jc/jc_ai.ml: src/jc/jc_annot_inference.ml src/jc/jc_annot_fail.ml Makefile
-	if test "@enable_apron@" = "yes" ; then \
-	  echo "# 1 \"src/jc/jc_annot_inference.ml\"" > src/jc/jc_ai.ml; \
-	  cat src/jc/jc_annot_inference.ml >> src/jc/jc_ai.ml; \
-	else \
-	  echo "# 1 \"src/jc/jc_annot_fail.ml\"" > src/jc/jc_ai.ml; \
-	  cat src/jc/jc_annot_fail.ml >> src/jc/jc_ai.ml; \
-	fi
 
 # Emacs tags
 ############
