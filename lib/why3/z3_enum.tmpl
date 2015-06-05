@@ -1,3 +1,9 @@
+theory core.Jessie_pointer
+  meta "select_inst" "none"
+  meta "select_lskept" "none"
+  meta "select_lsinst" "all"
+end
+
 {% macro bit (signed, size) -%}
 {% if signed -%}
   {% set u = "" %}
@@ -28,12 +34,12 @@ theory enum.Bit_{{u}}int{{size}}
 
   syntax function of_int_modulo "((_ int2bv {{size}}) %1)"
   syntax converter of_int_const "(_ bv%1 {{size}})"
-  {% if signed %}
+  {% if signed -%}
   syntax function to_uint "(bv2int %1)"
-  {% else %}
+  {% else -%}
   syntax function to_int "(bv2int %1)"
   remove prop To_uint
-  {% endif %}
+  {% endif -%}
 
   remove prop To_uint_lsr
   remove prop To_uint_lsl_modulo
@@ -79,15 +85,15 @@ end
   {% set us_to = u %}
 {% endif -%}
 theory enum.Bit_{{u_to}}int{{size_to}}_of_bit_{{u_from}}int{{size_from}}
-  {% if size_from == size_to %}
+  {%- if size_from == size_to %}
   syntax function cast_modulo "%1"
-  {% elseif size_from > size_to %}
+  {%- elseif size_from > size_to %}
   syntax function cast_modulo "((_ extract {{size_to - 1}} {{0}}) %1)"
-  {% elseif signed_from %}
+  {%- elseif signed_from %}
   syntax function cast_modulo "((_ sign_extend {{size_to - size_from}}) %1)"
-  {% else %}
+  {%- else %}
   syntax function cast_modulo "((_ zero_extend {{size_to - size_from}}) %1)"
-  {% endif %}
+  {%- endif %}
 end
 {% endmacro -%}
 {% set sizes = [8, 16, 32, 64] %}
