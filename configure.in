@@ -327,13 +327,8 @@ else
   AC_MSG_CHECKING(Why3 version)
   WHY3VERSION=`why3 --version | sed -n -e 's|.*version \([[^ ]]\+\) .*$|\1|p'`
   case $WHY3VERSION in
-  0.83|0.84|0.85|0.85+git)
+  0.83|0.84|0.85|0.85+git|0.86*)
       AC_MSG_RESULT($WHY3VERSION)
-      ;;
-  0.82+git|0.83+git)
-      AC_MSG_RESULT($WHY3VERSION)
-      WHY3MSG="(version not guaranteed to be supported, hope this works)"
-      AC_MSG_WARN($WHY3MSG)
       ;;
   0.6*|0.7*|0.8*)
       AC_MSG_RESULT($WHY3VERSION)
@@ -540,9 +535,6 @@ fi
 echo "Coq support              : $COQ"
 if test "$COQ" = "yes" ; then
    echo "    Version              : $COQVER ($COQVERSION)"
-   if test "$JESSIEWHY3LIBCOQ" = ""; then
-      echo "                         : (Jessie/Why3 Coq proofs disabled, requires Coq realizations for Why3)"
-   fi
    echo "    Lib                  : $COQLIB"
    echo "    FP lib (Flocq)       : $COQFLOATSMSG"
    echo "    FP lib (Float)       : $COQFLOATSLEGACYMSG"

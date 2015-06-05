@@ -14,7 +14,7 @@ echo "let coqversion = \"$COQVER\"" > $WHYVF
 echo "let version = \"$WHY_VERSION\"" >> $WHYVF
 echo "let date = \""`date -R`"\"" >> $WHYVF
 echo "let bindir = \"$BINDIR\"" >> $WHYVF
-echo "let libdir = \"$LIBDIR/why\"" >> $WHYVF
+echo "let libdir = \"$LIBDIR/jessie\"" >> $WHYVF
 
 # Jessie2
 JCVF=src/jc/jc_version.ml

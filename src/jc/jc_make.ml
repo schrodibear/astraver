@@ -32,36 +32,16 @@
 open Format
 open Why_pp
 
-let generic full f targets =
+let generic full _f targets =
   print_in_file
     (fun fmt ->
        let out x = fprintf fmt x in
        out "# this makefile was automatically generated; do not edit @\n@\n";
        out "TIMEOUT ?= 10@\n@\n";
-       out "DP ?= why-dp -timeout $(TIMEOUT)@\n";
        out "WHYLIB ?= %s@\n@\n" (String.escaped Options.libdir);
        out "USERWHYTHREEOPT=%s@\n"  (Options.why3_opt);
-       out "WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs %s.loc@\n@\n" f;
-       out "GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs %s.loc@\n@\n"  f;
-       out "JESSIELIBFILES ?=";
-       List.iter (fun s ->
-		    out " %s"
-		      (String.escaped (Filename.concat "$(WHYLIB)"
-					 (Filename.concat "why" s))))
-	 (Options.get_libfiles ());
        out "@\n";
        out "JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf@\n@\n";
-       out "COQDEP = coqdep@\n@\n";
-
-       let why3_target =
-	 (match targets with f :: _ -> f ^ "_why3.why" | [] -> "")
-       in
-       out "why3: why/%s@\n" why3_target;
-
-       out "why/%%_why3.why:  WHYOPT=-why3@\n";
-       out "why/%%_why3.why: why/%%.why@\n";
-       out "\t@@echo 'why -why3 [...] why/$*.why' \
-            && $(WHY) $(JESSIELIBFILES) why/$*.why@\n";
 
        let why3ml_target =
 	 (match targets with f :: _ -> f ^ ".mlw" | [] -> "")

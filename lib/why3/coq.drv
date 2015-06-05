@@ -1,3 +1,413 @@
-theory jessie3theories.Jessie_memory_model
-  meta "realized_theory" "jessie3theories.Jessie_memory_model", "Jessie_memory_model"
+
+theory core.Jessie_pointer
+  meta "realized_theory" "core.Jessie_pointer", "Jessie_pointer"
 end
+
+theory core.Jessie_zwf
+  meta "realized_theory" "core.Jessie_zwf", "Jessie_zwf"
+end
+
+theory core.Jessie_alloc_table
+  meta "realized_theory" "core.Jessie_alloc_table", "Jessie_alloc_table"
+end
+
+theory core.Jessie_memory
+  meta "realized_theory" "core.Jessie_memory", "Jessie_memory"
+end
+
+theory core.Jessie_pset
+  meta "realized_theory" "core.Jessie_pset", "Jessie_pset"
+end
+
+theory core.Jessie_pset_range
+  meta "realized_theory" "core.Jessie_pset_range", "Jessie_pset_range"
+end
+
+theory core.Jessie_pset_range_left
+  meta "realized_theory" "core.Jessie_pset_range_left", "Jessie_pset_range_left"
+end
+
+theory core.Jessie_pset_range_right
+  meta "realized_theory" "core.Jessie_pset_range_right", "Jessie_pset_range_right"
+end
+
+theory core.Jessie_pset_deref
+  meta "realized_theory" "core.Jessie_pset_deref", "Jessie_pset_deref"
+end
+
+theory core.Jessie_pset_union
+  meta "realized_theory" "core.Jessie_pset_union", "Jessie_pset_union"
+end
+
+theory core.Jessie_pset_all
+  meta "realized_theory" "core.Jessie_pset_all", "Jessie_pset_all"
+end
+
+theory core.Jessie_pset_disjoint
+  meta "realized_theory" "core.Jessie_pset_disjoint", "Jessie_pset_disjoint"
+end
+
+theory core.Jessie_pset_included
+  meta "realized_theory" "core.Jessie_pset_included", "Jessie_pset_included"
+end
+
+theory core.Jessie_assigns
+  meta "realized_theory" "core.Jessie_assigns", "Jessie_assigns"
+end
+
+theory core.Jessie_assigns_strong
+  meta "realized_theory" "core.Jessie_assigns_strong", "Jessie_assigns_strong"
+end
+
+theory core.Jessie_tag_id
+  meta "realized_theory" "core.Jessie_tag_id", "Jessie_tag_id"
+end
+
+theory core.Jessie_tag
+  meta "realized_theory" "core.Jessie_tag", "Jessie_tag"
+end
+
+theory core.Jessie_tag_table_type
+  meta "realized_theory" "core.Jessie_tag_table_type", "Jessie_tag_table_type"
+end
+
+theory core.Jessie_tag_table
+  meta "realized_theory" "core.Jessie_tag_table", "Jessie_tag_table"
+end
+
+theory core.Jessie_reinterpret
+  meta "realized_theory" "core.Jessie_reinterpret", "Jessie_reinterpret"
+end
+
+theory core.Jessie_reinterpret_cast
+  meta "realized_theory" "core.Jessie_reinterpret_cast", "Jessie_reinterpret_cast"
+end
+
+theory core.Jessie_allocable
+  meta "realized_theory" "core.Jessie_allocable", "Jessie_allocable"
+end
+
+theory core.Jessie_alloc
+  meta "realized_theory" "core.Jessie_alloc", "Jessie_alloc"
+end
+
+theory core.Jessie_same_except
+  meta "realized_theory" "core.Jessie_same_except", "Jessie_same_except"
+end
+
+theory core.Jessie_rmem
+  meta "realized_theory" "core.Jessie_rmem", "Jessie_rmem"
+end
+
+theory enum.Enum_intf
+  meta "realized_theory" "enum.Enum_intf", "Enum_intf"
+end
+
+theory enum.Enum
+  meta "realized_theory" "enum.Enum", "Enum"
+end
+
+theory enum.Powers_of_2
+  meta "realized_theory" "enum.Powers_of_2", "Powers_of_2"
+end
+
+theory enum.Bit_enum_intf
+  meta "realized_theory" "enum.Bit_enum_intf", "Bit_enum_intf"
+end
+
+theory enum.Bit_enum_intf2
+  meta "realized_theory" "enum.Bit_enum_intf2", "Bit_enum_intf2"
+end
+
+theory enum.Bit_enum
+  meta "realized_theory" "enum.Bit_enum", "Bit_enum"
+end
+
+theory enum.Int8
+  meta "realized_theory" "enum.Int8", "Int8"
+end
+
+theory enum.Uint8
+  meta "realized_theory" "enum.Uint8", "Uint8"
+end
+
+theory enum.Int16
+  meta "realized_theory" "enum.Int16", "Int16"
+end
+
+theory enum.Uint16
+  meta "realized_theory" "enum.Uint16", "Uint16"
+end
+
+theory enum.Int32
+  meta "realized_theory" "enum.Int32", "Int32"
+end
+
+theory enum.Uint32
+  meta "realized_theory" "enum.Uint32", "Uint32"
+end
+
+theory enum.Int64
+  meta "realized_theory" "enum.Int64", "Int64"
+end
+
+theory enum.Uint64
+  meta "realized_theory" "enum.Uint64", "Uint64"
+end
+
+theory enum.Bit_int8
+  meta "realized_theory" "enum.Bit_int8", "Bit_int8"
+end
+
+theory enum.Bit_uint8
+  meta "realized_theory" "enum.Bit_uint8", "Bit_uint8"
+end
+
+theory enum.Bit_int16
+  meta "realized_theory" "enum.Bit_int16", "Bit_int16"
+end
+
+theory enum.Bit_uint16
+  meta "realized_theory" "enum.Bit_uint16", "Bit_uint16"
+end
+
+theory enum.Bit_int32
+  meta "realized_theory" "enum.Bit_int32", "Bit_int32"
+end
+
+theory enum.Bit_uint32
+  meta "realized_theory" "enum.Bit_uint32", "Bit_uint32"
+end
+
+theory enum.Bit_int64
+  meta "realized_theory" "enum.Bit_int64", "Bit_int64"
+end
+
+theory enum.Bit_uint64
+  meta "realized_theory" "enum.Bit_uint64", "Bit_uint64"
+end
+
+theory enum.Bit_uint8_of_bit_int8
+  meta "realized_theory" "enum.Bit_uint8_of_bit_int8", "Bit_uint8_of_bit_int8"
+end
+
+theory enum.Bit_int16_of_bit_int8
+  meta "realized_theory" "enum.Bit_int16_of_bit_int8", "Bit_int16_of_bit_int8"
+end
+
+theory enum.Bit_uint16_of_bit_int8
+  meta "realized_theory" "enum.Bit_uint16_of_bit_int8", "Bit_uint16_of_bit_int8"
+end
+
+theory enum.Bit_int32_of_bit_int8
+  meta "realized_theory" "enum.Bit_int32_of_bit_int8", "Bit_int32_of_bit_int8"
+end
+
+theory enum.Bit_uint32_of_bit_int8
+  meta "realized_theory" "enum.Bit_uint32_of_bit_int8", "Bit_uint32_of_bit_int8"
+end
+
+theory enum.Bit_int64_of_bit_int8
+  meta "realized_theory" "enum.Bit_int64_of_bit_int8", "Bit_int64_of_bit_int8"
+end
+
+theory enum.Bit_uint64_of_bit_int8
+  meta "realized_theory" "enum.Bit_uint64_of_bit_int8", "Bit_uint64_of_bit_int8"
+end
+
+theory enum.Bit_int8_of_bit_uint8
+  meta "realized_theory" "enum.Bit_int8_of_bit_uint8", "Bit_int8_of_bit_uint8"
+end
+
+theory enum.Bit_int16_of_bit_uint8
+  meta "realized_theory" "enum.Bit_int16_of_bit_uint8", "Bit_int16_of_bit_uint8"
+end
+
+theory enum.Bit_uint16_of_bit_uint8
+  meta "realized_theory" "enum.Bit_uint16_of_bit_uint8", "Bit_uint16_of_bit_uint8"
+end
+
+theory enum.Bit_int32_of_bit_uint8
+  meta "realized_theory" "enum.Bit_int32_of_bit_uint8", "Bit_int32_of_bit_uint8"
+end
+
+theory enum.Bit_uint32_of_bit_uint8
+  meta "realized_theory" "enum.Bit_uint32_of_bit_uint8", "Bit_uint32_of_bit_uint8"
+end
+
+theory enum.Bit_int64_of_bit_uint8
+  meta "realized_theory" "enum.Bit_int64_of_bit_uint8", "Bit_int64_of_bit_uint8"
+end
+
+theory enum.Bit_uint64_of_bit_uint8
+  meta "realized_theory" "enum.Bit_uint64_of_bit_uint8", "Bit_uint64_of_bit_uint8"
+end
+
+theory enum.Bit_int8_of_bit_int16
+  meta "realized_theory" "enum.Bit_int8_of_bit_int16", "Bit_int8_of_bit_int16"
+end
+
+theory enum.Bit_uint8_of_bit_int16
+  meta "realized_theory" "enum.Bit_uint8_of_bit_int16", "Bit_uint8_of_bit_int16"
+end
+
+theory enum.Bit_uint16_of_bit_int16
+  meta "realized_theory" "enum.Bit_uint16_of_bit_int16", "Bit_uint16_of_bit_int16"
+end
+
+theory enum.Bit_int32_of_bit_int16
+  meta "realized_theory" "enum.Bit_int32_of_bit_int16", "Bit_int32_of_bit_int16"
+end
+
+theory enum.Bit_uint32_of_bit_int16
+  meta "realized_theory" "enum.Bit_uint32_of_bit_int16", "Bit_uint32_of_bit_int16"
+end
+
+theory enum.Bit_int64_of_bit_int16
+  meta "realized_theory" "enum.Bit_int64_of_bit_int16", "Bit_int64_of_bit_int16"
+end
+
+theory enum.Bit_uint64_of_bit_int16
+  meta "realized_theory" "enum.Bit_uint64_of_bit_int16", "Bit_uint64_of_bit_int16"
+end
+
+theory enum.Bit_int8_of_bit_uint16
+  meta "realized_theory" "enum.Bit_int8_of_bit_uint16", "Bit_int8_of_bit_uint16"
+end
+
+theory enum.Bit_uint8_of_bit_uint16
+  meta "realized_theory" "enum.Bit_uint8_of_bit_uint16", "Bit_uint8_of_bit_uint16"
+end
+
+theory enum.Bit_int16_of_bit_uint16
+  meta "realized_theory" "enum.Bit_int16_of_bit_uint16", "Bit_int16_of_bit_uint16"
+end
+
+theory enum.Bit_int32_of_bit_uint16
+  meta "realized_theory" "enum.Bit_int32_of_bit_uint16", "Bit_int32_of_bit_uint16"
+end
+
+theory enum.Bit_uint32_of_bit_uint16
+  meta "realized_theory" "enum.Bit_uint32_of_bit_uint16", "Bit_uint32_of_bit_uint16"
+end
+
+theory enum.Bit_int64_of_bit_uint16
+  meta "realized_theory" "enum.Bit_int64_of_bit_uint16", "Bit_int64_of_bit_uint16"
+end
+
+theory enum.Bit_uint64_of_bit_uint16
+  meta "realized_theory" "enum.Bit_uint64_of_bit_uint16", "Bit_uint64_of_bit_uint16"
+end
+
+theory enum.Bit_int8_of_bit_int32
+  meta "realized_theory" "enum.Bit_int8_of_bit_int32", "Bit_int8_of_bit_int32"
+end
+
+theory enum.Bit_uint8_of_bit_int32
+  meta "realized_theory" "enum.Bit_uint8_of_bit_int32", "Bit_uint8_of_bit_int32"
+end
+
+theory enum.Bit_int16_of_bit_int32
+  meta "realized_theory" "enum.Bit_int16_of_bit_int32", "Bit_int16_of_bit_int32"
+end
+
+theory enum.Bit_uint16_of_bit_int32
+  meta "realized_theory" "enum.Bit_uint16_of_bit_int32", "Bit_uint16_of_bit_int32"
+end
+
+theory enum.Bit_uint32_of_bit_int32
+  meta "realized_theory" "enum.Bit_uint32_of_bit_int32", "Bit_uint32_of_bit_int32"
+end
+
+theory enum.Bit_int64_of_bit_int32
+  meta "realized_theory" "enum.Bit_int64_of_bit_int32", "Bit_int64_of_bit_int32"
+end
+
+theory enum.Bit_uint64_of_bit_int32
+  meta "realized_theory" "enum.Bit_uint64_of_bit_int32", "Bit_uint64_of_bit_int32"
+end
+
+theory enum.Bit_int8_of_bit_uint32
+  meta "realized_theory" "enum.Bit_int8_of_bit_uint32", "Bit_int8_of_bit_uint32"
+end
+
+theory enum.Bit_uint8_of_bit_uint32
+  meta "realized_theory" "enum.Bit_uint8_of_bit_uint32", "Bit_uint8_of_bit_uint32"
+end
+
+theory enum.Bit_int16_of_bit_uint32
+  meta "realized_theory" "enum.Bit_int16_of_bit_uint32", "Bit_int16_of_bit_uint32"
+end
+
+theory enum.Bit_uint16_of_bit_uint32
+  meta "realized_theory" "enum.Bit_uint16_of_bit_uint32", "Bit_uint16_of_bit_uint32"
+end
+
+theory enum.Bit_int32_of_bit_uint32
+  meta "realized_theory" "enum.Bit_int32_of_bit_uint32", "Bit_int32_of_bit_uint32"
+end
+
+theory enum.Bit_int64_of_bit_uint32
+  meta "realized_theory" "enum.Bit_int64_of_bit_uint32", "Bit_int64_of_bit_uint32"
+end
+
+theory enum.Bit_uint64_of_bit_uint32
+  meta "realized_theory" "enum.Bit_uint64_of_bit_uint32", "Bit_uint64_of_bit_uint32"
+end
+
+theory enum.Bit_int8_of_bit_int64
+  meta "realized_theory" "enum.Bit_int8_of_bit_int64", "Bit_int8_of_bit_int64"
+end
+
+theory enum.Bit_uint8_of_bit_int64
+  meta "realized_theory" "enum.Bit_uint8_of_bit_int64", "Bit_uint8_of_bit_int64"
+end
+
+theory enum.Bit_int16_of_bit_int64
+  meta "realized_theory" "enum.Bit_int16_of_bit_int64", "Bit_int16_of_bit_int64"
+end
+
+theory enum.Bit_uint16_of_bit_int64
+  meta "realized_theory" "enum.Bit_uint16_of_bit_int64", "Bit_uint16_of_bit_int64"
+end
+
+theory enum.Bit_int32_of_bit_int64
+  meta "realized_theory" "enum.Bit_int32_of_bit_int64", "Bit_int32_of_bit_int64"
+end
+
+theory enum.Bit_uint32_of_bit_int64
+  meta "realized_theory" "enum.Bit_uint32_of_bit_int64", "Bit_uint32_of_bit_int64"
+end
+
+theory enum.Bit_uint64_of_bit_int64
+  meta "realized_theory" "enum.Bit_uint64_of_bit_int64", "Bit_uint64_of_bit_int64"
+end
+
+theory enum.Bit_int8_of_bit_uint64
+  meta "realized_theory" "enum.Bit_int8_of_bit_uint64", "Bit_int8_of_bit_uint64"
+end
+
+theory enum.Bit_uint8_of_bit_uint64
+  meta "realized_theory" "enum.Bit_uint8_of_bit_uint64", "Bit_uint8_of_bit_uint64"
+end
+
+theory enum.Bit_int16_of_bit_uint64
+  meta "realized_theory" "enum.Bit_int16_of_bit_uint64", "Bit_int16_of_bit_uint64"
+end
+
+theory enum.Bit_uint16_of_bit_uint64
+  meta "realized_theory" "enum.Bit_uint16_of_bit_uint64", "Bit_uint16_of_bit_uint64"
+end
+
+theory enum.Bit_int32_of_bit_uint64
+  meta "realized_theory" "enum.Bit_int32_of_bit_uint64", "Bit_int32_of_bit_uint64"
+end
+
+theory enum.Bit_uint32_of_bit_uint64
+  meta "realized_theory" "enum.Bit_uint32_of_bit_uint64", "Bit_uint32_of_bit_uint64"
+end
+
+theory enum.Bit_int64_of_bit_uint64
+  meta "realized_theory" "enum.Bit_int64_of_bit_uint64", "Bit_int64_of_bit_uint64"
+end
+
