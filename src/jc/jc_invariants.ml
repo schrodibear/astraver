@@ -75,76 +75,70 @@ let rec invariant_for_struct ?pos this si =
               ()
 
 let code_function (fi, pos, fs, _sl) vil =
-  begin
-    match !Common_options.inv_sem with
-    | InvArguments ->  (* apply arguments invariant policy *)
-      (* Calculate global invariants. *)
-      let _vitl =
-        List.map
-          (fun vi -> Term.mkvar ~var:vi ()) vil
-      in
-      let global_invariants =
-        IntHashtblIter.fold
-          (fun _ (li, _) acc ->
-             (* li.li_parameters <- vil; *)
-             let a = { app_fun = li;
-                       app_args = (* vitl *)[];
-                       app_label_assoc = [];
-                       app_region_assoc = [] }
-             in
-             (new assertion ~mark:(Common.new_label_name ())
-               ~pos (JCAapp a)) :: acc)
-          Typing.global_invariants_table []
-      in
-      let global_invariants = Assertion.mkand ~pos ~conjuncts:global_invariants () in
-      (* Calculate invariants for each parameter. *)
-      let pre_invariants,post_invariants =
-        List.fold_left
-              (fun (acc1,acc2) (valid,vi) ->
-                 match vi.vi_type with
-                   | JCTpointer (JCtag (st, []), _, _) ->
-                       let inv =
-                         invariant_for_struct ~pos
-                           (Term.mkvar ~var:vi ()) st
-                       in
-                       ((if valid then
-                           Assertion.mkand ~pos
-                             ~conjuncts: [acc1; inv] ()
-                         else acc1),
-                        Assertion.mkand ~pos
-                          ~conjuncts: [acc2; inv] ())
-                   | _ -> (acc1,acc2))
-              (global_invariants,global_invariants)
-              fi.fun_parameters
-          in
-          (* add invariants to the function precondition *)
-          fs.fs_requires <-
+  (* Calculate global invariants. *)
+  let _vitl =
+    List.map
+      (fun vi -> Term.mkvar ~var:vi ()) vil
+  in
+  let global_invariants =
+    IntHashtblIter.fold
+      (fun _ (li, _) acc ->
+         (* li.li_parameters <- vil; *)
+         let a = { app_fun = li;
+                   app_args = (* vitl *)[];
+                   app_label_assoc = [];
+                   app_region_assoc = [] }
+         in
+         (new assertion ~mark:(Common.new_label_name ())
+           ~pos (JCAapp a)) :: acc)
+      Typing.global_invariants_table []
+  in
+  let global_invariants = Assertion.mkand ~pos ~conjuncts:global_invariants () in
+  (* Calculate invariants for each parameter. *)
+  let pre_invariants,post_invariants =
+    List.fold_left
+      (fun (acc1,acc2) (valid,vi) ->
+         match vi.vi_type with
+         | JCTpointer (JCtag (st, []), _, _) ->
+           let inv =
+             invariant_for_struct ~pos
+               (Term.mkvar ~var:vi ()) st
+           in
+           ((if valid then
+               Assertion.mkand ~pos
+                 ~conjuncts: [acc1; inv] ()
+             else acc1),
             Assertion.mkand ~pos
-            ~conjuncts:[fs.fs_requires; pre_invariants] ();
-          (* add invariants to the function postcondition *)
-          if is_purely_exceptional_fun fs then () else
-            let safety_exists = ref false in
-            let post = post_invariants in
-            List.iter
-              (fun (_, s, b) ->
-                 if s = "safety" then safety_exists := true;
-                 b.b_ensures <-
-                   Assertion.mkand ~pos ~conjuncts:[b.b_ensures; post] ())
-              fs.fs_behavior;
-            (* add the 'safety' spec if it does not exist
-               (it could exist e.g. from Krakatoa) *)
-            if not !safety_exists then
-              if Options.verify_invariants_only then
-                let invariants_b = { default_behavior with b_ensures = post } in
-                fs.fs_behavior <-
-                  (Why_loc.dummy_position, "invariants", invariants_b) :: fs.fs_behavior;
-              else
-                let safety_b = { default_behavior with b_ensures = post } in
-                fs.fs_behavior <-
-                  (Why_loc.dummy_position, "safety", safety_b) :: fs.fs_behavior;
-      | _ -> ()
-  end;
-
+              ~conjuncts: [acc2; inv] ())
+         | _ -> (acc1,acc2))
+      (global_invariants,global_invariants)
+      fi.fun_parameters
+  in
+  (* add invariants to the function precondition *)
+  fs.fs_requires <-
+    Assertion.mkand ~pos
+      ~conjuncts:[fs.fs_requires; pre_invariants] ();
+  (* add invariants to the function postcondition *)
+  if is_purely_exceptional_fun fs then () else
+    let safety_exists = ref false in
+    let post = post_invariants in
+    List.iter
+      (fun (_, s, b) ->
+         if s = "safety" then safety_exists := true;
+         b.b_ensures <-
+           Assertion.mkand ~pos ~conjuncts:[b.b_ensures; post] ())
+      fs.fs_behavior;
+    (* add the 'safety' spec if it does not exist
+       (it could exist e.g. from Krakatoa) *)
+    if not !safety_exists then
+      if Options.verify_invariants_only then
+        let invariants_b = { default_behavior with b_ensures = post } in
+        fs.fs_behavior <-
+          (Why_loc.dummy_position, "invariants", invariants_b) :: fs.fs_behavior;
+      else
+        let safety_b = { default_behavior with b_ensures = post } in
+        fs.fs_behavior <-
+          (Why_loc.dummy_position, "safety", safety_b) :: fs.fs_behavior;
 
 (*
   Local Variables:

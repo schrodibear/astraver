@@ -47,7 +47,6 @@ val print_graph : bool
 val debug : bool
 val verbose : bool
 val werror : bool
-val why_opt : string
 val why3_opt : string
 
 val verify_all_offsets : bool
@@ -61,25 +60,13 @@ val main : string
 val files : unit -> string list
 val usage : unit -> unit
 
-val inv_sem: Env.inv_sem ref
-val separation_sem : Env.separation_sem ref
-val annotation_sem : Env.annotation_sem ref
-val termination_policy : Env.termination_policy ref
-val ai_domain : Env.abstract_domain ref
-val int_model : Env.int_model ref
 val float_model : Env.float_model ref
 val float_instruction_set : Env.float_instruction_set ref
-val trust_ai : bool
-val fast_ai : bool
 val forall_inst_bound: int
-
-val gen_frame_rule_with_ft : bool
 
 val current_rounding_mode : Env.float_rounding_mode ref
 
 val verify_behavior: string -> bool
-
-val set_int_model: int_model -> unit
 
 val set_float_model: float_model -> unit
 

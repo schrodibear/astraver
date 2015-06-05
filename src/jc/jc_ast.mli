@@ -266,15 +266,6 @@ type 'expr decl_node =
   (* global invariant *)
   | JCDglobal_inv of string * 'expr
   (* "pragma" options and policies *)
-  | JCDinvariant_policy of Env.inv_sem
-  | JCDseparation_policy of Env.separation_sem
-  | JCDtermination_policy of Env.termination_policy
-  | JCDannotation_policy of Env.annotation_sem
-  | JCDabstract_domain of Env.abstract_domain
-  | JCDpragma_gen_sep of string * string * (ptype * string list) list
-  | JCDpragma_gen_frame of string * string
-  | JCDpragma_gen_sub of string * string
-  | JCDpragma_gen_same of string * string
   | JCDaxiomatic of string * 'expr decl list
 
 

@@ -33,17 +33,12 @@
 
 (*s command-line options *)
 
-open Env
-
 val debug : bool ref
 val verbose : bool ref
 val werror : bool ref
 
-val inv_sem: inv_sem ref
-val separation_sem : separation_sem ref
-
 (*
-Local Variables: 
-compile-command: "make -C .. bin/jessie.byte"
-End: 
+  Local Variables:
+  compile-command: "make -C .. bin/jessie.byte"
+  End:
 *)

@@ -51,7 +51,7 @@ struct
     Emitter.create
       "jessie"
       [Emitter.Funspec; Emitter.Code_annot]
-      ~correctness:[Jessie_options.Behavior.parameter; Jessie_options.Infer_annot.parameter]
+      ~correctness:[Jessie_options.Behavior.parameter]
       ~tuning:[]
 end
 

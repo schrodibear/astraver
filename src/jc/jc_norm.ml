@@ -596,17 +596,8 @@ let rec decl d =
       JCDlogic_var (ty, id, Option.map expr body)
     | JCDlogic (ty, id, poly_args, labels, params, body) ->
       JCDlogic (ty, id, poly_args, labels, params, reads_or_expr body)
-    | JCDaxiomatic(id,l) -> JCDaxiomatic(id,List.map decl l)
-    | JCDlogic_type _
-    | JCDabstract_domain _
-    | JCDtermination_policy _
-    | JCDannotation_policy _
-    | JCDseparation_policy _
-    | JCDinvariant_policy _
-    | JCDpragma_gen_sep _
-    | JCDpragma_gen_frame _
-    | JCDpragma_gen_sub _
-    | JCDpragma_gen_same _ as e -> e
+    | JCDaxiomatic (id, l) -> JCDaxiomatic(id, List.map decl l)
+    | JCDlogic_type _ as d -> d
   in
   new decl ~pos:d#pos dnode
 

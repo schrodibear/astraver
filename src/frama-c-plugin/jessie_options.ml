@@ -32,17 +32,18 @@
 include
   Plugin.Register
     (struct
-       let name = "jessie"
-       let shortname = "jessie"
-       let help = "translation to Why/Jessie"
+       let name = "Jessie2"
+       let shortname = "Jessie2"
+       let help = "Translation to Jessie(2) intermediate language with subsequent launch of Jessie-to-Why3ML translator"
      end)
 
 module Project_name =
   Empty_string
     (struct
-       let option_name = "-jessie-project-name"
+       let option_name = "-jessie-file-name"
        let arg_name = ""
-       let help = "specify project name for Jessie analysis"
+       let help = "specify output file name for Jessie-to-Why3ML translator. The default is the input .c file name or \
+                   `whole_program' in case of several input files"
      end)
 
 module Behavior =
@@ -50,33 +51,24 @@ module Behavior =
     (struct
        let option_name = "-jessie-behavior"
        let arg_name = ""
-       let help =
-	 "restrict verification to a specific behavior (safety, default or a user-defined behavior)"
+       let help = "restrict verification to a specific behavior (safety, default or a user-defined behavior)"
      end)
 
 module Analysis =
   False
     (struct
       let option_name = "-jessie"
-      let help = "perform C to Jessie translation"
+      let help = "perform C-to-Jessie translation, i.e. this option is used to launch the plugin"
     end)
 
 module Force_ad_hoc_normalization =
   False
     (struct
-      let option_name = "-jessie-adhoc-normalization"
-      let help =
-        "enforce code normalization in a mode suitable for Jessie plugin."
+      let option_name = "-jessie-ad-hoc-normalization"
+      let help = "enforce additional code normalization (obsolete, deprecated)."
     end)
 
 let () =
-  (* [JS 2009/10/04]
-     Preserve the behaviour of svn release <= r5012.
-     However it works only if the int-model is set from the command line.
-     [CM 2009/12/08]
-     setting int-model on the command-line is obsolete, so what is this
-     code for ?
-  *)
   Force_ad_hoc_normalization.add_set_hook
     (fun _ b ->
        if b then begin
@@ -106,16 +98,8 @@ module Jc_opt =
     (struct
       let option_name = "-jessie-jc-opt"
       let arg_name = ""
-      let help = "give an option to Jc (e.g., -jessie-jc-opt=\"-trust-ai\")"
+      let help = "give an option to Jessie-to-Why3ML translator (e.g., -jessie-jc-opt=\"-forall-inst-bound 5\")"
     end)
-
-module Why_opt =
-  String_set
-    (struct
-       let option_name = "-jessie-why-opt"
-       let arg_name = ""
-       let help = "give an option to Why (e.g., -jessie-why-opt=\"-fast-wp\")"
-     end)
 
 module Why3_opt =
   String_set
@@ -129,49 +113,25 @@ module Gen_only =
   False
     (struct
       let option_name = "-jessie-gen-only"
-      let help = "only generates jessie code (for developer use)"
+      let help = "only generate Jessie code (for developer use)"
     end)
-
-module Infer_annot =
-  Empty_string
-    (struct
-       let option_name = "-jessie-infer-annot"
-       let arg_name = ""
-       let help = "infer function annotations (inv, pre, spre, wpre)"
-     end)
 
 module Cpu_limit =
   Zero
     (struct
        let option_name = "-jessie-cpu-limit"
        let arg_name = ""
-       let help = "set the time limit in sec. for the analysis"
+       let help = "set the time limit in sec. for the analysis (suitable only for some targets, see -jessie-target)"
      end)
 
-module Abs_domain =
+module Target =
   String
     (struct
-       let option_name = "-jessie-abstract-domain"
-       let default = "poly"
-       let arg_name = ""
-       let help = "use specified abstract domain (box, oct or poly)"
-     end)
-
-module Atp =
-  String
-    (struct
-       let option_name = "-jessie-atp"
+       let option_name = "-jessie-target"
        let default = "why3ide"
        let arg_name = ""
-       let help = "use given automated theorem prover, among `alt-ergo', `cvc3', `simplify', `vampire', `yices' and `z3'. Use `goals' to simply generate goals in Why syntax."
-     end)
-
-module Hint_level =
-  Zero
-    (struct
-       let option_name = "-jessie-hint-level"
-       let arg_name = ""
-       let help = "level of hints, i.e. assertions to help the proof (e.g. for string usage)"
+       let help = "run Make with the specified target instead of the default `why3ide'. Use `update' to simply \
+                   generate the .mlw file and exit"
      end)
 
 module Specialize =

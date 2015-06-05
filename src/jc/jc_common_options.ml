@@ -33,14 +33,9 @@
 
 (*s command-line options *)
 
-open Env
-
 let debug = ref false
 let verbose = ref false
 let werror = ref false
-
-let inv_sem = ref InvArguments
-let separation_sem = ref SepRegions
 
 (*
   Local Variables:

@@ -92,22 +92,19 @@ let label =
 let tag st = st.si_name ^ "_tag"
 
 let tag_table (ri, r) =
-  if !Common_options.separation_sem = SepRegions && not (is_dummy_region r)
-  then
+  if not (is_dummy_region r) then
     (Type.root ri) ^ "_" ^ (Region.name r) ^ "_tag_table"
   else
     (Type.root ri) ^ "_tag_table"
 
 let alloc_table (ac, r) =
-  if !Common_options.separation_sem = SepRegions && not (is_dummy_region r)
-  then
+  if not (is_dummy_region r) then
     (Class.alloc ac) ^ "_" ^ (Region.name r) ^ "_alloc_table"
   else
     (Class.alloc ac) ^ "_alloc_table"
 
 let memory (fi, r) =
-  if !Common_options.separation_sem = SepRegions && not (is_dummy_region r)
-  then
+  if not (is_dummy_region r) then
     fi.fi_final_name ^ "_" ^ (Region.name r)
   else
     fi.fi_final_name
@@ -324,8 +321,7 @@ let field_memory_name fi =
     fi.fi_final_name
 
 let field_region_memory_name (fi, r) =
-  if !Common_options.separation_sem = SepRegions && not (is_dummy_region r)
-  then
+  if not (is_dummy_region r) then
     (field_memory_name fi) ^ "_" ^ (Region.name r)
   else
     field_memory_name fi
@@ -334,15 +330,13 @@ let union_memory_name vi =
   vi.ri_name ^ "_fields"
 
 let union_region_memory_name (vi, r) =
-  if !Common_options.separation_sem = SepRegions && not (is_dummy_region r)
-  then
+  if not (is_dummy_region r) then
     (union_memory_name vi) ^ "_" ^ (Region.name r)
   else
     union_memory_name vi
 
 let bitvector_region_memory_name r =
-  if !Common_options.separation_sem = SepRegions && not (is_dummy_region r)
-  then
+  if not (is_dummy_region r) then
     Type.bitvector ^ "_" ^ (Region.name r)
   else
     Type.bitvector

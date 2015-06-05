@@ -35,43 +35,6 @@ open Ast
 open Format
 open Why_pp
 
-let string_of_termination_policy p =
-  match p with
-    | TPalways -> "always"
-    | TPuser -> "user"
-    | TPnever -> "never"
-
-let string_of_invariant_policy p =
-  match p with
-    | InvNone -> "None"
-    | InvArguments -> "Arguments"
-    | InvOwnership -> "Ownership"
-
-let string_of_separation_policy p =
-  match p with
-    | SepNone -> "None"
-    | SepRegions -> "Regions"
-
-let string_of_annotation_policy p =
-  match p with
-    | AnnotNone -> "None"
-    | AnnotInvariants -> "Invariants"
-    | AnnotElimPre -> "ElimPre"
-    | AnnotStrongPre -> "StrongPre"
-    | AnnotWeakPre -> "WeakPre"
-
-let string_of_abstract_domain p =
-  match p with
-    | AbsNone -> "None"
-    | AbsBox -> "Box"
-    | AbsOct -> "Oct"
-    | AbsPol -> "Pol"
-
-let string_of_int_model p =
-  match p with
-    | IMbounded -> "bounded"
-    | IMmodulo -> "modulo"
-
 let float_suffix fmt = function
   | `Single -> fprintf fmt "f"
   | `Double -> fprintf fmt "d"

@@ -42,7 +42,7 @@ JCCMA		?= $(BUILDSRC)/jc/jc.cma
 JCCMXA		?= $(JCCMA:.cma=.cmxa)
 
 PLUGIN_NAME:=Jessie
-PLUGIN_CMO:= jessie_config jessie_options jessie_integer common extractor rewrite \
+PLUGIN_CMO:= jessie_options jessie_integer common extractor rewrite \
              retype norm interp register
 PLUGIN_HAS_MLI:=yes
 PLUGIN_BFLAGS:=$(JESSIE_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
@@ -61,11 +61,6 @@ $(PLUGIN_DIR)/interp.cmo: $(PLUGIN_DIR)/interp.cmi $(JCCMA)
 $(PLUGIN_DIR)/interp.cmi: $(BUILDSRC)/jc/jc.cmi
 
 $(PLUGIN_DIR)/interp.cmx: $(PLUGIN_DIR)/interp.cmi $(JCCMXA)
-
-$(PLUGIN_DIR)/jessie_config.ml:
-	echo "let jessie_local = false" > $@
-
-PLUGIN_GENERATED_LIST+=$(JESSIE_HOME_DIR)/jessie_config.ml
 
 RESOURCES   ?= jessie_spec_prolog.h
 

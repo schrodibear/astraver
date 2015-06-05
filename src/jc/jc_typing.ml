@@ -381,7 +381,7 @@ let rec list_assoc_name f id l =
 let rec find_field_struct loc st allow_mutable =
   function
   | ("mutable" | "committed") as x ->
-    if allow_mutable && !Common_options.inv_sem = InvOwnership then
+    if allow_mutable && false (* ownership -- to be reimplemented *) then
       let table =
         if x = "mutable" then mutable_fields_table
         else committed_fields_table
@@ -2419,12 +2419,8 @@ let rec type_labels_in_decl d = match d#node with
   | JCDglobal_inv(_, body) ->
     type_labels [LabelHere] ~result_label:None (Some LabelHere) body
   | JCDvariant_type _ | JCDunion_type _ | JCDenum_type _ | JCDlogic_type _
-  | JCDexception _ | JCDinvariant_policy _ | JCDseparation_policy _
-  | JCDannotation_policy _ | JCDabstract_domain _
-  | JCDtermination_policy _ | JCDlogic_var _ ->  ()
-  | JCDaxiomatic(_id,l) -> List.iter type_labels_in_decl l
-  | JCDpragma_gen_sep _ | JCDpragma_gen_frame _ | JCDpragma_gen_sub _
-  | JCDpragma_gen_same _ -> ()
+  | JCDexception _ | JCDlogic_var _ ->  ()
+  | JCDaxiomatic (_id, l) -> List.iter type_labels_in_decl l
 
 (* <====== A partir d'ici, c'est pas encore fait *)
 
@@ -3032,7 +3028,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
         let invariants =
           List.fold_left
             (fun acc (id, x, e) ->
-               if !Common_options.inv_sem = InvNone then
+               if false (* ownership -- to be re-implemented ==> enable structure invariants *) then
                  typing_error ~loc:id#pos
                    "use of structure invariants requires declaration of an invariant policy";
                let vi =
@@ -3094,7 +3090,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
         let a = assertion [] e in
         let li = make_pred id in
         let idx = li.li_tag in
-        if !Common_options.inv_sem = InvArguments then
+        if true (* ownership -- to be re-imlpemented *) then
           IntHashtblIter.replace logic_functions_table
             idx (li, JCAssertion a);
         IntHashtblIter.add global_invariants_table idx (li, a);
@@ -3197,56 +3193,6 @@ let rec decl_aux ~only_types ~axiomatic acc d =
           end
         else
           acc
-    | JCDabstract_domain _|JCDannotation_policy _
-    | JCDseparation_policy _
-    | JCDtermination_policy _
-    | JCDinvariant_policy _ -> assert false
-    | JCDpragma_gen_sep (kind,id,li) ->
-        if Options.gen_frame_rule_with_ft && not only_types then
-          begin
-            let kind = match kind,li with
-              | "",_ -> `Sep
-              | "inc", [_;_] -> `Inc
-              | "cni", [_;_] -> `Cni
-
-              | ("inc"|"cni"), _ ->
-                  typing_error ~loc:loc
-                    "A Gen_separation inc or cni pragma should \
-                     have 2 arguments (%i given)" (List.length li)
-              | _ -> typing_error ~loc:loc
-                  "I don't know that kind of Gen_separation pragma : %s" 
-                kind in
-            create_pragma_gen_sep_logic loc kind id li
-          end;
-        acc
-    | JCDpragma_gen_frame(name,logic) -> 
-        if Options.gen_frame_rule_with_ft && not only_types then
-          begin
-            create_pragma_gen_frame_sub `Frame loc name logic
-          end;
-      acc
-    | JCDpragma_gen_sub(name,logic) -> 
-        if Options.gen_frame_rule_with_ft && not only_types then
-          begin
-            create_pragma_gen_frame_sub `Sub loc name logic
-          end;
-      acc
-    | JCDpragma_gen_same(name,logic) -> 
-        if Options.gen_frame_rule_with_ft && not only_types then
-          begin
-            let logic_info =
-              try
-                find_logic_info name
-              with Not_found -> raise (Identifier_Not_found name) in
-            let pred_info =
-              try
-                find_logic_info logic
-              with Not_found -> raise (Identifier_Not_found logic) in
-            (** TODO test that the arguments are the same *)
-            Hashtbl.add pragma_gen_same
-              logic_info.li_tag pred_info
-          end;
-      acc
     | JCDaxiomatic(id,l) ->
         Options.lprintf "Typing axiomatic %s@." id;
         let data =
@@ -3283,7 +3229,7 @@ let declare_struct_info d =
     in
     StringHashtblIter.add structs_table id (si, []);
     (* declare the "mutable" field (if needed) *)
-    if parent = None && !Common_options.inv_sem = InvOwnership then
+    if parent = None && false (* ownership -- to be re-implemented *) then
       create_mutable_field si
   | _ -> ()
 

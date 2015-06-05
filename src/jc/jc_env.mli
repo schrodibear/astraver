@@ -31,21 +31,9 @@
 
 open Output_ast
 
-type termination_policy = TPalways | TPnever | TPuser
-
 type float_format = [ `Double | `Float | `Binary80 ]
 
 type native_type = Tunit | Tboolean | Tinteger | Treal | Tgenfloat of float_format | Tstring
-
-type inv_sem = InvNone | InvOwnership | InvArguments
-
-type separation_sem = SepNone | SepRegions
-
-type annotation_sem = AnnotNone | AnnotInvariants | AnnotElimPre | AnnotStrongPre | AnnotWeakPre
-
-type abstract_domain = AbsNone | AbsBox | AbsOct | AbsPol
-
-type int_model = IMbounded | IMmodulo
 
 type float_model = FMmath | FMdefensive | FMfull | FMmultirounding
 

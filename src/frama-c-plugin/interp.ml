@@ -187,16 +187,6 @@ let relation = function
   | Req -> `Beq
   | Rneq -> `Bneq
 
-
-
-let invariant_policy = ref Jc.Env.InvArguments
-
-let separation_policy_regions = ref true
-
-type int_model = IMexact | IMbounded | IMmodulo
-
-let int_model = ref (IMbounded : int_model)
-
 let float_model = ref `Defensive
 
 let rec name_with_profile s prof =
@@ -387,10 +377,7 @@ let ctype ?bitsize ty =
     match unrollType ty with
     | TVoid _attr -> JCPTnative Tunit
     | TInt (_ik, _attr) ->
-      if !int_model = IMexact then
-        JCPTnative Tinteger
-      else
-        JCPTidentifier (Type.Integral.(name ?bitsize @@ of_typ_exn ty), [])
+      JCPTidentifier (Type.Integral.(name ?bitsize @@ of_typ_exn ty), [])
     | TFloat (fk, _attr) ->
       begin match !float_model with
       | `Math ->
@@ -686,12 +673,9 @@ and terms ?(in_zone=false) t =
       List.map (fun x -> JCPEapp("\\truncate_real_to_int",[],[x])) (terms t)
     | TCastE (ty, oft, t')
       when isIntegralType ty && isLogicArithmeticType t'.term_type ->
-      if !int_model = IMexact then
-        List.map (fun x -> x#node) (terms t')
-      else
-        List.map
-          (fun x -> (match oft with Check -> JCPEcast (x, ctype ty) | Modulo -> JCPEcast_mod (x, ctype ty)))
-          (terms t')
+      List.map
+        (fun x -> (match oft with Check -> JCPEcast (x, ctype ty) | Modulo -> JCPEcast_mod (x, ctype ty)))
+        (terms t')
     | TCastE (ty, _, t)
       when isFloatingType ty && isLogicArithmeticType t.term_type ->
       List.map (fun x -> JCPEcast (x, ctype ty)) (terms t)
@@ -1580,23 +1564,17 @@ and integral_expr e =
 
       | CastE (ty, _, e1) when isFloatingType (typeOf e1) ->
           let e1' = locate (mkexpr (JCPEcast(expr e1,ltype Linteger)) e.eloc) in
-          if !int_model = IMexact then
-            e1'#node
-          else
-            let e2' = locate (mkexpr (JCPEcast(e1',ctype ty)) e.eloc) in
-            e2'#node
+          let e2' = locate (mkexpr (JCPEcast(e1',ctype ty)) e.eloc) in
+          e2'#node
 
       | CastE (ty, oft, e1) when isIntegralType (typeOf e1) ->
-          if !int_model = IMexact then
-            (int_expr e1)#node
-          else
-            let cast =
-              match oft with
-              | Check -> JCPEcast (int_expr e1, ctype ty)
-              | Modulo -> JCPEcast_mod (int_expr e1, ctype ty)
-            in
-            let e = locate (mkexpr cast e.eloc) in
-            e#node
+        let cast =
+          match oft with
+          | Check -> JCPEcast (int_expr e1, ctype ty)
+          | Modulo -> JCPEcast_mod (int_expr e1, ctype ty)
+        in
+        let e = locate (mkexpr cast e.eloc) in
+        e#node
 
       | _ -> (expr e)#node
     in
@@ -2621,15 +2599,12 @@ let integral_type name ty bitsize =
   mkdecl (JCDenum_type (name, min, max)) Why_loc.dummy_position
 
 let integral_types () =
-  if !int_model = IMexact then
+  Type.Integral.fold_all
+    (fun name (ty, bitsize) acc ->
+       match unrollType (ty : Type.Integral.t :> typ) with
+       | TInt (ik, _) when ik <> IBool -> acc
+       | _ -> integral_type name ty bitsize :: acc)
     []
-  else
-    Type.Integral.fold_all
-      (fun name (ty, bitsize) acc ->
-         match unrollType (ty : Type.Integral.t :> typ) with
-         | TInt (ik, _) when ik <> IBool -> acc
-         | _ -> integral_type name ty bitsize :: acc)
-      []
 
 let type_conversions () =
   let typconv_axiom ty1 ty1_to_ty2 ty2_to_ty1 =
@@ -2938,114 +2913,59 @@ let pragma =
   | GPragma (Attr (name, [AStr arg]), _)
   | GPragma (Attr (name, [ACons (arg, [])]), _) ->
     begin match name with
-    | "InvariantPolicy" ->
+    | "JessieFloatModel" ->
       begin match String.lowercase arg with
-      | "none" -> invariant_policy := Jc.Env.InvNone
-      | "arguments" -> invariant_policy := Jc.Env.InvArguments
-      | "ownership" -> invariant_policy := Jc.Env.InvOwnership
-      | _ -> assert false
+      | "math" -> float_model := `Math;
+        [Jc.Print.JCfloat_model Jc.Env.FMmath]
+      | "defensive" ->
+        float_model := `Defensive;
+        [Jc.Print.JCfloat_model Jc.Env.FMdefensive]
+      | "full" ->
+        float_model := `Full;
+        [Jc.Print.JCfloat_model Jc.Env.FMfull]
+      | "multirounding" ->
+        float_model := `Multirounding;
+        [Jc.Print.JCfloat_model Jc.Env.FMmultirounding]
+      | s ->
+        Console.warning
+          "pragma %s: identifier %s is not a valid value (ignored)."
+          name s; []
       end;
-      []
-    | "SeparationPolicy" ->
+    | "JessieFloatRoundingMode" ->
       begin match String.lowercase arg with
-      | "none" -> separation_policy_regions := false
-      | "regions" -> separation_policy_regions := true
-      | _ -> assert false
-      end;
-      []
-    | "AnnotationPolicy" ->
-      begin match String.lowercase arg with
-      | "none" -> [Jc.Print.JCannotation_policy Jc.Env.AnnotNone]
-      | "invariants" -> [Jc.Print.JCannotation_policy Jc.Env.AnnotInvariants]
-      | "weakpre" -> [Jc.Print.JCannotation_policy Jc.Env.AnnotWeakPre]
-      | "strongpre" -> [Jc.Print.JCannotation_policy Jc.Env.AnnotStrongPre]
-      | _ -> assert false
+      | "nearesteven" ->
+        (* float_rounding_mode := `NearestEven; *)
+        [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMNearestEven]
+      | "down" ->
+        (* float_rounding_mode := `Downward; *)
+        [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMDown]
+      | "up" ->
+        (* float_rounding_mode := `Upward; *)
+        [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMUp]
+      | "tozero" ->
+        (* float_rounding_mode := `Towardzero; *)
+        [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMToZero]
+      | "nearestaway" ->
+        (* float_rounding_mode := `Towardawayzero; *)
+        [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMNearestAway]
+      | s ->
+        Console.warning
+          "pragma %s: identifier %s is not a valid value (ignored)" name s; []
       end
-    | "AbstractDomain" ->
+    | "JessieFloatInstructionSet" ->
       begin match String.lowercase arg with
-      | "none" -> [Jc.Print.JCabstract_domain Jc.Env.AbsNone]
-      | "box" -> [Jc.Print.JCabstract_domain Jc.Env.AbsBox]
-      | "oct" -> [Jc.Print.JCabstract_domain Jc.Env.AbsOct]
-      | "pol" -> [Jc.Print.JCabstract_domain Jc.Env.AbsPol]
-      | _ -> assert false
+      | "x87" ->
+        [Jc.Print.JCfloat_instruction_set "x87"]
+      | "ieee754" ->
+        [Jc.Print.JCfloat_instruction_set "ieee754"]
+      | s ->
+        Console.warning
+          "pragma %s: identifier %s is not a valid value (ignored)" name s; []
       end
-        | "JessieFloatModel" ->
-          begin match String.lowercase arg with
-          | "math" -> float_model := `Math;
-            [Jc.Print.JCfloat_model Jc.Env.FMmath]
-          | "defensive" ->
-            float_model := `Defensive;
-            [Jc.Print.JCfloat_model Jc.Env.FMdefensive]
-          | "full" ->
-            float_model := `Full;
-            [Jc.Print.JCfloat_model Jc.Env.FMfull]
-          | "multirounding" ->
-            float_model := `Multirounding;
-            [Jc.Print.JCfloat_model Jc.Env.FMmultirounding]
-          | s ->
-            Console.warning
-              "pragma %s: identifier %s is not a valid value (ignored)."
-              name s; []
-          end;
-        | "JessieFloatRoundingMode" ->
-          begin match String.lowercase arg with
-          | "nearesteven" ->
-            (* float_rounding_mode := `NearestEven; *)
-            [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMNearestEven]
-          | "down" ->
-            (* float_rounding_mode := `Downward; *)
-            [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMDown]
-          | "up" ->
-            (* float_rounding_mode := `Upward; *)
-            [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMUp]
-          | "tozero" ->
-            (* float_rounding_mode := `Towardzero; *)
-            [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMToZero]
-          | "nearestaway" ->
-            (* float_rounding_mode := `Towardawayzero; *)
-            [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMNearestAway]
-          | s ->
-            Console.warning
-              "pragma %s: identifier %s is not a valid value (ignored)" name s; []
-          end
-        | "JessieFloatInstructionSet" ->
-          begin match String.lowercase arg with
-          | "x87" ->
-            [Jc.Print.JCfloat_instruction_set "x87"]
-          | "ieee754" ->
-            [Jc.Print.JCfloat_instruction_set "ieee754"]
-              | s ->
-                Console.warning
-                  "pragma %s: identifier %s is not a valid value (ignored)" name s; []
-          end
-
-        | "JessieIntegerModel" ->
-          begin match String.lowercase arg with
-          | "exact" | "math" -> int_model := IMexact
-          | "strict" -> int_model := IMbounded
-          | "modulo" -> int_model := IMmodulo
-          | s ->
-            Console.warning
-              "pragma %s: identifier %s is not a valid value (ignored)." name s
-          end;
-            []
-
-        | "JessieTerminationPolicy" ->
-          begin match String.lowercase arg with
-          | "always" ->
-            [Jc.Print.JCtermination_policy TPalways]
-          | "user" ->
-            [Jc.Print.JCtermination_policy TPuser]
-          | "never" ->
-            [Jc.Print.JCtermination_policy TPnever]
-          | s ->
-            Console.warning
-              "pragma %s: identifier %s is not a valid value (ignored)" name s; []
-          end
-        | _ ->
-          Console.warning
-            "pragma %s is ignored by Jessie." name;
-          []
+    | _ ->
+      Console.warning
+        "pragma %s is ignored by Jessie." name;
+      []
     end
   | GPragma (Attr ("JessieBuiltin", [ACons (acsl, []); AStr jessie]), _) ->
     Hashtbl.add jessie_builtins acsl jessie;
@@ -3053,30 +2973,7 @@ let pragma =
   | GPragma _ -> []
   | _ -> []
 
-let pragmas f =
-  let l = List.flatten (List.rev (List.rev_map pragma f.globals)) in
-
-  Jc.Print.JCinvariant_policy !invariant_policy
-  :: (if !separation_policy_regions then
-        Jc.Print.JCseparation_policy Jc.Env.SepRegions
-      else
-        Jc.Print.JCseparation_policy Jc.Env.SepNone)
-  :: (match Config.Infer_annot.get () with
-    | "" -> Jc.Print.JCannotation_policy Jc.Env.AnnotNone
-    | "inv" -> Jc.Print.JCannotation_policy Jc.Env.AnnotInvariants
-    | "pre" -> Jc.Print.JCannotation_policy Jc.Env.AnnotElimPre
-    | "spre" -> Jc.Print.JCannotation_policy Jc.Env.AnnotStrongPre
-    | "wpre" -> Jc.Print.JCannotation_policy Jc.Env.AnnotWeakPre
-    | s ->
-      Jessie_options.abort "unknown inference technique %s" s)
-  :: (match Config.Abs_domain.get () with
-    | "box" -> Jc.Print.JCabstract_domain Jc.Env.AbsBox
-    | "oct" -> Jc.Print.JCabstract_domain Jc.Env.AbsOct
-    | "poly" -> Jc.Print.JCabstract_domain Jc.Env.AbsPol
-    | s ->
-      Jessie_options.abort "unknown abstract domain %s" s)
-  :: l
-
+let pragmas f = List.(flatten @@ map pragma f.globals)
 
 (*
 Local Variables:

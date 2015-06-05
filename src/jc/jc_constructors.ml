@@ -459,12 +459,6 @@ module PDecl = struct
   let mkvariant_type_def ~name ?(tags = []) =
     mk ~node:(JCDvariant_type(name, tags))
 
-  let mkinvariant_policy_def ~value = mk ~node:(JCDinvariant_policy value)
-  let mkseparation_policy_def ~value = mk ~node:(JCDseparation_policy value)
-  let mktermination_policy_def ~value = mk ~node:(JCDtermination_policy value)
-  let mkannotation_policy_def ~value = mk ~node:(JCDannotation_policy value)
-  let mkabstract_domain_def ~value = mk ~node:(JCDabstract_domain value)
-
   let mkbehavior ?(pos = Why_loc.dummy_position) ~name ?throws ?assumes ?requires
       ?assigns ?allocates ?(ensures = mkboolean ~value:true ()) () =
     (pos, name, throws, assumes, requires, assigns, allocates, ensures)

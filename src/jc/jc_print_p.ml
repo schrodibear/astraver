@@ -452,27 +452,6 @@ let rec pdecl fmt d =
       reads_or_expr body
   | JCDlogic_type (id,args) ->
     fprintf fmt "@\n@[logic type %s%a@]@\n" id (print_list_delim lchevron rchevron comma string) args
-  | JCDinvariant_policy p ->
-    fprintf fmt "# InvariantPolicy = %s@\n" (string_of_invariant_policy p)
-  | JCDseparation_policy p ->
-    fprintf fmt "# SeparationPolicy = %s@\n" (string_of_separation_policy p)
-  | JCDtermination_policy p ->
-    fprintf fmt "# TerminationPolicy = %s@\n" (string_of_termination_policy p)
-  | JCDannotation_policy p ->
-    fprintf fmt "# AnnotationPolicy = %s@\n" (string_of_annotation_policy p)
-  | JCDabstract_domain p ->
-    fprintf fmt "# AbstractDomain = %s@\n" (string_of_abstract_domain p)
-  | JCDpragma_gen_sep (kind,s,l) ->
-    let print_ptype_r =
-      print_pair ptype (print_list semi string) in
-    fprintf fmt "# Gen_Separation %s %s(%a)\n" kind s
-      (print_list comma print_ptype_r) l
-  | JCDpragma_gen_frame (name,logic) ->
-    fprintf fmt "# Gen_Frame %s %s" name logic
-  | JCDpragma_gen_sub (name,logic) ->
-    fprintf fmt "# Gen_Sub %s %s" name logic
-  | JCDpragma_gen_same (name,logic) ->
-    fprintf fmt "# Gen_Same_Footprint %s %s" name logic
   | JCDaxiomatic(id,l) ->
     fprintf fmt "@\n@[axiomatic %s {@\n@[<v 2>%a@]@\n}@]@\n" id
       (print_list space pdecl) l

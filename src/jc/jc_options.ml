@@ -65,9 +65,7 @@ let libdir =
     p
 
 let has_floats = ref false
-
 let float_model : float_model ref = ref FMdefensive
-
 let float_instruction_set : float_instruction_set ref = ref FISstrictIEEE754
 
 let libfiles = ref []
@@ -89,24 +87,13 @@ let verify_invariants_only = ref false
 let verify = ref []
 let behavior = ref []
 
-let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 let add_why3_opt s = why3_opt := !why3_opt ^ " " ^ s
-
-let annotation_sem = ref AnnotNone
-let ai_domain = ref AbsNone
 
 let current_rounding_mode = ref FRMNearestEven
 
-let termination_policy = ref Env.TPalways
-
-let int_model = ref IMbounded
 let interprocedural = ref false
 let main = ref ""
-let trust_ai = ref false
-let fast_ai = ref false
 let forall_inst_bound = ref 10
-
-let gen_frame_rule_with_ft = ref false
 
 let files_ = ref []
 let add_file f = files_ := f :: !files_
@@ -118,7 +105,7 @@ let pos_table = Hashtbl.create 97
 let version () =
   Printf.printf "This is Jessie2 (ISP RAS Jessie fork) version %s, compiled on %s.\n\
                  Copyright (c) 2006-2015 - CNRS/INRIA/Univ Paris-Sud/ISP RAS.\n\
-                 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty).\n"
+                 This is free software with ABSOLUTELY NO WARRANTY (see LICENSE).\n"
     Jc_version.version
     Jc_version.date;
   exit 0
@@ -141,60 +128,28 @@ let _ =
           "  <f> reads source locations from file f" ;
         "-behavior", Arg.String (fun s -> behavior := s::!behavior),
           "  verify only specified behavior (safety, variant, default or user-defined behavior)";
-
-        "-why-opt", Arg.String add_why_opt,
-          "  <why options>  passes options to Why";
         "-why3-opt", Arg.String add_why3_opt,
           "  <why options>  passes options to Why3";
         "-v", Arg.Set verbose,
           "  verbose mode";
         "-q", Arg.Clear verbose,
           "  quiet mode (default)";
-(*      "-ai", Arg.Tuple [                                                          *)
-(*        Arg.String (fun s -> ai_domain := s);                                     *)
-(*        Arg.Set annot_infer],                                                     *)
-(*           "  <box,oct,pol,wp,boxwp,octwp,polwp> performs annotation inference"   *)
-(*           ^ " with abstract interpretation using the Box, Octagon"               *)
-(*           ^ " or Polyhedron domain, or with weakest preconditions or with both"; *)
         "-forall-inst-bound", Arg.Set_int forall_inst_bound,
           "  bound on the number of expressions resulting from unrolling some forall quantifiers";
         "-main", Arg.Tuple [Arg.Set interprocedural; Arg.Set_string main],
           "  main function for interprocedural abstract interpretation (needs -ai <domain>)";
-        "-fast-ai", Arg.Set fast_ai,
-          "  fast ai (needs -ai <domain> and -main <function>)";
-        "-trust-ai", Arg.Set trust_ai,
-          "  verify inferred annotations (needs -ai <domain>)";
-        "-separation", Arg.Unit (fun () -> separation_sem := SepRegions),
-          "  apply region-based separation on pointers";
         "--werror", Arg.Set werror,
           "  treats warnings as errors";
         "--version", Arg.Unit version,
           "  prints version and exit";
-(*
-        "-inv-sem", Arg.String
-          (function
-             | "none" -> inv_sem := InvNone
-             | "ownership" -> inv_sem := InvOwnership
-             | "arguments" -> inv_sem := InvArguments
-             | s -> raise (Arg.Bad ("Unknown mode: "^s))),
-          "  <kind>  sets the semantics of invariants (available modes: none, ownership, arguments)";
-*)
         "-all-offsets", Arg.Set verify_all_offsets,
           "  generate vcs for all pointer offsets";
         "-invariants-only", Arg.Set verify_invariants_only,
           "  verify invariants only (Arguments policy)";
         "-verify", Arg.String (function s -> verify := s :: !verify),
-          "  verify only these functions";
-        "-gen_frame_rule_with_ft", Arg.Set gen_frame_rule_with_ft,
-        "Experimental : Generate frame rule for predicates and logic functions using only their definitions";
+          "  verify only these functions"
       ]
       add_file usage
-
-let () =
-  if !trust_ai && !int_model = IMmodulo then begin
-    Format.eprintf "Cannot trust abstract interpretation in modulo integer model";
-    exit 1
-  end
 
 let usage () =
   eprintf "usage: %s@." usage;
@@ -207,12 +162,7 @@ let print_graph = !print_graph
 let debug = !debug
 let verbose = !verbose
 let werror = !werror
-let why_opt = !why_opt
 let why3_opt = !why3_opt
-let inv_sem = inv_sem
-let separation_sem = separation_sem
-let trust_ai = !trust_ai
-let fast_ai = !fast_ai
 let forall_inst_bound = !forall_inst_bound
 
 let verify_all_offsets = !verify_all_offsets
@@ -222,21 +172,10 @@ let interprocedural = !interprocedural
 let main = !main
 let behavior = !behavior
 
-let gen_frame_rule_with_ft = !gen_frame_rule_with_ft
-let () = if gen_frame_rule_with_ft then libfiles := "mybag.why" :: !libfiles
-
 let verify_behavior s =
   behavior = [] || List.mem s behavior
 
-let set_int_model im =
-  if im = IMmodulo && trust_ai then begin
-    Format.eprintf "cannot trust abstract interpretation in modulo integer model";
-    exit 1
-  end else
-    int_model := im
-
 let set_float_model fm = float_model := fm
-
 
 (* error handling *)
 

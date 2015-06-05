@@ -920,10 +920,8 @@ let rec collect_pset_locations t ~type_safe ~global_assertion lab loc =
     collect_pset_locations t ~type_safe ~global_assertion lab loc
 
 let external_region ?region_list (_, r) =
-  (* More exact apprixmation (at least fixes both previously encountered bugs): *)
+  (* More exact approximation (at least fixes both previously encountered bugs): *)
   (* generate not_assigns for parameters and constant (i.e. global) memories (tables). *)
-  (* Also generate not_assigns always when in SepNone sparation mode. *)
-  !Options.separation_sem = SepNone || (* no regions used at all *)
   (* constant memory, alloc- or tag table, not passed as argument, but counted as effect (global) *)
   not (Region.polymorphic r) ||
   (* passed as argument and counted as effect *)
@@ -1249,26 +1247,16 @@ let term_zero = new term ~typ:integer_type (JCTconst (JCCinteger "0"))
 let dummy_measure = (term_zero, None)
 
 let get_measure_for f =
-  match !Options.termination_policy with
-  | TPalways ->
-    begin try
-       Hashtbl.find decreases_clause_table (f.fun_tag)
-     with
-     | Not_found ->
-       Hashtbl.add decreases_clause_table (f.fun_tag) dummy_measure;
-       eprintf
-            "Warning: generating dummy decrease variant for recursive \
-             function %s. Please provide a real variant or set \
-             termination policy to user or never\n%!" f.fun_name;
-       dummy_measure
-    end
-  | TPuser ->
-    begin try
-      Hashtbl.find decreases_clause_table (f.fun_tag)
-    with
-    | Not_found -> raise Exit
-    end
-  | TPnever -> raise Exit
+  try
+    Hashtbl.find decreases_clause_table (f.fun_tag)
+  with
+  | Not_found ->
+    Hashtbl.add decreases_clause_table (f.fun_tag) dummy_measure;
+    eprintf
+      "Warning: generating dummy decrease variant for recursive \
+       function %s. Please provide a real variant or set \
+       termination policy to user or never\n%!" f.fun_name;
+    dummy_measure
 
 (* Translate the heap update `e1.fi = tmp2'
 
@@ -1332,92 +1320,8 @@ let rec make_upd_simple ~e e1 fi tmp2 =
   tmp1, letspi, upd
 
 and make_upd_union ~e:_ _off _e1 _fi _tmp2 = assert false
-  (*let e1' = expr e1 in
-  (* Convert value assigned into bitvector *)
-  let e2' =
-    match fi.fi_type with
-    | JCTenum ri -> make_app (logic_bitvector_of_enum_name ri) [mk_var tmp2]
-    | JCTnative Tinteger -> make_app logic_bitvector_of_integer_name [mk_var tmp2]
-    | JCTnative _
-    | JCTtype_var _
-    | JCTpointer (_, _, _)
-    | JCTlogic _
-    | JCTany
-    | JCTnull ->
-      Options.jc_error e1#pos "Unsupported bv type conversion" (* TODO ? *)
-  in
-  (* Temporary variables to avoid duplicating code *)
-  let tmp1 = tmp_var_name () in
-  let tmp2 = tmp_var_name () in
-  let v1 = Common.var e1#typ tmp1 in
-  let e1 = new expr_with ~node:(JCEvar v1) e1 in
-  let size =
-    match fi.fi_bitsize with
-    | Some x -> x / 8
-    | None -> failwith "make_upd_union: field without bitsize in bv region"
-  in
-  let union_size = (union_type e1#typ).ri_union_size_in_bytes in
-  let e2' =
-    if size = union_size then
-      (* TODO: deal with offset which should be null *)
-      e2'
-    else
-      (* Retrieve bitvector for access to union *)
-      let deref = make_deref_simple ~e e1 fi in
-      (* Replace subpart of bitvector for specific subfield *)
-      let off =
-        match off with
-        | Int_offset s -> s
-        | _ -> Options.jc_error e1#pos "Unsupported offset in expression" (* TODO *)
-      in
-      let off = string_of_int off and size = string_of_int size in
-      make_app "replace_bytes"
-        [deref; mk_expr (Cte (Prim_int off)); mk_expr (Cte (Prim_int size)); e2']
-  in
-  let lets = [tmp1, e1'; tmp2, e2'] in
-  let tmp1, lets', e' = make_upd_simple ~e e1 fi tmp2 in
-  tmp1, lets @ lets', e'*)
 
 and make_upd_bytes ~e:_ _e1 _fi _tmp2 = assert false
-  (*let e1' = expr e1 in
-  (* Convert value assigned into bitvector *)
-  let e2' =
-    match fi.fi_type with
-    | JCTenum ri -> make_app (logic_bitvector_of_enum_name ri) [mk_var tmp2]
-    | _ty -> Options.jc_error e#pos "Unsupported field type in bv update" (* TODO *)
-  in
-  (* Temporary variables to avoid duplicating code *)
-  let tmp1 = tmp_var_name () in
-  let v1 = Common.var e1#typ tmp1 in
-  let e1 = new expr_with ~node:(JCEvar v1) e1 in
-  (* Define memory and allocation table *)
-  let mem = plain_memory_var (JCmem_bitvector,e1#region) in
-  let alloc = alloc_table_var (JCalloc_bitvector,e1#region) in
-  (* Store bitvector *)
-  let off =
-    match field_offset_in_bytes fi with
-    | Some x -> x
-    | None -> failwith "make_upd_bytes: field without offset in bytes in bv region"
-  in
-  let size =
-    match fi.fi_bitsize with
-    | Some x ->  x / 8
-    | None -> failwith "make_upd_bytes: field without bitsize in bv region"
-  in
-  let off = string_of_int off and size = string_of_int size in
-  let e' =
-    if safety_checking () then
-      make_vc_app_e ~e  ~kind:JCVCpointer_deref "upd_bytes_" @@
-        [alloc; mem; mk_var tmp1;
-         mk_expr (Cte (Prim_int off)); mk_expr (Cte (Prim_int size));
-         mk_var tmp2]
-    else
-      make_app "safe_upd_bytes_"
-        [mem; mk_var tmp1; mk_expr @@ Cte (Prim_int off);
-          mk_expr @@ Cte (Prim_int size); mk_var tmp2]
-  in
-  let lets = [tmp1, e1'; tmp2, e2'] in
-    tmp1, lets, e'*)
 
 and make_upd ~e e1 fi e2 =
   (* Value assigned stored in temporary at that point *)
@@ -1497,67 +1401,8 @@ and make_deref_simple ~e e1 fi =
     O.F.Jc.acc_unsafe "acc" $ mem ^. expr Any e1
 
 and make_deref_union ~e:_ _off _e1 _fi = assert false
-  (*(* Retrieve bitvector *)
-  let e' = make_deref_simple ~e e1 fi in
-  (* Retrieve subpart of bitvector for specific subfield *)
-  let off =
-    match off with
-    | Int_offset s -> s
-    | _ -> Options.jc_error e#pos "Usnupported offset" (* TODO *)
-  in
-  let size =
-    match fi.fi_bitsize with
-      | Some x -> x / 8
-      | None -> failwith "make_deref_union: field without bitsize in bv region"
-  in
-  let off = string_of_int off and size = string_of_int size in
-  let e' = make_app "extract_bytes" [e'; mk_expr @@ Cte (Prim_int off); mk_expr @@ Cte (Prim_int size)] in
-  (* Convert bitvector into appropriate type *)
-  match fi.fi_type with
-  | JCTenum ri -> make_app (logic_enum_of_bitvector_name ri) [e']
-  | _ty -> Options.jc_error e#pos "Unsupported field type in bv update" (* TODO *)*)
 
 and make_deref_bytes ~_e _e1 _fi = assert false
-  (*(* Define memory and allocation table *)
-  let mem = memory_var (JCmem_bitvector, e1#region) in
-  let alloc = alloc_table_var (JCalloc_bitvector, e1#region) in
-  (* Retrieve bitvector *)
-  let off =
-    match field_offset_in_bytes fi with
-    | Some x -> x
-    | None -> failwith "make_upd_bytes: field without offset in bv region"
-  in
-  let size =
-    match fi.fi_bitsize with
-    | Some x ->  x / 8
-    | None -> failwith "make_upd_bytes: field without bitsize in bv region"
-  in
-  let off = string_of_int off and size = string_of_int size in
-  let e' =
-    if safety_checking () then
-      make_vc_app_e ~e ~kind:JCVCpointer_deref "acc_bytes_"
-        [alloc; mem; expr e1; mk_expr @@ Cte (Prim_int off); mk_expr @@ Cte (Prim_int size)]
-    else
-      make_app "safe_acc_bytes_"
-        [mem; expr e1; mk_expr @@ Cte (Prim_int off); mk_expr @@ Cte (Prim_int size)]
-  in
-  (* Convert bitvector into appropriate type *)
-  match fi.fi_type with
-  | JCTenum ri -> make_app (logic_enum_of_bitvector_name ri) [e']
-  | JCTnative t ->
-    begin match t with
-      | Treal  -> unsupported e#pos "bit-dependent cast over real numbers"
-      | Tgenfloat _ -> unsupported e#pos "bit-dependent cast over floating-point values"
-      | Tstring -> unsupported e#pos "bit-dependent cast over strings"
-      | Tinteger -> unsupported e#pos "bit-dependent cast over integers"
-      | Tboolean -> unsupported e#pos "bit-dependent cast over booleans"
-      | Tunit  -> unsupported e#pos "bit-dependent cast over type unit"
-    end
-  | JCTtype_var _
-  | JCTpointer (_, _, _)
-  | JCTlogic _
-  | JCTany
-  | JCTnull -> unsupported e#pos "Unsupported type in bit-dependent cast" (* TODO *)*)
 
 and make_deref ~e e1 fi =
   (* Dispatch depending on kind of memory *)
@@ -1689,13 +1534,9 @@ and make_reinterpret ~e e1 st =
     let mem_to = plain_memory_var (mc_to, e1#region) in
     let open O.E in
     [before.lab_final_name] @:
-    match P.(!Options.inv_sem) with
-    | InvOwnership ->
-      unsupported ~loc:e1#pos "reinterpret .. as construct is not supported when inv_sem = InvOwnership"
-    | InvNone | InvArguments ->
-      E.locate ~e
-        (O.F.reinterpret ~safe:(safety_checking ()) $
-         alloc ^ tt ^ tag s_from ^ tag s_to ^ mem_to ^. expr Any e1)
+    E.locate ~e
+      (O.F.reinterpret ~safe:(safety_checking ()) $
+       alloc ^ tt ^ tag s_from ^ tag s_to ^ mem_to ^. expr Any e1)
   in
 
   (* Let's now switch to terms and assume predicates instead of calling params... *)
@@ -1976,29 +1817,23 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
       let e1' = expr (Ty O.Ty.integer) e1 in
       let ac = deref_alloc_class ~type_safe:false e in
       let pc = JCtag (st, []) in
-      if !Options.inv_sem = InvOwnership then
-        assert false
-      else
-        begin match e1#node with
-        | JCEconst JCCinteger s
-          when (try let n = int_of_string s in n == 1 with Failure "int_of_string" -> false) ->
-          Interp_struct.alloc ~arg:Singleton (ac, e#region) pc
-        | _ ->
-          E.locate
-            ~e
-            ~kind:JCVCalloc_size
-            (Interp_struct.alloc ~arg:Range_0_n ~check_size:(safety_checking ()) (ac, e#region) pc e1')
-        end
+      begin match e1#node with
+      | JCEconst JCCinteger s
+        when (try let n = int_of_string s in n == 1 with Failure "int_of_string" -> false) ->
+        Interp_struct.alloc ~arg:Singleton (ac, e#region) pc
+      | _ ->
+        E.locate
+          ~e
+          ~kind:JCVCalloc_size
+          (Interp_struct.alloc ~arg:Range_0_n ~check_size:(safety_checking ()) (ac, e#region) pc e1')
+      end
     | JCEfree e1 ->
       let e1' = expr Any e1 in
       let ac = deref_alloc_class ~type_safe:false e1 in
       let pc = pointer_class e1#typ in
-      if !Options.inv_sem = InvOwnership then
-        assert false
-      else
-        return @@
-        E.locate ~e @@
-        Interp_struct.free ~safe:(not @@ safety_checking ()) (ac, e1#region) pc e1'
+      return @@
+      E.locate ~e @@
+      Interp_struct.free ~safe:(not @@ safety_checking ()) (ac, e1#region) pc e1'
     | JCEreinterpret (e1, st) -> return @@ make_reinterpret ~e e1 st
     | JCEapp call ->
       begin match call.call_fun with
@@ -2177,11 +2012,6 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
       let e2 = new expr_with ~typ:fi.fi_type ~node:(JCEvar v2) e2 in
       (* Translate assignment *)
       let _tmp1, lets, e' = make_upd ~e e1 fi e2 in
-      let e' =
-        if (safety_checking()) && !Options.inv_sem = InvOwnership
-        then assert false
-        else e'
-      in
       let lets = (tmp2, e2') :: lets in
       let e' =
         if e#typ = Common.unit_type
@@ -2285,7 +2115,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
             ~type_safe:false ~global_assertion:false ~relocate:false
             LabelHere LabelPre free_inv
         in
-        let inv' = if Options.trust_ai then inv' else O.P.(inv' && free_inv') in
+        let inv' = O.P.(inv' && free_inv') in
         (* loop assigns
 
            By default, the assigns clause for the function should be
@@ -2404,31 +2234,25 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
         let inv' = O.P.(inv' && mark_predicate ~e ass && mark_predicate ~e ass_from_fun) in
         (* loop body *)
         let body = expr (Ty Void) e1 in
-        let add_assume s =
-          let s = O.E.(assumption assume_from_inv assume_from_inv' ^^ s) in
-          if Options.trust_ai then O.E.(assumption [free_inv] free_inv' ^^ s)
-          else s
-        in
+        let add_assume s = O.E.(assumption assume_from_inv assume_from_inv' ^^ s) in
         let body = [ add_assume body ] in
         (* loop variant *)
         let loop_variant =
           match la.loop_variant with
-            | Some (t, r) when variant_checking () &&
-                !Options.termination_policy <> TPnever ->
-                let variant =
-                  named_term
-                    (Ty O.Ty.integer)
-                    ~type_safe:false ~global_assertion:false ~relocate:false
-                    LabelHere LabelPre t
-                in
-                Some (variant, Option.map (fun r -> r.li_final_name) r)
-            | None when variant_checking () &&
-                !Options.termination_policy = TPalways ->
-                eprintf
-                  "Warning, generating a dummy variant for loop. \
-                   Please provide a real variant or set termination policy \
-                   to user or never\n%!";
-                Some (Const (Int "0"), None)
+            | Some (t, r) when variant_checking () ->
+              let variant =
+                named_term
+                  (Ty O.Ty.integer)
+                  ~type_safe:false ~global_assertion:false ~relocate:false
+                  LabelHere LabelPre t
+              in
+              Some (variant, Option.map (fun r -> r.li_final_name) r)
+            | None when variant_checking () ->
+              eprintf
+                "Warning, generating a dummy variant for loop. \
+                 Please provide a real variant or set termination policy \
+                 to user or never\n%!";
+              Some (Const (Int "0"), None)
             | _ -> None
         in
         return @@
@@ -2611,43 +2435,6 @@ let make_old_style_update_no_shift ~e ~at ~mem ~p ~lbound ~rbound ~v =
         [at; mem; p; v]
   else
     make_app "safe_upd_" [mem; p; v]
-
-let make_not_assigns mem t l =
-  let l = List.map (fun (i, _, _, _) -> i) l in
-  let l = List.sort Pervasives.compare l in
-  let rec merge l acc =
-    match l,acc with
-    | [],_ -> acc
-    | i :: r, [] -> merge r [(i,i)]
-    | i :: r, (a, b) :: acc' ->
-      if i = b + 1 then
-        merge r ((a, i) :: acc')
-      else
-        merge r ((i, i) :: acc)
-  in
-  let i, l =
-    match merge l [] with
-    | [] -> failwith "make_not_assigns: got empty location list after merge"
-    | i :: l -> i, l
-  in
-  let pset_of_interval (a, b) =
-    if a = b then
-      LApp ("pset_singleton",
-            [LApp("shift", [LVar t; LConst (Prim_int (string_of_int a))])])
-    else
-      LApp("pset_range",
-           [LApp("pset_singleton", [LVar t]);
-             LConst(Prim_int (string_of_int a));
-             LConst(Prim_int (string_of_int b))])
-  in
-  let pset =
-    List.fold_left
-    (fun acc i ->
-       LApp("pset_union", [pset_of_interval i; acc]))
-    (pset_of_interval i)
-    l
-  in
-  LPred ("not_assigns", [LDerefAtLabel(mem, ""); LDeref mem; pset])
 *)
 
 (*****************************)
@@ -2967,14 +2754,11 @@ let func f funpos spec body =
         LabelHere LabelHere spec.fs_requires
   in
   let external_requires =
-    if Options.trust_ai then
-      external_requires
-    else
-      let free_requires =
-        named_predicate ~type_safe:true ~global_assertion:false ~relocate:false
-          LabelHere LabelHere spec.fs_free_requires
-      in
-      O.P.(external_requires && free_requires)
+    let free_requires =
+      named_predicate ~type_safe:true ~global_assertion:false ~relocate:false
+        LabelHere LabelHere spec.fs_free_requires
+    in
+    O.P.(external_requires && free_requires)
   in
   let internal_requires =
     named_predicate ~type_safe:false ~global_assertion:false ~relocate:false
@@ -3010,13 +2794,10 @@ let func f funpos spec body =
     List.fold_left
       (fun (safety, normal_inferred, normal, excep_inferred, excep) (_pos, id, b) ->
          let make_post ~type_safe ~internal =
-           (if internal && Options.trust_ai then
-               b.b_ensures
-            else
-              Assertion.mkand
-                [b.b_ensures;
-                 b.b_free_ensures]
-                ())
+           (Assertion.mkand
+               [b.b_ensures;
+                b.b_free_ensures]
+               ())
            |>
            named_predicate ~type_safe ~global_assertion:false ~kind:JCVCensures ~relocate:false LabelPost LabelOld |>
            O.P.(&&) @@
@@ -3067,7 +2848,7 @@ let func f funpos spec body =
            | "inferred" ->
              assert (b.b_assumes = None);
              safety, behav :: normal_inferred,
-             (if Options.trust_ai then normal else behav :: normal),
+             (behav :: normal),
              excep_inferred, excep
            | _ ->
              safety, normal_inferred, behav :: normal,
@@ -3079,8 +2860,7 @@ let func f funpos spec body =
              safety, normal_inferred, normal,
              ExceptionMap.add_merge
                List.append exc [behav] excep_inferred,
-             if Options.trust_ai then excep else
-               ExceptionMap.add_merge List.append exc [behav] excep
+             ExceptionMap.add_merge List.append exc [behav] excep
            end else
              safety, normal_inferred, normal, excep_inferred,
              ExceptionMap.add_merge List.append exc [behav] excep)

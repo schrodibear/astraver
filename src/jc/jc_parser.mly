@@ -128,8 +128,6 @@
 /* @ (string concat) */
 %token AT
 
-%token PRAGMA_GEN_SEP PRAGMA_GEN_FRAME PRAGMA_GEN_SUB  PRAGMA_GEN_SAME
-
 %token EOF
 %type <Ast.pexpr Ast.decl list> file
 %start file
@@ -211,8 +209,6 @@ decl:
 | exception_definition
     { $1 }
 | logic_definition
-    { $1 }
-| pragma_gen_sep
     { $1 }
 /*
 | error
@@ -1074,23 +1070,6 @@ pattern_expression_list:
     { ($1, $3) :: $5 }
 | pattern MINUSGT expression SEMICOLON
     { [$1, $3] }
-;
-
-
-/******************/
-/* pragma_gen_sep */
-/******************/
-pragma_gen_sep:
-| PRAGMA_GEN_SEP IDENTIFIER type_expr_parameters
-    { locate (JCDpragma_gen_sep ("", $2, $3)) }
-| PRAGMA_GEN_SEP IDENTIFIER IDENTIFIER type_expr_parameters
-    { locate (JCDpragma_gen_sep ($2, $3, $4)) }
-| PRAGMA_GEN_FRAME IDENTIFIER IDENTIFIER
-    { locate (JCDpragma_gen_frame ($2, $3)) }
-| PRAGMA_GEN_SUB IDENTIFIER IDENTIFIER
-    { locate (JCDpragma_gen_sub ($2, $3)) }
-| PRAGMA_GEN_SAME IDENTIFIER IDENTIFIER
-    { locate (JCDpragma_gen_same ($2, $3)) }
 ;
 
 type_expr_parameters:

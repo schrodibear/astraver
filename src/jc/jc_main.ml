@@ -50,21 +50,19 @@ let parse_file f =
     exit 1
 
 let compute_regions logic_components components =
-  if !Options.separation_sem = SepRegions then begin
-    Options.lprintf "Computation of regions@.";
-    (* Preserve order between following calls *)
-    Array.iter Separation.logic_component logic_components;
-    StringHashtblIter.iter (Separation.prop []) Typing.lemmas_table;
-    StringHashtblIter.iter
-      (fun _id data ->
-         List.iter
-           (function
-            | Typing.ADprop (pos, id, labs, kind, a) ->
-              (Separation.prop []) id (pos, (* is_axiom = *)kind = `Axiom, [], labs, a))
-           data.Typing.axiomatics_decls)
-      Typing.axiomatics_table;
-    Array.iter Separation.code_component components
-  end
+  Options.lprintf "Computation of regions@.";
+  (* Preserve order between following calls *)
+  Array.iter Separation.logic_component logic_components;
+  StringHashtblIter.iter (Separation.prop []) Typing.lemmas_table;
+  StringHashtblIter.iter
+    (fun _id data ->
+       List.iter
+         (function
+           | Typing.ADprop (pos, id, labs, kind, a) ->
+             (Separation.prop []) id (pos, (* is_axiom = *)kind = `Axiom, [], labs, a))
+         data.Typing.axiomatics_decls)
+    Typing.axiomatics_table;
+  Array.iter Separation.code_component components
 
 let compute_effects logic_components components =
   Options.lprintf "Computation of effects@.";

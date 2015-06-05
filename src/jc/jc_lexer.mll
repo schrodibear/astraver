@@ -90,44 +90,6 @@
 
   let pragma lexbuf id v =
     match id with
-      | "InvariantPolicy" ->
-	  begin
-	    Options.inv_sem :=
-	      match v with
-		| "None" -> Env.InvNone
-		| "Arguments" -> Env.InvArguments
-		| "Ownership" -> Env.InvOwnership
-		| _ -> lex_error lexbuf ("unknown invariant policy " ^ v)
-	  end
-      | "SeparationPolicy" ->
-	  begin
-	    Options.separation_sem :=
-	      match v with
-		| "None" -> Env.SepNone
-		| "Regions" -> Env.SepRegions
-		| _ -> lex_error lexbuf ("unknown separation policy " ^ v)
-	  end
-      | "AnnotationPolicy" ->
-	  begin
-	    Options.annotation_sem :=
-	      match v with
-		| "None" -> Env.AnnotNone
-		| "Invariants" -> Env.AnnotInvariants
-		| "ElimPre" -> Env.AnnotElimPre
-		| "StrongPre" -> Env.AnnotStrongPre
-		| "WeakPre" -> Env.AnnotWeakPre
-		| _ -> lex_error lexbuf ("unknown annotation policy " ^ v)
-	  end
-      | "AbstractDomain" ->
-	  begin
-	    Options.ai_domain :=
-	      match v with
-		| "None" -> Env.AbsNone
-		| "Box" -> Env.AbsBox
-		| "Oct" -> Env.AbsOct
-		| "Pol" -> Env.AbsPol
-		| _ -> lex_error lexbuf ("unknown abstract domain " ^ v)
-	  end
       | "FloatModel" ->
 	  begin
 	    Options.float_model :=
@@ -156,15 +118,6 @@
 		 | "x87" -> Env.FISx87
 		 | "ieee754" -> Env.FISstrictIEEE754
 		 | _ -> lex_error lexbuf ("unknown float instruction set " ^ v))
-	  end
-      | "TerminationPolicy" ->
-	  begin
-	    Options.termination_policy :=
-	      (match v with
-		 | "always" -> Env.TPalways
-		 | "never" -> Env.TPnever
-		 | "user" -> Env.TPuser
-		 | _ -> lex_error lexbuf ("unknown termination policy " ^ v))
 	  end
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 
@@ -288,10 +241,6 @@ rule token = parse
   | '#' space* ((rL | rD)+ as id) space* "="
         space* ((rL | rD)+ as v) space* '\n'
       { pragma lexbuf id v; newline lexbuf; token lexbuf }
-  | '#' ' '* "Gen_Separation" { PRAGMA_GEN_SEP }
-  | '#' ' '* "Gen_Frame" { PRAGMA_GEN_FRAME }
-  | '#' ' '* "Gen_Sub" { PRAGMA_GEN_SUB }
-  | '#' ' '* "Gen_Same_Footprint" { PRAGMA_GEN_SAME }
   | rL (rL | rD)*           { match lexeme lexbuf with
 				| "_" -> UNDERSCORE
 				| s -> IDENTIFIER s }

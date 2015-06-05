@@ -60,14 +60,9 @@ type jc_decl =
   | JCglobinv_def of string * assertion
   | JClogic_const_def of jc_type * string * type_var_info list * term option
   | JClogic_type_def of string * type_var_info list
-  | JCinvariant_policy of inv_sem
-  | JCseparation_policy of separation_sem
-  | JCannotation_policy of annotation_sem
-  | JCabstract_domain of abstract_domain
   | JCfloat_rounding_mode of float_rounding_mode
   | JCfloat_model of float_model
   | JCfloat_instruction_set of string
-  | JCtermination_policy of termination_policy
 
 let identifier fmt id =
   fprintf fmt "%s" id#name
@@ -535,16 +530,6 @@ let string_of_float_model p =
 
 let rec print_decl fmt d =
   match d with
-  | JCinvariant_policy p ->
-    fprintf fmt "# InvariantPolicy = %s@\n" (string_of_invariant_policy p)
-  | JCseparation_policy p ->
-    fprintf fmt "# SeparationPolicy = %s@\n" (string_of_separation_policy p)
-  | JCannotation_policy p ->
-    fprintf fmt "# AnnotationPolicy = %s@\n" (string_of_annotation_policy p)
-  | JCtermination_policy p ->
-    fprintf fmt "# TerminationPolicy = %s@\n" (string_of_termination_policy p)
-  | JCabstract_domain p ->
-    fprintf fmt "# AbstractDomain = %s@\n" (string_of_abstract_domain p)
   | JCfloat_model p ->
     fprintf fmt "# FloatModel = %s@\n" (string_of_float_model p)
   | JCfloat_rounding_mode p ->

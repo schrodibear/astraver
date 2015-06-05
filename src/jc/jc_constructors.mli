@@ -580,26 +580,6 @@ module PDecl :
       ?tags:identifier list ->
       ?pos:Why_loc.position -> unit -> 'a decl_node node_positioned
 
-    val mkinvariant_policy_def :
-      value:inv_sem ->
-      ?pos:Why_loc.position -> unit -> 'a decl_node node_positioned
-
-    val mktermination_policy_def :
-      value:termination_policy ->
-      ?pos:Why_loc.position -> unit -> 'a decl_node node_positioned
-
-    val mkseparation_policy_def :
-      value:separation_sem ->
-      ?pos:Why_loc.position -> unit -> 'a decl_node node_positioned
-
-    val mkannotation_policy_def :
-      value:annotation_sem ->
-      ?pos:Why_loc.position -> unit -> 'a decl_node node_positioned
-
-    val mkabstract_domain_def :
-      value:abstract_domain ->
-      ?pos:Why_loc.position -> unit -> 'a decl_node node_positioned
-
     val mkbehavior :
       ?pos:Why_loc.position ->
       name:string ->
