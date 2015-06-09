@@ -1,7 +1,0 @@
-*.vo
-.pvscontext
-*.bin
-*.pvs
-*.wol
-*_valid.v
-*.rv

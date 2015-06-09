@@ -1,7 +1,0 @@
-why
-out
-*.makefile
-*.depend
-*.cache
-simplify
-coq
