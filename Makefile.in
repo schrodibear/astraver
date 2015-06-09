@@ -39,48 +39,27 @@ endif
 
 # where to install the binaries
 DESTDIR =
-prefix=@prefix@
-datarootdir=@datarootdir@
-exec_prefix=@exec_prefix@
 BINDIR=$(DESTDIR)@bindir@
 LIBDIR=$(DESTDIR)@libdir@
 
-# where to install the man page
-MANDIR=$(DESTDIR)@mandir@
-
 # other variables
-OCAMLC   = @OCAMLC@
-OCAMLOPT = @OCAMLOPT@
-OCAMLDEP = @OCAMLDEP@
-OCAMLLEX = @OCAMLLEX@
-OCAMLYACC= @OCAMLYACC@
-OCAMLDOC = @OCAMLDOC@
-OCAMLLIB = @OCAMLLIB@
 OCAMLBEST= @OCAMLBEST@
-OCAMLVERSION = @OCAMLVERSION@
 OCAMLBUILD = @OCAMLBUILD@
-CAMLP4   = @CAMLP4O@
 
 export FRAMAC = @FRAMAC@
-FRAMACPLUGIN = @FRAMACPLUGIN@
 
-ifeq ($(FRAMACPLUGIN),yes)
 JESSIE_PLUGIN_BYTE= jessie_plugin.byte
 JESSIE_PLUGIN_OPT= jessie_plugin.opt
 JESSIE_PLUGIN_BEST= jessie_plugin.$(OCAMLBEST)
 .PHONY: $(JESSIE_PLUGIN_BYTE) $(JESSIE_PLUGIN_OPT)
-endif
 
-enable_local=@enable_local@
-
-COQC8  = @COQC8@
-COQDEP = @COQDEP@
 COQLIB = $(DESTDIR)"@COQLIB@"
 COQVER = @COQVER@
 
-VO8= $(patsubst %.v,%.vo,$(wildcard lib/coq/*.v))
+V8 = $(wildcard lib/coq/*.v)
+VO8 = $(patsubst %.v,%.vo, $(V8))
 
-PVSFILES = lib/pvs/jessie.pvs
+PVSFILES =
 PVSLIB = $(DESTDIR)@PVSLIB@
 
 GENERATED = src/why/why_version.ml \
@@ -89,8 +68,6 @@ GENERATED = src/why/why_version.ml \
 
 # main targets
 ##############
-
-.NOTPARALLEL:
 
 JESSIE=bin/jessie.$(OCAMLBEST)
 
@@ -108,7 +85,7 @@ endif
 
 all: all-without-frama-c-plugin $(JESSIE_PLUGIN_BEST)
 
-all-without-frama-c-plugin: $(JESSIE) coq-@COQ@ pvs-@PVS@ $(JCLIB)
+all-without-frama-c-plugin: $(JESSIE) coq-@COQ@ $(JCLIB)
 
 opt:  bin/jessie.opt $(JESSIE_PLUGIN_OPT)
 byte: bin/jessie.byte $(JESSIE_PLUGIN_BYTE)
@@ -122,39 +99,33 @@ $(BUILDSRC)/jc/jc.%: $(JC_SOURCES) $(GENERATED) $(BUILDSRC)/jc/jc.cmxa
 	touch $@
 
 bin/jessie.opt: $(JC_SOURCES) bin $(BUILDSRC)/jc/jc.cmxa
-	mv jc_main.native $@
+	if [ ! -f $@ ]; then mv jc_main.native $@; fi
 	touch $@
 
 bin/jessie.byte: $(JC_SOURCES) bin $(BUILDSRC)/jc/jc.cma
 	$(OCAMLBUILD) jc_main.d.byte
-	mv jc_main.d.byte $@
+	if [ ! -f $@ ]; then mv jc_main.d.byte $@; fi
 	touch $@
 
 bin:
 	mkdir -p bin
 
 # Frama-C plugin for Jessie
-ifeq ($(FRAMACPLUGIN),yes)
 JESSIE_PLUGIN_PATH=src/frama-c-plugin
 $(JESSIE_PLUGIN_BYTE): $(addprefix $(BUILDSRC)/jc/,jc.cmi jc.cma)
-	$(MAKE) -j -C $(JESSIE_PLUGIN_PATH) depend
-	$(MAKE) -j -C $(JESSIE_PLUGIN_PATH) Jessie.cma
+	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
+	$(MAKE) -C $(JESSIE_PLUGIN_PATH) Jessie.cma
 
 $(JESSIE_PLUGIN_OPT): $(addprefix $(BUILDSRC)/jc/,jc.cmi jc.cma jc.cmxa)
-	$(MAKE) -j -C $(JESSIE_PLUGIN_PATH) depend
-	$(MAKE) -j -C $(JESSIE_PLUGIN_PATH)
+	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
+	$(MAKE) -C $(JESSIE_PLUGIN_PATH)
 
 install:
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) install
 clean::
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) clean
-endif
 
-ifeq ($(enable_local),no)
 LIBWHY3=$(LIBDIR)/jessie
-else
-LIBWHY3=$(PWD)/lib
-endif
 
 WHY3_DATADIR=$(shell why3 --print-datadir)
 
@@ -301,21 +272,6 @@ install-pvs-yes: $(PVSFILES)
 	(cd $(PVSLIB)/jessie ; @PVSC@ -batch -l pvscontext.el -q -v 2 > top.out)
 	@echo "======  Done compiling PVS theories ======"
 
-local-install: $(JESSIE)
-	cp $(JESSIE) $$HOME/bin/jessie
-
-local: install
-
-demons: $(STATICBINARY) doc/manual.ps
-	cp -f $(STATICBINARY) /users/demons/demons/bin/$$OSTYPE/jessie
-	cp doc/manual.ps /users/demons/demons/docs/jessie.ps
-
-win: jessie.nsi
-	"/cygdrive/c/Program Files (x86)/NSIS/makensis" /DVERSION=$(VERSION) jessie.nsi
-
-zip:
-	zip -A -r jessie-$(VERSION).zip c:/jessie/bin c:/jessie/lib c:/coq/lib/contrib/jessie c:/coq/lib/contrib7/jessie
-
 # doc
 
 DOC=doc/jessie.pdf doc/jessie.html
@@ -323,49 +279,21 @@ DOC=doc/jessie.pdf doc/jessie.html
 doc:: $(DOC)
 
 doc/manual.ps: doc/manual.tex doc/version.tex
-	make -C doc manual.ps
+	$(MAKE) -C doc manual.ps
 
 doc/jessie.pdf: doc/jessie.tex doc/version.tex
-	make -C doc jessie.pdf
+	$(MAKE) -C doc jessie.pdf
 
 doc/jessie.html: doc/jessie.tex doc/version.tex
-	make -C doc jessie.html
-
-
-# API HTML DOC
-##############
-
-OCAMLDOCSRC = intf/model.mli $(WHYCONFIGCMO:.cmo=.ml) $(WHYCONFIGCMI:.cmi=.mli)
-	# $(JCCMO:.cmo=.ml) $(JCCMI:.cmi=.mli)
-
-apidoc: $(OCAMLDOCSRC)
-	mkdir -p ocamldoc
-	rm -f ocamldoc/*
-	$(OCAMLDOC) -d ocamldoc -html $(INCLUDES) @INCLUDEGTK2@ $(OCAMLDOCSRC)
+	$(MAKE) -C doc jessie.html
 
 @JESSIEWHY3LIBCOQ@: COQEXTRAR += -R @WHY3COQPATH@ Why3
 
-lib/coq/%.vo: lib/coq/%.v
-	lib/coq/compile.sh $<
+lib/coq/%.vo: $(V8) lib/coq/Jessie_pointer.vo
+	touch $@
 
-# Emacs tags
-############
-
-tags:
-	find src -name "*.ml*" | sort -r | xargs \
-	etags "--regex=/let[ \t]+\([^ \t]+\)/\1/" \
-	      "--regex=/let[ \t]+rec[ \t]+\([^ \t]+\)/\1/" \
-	      "--regex=/and[ \t]+\([^ \t]+\)/\1/" \
-	      "--regex=/type[ \t]+\([^ \t]+\)/\1/" \
-              "--regex=/exception[ \t]+\([^ \t]+\)/\1/" \
-	      "--regex=/val[ \t]+\([^ \t]+\)/\1/" \
-	      "--regex=/module[ \t]+\([^ \t]+\)/\1/"
-
-otags:
-	otags src/*.mli src/*.ml
-
-wc:
-	ocamlwc -p src/*.ml* jc/*.ml*
+lib/coq/Jessie_pointer.vo: $(V8)
+	$(MAKE) -C lib/coq
 
 # myself
 ########
@@ -388,9 +316,9 @@ clean::
 	rm -rf _build
 	rm -f lib/coq*/*.vo lib/coq*/*.glob lib/coq*/*~
 	rm -f $(GENERATED)
-	make -C doc clean
+	$(MAKE) -C doc clean
 	if test -d examples-v7; then \
-		make -C examples-v7 clean ; \
+		$(MAKE) -C examples-v7 clean ; \
 	fi
 
 dist-clean:: clean
@@ -401,13 +329,4 @@ coq-clean::
 
 .PHONY: depend
 depend:
-ifeq ($(FRAMACPLUGIN),yes)
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
-endif
-
-.depend.coq: lib/coq*/*.v
-	if test @COQ@ = yes; then \
-	  rm -f .depend.coq; \
-	  $(COQDEP) -I lib/coq lib/coq/*.v > .depend.coq; \
-	else touch .depend.coq; \
-	fi

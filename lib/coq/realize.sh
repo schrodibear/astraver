@@ -44,25 +44,25 @@ function realize_theories
     done
 }
 
-function generate_compilation_script
+function generate_makefile
 {
-    COMPILING=./compile.sh
-    echo "#!/bin/bash" >$COMPILING
-    echo >>$COMPILING
-    echo "if [ ! -f \${1}o ]; then" >>$COMPILING
-    echo "  WHY3LIBDIR=\$(why3 --print-libdir)" >>$COMPILING
-    echo "  declare -A PID" >>$COMPILING
-    echo >>$COMPILING
+    MAKEFILE=./Makefile
+    echo  >$MAKEFILE
+    jobs=""
+    for i in $THS; do jobs=$jobs" ${i##*\.}.vo"; done
+    echo "all: $jobs" >>$MAKEFILE
+    echo >>$MAKEFILE
+    echo "WHY3LIBDIR=\$(shell why3 --print-libdir)" >>$MAKEFILE
+    echo >>$MAKEFILE
     for i in $THS; do
         file="${i##*\.}"
-        deps=$(grep -oE 'Require [A-Z][A-Za-z_0-9]+' ${file}.v | cut -d ' ' -f 2 | grep -vE 'Import|BuiltIn|Int' | tr '\n' ' ')
-        echo "  for p in $deps; do wait \${PID[\"\$p\"]}; done " >>$COMPILING
-        echo "  coqc -R \${WHY3LIBDIR}/coq Why3 -R lib/coq Jessie lib/coq/${file}.v&" >>$COMPILING
-        echo "  PID[\"$file\"]=\$!" >>$COMPILING
+        th_deps=$(grep -oE 'Require [A-Z][A-Za-z_0-9]+' ${file}.v | cut -d ' ' -f 2 | grep -vE 'Import|BuiltIn|Int' | tr '\n' ' ')
+        deps=""
+        for j in $th_deps; do deps=$deps" ${j}.vo"; done
+        echo "${file}.vo: ${file}.v $deps" >>$MAKEFILE
+        echo -e "\tcoqc -R \$(WHY3LIBDIR)/coq Why3 -R . Jessie $<" >>$MAKEFILE
+        echo >>$MAKEFILE
     done
-    echo "  wait" >>$COMPILING
-    echo "fi" >>$COMPILING
-    chmod +x $COMPILING
 }
 
 CORE=$(grep_ths core)
@@ -75,8 +75,8 @@ echo "Patching custom Coq driver"
 patch_driver
 echo "Realizing theories"
 realize_theories
-echo "Generating compilation script"
-generate_compilation_script
+echo "Generating Makefile"
+generate_makefile
 echo "Cleaning up"
 rm -f ./coq.gen
 echo "Finished"
