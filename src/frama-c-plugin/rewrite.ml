@@ -1306,6 +1306,15 @@ class term_bw_op_retyping_visitor =
         | _ -> t
       in
       DoChildrenPost f
+
+    method! vpredicate _ =
+      DoChildrenPost
+      (function
+        | Prel (rel, { term_node = TLogic_coerce (Linteger, t1) }, { term_node = TLogic_coerce (Linteger, t2) })
+        | Prel (rel, { term_node = TLogic_coerce (Linteger, t1) }, t2)
+        | Prel (rel, t1, { term_node = TLogic_coerce (Linteger, t2) }) ->
+          Prel (rel, t1, t2)
+        | p -> p)
   end
 
 let retype_bw_ops_in_terms = visitFramacFile @@ new term_bw_op_retyping_visitor
