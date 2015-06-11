@@ -1310,7 +1310,7 @@ class term_bw_op_retyping_visitor =
             if Logic_utils.is_same_type (Ctype (unrollType ty)) ty' then t'
             else {t with term_node = TCastE (ty, oft, t') }
           else t
-        | TBinOp((Lt | Gt | Le | Ge | Eq | Ne as rel), t1, t2) ->
+        | TBinOp ((Lt | Gt | Le | Ge | Eq | Ne as rel), t1, t2) ->
           let (t1, ty1), (t2, ty2) = map_pair (strip ~force:false) (t1, t2) in
           if Logic_utils.is_same_type ty1 ty2 then
             { t with term_node = TBinOp (rel, t1, t2) }
