@@ -143,7 +143,8 @@ let create_mutable_field st =
     fi_struct = st;
     fi_rep = false;
     fi_abstract = false;
-    fi_bitsize = None
+    fi_bitsize = 0;
+    fi_bitoffset = 0
   }
   in
   Hashtbl.add committed_fields_table st.si_name fi
@@ -259,15 +260,15 @@ let rec substruct st =
       vi == vi' && root_is_union vi ||
       begin match st.si_parent with
       | None -> false
-      | Some(p, []) -> substruct p pc
-      | Some(_p, _) -> assert false (* TODO *)
+      | Some (p, []) -> substruct p pc
+      | Some (_p, _) -> assert false (* TODO *)
       end
   | JCroot vi ->
     struct_root st == vi
 
 let rec superstruct st =
   function
-  | JCtag(st', _) ->
+  | JCtag (st', _) ->
     let vi' = struct_root st' in
     not (root_is_union vi') && substruct st' (JCtag (st, []))
   | JCroot _vi ->
@@ -405,8 +406,8 @@ let find_field_struct loc st allow_mutable f =
 
 let find_field ~loc ty f allow_mutable =
   match ty with
-  | JCTpointer(JCtag (st, _), _, _) -> find_field_struct loc st allow_mutable f
-  | JCTpointer(JCroot _, _, _)
+  | JCTpointer (JCtag (st, _), _, _) -> find_field_struct loc st allow_mutable f
+  | JCTpointer (JCroot _, _, _)
   | JCTnative _
   | JCTenum _
   | JCTlogic _
@@ -1015,9 +1016,9 @@ let rec term env (e : nexpr) =
           if superstruct st st1 then
             ty, te1#region, te1#node
           else if substruct st st1 then
-            JCTpointer (JCtag (st, []), a, b), te1#region, JCTcast (te1, label (), st)
+            JCTpointer (JCtag (st, []), a, b), te1#region, JCTdowncast (te1, label (), st)
           else
-            typing_error ~loc:e#pos "invalid cast"
+            JCTpointer (JCtag (st, []), a, b), te1#region, JCTsidecast (te1, label (), st)
         | JCTnull -> typing_error ~loc:e#pos "invalid cast"
         | JCTnative _ | JCTlogic _ | JCTenum _ | JCTany
         | JCTtype_var _ -> bad_type ~loc:e#pos te1#typ "only structures can be cast"
@@ -1049,7 +1050,7 @@ let rec term env (e : nexpr) =
     | JCNEoffset (k, e1) ->
       let te1 = ft e1 in
       begin match te1#typ with
-      | JCTpointer(JCtag(st, _), _, _) ->
+      | JCTpointer (JCtag(st, _), _, _) ->
         integer_type, dummy_region, JCToffset(k, te1, st)
       | JCTpointer(JCroot _, _, _) ->
         assert false (* TODO *)
@@ -2093,11 +2094,9 @@ let rec expr env e =
              te1#region,
              te1#node)
           else if substruct st st1 then
-            (JCTpointer (JCtag (st, []), a, b),
-             te1#region,
-             JCEcast (te1, st))
+            (JCTpointer (JCtag (st, []), a, b), te1#region, JCEdowncast (te1, st))
           else
-            typing_error ~loc:e#pos "invalid cast"
+            (JCTpointer (JCtag (st, []), a, b), te1#region, JCEsidecast (te1, st))
         | _ -> typing_error ~loc:e#pos "invalid cast"
         end
       | _ -> typing_error ~loc:e#pos "invalid cast"
@@ -2463,7 +2462,7 @@ let fun_param (v, t, id) =
 
 let assertion_true = new assertion JCAtrue
 
-let field st root ((rep,abs), t, id, bitsize) =
+let field st root bitoffset ((rep, abs), t, id, bitsize) =
   let ty = type_type t in
   incr field_tag_counter;
   let name = st.si_name ^ "_" ^ id in
@@ -2478,6 +2477,7 @@ let field st root ((rep,abs), t, id, bitsize) =
       fi_rep = rep || (not (is_pointer_type ty));
       fi_abstract = abs;
       fi_bitsize = bitsize;
+      fi_bitoffset = bitoffset
     }
   in
   fi
@@ -2646,7 +2646,8 @@ let rec term_occurrences table t =
   | JCToffset (_, t, _)
   | JCTderef (t, _, _)
   | JCTinstanceof (t, _, _)
-  | JCTcast (t, _, _)
+  | JCTdowncast (t, _, _)
+  | JCTsidecast (t, _, _)
   | JCTreal_cast (t, _) ->
     term t
   | JCTbinary (t1, _, t2)
@@ -3339,7 +3340,12 @@ let declare_tag_fields d = match d#node with
   | JCDtag(id, _, _, fields, _inv) ->
       let struct_info, _ = StringHashtblIter.find structs_table id in
       let root = struct_info.si_hroot in
-      let fields = List.map (field struct_info root) fields in
+      let _, fields =
+        List.fold_left
+          (fun (off, fs) (_, _, _, bs as f) -> off + bs, field struct_info root off f :: fs)
+          (0, [])
+          fields
+      in
       struct_info.si_fields <- fields;
       StringHashtblIter.replace structs_table id (struct_info, [])
   | _ -> ()

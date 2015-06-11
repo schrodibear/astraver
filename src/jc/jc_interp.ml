@@ -511,13 +511,16 @@ let rec term :
     | JCTinstanceof (t1, lab', st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
       return @@ O.T.(instanceof ~code:(not global_assertion) ~r:t1#region ~lab (ft Any t1) st)
-    | JCTcast (t1, lab', st) ->
-      if struct_of_union st
-      then ft Any t1
-      else
-        let lab = if relocate && lab' = LabelHere then lab else lab' in
-        let _, tt = ttag_table_var ~label_in_name:global_assertion lab (struct_root st, t1#region) in
-        O.T.(F.Jc.tag_table "downcast" $ tt ^ ft Any t1 ^. tag st)
+    | JCTdowncast (t1, _, st) when struct_of_union st -> ft Any t1
+    | JCTdowncast (t1, lab', st) | JCTsidecast (t1, lab', st) ->
+      let lab = if relocate && lab' = LabelHere then lab else lab' in
+      let open O.T in
+      let f =
+        match t#node with
+        | JCTdowncast _ -> downcast
+        | _ -> sidecast ?tag:None
+      in
+      f ~code:(not global_assertion) ~r:t1#region ~lab (ft Any t1) st
     | JCTrange_cast (t1, ei_opt) ->
       let Typ typ, Typ typ' =
         let to_type = Option.map_default ~f:(fun e -> JCTenum e) ~default:(JCTnative Tinteger) ei_opt in
@@ -553,11 +556,7 @@ let rec term :
           | Int_offset s -> s
           | _ -> failwith "term: unsupported bitvector offset" (* TODO *)
         in
-        let size =
-          match fi.fi_bitsize with
-          | Some x -> x / 8
-          | None -> failwith "term: field without bitsize in bv region"
-        in
+        let size = fi.fi_bitsize / 8 in
         let _off = string_of_int off and _size = string_of_int size in
         let _e' =
           assert false
@@ -582,11 +581,7 @@ let rec term :
           | Some x -> x
           | None -> failwith "term: field without bitsize in bv region"
         in
-        let size =
-          match fi.fi_bitsize with
-          | Some x -> x / 8
-          | None -> failwith "term: field without bitsize in bv region"
-        in
+        let size =  fi.fi_bitsize  / 8 in
         let _off = string_of_int off and _size = string_of_int size in
         let _e' = assert false in
         (* Convert bitvector into appropriate type *)
@@ -1067,7 +1062,7 @@ let rec const_int_term t =
   | JCTold _ | JCTat _
   | JCToffset _ | JCTaddress _ | JCTinstanceof _ | JCTbase_block _
   | JCTreal_cast _ | JCTif _ | JCTrange _
-  | JCTcast _ | JCTmatch _ | JCTlet _ ->
+  | JCTdowncast _ | JCTsidecast _ | JCTmatch _ | JCTlet _ ->
     assert false
 
 let rec const_int_expr e =
@@ -1140,7 +1135,7 @@ let rec const_int_expr e =
   | JCEcontract _ | JCEblock _ | JCEloop _
   | JCEreturn_void | JCEreturn _ | JCEtry _
   | JCEthrow _ | JCEpack _ | JCEunpack _
-  | JCEcast _ | JCEmatch _ | JCEshift _
+  | JCEdowncast _ | JCEsidecast _ | JCEmatch _ | JCEshift _
   | JCEfresh _ ->
     assert false
 
@@ -1297,7 +1292,7 @@ let rec make_upd_simple ~e e1 fi tmp2 =
       (if P.(off = Int_offset 0) then
          var tmpp
        else if not typesafe then
-         E.locate ~e ~kind:JCVCpointer_shift (O.F.Jc.shift_safe "shift" $ tt ^ var tmpp ^ tag_id ^. var tmpi)
+         E.locate ~e ~kind:JCVCpointer_shift (O.F.Jc.shift_safe "shift_" $ tt ^ var tmpp ^ tag_id ^. var tmpi)
        else
          O.F.Jc.shift_safe "shift_typesafe" $ var tmpp ^. var tmpi),
 
@@ -1313,7 +1308,7 @@ let rec make_upd_simple ~e e1 fi tmp2 =
       (if P.(off = Int_offset 0) then
          var tmpp
        else
-         O.F.Jc.shift_unsafe "shift" $ var tmpp ^. var tmpi),
+         O.F.Jc.shift_unsafe "shift_" $ var tmpp ^. var tmpi),
       O.F.Jc.upd_unsafe "upd" $ var mem ^ var tmp1 ^. var tmp2
   in
   let letspi = O.E.[tmpp, some p'; tmpi, some i'; tmp1, some shift] in
@@ -1547,13 +1542,7 @@ and make_reinterpret ~e e1 st =
   (* reinterpretation kind (operation):
      merging (e.g. char -> int) / splitting (e.g. int -> char) / plain (e.g. int -> long) *)
   let op =
-    let from_bitsize, to_bitsize =
-      Pair.map
-        (fi_from, fi_to)
-        ~f:(function
-         | { fi_bitsize = Some s } -> s
-         | _ -> unsupported ~loc:e1#pos "reinterpretation for field with no bitsize specified")
-    in
+    let from_bitsize, to_bitsize = Pair.map (fun { fi_bitsize = s } -> s) (fi_from, fi_to) in
     match compare from_bitsize to_bitsize with
     | 0 -> `Retain
     | v when v > 0 -> `Split (from_bitsize / to_bitsize)
@@ -1594,7 +1583,7 @@ and make_reinterpret ~e e1 st =
     let open O.P in
     let_ "p" e'
       (fun p ->
-         let_ "ps" T.(F.Jc.tag_table "downcast" $ tt ^ e' ^. tag s_to)
+         let_ "ps" (T.sidecast ~r:e1#region e' s_to)
            (fun ps ->
               let omin_omax =
                 let app f =
@@ -1668,7 +1657,7 @@ and make_reinterpret ~e e1 st =
     O.P.conj
       O.T.[F.Jc.rmem "rmem" $. mem `Old = mem `New;
            F.Jc.rmem "rfactor" $. mem `Old = int c;
-           F.Jc.rmem "rpointer_new" $ mem `Old ^. e' = (F.Jc.tag_table "downcast" $ tt ^ e' ^. tag s_to)]
+           F.Jc.rmem "rpointer_new" $ mem `Old ^. e' = sidecast ~r:e1#region e' s_to]
   in
 
   let cast_factor_assumption = O.T.(F.cast_factor () $ tag s_from ^. tag s_to = int c) in
@@ -1712,6 +1701,9 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
         in
         E.locate ~e @@
         O.E.(th (match o with `Beq -> "eq_pointer" | `Bneq -> "neq_pointer") $ at1 ^ at2 ^ e1' ^. e2')
+    | JCEbinary (e1, (`Bsub, `Pointer), e2) ->
+      let th = O.F.Jc.(if safety_checking () then sub_pointer_safe else sub_pointer_unsafe) in
+      E.locate ~e @@ O.E.(th "sub_pointer_" $ expr Any e1 ^. expr Any e2)
     | JCEbinary (e1, (_, (`Pointer | `Logic) as op), e2) ->
       begin match bin_op ~e op with
       | Op (f, t) -> return O.E.(f $ expr t e1 ^. expr t e2)
@@ -1741,11 +1733,11 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
         | _ -> None
       with
       | Some (tt, tag') when safety_checking () ->
-        O.E.(O.F.Jc.shift_safe "shift" $ tt ^ expr Any e1 ^ tag' ^. expr (Ty O.Ty.integer) e2)
+        O.E.(O.F.Jc.shift_safe "shift_" $ tt ^ expr Any e1 ^ tag' ^. expr (Ty O.Ty.integer) e2)
       | None when safety_checking() ->
         O.E.(F.Jc.shift_safe "shift_typesafe" $ expr Any e1 ^. expr (Ty O.Ty.integer) e2)
       | _ ->
-        O.E.(F.Jc.shift_unsafe "shift" $ expr Any e1 ^. expr (Ty O.Ty.integer) e2)
+        O.E.(F.Jc.shift_unsafe "shift_" $ expr Any e1 ^. expr (Ty O.Ty.integer) e2)
       end
     | JCEif (e1, e2, e3) ->
       O.E.(if_ (E.locate ~e:e1 @@ expr (Ty Bool) e1) (expr t e2) (expr t e3))
@@ -1757,19 +1749,28 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
       let tt = tag_table_var (struct_root st, e1#region) in
       (* always safe *)
       O.E.(F.Jc.instanceof "instanceof"  $ tt ^ expr Any e1 ^. tag st)
-    | JCEcast (e1, st) ->
+    | JCEdowncast (e1, st) ->
       let tt = tag_table_var (struct_root st, e1#region) in
       if struct_of_union st
       then expr Any e1
       else
-        O.E.((if safety_checking () then
-                let downcast_mod =
-                  F.Jc.(if infunction.fun_effects.fe_reinterpret then downcast_safe_reinterpret else downcast_safe)
-                in
-                (fun args -> E.locate ~e ~kind:JCVCdowncast (downcast_mod "downcast" $ args))
-              else
-                ($) (F.Jc.downcast_unsafe "downcast"))
-               (tt ^ expr Any e1 ^. tag st))
+        let downcast = "downcast_" in
+        O.E.(
+          F.Jc.(if safety_checking () then (fun args -> E.locate ~e (downcast_safe downcast $ args))
+                                      else (($) @@ downcast_unsafe downcast))
+            (tt ^ expr Any e1 ^. tag st))
+    | JCEsidecast (e1, st) ->
+      let tt = tag_table_var (struct_root st, e1#region) in
+      let sidecast = "sidecast_" in
+      O.E.(
+        (if safety_checking () then
+           let sidecast_mod =
+             F.Jc.(if infunction.fun_effects.fe_reinterpret then sidecast_safe_reinterpret else sidecast_safe)
+           in
+           (fun args -> E.locate ~e (sidecast_mod sidecast $ args))
+         else
+           ($) (F.Jc.sidecast_unsafe sidecast))
+          (tt ^ expr Any e1 ^. tag st))
     | JCErange_cast (e1, _ri) ->
       let Typ from_typ = ty e1#typ in
       coerce
@@ -3544,67 +3545,76 @@ let dummies =
   let open O in
   List.map
     Entry.some
-    Th.[
-      dummy "Int";
-      dummy "Bool";
-      dummy "Ref";
-      dummy "why3.Bool.Bool";
-      dummy "ComputerDivision";
-      dummy "Abs";
-      dummy "MinMax";
-      dummy "Jessie_pointer";
-      dummy "Jessie_zwf";
-      dummy "Jessie_alloc_table";
-      dummy "Jessie_memory";
-      dummy "Jessie_pset";
-      dummy "Jessie_pset_range";
-      dummy "Jessie_pset_range_left";
-      dummy "Jessie_pset_range_right";
-      dummy "Jessie_pset_deref";
-      dummy "Jessie_pset_union";
-      dummy "Jessie_pset_all";
-      dummy "Jessie_pset_disjoint";
-      dummy "Jessie_pset_included";
-      dummy "Jessie_assigns";
-      dummy "Jessie_tag_id";
-      dummy "Jessie_tag";
-      dummy "Jessie_tag_table_type";
-      dummy "Jessie_tag_table";
-      dummy "Jessie_reinterpret";
-      dummy "Jessie_reinterpret_cast";
-      dummy "Jessie_allocable";
-      dummy "Jessie_alloc";
-      dummy "Jessie_same_except";
-      dummy "Jessie_rmem"] @
+    Th.(List.map
+          dummy
+          ["Int";
+           "Bool";
+           "Ref";
+           "why3.Bool.Bool";
+           "ComputerDivision";
+           "Abs";
+           "MinMax"] @
+        List.map
+          (dummy % fst)
+          Name.Theory.Jessie.
+            [pointer;
+             zwf;
+             alloc_table;
+             memory;
+             pset;
+             pset_range;
+             pset_range_left;
+             pset_range_right;
+             pset_deref;
+             pset_union;
+             pset_all;
+             pset_disjoint;
+             pset_included;
+             assigns;
+             tag_id;
+             voidp;
+             voidp_tag_id;
+             charp_tag_id;
+             tag;
+             tag_table_type;
+             tag_table;
+             sidecast;
+             reinterpret;
+             reinterpret_cast;
+             allocable;
+             alloc;
+             same_except;
+             rmem]) @
   List.map
-    Entry.some
-    Mod.[
-      dummy "Jessie_return";
-      dummy "Jessie_sub_pointer_safe";
-      dummy "Jessie_sub_pointer_unsafe";
-      dummy "Jessie_eq_pointer_safe";
-      dummy "Jessie_eq_pointer_unsafe";
-      dummy "Jessie_acc_safe";
-      dummy "Jessie_acc_unsafe";
-      dummy "Jessie_acc_offset_safe";
-      dummy "Jessie_upd_safe";
-      dummy "Jessie_upd_unsafe";
-      dummy "Jessie_upd_offset_safe";
-      dummy "Jessie_instanceof";
-      dummy "Jessie_downcast_safe";
-      dummy "Jessie_downcast_safe_reinterpret";
-      dummy "Jessie_downcast_unsafe";
-      dummy "Jessie_shift_safe";
-      dummy "Jessie_shift_unsafe";
-      dummy "Jessie_any_int";
-      dummy "Jessie_any_real";
-      dummy "Jessie_any_bool";
-      dummy "Jessie_any_pointer";
-      dummy "Jessie_any_memory";
-      dummy "Jessie_any_alloc_table";
-      dummy "Jessie_any_tag_table";
-      dummy "Jessie_reinterpret_unsafe";
-      dummy "Jessie_reinterpret_safe"]
+    (Entry.some % Mod.dummy % fst)
+    Name.Module.Jessie.
+      [return;
+       sub_pointer_safe;
+       sub_pointer_unsafe;
+       eq_pointer_safe;
+       eq_pointer_unsafe;
+       acc_safe;
+       acc_unsafe;
+       acc_offset_safe;
+       upd_safe;
+       upd_unsafe;
+       upd_offset_safe;
+       downcast_safe;
+       downcast_unsafe;
+       sidecast_safe;
+       sidecast_safe_reinterpret;
+       sidecast_unsafe;
+       shift_safe;
+       shift_unsafe;
+       any_int;
+       any_real;
+       any_bool;
+       any_pointer;
+       any_memory;
+       any_alloc_table;
+       any_tag_table;
+       reinterpret_unsafe;
+       reinterpret_safe]
 
 include Interp_struct
 

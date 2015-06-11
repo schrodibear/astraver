@@ -347,11 +347,7 @@ let field fmt (modifier, ty, fi, bitsize) =
       fprintf fmt "rep ";
   fprintf fmt "%a %s"
     ptype ty fi;
-  match bitsize with
-  | Some bitsize ->
-    fprintf fmt ": %d;" bitsize
-  | None ->
-    fprintf fmt ";"
+  fprintf fmt ": %d;" bitsize
 
 let invariant fmt (id, vi, a) =
   fprintf fmt "@\n@[<hv 2>invariant %s(%s) =@ %a;@]"

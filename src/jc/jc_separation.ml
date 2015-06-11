@@ -113,7 +113,8 @@ let single_term comp result_region t =
   | JCTrange _ | JCTunary _            | JCTderef _      | JCTold _
   | JCTat _    | JCToffset _           | JCTbase_block _
   | JCTaddress _                       | JCTinstanceof _
-  | JCTcast _  | JCTrange_cast _       | JCTrange_cast_mod _
+  | JCTdowncast _                      | JCTsidecast _
+  | JCTrange_cast _                    | JCTrange_cast_mod _
   | JCTreal_cast _ ->
     ()
 
@@ -212,9 +213,9 @@ let single_expr code_comp logic_comp result_region e =
       "Unsupported decreases clause in statement contract"
   | JCEconst _        | JCEvar _        | JCEshift _   | JCEunary _
   | JCEderef _        | JCEoffset _     | JCEaddress _ | JCEinstanceof _
-  | JCEcast _         | JCEreinterpret _
+  | JCEdowncast _     | JCEsidecast _   | JCEreinterpret _
   | JCEbase_block _   | JCEfresh _
-  | JCErange_cast _   |JCErange_cast_mod _             | JCEreal_cast _
+  | JCErange_cast _   | JCErange_cast_mod _            | JCEreal_cast _
   | JCEalloc _        | JCEfree _
   | JCElet (_, None, _)
   | JCEloop (_, _)    | JCEblock _      | JCEtry _
@@ -343,7 +344,8 @@ let regionalize_assertion a assoc =
          | JCTconst _      | JCTvar _     | JCTshift _
          | JCTderef _      | JCTbinary _  | JCTunary _        | JCTold _        | JCTat _        | JCToffset _
          | JCTaddress _    | JCTbase_block _
-         | JCTinstanceof _ | JCTcast _    | JCTrange_cast _   | JCTrange_cast_mod _
+         | JCTinstanceof _ | JCTdowncast _                    | JCTsidecast _
+         | JCTrange_cast _ | JCTrange_cast_mod _
          | JCTreal_cast _  | JCTif _
          | JCTmatch _      | JCTrange _   | JCTlet _ -> t
        in

@@ -89,6 +89,10 @@ let label =
   | LabelPost -> "Post"
   | LabelName lab -> lab.lab_final_name
 
+let voidp = "voidP"
+
+let charp = "charP"
+
 let tag st = st.si_name ^ "_tag"
 
 let tag_table (ri, r) =
@@ -162,9 +166,13 @@ struct
     let pset_included = "Jessie_pset_included", `Short
     let assigns = "Jessie_assigns", `Short
     let tag_id = "Jessie_tag_id", `Short
+    let voidp = "Jessie_voidp", `Short
+    let voidp_tag_id = "Jessie_voidp_tag_id", `Short
+    let charp_tag_id = "Jessie_charp_tag_id", `Short
     let tag = "Jessie_tag", `Short
     let tag_table_type = "Jessie_tag_table_type", `Short
     let tag_table = "Jessie_tag_table", `Short
+    let sidecast = "Jessie_sidecast", `Short
     let reinterpret = "Jessie_reinterpret", `Short
     let reinterpret_cast = "Jessie_reinterpret_cast", `Short
     let allocable = "Jessie_allocable", `Short
@@ -204,8 +212,10 @@ struct
     let upd_offset_safe = "Jessie_upd_offset_safe", `Short
     let instanceof = "Jessie_instanceof", `Short
     let downcast_safe = "Jessie_downcast_safe", `Short
-    let downcast_safe_reinterpret = "Jessie_downcast_safe_reinterpret", `Short
     let downcast_unsafe = "Jessie_downcast_unsafe", `Short
+    let sidecast_safe = "Jessie_sidecast_safe", `Short
+    let sidecast_safe_reinterpret = "Jessie_sidecast_safe_reinterpret", `Short
+    let sidecast_unsafe = "Jessie_sidecast_unsafe", `Short
     let shift_safe = "Jessie_shift_safe", `Short
     let shift_unsafe = "Jessie_shift_unsafe", `Short
     let any_int = "Jessie_any_int", `Short
@@ -264,6 +274,18 @@ struct
         | JCalloc_root _ ->
           pred_name ^ (match arg with Singleton -> "_singleton" | Range_l_r -> "")
         | JCalloc_bitvector -> pred_name ^ "_bitvector" (* TODO *)
+      in
+      Theory.struct_ pc, prefix ^ "_" ^ (Class.pointer pc)
+
+  let containerof
+      (type t1) (type t2) (type t3) (type t4) (type t5) : arg:(t1, t2, t3, _, t4, t5) arg -> _ =
+    fun ~arg ac pc ->
+      let prefix =
+        let container_of = "container_of" in
+        match ac with
+        | JCalloc_root _ ->
+          container_of ^ (match arg with Singleton -> "_singleton" | Range_l_r -> "")
+        | JCalloc_bitvector -> container_of ^ "_bitvector" (* TODO *)
       in
       Theory.struct_ pc, prefix ^ "_" ^ (Class.pointer pc)
 

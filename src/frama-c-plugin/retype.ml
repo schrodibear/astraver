@@ -215,7 +215,12 @@ class struct_hierarchy_builder =
     | `subtype ->
       (* [ty1] subtype of [ty2] *)
       add_inheritance_relation ty1 ty2
-    | `neither -> ()
+    | `neither ->
+      (* no subtyping relation, but in order to allow side-casts we still
+         need both types to be in the same hierarchy, therefore unifying both with void *)
+      let ty_void = (Type.Composite.Struct.void () :> typ) in
+      add_inheritance_relation ty1 ty_void;
+      add_inheritance_relation ty2 ty_void
   in
 object (self)
 

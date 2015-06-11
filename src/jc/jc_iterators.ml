@@ -432,7 +432,8 @@ let rec subst_term (subst : term_subst) t =
     | JCTaddress(kind,t1) -> JCTaddress(kind,f t1)
     | JCTbase_block(t1) -> JCTbase_block(f t1)
     | JCTinstanceof(t1,lab,st) -> JCTinstanceof(f t1,lab,st)
-    | JCTcast(t1,lab,st) -> JCTcast(f t1,lab,st)
+    | JCTdowncast (t1, lab, st) -> JCTdowncast (f t1, lab, st)
+    | JCTsidecast (t1, lab, st) -> JCTsidecast(f t1, lab, st)
     | JCTrange_cast(t1,ei) -> JCTrange_cast(f t1,ei)
     | JCTrange_cast_mod (t1, ei) -> JCTrange_cast_mod (f t1, ei)
     | JCTreal_cast(t1,rconv) -> JCTreal_cast(f t1,rconv)
@@ -456,12 +457,12 @@ module TermAst = struct
       | JCTbinary(t1,_,t2) | JCTshift(t1,t2)
       | JCTrange(Some t1,Some t2) ->
           [t1;t2]
-      | JCTunary(_,t1) | JCTderef(t1,_,_) | JCTold t1 | JCTat(t1,_)
-      | JCToffset(_,t1,_) | JCTaddress(_,t1) | JCTbase_block(t1)
-      | JCTinstanceof(t1,_,_) | JCTcast(t1,_,_)
-      | JCTrange_cast(t1,_) | JCTrange_cast_mod (t1, _)
-      | JCTreal_cast(t1,_) | JCTrange(Some t1,None)
-      | JCTrange(None,Some t1) ->
+      | JCTunary (_, t1) | JCTderef (t1, _, _) | JCTold t1 | JCTat (t1, _)
+      | JCToffset (_, t1, _) | JCTaddress (_, t1) | JCTbase_block (t1)
+      | JCTinstanceof (t1, _, _) | JCTdowncast (t1, _, _) | JCTsidecast (t1, _, _)
+      | JCTrange_cast (t1, _) | JCTrange_cast_mod (t1, _)
+      | JCTreal_cast (t1, _) | JCTrange (Some t1, None)
+      | JCTrange (None, Some t1) ->
           [t1]
       | JCTapp app ->
           app.app_args
@@ -489,18 +490,19 @@ let fold_sub_term it f acc t =
     | JCTrange (t1_opt, t2_opt) ->
       Option.fold ~init:acc ~f:it t1_opt |>
       Option.fold_left' ~f:it t2_opt
-    | JCTunary(_,t1)
-    | JCTderef(t1,_,_)
+    | JCTunary (_, t1)
+    | JCTderef (t1, _, _)
     | JCTold t1
-    | JCToffset(_,t1,_)
-    | JCTaddress(_,t1)
-    | JCTbase_block(t1)
-    | JCTinstanceof(t1,_,_)
-    | JCTcast(t1,_,_)
-    | JCTreal_cast(t1,_)
-    | JCTrange_cast(t1,_)
+    | JCToffset (_, t1, _)
+    | JCTaddress (_, t1)
+    | JCTbase_block (t1)
+    | JCTinstanceof (t1, _, _)
+    | JCTdowncast (t1, _, _)
+    | JCTsidecast (t1, _, _)
+    | JCTreal_cast (t1, _)
+    | JCTrange_cast (t1, _)
     | JCTrange_cast_mod (t1, _)
-    | JCTat(t1,_) ->
+    | JCTat (t1, _) ->
         it acc t1
     | JCTapp app ->
         let tl = app.app_args in
@@ -554,8 +556,10 @@ let rec map_term f t =
         JCTbase_block (map_term f t)
     | JCTinstanceof(t,lab,st) ->
         JCTinstanceof(map_term f t,lab,st)
-    | JCTcast(t,lab,st) ->
-        JCTcast(map_term f t,lab,st)
+    | JCTdowncast (t, lab, st) ->
+        JCTdowncast (map_term f t, lab, st)
+    | JCTsidecast (t, lab, st) ->
+        JCTsidecast (map_term f t, lab, st)
     | JCTrange_cast(t,ei) ->
         JCTrange_cast(map_term f t,ei)
     | JCTrange_cast_mod (t, ei) ->
@@ -1147,8 +1151,10 @@ let replace_sub_expr e el =
         let e1 = as1 el in JCEbase_block(e1)
     | JCEinstanceof(_e,st) ->
         let e1 = as1 el in JCEinstanceof(e1,st)
-    | JCEcast(_e,st) ->
-        let e1 = as1 el in JCEcast(e1,st)
+    | JCEdowncast (_e, st) ->
+      let e1 = as1 el in JCEdowncast (e1, st)
+    | JCEsidecast (_e, st) ->
+      let e1 = as1 el in JCEsidecast (e1, st)
     | JCEreal_cast(_e,st) ->
         let e1 = as1 el in JCEreal_cast(e1,st)
     | JCErange_cast(_e,st) ->
@@ -1208,11 +1214,12 @@ module ExprAst = struct
       | JCEreturn_void
       | JCEthrow(_, None) ->
           []
-      | JCEderef(e, _)
-      | JCEunary(_, e)
-      | JCEassign_var(_, e)
-      | JCEinstanceof(e, _)
-      | JCEcast(e, _)
+      | JCEderef (e, _)
+      | JCEunary (_, e)
+      | JCEassign_var (_, e)
+      | JCEinstanceof (e, _)
+      | JCEdowncast (e, _)
+      | JCEsidecast (e, _)
       | JCErange_cast (e, _)
       | JCErange_cast_mod (e, _)
       | JCEreal_cast(e, _)
@@ -1269,13 +1276,14 @@ let fold_sub_expr_and_term_and_assertion
     | JCEassign_heap(e1,_,e2) ->
         let acc = ite acc e1 in
         ite acc e2
-    | JCEunary(_,e1)
-    | JCEderef(e1,_)
-    | JCEoffset(_,e1,_)
-    | JCEaddress(_,e1)
-    | JCEbase_block(e1)
-    | JCEfresh(e1)
-    | JCEcast(e1,_)
+    | JCEunary (_, e1)
+    | JCEderef (e1, _)
+    | JCEoffset (_, e1, _)
+    | JCEaddress (_, e1)
+    | JCEbase_block (e1)
+    | JCEfresh (e1)
+    | JCEdowncast (e1, _)
+    | JCEsidecast (e1, _)
     | JCErange_cast(e1,_)
     | JCErange_cast_mod (e1, _)
     | JCEinstanceof(e1,_)

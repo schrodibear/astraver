@@ -82,11 +82,6 @@ val root_is_plain_union : Env.root_info -> bool
 val root_is_discr_union : Env.root_info -> bool
 val root_is_union : Env.root_info -> bool
 
-val struct_has_bytesize: Env.struct_info -> bool
-val struct_bitsize: Env.struct_info -> int
-val struct_bytesize: Env.struct_info -> int
-val possible_struct_bytesize: Env.struct_info -> int option
-
 (* constants *)
 
 val zero: Num.num

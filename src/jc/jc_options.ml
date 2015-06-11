@@ -202,15 +202,12 @@ let kind_of_ident =
   let open Output_ast in
   function
   | "ArithOverflow" -> JCVCarith_overflow
-  | "DownCast" -> JCVCdowncast
   | "IndexBounds" -> JCVCpointer_deref_bounds
   | "PointerDeref" -> JCVCpointer_deref
   | "PointerShift" -> JCVCpointer_shift
   | "UserCall" -> JCVCuser_call "?"
   | "DivByZero" -> JCVCdiv_by_zero
   | "AllocSize" -> JCVCalloc_size
-  | "Pack" ->  JCVCpack
-  | "Unpack" -> JCVCunpack
   | _ -> raise Not_found
 
 let () =

@@ -8,8 +8,6 @@
 <prover id="4" name="CVC3" version="2.4.1" timelimit="60" memlimit="1000"/>
 <prover id="6" name="CVC4" version="1.4" alternative="&apos;14" timelimit="5" memlimit="1000"/>
 <file name="../core.mlw" expanded="true">
-<theory name="Int" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
-</theory>
 <theory name="Jessie_pointer" sum="9af29e038defe72ca824cd6e219adf49" expanded="true">
  <goal name="Sub_pointer_shift">
  <proof prover="1"><result status="valid" time="0.00"/></proof>
@@ -109,11 +107,17 @@
 </theory>
 <theory name="Jessie_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
+<theory name="Jessie_voidp_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_charp_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
 <theory name="Jessie_tag" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
-<theory name="Jessie_tag_table_type" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Jessie_tag_table_type" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 <theory name="Jessie_tag_table" sum="d41d8cd98f00b204e9800998ecf8427e">
+</theory>
+<theory name="Jessie_sidecast" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 <theory name="Jessie_reinterpret" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
@@ -126,7 +130,7 @@
 </theory>
 <theory name="Jessie_alloc" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
-<theory name="Jessie_same_except" sum="edfef850cbfad75065acf4ddced47f68">
+<theory name="Jessie_same_except" sum="8a847b2ec508a87b3221b4e17e750aa5">
  <goal name="Alloc_same_except_trans">
  <proof prover="4"><result status="valid" time="0.00"/></proof>
  </goal>
@@ -158,13 +162,15 @@
 </theory>
 <theory name="Jessie_upd_offset_safe" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
-<theory name="Jessie_instanceof" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Jessie_downcast_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_downcast_safe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Jessie_downcast_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_downcast_safe_reinterpret" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Jessie_sidecast_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_downcast_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Jessie_sidecast_safe_reinterpret" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_sidecast_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 <theory name="Jessie_shift_safe" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>

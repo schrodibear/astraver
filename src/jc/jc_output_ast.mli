@@ -38,7 +38,6 @@ open Format
 type vc_kind =
   | JCVCvar_decr
   | JCVCarith_overflow
-  | JCVCdowncast
   | JCVCpointer_deref
   | JCVCpointer_deref_bounds
   | JCVCpointer_shift
@@ -47,8 +46,6 @@ type vc_kind =
   | JCVCuser_call of string
   | JCVCdiv_by_zero
   | JCVCalloc_size
-  | JCVCpack
-  | JCVCunpack
   | JCVCfp_overflow
   | JCVCpre of string
   | JCVCassigns

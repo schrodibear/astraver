@@ -102,25 +102,25 @@ let tags :
     map @@ fun ac -> deref_if_needed ~in_param lab @@ ttag_table_var ~label_in_name:false LabelHere (ac, r)
   | In_pred -> map @@ fdup2 (Name.tag_table % Pair.cons' dummy_region) (O.Lt.some % tag_table_type)
 
-let map_st ~f ac pc =
+let map_si ~f ac pc =
   match ac with
   | JCalloc_bitvector -> []
-  | JCalloc_root rt ->
-    match rt.ri_kind with
+  | JCalloc_root ri ->
+    match ri.ri_kind with
     | Rvariant ->
       begin match pc with
-      | JCtag (st, _) ->
-        f st
+      | JCtag (si, _) ->
+        f si
       | JCroot _ -> []
       end
     | RdiscrUnion
     | RplainUnion -> []
 
 let map_embedded_fields ~f ~p ac =
-  map_st ac
-    ~f:(fun st ->
+  map_si ac
+    ~f:(fun si ->
       ListLabels.map
-        st.si_fields
+        si.si_fields
         ~f:(function
           | { fi_type = JCTpointer (fpc, Some fa, Some fb) } as fi ->
             f ~acr:(alloc_class_of_pointer_class fpc, dummy_region) ~pc:fpc ~p:O.T.(p **> fi) ~l:fa ~r:fb
@@ -174,8 +174,8 @@ let valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
       | JCtag ({ si_parent = None }, _)
       | JCroot _ ->
         let open O.T in
-        (if equal then (=) else (<=)) (offset_min ac (var p)) (var a),
-        (if equal then (=) else (>=)) (offset_max ac (var p)) (var b),
+        (if equal then (=) else (<=)) (offset_min ~code:false ac (var p)) (var a),
+        (if equal then (=) else (>=)) (offset_max ~code:false ac (var p)) (var b),
         True
     in
     let fields_valid =
@@ -234,7 +234,7 @@ let fresh_pred ~for_ ac pc =
       [fresh ~for_:for_' ~in_param:false (ac, dummy_region) (JCtag (st, pp)) O.T.(var p)]
     | JCtag ({ si_parent = None }, _)
     | JCroot _ ->
-      map_st ac pc
+      map_si ac pc
         ~f:(fun si ->
             let predicate =
               match for_ with
@@ -303,13 +303,13 @@ let instanceof_pred ~exact (type t1) (type t2) :
     p :: l_r @ tags ac pc In_pred @ mems ac pc In_pred
   in
   let pred = O.P.(if exact then typeeq else instanceof) in
-  let self_instanceof p = map_st ac pc ~f:(fun si -> O.P.[pred p si]) in
+  let self_instanceof p = map_si ac pc ~f:(fun si -> O.P.[pred ~code:false p si]) in
   let fields_instanceof p =
     List.flatten @@
       map_embedded_fields ac pc ~p
         ~f:(fun ~acr ~pc ~p ~l ~r ->
               let open Num in
-              if r -/ l >=/ Int 0 && l -/ r <=/ Int Options.forall_inst_bound then
+              if r -/ l >=/ Int 0 && r -/ l <=/ Int Options.forall_inst_bound then
                 let instanceof p =
                   instanceof ~exact ~arg:Singleton ~in_param:false acr pc p
                 in
@@ -335,6 +335,77 @@ let instanceof_pred ~exact (type t1) (type t2) :
           ~f:(fun p -> instanceof' p)])
     in
     O.Wd.mk ~name:(snd @@ Name.Pred.instanceof ~exact ~arg ac pc) @@ Predicate (params, instanceof)
+
+(* Containerof *)
+
+let containerof : type t1 t2.
+  arg:(pred, _, unbounded integer number term -> unbounded integer number term -> pred, _, t1, t2) arg ->
+  in_param:_ -> _ -> _ -> _ -> t2 =
+  fun ~arg ~in_param (ac, r) pc p ->
+  let params = tags ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r in
+  match arg with
+  | Singleton -> O.P.(Name.Pred.containerof ~arg ac pc $.. p ^.. params)
+  | Range_l_r -> fun l r ->
+    O.P.(Name.Pred.containerof ~arg ac pc $.. p ^.. l ^.. r ^.. params)
+
+let containerof_pred : type t1 t2.
+  arg : (pred, _, unbounded integer number term -> unbounded integer number term -> pred, _, t1, t2) arg -> _ =
+  fun ~arg ac pc ->
+    let p = "p" in
+    let l_r : (t1, _) param =
+      match arg with
+      | Singleton -> Void
+      | Range_l_r -> L_R ("l", "r")
+    in
+    let params =
+      let p = p, O.Lt.some (pointer_type ac pc) in
+      let l_r =
+        match arg with
+        | Singleton -> []
+        | Range_l_r -> List.map (fun a -> a, O.Lt.(some integer)) [get_l l_r; get_r l_r]
+      in
+      p :: l_r @ tags ac pc In_pred @ mems ac pc In_pred
+    in
+    let contains_embedded_fields p =
+      List.flatten @@
+      map_si ac pc
+        ~f:(fun si ->
+          ListLabels.map
+            si.si_fields
+            ~f:(function
+              | ({ fi_type = JCTpointer (fpc, Some l, Some r); fi_bitoffset } as fi)
+                when Num.(l =/ Int 0 && r =/ Int 1) && fi_bitoffset mod 8 = 0 ->
+                let (fac, _) as facr = alloc_class_of_pointer_class fpc, dummy_region in
+                let off = fi_bitoffset / 8 in
+                let open Num in
+                let contains p =
+                  let fp = O.T.(p **> fi) in
+                  let contains =
+                    map_si fac fpc
+                      ~f:(fun fsi ->
+                        let cast' = O.T.sidecast ~code:false in
+                        O.P.[T.(cast' (shift (cast' fp ~tag:(charp_tag ()) fsi) (int (- off))) si) = p])
+                  in
+                  O.P.(conj contains && containerof ~arg:Singleton ~in_param:false facr fpc fp)
+                in
+                contains p ::
+                (List.(range ~-1 `Downto (int_of_num l) @ range 1 `To (int_of_num r)) |>
+                 List.map @@ fun i -> contains @@ O.T.(shift p @@ int i))
+              | _ -> []))
+    in
+    match arg with
+    | Singleton ->
+      let containerof = O.P.conj @@ contains_embedded_fields O.T.(var p) in
+      O.Wd.mk ~name:(snd @@ Name.Pred.containerof ~arg ac pc) @@ Predicate (params, containerof)
+    | Range_l_r ->
+      let containerof =
+        O.P.(
+          conj @@
+          contains_embedded_fields O.T.(var p) @
+          [forall_offset_in_range O.T.(var p) O.T.(var (get_l l_r)) O.T.(var (get_r l_r))
+             ~f:(fun p -> contains_embedded_fields p)])
+      in
+      O.Wd.mk ~name:(snd @@ Name.Pred.containerof ~arg ac pc) @@ Predicate (params, containerof)
 
 (* Alloc *)
 
@@ -518,14 +589,17 @@ let alloc_param : type t1 t2.
   in
   let lresult = O.T.var "result" in
   (* postcondition *)
-  let instanceof_post =
-    let f ~arg = instanceof ~exact:true ~arg ~in_param:true (ac, dummy_region) pc lresult in
+  let tag_post =
+    let instanceof ~arg = instanceof ~exact:true ~arg ~in_param:true (ac, dummy_region) pc lresult in
+    let containerof ~arg = containerof ~arg ~in_param:true (ac, dummy_region) pc lresult in
     let f =
       match arg with
-      | Singleton -> fun _ -> [f ~arg:Singleton]
-      | Range_0_n -> fun _ -> [f ~arg:Range_l_r (O.T.int 0) @@ O.T.var (get_n n)]
+      | Singleton -> fun _ -> [instanceof ~arg:Singleton; containerof ~arg:Singleton]
+      | Range_0_n -> fun _ ->
+        let z = O.T.int 0 and n = O.T.var (get_n n) in
+        [instanceof ~arg:Range_l_r z n; containerof ~arg:Range_l_r z n]
     in
-    map_st ~f ac pc
+    map_si ~f ac pc
   in
   let alloc_type pre =
     List.fold_right (fun (n, Why_type ty') (Why_type acc) -> Why_type (Arrow (n, ty', acc))) params @@
@@ -552,7 +626,7 @@ let alloc_param : type t1 t2.
          frame ~for_:`tag_tables ~in_param:true (ac, dummy_region) pc lresult;
          fresh ~for_:(`alloc_tables_in `alloc) ~in_param:true (ac, dummy_region) pc lresult;
          fresh ~for_:`tag_tables ~in_param:true (ac, dummy_region) pc lresult]
-        @ instanceof_post),
+        @ tag_post),
       (* no exceptional post *)
       [])
   in
@@ -637,7 +711,7 @@ let free_param ~safe ac pc =
 
 let struc =
   let fresh_tag_id =
-    let counter = ref 0 in
+    let counter = ref 2 in
     fun () -> incr counter; !counter
   in
   fun si ->
@@ -645,8 +719,13 @@ let struc =
     let int_of_tag_axiom =
       O.Wd.mk
         ~name:(Name.Axiom.int_of_tag si)
-        (Goal (KAxiom,
-               O.T.(int_of_tag (var (Name.tag si)) = int (fresh_tag_id ()))))
+        O.(Goal (KAxiom,
+               if si.si_name <> Name.charp && si.si_name <> Name.voidp then
+                 T.(int_of_tag (var (Name.tag si)) = int (fresh_tag_id ()))
+               else if si.si_name = Name.charp then
+                 T.(var (Name.tag si) = charp_tag ())
+               else (* voidp *)
+                 T.(var (Name.tag si) = voidp_tag ())))
     in
     let preds, safe_params, unsafe_params =
       if not @@ struct_of_union si then
@@ -663,6 +742,9 @@ let struc =
          instanceof_pred ~exact:false ~arg:Singleton ac pc;
          instanceof_pred ~exact:true ~arg:Range_l_r ac pc;
          instanceof_pred ~exact:true ~arg:Singleton ac pc;
+
+         containerof_pred ~arg:Range_l_r ac pc;
+         containerof_pred ~arg:Singleton ac pc;
 
          fresh_pred ~for_:`alloc_tables ac pc;
          fresh_pred ~for_:`tag_tables ac pc;
@@ -710,7 +792,12 @@ let struc =
        Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:false (JCtag (si, []))) ~safe:false unsafe_params]
 
 let root ri =
-  let type_param = O.Wd.mk ~name:(Name.Type.root ri) @@ Type [] in
+  let type_param =
+    if ri.ri_name <> Name.voidp then
+      [O.Wd.mk ~name:(Name.Type.root ri) @@ Type []]
+    else
+      []
+  in
   let preds, safe_params, unsafe_params =
     let ac = JCalloc_root ri and pc = JCroot ri in
     let in_param = false in
@@ -733,7 +820,7 @@ let root ri =
       [], [], []
   in
   let same_typeof_in_block_if_struct =
-    if not (root_is_union ri) then
+    if not (root_is_union ri) && ri.ri_name <> Name.voidp then
       [O.Wd.mk ~name:(ri.ri_name ^ "_whole_block_tag") @@
        Goal (KAxiom,
              let ri_pointer_type = pointer_type (JCalloc_root ri) (JCroot ri) in
@@ -746,9 +833,15 @@ let root ri =
     else
       []
   in
+  let deps =
+    if ri.ri_name = Name.voidp then
+      [Use (`Export, O.Th.dummy @@ fst Name.Theory.Jessie.voidp)]
+    else
+      []
+  in
   O.[Entry.some @@
-     Th.mk ~name:(fst @@ Name.Theory.struct_ (JCroot ri)) @@
-     type_param :: preds @ same_typeof_in_block_if_struct;
+     Th.mk ~deps ~name:(fst @@ Name.Theory.struct_ (JCroot ri)) @@
+     type_param @ preds @ same_typeof_in_block_if_struct;
      Entry.some @@
      Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:true (JCroot ri)) ~safe:true safe_params;
      Entry.some @@

@@ -102,7 +102,8 @@ and field_info = {
   (* The root of the structure in which the field is defined *)
   fi_rep        : bool; (* "rep" flag *)
   fi_abstract   : bool; (* "abstract" flag *)
-  fi_bitsize    : int option; (* Size of the field in bits, optional *)
+  fi_bitsize    : int; (* Size of the field in bits, optional *)
+  fi_bitoffset  : int
 }
 
 type region = {

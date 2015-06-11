@@ -950,7 +950,8 @@ let term_of_expr e =
       | JCEshift (e1, e2) -> JCTshift (term e1, term e2)
       | JCEderef (e1, fi) -> JCTderef (term e1, LabelHere, fi)
       | JCEinstanceof (e1, st) -> JCTinstanceof (term e1, LabelHere, st)
-      | JCEcast (e1, st) -> JCTcast (term e1, LabelHere, st)
+      | JCEdowncast (e1, st) -> JCTdowncast (term e1, LabelHere, st)
+      | JCEsidecast (e1, st) -> JCTsidecast (term e1, LabelHere, st)
       | JCErange_cast(e1,_) | JCEreal_cast(e1,_) ->
           (* range does not modify term value *)
           (term e1)#node
@@ -1194,10 +1195,11 @@ let rec single_term ef t =
                     true, ef
               end
         end
-    | JCTcast(t,lab,st)
-    | JCTinstanceof(t,lab,st) ->
+    | JCTdowncast (t, lab, st)
+    | JCTsidecast (t, lab, st)
+    | JCTinstanceof(t, lab, st) ->
         true,
-        add_tag_effect lab ef (struct_root st,t#region)
+        add_tag_effect lab ef (struct_root st, t#region)
     | JCTmatch(_t,ptl) ->
         true,
         List.fold_left pattern ef (List.map fst ptl)
@@ -1462,8 +1464,9 @@ let rec expr fef e =
                        true, fef
                  end
            end
-       | JCEcast(e,st)
-       | JCEinstanceof(e,st) ->
+       | JCEdowncast (e, st)
+       | JCEsidecast (e, st)
+       | JCEinstanceof (e, st) ->
            true,
            add_tag_reads LabelHere fef (struct_root st,e#region)
        | JCEshift (e1, _) ->

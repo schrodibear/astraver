@@ -451,7 +451,7 @@ let rec is_constant_term t =
     | JCTvar _ | JCTshift _ | JCTderef _
     | JCTapp _ | JCTold _ | JCTat _ | JCToffset _ | JCTaddress _
     | JCTbase_block _
-    | JCTinstanceof _ | JCTcast _ | JCTrange_cast _ | JCTrange_cast_mod _
+    | JCTinstanceof _ | JCTdowncast _ | JCTsidecast _ | JCTrange_cast _ | JCTrange_cast_mod _
     | JCTreal_cast _ | JCTif _ | JCTlet _ | JCTmatch _ -> false
     | JCTbinary (t1, _, t2) | JCTrange (Some t1, Some t2) ->
         is_constant_term t1 && is_constant_term t2
@@ -473,7 +473,8 @@ module TermOrd = struct
     | JCToffset _ -> 23
     | JCTaddress _ -> 25
     | JCTinstanceof _ -> 31
-    | JCTcast _ -> 37
+    | JCTdowncast _ -> 37
+    | JCTsidecast _ -> 39
     | JCTrange _ -> 41
     | JCTapp _ -> 43
     | JCTif _ -> 47
@@ -523,8 +524,9 @@ module TermOrd = struct
             in
             if compst = 0 then compare t11 t21 else compst
           else compok
-      | JCTinstanceof(t11,lab1,st1),JCTinstanceof(t21,lab2,st2)
-      | JCTcast(t11,lab1,st1),JCTcast(t21,lab2,st2) ->
+      | JCTinstanceof (t11, lab1, st1), JCTinstanceof (t21, lab2, st2)
+      | JCTdowncast (t11, lab1, st1), JCTdowncast (t21, lab2, st2)
+      | JCTsidecast (t11, lab1, st1), JCTsidecast (t21, lab2, st2) ->
           let compst =
             Pervasives.compare st1.si_name st2.si_name
           in
@@ -606,8 +608,9 @@ module TermOrd = struct
       | JCToffset(ok1,t11,st1) ->
           Hashtbl.hash ok1 * hash t11
           * Hashtbl.hash st1.si_name
-      | JCTinstanceof(t11,_,_)
-      | JCTcast(t11,_,_)
+      | JCTinstanceof (t11, _, _)
+      | JCTdowncast (t11, _, _)
+      | JCTsidecast (t11, _, _)
       | JCTbase_block(t11)
       | JCTreal_cast(t11,_)
       | JCTrange_cast(t11,_)
@@ -777,7 +780,7 @@ let rec is_numeric_term t =
     | JCTvar _ | JCTshift _ | JCTderef _
     | JCToffset _ | JCTaddress _ | JCTinstanceof _ | JCTrange _ -> false
     | JCTbinary (t1, _, t2) -> is_numeric_term t1 && is_numeric_term t2
-    | JCTunary (_, t) | JCTold t | JCTat(t,_) | JCTcast (t, _, _)
+    | JCTunary (_, t) | JCTold t | JCTat(t,_) | JCTdowncast (t, _, _) | JCTsidecast (t, _, _)
     | JCTbase_block t
     | JCTrange_cast (t, _) | JCTrange_cast_mod (t, _) | JCTreal_cast (t, _) -> is_numeric_term t
     | JCTapp _ -> false (* TODO ? *)
@@ -987,26 +990,6 @@ let integral_union vi =
                       | [fi] -> is_integral_type fi.fi_type
                       | _ -> false
                  ) true vi.ri_hroots
-
-let struct_has_bytesize st =
-  List.fold_left
-    (fun acc fi -> acc &&
-       match fi.fi_bitsize with None -> false | Some _ -> true)
-    true st.si_fields
-
-let struct_bitsize st =
-  List.fold_left
-    (fun acc fi ->
-       match fi.fi_bitsize with
-         | Some x -> acc + x
-         | None -> assert false)
-    0 st.si_fields
-
-let struct_bytesize st =
-  struct_bitsize st / 8
-
-let possible_struct_bytesize st =
-  if struct_has_bytesize st then Some (struct_bytesize st) else None
 
 (* These are only used by error messages, so feel free to change the strings. *)
 let string_of_op = function

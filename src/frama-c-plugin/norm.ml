@@ -739,7 +739,8 @@ object
       | Tinter _
       | Tcomprehension _
       | Tif _
-      | Tnull -> [t]
+      | Tnull
+      | TOffsetOf _ -> [t]
         (* those cases can not appear as assigns *)
       | TSizeOf _ | TSizeOfE _ | TSizeOfStr _ | TAlignOf _ | TAlignOfE _
       | Tlambda _ | TDataCons _ | Tbase_addr _ | TBinOp _ | TUnOp _
@@ -998,118 +999,6 @@ class embed_first_substructs_visitor =
   end
 
 let embed_first_substructs = visitFramacFile (new embed_first_substructs_visitor)
-
-(*****************************************************************************)
-(* Rewrite type char* into void* in successive castings.                     *)
-(*****************************************************************************)
-
-class char_pointer_rewriter =
-object
-  inherit frama_c_inplace
-
-  method! vexpr e =
-    let void_ptr_with_attrs t = typeAddAttributes (typeAttrs t) voidPtrType in
-    match e.enode with
-    | CastE (tcharp, _, ein)
-      when isCharPtrType tcharp ->
-        ChangeTo ({ e with enode = CastE (void_ptr_with_attrs tcharp, Check, ein)})
-    | BinOp _ ->
-      DoChildrenPost
-        (function
-         | { enode = BinOp (op, e1, e2, _); eloc } -> mkBinOp ~loc:eloc op e1 e2
-         | e -> Console.fatal "vexpr: unexpected transformation of BinOp to: %a" Printer.pp_exp e)
-    | UnOp (op, ( { eloc } as e), typ) when isCharPtrType typ ->
-        ChangeDoChildrenPost (new_exp ~loc:eloc (UnOp (op, e, void_ptr_with_attrs typ)), Fn.id)
-    | _ -> DoChildren
-end
-
-class side_cast_rewriter =
-  let has_charp_casts e =
-    try
-      ignore @@ visitFramacExpr
-        (object
-          inherit frama_c_inplace
-          method! vexpr =
-            function
-            | { enode = CastE (tcharp, _, _) }
-              when isCharPtrType tcharp -> raise Exit
-            | _ -> DoChildren
-         end)
-        e;
-      false
-    with Exit -> true
-  in
-  let rewrite_char_pointers = visitFramacExpr (new char_pointer_rewriter) in
-  let struct_fields t =
-    match unrollType t with
-    | TComp (compinfo, _, _) -> compinfo.cfields
-    | t -> Console.fatal "struct_fields: expected composite type, got: %a" Printer.pp_typ t
-  in
-  let pointed_type t =
-    match unrollType t with
-    | TPtr _ as t -> typeOf_pointed t
-    | TArray _ as t -> typeOf_array_elem t
-    | t -> t
-  in
-  let subtype t1 t2 =
-    let rec is_first_substruct t1 t2 =
-      let first_field_type t = unrollType (List.hd Type.Composite.(compinfo @@ of_typ_exn t).cfields).ftype in
-      not (need_cast t1 t2) ||
-      (let t1 = first_field_type t1 in
-       Type.Composite.Struct.is_struct t1 &&
-       is_first_substruct t1 t2) ||
-      (let t2 = first_field_type t2 in
-       Type.Composite.Struct.is_struct t2 &&
-       is_first_substruct t2 t1)
-    in
-    isVoidPtrType t2 ||
-    let t1, t2 = map_pair pointed_type (t1, t2) in
-    Cil_datatype.Typ.equal t1 t2 ||
-    isStructOrUnionType t1 && isStructOrUnionType t2 &&
-    (is_first_substruct t1 t2 ||
-     let fields1, fields2 = map_pair struct_fields (t1, t2) in
-     let len1, len2 = map_pair List.length (fields1, fields2) in
-     len1 > len2 &&
-     List.for_all2
-       (fun fi1 fi2 -> Retype.same_fields fi1 fi2)
-       (List.take len2 fields1)
-       fields2)
-  in
-object(self)
-  inherit frama_c_inplace
-
-  method! vexpr e =
-    match e.enode with
-    | CastE (tto, oft, efrom)
-      when isCharPtrType (typeOf efrom) &&
-           isPointerType tto &&
-           not (isCharPtrType tto) &&
-           not (isVoidPtrType tto) &&
-           has_charp_casts efrom ->
-      ChangeTo ({ e with enode = CastE (tto, oft, rewrite_char_pointers efrom) })
-    | CastE (tto, oft, efrom) ->
-      let tfrom = typeOf efrom in
-      if (isPointerType tfrom || isArrayType tfrom) &&
-         (isPointerType tto || isArrayType tto) &&
-         let tto = typeDeepDropAllAttributes tto
-         and tfrom = typeDeepDropAllAttributes tfrom in
-         not (subtype tto tfrom || subtype tfrom tto)
-      then
-        let void_ptr_type = typeAddAttributes (typeAttrs tfrom) voidConstPtrType in
-        ChangeDoChildrenPost
-          ({ e with enode = CastE (tto,
-                                   oft,
-                                   mkCastT ~overflow:Check ~force:false ~e:efrom ~oldt:tfrom ~newt:void_ptr_type)},
-           Fn.id)
-      else
-        DoChildren
-    | _ -> DoChildren
-
-  method! vterm t =
-    Do.on_term ~pre:(fun e -> match self#vexpr e with ChangeTo e | ChangeDoChildrenPost (e, _) -> e | _ -> e) t
-end
-
-let rewrite_side_casts  = visitFramacFile (new side_cast_rewriter)
 
 (*****************************************************************************)
 (* Retype variables of structure type.                                       *)
@@ -2163,8 +2052,6 @@ let normalize file =
   (* Expand structure copying through parameter, return or assignment. *)
   (* order: before [retype_address_taken], before [retype_struct_variables] *)
   apply expand_struct_assign "expanding structure copying";
-  (* Rewrite char * into void * in successive casts. *)
-  apply rewrite_side_casts "rewriting type char* into void* in successive casts";
   (* Retype variables of structure type. *)
   apply retype_struct_variables "retyping variables of structure type";
   (* Retype variables and fields whose address is taken. *)

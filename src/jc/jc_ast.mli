@@ -249,7 +249,7 @@ type 'expr decl_node =
       string (* name of the tag *)
       * string list (* type parameters *)
       * (string * ptype list) option (* parent tag, applied type parameters *)
-      * (field_modifiers * ptype * string * int option) list (* fields *)
+      * (field_modifiers * ptype * string * int) list (* fields *)
       * (identifier * string * 'expr) list (* invariants *)
   | JCDvariant_type of string * identifier list
   | JCDunion_type of string * bool * identifier list
@@ -379,7 +379,8 @@ and 'li term_node =
   | JCTaddress of address_kind * 'li term
   | JCTbase_block of 'li term
   | JCTinstanceof of 'li term * label * struct_info
-  | JCTcast of 'li term * label * struct_info
+  | JCTdowncast of 'li term * label * struct_info
+  | JCTsidecast of 'li term * label * struct_info
   | JCTrange_cast of 'li term * enum_info option
   | JCTrange_cast_mod of 'li term * enum_info
   | JCTreal_cast of 'li term * real_conversion
@@ -527,7 +528,8 @@ type ('li,'fi) expr_node =
   | JCEassign_var of var_info * ('li,'fi) expr
   | JCEassign_heap of ('li,'fi) expr * field_info * ('li,'fi) expr
   | JCEinstanceof of ('li,'fi) expr * struct_info
-  | JCEcast of ('li,'fi) expr * struct_info
+  | JCEdowncast of ('li,'fi) expr * struct_info
+  | JCEsidecast of ('li,'fi) expr * struct_info
   | JCErange_cast of ('li,'fi) expr * enum_info option
   | JCErange_cast_mod of ('li,'fi) expr * enum_info
   | JCEreal_cast of ('li,'fi) expr * real_conversion

@@ -71,8 +71,24 @@ theory core.Jessie_tag_table_type
   meta "realized_theory" "core.Jessie_tag_table_type", "Jessie_tag_table_type"
 end
 
+theory core.Jessie_voidp
+  meta "realized_theory" "core.Jessie_voidp", "Jessie_voidp"
+end
+
+theory core.Jessie_voidp_tag_id
+  meta "realized_theory" "core.Jessie_voidp_tag_id", "Jessie_voidp_tag_id"
+end
+
+theory core.Jessie_charp_tag_id
+  meta "realized_theory" "core.Jessie_charp_tag_id", "Jessie_charp_tag_id"
+end
+
 theory core.Jessie_tag_table
   meta "realized_theory" "core.Jessie_tag_table", "Jessie_tag_table"
+end
+
+theory core.Jessie_sidecast
+  meta "realized_theory" "core.Jessie_sidecast", "Jessie_sidecast"
 end
 
 theory core.Jessie_reinterpret

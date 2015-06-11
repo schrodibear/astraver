@@ -153,7 +153,7 @@ let rec term fmt t =
     | JCTlet (vi, t1, t2) ->
       fprintf fmt "@[(let %s = %a in %a)@]"
         vi.vi_name term t1 term t2
-    | JCTcast (t, _, si) ->
+    | JCTdowncast (t, _, si) | JCTsidecast (t, _, si) ->
       fprintf fmt "(%a :> %s)" term t si.si_name
     | JCTrange_cast (t, None) ->
       fprintf fmt "(%a :> integer)" term t
@@ -337,7 +337,7 @@ let rec expr fmt e =
       fprintf fmt "%a.%s = %a" expr e1 fi.fi_name expr e2
     | JCEinstanceof(e, si) ->
       fprintf fmt "(%a <: %s)" expr e si.si_name
-    | JCEcast (e, si) ->
+    | JCEdowncast (e, si) | JCEsidecast (e, si) ->
       fprintf fmt "(%a :> %s)" expr e  si.si_name
     | JCErange_cast (e, None) ->
       fprintf fmt "(%a :> integer)" expr e
@@ -474,11 +474,7 @@ let field fmt fi =
     fprintf fmt "rep ";
   fprintf fmt "%a %s"
     print_type fi.fi_type fi.fi_name;
-  match fi.fi_bitsize with
-  | Some bitsize ->
-    fprintf fmt ": %d;" bitsize
-  | None ->
-    fprintf fmt ";"
+  fprintf fmt ": %d;" fi.fi_bitsize
 
 let invariant fmt (id, vi, a) =
   fprintf fmt "@\n@[invariant %s(%s) =@ %a;@]"

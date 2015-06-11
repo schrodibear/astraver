@@ -34,13 +34,12 @@ VERBOSEMAKE ?= @VERBOSEMAKE@
 ifeq ($(VERBOSEMAKE),yes)
  QUIET =
 else
- QUIET =yes
+ QUIET = yes
 endif
 
 # where to install the binaries
-DESTDIR =
-BINDIR=$(DESTDIR)@bindir@
-LIBDIR=$(DESTDIR)@libdir@
+BINDIR= @bindir@
+LIBDIR= @libdir@
 
 # other variables
 OCAMLBEST= @OCAMLBEST@
@@ -99,12 +98,12 @@ $(BUILDSRC)/jc/jc.%: $(JC_SOURCES) $(GENERATED) $(BUILDSRC)/jc/jc.cmxa
 	touch $@
 
 bin/jessie.opt: $(JC_SOURCES) bin $(BUILDSRC)/jc/jc.cmxa
-	if [ ! -f $@ ]; then mv jc_main.native $@; fi
+	if [ -f jc_main.native ]; then mv jc_main.native $@; fi
 	touch $@
 
 bin/jessie.byte: $(JC_SOURCES) bin $(BUILDSRC)/jc/jc.cma
 	$(OCAMLBUILD) jc_main.d.byte
-	if [ ! -f $@ ]; then mv jc_main.d.byte $@; fi
+	if [ -f jc_main.d.byte ]; then mv jc_main.d.byte $@; fi
 	touch $@
 
 bin:

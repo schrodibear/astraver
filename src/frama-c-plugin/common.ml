@@ -845,7 +845,7 @@ struct
         | TSizeOf ty -> SizeOf ty, Env.empty
         | TConst c ->
           (try Const (const_of_lconst c), Env.empty with Exit -> Env.add_term Env.empty t)
-        | Tapp _ | TDataCons _ | Tif _ | Tat _ | Tbase_addr _
+        | Tapp _ | TDataCons _ | Tif _ | Tat _ | Tbase_addr _ | TOffsetOf _
         | Toffset _ | Toffset_max _ | Toffset_min _
         | Tblock_length _ | Tnull | TCoerce _ | TCoerceE _ | TUpdate _
         | Tlambda _ | Ttypeof _ | Ttype _ | Tcomprehension _

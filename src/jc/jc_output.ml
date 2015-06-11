@@ -137,9 +137,13 @@ struct
     let pset_included = user ~from:pset_included
     let assigns = user ~from:assigns
     let tag_id = user ~from:tag_id
+    let voidp = user ~from:voidp
+    let voidp_tag_id = user ~from:voidp_tag_id
+    let charp_tag_id = user ~from:charp_tag_id
     let tag = user ~from:tag
     let tag_table_type = user ~from:tag_table_type
     let tag_table = user ~from:tag_table
+    let sidecast = user ~from:sidecast
     let reinterpret = user ~from:reinterpret
     let reinterpret_cast = user ~from:reinterpret_cast
     let allocable = user ~from:allocable
@@ -161,8 +165,10 @@ struct
     let upd_offset_safe = user ~from:upd_offset_safe
     let instanceof = user ~from:instanceof
     let downcast_safe = user ~from:downcast_safe
-    let downcast_safe_reinterpret = user ~from:downcast_safe_reinterpret
     let downcast_unsafe = user ~from:downcast_unsafe
+    let sidecast_safe = user ~from:sidecast_safe
+    let sidecast_unsafe = user ~from:sidecast_unsafe
+    let sidecast_safe_reinterpret = user ~from:sidecast_safe_reinterpret
     let shift_safe = user ~from:shift_safe
     let shift_unsafe = user ~from:shift_unsafe
     let any_int = user ~from:any_int
@@ -182,9 +188,24 @@ struct
 
   let abs = U_int_op `Abs
 
-  let tag si : (unit, _) t = user ~from:(Name.Theory.struct_ (Env.JCtag (si, []))) (Name.tag si)
+  let voidp () : (unit, _) t = Jc.voidp "voidP"
+
+  let voidp_tag () : (unit, _) t = Jc.voidp_tag_id "voidP_tag"
+
+  let charp_tag () : (unit, _) t = Jc.charp_tag_id "charP_tag"
+
+  let tag si : (unit, _) t =
+    let open Env in
+    if si.si_name = Name.voidp then voidp_tag ()
+    else if si.si_name = Name.charp then charp_tag ()
+    else
+      user ~from:(Name.Theory.struct_ (JCtag (si, []))) (Name.tag si)
 
   let instanceof () : (_ * (_ * (_ * unit)), boolean) t = Jc.tag_table "instanceof"
+
+  let downcast () : (_ * (_ * (_ * unit)), _) t = Jc.tag_table "downcast"
+
+  let sidecast () : (_ * (_ * (_ * unit)), _) t = Jc.sidecast "sidecast"
 
   let typeof () : (_ * (_ * unit), _) t = Jc.tag_table_type "typeof"
 
@@ -414,10 +435,20 @@ struct
 
   let tag si = F.tag si $ Nil
 
+  let charp_tag () = F.charp_tag () $ Nil
+
+  let voidp_tag () = F.voidp_tag () $ Nil
+
   let typeof ri ?r ?code:deref ?lab p = F.typeof () $ tag_table ?deref ?lab ?r ri ^. p
 
   let instanceof ?r ?code:deref ?lab p si =
     F.instanceof () $ (tag_table ?deref ?lab ?r @@ struct_root si) ^ p ^. tag si
+
+  let downcast ?r ?code:deref ?lab p si =
+    F.downcast () $ (tag_table ?deref ?lab ?r @@ struct_root si) ^ p ^. tag si
+
+  let sidecast ?r ?code:deref ?lab p ?tag si =
+    F.sidecast () $ (tag_table ?deref ?lab ?r @@ struct_root si) ^ p ^. (tag |? (F.tag si $ Nil))
 
   let ( **>) p fi = select (var (Name.field_memory_name fi)) p
 

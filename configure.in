@@ -73,11 +73,6 @@ if test "$VERBOSEMAKE" = yes ; then
 	AC_MSG_RESULT(Make will be verbose.)
 fi
 
-AC_ARG_ENABLE(local,
-  [  --enable-local          use Jessie in the build directory (no installation)],,
-  enable_local=no)
-
-
 # Check for Ocaml compilers
 
 # we first look for ocamlc in the path; if not present, we fail
@@ -123,21 +118,12 @@ AC_MSG_CHECKING(OS dependent settings)
 OSTYPE=`echo 'prerr_endline Sys.os_type;;' | ocaml 2>&1 > /dev/null | tr -d '\\r' `
 case $OSTYPE in
   Win32)
-    EXE=.exe
-    STRIP='echo "no strip "'
-    CPULIMIT=cpulimit-win
     AC_MSG_RESULT(Win32)
     ;;
   Cygwin)
-    EXE=.exe
-    STRIP=strip
-    CPULIMIT=cpulimit-win
     AC_MSG_RESULT(Cygwin)
     ;;
   Unix)
-    EXE=
-    STRIP=strip
-    CPULIMIT=cpulimit
     AC_MSG_RESULT(Unix)
     ;;
   *) AC_MSG_ERROR(Unknown OS type: $OSTYPE)
@@ -287,8 +273,6 @@ else
   fi
 fi
 
-
-AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
 # Frama-C
 AC_CHECK_PROG(FRAMAC,frama-c,frama-c,no)
@@ -455,9 +439,6 @@ fi
 
 # substitutions to perform
 AC_SUBST(VERBOSEMAKE)
-AC_SUBST(EXE)
-AC_SUBST(STRIP)
-AC_SUBST(CPULIMIT)
 
 AC_SUBST(OCAMLC)
 AC_SUBST(OCAMLOPT)
@@ -491,8 +472,6 @@ AC_SUBST(WHYLIBCOQ)
 AC_SUBST(WHYFLOATS)
 AC_SUBST(JESSIEWHY3LIBCOQ)
 AC_SUBST(WHY3COQPATH)
-
-AC_SUBST(enable_local)
 
 AC_SUBST(PVS)
 AC_SUBST(PVSC)

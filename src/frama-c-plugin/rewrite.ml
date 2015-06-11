@@ -1253,32 +1253,34 @@ let expand_composites =
 (*****************************************************************************)
 
 class term_bw_op_retyping_visitor =
+  let is_int_type t =
+    match unrollType t with
+    | TInt _ -> true
+    | _ -> false
+  in
+  let strip ?(force=true) t =
+    let open Logic_utils in
+    match t.term_node with
+    | TConst (Integer (_, Some s)) when t.term_type = Linteger ->
+      let ty = typeOf @@ parseIntExp ~loc:Location.unknown s in
+      let lty = Ctype (unrollType ty) in
+      Logic_const.term ~loc:t.term_loc (TCastE (ty, Check, t)) lty,
+      lty
+    | TLogic_coerce (Linteger, ({ term_type = lty } as t1))
+      when isLogicType is_int_type @@ unroll_type lty ->
+      t1, unroll_type lty
+    | _ when isLogicType is_int_type @@ unroll_type t.term_type -> t, unroll_type t.term_type
+    | _ when force ->
+      Console.unsupported
+        "Can't automatically recover built-in bounded integral type of term %a"
+        Printer.pp_term t
+    | _ -> t, t.term_type
+  in
   object
     inherit frama_c_inplace
 
     method! vterm _ =
       let f t =
-        let is_int_type t =
-          match unrollType t with
-          | TInt _ -> true
-          | _ -> false
-        in
-        let strip t =
-          match t.term_node with
-          | TConst (Integer (_, Some s)) when t.term_type = Linteger ->
-            let ty = typeOf @@ parseIntExp ~loc:Location.unknown s in
-            let lty = Ctype (unrollType ty) in
-            Logic_const.term ~loc:t.term_loc (TCastE (ty, Check, t)) lty,
-            lty
-          | TLogic_coerce (Linteger, ({ term_type = Ctype ty } as t1))
-            when is_int_type ty ->
-            t1, Ctype (unrollType ty)
-          | _ when Logic_utils.isLogicType is_int_type t.term_type -> t, t.term_type
-          | _ ->
-            Console.unsupported
-              "Can't automatically recover built-in bounded integral type of term %a"
-              Printer.pp_term t
-        in
         let wrap term_node term_type =
           Logic_const.term
             ~loc:t.term_loc
@@ -1288,8 +1290,7 @@ class term_bw_op_retyping_visitor =
         match t.term_node with
         | TBinOp (
           (PlusA Modulo | MinusA Modulo | Mult Modulo | Div Modulo | Shiftlt _ | Shiftrt | BAnd | BXor | BOr as op),
-          ({ term_node = TLogic_coerce (Linteger, _) | TConst (Integer (_, Some _)) } as t1),
-          ({ term_node = TLogic_coerce (Linteger, _) | TConst (Integer (_, Some _)) } as t2)) ->
+          t1, t2) ->
           let (t1, ty1), (t2, ty2) = map_pair strip (t1, t2) in
           if Logic_utils.is_same_type ty1 ty2 then
             wrap (TBinOp (op, t1, t2)) ty1
@@ -1303,18 +1304,32 @@ class term_bw_op_retyping_visitor =
         | TUnOp (BNot, t1) ->
           let t1, ty1 = strip t1 in
           wrap (TUnOp (BNot, t1)) ty1
+        | TCastE (ty, oft, t') when is_int_type ty ->
+          let t', ty' = strip ~force:false t' in
+          if Logic_utils.isLogicType is_int_type ty' then
+            if Logic_utils.is_same_type (Ctype (unrollType ty)) ty' then t'
+            else {t with term_node = TCastE (ty, oft, t') }
+          else t
+        | TBinOp((Lt | Gt | Le | Ge | Eq | Ne as rel), t1, t2) ->
+          let (t1, ty1), (t2, ty2) = map_pair (strip ~force:false) (t1, t2) in
+          if Logic_utils.is_same_type ty1 ty2 then
+            { t with term_node = TBinOp (rel, t1, t2) }
+          else
+            t
         | _ -> t
       in
       DoChildrenPost f
 
     method! vpredicate _ =
       DoChildrenPost
-      (function
-        | Prel (rel, { term_node = TLogic_coerce (Linteger, t1) }, { term_node = TLogic_coerce (Linteger, t2) })
-        | Prel (rel, { term_node = TLogic_coerce (Linteger, t1) }, t2)
-        | Prel (rel, t1, { term_node = TLogic_coerce (Linteger, t2) }) ->
-          Prel (rel, t1, t2)
-        | p -> p)
+        (function
+          | Prel (rel, t1, t2) as p ->
+            let (t1, ty1), (t2, ty2) = map_pair (strip ~force:false) (t1, t2) in
+            if Logic_utils.is_same_type ty1 ty2 then
+              Prel (rel, t1, t2)
+            else
+              p
+          | p -> p)
   end
 
 let retype_bw_ops_in_terms = visitFramacFile @@ new term_bw_op_retyping_visitor
@@ -2380,7 +2395,7 @@ let rewrite file =
   let apply = apply ~file in
   let open Config in
   (* Remove assigns \from clauses not used by Jessie but causing failures by void * dereferences *)
-  apply remove_assigns_from "remove assigns from clauses";
+  apply remove_assigns_from "removing assigns \\from clauses";
   (* Insert declarations for kmalloc and jessie_nondet_int if necessary *)
   apply declare_jessie_nondet_int "inserting declaration for jessie_nondet_int (if necessary)";
   (* Add definitions for undefined composite tags. *)

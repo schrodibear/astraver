@@ -303,10 +303,8 @@ field_declaration_list:
 ;
 
 field_declaration:
-| field_modifier type_expr IDENTIFIER SEMICOLON
-    { ($1, $2, $3, None) }
 | field_modifier type_expr IDENTIFIER COLON int_constant SEMICOLON
-    { ($1, $2, $3, Some (Num.int_of_num $5)) }
+    { ($1, $2, $3, Num.int_of_num $5) }
 ;
 
 field_modifier:

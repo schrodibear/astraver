@@ -621,7 +621,7 @@ and terms ?(in_zone=false) t =
     | TLval lv ->
       List.map (fun x -> x#node) (terms_lval t.term_loc lv)
 
-    | TSizeOf _ | TSizeOfE _ | TSizeOfStr _ | TAlignOf _ | TAlignOfE _ ->
+    | TSizeOf _ | TOffsetOf _ | TSizeOfE _ | TSizeOfStr _ | TAlignOf _ | TAlignOfE _ ->
       assert false (* Should be removed by constant folding *)
     | TUnOp (op, t) ->
       List.map (fun x -> JCPEunary(unop op,x)) (coerce_floats t)
@@ -702,25 +702,18 @@ and terms ?(in_zone=false) t =
              Integer.equal (value_of_integral_logic_const c) Integer.zero ->
         [JCPEconst JCCnull]
       | _ ->
-        (* Only hierarchical type-casts are available in Jessie. It   *)
-        (* should have been encoded as the use of pointer types       *)
-        (* on structure type.                                         *)
-        (* TODO: Now some non-hierarchical cast are also available, but the typing isn't ready for this yet,
-           so the code here should be changed *)
         let dstty = unrollType @@ pointed_type ptrty in
         let srcty = unrollType @@ Type.Logic_c_type.(map ~f:pointed_type (of_logic_type_exn t.term_type)) in
         begin match srcty, dstty with
-        | TComp _, TComp _
-          when Retype.(subtype srcty dstty || subtype dstty srcty) ->
+        | TComp _, TComp _ ->
           [JCPEcast (term t, ctype ptrty)]
-        | _ -> Console.unsupported "Casting from type %a to type %a not allowed in logic"
-                 Printer.pp_logic_type t.term_type Printer.pp_typ ptrty
+        | _ ->
+          Console.unsupported "Casting from type %a to type %a not allowed in logic"
+            Printer.pp_logic_type t.term_type Printer.pp_typ ptrty
         end
       end
     | TCastE (ty, _, t) ->
-      (* TODO: support other casts in Jessie as well, through low-level
-       * memory model
-      *)
+      (* TODO: support other casts in Jessie as well *)
       Console.unsupported "Casting from type %a to type %a not allowed"
         Printer.pp_logic_type t.term_type Printer.pp_typ ty
     | TAddrOf _tlv -> assert false (* Should have been rewritten *)
@@ -1378,11 +1371,11 @@ let rec expr e =
         let e = locate (mkexpr (JCPEcast(expr e',ctype ty)) e.eloc) in
         e#node
 
-    | CastE(ty, _, e') when isIntegralType ty && isPointerType (typeOf e') ->
+    | CastE (ty, _, e') when isIntegralType ty && isPointerType (typeOf e') ->
       Console.unsupported "Casting from type %a to type %a not allowed"
         Printer.pp_typ (typeOf e') Printer.pp_typ ty
 
-    | CastE(ptrty, _, _e1) when isPointerType ptrty ->
+    | CastE (ptrty, _, _e1) when isPointerType ptrty ->
         begin
           let rec strip_cast_and_infos ?(cast=true) e =
             match e.enode with
@@ -1399,18 +1392,14 @@ let rec expr e =
               JCPEconst JCCnull
           | _ ->
               let ety = typeOf e in
-              if isIntegralType ety(*  && bits_sizeof ety = bits_sizeof ptrty *) then
+              if isIntegralType ety then
                 Console.unsupported "Casting from type %a to type %a not allowed"
                   Printer.pp_typ (typeOf e) Printer.pp_typ ptrty
               else if isPointerType ety then
-                  let enode = JCPEcast(expr e,ctype ptrty) in
+                  let enode = JCPEcast (expr e, ctype ptrty) in
                   let e = locate (mkexpr enode e.eloc) in
                   e#node
               else
-                (* Only hierarchical types are available in Jessie. It
-                 * should have been encoded as the use of pointer types
-                 * on structure type.
-                 *)
                 Console.unsupported "Casting from type %a to type %a not allowed"
                   Printer.pp_typ (typeOf e) Printer.pp_typ ptrty
         end
@@ -1515,7 +1504,7 @@ and integral_expr e =
           let e = mkexpr (JCPEbinary(expr e1,binop op,expr e2)) e.eloc in
           node_from_boolean_expr e
 
-      | BinOp(Shiftrt,e1,e2,_ty) ->
+      | BinOp (Shiftrt, e1, e2, _ty) ->
         let e =
           let ik = match typeOf e1 with TInt (ik, _) -> ik | _ -> assert false in
           match possible_value_of_integral_expr e2 with
@@ -1536,7 +1525,7 @@ and integral_expr e =
           in
           e#node
 
-      | BinOp (Shiftlt oft as op,e1,e2,_ty) ->
+      | BinOp (Shiftlt oft as op, e1, e2, _ty) ->
         let e =
           let ik = match typeOf e1 with TInt (ik, _) -> ik | _ -> assert false in
           match possible_value_of_integral_expr e2 with
@@ -2355,7 +2344,7 @@ let global vardefs g =
       let field fi =
         let add_padding size acc =
           if Pervasives.(size > 0) then
-            acc @ [default_field_modifiers, type_of_padding, Name.unique "padding", Some size]
+            acc @ [default_field_modifiers, type_of_padding, Name.unique "padding", size]
           else
             acc
         in
@@ -2367,13 +2356,13 @@ let global vardefs g =
           [default_field_modifiers,
            ctype ?bitsize:fi.fsize_in_bits fi.ftype,
            fi.fname,
-           fi.fsize_in_bits]
+           Option.value_fatal ~in_:"global:field" fi.fsize_in_bits]
       in
       let model_field mi =
         default_field_modifiers,
         ltype mi.mi_field_type,
         mi.mi_name,
-        None
+        0
       in
       let ty = TComp (compinfo, empty_size_cache (), []) in
       let fields =
@@ -2429,9 +2418,9 @@ let global vardefs g =
         let padding =
           if union_size = 0 then [] else
             [default_field_modifiers,
-             type_of_padding, Name.unique "padding", Some union_size]
+             type_of_padding, Name.unique "padding", union_size]
         in
-        let union_tag = JCDtag(compinfo.cname,[],None,padding,[]) in
+        let union_tag = JCDtag (compinfo.cname, [], None, padding, []) in
         let fields = List.map field (Type.Composite.Ci.proper_fields compinfo) in
         [JCDvariant_type (compinfo.cname, union_id :: fields); union_tag]
 

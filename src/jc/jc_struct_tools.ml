@@ -80,10 +80,7 @@ let field_offset fi =
 			if fi.fi_tag = fi'.fi_tag then
 			  off,false
 			else
-			  off + (match fi'.fi_bitsize
-				 with Some v -> v
-				   | None -> assert false)
-				   , counting
+			  off + fi'.fi_bitsize, counting
 		      else
 			off,counting
 		   ) (0,true) st.si_fields
@@ -114,18 +111,12 @@ let struct_fields st =
   in
   aux [] st
 
-let struct_has_size st =
-  not (List.exists
-	 (fun fi -> fi.fi_bitsize = None)
-	 (struct_fields st))
+let struct_has_size _st = true
 
 let struct_size st =
   match List.rev st.si_fields with
-    | [] -> 0
-    | last_fi::_ ->
-	match last_fi.fi_bitsize with
-	  | None -> assert false
-	  | Some fi_siz -> field_offset last_fi + fi_siz
+  | [] -> 0
+  | last_fi :: _ -> field_offset last_fi + last_fi.fi_bitsize
 
 let struct_size_in_bytes st =
   let s = struct_size st in

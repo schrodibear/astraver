@@ -405,6 +405,40 @@ theory Jessie_tag_table_type
   function typeof (t : tag_table 't) (p : pointer 't) : tag_id 't = Map.get t p
 end
 
+theory Jessie_voidp
+  use import Jessie_pointer
+  use import Jessie_tag_table_type
+
+  type voidP
+
+  axiom Voidp_whole_block_tag:
+    forall t : tag_table voidP.
+      forall p : pointer voidP.
+        forall q : pointer voidP.
+          same_block p q -> typeof t p = typeof t q
+end
+
+theory Jessie_voidp_tag_id
+  use import Jessie_tag_id
+  use import Jessie_voidp
+
+  constant voidP_tag : tag_id voidP
+
+  axiom Voidp_int:
+    int_of_tag voidP_tag = 0
+end
+
+theory Jessie_charp_tag_id
+  use import Jessie_tag_id
+  use import Jessie_voidp
+  use import Jessie_voidp_tag_id
+
+  constant charP_tag : tag_id voidP
+
+  axiom Charp_int:
+    int_of_tag charP_tag = 1
+end
+
 theory Jessie_tag_table
   use import Jessie_pointer
   use import Jessie_tag
@@ -421,11 +455,50 @@ theory Jessie_tag_table
       instanceof t p s -> downcast t p s = p
 end
 
-theory Jessie_reinterpret
-  use import int.Int
+theory Jessie_sidecast
   use import Jessie_pointer
   use import Jessie_tag
   use import Jessie_tag_table
+
+  function sidecast (tag_table 't) (pointer 't) (tag_id 't) : pointer 't
+
+  axiom Sidecast_refl:
+    forall t : tag_table 't.
+      forall p : pointer 't [typeof t p].
+        forall s2 : tag_id 't [sidecast t p s2].
+          typeof t p = s2 -> sidecast t p s2 = p
+
+  axiom Sidecast_extensionality:
+    forall p : pointer 't.
+      forall t1 : tag_table 't [typeof t1 p].
+        forall t2 : tag_table 't [typeof t2 p].
+          forall s : tag_id 't [sidecast t1 p s | sidecast t2 p s].
+            typeof t1 p = typeof t2 p -> sidecast t1 p s = sidecast t2 p s
+
+  axiom Sidecast_reduce:
+    forall t : tag_table 't.
+      forall p : pointer 't.
+        forall s1 : tag_id 't [sidecast t p s1].
+          forall s2 : tag_id 't [sidecast t (sidecast t p s1) s2].
+            sidecast t (sidecast t p s1) s2 = sidecast t p s2
+
+  axiom Typeof_sidecast:
+    forall t : tag_table 't.
+    forall p : pointer 't.
+    forall s2 : tag_id 't [sidecast t p s2 | typeof t (sidecast t p s2)].
+      typeof t p <> bottom_tag -> typeof t (sidecast t p s2) = s2
+
+  axiom Typeof_sidecast_fresh:
+    forall t : tag_table 't.
+    forall p : pointer 't.
+    forall s2 : tag_id 't [sidecast t p s2 | typeof t (sidecast t p s2)].
+      typeof t p = bottom_tag -> typeof t (sidecast t p s2) = bottom_tag
+end
+
+theory Jessie_reinterpret
+  use import int.Int
+  use import Jessie_pointer
+  use import Jessie_tag_id
 
   function cast_factor (tag_id 't) (tag_id 't) : int
 
@@ -444,30 +517,15 @@ theory Jessie_reinterpret
           (c12 < 0 /\ c23 > 0 /\ c23 > (- c12) /\ mod c23 (- c12) = 0 -> c13 = div c23 (- c12)) /\
           (c12 < 0 /\ c23 > 0 /\ c23 < (- c12) /\ mod (- c12) c23 = 0 -> c13 = - (div (- c12) c23)) /\
           (c12 < 0 /\ c23 < 0 -> c13 = (- c12) * c23)
-
-  axiom Downcast_reduce:
-    forall t : tag_table 't.
-      forall p : pointer 't.
-        forall s2 : tag_id 't [downcast t p s2].
-          forall s1 : tag_id 't [downcast t (downcast t p s1) s2].
-            cast_factor s1 s2 <> 0 -> downcast t (downcast t p s1) s2 = downcast t p s2
-
-  axiom Typeof_sidecast:
-    forall t : tag_table 't.
-    forall p : pointer 't.
-    forall s1 : tag_id 't.
-    forall s2 : tag_id 't [typeof t (downcast t p s2)].
-      cast_factor s1 s2 <> 0 ->
-      typeof t p = s1 ->
-      typeof t (downcast t p s2) = s2
 end
 
 theory Jessie_reinterpret_cast
   use import int.Int
   use import Jessie_pointer
   use import Jessie_alloc_table
-  use import Jessie_tag
+  use import Jessie_tag_id
   use import Jessie_tag_table
+  use import Jessie_sidecast
 
   use import int.ComputerDivision
 
@@ -478,9 +536,9 @@ theory Jessie_reinterpret_cast
     (p : pointer 't)
     (s : tag_id 't)
     (c : int) =
-      let ps = downcast t p s in
-      (forall i : int [shift p i | shift ps (div i c)]. mod i c = 0 -> downcast t (shift p i) s = shift ps (div i c)) /\
-      (forall i : int [shift ps i | shift p (i * c)]. downcast t (shift p (i * c)) s = shift ps i) /\
+      let ps = sidecast t p s in
+      (forall i : int [shift p i | shift ps (div i c)]. mod i c = 0 -> sidecast t (shift p i) s = shift ps (div i c)) /\
+      (forall i : int [shift ps i | shift p (i * c)]. sidecast t (shift p (i * c)) s = shift ps i) /\
       offset_min a2 ps = div (offset_min a1 p) c /\
       offset_max a2 ps = div (offset_max a1 p + 1) c - 1
 
@@ -491,20 +549,20 @@ theory Jessie_reinterpret_cast
     (p : pointer 't)
     (s : tag_id 't)
     (c : int) =
-      let ps = downcast t p s in
-      (forall i : int [shift p i | shift ps (i * c)]. downcast t (shift p i) s = shift ps (i * c)) /\
-      (forall i : int [shift ps i | shift p (div i c)]. mod i c = 0 -> downcast t (shift p (div i c)) s = shift ps i) /\
+      let ps = sidecast t p s in
+      (forall i : int [shift p i | shift ps (i * c)]. sidecast t (shift p i) s = shift ps (i * c)) /\
+      (forall i : int [shift ps i | shift p (div i c)]. mod i c = 0 -> sidecast t (shift p (div i c)) s = shift ps i) /\
       offset_min a2 ps = c * offset_min a1 p /\
       offset_max a2 ps = c * (offset_max a1 p + 1) - 1
 
-   predicate reinterpret_cast_retain
+  predicate reinterpret_cast_retain
      (t : tag_table 't)
      (a1 : alloc_table 't)
      (a2 : alloc_table 't)
      (p : pointer 't)
      (s : tag_id 't) =
-       let ps = downcast t p s in
-       (forall i : int [shift p i | shift ps i]. downcast t (shift p i) s = shift ps i) /\
+       let ps = sidecast t p s in
+       (forall i : int [shift p i | shift ps i]. sidecast t (shift p i) s = shift ps i) /\
        offset_min a2 ps = offset_min a1 p /\
        offset_max a2 ps = offset_max a1 p
 end
@@ -696,7 +754,7 @@ end
 module Jessie_sub_pointer_safe
   use import Jessie_pointer
 
-  val sub_pointer (p : pointer 't) (q : pointer 't) : int
+  val sub_pointer_ (p : pointer 't) (q : pointer 't) : int
     requires { "expl:Pointer difference" same_block p q }
     ensures  { result = sub_pointer p q }
 end
@@ -704,7 +762,7 @@ end
 module Jessie_sub_pointer_unsafe
   use import Jessie_pointer
 
-  val sub_pointer (p : pointer 't) (q : pointer 't) : int
+  val sub_pointer_ (p : pointer 't) (q : pointer 't) : int
     requires { true }
     ensures  { result = sub_pointer p q }
 end
@@ -918,36 +976,13 @@ module Jessie_upd_offset_safe
     ensures  { !m = store (old !m) (shift p off) v }
 end
 
-module Jessie_instanceof
-  use import Jessie_pointer
-  use import Jessie_tag
-  use import Jessie_tag_table
-
-  val instanceof (t : tag_table 't) (p : pointer 't) (s: tag_id 't) : bool
-    requires { true }
-    ensures  { result = True <-> instanceof t p s }
-end
-
 module Jessie_downcast_safe
   use import Jessie_pointer
   use import Jessie_tag
   use import Jessie_tag_table
 
-  val downcast (t : tag_table 't) (p : pointer 't) (s : tag_id 't) :  pointer 't
-    requires { "expl:Prefix cast"
-               ("expl:Up/downcast" instanceof t p s) }
-    ensures  { result = downcast t p s }
-end
-
-module Jessie_downcast_safe_reinterpret
-  use import Jessie_pointer
-  use import Jessie_tag
-  use import Jessie_tag_table
-  use import Jessie_reinterpret
-
-  val downcast (t : tag_table 't) (p : pointer 't) (s : tag_id 't) :  pointer 't
-    requires { "expl:Prefix cast or reinterpret"
-               ("expl:Up/downcast" instanceof t p s) \/ ("expl:Reinterpret cast" cast_factor (typeof t p) s <> 0) }
+  val downcast_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) :  pointer 't
+    requires { "expl:Downcast" instanceof t p s }
     ensures  { result = downcast t p s }
 end
 
@@ -956,9 +991,47 @@ module Jessie_downcast_unsafe
   use import Jessie_tag
   use import Jessie_tag_table
 
-  val downcast (t : tag_table 't) (p : pointer 't) (s : tag_id 't) : pointer 't
+  val downcast_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) : pointer 't
     requires { true }
     ensures  { result = downcast t p s }
+end
+
+module Jessie_sidecast_safe
+  use import Jessie_pointer
+  use import Jessie_tag_id
+  use import Jessie_voidp
+  use import Jessie_charp_tag_id
+  use import Jessie_tag_table
+  use import Jessie_sidecast
+
+  val sidecast_ (t : tag_table voidP) (p : pointer voidP) (s : tag_id voidP) :  pointer voidP
+    requires { "expl: Reinterpret cast to/from char *" typeof t p = charP_tag \/ s = charP_tag }
+    ensures  { result = sidecast t p s }
+end
+
+module Jessie_sidecast_safe_reinterpret
+  use import Jessie_pointer
+  use import Jessie_tag
+  use import Jessie_voidp
+  use import Jessie_charp_tag_id
+  use import Jessie_tag_table
+  use import Jessie_sidecast
+  use import Jessie_reinterpret
+
+  val sidecast_ (t : tag_table voidP) (p : pointer voidP) (s : tag_id voidP) :  pointer voidP
+    requires { "expl: Reinterpret cast" typeof t p = charP_tag \/ s = charP_tag \/ cast_factor (typeof t p) s <> 0 }
+    ensures  { result = sidecast t p s }
+end
+
+module Jessie_sidecast_unsafe
+  use import Jessie_pointer
+  use import Jessie_tag_id
+  use import Jessie_tag_table_type
+  use import Jessie_sidecast
+
+  val sidecast_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) :  pointer 't
+    requires { true }
+    ensures  { result = sidecast t p s }
 end
 
 module Jessie_shift_safe
@@ -966,7 +1039,7 @@ module Jessie_shift_safe
   use import Jessie_tag
   use import Jessie_tag_table
 
-  val shift (t : tag_table 't) (p : pointer 't) (s : tag_id 't) (off : int) : pointer 't
+  val shift_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) (off : int) : pointer 't
     requires { "expl:Correct type" typeof t p = s }
     ensures  { result = shift p off }
 
@@ -977,7 +1050,7 @@ end
 module Jessie_shift_unsafe
   use import Jessie_pointer
 
-  val shift (p : pointer 't) (off : int) : pointer 't
+  val shift_ (p : pointer 't) (off : int) : pointer 't
     requires { true }
     ensures  { result = shift p off }
 end
@@ -1028,7 +1101,8 @@ module Jessie_reinterpret_unsafe
   use import Jessie_allocable
   use import Jessie_alloc
   use import Jessie_tag
-  use import Jessie_tag_table
+  use import Jessie_tag_table_type
+  use import Jessie_sidecast
   use import Jessie_assigns_strong
 
   val reinterpret
@@ -1041,7 +1115,7 @@ module Jessie_reinterpret_unsafe
     unit
     writes { a, m }
     ensures  { let pset_old = pset_singleton p in
-               let ps = downcast t p s2 in
+               let ps = sidecast t p s2 in
                let pset_new = pset_singleton ps in
                alloc_blockset (old !a) !a (pset_union pset_old pset_new) /\
                switch_blocks (old !a) !a p ps (offset_max !a ps + 1) /\
@@ -1066,7 +1140,8 @@ module Jessie_reinterpret_safe
   use import Jessie_allocable
   use import Jessie_alloc
   use import Jessie_tag
-  use import Jessie_tag_table
+  use import Jessie_tag_table_type
+  use import Jessie_sidecast
   use import Jessie_assigns_strong
 
   use import int.ComputerDivision
@@ -1087,7 +1162,7 @@ module Jessie_reinterpret_safe
                     ("expl:Join" mod (offset_max !a p - offset_min !a p + 1) (- cast_factor s1 s2) = 0))
              }
     ensures  { let pset_old = pset_singleton p in
-               let ps = downcast t p s2 in
+               let ps = sidecast t p s2 in
                let pset_new = pset_singleton ps in
                alloc_blockset (old !a) !a (pset_union pset_old pset_new) /\
                switch_blocks (old !a) !a p ps (offset_max !a ps + 1) /\

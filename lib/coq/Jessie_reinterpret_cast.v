@@ -12,17 +12,18 @@ Require Jessie_tag_id.
 Require Jessie_tag.
 Require Jessie_tag_table_type.
 Require Jessie_tag_table.
+Require Jessie_sidecast.
 
 (* Why3 assumption *)
 Definition reinterpret_cast_merge {t:Type} {t_WT:WhyType t} (t1:(map.Map.map
   (Jessie_pointer.pointer t) (Jessie_tag_id.tag_id t)))
   (a1:(Jessie_alloc_table.alloc_table t)) (a2:(Jessie_alloc_table.alloc_table
   t)) (p:(Jessie_pointer.pointer t)) (s:(Jessie_tag_id.tag_id t))
-  (c:Z): Prop := let ps := (Jessie_tag_table.downcast t1 p s) in
+  (c:Z): Prop := let ps := (Jessie_sidecast.sidecast t1 p s) in
   ((forall (i:Z), ((ZArith.BinInt.Z.rem i c) = 0%Z) ->
-  ((Jessie_tag_table.downcast t1 (Jessie_pointer.shift p i)
+  ((Jessie_sidecast.sidecast t1 (Jessie_pointer.shift p i)
   s) = (Jessie_pointer.shift ps (ZArith.BinInt.Z.quot i c)))) /\
-  ((forall (i:Z), ((Jessie_tag_table.downcast t1 (Jessie_pointer.shift p
+  ((forall (i:Z), ((Jessie_sidecast.sidecast t1 (Jessie_pointer.shift p
   (i * c)%Z) s) = (Jessie_pointer.shift ps i))) /\
   (((Jessie_alloc_table.offset_min a2
   ps) = (ZArith.BinInt.Z.quot (Jessie_alloc_table.offset_min a1 p) c)) /\
@@ -35,10 +36,10 @@ Definition reinterpret_cast_split {t:Type} {t_WT:WhyType t} (t1:(map.Map.map
   (Jessie_pointer.pointer t) (Jessie_tag_id.tag_id t)))
   (a1:(Jessie_alloc_table.alloc_table t)) (a2:(Jessie_alloc_table.alloc_table
   t)) (p:(Jessie_pointer.pointer t)) (s:(Jessie_tag_id.tag_id t))
-  (c:Z): Prop := let ps := (Jessie_tag_table.downcast t1 p s) in
-  ((forall (i:Z), ((Jessie_tag_table.downcast t1 (Jessie_pointer.shift p i)
+  (c:Z): Prop := let ps := (Jessie_sidecast.sidecast t1 p s) in
+  ((forall (i:Z), ((Jessie_sidecast.sidecast t1 (Jessie_pointer.shift p i)
   s) = (Jessie_pointer.shift ps (i * c)%Z))) /\ ((forall (i:Z),
-  ((ZArith.BinInt.Z.rem i c) = 0%Z) -> ((Jessie_tag_table.downcast t1
+  ((ZArith.BinInt.Z.rem i c) = 0%Z) -> ((Jessie_sidecast.sidecast t1
   (Jessie_pointer.shift p (ZArith.BinInt.Z.quot i c))
   s) = (Jessie_pointer.shift ps i))) /\ (((Jessie_alloc_table.offset_min a2
   ps) = (c * (Jessie_alloc_table.offset_min a1 p))%Z) /\
@@ -50,8 +51,8 @@ Definition reinterpret_cast_retain {t:Type} {t_WT:WhyType t} (t1:(map.Map.map
   (Jessie_pointer.pointer t) (Jessie_tag_id.tag_id t)))
   (a1:(Jessie_alloc_table.alloc_table t)) (a2:(Jessie_alloc_table.alloc_table
   t)) (p:(Jessie_pointer.pointer t)) (s:(Jessie_tag_id.tag_id t)): Prop :=
-  let ps := (Jessie_tag_table.downcast t1 p s) in ((forall (i:Z),
-  ((Jessie_tag_table.downcast t1 (Jessie_pointer.shift p i)
+  let ps := (Jessie_sidecast.sidecast t1 p s) in ((forall (i:Z),
+  ((Jessie_sidecast.sidecast t1 (Jessie_pointer.shift p i)
   s) = (Jessie_pointer.shift ps i))) /\ (((Jessie_alloc_table.offset_min a2
   ps) = (Jessie_alloc_table.offset_min a1 p)) /\
   ((Jessie_alloc_table.offset_max a2 ps) = (Jessie_alloc_table.offset_max a1

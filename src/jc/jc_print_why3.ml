@@ -225,8 +225,6 @@ let vc_kind fmttr k =
   fprintf fmttr "%s"
     (match k with
      | JCVCvar_decr -> "Variant decreases"
-     | JCVCpack -> "Pack"
-     | JCVCunpack -> "Unpack"
      | JCVCdiv_by_zero -> "Division by zero"
      | JCVCalloc_size -> "Allocation size"
      | JCVCuser_call n -> "Precondition for " ^ n
@@ -235,7 +233,6 @@ let vc_kind fmttr k =
      | JCVCpointer_shift -> "Pointer shift"
      | JCVCseparation -> "Separation assertion"
      | JCVCindex_bounds -> "Pointer index bounds"
-     | JCVCdowncast -> "Pointer cast"
      | JCVCarith_overflow -> "Arithmetic overflow"
      | JCVCfp_overflow -> "Floating-point overflow"
      | JCVCpre c -> c

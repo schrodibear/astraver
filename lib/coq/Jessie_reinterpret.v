@@ -6,11 +6,7 @@ Require Jessie_pointer.
 Require int.Int.
 Require int.Abs.
 Require int.ComputerDivision.
-Require map.Map.
 Require Jessie_tag_id.
-Require Jessie_tag.
-Require Jessie_tag_table_type.
-Require Jessie_tag_table.
 
 Parameter cast_factor: forall {t:Type} {t_WT:WhyType t},
   (Jessie_tag_id.tag_id t) -> (Jessie_tag_id.tag_id t) -> Z.
@@ -33,19 +29,4 @@ Axiom Cast_factor_trans : forall {t:Type} {t_WT:WhyType t},
   ((ZArith.BinInt.Z.rem (-c12)%Z c23) = 0%Z)))) ->
   (c13 = (-(ZArith.BinInt.Z.quot (-c12)%Z c23))%Z)) /\ (((c12 < 0%Z)%Z /\
   (c23 < 0%Z)%Z) -> (c13 = ((-c12)%Z * c23)%Z))))))).
-
-Axiom Downcast_reduce : forall {t:Type} {t_WT:WhyType t},
-  forall (t1:(map.Map.map (Jessie_pointer.pointer t) (Jessie_tag_id.tag_id
-  t))), forall (p:(Jessie_pointer.pointer t)),
-  forall (s2:(Jessie_tag_id.tag_id t)), forall (s1:(Jessie_tag_id.tag_id t)),
-  (~ ((cast_factor s1 s2) = 0%Z)) -> ((Jessie_tag_table.downcast t1
-  (Jessie_tag_table.downcast t1 p s1) s2) = (Jessie_tag_table.downcast t1 p
-  s2)).
-
-Axiom Typeof_sidecast : forall {t:Type} {t_WT:WhyType t},
-  forall (t1:(map.Map.map (Jessie_pointer.pointer t) (Jessie_tag_id.tag_id
-  t))), forall (p:(Jessie_pointer.pointer t)),
-  forall (s1:(Jessie_tag_id.tag_id t)), forall (s2:(Jessie_tag_id.tag_id t)),
-  (~ ((cast_factor s1 s2) = 0%Z)) -> (((map.Map.get t1 p) = s1) ->
-  ((map.Map.get t1 (Jessie_tag_table.downcast t1 p s2)) = s2)).
 
