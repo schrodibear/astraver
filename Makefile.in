@@ -63,7 +63,10 @@ PVSLIB = $(DESTDIR)@PVSLIB@
 
 GENERATED = src/why/why_version.ml \
 	    src/jc/jc_version.ml \
-            lib/why3/why3.conf
+            lib/why3/why3.conf \
+            lib/why3/z3.drv \
+            lib/why3/cvc4.drv \
+            lib/why3/alt-ergo.drv
 
 # main targets
 ##############
@@ -128,7 +131,19 @@ LIBWHY3=$(LIBDIR)/jessie
 
 WHY3_DATADIR=$(shell why3 --print-datadir)
 
-lib/why3/why3.conf: Makefile
+lib/why3/%.drv: lib/why3/%_enum.gen
+	@DRIVER=smt-libv2.drv; \
+	if [ $(@F) = alt-ergo.drv ]; then \
+	  DRIVER=alt_ergo.drv; \
+	elif [ $(@F) = cvc4.drv ]; then \
+	  DRIVER=cvc4_14.drv; \
+	elif [ $(@F) = z3.drv ]; then \
+	  DRIVER=z3_432.drv; \
+	fi; \
+	cp $< $@; \
+	printf "import \"$(WHY3_DATADIR)/drivers/$${DRIVER}\"" >> $@
+
+lib/why3/why3.conf:  lib/why3/cvc4.drv lib/why3/z3.drv lib/why3/alt-ergo.drv Makefile
 	@printf "[main]\n" > $@
 	@printf "loadpath=\"$(LIBWHY3)/why3\"\n" >> $@
 	@printf "\n" >> $@
@@ -167,7 +182,7 @@ lib/why3/why3.conf: Makefile
 	@printf "[prover]\n" >> $@
 	@printf "alternative = \"-trigs\"\n" >> $@
 	@printf "command = \"%%l/why3-cpulimit %%t %%m -s z3 -smt2 parser.ignore_user_patterns=true %%f\"\n" >> $@
-	@printf "driver = \"$(WHY3_DATADIR)/drivers/z3_432.drv\"\n" >> $@
+	@printf "driver = \"$(LIBWHY3)/why3/z3.drv\"\n" >> $@
 	@printf "editor = \"\"\n" >> $@
 	@printf "in_place = false\n" >> $@
 	@printf "interactive = false\n" >> $@
@@ -179,7 +194,7 @@ lib/why3/why3.conf: Makefile
 	@printf "alternative = \"'14\"\n" >> $@
 	@printf "command = \"%%l/why3-cpulimit %%t %%m -s cvc4 --lang=smt2 --simplification=none\
 		--quant-cf --qcf-tconstraint --mbqi=gen-ev --full-saturate-quant --uf-ss-fair %%f\"\n" >> $@
-	@printf "driver = \"$(WHY3_DATADIR)/drivers/cvc4_14.drv\"\n" >> $@
+	@printf "driver = \"$(LIBWHY3)/why3/cvc4.drv\"\n" >> $@
 	@printf "editor = \"\"\n" >> $@
 	@printf "in_place = false\n" >> $@
 	@printf "interactive = false\n" >> $@
@@ -190,7 +205,7 @@ lib/why3/why3.conf: Makefile
 	@printf "[prover]\n" >> $@
 	@printf "alternative = \"-Em\"\n" >> $@
 	@printf "command = \"%%l/why3-cpulimit %%t %%m -s alt-ergo -timelimit %%t -steps-bound %%S %%f -no-Ematching\"\n" >> $@
-	@printf "driver = \"$(WHY3_DATADIR)/drivers/alt_ergo.drv\"\n" >> $@
+	@printf "driver = \"$(LIBWHY3)/why3/alt-ergo.drv\"\n" >> $@
 	@printf "editor = \"altgr-ergo\"\n" >> $@
 	@printf "in_place = false\n" >> $@
 	@printf "interactive = false\n" >> $@
@@ -244,6 +259,7 @@ install-lib: $(JCLIB) lib/why3/why3.conf
 	mkdir -p $(LIBDIR)/jessie/why3
 	cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/core.mlw lib/why3/enum.mlw $(LIBDIR)/jessie/why3
 	cp -f lib/why3/cvc4_enum.gen lib/why3/alt-ergo_enum.gen lib/why3/z3_enum.gen $(LIBDIR)/jessie/why3
+	cp -f lib/why3/cvc4.drv lib/why3/alt-ergo.drv lib/why3/z3.drv $(LIBDIR)/jessie/why3
 	mkdir -p $(LIBDIR)/jessie
 	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
 

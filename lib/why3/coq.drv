@@ -172,26 +172,32 @@ theory enum.Uint64
 end
 
 theory enum.Bit_int8
+  remove prop To_int_def
   meta "realized_theory" "enum.Bit_int8", "Bit_int8"
 end
 
 theory enum.Bit_uint8
+  remove prop To_int_def
   meta "realized_theory" "enum.Bit_uint8", "Bit_uint8"
 end
 
 theory enum.Bit_int16
+  remove prop To_int_def
   meta "realized_theory" "enum.Bit_int16", "Bit_int16"
 end
 
 theory enum.Bit_uint16
+  remove prop To_int_def
   meta "realized_theory" "enum.Bit_uint16", "Bit_uint16"
 end
 
 theory enum.Bit_int32
+  remove prop To_int_def
   meta "realized_theory" "enum.Bit_int32", "Bit_int32"
 end
 
 theory enum.Bit_uint32
+  remove prop To_int_def
   meta "realized_theory" "enum.Bit_uint32", "Bit_uint32"
 end
 

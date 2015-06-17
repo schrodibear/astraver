@@ -25,10 +25,6 @@ bin
 /config.status
 /configure
 
-/jessie2-regtests.err
-/jessie2-regtests.out
-/regtest.opt
-
 /doc/version.tex
 /doc/*.aux
 /doc/*.toc
@@ -56,25 +52,13 @@ bin
 /doc/*.image.tex
 /doc/manual001.png
 
-/bin/gwhy.opt
 /bin/jessie.opt
-/bin/krakatoa.opt
-/bin/rv_merge.opt
-/bin/simplify2why.opt
-/bin/tool-stat.opt
-/bin/why-config.opt
-/bin/why-cpulimit
-/bin/why-dp.opt
-/bin/why-obfuscator.opt
-/bin/why-stat.opt
-/bin/why.opt
-/bin/why2html.opt
-/bin/gwhy.byte
 /bin/jessie.byte
-/bin/krakatoa.byte
-/bin/why.byte
 
 /lib/why3/why3.conf
+/lib/why3/alt-ergo.drv
+/lib/why3/cvc4.drv
+/lib/why3/z3.drv
 
 /src/why/why_lexer.ml
 /src/why/why_linenum.ml
@@ -84,58 +68,15 @@ bin
 /src/why/why_version.ml
 /src/why/why_xml.ml
 
-/mix/mix_lexer.ml
-/mix/mix_parser.ml
-/mix/mix_parser.mli
-
-/ml/parsing/lexer.ml
-/ml/parsing/linenum.ml
-/ml/parsing/parser.ml
-/ml/parsing/parser.mli
-
-/intf/config.ml
-/intf/hilight.ml
-/intf/tagsplit.ml
-/intf/whyhilight.ml
-
-/java/java_lexer.ml
-/java/java_parser.ml
-/java/java_parser.mli
-
-/src/jc/jc_ai.ml
 /src/jc/jc_lexer.ml
 /src/jc/jc_parser.ml
 /src/jc/jc_parser.mli
 /src/jc/jc_numconst.ml
 /src/jc/jc_version.ml
 
-/c/cconst.ml
-/c/clexer.ml
-/c/cllexer.ml
-/c/clparser.ml
-/c/clparser.mli
-/c/cparser.ml
-/c/cparser.mli
-/c/cpp.ml
-/c/cversion.ml
-
 /src/frama-c-plugin/.depend
 /src/frama-c-plugin/Jessie_DEP
 /src/frama-c-plugin/jessie_config.ml
-
-/tools/simplify_lexer.ml
-/tools/simplify_parser.ml
-/tools/simplify_parser.mli
-/tools/cvcl_split.ml
-/tools/ergo_split.ml
-/tools/rv_split.ml
-/tools/simplify_split.ml
-/tools/smtlib_split.ml
-/tools/toolstat_lex.ml
-/tools/toolstat_pars.ml
-/tools/toolstat_pars.mli
-/tools/why2html.ml
-/tools/zenon_split.ml
 
 /tests/java/*.jc
 /tests/java/*.mlw
@@ -163,8 +104,6 @@ bin
 /src/frama-c-plugin/tests/jessie/*.jessie/simplify
 /src/frama-c-plugin/tests/jessie/*.jessie/gappa
 /src/frama-c-plugin/tests/ptests_config
-
-/export
 
 .paths
 .project

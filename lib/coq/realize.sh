@@ -14,6 +14,9 @@ function generate_driver
     echo >$DRIVER
     for i in $THS; do
         echo "theory $i" >>$DRIVER
+        if [[ "$i" =~ enum.Bit_u?int(8|16|32)$ ]]; then
+            echo "  remove prop To_int_def" >>$DRIVER
+        fi
         echo "  meta \"realized_theory\" \"$i\", \"${i##*\.}\"" >>$DRIVER
         echo "end" >>$DRIVER
         echo >>$DRIVER
@@ -25,7 +28,7 @@ function patch_driver
     WHY3DATADIR=$(why3 --print-datadir)
     WHY3DATADIR=${WHY3DATADIR//\//\\\/}
     cp $DRIVER ./coq.gen
-    sed -e "s/WHY3DATADIR/$WHY3DATADIR/g" ./coq.drv >> ./coq.gen
+    echo "import \"${WHY3DATADIR}/drivers/coq.drv\"" >> ./coq.gen
 }
 
 function realize_theories
