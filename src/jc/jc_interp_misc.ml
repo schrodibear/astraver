@@ -144,13 +144,17 @@ let fresh_statement_label = make_label_counter "l__before_statement_"
 
 (* basic model types *)
 
-let root_model_type ri = O.Lt.(user ~from:(Name.Theory.root ri) (Name.Type.root ri) $ Nil)
+let root_model_type ri =
+  if ri.ri_name <> Name.voidp then
+    O.Lt.(Tc.user ~from:(Name.Theory.root ri) (Name.Type.root ri) $ Nil)
+  else
+    O.Lt.voidp ()
 
 let struct_model_type st = root_model_type (struct_root st)
 
 let pointer_class_model_type pc = root_model_type (pointer_class_root pc)
 
-let bitvector_type () = O.Lt.(user ~from:(Name.Theory.bitvector) Name.Type.bitvector $ Nil)
+let bitvector_type () = O.Lt.(Tc.user ~from:(Name.Theory.bitvector) Name.Type.bitvector $ Nil)
 
 let alloc_class_type =
   function
@@ -161,17 +165,17 @@ let memory_class_type mc = alloc_class_type (alloc_class_of_mem_class mc)
 
 (* raw types *)
 
-let raw_pointer_type ty' = O.Lt.(Jc.pointer Name.Type.pointer $. ty')
+let raw_pointer_type ty' = O.Lt.(Tc.Jc.pointer Name.Type.pointer $. ty')
 
-let raw_pset_type ty' = O.Lt.(Jc.pset Name.Type.pset $. ty')
+let raw_pset_type ty' = O.Lt.(Tc.Jc.pset Name.Type.pset $. ty')
 
-let raw_alloc_table_type ty' = O.Lt.(Jc.alloc_table Name.Type.alloc_table $. ty')
+let raw_alloc_table_type ty' = O.Lt.(Tc.Jc.alloc_table Name.Type.alloc_table $. ty')
 
-let raw_tag_table_type ty' = O.Lt.(Jc.tag_table_type Name.Type.tag_table $. ty')
+let raw_tag_table_type ty' = O.Lt.(Tc.Jc.tag_table_type Name.Type.tag_table $. ty')
 
-let raw_tag_id_type ty' = O.Lt.(Jc.tag_id Name.Type.tag_id $. ty')
+let raw_tag_id_type ty' = O.Lt.(Tc.Jc.tag_id Name.Type.tag_id $. ty')
 
-let raw_memory_type ty1' ty2' = O.Lt.(Jc.memory Name.Type.memory $ ty1' ^. ty2')
+let raw_memory_type ty1' ty2' = O.Lt.(Tc.Jc.memory Name.Type.memory $ ty1' ^. ty2')
 
 (* pointer model types *)
 
@@ -218,7 +222,7 @@ let rec type_ : type a b. (a, b) ty_opt -> _ -> a logic_type =
   function
   | JCTnative ty -> native_type t ty
   | JCTlogic (s, l) ->
-    return (let Ltype_hlist lhl = ltype_hlist l in user ~from:(Name.Theory.logic_type s) s $ lhl)
+    return (let Ltype_hlist lhl = ltype_hlist l in Tc.user ~from:(Name.Theory.logic_type s) s $ lhl)
   | JCTenum { ei_type = Int (r, b) } ->
     return (int (Int (r, b)))
   | JCTenum { ei_type = Enum e } ->

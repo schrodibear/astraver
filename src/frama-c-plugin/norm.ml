@@ -1753,6 +1753,7 @@ object(self)
 
   method! vfile _ =
     Type.Composite.Struct.(init_void @@ of_typ_exn @@ self#new_wrapper_for_type voidType);
+    Type.Composite.Struct.(init_char @@ of_typ_exn @@ self#new_wrapper_for_type charType);
     DoChildren
 
   method! vtype ty =

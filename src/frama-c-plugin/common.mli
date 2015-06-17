@@ -449,6 +449,8 @@ sig
       val is_struct : typ -> bool
       val void : unit -> t
       val init_void : t -> unit
+      val char : unit -> t
+      val init_char : t -> unit
     end
   end
 

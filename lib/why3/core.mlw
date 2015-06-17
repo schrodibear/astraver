@@ -386,6 +386,9 @@ theory Jessie_tag
     forall t : tag_id 't [subtag t bottom_tag].
       subtag t bottom_tag
 
+  axiom Bottom_int:
+    int_of_tag (bottom_tag : tag_id 'a) = 0
+
   predicate root_tag (t : tag_id 't) = parenttag t bottom_tag
 
   axiom Root_subtag:
@@ -419,24 +422,16 @@ theory Jessie_voidp
 end
 
 theory Jessie_voidp_tag_id
-  use import Jessie_tag_id
   use import Jessie_voidp
+  use import Jessie_tag
 
   constant voidP_tag : tag_id voidP
 
   axiom Voidp_int:
-    int_of_tag voidP_tag = 0
-end
+    int_of_tag voidP_tag = 1
 
-theory Jessie_charp_tag_id
-  use import Jessie_tag_id
-  use import Jessie_voidp
-  use import Jessie_voidp_tag_id
-
-  constant charP_tag : tag_id voidP
-
-  axiom Charp_int:
-    int_of_tag charP_tag = 1
+  axiom Voidp_parenttag_bottom:
+    parenttag voidP_tag bottom_tag
 end
 
 theory Jessie_tag_table
@@ -453,6 +448,27 @@ theory Jessie_tag_table
     forall p : pointer 't.
     forall s : tag_id 't [instanceof t p s | downcast t p s].
       instanceof t p s -> downcast t p s = p
+end
+
+theory Jessie_charp_tag_id
+  use import Jessie_voidp_tag_id
+  use import Jessie_voidp
+  use import Jessie_pointer
+  use import Jessie_tag
+  use import Jessie_tag_table
+
+  constant charP_tag : tag_id voidP
+
+  axiom Charp_int:
+    int_of_tag charP_tag = 2
+
+  axiom Charp_is_final:
+    forall t : tag_table voidP.
+      forall p : pointer voidP [instanceof t p charP_tag | typeof t p].
+        instanceof t p charP_tag -> typeof t p = charP_tag
+
+  axiom Charp_parenttag_voidp:
+    parenttag charP_tag voidP_tag
 end
 
 theory Jessie_sidecast

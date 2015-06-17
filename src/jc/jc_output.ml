@@ -188,8 +188,6 @@ struct
 
   let abs = U_int_op `Abs
 
-  let voidp () : (unit, _) t = Jc.voidp "voidP"
-
   let voidp_tag () : (unit, _) t = Jc.voidp_tag_id "voidP_tag"
 
   let charp_tag () : (unit, _) t = Jc.charp_tag_id "charP_tag"
@@ -534,6 +532,25 @@ struct
 
   type 'a poly = { tconstr : 'b. ('a, 'b) tconstr }
 
+  let user s ~from = User (from, s)
+
+  module Jc =
+  struct
+    open Name.Theory.Jessie
+
+    let pointer = user ~from:pointer
+    let alloc_table = user ~from:alloc_table
+    let memory = user ~from:memory
+    let pset = user ~from:pset
+    let tag_id = user ~from:tag_id
+    let voidp = user ~from:voidp
+    let tag = user ~from:tag
+    let tag_table_type = user ~from:tag_table_type
+    let tag_table = user ~from:tag_table
+  end
+
+  let voidp () : (unit, _) tconstr = Jc.voidp "voidP"
+
   type ('a, 'b) typed =
     | Ty of 'a ty
     | Poly of 'b poly
@@ -603,21 +620,7 @@ struct
 
   let var v = Var v $ Nil
 
-  let user s ~from = User (from, s)
-
-  module Jc =
-  struct
-    open Name.Theory.Jessie
-
-    let pointer = user ~from:pointer
-    let alloc_table = user ~from:alloc_table
-    let memory = user ~from:memory
-    let pset = user ~from:pset
-    let tag_id = user ~from:tag_id
-    let tag = user ~from:tag
-    let tag_table_type = user ~from:tag_table_type
-    let tag_table = user ~from:tag_table
-  end
+  let voidp () = Tc.voidp () $ Nil
 
   type poly_logic_type = { logic_type : 'a. 'a logic_type }
 

@@ -1488,6 +1488,12 @@ struct
         | Some wrapper -> wrapper
         | None -> Console.fatal "Type.Composite.Struct.void: called before normalization"
 
+      let char_wrapper = ref None
+      let char () =
+        match !char_wrapper with
+        | Some wrapper -> wrapper
+        | None -> Console.fatal "Type.Composite.Struct.char: called before normalization"
+
       let of_typ ty =
         match unrollType ty with
         | TComp ({ cstruct = true }, _, _) ->
@@ -1512,6 +1518,15 @@ struct
           | TComp ({ cstruct = true }, _, _) ->
             void_wrapper := Some wrapper
           | _ -> Console.fatal "Type.Composite.Struct.init_void: called on non-struct"
+
+      let init_char wrapper =
+        match !char_wrapper with
+        | Some _ -> Console.fatal "Type.Composite.Struct.init_char: called after initilization"
+        | None ->
+          match wrapper with
+          | TComp ({ cstruct = true }, _, _) ->
+            char_wrapper := Some wrapper
+          | _ -> Console.fatal "Type.Composite.Struct.init_char: called on non-struct"
     end
   end
 

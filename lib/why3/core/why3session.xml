@@ -107,15 +107,17 @@
 </theory>
 <theory name="Jessie_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
-<theory name="Jessie_voidp_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
-</theory>
-<theory name="Jessie_charp_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
-</theory>
 <theory name="Jessie_tag" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
 <theory name="Jessie_tag_table_type" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
+<theory name="Jessie_voidp" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Jessie_voidp_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
 <theory name="Jessie_tag_table" sum="d41d8cd98f00b204e9800998ecf8427e">
+</theory>
+<theory name="Jessie_charp_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 <theory name="Jessie_sidecast" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
@@ -123,14 +125,14 @@
 </theory>
 <theory name="Jessie_reinterpret_cast" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
-<theory name="Jessie_allocable" sum="6f9187d7dd87c5651616aabc0569cfd5">
+<theory name="Jessie_allocable" sum="79934a522a75ea7e4fbf7fac18278daa">
  <goal name="Alloc_fresh_not_same_block">
  <proof prover="0" memlimit="2000"><result status="valid" time="0.01" steps="13"/></proof>
  </goal>
 </theory>
 <theory name="Jessie_alloc" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
-<theory name="Jessie_same_except" sum="8a847b2ec508a87b3221b4e17e750aa5">
+<theory name="Jessie_same_except" sum="90637a149e8eac6f6f592b5af818df13">
  <goal name="Alloc_same_except_trans">
  <proof prover="4"><result status="valid" time="0.00"/></proof>
  </goal>

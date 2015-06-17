@@ -198,8 +198,12 @@ let cmp_subtype =
   else
     `neither
 
-class struct_hierarchy_builder =
-  let unify_type_hierarchies ty1 ty2 =
+class struct_hierarchy_builder () =
+  let unify_type_hierarchies =
+    let ty_void, ty_char =
+      Type.Composite.Struct.((void () :> typ), (char () :> typ))
+    in
+    fun ty1 ty2 ->
     (* Extract info from types *)
     let comp_ty_of_ty_exn ty =
       match unrollType (pointed_type ty) with
@@ -207,20 +211,20 @@ class struct_hierarchy_builder =
       | t -> Console.fatal "unify_type_hierarchies: non-composite type %a" Printer.pp_typ t
     in
     let ty1, ty2 = map_pair comp_ty_of_ty_exn (ty1, ty2) in
-    (* Compare types *)
-    match cmp_subtype ty1 ty2 with
-    | `supertype ->
-      (* [ty2] subtype of [ty1] *)
-      add_inheritance_relation ty2 ty1
-    | `subtype ->
-      (* [ty1] subtype of [ty2] *)
-      add_inheritance_relation ty1 ty2
-    | `neither ->
-      (* no subtyping relation, but in order to allow side-casts we still
-         need both types to be in the same hierarchy, therefore unifying both with void *)
-      let ty_void = (Type.Composite.Struct.void () :> typ) in
-      add_inheritance_relation ty1 ty_void;
-      add_inheritance_relation ty2 ty_void
+    if not (Typ.equal ty1 ty_char) && not (Typ.equal ty2 ty_char) then
+      (* Compare types *)
+      match cmp_subtype ty1 ty2 with
+      | `supertype ->
+        (* [ty2] subtype of [ty1] *)
+        add_inheritance_relation ty2 ty1
+      | `subtype ->
+        (* [ty1] subtype of [ty2] *)
+        add_inheritance_relation ty1 ty2
+      | `neither ->
+        (* no subtyping relation, but in order to allow side-casts we still
+           need both types to be in the same hierarchy, therefore unifying both with void *)
+        add_inheritance_relation ty1 ty_void;
+        add_inheritance_relation ty2 ty_void
   in
 object (self)
 
@@ -280,7 +284,8 @@ let create_struct_hierarchy file =
          while not (Queue.is_empty q) do bfs @@ Queue.pop q done)
       classes
   in
-  visitFramacFile (new struct_hierarchy_builder) file;
+  visitFramacFile (new struct_hierarchy_builder ()) file;
+  Type.Composite.Struct.(add_inheritance_relation (char () :> typ) (void () :> typ));
   compute_hierarchy ()
 
 let subtype ty parentty =

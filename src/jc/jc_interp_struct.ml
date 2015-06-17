@@ -711,21 +711,24 @@ let free_param ~safe ac pc =
 
 let struc =
   let fresh_tag_id =
-    let counter = ref 2 in
+    let counter = ref 3 in
     fun () -> incr counter; !counter
   in
   fun si ->
-    let tag_id_type = O.Wd.mk ~name:(Name.tag si) @@ Logic ([], tag_id_type (struct_root si)) in
+    let unless_builtin ?(and_=true) =
+      let bultin = si.si_name = Name.charp || si.si_name = Name.voidp in
+      fun r ->
+        if not bultin && and_ then [r ()] else []
+    in
+    let tag_id_type =
+      unless_builtin @@ fun () ->
+      O.Wd.mk ~name:(Name.tag si) @@ Logic ([], tag_id_type (struct_root si))
+    in
     let int_of_tag_axiom =
+      unless_builtin @@ fun () ->
       O.Wd.mk
         ~name:(Name.Axiom.int_of_tag si)
-        O.(Goal (KAxiom,
-               if si.si_name <> Name.charp && si.si_name <> Name.voidp then
-                 T.(int_of_tag (var (Name.tag si)) = int (fresh_tag_id ()))
-               else if si.si_name = Name.charp then
-                 T.(var (Name.tag si) = charp_tag ())
-               else (* voidp *)
-                 T.(var (Name.tag si) = voidp_tag ())))
+        O.(Goal (KAxiom, T.(int_of_tag @@ var @@ Name.tag si = int @@ fresh_tag_id ())))
     in
     let preds, safe_params, unsafe_params =
       if not @@ struct_of_union si then
@@ -761,42 +764,54 @@ let struc =
         [], [], []
     in
     let instanceof_implies_typeof_if_final =
-      if si.si_final then
-        [O.Wd.mk ~name:(si.si_name ^ "_is_final") @@
-         Goal (KAxiom,
-               let ri = Option.value_fail ~in_:__LOC__ si.si_hroot.si_root in
-               O.P.(forall (Name.Generic.tag_table (struct_root si)) (tag_table_type ri) @@ fun _t ->
-                    forall "p" (pointer_type (JCalloc_root ri) (JCtag (si, []))) @@ fun p ->
-                    impl
-                      (instanceof ~code:false p si)
-                      (typeeq ~code:false p si)))]
-      else
-        []
+      unless_builtin ~and_:si.si_final @@ fun () ->
+      O.Wd.mk ~name:(si.si_name ^ "_is_final") @@
+      Goal (KAxiom,
+            let ri = Option.value_fail ~in_:__LOC__ si.si_hroot.si_root in
+            O.P.(forall (Name.Generic.tag_table (struct_root si)) (tag_table_type ri) @@ fun _t ->
+                 forall "p" (pointer_type (JCalloc_root ri) (JCtag (si, []))) @@ fun p ->
+                 impl
+                   (instanceof ~code:false p si)
+                   (typeeq ~code:false p si)))
     in
     let parent_tag_axiom =
+      unless_builtin @@ fun () ->
       begin match si.si_parent with
       | None ->
         let p = O.(P.parenttag T.(var @@ Name.tag si) T.(var "bottom_tag")) in
         O.Wd.mk ~name:(si.si_name ^ "_parenttag_bottom") @@ Goal (KAxiom, p)
       | Some (parent, _) ->
-        let p = O.(P.parenttag T.(var @@ Name.tag si) T.(var @@ Name.tag parent)) in
+        let p = O.(P.parenttag T.(var @@ Name.tag si) @@ T.tag parent) in
         O.Wd.mk ~name:(si.si_name ^ "_parenttag_" ^ parent.si_name) @@ Goal (KAxiom, p)
       end
     in
+    let deps =
+      let use_th th = [Use (`Import None, O.Th.dummy @@ fst th)] in
+      Name.(
+        if si.si_name = voidp then
+          use_th Theory.Jessie.voidp_tag_id
+        else if si.si_name = charp then
+          use_th Theory.Jessie.charp_tag_id
+        else
+          [])
+    in
     O.[Entry.some @@
-       Th.mk ~name:(fst @@ Name.Theory.struct_ (JCtag (si, []))) @@
-       tag_id_type :: int_of_tag_axiom :: preds @ instanceof_implies_typeof_if_final @ parent_tag_axiom :: [];
+       Th.mk ~name:(fst @@ Name.Theory.struct_ (JCtag (si, []))) ~deps @@
+       tag_id_type @ int_of_tag_axiom @ preds @ instanceof_implies_typeof_if_final @ parent_tag_axiom;
        Entry.some @@
        Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:true (JCtag (si, []))) ~safe:true safe_params;
        Entry.some @@
        Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:false (JCtag (si, []))) ~safe:false unsafe_params]
 
 let root ri =
+  let unless_builtin ?(and_=true) =
+    let bultin = ri.ri_name = Name.voidp in
+    fun r ->
+      if not bultin && and_ then [r ()] else []
+  in
   let type_param =
-    if ri.ri_name <> Name.voidp then
-      [O.Wd.mk ~name:(Name.Type.root ri) @@ Type []]
-    else
-      []
+    unless_builtin @@ fun () ->
+    O.Wd.mk ~name:(Name.Type.root ri) @@ Type []
   in
   let preds, safe_params, unsafe_params =
     let ac = JCalloc_root ri and pc = JCroot ri in
@@ -820,22 +835,20 @@ let root ri =
       [], [], []
   in
   let same_typeof_in_block_if_struct =
-    if not (root_is_union ri) && ri.ri_name <> Name.voidp then
-      [O.Wd.mk ~name:(ri.ri_name ^ "_whole_block_tag") @@
-       Goal (KAxiom,
-             let ri_pointer_type = pointer_type (JCalloc_root ri) (JCroot ri) in
-             O.P.(
-               forall (Name.Generic.tag_table ri) (tag_table_type ri) @@ fun _ ->
-               forall "p" ri_pointer_type @@ fun p ->
-               forall "q" ri_pointer_type @@ fun q ->
-               impl (same_block p q)
-                 T.(typeof ~code:false ri p = typeof ~code:false ri q)))]
-    else
-      []
+    unless_builtin ~and_:(root_is_union ri) @@ fun () ->
+      O.Wd.mk ~name:(ri.ri_name ^ "_whole_block_tag") @@
+      Goal (KAxiom,
+            let ri_pointer_type = pointer_type (JCalloc_root ri) (JCroot ri) in
+            O.P.(
+              forall (Name.Generic.tag_table ri) (tag_table_type ri) @@ fun _ ->
+              forall "p" ri_pointer_type @@ fun p ->
+              forall "q" ri_pointer_type @@ fun q ->
+              impl (same_block p q)
+                 T.(typeof ~code:false ri p = typeof ~code:false ri q)))
   in
   let deps =
     if ri.ri_name = Name.voidp then
-      [Use (`Export, O.Th.dummy @@ fst Name.Theory.Jessie.voidp)]
+      [Use (`Import None, O.Th.dummy @@ fst Name.Theory.Jessie.voidp)]
     else
       []
   in
