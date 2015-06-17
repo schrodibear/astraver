@@ -700,8 +700,12 @@ let make_logic_bin_op ~loc ~(op : bin_op) e1 e2 =
   | `Badd_mod ->
     typing_error ~loc "unexpected types for +%%"
   | `Bsub when is_pointer_type t1 && is_integer t2 ->
-    let e2 = new term_with e2 ~node:(Tuple.T3.trd @@ make_logic_unary_op loc `Uminus e2) in
-    return t1 ~region:e1#region (JCTshift (e1, term_implicit_coerce t2 (JCTnative Tinteger) e2))
+    let e2 =
+      new term_with
+        e2
+        ~node:(Tuple.T3.trd @@ make_logic_unary_op loc `Uminus (term_implicit_coerce t2 (JCTnative Tinteger) e2))
+    in
+    return t1 ~region:e1#region (JCTshift (e1, e2))
   | `Bsub when is_pointer_type t1 && is_pointer_type t2 && comparable_types t1 t2 ->
     return integer_type ~region:dummy_region (JCTbinary (e1, bin_op `Pointer `Bsub, e2))
   | `Bsub when is_numeric t1 && is_numeric t2 ->
@@ -1800,8 +1804,12 @@ let make_bin_op loc (op: operational_op) e1 e2 =
   | `Badd_mod ->
     typing_error ~loc "enum type expected for +%%"
   | `Bsub when is_pointer_type t1 && is_integer t2 ->
-    let e2 = new expr_with ~node:(Tuple.T3.trd @@ make_unary_op loc `Uminus e2) e2 in
-    return ~t:t1 ~region:e1#region @@ JCEshift (e1, implicit_coerce t2 (JCTnative Tinteger) e2)
+    let e2 =
+      new expr_with
+        e2
+        ~node:(Tuple.T3.trd @@ make_unary_op loc `Uminus (implicit_coerce t2 (JCTnative Tinteger) e2))
+    in
+    return ~t:t1 ~region:e1#region @@ JCEshift (e1, e2)
   | `Bsub when is_pointer_type t1 && is_pointer_type t2 && comparable_types t1 t2 ->
     return ~t:integer_type ~region:dummy_region (JCEbinary (e1, bin_op `Pointer `Bsub, e2))
   | `Bsub when is_numeric t1 && is_numeric t2 || is_gen_float t1 && is_gen_float t2 ->
