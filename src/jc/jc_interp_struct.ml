@@ -374,7 +374,7 @@ let containerof_pred : type t1 t2.
             si.si_fields
             ~f:(function
               | ({ fi_type = JCTpointer (fpc, Some l, Some r); fi_bitoffset } as fi)
-                when Num.(l =/ Int 0 && r =/ Int 1) && fi_bitoffset mod 8 = 0 ->
+                when Num.(l =/ Int 0 && r =/ Int 0) && fi_bitoffset mod 8 = 0 ->
                 let (fac, _) as facr = alloc_class_of_pointer_class fpc, dummy_region in
                 let off = fi_bitoffset / 8 in
                 let open Num in
@@ -383,8 +383,11 @@ let containerof_pred : type t1 t2.
                   let contains =
                     map_si fac fpc
                       ~f:(fun fsi ->
-                        let cast' = O.T.sidecast ~code:false in
-                        O.P.[T.(cast' (shift (cast' fp ~tag:(charp_tag ()) fsi) (int (- off))) si) = p])
+                        if List.for_all (fun si -> (struct_root si).ri_name = Name.voidp) [fsi; si] then
+                          let cast' = O.T.sidecast ~code:false in
+                          O.P.[T.(cast' (shift (cast' fp ~tag:(charp_tag ()) fsi) (int (- off))) si) = p]
+                        else
+                          [])
                   in
                   O.P.(conj contains && containerof ~arg:Singleton ~in_param:false facr fpc fp)
                 in
