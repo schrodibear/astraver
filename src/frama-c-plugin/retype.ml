@@ -211,20 +211,26 @@ class struct_hierarchy_builder () =
       | t -> Console.fatal "unify_type_hierarchies: non-composite type %a" Printer.pp_typ t
     in
     let ty1, ty2 = map_pair comp_ty_of_ty_exn (ty1, ty2) in
-    if not (Typ.equal ty1 ty_char) && not (Typ.equal ty2 ty_char) then
-      (* Compare types *)
-      match cmp_subtype ty1 ty2 with
-      | `supertype ->
-        (* [ty2] subtype of [ty1] *)
-        add_inheritance_relation ty2 ty1
-      | `subtype ->
-        (* [ty1] subtype of [ty2] *)
-        add_inheritance_relation ty1 ty2
-      | `neither ->
-        (* no subtyping relation, but in order to allow side-casts we still
+    (* Compare types *)
+    match cmp_subtype ty1 ty2 with
+    | `supertype ->
+      if not (Typ.equal ty1 ty_char) then
+      (* [ty2] subtype of [ty1] *)
+      add_inheritance_relation ty2 ty1
+    | `subtype ->
+      if not (Typ.equal ty2 ty_char) then
+      (* [ty1] subtype of [ty2] *)
+      add_inheritance_relation ty1 ty2
+    | `neither ->
+      (* no subtyping relation, but in order to allow side-casts we still
            need both types to be in the same hierarchy, therefore unifying both with void *)
-        add_inheritance_relation ty1 ty_void;
-        add_inheritance_relation ty2 ty_void
+      add_inheritance_relation ty1 ty_void;
+      add_inheritance_relation ty2 ty_void
+  in
+  let is_pointer_type ty =
+    match unrollType ty with
+    | TPtr _ | TArray _ -> true
+    | _ -> false
   in
 object (self)
 
@@ -232,9 +238,9 @@ object (self)
 
   method! vexpr e =
     match e.enode with
-    | CastE (ty, _, e) when isPointerType ty ->
+    | CastE (ty, _, e) when is_pointer_type ty ->
       let ety = typeOf (stripInfo e) in
-      if isPointerType ety then
+      if is_pointer_type ety then
         unify_type_hierarchies ty ety;
       DoChildren
     | _ -> DoChildren
@@ -244,7 +250,17 @@ object (self)
     | TCastE _ ->
       ignore @@ self#vexpr @@ stripInfo @@ fst @@ Ast.Term.to_exp_env t;
       DoChildren
+    | TOffsetOf fi ->
+      unify_type_hierarchies fi.ftype (TPtr (TComp (fi.fcomp, empty_size_cache (), []), []));
+      SkipChildren
     | _ -> DoChildren
+
+  method! vjessie_pragma (JPexpr t) =
+    match t.term_node with
+    | TCoerce (t, typ) when Logic_utils.isLogicType is_pointer_type t.term_type && is_pointer_type typ ->
+      unify_type_hierarchies (Logic_utils.logicCType t.term_type) typ;
+      SkipChildren
+    | _ -> SkipChildren
 end
 
 let parent_type = Typ.Hashtbl.create 17
@@ -285,7 +301,7 @@ let create_struct_hierarchy file =
       classes
   in
   visitFramacFile (new struct_hierarchy_builder ()) file;
-  Type.Composite.Struct.(add_inheritance_relation (char () :> typ) (void () :> typ));
+  Type.Composite.Struct.(TypeUF.unify (char () :> typ) (void () :> typ));
   compute_hierarchy ()
 
 let subtype ty parentty =
