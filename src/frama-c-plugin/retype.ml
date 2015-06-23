@@ -204,28 +204,29 @@ class struct_hierarchy_builder () =
       Type.Composite.Struct.((void () :> typ), (char () :> typ))
     in
     fun ty1 ty2 ->
-    (* Extract info from types *)
-    let comp_ty_of_ty_exn ty =
-      match unrollType (pointed_type ty) with
-      | TComp (ci, _, _) -> typeDeepDropAllAttributes @@ TComp (ci, empty_size_cache (), [])
-      | t -> Console.fatal "unify_type_hierarchies: non-composite type %a" Printer.pp_typ t
-    in
-    let ty1, ty2 = map_pair comp_ty_of_ty_exn (ty1, ty2) in
-    (* Compare types *)
-    match cmp_subtype ty1 ty2 with
-    | `supertype ->
-      if not (Typ.equal ty1 ty_char) then
-      (* [ty2] subtype of [ty1] *)
-      add_inheritance_relation ty2 ty1
-    | `subtype ->
-      if not (Typ.equal ty2 ty_char) then
-      (* [ty1] subtype of [ty2] *)
-      add_inheritance_relation ty1 ty2
-    | `neither ->
-      (* no subtyping relation, but in order to allow side-casts we still
-           need both types to be in the same hierarchy, therefore unifying both with void *)
-      add_inheritance_relation ty1 ty_void;
-      add_inheritance_relation ty2 ty_void
+      if List.for_all (Type.Composite.Struct.is_struct % pointed_type) [ty1; ty2] then
+        (* Extract info from types *)
+        let struct_ty_of_ty_exn ty =
+          match unrollType (pointed_type ty) with
+          | TComp (ci, _, _) when ci.cstruct -> typeDeepDropAllAttributes @@ TComp (ci, empty_size_cache (), [])
+          | t -> Console.fatal "unify_type_hierarchies: non-structure type %a" Printer.pp_typ t
+        in
+        let ty1, ty2 = map_pair struct_ty_of_ty_exn (ty1, ty2) in
+        (* Compare types *)
+        match cmp_subtype ty1 ty2 with
+        | `supertype ->
+          if not (Typ.equal ty1 ty_char) then
+            (* [ty2] subtype of [ty1] *)
+            add_inheritance_relation ty2 ty1
+        | `subtype ->
+          if not (Typ.equal ty2 ty_char) then
+            (* [ty1] subtype of [ty2] *)
+            add_inheritance_relation ty1 ty2
+        | `neither ->
+          (* no subtyping relation, but in order to allow side-casts we still
+             need both types to be in the same hierarchy, therefore unifying both with void *)
+          add_inheritance_relation ty1 ty_void;
+          add_inheritance_relation ty2 ty_void
   in
   let is_pointer_type ty =
     match unrollType ty with
@@ -243,6 +244,19 @@ object (self)
       if is_pointer_type ety then
         unify_type_hierarchies ty ety;
       DoChildren
+    | CastE (_, _, { enode = AddrOf (Mem { enode = CastE (bt, _, z) }, off) })
+      when isZero z && is_pointer_type bt && isStructOrUnionType (pointed_type bt) ->
+      let rec loop =
+        function
+        | Field (fi, off) when fi.fcomp.cstruct ->
+          unify_type_hierarchies fi.ftype bt;
+          loop off
+        | Field (_, off) -> loop off
+        | NoOffset -> ()
+        | Index _ as off -> Console.fatal "struct_hierarchy_builder: impossible index: %a" Printer.pp_offset off
+      in
+      loop off;
+      SkipChildren
     | _ -> DoChildren
 
   method! vterm t =
