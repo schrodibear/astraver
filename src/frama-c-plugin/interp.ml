@@ -705,7 +705,7 @@ and terms ?(in_zone=false) t =
         let dstty = unrollType @@ pointed_type ptrty in
         let srcty = unrollType @@ Type.Logic_c_type.(map ~f:pointed_type (of_logic_type_exn t.term_type)) in
         begin match srcty, dstty with
-        | TComp _, TComp _ ->
+        | TComp (ci1, _, _), TComp (ci2, _, _) when ci1.cstruct && ci2.cstruct ->
           [JCPEcast (term t, ctype ptrty)]
         | _ ->
           Console.unsupported "Casting from type %a to type %a not allowed in logic"
@@ -1376,33 +1376,35 @@ let rec expr e =
         Printer.pp_typ (typeOf e') Printer.pp_typ ty
 
     | CastE (ptrty, _, _e1) when isPointerType ptrty ->
-        begin
-          let rec strip_cast_and_infos ?(cast=true) e =
-            match e.enode with
-            | Info (e, _) -> strip_cast_and_infos e
-            | CastE (_, _, e) when cast -> strip_cast_and_infos ~cast:false e
-            | CastE (_, _, e) when isConstant (stripCastsAndInfo e) -> e
-            | _ -> e
-          in
-          let e = strip_cast_and_infos e in
-          match e.enode with
-          | Const c
-              when is_integral_const c
-                && Integer.equal (value_of_integral_const c) Integer.zero ->
-              JCPEconst JCCnull
-          | _ ->
-              let ety = typeOf e in
-              if isIntegralType ety then
-                Console.unsupported "Casting from type %a to type %a not allowed"
-                  Printer.pp_typ (typeOf e) Printer.pp_typ ptrty
-              else if isPointerType ety then
-                  let enode = JCPEcast (expr e, ctype ptrty) in
-                  let e = locate (mkexpr enode e.eloc) in
-                  e#node
-              else
-                Console.unsupported "Casting from type %a to type %a not allowed"
-                  Printer.pp_typ (typeOf e) Printer.pp_typ ptrty
-        end
+      let rec strip_cast_and_infos ?(cast=true) e =
+        match e.enode with
+        | Info (e, _) -> strip_cast_and_infos e
+        | CastE (_, _, e) when cast -> strip_cast_and_infos ~cast:false e
+        | CastE (_, _, e) when isConstant (stripCastsAndInfo e) -> e
+        | _ -> e
+      in
+      let e = strip_cast_and_infos e in
+      let is_struct_pointer ty =
+        (isPointerType ty || isArrayType ty) && Type.Composite.Struct.is_struct (pointed_type ty)
+      in
+      begin match e.enode with
+      | Const c
+        when is_integral_const c
+             && Integer.equal (value_of_integral_const c) Integer.zero ->
+        JCPEconst JCCnull
+      | _ ->
+        let ety = typeOf e in
+        if isIntegralType ety then
+          Console.unsupported "Casting from type %a to type %a not allowed"
+            Printer.pp_typ (typeOf e) Printer.pp_typ ptrty
+        else if is_struct_pointer ety && is_struct_pointer ptrty then
+          let enode = JCPEcast (expr e, ctype ptrty) in
+          let e = locate (mkexpr enode e.eloc) in
+          e#node
+        else
+          Console.unsupported "Casting from type %a to type %a not allowed"
+            Printer.pp_typ (typeOf e) Printer.pp_typ ptrty
+      end
 
     | CastE (ty, _, e') ->
         (* TODO: support other casts in Jessie as well, through low-level
