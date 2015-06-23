@@ -1335,21 +1335,6 @@ class term_bw_op_retyping_visitor =
 let retype_bw_ops_in_terms = visitFramacFile @@ new term_bw_op_retyping_visitor
 
 (*****************************************************************************)
-(* Fold constants to avoid incorrect sizeofs.                                *)
-(*****************************************************************************)
-
-let fold_constants_in_terms =
-  visitFramacFile
-    (object
-      inherit frama_c_inplace
-      method! vterm t =
-        ChangeTo (
-          Ast.Term.to_exp_env t |>
-          map_fst (map_under_info @@ visitCilExpr @@ constFoldVisitor true) |>
-          Ast.Term.of_exp_env)
-    end)
-
-(*****************************************************************************)
 (* Replace inine assembly with undefined function calls.                     *)
 (*****************************************************************************)
 
@@ -2415,8 +2400,6 @@ let rewrite file =
   apply retype_bw_ops_in_terms "retyping bitwise binary operations in terms";
   (* Expand assigns clauses and equalities for composite types. *)
   apply expand_composites "expanding assigns clauses and equality for composite types";
-  (* Fold constants to avoid incorrect sizeofs. *)
-  apply fold_constants_in_terms "folding constants in terms to avoid incorrect sizeofs";
   (* adds a behavior named [name_of_default_behavior] to all functions if
      it does not already exist.
    *)
