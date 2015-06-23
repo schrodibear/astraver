@@ -32,18 +32,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
-module Ai = Jc_ai
 module Ast = Jc_ast
-module Annot_inference = Jc_annot_fail
 module Callgraph = Jc_callgraph
-module Common_options = Jc_common_options
 module Constructors = Jc_constructors
+module Common_options = Jc_common_options
 module Env = Jc_env
 module Effect = Jc_effect
 module Envset = Jc_envset
 module Fenv = Jc_fenv
-module Frame = Jc_frame
-module Frame_notin = Jc_frame_notin
 module Interp_struct = Jc_interp_struct
 module Interp_misc = Jc_interp_misc
 module Interp = Jc_interp
