@@ -166,193 +166,189 @@ let run () =
        method! vvrbl = Varinfo.Hashtbl.(restore_sharing ~find ~add ~f:Fn.id cvi)
      end)
     file;
-  try
-    if file.globals = [] then
-      Console.abort "Nothing to process. There was probably an error before.";
-    (* Phase 1: various preprocessing steps before C to Jessie translation *)
 
-    (* Enforce the prototype of malloc to exist before visiting anything.
-     * It might be useful for allocation pointers from arrays.
-     *)
-    ignore (Ast.Vi.Function.malloc ());
-    ignore (Ast.Vi.Function.free ());
-    Console.debug  "After malloc and free";
-    Debug.check_exp_types file;
-    steal_annots ();
-    Console.debug "After steal_annots";
-    Debug.check_exp_types file;
-    (* Extract relevant globals *)
-    if Config.Extract.get () then begin
-      Console.debug "Extract relevant globals";
-      Extractor.extract file;
-      Debug.check_exp_types file
+  if file.globals = [] then
+    Console.abort "Nothing to process. There was probably an error before.";
+  (* Phase 1: various preprocessing steps before C to Jessie translation *)
+
+  (* Enforce the prototype of malloc to exist before visiting anything.
+   * It might be useful for allocation pointers from arrays.
+  *)
+  ignore (Ast.Vi.Function.malloc ());
+  ignore (Ast.Vi.Function.free ());
+  Console.debug  "After malloc and free";
+  Debug.check_exp_types file;
+  steal_annots ();
+  Console.debug "After steal_annots";
+  Debug.check_exp_types file;
+  (* Extract relevant globals *)
+  if Config.Extract.get () then begin
+    Console.debug "Extract relevant globals";
+    Extractor.extract file;
+    Debug.check_exp_types file
+  end;
+  (* Rewrite ranges in logic annotations by comprehesion *)
+  Console.debug "from range to comprehension";
+  Rewrite.from_range_to_comprehension (Cil.inplace_visit ()) file;
+  Debug.check_exp_types file;
+
+  (* Phase 2: C-level rewriting to facilitate analysis *)
+
+  Rewrite.rewrite file;
+  Debug.check_exp_types file;
+
+  (* Phase 3: Caduceus-like normalization that rewrites C-level AST into
+   * Jessie-like AST, still in Cil (in order to use Cil visitors)
+  *)
+
+  Norm.normalize file;
+  Retype.retype file;
+  Debug.check_exp_types file;
+
+  (* Phase 4: various postprocessing steps, still on Cil AST *)
+
+  (* Rewrite ranges back in logic annotations *)
+  Rewrite.from_comprehension_to_range (Cil.inplace_visit ()) file;
+  Debug.check_exp_types  file;
+
+  (* Phase 5: C to Jessie translation, should be quite straighforward at this
+   * stage (after normalization)
+  *)
+  Console.debug "Jessie pragmas";
+  let pragmas = Interp.pragmas file in
+  Console.debug "Jessie translation";
+  let pfile = Interp.file file in
+  Console.debug "Printing Jessie program";
+
+  (* Phase 6: pretty-printing of Jessie program *)
+
+  let sys_command cmd =
+    if Sys.command cmd <> 0 then
+      Console.abort "Jessie subprocess failed: %s" cmd
+  in
+
+  let projname = Config.Project_name.get () in
+  let projname =
+    if projname <> "" then projname
+    else
+      match Kernel.Files.get() with
+      | [f] ->
+        (try Filename.chop_extension f with Invalid_argument _ -> f)
+      | _ -> "whole_program"
+  in
+  (* if called on 'path/file.c', projname is 'path/file' *)
+  (* jessie_subdir is 'path/file.jessie' *)
+  let jessie_subdir = projname ^ ".jessie" in
+  let mkdir_p dir =
+    if Sys.file_exists dir then begin
+      if Unix.((stat dir).st_kind <> S_DIR) then
+        failwith ("failed to create directory " ^ dir)
+    end else
+      Unix.mkdir dir 0o777
+  in
+  mkdir_p jessie_subdir;
+  Console.feedback "Producing Jessie files in subdir %s" jessie_subdir;
+
+  (* basename is 'file' *)
+  let basename =
+    String.filter_alphanumeric ~assoc:['-', '-'; ' ', '-'; '(', '-'; ')', '-'] ~default:'_' @@
+    Filename.basename projname
+  in
+
+  (* filename is 'file.jc' *)
+  let filename = basename ^ ".jc" in
+  Why_pp.print_in_file
+    (fun fmt ->
+       Jc.Print.print_decls fmt pragmas;
+       Format.fprintf fmt "%a" Jc.Print_p.pdecls pfile)
+    (Filename.concat jessie_subdir filename);
+  Console.feedback "File %s/%s written." jessie_subdir filename;
+
+  (* Phase 7: produce source-to-source correspondance file *)
+  (* locname is 'file.cloc' *)
+  let locname = basename ^ ".cloc" in
+  Why_pp.print_in_file
+    Jc.Print.jc_print_pos
+    (Filename.concat jessie_subdir locname);
+  Console.feedback "File %s/%s written." jessie_subdir locname;
+
+  if not @@ Config.Gen_only.get () then
+    (* Phase 8: call Jessie to Why3ML translation *)
+    let why3_opt =
+      let res = ref "" in
+      Config.Why3_opt.iter
+        ((:=) res %
+         Format.sprintf "%s%s-why-opt %S"
+           !res
+           (if !res = "" then "" else " "));
+      !res
+    in
+    let jc_opt = Config.Jc_opt.As_string.get () in
+    let debug_opt = if Console.debug_at_least 1 then " -d " else " " in
+    let behav_opt =
+      if Config.Behavior.get () <> "" then
+        "-behavior " ^ Config.Behavior.get ()
+      else ""
+    in
+    let verbose_opt =
+      if Console.verbose_at_least 1 then " -v " else " "
+    in
+    let env_opt =
+      if Console.debug_at_least 1 then
+        "OCAMLRUNPARAM=bt"
+      else ""
+    in
+    let jessie_cmd =
+      try Sys.getenv "JESSIEEXEC"
+      with
+      | Not_found ->
+        (* NdV: the test below might not be that useful, since ocaml
+           has stack trace in native code since 3.10, even though -g
+           is usually missing from native flags.  *)
+        if Console.debug_at_least 1 then " jessie.byte "
+        else " jessie "
+    in
+    let timeout =
+      if Config.Cpu_limit.get () <> 0 then "TIMEOUT=" ^ (string_of_int (Config.Cpu_limit.get ())) ^ " "
+      else ""
+    in
+    Console.feedback "Calling Jessie tool in subdir %s" jessie_subdir;
+    Sys.chdir jessie_subdir;
+
+    let target = Config.Target.get () in
+    let jessie_opt =
+      match target with
+      | "why3" | "why3ml" | "why3ide" | "why3replay" | "why3autoreplay" | "update" -> ""
+      | _ -> ""
+    in
+    let cmd =
+      String.concat " "
+        [
+          env_opt;
+          jessie_cmd;
+          jessie_opt ;
+          verbose_opt;
+          why3_opt;
+          jc_opt;
+          debug_opt;
+          behav_opt;
+          "-locs";
+          locname;
+          filename
+        ]
+    in
+    sys_command cmd;
+
+    if target <> "update" then begin
+      (* Phase 9: call Why3 to VC translation *)
+      let makefile = basename ^ ".makefile" in
+      (* temporarily, we launch proving tools of the Why3 platform,
+         either graphic or script-based
+      *)
+      Console.feedback "Calling VCs generator.";
+      sys_command (timeout ^ "make -f " ^ makefile ^ " " ^ target)
     end;
-    (* Rewrite ranges in logic annotations by comprehesion *)
-    Console.debug "from range to comprehension";
-    Rewrite.from_range_to_comprehension (Cil.inplace_visit ()) file;
-    Debug.check_exp_types file;
-
-    (* Phase 2: C-level rewriting to facilitate analysis *)
-
-    Rewrite.rewrite file;
-    Debug.check_exp_types file;
-
-    (* Phase 3: Caduceus-like normalization that rewrites C-level AST into
-     * Jessie-like AST, still in Cil (in order to use Cil visitors)
-     *)
-
-    Norm.normalize file;
-    Retype.retype file;
-    Debug.check_exp_types file;
-
-    (* Phase 4: various postprocessing steps, still on Cil AST *)
-
-    (* Rewrite ranges back in logic annotations *)
-    Rewrite.from_comprehension_to_range (Cil.inplace_visit ()) file;
-    Debug.check_exp_types  file;
-
-    (* Phase 5: C to Jessie translation, should be quite straighforward at this
-     * stage (after normalization)
-     *)
-    Console.debug "Jessie pragmas";
-    let pragmas = Interp.pragmas file in
-    Console.debug "Jessie translation";
-    let pfile = Interp.file file in
-    Console.debug "Printing Jessie program";
-
-    (* Phase 6: pretty-printing of Jessie program *)
-
-    let sys_command cmd =
-      if Sys.command cmd <> 0 then begin
-        Console.error "Jessie subprocess failed: %s" cmd;
-        raise Exit
-      end
-    in
-
-    let projname = Config.Project_name.get () in
-    let projname =
-      if projname <> "" then projname
-      else
-        match Kernel.Files.get() with
-        | [f] ->
-          (try Filename.chop_extension f with Invalid_argument _ -> f)
-        | _ -> "whole_program"
-    in
-    (* if called on 'path/file.c', projname is 'path/file' *)
-    (* jessie_subdir is 'path/file.jessie' *)
-    let jessie_subdir = projname ^ ".jessie" in
-    let mkdir_p dir =
-      if Sys.file_exists dir then begin
-        if Unix.((stat dir).st_kind <> S_DIR) then
-          failwith ("failed to create directory " ^ dir)
-      end else
-        Unix.mkdir dir 0o777
-    in
-    mkdir_p jessie_subdir;
-    Console.feedback "Producing Jessie files in subdir %s" jessie_subdir;
-
-    (* basename is 'file' *)
-    let basename =
-      String.filter_alphanumeric ~assoc:['-', '-'; ' ', '-'; '(', '-'; ')', '-'] ~default:'_' @@
-        Filename.basename projname
-    in
-
-    (* filename is 'file.jc' *)
-    let filename = basename ^ ".jc" in
-    Why_pp.print_in_file
-      (fun fmt ->
-         Jc.Print.print_decls fmt pragmas;
-         Format.fprintf fmt "%a" Jc.Print_p.pdecls pfile)
-      (Filename.concat jessie_subdir filename);
-    Console.feedback "File %s/%s written." jessie_subdir filename;
-
-    (* Phase 7: produce source-to-source correspondance file *)
-    (* locname is 'file.cloc' *)
-    let locname = basename ^ ".cloc" in
-    Why_pp.print_in_file
-      Jc.Print.jc_print_pos
-      (Filename.concat jessie_subdir locname);
-    Console.feedback "File %s/%s written." jessie_subdir locname;
-
-    if not @@ Config.Gen_only.get () then
-      (* Phase 8: call Jessie to Why3ML translation *)
-      let why3_opt =
-        let res = ref "" in
-        Config.Why3_opt.iter
-          ((:=) res %
-           Format.sprintf "%s%s-why-opt %S"
-             !res
-             (if !res = "" then "" else " "));
-        !res
-      in
-      let jc_opt = Config.Jc_opt.As_string.get () in
-      let debug_opt = if Console.debug_at_least 1 then " -d " else " " in
-      let behav_opt =
-        if Config.Behavior.get () <> "" then
-          "-behavior " ^ Config.Behavior.get ()
-        else ""
-      in
-      let verbose_opt =
-        if Console.verbose_at_least 1 then " -v " else " "
-      in
-      let env_opt =
-        if Console.debug_at_least 1 then
-          "OCAMLRUNPARAM=bt"
-        else ""
-      in
-      let jessie_cmd =
-        try Sys.getenv "JESSIEEXEC"
-        with
-        | Not_found ->
-          (* NdV: the test below might not be that useful, since ocaml
-             has stack trace in native code since 3.10, even though -g
-             is usually missing from native flags.  *)
-          if Console.debug_at_least 1 then " jessie.byte "
-          else " jessie "
-      in
-      let timeout =
-        if Config.Cpu_limit.get () <> 0 then "TIMEOUT=" ^ (string_of_int (Config.Cpu_limit.get ())) ^ " "
-        else ""
-      in
-      Console.feedback "Calling Jessie tool in subdir %s" jessie_subdir;
-      Sys.chdir jessie_subdir;
-
-      let target = Config.Target.get () in
-      let jessie_opt =
-        match target with
-          | "why3" | "why3ml" | "why3ide" | "why3replay" | "why3autoreplay" | "update" -> ""
-          | _ -> ""
-      in
-      let cmd =
-        String.concat " "
-          [
-            env_opt;
-            jessie_cmd;
-            jessie_opt ;
-            verbose_opt;
-            why3_opt;
-            jc_opt;
-            debug_opt;
-            behav_opt;
-            "-locs";
-            locname;
-            filename
-          ]
-      in
-      sys_command cmd;
-
-      if target <> "update" then begin
-        (* Phase 9: call Why3 to VC translation *)
-        let makefile = basename ^ ".makefile" in
-        (* temporarily, we launch proving tools of the Why3 platform,
-           either graphic or script-based
-        *)
-        Console.feedback "Calling VCs generator.";
-        sys_command (timeout ^ "make -f " ^ makefile ^ " " ^ target)
-      end;
-      flush_all ()
-  with
-  | Exit -> ()
+    flush_all ()
 
 (* ************************************************************************* *)
 (* Plug Jessie to the Frama-C platform *)
