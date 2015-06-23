@@ -30,6 +30,7 @@ load_printer jc_version.d.cmo
 load_printer jc_position.d.cmo
 load_printer jc_name.d.cmo
 load_printer jc_output.d.cmo
+load_printer jc_common_options.d.cmo
 load_printer jc_options.d.cmo
 load_printer jc_norm.d.cmo
 load_printer jc_struct_tools.d.cmo
