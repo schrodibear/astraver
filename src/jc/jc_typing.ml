@@ -1014,7 +1014,7 @@ let rec term env (e : nexpr) =
           JCTenum ri, dummy_region, JCTrange_cast (te1, Some ri)
         else
           bad_type ~loc:e#pos te1#typ "integer type expected"
-      | JCTpointer (JCtag (st, _), _, _) ->
+      | JCTpointer (JCtag (st, _) as st_pc, _, _) ->
         begin match te1#typ with
         | JCTpointer (st1, a, b) ->
           if superstruct st st1 then
@@ -1022,7 +1022,15 @@ let rec term env (e : nexpr) =
           else if substruct st st1 then
             JCTpointer (JCtag (st, []), a, b), te1#region, JCTdowncast (te1, label (), st)
           else
-            JCTpointer (JCtag (st, []), a, b), te1#region, JCTsidecast (te1, label (), st)
+            begin match st1 with
+            | JCroot ri | JCtag ({ si_root = Some ri; _ }, [])
+              when ri == struct_root st && List.length ri.ri_hroots > 1 ->
+              (* union downcast -- currently translated similar to usual one ==> TODO: support unions *)
+              JCTpointer (JCtag (st, []), a, b), te1#region, JCTdowncast (te1, label (), st)
+            | JCtag _ when same_hierarchy st_pc st1 ->
+              JCTpointer (JCtag (st, []), a, b), te1#region, JCTsidecast (te1, label (), st)
+            | _ -> typing_error ~loc:e#pos "invalid cast: structures from different hierarchies"
+            end
         | JCTnull -> typing_error ~loc:e#pos "invalid cast"
         | JCTnative _ | JCTlogic _ | JCTenum _ | JCTany
         | JCTtype_var _ -> bad_type ~loc:e#pos te1#typ "only structures can be cast"
@@ -2094,17 +2102,23 @@ let rec expr env e =
           JCTenum ri, dummy_region, JCErange_cast (te1, Some ri)
         else
           typing_error ~loc:e#pos "integer type expected"
-      | JCTpointer ( JCtag (st, _), _, _) ->
+      | JCTpointer (JCtag (st, _) as st_pc, _, _) ->
         begin match te1#typ with
         | JCTpointer (st1, a, b) ->
           if superstruct st st1 then
-            (ty,
-             te1#region,
-             te1#node)
+            ty, te1#region, te1#node
           else if substruct st st1 then
-            (JCTpointer (JCtag (st, []), a, b), te1#region, JCEdowncast (te1, st))
+            JCTpointer (JCtag (st, []), a, b), te1#region, JCEdowncast (te1, st)
           else
-            (JCTpointer (JCtag (st, []), a, b), te1#region, JCEsidecast (te1, st))
+            begin match st1 with
+            | JCroot ri | JCtag ({ si_root = Some ri; _ }, [])
+              when ri == struct_root st && List.length ri.ri_hroots > 1 ->
+              (* union downcast -- now supported siilar to usual one ==> TODO: support unions *)
+              JCTpointer (JCtag (st, []), a, b), te1#region, JCEdowncast (te1, st)
+            | JCtag _ when same_hierarchy st1 st_pc ->
+              JCTpointer (JCtag (st, []), a, b), te1#region, JCEsidecast (te1, st)
+            | _ -> typing_error ~loc:e#pos "invalid cast: structures from different hierarchies"
+            end
         | _ -> typing_error ~loc:e#pos "invalid cast"
         end
       | _ -> typing_error ~loc:e#pos "invalid cast"
