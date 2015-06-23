@@ -214,15 +214,13 @@ class struct_hierarchy_builder () =
         let ty1, ty2 = map_pair struct_ty_of_ty_exn (ty1, ty2) in
         (* Compare types *)
         match cmp_subtype ty1 ty2 with
-        | `supertype ->
-          if not (Typ.equal ty1 ty_char) then
-            (* [ty2] subtype of [ty1] *)
-            add_inheritance_relation ty2 ty1
-        | `subtype ->
-          if not (Typ.equal ty2 ty_char) then
-            (* [ty1] subtype of [ty2] *)
-            add_inheritance_relation ty1 ty2
-        | `neither ->
+        | `supertype when not (Typ.equal ty1 ty_char) ->
+          (* [ty2] subtype of [ty1] *)
+          add_inheritance_relation ty2 ty1
+        | `subtype when not (Typ.equal ty2 ty_char) ->
+          (* [ty1] subtype of [ty2] *)
+          add_inheritance_relation ty1 ty2
+        | `neither | _ ->
           (* no subtyping relation, but in order to allow side-casts we still
              need both types to be in the same hierarchy, therefore unifying both with void *)
           add_inheritance_relation ty1 ty_void;
