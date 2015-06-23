@@ -1381,7 +1381,12 @@ struct
         begin try
           ignore (List.fold_right field ci.cfields (bitsSizeOf basety))
         with
-        | SizeOfError _ -> ()
+        | SizeOfError (s, typ) ->
+          Console.warning
+            "Sizeof error occurred when computing bit offsets in composite type %s: %s (in type %a)"
+            (compFullName ci)
+            s
+            Printer.pp_typ typ
         end
 
       let padding_field =
