@@ -994,6 +994,7 @@ class embed_first_substructs_visitor =
                   * after transformations: due to dummy_info that inserts dummy void where actual typing is necessary.
                   *)
                  ChangeTo { t with term_node = TCastE (fi.ftype, Check, t'); term_type = Ctype fi.ftype }
+               | TOffsetOf fi when is_embedded fi -> ChangeTo (Logic_const.tinteger ~loc:t.term_loc 0)
                | _ -> DoChildren
            end))
   end
