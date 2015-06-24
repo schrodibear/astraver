@@ -361,10 +361,10 @@ let comparable_types t1 t2 =
   | JCTnative Tinteger, JCTnative Treal -> true
   | JCTnative Treal, JCTnative Tinteger -> true
   | JCTnative t1, JCTnative t2 -> t1 = t2
-  | JCTenum ei1, JCTenum ei2 -> ei1 = ei2
+  | JCTenum ei1, JCTenum ei2 -> Enum_info.(ei1 = ei2)
   | JCTenum _, JCTnative Tinteger -> true
   | JCTnative Tinteger, JCTenum _ -> true
-  | JCTlogic s1, JCTlogic s2 -> s1=s2
+  | JCTlogic s1, JCTlogic s2 -> s1 = s2
   | JCTpointer (pc1, _ ,_), JCTpointer (pc2, _, _) ->
     pointer_class_root pc1 == pointer_class_root pc2
   | JCTnull, JCTnull -> true
