@@ -195,6 +195,10 @@ let cmp_subtype =
       `subtype
     else
       `neither
+  else if isVoidType ty1 && not (isVoidType ty2) then
+    `supertype
+  else if not (isVoidType ty1) && isVoidType ty2 then
+    `subtype
   else
     `neither
 
@@ -300,13 +304,16 @@ let create_struct_hierarchy file =
          let bfs ty =
            List.iter
              (fun ty' ->
-                match cmp_subtype ty ty' with
-                | `supertype ->
-                  add_inheritance_relation ty' ty;
-                  let ty_fields, parentty_fields = map_pair struct_fields_exn (ty', ty) in
-                  List.iter2 add_field_representant List.(take (length parentty_fields) ty_fields) parentty_fields;
-                  Queue.add ty' q
-                | _ -> ())
+                let above_child = cmp_subtype ty ty' = `supertype in
+                let below_parent =
+                  try cmp_subtype ty (Typ.Hashtbl.find parent_type ty') = `subtype with Not_found -> true
+                in
+                if above_child && below_parent then begin
+                   add_inheritance_relation ty' ty;
+                   let ty_fields, parentty_fields = map_pair struct_fields_exn (ty', ty) in
+                   List.iter2 add_field_representant List.(take (length parentty_fields) ty_fields) parentty_fields;
+                   Queue.add ty' q
+                end)
              types
          in
          while not (Queue.is_empty q) do bfs @@ Queue.pop q done)
