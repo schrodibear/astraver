@@ -1686,11 +1686,8 @@ let instruction = function
       let open Ast.Vi.Function in
       let enode =
         let lv_size lv_type =
-          match unrollType lv_type with
-          | TComp ({ cname }, _, _) when cname = wrapper_name voidType ->
-            Integer.one
-          | _ ->
-            Integer.of_int64 ((Type.size_in_bits_exn lv_type) lsr 3)
+          let r = Type.size_in_bits_exn lv_type lsr 3 in
+          Integer.(if r = 0L then one else of_int64 r)
         in
         if is_malloc v || is_kmalloc v || is_realloc v then
           let lvtyp = pointed_type (typeOfLval lv) in
@@ -1712,11 +1709,8 @@ let instruction = function
           let ty,arg = match arg.enode with
             | Info _ -> assert false
             | Const c when is_integral_const c ->
-                let allocsiz = Integer.div (value_of_integral_expr arg) lvsiz
-                in
-                let siznode =
-                  JCPEconst(JCCinteger(Integer.to_string allocsiz))
-                in
+                let allocsiz = Integer.div (value_of_integral_expr arg) lvsiz in
+                let siznode = JCPEconst (JCCinteger (Integer.to_string allocsiz)) in
                 lvtyp, mkexpr siznode pos
             | BinOp(Mult oft,({enode = Const c} as arg),nelem,_ty)
             | BinOp(Mult oft, nelem,({enode = Const c} as arg),_ty)
