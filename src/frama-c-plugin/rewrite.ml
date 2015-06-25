@@ -777,7 +777,7 @@ class kzalloc_expanding_visitor =
                      mkBlock [mkStmt (Instr (Skip loc))],
                      loc))]);
         SkipChildren
-      | _ -> SkipChildren
+      | _ -> DoChildren
   end
 
 let expand_kzallocs file = visitFramacFile (new kzalloc_expanding_visitor) file
@@ -2345,7 +2345,7 @@ let declare_jessie_nondet_int file =
                 | Some _
                 | None -> SkipChildren
                 end
-              | _ -> SkipChildren
+              | _ -> DoChildren
           end
       }
       file
