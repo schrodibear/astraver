@@ -38,8 +38,14 @@ else
 endif
 
 # where to install the binaries
-BINDIR= @bindir@
-LIBDIR= @libdir@
+DESTDIR =
+
+prefix      = @prefix@
+exec_prefix = @exec_prefix@
+datarootdir = @datarootdir@
+
+BINDIR= $(DESTDIR)@bindir@
+LIBDIR= $(DESTDIR)@libdir@
 
 # other variables
 OCAMLBEST= @OCAMLBEST@
@@ -127,7 +133,7 @@ install:
 clean::
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) clean
 
-LIBWHY3=$(LIBDIR)/jessie
+LIBWHY3=@libdir@/jessie
 
 WHY3_DATADIR=$(shell why3 --print-datadir)
 
@@ -239,7 +245,7 @@ pvs-yes: $(PVSFILES)
 include Version
 
 doc/version.tex src/why/why_version.ml src/jc/jc_version.ml: Version version.sh config.status
-	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) COQVER=$(COQVER) ./version.sh
+	BINDIR=@bindir@ LIBDIR=@libdir@ COQVER=$(COQVER) ./version.sh
 
 # installation
 ##############
