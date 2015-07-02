@@ -507,7 +507,7 @@ let rec term :
     | JCTbase_block t1 ->
       let ac = tderef_alloc_class ~type_safe t1 in
       let t1' = ft Any t1 in
-      return @@ O.T.(shift t1' @@ offset_min ac ~r:t1#region ~lab t1')
+      return @@ O.T.(shift t1' @@ offset_min ~code:(not global_assertion) ac ~r:t1#region ~lab t1')
     | JCTinstanceof (t1, lab', st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
       return @@ O.T.(instanceof ~code:(not global_assertion) ~r:t1#region ~lab (ft Any t1) st)
@@ -772,7 +772,7 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
     | JCAfresh t1 ->
       let ac = tderef_alloc_class ~type_safe t1 in
       let lab = if relocate && oldlab = LabelHere then lab else oldlab in
-      O.P.(allocable ac ~r:t1#region ~lab @@ ft Any t1)
+      O.P.(allocable ~code:(P.not global_assertion) ac ~r:t1#region ~lab @@ ft Any t1)
     | JCAbool_term t1 ->
       App (Poly `Eq, O.T.(ft (Ty Bool) t1 ^. Const (Bool true)))
     | JCAinstanceof (t1, lab', st) ->
