@@ -1649,7 +1649,7 @@ class dummy_struct_definer ~attach =
 
     method! vcompinfo ci =
       if ci.cdefined = false && ci.cfields = [] then begin
-        Jessie_options.warning
+        Console.warning
           "Defining dummy composite tag for %s in extract mode (enabled by -jessie-extract)"
           (compFullName ci);
         attach#global @@ GCompTag (ci, Location.unknown);
@@ -1955,7 +1955,7 @@ object
   method! vpredicate =
     function
     | Pseparated _ ->
-      Jessie_options.warning ~once:true
+      Console.warn_once
         "\\separated is not supported by Jessie. This predicate will be \
          ignored";
       ChangeTo Ptrue
@@ -2306,8 +2306,7 @@ let declare_jessie_nondet_int file =
                   | Failure "hd"
                   | Exit ->
                     (* Cannot use Common.unsupported with ~source due to argument erasure *)
-                    Jessie_options.with_failure
-                      (fun evt -> raise (Unsupported evt.Log.evt_message))
+                    Console.unsupported
                       ~current:true
                       ~source
                       "unable to recognize type of the allocation";
@@ -2372,7 +2371,7 @@ let remove_assigns_from = visitFramacFile (new assigns_from_remover)
 (*****************************************************************************)
 
 let apply ~file f msg =
-  Jessie_options.debug "Applying transformation: %s" msg;
+  Console.debug "Applying transformation: %s" msg;
   f file;
   Debug.check_exp_types file
 
