@@ -109,31 +109,31 @@ let run () =
   Console.debug "Project created";
   FCProject.copy ~selection:(Parameter_state.get_selection ()) prj;
   FCProject.set_current prj;
+  (* Extract relevant globals *)
   let file = FCAst.get () in
-
+  if Config.Extract.get () then begin
+    Console.debug "Extract relevant globals";
+    Extractor.extract file;
+    Debug.check_exp_types file
+  end;
+  (* Synchronize `file' with AST once again after extraction *)
+  let file = FCAst.get () in
   if file.globals = [] then
-    Console.abort "Nothing to process. There was probably an error before.";
+    Console.abort "Nothing to process. No relevant annotated globals found for further analysis.";
   (* Phase 1: various preprocessing steps before C to Jessie translation *)
 
-  (* Enforce the prototype of malloc to exist before visiting anything.
-   * It might be useful for allocation pointers from arrays.
-  *)
+  (* Enforce the prototypes of malloc and kmalloc to exist before visiting anything.
+   * This might be useful for allocating heap arrays and kzalloc -> kmalloc+memset rewriting.
+   *)
   ignore (Ast.Vi.Function.malloc ());
+  ignore (Ast.Vi.Function.malloc ~kernel:true ());
   ignore (Ast.Vi.Function.free ());
   Console.debug  "After malloc and free";
   Debug.check_exp_types file;
   steal_annots ();
   Console.debug "After steal_annots";
   Debug.check_exp_types file;
-  (* Extract relevant globals *)
-  if Config.Extract.get () then begin
-    Console.debug "Extract relevant globals";
-    Extractor.extract file;
-    Debug.check_exp_types file
-  end;
   (* Rewrite ranges in logic annotations by comprehesion *)
-  Console.debug "from range to comprehension";
-  Rewrite.from_range_to_comprehension (Cil.inplace_visit ()) file;
   Debug.check_exp_types file;
 
   (* Phase 2: C-level rewriting to facilitate analysis *)
@@ -143,28 +143,22 @@ let run () =
 
   (* Phase 3: Caduceus-like normalization that rewrites C-level AST into
    * Jessie-like AST, still in Cil (in order to use Cil visitors)
-  *)
+   *)
 
   Norm.normalize file;
   Retype.retype file;
   Debug.check_exp_types file;
 
-  (* Phase 4: various postprocessing steps, still on Cil AST *)
-
-  (* Rewrite ranges back in logic annotations *)
-  Rewrite.from_comprehension_to_range (Cil.inplace_visit ()) file;
-  Debug.check_exp_types  file;
-
-  (* Phase 5: C to Jessie translation, should be quite straighforward at this
+  (* Phase 4: C to Jessie translation, should be quite straighforward at this
    * stage (after normalization)
-  *)
+   *)
   Console.debug "Jessie pragmas";
   let pragmas = Interp.pragmas file in
   Console.debug "Jessie translation";
   let pfile = Interp.file file in
   Console.debug "Printing Jessie program";
 
-  (* Phase 6: pretty-printing of Jessie program *)
+  (* Phase 5: pretty-printing of Jessie program *)
 
   let sys_command cmd =
     if Sys.command cmd <> 0 then
@@ -208,7 +202,7 @@ let run () =
     (Filename.concat jessie_subdir filename);
   Console.feedback "File %s/%s written." jessie_subdir filename;
 
-  (* Phase 7: produce source-to-source correspondance file *)
+  (* Phase 6: produce source-to-source correspondance file *)
   (* locname is 'file.cloc' *)
   let locname = basename ^ ".cloc" in
   Why_pp.print_in_file
@@ -217,7 +211,7 @@ let run () =
   Console.feedback "File %s/%s written." jessie_subdir locname;
 
   if not @@ Config.Gen_only.get () then
-    (* Phase 8: call Jessie to Why3ML translation *)
+    (* Phase 7: call Jessie to Why3ML translation *)
     let why3_opt =
       let res = ref "" in
       Config.Why3_opt.iter
@@ -284,7 +278,7 @@ let run () =
     sys_command cmd;
 
     if target <> "update" then begin
-      (* Phase 9: call Why3 to VC translation *)
+      (* Phase 8: call Why3 to VC translation *)
       let makefile = basename ^ ".makefile" in
       (* temporarily, we launch proving tools of the Why3 platform,
          either graphic or script-based
