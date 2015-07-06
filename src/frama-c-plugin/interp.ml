@@ -2587,7 +2587,12 @@ let integral_types () =
   Type.Integral.fold_all
     (fun name (ty, bitsize) acc ->
        match unrollType (ty : Type.Integral.t :> typ) with
-       | TInt (ik, _) when ik <> IBool -> acc
+       | TInt (ik, _)
+         when ik <> IBool &&
+              Option.map_default
+                ~default:true
+                ~f:Pervasives.((=) @@ Type.Integral.IKind.size_in_bytes ik * 8) bitsize ->
+         acc
        | _ -> integral_type name ty bitsize :: acc)
     []
 
