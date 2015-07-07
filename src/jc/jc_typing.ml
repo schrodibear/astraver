@@ -1596,14 +1596,21 @@ let rec location env e =
       with Typing_error _ ->
         deref_location_set_exn t f
       end
-    | JCNEat(e, lab) ->
+    | JCNEat (e, lab) ->
       let t, tr, tl = location env e in
       t, tr, JCLat(tl, lab)
+    | JCNEcast _ ->
+      let t = term env e in
+      begin match t#typ with
+      | JCTpointer _ ->
+        t#typ, t#region, JCLsingleton t
+      | _ -> typing_error ~loc:e#pos "non-pointer singleton term used as location"
+      end
     | JCNErange _ | JCNEeqtype _ | JCNEmutable _ | JCNEold _
     | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
     | JCNEtry _ | JCNEreturn _ | JCNEloop _ | JCNEblock _ | JCNEassert _
     | JCNElet _ | JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEreinterpret _ | JCNEaddress _
-    | JCNEif _ | JCNEcast _ | JCNEcast_mod _ | JCNEbase_block _
+    | JCNEif _ | JCNEcast_mod _ | JCNEbase_block _
     | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _ | JCNEbinary _
     | JCNEconst _ | JCNEcontract _ | JCNEsubtype _ | JCNEfresh _ ->
       typing_error ~loc:e#pos "invalid memory location"

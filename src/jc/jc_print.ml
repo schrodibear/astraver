@@ -288,6 +288,8 @@ let rec location fmt loc =
     fprintf fmt "%a.%s" location_set locs fi.fi_name
   | JCLderef_term (t1, fi) ->
     fprintf fmt "%a.%s" term t1 fi.fi_name
+  | JCLsingleton t ->
+    fprintf fmt "%a" term t
   | JCLat (loc, lab) ->
     fprintf fmt "\\at(%a,%a)" location loc label lab
 

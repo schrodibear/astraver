@@ -885,6 +885,11 @@ let rec collect_locations ~type_safe ~global_assertion ~in_clause before loc (re
     let iloc = O.T.(F.Jc.pset "pset_singleton" $. t1') in
     let mcr = JCmem_field fi, t1#region in
     refs, MemoryMap.add_merge (@) mcr [iloc, ef] mems
+  | JCLsingleton t ->
+    unsupported
+      ~loc:loc#pos
+      "Undereferenced singleton pointer term `%a' found as location in memory footprint context"
+      Print.term t
   | JCLvar vi ->
     let var = vi.vi_final_name in
     StringMap.add var true refs, mems
@@ -911,6 +916,9 @@ let rec collect_pset_locations t ~type_safe ~global_assertion lab loc =
     Options.jc_warning loc#pos "Non-pointer variable `%s' found as location in pointer-set context, ignoring"
       vi.vi_name;
     O.T.var "pset_empty"
+  | JCLsingleton t ->
+    let lab = match t#label with Some l -> l | None -> lab in
+    return (pset "pset_singleton" $. ft Any lab lab t)
   | JCLat (loc, lab) ->
     collect_pset_locations t ~type_safe ~global_assertion lab loc
 
@@ -1221,6 +1229,11 @@ let rec old_to_pre_loc loc =
     new location_with
       ~typ:loc#typ
       ~node:(JCLderef_term (old_to_pre_term t1, fi))
+      loc
+  | JCLsingleton t ->
+    new location_with
+      ~typ:loc#typ
+      ~node:(JCLsingleton (old_to_pre_term t))
       loc
 
 let assumption al a' =

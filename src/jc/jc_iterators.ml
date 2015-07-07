@@ -842,11 +842,13 @@ let fold_sub_location itt itl itls ft fl fls acc loc =
   match loc#node with
     | JCLvar _vi ->
         acc
-    | JCLderef(locs,_lab,_fi,_r) ->
+    | JCLderef (locs,_lab,_fi,_r) ->
         itls acc locs
-    | JCLderef_term(locs,_fi) ->
+    | JCLderef_term (locs,_fi) ->
         itt acc locs
-    | JCLat(loc,_lab) ->
+    | JCLsingleton t ->
+        itt acc t
+    | JCLat (loc,_lab) ->
         itl acc loc
 
 let rec fold_location ft fl fls acc loc =

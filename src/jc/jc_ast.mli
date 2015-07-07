@@ -420,6 +420,7 @@ and 'li location_node =
   | JCLvar of var_info
   | JCLderef of 'li location_set * label * field_info * region
   | JCLderef_term of 'li term * field_info
+  | JCLsingleton of 'li term
   | JCLat of 'li location * label
 
 and 'li location_set = 'li location_set_node c_location

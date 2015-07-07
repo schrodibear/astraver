@@ -1062,6 +1062,7 @@ let rec term_of_location ?(label=LabelHere) loc =
             "Failed to transform location to term: %a: different regions: %a != %a"
             Print.location loc Region.print r Region.print r'
       | JCLderef_term (t, fi), _ -> JCTderef (t, label, fi)
+      | JCLsingleton t, _ -> t#node
       | JCLat (loc, label), _ -> JCTat (term_of_location ~label loc, label)
 
 (* last location can be mutated *)
@@ -1331,6 +1332,7 @@ let rec single_location ~in_clause fef loc =
     end
   | JCLderef (locs, lab, fi, r) -> add_deref locs ~lab ~r lderef_mem_class fi
   | JCLderef_term (t, fi) -> add_deref t tderef_mem_class fi
+  | JCLsingleton t -> snd @@ single_term fef t
   | JCLat (loc, lab) ->
     loc#set_label @@ Some (loc#label |? lab);
     snd @@ single_location ~in_clause fef loc

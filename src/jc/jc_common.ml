@@ -198,6 +198,8 @@ let rec location_set_of_location =
       | JCLderef_term (t, fi) ->
         let locs = location_set_with_node t @@ JCLSrange_term (t, Some zero, Some zero) in
         JCLSderef (locs, loc#label |? LabelHere, fi, loc#region)
+      | JCLsingleton t ->
+        JCLSrange_term (t, Some zero, Some zero)
       | JCLat (ls, lab) -> JCLSat (location_set_of_location ls, lab)
     in
     location_set_with_node loc node
