@@ -2708,7 +2708,18 @@ let allocates ~internal ~type_safe ?region_list ef =
             map_embedded_fields
               loc
               ~f:(fun ~typ ~l:_ ~r:_ fi ->
-                [location_with_node ~typ loc @@ JCLderef (location_set_of_location loc, LabelPost, fi, loc#region)]))
+                (* Optimizing field locations -- deref_term is applicable only if there are no ranges,
+                   since Trange is not supported *)
+                [location_with_node ~typ loc @@
+                 try
+                   Iterators.iter_location
+                     ignore
+                     ignore
+                     (fun l -> match l#node with JCLSrange _ | JCLSrange_term _ -> raise Exit | _ -> ())
+                     loc;
+                   JCLderef_term (term_of_location loc, fi)
+                 with
+                 | Exit -> JCLderef (location_set_of_location loc, LabelPost, fi, loc#region)]))
         |>
         List.map (fun loc -> Name.alloc_table (lderef_alloc_class ~type_safe loc, loc#region), loc)
       in
