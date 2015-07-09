@@ -1702,7 +1702,41 @@ let file fmttr file =
        function
        | Entry entry' -> consts := entry fmttr ~consts:!consts entry')
     fmttr
-    file
+    Output_ast.(
+      List.sort
+        (fun e1 e2 ->
+           let compare
+               { why_name = id1; why_pos = pos1 }
+               { why_name = id2; why_pos = pos2 } =
+             let c = Position.compare pos1 pos2 in
+             if c <> 0 then c else compare id1 id2
+           in
+           let min l =
+             List.fold_left
+               (fun min curr ->
+                  if compare min curr <= 0 then min else curr)
+               (List.hd l)
+               l
+           in
+           let decls =
+             let ids l =
+               List.map
+                 (fun { why_id; _ } -> why_id)
+                 l
+             in
+             function
+             | Entry (Module (_, None)) -> []
+             | Entry (Module (_, Some (_, _, decls))) -> ids decls
+             | Entry (Theory (_, None)) -> []
+             | Entry (Theory (_, Some (_, decls))) -> ids decls
+           in
+           match decls e1, decls e2 with
+           | [], _ :: _ -> -1
+           | _ :: _, [] -> 1
+           | [], [] -> 0
+           | decls1, decls2 ->
+             compare (min decls1) (min decls2))
+        file)
 
 let entry ~consts fmttr e = ignore (entry ~consts fmttr e)
 
