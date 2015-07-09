@@ -2548,7 +2548,7 @@ let logic_fun f ta =
   | None, JCTerm _
   | Some _, JCAssertion _ -> assert false
 
-let global_imports ~lookup =
+let global_imports ~for_ ~lookup =
   let module S = Set.Make (PointerClass) in
   let add = Fn.const % S.add in
   let skip _ x = x in
@@ -2576,7 +2576,14 @@ let global_imports ~lookup =
         | _ -> skip)
       e.e_globals |> fun s ->
     S.fold (fun pc -> cons_global_import @@ Some pc) s [] |>
-    VarMap.fold (function { vi_type = JCTpointer _ } -> skip | _ -> Fn.const @@ cons_global_import None) e.e_globals
+    VarMap.fold (function { vi_type = JCTpointer _ } -> skip | _ -> Fn.const @@ cons_global_import None) e.e_globals |>
+    match for_ with
+    | `Logic -> Fn.id
+    | `Code ->
+      StringHashtblIter.fold
+        (fun id (_, is_axiom, _, _, _) ->
+           List.cons @@ Use (`Import None, lookup @@ fst @@ Name.Theory.lemma ~is_axiom id))
+        Typing.lemmas_table
 
 let axiomatic name data =
   let open Typing in
@@ -2594,7 +2601,7 @@ let logic_fun li body =
     O.[Entry.some @@
        Th.mk
          ~name:(fst @@ Name.Theory.axiomatic_of li)
-         ~deps:(global_imports ~lookup:Th.dummy li.li_effects)
+         ~deps:(global_imports ~for_:`Logic ~lookup:Th.dummy li.li_effects)
          (logic_fun li body)]
   else
     []
@@ -3050,7 +3057,10 @@ let func f funpos spec body =
    let deps =
      List.map
        (fun d -> Dependency d)
-       (global_imports ~lookup:O.Mod.dummy @@ Effect.ef_union f.fun_effects.fe_reads f.fun_effects.fe_writes)
+       (global_imports
+          ~for_:`Code
+          ~lookup:O.Mod.dummy
+          (Effect.ef_union f.fun_effects.fe_reads f.fun_effects.fe_writes))
    in
    let external_safe =
      let name = f.fun_final_name in
