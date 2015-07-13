@@ -1276,10 +1276,27 @@ class term_bw_op_retyping_visitor =
         Printer.pp_term t
     | _ -> t, t.term_type
   in
-  object
+  object(self)
     inherit frama_c_inplace
 
-    method! vterm _ =
+    val retyped_vars = Logic_var.Hashtbl.create 25
+
+    method private vlet : 'a. f:('a -> 'a) -> change_to:(unit -> 'a) -> _ -> 'a visitAction =
+      fun ~f ~change_to ->
+        function
+        | { l_var_info; l_labels = []; l_type = Some Linteger; l_profile = []; l_body = LBterm t; _ } as li ->
+          let t, lt = strip ~force:false @@ visitFramacTerm (self :> frama_c_visitor) t in
+          li.l_body <- LBterm t;
+          if Logic_utils.isLogicType is_int_type lt then begin
+            li.l_type <- Some lt;
+            l_var_info.lv_type <- lt;
+            Logic_var.Hashtbl.add retyped_vars l_var_info ();
+            ChangeTo (change_to ())
+          end else
+            DoChildrenPost f
+        | _ -> DoChildrenPost f
+
+    method! vterm t =
       let f t =
         let wrap term_node term_type =
           Logic_const.term
@@ -1288,6 +1305,8 @@ class term_bw_op_retyping_visitor =
             Linteger
         in
         match t.term_node with
+        | TLval (TVar lv, TNoOffset) when Logic_var.Hashtbl.mem retyped_vars lv ->
+          wrap t.term_node lv.lv_type
         | TBinOp (
           (PlusA Modulo | MinusA Modulo | Mult Modulo | Div Modulo | Shiftlt _ | Shiftrt | BAnd | BXor | BOr as op),
           t1, t2) ->
@@ -1318,18 +1337,36 @@ class term_bw_op_retyping_visitor =
             t
         | _ -> t
       in
-      DoChildrenPost f
+      match t.term_node with
+      | Tlet (li, t) ->
+        self#vlet
+          ~f
+          li
+          ~change_to:(fun () ->
+            let t', term_type = strip ~force:false @@ visitFramacTerm (self :> frama_c_visitor) t in
+            { t with term_node = Tlet (li, t'); term_type })
+      | _ -> DoChildrenPost f
 
-    method! vpredicate _ =
-      DoChildrenPost
-        (function
-          | Prel (rel, t1, t2) as p ->
-            let (t1, ty1), (t2, ty2) = map_pair (strip ~force:false) (t1, t2) in
-            if Logic_utils.is_same_type ty1 ty2 then
-              Prel (rel, t1, t2)
-            else
-              p
-          | p -> p)
+    method! vpredicate =
+      let f =
+        function
+        | Prel (rel, t1, t2) as p ->
+          let (t1, ty1), (t2, ty2) = map_pair (strip ~force:false) (t1, t2) in
+          if Logic_utils.is_same_type ty1 ty2 then
+            Prel (rel, t1, t2)
+          else
+            p
+        | p -> p
+      in
+      function
+      | Plet (li, p) ->
+        self#vlet
+          ~f
+          li
+          ~change_to:
+            (fun () ->
+               Plet (li, { p with content = visitFramacPredicate (self :> frama_c_visitor) p.content }))
+      | _ -> DoChildrenPost f
   end
 
 let retype_bw_ops_in_terms = visitFramacFile @@ new term_bw_op_retyping_visitor
