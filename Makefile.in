@@ -210,7 +210,8 @@ lib/why3/why3.conf:  lib/why3/cvc4.drv lib/why3/z3.drv lib/why3/alt-ergo.drv Mak
 
 	@printf "[prover]\n" >> $@
 	@printf "alternative = \"-Em\"\n" >> $@
-	@printf "command = \"%%l/why3-cpulimit %%t %%m -s alt-ergo -timelimit %%t -steps-bound %%S %%f -no-Ematching\"\n" >> $@
+	@printf "command = \"%%l/why3-cpulimit %%T %%m -s alt-ergo -timelimit %%t %%f -no-Ematching\"\n" >> $@
+	@printf "command_steps = \"%%l/why3-cpulimit %%U %%m -s alt-ergo -steps-bound %%S %%f -no-Ematching\"\n" >> $@
 	@printf "driver = \"$(LIBWHY3)/why3/alt-ergo.drv\"\n" >> $@
 	@printf "editor = \"altgr-ergo\"\n" >> $@
 	@printf "in_place = false\n" >> $@
