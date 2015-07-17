@@ -216,7 +216,7 @@ let run () =
       let res = ref "" in
       Config.Why3_opt.iter
         ((:=) res %
-         Format.sprintf "%s%s-why-opt %S"
+         Format.sprintf "%s%s-why3-opt %S"
            !res
            (if !res = "" then "" else " "));
       !res

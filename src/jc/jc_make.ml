@@ -60,6 +60,9 @@ let generic full _f targets =
 
        out "why3typecheck: %s@\n" why3ml_target;
        out "\t why3 prove --type-only $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";
+
+       out "why3prove: %s@\n" why3ml_target;
+       out "\t why3 prove $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";
     )
     (full ^ ".makefile")
 
