@@ -1508,7 +1508,7 @@ and integral_expr e =
 
       | BinOp (Shiftrt, e1, e2, _ty) ->
         let e =
-          let ik = match typeOf e1 with TInt (ik, _) -> ik | _ -> assert false in
+          let ik = match unrollType @@ typeOf e1 with TInt (ik, _) -> ik | _ -> assert false in
           match possible_value_of_integral_expr e2 with
             | Some i when Integer.ge i Integer.zero &&
                           Integer.lt i (Integer.of_int 63) &&
@@ -1529,7 +1529,7 @@ and integral_expr e =
 
       | BinOp (Shiftlt oft as op, e1, e2, _ty) ->
         let e =
-          let ik = match typeOf e1 with TInt (ik, _) -> ik | _ -> assert false in
+          let ik = match unrollType @@ typeOf e1 with TInt (ik, _) -> ik | _ -> assert false in
           match possible_value_of_integral_expr e2 with
             | Some i when
               Integer.ge i Integer.zero &&
