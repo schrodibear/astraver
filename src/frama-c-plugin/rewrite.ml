@@ -938,6 +938,12 @@ class specialize_blockfuns_visitor =
       Filename.basename pos_fname = Name.File.blockfuns_include
     | _ -> false
   in
+  let pointed_type' =
+    function
+    | TPtr (t, _) -> t
+    | TArray _ as arrty -> element_type arrty
+    | ty -> ty
+  in
   let match_arg_types ftype tl_opt tacts =
     match ftype with
     | TFun (rtype, Some formals, _, _) ->
@@ -947,22 +953,17 @@ class specialize_blockfuns_visitor =
         let const_attr = "const" in
         let strip = typeRemoveAttributes irrelevant_attrs in
         let strip_const = typeRemoveAttributes (const_attr :: irrelevant_attrs) in
-        let pointed_type = function
-          | TPtr (t, _) -> t
-          | TArray _ as arrty -> element_type arrty
-          | ty -> ty
-        in
-        if not (is_pattern_type @@ pointed_type tf) then begin
+        if not (is_pattern_type @@ pointed_type' tf) then begin
           not @@ need_cast
             ((if not @@ hasAttribute const_attr @@ typeAttrs tf then strip else strip_const) ta)
             tf
         end else
           let ta = if isPointerType ta then pointed_type ta else ta in
-          if Option.map_default !_type_ref ~default:true ~f:(fun typ -> not (need_cast ta typ)) then begin
-            if not (Option.is_some !_type_ref) then _type_ref := Some ta;
-            true
-          end else
-            false
+          Option.map_default
+            !_type_ref
+            ~default:true
+            ~f:(fun typ -> isVoidType ta || isCharType ta || not (need_cast ta typ)) &&
+          (if not (isVoidType ta || Option.is_some !_type_ref) then _type_ref := Some ta; true)
       in
       if
         List.length formals = List.length tacts &&
@@ -1088,6 +1089,23 @@ class specialize_blockfuns_visitor =
                   if fname <> Name.unique fname then
                     Console.fatal "Can't introduce specialized function due to name conflict: %s" fname;
                   self#specialize_function fpatt fname typ
+              in
+              let args =
+                List.map2
+                  (fun t arg ->
+                     let typ = if isPointerType t || isArrayType t then TPtr (typ, []) else typ in
+                     if is_pattern_type @@ pointed_type' t && need_cast (typeOf arg) typ then
+                       mkCast
+                         ~force:false
+                         ~overflow:Check
+                         ~e:arg
+                         ~newt:typ
+                     else
+                       arg)
+                  (match fvtype with
+                   | TFun (_, Some formals, _, _) -> List.map (fun (_, t, _) -> t) formals
+                   | _ -> assert false (* ensured by match_arg_types *))
+                  args
               in
               stmt.skind <- Instr (Call (lval_opt, evar ~loc f, args, loc));
               SkipChildren
