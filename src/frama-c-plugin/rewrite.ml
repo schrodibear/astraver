@@ -970,7 +970,7 @@ class specialize_blockfuns_visitor =
         List.for_all Fn.id @@
         (Option.map_default tl_opt ~default:true ~f:(matches ~tf:rtype)) ::
         List.map2 (fun (_, tf, _) ta -> matches ~tf ta) formals tacts
-      then !_type_ref
+      then Some (!_type_ref |? charType)
       else None
     | TFun _ -> Console.fatal "Can't specialize the function by its return type: %a" Printer.pp_typ ftype
     | _ -> Console.fatal "%a is not a function type, can't check if the signature matches" Printer.pp_typ ftype
@@ -1080,7 +1080,7 @@ class specialize_blockfuns_visitor =
               | _ -> assert false (* is_block_function == true *)
             in
             match match_arg_types fvtype lval_type_opt arg_types with
-            | Some typ when not (isVoidType typ) ->
+            | Some typ ->
               let f =
                 let fname = fvar.vname ^ "_" ^ Name.typ typ in
                 match self#find_specialized_function fname with
@@ -1109,16 +1109,18 @@ class specialize_blockfuns_visitor =
               in
               stmt.skind <- Instr (Call (lval_opt, evar ~loc f, args, loc));
               SkipChildren
-            | Some _ ->
-              Console.unsupported
-                "Can't specialize %s applied (or assigned) to arguments (or lvalue) of type `void': %a"
-                fvar.vname Printer.pp_stmt stmt
             | _ ->
               Console.unsupported
-                "Can't specialize %s applied (or assigned) to arguments (or lvalue) of incorrect types: %a"
-                fvar.vname Printer.pp_stmt stmt
-          else DoChildren
-        with Not_found -> DoChildren
+                "Can't specialize %s applied (or assigned) to arguments (lvalue) of incorrect type(s):@[%a@]@.\
+                 The type of %s is considered to be:@\n@[<hov 2>%a@].@.The types in the call-site context:@\n\
+                 @[<hov 2>%a@ (%a)@]."
+                fvar.vname Printer.pp_stmt stmt fvar.vname Printer.pp_typ fvar.vtype
+                Printer.pp_typ (lval_type_opt |? voidType)
+                (Format.pp_print_list ~pp_sep:(fun f () -> Format.fprintf f ",@ ") Printer.pp_typ) arg_types
+          else
+            DoChildren
+        with
+        | Not_found -> DoChildren
         end
       | _ -> DoChildren
 
