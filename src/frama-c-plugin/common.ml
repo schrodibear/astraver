@@ -1363,15 +1363,24 @@ struct
       let fill_jessie_fields ci =
         let basety = TComp (ci, empty_size_cache (), []) in
         let field fi nextoff =
-          let size_in_bits =
-            match fi.fbitfield, unrollType fi.ftype with
-            | Some siz, _ -> siz
-            | None, TArray (_, None, _, _) -> 0
-            | None, _ -> bitsSizeOf fi.ftype
-          in
-          let offset_in_bits = fst (bitsOffset basety (Field (fi, NoOffset))) in
-          let padding_in_bits = nextoff - (offset_in_bits + size_in_bits) in
-          assert (padding_in_bits >= 0);
+          let offset_in_bits, size_in_bits = bitsOffset basety (Field (fi, NoOffset)) in
+          let padding_in_bits = nextoff - offset_in_bits - size_in_bits in
+          if padding_in_bits < 0 then
+            Console.unsupported
+              "assertion failed while computing paddings in composite type %s: \
+               the sum of the offset and size of the field %s (%d + %d) is *larger* than \
+               the offset of the next field (%d): cannot handle a negative padding:@[<hov 2>%a@]"
+              (compFullName ci)
+              fi.forig_name
+              offset_in_bits
+              size_in_bits
+              nextoff
+              (pp_print_list
+                 ~pp_sep:(fun f () -> fprintf f ";@\n")
+                 (fun f fi ->
+                    let o, s = bitsOffset basety (Field (fi, NoOffset)) in
+                    fprintf f "%s : %d @@ %d" fi.forig_name s o))
+              ci.cfields;
           fi.fsize_in_bits <- Some size_in_bits;
           fi.foffset_in_bits <- Some offset_in_bits;
           fi.fpadding_in_bits <- Some padding_in_bits;
@@ -1383,7 +1392,7 @@ struct
         with
         | SizeOfError (s, typ) ->
           Console.warning
-            "Sizeof error occurred when computing bit offsets in composite type %s: %s (in type %a)"
+            "SizeOfError occurred when computing bit offsets in composite type %s: %s (in type %a)"
             (compFullName ci)
             s
             Printer.pp_typ typ
