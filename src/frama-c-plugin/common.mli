@@ -315,7 +315,6 @@ sig
     val is_base_addr : t -> bool
     val mk : ?name:string list -> typ:logic_type -> loc:Lexing.position * Lexing.position -> term_node -> t
     val of_var : varinfo -> t
-    val typ_of_logic_c_type : logic_type -> typ
 
     module Env :
     sig

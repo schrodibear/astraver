@@ -733,7 +733,7 @@ struct
       | Ltype ({ lt_name = name }, []) when name = Utf8_logic.boolean  ->
         TInt (ILongLong, [])
       | Ltype ({ lt_name = "set" }, [t]) -> typ_of_logic_c_type t
-      | Ltype _ | Lvar _ | Larrow _ -> invalid_arg "Ast.Term.typ_of_logic_c_type"
+      | Ltype _ | Lvar _ | Larrow _ -> raise Exit
 
     module Env =
       struct
@@ -751,6 +751,12 @@ struct
             vars = Varinfo.Map.empty
           }
 
+        let dummy_type =
+          let ci =
+            mkCompInfo true (Name.unique "dummy_type") (fun _ -> ["charM", charType, None, [], Location.unknown]) []
+          in
+          TPtr (TComp (ci, empty_size_cache (), []), [])
+
         let merge env1 env2 =
           {
             term_lhosts =
@@ -767,7 +773,7 @@ struct
           let ty =
             match t.term_type with
             | Ctype ty -> ty
-            | _ -> voidType
+            | _ -> dummy_type
           in
           let v = Vi.Variable.pseudo ty in
           let env = { env with terms = Varinfo.Map.add v t env.terms } in
@@ -784,7 +790,7 @@ struct
           Var pv, env
 
         let add_lhost env lhost =
-          let v = Vi.Variable.pseudo voidType in
+          let v = Vi.Variable.pseudo dummy_type in
           let env = { env with term_lhosts = Varinfo.Map.add v lhost env.term_lhosts } in
           Var v, env
 
@@ -810,6 +816,7 @@ struct
         | LReal _
         | Integer _ -> raise Exit
       in
+      let try_ f = try f () with Exit -> Env.add_term Env.empty t in
       let e, env =
         match t.term_node with
         | TLval tlv ->
@@ -824,10 +831,13 @@ struct
           let e, env = to_exp_env t' in SizeOfE e, env
         | TAlignOfE t' ->
           let e, env = to_exp_env t' in AlignOfE e, env
-        | TUnOp (unop,t') ->
+        | TUnOp (unop, t') ->
+          try_ @@ fun () ->
+          let typ = typ_of_logic_c_type t.term_type in
           let e, env = to_exp_env t' in
-          UnOp (unop, e, typ_of_logic_c_type t.term_type), env
-        | TBinOp(binop,t1,t2) ->
+          UnOp (unop, e, typ), env
+        | TBinOp (binop, t1, t2) ->
+          try_ @@ fun () ->
           let e1, env1 = to_exp_env t1 in
           let e2, env2 = to_exp_env t2 in
           let env = Env.merge env1 env2 in
@@ -844,7 +854,8 @@ struct
         | TAlignOf ty -> AlignOf ty, Env.empty
         | TSizeOf ty -> SizeOf ty, Env.empty
         | TConst c ->
-          (try Const (const_of_lconst c), Env.empty with Exit -> Env.add_term Env.empty t)
+          try_ @@ fun () ->
+          Const (const_of_lconst c), Env.empty
         | Tapp _ | TDataCons _ | Tif _ | Tat _ | Tbase_addr _ | TOffsetOf _
         | Toffset _ | Toffset_max _ | Toffset_min _
         | Tblock_length _ | Tnull | TCoerce _ | TCoerceE _ | TUpdate _
@@ -852,6 +863,16 @@ struct
         | Tunion _ | Tinter _ | Tempty_set | Trange _ | Tlet _
         | TLogic_coerce _ ->
           Env.add_term Env.empty t
+      in
+      let e, env =
+        let rec is_safe =
+          function
+          | Lval (Mem e, _) when not (isPointerType @@ typeOf e) -> false
+          | Lval (Mem e, _) -> is_safe e.enode
+          | _ -> true
+        in
+        if is_safe e then e, env
+        else Env.add_term Env.empty t
       in
       let info_if_needed t e =
         let info () = new_exp ~loc @@ Info (e, exp_info_of_term t) in
