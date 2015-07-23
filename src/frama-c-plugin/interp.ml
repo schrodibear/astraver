@@ -701,7 +701,7 @@ and terms ?(in_zone=false) t =
         when is_integral_logic_const c &&
              Integer.equal (value_of_integral_logic_const c) Integer.zero ->
         [JCPEconst JCCnull]
-      | _ ->
+      | _ when Logic_utils.isLogicPointer t ->
         let dstty = unrollType @@ pointed_type ptrty in
         let srcty = unrollType @@ Type.Logic_c_type.(map ~f:pointed_type (of_logic_type_exn t.term_type)) in
         begin match srcty, dstty with
@@ -711,6 +711,9 @@ and terms ?(in_zone=false) t =
           Console.unsupported "Casting from type %a to type %a not allowed in logic"
             Printer.pp_logic_type t.term_type Printer.pp_typ ptrty
         end
+      | _ ->
+        Console.unsupported "Casting from non-pointer type %a to pointer type %a not allowed in logic"
+          Printer.pp_logic_type t.term_type Printer.pp_typ ptrty
       end
     | TCastE (ty, _, t) ->
       (* TODO: support other casts in Jessie as well *)
