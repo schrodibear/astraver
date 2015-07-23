@@ -58,6 +58,7 @@ typedef char _type;
   @*/
 extern _type *memcpy__type(_type *restrict dest, const _type *restrict src, size_t n);
 
+//@ assigns ((char *) dest)[0 .. n - 1];
 void *memcpy(void *dest, const void *src, size_t n);
 
 /*@ requires n > 0 &&
@@ -71,6 +72,7 @@ void *memcpy(void *dest, const void *src, size_t n);
   @*/
 extern _type *memmove__type(_type *dest, const _type *src, size_t n);
 
+//@ assigns ((char *) dest)[0 .. n - 1];
 void *memmove(void *dest, const void *src, size_t n);
 
 /*@ requires n > 0 &&
@@ -84,6 +86,7 @@ void *memmove(void *dest, const void *src, size_t n);
   @*/
 extern int memcmp__type(const _type *dest, const _type *src, size_t n);
 
+//@ assigns ((char *) dest)[0 .. n - 1];
 int memcmp(const void *dest, const void *src, size_t n);
 
 /*@ requires n > 0 &&
@@ -93,10 +96,13 @@ int memcmp(const void *dest, const void *src, size_t n);
   @ assigns ((_type *) dest)[0 .. (n / sizeof (_type)) - 1] \from val;
   @ allocates \nothing;
   @ ensures \let _n = n / sizeof (_type);
-  @           val == 0 ==> \forall integer k; 0 <= k < _n ==> dest[k] == (_type) (unsigned  char) val;
+  @           val == 0 ==>
+  @             ((\forall integer k; 0 <= k < _n ==> dest[k] == (_type) (unsigned  char) val) &&
+  @              (_n >= 1 ==> *dest == (_type) (unsigned char) val));
   @*/
 extern void *memset__type(_type *dest, int val, size_t n);
 
+//@ assigns ((char *) dest)[0 .. n - 1];
 void *memset(void *dest, int val, size_t n);
 
 #endif /* _JESSIE_SPEC_PROLOG_H_ */
