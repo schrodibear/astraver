@@ -1697,6 +1697,9 @@ struct
     let name ?bitsize ty =
       let name_it signed size_in_bytes =
         let nbits = bitsize |? 8 * size_in_bytes in
+        if nbits <= 0 then
+          Console.abort "Cannot translate an integral bit-field type `%a' of width %d <= 0 to Jessie enum type"
+            Printer.pp_typ ty nbits;
         let name = (if signed then "" else "u") ^ "int" ^ (string_of_int nbits) in
         All.replace name (ty, Some nbits);
         name
