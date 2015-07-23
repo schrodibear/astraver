@@ -356,15 +356,23 @@ class fun_vaddrof_visitor =
       | _ -> DoChildren
   end
 
-let get_annotated_funs () =
-  Globals.Functions.fold
-    (fun kf acc ->
-      if Annotations.(
-           not (is_empty_funspec (funspec kf)) ||
-           List.exists Common.(has_code_annot ~emitter:Emitter.end_user % fst) @@ code_annot_of_kf kf)
-      then kf.fundec :: acc
-      else acc)
-    []
+let get_annotated_funs =
+  let emitter = Emitter.end_user in
+  let has_user_annots =
+    List.exists
+      (function
+        | { annot_content = AAssert (_, { name = ["missing_return"] }) } -> false
+        | _ -> true)
+  in
+  fun () ->
+    Globals.Functions.fold
+      (fun kf acc ->
+         if Annotations.(
+           (try behaviors ~emitter kf <> [] with No_funspec _ -> false) ||
+           List.exists Common.(has_user_annots % code_annot ~emitter % fst) @@ code_annot_of_kf kf)
+         then kf.fundec :: acc
+         else acc)
+      []
 
 let collect file =
   let { State.
