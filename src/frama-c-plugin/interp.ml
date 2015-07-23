@@ -2840,12 +2840,12 @@ let memory_reinterpretation_predicates get_compinfo () =
       match (ty : Type.Integral.t :> typ) with
       | TInt (IInt | IUInt as ikind, attrs) when sizeof_int = sizeof_short ->
         handle_type
-          (name ^ "_short")
+          name
           (Type.Integral.int ~attrs (if isSigned ikind then IShort else IUShort), bitsize)
           acc
       | TInt (IInt | IUInt as ikind, attrs) when sizeof_int = sizeof_long ->
         handle_type
-          (name ^ "_long")
+          name
           (Type.Integral.int ~attrs (if isSigned ikind then ILong else IULong), bitsize)
           acc
       | _ -> acc
