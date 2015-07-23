@@ -82,8 +82,12 @@ let steal_annots () =
   let l =
     Annotations.fold_all_code_annot
       (fun stmt e ca acc ->
-         Annotations.remove_code_annot e stmt ca;
-        (stmt, ca) :: acc)
+         try
+           ignore (Kernel_function.find_englobing_kf stmt);
+           Annotations.remove_code_annot e stmt ca;
+           (stmt, ca) :: acc
+         with
+         | Not_found -> acc)
       []
   in
   List.iter (fun (stmt, ca) -> Annotations.add_code_annot emitter stmt ca) l;
@@ -116,6 +120,9 @@ let run () =
     Extractor.extract file;
     Debug.check_exp_types file
   end;
+  steal_annots ();
+  Console.debug "After steal_annots";
+  Debug.check_exp_types file;
   (* Synchronize `file' with AST once again after extraction *)
   let file = FCAst.get () in
   if file.globals = [] then
@@ -129,11 +136,6 @@ let run () =
   ignore (Ast.Vi.Function.malloc ~kernel:true ());
   ignore (Ast.Vi.Function.free ());
   Console.debug  "After malloc and free";
-  Debug.check_exp_types file;
-  steal_annots ();
-  Console.debug "After steal_annots";
-  Debug.check_exp_types file;
-  (* Rewrite ranges in logic annotations by comprehesion *)
   Debug.check_exp_types file;
 
   (* Phase 2: C-level rewriting to facilitate analysis *)
