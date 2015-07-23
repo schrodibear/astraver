@@ -575,7 +575,7 @@ struct
 
       let malloc ?(kernel=false) () =
         let fname, params =
-          let size = "size", uintType, [] in
+          let size = "size", theMachine.typeOfSizeOf, [] in
           if not kernel then
             malloc, Some [size]
           else
@@ -590,7 +590,8 @@ struct
             raise Not_found
           end;
           vi
-        with Not_found ->
+        with
+        | Not_found ->
           let f =
             findOrCreateFunc (Ast.get ()) fname typ
           in
