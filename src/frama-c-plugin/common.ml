@@ -531,7 +531,7 @@ struct
       match e.enode with
       | Info _ -> e
       | _ ->
-        let einfo = { exp_type = Ctype voidType; exp_name = [] } in
+        let einfo = { exp_type = Ctype voidPtrType; exp_name = [] } in
         (* In many cases, the correct type may not be available, as
          * the expression may result from a conversion from a term or a tset.
          * Calling [typeOf] on such an expression may raise an error.
