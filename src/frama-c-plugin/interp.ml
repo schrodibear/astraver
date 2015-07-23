@@ -1426,9 +1426,12 @@ let rec expr e =
 *)
 and boolean_expr ?(to_locate=false) e =
   let boolean_node_from_expr ty e' =
-    if isPointerType ty then JCPEbinary(e',`Bneq,null_expr)
-    else if isArithmeticType ty then JCPEbinary (e',`Bneq, mkexpr (JCPEcast (zero_expr, ctype ty)) e.eloc)
-    else assert false
+    if isPointerType ty then JCPEbinary (e', `Bneq, null_expr)
+    else if isArithmeticType ty then
+      let cast = let ty = ctype ty in fun e' -> mkexpr (JCPEcast (e', ty)) e.eloc in
+      JCPEbinary (cast e', `Bneq, cast zero_expr)
+    else
+      assert false
   in
 
   let enode = match (stripInfo e).enode with
