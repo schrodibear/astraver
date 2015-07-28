@@ -26,7 +26,13 @@
 #define _JESSIE_SPEC_PROLOG_H_
 
 #ifndef _SIZE_T
+#ifdef __kernel_size_t
+#define _SIZE_T
+typedef __kernel_size_t size_t;
+#else
 #include <stddef.h>
+#define _SIZE_T
+#endif
 #endif
 
 typedef char _type;
@@ -46,7 +52,7 @@ typedef char _type;
   @ }
   @ */
 
-/*@ requires n > 0 &&
+/*@ requires n >= 0 &&
   @          n % (sizeof (_type)) == 0 &&
   @          \let _n = n / sizeof (_type);
   @          \valid(((_type *) dest)+(0 .. _n - 1)) &&
@@ -61,7 +67,7 @@ extern _type *memcpy__type(_type *restrict dest, const _type *restrict src, size
 //@ assigns ((char *) dest)[0 .. n - 1];
 void *memcpy(void *dest, const void *src, size_t n);
 
-/*@ requires n > 0 &&
+/*@ requires n >= 0 &&
   @          n % (sizeof (_type)) == 0 &&
   @          \let _n = n / sizeof (_type);
   @          \valid(((_type *) dest)+(0 .. _n - 1)) &&
@@ -75,7 +81,7 @@ extern _type *memmove__type(_type *dest, const _type *src, size_t n);
 //@ assigns ((char *) dest)[0 .. n - 1];
 void *memmove(void *dest, const void *src, size_t n);
 
-/*@ requires n > 0 &&
+/*@ requires n >= 0 &&
   @          n % (sizeof (_type)) == 0 &&
   @          \let _n = n / sizeof (_type);
   @          \valid(((_type *) dest)+(0 .. _n - 1)) &&
@@ -89,7 +95,7 @@ extern int memcmp__type(const _type *dest, const _type *src, size_t n);
 //@ assigns ((char *) dest)[0 .. n - 1];
 int memcmp(const void *dest, const void *src, size_t n);
 
-/*@ requires n > 0 &&
+/*@ requires n >= 0 &&
   @          n % (sizeof (_type)) == 0 &&
   @          \let _n = n / sizeof (_type);
   @          \valid(((_type *) dest)+(0 .. _n - 1));
