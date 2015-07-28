@@ -1753,23 +1753,28 @@ struct
     result
 
   let retaining_size_of_field fi f =
-    let size_determinants fi =
-      let bit_size_of { ftype } =
-        match unrollType ftype with
-        | TArray (_, None ,_, _) -> 0
-        | t -> bitsSizeOf t
+    let size fi =
+      let off, nextoff =
+        let ci = fi.fcomp in
+        let ty = TComp (ci, empty_size_cache (), []) in
+        let rec rest =
+          function
+          | { fcomp = { ckey }; fname } :: rest
+            when ckey = ci.ckey && fname = fi.fname -> rest
+          | _ :: rst -> rest rst
+          | [] -> assert false (* The composite should necessarily contain its field *)
+        in
+        let rest = rest ci.cfields in
+        let bits_offset fi = fst @@ bitsOffset ty @@ Field (fi, NoOffset) in
+        bits_offset fi, match rest with fi :: _ -> bits_offset fi | [] -> bitsSizeOf ty - 8 * bytesAlignOf ty
       in
-      fi.fbitfield, bit_size_of fi, hasAttribute Name.Attr.packed fi.fattr
+      nextoff - off
     in
-    let originals, original_size =
-      size_determinants fi,
-        Option.value_fatal ~in_:__LOC__ fi.fsize_in_bits +
-        Option.value_fatal ~in_:__LOC__ fi.fpadding_in_bits
-    in
+    let original_size = size fi in
     let result = f fi in
-    if size_determinants fi <> originals then begin
+    if size fi <> original_size then begin
       fi.fbitfield <- Some original_size;
-      fi.fattr <- addAttribute (Attr (Name.Attr.packed, [])) fi.fattr
+      fi.fattr <- addAttribute (Attr (Name.Attr.packed, [])) fi.fattr;
     end;
     result
 
