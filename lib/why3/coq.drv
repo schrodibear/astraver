@@ -79,12 +79,12 @@ theory core.Jessie_voidp_tag_id
   meta "realized_theory" "core.Jessie_voidp_tag_id", "Jessie_voidp_tag_id"
 end
 
-theory core.Jessie_charp_tag_id
-  meta "realized_theory" "core.Jessie_charp_tag_id", "Jessie_charp_tag_id"
-end
-
 theory core.Jessie_tag_table
   meta "realized_theory" "core.Jessie_tag_table", "Jessie_tag_table"
+end
+
+theory core.Jessie_charp_tag_id
+  meta "realized_theory" "core.Jessie_charp_tag_id", "Jessie_charp_tag_id"
 end
 
 theory core.Jessie_sidecast

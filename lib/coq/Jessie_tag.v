@@ -26,6 +26,9 @@ Axiom Bottom_tag : forall {t:Type} {t_WT:WhyType t},
   forall (t1:(Jessie_tag_id.tag_id t)), (subtag t1
   (bottom_tag : (Jessie_tag_id.tag_id t))).
 
+Axiom Bottom_int : forall {a:Type} {a_WT:WhyType a},
+  ((Jessie_tag_id.int_of_tag (bottom_tag : (Jessie_tag_id.tag_id a))) = 0%Z).
+
 Axiom Root_subtag : forall {t:Type} {t_WT:WhyType t},
   forall (a:(Jessie_tag_id.tag_id t)), forall (b:(Jessie_tag_id.tag_id t)),
   forall (c:(Jessie_tag_id.tag_id t)), (parenttag a

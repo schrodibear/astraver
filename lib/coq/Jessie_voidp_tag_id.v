@@ -6,10 +6,14 @@ Require Jessie_pointer.
 Require int.Int.
 Require map.Map.
 Require Jessie_tag_id.
+Require Jessie_tag.
 Require Jessie_tag_table_type.
 Require Jessie_voidp.
 
 Parameter voidP_tag: (Jessie_tag_id.tag_id Jessie_voidp.voidP).
 
-Axiom Voidp_int : ((Jessie_tag_id.int_of_tag voidP_tag) = 0%Z).
+Axiom Voidp_int : ((Jessie_tag_id.int_of_tag voidP_tag) = 1%Z).
+
+Axiom Voidp_parenttag_bottom : (Jessie_tag.parenttag voidP_tag
+  (Jessie_tag.bottom_tag : (Jessie_tag_id.tag_id Jessie_voidp.voidP))).
 
