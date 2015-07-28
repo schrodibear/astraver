@@ -1,6 +1,5 @@
 # Why version (not maintained in this project, to be eliminated)
-WHY_VERSION=2.34
+WHY_VERSION="2.34-(frozen)"
 
 # Jessie2 version
-JC_VERSION=alpha2
-
+JC_VERSION="alpha2"
