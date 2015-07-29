@@ -1347,7 +1347,7 @@ object
       (* No problem with calling [retype_var] more than once, since
          subsequent calls do nothing on reference type. *)
       if not (isFunctionType v.vtype || v.vdefined) then retype_var v;
-      SkipChildren
+      DoChildren
     | GFun _ -> DoChildren
     | GAnnot _ -> DoChildren
     | GCompTag (compinfo,_loc) ->
