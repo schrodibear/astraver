@@ -84,7 +84,7 @@ let () =
       "bool"; "do"; "done"; "else"; "end"; "exception"; "exists";
       "external"; "false"; "for"; "forall"; "fun"; "function"; "goal";
       "if"; "in"; "int"; "invariant"; "label"; "let"; "logic"; "not";
-      "of"; "or"; "parameter"; "predicate"; "prop"; "raise"; "raises";
+      "of"; "old"; "or"; "parameter"; "predicate"; "prop"; "raise"; "raises";
       "reads"; "real"; "rec"; "ref"; "result"; "returns"; "then"; "true"; "try";
       "type"; "unit"; "variant"; "void"; "while"; "with"; "writes";
       (* Why prelude *)
