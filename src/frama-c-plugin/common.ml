@@ -1444,7 +1444,7 @@ struct
         | Some original_size, Some current_size ->
           List.iter (fun fi -> fi.foffset_in_bits <- None) ci.cfields;
           let warn action =
-            Console.warning "Fixing size of composite [%s] by %s" (compFullName ci) action
+            Console.debug "Fixing size of composite [%s] by %s" (compFullName ci) action
           in
           if current_size < original_size then begin
             warn "padding";
