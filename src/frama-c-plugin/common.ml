@@ -1757,16 +1757,19 @@ struct
       let off, nextoff =
         let ci = fi.fcomp in
         let ty = TComp (ci, empty_size_cache (), []) in
-        let rec rest =
-          function
-          | { fcomp = { ckey }; fname } :: rest
-            when ckey = ci.ckey && fname = fi.fname -> rest
-          | _ :: rst -> rest rst
-          | [] -> assert false (* The composite should necessarily contain its field *)
-        in
-        let rest = rest ci.cfields in
-        let bits_offset fi = fst @@ bitsOffset ty @@ Field (fi, NoOffset) in
-        bits_offset fi, match rest with fi :: _ -> bits_offset fi | [] -> bitsSizeOf ty - 8 * bytesAlignOf ty
+        if ci.cstruct then
+          let rec rest =
+            function
+            | { fcomp = { ckey }; fname } :: rest
+              when ckey = ci.ckey && fname = fi.fname -> rest
+            | _ :: rst -> rest rst
+            | [] -> assert false (* The composite should necessarily contain its field *)
+          in
+          let rest = rest ci.cfields in
+          let bits_offset fi = fst @@ bitsOffset ty @@ Field (fi, NoOffset) in
+          bits_offset fi, match rest with fi :: _ -> bits_offset fi | [] -> bitsSizeOf ty - 8 * bytesAlignOf ty
+        else
+          0, snd @@ bitsOffset ty @@ Field (fi, NoOffset)
       in
       nextoff - off
     in
