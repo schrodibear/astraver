@@ -273,6 +273,7 @@ sig
     type t = exp
     val const : ?loc:Location.t -> Integer.t -> t
     val dummy_info : t -> t
+    val strip_casts_to: typ -> exp -> exp
   end
 
   module rec Vi :

@@ -841,7 +841,7 @@ struct
             if self#is_old lv then      ChangeTo (H.find news lv)
             else if self#is_new lv then DoChildren
             else if lv_name = get_specialized_name lv_name then
-              (* logic var name does NOT contain template => just copy it to avoid sharing before retyping *)
+              (* logic var name does NOT contain template => just copy it to avoid sharing before renaming *)
               self#vlogic_var_copying lv
             else
               (* logic var name DOES contain template => copy and rename it by substituting _type with type name *)
@@ -861,8 +861,8 @@ class virtual logic_var_specializing_visitor update_logic_info typ =
   object(self)
     inherit logic_var_visitor typ
 
-    method private vlogic_var_copying ({ lv_name; lv_type } as lv) =
-      let lv' = Cil_const.make_logic_var_formal lv_name lv_type in
+    method private vlogic_var_copying ({ lv_name; lv_type; lv_kind } as lv) =
+      let lv' = Cil_const.make_logic_var_kind lv_name lv_kind lv_type in
       set_logic_var self#behavior lv lv';
       set_orig_logic_var self#behavior lv' lv;
       self#set_old lv' lv;
@@ -889,9 +889,9 @@ class virtual logic_var_renaming_visitor typ =
 
     method private vlogic_var_copying _ = DoChildren
 
-    method private vlogic_var_renaming ({ lv_name; lv_type } as lv) =
+    method private vlogic_var_renaming ({ lv_name; lv_type; lv_kind } as lv) =
       let lv_name' = get_specialized_name lv_name in
-      let lv' = Cil_const.make_logic_var_formal lv_name' lv_type in
+      let lv' = Cil_const.make_logic_var_kind lv_name' lv_kind lv_type in
       set_logic_var self#behavior lv lv';
       set_orig_logic_var self#behavior lv' lv;
       ChangeTo lv'
@@ -984,7 +984,7 @@ class specialize_blockfuns_visitor =
     method private update_logic_info typ (*li*) =
       let get_specialized_name = get_specialized_name typ in
       let rec match_global_with_lvar_name name = function
-        | GAnnot (Dfun_or_pred ({ l_var_info={ lv_name } }, _), _) -> lv_name = name
+        | GAnnot (Dfun_or_pred ({ l_var_info = { lv_name } }, _), _) -> lv_name = name
         | GAnnot (Daxiomatic (_, lst, loc), _) ->
           List.exists (match_global_with_lvar_name name) (List.map (fun ga -> GAnnot (ga, loc)) lst)
         | _ -> false
@@ -1066,13 +1066,7 @@ class specialize_blockfuns_visitor =
         begin try
           let fpatt = Globals.Functions.find_by_name (fvar.vname ^ "__type") in
           if is_block_function fpatt then
-            let strip_cast e =
-              match e.enode with
-              | CastE (_, _, e) -> e
-              | _ -> e
-            in
-            let strip_void_ptr_casts e = if isVoidPtrType @@ typeOf e then strip_cast e else e in
-            let args = List.map strip_void_ptr_casts args in
+            let args = List.map (Ast.Exp.strip_casts_to voidPtrType) args in
             let lval_type_opt = Option.map lval_opt ~f:typeOfLval in
             let arg_types =  List.map typeOf args in
             let fvtype = match fpatt.fundec with

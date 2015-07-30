@@ -538,6 +538,11 @@ struct
          * Therefore, put here a dummy type until tsets correctly typed.
          *)
         new_exp ~loc:e.eloc @@ Info (e, einfo)
+
+    let rec strip_casts_to ty =
+      function
+      | { enode = CastE (ty', _, e) } when not (need_cast ty' ty) -> strip_casts_to ty e
+      | e -> e
   end
 
   module Vi =
