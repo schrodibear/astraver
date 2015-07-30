@@ -39,7 +39,8 @@ Axiom Typeof_sidecast : forall {t:Type} {t_WT:WhyType t},
   t))), forall (p:(Jessie_pointer.pointer t)),
   forall (s2:(Jessie_tag_id.tag_id t)), (~ ((map.Map.get t1
   p) = (Jessie_tag.bottom_tag : (Jessie_tag_id.tag_id t)))) ->
-  ((map.Map.get t1 (sidecast t1 p s2)) = s2).
+  ((~ (s2 = (Jessie_tag.bottom_tag : (Jessie_tag_id.tag_id t)))) ->
+  ((map.Map.get t1 (sidecast t1 p s2)) = s2)).
 
 Axiom Typeof_sidecast_fresh : forall {t:Type} {t_WT:WhyType t},
   forall (t1:(map.Map.map (Jessie_pointer.pointer t) (Jessie_tag_id.tag_id

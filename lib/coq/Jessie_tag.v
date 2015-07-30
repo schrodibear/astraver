@@ -19,6 +19,10 @@ Axiom Subtag_parent : forall {t:Type} {t_WT:WhyType t},
   forall (t3:(Jessie_tag_id.tag_id t)), (subtag t1 t2) -> ((parenttag t2
   t3) -> (subtag t1 t3)).
 
+Axiom Subtag_antisymmetric : forall {t:Type} {t_WT:WhyType t},
+  forall (t1:(Jessie_tag_id.tag_id t)) (t2:(Jessie_tag_id.tag_id t)), (subtag
+  t1 t2) -> ((subtag t2 t1) -> (t1 = t2)).
+
 Parameter bottom_tag: forall {a:Type} {a_WT:WhyType a}, (Jessie_tag_id.tag_id
   a).
 

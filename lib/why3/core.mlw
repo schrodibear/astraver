@@ -380,6 +380,10 @@ theory Jessie_tag
     forall t3: (tag_id 't) [subtag t1 t2 | parenttag t2 t3 | subtag t1 t3].
       subtag t1 t2 -> parenttag t2 t3 -> subtag t1 t3
 
+  axiom Subtag_antisymmetric:
+    forall t1 t2 : tag_id 't.
+      subtag t1 t2 -> subtag t2 t1 -> t1 = t2
+
   function bottom_tag: tag_id 'a
 
   axiom Bottom_tag:
