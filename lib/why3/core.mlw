@@ -502,7 +502,7 @@ theory Jessie_sidecast
     forall t : tag_table 't.
     forall p : pointer 't.
     forall s2 : tag_id 't [sidecast t p s2 | typeof t (sidecast t p s2)].
-      typeof t p <> bottom_tag -> typeof t (sidecast t p s2) = s2
+      typeof t p <> bottom_tag -> s2 <> bottom_tag -> typeof t (sidecast t p s2) = s2
 
   axiom Typeof_sidecast_fresh:
     forall t : tag_table 't.
