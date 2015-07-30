@@ -1673,7 +1673,7 @@ let instruction = function
         let enode =
           if is_free v || is_kfree v then
             let arg = as_singleton eargs in
-            let subarg = stripCasts arg in
+            let subarg = Ast.Exp.strip_casts_to (TPtr ((Type.Composite.Struct.void () :> typ), [])) arg in
             let arg = if isPointerType (typeOf subarg) then subarg else arg in
             JCPEfree(expr arg)
           else
