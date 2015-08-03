@@ -1758,7 +1758,7 @@ struct
     result
 
   let retaining_size_of_field fi f =
-    let size_align fi =
+    let dimensions fi =
       let ci = fi.fcomp in
       let ty = TComp (ci, empty_size_cache (), []) in
       let off, nextoff =
@@ -1776,12 +1776,14 @@ struct
         else
           0, snd @@ bitsOffset ty @@ Field (fi, NoOffset)
       in
-      nextoff - off, bytesAlignOf ty
+      off, nextoff, bytesSizeOf ty
     in
-    let original_size_align = size_align fi in
+    let original_dimensions = dimensions fi in
     let result = f fi in
-    if size_align fi <> original_size_align then begin
-      fi.fbitfield <- Some (fst original_size_align);
+    let dimensions = dimensions fi in
+    if dimensions <> original_dimensions then begin
+      let off, nextoff, _ = original_dimensions in
+      fi.fbitfield <- Some (nextoff - off);
       fi.fattr <- addAttribute (Attr (Name.Attr.packed, [])) fi.fattr;
     end;
     result
