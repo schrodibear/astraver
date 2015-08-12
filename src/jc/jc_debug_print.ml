@@ -220,6 +220,7 @@ object
     | JCLderef (ls, lab, fi, r) ->  JCLderef (lswrap ls, lab, fi, r)
     | JCLderef_term (t, fi) ->      JCLderef_term (twrap t, fi)
     | JCLat (l, lab) ->             JCLat (wrap l, lab)
+    | JCLsingleton t ->             JCLsingleton (twrap t)
 end
 
 let lwrap = new loc_wrapper loc_dummy

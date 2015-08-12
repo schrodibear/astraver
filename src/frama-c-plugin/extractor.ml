@@ -55,6 +55,7 @@ sig
   val add : 'a t -> 'a -> unit
   val mem : 'a t -> 'a -> bool
   val ensure : on_add:('a -> unit) -> 'a t -> 'a -> unit
+  val iter : 'a t -> f:('a -> unit) -> unit
 end =
 struct
   module type H =
@@ -63,6 +64,7 @@ struct
     type key
     val replace : t -> key -> unit -> unit
     val mem : t -> key -> bool
+    val iter : (key -> unit -> unit) -> t -> unit
   end
 
   module Hide (H : Hashtbl.S) =
@@ -72,6 +74,7 @@ struct
     let create = H.create
     let mem = H.mem
     let replace = H.replace
+    let iter = H.iter
   end
 
   type 'a t = Set : (module H with type key = 'a and type t = 'b) * 'b -> 'a t
@@ -85,6 +88,7 @@ struct
       on_add k;
       add t k
     end
+  let iter (type elt) (Set ((module H), t) : elt t) ~f = H.iter (fun k () -> f k) t
 end
 
 module State =
@@ -439,7 +443,34 @@ let collect file =
       do_comp (Queue.take comp_queue)
     else
       raise Exit
-  done with Exit -> () end;
+    done with Exit -> () end;
+  (* This hackish trick was added to avoid an unwanted side-effect of extraction:
+     vanishing side-effects. This can happen e.g. with \assigns clauses and assignments when they are used on
+     composite types. Since it is possible that no fields of a composite type are used in the relevant code, they can
+     all be removed making the containing composite type empty. After expansion of assignments for composite types
+     all assignments on such composite types would vanish. To prevent this we
+     fill spuriously emptified composites with the first least-nested field of some primitive or array type. *)
+  Set.iter comps ~f:(fun { cfields; _ } ->
+    let inf = max_int in
+    let rec fold_fields_exn ?(nesting=0) fs =
+      let rec rank fi =
+        let overhead fi = if Set.mem fields fi then 0 else 1 in
+        map_fst ((+) @@ 4 * nesting) @@
+        match fi.ftype with
+        | TEnum _ | TInt _ | TPtr _ | TArray _ | TFun _ -> 0 + overhead fi, [fi]
+        | TFloat _ -> 2 + overhead fi, [fi]
+        | TNamed (ti, _) -> rank { fi with ftype = ti.ttype }
+        | TComp ({ cfields; _ }, _, _) when cfields <> [] ->
+          let r, fis = fold_fields_exn ~nesting:(nesting + 1) cfields in
+          r + overhead fi, fi :: fis
+        | TComp _ | TVoid _ | TBuiltin_va_list _ -> inf, [fi]
+      in
+      List.(fold_left (fun acc fi -> let r = rank fi in if fst acc > fst r then r else acc) (rank @@ hd fs) @@ tl fs)
+    in
+    if not (List.exists (fun fi -> fi.faddrof || Set.mem fields fi) cfields) && cfields <> [] then
+      let r, fis = fold_fields_exn cfields in
+      if r <> inf then
+        List.iter (fun fi -> Set.add fields fi; add_from_type fi.ftype) fis);
   { Result. types; comps; fields; enums; vars; dcomps }
 
 class extractor { Result. types; comps; fields; enums; vars; dcomps } =

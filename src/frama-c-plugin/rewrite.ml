@@ -1225,7 +1225,7 @@ class composite_expanding_visitor =
       | Writes lst ->
         let lst = List.flatten @@ ListLabels.map lst ~f:(function
           | { it_content = { term_type = ty1 } } as it1,
-            From [ { it_content = {term_type = ty2 } } as it2]
+            From [ { it_content = { term_type = ty2 } } as it2]
             when Logic_utils.is_same_type ty1 ty2 ->
             List.map2
               (fun it1 it2 -> it1, From [it2])
