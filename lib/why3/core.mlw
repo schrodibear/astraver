@@ -456,6 +456,11 @@ theory Jessie_tag_table
     forall p : pointer 't.
     forall s : tag_id 't [instanceof t p s | downcast t p s].
       instanceof t p s -> downcast t p s = p
+
+  axiom Downcast_null:
+    forall t : tag_table 't.
+      forall s : tag_id 't [downcast t null s].
+        downcast t null s = null
 end
 
 theory Jessie_charp_tag_id
@@ -511,6 +516,12 @@ theory Jessie_sidecast
     forall p : pointer 't.
     forall s2 : tag_id 't [sidecast t p s2 | typeof t (sidecast t p s2)].
       typeof t p <> bottom_tag -> s2 <> bottom_tag -> typeof t (sidecast t p s2) = s2
+
+  (* Implies forall t : tag_table. typeof t null = bottom_tag ! *)
+  axiom Sidecast_null:
+    forall t : tag_table 't.
+      forall s : tag_id 't [sidecast t null s].
+        sidecast t null s = null
 
   axiom Typeof_sidecast_fresh:
     forall t : tag_table 't.
