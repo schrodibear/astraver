@@ -130,6 +130,10 @@ theory Jessie_alloc_table
 
   predicate valid (a : alloc_table 't) (p : pointer 't) =
     offset_min a p <= 0 <= offset_max a p
+
+  (* These ones are used too often with alloc_tables, inlining would make the resulting task too huge *)
+  meta "inline : no" predicate (<=)
+  meta "inline : no" predicate (>=)
 end
 
 theory Jessie_memory
