@@ -882,6 +882,21 @@ and term t =
 
 and pred p =
   CurrentLoc.set p.loc;
+  let rec expand_embedded t =
+    Type.Logic_c_type.map_default ~default:[t] t.term_type ~f:(fun ty ->
+      match unrollTypeDeep ty with
+      | TPtr (TComp (ci, _, _), _) ->
+        t ::
+        List.(
+          flatten @@
+          filter_map
+            ~f:(fun fi ->
+              if Type.Ref.(is_ref fi.ftype && size (of_typ_exn fi.ftype) > 0L)  then
+                Some (expand_embedded @@ Logic_const.term (TLval (TMem t, TField (fi, TNoOffset))) @@ Ctype fi.ftype)
+              else None)
+            ci.cfields)
+      | _ -> [t])
+  in
   let enode =
     match p.content with
     | Pfalse -> JCPEconst (JCCboolean false)
@@ -1045,7 +1060,7 @@ and pred p =
                 let eoffmax = mkexpr (JCPEoffset(Offset_max,e)) p.loc in
                 let emax = mkexpr (JCPEbinary(eoffmax,`Bge,zero_expr)) p.loc in
                 [emin; emax])
-             (terms t))
+             List.(flatten @@ map terms @@ expand_embedded t))
       in
       (mkconjunct elist p.loc)#node
 
