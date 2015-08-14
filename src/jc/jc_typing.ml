@@ -274,6 +274,64 @@ let rec superstruct st =
   | JCroot _vi ->
     false
 
+let rec deep_substruct ~constrs =
+  let true_, false_ = (true, fun _ -> constrs#true_), (false, fun _ -> constrs#true_) in
+  let deep_substruct ~assumps = deep_substruct ~constrs ~assumps in
+  fun ?(assumps=[]) si si' ->
+    let deep_substruct = deep_substruct ~assumps:((si, si') :: assumps) in
+    let rec compat_fields fis fis' =
+      match fis, fis' with
+      | fi :: fis, fi' :: fis' ->
+        let (&&) (r, conds) f =
+          if r then let r', conds' = f () in r', fun p -> constrs#and_ (conds p) @@ conds' p
+          else false_
+        in
+        let rec compat_type ty ty' =
+          match ty, ty' with
+          | JCTnative t, JCTnative t' -> t = t', fun _ -> constrs#true_
+          | JCTenum ei, JCTenum ei' -> ei.ei_type = ei'.ei_type, fun _ -> constrs#true_
+          | JCTlogic (name, args), JCTlogic (name', args') when name = name' ->
+            List.fold_left2 (fun acc ty ty' -> acc && fun () -> compat_type ty ty') true_ args args'
+          | JCTlogic ("padding", []), _ -> true_
+          | JCTpointer (JCtag (si, _), _, _), JCTpointer (JCtag (si', _) as pc', _, _) ->
+            if substruct si pc' then true, fun p -> constrs#instanceof (constrs#deref p fi') si
+            else if List.memq (si, si') assumps then true_
+            else deep_substruct si si'
+          | _ -> false_
+        in
+        (fi.fi_bitsize = fi'.fi_bitsize, fun _ -> constrs#true_) && fun () ->
+          compat_type fi.fi_type fi'.fi_type && fun () ->
+            compat_fields fis fis'
+      | _ :: _, [] -> true_
+      | [], _ :: _  -> false_
+      | [], [] -> true_
+    in
+    let r, conds = compat_fields si.si_fields si'.si_fields in
+    if r then r, fun p -> constrs#or_ (constrs#instanceof p si) @@ conds p
+    else false_
+
+let deep_substruct_nconstrs =
+  let module M = Map.Make (PairOrd (StructOrd) (StructOrd)) in
+  let cache = ref M.empty in
+  let constrs =
+    let mk = new nexpr ~label:LabelHere in
+    object
+      method true_ = mk @@ JCNEconst (JCCboolean true)
+      method and_ ne1 ne2 = mk @@ JCNEbinary (ne1, `Bland, ne2)
+      method or_ ne1 ne2 = mk @@ JCNEbinary (ne1, `Blor, ne2)
+      method deref ne fi = mk @@ JCNEderef (ne, fi.fi_name)
+      method instanceof ne st = mk @@ JCNEinstanceof (ne, st.si_name)
+    end
+  in
+  let deep_substruct = deep_substruct ~constrs in
+  fun si si' ->
+    match M.find_or_none (si, si') !cache with
+    | Some r -> r
+    | None ->
+      let r = deep_substruct si si' in
+      cache := M.add (si, si') r !cache;
+      r
+
 let same_hierarchy st1 st2 =
   let vi1 = pointer_class_root st1 in
   let vi2 = pointer_class_root st2 in
@@ -1027,8 +1085,19 @@ let rec term env (e : nexpr) =
               when ri == struct_root st && List.length ri.ri_hroots > 1 ->
               (* union downcast -- currently translated similar to usual one ==> TODO: support unions *)
               JCTpointer (JCtag (st, []), a, b), te1#region, JCTdowncast (te1, label (), st)
-            | JCtag _ when same_hierarchy st_pc st1 ->
-              JCTpointer (JCtag (st, []), a, b), te1#region, JCTsidecast (te1, label (), st)
+            | JCtag (st', []) when same_hierarchy st_pc st1 ->
+              let deep_substruct = deep_substruct_nconstrs in
+              let r, _ = deep_substruct st' st in
+              if r then ty, te1#region, te1#node (* implcit cast to deep superstruct *)
+              else
+                let r, conds = deep_substruct st st' in
+                if r then (* deep downcast *)
+                  let typ = JCTpointer (JCtag (st, []), a, b) in
+                  let term = new term ~typ ~region:te1#region
+                  and conds = term env (conds e1) in
+                  typ, te1#region, JCTif (conds, term te1#node, term (JCTdowncast (te1, label (), st)))
+                else (* sidecast *)
+                  JCTpointer (JCtag (st, []), None, None), te1#region, JCTsidecast (te1, label (), st)
             | _ -> typing_error ~loc:e#pos "invalid cast: structures from different hierarchies"
             end
         | JCTnull -> typing_error ~loc:e#pos "invalid cast"
@@ -2122,8 +2191,22 @@ let rec expr env e =
               when ri == struct_root st && List.length ri.ri_hroots > 1 ->
               (* union downcast -- now supported siilar to usual one ==> TODO: support unions *)
               JCTpointer (JCtag (st, []), a, b), te1#region, JCEdowncast (te1, st)
-            | JCtag _ when same_hierarchy st1 st_pc ->
-              JCTpointer (JCtag (st, []), a, b), te1#region, JCEsidecast (te1, st)
+            | JCtag (st', []) when same_hierarchy st_pc st1 ->
+              let deep_substruct = deep_substruct_nconstrs in
+              let r, _ = deep_substruct st' st in
+              if r then ty, te1#region, te1#node (* implcit cast to deep superstruct *)
+              else
+                let r, conds = deep_substruct st st' in
+                if r then (* deep downcast *)
+                  let typ = JCTpointer (JCtag (st, []), a, b) in
+                  typ, te1#region,
+                  JCEblock [
+                    new expr ~typ:unit_type @@
+                    JCEassert ([new identifier "safety"], Acheck,
+                               new assertion_with ~mark:"type_tags" @@ assertion env @@ conds e1);
+                    new expr ~typ ~region:te1#region te1#node]
+                else (* sidecast *)
+                  JCTpointer (JCtag (st, []), None, None), te1#region, JCEsidecast (te1, st)
             | _ -> typing_error ~loc:e#pos "invalid cast: structures from different hierarchies"
             end
         | _ -> typing_error ~loc:e#pos "invalid cast"

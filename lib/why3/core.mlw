@@ -1017,8 +1017,8 @@ module Jessie_downcast_safe
   use import Jessie_tag_table
 
   val downcast_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) :  pointer 't
-    requires { "expl:Downcast" instanceof t p s }
-    ensures  { result = downcast t p s }
+    requires { "expl:Downcast" instanceof t p s \/ p = null }
+    ensures  { result = p }
 end
 
 module Jessie_downcast_unsafe
@@ -1028,7 +1028,7 @@ module Jessie_downcast_unsafe
 
   val downcast_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) : pointer 't
     requires { true }
-    ensures  { result = downcast t p s }
+    ensures  { result = p }
 end
 
 module Jessie_sidecast_safe

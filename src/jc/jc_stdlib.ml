@@ -313,6 +313,16 @@ struct
     | [x] -> [[x]]
     | x :: _ as xs -> loop [] [x] xs
 
+  let rec last =
+    function
+    | [x] -> x
+    | _ :: xs -> last xs
+    | [] -> failwith "last"
+
+  let rec but_last ?(acc=[]) =
+    function
+    | [] | [_] -> rev acc
+    | x :: xs -> but_last ~acc:(x :: acc) xs
 end
 
 module Set =

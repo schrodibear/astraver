@@ -2034,8 +2034,12 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
       in
       return e'
 
-    | JCEblock el ->
+    | JCEblock el when e#typ = JCTnative Tunit ->
       return O.E.(mk @@ Block (List.map (expr (Ty Void)) el, Void))
+    | JCEblock [] -> return O.E.void
+    | JCEblock el ->
+      let e, el = List.(last el, but_last el) in
+      O.E.mk @@ Block (List.map (expr @@ Ty Void) el, Return (expr t e))
     | JCElet (v, e1, e2) ->
       let Typ typ = ty v.vi_type in
       let e1' =
@@ -2068,6 +2072,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
                 (match a#mark with
                 | "disjoint_behaviors" -> "behavior disjointness"
                 | "complete_behaviors" -> "behavior completeness"
+                | "type_tags" -> "deep downcast"
                 | _ -> ""))
           | _ -> None
         in

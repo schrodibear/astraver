@@ -4,6 +4,7 @@
 <why3session shape_version="4">
 <prover id="0" name="Alt-Ergo" version="0.99.1" timelimit="10" memlimit="2000"/>
 <prover id="1" name="Z3" version="4.3.2" timelimit="10" memlimit="2000"/>
+<prover id="2" name="CVC4" version="1.4.1-prerelease" timelimit="10" memlimit="1000"/>
 <prover id="3" name="CVC4" version="1.4" timelimit="10" memlimit="1000"/>
 <file name="../core.mlw" expanded="true">
 <theory name="Jessie_pointer" sum="9af29e038defe72ca824cd6e219adf49" expanded="true">
@@ -89,17 +90,20 @@
 </theory>
 <theory name="Jessie_pset_included" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
-<theory name="Jessie_assigns" sum="91eb43c8480803863d976c7ec81e8b66">
+<theory name="Jessie_assigns" sum="eae830343f60e40927e4654b1bcab65a">
  <goal name="Not_assigns_refl">
- <proof prover="3"><result status="valid" time="0.01"/></proof>
+ <proof prover="2"><result status="valid" time="0.01"/></proof>
+ <proof prover="3" obsolete="true"><result status="valid" time="0.01"/></proof>
  </goal>
  <goal name="Not_assigns_trans">
- <proof prover="3"><result status="valid" time="0.01"/></proof>
+ <proof prover="2"><result status="valid" time="0.01"/></proof>
+ <proof prover="3" obsolete="true"><result status="valid" time="0.01"/></proof>
  </goal>
 </theory>
-<theory name="Jessie_assigns_strong" sum="25f1f426051035910925a92f72f6bbec">
+<theory name="Jessie_assigns_strong" sum="9725597645b1e5394498b9514b06b26c">
  <goal name="not_assigns_strong">
- <proof prover="3"><result status="valid" time="0.01"/></proof>
+ <proof prover="2"><result status="valid" time="0.01"/></proof>
+ <proof prover="3" obsolete="true"><result status="valid" time="0.01"/></proof>
  </goal>
 </theory>
 <theory name="Jessie_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e">
@@ -122,19 +126,19 @@
 </theory>
 <theory name="Jessie_reinterpret_cast" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
-<theory name="Jessie_allocable" sum="d5339a78d5989338271e829317f34cf5">
+<theory name="Jessie_allocable" sum="dfe5feb4f8e5b1dfd2395210104d1d94">
  <goal name="Alloc_fresh_not_same_block">
- <proof prover="3"><result status="valid" time="0.02"/></proof>
+ <proof prover="2"><result status="valid" time="0.02"/></proof>
  </goal>
 </theory>
 <theory name="Jessie_alloc" sum="d41d8cd98f00b204e9800998ecf8427e">
 </theory>
-<theory name="Jessie_same_except" sum="6cf2365702480af7034ce3781f88ab2d">
+<theory name="Jessie_same_except" sum="197f9c54cc63b0098296acb1fd55f41f">
  <goal name="Alloc_same_except_trans">
- <proof prover="3"><result status="valid" time="0.01"/></proof>
+ <proof prover="2"><result status="valid" time="0.01"/></proof>
  </goal>
  <goal name="Tag_same_except_refl">
- <proof prover="3"><result status="valid" time="0.01"/></proof>
+ <proof prover="2"><result status="valid" time="0.01"/></proof>
  </goal>
 </theory>
 <theory name="Jessie_rmem" sum="d41d8cd98f00b204e9800998ecf8427e">

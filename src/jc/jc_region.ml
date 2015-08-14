@@ -146,11 +146,11 @@ module RegionTable = Hashtbl.Make(InternalRegion)
 module PairOrd(A : Set.OrderedType)(B : Set.OrderedType) =
 struct
   type t = A.t * B.t
-  let compare (a1,b1) (a2,b2) =
+  let compare (a1, b1) (a2, b2) =
     let res1 = A.compare a1 a2 in
     if res1 <> 0 then res1 else B.compare b1 b2
-  let equal (a1,b1) (a2,b2) =
-    compare (a1,b1) (a2,b2) = 0
+  let equal (a1, b1) (a2, b2) =
+    compare (a1, b1) (a2, b2) = 0
 end
 
 module RegionUF = UnionFind(InternalRegion)(RegionTable)
