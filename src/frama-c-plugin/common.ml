@@ -324,6 +324,8 @@ end
 
 let (|?) xo default = Option.value ~default xo
 
+let (!!) = Lazy.force
+
 module Location =
 struct
   include Location

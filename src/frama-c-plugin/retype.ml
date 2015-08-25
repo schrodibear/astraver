@@ -150,6 +150,8 @@ let struct_fields_exn ty =
     begin function [] when compinfo.cfields <> [] -> [List.hd compinfo.cfields] | fields -> fields end
   | t -> Console.fatal "struct_fields: non-composite type %a" Printer.pp_typ t
 
+let ty_void, ty_char = Type.Composite.Struct.(lazy (void () :> typ), lazy (char () :> typ))
+
 let cmp_subtype =
   let cache =
     let module H = Datatype.Pair_with_collections (Typ) (Typ) (struct let module_name = "type_pair" end) in
@@ -157,7 +159,8 @@ let cmp_subtype =
     let h = H.create 25 in
     fun f ty1 ty2 ->
       try H.find h (ty1, ty2)
-      with Not_found ->
+      with
+      | Not_found ->
         let r = f ty1 ty2 in
         H.replace h (ty1, ty2) r;
         H.replace h (ty2, ty1) (match r with `supertype -> `subtype | `subtype -> `supertype | n -> n);
@@ -195,40 +198,36 @@ let cmp_subtype =
       `subtype
     else
       `neither
-  else if isVoidType ty1 && not (isVoidType ty2) then
+  else if Typ.(equal ty1 !!ty_void && not (equal ty2 !!ty_void)) then
     `supertype
-  else if not (isVoidType ty1) && isVoidType ty2 then
+  else if Typ.(not (equal ty1 !!ty_void) && equal ty2 !!ty_void) then
     `subtype
   else
     `neither
 
 class struct_hierarchy_builder () =
-  let unify_type_hierarchies =
-    let ty_void, ty_char =
-      Type.Composite.Struct.((void () :> typ), (char () :> typ))
-    in
-    fun ty1 ty2 ->
-      if List.for_all (Type.Composite.Struct.is_struct % pointed_type) [ty1; ty2] then
-        (* Extract info from types *)
-        let struct_ty_of_ty_exn ty =
-          match unrollType (pointed_type ty) with
-          | TComp (ci, _, _) when ci.cstruct -> typeDeepDropAllAttributes @@ TComp (ci, empty_size_cache (), [])
-          | t -> Console.fatal "unify_type_hierarchies: non-structure type %a" Printer.pp_typ t
-        in
-        let ty1, ty2 = map_pair struct_ty_of_ty_exn (ty1, ty2) in
-        (* Compare types *)
-        match cmp_subtype ty1 ty2 with
-        | `supertype when not (Typ.equal ty1 ty_char) ->
-          (* [ty2] subtype of [ty1] *)
-          add_inheritance_relation ty2 ty1
-        | `subtype when not (Typ.equal ty2 ty_char) ->
-          (* [ty1] subtype of [ty2] *)
-          add_inheritance_relation ty1 ty2
-        | `neither | _ ->
-          (* no subtyping relation, but in order to allow side-casts we still
-             need both types to be in the same hierarchy, therefore unifying both with void *)
-          add_inheritance_relation ty1 ty_void;
-          add_inheritance_relation ty2 ty_void
+  let unify_type_hierarchies ty1 ty2 =
+    if List.for_all (Type.Composite.Struct.is_struct % pointed_type) [ty1; ty2] then
+      (* Extract info from types *)
+      let struct_ty_of_ty_exn ty =
+        match unrollType (pointed_type ty) with
+        | TComp (ci, _, _) when ci.cstruct -> typeDeepDropAllAttributes @@ TComp (ci, empty_size_cache (), [])
+        | t -> Console.fatal "unify_type_hierarchies: non-structure type %a" Printer.pp_typ t
+      in
+      let ty1, ty2 = map_pair struct_ty_of_ty_exn (ty1, ty2) in
+      (* Compare types *)
+      match cmp_subtype ty1 ty2 with
+      | `supertype when not (Typ.equal ty1 !!ty_char) ->
+        (* [ty2] subtype of [ty1] *)
+        add_inheritance_relation ty2 ty1
+      | `subtype when not (Typ.equal ty2 !!ty_char) ->
+        (* [ty1] subtype of [ty2] *)
+        add_inheritance_relation ty1 ty2
+      | `neither | _ ->
+        (* no subtyping relation, but in order to allow side-casts we still
+           need both types to be in the same hierarchy, therefore unifying both with void *)
+        add_inheritance_relation ty1 !!ty_void;
+        add_inheritance_relation ty2 !!ty_void
   in
   let is_pointer_type ty =
     match unrollType ty with
@@ -266,7 +265,7 @@ object (self)
     | TCastE _ ->
       ignore @@ self#vexpr @@ stripInfo @@ fst @@ Ast.Term.to_exp_env t;
       DoChildren
-    | TOffsetOf fi ->
+    | TOffsetOf fi when is_pointer_type fi.ftype ->
       unify_type_hierarchies fi.ftype (TPtr (TComp (fi.fcomp, empty_size_cache (), []), []));
       SkipChildren
     | _ -> DoChildren

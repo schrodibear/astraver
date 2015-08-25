@@ -165,6 +165,8 @@ end
 
 val ( |? ) : 'a option -> 'a -> 'a
 
+val ( !! ) : 'a lazy_t -> 'a
+
 module Location :
 sig
   include module type of Location
