@@ -119,13 +119,15 @@ end
 
 class relevant_type_visitor
     { State. types; comps; enums; typ_queue; comp_queue } =
-  object
+  object(self)
     inherit frama_c_inplace
 
     method! vtype t =
       begin match t with
       | TNamed (ti, _) ->
-        Set.ensure types ti ~on_add:(Queue.add typ_queue)
+        Set.ensure types ti ~on_add:(Queue.add typ_queue);
+        (* Forcing recursion into the type-info (CIL won't do that). *)
+        ignore (self#vtype ti.ttype)
       | TComp (ci, _, _) ->
         Set.ensure comps ci ~on_add:(Queue.add comp_queue)
       | TEnum (ei, _) ->
@@ -143,8 +145,9 @@ class dummy_type_visitor { State. enums } dcomps =
 
     method! vtype t =
       begin match t with
-      | TNamed (ti, _) -> (* Forcing recursion into the type-info. *)
-        ignore (visitFramacType (self :> frama_c_visitor) ti.ttype)
+      | TNamed (ti, _) ->
+        (* Forcing recursion into the type-info. *)
+        ignore (self#vtype ti.ttype)
       | TComp (ci, _, _) -> Set.add dcomps ci
       | TEnum (ei, _) -> Set.add enums ei
       | _ -> ()
