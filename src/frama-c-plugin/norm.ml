@@ -1621,7 +1621,7 @@ class base_retyping_visitor ~attach =
     in
     let tdef = GCompTag (compinfo, Cil_datatype.Location.unknown) in
     let tattrs =
-      if isStructOrUnionType typ || isVoidType typ || isCharType typ
+      if isStructOrUnionType typ || isVoidType typ
       then []
       else [Attr (Name.Attr.wrapper, [])]
     in
