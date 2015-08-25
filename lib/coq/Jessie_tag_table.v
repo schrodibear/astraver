@@ -26,3 +26,9 @@ Axiom Downcast_instanceof : forall {t:Type} {t_WT:WhyType t},
   forall (s:(Jessie_tag_id.tag_id t)), (instanceof t1 p s) -> ((downcast t1 p
   s) = p).
 
+Axiom Downcast_null : forall {t:Type} {t_WT:WhyType t},
+  forall (t1:(map.Map.map (Jessie_pointer.pointer t) (Jessie_tag_id.tag_id
+  t))), forall (s:(Jessie_tag_id.tag_id t)), ((downcast t1
+  (Jessie_pointer.null : (Jessie_pointer.pointer t))
+  s) = (Jessie_pointer.null : (Jessie_pointer.pointer t))).
+
