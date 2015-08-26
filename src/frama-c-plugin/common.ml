@@ -409,6 +409,7 @@ struct
 
   module Logic_type =
   struct
+    let set = "set"
     let padding = "padding"
   end
 
@@ -433,6 +434,7 @@ struct
       realloc;
       free;
       kfree;
+      Logic_type.set;
       Logic_function.nondet_int
     ]
 
@@ -781,6 +783,7 @@ struct
           let ty =
             match t.term_type with
             | Ctype ty -> ty
+            | Ltype ({ lt_name = "set" }, [Ctype ty]) -> ty
             | _ -> dummy_type
           in
           let v = Vi.Variable.pseudo ty in
