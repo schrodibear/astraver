@@ -1883,7 +1883,7 @@ let make_bin_op loc (op: operational_op) e1 e2 =
     return_numeric ()
   | `Badd ->
     typing_error ~loc "unexpected types for +"
-  | `Badd_mod when is_enum t1 && t1 = t2 ->
+  | `Badd_mod when is_enum t1 && same_type_no_coercion t1 t2 ->
     return_numeric ()
   | `Badd_mod ->
     typing_error ~loc "enum type expected for +%%"
@@ -1899,7 +1899,7 @@ let make_bin_op loc (op: operational_op) e1 e2 =
   | `Bsub when is_numeric t1 && is_numeric t2 || is_gen_float t1 && is_gen_float t2 ->
     return_numeric ()
   | `Bsub -> typing_error ~loc "unexpected types for -"
-  | `Bsub_mod when is_enum t1 && t1 = t2 ->
+  | `Bsub_mod when is_enum t1 && same_type_no_coercion t1 t2 ->
     return_numeric ()
   | `Bsub_mod ->
     typing_error ~loc "enum type expected for -%%"
@@ -1907,7 +1907,7 @@ let make_bin_op loc (op: operational_op) e1 e2 =
     return_numeric ()
   | `Bmul | `Bdiv | `Bmod ->
     typing_error ~loc "numeric types expected for multiplicative operators"
-  | `Bmul_mod | `Bdiv_mod when is_enum t1 && t1 = t2 ->
+  | `Bmul_mod | `Bdiv_mod when is_enum t1 && same_type_no_coercion t1 t2 ->
     return_numeric ()
   | `Bmul_mod | `Bdiv_mod ->
     typing_error ~loc "enum type expected for *%% or /%%"
