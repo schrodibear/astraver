@@ -1452,6 +1452,12 @@ struct
         let current_size = size ci in
         match original_size, current_size with
         | Some original_size, Some current_size ->
+          let current_size =
+            if current_size > original_size then begin
+              ci.cattr <- Attr (Name.Attr.packed, []) :: ci.cattr;
+              Option.value_fatal ~in_:"fix_size" @@ size ci
+            end else current_size
+          in
           List.iter (fun fi -> fi.foffset_in_bits <- None) ci.cfields;
           let warn action =
             Console.debug "Fixing size of composite [%s] by %s" (compFullName ci) action
