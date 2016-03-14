@@ -1585,6 +1585,11 @@ object
 
   method! vterm t = Do.on_term ~post:postaction_expr t
 
+  method! vterm_node =
+    function
+    | TStartOf t -> ChangeDoChildrenPost (TAddrOf t, Fn.id)
+    | _ -> DoChildren
+
 end
 
 let retype_fields = visitFramacFile (new fields_retyping_visitor)
