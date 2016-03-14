@@ -260,7 +260,7 @@ let logic_function comp f =
   | JCInductive l ->
     List.iter (fun (_, _, a) -> assertion comp result_region a) l
   end;
-  Option.iter (axiomatic comp) f.li_axiomatic
+  if ta = JCNone then Option.iter (axiomatic comp) f.li_axiomatic
 
 let logic_component comp =
   let generalize_logic_function f =
