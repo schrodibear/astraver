@@ -573,13 +573,13 @@ let replace_string_constants =
 (* Invariant for global constants                                            *)
 (*****************************************************************************)
 
-class global_const_visitor ~attach =
+class global_const_handler ~attach =
   object
     inherit frama_c_inplace
 
     method! vglob_aux =
       function
-      | GVar (v, { init = Some (SingleInit e) }, _loc) as g
+      | GVar (v, { init = Some (SingleInit e) }, _) as g
         when typeHasAttribute "const" v.vtype && isIntegerConstant e ->
         let globinv = Cil_const.make_logic_info (Name.Logic.unique ("__value_of_" ^ v.vname)) in
         globinv.l_labels <- [LogicLabel (None, "Here")];
@@ -591,7 +591,7 @@ class global_const_visitor ~attach =
       | _ -> SkipChildren
   end
 
-let global_const_handler = Visit.(attaching_globs { mk = new global_const_visitor })[@warning "-42"]
+let handle_global_consts = Visit.(attaching_globs { mk = new global_const_handler })[@warning "-42"]
 
 (*****************************************************************************)
 (* Put all global initializations in the [globinit] file.                    *)
@@ -2189,7 +2189,7 @@ let rewrite file =
   (* Replace string constants by global variables. *)
   apply replace_string_constants "replacing string constants by global variables";
   (* Add invariant for global constants *)
-  apply global_const_handler "adding invariants for global constants";
+  apply handle_global_consts "adding invariants for global constants";
   (* Put all global initializations in the [globinit] file. *)
   apply gather_initialization "putting all global initializations in the [globinit] file";
   (* Replace global compound initializations by equivalent statements. *)
