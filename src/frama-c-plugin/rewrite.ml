@@ -570,6 +570,30 @@ let replace_string_constants =
     }
 
 (*****************************************************************************)
+(* Invariant for global constants                                            *)
+(*****************************************************************************)
+
+class global_const_visitor ~attach =
+  object
+    inherit frama_c_inplace
+
+    method! vglob_aux =
+      function
+      | GVar (v, { init = Some (SingleInit e) }, _loc) as g
+        when typeHasAttribute "const" v.vtype && isIntegerConstant e ->
+        let globinv = Cil_const.make_logic_info (Name.Logic.unique ("__value_of_" ^ v.vname)) in
+        globinv.l_labels <- [LogicLabel (None, "Here")];
+        globinv.l_body <- LBpred (
+          let loc = v.vdecl in
+          Logic_const.(prel ~loc (Req, tvar ~loc @@ cvar_to_lvar v, tint ~loc @@ value_of_integral_expr e)));
+        attach#globaction (fun () -> Logic_utils.add_logic_function globinv);
+        ChangeTo ([g; GAnnot (Dinvariant (globinv, v.vdecl), v.vdecl)])
+      | _ -> SkipChildren
+  end
+
+let global_const_handler = Visit.(attaching_globs { mk = new global_const_visitor })[@warning "-42"]
+
+(*****************************************************************************)
 (* Put all global initializations in the [globinit] file.                    *)
 (* Replace global compound initializations by equivalent statements.         *)
 (*****************************************************************************)
@@ -781,6 +805,24 @@ class kzalloc_expanding_visitor =
   end
 
 let expand_kzallocs file = visitFramacFile (new kzalloc_expanding_visitor) file
+
+(*****************************************************************************)
+(* Support for alloca (and corresponding dynamic stack arrays)               *)
+(*****************************************************************************)
+
+class alloca_rewriter =
+  object
+    inherit frama_c_inplace
+
+    method! vinst =
+      function
+      | Call (lv, ({ enode = Lval (Var vi, NoOffset) } as e), ([_] as args), loc)
+        when isFunctionType vi.vtype && Ast.Vi.Function.(is_alloca @@ of_varinfo_exn vi) ->
+        ChangeTo [Call (lv, { e with enode = Lval (Var (Ast.Vi.Function.malloc () :> varinfo), NoOffset) }, args, loc)]
+      | _ -> SkipChildren
+  end
+
+let rewrite_alloca = visitFramacFile (new alloca_rewriter)
 
 let get_specialized_name (*_type*) (*original_name*) =
   let type_regexp = Str.regexp_string "_type" in
@@ -2126,6 +2168,8 @@ let rewrite file =
     apply expand_kzallocs "expanding kzallocs to kmalloc+memset";
     apply specialize_blockfuns "using specialized versions for block functions (e.g. memcpy)";
   end;
+  (* Rewrite alloca to malloc (currently unconditionally successful) *)
+  apply rewrite_alloca "rewriting alloca";
   (* Retype bitwise operations in terms. *)
   apply retype_bw_ops_in_terms "retyping bitwise binary operations in terms";
   (* Expand assigns clauses and equalities for composite types. *)
@@ -2143,6 +2187,8 @@ let rewrite file =
   apply replace_addrof_array "replacing addrof array with startof";
   (* Replace string constants by global variables. *)
   apply replace_string_constants "replacing string constants by global variables";
+  (* Add invariant for global constants *)
+  apply global_const_handler "adding invariants for global constants";
   (* Put all global initializations in the [globinit] file. *)
   apply gather_initialization "putting all global initializations in the [globinit] file";
   (* Replace global compound initializations by equivalent statements. *)

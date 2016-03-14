@@ -385,6 +385,7 @@ struct
     let kzalloc = "kzalloc"
     let calloc = "calloc"
     let realloc = "realloc"
+    let alloca = "__builtin_alloca"
   end
 
   module File =
@@ -432,6 +433,7 @@ struct
       kzalloc;
       calloc;
       realloc;
+      alloca;
       free;
       kfree;
       Logic_type.set;
@@ -581,6 +583,7 @@ struct
       let is_kzalloc v = isFunctionType v.vtype && v.vname = kzalloc
       let is_calloc v = isFunctionType v.vtype && v.vname = calloc
       let is_realloc v = isFunctionType v.vtype && v.vname = realloc
+      let is_alloca v = isFunctionType v.vtype && v.vname = alloca
 
       let malloc ?(kernel=false) () =
         let fname, params =

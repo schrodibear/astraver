@@ -225,6 +225,7 @@ sig
     val kzalloc : string
     val calloc : string
     val realloc : string
+    val alloca : string
   end
 
   module File :
@@ -299,6 +300,7 @@ sig
       val is_kzalloc : t -> bool
       val is_calloc : t -> bool
       val is_realloc : t -> bool
+      val is_alloca : t -> bool
       val malloc : ?kernel:bool -> unit -> t
       val free : unit -> t
     end
