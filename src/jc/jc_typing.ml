@@ -2271,7 +2271,9 @@ let rec expr env e =
     | JCNEalloc(e1, t) ->
       let st = find_struct_info e#pos t in
       let ty = JCTpointer(JCtag(st, []), Some zero, None) in
-      ty, Region.make_var ty "alloc", JCEalloc (fe e1, st)
+      let te1 = fe e1 in
+      let te1 = implicit_coerce te1#typ (JCTnative Tinteger) te1 in
+      ty, Region.make_var ty "alloc", JCEalloc (te1, st)
     | JCNEfree e1 ->
       unit_type, dummy_region, JCEfree (fe e1)
     | JCNElet(tyo, id, e1o, e2) ->
