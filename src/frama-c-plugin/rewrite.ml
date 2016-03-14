@@ -2111,7 +2111,8 @@ let declare_jessie_nondet_int file =
                   self#fix_vartype ~loc lv;
                   SkipChildren
                 | Some vi
-                  when Ast.Vi.Function.(is_malloc vi || is_kmalloc vi || is_kzalloc vi || is_realloc vi) ->
+                  when
+                    Ast.Vi.Function.(is_malloc vi || is_kmalloc vi || is_kzalloc vi || is_realloc vi || is_calloc vi) ->
                   self#fix_vartype ~loc lv;
                   SkipChildren
                 | Some _
