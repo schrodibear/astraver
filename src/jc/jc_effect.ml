@@ -1788,7 +1788,7 @@ let axiomatic_decl_effect, li_effects_from_ax_decl =
     match d with
     | Typing.ADprop (_, _, _, `Lemma, _) -> acc
     (* Lemma effects are never counted in function effects (even for UIFs) *)
-    | Typing.ADprop (_, _, _, _, a) -> f acc a
+    | Typing.ADprop (_, _, _, `Axiom, a) -> f acc a
   in
   with_axiomatic_decl assertion,
   fun fi ax_effects -> with_axiomatic_decl (li_effects_from_assertion fi ax_effects)
