@@ -13,6 +13,7 @@
 *.output
 *.glob
 *.vo
+*.aux
 
 _build
 bin
