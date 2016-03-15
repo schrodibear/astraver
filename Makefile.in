@@ -287,12 +287,12 @@ install-coq-v8 install-coq-v8.1:
 
 install-pvs-no:
 install-pvs-yes: $(PVSFILES)
-	mkdir -p $(PVSLIB)/jessie
-	cp $(PVSFILES) $(PVSFILES:.pvs=.prf) $(PVSLIB)/jessie
-	cp lib/pvs/top.pvs lib/pvs/pvscontext.el $(PVSLIB)/jessie
-	@echo "======  Compiling PVS theories, this may take some time ======"
-	(cd $(PVSLIB)/jessie ; @PVSC@ -batch -l pvscontext.el -q -v 2 > top.out)
-	@echo "======  Done compiling PVS theories ======"
+#	mkdir -p $(PVSLIB)/jessie
+#	cp $(PVSFILES) $(PVSFILES:.pvs=.prf) $(PVSLIB)/jessie
+#	cp lib/pvs/top.pvs lib/pvs/pvscontext.el $(PVSLIB)/jessie
+#	@echo "======  Compiling PVS theories, this may take some time ======"
+#	(cd $(PVSLIB)/jessie ; @PVSC@ -batch -l pvscontext.el -q -v 2 > top.out)
+#	@echo "======  Done compiling PVS theories ======"
 
 # doc
 
