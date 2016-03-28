@@ -33,7 +33,7 @@ theory Bit_{{u_to}}int{{size_to}}_of_bit_{{u_from}}int{{size_from}}
   use {{t_to}}
   function cast_modulo (a : {{t_from}}.t) : {{t_to}}.t
   axiom Cast_modulo:
-    forall a : {{t_from}}.t [cast_modulo a].
+    forall a : {{t_from}}.t.
       cast_modulo a = {{t_to}}.of_int ({{t_to}}.normalize ({{t_from}}.to_int a))
   predicate is_safe {{t_from}}.t
   predicate bit_{{u_from}}int{{size_from}}_as_bit_{{u_to}}int{{size_to}} {{t_greater}}.t{% for i in range(1, size_greater / size_smaller) %} {{t_smaller}}.t{% endfor %}
