@@ -256,6 +256,16 @@ theory Bit_enum_intf
   function (/%) t t : t
   function (%%) t t : t
 
+  type tt
+  function extend t : tt
+  predicate is_safe tt
+  function (+%~) tt tt : tt
+  function (-%~) tt tt : tt
+  function (-%~_) tt : tt
+  function ( *%~) tt tt : tt
+  function (/%~) tt tt : tt
+  function (%%~) tt tt : tt
+
   function (&) t t : t
   function (|^) t t : t
   function (~_) t : t
@@ -264,6 +274,8 @@ theory Bit_enum_intf
   function lsl_modulo t t : t
   function lsr t t : t
   function asr t t : t
+
+  function lsl_modulo_ tt tt : tt
 
   predicate lt t t
   predicate le t t
@@ -557,25 +569,35 @@ module Safe_bit_enum
   use int.Int
 
   val lsl (x y : t) : t
-    requires { "expl:<< second operand" Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size }
-    requires { "expl:integer overflow" in_bounds (Int.( *) (to_int x) (power2 (to_int y))) }
+    requires { "expl:<< second operand"
+               Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size \/
+               le (of_int_const 0) y && lt y (of_int_const size) }
+    requires { "expl:integer overflow"
+               in_bounds (Int.( *) (to_int x) (power2 (to_int y))) \/
+               is_safe (lsl_modulo_ (extend x) (extend y)) }
     ensures { result = lsl_modulo x y }
     ensures { to_int result = Int.( *) (to_int x) (power2 (to_int y)) }
 
   val lsl_modulo (x y : t) : t
-    requires { "expl:<< second operand" Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size }
+    requires { "expl:<< second operand"
+               Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size \/
+               le (of_int_const 0) y && lt y (of_int_const size) }
     ensures { result = lsl_modulo x y }
     ensures { to_int result = normalize (Int.( *) (to_int x) (power2 (to_int y))) }
 
   use int.EuclideanDivision as ED
 
   val lsr (x y : t) : t
-    requires { "expl:>> second operand" Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size }
+    requires { "expl:>> second operand"
+               Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size \/
+               le (of_int_const 0) y && lt y (of_int_const size) }
     ensures { result = lsr x y }
     ensures { Int.(>=) (to_int x) 0 -> to_int result = ED.div (to_int x) (power2 (to_int y)) }
 
   val asr (x y : t) : t
-    requires { "expl:>> second operand" Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size }
+    requires { "expl:>> second operand"
+                Int.(<=) 0 (to_int y) && Int.(<) (to_int y) size \/
+                le (of_int_const 0) y && lt y (of_int_const size) }
     ensures { result = asr x y }
     ensures { to_int result = ED.div (to_int x) (power2 (to_int y)) }
 
@@ -586,46 +608,58 @@ module Safe_bit_enum
     ensures  { result = of_int n }
 
   val (+) (a b : t) : t
-    requires { "expl:integer overflow" in_bounds (Int.(+) (to_int a) (to_int b)) }
+    requires { "expl:integer overflow"
+               in_bounds (Int.(+) (to_int a) (to_int b)) \/
+               is_safe (extend a +%~ extend b) }
     ensures  { to_int result = Int.(+) (to_int a) (to_int b) }
     ensures  { result = a +% b }
 
   val (-) (a b : t) : t
-    requires { "expl:integer overflow" in_bounds (Int.(-) (to_int a) (to_int b)) }
+    requires { "expl:integer overflow"
+               in_bounds (Int.(-) (to_int a) (to_int b)) \/
+               is_safe (extend a -%~ extend b) }
     ensures  { to_int result = Int.(-) (to_int a) (to_int b) }
     ensures  { result = a -% b }
 
   val ( *) (a b : t) : t
-    requires { "expl:integer overflow" in_bounds (Int.(*) (to_int a) (to_int b)) }
+    requires { "expl:integer overflow"
+               in_bounds (Int.(*) (to_int a) (to_int b)) \/
+               is_safe (extend a *%~ extend b) }
     ensures  { to_int result = Int.(*) (to_int a) (to_int b) }
     ensures  { result = a *% b }
 
   val (-_) (a : t) : t
-    requires { "expl:integer overflow" in_bounds (Int.(-_) (to_int a)) }
+    requires { "expl:integer overflow"
+               in_bounds (Int.(-_) (to_int a)) \/
+               is_safe ((-%~_) (extend a)) }
     ensures  { to_int result = Int.(-_) (to_int a) }
     ensures  { result = -% a }
 
   use int.ComputerDivision as CD
 
   val (/) (a b : t) : t
-    requires { "expl:division by zero" to_int b <> 0 }
-    requires { "expl:integer overflow" in_bounds (CD.div (to_int a) (to_int b)) }
+    requires { "expl:division by zero" to_int b <> 0 \/ b <> of_int_const 0 }
+    requires { "expl:integer overflow"
+               in_bounds (CD.div (to_int a) (to_int b)) \/
+               is_safe (extend a /%~ extend b) }
     ensures  { to_int result = CD.div (to_int a) (to_int b) }
     ensures  { result = a /% b }
 
   val (%) (a b : t) : t
-    requires { "expl:division by zero" to_int b <> 0 }
-    requires { "expl:integer overflow" in_bounds (CD.mod (to_int a) (to_int b)) }
+    requires { "expl:division by zero" to_int b <> 0 \/ b <> of_int_const 0 }
+    requires { "expl:integer overflow"
+               in_bounds (CD.mod (to_int a) (to_int b)) \/
+               is_safe (extend a %%~ extend b) }
     ensures  { to_int result = CD.mod (to_int a) (to_int b) }
     ensures  { result = a %% b }
 
   val (/%) (a b : t) : t
-    requires { "expl:division by zero" to_int b <> 0 }
+    requires { "expl:division by zero" to_int b <> 0 \/ b <> of_int_const 0 }
     ensures  { to_int result = normalize (CD.div (to_int a) (to_int b)) }
     ensures  { result = a /% b }
 
   val (%%) (a b : t) : t
-    requires { "expl:division by zero" to_int b <> 0 }
+    requires { "expl:division by zero" to_int b <> 0 \/ b <> of_int_const 0 }
     ensures  { to_int result = normalize (CD.mod (to_int a) (to_int b)) }
     ensures  { result = a %% b }
 end

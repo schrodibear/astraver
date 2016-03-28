@@ -3399,24 +3399,23 @@ let enum_cast (ei_to, ei_from) =
     in
     let cast_val ~safe ~bw ~m =
       let n_t = T.var n in
-      let from = enum_entry_name ~how:(`Theory (if bw then `Bitvector else `Abstract)) to_, `Qualified in
+      let th_to = enum_entry_name ~how:(`Theory (if bw then `Bitvector else `Abstract)) to_, `Qualified in
+      let th_bv = name ~of_:(`Theory `Bitvector), `Qualified in
       Wd.mk
         ~name:(cast_name m)
         (Param (Arrow
                   (n, Logic lt_from,
                    (Annot
                       ((if safe && not m && (ei_to.ei_min >/ ei_from.ei_min || ei_to.ei_max </ ei_from.ei_max)
-                        then P.(F.user ~from "in_bounds" $. to_int n_t)
+                        then P.(F.user ~from:th_to "in_bounds" $. to_int n_t ||
+                                if bw then F.user ~from:th_bv "is_safe" $. n_t else False)
                         else True),
                        Logic lt_to,
                        [],
                        [],
                        P.(T.(To_int to_ $. T.result =
-                             let n_i = to_int n_t in if m then F.user ~from "normalize" $. n_i else n_i) &&
-                          if bw then
-                            T.(result =
-                               (F.user ~from:(name ~of_:(`Theory `Bitvector), `Qualified) (cast_name ~m:true) $. n_t))
-                          else True),
+                             let n_i = to_int n_t in if m then F.user ~from:th_to "normalize" $. n_i else n_i) &&
+                          if bw then T.(result = (F.user ~from:th_bv (cast_name ~m:true) $. n_t)) else True),
                        [])))))
     in
     let mods ~bw =

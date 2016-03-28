@@ -22,6 +22,7 @@ theory Bit_{{u_to}}int{{size_to}}_of_bit_{{u_from}}int{{size_from}}
   axiom Cast_modulo:
     forall a : {{t_from}}.t [cast_modulo a].
       cast_modulo a = {{t_to}}.of_int ({{t_to}}.normalize ({{t_from}}.to_int a))
+  predicate is_safe {{t_from}}.t
 end
 {% endmacro -%}
 {% set sizes = [8, 16, 32, 64] %}

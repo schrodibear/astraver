@@ -41,6 +41,25 @@ theory enum.Bit_{{u}}int{{size}}
   remove prop To_uint
   {% endif -%}
 
+  syntax type tt "(_ BitVec {{size * 2}})"
+
+  {% if signed -%}
+  syntax function  extend  "((_ sign_extend {{size}}) %1)"
+  syntax predicate is_safe "(= ((_ extract {{2 * size - 1}} {{size}}) %1) ((_ repeat {{size}}) ((_ extract {{size - 1}} {{size - 1}}) %1)))"
+  {% else -%}
+  syntax function  extend  "((_ zero_extend {{size}}) %1)"
+  syntax predicate is_safe "(= ((_ extract {{2 * size - 1}} {{size}}) %1) (_ bv0 {{size}}))"
+  {% endif -%}
+
+  syntax function (+%~)  "(bvadd %1 %2)"
+  syntax function (-%~)  "(bvsub %1 %2)"
+  syntax function (-%~_) "(bvneg %1)"
+  syntax function ( *%~) "(bvmul %1 %2)"
+  syntax function (/%~)  "(bv{{us}}div %1 %2)"
+  syntax function (%%~)  "(bv{{us}}rem %1 %2)"
+
+  syntax function lsl_modulo_ "(bvshl %1 %2)"
+
   remove prop To_uint_lsr
   remove prop To_uint_lsl_modulo
 
@@ -93,6 +112,15 @@ theory enum.Bit_{{u_to}}int{{size_to}}_of_bit_{{u_from}}int{{size_from}}
   syntax function cast_modulo "((_ sign_extend {{size_to - size_from}}) %1)"
   {%- else %}
   syntax function cast_modulo "((_ zero_extend {{size_to - size_from}}) %1)"
+  {%- endif %}
+  {%- if size_from < size_to && sign_from && !sign_to || size_from == size_to && sign_from != sign_to %}
+  syntax predicate is_safe "(= ((_ extract {{size_from - 1}} {{size_from - 1}}) %1) (_ bv0 1))"
+  {%- elseif size_from > size_to && sign_to %}
+  syntax predicate is_safe "(= ((_ extract {{size_from - 1}} {{size_to}}) %1) ((_ repeat {{size_from - size_to}}) ((_ extract {{size_to - 1}} {{size_to - 1}}) %1)))"
+  {%- elseif size_from > size_to %}
+  syntax predicate is_safe "(= ((_ extract {{size_from - 1}} {{size_to}}) %1) (_ bv0 {{size_from - size_to}}))"
+  {%- else %}
+  syntax predicate is_safe "true"
   {%- endif %}
 end
 {% endmacro -%}
