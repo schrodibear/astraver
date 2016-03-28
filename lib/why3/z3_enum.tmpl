@@ -103,6 +103,13 @@ end
   {% set u_to = "u" %}
   {% set us_to = u %}
 {% endif -%}
+{% if size_from > size_to || size_from == size_to && signed_from && !signed_to %}
+  {% set size_greater = size_from %}
+  {% set size_smaller = size_to %}
+{% else %}
+  {% set size_greater = size_to %}
+  {% set size_smaller = size_from %}
+{% endif %}
 theory enum.Bit_{{u_to}}int{{size_to}}_of_bit_{{u_from}}int{{size_from}}
   {%- if size_from == size_to %}
   syntax function cast_modulo "%1"
@@ -121,6 +128,13 @@ theory enum.Bit_{{u_to}}int{{size_to}}_of_bit_{{u_from}}int{{size_from}}
   syntax predicate is_safe "(= ((_ extract {{size_from - 1}} {{size_to}}) %1) (_ bv0 {{size_from - size_to}}))"
   {%- else %}
   syntax predicate is_safe "true"
+  {%- endif %}
+  {%- if size_from == size_to %}
+  syntax predicate bit_{{u_from}}int{{size_from}}_as_bit_{{u_to}}int{{size_to}} "(= %1 %2)"
+  {%- elseif size_greater == size_from %}
+  syntax predicate bit_{{u_from}}int{{size_from}}_as_bit_{{u_to}}int{{size_to}} "(and{% for i in range(1, size_greater / size_smaller) %} (= %{{i + 1}} ((_ extract {{i * size_smaller - 1}} {{(i - 1) * size_smaller}}) %1)){% endfor %})"
+  {%- else %}
+  syntax predicate bit_{{u_from}}int{{size_from}}_as_bit_{{u_to}}int{{size_to}} "(= %1 {% for i in range(1, size_greater / size_smaller - 1) %}(concat {% endfor %} %{{size_greater / size_smaller + 1}}{% for i in range(size_greater / size_smaller - 1, 1) %} %{{i + 1}}){% endfor %})"
   {%- endif %}
 end
 {% endmacro -%}

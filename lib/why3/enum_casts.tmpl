@@ -15,6 +15,19 @@
 {% endif -%}
 {% set t_from = "Bit_" + pr_from + "nt" + size_from %}
 {% set t_to = "Bit_" + pr_to + "nt" + size_to %}
+{% if size_from > size_to || size_from == size_to && signed_from && !signed_to -%}
+  {% set size_greater = size_from %}
+  {% set size_smaller = size_to %}
+  {% set pr_greater = pr_from %}
+  {% set pr_smaller = pr_to %}
+{% else -%}
+  {% set size_greater = size_to %}
+  {% set size_smaller = size_from %}
+  {% set pr_greater = pr_to %}
+  {% set pr_smaller = pr_from %}
+{% endif -%}
+{% set t_greater = "Bit_" + pr_greater + "nt" + size_greater %}
+{% set t_smaller = "Bit_" + pr_smaller + "nt" + size_smaller %}
 theory Bit_{{u_to}}int{{size_to}}_of_bit_{{u_from}}int{{size_from}}
   use {{t_from}}
   use {{t_to}}
@@ -23,6 +36,7 @@ theory Bit_{{u_to}}int{{size_to}}_of_bit_{{u_from}}int{{size_from}}
     forall a : {{t_from}}.t [cast_modulo a].
       cast_modulo a = {{t_to}}.of_int ({{t_to}}.normalize ({{t_from}}.to_int a))
   predicate is_safe {{t_from}}.t
+  predicate bit_{{u_from}}int{{size_from}}_as_bit_{{u_to}}int{{size_to}} {{t_greater}}.t{% for i in range(1, size_greater / size_smaller) %} {{t_smaller}}.t{% endfor %}
 end
 {% endmacro -%}
 {% set sizes = [8, 16, 32, 64] %}
