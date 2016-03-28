@@ -1055,6 +1055,8 @@ theory Bit_uint8_of_bit_int8
   axiom Cast_modulo:
     forall a : Bit_int8.t [cast_modulo a].
       cast_modulo a = Bit_uint8.of_int (Bit_uint8.normalize (Bit_int8.to_int a))
+  predicate is_safe Bit_int8.t
+  predicate bit_int8_as_bit_uint8 Bit_int8.t Bit_uint8.t
 end
 
 theory Bit_int16_of_bit_int8
@@ -1064,6 +1066,8 @@ theory Bit_int16_of_bit_int8
   axiom Cast_modulo:
     forall a : Bit_int8.t [cast_modulo a].
       cast_modulo a = Bit_int16.of_int (Bit_int16.normalize (Bit_int8.to_int a))
+  predicate is_safe Bit_int8.t
+  predicate bit_int8_as_bit_int16 Bit_int16.t Bit_int8.t Bit_int8.t
 end
 
 theory Bit_uint16_of_bit_int8
@@ -1073,6 +1077,8 @@ theory Bit_uint16_of_bit_int8
   axiom Cast_modulo:
     forall a : Bit_int8.t [cast_modulo a].
       cast_modulo a = Bit_uint16.of_int (Bit_uint16.normalize (Bit_int8.to_int a))
+  predicate is_safe Bit_int8.t
+  predicate bit_int8_as_bit_uint16 Bit_uint16.t Bit_int8.t Bit_int8.t
 end
 
 theory Bit_int32_of_bit_int8
@@ -1082,6 +1088,8 @@ theory Bit_int32_of_bit_int8
   axiom Cast_modulo:
     forall a : Bit_int8.t [cast_modulo a].
       cast_modulo a = Bit_int32.of_int (Bit_int32.normalize (Bit_int8.to_int a))
+  predicate is_safe Bit_int8.t
+  predicate bit_int8_as_bit_int32 Bit_int32.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t
 end
 
 theory Bit_uint32_of_bit_int8
@@ -1091,6 +1099,8 @@ theory Bit_uint32_of_bit_int8
   axiom Cast_modulo:
     forall a : Bit_int8.t [cast_modulo a].
       cast_modulo a = Bit_uint32.of_int (Bit_uint32.normalize (Bit_int8.to_int a))
+  predicate is_safe Bit_int8.t
+  predicate bit_int8_as_bit_uint32 Bit_uint32.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t
 end
 
 theory Bit_int64_of_bit_int8
@@ -1100,6 +1110,8 @@ theory Bit_int64_of_bit_int8
   axiom Cast_modulo:
     forall a : Bit_int8.t [cast_modulo a].
       cast_modulo a = Bit_int64.of_int (Bit_int64.normalize (Bit_int8.to_int a))
+  predicate is_safe Bit_int8.t
+  predicate bit_int8_as_bit_int64 Bit_int64.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t
 end
 
 theory Bit_uint64_of_bit_int8
@@ -1109,6 +1121,8 @@ theory Bit_uint64_of_bit_int8
   axiom Cast_modulo:
     forall a : Bit_int8.t [cast_modulo a].
       cast_modulo a = Bit_uint64.of_int (Bit_uint64.normalize (Bit_int8.to_int a))
+  predicate is_safe Bit_int8.t
+  predicate bit_int8_as_bit_uint64 Bit_uint64.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t
 end
 
 theory Bit_int8_of_bit_uint8
@@ -1118,6 +1132,8 @@ theory Bit_int8_of_bit_uint8
   axiom Cast_modulo:
     forall a : Bit_uint8.t [cast_modulo a].
       cast_modulo a = Bit_int8.of_int (Bit_int8.normalize (Bit_uint8.to_int a))
+  predicate is_safe Bit_uint8.t
+  predicate bit_uint8_as_bit_int8 Bit_int8.t Bit_uint8.t
 end
 
 theory Bit_int16_of_bit_uint8
@@ -1127,6 +1143,8 @@ theory Bit_int16_of_bit_uint8
   axiom Cast_modulo:
     forall a : Bit_uint8.t [cast_modulo a].
       cast_modulo a = Bit_int16.of_int (Bit_int16.normalize (Bit_uint8.to_int a))
+  predicate is_safe Bit_uint8.t
+  predicate bit_uint8_as_bit_int16 Bit_int16.t Bit_uint8.t Bit_uint8.t
 end
 
 theory Bit_uint16_of_bit_uint8
@@ -1136,6 +1154,8 @@ theory Bit_uint16_of_bit_uint8
   axiom Cast_modulo:
     forall a : Bit_uint8.t [cast_modulo a].
       cast_modulo a = Bit_uint16.of_int (Bit_uint16.normalize (Bit_uint8.to_int a))
+  predicate is_safe Bit_uint8.t
+  predicate bit_uint8_as_bit_uint16 Bit_uint16.t Bit_uint8.t Bit_uint8.t
 end
 
 theory Bit_int32_of_bit_uint8
@@ -1145,6 +1165,8 @@ theory Bit_int32_of_bit_uint8
   axiom Cast_modulo:
     forall a : Bit_uint8.t [cast_modulo a].
       cast_modulo a = Bit_int32.of_int (Bit_int32.normalize (Bit_uint8.to_int a))
+  predicate is_safe Bit_uint8.t
+  predicate bit_uint8_as_bit_int32 Bit_int32.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t
 end
 
 theory Bit_uint32_of_bit_uint8
@@ -1154,6 +1176,8 @@ theory Bit_uint32_of_bit_uint8
   axiom Cast_modulo:
     forall a : Bit_uint8.t [cast_modulo a].
       cast_modulo a = Bit_uint32.of_int (Bit_uint32.normalize (Bit_uint8.to_int a))
+  predicate is_safe Bit_uint8.t
+  predicate bit_uint8_as_bit_uint32 Bit_uint32.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t
 end
 
 theory Bit_int64_of_bit_uint8
@@ -1163,6 +1187,8 @@ theory Bit_int64_of_bit_uint8
   axiom Cast_modulo:
     forall a : Bit_uint8.t [cast_modulo a].
       cast_modulo a = Bit_int64.of_int (Bit_int64.normalize (Bit_uint8.to_int a))
+  predicate is_safe Bit_uint8.t
+  predicate bit_uint8_as_bit_int64 Bit_int64.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t
 end
 
 theory Bit_uint64_of_bit_uint8
@@ -1172,6 +1198,8 @@ theory Bit_uint64_of_bit_uint8
   axiom Cast_modulo:
     forall a : Bit_uint8.t [cast_modulo a].
       cast_modulo a = Bit_uint64.of_int (Bit_uint64.normalize (Bit_uint8.to_int a))
+  predicate is_safe Bit_uint8.t
+  predicate bit_uint8_as_bit_uint64 Bit_uint64.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t
 end
 
 theory Bit_int8_of_bit_int16
@@ -1181,6 +1209,8 @@ theory Bit_int8_of_bit_int16
   axiom Cast_modulo:
     forall a : Bit_int16.t [cast_modulo a].
       cast_modulo a = Bit_int8.of_int (Bit_int8.normalize (Bit_int16.to_int a))
+  predicate is_safe Bit_int16.t
+  predicate bit_int16_as_bit_int8 Bit_int16.t Bit_int8.t Bit_int8.t
 end
 
 theory Bit_uint8_of_bit_int16
@@ -1190,6 +1220,8 @@ theory Bit_uint8_of_bit_int16
   axiom Cast_modulo:
     forall a : Bit_int16.t [cast_modulo a].
       cast_modulo a = Bit_uint8.of_int (Bit_uint8.normalize (Bit_int16.to_int a))
+  predicate is_safe Bit_int16.t
+  predicate bit_int16_as_bit_uint8 Bit_int16.t Bit_uint8.t Bit_uint8.t
 end
 
 theory Bit_uint16_of_bit_int16
@@ -1199,6 +1231,8 @@ theory Bit_uint16_of_bit_int16
   axiom Cast_modulo:
     forall a : Bit_int16.t [cast_modulo a].
       cast_modulo a = Bit_uint16.of_int (Bit_uint16.normalize (Bit_int16.to_int a))
+  predicate is_safe Bit_int16.t
+  predicate bit_int16_as_bit_uint16 Bit_int16.t Bit_uint16.t
 end
 
 theory Bit_int32_of_bit_int16
@@ -1208,6 +1242,8 @@ theory Bit_int32_of_bit_int16
   axiom Cast_modulo:
     forall a : Bit_int16.t [cast_modulo a].
       cast_modulo a = Bit_int32.of_int (Bit_int32.normalize (Bit_int16.to_int a))
+  predicate is_safe Bit_int16.t
+  predicate bit_int16_as_bit_int32 Bit_int32.t Bit_int16.t Bit_int16.t
 end
 
 theory Bit_uint32_of_bit_int16
@@ -1217,6 +1253,8 @@ theory Bit_uint32_of_bit_int16
   axiom Cast_modulo:
     forall a : Bit_int16.t [cast_modulo a].
       cast_modulo a = Bit_uint32.of_int (Bit_uint32.normalize (Bit_int16.to_int a))
+  predicate is_safe Bit_int16.t
+  predicate bit_int16_as_bit_uint32 Bit_uint32.t Bit_int16.t Bit_int16.t
 end
 
 theory Bit_int64_of_bit_int16
@@ -1226,6 +1264,8 @@ theory Bit_int64_of_bit_int16
   axiom Cast_modulo:
     forall a : Bit_int16.t [cast_modulo a].
       cast_modulo a = Bit_int64.of_int (Bit_int64.normalize (Bit_int16.to_int a))
+  predicate is_safe Bit_int16.t
+  predicate bit_int16_as_bit_int64 Bit_int64.t Bit_int16.t Bit_int16.t Bit_int16.t Bit_int16.t
 end
 
 theory Bit_uint64_of_bit_int16
@@ -1235,6 +1275,8 @@ theory Bit_uint64_of_bit_int16
   axiom Cast_modulo:
     forall a : Bit_int16.t [cast_modulo a].
       cast_modulo a = Bit_uint64.of_int (Bit_uint64.normalize (Bit_int16.to_int a))
+  predicate is_safe Bit_int16.t
+  predicate bit_int16_as_bit_uint64 Bit_uint64.t Bit_int16.t Bit_int16.t Bit_int16.t Bit_int16.t
 end
 
 theory Bit_int8_of_bit_uint16
@@ -1244,6 +1286,8 @@ theory Bit_int8_of_bit_uint16
   axiom Cast_modulo:
     forall a : Bit_uint16.t [cast_modulo a].
       cast_modulo a = Bit_int8.of_int (Bit_int8.normalize (Bit_uint16.to_int a))
+  predicate is_safe Bit_uint16.t
+  predicate bit_uint16_as_bit_int8 Bit_uint16.t Bit_int8.t Bit_int8.t
 end
 
 theory Bit_uint8_of_bit_uint16
@@ -1253,6 +1297,8 @@ theory Bit_uint8_of_bit_uint16
   axiom Cast_modulo:
     forall a : Bit_uint16.t [cast_modulo a].
       cast_modulo a = Bit_uint8.of_int (Bit_uint8.normalize (Bit_uint16.to_int a))
+  predicate is_safe Bit_uint16.t
+  predicate bit_uint16_as_bit_uint8 Bit_uint16.t Bit_uint8.t Bit_uint8.t
 end
 
 theory Bit_int16_of_bit_uint16
@@ -1262,6 +1308,8 @@ theory Bit_int16_of_bit_uint16
   axiom Cast_modulo:
     forall a : Bit_uint16.t [cast_modulo a].
       cast_modulo a = Bit_int16.of_int (Bit_int16.normalize (Bit_uint16.to_int a))
+  predicate is_safe Bit_uint16.t
+  predicate bit_uint16_as_bit_int16 Bit_int16.t Bit_uint16.t
 end
 
 theory Bit_int32_of_bit_uint16
@@ -1271,6 +1319,8 @@ theory Bit_int32_of_bit_uint16
   axiom Cast_modulo:
     forall a : Bit_uint16.t [cast_modulo a].
       cast_modulo a = Bit_int32.of_int (Bit_int32.normalize (Bit_uint16.to_int a))
+  predicate is_safe Bit_uint16.t
+  predicate bit_uint16_as_bit_int32 Bit_int32.t Bit_uint16.t Bit_uint16.t
 end
 
 theory Bit_uint32_of_bit_uint16
@@ -1280,6 +1330,8 @@ theory Bit_uint32_of_bit_uint16
   axiom Cast_modulo:
     forall a : Bit_uint16.t [cast_modulo a].
       cast_modulo a = Bit_uint32.of_int (Bit_uint32.normalize (Bit_uint16.to_int a))
+  predicate is_safe Bit_uint16.t
+  predicate bit_uint16_as_bit_uint32 Bit_uint32.t Bit_uint16.t Bit_uint16.t
 end
 
 theory Bit_int64_of_bit_uint16
@@ -1289,6 +1341,8 @@ theory Bit_int64_of_bit_uint16
   axiom Cast_modulo:
     forall a : Bit_uint16.t [cast_modulo a].
       cast_modulo a = Bit_int64.of_int (Bit_int64.normalize (Bit_uint16.to_int a))
+  predicate is_safe Bit_uint16.t
+  predicate bit_uint16_as_bit_int64 Bit_int64.t Bit_uint16.t Bit_uint16.t Bit_uint16.t Bit_uint16.t
 end
 
 theory Bit_uint64_of_bit_uint16
@@ -1298,6 +1352,8 @@ theory Bit_uint64_of_bit_uint16
   axiom Cast_modulo:
     forall a : Bit_uint16.t [cast_modulo a].
       cast_modulo a = Bit_uint64.of_int (Bit_uint64.normalize (Bit_uint16.to_int a))
+  predicate is_safe Bit_uint16.t
+  predicate bit_uint16_as_bit_uint64 Bit_uint64.t Bit_uint16.t Bit_uint16.t Bit_uint16.t Bit_uint16.t
 end
 
 theory Bit_int8_of_bit_int32
@@ -1307,6 +1363,8 @@ theory Bit_int8_of_bit_int32
   axiom Cast_modulo:
     forall a : Bit_int32.t [cast_modulo a].
       cast_modulo a = Bit_int8.of_int (Bit_int8.normalize (Bit_int32.to_int a))
+  predicate is_safe Bit_int32.t
+  predicate bit_int32_as_bit_int8 Bit_int32.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t
 end
 
 theory Bit_uint8_of_bit_int32
@@ -1316,6 +1374,8 @@ theory Bit_uint8_of_bit_int32
   axiom Cast_modulo:
     forall a : Bit_int32.t [cast_modulo a].
       cast_modulo a = Bit_uint8.of_int (Bit_uint8.normalize (Bit_int32.to_int a))
+  predicate is_safe Bit_int32.t
+  predicate bit_int32_as_bit_uint8 Bit_int32.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t
 end
 
 theory Bit_int16_of_bit_int32
@@ -1325,6 +1385,8 @@ theory Bit_int16_of_bit_int32
   axiom Cast_modulo:
     forall a : Bit_int32.t [cast_modulo a].
       cast_modulo a = Bit_int16.of_int (Bit_int16.normalize (Bit_int32.to_int a))
+  predicate is_safe Bit_int32.t
+  predicate bit_int32_as_bit_int16 Bit_int32.t Bit_int16.t Bit_int16.t
 end
 
 theory Bit_uint16_of_bit_int32
@@ -1334,6 +1396,8 @@ theory Bit_uint16_of_bit_int32
   axiom Cast_modulo:
     forall a : Bit_int32.t [cast_modulo a].
       cast_modulo a = Bit_uint16.of_int (Bit_uint16.normalize (Bit_int32.to_int a))
+  predicate is_safe Bit_int32.t
+  predicate bit_int32_as_bit_uint16 Bit_int32.t Bit_uint16.t Bit_uint16.t
 end
 
 theory Bit_uint32_of_bit_int32
@@ -1343,6 +1407,8 @@ theory Bit_uint32_of_bit_int32
   axiom Cast_modulo:
     forall a : Bit_int32.t [cast_modulo a].
       cast_modulo a = Bit_uint32.of_int (Bit_uint32.normalize (Bit_int32.to_int a))
+  predicate is_safe Bit_int32.t
+  predicate bit_int32_as_bit_uint32 Bit_int32.t Bit_uint32.t
 end
 
 theory Bit_int64_of_bit_int32
@@ -1352,6 +1418,8 @@ theory Bit_int64_of_bit_int32
   axiom Cast_modulo:
     forall a : Bit_int32.t [cast_modulo a].
       cast_modulo a = Bit_int64.of_int (Bit_int64.normalize (Bit_int32.to_int a))
+  predicate is_safe Bit_int32.t
+  predicate bit_int32_as_bit_int64 Bit_int64.t Bit_int32.t Bit_int32.t
 end
 
 theory Bit_uint64_of_bit_int32
@@ -1361,6 +1429,8 @@ theory Bit_uint64_of_bit_int32
   axiom Cast_modulo:
     forall a : Bit_int32.t [cast_modulo a].
       cast_modulo a = Bit_uint64.of_int (Bit_uint64.normalize (Bit_int32.to_int a))
+  predicate is_safe Bit_int32.t
+  predicate bit_int32_as_bit_uint64 Bit_uint64.t Bit_int32.t Bit_int32.t
 end
 
 theory Bit_int8_of_bit_uint32
@@ -1370,6 +1440,8 @@ theory Bit_int8_of_bit_uint32
   axiom Cast_modulo:
     forall a : Bit_uint32.t [cast_modulo a].
       cast_modulo a = Bit_int8.of_int (Bit_int8.normalize (Bit_uint32.to_int a))
+  predicate is_safe Bit_uint32.t
+  predicate bit_uint32_as_bit_int8 Bit_uint32.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t
 end
 
 theory Bit_uint8_of_bit_uint32
@@ -1379,6 +1451,8 @@ theory Bit_uint8_of_bit_uint32
   axiom Cast_modulo:
     forall a : Bit_uint32.t [cast_modulo a].
       cast_modulo a = Bit_uint8.of_int (Bit_uint8.normalize (Bit_uint32.to_int a))
+  predicate is_safe Bit_uint32.t
+  predicate bit_uint32_as_bit_uint8 Bit_uint32.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t
 end
 
 theory Bit_int16_of_bit_uint32
@@ -1388,6 +1462,8 @@ theory Bit_int16_of_bit_uint32
   axiom Cast_modulo:
     forall a : Bit_uint32.t [cast_modulo a].
       cast_modulo a = Bit_int16.of_int (Bit_int16.normalize (Bit_uint32.to_int a))
+  predicate is_safe Bit_uint32.t
+  predicate bit_uint32_as_bit_int16 Bit_uint32.t Bit_int16.t Bit_int16.t
 end
 
 theory Bit_uint16_of_bit_uint32
@@ -1397,6 +1473,8 @@ theory Bit_uint16_of_bit_uint32
   axiom Cast_modulo:
     forall a : Bit_uint32.t [cast_modulo a].
       cast_modulo a = Bit_uint16.of_int (Bit_uint16.normalize (Bit_uint32.to_int a))
+  predicate is_safe Bit_uint32.t
+  predicate bit_uint32_as_bit_uint16 Bit_uint32.t Bit_uint16.t Bit_uint16.t
 end
 
 theory Bit_int32_of_bit_uint32
@@ -1406,6 +1484,8 @@ theory Bit_int32_of_bit_uint32
   axiom Cast_modulo:
     forall a : Bit_uint32.t [cast_modulo a].
       cast_modulo a = Bit_int32.of_int (Bit_int32.normalize (Bit_uint32.to_int a))
+  predicate is_safe Bit_uint32.t
+  predicate bit_uint32_as_bit_int32 Bit_int32.t Bit_uint32.t
 end
 
 theory Bit_int64_of_bit_uint32
@@ -1415,6 +1495,8 @@ theory Bit_int64_of_bit_uint32
   axiom Cast_modulo:
     forall a : Bit_uint32.t [cast_modulo a].
       cast_modulo a = Bit_int64.of_int (Bit_int64.normalize (Bit_uint32.to_int a))
+  predicate is_safe Bit_uint32.t
+  predicate bit_uint32_as_bit_int64 Bit_int64.t Bit_uint32.t Bit_uint32.t
 end
 
 theory Bit_uint64_of_bit_uint32
@@ -1424,6 +1506,8 @@ theory Bit_uint64_of_bit_uint32
   axiom Cast_modulo:
     forall a : Bit_uint32.t [cast_modulo a].
       cast_modulo a = Bit_uint64.of_int (Bit_uint64.normalize (Bit_uint32.to_int a))
+  predicate is_safe Bit_uint32.t
+  predicate bit_uint32_as_bit_uint64 Bit_uint64.t Bit_uint32.t Bit_uint32.t
 end
 
 theory Bit_int8_of_bit_int64
@@ -1433,6 +1517,8 @@ theory Bit_int8_of_bit_int64
   axiom Cast_modulo:
     forall a : Bit_int64.t [cast_modulo a].
       cast_modulo a = Bit_int8.of_int (Bit_int8.normalize (Bit_int64.to_int a))
+  predicate is_safe Bit_int64.t
+  predicate bit_int64_as_bit_int8 Bit_int64.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t
 end
 
 theory Bit_uint8_of_bit_int64
@@ -1442,6 +1528,8 @@ theory Bit_uint8_of_bit_int64
   axiom Cast_modulo:
     forall a : Bit_int64.t [cast_modulo a].
       cast_modulo a = Bit_uint8.of_int (Bit_uint8.normalize (Bit_int64.to_int a))
+  predicate is_safe Bit_int64.t
+  predicate bit_int64_as_bit_uint8 Bit_int64.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t
 end
 
 theory Bit_int16_of_bit_int64
@@ -1451,6 +1539,8 @@ theory Bit_int16_of_bit_int64
   axiom Cast_modulo:
     forall a : Bit_int64.t [cast_modulo a].
       cast_modulo a = Bit_int16.of_int (Bit_int16.normalize (Bit_int64.to_int a))
+  predicate is_safe Bit_int64.t
+  predicate bit_int64_as_bit_int16 Bit_int64.t Bit_int16.t Bit_int16.t Bit_int16.t Bit_int16.t
 end
 
 theory Bit_uint16_of_bit_int64
@@ -1460,6 +1550,8 @@ theory Bit_uint16_of_bit_int64
   axiom Cast_modulo:
     forall a : Bit_int64.t [cast_modulo a].
       cast_modulo a = Bit_uint16.of_int (Bit_uint16.normalize (Bit_int64.to_int a))
+  predicate is_safe Bit_int64.t
+  predicate bit_int64_as_bit_uint16 Bit_int64.t Bit_uint16.t Bit_uint16.t Bit_uint16.t Bit_uint16.t
 end
 
 theory Bit_int32_of_bit_int64
@@ -1469,6 +1561,8 @@ theory Bit_int32_of_bit_int64
   axiom Cast_modulo:
     forall a : Bit_int64.t [cast_modulo a].
       cast_modulo a = Bit_int32.of_int (Bit_int32.normalize (Bit_int64.to_int a))
+  predicate is_safe Bit_int64.t
+  predicate bit_int64_as_bit_int32 Bit_int64.t Bit_int32.t Bit_int32.t
 end
 
 theory Bit_uint32_of_bit_int64
@@ -1478,6 +1572,8 @@ theory Bit_uint32_of_bit_int64
   axiom Cast_modulo:
     forall a : Bit_int64.t [cast_modulo a].
       cast_modulo a = Bit_uint32.of_int (Bit_uint32.normalize (Bit_int64.to_int a))
+  predicate is_safe Bit_int64.t
+  predicate bit_int64_as_bit_uint32 Bit_int64.t Bit_uint32.t Bit_uint32.t
 end
 
 theory Bit_uint64_of_bit_int64
@@ -1487,6 +1583,8 @@ theory Bit_uint64_of_bit_int64
   axiom Cast_modulo:
     forall a : Bit_int64.t [cast_modulo a].
       cast_modulo a = Bit_uint64.of_int (Bit_uint64.normalize (Bit_int64.to_int a))
+  predicate is_safe Bit_int64.t
+  predicate bit_int64_as_bit_uint64 Bit_int64.t Bit_uint64.t
 end
 
 theory Bit_int8_of_bit_uint64
@@ -1496,6 +1594,8 @@ theory Bit_int8_of_bit_uint64
   axiom Cast_modulo:
     forall a : Bit_uint64.t [cast_modulo a].
       cast_modulo a = Bit_int8.of_int (Bit_int8.normalize (Bit_uint64.to_int a))
+  predicate is_safe Bit_uint64.t
+  predicate bit_uint64_as_bit_int8 Bit_uint64.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t Bit_int8.t
 end
 
 theory Bit_uint8_of_bit_uint64
@@ -1505,6 +1605,8 @@ theory Bit_uint8_of_bit_uint64
   axiom Cast_modulo:
     forall a : Bit_uint64.t [cast_modulo a].
       cast_modulo a = Bit_uint8.of_int (Bit_uint8.normalize (Bit_uint64.to_int a))
+  predicate is_safe Bit_uint64.t
+  predicate bit_uint64_as_bit_uint8 Bit_uint64.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t Bit_uint8.t
 end
 
 theory Bit_int16_of_bit_uint64
@@ -1514,6 +1616,8 @@ theory Bit_int16_of_bit_uint64
   axiom Cast_modulo:
     forall a : Bit_uint64.t [cast_modulo a].
       cast_modulo a = Bit_int16.of_int (Bit_int16.normalize (Bit_uint64.to_int a))
+  predicate is_safe Bit_uint64.t
+  predicate bit_uint64_as_bit_int16 Bit_uint64.t Bit_int16.t Bit_int16.t Bit_int16.t Bit_int16.t
 end
 
 theory Bit_uint16_of_bit_uint64
@@ -1523,6 +1627,8 @@ theory Bit_uint16_of_bit_uint64
   axiom Cast_modulo:
     forall a : Bit_uint64.t [cast_modulo a].
       cast_modulo a = Bit_uint16.of_int (Bit_uint16.normalize (Bit_uint64.to_int a))
+  predicate is_safe Bit_uint64.t
+  predicate bit_uint64_as_bit_uint16 Bit_uint64.t Bit_uint16.t Bit_uint16.t Bit_uint16.t Bit_uint16.t
 end
 
 theory Bit_int32_of_bit_uint64
@@ -1532,6 +1638,8 @@ theory Bit_int32_of_bit_uint64
   axiom Cast_modulo:
     forall a : Bit_uint64.t [cast_modulo a].
       cast_modulo a = Bit_int32.of_int (Bit_int32.normalize (Bit_uint64.to_int a))
+  predicate is_safe Bit_uint64.t
+  predicate bit_uint64_as_bit_int32 Bit_uint64.t Bit_int32.t Bit_int32.t
 end
 
 theory Bit_uint32_of_bit_uint64
@@ -1541,6 +1649,8 @@ theory Bit_uint32_of_bit_uint64
   axiom Cast_modulo:
     forall a : Bit_uint64.t [cast_modulo a].
       cast_modulo a = Bit_uint32.of_int (Bit_uint32.normalize (Bit_uint64.to_int a))
+  predicate is_safe Bit_uint64.t
+  predicate bit_uint64_as_bit_uint32 Bit_uint64.t Bit_uint32.t Bit_uint32.t
 end
 
 theory Bit_int64_of_bit_uint64
@@ -1550,4 +1660,6 @@ theory Bit_int64_of_bit_uint64
   axiom Cast_modulo:
     forall a : Bit_uint64.t [cast_modulo a].
       cast_modulo a = Bit_int64.of_int (Bit_int64.normalize (Bit_uint64.to_int a))
+  predicate is_safe Bit_uint64.t
+  predicate bit_uint64_as_bit_int64 Bit_int64.t Bit_uint64.t
 end

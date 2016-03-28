@@ -27,6 +27,19 @@ theory enum.Bit_int8
   syntax function of_int_modulo "((_ int2bv 8) %1)"
   syntax converter of_int_const "(_ bv%1 8)"
   syntax function to_uint "(bv2int %1)"
+  syntax type tt "(_ BitVec 16)"
+
+  syntax function  extend  "((_ sign_extend 8) %1)"
+  syntax predicate is_safe "(= ((_ extract 15 8) %1) ((_ repeat 8) ((_ extract 7 7) %1)))"
+  syntax function (+%~)  "(bvadd %1 %2)"
+  syntax function (-%~)  "(bvsub %1 %2)"
+  syntax function (-%~_) "(bvneg %1)"
+  syntax function ( *%~) "(bvmul %1 %2)"
+  syntax function (/%~)  "(bvsdiv %1 %2)"
+  syntax function (%%~)  "(bvsrem %1 %2)"
+
+  syntax function lsl_modulo_ "(bvshl %1 %2)"
+
   remove prop To_uint_lsr
   remove prop To_uint_lsl_modulo
 
@@ -75,6 +88,19 @@ theory enum.Bit_uint8
   syntax converter of_int_const "(_ bv%1 8)"
   syntax function to_int "(bv2int %1)"
   remove prop To_uint
+  syntax type tt "(_ BitVec 16)"
+
+  syntax function  extend  "((_ zero_extend 8) %1)"
+  syntax predicate is_safe "(= ((_ extract 15 8) %1) (_ bv0 8))"
+  syntax function (+%~)  "(bvadd %1 %2)"
+  syntax function (-%~)  "(bvsub %1 %2)"
+  syntax function (-%~_) "(bvneg %1)"
+  syntax function ( *%~) "(bvmul %1 %2)"
+  syntax function (/%~)  "(bvudiv %1 %2)"
+  syntax function (%%~)  "(bvurem %1 %2)"
+
+  syntax function lsl_modulo_ "(bvshl %1 %2)"
+
   remove prop To_uint_lsr
   remove prop To_uint_lsl_modulo
 
@@ -122,6 +148,19 @@ theory enum.Bit_int16
   syntax function of_int_modulo "((_ int2bv 16) %1)"
   syntax converter of_int_const "(_ bv%1 16)"
   syntax function to_uint "(bv2int %1)"
+  syntax type tt "(_ BitVec 32)"
+
+  syntax function  extend  "((_ sign_extend 16) %1)"
+  syntax predicate is_safe "(= ((_ extract 31 16) %1) ((_ repeat 16) ((_ extract 15 15) %1)))"
+  syntax function (+%~)  "(bvadd %1 %2)"
+  syntax function (-%~)  "(bvsub %1 %2)"
+  syntax function (-%~_) "(bvneg %1)"
+  syntax function ( *%~) "(bvmul %1 %2)"
+  syntax function (/%~)  "(bvsdiv %1 %2)"
+  syntax function (%%~)  "(bvsrem %1 %2)"
+
+  syntax function lsl_modulo_ "(bvshl %1 %2)"
+
   remove prop To_uint_lsr
   remove prop To_uint_lsl_modulo
 
@@ -170,6 +209,19 @@ theory enum.Bit_uint16
   syntax converter of_int_const "(_ bv%1 16)"
   syntax function to_int "(bv2int %1)"
   remove prop To_uint
+  syntax type tt "(_ BitVec 32)"
+
+  syntax function  extend  "((_ zero_extend 16) %1)"
+  syntax predicate is_safe "(= ((_ extract 31 16) %1) (_ bv0 16))"
+  syntax function (+%~)  "(bvadd %1 %2)"
+  syntax function (-%~)  "(bvsub %1 %2)"
+  syntax function (-%~_) "(bvneg %1)"
+  syntax function ( *%~) "(bvmul %1 %2)"
+  syntax function (/%~)  "(bvudiv %1 %2)"
+  syntax function (%%~)  "(bvurem %1 %2)"
+
+  syntax function lsl_modulo_ "(bvshl %1 %2)"
+
   remove prop To_uint_lsr
   remove prop To_uint_lsl_modulo
 
@@ -217,6 +269,19 @@ theory enum.Bit_int32
   syntax function of_int_modulo "((_ int2bv 32) %1)"
   syntax converter of_int_const "(_ bv%1 32)"
   syntax function to_uint "(bv2int %1)"
+  syntax type tt "(_ BitVec 64)"
+
+  syntax function  extend  "((_ sign_extend 32) %1)"
+  syntax predicate is_safe "(= ((_ extract 63 32) %1) ((_ repeat 32) ((_ extract 31 31) %1)))"
+  syntax function (+%~)  "(bvadd %1 %2)"
+  syntax function (-%~)  "(bvsub %1 %2)"
+  syntax function (-%~_) "(bvneg %1)"
+  syntax function ( *%~) "(bvmul %1 %2)"
+  syntax function (/%~)  "(bvsdiv %1 %2)"
+  syntax function (%%~)  "(bvsrem %1 %2)"
+
+  syntax function lsl_modulo_ "(bvshl %1 %2)"
+
   remove prop To_uint_lsr
   remove prop To_uint_lsl_modulo
 
@@ -265,6 +330,19 @@ theory enum.Bit_uint32
   syntax converter of_int_const "(_ bv%1 32)"
   syntax function to_int "(bv2int %1)"
   remove prop To_uint
+  syntax type tt "(_ BitVec 64)"
+
+  syntax function  extend  "((_ zero_extend 32) %1)"
+  syntax predicate is_safe "(= ((_ extract 63 32) %1) (_ bv0 32))"
+  syntax function (+%~)  "(bvadd %1 %2)"
+  syntax function (-%~)  "(bvsub %1 %2)"
+  syntax function (-%~_) "(bvneg %1)"
+  syntax function ( *%~) "(bvmul %1 %2)"
+  syntax function (/%~)  "(bvudiv %1 %2)"
+  syntax function (%%~)  "(bvurem %1 %2)"
+
+  syntax function lsl_modulo_ "(bvshl %1 %2)"
+
   remove prop To_uint_lsr
   remove prop To_uint_lsl_modulo
 
@@ -312,6 +390,19 @@ theory enum.Bit_int64
   syntax function of_int_modulo "((_ int2bv 64) %1)"
   syntax converter of_int_const "(_ bv%1 64)"
   syntax function to_uint "(bv2int %1)"
+  syntax type tt "(_ BitVec 128)"
+
+  syntax function  extend  "((_ sign_extend 64) %1)"
+  syntax predicate is_safe "(= ((_ extract 127 64) %1) ((_ repeat 64) ((_ extract 63 63) %1)))"
+  syntax function (+%~)  "(bvadd %1 %2)"
+  syntax function (-%~)  "(bvsub %1 %2)"
+  syntax function (-%~_) "(bvneg %1)"
+  syntax function ( *%~) "(bvmul %1 %2)"
+  syntax function (/%~)  "(bvsdiv %1 %2)"
+  syntax function (%%~)  "(bvsrem %1 %2)"
+
+  syntax function lsl_modulo_ "(bvshl %1 %2)"
+
   remove prop To_uint_lsr
   remove prop To_uint_lsl_modulo
 
@@ -359,6 +450,19 @@ theory enum.Bit_uint64
   syntax converter of_int_const "(_ bv%1 64)"
   syntax function to_int "(bv2int %1)"
   remove prop To_uint
+  syntax type tt "(_ BitVec 128)"
+
+  syntax function  extend  "((_ zero_extend 64) %1)"
+  syntax predicate is_safe "(= ((_ extract 127 64) %1) (_ bv0 64))"
+  syntax function (+%~)  "(bvadd %1 %2)"
+  syntax function (-%~)  "(bvsub %1 %2)"
+  syntax function (-%~_) "(bvneg %1)"
+  syntax function ( *%~) "(bvmul %1 %2)"
+  syntax function (/%~)  "(bvudiv %1 %2)"
+  syntax function (%%~)  "(bvurem %1 %2)"
+
+  syntax function lsl_modulo_ "(bvshl %1 %2)"
+
   remove prop To_uint_lsr
   remove prop To_uint_lsl_modulo
 
@@ -384,225 +488,337 @@ end
 
 theory enum.Bit_uint8_of_bit_int8
   syntax function cast_modulo "%1"
+  syntax predicate is_safe "(= ((_ extract 7 7) %1) (_ bv0 1))"
+  syntax predicate bit_int8_as_bit_uint8 "(= %1 %2)"
 end
 
 theory enum.Bit_int16_of_bit_int8
   syntax function cast_modulo "((_ sign_extend 8) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_int8_as_bit_int16 "(= %1 (concat  %3 %2))"
 end
 
 theory enum.Bit_uint16_of_bit_int8
   syntax function cast_modulo "((_ sign_extend 8) %1)"
+  syntax predicate is_safe "(= ((_ extract 7 7) %1) (_ bv0 1))"
+  syntax predicate bit_int8_as_bit_uint16 "(= %1 (concat  %3 %2))"
 end
 
 theory enum.Bit_int32_of_bit_int8
   syntax function cast_modulo "((_ sign_extend 24) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_int8_as_bit_int32 "(= %1 (concat (concat (concat  %5 %4) %3) %2))"
 end
 
 theory enum.Bit_uint32_of_bit_int8
   syntax function cast_modulo "((_ sign_extend 24) %1)"
+  syntax predicate is_safe "(= ((_ extract 7 7) %1) (_ bv0 1))"
+  syntax predicate bit_int8_as_bit_uint32 "(= %1 (concat (concat (concat  %5 %4) %3) %2))"
 end
 
 theory enum.Bit_int64_of_bit_int8
   syntax function cast_modulo "((_ sign_extend 56) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_int8_as_bit_int64 "(= %1 (concat (concat (concat (concat (concat (concat (concat  %9 %8) %7) %6) %5) %4) %3) %2))"
 end
 
 theory enum.Bit_uint64_of_bit_int8
   syntax function cast_modulo "((_ sign_extend 56) %1)"
+  syntax predicate is_safe "(= ((_ extract 7 7) %1) (_ bv0 1))"
+  syntax predicate bit_int8_as_bit_uint64 "(= %1 (concat (concat (concat (concat (concat (concat (concat  %9 %8) %7) %6) %5) %4) %3) %2))"
 end
 
 theory enum.Bit_int8_of_bit_uint8
   syntax function cast_modulo "%1"
+  syntax predicate is_safe "(= ((_ extract 7 7) %1) (_ bv0 1))"
+  syntax predicate bit_uint8_as_bit_int8 "(= %1 %2)"
 end
 
 theory enum.Bit_int16_of_bit_uint8
   syntax function cast_modulo "((_ zero_extend 8) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_uint8_as_bit_int16 "(= %1 (concat  %3 %2))"
 end
 
 theory enum.Bit_uint16_of_bit_uint8
   syntax function cast_modulo "((_ zero_extend 8) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_uint8_as_bit_uint16 "(= %1 (concat  %3 %2))"
 end
 
 theory enum.Bit_int32_of_bit_uint8
   syntax function cast_modulo "((_ zero_extend 24) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_uint8_as_bit_int32 "(= %1 (concat (concat (concat  %5 %4) %3) %2))"
 end
 
 theory enum.Bit_uint32_of_bit_uint8
   syntax function cast_modulo "((_ zero_extend 24) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_uint8_as_bit_uint32 "(= %1 (concat (concat (concat  %5 %4) %3) %2))"
 end
 
 theory enum.Bit_int64_of_bit_uint8
   syntax function cast_modulo "((_ zero_extend 56) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_uint8_as_bit_int64 "(= %1 (concat (concat (concat (concat (concat (concat (concat  %9 %8) %7) %6) %5) %4) %3) %2))"
 end
 
 theory enum.Bit_uint64_of_bit_uint8
   syntax function cast_modulo "((_ zero_extend 56) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_uint8_as_bit_uint64 "(= %1 (concat (concat (concat (concat (concat (concat (concat  %9 %8) %7) %6) %5) %4) %3) %2))"
 end
 
 theory enum.Bit_int8_of_bit_int16
   syntax function cast_modulo "((_ extract 7 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 15 8) %1) ((_ repeat 8) ((_ extract 7 7) %1)))"
+  syntax predicate bit_int16_as_bit_int8 "(and (= %2 ((_ extract 7 0) %1)) (= %3 ((_ extract 15 8) %1)))"
 end
 
 theory enum.Bit_uint8_of_bit_int16
   syntax function cast_modulo "((_ extract 7 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 15 8) %1) (_ bv0 8))"
+  syntax predicate bit_int16_as_bit_uint8 "(and (= %2 ((_ extract 7 0) %1)) (= %3 ((_ extract 15 8) %1)))"
 end
 
 theory enum.Bit_uint16_of_bit_int16
   syntax function cast_modulo "%1"
+  syntax predicate is_safe "(= ((_ extract 15 15) %1) (_ bv0 1))"
+  syntax predicate bit_int16_as_bit_uint16 "(= %1 %2)"
 end
 
 theory enum.Bit_int32_of_bit_int16
   syntax function cast_modulo "((_ sign_extend 16) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_int16_as_bit_int32 "(= %1 (concat  %3 %2))"
 end
 
 theory enum.Bit_uint32_of_bit_int16
   syntax function cast_modulo "((_ sign_extend 16) %1)"
+  syntax predicate is_safe "(= ((_ extract 15 15) %1) (_ bv0 1))"
+  syntax predicate bit_int16_as_bit_uint32 "(= %1 (concat  %3 %2))"
 end
 
 theory enum.Bit_int64_of_bit_int16
   syntax function cast_modulo "((_ sign_extend 48) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_int16_as_bit_int64 "(= %1 (concat (concat (concat  %5 %4) %3) %2))"
 end
 
 theory enum.Bit_uint64_of_bit_int16
   syntax function cast_modulo "((_ sign_extend 48) %1)"
+  syntax predicate is_safe "(= ((_ extract 15 15) %1) (_ bv0 1))"
+  syntax predicate bit_int16_as_bit_uint64 "(= %1 (concat (concat (concat  %5 %4) %3) %2))"
 end
 
 theory enum.Bit_int8_of_bit_uint16
   syntax function cast_modulo "((_ extract 7 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 15 8) %1) ((_ repeat 8) ((_ extract 7 7) %1)))"
+  syntax predicate bit_uint16_as_bit_int8 "(and (= %2 ((_ extract 7 0) %1)) (= %3 ((_ extract 15 8) %1)))"
 end
 
 theory enum.Bit_uint8_of_bit_uint16
   syntax function cast_modulo "((_ extract 7 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 15 8) %1) (_ bv0 8))"
+  syntax predicate bit_uint16_as_bit_uint8 "(and (= %2 ((_ extract 7 0) %1)) (= %3 ((_ extract 15 8) %1)))"
 end
 
 theory enum.Bit_int16_of_bit_uint16
   syntax function cast_modulo "%1"
+  syntax predicate is_safe "(= ((_ extract 15 15) %1) (_ bv0 1))"
+  syntax predicate bit_uint16_as_bit_int16 "(= %1 %2)"
 end
 
 theory enum.Bit_int32_of_bit_uint16
   syntax function cast_modulo "((_ zero_extend 16) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_uint16_as_bit_int32 "(= %1 (concat  %3 %2))"
 end
 
 theory enum.Bit_uint32_of_bit_uint16
   syntax function cast_modulo "((_ zero_extend 16) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_uint16_as_bit_uint32 "(= %1 (concat  %3 %2))"
 end
 
 theory enum.Bit_int64_of_bit_uint16
   syntax function cast_modulo "((_ zero_extend 48) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_uint16_as_bit_int64 "(= %1 (concat (concat (concat  %5 %4) %3) %2))"
 end
 
 theory enum.Bit_uint64_of_bit_uint16
   syntax function cast_modulo "((_ zero_extend 48) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_uint16_as_bit_uint64 "(= %1 (concat (concat (concat  %5 %4) %3) %2))"
 end
 
 theory enum.Bit_int8_of_bit_int32
   syntax function cast_modulo "((_ extract 7 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 31 8) %1) ((_ repeat 24) ((_ extract 7 7) %1)))"
+  syntax predicate bit_int32_as_bit_int8 "(and (= %2 ((_ extract 7 0) %1)) (= %3 ((_ extract 15 8) %1)) (= %4 ((_ extract 23 16) %1)) (= %5 ((_ extract 31 24) %1)))"
 end
 
 theory enum.Bit_uint8_of_bit_int32
   syntax function cast_modulo "((_ extract 7 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 31 8) %1) (_ bv0 24))"
+  syntax predicate bit_int32_as_bit_uint8 "(and (= %2 ((_ extract 7 0) %1)) (= %3 ((_ extract 15 8) %1)) (= %4 ((_ extract 23 16) %1)) (= %5 ((_ extract 31 24) %1)))"
 end
 
 theory enum.Bit_int16_of_bit_int32
   syntax function cast_modulo "((_ extract 15 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 31 16) %1) ((_ repeat 16) ((_ extract 15 15) %1)))"
+  syntax predicate bit_int32_as_bit_int16 "(and (= %2 ((_ extract 15 0) %1)) (= %3 ((_ extract 31 16) %1)))"
 end
 
 theory enum.Bit_uint16_of_bit_int32
   syntax function cast_modulo "((_ extract 15 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 31 16) %1) (_ bv0 16))"
+  syntax predicate bit_int32_as_bit_uint16 "(and (= %2 ((_ extract 15 0) %1)) (= %3 ((_ extract 31 16) %1)))"
 end
 
 theory enum.Bit_uint32_of_bit_int32
   syntax function cast_modulo "%1"
+  syntax predicate is_safe "(= ((_ extract 31 31) %1) (_ bv0 1))"
+  syntax predicate bit_int32_as_bit_uint32 "(= %1 %2)"
 end
 
 theory enum.Bit_int64_of_bit_int32
   syntax function cast_modulo "((_ sign_extend 32) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_int32_as_bit_int64 "(= %1 (concat  %3 %2))"
 end
 
 theory enum.Bit_uint64_of_bit_int32
   syntax function cast_modulo "((_ sign_extend 32) %1)"
+  syntax predicate is_safe "(= ((_ extract 31 31) %1) (_ bv0 1))"
+  syntax predicate bit_int32_as_bit_uint64 "(= %1 (concat  %3 %2))"
 end
 
 theory enum.Bit_int8_of_bit_uint32
   syntax function cast_modulo "((_ extract 7 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 31 8) %1) ((_ repeat 24) ((_ extract 7 7) %1)))"
+  syntax predicate bit_uint32_as_bit_int8 "(and (= %2 ((_ extract 7 0) %1)) (= %3 ((_ extract 15 8) %1)) (= %4 ((_ extract 23 16) %1)) (= %5 ((_ extract 31 24) %1)))"
 end
 
 theory enum.Bit_uint8_of_bit_uint32
   syntax function cast_modulo "((_ extract 7 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 31 8) %1) (_ bv0 24))"
+  syntax predicate bit_uint32_as_bit_uint8 "(and (= %2 ((_ extract 7 0) %1)) (= %3 ((_ extract 15 8) %1)) (= %4 ((_ extract 23 16) %1)) (= %5 ((_ extract 31 24) %1)))"
 end
 
 theory enum.Bit_int16_of_bit_uint32
   syntax function cast_modulo "((_ extract 15 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 31 16) %1) ((_ repeat 16) ((_ extract 15 15) %1)))"
+  syntax predicate bit_uint32_as_bit_int16 "(and (= %2 ((_ extract 15 0) %1)) (= %3 ((_ extract 31 16) %1)))"
 end
 
 theory enum.Bit_uint16_of_bit_uint32
   syntax function cast_modulo "((_ extract 15 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 31 16) %1) (_ bv0 16))"
+  syntax predicate bit_uint32_as_bit_uint16 "(and (= %2 ((_ extract 15 0) %1)) (= %3 ((_ extract 31 16) %1)))"
 end
 
 theory enum.Bit_int32_of_bit_uint32
   syntax function cast_modulo "%1"
+  syntax predicate is_safe "(= ((_ extract 31 31) %1) (_ bv0 1))"
+  syntax predicate bit_uint32_as_bit_int32 "(= %1 %2)"
 end
 
 theory enum.Bit_int64_of_bit_uint32
   syntax function cast_modulo "((_ zero_extend 32) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_uint32_as_bit_int64 "(= %1 (concat  %3 %2))"
 end
 
 theory enum.Bit_uint64_of_bit_uint32
   syntax function cast_modulo "((_ zero_extend 32) %1)"
+  syntax predicate is_safe "true"
+  syntax predicate bit_uint32_as_bit_uint64 "(= %1 (concat  %3 %2))"
 end
 
 theory enum.Bit_int8_of_bit_int64
   syntax function cast_modulo "((_ extract 7 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 63 8) %1) ((_ repeat 56) ((_ extract 7 7) %1)))"
+  syntax predicate bit_int64_as_bit_int8 "(and (= %2 ((_ extract 7 0) %1)) (= %3 ((_ extract 15 8) %1)) (= %4 ((_ extract 23 16) %1)) (= %5 ((_ extract 31 24) %1)) (= %6 ((_ extract 39 32) %1)) (= %7 ((_ extract 47 40) %1)) (= %8 ((_ extract 55 48) %1)) (= %9 ((_ extract 63 56) %1)))"
 end
 
 theory enum.Bit_uint8_of_bit_int64
   syntax function cast_modulo "((_ extract 7 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 63 8) %1) (_ bv0 56))"
+  syntax predicate bit_int64_as_bit_uint8 "(and (= %2 ((_ extract 7 0) %1)) (= %3 ((_ extract 15 8) %1)) (= %4 ((_ extract 23 16) %1)) (= %5 ((_ extract 31 24) %1)) (= %6 ((_ extract 39 32) %1)) (= %7 ((_ extract 47 40) %1)) (= %8 ((_ extract 55 48) %1)) (= %9 ((_ extract 63 56) %1)))"
 end
 
 theory enum.Bit_int16_of_bit_int64
   syntax function cast_modulo "((_ extract 15 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 63 16) %1) ((_ repeat 48) ((_ extract 15 15) %1)))"
+  syntax predicate bit_int64_as_bit_int16 "(and (= %2 ((_ extract 15 0) %1)) (= %3 ((_ extract 31 16) %1)) (= %4 ((_ extract 47 32) %1)) (= %5 ((_ extract 63 48) %1)))"
 end
 
 theory enum.Bit_uint16_of_bit_int64
   syntax function cast_modulo "((_ extract 15 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 63 16) %1) (_ bv0 48))"
+  syntax predicate bit_int64_as_bit_uint16 "(and (= %2 ((_ extract 15 0) %1)) (= %3 ((_ extract 31 16) %1)) (= %4 ((_ extract 47 32) %1)) (= %5 ((_ extract 63 48) %1)))"
 end
 
 theory enum.Bit_int32_of_bit_int64
   syntax function cast_modulo "((_ extract 31 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 63 32) %1) ((_ repeat 32) ((_ extract 31 31) %1)))"
+  syntax predicate bit_int64_as_bit_int32 "(and (= %2 ((_ extract 31 0) %1)) (= %3 ((_ extract 63 32) %1)))"
 end
 
 theory enum.Bit_uint32_of_bit_int64
   syntax function cast_modulo "((_ extract 31 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 63 32) %1) (_ bv0 32))"
+  syntax predicate bit_int64_as_bit_uint32 "(and (= %2 ((_ extract 31 0) %1)) (= %3 ((_ extract 63 32) %1)))"
 end
 
 theory enum.Bit_uint64_of_bit_int64
   syntax function cast_modulo "%1"
+  syntax predicate is_safe "(= ((_ extract 63 63) %1) (_ bv0 1))"
+  syntax predicate bit_int64_as_bit_uint64 "(= %1 %2)"
 end
 
 theory enum.Bit_int8_of_bit_uint64
   syntax function cast_modulo "((_ extract 7 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 63 8) %1) ((_ repeat 56) ((_ extract 7 7) %1)))"
+  syntax predicate bit_uint64_as_bit_int8 "(and (= %2 ((_ extract 7 0) %1)) (= %3 ((_ extract 15 8) %1)) (= %4 ((_ extract 23 16) %1)) (= %5 ((_ extract 31 24) %1)) (= %6 ((_ extract 39 32) %1)) (= %7 ((_ extract 47 40) %1)) (= %8 ((_ extract 55 48) %1)) (= %9 ((_ extract 63 56) %1)))"
 end
 
 theory enum.Bit_uint8_of_bit_uint64
   syntax function cast_modulo "((_ extract 7 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 63 8) %1) (_ bv0 56))"
+  syntax predicate bit_uint64_as_bit_uint8 "(and (= %2 ((_ extract 7 0) %1)) (= %3 ((_ extract 15 8) %1)) (= %4 ((_ extract 23 16) %1)) (= %5 ((_ extract 31 24) %1)) (= %6 ((_ extract 39 32) %1)) (= %7 ((_ extract 47 40) %1)) (= %8 ((_ extract 55 48) %1)) (= %9 ((_ extract 63 56) %1)))"
 end
 
 theory enum.Bit_int16_of_bit_uint64
   syntax function cast_modulo "((_ extract 15 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 63 16) %1) ((_ repeat 48) ((_ extract 15 15) %1)))"
+  syntax predicate bit_uint64_as_bit_int16 "(and (= %2 ((_ extract 15 0) %1)) (= %3 ((_ extract 31 16) %1)) (= %4 ((_ extract 47 32) %1)) (= %5 ((_ extract 63 48) %1)))"
 end
 
 theory enum.Bit_uint16_of_bit_uint64
   syntax function cast_modulo "((_ extract 15 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 63 16) %1) (_ bv0 48))"
+  syntax predicate bit_uint64_as_bit_uint16 "(and (= %2 ((_ extract 15 0) %1)) (= %3 ((_ extract 31 16) %1)) (= %4 ((_ extract 47 32) %1)) (= %5 ((_ extract 63 48) %1)))"
 end
 
 theory enum.Bit_int32_of_bit_uint64
   syntax function cast_modulo "((_ extract 31 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 63 32) %1) ((_ repeat 32) ((_ extract 31 31) %1)))"
+  syntax predicate bit_uint64_as_bit_int32 "(and (= %2 ((_ extract 31 0) %1)) (= %3 ((_ extract 63 32) %1)))"
 end
 
 theory enum.Bit_uint32_of_bit_uint64
   syntax function cast_modulo "((_ extract 31 0) %1)"
+  syntax predicate is_safe "(= ((_ extract 63 32) %1) (_ bv0 32))"
+  syntax predicate bit_uint64_as_bit_uint32 "(and (= %2 ((_ extract 31 0) %1)) (= %3 ((_ extract 63 32) %1)))"
 end
 
 theory enum.Bit_int64_of_bit_uint64
   syntax function cast_modulo "%1"
+  syntax predicate is_safe "(= ((_ extract 63 63) %1) (_ bv0 1))"
+  syntax predicate bit_uint64_as_bit_int64 "(= %1 %2)"
 end
 
