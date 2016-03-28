@@ -168,6 +168,8 @@ val string_of_op_type: [< operator_type] -> string
 val builtin_logic_symbols :
   (Env.jc_type option * string * string * Env.jc_type list) list
 
+val is_reinterpretation_predicate : logic_info -> bool
+
 val builtin_function_symbols :
   (Env.jc_type * string * string * Env.jc_type list * Fenv.builtin_treatment) list
 

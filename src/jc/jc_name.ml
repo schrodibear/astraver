@@ -148,6 +148,12 @@ struct
   let logic_type name = "Logic_type_" ^ name, `Short
   let lemma ~is_axiom id = (if is_axiom then "Axiom_" else "Lemma_") ^ id, `Short
   let reinterpret_mem = axiomatic "Jessie_memory_reinterpretation_predicates"
+  let reinterpret_pred =
+    let regexp = Str.regexp_string "_as_" in
+    fun s ->
+      let from, to_ = List.(fdup2 hd last @@ Str.split regexp s) in
+      if from <> to_ then Some (String.capitalize @@ to_ ^ "_of_" ^ from, `Qualified)
+                     else None
 
   module Jessie =
   struct

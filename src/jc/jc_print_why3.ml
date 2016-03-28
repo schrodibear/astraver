@@ -1373,6 +1373,12 @@ struct
                       try_conv_entry name (fun _ _ m -> s, m)
                     | (`Theory (name, _) | `Module (name, _)), "cast_modulo" ->
                       try_conv_entry name (fun ty1 ty2 m -> S.(add ty1 s |> add ty2), m)
+                    | (`Theory (name, _) | `Module (name, _)), reinterpret
+                      when name = Name.Theory.reinterpret_mem ->
+                      begin match Name.Theory.reinterpret_pred reinterpret with
+                      | None -> acc
+                      | Some (name, _) -> try_conv_entry name (fun ty1 ty2 m -> S.(add ty1 s |> add ty2), m)
+                      end
                     | _ -> acc)
               in
               let close_bw_ints (s, deps) =

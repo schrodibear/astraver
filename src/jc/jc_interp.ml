@@ -739,23 +739,33 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
           app.app_args
           []
       in
-      let label_assoc =
-        if relocate
-        then
-          let relab (lab1, lab2) = lab1, if lab2 = LabelHere then lab else lab2 in
-          (LabelHere, lab) :: List.map relab app.app_label_assoc
-        else
-          app.app_label_assoc
-      in
-      logic_pred_call
-        ~label_in_name:global_assertion
-        ~region_assoc:app.app_region_assoc
-        ~label_assoc
-        f args
-      |>
-      Fn.on
-        (IntHashtblIter.mem Typing.global_invariants_table app.app_fun.li_tag) @@
-        P.locate ~p ?behavior:None ~kind:(JCVCglobal_invariant app.app_fun.li_name)
+      if is_reinterpretation_predicate f then
+        let name = f.li_final_name in
+        Option.map_default
+          ~default:O.P.(
+            let Term a, Term b = List.(hd args, last args) in
+            let Typ ty = ty (List.hd f.li_parameters).vi_type in
+            T.return ty a = T.return ty b)
+          ~f:(fun th -> O.P.((th, name) $.. args))
+          (Theory.reinterpret_pred name)
+      else
+        let label_assoc =
+          if relocate
+          then
+            let relab (lab1, lab2) = lab1, if lab2 = LabelHere then lab else lab2 in
+            (LabelHere, lab) :: List.map relab app.app_label_assoc
+          else
+            app.app_label_assoc
+        in
+        logic_pred_call
+          ~label_in_name:global_assertion
+          ~region_assoc:app.app_region_assoc
+          ~label_assoc
+          f args
+        |>
+        Fn.on
+          (IntHashtblIter.mem Typing.global_invariants_table app.app_fun.li_tag) @@
+          P.locate ~p ?behavior:None ~kind:(JCVCglobal_invariant app.app_fun.li_name)
     | JCAquantifier (Forall | Exists as q, v, trigs, p1) ->
       let Logic_type lt = some_var_logic_type v in
       (match q with Forall -> O.P.forall | Exists -> O.P.exists)

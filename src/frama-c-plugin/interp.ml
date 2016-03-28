@@ -2705,6 +2705,9 @@ let memory_reinterpretation_predicates get_compinfo () =
     in
     (* Predicates for integral type conversions *)
     let endian_map = List.(if theMachine.theMachine.little_endian then rev_map else map) in
+    let conjunct_bw_pred name params body =
+      mkand ~expr1:body ~expr2:(mkapp ~fun_name:("\\" ^ name) ~args:(List.map (fst % var % snd) params) ()) ()
+    in
     let unsigned_split_pred () =
       let whole_name, part_name = map_pair add_u (whole_name, part_name) in
       let name = whole_name ^ "_as_" ^ part_name in
@@ -2725,10 +2728,11 @@ let memory_reinterpretation_predicates get_compinfo () =
                   mkand ~expr1 ~expr2 (), sdi)
         in
         let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
-        [PDecl.mklogic_def
+        [let params = (whole_type, snd (last svars)) :: endian_map (fun (v, _) -> part_type, v) svars in
+         PDecl.mklogic_def
            ~name
-           ~params:((whole_type, snd (last svars)) :: endian_map (fun (v, _) -> part_type, v) svars)
-           ~body
+           ~params
+           ~body:(conjunct_bw_pred name params body)
            ()]
     in
     let unsigned_merge_pred () =
@@ -2749,10 +2753,11 @@ let memory_reinterpretation_predicates get_compinfo () =
           mkeq (fst @@ var d0) n
         in
         let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
-        [PDecl.mklogic_def
+        [let params = (whole_type, d0) :: endian_map (fun v -> part_type, v) svars in
+         PDecl.mklogic_def
            ~name
-           ~params:((whole_type, d0) :: endian_map (fun v -> part_type, v) svars)
-           ~body
+           ~params
+           ~body:(conjunct_bw_pred name params body)
            ()]
     in
     let complement what =
@@ -2795,10 +2800,11 @@ let memory_reinterpretation_predicates get_compinfo () =
         let whole_type, part_type = map_pair integral_type (whole_name, part_name) in
         unsigned_pred_defs @
         complement_def @
-        [PDecl.mklogic_def
+        [let params = (whole_type, d0) :: List.map (fun v -> part_type, v) svars in
+         PDecl.mklogic_def
            ~name
-           ~params:((whole_type, d0) :: List.map (fun v -> part_type, v) svars)
-           ~body
+           ~params
+           ~body:(conjunct_bw_pred name params body)
            ()]
     in
     let preds =
@@ -2823,7 +2829,12 @@ let memory_reinterpretation_predicates get_compinfo () =
         complement_def @
         List.map2
           (fun name body ->
-            PDecl.mklogic_def ~name ~params:((whole_type, d0) :: List.map (fun v -> part_type, v) svars) ~body ())
+             let params = (whole_type, d0) :: List.map (fun v -> part_type, v) svars in
+             PDecl.mklogic_def
+               ~name
+               ~params
+               ~body:(conjunct_bw_pred name params body)
+               ())
           names bodies
     in
     preds

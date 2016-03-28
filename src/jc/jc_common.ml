@@ -1050,6 +1050,67 @@ let rounding_mode = JCTlogic ("rounding_mode",[])
 
 *)
 
+let builtin_enum_symbols =
+  let (~+) = Num.num_of_string in
+  [
+    "int8",   { ei_min = ~+ "-128";                 ei_max = ~+ "127";                  ei_type = Int (Signed, X8) };
+    "uint8",  { ei_min = ~+ "0";                    ei_max = ~+ "255";                  ei_type = Int (Unsigned, X8) };
+    "int16",  { ei_min = ~+ "-32768";               ei_max = ~+ "32767";                ei_type = Int (Signed, X16) };
+    "uint16", { ei_min = ~+ "0";                    ei_max = ~+ "65535";                ei_type = Int (Unsigned, X16) };
+    "int32",  { ei_min = ~+ "-2147483648";          ei_max = ~+ "2147483647";           ei_type = Int (Signed, X32) };
+    "uint32", { ei_min = ~+ "0";                    ei_max = ~+ "4294967295";           ei_type = Int (Unsigned, X32) };
+    "int64",  { ei_min = ~+ "-9223372036854775808"; ei_max = ~+ "9223372036854775807";  ei_type = Int (Signed, X64) };
+    "uint64", { ei_min = ~+ "0";                    ei_max = ~+ "18446744073709551615"; ei_type = Int (Unsigned, X64) };
+  ]
+
+let reinterpretation_predicates =
+  let module M = struct type some_repr = Repr : _ repr -> some_repr type some_bit = Bit : _ bit -> some_bit end in
+  let open M in
+  let rec reinterpretation_predicates ?(acc=[]) =
+    let predicates bitsizes =
+      let size1, size2 =
+        Pair.map
+          (function
+            | Bit X8 -> 1
+            | Bit X16 -> 2
+            | Bit X32 -> 4
+            | Bit X64 -> 8)
+          bitsizes
+      in
+      let rec predicates =
+        fun ?(acc=[]) ->
+          function
+          | [] -> acc
+          | reprs :: reprz ->
+            let enum1, enum2 =
+              Pair.map
+                (fun (Repr r, Bit b) -> (Int (r, b) : some_enum))
+                ((fst reprs, fst bitsizes), (snd reprs, snd bitsizes))
+            in
+            let name1, name2 = Pair.map string_of_some_enum (enum1, enum2) in
+            let enum1, enum2 =
+              (if size1 < size2 || size1 = size2 && reprs = (Repr Unsigned, Repr Signed)
+               then enum1, enum2 else enum2, enum1) |>
+              Pair.map ~f:(fun e -> List.assoc (string_of_some_enum e) builtin_enum_symbols)
+            in
+            predicates
+              ~acc:((Some (JCTnative Tboolean),
+                     "\\" ^ name1 ^ "_as_" ^ name2,
+                     "bit_" ^ name1 ^ "_as_bit_" ^ name2,
+                     JCTenum enum2 :: Array.(to_list @@ make (max size1 size2 / min size1 size2) @@ JCTenum enum1)) ::
+                    acc)
+              reprz
+      in
+      predicates
+    in
+    function
+    | [] -> acc
+    | bitsizes :: bitsizez ->
+      reinterpretation_predicates
+        ~acc:(acc @ predicates bitsizes @@ List.all_ordered_pairs [Repr Signed; Repr Unsigned])
+        bitsizez
+  in
+  reinterpretation_predicates @@ List.all_ordered_pairs [Bit X8; Bit X16; Bit X32; Bit X64]
 
 let builtin_logic_symbols =
   (* return type, jessie name, why name, parameter types *)
@@ -1077,12 +1138,11 @@ let builtin_logic_symbols =
 
 
     Some real_type, "\\single_round_error", "single_round_error", [float_type];
-   Some real_type, "\\double_round_error", "double_round_error", [double_type];
-   Some real_type, "\\double_total_error", "double_total_error", [double_type];
+    Some real_type, "\\double_round_error", "double_round_error", [double_type];
+    Some real_type, "\\double_total_error", "double_total_error", [double_type];
     Some real_type, "\\single_total_error", "single_total_error", [float_type];
-(*    Some real_type, "\\double_relative_error", "gen_relative_error", [double_type];
-    Some real_type, "\\single_relative_error", "gen_relative_error", [float_type];
-*)
+(*  Some real_type, "\\double_relative_error", "gen_relative_error", [double_type];
+    Some real_type, "\\single_relative_error", "gen_relative_error", [float_type]; *)
     Some sign, "\\single_sign", "single_sign", [float_type];
     Some sign, "\\double_sign", "double_sign", [double_type];
 
@@ -1154,7 +1214,11 @@ let builtin_logic_symbols =
 
     Some (JCTnative Tboolean), "\\ne_float", "ne_single_full", [float_type;float_type];
     Some (JCTnative Tboolean), "\\ne_double", "ne_double_full", [double_type;double_type];
-]
+  ] @
+  reinterpretation_predicates
+
+let is_reinterpretation_predicate li =
+  List.exists (fun (_, name, _, _) -> name = li.li_name) reinterpretation_predicates
 
 let treatdouble = TreatGenFloat (`Double :> float_format)
 
@@ -1170,19 +1234,6 @@ let builtin_function_symbols =
     float_type, "\\float_abs", "abs_single", [float_type], treatfloat ;
     double_type, "\\neg_double", "neg_double", [double_type], treatdouble ;
     float_type, "\\neg_float", "neg_single", [float_type], treatfloat ;
-]
-
-let builtin_enum_symbols =
-  let (~+) = Num.num_of_string in
-  [
-    "int8",   { ei_min = ~+ "-128";                 ei_max = ~+ "127";                  ei_type = Int (Signed, X8) };
-    "uint8",  { ei_min = ~+ "0";                    ei_max = ~+ "255";                  ei_type = Int (Unsigned, X8) };
-    "int16",  { ei_min = ~+ "-32768";               ei_max = ~+ "32767";                ei_type = Int (Signed, X16) };
-    "uint16", { ei_min = ~+ "0";                    ei_max = ~+ "65535";                ei_type = Int (Unsigned, X16) };
-    "int32",  { ei_min = ~+ "-2147483648";          ei_max = ~+ "2147483647";           ei_type = Int (Signed, X32) };
-    "uint32", { ei_min = ~+ "0";                    ei_max = ~+ "4294967295";           ei_type = Int (Unsigned, X32) };
-    "int64",  { ei_min = ~+ "-9223372036854775808"; ei_max = ~+ "9223372036854775807";  ei_type = Int (Signed, X64) };
-    "uint64", { ei_min = ~+ "0";                    ei_max = ~+ "18446744073709551615"; ei_type = Int (Unsigned, X64) };
   ]
 
 module StringSet = Set.Make(String)

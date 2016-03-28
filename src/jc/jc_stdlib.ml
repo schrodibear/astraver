@@ -279,6 +279,8 @@ struct
       all_pairs ~acc l
     | [] -> acc
 
+  let all_ordered_pairs l = flatten @@ map (fun x -> map (Pair.cons x) l) l
+
   let concat_map ~f l =
     let rec aux acc =
       function
