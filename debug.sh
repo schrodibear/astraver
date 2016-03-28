@@ -6,7 +6,8 @@ make -C $BUILDSRC/../.. -j byte
 
 ocamlc -c -g -no-alias-deps -open Aliases -I "$BUILDSRC/why" -I "$BUILDSRC/jc" -o "$BUILDSRC/jc/jc_debug_print.cmo" "$BUILDSRC/../../src/jc/jc_debug_print.ml"
 
-SCRIPT='load_printer nums.cma
+SCRIPT='load_printer str.cma
+load_printer nums.cma
 load_printer why_pp.cmo
 load_printer jc_stdlib.cmo
 load_printer jc_envset.cmo
