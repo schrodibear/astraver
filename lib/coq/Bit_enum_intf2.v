@@ -49,6 +49,26 @@ Parameter infix_slpc: t -> t -> t.
 
 Parameter infix_pcpc: t -> t -> t.
 
+Axiom tt : Type.
+Parameter tt_WhyType : WhyType tt.
+Existing Instance tt_WhyType.
+
+Parameter extend: t -> tt.
+
+Parameter is_safe: tt -> Prop.
+
+Parameter infix_plpctl: tt -> tt -> tt.
+
+Parameter infix_mnpctl: tt -> tt -> tt.
+
+Parameter prefix_mnpctl: tt -> tt.
+
+Parameter infix_aspctl: tt -> tt -> tt.
+
+Parameter infix_slpctl: tt -> tt -> tt.
+
+Parameter infix_pcpctl: tt -> tt -> tt.
+
 Parameter infix_et: t -> t -> t.
 
 Parameter infix_brcf: t -> t -> t.
@@ -64,6 +84,8 @@ Parameter lsl_modulo: t -> t -> t.
 Parameter lsr: t -> t -> t.
 
 Parameter asr: t -> t -> t.
+
+Parameter lsl_modulo_: tt -> tt -> tt.
 
 Parameter lt: t -> t -> Prop.
 

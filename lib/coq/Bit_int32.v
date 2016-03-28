@@ -34,6 +34,26 @@ Parameter infix_slpc: Int32.t -> Int32.t -> Int32.t.
 
 Parameter infix_pcpc: Int32.t -> Int32.t -> Int32.t.
 
+Axiom tt : Type.
+Parameter tt_WhyType : WhyType tt.
+Existing Instance tt_WhyType.
+
+Parameter extend: Int32.t -> tt.
+
+Parameter is_safe: tt -> Prop.
+
+Parameter infix_plpctl: tt -> tt -> tt.
+
+Parameter infix_mnpctl: tt -> tt -> tt.
+
+Parameter prefix_mnpctl: tt -> tt.
+
+Parameter infix_aspctl: tt -> tt -> tt.
+
+Parameter infix_slpctl: tt -> tt -> tt.
+
+Parameter infix_pcpctl: tt -> tt -> tt.
+
 Parameter infix_et: Int32.t -> Int32.t -> Int32.t.
 
 Parameter infix_brcf: Int32.t -> Int32.t -> Int32.t.
@@ -49,6 +69,8 @@ Parameter lsl_modulo: Int32.t -> Int32.t -> Int32.t.
 Parameter lsr: Int32.t -> Int32.t -> Int32.t.
 
 Parameter asr: Int32.t -> Int32.t -> Int32.t.
+
+Parameter lsl_modulo_: tt -> tt -> tt.
 
 Parameter lt: Int32.t -> Int32.t -> Prop.
 

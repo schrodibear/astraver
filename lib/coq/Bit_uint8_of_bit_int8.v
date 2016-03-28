@@ -21,3 +21,7 @@ Parameter cast_modulo: Int8.t -> Uint8.t.
 Axiom Cast_modulo : forall (a:Int8.t),
   ((cast_modulo a) = (Uint8.of_int (Bit_uint8.normalize (Int8.to_int a)))).
 
+Parameter is_safe: Int8.t -> Prop.
+
+Parameter bit_int8_as_bit_uint8: Int8.t -> Uint8.t -> Prop.
+

@@ -21,3 +21,7 @@ Parameter cast_modulo: Uint32.t -> Uint64.t.
 Axiom Cast_modulo : forall (a:Uint32.t),
   ((cast_modulo a) = (Uint64.of_int (Bit_uint64.normalize (Uint32.to_int a)))).
 
+Parameter is_safe: Uint32.t -> Prop.
+
+Parameter bit_uint32_as_bit_uint64: Uint64.t -> Uint32.t -> Uint32.t -> Prop.
+

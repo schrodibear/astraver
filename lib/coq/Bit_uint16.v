@@ -34,6 +34,26 @@ Parameter infix_slpc: Uint16.t -> Uint16.t -> Uint16.t.
 
 Parameter infix_pcpc: Uint16.t -> Uint16.t -> Uint16.t.
 
+Axiom tt : Type.
+Parameter tt_WhyType : WhyType tt.
+Existing Instance tt_WhyType.
+
+Parameter extend: Uint16.t -> tt.
+
+Parameter is_safe: tt -> Prop.
+
+Parameter infix_plpctl: tt -> tt -> tt.
+
+Parameter infix_mnpctl: tt -> tt -> tt.
+
+Parameter prefix_mnpctl: tt -> tt.
+
+Parameter infix_aspctl: tt -> tt -> tt.
+
+Parameter infix_slpctl: tt -> tt -> tt.
+
+Parameter infix_pcpctl: tt -> tt -> tt.
+
 Parameter infix_et: Uint16.t -> Uint16.t -> Uint16.t.
 
 Parameter infix_brcf: Uint16.t -> Uint16.t -> Uint16.t.
@@ -49,6 +69,8 @@ Parameter lsl_modulo: Uint16.t -> Uint16.t -> Uint16.t.
 Parameter lsr: Uint16.t -> Uint16.t -> Uint16.t.
 
 Parameter asr: Uint16.t -> Uint16.t -> Uint16.t.
+
+Parameter lsl_modulo_: tt -> tt -> tt.
 
 Parameter lt: Uint16.t -> Uint16.t -> Prop.
 
