@@ -58,6 +58,7 @@ bin
 
 /lib/why3/why3.conf
 /lib/why3/alt-ergo.drv
+/lib/why3/alt-ergo_remove_triggers.drv
 /lib/why3/cvc4.drv
 /lib/why3/z3.drv
 

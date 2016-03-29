@@ -1,0 +1,24 @@
+transformation "remove_triggers"
+
+{% macro bit (signed, size) -%}
+{% if signed -%}
+  {% set u = "" %}
+  {% set us = "s" %}
+{% else -%}
+  {% set u = "u" %}
+  {% set us = u %}
+{% endif -%}
+theory enum.Bit_{{u}}int{{size}}
+  {%- if size <= 32 %}
+  remove prop To_int_def
+  {%- else %}
+  {%- endif %}
+end
+{% endmacro -%}
+{% set sizes = [8, 16, 32, 64] %}
+{% set signs = [true, false] %}
+{% for size in sizes -%}
+{% for sign in signs -%}
+{{ bit (sign, size) }}
+{% endfor -%}
+{% endfor -%}
