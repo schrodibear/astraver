@@ -2029,6 +2029,8 @@ class pre_old_rewriter =
       let b = mk_behavior ~name ~requires ~assumes ~assigns ~allocation ~post_cond () in
       ChangeTo b
 
+  method! vassigns _ = SkipChildren
+
   method! vlogic_label l =
     if Logic_label.equal l Logic_const.pre_label &&
        self#current_kinstr = Kglobal (* Do not rewrite Pre in stmt annot. *)
