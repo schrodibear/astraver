@@ -1987,59 +1987,65 @@ class pre_old_rewriter =
 
     inherit frama_c_inplace
 
-    val mutable rep_lab = Logic_const.pre_label
-
-    method! vbehavior b =
-      rep_lab <- Logic_const.here_label;
-      let requires = visitFramacPredicates (self :> frama_c_visitor) b.b_requires in
-      let assumes = visitFramacPredicates (self :> frama_c_visitor) b.b_assumes in
-      let allocation =
-        match b.b_allocation with
-        | FreeAllocAny -> FreeAllocAny
-        | FreeAlloc (free, alloc) ->
-          rep_lab <- Logic_const.here_label;
-          let free =
-            List.map
-              (visitFramacIdTerm (self :> frama_c_visitor))
-              free
-          in
-          rep_lab <- Logic_const.old_label;
-          let alloc =
-            List.map
-              (visitFramacIdTerm (self:> frama_c_visitor))
-              alloc
-          in
-          FreeAlloc (free, alloc)
+    method! vbehavior =
+      let label_rewriter ?(in_zone=false) ~pre_to =
+        object
+          inherit frama_c_inplace
+          method! vlogic_label l =
+            if Logic_label.equal l Logic_const.pre_label &&
+               self#current_kinstr = Kglobal (* Do not rewrite Pre in stmt annot. *)
+            then
+              ChangeTo pre_to
+            else if not in_zone && Logic_label.equal l Logic_const.post_label then
+              ChangeTo Logic_const.here_label
+            else
+              DoChildren
+        end
       in
-      (* VP: 2012-09-20: signature of Cil.mk_behavior is utterly broken.
-         We'll have to live with that for Oxygen, but this will change as
-         soon as possible. *)
-      let allocation = Some allocation in
-      rep_lab <- Logic_const.old_label;
-      let assigns = visitFramacAssigns (self :> frama_c_visitor) b.b_assigns in
-      let post_cond =
-        mapNoCopy
-          (fun (k, p as e) ->
-            let p' = visitFramacIdPredicate (self :> frama_c_visitor) p in
-            if p != p' then (k,p') else e)
-          b.b_post_cond
-      in
-      rep_lab <- Logic_const.pre_label;
-      let name = b.b_name in
-      let b = mk_behavior ~name ~requires ~assumes ~assigns ~allocation ~post_cond () in
-      ChangeTo b
-
-  method! vassigns _ = SkipChildren
-
-  method! vlogic_label l =
-    if Logic_label.equal l Logic_const.pre_label &&
-       self#current_kinstr = Kglobal (* Do not rewrite Pre in stmt annot. *)
-    then
-      ChangeTo rep_lab
-    else if Logic_label.equal l Logic_const.post_label then
-      ChangeTo Logic_const.here_label
-    else
-      DoChildren
+      let pre_to_here_rewriter ?in_zone () = label_rewriter ~pre_to:Logic_const.here_label ?in_zone in
+      let pre_to_old_rewriter ?in_zone () = label_rewriter ~pre_to:Logic_const.old_label ?in_zone in
+      fun b ->
+        let requires = visitFramacPredicates (pre_to_here_rewriter ()) b.b_requires in
+        let assumes = visitFramacPredicates (pre_to_here_rewriter ()) b.b_assumes in
+        let allocation =
+          match b.b_allocation with
+          | FreeAllocAny -> FreeAllocAny
+          | FreeAlloc (free, alloc) ->
+            let free =
+              List.map
+                (visitFramacIdTerm
+                   (object
+                     inherit Visitor.frama_c_inplace
+                     method! vlogic_label l =
+                       if Logic_label.equal l Logic_const.here_label
+                       then ChangeTo Logic_const.old_label
+                       else DoChildren
+                   end) %>
+                 visitFramacIdTerm (pre_to_old_rewriter ()))
+                free
+            in
+            let alloc =
+              List.map
+                (visitFramacIdTerm (pre_to_old_rewriter ()))
+                alloc
+            in
+            FreeAlloc (free, alloc)
+        in
+        (* VP: 2012-09-20: signature of Cil.mk_behavior is utterly broken.
+           We'll have to live with that for Oxygen, but this will change as
+           soon as possible. *)
+        let allocation = Some allocation in
+        let assigns = visitFramacAssigns (pre_to_old_rewriter ~in_zone:true ()) b.b_assigns in
+        let post_cond =
+          mapNoCopy
+            (fun (k, p as e) ->
+               let p' = visitFramacIdPredicate (pre_to_old_rewriter ()) p in
+               if p != p' then (k,p') else e)
+            b.b_post_cond
+        in
+        let name = b.b_name in
+        let b = mk_behavior ~name ~requires ~assumes ~assigns ~allocation ~post_cond () in
+        ChangeTo b
 end
 
 let rewrite_pre_old = visitFramacFile (new pre_old_rewriter)

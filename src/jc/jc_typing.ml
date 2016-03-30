@@ -2489,13 +2489,13 @@ let type_labels_in_clause = function
       Option.iter
         (fun (_, x) ->
            List.iter
-             (type_labels [LabelOld; LabelPre; LabelPost]
+             (type_labels [LabelOld; LabelPre; LabelPost; LabelHere]
                 ~result_label:(Some LabelPost) (Some LabelOld)) x)
         assigns;
       Option.iter
         (fun (_, x) ->
            List.iter
-             (type_labels [LabelOld; LabelPre; LabelPost]
+             (type_labels [LabelOld; LabelPre; LabelPost; LabelHere]
 (* warning: allocates L: L evaluated in the post-state *)
                 ~result_label:(Some LabelHere) (Some LabelHere)) x)
         allocates;
