@@ -662,7 +662,19 @@ object
         | Some p -> Some (List.map formal p)
       in
       let rt = if isStructOrUnionType rt then (Type.Ref.singleton rt ~msg:"Norm.vglob_aux(2)" :> typ) else rt in
-      fvi.vtype <- TFun (rt, params, isva, a)
+      let typ = TFun (rt, params, isva, a) in
+      fvi.vtype <- typ;
+      let old_formals = getFormalsDecl fvi in
+      setFormalsDecl fvi typ;
+      List.iter2
+        (fun vi vi' -> if isStructOrUnionType vi.vtype then pairs := (vi, vi') :: !pairs)
+        old_formals
+        (getFormalsDecl fvi);
+      try
+        let kf = Globals.Functions.get fvi in
+        Globals.Functions.add kf.fundec
+      with
+      | Not_found -> ()
     in
     function
     | GVarDecl (_spec, v, _attr) ->
