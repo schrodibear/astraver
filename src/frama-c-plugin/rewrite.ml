@@ -1277,6 +1277,19 @@ class composite_expanding_visitor =
         in
         ChangeTo (Writes lst)
 
+    method vpredicate_named =
+      let open Logic_const in
+      function
+      | { loc;
+          content =
+            Prel (Req | Rneq as r,
+                  ({ term_node = TBinOp (Eq | Ne as b1, t11, t12) } as t1),
+                  ({ term_node = TBinOp (Eq | Ne as b2, t21, t22) } as t2)) } ->
+        let rel r = if r = Eq then Req else Rneq in
+        let p1 = prel ~loc:t1.term_loc (rel b1, t11, t12) and p2 = prel ~loc:t2.term_loc (rel b2, t21, t22) in
+        ChangeDoChildrenPost ((if r = Req then piff else pxor) ~loc (p1, p2), Fn.id)
+      | _ -> DoChildren
+
     method vpredicate = function
       | Prel (Req, ({ term_loc; term_type=ty1 } as t1), ({ term_type=ty2 } as t2)) ->
         let expand1 = is_term_to_expand t1 and expand2 = is_term_to_expand t2 in
@@ -2015,7 +2028,7 @@ class pre_old_rewriter =
               List.map
                 (visitFramacIdTerm
                    (object
-                     inherit Visitor.frama_c_inplace
+                     inherit frama_c_inplace
                      method! vlogic_label l =
                        if Logic_label.equal l Logic_const.here_label
                        then ChangeTo Logic_const.old_label
