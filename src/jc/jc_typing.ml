@@ -2704,12 +2704,11 @@ let rec signed_occurrences pi a =
       let (pos1,neg1) = signed_occurrences pi p1 in
       let (pos2,neg2) = signed_occurrences pi p2 in
       (neg1+pos2,pos1+neg2)
-  | JCAand l ->
+  | JCAand l | JCAor l ->
       List.fold_left
         (fun (p,n) a ->
            let (pos1,neg1) = signed_occurrences pi a in
            (p+pos1,n+neg1)) (0,0) l
-  | JCAor _ -> assert false (* TODO *)
   | JCAat (p, _) | JCAold p -> signed_occurrences pi p
   | JCAnot p ->
       let (pos,neg) = signed_occurrences pi p in
