@@ -826,8 +826,8 @@ let rec mark_predicate ?(recursively=true) ~e ?kind p =
   else
     let mark_predicate = mark_predicate ~e ?kind in
     match p with
-    | (And (p1, p2) : pred) ->
-      mark_predicate' (And (mark_predicate p1, mark_predicate p2))
+    | (And (split, p1, p2) : pred) ->
+      mark_predicate' (And (split, mark_predicate p1, mark_predicate p2))
     | Let (v, p1, p2) ->
       Let (v, p1, mark_predicate p2)
     | Labeled (l, (And _ as p)) | Labeled (l, (Let _ as p)) ->
@@ -2123,7 +2123,8 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
         in
         let inv' =
           O.P.conj
-            (List.map
+            ~split:true
+            (List.rev_map
                (named_predicate
                   ~type_safe:false ~global_assertion:false ~relocate:false
                   LabelHere LabelPre)

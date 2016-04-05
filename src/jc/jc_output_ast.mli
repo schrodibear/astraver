@@ -213,7 +213,7 @@ and 'a logic_type = Type : ('a, 'b) tconstr * 'a ltype_hlist -> 'b logic_type
 
 type pred =
   | True | False
-  | And : pred * pred -> pred
+  | And : [`Split | `Don't_split] * pred * pred -> pred
   | Or : pred * pred -> pred
   | Iff : pred * pred -> pred
   | Not : pred -> pred

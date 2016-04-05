@@ -1332,13 +1332,15 @@ struct
   let (=) = T.(=)
   let (<>) = T.(<>)
 
-  let (&&) p1 p2 =
+  let (&&) ?(split=false) p1 p2 =
     match unlabel p1, unlabel p2 with
     | True, _ -> p2
     | _, True -> p1
     | False, _ -> False
     | _, False -> False
-    | _, _ -> And (p1, p2)
+    | _, _ -> And ((if split then `Split else `Don't_split), p1, p2)
+
+  let (&&!) p1 p2 = (&&) ~split:true p1 p2
 
   let (||) p1 p2 =
     match unlabel p1, unlabel p2 with
@@ -1348,10 +1350,10 @@ struct
     | _, False -> p1
     | _, _ -> Or (p1, p2)
 
-  let rec conj =
+  let rec conj ?split =
     function
     | [] -> True
-    | p :: ps -> p && conj ps
+    | p :: ps -> (&&) ?split p (conj ?split ps)
 
   let rec disj =
     function

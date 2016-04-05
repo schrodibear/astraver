@@ -413,8 +413,10 @@ let rec pred ~entry ~bw_ints ~consts fmttr =
   function
   | True -> pr "true"
   | False -> pr "false"
-  | And (p1, p2) ->
+  | And (`Don't_split, p1, p2) ->
     pr "@[(%a@ /\\@ %a)@]" pred p1 pred p2
+  | And (`Split, p1, p2) ->
+    pr "@[(%a@ &&@ %a)@]" pred p1 pred p2
   | Or (p1, p2) ->
     pr "@[(%a@ \\/@ %a)@]" pred p1 pred p2
   | Iff (p1, p2) ->
@@ -916,7 +918,7 @@ struct
     in
     function
     | True | False -> init
-    | And (p1, p2)
+    | And (_, p1, p2)
     | Or (p1, p2)
     | Iff (p1, p2)
     | Impl (p1, p2) ->
