@@ -156,8 +156,16 @@ let rename_entities file =
   Globals.Vars.iter (fun v _init -> add_variable v);
   Globals.Functions.iter
     (fun kf ->
-       add_variable (Globals.Functions.get_vi kf);
-       List.iter add_variable (Globals.Functions.get_params kf));
+       let vi, params = Globals.Functions.(get_vi kf, get_params kf) in
+       add_variable vi;
+       List.iter add_variable params;
+       let rt, params', is_va, attrs = splitFunctionTypeVI vi in
+       let params' =
+         Option.map
+           (List.map2 (fun vi (_, _, attrs) -> vi.vname, vi.vtype, addAttributes attrs vi.vattr) params)
+           params'
+       in
+       vi.vtype <- TFun (rt, params', is_va, attrs));
   (* preprocess of renaming logic functions  *)
   Logic_env.Logic_info.iter
     (fun name _li ->
