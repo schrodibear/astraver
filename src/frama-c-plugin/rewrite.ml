@@ -1030,6 +1030,7 @@ class specialize_blockfuns_visitor =
 
     val mutable new_globals = []
     val mutable introduced_globals = []
+    val mutable old_globals = []
 
     method private update_logic_info typ (*li*) =
       let get_specialized_name = get_specialized_name typ in
@@ -1040,16 +1041,34 @@ class specialize_blockfuns_visitor =
         | _ -> false
       in
       fun ({ l_var_info={ lv_name } } as li) ->
+        let lv_name' = get_specialized_name lv_name in
+        let match_global' = match_global_with_lvar_name lv_name' in
+        let rec find_li' =
+          function
+          | GAnnot (Dfun_or_pred (li, _), _) -> li
+          | GAnnot (Daxiomatic (_, lst, loc), _) ->
+            find_li' (List.find match_global' (List.map (fun ga -> GAnnot (ga, loc)) lst))
+          | _ -> assert false
+        in
+        let handle_user_decl li' =
+          if List.exists match_global' old_globals then
+            let li = find_li' (List.find match_global' old_globals) in
+            if Logic_utils.(
+              is_same_logic_profile li li' &&
+              Option.equal is_same_type li.l_type li'.l_type) &&
+               List.(length li.l_labels = length li'.l_labels)
+            then
+              if li.l_body = LBnone then begin
+                li.l_profile <- li'.l_profile;
+                li.l_body <- li'.l_body
+              end else
+                Console.abort "Can't specialize logic function/predicate `%s' to `%s': it already has a definition"
+                  lv_name (get_specialized_name lv_name)
+        in
         try
-          let match_global = match_global_with_lvar_name (get_specialized_name lv_name) in
-          let rec find_li =
-            function
-            | GAnnot (Dfun_or_pred (li, _), _) -> li
-            | GAnnot (Daxiomatic (_, lst, loc), _) ->
-              find_li (List.find match_global (List.map (fun ga -> GAnnot (ga, loc)) lst))
-            | _ -> assert false
-          in
-          find_li (List.find match_global @@ new_globals @ introduced_globals)
+          let result = find_li' (List.find match_global' @@ new_globals @ introduced_globals) in
+          handle_user_decl result;
+          result
         with
         | Not_found ->
           let match_global = match_global_with_lvar_name lv_name in
@@ -1071,6 +1090,11 @@ class specialize_blockfuns_visitor =
                     Dfun_or_pred (li, loc)
                   | _ -> Console.fatal "Can't specialize unknown logic info in axiomatic: %s" name)
             in
+            handle_user_decl
+              (Option.value_fatal ~in_:"specialize_blockfuns_visitor:update_logic_info" @@
+               List.find_map
+                 ~f:(function Dfun_or_pred (li, _) when li.l_var_info.lv_name = lv_name' -> Some li | _ -> None)
+                 lst);
             let g = Daxiomatic (name, lst, Location.unknown) in
             new_globals <- GAnnot (g, CurrentLoc.get ()) :: new_globals;
             Annotations.add_global Emitters.jessie g;
@@ -1174,6 +1198,10 @@ class specialize_blockfuns_visitor =
         let saved_globals = new_globals in
         new_globals <-[];
         saved_globals @ globals)
+
+    method! vfile f =
+      old_globals <- f.globals;
+      DoChildren
   end
 
 let specialize_blockfuns file =

@@ -154,6 +154,7 @@ sig
   val value_exn : exn:exn -> 'a option -> 'a
   val value_fatal : in_:string -> 'a option -> 'a
   val compare : cmp:('a -> 'b -> int) -> 'a option -> 'b option -> int
+  val equal : eq:('a -> 'b -> bool) -> 'a option -> 'b option -> bool
 
   val abort : 'a option
   val map : f:('a -> 'b) -> 'a option -> 'b option

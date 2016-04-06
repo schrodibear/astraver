@@ -284,6 +284,13 @@ struct
     | Some _, None -> 1
     | None, None -> 0
 
+  let equal ~eq a b =
+    match a, b with
+    | Some a, Some b -> eq a b
+    | None, Some _
+    | Some _, None -> false
+    | None, None -> true
+
   include
     (Monad.Make_subst
        (struct
