@@ -1889,7 +1889,12 @@ class unions_translator =
     let sname = Name.unique (fi.fname ^ "P") in
     let fname = Name.unique (fi.fname ^ "M") in
     let padding = Option.value_fatal ~in_:__LOC__ fi.fpadding_in_bits in
-    let mcomp = (Type.Composite.Ci.Struct.singleton ~padding ~sname ~fname fi.ftype :> compinfo) in
+    let mcomp =
+      let ci = (Type.Composite.Ci.Struct.singleton ~padding ~sname ~fname fi.ftype :> compinfo) in
+      let fi = List.hd ci.cfields in
+      fi.fattr <- addAttribute (Attr (Name.Attr.noembed, [])) fi.fattr;
+      ci
+    in
     let tdef = GCompTag (mcomp, CurrentLoc.get ()) in
     let tdecl = TComp (mcomp, empty_size_cache (), []) in
     Htbl_ty.add generated_union_types tdecl ();
@@ -2083,12 +2088,12 @@ let normalize file =
   apply expand_struct_assign "expanding structure copying through assignment";
   (* Fill offset/size information in fields *)
   apply fill_offset_size_in_fields "filling offset/size information in fields";
-  (* Translate union fields into structures. *)
-  apply translate_unions  "translate union fields into structures";
   (* Retype fields of type structure and array. *)
   (* order: after [expand_struct_assign] and [retype_address_taken]
    * before [translate_unions] *)
   apply retype_fields "retype fields of type structure and array";
+  (* Translate union fields into structures. *)
+  apply translate_unions "translate union fields into structures";
   (* Retype fields of type structure and array. *)
   (* order: after [translate_unions] *)
   apply retype_fields "retyping fields of type structure and array";
