@@ -1190,6 +1190,12 @@ let old_to_pre_term =
          new term_with ~node:(JCTat (t', LabelPre)) t
        | JCTderef (t', LabelOld, fi) ->
          new term_with ~node:(JCTderef (t', LabelPre, fi)) t
+       | JCTdowncast (t', LabelOld, si) ->
+         new term_with ~node:(JCTdowncast (t', LabelPre, si)) t
+       | JCTinstanceof (t', LabelOld, si) ->
+         new term_with ~node:(JCTinstanceof (t', LabelPre, si)) t
+       | JCTsidecast (t', LabelOld, si) ->
+         new term_with ~node:(JCTsidecast (t', LabelPre, si)) t
        | _ -> t)
 
 let rec old_to_pre_lset lset =
