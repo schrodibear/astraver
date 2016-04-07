@@ -664,12 +664,19 @@ object
       let rt = if isStructOrUnionType rt then (Type.Ref.singleton rt ~msg:"Norm.vglob_aux(2)" :> typ) else rt in
       let typ = TFun (rt, params, isva, a) in
       fvi.vtype <- typ;
-      let old_formals = getFormalsDecl fvi in
-      setFormalsDecl fvi typ;
-      List.iter2
-        (fun vi vi' -> if isStructOrUnionType vi.vtype then pairs := (vi, vi') :: !pairs)
-        old_formals
-        (getFormalsDecl fvi);
+      unsafeSetFormalsDecl fvi @@
+        Option.map_default
+          params
+          ~default:[]
+          ~f:(List.map2
+                (fun vi (name, typ, _) ->
+                   if not (Cil_datatype.Typ.equal vi.vtype typ) then
+                     let vi' = copyVarinfo vi name in
+                     vi'.vtype <- typ;
+                     pairs := (vi, vi') :: !pairs;
+                     vi'
+                   else vi)
+                (getFormalsDecl fvi));
       try
         let kf = Globals.Functions.get fvi in
         Globals.Functions.add kf.fundec
