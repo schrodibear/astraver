@@ -1121,14 +1121,7 @@ object
                 attach_globinit ast;
            *)
           (* Define a global validity invariant *)
-          let p =
-            Logic_const.pvalid_range
-              ~loc:v.vdecl
-              (label_here,
-               variable_term v.vdecl (cvar_to_lvar v),
-               constant_term v.vdecl Integer.zero,
-               constant_term v.vdecl Integer.zero)
-          in
+          let p = Logic_const.pvalid ~loc:v.vdecl (label_here, variable_term v.vdecl (cvar_to_lvar v)) in
           let globinv = Cil_const.make_logic_info @@ Name.Logic.unique ("valid_" ^ v.vname) in
           globinv.l_labels <- [label_here];
           globinv.l_body <- LBpred p;
