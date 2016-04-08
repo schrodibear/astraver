@@ -782,7 +782,10 @@ and terms ?(in_zone=false) t =
     | Tlambda _ ->
       Console.unsupported "Jessie plugin does not support lambda abstraction"
     | Ttypeof _ | Ttype _ -> assert false (* Should have been treated *)
-    | Trange (low, high) -> [JCPErange(opt_map term low,opt_map term high)]
+    | Trange (low, high) ->
+      let coerce t = if t.term_type = Linteger then t else { t with term_node = TLogic_coerce(Linteger, t) } in
+      let low, high = map_pair (opt_map coerce) (low, high) in
+      [JCPErange(opt_map term low,opt_map term high)]
     | Tunion l ->
       List.map (fun x -> x#node) (List.flatten (List.map terms l))
     | Tcomprehension _ -> Console.unsupported "sets by comprehension"
