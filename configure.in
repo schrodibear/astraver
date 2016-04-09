@@ -309,21 +309,21 @@ if test "$WHY3" = no ; then
   AC_MSG_WARN($WHY3MSG)
 else
   AC_MSG_CHECKING(Why3 version)
-  WHY3VERSION=`why3 --version | sed -n -e 's|.*version \([[^ ]]\+\) .*$|\1|p'`
+  WHY3VERSION=`why3 --version | sed -n -e 's|.*version \(@<:@^ @:>@@<:@^ @:>@*\) .*$|\1|p'`
   case $WHY3VERSION in
-  0.83|0.84|0.85|0.85+git|0.86*)
+  0.83|0.84|0.85|0.85+git|0.86*|0.87*)
       AC_MSG_RESULT($WHY3VERSION)
       ;;
-  0.6*|0.7*|0.8*)
+  0.6*|0.7*|0.80|0.81|0.82)
       AC_MSG_RESULT($WHY3VERSION)
       WHY3="no"
-      WHY3MSG="version $WHY3VERSION too old, why3 support discarded"
+      WHY3MSG="Why3 version $WHY3VERSION is too old"
       AC_MSG_WARN($WHY3MSG)
       ;;
   *)
       AC_MSG_RESULT($WHY3VERSION)
       WHY3="no"
-      WHY3MSG="unknown version $WHY3VERSION, why3 support discarded"
+      WHY3MSG="Why3 version $WHY3VERSION is unknown"
       AC_MSG_WARN($WHY3MSG)
       ;;
   esac
