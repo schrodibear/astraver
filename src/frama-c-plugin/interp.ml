@@ -581,8 +581,17 @@ let rec coerce_floats t =
     else
       terms t
 
-and terms ?(in_zone=false) t =
+and terms ?(in_zone=false) ?default_label t =
   CurrentLoc.set t.term_loc;
+  let term, terms, default_label =
+    let default_label, for_current_term =
+      let arg f = Option.map default_label ~f:(fun (`Force l | `Use l) -> f l) in
+      match t.term_node with
+      | Toffset (l, _) | Toffset_min (l, _) | Toffset_max (l, _) -> arg (fun l -> `Force l), Some (`Force l)
+      | _                                                        -> arg (fun l -> `Use l), default_label
+    in
+    term ?default_label, terms ?default_label, for_current_term
+  in
   let enode =
     match constFoldTermNodeAtTop t.term_node with
     | TConst c -> [logic_const t.term_loc c]
@@ -597,27 +606,14 @@ and terms ?(in_zone=false) t =
       List.map (fun x -> JCPEapp (ctor.ctor_name, [], x)) args
     | TUpdate _ -> Console.unsupported "logic update"
     | Toffset _ -> Console.unsupported "logic offset"
-    | Toffset_max (lab, t1) | Toffset_min (lab, t1) as tnode ->
-      let label_here = LogicLabel (None, "Here") in
-      let f, offset_kind =
+    | Toffset_max (_, t1) | Toffset_min (_, t1) as tnode ->
+      let offset_kind =
         match tnode with
-        | Toffset_max _ -> (fun x -> { t with term_node = Toffset_max (label_here, x) }), Offset_max
-        | Toffset_min _ -> (fun x -> { t with term_node = Toffset_min (label_here, x) }), Offset_min
+        | Toffset_max _ -> Offset_max
+        | Toffset_min _ -> Offset_min
         | _ -> assert false
       in
-      let label_name =
-        match lab with
-        | LogicLabel (_, lab) -> lab
-        | StmtLabel sref -> label (List.hd (filter_out is_case_label !sref.labels))
-      in
-      let f, start =
-        match label_name with
-        | "Here" -> (fun x -> JCPEoffset (offset_kind, x)), terms t1
-        | _ ->
-          (fun x -> JCPEat (x, logic_label lab)),
-          terms (f {t1 with term_node = (Tat (t1, lab))})
-      in
-      List.map f start
+      List.map (fun x -> JCPEoffset (offset_kind, x)) @@ terms t1
     | TLval lv ->
       List.map (fun x -> x#node) (terms_lval t.term_loc lv)
 
@@ -795,6 +791,11 @@ and terms ?(in_zone=false) t =
     | TLogic_coerce (Linteger, t) -> List.map (fun x -> JCPEcast (x, mktype @@ JCPTnative Tinteger)) (terms t)
     | TLogic_coerce (_, t) -> List.map (fun x -> x#node) (terms t)
   in
+  let enode =
+    match default_label with
+    | Some (`Force l) -> List.map (fun e -> JCPEat (mkexpr e t.term_loc, logic_label l)) enode
+    | _ -> enode
+  in
   List.map (Fn.flip mkexpr t.term_loc) enode
 
 and tag t =
@@ -876,14 +877,14 @@ and terms_lval pos lv =
     Console.unsupported "cannot interpret this lvalue: %a"
       Printer.pp_term_lval lv
 
-and term t =
-  match terms t with
+and term ?default_label t =
+  match terms ?default_label t with
   | [ t ] -> t
   | _ ->
     Console.unsupported "Expecting a single term, not a set:@ %a@."
       Printer.pp_term t
 
-and pred p =
+and pred ?default_label p =
   CurrentLoc.set p.loc;
   let rec expand_embedded t =
     Type.Logic_c_type.map_default ~default:[t] t.term_type ~f:(fun ty ->
@@ -899,6 +900,15 @@ and pred p =
               else None)
             ci.cfields)
       | _ -> [t])
+  in
+  let term, terms, default_label =
+    let default_label, for_current_pred =
+      let arg f = Option.map default_label ~f:(fun (`Force l | `Use l) -> f l) in
+      match p.content with
+      | Pvalid (l, _) -> arg (fun l -> `Force l), Some (`Force l)
+      | _             -> arg (fun l -> `Use l), default_label
+    in
+    term ?default_label, terms ?default_label, for_current_pred
   in
   let enode =
     match p.content with
@@ -1099,14 +1109,21 @@ and pred p =
 
     | Pinitialized _ -> Console.unsupported "\\initialized predicate is unsupported"
   in
+  let enode =
+    match default_label with
+    | Some (`Force l) -> JCPEat (mkexpr enode p.loc, logic_label l)
+    | _ -> enode
+  in
   mkexpr enode p.loc
 
 (* Keep names associated to predicate *)
-let named_pred p = List.fold_right (fun lab p -> mkexpr (JCPElabel(lab,p)) p#pos) p.name (pred p)
+let named_pred ?default_label p =
+  List.fold_right (fun lab p -> mkexpr (JCPElabel(lab,p)) p#pos) p.name (pred ?default_label p)
 
-let conjunct pos pl = mkconjunct (List.map (pred % Logic_const.pred_of_id_pred) pl) pos
+let conjunct ?default_label pos pl =
+  mkconjunct (List.map (pred ?default_label % Logic_const.pred_of_id_pred) pl) pos
 
-let zone (tset, _) = terms ~in_zone:true tset.it_content
+let zone ?default_label (tset, _) = terms ?default_label ~in_zone:true tset.it_content
 
 (* Distinguish between:
  * - no assign, which is the empty list in Cil and None in Jessie
@@ -2117,8 +2134,18 @@ let logic_variable v =
   ltype v.lv_type, name
 
 let rec annotation is_axiomatic annot =
+  let default_label labs =
+    match labs with
+    | [l] -> Some (`Use l)
+    | _ -> None
+  in
   match annot with
   | Dfun_or_pred (info,pos) ->
+      let pred' = pred in
+      let term, terms, pred =
+        let default_label = default_label info.l_labels in
+        term ?default_label, terms ?default_label, pred ?default_label
+      in
       CurrentLoc.set pos;
       begin
         try
@@ -2134,9 +2161,12 @@ let rec annotation is_axiomatic annot =
               JCreads reads
           | LBpred p -> JCexpr(pred p)
           | LBinductive indcases ->
-              let l = List.map
-                (fun (id,labs,_poly,p) ->
-                   (new identifier id,logic_labels labs,pred p)) indcases
+              let l =
+                List.map
+                  (fun (id,labs,_poly,p) ->
+                     let pred = pred' ?default_label:(default_label labs) in
+                     (new identifier id,logic_labels labs,pred p))
+                  indcases
               in
               JCinductive l
           | LBterm t ->
@@ -2177,6 +2207,7 @@ let rec annotation is_axiomatic annot =
       end
 
   | Dlemma (name, is_axiom, labels, _poly, property, pos) ->
+      let pred = pred ?default_label:(default_label labels) in
       CurrentLoc.set pos;
       ignore
         (reg_position ~id:name
