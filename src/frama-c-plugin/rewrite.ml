@@ -588,7 +588,7 @@ class global_const_handler ~attach =
     method! vglob_aux =
       function
       | GVar (v, { init = Some (SingleInit e) }, _) as g
-        when typeHasAttribute "const" v.vtype && isIntegerConstant e ->
+        when typeHasAttribute "const" v.vtype && Option.is_some @@ possible_value_of_integral_expr e ->
         let globinv = Cil_const.make_logic_info (Name.Logic.unique ("__value_of_" ^ v.vname)) in
         globinv.l_labels <- [LogicLabel (None, "Here")];
         globinv.l_body <- LBpred (
