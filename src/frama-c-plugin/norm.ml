@@ -664,21 +664,23 @@ object
       let rt = if isStructOrUnionType rt then (Type.Ref.singleton rt ~msg:"Norm.vglob_aux(2)" :> typ) else rt in
       let typ = TFun (rt, params, isva, a) in
       fvi.vtype <- typ;
-      unsafeSetFormalsDecl fvi @@
-        Option.map_default
-          params
-          ~default:[]
-          ~f:(List.map2
-                (fun vi (name, typ, _) ->
-                   if not (Cil_datatype.Typ.equal vi.vtype typ) then
-                     let vi' = copyVarinfo vi name in
-                     vi'.vtype <- typ;
-                     pairs := (vi, vi') :: !pairs;
-                     vi'
-                   else vi)
-                (getFormalsDecl fvi));
       try
         let kf = Globals.Functions.get fvi in
+        unsafeSetFormalsDecl fvi @@
+          Option.map_default
+            params
+            ~default:[]
+            ~f:(List.map2
+                  (fun vi (name, typ, _) ->
+                     if not (Cil_datatype.Typ.equal vi.vtype typ) then
+                       let vi' = copyVarinfo vi name in
+                       vi'.vtype <- typ;
+                       pairs := (vi, vi') :: !pairs;
+                       vi'
+                     else vi)
+                  (try getFormalsDecl fvi with Not_found -> Globals.Functions.get_params kf));
+        (* ?! Workaround for unknown breakage of sharing invariant *)
+        (match kf.fundec with Declaration (spec, _, _, _) -> kf.spec <- spec | _ -> ());
         Globals.Functions.add kf.fundec
       with
       | Not_found -> ()
