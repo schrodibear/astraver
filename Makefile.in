@@ -205,7 +205,7 @@ lib/why3/why3.conf:  lib/why3/cvc4.drv lib/why3/z3.drv lib/why3/alt-ergo.drv lib
 	@printf "in_place = false\n" >> $@
 	@printf "interactive = false\n" >> $@
 	@printf "name = \"CVC4\"\n" >> $@
-	@printf "version = \"1.4\"\n" >> $@
+	@printf "version = \">=1.4\"\n" >> $@
 	@printf "\n" >> $@
 
 	@printf "[prover]\n" >> $@
