@@ -570,7 +570,8 @@ let term_lhost pos =
 let product f t1 t2 =
   List.fold_right (fun x acc -> List.fold_right (fun y acc -> f x y :: acc) t2 acc) t1 []
 
-let rec coerce_floats t =
+let rec coerce_floats ~default_label t =
+  let terms = terms ~default_label in
   match !float_model with
   | `Math -> terms t
   | `Defensive | `Full | `Multirounding ->
@@ -581,16 +582,21 @@ let rec coerce_floats t =
     else
       terms t
 
-and terms ?(in_zone=false) ?default_label t =
+and terms ?(in_zone=false) ~default_label t =
   CurrentLoc.set t.term_loc;
-  let term, terms, default_label =
+  let term, terms, coerce_floats, terms_lval, default_label, terms_at =
     let default_label, for_current_term =
-      let arg f = Option.map default_label ~f:(fun (`Force l | `Use l) -> f l) in
+      let arg f = match default_label with `Force l | `Use l -> f l in
       match t.term_node with
-      | Toffset (l, _) | Toffset_min (l, _) | Toffset_max (l, _) -> arg (fun l -> `Force l), Some (`Force l)
+      | Toffset (l, _) | Toffset_min (l, _) | Toffset_max (l, _) -> arg (fun l -> `Force l), `Force l
       | _                                                        -> arg (fun l -> `Use l), default_label
     in
-    term ?default_label, terms ?default_label, for_current_term
+    term ~default_label,
+    terms ~default_label,
+    coerce_floats ~default_label,
+    terms_lval ~default_label,
+    for_current_term,
+    fun l -> terms ~default_label:(match default_label with `Use _ -> `Use l | `Force _ -> `Force l)
   in
   let enode =
     match constFoldTermNodeAtTop t.term_node with
@@ -751,7 +757,7 @@ and terms ?(in_zone=false) ?default_label t =
       let t1 = terms t1 in let t2 = terms t2 in let t3 = terms t3 in
       product (fun f x -> f x) (product (fun x y z -> JCPEif(x,y,z)) t1 t2) t3
 
-    | Tat(t,lab) -> List.map (fun x -> JCPEat (x, logic_label lab)) (terms t)
+    | Tat(t,lab) -> List.map (fun x -> JCPEat (x, logic_label lab)) (terms_at lab t)
     | Tbase_addr (_lab,t) -> List.map (fun x -> JCPEbase_block x) (terms t)
     | Tblock_length (_lab,_t) -> Console.unsupported "\\block_length operator"
     | Tnull -> [JCPEconst JCCnull]
@@ -765,7 +771,7 @@ and terms ?(in_zone=false) ?default_label t =
           let typ = ltype v.lv_type in
           [JCPElet(Some typ, v.lv_name, Some jc_def, jc_body)]
         | LBpred p, [] ->
-          let jc_def = pred p in
+          let jc_def = pred ~default_label p in
           let jc_body = term body in
           [JCPElet(None,v.lv_name, Some jc_def, jc_body)]
         | (LBterm _ | LBpred _), _::_ ->
@@ -793,15 +799,15 @@ and terms ?(in_zone=false) ?default_label t =
   in
   let enode =
     match default_label with
-    | Some (`Force l) -> List.map (fun e -> JCPEat (mkexpr e t.term_loc, logic_label l)) enode
+    | `Force l -> List.map (fun e -> JCPEat (mkexpr e t.term_loc, logic_label l)) enode
     | _ -> enode
   in
   List.map (Fn.flip mkexpr t.term_loc) enode
 
-and tag t =
+and tag ~default_label t =
   let tag_node =
     match t.term_node with
-    | Ttypeof t -> JCPTtypeof (term t)
+    | Ttypeof t -> JCPTtypeof (term ~default_label t)
     | Ttype ty ->
       let id = mkidentifier Type.Composite.(compinfo_cname @@ of_typ_exn @@ pointed_type ty) t.term_loc in
       JCPTtag id
@@ -811,7 +817,8 @@ and tag t =
   in
   mktag tag_node t.term_loc
 
-and terms_lval pos lv =
+and terms_lval ~default_label pos lv =
+  let terms = terms ~default_label in
   match lv with
   | lhost, TNoOffset -> [term_lhost pos lhost]
 
@@ -877,14 +884,14 @@ and terms_lval pos lv =
     Console.unsupported "cannot interpret this lvalue: %a"
       Printer.pp_term_lval lv
 
-and term ?default_label t =
-  match terms ?default_label t with
+and term ~default_label t =
+  match terms ~default_label t with
   | [ t ] -> t
   | _ ->
     Console.unsupported "Expecting a single term, not a set:@ %a@."
       Printer.pp_term t
 
-and pred ?default_label p =
+and pred ~default_label p =
   CurrentLoc.set p.loc;
   let rec expand_embedded t =
     Type.Logic_c_type.map_default ~default:[t] t.term_type ~f:(fun ty ->
@@ -901,14 +908,20 @@ and pred ?default_label p =
             ci.cfields)
       | _ -> [t])
   in
-  let term, terms, default_label =
+  let term, terms, coerce_floats, tag, pred, default_label, pred_at =
     let default_label, for_current_pred =
-      let arg f = Option.map default_label ~f:(fun (`Force l | `Use l) -> f l) in
+      let arg f = match default_label with `Force l | `Use l -> f l in
       match p.content with
-      | Pvalid (l, _) -> arg (fun l -> `Force l), Some (`Force l)
+      | Pvalid (l, _) -> arg (fun l -> `Force l), `Force l
       | _             -> arg (fun l -> `Use l), default_label
     in
-    term ?default_label, terms ?default_label, for_current_pred
+    term ~default_label,
+    terms ~default_label,
+    coerce_floats ~default_label,
+    tag ~default_label,
+    pred ~default_label,
+    for_current_pred,
+    fun l -> pred ~default_label:(match default_label with `Force _ -> `Force l | `Use _ -> `Use l)
   in
   let enode =
     match p.content with
@@ -1016,7 +1029,10 @@ and pred ?default_label p =
       let newp = { p with content = Pexists(q,subp) } in
       JCPEquantifier (Exists,ltype v.lv_type, [new identifier v.lv_name], [], pred newp)
 
-    | Pat (p, lab) -> JCPEat (pred p, logic_label lab)
+    | Pat (p, lab) -> JCPEat (pred_at lab p, logic_label lab)
+
+    | Pvalid (lab, { term_node = Tat (t, lab') }) ->
+      (pred { p with content = Pat ({ p with content = Pvalid (lab, t) }, lab') })#node
 
     | Pvalid (_lab,
               { term_node = TBinOp (PlusPI, t1,
@@ -1111,19 +1127,26 @@ and pred ?default_label p =
   in
   let enode =
     match default_label with
-    | Some (`Force l) -> JCPEat (mkexpr enode p.loc, logic_label l)
+    | `Force l -> JCPEat (mkexpr enode p.loc, logic_label l)
     | _ -> enode
   in
   mkexpr enode p.loc
 
+let terms ?(default_label=Logic_const.here_label) = terms ~default_label:(`Use default_label)
+
+let term ?(default_label=Logic_const.here_label) = term ~default_label:(`Use default_label)
+
+let pred ?(default_label=Logic_const.here_label) = pred ~default_label:(`Use default_label)
+
 (* Keep names associated to predicate *)
-let named_pred ?default_label p =
-  List.fold_right (fun lab p -> mkexpr (JCPElabel(lab,p)) p#pos) p.name (pred ?default_label p)
+let named_pred ?(default_label=Logic_const.here_label) p =
+  List.fold_right (fun lab p -> mkexpr (JCPElabel(lab,p)) p#pos) p.name (pred ~default_label p)
 
-let conjunct ?default_label pos pl =
-  mkconjunct (List.map (pred ?default_label % Logic_const.pred_of_id_pred) pl) pos
+let conjunct ?(default_label=Logic_const.here_label) pos pl =
+  mkconjunct (List.map (pred ~default_label % Logic_const.pred_of_id_pred) pl) pos
 
-let zone ?default_label (tset, _) = terms ?default_label ~in_zone:true tset.it_content
+let zone ?(default_label=Logic_const.here_label) (tset, _) =
+  terms ~default_label ~in_zone:true tset.it_content
 
 (* Distinguish between:
  * - no assign, which is the empty list in Cil and None in Jessie
@@ -1144,21 +1167,17 @@ let assigns =
 let allocates a =
   match a with
   | FreeAllocAny -> None
-  | FreeAlloc (frees, alloc) ->
+  | FreeAlloc (frees, allocs) ->
     let frees =
       List.map
         (fun t -> Logic_const.({ t with it_content = tat ~loc:t.it_content.term_loc (t.it_content, old_label) }))
         frees
     in
-    let assign_list =
-      List.fold_left
-          (fun acc out ->
-          (out, 1) :: acc)
-          []
-          (alloc @ frees)
+    let allocs, frees = map_pair (List.fold_left (fun acc out -> (out, 1) :: acc) []) (allocs, frees) in
+    let result =
+      List.flatten @@ List.map zone allocs @ List.map (zone ~default_label:Logic_const.old_label) frees
     in
-    let assign_list = List.flatten (List.map zone assign_list) in
-    Some (Why_loc.dummy_position, assign_list)
+    Some (Why_loc.dummy_position, result)
 
 let spec _fname funspec =
   let is_normal_postcond =
@@ -2136,7 +2155,7 @@ let logic_variable v =
 let rec annotation is_axiomatic annot =
   let default_label labs =
     match labs with
-    | [l] -> Some (`Use l)
+    | [l] -> Some l
     | _ -> None
   in
   match annot with
