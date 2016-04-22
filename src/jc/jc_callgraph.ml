@@ -151,10 +151,10 @@ let compute_axiomatic_calls a =
 let compute_logic_calls f t =
   let calls =
     match t with
-      | JCNone -> []
       | JCTerm t -> term [] t
       | JCAssertion a -> assertion [] a
-      | JCReads _r ->
+      | JCNone
+      | JCReads _ ->
 	  begin
 	    match f.li_axiomatic with
 	      | None -> []
