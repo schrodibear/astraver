@@ -46,6 +46,7 @@ type vc_kind =
   | JCVCuser_call of string
   | JCVCdiv_by_zero
   | JCVCalloc_size
+  | JCVCenum_cast
   | JCVCfp_overflow
   | JCVCpre of string
   | JCVCassigns

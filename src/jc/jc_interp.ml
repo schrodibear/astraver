@@ -333,11 +333,14 @@ let float_of_real (type a) (f : a precision) x =
 let rec coerce :
   type a b ax bx c d. (b, c) ty_opt -> (a, d) ty_opt -> (a, b, ax, bx) form -> ?modulo:bool -> e:_ -> e1:_ -> ax -> bx =
   fun ty_dst ty_src form ->
-    let apply : (a * unit, b) func -> ax -> bx =
-      fun f e ->
+    let apply : (a * unit, b) func -> ?label:_ -> ax -> bx =
+      fun f ?label e ->
+        let opt_locate (locate : _ -> ?behavior:_ -> ?kind:_ -> _) r =
+          Option.map_default ~default:r ~f:(fun (x, kind) -> locate x ?behavior:None ~kind r) label
+        in
       match form with
-      | Term -> O.T.(f $. e)
-      | Expr -> O.E.(f $. e)
+      | Term -> O.T.(opt_locate (fun t -> T.locate ~t) (f $. e))
+      | Expr -> O.E.(opt_locate (fun e -> E.locate ~e) (f $. e))
     in
     let return (e : ax) : bx =
       match form, ty_dst, ty_src with
@@ -359,7 +362,7 @@ let rec coerce :
     in
     fun ?(modulo=false) ~e ~e1 e' ->
       let modulo = if modulo then `Modulo else `Check in
-      let apply' f = apply f e' in
+      let apply' ?label f = apply f ?label e' in
       let return () = return e' in
       match ty_src, ty_dst with
       | Any, Any when
@@ -403,7 +406,7 @@ let rec coerce :
       | Ty (Numeric (Integral (Enum (module E1) as e1))), Ty (Numeric (Integral (Enum (module E2) as e2))) ->
         begin match E1.E with
           | E2.E -> return ()
-          | _ -> apply' @@ Cast (e2, e1, modulo)
+          | _ -> apply' ~label:(e, JCVCenum_cast) @@ Cast (e2, e1, modulo)
         end
       | Ty (Numeric (Integral (Int (r1, b1) as i1))), Ty (Numeric (Integral (Int (r2, b2) as i2))) ->
         begin match r1, b1, r2, b2 with
@@ -415,16 +418,16 @@ let rec coerce :
         | Unsigned, X32, Unsigned, X32 -> return ()
         | Signed, X64, Signed, X64 -> return ()
         | Unsigned, X64, Unsigned, X64 -> return ()
-        | _ -> apply' @@ Cast (i2, i1, modulo)
+        | _ -> apply' ~label:(e, JCVCenum_cast) @@ Cast (i2, i1, modulo)
         end
       | Ty (Numeric (Integral (Enum _ as e1))), Ty (Numeric (Integral (Int _ as i2))) ->
-        apply' @@ Cast (i2, e1, modulo)
+        apply' ~label:(e, JCVCenum_cast) @@ Cast (i2, e1, modulo)
       | Ty (Numeric (Integral (Int _ as i1))), Ty (Numeric (Integral (Enum _ as e2))) ->
-        apply' @@ Cast (e2, i1, modulo)
+        apply' ~label:(e, JCVCenum_cast) @@ Cast (e2, i1, modulo)
       | Ty (Numeric (Integral Integer)), Ty (Numeric (Integral (Int _ as i))) ->
-        apply' @@ Of_int (i, modulo)
-      | Ty (Numeric (Integral Integer)), Ty (Numeric (Integral (Enum _ as e))) ->
-        apply' @@ Of_int (e, modulo)
+        apply' ~label:(e, JCVCenum_cast) @@ Of_int (i, modulo)
+      | Ty (Numeric (Integral Integer)), Ty (Numeric (Integral (Enum _ as e'))) ->
+        apply' ~label:(e, JCVCenum_cast) @@ Of_int (e', modulo)
       | Ty (Numeric (Integral (Int _ as i))), Ty (Numeric (Integral Integer))  ->
         apply' @@ To_int i
       | Ty (Numeric (Integral (Enum _ as e))), Ty (Numeric (Integral Integer))  ->

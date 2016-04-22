@@ -227,6 +227,7 @@ let vc_kind fmttr k =
      | JCVCvar_decr -> "Variant decreases"
      | JCVCdiv_by_zero -> "Division by zero"
      | JCVCalloc_size -> "Allocation size"
+     | JCVCenum_cast -> "Integer cast"
      | JCVCuser_call n -> "Precondition for " ^ n
      | JCVCpointer_deref -> "Pointer dereference"
      | JCVCpointer_deref_bounds -> "Bounded pointer dereference"
