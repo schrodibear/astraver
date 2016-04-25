@@ -799,7 +799,13 @@ and terms ?(in_zone=false) ~default_label t =
   in
   let enode =
     match default_label with
-    | `Force l -> List.map (fun e -> JCPEat (mkexpr e t.term_loc, logic_label l)) enode
+    | `Force l ->
+      List.map
+        (fun e ->
+           match e with
+           | JCPEat _ -> e
+           | _ -> JCPEat (mkexpr e t.term_loc, logic_label l))
+        enode
     | _ -> enode
   in
   List.map (Fn.flip mkexpr t.term_loc) enode
@@ -1126,8 +1132,9 @@ and pred ~default_label p =
     | Pinitialized _ -> Console.unsupported "\\initialized predicate is unsupported"
   in
   let enode =
-    match default_label with
-    | `Force l -> JCPEat (mkexpr enode p.loc, logic_label l)
+    match default_label, enode with
+    | `Force _, JCPEat _ -> enode
+    | `Force l, _ -> JCPEat (mkexpr enode p.loc, logic_label l)
     | _ -> enode
   in
   mkexpr enode p.loc
@@ -2155,8 +2162,8 @@ let logic_variable v =
 let rec annotation is_axiomatic annot =
   let default_label labs =
     match labs with
-    | [l] -> Some l
-    | _ -> None
+    | [] -> None
+    | l :: _ -> Some l
   in
   match annot with
   | Dfun_or_pred (info,pos) ->
