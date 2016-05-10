@@ -307,7 +307,7 @@ let ef_assoc ?label_assoc ~region_assoc ~region_mem_assoc ef =
                (fun (ac, _r) acc ->
                   if not (Region.polymorphic locr) then
                     add_constant_alloc_table (ac, locr);
-                  AllocMap.add (ac, locr) labs acc)
+                  AllocMap.add_merge LogicLabelSet.union (ac, locr) labs acc)
                allocs
                acc)
         ef.e_alloc_tables
@@ -324,7 +324,7 @@ let ef_assoc ?label_assoc ~region_assoc ~region_mem_assoc ef =
                    (fun (vi, _r) acc ->
                       if not (Region.polymorphic locr) then
                         add_constant_tag_table (vi, locr);
-                      TagMap.add (vi, locr) labs acc)
+                      TagMap.add_merge LogicLabelSet.union (vi, locr) labs acc)
                    tags
                    acc)
           ef.e_tag_tables
@@ -343,7 +343,7 @@ let ef_assoc ?label_assoc ~region_assoc ~region_mem_assoc ef =
                      (fun (mc,_r) acc ->
                         if not (Region.polymorphic locr) then
                           add_constant_memory (mc,locr);
-                        MemoryMap.add (mc,locr) labs acc
+                        MemoryMap.add_merge LogicLabelSet.union (mc,locr) labs acc
                      ) mems acc
           ) ef.e_raw_memories MemoryMap.empty;
       e_memories =
@@ -360,7 +360,7 @@ let ef_assoc ?label_assoc ~region_assoc ~region_mem_assoc ef =
                      (fun (mc,_r) acc ->
                         if not (Region.polymorphic locr) then
                           add_constant_memory (mc,locr);
-                        MemoryMap.add (mc,locr) labs acc
+                        MemoryMap.add_merge LogicLabelSet.union (mc,locr) labs acc
                      ) mems acc
           ) ef.e_memories MemoryMap.empty;
       e_globals =
