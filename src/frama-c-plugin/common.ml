@@ -553,8 +553,9 @@ struct
         new_exp ~loc:e.eloc @@ Info (e, einfo)
 
     let rec strip_casts_to ty =
+      let norm = type_remove_qualifier_attributes_deep in
       function
-      | { enode = CastE (ty', _, e) } when not (need_cast ty' ty) -> strip_casts_to ty e
+      | { enode = CastE (ty', _, e) } when not (need_cast (norm ty') @@ norm ty) -> strip_casts_to ty e
       | e -> e
   end
 

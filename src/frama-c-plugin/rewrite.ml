@@ -1061,7 +1061,7 @@ class specialize_blockfuns_visitor =
               if li.l_body = LBnone then begin
                 li.l_profile <- li'.l_profile;
                 li.l_body <- li'.l_body
-              end else
+              end else if li.l_body != li'.l_body then
                 Console.abort "Can't specialize logic function/predicate `%s' to `%s': it already has a definition"
                   lv_name (get_specialized_name lv_name)
         in
