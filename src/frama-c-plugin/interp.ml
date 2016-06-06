@@ -899,22 +899,7 @@ and term ~default_label t =
 
 and pred ~default_label p =
   CurrentLoc.set p.loc;
-  let rec expand_embedded t =
-    Type.Logic_c_type.map_default ~default:[t] t.term_type ~f:(fun ty ->
-      match unrollTypeDeep ty with
-      | TPtr (TComp (ci, _, _), _) ->
-        t ::
-        List.(
-          flatten @@
-          filter_map
-            ~f:(fun fi ->
-              if Type.Ref.(is_ref fi.ftype && size (of_typ_exn fi.ftype) > 0L)  then
-                Some (expand_embedded @@ Logic_const.term (TLval (TMem t, TField (fi, TNoOffset))) @@ Ctype fi.ftype)
-              else None)
-            ci.cfields)
-      | _ -> [t])
-  in
-  let term, terms, coerce_floats, tag, pred, default_label, pred_at =
+  let term, _terms, coerce_floats, tag, pred, default_label, pred_at =
     let default_label, for_current_pred =
       let arg f = match default_label with `Force l | `Use l -> f l in
       match p.content with
@@ -928,6 +913,105 @@ and pred ~default_label p =
     pred ~default_label,
     for_current_pred,
     fun l -> pred ~default_label:(match default_label with `Force _ -> `Force l | `Use _ -> `Use l)
+  in
+  let rec fully_valid =
+    let mk_term t = Logic_const.term ~loc:p.loc t Linteger in
+    let tinteger = Logic_const.tinteger ~loc:p.loc in
+    fun ?omin ?omax t ->
+      let supplied_offs = Option.(is_some omin && is_some omax) in
+      let omin, omax = omin |? tinteger 0, omax |? tinteger 0 in
+      let valid ~omin ~omax =
+        let t = term t in
+        let off_min = mkexpr (JCPEoffset (Offset_min, t)) p.loc in
+        let omin = mkexpr (JCPEbinary (off_min, `Ble, term omin)) p.loc in
+        let off_max = mkexpr (JCPEoffset (Offset_max, t)) p.loc in
+        let omax = mkexpr (JCPEbinary(off_max, `Bge, term omax)) p.loc in
+        mkconjunct [omin; omax] p.loc
+      in
+      let omax =
+        let size, size_gt_one =
+          map_fst tinteger @@
+          Type.Ref.(
+            if Logic_utils.isLogicType (fun _ -> true) t.term_type then
+              let typ = Logic_utils.logicCType t.term_type in
+              let is_ref = is_ref typ and size = lazy (size (of_typ_exn typ)) in
+              if is_ref && !!size > 1L then Int64.to_int !!size, true else 1, false
+            else 1, false)
+        in
+        let one = tinteger 1 in
+        if not supplied_offs && size_gt_one then
+          mk_term @@ TBinOp (MinusA Check, mk_term @@ TBinOp (Mult Check, one, size), one)
+        else
+          omax
+      in
+      let wrap =
+        let just_one, just_several =
+          match map_pair (Logic_utils.constFoldTermToInt ~machdep:true) (omin, omax) with
+          | Some v1, Some v2 ->
+            Integer.(equal (sub v2 v1) zero, if le (sub v2 v1) sixteen then Some (to_int v1, to_int v2) else None)
+          | _ -> false, None
+        in
+        fun e ->
+          let i = make_temp_logic_var Linteger in
+          let var_i = mkexpr (JCPEvar i.lv_name) p.loc in
+          if not just_one then
+            match just_several with
+            | Some (v1, v2) ->
+              mkconjunct List.(range v1 `To v2 |> map @@ fun i -> e @@ Some (tinteger i)) p.loc
+            | None ->
+              mkexpr
+                (JCPEquantifier
+                   (Forall, ltype Linteger, [new identifier i.lv_name], [],
+                    mkimplies
+                      [mkconjunct
+                         [mkexpr (JCPEbinary (term omin, `Ble, var_i)) p.loc;
+                          mkexpr (JCPEbinary (var_i, `Ble, term omax)) p.loc]
+                         p.loc]
+                      [e @@ Some (Logic_const.tvar i)]
+                      p.loc))
+                p.loc
+          else
+            e None
+      in
+      let gen_valid ci =
+        valid ~omin ~omax ::
+        [wrap @@ fun io ->
+         mkconjunct
+           (List.filter_map
+              ~f:(fun fi ->
+                  if Type.Ref.is_ref fi.ftype then
+                    let size = Type.Ref.(size @@ of_typ_exn fi.ftype) in
+                    if size > 0L then
+                      Some
+                        (fully_valid
+                           (let t =
+                              match io with
+                              | None -> t
+                              | Some i -> mk_term (TBinOp (PlusPI, t, i))
+                            in
+                            Logic_const.term (TLval (TMem t, TField (fi, TNoOffset))) @@ Ctype fi.ftype)
+                           ~omin:(tinteger 0)
+                           ~omax:(tinteger @@ Int64.to_int size))
+                    else
+                      None
+                  else
+                    None)
+              ci.cfields)
+           p.loc]
+      in
+      mkconjunct
+        (Type.Logic_c_type.map_default
+           ~default:[valid ~omin ~omax]
+           t.term_type
+           ~f:(fun ty ->
+               match unrollTypeDeep ty with
+               | TPtr (TComp ({ cstruct = true } as ci, _, _), _)
+               | TArray (TComp ({ cstruct = true } as ci, _, _), _, _, _) ->
+                 gen_valid ci
+               | ty when Type.Ref.(is_ref ty && Type.Composite.Struct.is_struct @@ typ @@ of_typ_exn ty) ->
+                 gen_valid @@ Type.Composite.(compinfo @@ of_typ_exn @@ Type.Ref.(typ @@ of_typ_exn ty))
+               | _ -> [valid ~omin ~omax]))
+        p.loc
   in
   let enode =
     match p.content with
@@ -1043,61 +1127,31 @@ and pred ~default_label p =
     | Pvalid (_lab,
               { term_node = TBinOp (PlusPI, t1,
                                     {term_node = Trange (start, stop)})}) ->
-      let e1 = terms t1 in
-      let mk_one_pred e1 =
-        let mk_valid_in_range ~guarded ~start ~stop =
-          let start, stop = map_pair term (start, stop) in
-          let eoffmin = mkexpr (JCPEoffset (Offset_min, e1)) p.loc in
-          let emin = mkexpr (JCPEbinary (eoffmin, `Ble, start)) p.loc in
-          let eoffmax = mkexpr (JCPEoffset (Offset_max, e1)) p.loc in
-          let emax = mkexpr (JCPEbinary (eoffmax, `Bge, stop)) p.loc in
-          let result = mkconjunct [emin; emax] p.loc in
+      let mk_one_pred t1 =
+        let mk_valid_in_range ~guarded ~omin ~omax =
+          let result = fully_valid t1 ~omin ~omax in
           if not guarded then
             result
           else
-            let cond = mkexpr (JCPEbinary (start, `Ble, stop)) p.loc in
+            let cond = mkexpr (JCPEbinary (term omin, `Ble, term omax)) p.loc in
             mkexpr (JCPEif (cond, result, true_expr)) p.loc
         in
         match start, stop with
         | None, _
         | _, None -> false_expr
-        | Some ({ term_node = TConst (Integer (a, _))} as start),
-          Some ({ term_node = TConst (Integer (b, _))} as stop) ->
+        | Some ({ term_node = TConst (Integer (a, _))} as omin),
+          Some ({ term_node = TConst (Integer (b, _))} as omax) ->
           if Integer.le a b then
-            mk_valid_in_range ~guarded:false ~start ~stop
+            mk_valid_in_range ~guarded:false ~omin ~omax
           else
             true_expr
-        | Some start, Some stop ->
-          mk_valid_in_range ~guarded:true ~start ~stop
+        | Some omin, Some omax ->
+          mk_valid_in_range ~guarded:true ~omin ~omax
       in
-      (mkconjunct (List.map mk_one_pred e1) p.loc)#node
+      (mk_one_pred t1)#node
 
-    | Pvalid (_lab, { term_node = TBinOp (PlusPI, t1, t2) }) ->
-      let e1 = terms t1 in
-      let e2 = term t2 in
-      (mkconjunct
-         (List.flatten
-            (List.map
-               (fun e1 ->
-                  let eoffmin = mkexpr (JCPEoffset(Offset_min,e1)) p.loc in
-                  let emin = mkexpr (JCPEbinary(eoffmin,`Ble,e2)) p.loc in
-                  let eoffmax = mkexpr (JCPEoffset(Offset_max,e1)) p.loc in
-                  let emax = mkexpr (JCPEbinary(eoffmax,`Bge,e2)) p.loc in
-                  [emin; emax])
-               e1)) p.loc)#node
-    | Pvalid (_lab, t) ->
-      let elist =
-        List.flatten
-          (List.map
-             (fun e ->
-                let eoffmin = mkexpr (JCPEoffset(Offset_min,e)) p.loc in
-                let emin = mkexpr (JCPEbinary(eoffmin,`Ble,zero_expr)) p.loc in
-                let eoffmax = mkexpr (JCPEoffset(Offset_max,e)) p.loc in
-                let emax = mkexpr (JCPEbinary(eoffmax,`Bge,zero_expr)) p.loc in
-                [emin; emax])
-             List.(flatten @@ map terms @@ expand_embedded t))
-      in
-      (mkconjunct elist p.loc)#node
+    | Pvalid (_lab, { term_node = TBinOp (PlusPI, t1, t2) }) -> (fully_valid t1 ~omin:t2 ~omax:t2)#node
+    | Pvalid (_lab, t) -> (fully_valid t)#node
 
     | Pvalid_read _ -> Console.unsupported "\\valid_read predicate is unsupported"
 
