@@ -1390,7 +1390,7 @@ struct
         let singleton ?(padding=0) ~sname ~fname typ =
           let compinfo =
             mkCompInfo true sname
-              (fun _ -> [fname, typ, None, [], CurrentLoc.get ()]) []
+              (fun _ -> [fname, typ, None, [Attr (Name.Attr.noembed, [])], CurrentLoc.get ()]) []
           in
           let fi = unique_field_exn @@ TComp (compinfo, empty_size_cache (), []) in
           fi.fsize_in_bits <- Some (bitsSizeOf typ);
