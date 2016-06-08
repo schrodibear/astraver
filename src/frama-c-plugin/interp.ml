@@ -945,33 +945,32 @@ and pred ~default_label p =
           omax
       in
       let wrap =
-        let just_one, just_several =
+        let just_several =
           match map_pair (Logic_utils.constFoldTermToInt ~machdep:true) (omin, omax) with
           | Some v1, Some v2 ->
-            Integer.(equal (sub v2 v1) zero, if le (sub v2 v1) sixteen then Some (to_int v1, to_int v2) else None)
-          | _ -> false, None
+            Integer.(if le (sub v2 v1) sixteen then Some (to_int v1, to_int v2) else None)
+          | _ -> None
         in
         fun e ->
           let i = make_temp_logic_var Linteger in
           let var_i = mkexpr (JCPEvar i.lv_name) p.loc in
-          if not just_one then
-            match just_several with
-            | Some (v1, v2) ->
-              mkconjunct List.(range v1 `To v2 |> map @@ fun i -> e @@ Some (tinteger i)) p.loc
-            | None ->
-              mkexpr
-                (JCPEquantifier
-                   (Forall, ltype Linteger, [new identifier i.lv_name], [],
-                    mkimplies
-                      [mkconjunct
-                         [mkexpr (JCPEbinary (term omin, `Ble, var_i)) p.loc;
-                          mkexpr (JCPEbinary (var_i, `Ble, term omax)) p.loc]
-                         p.loc]
-                      [e @@ Some (Logic_const.tvar i)]
-                      p.loc))
-                p.loc
-          else
-            e None
+          match just_several with
+          | Some (v1, v2) when v1 = v2 ->
+            if v1 = 0 then e None else e @@ Some (tinteger v1)
+          | Some (v1, v2) ->
+            mkconjunct List.(range v1 `To v2 |> map @@ fun i -> e @@ Some (tinteger i)) p.loc
+          | None ->
+            mkexpr
+              (JCPEquantifier
+                 (Forall, ltype Linteger, [new identifier i.lv_name], [],
+                  mkimplies
+                    [mkconjunct
+                       [mkexpr (JCPEbinary (term omin, `Ble, var_i)) p.loc;
+                        mkexpr (JCPEbinary (var_i, `Ble, term omax)) p.loc]
+                       p.loc]
+                    [e @@ Some (Logic_const.tvar i)]
+                    p.loc))
+              p.loc
       in
       let gen_valid ci =
         valid ~omin ~omax ::
