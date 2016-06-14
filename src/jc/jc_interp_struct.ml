@@ -126,6 +126,16 @@ let map_embedded_fields ~f ~p ac =
             f ~acr:(alloc_class_of_pointer_class fpc, dummy_region) ~pc:fpc ~p:O.T.(p **> fi) ~l:fa ~r:fb
           | _ -> []))
 
+let forall_offset_in_range ?(inclusive=false) p l r ~f =
+  if f (Const Void : _ term) <> [] then
+    O.P.(
+      forall "i" O.Lt.integer @@
+      fun i ->
+      impl
+        (l <= i && (if inclusive then (<=) else (<)) i r)
+        (conj (f T.(shift p i))))
+  else True
+
 (* Validity *)
 
 let valid ~in_param ~equal (ac, r) pc p ao bo =
@@ -179,12 +189,20 @@ let valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
         True
     in
     let fields_valid =
-      List.flatten @@
-        map_embedded_fields ac pc ~p:O.T.(var p)
+      let fields_valid p =
+        List.flatten @@
+        map_embedded_fields ac pc ~p
           ~f:(fun ~acr ~pc ~p ~l ~r ->
             [valid ~in_param ~equal:false acr pc p
                (if left then Some O.T.(num l) else None)
                (if right then Some O.T.(num r) else None)])
+      in
+      let result1 = fields_valid O.T.(var p) in
+      result1 @
+      if left && right && result1 <> [] then
+        O.T.[forall_offset_in_range ~inclusive:true (var p) (var a) (var b) ~f:fields_valid]
+      else
+        []
     in
     let validity = super_valid :: fields_valid in
     let validity = if right then omax :: validity else validity in
@@ -244,24 +262,30 @@ let fresh_pred ~for_ ac pc =
             [predicate O.T.(var p)])
   in
   let fields_fresh p =
-    List.flatten @@
+    let fields_fresh p =
+      List.flatten @@
       map_embedded_fields ac pc ~p
         ~f:(fun ~acr ~pc ~p ~l:_ ~r:_ -> [fresh ~for_:for_' ~in_param:false acr pc p])
+    in
+    let result1 = fields_fresh p in
+    result1 @
+    if result1 <> [] then
+      O.P.(
+        forall "i" O.Lt.integer @@
+        fun i ->
+        impl
+          (match for_ with
+           | `alloc_tables -> T.(offset_min ~code:false ac p <= i && i <= offset_max ~code:false ac p)
+           | `tag_tables -> conj @@ map_si ac pc ~f:(fun si -> [instanceof ~code:false T.(shift p i) si]))
+          (conj @@ fields_fresh @@ T.(shift p i))) ::
+      []
+    else
+      []
   in
   let freshness = O.P.conj @@ super_fresh @ fields_fresh O.P.(T.var p) in
   O.Wd.mk ~name:(snd @@ Name.Pred.fresh ~for_ ac pc) @@ Predicate (params, freshness)
 
 (* Instanceof *)
-
-let forall_offset_in_range p l r ~f =
-  if f (Const Void : _ term) <> [] then
-    O.P.(
-      forall "i" O.Lt.integer @@
-      fun i ->
-      impl
-        (l <= i && i < r)
-        (conj (f T.(shift p i))))
-  else True
 
 type (_, 'a) param =
   | Void : ([`Singleton], 'a) param

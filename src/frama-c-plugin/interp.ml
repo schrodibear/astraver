@@ -990,7 +990,7 @@ and pred ~default_label p =
                             in
                             Logic_const.term (TLval (TMem t, TField (fi, TNoOffset))) @@ Ctype fi.ftype)
                            ~omin:(tinteger 0)
-                           ~omax:(tinteger @@ Int64.to_int size))
+                           ~omax:(tinteger Int64.(to_int @@ size - 1L)))
                     else
                       None
                   else
