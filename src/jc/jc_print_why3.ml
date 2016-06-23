@@ -152,7 +152,7 @@ let fail_on_real () =
   failwith "floating point operations are not yet supported in GADT encoding, \
             please use the User generic constructor"
 
-let func ~entry ~where ~bw_ints fmttr (type a) (type b) =
+let func ~entry ~where ~bw_ints fmttr (type a) (type b) : (a, b) func -> _ =
   let qid = qid ~entry ~u:false in
   let pr fmt = fprintf fmttr fmt in
   let pr_bop fp ty op' fmodulo modulo = pr "%a.%a%a%a" fp ty op op' fmodulo modulo rpar op' in
@@ -189,7 +189,7 @@ let func ~entry ~where ~bw_ints fmttr (type a) (type b) =
     | Enum _, Enum _ -> pr enum_ty ty_to enum_ty ty_from
   in
   function
-  | (B_int_op (`Add | `Sub | `Mul as op') : (a, b) func) -> pr "Int.%a)" op op'
+  | B_int_op (`Add | `Sub | `Mul as op') -> pr "Int.%a)" op op'
   | B_int_op (`Div | `Mod as op') -> pr "ComputerDivision.%s" (match op' with `Div -> "div" | `Mod -> "mod")
   | B_int_op (`Min | `Max as op') -> pr "MinMax.%s" (match op' with `Min -> "min" | `Max -> "max")
   | U_int_op `Neg -> pr "Int.%a)" op `Neg
@@ -274,11 +274,11 @@ let why_label fmttr { l_kind; l_behavior; l_pos } =
     with_behavior @@ (fun b -> pr "\"for behavior %s\"@ " b)
   end
 
-let tconstr ~entry fmttr (type a) (type b) =
+let tconstr ~entry fmttr (type a) (type b) : (a, b) tconstr -> _ =
   let qid = qid ~entry ~u:false in
   let pr fmt = fprintf fmttr fmt in
   function
-  | (Numeric (Integral Integer) : (a, b) tconstr) -> pr "int"
+  | Numeric (Integral Integer) -> pr "int"
   | Numeric (Integral (Int _  as ty)) -> pr "%a.t" (int_ty ~how:(`Theory `Abstract)) ty
   | Numeric (Integral (Enum _  as ty)) -> pr "%a.t" (enum_ty ~how:`Theory) ty
   | Numeric (Real _) -> fail_on_real ()
@@ -1755,4 +1755,3 @@ let file ~filename f =
   compile-command: "ocamlc -c -bin-annot -I . -I ../src jc_print_why3.ml"
   End:
 *)
-

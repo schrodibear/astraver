@@ -3317,9 +3317,9 @@ let logic_type (name, l) =
        ~name:(fst @@ Name.Theory.logic_type name)
        [Wd.mk ~name @@ Type (List.map Type_var.name l)]]
 
-let enum_entry_name ~how (type a) =
+let enum_entry_name ~how (type a) : a bounded integer -> _ =
   function
-  | (Int _ as i : a bounded integer) ->
+  | Int _ as i ->
     let (module M) = O.module_of_int_ty i in
     begin match how with
     | `Theory `Abstract -> M.theory
