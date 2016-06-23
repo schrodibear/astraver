@@ -1053,7 +1053,8 @@ struct
       fold ~init e1 |~>
       fold e2
     | Let_ref (_, e1, e2) ->
-      fold ~init e1 |~>
+      f ~acc:init (ref_module, "ref") |~>
+      fold e1 |~>
       fold e2
     | App (f', hl, wt_opt) ->
       fold_func ~init f' |~>
