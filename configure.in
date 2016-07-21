@@ -115,7 +115,7 @@ fi
 # Check for arch/OS
 
 AC_MSG_CHECKING(OS dependent settings)
-OSTYPE=`echo 'prerr_endline Sys.os_type;;' | ocaml 2>&1 > /dev/null | tr -d '\\r' `
+OSTYPE=`echo 'prerr_endline Sys.os_type;;' | ocaml -noinit 2>&1 > /dev/null | tr -d '\\r' `
 case $OSTYPE in
   Win32)
     AC_MSG_RESULT(Win32)
