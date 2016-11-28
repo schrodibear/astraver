@@ -1965,7 +1965,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
              term
                (Ty (O.Ty.integer))
                ~type_safe:true
-               ~global_assertion:true
+               ~global_assertion:false
                ~relocate:false
                LabelPre LabelPre
                cur_measure
@@ -1983,7 +1983,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
                (Ty (O.Ty.integer))
                ~subst
                ~type_safe:true
-               ~global_assertion:true
+               ~global_assertion:false
                ~relocate:false
                LabelHere LabelHere
                this_measure
