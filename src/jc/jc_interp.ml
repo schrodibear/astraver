@@ -463,7 +463,7 @@ let rec term :
   let return t = O.T.return typ t in
   let t' =
     match t#node with
-    | JCTconst JCCnull -> O.T.(check typ (var "null"))
+    | JCTconst JCCnull -> O.T.null ()
     | JCTvar v ->
       begin try
         let (Term t : some_term) = VarMap.find v subst in
@@ -1707,7 +1707,7 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
   let return e = O.E.return t e in
   let e' =
     match e#node with
-    | JCEconst JCCnull -> O.E.var "null"
+    | JCEconst JCCnull -> O.E.null ()
     | JCEconst c -> O.E.mk (Const (const t c))
     | JCEvar v -> var v
     | JCEunary ((`Uminus, (`Double | `Float as _format)), e2) ->

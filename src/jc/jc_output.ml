@@ -213,6 +213,8 @@ struct
 
   let allocated () : (_ * (_ * unit), boolean) t = Jc.allocable "allocated"
 
+  let null () : (unit, _) t = Jc.pointer "null"
+
   let shift () : (_ * (unbounded integer number * unit), _) t = Jc.pointer "shift"
 
   let same_block () : (_ * (_ * unit), boolean) t = Jc.pointer "same_block"
@@ -449,6 +451,8 @@ struct
     F.sidecast () $ (tag_table ?deref ?lab ?r @@ struct_root si) ^ p ^. (tag |? (F.tag si $ Nil))
 
   let ( **>) p fi = select (var (Name.field_memory_name fi)) p
+
+  let null () = F.null () $ Nil
 
   let shift p i = F.shift () $ p ^. i
 
@@ -780,6 +784,8 @@ struct
   let (!.) v = mk (Deref v)
 
   let void = mk Void
+
+  let null () = F.null () $ Nil
 
   let let_ v ~(equal : 'a t) ~in_ = mk (Let (v, equal, in_ (var v : 'a t)))
 
