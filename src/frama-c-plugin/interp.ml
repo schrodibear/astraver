@@ -1762,18 +1762,28 @@ let keep_only_declared_nb_of_arguments vi l =
   else if is_variadic then Console.unsupported "unsupported variadic functions"
   else l
 
+let adjust_rvalue_to_bitfield ~lv ~typ e =
+  match lastOffset (snd lv) with
+  | Field (fi, NoOffset)
+    when (the fi.fsize_in_bits) <> bitsSizeOf typ ->
+    mkexpr (JCPEcast (e, ctype ~bitsize:(the fi.fsize_in_bits) fi.ftype)) e#pos
+  | _ -> e
+
 let instruction = function
   | Set (lv, e, pos) ->
     let e =
-      match unrollType (typeOfLval lv) with
+      begin match unrollType (typeOfLval lv) with
       | TEnum _ as newt ->
         begin match unrollType (typeOf e) with
         | TInt _ -> mkCast ~force:true ~overflow:Check ~e ~newt
         | _ -> e
         end
       | _ -> e
+      end |>
+      expr |>
+      adjust_rvalue_to_bitfield ~lv ~typ:(typeOf e)
     in
-    let enode = JCPEassign (lval pos lv, expr e) in
+    let enode = JCPEassign (lval pos lv, e) in
     (locate (mkexpr enode pos))#node
 
   | Call (None, { enode = Lval (Var v, NoOffset) }, eargs, pos) ->
@@ -1908,9 +1918,10 @@ let instruction = function
                     (List.map expr eargs))
       in
       let lvty = typeOfLval lv in
-      let call = locate (mkexpr enode pos) in
+      let rety = getReturnType (v :> varinfo).vtype in
+      let call = locate (adjust_rvalue_to_bitfield ~lv ~typ:rety @@ mkexpr enode pos) in
       let enode =
-        if Typ.equal lvty (getReturnType (v :> varinfo).vtype)
+        if Typ.equal lvty rety
           || is_malloc v
           || is_realloc v
           || is_calloc v
