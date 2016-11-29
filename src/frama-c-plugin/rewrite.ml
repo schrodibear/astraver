@@ -1971,6 +1971,7 @@ class va_list_rewriter () =
                           ~newt:(TPtr (va_arg_type, []))
                       in
                       let atmp = makeTempVar current_func ~name:"va_arg" (TPtr (va_arg_type, [])) in
+                      let a = mkCast ~force:false ~overflow:Check ~e:a ~newt:va_arg_type in
                       [Call (Some (var atmp),
                              evar ~loc (Ast.Vi.Function.malloc () :> varinfo),
                              [sizeOf ~loc va_arg_type],

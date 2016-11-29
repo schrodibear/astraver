@@ -1595,18 +1595,20 @@ struct
 
   let promote_argument_type arg_type =
     match unrollType arg_type with
-    | TVoid _ -> TVoid []
-    | TInt (k, _) when rank k <= rank IInt -> TInt (IInt, [])
-    | TInt (k, _) -> TInt (k, [])
-    | TFloat (FFloat, _) -> TFloat (FDouble, [])
-    | TFloat (k, _) -> TFloat (k, [])
-    | TPtr (t, _) | TArray (t, _, _, _) -> TPtr (t, [])
-    | TFun _ as t -> TPtr (t, [])
-    | TComp (ci, _, _) -> TComp (ci, empty_size_cache (), [])
-    | TEnum (ei, _) -> TEnum (ei, [])
-    | TBuiltin_va_list _ ->
-      Console.fatal ~current:true "promote_argument_type: variadic arguments"
-    | TNamed _ -> assert false (* unrollType *)
+    | TVoid _                            -> voidType
+    | TInt (k,_) when rank k < rank IInt ->
+      if intTypeIncluded k IInt then       intType
+      (* This may happen when char or short have the same size as int *)
+      else                                 uintType
+    | TInt (k, _)                        -> TInt(k, [])
+    | TFloat (FFloat, _)                 -> doubleType
+    | TFloat (k, _)                      -> TFloat (k, [])
+    | TPtr (t, _) | TArray (t, _, _, _)  -> TPtr (t, [])
+    | TFun _ as t                        -> TPtr (t, [])
+    | TComp (ci, _, _)                   -> TComp (ci, { scache = Not_Computed }, [])
+    | TEnum (ei, _)                      -> TEnum (ei, [])
+    | TBuiltin_va_list _                 -> Console.fatal ~current:true "promote_argument_type: variadic arguments"
+    | TNamed _                           -> assert false (* unrollType *)
 
   let size_in_bits_exn ty =
     let open! Jessie_integer in
