@@ -270,6 +270,19 @@ object (self)
       SkipChildren
     | _ -> DoChildren
 
+  method! vinst =
+    function
+    | Call (Some lv, e, _, _) ->
+      let lvty = typeOfLval lv in
+      begin match unrollType (typeOf e) with
+      | TFun (rt, _, _, _) when need_cast rt lvty ->
+        if is_pointer_type lvty && is_pointer_type rt then
+          unify_type_hierarchies lvty rt
+      | _ -> ()
+      end;
+      DoChildren
+    | _ -> DoChildren
+
   method! vjessie_pragma (JPexpr t) =
     match t.term_node with
     | TCoerce (t, typ) when Logic_utils.isLogicType is_pointer_type t.term_type && is_pointer_type typ ->
