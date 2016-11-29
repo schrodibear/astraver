@@ -1538,6 +1538,16 @@ let rec expr e =
   in
   mkexpr enode e.eloc
 
+and adjust_bitsizes ~typ e1 e2 =
+  let cast e =
+    if isArithmeticType typ && isArithmeticType (typeOf e) && not (Typ.equal (typeOf e) typ) then
+      let e = expr e in
+      mkexpr (JCPEcast (e, ctype ~bitsize:(bitsSizeOf typ) typ)) e#pos
+    else
+      expr e
+  in
+  map_pair cast (e1, e2)
+
 (* Function called when expecting a boolean in Jessie, i.e. when translating
    a test or a sub-expression of an "or" or "and".
 *)
@@ -1561,13 +1571,15 @@ and boolean_expr ?(to_locate=false) e =
     | BinOp((LAnd | LOr) as op,e1,e2,_typ) ->
         JCPEbinary (boolean_expr ~to_locate:true e1, binop op, boolean_expr ~to_locate:true e2)
 
-    | BinOp((Eq | Ne) as op,e1,e2,_typ) ->
-        JCPEbinary(expr e1,binop op,expr e2)
+    | BinOp((Eq | Ne) as op,e1,e2,typ) ->
+        let e1, e2 = adjust_bitsizes ~typ e1 e2 in
+        JCPEbinary(e1,binop op,e2)
 
-    | BinOp((Lt | Gt | Le | Ge) as op,e1,e2,_typ) ->
+    | BinOp((Lt | Gt | Le | Ge) as op,e1,e2,typ) ->
         let ty = typeOf e1 in
         if isArithmeticType ty then
-          JCPEbinary(expr e1,binop op,expr e2)
+          let e1, e2 = adjust_bitsizes ~typ e1 e2 in
+          JCPEbinary(e1,binop op,e2)
         else
           (* Pointer comparison is translated as subtraction *)
           let sube = mkexpr (JCPEbinary(expr e1,`Bsub,expr e2)) e.eloc in
@@ -1618,15 +1630,17 @@ and integral_expr e =
 (*           let e = mkexpr (JCPEbinary(sube,binop op,zero_expr)) pos in *)
 (*           node_from_boolean_expr e *)
 
-      | BinOp((Eq | Ne) as op,e1,e2,_ty) ->
-          let e = mkexpr (JCPEbinary(expr e1,binop op,expr e2)) e.eloc in
+      | BinOp((Eq | Ne) as op,e1,e2,typ) ->
+          let e1, e2 = adjust_bitsizes ~typ e1 e2 in
+          let e = mkexpr (JCPEbinary(e1,binop op,e2)) e.eloc in
           node_from_boolean_expr e
 
-      | BinOp((Lt | Gt | Le | Ge) as op,e1,e2,_ty) ->
-          let e = mkexpr (JCPEbinary(expr e1,binop op,expr e2)) e.eloc in
+      | BinOp((Lt | Gt | Le | Ge) as op,e1,e2,typ) ->
+          let e1, e2 = adjust_bitsizes ~typ e1 e2 in
+          let e = mkexpr (JCPEbinary(e1,binop op,e2)) e.eloc in
           node_from_boolean_expr e
 
-      | BinOp (Shiftrt, e1, e2, _ty) ->
+      | BinOp (Shiftrt, e1, e2, typ) ->
         let e =
           let ik = match unrollType @@ typeOf e1 with TInt (ik, _) -> ik | _ -> assert false in
           match possible_value_of_integral_expr e2 with
@@ -1643,11 +1657,12 @@ and integral_expr e =
                   if isSignedInteger (typeOf e1) then `Barith_shift_right
                   else `Blogical_shift_right
                 in
-                locate (mkexpr (JCPEbinary(expr e1,op,expr e2)) e.eloc)
+                let e1, e2 = adjust_bitsizes ~typ e1 e2 in
+                locate (mkexpr (JCPEbinary(e1,op,e2)) e.eloc)
           in
           e#node
 
-      | BinOp (Shiftlt oft as op, e1, e2, _ty) ->
+      | BinOp (Shiftlt oft as op, e1, e2, typ) ->
         let e =
           let ik = match unrollType @@ typeOf e1 with TInt (ik, _) -> ik | _ -> assert false in
           match possible_value_of_integral_expr e2 with
@@ -1663,13 +1678,15 @@ and integral_expr e =
                 locate
                   (mkexpr (JCPEbinary(expr e1, (match oft with Check -> `Bmul | Modulo -> `Bmul_mod), expr pow)) e.eloc)
             | _ ->
-                locate (mkexpr (JCPEbinary(expr e1,binop op,expr e2)) e.eloc)
+                let e1, e2 = adjust_bitsizes ~typ e1 e2 in
+                locate (mkexpr (JCPEbinary(e1,binop op,e2)) e.eloc)
           in
           e#node
 
-      | BinOp(op,e1,e2,_ty) ->
+      | BinOp(op,e1,e2,typ) ->
           let e =
-            locate (mkexpr (JCPEbinary(expr e1,binop op,expr e2)) e.eloc)
+            let e1, e2 = adjust_bitsizes ~typ e1 e2 in
+            locate (mkexpr (JCPEbinary(e1,binop op,e2)) e.eloc)
           in
           e#node
 
