@@ -1585,6 +1585,13 @@ and integral_expr e =
 
   let rec int_expr e =
     let node_from_boolean_expr e = JCPEif (e, one_expr, zero_expr) in
+    let expr_shift_precast ~t1 e2 =
+      let e2' = expr e2 in
+      if bitsSizeOf t1 <> bitsSizeOf (typeOf e2) then
+        mkexpr (JCPEcast (e2', ctype ~bitsize:(bitsSizeOf t1) t1)) e2.eloc
+      else
+        e2'
+    in
 
     let enode = match e.enode with
       | UnOp(LNot,e',_ty) ->
@@ -1628,7 +1635,8 @@ and integral_expr e =
 
       | BinOp (Shiftrt, e1, e2, _ty) ->
         let e =
-          let ik = match unrollType @@ typeOf e1 with TInt (ik, _) -> ik | _ -> assert false in
+          let t1 = typeOf e1 in
+          let ik = match unrollType t1 with TInt (ik, _) -> ik | _ -> assert false in
           match possible_value_of_integral_expr e2 with
             | Some i when Integer.ge i Integer.zero &&
                           Integer.lt i (Integer.of_int 63) &&
@@ -1640,16 +1648,17 @@ and integral_expr e =
                 locate (mkexpr (JCPEbinary(expr e1,`Bdiv,expr pow)) e.eloc)
             | _ ->
                 let op =
-                  if isSignedInteger (typeOf e1) then `Barith_shift_right
+                  if isSignedInteger t1 then `Barith_shift_right
                   else `Blogical_shift_right
                 in
-                locate (mkexpr (JCPEbinary(expr e1,op,expr e2)) e.eloc)
+                locate (mkexpr (JCPEbinary(expr e1,op,expr_shift_precast ~t1 e2)) e.eloc)
           in
           e#node
 
       | BinOp (Shiftlt oft as op, e1, e2, _ty) ->
         let e =
-          let ik = match unrollType @@ typeOf e1 with TInt (ik, _) -> ik | _ -> assert false in
+          let t1 = typeOf e1 in
+          let ik = match unrollType t1 with TInt (ik, _) -> ik | _ -> assert false in
           match possible_value_of_integral_expr e2 with
             | Some i when
               Integer.ge i Integer.zero &&
@@ -1663,7 +1672,7 @@ and integral_expr e =
                 locate
                   (mkexpr (JCPEbinary(expr e1, (match oft with Check -> `Bmul | Modulo -> `Bmul_mod), expr pow)) e.eloc)
             | _ ->
-                locate (mkexpr (JCPEbinary(expr e1,binop op,expr e2)) e.eloc)
+                locate (mkexpr (JCPEbinary(expr e1,binop op,expr_shift_precast ~t1 e2)) e.eloc)
           in
           e#node
 
