@@ -2696,7 +2696,7 @@ let type_range_of_term ty t =
 
 let rec signed_occurrences pi a =
   match a#node with
-  | JCArelation _ | JCAtrue | JCAfalse -> (0,0)
+  | JCArelation _ | JCAbool_term _ | JCAtrue | JCAfalse -> (0,0)
   | JCAapp app -> ((if app.app_fun == pi then 1 else 0),0)
   | JCAquantifier (Forall, _vi, _, p) -> signed_occurrences pi p
   | JCAquantifier (Exists, _vi, _, _p) -> assert false (* TODO *)
@@ -2718,7 +2718,6 @@ let rec signed_occurrences pi a =
   | JCAeqtype (_, _, _) -> assert false (* TODO *)
   | JCAmutable (_, _, _) -> assert false (* TODO *)
   | JCAif (_, _, _) -> assert false (* TODO *)
-  | JCAbool_term _ -> assert false (* TODO *)
   | JCAinstanceof (_, _, _) -> assert false (* TODO *)
   | JCAlet (_, _,_) -> assert false (* TODO *)
   | JCAmatch (_, _) -> assert false (* TODO *)
