@@ -570,6 +570,13 @@ let term_lhost pos =
 let product f t1 t2 =
   List.fold_right (fun x acc -> List.fold_right (fun y acc -> f x y :: acc) t2 acc) t1 []
 
+let adjust_from_bitfield ~in_zone ~fi e =
+  let ty = fi.ftype in
+  if not in_zone && isArithmeticType ty && the fi.fsize_in_bits <> bitsSizeOf ty then
+    mkexpr (JCPEcast (e, ctype ty)) e#pos
+  else
+    e
+
 let rec coerce_floats ~default_label t =
   let terms = terms ~default_label in
   match !float_model with
@@ -621,7 +628,7 @@ and terms ?(in_zone=false) ~default_label t =
       in
       List.map (fun x -> JCPEoffset (offset_kind, x)) @@ terms t1
     | TLval lv ->
-      List.map (fun x -> x#node) (terms_lval t.term_loc lv)
+      List.map (fun x -> x#node) (terms_lval ~in_zone t.term_loc lv)
 
     | TSizeOf _ | TOffsetOf _ | TSizeOfE _ | TSizeOfStr _ | TAlignOf _ | TAlignOfE _ ->
       assert false (* Should be removed by constant folding *)
@@ -723,7 +730,7 @@ and terms ?(in_zone=false) ~default_label t =
         Printer.pp_logic_type t.term_type Printer.pp_typ ty
     | TAddrOf _tlv -> assert false (* Should have been rewritten *)
     | TStartOf tlv ->
-      List.map (fun x -> x#node) (terms_lval t.term_loc tlv)
+      List.map (fun x -> x#node) (terms_lval ~in_zone t.term_loc tlv)
     | Tapp (linfo, labels, tlist) ->
       begin try
         let name = translated_name linfo tlist in
@@ -823,7 +830,7 @@ and tag ~default_label t =
   in
   mktag tag_node t.term_loc
 
-and terms_lval ~default_label pos lv =
+and terms_lval ~in_zone ~default_label pos lv =
   let terms = terms ~default_label in
   match lv with
   | lhost, TNoOffset -> [term_lhost pos lhost]
@@ -857,7 +864,7 @@ and terms_lval ~default_label pos lv =
           in
           caste,repfi
       in
-      List.map (fun e -> mkexpr (JCPEderef(e,fi.fname)) pos) e
+      List.map (fun e -> adjust_from_bitfield ~in_zone ~fi @@ mkexpr (JCPEderef(e,fi.fname)) pos) e
 
   | TMem t, TIndex (it, TField (fi, toff)) ->
     assert (toff = TNoOffset); (* Others should have been rewritten *)
@@ -1774,7 +1781,7 @@ let keep_only_declared_nb_of_arguments vi l =
 let adjust_rvalue_to_bitfield ~lv ~typ e =
   match lastOffset (snd lv) with
   | Field (fi, NoOffset)
-    when (the fi.fsize_in_bits) <> bitsSizeOf typ ->
+    when isArithmeticType typ && the fi.fsize_in_bits <> bitsSizeOf typ ->
     mkexpr (JCPEcast (e, ctype ~bitsize:(the fi.fsize_in_bits) fi.ftype)) e#pos
   | _ -> e
 
