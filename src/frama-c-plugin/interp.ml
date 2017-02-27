@@ -964,8 +964,9 @@ and pred ~default_label p =
           match just_several with
           | Some (v1, v2) when v1 = v2 ->
             if v1 = 0 then e None else e @@ Some (tinteger v1)
-          | Some (v1, v2) ->
+          | Some (v1, v2) when Pervasives.(v1 <= v2) ->
             mkconjunct List.(range v1 `To v2 |> map @@ fun i -> e @@ Some (tinteger i)) p.loc
+          | Some (v1, v2) -> mkexpr (JCPEconst (JCCboolean true)) p.loc
           | None ->
             mkexpr
               (JCPEquantifier
