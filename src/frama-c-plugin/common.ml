@@ -1293,11 +1293,13 @@ struct
     let size ty =
       match findAttribute Name.Attr.arraylen (typeAttrs ty) with
       | [AInt i] -> Integer.to_int64 i
+      | [ACons (_, [])] -> 0L
       | _ -> Console.fatal "Type.Ref.size: non-reference type: %a" Printer.pp_typ ty
 
     let of_typ ty =
       match findAttribute Name.Attr.arraylen (typeAttrs ty) with
-      | [AInt _] -> Some ty
+      | [AInt _]
+      | [ACons (_, [])] -> Some ty
       | _ -> None
 
     let of_typ_exn ty =
