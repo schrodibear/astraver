@@ -27,17 +27,24 @@ theory Enum
   axiom Of_int:
     forall a : int [of_int a]. in_bounds a -> to_int (of_int a) = a
 
+  (* The folowing functions are `degenerate' due to the typing in the input ACSL specs,
+   *  for operation without `%' we always explicitly coerce to integer (`int') before performing the operation,
+   *  for modulo operations we always use bitvector operations.
+   *)
+
+  (*
   function (+) (a b : t) : t = of_int (Int.(+) (to_int a) (to_int b))
 
   function (-_) (a : t) : t = of_int (Int.(-_) (to_int a))
 
   function (-) (a b : t) : t = of_int (Int.(-) (to_int a) (to_int b))
 
-  function ( *) (a b : t) : t = of_int (Int.( *) (to_int a) (to_int b))
+  function ( * ) (a b : t) : t = of_int (Int.( * ) (to_int a) (to_int b))
 
   function (/) (a b : t) : t = of_int (div (to_int a) (to_int b))
 
   function (%) (a b : t) : t = of_int (mod (to_int a) (to_int b))
+  *)
 
   axiom Extensionality1: forall x y : t [to_int x, to_int y]. to_int x = to_int y -> x = y
 

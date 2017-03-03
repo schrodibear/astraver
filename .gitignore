@@ -25,6 +25,7 @@ bin
 /bench/bench
 /config.status
 /configure
+generate.ml.exe
 
 /doc/version.tex
 /doc/*.aux

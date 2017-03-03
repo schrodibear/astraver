@@ -34,10 +34,11 @@ theory enum.Bit_{{u}}int{{size}}
 
   syntax function of_int_modulo "((_ int2bv {{size}}) %1)"
   syntax converter of_int_const "(_ bv%1 {{size}})"
+{# This significantly degrades solver performance, better removed, since it helps too little #}
   {% if signed -%}
-  syntax function to_uint "(bv2int %1)"
+{# syntax function to_uint "(bv2int %1)" #}
   {% else -%}
-  syntax function to_int "(bv2int %1)"
+{# syntax function to_int "(bv2int %1)" #}
   remove prop To_uint
   {% endif -%}
 

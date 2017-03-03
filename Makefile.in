@@ -137,6 +137,9 @@ LIBWHY3=@libdir@/jessie
 
 WHY3_DATADIR=$(shell why3 --print-datadir)
 
+lib/why3/%_enum.gen: lib/why3/%_enum.tmpl
+	./generate.ml $<
+
 lib/why3/%.drv: lib/why3/%_enum.gen
 	@DRIVER=smt-libv2.drv; \
 	if [ $(@F) = alt-ergo.drv -o $(@F) = alt-ergo_remove_triggers.drv ]; then \

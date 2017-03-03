@@ -26,7 +26,7 @@ theory enum.Bit_int8
 
   syntax function of_int_modulo "((_ int2bv 8) %1)"
   syntax converter of_int_const "(_ bv%1 8)"
-  syntax function to_uint "(bv2nat %1)"
+
   syntax type tt "(_ BitVec 16)"
 
   syntax function  extend  "((_ sign_extend 8) %1)"
@@ -86,7 +86,7 @@ theory enum.Bit_uint8
 
   syntax function of_int_modulo "((_ int2bv 8) %1)"
   syntax converter of_int_const "(_ bv%1 8)"
-  syntax function to_int "(bv2nat %1)"
+
   remove prop To_uint
   syntax type tt "(_ BitVec 16)"
 
@@ -147,7 +147,7 @@ theory enum.Bit_int16
 
   syntax function of_int_modulo "((_ int2bv 16) %1)"
   syntax converter of_int_const "(_ bv%1 16)"
-  syntax function to_uint "(bv2nat %1)"
+
   syntax type tt "(_ BitVec 32)"
 
   syntax function  extend  "((_ sign_extend 16) %1)"
@@ -207,7 +207,7 @@ theory enum.Bit_uint16
 
   syntax function of_int_modulo "((_ int2bv 16) %1)"
   syntax converter of_int_const "(_ bv%1 16)"
-  syntax function to_int "(bv2nat %1)"
+
   remove prop To_uint
   syntax type tt "(_ BitVec 32)"
 
@@ -268,7 +268,7 @@ theory enum.Bit_int32
 
   syntax function of_int_modulo "((_ int2bv 32) %1)"
   syntax converter of_int_const "(_ bv%1 32)"
-  syntax function to_uint "(bv2nat %1)"
+
   syntax type tt "(_ BitVec 64)"
 
   syntax function  extend  "((_ sign_extend 32) %1)"
@@ -328,7 +328,7 @@ theory enum.Bit_uint32
 
   syntax function of_int_modulo "((_ int2bv 32) %1)"
   syntax converter of_int_const "(_ bv%1 32)"
-  syntax function to_int "(bv2nat %1)"
+
   remove prop To_uint
   syntax type tt "(_ BitVec 64)"
 
@@ -389,7 +389,7 @@ theory enum.Bit_int64
 
   syntax function of_int_modulo "((_ int2bv 64) %1)"
   syntax converter of_int_const "(_ bv%1 64)"
-  syntax function to_uint "(bv2nat %1)"
+
   syntax type tt "(_ BitVec 128)"
 
   syntax function  extend  "((_ sign_extend 64) %1)"
@@ -448,7 +448,7 @@ theory enum.Bit_uint64
 
   syntax function of_int_modulo "((_ int2bv 64) %1)"
   syntax converter of_int_const "(_ bv%1 64)"
-  syntax function to_int "(bv2nat %1)"
+
   remove prop To_uint
   syntax type tt "(_ BitVec 128)"
 
