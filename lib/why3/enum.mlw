@@ -12,6 +12,9 @@ theory Enum
 
   use import int.Int
 
+  meta "inline : no" predicate Int.(<=)
+  meta "inline : no" predicate Int.(>=)
+
   use import int.ComputerDivision
 
   predicate in_bounds (n : int) = min <= n <= max
@@ -54,13 +57,13 @@ theory Enum
         in_bounds x /\ in_bounds y ->
           x = y
 
-  predicate (<=) (a b : t) = Int.(<=) (to_int a) (to_int b)
+  meta "inline : no" predicate (<=) (a b : t) = Int.(<=) (to_int a) (to_int b)
 
-  predicate (<) (a b : t) = Int.(<) (to_int a) (to_int b)
+  meta "inline : no" predicate (<) (a b : t) = Int.(<) (to_int a) (to_int b)
 
-  predicate (>=) (a b : t) = Int.(>=) (to_int a) (to_int b)
+  meta "inline : no" predicate (>=) (a b : t) = Int.(>=) (to_int a) (to_int b)
 
-  predicate (>) (a b : t) = Int.(>) (to_int a) (to_int b)
+  meta "inline : no" predicate (>) (a b : t) = Int.(>) (to_int a) (to_int b)
 end
 
 module Generic_enum
