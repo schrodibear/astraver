@@ -57,13 +57,18 @@ theory Enum
         in_bounds x /\ in_bounds y ->
           x = y
 
-  meta "inline : no" predicate (<=) (a b : t) = Int.(<=) (to_int a) (to_int b)
+  predicate (<=) (a b : t) = Int.(<=) (to_int a) (to_int b)
 
-  meta "inline : no" predicate (<) (a b : t) = Int.(<) (to_int a) (to_int b)
+  predicate (<) (a b : t) = Int.(<) (to_int a) (to_int b)
 
-  meta "inline : no" predicate (>=) (a b : t) = Int.(>=) (to_int a) (to_int b)
+  predicate (>=) (a b : t) = Int.(>=) (to_int a) (to_int b)
 
-  meta "inline : no" predicate (>) (a b : t) = Int.(>) (to_int a) (to_int b)
+  predicate (>) (a b : t) = Int.(>) (to_int a) (to_int b)
+
+  meta "inline : no" predicate (<=)
+  meta "inline : no" predicate (<)
+  meta "inline : no" predicate (>=)
+  meta "inline : no" predicate (>)
 end
 
 module Generic_enum
