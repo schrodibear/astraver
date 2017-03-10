@@ -1266,7 +1266,7 @@ let rec map_expr ?(before = fun x -> x) ?(after = fun x -> x) e =
 let fold_sub_expr_and_term_and_assertion
     itt ita itl itls ite ft fa fl fls fe acc e =
   let fold_sub_behavior = fold_sub_behavior itt ita itl itls ft fa fl fls in
-  let ite = ite ft fa fl fls fe and ita = ita ft fa and itt = itt ft in
+  let ite = ite ft fa fl fls fe and ita = ita ft fa and itt = itt ft and itl = itl ft fl fls in
   match e#node with
     | JCEconst _
     | JCEvar _
@@ -1323,8 +1323,9 @@ let fold_sub_expr_and_term_and_assertion
         let acc = ite acc e1 in
         let acc =
           List.fold_left
-            (fun acc (_id,inv,_assigns) ->
-               Option.fold ~f:ita ~init:acc inv
+            (fun acc (_id,inv, assigns) ->
+               Option.fold ~f:ita ~init:acc inv |>
+               Option.fold_left' ~f:(List.fold_left itl) assigns
                (* TODO: fold on assigns *))
             acc
             la.loop_behaviors
@@ -1363,8 +1364,12 @@ let rec fold_rec_expr_and_term_and_assertion ft fa fl fls fe acc e =
   else acc
 
 let iter_expr_and_term_and_assertion ft fa fl fls fe e =
-  fold_expr_and_term_and_assertion (fold_unit ft) (fold_unit fa)
-    (fold_unit fl) (fold_unit fls) (fold_unit fe) () e
+  fold_expr_and_term_and_assertion
+    (fun () t -> iter_term ft t)
+    (fun () a -> iter_term_and_assertion ft fa a)
+    (fun () loc -> iter_location ft fl fls loc)
+    (fun () ls -> fls ls)
+    (fun () e -> fe e) () e
 
 
 module NExprAst = struct
