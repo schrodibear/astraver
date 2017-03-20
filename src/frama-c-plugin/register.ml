@@ -52,12 +52,18 @@ let avoid_frama_c_stdlib () =
   if Config.Analysis.get () then
     Kernel.FramaCStdLib.off ()
 
+let activate_enum_int_casts () =
+  if Config.Analysis.get () then
+    Kernel.ForceEnumIntCasts.on ()
+
 let () =
   (* [JS 2009/10/04]
      Preserve the behaviour of svn release <= r5012.
      However it works only if the int-model is set from the command line. *)
   (* Extension -- support for specialized memcpy() versions. *)
-  List.iter Cmdline.run_after_configuring_stage [treat_jessie_spec_prolog; avoid_frama_c_stdlib]
+  List.iter
+    Cmdline.run_after_configuring_stage
+    [treat_jessie_spec_prolog; avoid_frama_c_stdlib; activate_enum_int_casts]
 
 let steal_globals () =
   let vis =
