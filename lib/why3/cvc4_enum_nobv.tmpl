@@ -1,0 +1,48 @@
+theory core.Jessie_pointer
+  meta "select_inst" "none"
+  meta "select_lskept" "none"
+  meta "select_lsinst" "all"
+end
+
+{% macro bit (signed, size) -%}
+{% if signed -%}
+  {% set u = "" %}
+{% else -%}
+  {% set u = "u" %}
+{% endif -%}
+theory enum.Bit_{{u}}int{{size}}
+
+  {% if signed -%}
+  {% else -%}
+  remove prop To_uint
+  {% endif -%}
+
+  remove prop To_uint_lsr
+  remove prop To_uint_lsl_modulo
+
+  remove prop Nth_bw_or
+  remove prop Nth_bw_and
+  remove prop Nth_bw_xor
+  remove prop Nth_bw_not
+  remove prop Lsr_nth_low
+  remove prop Lsr_nth_high
+  remove prop Asr_nth_low
+  remove prop Asr_nth_high
+  remove prop Lsl_modulo_nth_low
+  remove prop Lsl_modulo_nth_high
+
+  remove prop Nth
+
+  {%- if size <= 32 %}
+  remove prop To_int_def
+  {%- else %}
+  {%- endif %}
+end
+{% endmacro -%}
+{% set sizes = [8, 16, 32, 64] %}
+{% set signs = [true, false] %}
+{% for size in sizes -%}
+{% for sign in signs -%}
+{{ bit (sign, size) }}
+{% endfor -%}
+{% endfor -%}

@@ -1,0 +1,168 @@
+theory core.Jessie_pointer
+  meta "select_inst" "none"
+  meta "select_lskept" "none"
+  meta "select_lsinst" "all"
+end
+
+theory enum.Bit_int8
+
+  remove prop To_uint_lsr
+  remove prop To_uint_lsl_modulo
+
+  remove prop Nth_bw_or
+  remove prop Nth_bw_and
+  remove prop Nth_bw_xor
+  remove prop Nth_bw_not
+  remove prop Lsr_nth_low
+  remove prop Lsr_nth_high
+  remove prop Asr_nth_low
+  remove prop Asr_nth_high
+  remove prop Lsl_modulo_nth_low
+  remove prop Lsl_modulo_nth_high
+
+  remove prop Nth
+  remove prop To_int_def
+end
+
+theory enum.Bit_uint8
+
+  remove prop To_uint
+  remove prop To_uint_lsr
+  remove prop To_uint_lsl_modulo
+
+  remove prop Nth_bw_or
+  remove prop Nth_bw_and
+  remove prop Nth_bw_xor
+  remove prop Nth_bw_not
+  remove prop Lsr_nth_low
+  remove prop Lsr_nth_high
+  remove prop Asr_nth_low
+  remove prop Asr_nth_high
+  remove prop Lsl_modulo_nth_low
+  remove prop Lsl_modulo_nth_high
+
+  remove prop Nth
+  remove prop To_int_def
+end
+
+theory enum.Bit_int16
+
+  remove prop To_uint_lsr
+  remove prop To_uint_lsl_modulo
+
+  remove prop Nth_bw_or
+  remove prop Nth_bw_and
+  remove prop Nth_bw_xor
+  remove prop Nth_bw_not
+  remove prop Lsr_nth_low
+  remove prop Lsr_nth_high
+  remove prop Asr_nth_low
+  remove prop Asr_nth_high
+  remove prop Lsl_modulo_nth_low
+  remove prop Lsl_modulo_nth_high
+
+  remove prop Nth
+  remove prop To_int_def
+end
+
+theory enum.Bit_uint16
+
+  remove prop To_uint
+  remove prop To_uint_lsr
+  remove prop To_uint_lsl_modulo
+
+  remove prop Nth_bw_or
+  remove prop Nth_bw_and
+  remove prop Nth_bw_xor
+  remove prop Nth_bw_not
+  remove prop Lsr_nth_low
+  remove prop Lsr_nth_high
+  remove prop Asr_nth_low
+  remove prop Asr_nth_high
+  remove prop Lsl_modulo_nth_low
+  remove prop Lsl_modulo_nth_high
+
+  remove prop Nth
+  remove prop To_int_def
+end
+
+theory enum.Bit_int32
+
+  remove prop To_uint_lsr
+  remove prop To_uint_lsl_modulo
+
+  remove prop Nth_bw_or
+  remove prop Nth_bw_and
+  remove prop Nth_bw_xor
+  remove prop Nth_bw_not
+  remove prop Lsr_nth_low
+  remove prop Lsr_nth_high
+  remove prop Asr_nth_low
+  remove prop Asr_nth_high
+  remove prop Lsl_modulo_nth_low
+  remove prop Lsl_modulo_nth_high
+
+  remove prop Nth
+  remove prop To_int_def
+end
+
+theory enum.Bit_uint32
+
+  remove prop To_uint
+  remove prop To_uint_lsr
+  remove prop To_uint_lsl_modulo
+
+  remove prop Nth_bw_or
+  remove prop Nth_bw_and
+  remove prop Nth_bw_xor
+  remove prop Nth_bw_not
+  remove prop Lsr_nth_low
+  remove prop Lsr_nth_high
+  remove prop Asr_nth_low
+  remove prop Asr_nth_high
+  remove prop Lsl_modulo_nth_low
+  remove prop Lsl_modulo_nth_high
+
+  remove prop Nth
+  remove prop To_int_def
+end
+
+theory enum.Bit_int64
+
+  remove prop To_uint_lsr
+  remove prop To_uint_lsl_modulo
+
+  remove prop Nth_bw_or
+  remove prop Nth_bw_and
+  remove prop Nth_bw_xor
+  remove prop Nth_bw_not
+  remove prop Lsr_nth_low
+  remove prop Lsr_nth_high
+  remove prop Asr_nth_low
+  remove prop Asr_nth_high
+  remove prop Lsl_modulo_nth_low
+  remove prop Lsl_modulo_nth_high
+
+  remove prop Nth
+end
+
+theory enum.Bit_uint64
+
+  remove prop To_uint
+  remove prop To_uint_lsr
+  remove prop To_uint_lsl_modulo
+
+  remove prop Nth_bw_or
+  remove prop Nth_bw_and
+  remove prop Nth_bw_xor
+  remove prop Nth_bw_not
+  remove prop Lsr_nth_low
+  remove prop Lsr_nth_high
+  remove prop Asr_nth_low
+  remove prop Asr_nth_high
+  remove prop Lsl_modulo_nth_low
+  remove prop Lsl_modulo_nth_high
+
+  remove prop Nth
+end
+

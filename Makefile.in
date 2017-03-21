@@ -70,9 +70,18 @@ PVSLIB = $(DESTDIR)@PVSLIB@
 GENERATED = src/why/why_version.ml \
 	    src/jc/jc_version.ml \
             lib/why3/why3.conf \
-            lib/why3/z3.drv \
-            lib/why3/cvc4.drv \
-            lib/why3/alt-ergo.drv
+            lib/why3/z3_enum.drv \
+            lib/why3/z3_enum_nobv.drv \
+            lib/why3/cvc4_enum.drv \
+            lib/why3/cvc4_enum_nobv.drv \
+            lib/why3/alt-ergo_enum.drv \
+            lib/why3/alt-ergo_remove_triggers_enum.drv \
+            lib/why3/z3_enum.gen \
+            lib/why3/z3_enum_nobv.gen \
+            lib/why3/cvc4_enum.gen \
+            lib/why3/cvc4_enum_nobv.gen \
+            lib/why3/alt-ergo_enum.gen \
+            lib/why3/alt-ergo_remove_triggers_enum.gen
 
 # main targets
 ##############
@@ -137,22 +146,24 @@ LIBWHY3=@libdir@/jessie
 
 WHY3_DATADIR=$(shell why3 --print-datadir)
 
-lib/why3/%_enum.gen: lib/why3/%_enum.tmpl
+lib/why3/%.gen: lib/why3/%.tmpl
 	./generate.ml $<
 
-lib/why3/%.drv: lib/why3/%_enum.gen
+lib/why3/%.drv: lib/why3/%.gen
 	@DRIVER=smt-libv2.drv; \
-	if [ $(@F) = alt-ergo.drv -o $(@F) = alt-ergo_remove_triggers.drv ]; then \
+	if [ $(@F) = alt-ergo_enum.drv -o $(@F) = alt-ergo_remove_triggers_enum.drv ]; then \
 	  DRIVER=alt_ergo.drv; \
-	elif [ $(@F) = cvc4.drv ]; then \
-	  DRIVER=cvc4_14.drv; \
-	elif [ $(@F) = z3.drv ]; then \
-	  DRIVER=z3_432.drv; \
+	elif [ $(@F) = cvc4_enum.drv ]; then \
+	  DRIVER=cvc4_15.drv; \
+	elif [ $(@F) = z3_enum.drv ]; then \
+	  DRIVER=z3_400.drv; \
 	fi; \
 	cp $< $@; \
 	printf "import \"$(WHY3_DATADIR)/drivers/$${DRIVER}\"" >> $@
 
-lib/why3/why3.conf:  lib/why3/cvc4.drv lib/why3/z3.drv lib/why3/alt-ergo.drv lib/why3/alt-ergo_remove_triggers.drv Makefile
+.PRECIOUS: lib/why3/cvc4_enum.gen lib/why3/cvc4_enum_nobv.gen lib/why3/z3_enum.gen lib/why3/z3_enum_nobv.gen lib/why3/alt-ergo_enum.gen lib/why3/alt-ergo_remove_triggers_enum.gen
+
+lib/why3/why3.conf:  lib/why3/cvc4_enum.drv lib/why3/cvc4_enum_nobv.drv lib/why3/z3_enum.drv lib/why3/z3_enum_nobv.drv lib/why3/alt-ergo_enum.drv lib/why3/alt-ergo_remove_triggers_enum.drv Makefile
 	@printf "[main]\n" > $@
 	@printf "loadpath=\"$(LIBWHY3)/why3\"\n" >> $@
 	@printf "\n" >> $@
@@ -165,11 +176,13 @@ lib/why3/why3.conf:  lib/why3/cvc4.drv lib/why3/z3.drv lib/why3/alt-ergo.drv lib
 
 	@printf "[prover_modifiers]\n" >> $@
 	@printf "name=\"CVC4\"\n" >> $@
+	@printf "alternative = \"\"\n" >> $@
 	@printf "driver=\"$(LIBWHY3)/why3/cvc4_enum.gen\"\n" >> $@
 	@printf "\n"  >> $@
 
 	@printf "[prover_modifiers]\n" >> $@
 	@printf "name=\"Z3\"\n" >> $@
+	@printf "alternative = \"\"\n" >> $@
 	@printf "driver=\"$(LIBWHY3)/why3/z3_enum.gen\"\n" >> $@
 	@printf "\n"  >> $@
 
@@ -188,52 +201,17 @@ lib/why3/why3.conf:  lib/why3/cvc4.drv lib/why3/z3.drv lib/why3/alt-ergo.drv lib
 	@printf "driver=\"$(LIBWHY3)/why3/alt-ergo_enum.gen\"\n" >> $@
 	@printf "\n"  >> $@
 
-	@printf "[prover]\n" >> $@
-	@printf "alternative = \"-trigs\"\n" >> $@
-	@printf "command = \"%%l/why3-cpulimit %%t %%m -s z3 -smt2 parser.ignore_user_patterns=true %%f\"\n" >> $@
-	@printf "driver = \"$(LIBWHY3)/why3/z3.drv\"\n" >> $@
-	@printf "editor = \"\"\n" >> $@
-	@printf "in_place = false\n" >> $@
-	@printf "interactive = false\n" >> $@
-	@printf "name = \"Z3\"\n" >> $@
-	@printf "version = \"4.4.0\"\n" >> $@
-	@printf "\n" >> $@
+	@printf "[prover_modifiers]\n" >> $@
+	@printf "name=\"CVC4\"\n" >> $@
+	@printf "alternative = \"noBV\"\n" >> $@
+	@printf "driver=\"$(LIBWHY3)/why3/cvc4_enum_nobv.gen\"\n" >> $@
+	@printf "\n"  >> $@
 
-	@printf "[prover]\n" >> $@
-	@printf "alternative = \"'14\"\n" >> $@
-	@printf "command = \"%%l/why3-cpulimit %%t %%m -s cvc4 --lang=smt2 --simplification=none\
-		--quant-cf --qcf-tconstraint --mbqi=gen-ev --full-saturate-quant --uf-ss-fair %%f\"\n" >> $@
-	@printf "driver = \"$(LIBWHY3)/why3/cvc4.drv\"\n" >> $@
-	@printf "editor = \"\"\n" >> $@
-	@printf "in_place = false\n" >> $@
-	@printf "interactive = false\n" >> $@
-	@printf "name = \"CVC4\"\n" >> $@
-	@printf "version = \">=1.4\"\n" >> $@
-	@printf "\n" >> $@
-
-	@printf "[prover]\n" >> $@
-	@printf "alternative = \"-Em\"\n" >> $@
-	@printf "command = \"%%l/why3-cpulimit %%T %%m -s alt-ergo -timelimit %%t %%f -no-Ematching\"\n" >> $@
-	@printf "command_steps = \"%%l/why3-cpulimit %%U %%m -s alt-ergo -steps-bound %%S %%f -no-Ematching\"\n" >> $@
-	@printf "driver = \"$(LIBWHY3)/why3/alt-ergo.drv\"\n" >> $@
-	@printf "editor = \"altgr-ergo\"\n" >> $@
-	@printf "in_place = false\n" >> $@
-	@printf "interactive = false\n" >> $@
-	@printf "name = \"Alt-Ergo\"\n" >> $@
-	@printf "version = \"1.01\"\n" >> $@
-	@printf "\n" >> $@
-
-	@printf "[prover]\n" >> $@
-	@printf "alternative = \"-trigs\"\n" >> $@
-	@printf "command = \"%%l/why3-cpulimit %%T %%m -s alt-ergo -timelimit %%t %%f\"\n" >> $@
-	@printf "command_steps = \"%%l/why3-cpulimit %%U %%m -s alt-ergo -steps-bound %%S %%f\"\n" >> $@
-	@printf "driver = \"$(LIBWHY3)/why3/alt-ergo_remove_triggers.drv\"\n" >> $@
-	@printf "editor = \"altgr-ergo\"\n" >> $@
-	@printf "in_place = false\n" >> $@
-	@printf "interactive = false\n" >> $@
-	@printf "name = \"Alt-Ergo\"\n" >> $@
-	@printf "version = \"1.01\"\n" >> $@
-	@printf "\n" >> $@
+	@printf "[prover_modifiers]\n" >> $@
+	@printf "name=\"Z3\"\n" >> $@
+	@printf "alternative = \"noBV\"\n" >> $@
+	@printf "driver=\"$(LIBWHY3)/why3/z3_enum_nobv.gen\"\n" >> $@
+	@printf "\n"  >> $@
 
 	@printf "[editor_modifiers coqide]\n" >> $@
 	@printf "option=\"-R $(LIBWHY3)/coq Jessie\"\n" >> $@
@@ -280,8 +258,8 @@ install-lib: $(JCLIB) lib/why3/why3.conf
 	rm -rf $(LIBDIR)/jessie/why3
 	mkdir -p $(LIBDIR)/jessie/why3
 	cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/core.mlw lib/why3/enum.mlw $(LIBDIR)/jessie/why3
-	cp -f lib/why3/cvc4_enum.gen lib/why3/alt-ergo_enum.gen lib/why3/alt-ergo_remove_triggers_enum.gen lib/why3/z3_enum.gen $(LIBDIR)/jessie/why3
-	cp -f lib/why3/cvc4.drv lib/why3/alt-ergo.drv lib/why3/alt-ergo_remove_triggers.drv lib/why3/z3.drv $(LIBDIR)/jessie/why3
+	cp -f lib/why3/cvc4_enum.gen lib/why3/cvc4_enum_nobv.gen lib/why3/alt-ergo_enum.gen lib/why3/alt-ergo_remove_triggers_enum.gen lib/why3/z3_enum.gen lib/why3/z3_enum_nobv.gen $(LIBDIR)/jessie/why3
+	cp -f lib/why3/cvc4_enum.drv lib/why3/alt-ergo_enum.drv lib/why3/alt-ergo_remove_triggers_enum.drv lib/why3/z3_enum.drv $(LIBDIR)/jessie/why3
 	mkdir -p $(LIBDIR)/jessie
 	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
 

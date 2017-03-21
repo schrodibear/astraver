@@ -58,10 +58,12 @@ generate.ml.exe
 /bin/jessie.byte
 
 /lib/why3/why3.conf
-/lib/why3/alt-ergo.drv
-/lib/why3/alt-ergo_remove_triggers.drv
-/lib/why3/cvc4.drv
-/lib/why3/z3.drv
+/lib/why3/alt-ergo_enum.drv
+/lib/why3/alt-ergo_remove_triggers_enum.drv
+/lib/why3/cvc4_enum.drv
+/lib/why3/cvc4_enum_nobv.drv
+/lib/why3/z3_enum.drv
+/lib/why3/z3_enum_nobv.drv
 
 /src/why/why_lexer.ml
 /src/why/why_linenum.ml
