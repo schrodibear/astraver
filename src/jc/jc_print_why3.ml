@@ -1276,8 +1276,8 @@ struct
               let f (type k) (e : k entry) =
                 let add name = H.add state name (init, Entry e) in
                 match e with
-                | Theory (name, _) -> add (register name)
-                | Module (name, _) -> add (register name)
+                | Theory (id, _) -> add (register id.why_name)
+                | Module (id, _) -> add (register id.why_name)
               in
               List.iter (fun (Entry e) -> f e) file;
               { iter = fun ~consts ~entry -> continue ~state ~consts ~entry:(fun () -> assert false) ~entry':entry }
@@ -1412,20 +1412,20 @@ struct
               match entry' with
               | Theory (_, None) -> S.empty
               | Module (_, None) -> S.empty
-              | Theory (name, Some (_, decls)) ->
-                memo name @@
+              | Theory (id, Some (_, decls)) ->
+                memo id.why_name @@
                 fun () ->
                 List.fold_left
-                  (fold_decls ~entry:name ~kind:Theory @@ map_ints ~how:`Theory)
+                  (fold_decls ~entry:id.why_name ~kind:Theory @@ map_ints ~how:`Theory)
                   (S.empty, M'.empty)
                   decls |>
                 close_bw_ints
-              | Module (name, Some (_, safe, decls)) ->
-                memo name @@
+              | Module (id, Some (_, safe, decls)) ->
+                memo id.why_name @@
                 fun () ->
                 let map = M.fold M.add (map_ints ~how:`Theory) @@ map_ints ~how:(`Module safe) in
                 List.fold_left
-                  (fold_decls ~entry:name ~kind:(Module safe) map)
+                  (fold_decls ~entry:id.why_name ~kind:(Module safe) map)
                   (S.empty, M'.empty)
                   decls |>
                 close_bw_ints
@@ -1473,13 +1473,13 @@ struct
               begin match entry' with
               | Theory (_, None) -> consts
               | Module (_, None) -> consts
-              | Theory (name, Some (deps, decls)) ->
+              | Theory ({ why_name = name }, Some (deps, decls)) ->
                 List.fold_left
                   (fun acc ->
                      function
-                     | Use (_, Theory (name', _))
-                     | Clone (_, Theory (name', _), _) ->
-                       enter acc name' None)
+                     | Use (_, Theory (id', _))
+                     | Clone (_, Theory (id', _), _) ->
+                       enter acc id'.why_name None)
                   (consts, M.empty)
                   !deps |~>
                 ListLabels.fold_left ~f:(f ~entry:name ~kind:Theory ~name) decls |>
@@ -1496,14 +1496,14 @@ struct
                   fst @@ enter acc name None
                 else
                   consts
-              | Module (name, Some (deps, safe, decls)) ->
+              | Module ({ why_name = name }, Some (deps, safe, decls)) ->
                 List.fold_left
                   (fun acc ->
                      fun (Dependency d) ->
                        let enter (type k) =
                          function
-                         | (Theory (name', _) : k entry) -> enter acc name' None
-                       | Module (name', _) -> enter acc name' None
+                         | (Theory (id', _) : k entry) -> enter acc id'.why_name None
+                         | Module (id', _) -> enter acc id'.why_name None
                        in
                        match d with
                        | Use (_, e) | Clone (_, e, _) -> enter e)
@@ -1573,12 +1573,12 @@ struct
               match entry () with
               | Theory (_, None) -> consts
               | Module (_, None) -> consts
-              | Theory (name, Some (_, decls)) ->
+              | Theory ({ why_name = name }, Some (_, decls)) ->
                 let why_decl = why_decl ~entry:name ~kind:Theory ~bw_ints in
                 let rec self ~consts d = f ~kind:Theory ~name ~self ~why_decl ~consts d in
                 let enter ~consts { why_id = { why_name } } = enter ~self ~why_decl consts why_name in
                 List.fold_left (fun consts d -> enter ~consts:(self ~consts d) d) consts @@ sort decls
-              | Module (name, Some (_, safe, decls)) ->
+              | Module ({ why_name = name }, Some (_, safe, decls)) ->
                 let why_decl = why_decl ~entry:name ~kind:(Module safe) ~bw_ints in
                 let rec self ~consts d = f ~kind:(Module safe) ~name ~self ~why_decl ~consts d in
                 let enter ~consts { why_id = { why_name } } = enter ~self ~why_decl consts why_name in
@@ -1623,8 +1623,8 @@ let dependency fmttr =
   let pr fmt = fprintf fmttr fmt in
   let name (type a) =
     function
-    | (Theory (name, _) : a entry) -> name
-    | Module (name, _) -> name
+    | (Theory (id, _) : a entry) -> id.why_name
+    | Module (id, _) -> id.why_name
   in
   function
   | Use (spec, entry) ->
@@ -1665,7 +1665,7 @@ let entry ~consts fmttr (type k) (entry : k entry) =
         | `Done -> `Done, consts)
   in
   let pr_entry kind name dep deps =
-    pr "@\n%s@ %a@ @[<hov 2>@\n%a" kind uid name (list dep ~sep:"@\n@\n" ~post:"@\n") deps;
+    pr "@\n%s@ %a@ @[<hov 2>@\n%a" kind (why_id ~constr:true) name (list dep ~sep:"@\n@\n" ~post:"@\n") deps;
     let consts = decls () in
     pr "@]@\nend@.";
     consts

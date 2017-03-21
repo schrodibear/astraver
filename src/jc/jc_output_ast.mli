@@ -341,9 +341,9 @@ type 'kind dependency =
                `Goal of string ] list
 and module_dependency = Dependency : [< `Theory | `Module of [ `Safe | `Unsafe ] ] dependency -> module_dependency
 and 'kind entry =
-  | Theory : string * ([ `Theory ] dependency list ref * [ `Theory ] why_decl list) option -> [ `Theory ] entry
+  | Theory : why_id * ([ `Theory ] dependency list ref * [ `Theory ] why_decl list) option -> [ `Theory ] entry
   | Module :
-      string * (module_dependency list ref *
+      why_id * (module_dependency list ref *
                 [ `Safe | `Unsafe ] * [ `Module of [ `Safe | `Unsafe ] ] why_decl list) option ->
     [ `Module of [ `Safe | `Unsafe ] ] entry
 

@@ -227,6 +227,14 @@ end
 
 let (|?) xo default = Option.value ~default xo
 
+module String =
+struct
+  include String
+
+  let capitalize = capitalize_ascii
+  let lowercase = lowercase_ascii
+end
+
 module List =
 struct
   include List

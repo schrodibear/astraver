@@ -2619,20 +2619,23 @@ let axiomatic name data =
       data.axiomatics_defined_ids
   in
   let goals = List.map axiomatic_decl data.axiomatics_decls in
-  O.[Entry.some (Th.mk ~name:(Name.Theory.axiomatic name) @@ List.flatten @@ logics @ goals)]
+  O.[Entry.some (Th.mk ~id:(Wid.mk @@ Name.Theory.axiomatic name) @@ List.flatten @@ logics @ goals)]
 
 let logic_fun li body =
   if li.li_axiomatic = None then
     O.[Entry.some @@
        Th.mk
-         ~name:(fst @@ Name.Theory.axiomatic_of li)
+         ~id:(Wid.mk @@ fst @@ Name.Theory.axiomatic_of li)
          ~deps:(global_imports ~for_:`Logic ~lookup:Th.dummy li.li_effects)
          (logic_fun li body)]
   else
     []
 
 let prop pos id ~is_axiom labels p =
-  O.[Entry.some @@ Th.mk ~name:(fst @@ Name.Theory.lemma ~is_axiom id) @@ prop pos id ~is_axiom labels p]
+  let expl = (if is_axiom then "Axiom " else "Lemma ") ^ id in
+  let pos = Jc_position.of_pos pos in
+  O.[Entry.some @@
+     Th.mk ~id:(Wid.mk ~expl ~pos @@ fst @@ Name.Theory.lemma ~is_axiom id) @@ prop pos id ~is_axiom labels p]
 
 (******************************************************************************)
 (*                                 Functions                                  *)
@@ -3092,7 +3095,7 @@ let func f funpos spec body =
      Hashtbl.add function_prototypes name (O.Wt.some fun_type);
      O.Entry.some @@
      O.Mod.mk
-       ~name:(Name.Module.func ~extern:true ~safe:true f)
+       ~id:(O.Wid.mk @@ Name.Module.func ~extern:true ~safe:true f)
        ~safe:false
        ~deps
        [O.Wd.mk ~name @@ Param fun_type]
@@ -3112,7 +3115,7 @@ let func f funpos spec body =
      Hashtbl.add function_prototypes name (O.Wt.some fun_type);
      O.Entry.some @@
      O.Mod.mk
-       ~name:(Name.Module.func ~extern:true ~safe:false f)
+       ~id:(O.Wid.mk @@ Name.Module.func ~extern:true ~safe:false f)
        ~safe:false
        ~deps
        [O.Wd.mk ~name @@ Param fun_type]
@@ -3197,6 +3200,7 @@ let func f funpos spec body =
                       v.vi_final_name <- List.assoc n list_of_refs)
                  fparams))
           in
+          let pos = Position.of_pos funpos in
           (* safety behavior *)
           (if (Options.verify_behavior "safety" || Options.verify_behavior "variant") &&
               not (is_purely_exceptional_fun spec) && not Options.verify_invariants_only
@@ -3209,13 +3213,13 @@ let func f funpos spec body =
              let safety_body = wrap_body f spec behav body in
              [O.Entry.some @@
               O.Mod.mk
-                ~name:(Name.Module.func ~safe:true ~extern:false f)
+                ~id:(O.Wid.mk ~expl:(f.fun_name ^ ", safety") ~pos @@ Name.Module.func ~safe:true ~extern:false f)
                 ~safe:true
                 ~deps
                 [O.Wd.mk
                    ~name
                    ~expl:("Function " ^ f.fun_name ^ ", safety")
-                   ~pos:(Position.of_pos funpos)
+                   ~pos
                    (Def
                       (O.E.mk @@ Fun (
                          params,
@@ -3233,7 +3237,7 @@ let func f funpos spec body =
           @
           [O.Entry.some @@
            O.Mod.mk
-             ~name:(Name.Module.func ~safe:false ~extern:false f)
+             ~id:(O.Wid.mk ~expl:(f.fun_name ^ ", behaviors") ~pos @@ Name.Module.func ~safe:false ~extern:false f)
              ~safe:false
              ~deps
              (List.fold_right
@@ -3314,7 +3318,7 @@ let func f funpos spec body =
 let logic_type (name, l) =
   O.[Entry.some @@
      Th.mk
-       ~name:(fst @@ Name.Theory.logic_type name)
+       ~id:(Wid.mk @@ fst @@ Name.Theory.logic_type name)
        [Wd.mk ~name @@ Type (List.map Type_var.name l)]]
 
 let enum_entry_name ~how (type a) : a bounded integer -> _ =
@@ -3346,7 +3350,7 @@ let enums eis =
   let mod_ ~th ~safe ty =
     Entry.some @@
     Mod.mk
-      ~name:(enum_entry_name ~how:(`Module (`Abstract, if safe then `Safe else `Unsafe)) ty)
+      ~id:(Wid.mk @@ enum_entry_name ~how:(`Module (`Abstract, if safe then `Safe else `Unsafe)) ty)
       ~safe
       ~deps:[Dependency (Use (`Import None, th));
              Dependency (Clone (`Export, generic_enum, here));
@@ -3372,7 +3376,7 @@ let enums eis =
         let bw_mod ~safe =
           Entry.some
             (Mod.mk
-               ~name:(enum_entry_name ~how:(`Module (`Bitvector, if safe then `Safe  else `Unsafe)) i)
+               ~id:(Wid.mk @@ enum_entry_name ~how:(`Module (`Bitvector, if safe then `Safe  else `Unsafe)) i)
                ~safe
                ~deps:[Dependency (Use (`Import None, bw_th));
                       Dependency (Clone (`Export, generic_bit_enum, here));
@@ -3390,13 +3394,13 @@ let enums eis =
         let min = "min" and max = "max" in
         let enum_aux =
           Th.mk
-            ~name:(enum_entry_name ~how:(`Theory `Abstract) e ^ "_aux")
+            ~id:(Wid.mk @@ enum_entry_name ~how:(`Theory `Abstract) e ^ "_aux")
             [Wd.mk ~name:min @@ Function ([], Lt.integer, T.num ei_min);
              Wd.mk ~name:max @@ Function ([], Lt.integer, T.num ei_max)]
         in
         let th =
           Th.mk
-            ~name:(enum_entry_name ~how:(`Theory `Abstract) e)
+            ~id:(Wid.mk @@ enum_entry_name ~how:(`Theory `Abstract) e)
             ~deps:[Use (`Import None, enum_aux);
                    Clone (`Export, enum, [`Constant (min, min); `Constant (max, max)])]
             []
@@ -3442,18 +3446,18 @@ let enum_cast (ei_to, ei_from) =
       let bw' = if bw then `Bitvector else `Abstract in
       [Entry.some @@
        Mod.mk
-         ~name:(name ~of_:(`Module (bw', `Unsafe)))
+         ~id:(Wid.mk @@ name ~of_:(`Module (bw', `Unsafe)))
          ~safe:false
          (cast_val ~safe:false ~bw ~m:false :: if bw then [cast_val ~safe:false ~bw ~m:true] else []);
        Entry.some @@
        Mod.mk
-         ~name:(name ~of_:(`Module (bw', `Safe)))
+         ~id:(Wid.mk @@ name ~of_:(`Module (bw', `Safe)))
          ~safe:true
          (cast_val ~safe:true ~bw ~m:false :: if bw then [cast_val ~safe:true ~bw ~m:true] else [])]
     in
     let th =
       Th.mk
-        ~name:(name ~of_:(`Theory `Abstract))
+        ~id:(Wid.mk @@ name ~of_:(`Theory `Abstract))
         [cast]
     in
     Entry.some th ::
@@ -3466,7 +3470,7 @@ let enum_cast (ei_to, ei_from) =
       Entry.some bw_th ::
       Entry.some
         (Th.mk
-           ~name:(name ~of_:how)
+           ~id:(Wid.mk @@ name ~of_:how)
            ~deps:[Use (`Export, th); Use (`Export, bw_th)]
            []) ::
       mods true
@@ -3489,7 +3493,7 @@ let exception_ ei =
 
 let exceptions () =
   O.[Entry.some @@
-     Mod.mk ~safe:false ~name:(fst @@ Name.Module.exceptions) @@
+     Mod.mk ~safe:false ~id:(Wid.mk @@ fst @@ Name.Module.exceptions) @@
      StringHashtblIter.fold
        (fun _ ei acc -> exception_ ei :: acc)
        Typing.exceptions_table
@@ -3550,10 +3554,10 @@ let globals () =
     fun () ->
       H.fold
         (fun pc decls acc ->
-           O.(Entry.some @@ Mod.mk ~safe:false ~name:(fst @@ Name.Module.globals (Some pc)) decls) :: acc)
+           O.(Entry.some @@ Mod.mk ~safe:false ~id:(Wid.mk @@ fst @@ Name.Module.globals (Some pc)) decls) :: acc)
         pcs
         [] @
-      O.[Entry.some @@ Mod.mk ~safe:false ~name:(fst @@ Name.Module.globals None) !global]
+      O.[Entry.some @@ Mod.mk ~safe:false ~id:(Wid.mk @@ fst @@ Name.Module.globals None) !global]
   in
   wrap
     (fun ~add ->

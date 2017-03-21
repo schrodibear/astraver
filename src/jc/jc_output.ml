@@ -1426,24 +1426,28 @@ struct
     F.tag_extends () $ T.tag_table ?r ?deref ~lab:old ri ^. T.tag_table ?r ?deref ?lab ri
 end
 
+module Wid =
+struct
+  let mk ?expl:(why_expl="") ?pos:(why_pos=Position.dummy) why_name = { why_name; why_expl; why_pos }
+end
+
 module Wd =
 struct
   let id { why_id } = why_id
 
-  let mk ~name:why_name ?expl:(why_expl="") ?pos:(why_pos = Position.dummy) why_decl =
-    { why_id = { why_name; why_expl; why_pos }; why_decl }
+  let mk ~name ?expl ?pos why_decl = { why_id = Wid.mk ?expl ?pos name; why_decl }
 end
 
 module Th =
 struct
-  let mk ~name ?(deps=[]) decls = Theory (name, Some (ref deps, decls))
-  let dummy name = Theory (name, None)
+  let mk ~id ?(deps=[]) decls = Theory (id, Some (ref deps, decls))
+  let dummy name = Theory (Wid.mk name, None)
 end
 
 module Mod =
 struct
-  let mk ~name ~safe ?(deps=[]) decls = Module (name, Some (ref deps, (if safe then `Safe else `Unsafe), decls))
-  let dummy name = Module (name, None)
+  let mk ~id ~safe ?(deps=[]) decls = Module (id, Some (ref deps, (if safe then `Safe else `Unsafe), decls))
+  let dummy name = Module (Wid.mk name, None)
 end
 
 module Entry =

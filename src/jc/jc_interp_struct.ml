@@ -823,12 +823,12 @@ let struc =
           [])
     in
     O.[Entry.some @@
-       Th.mk ~name:(fst @@ Name.Theory.struct_ (JCtag (si, []))) ~deps @@
+       Th.mk ~id:(Wid.mk @@ fst @@ Name.Theory.struct_ (JCtag (si, []))) ~deps @@
        tag_id_type @ int_of_tag_axiom @ preds @ instanceof_implies_typeof_if_final @ parent_tag_axiom;
        Entry.some @@
-       Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:true (JCtag (si, []))) ~safe:true safe_params;
+       Mod.mk ~id:(Wid.mk @@ fst @@ Name.Module.struct_ ~safe:true (JCtag (si, []))) ~safe:true safe_params;
        Entry.some @@
-       Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:false (JCtag (si, []))) ~safe:false unsafe_params]
+       Mod.mk ~id:(Wid.mk @@ fst @@ Name.Module.struct_ ~safe:false (JCtag (si, []))) ~safe:false unsafe_params]
 
 let root ri =
   let unless_builtin ?(and_=true) =
@@ -880,12 +880,12 @@ let root ri =
       []
   in
   O.[Entry.some @@
-     Th.mk ~deps ~name:(fst @@ Name.Theory.struct_ (JCroot ri)) @@
+     Th.mk ~deps ~id:(Wid.mk @@ fst @@ Name.Theory.struct_ (JCroot ri)) @@
      type_param @ preds @ same_typeof_in_block_if_struct;
      Entry.some @@
-     Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:true (JCroot ri)) ~safe:true safe_params;
+     Mod.mk ~id:(Wid.mk @@ fst @@ Name.Module.struct_ ~safe:true (JCroot ri)) ~safe:true safe_params;
      Entry.some @@
-     Mod.mk ~name:(fst @@ Name.Module.struct_ ~safe:false (JCroot ri)) ~safe:false unsafe_params]
+     Mod.mk ~id:(Wid.mk @@ fst @@ Name.Module.struct_ ~safe:false (JCroot ri)) ~safe:false unsafe_params]
 
 let valid_pre ~in_param all_effects (* vi *) =
   function
