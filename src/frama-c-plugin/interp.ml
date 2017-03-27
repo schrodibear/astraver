@@ -905,11 +905,11 @@ and term ~default_label t =
       Printer.pp_term t
 
 and pred ~default_label p =
-  CurrentLoc.set p.loc;
+  CurrentLoc.set p.pred_loc;
   let term, _terms, coerce_floats, tag, pred, default_label, pred_at =
     let default_label, for_current_pred =
       let arg f = match default_label with `Force l | `Use l -> f l in
-      match p.content with
+      match p.pred_content with
       | Pvalid (l, _) -> arg (fun l -> `Force l), `Force l
       | _             -> arg (fun l -> `Use l), default_label
     in
@@ -922,18 +922,18 @@ and pred ~default_label p =
     fun l -> pred ~default_label:(match default_label with `Force _ -> `Force l | `Use _ -> `Use l)
   in
   let rec fully_valid =
-    let mk_term t = Logic_const.term ~loc:p.loc t Linteger in
-    let tinteger = Logic_const.tinteger ~loc:p.loc in
+    let mk_term t = Logic_const.term ~loc:p.pred_loc t Linteger in
+    let tinteger = Logic_const.tinteger ~loc:p.pred_loc in
     fun ?omin ?omax t ->
       let supplied_offs = Option.(is_some omin && is_some omax) in
       let omin, omax = omin |? tinteger 0, omax |? tinteger 0 in
       let valid ~omin ~omax =
         let t = term t in
-        let off_min = mkexpr (JCPEoffset (Offset_min, t)) p.loc in
-        let omin = mkexpr (JCPEbinary (off_min, `Ble, term omin)) p.loc in
-        let off_max = mkexpr (JCPEoffset (Offset_max, t)) p.loc in
-        let omax = mkexpr (JCPEbinary(off_max, `Bge, term omax)) p.loc in
-        mkconjunct [omin; omax] p.loc
+        let off_min = mkexpr (JCPEoffset (Offset_min, t)) p.pred_loc in
+        let omin = mkexpr (JCPEbinary (off_min, `Ble, term omin)) p.pred_loc in
+        let off_max = mkexpr (JCPEoffset (Offset_max, t)) p.pred_loc in
+        let omax = mkexpr (JCPEbinary(off_max, `Bge, term omax)) p.pred_loc in
+        mkconjunct [omin; omax] p.pred_loc
       in
       let omax =
         let size, size_gt_one =
@@ -960,25 +960,25 @@ and pred ~default_label p =
         in
         fun e ->
           let i = make_temp_logic_var Linteger in
-          let var_i = mkexpr (JCPEvar i.lv_name) p.loc in
+          let var_i = mkexpr (JCPEvar i.lv_name) p.pred_loc in
           match just_several with
           | Some (v1, v2) when v1 = v2 ->
             if v1 = 0 then e None else e @@ Some (tinteger v1)
           | Some (v1, v2) when Pervasives.(v1 <= v2) ->
-            mkconjunct List.(range v1 `To v2 |> map @@ fun i -> e @@ Some (tinteger i)) p.loc
-          | Some (v1, v2) -> mkexpr (JCPEconst (JCCboolean true)) p.loc
+            mkconjunct List.(range v1 `To v2 |> map @@ fun i -> e @@ Some (tinteger i)) p.pred_loc
+          | Some (v1, v2) -> mkexpr (JCPEconst (JCCboolean true)) p.pred_loc
           | None ->
             mkexpr
               (JCPEquantifier
                  (Forall, ltype Linteger, [new identifier i.lv_name], [],
                   mkimplies
                     [mkconjunct
-                       [mkexpr (JCPEbinary (term omin, `Ble, var_i)) p.loc;
-                        mkexpr (JCPEbinary (var_i, `Ble, term omax)) p.loc]
-                       p.loc]
+                       [mkexpr (JCPEbinary (term omin, `Ble, var_i)) p.pred_loc;
+                        mkexpr (JCPEbinary (var_i, `Ble, term omax)) p.pred_loc]
+                       p.pred_loc]
                     [e @@ Some (Logic_const.tvar i)]
-                    p.loc))
-              p.loc
+                    p.pred_loc))
+              p.pred_loc
       in
       let gen_valid ci =
         valid ~omin ~omax ::
@@ -1004,7 +1004,7 @@ and pred ~default_label p =
                   else
                     None)
               ci.cfields)
-           p.loc]
+           p.pred_loc]
       in
       mkconjunct
         (Type.Logic_c_type.map_default
@@ -1018,10 +1018,10 @@ and pred ~default_label p =
                | ty when Type.Ref.(is_ref ty && Type.Composite.Struct.is_struct @@ typ @@ of_typ_exn ty) ->
                  gen_valid @@ Type.Composite.(compinfo @@ of_typ_exn @@ Type.Ref.(typ @@ of_typ_exn ty))
                | _ -> [valid ~omin ~omax]))
-        p.loc
+        p.pred_loc
   in
   let enode =
-    match p.content with
+    match[@warning "-57"] p.pred_content with
     | Pfalse -> JCPEconst (JCCboolean false)
 
     | Ptrue -> JCPEconst (JCCboolean true)
@@ -1048,24 +1048,24 @@ and pred ~default_label p =
     | Prel ((Rlt | Rgt | Rle | Rge as rel), t1, t2)
       when Type.Logic_c_type.map_default ~f:isPointerType ~default:false t1.term_type ->
       (* Pointer comparison is translated as subtraction *)
-      let sube = mkexpr (JCPEbinary (term t1, `Bsub, term t2)) p.loc in
+      let sube = mkexpr (JCPEbinary (term t1, `Bsub, term t2)) p.pred_loc in
       JCPEbinary (sube, relation rel, zero_expr)
 
     | Prel (Req, t1, t2) when isTypeTagType t1.term_type ->
       JCPEeqtype (tag t1, tag t2)
 
     | Prel (Rneq, t1, t2) when isTypeTagType t1.term_type ->
-      let eq = mkexpr (JCPEeqtype(tag t1,tag t2)) p.loc in
+      let eq = mkexpr (JCPEeqtype(tag t1,tag t2)) p.pred_loc in
       JCPEunary (`Unot,eq)
 
     | Prel (rel,t1,t2) ->
       let res =
         product
-          (fun t1 t2 -> mkexpr (JCPEbinary (t1, relation rel, t2)) p.loc)
+          (fun t1 t2 -> mkexpr (JCPEbinary (t1, relation rel, t2)) p.pred_loc)
           (coerce_floats t1)
           (coerce_floats t2)
       in
-      (mkconjunct res p.loc)#node
+      (mkconjunct res p.pred_loc)#node
 
     | Pand(p1,p2) ->
       JCPEbinary (pred p1, `Bland, pred p2)
@@ -1074,10 +1074,10 @@ and pred ~default_label p =
       JCPEbinary(pred p1, `Blor, pred p2)
 
     | Pxor (p1,p2) ->
-      let notp2 = { p2 with content = Pnot p2; } in
-      let p1notp2 = { p with content = Pand(p1,notp2); } in
-      let notp1 = { p1 with content = Pnot p1; } in
-      let p2notp1 = { p with content = Pand(p2,notp1); } in
+      let notp2 = { p2 with pred_content = Pnot p2; } in
+      let p1notp2 = { p with pred_content = Pand(p1,notp2); } in
+      let notp1 = { p1 with pred_content = Pnot p1; } in
+      let p2notp1 = { p with pred_content = Pand(p2,notp1); } in
       JCPEbinary (pred p1notp2,`Blor, pred p2notp1)
 
     | Pimplies (p1, p2) ->
@@ -1114,7 +1114,7 @@ and pred ~default_label p =
       JCPEquantifier(Forall, ltype v.lv_type, [new identifier v.lv_name], [], pred p)
 
     | Pforall (v :: q, subp) ->
-      let newp = { p with content = Pforall(q,subp) } in
+      let newp = { p with pred_content = Pforall(q,subp) } in
       JCPEquantifier (Forall,ltype v.lv_type, [new identifier v.lv_name], [], pred newp)
 
     | Pexists ([], p) -> (pred p)#node
@@ -1123,13 +1123,13 @@ and pred ~default_label p =
       JCPEquantifier (Exists,ltype v.lv_type, [new identifier v.lv_name], [], pred p)
 
     | Pexists (v :: q, subp) ->
-      let newp = { p with content = Pexists(q,subp) } in
+      let newp = { p with pred_content = Pexists(q,subp) } in
       JCPEquantifier (Exists,ltype v.lv_type, [new identifier v.lv_name], [], pred newp)
 
     | Pat (p, lab) -> JCPEat (pred_at lab p, logic_label lab)
 
     | Pvalid (lab, { term_node = Tat (t, lab') }) ->
-      (pred { p with content = Pat ({ p with content = Pvalid (lab, t) }, lab') })#node
+      (pred { p with pred_content = Pat ({ p with pred_content = Pvalid (lab, t) }, lab') })#node
 
     | Pvalid (_lab,
               { term_node = TBinOp (PlusPI, t1,
@@ -1140,8 +1140,8 @@ and pred ~default_label p =
           if not guarded then
             result
           else
-            let cond = mkexpr (JCPEbinary (term omin, `Ble, term omax)) p.loc in
-            mkexpr (JCPEif (cond, result, true_expr)) p.loc
+            let cond = mkexpr (JCPEbinary (term omin, `Ble, term omax)) p.pred_loc in
+            mkexpr (JCPEif (cond, result, true_expr)) p.pred_loc
         in
         match start, stop with
         | None, _
@@ -1161,6 +1161,7 @@ and pred ~default_label p =
     | Pvalid (_lab, t) -> (fully_valid t)#node
 
     | Pvalid_read _ -> Console.unsupported "\\valid_read predicate is unsupported"
+    | Pvalid_function _ -> Console.unsupported "\\valid_function predicate is unsupported"
 
     | Pfresh (_lab1, _lab2, t, _) ->
       (* TODO: take into account size *)
@@ -1174,14 +1175,14 @@ and pred ~default_label p =
       when isPointerType ty ->
       JCPEinstanceof (term t, Type.Composite.(compinfo_cname (of_typ_exn @@ pointed_type ty)))
 
+    | Psubtype ({term_node = Ttype ty1}, {term_node = Ttype ty2})
+      when not (isPointerType ty1) || not (isPointerType ty2) ->
+      Console.unsupported "Subtyping relation (<:) is only suported for pointer types"
+
     | Psubtype (_, { term_node = Ttype ty })
     | Psubtype ({ term_node = Ttype ty }, _)
       when not (isPointerType ty) ->
       Console.unsupported "Subtyping relation (<:) is only suported for pointer types (here: \\type(%a))" Printer.pp_typ ty
-
-    | Psubtype ({term_node = Ttype ty1}, {term_node = Ttype ty2})
-      when not (isPointerType ty1) || not (isPointerType ty2) ->
-      Console.unsupported "Subtyping relation (<:) is only suported for pointer types"
 
     | Psubtype (t1, t2) ->
       JCPEsubtype (tag t1, tag t2)
@@ -1195,10 +1196,10 @@ and pred ~default_label p =
   let enode =
     match default_label, enode with
     | `Force _, JCPEat _ -> enode
-    | `Force l, _ -> JCPEat (mkexpr enode p.loc, logic_label l)
+    | `Force l, _ -> JCPEat (mkexpr enode p.pred_loc, logic_label l)
     | _ -> enode
   in
-  mkexpr enode p.loc
+  mkexpr enode p.pred_loc
 
 let terms ?(default_label=Logic_const.here_label) = terms ~default_label:(`Use default_label)
 
@@ -1208,7 +1209,7 @@ let pred ?(default_label=Logic_const.here_label) = pred ~default_label:(`Use def
 
 (* Keep names associated to predicate *)
 let named_pred ?(default_label=Logic_const.here_label) p =
-  List.fold_right (fun lab p -> mkexpr (JCPElabel(lab,p)) p#pos) p.name (pred ~default_label p)
+  List.fold_right (fun lab p -> mkexpr (JCPElabel(lab,p)) p#pos) p.pred_name (pred ~default_label p)
 
 let conjunct ?(default_label=Logic_const.here_label) pos pl =
   mkconjunct (List.map (pred ~default_label % Logic_const.pred_of_id_pred) pl) pos
@@ -1266,7 +1267,7 @@ let spec _fname funspec =
     let loc =
       function
       | [] -> Why_loc.dummy_position
-      | ip :: _ -> ip.ip_loc
+      | ip :: _ -> ip.ip_content.pred_loc
     in
     JCCbehavior(
       loc b.Cil_types.b_assumes,
@@ -1434,6 +1435,8 @@ let code_annot pos ((acc_assert_before, contract) as acc) a =
     end
   | AStmtSpec _ ->
     Console.unsupported "statement contract for a specific behavior"
+  | AExtended _ ->
+    Console.unsupported "code annotation extension"
 
 (*****************************************************************************)
 (* Cil to Jessie translation of coding constructs                            *)
@@ -1847,7 +1850,7 @@ let instruction = function
               else (* realloc *)
                 match eargs with [ _; arg ] -> arg | _ -> raise Exit
             with
-            | Invalid_argument "Extlib.as_singleton"
+            | Invalid_argument _
             | Exit ->
               Console.unsupported "incorrect arguments for Jessie builtin allocation function %s" (v :> varinfo).vname
           in
@@ -1859,9 +1862,9 @@ let instruction = function
                 let allocsiz = Integer.div (value_of_integral_expr arg) lvsiz in
                 let siznode = JCPEconst (JCCinteger (Integer.to_string allocsiz)) in
                 lvtyp, mkexpr siznode pos
-            | BinOp(Mult oft,({enode = Const c} as arg),nelem,_ty)
-            | BinOp(Mult oft, nelem,({enode = Const c} as arg),_ty)
-                when is_integral_const c ->
+            | BinOp (Mult oft, arg, nelem, _ty)
+              when possible_value_of_integral_expr arg <> None || possible_value_of_integral_expr nelem <> None ->
+                let arg, nelem = if possible_value_of_integral_expr arg <> None then arg, nelem else nelem, arg in
                 let factor = Integer.div (value_of_integral_expr arg) lvsiz in
                 let siz =
                   if Integer.equal factor Integer.one then expr nelem
@@ -2071,7 +2074,7 @@ let rec statement s =
             | APragma _ -> (* ignored *) acc
             | AAllocation _ -> (* Ignored *) acc
             (* No loop annotation. *)
-            | AAssert _ | AStmtSpec _ | AInvariant _ -> acc
+            | AAssert _ | AStmtSpec _ | AInvariant _ | AExtended _-> acc
         in
         let behs,variant =
           Annotations.fold_code_annot treat_loop_annot s ([],None)
@@ -2608,7 +2611,8 @@ let global vardefs g =
 
     | GEnumTagDecl _ -> [] (* No enumeration declaration in Jessie *)
 
-    | GVarDecl (_, v, pos) ->
+    | GVarDecl (v, pos)
+    | GFunDecl (_, v, pos) ->
       let excluded_function_names =
         Name.
           [Predicate.valid_string;
@@ -2987,7 +2991,7 @@ let memory_reinterpretation_predicates get_compinfo () =
       | x :: _ as xxs, y :: ys -> loop ((x, y) :: r) (xxs, ys)
       | _ -> raise (Invalid_argument "pairwise")
     in
-    loop [] (lst, try List.tl lst with Failure "tl" -> [])
+    loop [] (lst, try List.tl lst with Failure _ -> [])
   in
   let pairs =
     let rec handle_type name (ty, bitsize) acc =
@@ -3032,7 +3036,7 @@ let file f =
   in
   let is_needed =
     function
-      | GVarDecl(_,v,_) when Cil.hasAttribute "FC_BUILTIN" v.vattr ->
+      | GFunDecl(_,v,_) when Cil.hasAttribute "FC_BUILTIN" v.vattr ->
           v.vreferenced
       | _ -> true
   in
@@ -3077,7 +3081,7 @@ let pragma =
   | GPragma (Attr (name, [ACons (arg, [])]), _) ->
     begin match name with
     | "JessieFloatModel" ->
-      begin match String.lowercase arg with
+      begin match String.lowercase_ascii arg with
       | "math" -> float_model := `Math;
         [Jc.Print.JCfloat_model Jc.Env.FMmath]
       | "defensive" ->
@@ -3095,7 +3099,7 @@ let pragma =
           name s; []
       end;
     | "JessieFloatRoundingMode" ->
-      begin match String.lowercase arg with
+      begin match String.lowercase_ascii arg with
       | "nearesteven" ->
         (* float_rounding_mode := `NearestEven; *)
         [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMNearestEven]
@@ -3116,7 +3120,7 @@ let pragma =
           "pragma %s: identifier %s is not a valid value (ignored)" name s; []
       end
     | "JessieFloatInstructionSet" ->
-      begin match String.lowercase arg with
+      begin match String.lowercase_ascii arg with
       | "x87" ->
         [Jc.Print.JCfloat_instruction_set "x87"]
       | "ieee754" ->

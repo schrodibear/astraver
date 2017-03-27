@@ -110,7 +110,7 @@ class renaming_visitor add_variable add_logic_variable =
       | GCompTagDecl(ci, _loc) ->
         add_ci ci;
         SkipChildren
-      | GVarDecl _ | GVar _ | GFun _ | GAnnot _ | GType _
+      | GVarDecl _ | GVar _ | GFun _ | GFunDecl _ | GAnnot _ | GType _
       | GEnumTagDecl _ | GEnumTag _ | GAsm _ | GPragma _ | GText _ ->
         DoChildren
 
@@ -391,9 +391,9 @@ class string_constants_visitor ~attach =
     in
     let size = constant_term v.vdecl (Integer.of_int size) in
     let psize = Prel (Req, strsize, size) in
-    let p = Pand (Ast.Named.mk ~loc:v.vdecl pstring, Ast.Named.mk ~loc:v.vdecl psize) in
+    let p = Pand (Ast.Predicate.mk ~loc:v.vdecl pstring, Ast.Predicate.mk ~loc:v.vdecl psize) in
 
-    attach_invariant ("validity_of_" ^ v.vname) v.vdecl (Ast.Named.mk ~loc:v.vdecl p);
+    attach_invariant ("validity_of_" ^ v.vname) v.vdecl (Ast.Predicate.mk ~loc:v.vdecl p);
     with Exit -> ()
     end;
     v
@@ -484,7 +484,7 @@ class string_constants_visitor ~attach =
              (None, attach_invariants);
            DoChildren
          with
-         | Failure "hd" | Failure "s" -> DoChildren)
+         | Failure _ -> DoChildren)
       | _ -> DoChildren
 
 end
@@ -551,8 +551,8 @@ class literal_proxy_visitor (first_pass_visitor : string_constants_visitor) =
               try
                 [List.nth vis i]
               with
-              | Failure "nth"
-              | Invalid_argument "List.nth" ->
+              | Failure _
+              | Invalid_argument _ ->
                 Console.fatal "Invalid string literal index: %a" Printer.pp_attributes vi.vattr)
         in
         match vis with
@@ -687,9 +687,6 @@ class copy_spec_specialize_memset =
           FreeAlloc (List.map Logic_const.refresh_identified_term free,
                      List.map Logic_const.refresh_identified_term alloc)
       in
-      let refresh_extended e =
-        List.map (fun (s,i,p) -> (s,i,List.map Logic_const.refresh_predicate p)) e
-      in
       let refresh_behavior b =
         let requires = List.map Logic_const.refresh_predicate b.b_requires in
         let assumes = List.map Logic_const.refresh_predicate b.b_assumes in
@@ -698,9 +695,8 @@ class copy_spec_specialize_memset =
             (fun (k, p) -> (k, Logic_const.refresh_predicate p)) b.b_post_cond
         in
         let assigns = refresh_assigns b.b_assigns in
-        let allocation = Some (refresh_allocates b.b_allocation) in
-        let extended = refresh_extended b.b_extended in
-        mk_behavior ~assumes ~requires ~post_cond ~assigns ~allocation ~extended ()
+        let allocation = refresh_allocates b.b_allocation in
+        mk_behavior ~assumes ~requires ~post_cond ~assigns ~allocation ~extended:b.b_extended ()
       in
       let refresh s =
         let bhvs = List.map refresh_behavior s.spec_behavior in
@@ -743,7 +739,7 @@ class specialize_memset =
                (TFun (TVoid [], Some arg_type, false, []))
            in
            unsafeSetFormalsDecl f formals;
-           my_globals <- GVarDecl(empty_funspec (), f, loc) :: my_globals;
+           my_globals <- GFunDecl(empty_funspec (), f, loc) :: my_globals;
            Globals.Functions.replace_by_declaration spec f loc;
            let kf = Globals.Functions.get f in
            Annotations.register_funspec ~emitter:Emitters.jessie kf;
@@ -1113,11 +1109,11 @@ class specialize_blockfuns_visitor =
           ListLabels.find
             (new_globals @ introduced_globals)
             ~f:(function
-              | GVarDecl (_, { vname }, _) -> vname = fname
+              | GFunDecl (_, { vname }, _) -> vname = fname
               | _ -> false)
         in
         match fdecl with
-        | GVarDecl (_, f, _) -> Some f
+        | GFunDecl (_, f, _) -> Some f
         | _ -> assert false
       with
       | Not_found -> None
@@ -1128,7 +1124,7 @@ class specialize_blockfuns_visitor =
       f.vstorage <- fvinfo.vstorage;
       f.vattr <- fvinfo.vattr;
       unsafeSetFormalsDecl f argvinfos;
-      new_globals <- GVarDecl (empty_funspec (), f, loc) :: new_globals;
+      new_globals <- GFunDecl (empty_funspec (), f, loc) :: new_globals;
       Globals.Functions.replace_by_declaration spec f loc;
       let kernel_function = Globals.Functions.get f in
       Annotations.register_funspec ~emitter:Emitters.jessie kernel_function;
@@ -1276,7 +1272,7 @@ class composite_expanding_visitor =
         | _ -> assert false)
   in
   let predicate_of_equality_list loc lst =
-    Logic_const.(pands @@ List.map (unamed ~loc) lst).content
+    Logic_const.(pands @@ List.map (unamed ~loc) lst).pred_content
   in
   let is_term_to_expand { term_type } =
     let t = ctype ~force:false term_type in
@@ -1313,11 +1309,11 @@ class composite_expanding_visitor =
         in
         ChangeTo (Writes lst)
 
-    method vpredicate_named =
+    method vpredicate =
       let open Logic_const in
       function
-      | { loc;
-          content =
+      | { pred_loc = loc;
+          pred_content =
             Prel (Req | Rneq as r,
                   ({ term_node = TBinOp (Eq | Ne as b1, t11, t12) } as t1),
                   ({ term_node = TBinOp (Eq | Ne as b2, t21, t22) } as t2)) } ->
@@ -1326,14 +1322,14 @@ class composite_expanding_visitor =
         ChangeDoChildrenPost ((if r = Req then piff else pxor) ~loc (p1, p2), Fn.id)
       | _ -> DoChildren
 
-    method vpredicate = function
+    method vpredicate_node = function
       | Prel (Req, ({ term_loc; term_type=ty1 } as t1), ({ term_type=ty2 } as t2)) ->
         let expand1 = is_term_to_expand t1 and expand2 = is_term_to_expand t2 in
         if expand1 && expand2 && Logic_utils.is_same_type ty1 ty2 || not (expand1 = expand2) then
           let result = predicate_of_equality_list term_loc @@ expand_equality (ctype ty1) t1 t2 in
           let open! Logic_const in
           let eq_implies_result t1 t2 =
-            (pimplies ~loc:term_loc (prel ~loc:term_loc (Req, t1, t2), unamed result)).content
+            (pimplies ~loc:term_loc (prel ~loc:term_loc (Req, t1, t2), unamed result)).pred_content
           in
           let st1 = stripTermCasts t1 and st2 = stripTermCasts t2 in
           match st1 == t1, st2 == t2 with
@@ -1452,7 +1448,7 @@ class term_bw_op_retyping_visitor =
             { t with term_node = Tlet (li, t'); term_type })
       | _ -> DoChildrenPost f
 
-    method! vpredicate =
+    method! vpredicate_node =
       let f =
         function
         | Prel (rel, t1, t2) as p ->
@@ -1470,7 +1466,7 @@ class term_bw_op_retyping_visitor =
           li
           ~change_to:
             (fun () ->
-               Plet (li, { p with content = visitFramacPredicate (self :> frama_c_visitor) p.content }))
+               Plet (li, { p with pred_content = visitFramacPredicateNode (self :> frama_c_visitor) p.pred_content }))
       | _ -> DoChildrenPost f
   end
 
@@ -1532,7 +1528,7 @@ class asms_to_functions_visitor =
       let attrs = attrs @ List.map (fun a -> Attr (a, [])) ["static"; "inline"] in
       let fname = Name.unique ("inline_asm" ^ (if int then "_goto" else "")) in
       let f = makeGlobalVar ~source:false fname @@ TFun (ret_typ, Some params, false, attrs) in
-      new_globals <- GVarDecl (empty_funspec (), f, loc) :: new_globals;
+      new_globals <- GFunDecl (empty_funspec (), f, loc) :: new_globals;
       Globals.Functions.replace_by_declaration (empty_funspec ()) f loc;
       (* We've created a new undefined unspecified function. Now let's specify it: *)
       let { fundec } as kf = Globals.Functions.get f in
@@ -1748,7 +1744,7 @@ class fp_eliminating_visitor ~attach =
               List.map (fun e -> new_exp ~loc @@ BinOp (Eq, f, e, intType)) addrs
                   in
                   Annotations.add_assert Emitters.jessie ~kf s @@
-                    Ast.Predicate.Named.of_exp_exn @@
+                    Ast.Predicate.of_exp_exn @@
                       List.fold_left (mkBinOp ~loc LOr) z eqs;
                   let s' =
                     ListLabels.fold_left2
@@ -2019,10 +2015,10 @@ class va_list_rewriter () =
 
   method! vglob_aux =
     function
-    | GVarDecl(_, { vname = "__builtin_va_start" }, _)
-    | GVarDecl(_, { vname = "__builtin_va_arg" }, _)
-    | GVarDecl(_, { vname = "__builtin_va_end" }, _)
-    | GVarDecl(_, { vname = "__builtin_va_copy" }, _) ->
+    | GFunDecl(_, { vname = "__builtin_va_start" }, _)
+    | GFunDecl(_, { vname = "__builtin_va_arg" }, _)
+    | GFunDecl(_, { vname = "__builtin_va_end" }, _)
+    | GFunDecl(_, { vname = "__builtin_va_copy" }, _) ->
       ChangeTo []
     | _ -> DoChildren
   end
@@ -2084,7 +2080,6 @@ class pre_old_rewriter =
         (* VP: 2012-09-20: signature of Cil.mk_behavior is utterly broken.
            We'll have to live with that for Oxygen, but this will change as
            soon as possible. *)
-        let allocation = Some allocation in
         let assigns = visitFramacAssigns (pre_to_old_rewriter ~in_zone:true ()) b.b_assigns in
         let post_cond =
           mapNoCopy
@@ -2103,7 +2098,7 @@ let rewrite_pre_old = visitFramacFile (new pre_old_rewriter)
 class unsupported_remover: frama_c_visitor =
 object
   inherit frama_c_inplace
-  method! vpredicate =
+  method! vpredicate_node =
     function
     | Pseparated _ ->
       Console.warn_once
@@ -2137,7 +2132,7 @@ let declare_jessie_nondet_int file =
                       vi.vtype <- t
                     | _ -> raise Exit
                   with
-                  | Failure "hd"
+                  | Failure _
                   | Exit ->
                     (* Cannot use Common.unsupported with ~source due to argument erasure *)
                     Console.unsupported
@@ -2163,7 +2158,7 @@ let declare_jessie_nondet_int file =
                   let fspec = empty_funspec () in
                   fspec.spec_behavior <-
                     [mk_behavior ~assigns:(Writes [Logic_const.(new_identified_term (tresult intType), FromAny)]) ()];
-                  attach#global @@ GVarDecl (fspec, f, Location.unknown);
+                  attach#global @@ GFunDecl (fspec, f, Location.unknown);
                   Globals.Functions.replace_by_declaration fspec f Location.unknown;
                   Annotations.register_funspec ~emitter:Emitters.jessie (Globals.Functions.get f);
                   self#fix_vartype ~loc lv;

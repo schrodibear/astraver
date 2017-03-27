@@ -455,7 +455,7 @@ struct
       if not force && is_exception s then s
       else
         let s = if s = "" then "unnamed" else s in
-        let s = if s.[0] <> Char.lowercase s.[0] then "_" ^ s else s in
+        let s = if s.[0] <> Char.lowercase_ascii s.[0] then "_" ^ s else s in
         try
           let count = Hashtbl.find unique_names s in
           let s = s ^ "_" ^ (string_of_int !count) in
@@ -520,18 +520,6 @@ end
 
 module Ast =
 struct
-
-  module Named =
-  struct
-    type 'a t = 'a named
-
-    let mk ?(name=[]) ~loc content =
-      {
-        name;
-        loc;
-        content
-      }
-  end
 
   module Exp =
   struct
@@ -1061,43 +1049,45 @@ struct
   struct
     type t = predicate
 
-    module Named =
-    struct
-      type t = predicate named
+    let mk ?name:(pred_name=[]) ~loc:pred_loc pred_content =
+      {
+        pred_name;
+        pred_loc;
+        pred_content
+      }
 
-      let rec of_exp_exn e =
-        let pnode =
-          match (stripInfo e).enode with
-          | Info _ ->
-            Console.fatal "Ast.Predicate.of_exp_exn: Info is unsupported (shoud not happen): %a" Printer.pp_exp e
-          | Const c ->
-            begin match possible_value_of_integral_const c with
-            | Some i -> if Integer.equal i Integer.zero then Pfalse else Ptrue
-            | None -> Console.fatal "Ast.Predicate.of_exp_exn: couldn't handle the constant: %a" Printer.pp_exp e
-            end
-          | UnOp (LNot, e, _) -> Pnot (of_exp_exn e)
-          | BinOp (LAnd, e1, e2, _) ->
-            Pand (of_exp_exn e1, of_exp_exn e2)
-          | BinOp (LOr, e1, e2, _) ->
-            Por (of_exp_exn e1, of_exp_exn e2)
-          | BinOp (op, e1, e2, _) ->
-            let rel =
-              match op with
-              | Lt -> Rlt
-              | Gt -> Rgt
-              | Le -> Rle
-              | Ge -> Rge
-              | Eq -> Req
-              | Ne -> Rneq
-              | _ -> Console.fatal "Ast.Predicate.of_exp_exn: couldn't handle binop: %a" Printer.pp_binop op
-            in
-            Prel (rel, Term.of_exp e1, Term.of_exp e2)
-          | Lval _ | CastE _ | AddrOf _ | StartOf _ | UnOp _
-          | SizeOf _ | SizeOfE _ | SizeOfStr _ | AlignOf _ | AlignOfE _ ->
-            Console.fatal "Ast.Predicate.of_exp_exn: non-predicate expression: %a" Printer.pp_exp e
-        in
-        { name = []; loc = e.eloc; content = pnode }
-    end
+    let rec of_exp_exn e =
+      let pnode =
+        match (stripInfo e).enode with
+        | Info _ ->
+          Console.fatal "Ast.Predicate.of_exp_exn: Info is unsupported (shoud not happen): %a" Printer.pp_exp e
+        | Const c ->
+          begin match possible_value_of_integral_const c with
+          | Some i -> if Integer.equal i Integer.zero then Pfalse else Ptrue
+          | None -> Console.fatal "Ast.Predicate.of_exp_exn: couldn't handle the constant: %a" Printer.pp_exp e
+          end
+        | UnOp (LNot, e, _) -> Pnot (of_exp_exn e)
+        | BinOp (LAnd, e1, e2, _) ->
+          Pand (of_exp_exn e1, of_exp_exn e2)
+        | BinOp (LOr, e1, e2, _) ->
+          Por (of_exp_exn e1, of_exp_exn e2)
+        | BinOp (op, e1, e2, _) ->
+          let rel =
+            match op with
+            | Lt -> Rlt
+            | Gt -> Rgt
+            | Le -> Rle
+            | Ge -> Rge
+            | Eq -> Req
+            | Ne -> Rneq
+            | _ -> Console.fatal "Ast.Predicate.of_exp_exn: couldn't handle binop: %a" Printer.pp_binop op
+          in
+          Prel (rel, Term.of_exp e1, Term.of_exp e2)
+        | Lval _ | CastE _ | AddrOf _ | StartOf _ | UnOp _
+        | SizeOf _ | SizeOfE _ | SizeOfStr _ | AlignOf _ | AlignOfE _ ->
+          Console.fatal "Ast.Predicate.of_exp_exn: non-predicate expression: %a" Printer.pp_exp e
+      in
+      { pred_name = []; pred_loc = e.eloc; pred_content = pnode }
   end
 
   module Code_annotation =
@@ -1105,7 +1095,7 @@ struct
     type t = code_annotation
 
     let of_exp_exn e =
-      Logic_const.new_code_annotation (AAssert ([], Predicate.Named.of_exp_exn e))
+      Logic_const.new_code_annotation (AAssert ([], Predicate.of_exp_exn e))
   end
 
   module Offset =
@@ -2024,8 +2014,8 @@ struct
       method vlogic_var_decl : 'a 'b. (logic_var, 'a, 'b) visitor_method = do_children
       method vlogic_var_use : 'a 'b. (logic_var, 'a, 'b) visitor_method = do_children
       method vquantifiers : 'a 'b. (quantifiers, 'a, 'b) visitor_method = do_children
+      method vpredicate_node : 'a 'b. (predicate_node, 'a, 'b) visitor_method = do_children
       method vpredicate : 'a 'b. (predicate, 'a, 'b) visitor_method = do_children
-      method vpredicate_named : 'a 'b. (predicate named, 'a, 'b) visitor_method = do_children
       method vmodel_info : model_info -> model_info visitAction = do_children_global
 
       method vbehavior : 'a 'b. (funbehavior, 'a, 'b) visitor_method = do_children
@@ -2195,8 +2185,8 @@ struct
       method! vlogic_var_decl = cond { visit = fun x -> !visitor#vlogic_var_decl x }
       method! vlogic_var_use = cond { visit = fun x -> !visitor#vlogic_var_use x }
       method! vquantifiers = cond { visit = fun x -> !visitor#vquantifiers x }
+      method! vpredicate_node = cond { visit = fun x -> !visitor#vpredicate_node x }
       method! vpredicate = cond { visit = fun x -> !visitor#vpredicate x }
-      method! vpredicate_named = cond { visit = fun x -> !visitor#vpredicate_named x }
       method! vmodel_info = global !visitor#vmodel_info
       method! vbehavior = cond { visit = fun x -> !visitor#vbehavior x }
       method! vspec = cond { visit = fun x -> !visitor#vspec x }

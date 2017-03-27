@@ -195,7 +195,7 @@ let add_hcast { State.fields } ~typ ~exp =
             Set.add fields fi
           | _ -> ()
         with
-        | Failure "hd" -> ()
+        | Failure _ -> ()
       in
       List.iter add_first_field [ci1, ci2; ci2, ci1]
     | _ -> ()
@@ -368,7 +368,7 @@ let get_annotated_funs =
   let has_user_annots =
     List.exists
       (function
-        | { annot_content = AAssert (_, { name = ["missing_return"] }) } -> false
+        | { annot_content = AAssert (_, { pred_name = ["missing_return"] }) } -> false
         | _ -> true)
   in
   fun () ->
@@ -513,7 +513,7 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } =
         SkipChildren
       | GEnumTag (ei, _) | GEnumTagDecl (ei, _) when Set.mem enums ei ->
         SkipChildren
-      | GVarDecl (_, vi, _) | GVar (vi, _, _) | GFun ( { svar = vi }, _)
+      | GVarDecl (vi, _) | GVar (vi, _, _) | GFun ( { svar = vi }, _) | GFunDecl (_, vi, _)
         when Set.mem vars vi || vi.vghost ->
         SkipChildren
       | GPragma _ -> SkipChildren

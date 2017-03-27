@@ -291,7 +291,7 @@ class array_variables_retyping_visitor ~attach self =
           ChangeTo (g :: invariants)
         else
           DoChildren
-      | GVarDecl _ | GFun _ | GAnnot _ -> DoChildren
+      | GVarDecl _ | GFun _ | GFunDecl _ | GAnnot _ -> DoChildren
       | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
       | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
 
@@ -504,7 +504,7 @@ object
     in
     ChangeDoChildrenPost (preaction_term t, postaction_term)
 
-  method! vpredicate =
+  method! vpredicate_node =
     function
     | Papp (callee, labels, args) ->
       let args = List.map preaction_term_arg args in
@@ -686,12 +686,12 @@ object
       | Not_found -> ()
     in
     function
-    | GVarDecl (_spec, v, _attr) ->
-      if isFunctionType v.vtype && not v.vdefined then retype_func v;
+    | GFunDecl (_spec, v, _attr) ->
+      if not v.vdefined then retype_func v;
       DoChildren
     | GFun _
     | GAnnot _ -> DoChildren
-    | GVar _  | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
+    | GVar _ | GVarDecl _ | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
     | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
 
   method! vfunc f =
@@ -796,7 +796,7 @@ object
         ~assumes:b.b_assumes
         ~post_cond:b.b_post_cond
         ~assigns:assigns
-        ~allocation:(Some b.b_allocation)
+        ~allocation:b.b_allocation
         ()
     in
     Visit.to_visit_action @@ ChangeDoChildrenPost (new_bhv, Fn.id)
@@ -1133,7 +1133,7 @@ object
         | _ -> Console.fatal "transformed variable to somethig else during normalization: %a" Printer.pp_global g
       in
       ChangeDoChildrenPost ([g], postaction)
-    | GVarDecl _ | GFun _ | GAnnot _ -> DoChildren
+    | GVarDecl _ | GFun _ | GFunDecl _ | GAnnot _ -> DoChildren
     | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
     | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
 
@@ -1357,12 +1357,12 @@ object
             attach_globinit ast
            *)
       SkipChildren
-    | GVarDecl (_, v, _) ->
+    | GVarDecl (v, _) ->
       (* No problem with calling [retype_var] more than once, since
          subsequent calls do nothing on reference type. *)
-      if not (isFunctionType v.vtype || v.vdefined) then retype_var v;
+      retype_var v;
       DoChildren
-    | GFun _ -> DoChildren
+    | GFun _ | GFunDecl _ -> DoChildren
     | GAnnot _ -> DoChildren
     | GCompTag (compinfo,_loc) ->
       Do.retaining_size_of_composite compinfo @@ fun compinfo ->
@@ -1587,7 +1587,7 @@ object
       Do.retaining_size_of_composite compinfo @@ fun compinfo ->
       List.iter field compinfo.cfields;
       SkipChildren
-    | GFun _ | GAnnot _ | GVar _ | GVarDecl _ -> DoChildren
+    | GFun _ | GFunDecl _ | GAnnot _ | GVar _ | GVarDecl _ -> DoChildren
     | GType _ | GCompTagDecl _ | GEnumTagDecl _
     | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
 
@@ -1666,9 +1666,7 @@ object(self)
       Htbl_ty.replace type_wrappers ty wrapper_type;
       auto_type_wrappers := Set_ty.add wrapper_type !auto_type_wrappers;
       (* Treat newly constructed type *)
-      let store_current_global = !currentGlobal in
       ignore @@ visitCilGlobal (self :> cilVisitor) wrapper_def;
-      currentGlobal := store_current_global;
       (* Return the wrapper type *)
       wrapper_type
 
@@ -1804,11 +1802,11 @@ object(self)
     | GFun (f, _) ->
       retype_return f.svar;
       DoChildren
-    | GVarDecl (_, v, _) ->
-      if isFunctionType v.vtype && not v.vdefined then
+    | GFunDecl (_, v, _) ->
+      if not v.vdefined then
         retype_return v;
       DoChildren
-    | GVar _
+    | GVar _ | GVarDecl _
     | GAnnot _ -> DoChildren
     | GCompTagDecl _ | GEnumTag _ | GEnumTagDecl _
     | GAsm _ | GPragma _ | GText _  -> SkipChildren
@@ -1926,7 +1924,7 @@ object
     Do.retaining_size_of_composite compinfo @@ fun compinfo ->
     let fty = List.map new_field_type (Type.Composite.Ci.proper_fields compinfo) in
     ChangeTo (g :: fty)
-  | GFun _ | GAnnot _ | GVar _ | GVarDecl _ -> DoChildren
+  | GFun _ | GFunDecl _ | GAnnot _ | GVar _ | GVarDecl _ -> DoChildren
   | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
   | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
 

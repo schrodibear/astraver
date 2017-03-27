@@ -37,6 +37,8 @@ include
        let help = "Translation to Jessie(2) intermediate language with subsequent launch of Jessie-to-Why3ML translator"
      end)
 
+let jessie = add_group "jessie"
+
 module Project_name =
   Empty_string
     (struct
@@ -93,6 +95,9 @@ let () =
   State_dependency_graph.add_dependencies
     ~from:Analysis.self [Force_ad_hoc_normalization.self]
 
+let () = Parameter_customize.set_group jessie
+let () = Parameter_customize.no_category ()
+
 module Jc_opt =
   String_set
     (struct
@@ -100,6 +105,9 @@ module Jc_opt =
       let arg_name = ""
       let help = "give an option to Jessie-to-Why3ML translator (e.g., -jessie-jc-opt=\"-forall-inst-bound 5\")"
     end)
+
+let () = Parameter_customize.set_group jessie
+let () = Parameter_customize.no_category ()
 
 module Why3_opt =
   String_set

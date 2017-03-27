@@ -283,18 +283,13 @@ if test "$FRAMAC" = no ; then
 else
    # we extract Ocaml version number
    AC_MSG_CHECKING(Frama-c version)
-   FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
+   FRAMACVERSION=`$FRAMAC -version`
    AC_MSG_RESULT($FRAMACVERSION)
    case $FRAMACVERSION in
-        Sodium-rc1|Sodium-rc2|Sodium-rc3|Sodium-rc4|Sodium-20150201)
+        Silicon-20161101)
            FRAMACPLUGIN=yes
            ;;
-        Neon-*)
-	   FRAMACMSG="Found unknown variant of Frama-C Sodium (hope this works)"
-           AC_MSG_WARN($FRAMACMSG)
-           FRAMACPLUGIN=yes
-           ;;
-        *) FRAMACMSG="you need Frama-C version Sodium"
+        *) FRAMACMSG="you need AstraVer branch of Frama-C version Silicon"
            FRAMACPLUGIN=no
            AC_MSG_ERROR($FRAMACMSG)
            ;;

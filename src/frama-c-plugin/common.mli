@@ -266,12 +266,6 @@ end
 
 module Ast :
 sig
-  module Named :
-  sig
-    type 'a t = 'a named
-    val mk : ?name:string list -> loc:Location.t -> 'a -> 'a t
-  end
-
   module Exp :
   sig
     type t = exp
@@ -344,11 +338,8 @@ sig
   module Predicate :
   sig
     type t = predicate
-    module Named :
-    sig
-      type t = predicate named
-      val of_exp_exn : Exp.t -> t
-    end
+    val mk : ?name:string list -> loc:location -> predicate_node -> t
+    val of_exp_exn : Exp.t -> t
   end
 
   module Code_annotation :
@@ -644,8 +635,8 @@ sig
       method vlval : (lval, 'a, 'b) visitor_method
       method vmodel_info : model_info -> model_info visitAction
       method voffs : (offset, 'a, 'b) visitor_method
+      method vpredicate_node : (predicate_node, 'a, 'b) visitor_method
       method vpredicate : (predicate, 'a, 'b) visitor_method
-      method vpredicate_named : (predicate named, 'a, 'b) visitor_method
       method vquantifiers : (quantifiers, 'a, 'b) visitor_method
       method vslice_pragma : (term slice_pragma, 'a, 'b) visitor_method
       method vspec : (funspec, 'a, 'b) visitor_method

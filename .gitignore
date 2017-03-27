@@ -26,6 +26,11 @@ bin
 /config.status
 /configure
 generate.ml.exe
+/src/frama-c-plugin/.Makefile.plugin.generated
+/src/frama-c-plugin/Jessie.check_mli_exists
+/src/frama-c-plugin/META.frama-c-jessie
+/src/frama-c-plugin/frama-c
+/src/frama-c-plugin/top/
 
 /doc/version.tex
 /doc/*.aux
