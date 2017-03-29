@@ -336,33 +336,33 @@ theory Bit_enum
 
   axiom Of_int_modulo:
     forall n : int [of_int_modulo n].
-      of_int_modulo n = E.of_int (normalize n)
+      E.to_int (of_int_modulo n) = normalize n
 
   axiom Add_modulo:
     forall a, b : E.t [a +% b].
-      a +% b = E.of_int (normalize (Int.(+) (E.to_int a) (E.to_int b)))
+      E.to_int (a +% b) = normalize (Int.(+) (E.to_int a) (E.to_int b))
 
   axiom Neg_modulo:
     forall a : E.t [-% a].
-      -% a = E.of_int (normalize (Int.(-_) (E.to_int a)))
+      E.to_int (-% a) = normalize (Int.(-_) (E.to_int a))
 
   axiom Sub_modulo:
     forall a, b : E.t [a -% b].
-      a -% b = E.of_int (normalize (Int.(-) (E.to_int a) (E.to_int b)))
+      E.to_int (a -% b) = normalize (Int.(-) (E.to_int a) (E.to_int b))
 
   axiom Mult_modulo:
     forall a, b : E.t [a *% b].
-      a *% b = E.of_int (normalize (Int.( *) (E.to_int a) (E.to_int b)))
+      E.to_int (a *% b) = normalize (Int.( *) (E.to_int a) (E.to_int b))
 
   use int.ComputerDivision as CD
 
   axiom Div_modulo:
     forall a, b : E.t [a /% b].
-      a /% b = E.of_int (normalize (CD.div (E.to_int a) (E.to_int b)))
+      E.to_int (a /% b) = normalize (CD.div (E.to_int a) (E.to_int b))
 
   axiom Mod_modulo:
     forall a, b : E.t [a %% b].
-      a %% b = E.of_int (CD.mod (E.to_int a) (E.to_int b))
+      E.to_int (a %% b) = CD.mod (E.to_int a) (E.to_int b)
 
   use import Powers_of_2
 
@@ -382,20 +382,15 @@ theory Bit_enum
 
   function to_uint (a : E.t) : int
 
-  axiom To_uint:
+  axiom To_uint_signed:
     signed ->
       forall a : E.t [E.to_int a].
-        E.to_int a = to_uint a - if lt a (of_int_const 0) then power2 size else 0
+        to_uint a = E.to_int a + if lt a (of_int_const 0) then range else 0
 
-  predicate nth E.t int
-
-  axiom Nth:
-    forall a : E.t.
-      forall n : int [nth a n].
-        0 <= n < size ->
-          nth a n =
-            (E.to_int a >= 0 /\ CD.mod (E.to_int a) (power2 (n + 1)) >= power2 n \/
-             E.to_int a < 0 /\ CD.mod (range  + E.to_int a) (power2 (n + 1)) >= power2 n)
+  axiom To_uint_unsigned:
+    not signed ->
+      forall a : E.t [E.to_int a].
+        to_uint a = E.to_int a
 
   axiom Lt_eq:
     forall a b : E.t [E.(<) a b | lt a b].
@@ -414,6 +409,19 @@ theory Bit_enum
       E.(>=) a b = ge a b
 
   (* The following axioms are to be removed by the drivers of solvers with native bitvector support *)
+
+  (* ATTENTION! *Not* to be used in actual specs, it's going to be encoded with `(_ extract ...)' (in the driver),
+     which only works for constant bit indices! *)
+
+  predicate nth E.t int
+
+  axiom Nth:
+    forall a : E.t.
+      forall n : int [nth a n].
+        0 <= n < size ->
+          nth a n =
+            (E.to_int a >= 0 /\ CD.mod (E.to_int a) (power2 (n + 1)) >= power2 n \/
+             E.to_int a < 0 /\ CD.mod (range + E.to_int a) (power2 (n + 1)) >= power2 n)
 
   axiom Nth_bw_and:
     forall a b : E.t [a & b].
@@ -438,12 +446,6 @@ theory Bit_enum
       forall n : int [nth (~ a) n].
         0 <= n < size ->
           nth (~ a) n = not (nth a n)
-
-  axiom Lsl_def:
-    forall b : E.t.
-      forall s : E.t [lsl b s].
-        ge (lsl_modulo b s) (of_int_const 0) ->
-          lsl b s = lsl_modulo b s
 
   axiom Lsr_nth_low:
     forall b : E.t.
@@ -499,19 +501,33 @@ theory Bit_enum
               n - E.to_int s < 0 ->
                 not (nth (lsl_modulo b s) n)
 
+  (* End of dummy axioms, the following ones are really essential *)
+
+  axiom Lsl_def:
+    forall b : E.t.
+      forall s : E.t [lsl b s].
+        0 <= E.to_int s < size ->
+          lsr (lsl_modulo b s) s = s ->
+            lsl b s = lsl_modulo b s
+
   axiom To_uint_lsr:
-    not signed ->
+    forall a : E.t.
+      forall n : E.t [lsr a n].
+        0 <= E.to_int n < size ->
+          E.to_uint (lsr a n) = ED.div (E.to_uint a) (power2 (E.to_int n))
+
+  axiom To_int_asr:
+    signed ->
       forall a : E.t.
         forall n : E.t [lsr a n].
-          E.to_int n >= 0 ->
-            E.to_int (lsr a n) = ED.div (E.to_int a) (power2 (E.to_int n))
+          0 <= E.to_int n < size ->
+            E.to_int (asr a n) = ED.div (E.to_int a) (power2 (E.to_int n))
 
   axiom To_uint_lsl_modulo:
-    not signed ->
-      forall a : E.t.
-        forall n : E.t [lsl_modulo a n].
-          E.to_int n >= 0 ->
-            E.to_int (lsl_modulo a n) = ED.mod (Int.( *) (E.to_int a) (power2 (E.to_int n))) range
+    forall a : E.t.
+      forall n : E.t [lsl_modulo a n].
+        0 <= E.to_int n < size ->
+          E.to_uint (lsl_modulo a n) = ED.mod (Int.( *) (E.to_uint a) (power2 (E.to_int n))) range
 end
 
 module Generic_bit_enum

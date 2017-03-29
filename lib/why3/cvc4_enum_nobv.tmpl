@@ -13,13 +13,13 @@ end
 theory enum.Bit_{{u}}int{{size}}
 
   {% if signed -%}
+  remove prop To_uint_unsigned
   {% else -%}
-  remove prop To_uint
+  remove prop To_uint_signed
+  remove prop To_int_asr
   {% endif -%}
 
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -30,8 +30,6 @@ theory enum.Bit_{{u}}int{{size}}
   remove prop Asr_nth_high
   remove prop Lsl_modulo_nth_low
   remove prop Lsl_modulo_nth_high
-
-  remove prop Nth
 
   {%- if size <= 32 %}
   remove prop To_int_def

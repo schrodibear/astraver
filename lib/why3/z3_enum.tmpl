@@ -37,9 +37,11 @@ theory enum.Bit_{{u}}int{{size}}
 {# This significantly degrades solver performance, better removed, since it helps too little #}
   {% if signed -%}
 {# syntax function to_uint "(bv2int %1)" #}
+  remove prop To_uint_unsigned
   {% else -%}
 {# syntax function to_int "(bv2int %1)" #}
-  remove prop To_uint
+  remove prop To_uint_signed
+  remove prop To_int_asr
   {% endif -%}
 
   syntax type tt "(_ BitVec {{size * 2}})"
@@ -61,9 +63,7 @@ theory enum.Bit_{{u}}int{{size}}
 
   syntax function lsl_modulo_ "(bvshl %1 %2)"
 
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -80,7 +80,6 @@ theory enum.Bit_{{u}}int{{size}}
   syntax predicate gt "(bv{{us}}gt %1 %2)"
   syntax predicate ge "(bv{{us}}ge %1 %2)"
 
-  remove prop Nth
   syntax predicate nth "(= ((_ extract %2 %2) %1) (_ bv1 1))"
 
   {%- if size <= 32 %}
