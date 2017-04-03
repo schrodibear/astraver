@@ -866,7 +866,7 @@ struct
         | TConst c ->
           try_ @@ fun () ->
           Const (const_of_lconst c), Env.empty
-        | Tapp _ | TDataCons _ | Tif _ | Tat _ | Tbase_addr _ | TOffsetOf _
+        | Tapp _ | TDataCons _ | Tif _ | Tpif _ | Tat _ | Tbase_addr _ | TOffsetOf _
         | Toffset _ | Toffset_max _ | Toffset_min _
         | Tblock_length _ | Tnull | TCoerce _ | TCoerceE _ | TUpdate _
         | Tlambda _ | Ttypeof _ | Ttype _ | Tcomprehension _

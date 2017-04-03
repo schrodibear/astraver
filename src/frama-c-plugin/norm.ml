@@ -760,6 +760,7 @@ object
       | Tinter _
       | Tcomprehension _
       | Tif _
+      | Tpif _
       | Tnull
       | TOffsetOf _ -> [t]
         (* those cases can not appear as assigns *)

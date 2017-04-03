@@ -1350,129 +1350,6 @@ let expand_composites =
     end)
 
 (*****************************************************************************)
-(* Retype bitwise operations in logic.                                       *)
-(*****************************************************************************)
-
-class term_bw_op_retyping_visitor =
-  let is_int_type t =
-    match unrollType t with
-    | TInt _ -> true
-    | _ -> false
-  in
-  let strip ?(force=true) t =
-    let open Logic_utils in
-    match t.term_node with
-    | TConst (Integer (_, Some s)) when t.term_type = Linteger ->
-      let ty = typeOf @@ parseIntExp ~loc:Location.unknown s in
-      let lty = Ctype (unrollType ty) in
-      Logic_const.term ~loc:t.term_loc (TCastE (ty, Check, t)) lty,
-      lty
-    | TLogic_coerce (Linteger, ({ term_type = lty } as t1))
-      when isLogicType is_int_type @@ unroll_type lty ->
-      t1, unroll_type lty
-    | _ when isLogicType is_int_type @@ unroll_type t.term_type -> t, unroll_type t.term_type
-    | _ when force ->
-      Console.unsupported
-        "Can't automatically recover built-in bounded integral type of term %a"
-        Printer.pp_term t
-    | _ -> t, t.term_type
-  in
-  object(self)
-    inherit frama_c_inplace
-
-    val retyped_vars = Logic_var.Hashtbl.create 25
-
-    method private vlet : 'a. f:('a -> 'a) -> change_to:(unit -> 'a) -> _ -> 'a visitAction =
-      fun ~f ~change_to ->
-        function
-        | { l_var_info; l_labels = []; l_type = Some Linteger; l_profile = []; l_body = LBterm t; _ } as li ->
-          let t, lt = strip ~force:false @@ visitFramacTerm (self :> frama_c_visitor) t in
-          li.l_body <- LBterm t;
-          if Logic_utils.isLogicType is_int_type lt then begin
-            li.l_type <- Some lt;
-            l_var_info.lv_type <- lt;
-            Logic_var.Hashtbl.add retyped_vars l_var_info ();
-            ChangeTo (change_to ())
-          end else
-            DoChildrenPost f
-        | _ -> DoChildrenPost f
-
-    method! vterm t =
-      let f t =
-        let wrap term_node term_type =
-          Logic_const.term
-            ~loc:t.term_loc
-            (TLogic_coerce (Linteger, { t with term_node; term_type }))
-            Linteger
-        in
-        match t.term_node with
-        | TLval (TVar lv, TNoOffset) when Logic_var.Hashtbl.mem retyped_vars lv ->
-          wrap t.term_node lv.lv_type
-        | TBinOp (
-          (PlusA Modulo | MinusA Modulo | Mult Modulo | Div Modulo | Shiftlt _ | Shiftrt | BAnd | BXor | BOr as op),
-          t1, t2) ->
-          let (t1, ty1), (t2, ty2) = map_pair strip (t1, t2) in
-          if Logic_utils.is_same_type ty1 ty2 then
-            wrap (TBinOp (op, t1, t2)) ty1
-          else
-            Console.abort
-              ~source:(fst @@ t.term_loc)
-              "Bitwise operation %a applied to arguments of different types: %a and %a"
-              Printer.pp_binop op
-              Printer.pp_logic_type ty1
-              Printer.pp_logic_type ty2
-        | TUnOp (BNot, t1) ->
-          let t1, ty1 = strip t1 in
-          wrap (TUnOp (BNot, t1)) ty1
-        | TCastE (ty, oft, t') when is_int_type ty ->
-          let t', ty' = strip ~force:false t' in
-          if Logic_utils.isLogicType is_int_type ty' then
-            if Logic_utils.is_same_type (Ctype (unrollType ty)) ty' then t'
-            else {t with term_node = TCastE (ty, oft, t') }
-          else t
-        | TBinOp ((Lt | Gt | Le | Ge | Eq | Ne as rel), t1, t2) ->
-          let (t1, ty1), (t2, ty2) = map_pair (strip ~force:false) (t1, t2) in
-          if Logic_utils.is_same_type ty1 ty2 then
-            { t with term_node = TBinOp (rel, t1, t2) }
-          else
-            t
-        | _ -> t
-      in
-      match t.term_node with
-      | Tlet (li, t) ->
-        self#vlet
-          ~f
-          li
-          ~change_to:(fun () ->
-            let t', term_type = strip ~force:false @@ visitFramacTerm (self :> frama_c_visitor) t in
-            { t with term_node = Tlet (li, t'); term_type })
-      | _ -> DoChildrenPost f
-
-    method! vpredicate_node =
-      let f =
-        function
-        | Prel (rel, t1, t2) as p ->
-          let (t1, ty1), (t2, ty2) = map_pair (strip ~force:false) (t1, t2) in
-          if Logic_utils.is_same_type ty1 ty2 then
-            Prel (rel, t1, t2)
-          else
-            p
-        | p -> p
-      in
-      function
-      | Plet (li, p) ->
-        self#vlet
-          ~f
-          li
-          ~change_to:
-            (fun () ->
-               Plet (li, { p with pred_content = visitFramacPredicateNode (self :> frama_c_visitor) p.pred_content }))
-      | _ -> DoChildrenPost f
-  end
-
-let retype_bw_ops_in_terms = visitFramacFile @@ new term_bw_op_retyping_visitor
-
-(*****************************************************************************)
 (* Replace inine assembly with undefined function calls.                     *)
 (*****************************************************************************)
 
@@ -2224,8 +2101,6 @@ let rewrite file =
   end;
   (* Rewrite alloca to malloc (currently unconditionally successful) *)
   apply rewrite_alloca "rewriting alloca";
-  (* Retype bitwise operations in terms. *)
-  apply retype_bw_ops_in_terms "retyping bitwise binary operations in terms";
   (* Expand assigns clauses and equalities for composite types. *)
   apply expand_composites "expanding assigns clauses and equality for composite types";
   (* adds a behavior named [name_of_default_behavior] to all functions if

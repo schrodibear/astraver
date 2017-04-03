@@ -455,22 +455,28 @@ let strip_float_suffix s =
   | _ -> s
 
 
-let logic_const pos =
-  function
-  | Integer (_, Some s) -> JCPEconst (JCCinteger s)
-  | Integer (n, None) -> JCPEconst (JCCinteger (Integer.to_string n))
-  | LStr _ | LWStr _ -> Console.unsupported "string literals in logic"
-  | LChr c -> JCPEconst (JCCinteger(string_of_int (Char.code c)))
-  | LReal { r_literal = s } -> JCPEconst (JCCreal (strip_float_suffix s))
-  | LEnum ei ->
-    begin match Cil.isInteger (ei.eival) with
-    | Some n ->
-      let e =
-        mkexpr (JCPEconst (JCCinteger (Integer.to_string n))) pos
-      in
-      JCPEcast (e, ctype (TEnum (ei.eihost, [])))
-    | None -> assert false
-    end
+let logic_const ~loc:pos c lty =
+  let c =
+    match c with
+    | Integer (_, Some s) -> JCPEconst (JCCinteger s)
+    | Integer (n, None) -> JCPEconst (JCCinteger (Integer.to_string n))
+    | LStr _ | LWStr _ -> Console.unsupported "string literals in logic"
+    | LChr c -> JCPEconst (JCCinteger(string_of_int (Char.code c)))
+    | LReal { r_literal = s } -> JCPEconst (JCCreal (strip_float_suffix s))
+    | LEnum ei ->
+      begin match Cil.isInteger (ei.eival) with
+      | Some n ->
+        let e =
+          mkexpr (JCPEconst (JCCinteger (Integer.to_string n))) pos
+        in
+        JCPEcast (e, ctype (TEnum (ei.eihost, [])))
+      | None -> assert false
+      end
+  in
+  match c, lty with
+  | JCPEcast _, _ -> c
+  | _, Ctype ty -> JCPEcast (mkexpr c pos, ctype ty)
+  | _ -> c
 
 let rec const pos =
   function
@@ -607,7 +613,7 @@ and terms ?(in_zone=false) ~default_label t =
   in
   let enode =
     match constFoldTermNodeAtTop t.term_node with
-    | TConst c -> [logic_const t.term_loc c]
+    | TConst c -> [logic_const ~loc:t.term_loc c t.term_type]
     | TDataCons ({ctor_type = {lt_name = name} } as d,_args)
       when name = Utf8_logic.boolean ->
       [JCPEconst (JCCboolean (d.ctor_name = "\\true"))]
@@ -645,34 +651,18 @@ and terms ?(in_zone=false) ~default_label t =
       in
       product expr t1 t2
     | TBinOp (Shiftrt, t1, t2) ->
-      begin match possible_value_of_integral_term t2 with
-      | Some i when Integer.ge i Integer.zero
-                    && Integer.lt i (Integer.of_int 63)  ->
-        (* Right shift by constant is division by constant *)
-        let pow = constant_term t2.term_loc (Integer.two_power i) in
-        List.map (fun x -> JCPEbinary (x, `Bdiv, term pow)) (terms t1)
-      | _ ->
-        let op =
-          match t1.term_type with
-          | Ctype ty1 ->
-            if isSignedInteger ty1 then `Barith_shift_right
-            else `Blogical_shift_right
-          | Linteger -> `Barith_shift_right
-          | _ -> assert false
-        in
-        product (fun x y -> JCPEbinary (x,op,y)) (terms t1) (terms t2)
-      end
+      let op =
+        match t1.term_type with
+        | Ctype ty1 ->
+          if isSignedInteger ty1 then `Barith_shift_right
+          else `Blogical_shift_right
+        | Linteger -> `Barith_shift_right
+        | _ -> assert false
+      in
+      product (fun x y -> JCPEbinary (x,op,y)) (terms t1) (terms t2)
 
     | TBinOp (Shiftlt oft as op, t1, t2) ->
-      begin match possible_value_of_integral_term t2 with
-      | Some i when Integer.ge i Integer.zero &&
-                    Integer.lt i (Integer.of_int 63) ->
-        (* Left shift by constant is multiplication by constant *)
-        let pow = constant_term t2.term_loc (Integer.two_power i) in
-        List.map (fun x -> JCPEbinary (x, (match oft with Check -> `Bmul | Modulo -> `Bmul_mod), term pow)) (terms t1)
-      | _ ->
-        product (fun x y -> JCPEbinary (x, binop op, y)) (terms t1) (terms t2)
-      end
+      product (fun x y -> JCPEbinary (x, binop op, y)) (terms t1) (terms t2)
     | TBinOp ((Lt | Gt | Le | Ge) as op, t1, t2) ->
       product (fun x y -> JCPEbinary (x, binop op, y)) (terms t1) (terms t2)
     | TBinOp (op, t1, t2) ->
@@ -762,7 +752,12 @@ and terms ?(in_zone=false) ~default_label t =
       end
     | Tif (t1, t2, t3) ->
       let t1 = terms t1 in let t2 = terms t2 in let t3 = terms t3 in
-      product (fun f x -> f x) (product (fun x y z -> JCPEif(x,y,z)) t1 t2) t3
+      product (@@) (product (fun x y z -> JCPEif(x,y,z)) t1 t2) t3
+
+    | Tpif (p, t1, t2) ->
+      let cond = pred ~default_label p in
+      let t1, t2 = map_pair terms (t1, t2) in
+      product (@@) (product (fun x y z -> JCPEif (x, y, z)) [cond] t1) t2
 
     | Tat(t,lab) -> List.map (fun x -> JCPEat (x, logic_label lab)) (terms_at lab t)
     | Tbase_addr (_lab,t) -> List.map (fun x -> JCPEbase_block x) (terms t)
@@ -966,7 +961,7 @@ and pred ~default_label p =
             if v1 = 0 then e None else e @@ Some (tinteger v1)
           | Some (v1, v2) when Pervasives.(v1 <= v2) ->
             mkconjunct List.(range v1 `To v2 |> map @@ fun i -> e @@ Some (tinteger i)) p.pred_loc
-          | Some (v1, v2) -> mkexpr (JCPEconst (JCCboolean true)) p.pred_loc
+          | Some _ -> mkexpr (JCPEconst (JCCboolean true)) p.pred_loc
           | None ->
             mkexpr
               (JCPEquantifier
@@ -1598,7 +1593,8 @@ and integral_expr e =
     let node_from_boolean_expr e = JCPEif (e, one_expr, zero_expr) in
     let expr_shift_precast ~t1 e2 =
       let e2' = expr e2 in
-      if bitsSizeOf t1 <> bitsSizeOf (typeOf e2) then
+      let t2 = typeOf e2 in
+      if bitsSizeOf t1 <> bitsSizeOf t2 || isSignedInteger t1 <> isSignedInteger t2 then
         mkexpr (JCPEcast (e2', ctype ~bitsize:(bitsSizeOf t1) t1)) e2.eloc
       else
         e2'
@@ -1647,45 +1643,20 @@ and integral_expr e =
       | BinOp (Shiftrt, e1, e2, _ty) ->
         let e =
           let t1 = typeOf e1 in
-          let ik = match unrollType t1 with TInt (ik, _) -> ik | _ -> assert false in
-          match possible_value_of_integral_expr e2 with
-            | Some i when Integer.ge i Integer.zero &&
-                          Integer.lt i (Integer.of_int 63) &&
-                          fitsInInt ik (Integer.two_power i) ->
-                (* Right shift by constant is division by constant *)
-                let pow =
-                  mkCast ~force:false ~overflow:Check ~e:(Ast.Exp.const (Integer.two_power i)) ~newt:(TInt (ik, []))
-                in
-                locate (mkexpr (JCPEbinary(expr e1,`Bdiv,expr pow)) e.eloc)
-            | _ ->
-                let op =
-                  if isSignedInteger t1 then `Barith_shift_right
-                  else `Blogical_shift_right
-                in
-                locate (mkexpr (JCPEbinary(expr e1,op,expr_shift_precast ~t1 e2)) e.eloc)
+          let op =
+            if isSignedInteger t1 then `Barith_shift_right
+            else `Blogical_shift_right
           in
-          e#node
+          locate (mkexpr (JCPEbinary(expr e1,op,expr_shift_precast ~t1 e2)) e.eloc)
+        in
+        e#node
 
       | BinOp (Shiftlt oft as op, e1, e2, _ty) ->
         let e =
           let t1 = typeOf e1 in
-          let ik = match unrollType t1 with TInt (ik, _) -> ik | _ -> assert false in
-          match possible_value_of_integral_expr e2 with
-            | Some i when
-              Integer.ge i Integer.zero &&
-              Integer.lt i (Integer.of_int 63) &&
-              (oft = Check || isUnsignedInteger (typeOf e1)) &&
-              fitsInInt ik (Integer.two_power i) ->
-                (* Left shift by constant is multiplication by constant *)
-                let pow =
-                  mkCast ~force:false ~overflow:oft ~e:(Ast.Exp.const (Integer.two_power i)) ~newt:(TInt (ik, []))
-                in
-                locate
-                  (mkexpr (JCPEbinary(expr e1, (match oft with Check -> `Bmul | Modulo -> `Bmul_mod), expr pow)) e.eloc)
-            | _ ->
-                locate (mkexpr (JCPEbinary(expr e1,binop op,expr_shift_precast ~t1 e2)) e.eloc)
-          in
-          e#node
+          locate (mkexpr (JCPEbinary(expr e1,binop op,expr_shift_precast ~t1 e2)) e.eloc)
+        in
+        e#node
 
       | BinOp(op,e1,e2,_ty) ->
           let e =
