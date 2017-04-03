@@ -380,18 +380,6 @@ theory Bit_enum
     forall n : int [E.of_int n].
       E.in_bounds n -> E.of_int n = of_int_modulo n
 
-  function to_uint (a : E.t) : int
-
-  axiom To_uint_signed:
-    signed ->
-      forall a : E.t [E.to_int a].
-        to_uint a = E.to_int a + if lt a (of_int_const 0) then range else 0
-
-  axiom To_uint_unsigned:
-    not signed ->
-      forall a : E.t [E.to_int a].
-        to_uint a = E.to_int a
-
   axiom Lt_eq:
     forall a b : E.t [E.(<) a b | lt a b].
       E.(<) a b = lt a b
@@ -503,31 +491,34 @@ theory Bit_enum
 
   (* End of dummy axioms, the following ones are really essential *)
 
-  axiom Lsl_def:
+  axiom Lsl:
     forall b : E.t.
       forall s : E.t [lsl b s].
         0 <= E.to_int s < size ->
           lsr (lsl_modulo b s) s = s ->
             lsl b s = lsl_modulo b s
 
-  axiom To_uint_lsr:
-    forall a : E.t.
-      forall n : E.t [lsr a n].
-        0 <= E.to_int n < size ->
-          E.to_uint (lsr a n) = ED.div (E.to_uint a) (power2 (E.to_int n))
+  axiom Lsr_unsigned:
+    not signed ->
+      forall a : E.t.
+        forall n : E.t [lsr a n].
+          0 <= E.to_int n < size ->
+            E.to_int (lsr a n) = ED.div (E.to_int a) (power2 (E.to_int n))
 
-  axiom To_int_asr:
+  (* lsr is not used for signed types in C *)
+
+  axiom Asr_signed:
     signed ->
       forall a : E.t.
         forall n : E.t [lsr a n].
           0 <= E.to_int n < size ->
             E.to_int (asr a n) = ED.div (E.to_int a) (power2 (E.to_int n))
 
-  axiom To_uint_lsl_modulo:
+  axiom Lsl_modulo:
     forall a : E.t.
       forall n : E.t [lsl_modulo a n].
-        0 <= E.to_int n < size ->
-          E.to_uint (lsl_modulo a n) = ED.mod (Int.( *) (E.to_uint a) (power2 (E.to_int n))) range
+         0 <= E.to_int n < size ->
+           E.to_int (lsl_modulo a n) = normalize (Int.( *) (E.to_int a) (power2 (E.to_int n)))
 end
 
 module Generic_bit_enum

@@ -27,6 +27,7 @@ theory enum.Bit_int8
   syntax function of_int_modulo "((_ int2bv 8) %1)"
   syntax converter of_int_const "(_ bv%1 8)"
 
+  remove prop Lsr_unsigned
   syntax type tt "(_ BitVec 16)"
 
   syntax function  extend  "((_ sign_extend 8) %1)"
@@ -40,9 +41,7 @@ theory enum.Bit_int8
 
   syntax function lsl_modulo_ "(bvshl %1 %2)"
 
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -59,7 +58,6 @@ theory enum.Bit_int8
   syntax predicate gt "(bvsgt %1 %2)"
   syntax predicate ge "(bvsge %1 %2)"
 
-  remove prop Nth
   syntax predicate nth "(= ((_ extract %2 %2) %1) (_ bv1 1))"
   remove prop To_int_def
 end
@@ -87,7 +85,7 @@ theory enum.Bit_uint8
   syntax function of_int_modulo "((_ int2bv 8) %1)"
   syntax converter of_int_const "(_ bv%1 8)"
 
-  remove prop To_uint
+  remove prop Asr_signed
   syntax type tt "(_ BitVec 16)"
 
   syntax function  extend  "((_ zero_extend 8) %1)"
@@ -101,9 +99,7 @@ theory enum.Bit_uint8
 
   syntax function lsl_modulo_ "(bvshl %1 %2)"
 
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -120,7 +116,6 @@ theory enum.Bit_uint8
   syntax predicate gt "(bvugt %1 %2)"
   syntax predicate ge "(bvuge %1 %2)"
 
-  remove prop Nth
   syntax predicate nth "(= ((_ extract %2 %2) %1) (_ bv1 1))"
   remove prop To_int_def
 end
@@ -148,6 +143,7 @@ theory enum.Bit_int16
   syntax function of_int_modulo "((_ int2bv 16) %1)"
   syntax converter of_int_const "(_ bv%1 16)"
 
+  remove prop Lsr_unsigned
   syntax type tt "(_ BitVec 32)"
 
   syntax function  extend  "((_ sign_extend 16) %1)"
@@ -161,9 +157,7 @@ theory enum.Bit_int16
 
   syntax function lsl_modulo_ "(bvshl %1 %2)"
 
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -180,7 +174,6 @@ theory enum.Bit_int16
   syntax predicate gt "(bvsgt %1 %2)"
   syntax predicate ge "(bvsge %1 %2)"
 
-  remove prop Nth
   syntax predicate nth "(= ((_ extract %2 %2) %1) (_ bv1 1))"
   remove prop To_int_def
 end
@@ -208,7 +201,7 @@ theory enum.Bit_uint16
   syntax function of_int_modulo "((_ int2bv 16) %1)"
   syntax converter of_int_const "(_ bv%1 16)"
 
-  remove prop To_uint
+  remove prop Asr_signed
   syntax type tt "(_ BitVec 32)"
 
   syntax function  extend  "((_ zero_extend 16) %1)"
@@ -222,9 +215,7 @@ theory enum.Bit_uint16
 
   syntax function lsl_modulo_ "(bvshl %1 %2)"
 
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -241,7 +232,6 @@ theory enum.Bit_uint16
   syntax predicate gt "(bvugt %1 %2)"
   syntax predicate ge "(bvuge %1 %2)"
 
-  remove prop Nth
   syntax predicate nth "(= ((_ extract %2 %2) %1) (_ bv1 1))"
   remove prop To_int_def
 end
@@ -269,6 +259,7 @@ theory enum.Bit_int32
   syntax function of_int_modulo "((_ int2bv 32) %1)"
   syntax converter of_int_const "(_ bv%1 32)"
 
+  remove prop Lsr_unsigned
   syntax type tt "(_ BitVec 64)"
 
   syntax function  extend  "((_ sign_extend 32) %1)"
@@ -282,9 +273,7 @@ theory enum.Bit_int32
 
   syntax function lsl_modulo_ "(bvshl %1 %2)"
 
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -301,7 +290,6 @@ theory enum.Bit_int32
   syntax predicate gt "(bvsgt %1 %2)"
   syntax predicate ge "(bvsge %1 %2)"
 
-  remove prop Nth
   syntax predicate nth "(= ((_ extract %2 %2) %1) (_ bv1 1))"
   remove prop To_int_def
 end
@@ -329,7 +317,7 @@ theory enum.Bit_uint32
   syntax function of_int_modulo "((_ int2bv 32) %1)"
   syntax converter of_int_const "(_ bv%1 32)"
 
-  remove prop To_uint
+  remove prop Asr_signed
   syntax type tt "(_ BitVec 64)"
 
   syntax function  extend  "((_ zero_extend 32) %1)"
@@ -343,9 +331,7 @@ theory enum.Bit_uint32
 
   syntax function lsl_modulo_ "(bvshl %1 %2)"
 
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -362,7 +348,6 @@ theory enum.Bit_uint32
   syntax predicate gt "(bvugt %1 %2)"
   syntax predicate ge "(bvuge %1 %2)"
 
-  remove prop Nth
   syntax predicate nth "(= ((_ extract %2 %2) %1) (_ bv1 1))"
   remove prop To_int_def
 end
@@ -390,6 +375,7 @@ theory enum.Bit_int64
   syntax function of_int_modulo "((_ int2bv 64) %1)"
   syntax converter of_int_const "(_ bv%1 64)"
 
+  remove prop Lsr_unsigned
   syntax type tt "(_ BitVec 128)"
 
   syntax function  extend  "((_ sign_extend 64) %1)"
@@ -403,9 +389,7 @@ theory enum.Bit_int64
 
   syntax function lsl_modulo_ "(bvshl %1 %2)"
 
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -422,7 +406,6 @@ theory enum.Bit_int64
   syntax predicate gt "(bvsgt %1 %2)"
   syntax predicate ge "(bvsge %1 %2)"
 
-  remove prop Nth
   syntax predicate nth "(= ((_ extract %2 %2) %1) (_ bv1 1))"
 end
 
@@ -449,7 +432,7 @@ theory enum.Bit_uint64
   syntax function of_int_modulo "((_ int2bv 64) %1)"
   syntax converter of_int_const "(_ bv%1 64)"
 
-  remove prop To_uint
+  remove prop Asr_signed
   syntax type tt "(_ BitVec 128)"
 
   syntax function  extend  "((_ zero_extend 64) %1)"
@@ -463,9 +446,7 @@ theory enum.Bit_uint64
 
   syntax function lsl_modulo_ "(bvshl %1 %2)"
 
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -482,7 +463,6 @@ theory enum.Bit_uint64
   syntax predicate gt "(bvugt %1 %2)"
   syntax predicate ge "(bvuge %1 %2)"
 
-  remove prop Nth
   syntax predicate nth "(= ((_ extract %2 %2) %1) (_ bv1 1))"
 end
 

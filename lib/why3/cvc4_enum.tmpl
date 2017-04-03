@@ -37,11 +37,10 @@ theory enum.Bit_{{u}}int{{size}}
 {# This significantly degrades solver performance, better removed, since it helps too little #}
   {% if signed -%}
 {# syntax function to_uint "(bv2nat %1)" #}
-  remove prop To_uint_unsigned
+  remove prop Lsr_unsigned
   {% else -%}
 {# syntax function to_int "(bv2nat %1)" #}
-  remove prop To_uint_signed
-  remove prop To_int_asr
+  remove prop Asr_signed
   {% endif -%}
 
   syntax type tt "(_ BitVec {{size * 2}})"

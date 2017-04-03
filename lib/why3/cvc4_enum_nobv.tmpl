@@ -13,10 +13,9 @@ end
 theory enum.Bit_{{u}}int{{size}}
 
   {% if signed -%}
-  remove prop To_uint_unsigned
+  remove prop Lsr_unsigned
   {% else -%}
-  remove prop To_uint_signed
-  remove prop To_int_asr
+  remove prop Asr_signed
   {% endif -%}
 
   remove prop Nth

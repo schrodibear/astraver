@@ -6,9 +6,8 @@ end
 
 theory enum.Bit_int8
 
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Lsr_unsigned
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -19,17 +18,13 @@ theory enum.Bit_int8
   remove prop Asr_nth_high
   remove prop Lsl_modulo_nth_low
   remove prop Lsl_modulo_nth_high
-
-  remove prop Nth
   remove prop To_int_def
 end
 
 theory enum.Bit_uint8
 
-  remove prop To_uint
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Asr_signed
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -40,16 +35,13 @@ theory enum.Bit_uint8
   remove prop Asr_nth_high
   remove prop Lsl_modulo_nth_low
   remove prop Lsl_modulo_nth_high
-
-  remove prop Nth
   remove prop To_int_def
 end
 
 theory enum.Bit_int16
 
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Lsr_unsigned
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -60,17 +52,13 @@ theory enum.Bit_int16
   remove prop Asr_nth_high
   remove prop Lsl_modulo_nth_low
   remove prop Lsl_modulo_nth_high
-
-  remove prop Nth
   remove prop To_int_def
 end
 
 theory enum.Bit_uint16
 
-  remove prop To_uint
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Asr_signed
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -81,16 +69,13 @@ theory enum.Bit_uint16
   remove prop Asr_nth_high
   remove prop Lsl_modulo_nth_low
   remove prop Lsl_modulo_nth_high
-
-  remove prop Nth
   remove prop To_int_def
 end
 
 theory enum.Bit_int32
 
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Lsr_unsigned
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -101,17 +86,13 @@ theory enum.Bit_int32
   remove prop Asr_nth_high
   remove prop Lsl_modulo_nth_low
   remove prop Lsl_modulo_nth_high
-
-  remove prop Nth
   remove prop To_int_def
 end
 
 theory enum.Bit_uint32
 
-  remove prop To_uint
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Asr_signed
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -122,16 +103,13 @@ theory enum.Bit_uint32
   remove prop Asr_nth_high
   remove prop Lsl_modulo_nth_low
   remove prop Lsl_modulo_nth_high
-
-  remove prop Nth
   remove prop To_int_def
 end
 
 theory enum.Bit_int64
 
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Lsr_unsigned
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -142,16 +120,12 @@ theory enum.Bit_int64
   remove prop Asr_nth_high
   remove prop Lsl_modulo_nth_low
   remove prop Lsl_modulo_nth_high
-
-  remove prop Nth
 end
 
 theory enum.Bit_uint64
 
-  remove prop To_uint
-  remove prop To_uint_lsr
-  remove prop To_uint_lsl_modulo
-
+  remove prop Asr_signed
+  remove prop Nth
   remove prop Nth_bw_or
   remove prop Nth_bw_and
   remove prop Nth_bw_xor
@@ -162,7 +136,5 @@ theory enum.Bit_uint64
   remove prop Asr_nth_high
   remove prop Lsl_modulo_nth_low
   remove prop Lsl_modulo_nth_high
-
-  remove prop Nth
 end
 
