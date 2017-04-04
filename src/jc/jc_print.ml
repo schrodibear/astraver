@@ -86,6 +86,7 @@ let bin_op (op, _) =
   | `Bdiv -> "/"
   | `Bdiv_mod -> "/%"
   | `Bmod -> "%"
+  | `Bmod_mod -> "%%"
   | `Bland -> "&&"
   | `Blor -> "||"
   | `Bimplies -> "==>"

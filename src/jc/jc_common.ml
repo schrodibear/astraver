@@ -1010,6 +1010,7 @@ let string_of_op = function
   | `Bdiv -> "/"
   | `Bdiv_mod -> "/%"
   | `Bmod -> "%"
+  | `Bmod_mod -> "%%"
   | `Bland -> "&&"
   | `Blor -> "||"
   | `Bimplies -> "==>"

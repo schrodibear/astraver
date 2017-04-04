@@ -93,7 +93,7 @@ and ptype = ptype_node node_positioned
 
 type comparison_op = [ `Blt | `Bgt | `Ble | `Bge | `Beq | `Bneq ]
 type arithmetic_op = [ `Badd | `Bsub | `Bmul | `Bdiv | `Bmod ]
-type mod_arithmetic_op = [ `Badd_mod | `Bsub_mod | `Bmul_mod | `Bdiv_mod ]
+type mod_arithmetic_op = [ `Badd_mod | `Bsub_mod | `Bmul_mod | `Bdiv_mod | `Bmod_mod ]
 type logical_op = [ `Bland | `Blor | `Bimplies | `Biff ]
 type bitwise_op =
     [ `Bbw_and | `Bbw_or | `Bbw_xor

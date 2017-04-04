@@ -1972,7 +1972,6 @@ end
 let remove_array_address file = visitFramacFile (new array_address_remover) file
 
 module H = Cil_datatype.Fieldinfo.Hashtbl
-module S = Cil_datatype.Fieldinfo.Set
 
 (*****************************************************************************)
 (* Retype int field used as pointer.                                         *)

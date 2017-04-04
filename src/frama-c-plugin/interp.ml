@@ -163,7 +163,8 @@ let binop = function
   | Mult Modulo -> `Bmul_mod
   | Div Check -> `Bdiv
   | Div Modulo -> `Bdiv_mod
-  | Mod -> `Bmod
+  | Mod Check-> `Bmod
+  | Mod Modulo -> `Bmod_mod
   | Shiftlt Check -> `Bshift_left
   | Shiftlt Modulo -> `Bshift_left_mod
   | Shiftrt -> assert false (* Should be decided at point used *)
@@ -661,7 +662,7 @@ and terms ?(in_zone=false) ~default_label t =
       in
       product (fun x y -> JCPEbinary (x,op,y)) (terms t1) (terms t2)
 
-    | TBinOp (Shiftlt oft as op, t1, t2) ->
+    | TBinOp (Shiftlt _ as op, t1, t2) ->
       product (fun x y -> JCPEbinary (x, binop op, y)) (terms t1) (terms t2)
     | TBinOp ((Lt | Gt | Le | Ge) as op, t1, t2) ->
       product (fun x y -> JCPEbinary (x, binop op, y)) (terms t1) (terms t2)
@@ -1651,7 +1652,7 @@ and integral_expr e =
         in
         e#node
 
-      | BinOp (Shiftlt oft as op, e1, e2, _ty) ->
+      | BinOp (Shiftlt _ as op, e1, e2, _ty) ->
         let e =
           let t1 = typeOf e1 in
           locate (mkexpr (JCPEbinary(expr e1,binop op,expr_shift_precast ~t1 e2)) e.eloc)

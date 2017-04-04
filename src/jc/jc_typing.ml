@@ -777,7 +777,7 @@ let make_logic_bin_op ~loc ~(op : bin_op) e1 e2 =
   | `Bmul | `Bdiv | `Bmod
     when is_numeric t1 && is_numeric t2 ->
     return_numeric ()
-  | `Bmul_mod | `Bdiv_mod
+  | `Bmul_mod | `Bdiv_mod | `Bmod_mod
     when is_enum t1 && is_enum t2 ->
     return_numeric ()
   | `Bbw_and | `Bbw_or | `Bbw_xor
@@ -786,7 +786,7 @@ let make_logic_bin_op ~loc ~(op : bin_op) e1 e2 =
     return_numeric ()
   | `Bmul | `Bdiv | `Bmod ->
     typing_error ~loc "numeric types expected for *, / or %%"
-  | `Bmul_mod | `Bdiv_mod ->
+  | `Bmul_mod | `Bdiv_mod | `Bmod_mod ->
     typing_error ~loc "enum types expected for *%% or /%%"
   | `Bbw_and | `Bbw_or | `Bbw_xor
   | `Blogical_shift_right | `Barith_shift_right | `Bshift_left| `Bshift_left_mod  ->
@@ -1907,9 +1907,9 @@ let make_bin_op loc (op: operational_op) e1 e2 =
     return_numeric ()
   | `Bmul | `Bdiv | `Bmod ->
     typing_error ~loc "numeric types expected for multiplicative operators"
-  | `Bmul_mod | `Bdiv_mod when is_enum t1 && same_type_no_coercion t1 t2 ->
+  | `Bmul_mod | `Bdiv_mod | `Bmod_mod when is_enum t1 && same_type_no_coercion t1 t2 ->
     return_numeric ()
-  | `Bmul_mod | `Bdiv_mod ->
+  | `Bmul_mod | `Bdiv_mod | `Bmod_mod ->
     typing_error ~loc "enum type expected for *%% or /%%"
   | `Bbw_and | `Bbw_or | `Bbw_xor when is_boolean t1 && is_boolean t2 ->
     return
