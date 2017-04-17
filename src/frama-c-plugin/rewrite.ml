@@ -263,6 +263,10 @@ class string_constants_visitor ~attach =
    * postponed until finding the corresponding proxy with the __invariant attribute.
    *)
   let content_inv ~loc s lv =
+    let int_of_char =
+      if theMachine.theMachine.char_is_unsigned then int_of_char
+      else fun c -> (128 + int_of_char c) mod 256 - 128
+    in
     let content =
       match s with
       | `String s -> List.map (Logic_const.tinteger ~loc % int_of_char) (String.explode s @ ['\000'])
