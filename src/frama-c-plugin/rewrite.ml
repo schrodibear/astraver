@@ -509,7 +509,7 @@ class literal_proxy_visitor (first_pass_visitor : string_constants_visitor) =
               match const with
               | CStr s ->
                 let s =
-                  if Str.last_chars s 3 = "..." then
+                  if String.length s >= 3 && Str.last_chars s 3 = "..." then
                     Str.first_chars s (String.length s - 3)
                   else s
                 in
