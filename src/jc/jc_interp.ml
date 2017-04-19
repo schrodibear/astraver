@@ -1199,6 +1199,9 @@ let old_to_pre_term =
          new term_with ~node:(JCTinstanceof (t', LabelPre, si)) t
        | JCTsidecast (t', LabelOld, si) ->
          new term_with ~node:(JCTsidecast (t', LabelPre, si)) t
+       | JCTapp app ->
+         new term_with
+           ~node:(JCTapp { app with app_label_assoc = List.map (map_snd old_to_pre) app.app_label_assoc }) t
        | _ -> t)
 
 let rec old_to_pre_lset lset =
