@@ -845,7 +845,7 @@ theory Bit_int8
   axiom To_int_def:
     forall a : t [to_int a].
       to_int a =
-        (Int.(+) (if nth a 0 then 1 else 0)
+        ("eliminate_if : no" Int.(+) (if nth a 0 then 1 else 0)
         (Int.(+) (if nth a 1 then 2 else 0)
         (Int.(+) (if nth a 2 then 4 else 0)
         (Int.(+) (if nth a 3 then 8 else 0)
@@ -870,7 +870,7 @@ theory Bit_uint8
   axiom To_int_def:
     forall a : t [to_int a].
       to_int a =
-        (Int.(+) (if nth a 0 then 1 else 0)
+        ("eliminate_if : no" Int.(+) (if nth a 0 then 1 else 0)
         (Int.(+) (if nth a 1 then 2 else 0)
         (Int.(+) (if nth a 2 then 4 else 0)
         (Int.(+) (if nth a 3 then 8 else 0)
@@ -895,7 +895,7 @@ theory Bit_int16
   axiom To_int_def:
     forall a : t [to_int a].
       to_int a =
-        (Int.(+) (if nth a 0 then 1 else 0)
+        ("eliminate_if : no" Int.(+) (if nth a 0 then 1 else 0)
         (Int.(+) (if nth a 1 then 2 else 0)
         (Int.(+) (if nth a 2 then 4 else 0)
         (Int.(+) (if nth a 3 then 8 else 0)
@@ -928,7 +928,7 @@ theory Bit_uint16
   axiom To_int_def:
     forall a : t [to_int a].
       to_int a =
-        (Int.(+) (if nth a 0 then 1 else 0)
+        ("eliminate_if : no" Int.(+) (if nth a 0 then 1 else 0)
         (Int.(+) (if nth a 1 then 2 else 0)
         (Int.(+) (if nth a 2 then 4 else 0)
         (Int.(+) (if nth a 3 then 8 else 0)
@@ -961,7 +961,7 @@ theory Bit_int32
   axiom To_int_def:
     forall a : t [to_int a].
       to_int a =
-        (Int.(+) (if nth a 0 then 1 else 0)
+        ("eliminate_if : no" Int.(+) (if nth a 0 then 1 else 0)
         (Int.(+) (if nth a 1 then 2 else 0)
         (Int.(+) (if nth a 2 then 4 else 0)
         (Int.(+) (if nth a 3 then 8 else 0)
@@ -1010,7 +1010,7 @@ theory Bit_uint32
   axiom To_int_def:
     forall a : t [to_int a].
       to_int a =
-        (Int.(+) (if nth a 0 then 1 else 0)
+        ("eliminate_if : no" Int.(+) (if nth a 0 then 1 else 0)
         (Int.(+) (if nth a 1 then 2 else 0)
         (Int.(+) (if nth a 2 then 4 else 0)
         (Int.(+) (if nth a 3 then 8 else 0)
