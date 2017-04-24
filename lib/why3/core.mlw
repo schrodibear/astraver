@@ -1153,9 +1153,12 @@ module Jessie_reinterpret_unsafe
                let ps = sidecast t p s2 in
                let pset_new = pset_singleton ps in
                alloc_blockset (old !a) !a (pset_union pset_old pset_new) /\
-               switch_blocks (old !a) !a p ps (offset_max !a ps + 1) /\
-               alloc_fresh (old !a) ps /\
-               allocable !a p /\
+               let size_new = offset_max !a ps - offset_min !a ps + 1 in
+               let start_old = shift p (offset_min (old !a) p) in
+               let start_new = shift ps (offset_min !a ps) in
+               switch_blocks (old !a) !a start_old start_new size_new /\
+               alloc_fresh (old !a) start_new /\
+               allocable !a start_old /\
                let pset_range_new =
                  pset_range (pset_singleton ps) (offset_min !a ps) (offset_max !a ps)
                in
@@ -1200,9 +1203,12 @@ module Jessie_reinterpret_safe
                let ps = sidecast t p s2 in
                let pset_new = pset_singleton ps in
                alloc_blockset (old !a) !a (pset_union pset_old pset_new) /\
-               switch_blocks (old !a) !a p ps (offset_max !a ps + 1) /\
-               alloc_fresh (old !a) ps /\
-               allocable !a p /\
+               let size_new = offset_max !a ps - offset_min !a ps + 1 in
+               let start_old = shift p (offset_min (old !a) p) in
+               let start_new = shift ps (offset_min !a ps) in
+               switch_blocks (old !a) !a start_old start_new size_new /\
+               alloc_fresh (old !a) start_new /\
+               allocable !a start_old /\
                let pset_range_new =
                  pset_range (pset_singleton ps) (offset_min !a ps) (offset_max !a ps)
                in

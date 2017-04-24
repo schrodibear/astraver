@@ -1616,9 +1616,9 @@ and make_reinterpret ~e e1 st =
   (* Assume reinterpretation predicates for all corresponingly shifted pointers *)
   let memory_assumption =
     let open O.P in
-    let_ "p" e'
+    let_ "p'" e'
       (fun p ->
-         let_ "ps" (T.sidecast ~r:e1#region e' s_to)
+         let_ "ps'" (T.sidecast ~r:e1#region e' s_to)
            (fun ps ->
               let omin_omax =
                 let app f =

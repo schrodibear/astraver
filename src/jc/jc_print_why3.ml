@@ -44,7 +44,10 @@ let constant fmttr (type a) =
   let pr fmt = fprintf fmttr fmt in
   function
   | (Void : a constant) -> pr "()"
-  | Int n -> pr "(%s)" @@ Num.string_of_num @@ Numconst.integer n
+  | Int n ->
+    let n = Numconst.integer n in
+    let open Num in
+    pr (if n >=/ Numconst.zero then "(%s)" else "(Int.(-_) %s)") @@ string_of_num @@ abs_num n
   | Real f -> pr "%s" f
   | Bool true -> pr "true"
   | Bool false -> pr "false"
