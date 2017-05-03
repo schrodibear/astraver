@@ -92,7 +92,7 @@ void *memmove(void *dest, const void *src, size_t n);
   @*/
 extern int memcmp__type(const _type *dest, const _type *src, size_t n);
 
-//@ assigns ((char *) dest)[0 .. n - 1];
+//@ assigns \nothing;
 int memcmp(const void *dest, const void *src, size_t n);
 
 /*@ requires n >= 0 &&
