@@ -577,6 +577,14 @@ let adjust_from_bitfield ~in_zone ~fi e =
   else
     e
 
+let pointer_comparison ~safe ~loc e1 rel e2 =
+  let mkexpr node = mkexpr node loc in
+  let sube = mkexpr (JCPEbinary (e1, `Bsub, e2)) in
+  let e = JCPEbinary (sube, rel, zero_expr) in
+  if safe then e
+  else
+    JCPEbinary (mkexpr (JCPEbinary (mkexpr (JCPEbase_block e1), `Beq, mkexpr (JCPEbase_block e2))), `Bland, mkexpr e)
+
 let rec coerce_floats ~default_label t =
   let terms = terms ~default_label in
   match !float_model with
@@ -636,13 +644,10 @@ and terms ?(in_zone=false) ~default_label t =
       List.map (fun x -> JCPEunary(unop op,x)) (coerce_floats t)
     | TBinOp ((Lt | Gt | Le | Ge as op), t1, t2)
       when Type.Logic_c_type.map_default ~f:isPointerType t1.term_type ~default:false ->
-      (* Pointer comparison is translated as subtraction *)
+      (* Pointer comparison is translated as subtraction + same_block *)
       let t1 = terms t1 in
       let t2 = terms t2 in
-      let expr x y =
-        let sube = mkexpr (JCPEbinary (x, `Bsub, y)) t.term_loc in
-        JCPEbinary (sube, binop op, zero_expr)
-      in
+      let expr x y = pointer_comparison ~safe:false ~loc:t.term_loc x (binop op) y in
       product expr t1 t2
     | TBinOp (Shiftrt, t1, t2) ->
       begin match possible_value_of_integral_term t2 with
@@ -1047,9 +1052,8 @@ and pred ~default_label p =
       end
     | Prel ((Rlt | Rgt | Rle | Rge as rel), t1, t2)
       when Type.Logic_c_type.map_default ~f:isPointerType ~default:false t1.term_type ->
-      (* Pointer comparison is translated as subtraction *)
-      let sube = mkexpr (JCPEbinary (term t1, `Bsub, term t2)) p.loc in
-      JCPEbinary (sube, relation rel, zero_expr)
+      (* Pointer comparison is translated as subtraction + same_block *)
+      pointer_comparison ~safe:false ~loc:p.loc (term t1) (relation rel) (term t2)
 
     | Prel (Req, t1, t2) when isTypeTagType t1.term_type ->
       JCPEeqtype (tag t1, tag t2)
@@ -1577,9 +1581,8 @@ and boolean_expr ?(to_locate=false) e =
         if isArithmeticType ty then
           JCPEbinary(expr e1,binop op,expr e2)
         else
-          (* Pointer comparison is translated as subtraction *)
-          let sube = mkexpr (JCPEbinary(expr e1,`Bsub,expr e2)) e.eloc in
-          JCPEbinary(sube,binop op,zero_expr)
+          (* Pointer comparison is translated as subtraction + same_block *)
+          pointer_comparison ~safe:true ~loc:e.eloc (expr e1) (binop op) (expr e2)
 
     | _ -> boolean_node_from_expr (typeOf e) (expr e)
   in
@@ -1620,10 +1623,9 @@ and integral_expr e =
 
       | BinOp((Lt | Gt | Le | Ge as op),e1,e2,_ty)
           when isPointerType (typeOf e1) ->
-          (* Pointer comparison is translated as subtraction *)
-          let sube = mkexpr (JCPEbinary (expr e1, `Bsub, expr e2)) e.eloc in
-          let e = mkexpr (JCPEbinary (sube, binop op, zero_expr)) e.eloc in
-          node_from_boolean_expr e
+          (* Pointer comparison is translated as subtraction + same_block *)
+          let e' = pointer_comparison ~safe:true ~loc:e.eloc (expr e1) (binop op) (expr e2) in
+          node_from_boolean_expr (mkexpr e' e.eloc)
 
 (*       | BinOp((Eq | Ne as op),e1,e2,_ty) *)
 (*           when isPointerType (typeOf e1) && *)
