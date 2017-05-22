@@ -1,18 +1,35 @@
 Before presentation on Frama-C Day:
-  * [ ] Fix location parsing for in-line annotations e.g. a +/*@%*/ b -/*@%*/ c
-  * [ ] Fix strange bug with preprocessing and locations in the example by Evgeny Kornykhin
-  * [ ] Find a way to restore tabs in the preprocessed outputs
+  * [X] Fix location parsing for in-line annotations e.g. a +/*@%*/ b -/*@%*/ c
+  * [X] Fix strange bug with preprocessing and locations in the example by Evgeny Kornykhin (GCC BUG 23779!!!)
+  * [X] Find a way to restore tabs in the preprocessed outputs
+  * [X] Support splitted preprocessor output (one input line on several output lines)
   * [ ] Support casts to logic types in logic e.g. (integer)1
   * [ ] Provide special support for annotating implicit casts (insert cast_mod to itself with attr ASizeOf?)
   * [ ] Provide a separate option for annotation preprocessing to disallow certain macroses in annotations (e.g. va_lists)
   * [ ] Allow arbitrary recursive definitions in Why3
   * [ ] Remove special translation for recursive *logic* functions in Jessie
+  * [ ] Add CVC4 configuration with inductive reasoning enabled
   * [ ] Fix gconfig for current tab and tabs in Why3 IDE
-  * [ ] Merge with Alpha2
+  * [ ] Add 'save config' option to File menu in Why3 IDE
+  * [ ] Merge Jessie with Alpha2
+  * [ ] Merge Why3 with origin/master
   * [ ] enable C11 in Frama-C (to support typedef redefinition by default)
+  * [ ] Support conjunctions in introduce_premises
 
 
 Later, but in the next release:
   * [ ] Add ghost function parameters (pointers, in particular) to support returning existential witnesses e.g. in strcmp
   * [ ] Implement special translation for undefined (unspecified) sequence
   * [ ] Fix Coq support!
+  * [ ] Add transformation to support simple inductive reasoning
+
+Later:
+  * [ ] Logic in code & types
+  * [ ] Datatypes from ACSL to Why3ML
+  * [ ] New memory model
+  * [ ] Proper support for reinterpretation
+  * [ ] Ownership methodology (but no parallelism, only coarse-grained locking)
+
+Even later:
+  * [ ] Inlined axiomatic definitions
+  * [ ] Domains & moving
