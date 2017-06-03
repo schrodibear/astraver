@@ -15,13 +15,14 @@ Before presentation on Frama-C Day:
   * [ ] Merge Why3 with origin/master
   * [ ] enable C11 in Frama-C (to support typedef redefinition by default)
   * [ ] Support conjunctions in introduce_premises
-
+  * [ ] Add explanations for assigns clauses (region names)
 
 Later, but in the next release:
   * [ ] Add ghost function parameters (pointers, in particular) to support returning existential witnesses e.g. in strcmp
   * [ ] Implement special translation for undefined (unspecified) sequence
   * [ ] Fix Coq support!
   * [ ] Add transformation to support simple inductive reasoning
+  * [ ] Add preliminary properties (auto-lemmas) implementation with Why3 transformation
 
 Later:
   * [ ] Logic in code & types
