@@ -1127,7 +1127,7 @@ let rec term env (e : nexpr) =
           Type_var.subst uenv t2
         end
       in
-      t, te1#region, JCTif(te1, te2, te3)
+      t, te2#region, JCTif(te1, te2, te3)
     | JCNEoffset (k, e1) ->
       let te1 = ft e1 in
       begin match te1#typ with
