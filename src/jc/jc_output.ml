@@ -873,6 +873,10 @@ struct
 
   let tag si = F.tag si $ Nil
 
+  let charp_tag () = F.charp_tag () $ Nil
+
+  let voidp_tag () = F.voidp_tag () $ Nil
+
   let select mem p = F.select () $ mem ^. p
 
   let ( **>) mem fi = select mem (var (Name.field_memory_name fi))
