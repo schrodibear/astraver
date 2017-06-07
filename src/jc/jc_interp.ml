@@ -1764,7 +1764,9 @@ and expr : type a b. (a, b) ty_opt -> _ -> a expr = fun t e ->
       begin match
         match e1#typ with
         | JCTpointer (JCtag ({ si_final = true }, []), _, _) -> None
-        | JCTpointer (JCtag (st, []), _, _) -> Some (tag_table_var (struct_root st, e1#region), O.E.tag st)
+        | JCTpointer (JCtag ({ si_name } as st, []), _, _) ->
+          Some (tag_table_var (struct_root st, e1#region),
+                if si_name = Name.voidp then O.E.charp_tag () else O.E.tag st)
         | _ -> None
       with
       | Some (tt, tag') when safety_checking () ->
