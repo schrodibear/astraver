@@ -22,15 +22,16 @@ Later, but in the next release:
   * [ ] Implement special translation for undefined (unspecified) sequence
   * [ ] Fix Coq support!
   * [ ] Add transformation to support simple inductive reasoning
-  * [ ] Add preliminary properties (auto-lemmas) implementation with Why3 transformation
+  * [ ] Add preliminary properties (auto-lemmas) implementation with Why3 transformation (outer quantifiers should match parameters, inside-out, cache instantiations (applications), allow exclude instantiated lemmas, keep cache state, collect occurrences from upper part for pres. properties, also `for rewrite` lemmas)
 
 Later:
   * [ ] Logic in code & types
   * [ ] Datatypes from ACSL to Why3ML
   * [ ] New memory model
   * [ ] Proper support for reinterpretation
+  * [ ] Projections, =/*@**/, ==/*@**/, a[/*@**/i], a +/*@**/ i and disruptive moving
   * [ ] Ownership methodology (but no parallelism, only coarse-grained locking)
 
 Even later:
-  * [ ] Inlined axiomatic definitions
+  * [ ] Inlined axiomatic definitions (properties, preservation properties)
   * [ ] Domains & moving
