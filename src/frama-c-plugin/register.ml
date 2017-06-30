@@ -42,33 +42,23 @@ open Common
 
 let std_include = Filename.concat Framac.Config.datadir "jessie"
 
-let treat_jessie_spec_prolog () =
+let jessie_specific_config () =
   if Config.Analysis.get () && Config.Specialize.get () then
     let spec_prolog_h_name = Filename.concat std_include Name.File.blockfuns_include in
-    Kernel.CppExtraArgs.append_before ["-include " ^ spec_prolog_h_name]
-
-(* The specifications in the lib force Jessie to handle usnupported features e.g. long double *)
-let avoid_frama_c_stdlib () =
-  if Config.Analysis.get () then
-    Kernel.FramaCStdLib.off ()
-
-let activate_enum_int_casts () =
-  if Config.Analysis.get () then
-    Kernel.ForceEnumIntCasts.on ()
-
-let activate_pp_files () =
-  if Config.Analysis.get () then
-    Kernel.GeneratePPFile.on ()
-
+    Kernel.CppExtraArgs.append_before ["-include " ^ spec_prolog_h_name];
+  if Config.Analysis.get () then begin
+    Kernel.FramaCStdLib.off ();
+    Kernel.ForceEnumIntCasts.on ();
+    Kernel.GeneratePPFile.on ();
+    Kernel.C11.on ()
+  end
 
 let () =
   (* [JS 2009/10/04]
      Preserve the behaviour of svn release <= r5012.
      However it works only if the int-model is set from the command line. *)
   (* Extension -- support for specialized memcpy() versions. *)
-  List.iter
-    Cmdline.run_after_configuring_stage
-    [treat_jessie_spec_prolog; avoid_frama_c_stdlib; activate_enum_int_casts; activate_pp_files]
+  List.iter Cmdline.run_after_configuring_stage [jessie_specific_config]
 
 let steal_globals () =
   let vis =
