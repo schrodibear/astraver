@@ -63,6 +63,9 @@ let generic full _f targets =
 
        out "why3prove: %s@\n" why3ml_target;
        out "\t why3 prove $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";
+
+       out "why3sprove: %s@\n" why3ml_target;
+       out "\t why3 sprove --clean --strategy default $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";
     )
     (full ^ ".makefile")
 

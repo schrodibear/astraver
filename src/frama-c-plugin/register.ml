@@ -259,7 +259,7 @@ let run () =
     let target = Config.Target.get () in
     let jessie_opt =
       match target with
-      | "why3" | "why3ml" | "why3ide" | "why3replay" | "why3autoreplay" | "update" -> ""
+      | "why3" | "why3ml" | "why3ide" | "why3replay" | "why3autoreplay" | "why3prove" | "why3sprove" | "update" -> ""
       | _ -> ""
     in
     let cmd =
