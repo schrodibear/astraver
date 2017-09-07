@@ -216,7 +216,8 @@ lib/why3/why3.conf:  lib/why3/cvc4_enum.drv lib/why3/cvc4_enum_nobv.drv lib/why3
 	@printf "[prover]\n" >> $@
 	@printf "alternative = \"-Em\"\n" >> $@
 	@printf "command = \"alt-ergo -timelimit %%t -no-Ematching %%f\"\n" >> $@
-	@printf "driver = \"$(WHY3_DATADIR)/drivers/alt_ergo.drv\"\n" >> $@
+	@printf "command_steps = \"alt-ergo -steps-bound %%S -no-Ematching %%f\"\n" >> $@
+	@printf "driver = \"alt_ergo\"\n" >> $@
 	@printf "editor = \"altgr-ergo\"\n" >> $@
 	@printf "in_place = false\n" >> $@
 	@printf "interactive = false\n" >> $@
