@@ -76,12 +76,13 @@ GENERATED = src/why/why_version.ml \
             lib/why3/cvc4_enum_nobv.drv \
             lib/why3/alt-ergo_enum.drv \
             lib/why3/alt-ergo_remove_triggers_enum.drv \
-            lib/why3/z3_enum.gen \
-            lib/why3/z3_enum_nobv.gen \
-            lib/why3/cvc4_enum.gen \
-            lib/why3/cvc4_enum_nobv.gen \
-            lib/why3/alt-ergo_enum.gen \
-            lib/why3/alt-ergo_remove_triggers_enum.gen
+
+MORE_GENERATED = lib/why3/z3_enum.gen \
+                 lib/why3/z3_enum_nobv.gen \
+                 lib/why3/cvc4_enum.gen \
+                 lib/why3/cvc4_enum_nobv.gen \
+                 lib/why3/alt-ergo_enum.gen \
+                 lib/why3/alt-ergo_remove_triggers_enum.gen
 
 # main targets
 ##############
@@ -356,6 +357,7 @@ clean::
 	fi
 
 dist-clean:: clean
+	rm -f $(MORE_GENERATED)
 	rm -f Makefile config.status config.cache config.log
 
 coq-clean::
