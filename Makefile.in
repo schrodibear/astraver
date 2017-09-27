@@ -198,6 +198,11 @@ lib/why3/why3.conf:  lib/why3/cvc4_enum.drv lib/why3/cvc4_enum_nobv.drv lib/why3
 	@printf "\n"  >> $@
 
 	@printf "[prover_modifiers]\n" >> $@
+	@printf "name=\"Spass\"\n" >> $@
+	@printf "driver=\"$(LIBWHY3)/why3/alt-ergo_enum.gen\"\n" >> $@
+	@printf "\n"  >> $@
+
+	@printf "[prover_modifiers]\n" >> $@
 	@printf "name=\"Eprover\"\n" >> $@
 	@printf "driver=\"$(LIBWHY3)/why3/alt-ergo_enum.gen\"\n" >> $@
 	@printf "\n"  >> $@
