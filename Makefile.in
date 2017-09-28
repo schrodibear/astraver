@@ -226,7 +226,7 @@ lib/why3/why3.conf:  lib/why3/cvc4_enum.drv lib/why3/cvc4_enum_nobv.drv lib/why3
 	@printf "\n"  >> $@
 
 	@printf "[strategy]\n" >> $@
-	@printf "code = \"start:\\\\nc Z3,,noBV 1 2000\\\\nc Alt-Ergo,, 1 2000\\\\nc CVC4,,noBV 1 2000\\\\nt split_goal_wp start\\\\nt introduce_premises next1\\\\nnext1:\\\\nt inline_goal_nometa start\\\\nt inline_all_nometa start\\\\nt eliminate_if next2\\\\nnext2:\\\\nt remove_triggers start\\\\nc Z3,,noBV 5 4000\\\\nc Alt-Ergo,, 5 4000\\\\nc CVC4,,noBV 5 4000\\\\n\"\n" >> $@
+	@printf "code = \"start:\\\\nc Z3,,noBV 1 2000\\\\nc Alt-Ergo,, 1 2000\\\\nc CVC4,1.4,noBV 1 2000\\\\nt split_goal_wp start\\\\nt introduce_premises next1\\\\nnext1:\\\\nt inline_goal_nometa start\\\\nt inline_all_nometa start\\\\nt eliminate_if next2\\\\nnext2:\\\\nt remove_triggers start\\\\nc Z3,,noBV 5 4000\\\\nc Alt-Ergo,, 5 4000\\\\nc CVC4,1.4,noBV 5 4000\\\\n\"\n" >> $@
 	@printf "desc = \"Automatic@ run@ of@ main@ provers@ with@ bitvector@ theory@ abstracted@ out\"\n" >> $@
 	@printf	"name = \"Auto level 1 noBV\"\n" >> $@
 	@printf "shortcut = \"2\"\n" >> $@
