@@ -193,6 +193,12 @@ lib/why3/why3.conf:  lib/why3/cvc4_enum.drv lib/why3/cvc4_enum_nobv.drv lib/why3
 	@printf "\n"  >> $@
 
 	@printf "[prover_modifiers]\n" >> $@
+	@printf "name=\"Alt-Ergo\"\n" >> $@
+	@printf "alternative = \"-Em\"\n" >> $@
+	@printf "driver=\"$(LIBWHY3)/why3/alt-ergo_enum.gen\"\n" >> $@
+	@printf "\n"  >> $@
+
+	@printf "[prover_modifiers]\n" >> $@
 	@printf "name=\"Vampire\"\n" >> $@
 	@printf "driver=\"$(LIBWHY3)/why3/alt-ergo_enum.gen\"\n" >> $@
 	@printf "\n"  >> $@
@@ -218,18 +224,6 @@ lib/why3/why3.conf:  lib/why3/cvc4_enum.drv lib/why3/cvc4_enum_nobv.drv lib/why3
 	@printf "alternative = \"noBV\"\n" >> $@
 	@printf "driver=\"$(LIBWHY3)/why3/z3_enum_nobv.gen\"\n" >> $@
 	@printf "\n"  >> $@
-
-	@printf "[prover]\n" >> $@
-	@printf "alternative = \"-Em\"\n" >> $@
-	@printf "command = \"alt-ergo -timelimit %%t -no-Ematching %%f\"\n" >> $@
-	@printf "command_steps = \"alt-ergo -steps-bound %%S -no-Ematching %%f\"\n" >> $@
-	@printf "driver = \"alt_ergo\"\n" >> $@
-	@printf "editor = \"altgr-ergo\"\n" >> $@
-	@printf "in_place = false\n" >> $@
-	@printf "interactive = false\n" >> $@
-	@printf "name = \"Alt-Ergo\"\n" >> $@
-	@printf "version = \"1.30\"\n" >> $@
-	@printf "\n" >> $@
 
 	@printf "[strategy]\n" >> $@
 	@printf "code = \"start:\\\\nc Z3,,noBV 1 2000\\\\nc Alt-Ergo,, 1 2000\\\\nc CVC4,,noBV 1 2000\\\\nt split_goal_wp start\\\\nt introduce_premises next1\\\\nnext1:\\\\nt inline_goal_nometa start\\\\nt inline_all_nometa start\\\\nt eliminate_if next2\\\\nnext2:\\\\nt remove_triggers start\\\\nc Z3,,noBV 5 4000\\\\nc Alt-Ergo,, 5 4000\\\\nc CVC4,,noBV 5 4000\\\\n\"\n" >> $@
