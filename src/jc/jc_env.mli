@@ -159,7 +159,7 @@ type (_, _, _, 'a, _, _) arg =
   | Singleton : ('result, _, _, [<`Singleton | `Range_0_n | `Range_l_r], [`Singleton], 'result) arg
   | Range_0_n : (_, 'result, _, [`Range_0_n | `Singleton], [`Range_0_n], 'result) arg
   | Range_l_r : (_, _, 'result, [`Range_l_r | `Singleton], [`Range_l_r], 'result) arg
-  constraint 'a = [<`Singleton | `Range_0_n | `Range_l_r]
+
 
 (*
 Local Variables:
