@@ -153,6 +153,7 @@ rule token = parse
   | "and"                   { AND }
   | "as"                    { AS }
   | "assert"                { ASSERT }
+  | "assume"                { ASSUME }
   | "assigns"               { ASSIGNS }
   | "assumes"               { ASSUMES }
   | "axiom"                 { AXIOM }

@@ -1382,12 +1382,17 @@ let built_behavior_ids = function
               i))
       l
 
-let code_annot pos ((acc_assert_before, contract) as acc) a =
+let code_annot ?e pos ((acc_assert_before, contract) as acc) a =
   let push s = s :: acc_assert_before, contract in
   match a.annot_content with
   | AAssert (behav,p) ->
     let behav = built_behavior_ids behav in
-    let asrt = Aassert in (* [VP] Needs to retrieve exact status *)
+    let asrt =
+      Option.map_default
+        ~default:Aassert
+        ~f:(fun e -> if Emitter.equal e Emitters.jessie_assume then Aassume else Aassert)
+        e
+    in (* [VP] Needs to retrieve exact status *)
     push
       (mkexpr
          (JCPEassert (behav, asrt, locate ~pos (named_pred p))) pos)
@@ -1950,7 +1955,7 @@ let rec statement s =
 
   let assert_before, contract =
     Annotations.fold_code_annot
-      (fun _ ca acc -> code_annot pos acc ca) s ([],None)
+      (fun e ca acc -> code_annot ~e pos acc ca) s ([],None)
   in
   let snode = match s.skind with
     | Instr i -> instruction i

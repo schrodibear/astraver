@@ -776,23 +776,23 @@ let specialize_memset file =
 (*****************************************************************************)
 
 class kzalloc_expanding_visitor =
-  object
+  object(self)
     inherit frama_c_inplace
 
     method! vstmt stmt =
+      let get_function name =
+        try
+          Kernel_function.get_vi (Globals.Functions.find_by_name name)
+        with
+        | Not_found ->
+          Console.unsupported
+            ("Using kzalloc or realloc without declared %s prototype. \
+              Please provide a declaration for %s with minimal specification (will be ignored)")
+            name name
+      in
       match stmt.skind with
       | Instr (Call (Some lv as lv_opt, { enode = Lval (Var fv, NoOffset); eloc }, ([size; _] as args), loc))
         when isFunctionType fv.vtype && fv.vname = Name.Function.kzalloc ->
-        let get_function name =
-          try
-            Kernel_function.get_vi (Globals.Functions.find_by_name name)
-          with
-          | Not_found ->
-            Console.unsupported
-              ("Using kzalloc without declared %s prototype. \
-                Please provide a declaration for %s with minimal specification (will be ignored)")
-              name name
-        in
         let vi_kmalloc = get_function Name.Function.kmalloc in
         let vi_memset = get_function "memset" in
         let lv = new_exp ~loc (Lval lv) in
@@ -808,6 +808,70 @@ class kzalloc_expanding_visitor =
                        [mkStmt (Instr (Call (None, evar ~loc:eloc vi_memset, [lv; z; size], loc)))],
                      mkBlock [mkStmt (Instr (Skip loc))],
                      loc))]);
+        SkipChildren
+      | Instr (Call (Some lv, { enode = Lval (Var fv, NoOffset); eloc }, [ptr; _], loc)) as inst
+        when isFunctionType fv.vtype && fv.vname = Name.Function.realloc ->
+        let ptr = stripCasts ptr in
+        let vi_old_ptr =
+          makeTempVar
+            (Option.value_fatal ~in_:"expand_realloc" self#current_func)
+            ~insert:true
+            ~descr:"old ptr for realloc"
+            (typeOfLval lv)
+        in
+        let vi_old_size =
+          makeTempVar
+            (Option.value_fatal ~in_:"expand_realloc" self#current_func)
+            ~insert:true
+            ~descr:"old size for realloc"
+            theMachine.typeOfSizeOf
+        in
+        let lv_old_size = cvar_to_lvar vi_old_size in
+        let save_stmt =
+          let r =
+            mkStmt (Instr (Set (var vi_old_ptr, ptr, loc)))
+          in
+          Annotations.add_assert
+            Emitters.jessie_assume
+            ~kf:(Option.value_fatal ~in_:"expand_realloc" self#current_kf)
+            r @@
+          Logic_const.(
+            prel ~loc
+              (Req,
+               tlogic_coerce ~loc (tvar ~loc lv_old_size) Linteger,
+               term ~loc
+                 (TBinOp
+                    (Mult Check,
+                     term ~loc
+                       (TBinOp
+                          (PlusA Check,
+                           (let tptr = Logic_utils.expr_to_term ~cast:true ptr in
+                            term ~loc
+                              (TBinOp
+                                 (MinusA Check,
+                                  term ~loc (Toffset_max (here_label, tptr)) Linteger,
+                                  term ~loc (Toffset_min (here_label, tptr)) Linteger)))
+                             Linteger,
+                           Logic_const.tinteger ~loc 1))
+                       Linteger,
+                     term ~loc (TSizeOf (pointed_type @@ typeOf ptr)) Linteger))
+                 Linteger));
+          r
+        in
+        let copy_stmt =
+          let vi_memcpy = get_function "memcpy" in
+          mkStmt
+            (Instr
+               (Call (None,
+                      evar ~loc:eloc vi_memcpy,
+                      [new_exp ~loc (Lval lv); evar ~loc:eloc vi_old_ptr; evar ~loc:eloc vi_old_size],
+                      loc)))
+        in
+        let free_stmt =
+          let vi_free = get_function "free" in
+           mkStmt (Instr (Call (None, evar ~loc:eloc vi_free, [evar ~loc:eloc vi_old_ptr], loc)))
+        in
+        stmt.skind <- Block (mkBlock [save_stmt; mkStmt inst; copy_stmt; free_stmt; ]);
         SkipChildren
       | _ -> DoChildren
   end

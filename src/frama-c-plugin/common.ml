@@ -53,6 +53,13 @@ struct
       [Emitter.Funspec; Emitter.Code_annot]
       ~correctness:[Jessie_options.Behavior.parameter]
       ~tuning:[]
+
+  let jessie_assume =
+    Emitter.create
+      "jessie_assume"
+      [Emitter.Funspec; Emitter.Code_annot]
+      ~correctness:[Jessie_options.Behavior.parameter]
+      ~tuning:[]
 end
 
 exception Unsupported of string

@@ -43,6 +43,7 @@ module Emitters :
 sig
   type t = Emitter.t
   val jessie : Emitter.t
+  val jessie_assume : Emitter.t
 end
 
 exception Unsupported of string
