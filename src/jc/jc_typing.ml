@@ -48,6 +48,8 @@ let typing_error ~loc =
     (fun _fmt -> raise @@ Typing_error (loc, flush_str_formatter ()))
     str_formatter
 
+let typing_warning = Format.eprintf
+
 let uenv = Type_var.(create { f = typing_error })
 
 let reset_uenv () = Type_var.reset uenv
@@ -2853,7 +2855,7 @@ let check_consistency id data =
   let pis = data.axiomatics_defined_ids in
   List.iter
     (function
-      | ADprop (loc, axid, labels, `Axiom, a) ->
+      | ADprop (_, axid, labels, `Axiom, a) ->
         let h = Hashtbl.create 17 in
         List.iter
           (fun pi -> Hashtbl.add h pi.li_tag [])
@@ -2872,12 +2874,12 @@ let check_consistency id data =
           h;
         Options.lprintf "@]@.";
         if Hashtbl.fold (fun _pi l acc -> acc && l=[]) h true then
-          typing_error ~loc:loc
+          typing_warning
             "axiom %s should contain at least one occurrence of a symbol declared in axiomatic %s" axid id;
         List.iter
           (fun lab ->
              if not (Hashtbl.fold (fun _pi l acc -> acc || List.exists (list_assoc_data lab) l) h false) then
-               typing_error ~loc:loc
+               typing_warning
                  "there should be at least one declared symbol depending on label %a in this axiom"
                  Print_misc.label lab)
           labels
