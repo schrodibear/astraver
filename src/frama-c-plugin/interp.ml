@@ -2295,7 +2295,7 @@ let rec annotation is_axiomatic annot =
           []
       end
 
-  | Dlemma (name, is_axiom, labels, _poly, property, pos) ->
+  | Dlemma (name, is_axiom, _, labels, _poly, property, pos) ->
       let pred = pred ?default_label:(default_label labels) in
       CurrentLoc.set pos;
       ignore
