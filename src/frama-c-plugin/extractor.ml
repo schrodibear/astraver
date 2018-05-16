@@ -437,16 +437,6 @@ let collect file =
   while not (Queue.is_empty fun_queue) do
     do_fun (Queue.take fun_queue)
   done;
-  (* Now all the relevant fields are added, so we'll use them to omptimize *)
-  (* the composites. *)
-  begin try while true do
-    if not (Queue.is_empty typ_queue) then
-      do_type (Queue.take typ_queue)
-    else if not (Queue.is_empty comp_queue) then
-      do_comp (Queue.take comp_queue)
-    else
-      raise Exit
-    done with Exit -> () end;
   (* This hackish trick was added to avoid an unwanted side-effect of extraction:
      vanishing side-effects. This can happen e.g. with \assigns clauses and assignments when they are used on
      composite types. Since it is possible that no fields of a composite type are used in the relevant code, they can
@@ -474,6 +464,16 @@ let collect file =
       let r, fis = fold_fields_exn cfields in
       if r <> inf then
         List.iter (fun fi -> Set.add fields fi; add_from_type fi.ftype) fis);
+  (* Now all the relevant fields are added, so we'll use them to omptimize *)
+  (* the composites. *)
+  begin try while true do
+    if not (Queue.is_empty typ_queue) then
+      do_type (Queue.take typ_queue)
+    else if not (Queue.is_empty comp_queue) then
+      do_comp (Queue.take comp_queue)
+    else
+      raise Exit
+    done with Exit -> () end;
   { Result. types; comps; fields; enums; vars; dcomps }
 
 class extractor { Result. types; comps; fields; enums; vars; dcomps } =
