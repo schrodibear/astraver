@@ -1440,6 +1440,16 @@ struct
   let id { why_id } = why_id
 
   let mk ~name ?expl ?pos why_decl = { why_id = Wid.mk ?expl ?pos name; why_decl }
+  let rec_ ~name ?expl ?pos why_decl = Rec (mk ~name ?expl ?pos why_decl, [])
+  let nonrec_ ~name ?expl ?pos why_decl = Nonrec (mk ~name ?expl ?pos why_decl)
+  let code ~name ?expl ?pos why_decl = Code (mk ~name ?expl ?pos why_decl)
+end
+
+module Wdg =
+struct
+  let rec_ ?(ds=[]) d = Rec (d, ds)
+  let nonrec_ d = Nonrec d
+  let code d = Code d
 end
 
 module Th =

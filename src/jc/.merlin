@@ -1,3 +1,4 @@
 # .merlin file for Jessie
+PKG ocamlgraph
 FLG -open Aliases
 REC

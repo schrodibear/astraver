@@ -666,7 +666,7 @@ let why_id ?(constr=false) fmttr { why_name; why_expl; why_pos } =
   if why_expl <> "" then pr "@ \"expl:%s\"" why_expl
 
 type 'kind kind =
-  | Theory : [`Theory] kind
+  | Theory : [`Let | `With] -> [`Theory of [< `Rec | `Nonrec]] kind
   | Module : [`Safe | `Unsafe] -> [`Module of [`Safe | `Unsafe]] kind
 
 let why_decl ~entry (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = why_id'; why_decl } =
@@ -678,6 +678,7 @@ let why_decl ~entry (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = 
   and logic_arg fmttr = logic_arg ~entry fmttr
   and pred = pred ~entry ~bw_ints
   and expr ~safe = expr ~entry ~safe ~bw_ints in
+  let or_with s = match kind with Theory `With -> "with" | Theory `Let -> s | Module _ -> s in
   match (why_decl : k decl) with
   | Param t ->
     let consts =
@@ -711,9 +712,9 @@ let why_decl ~entry (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = 
     in
     pr "val@ %a%s@ %a" why_id why_id' colon (why_type ~entry ~bw_ints ~consts) t
   | Logic (args', Type (Bool, Nil)) ->
-    pr "predicate@ %a@ %a" why_id why_id' args args'
+    pr "%s@ %a@ %a" (or_with "predicate") why_id why_id' args args'
   | Logic (args', t) ->
-    pr "function@ %a@ %a@ :@ %a" why_id why_id' args args' logic_type t
+    pr "%s@ %a@ %a@ :@ %a" (or_with "function") why_id why_id' args args' logic_type t
   | Inductive (args', cases) ->
     pr "inductive@ %a@ @[%a@]@ =@\n@[<v 0>%a@]"
       why_id why_id'
@@ -730,12 +731,14 @@ let why_decl ~entry (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = 
       why_id why_id'
       (expr ~consts ~safe) e
   | Predicate (args, p) ->
-    pr "predicate@ %a@ %a@ =@[<hov 2>@ %a@]"
+    pr "%s@ %a@ %a@ =@[<hov 2>@ %a@]"
+      (or_with "predicate")
       why_id why_id'
       (list ~sep:"@ " logic_arg) args
       (pred ~consts:(List.fold_right (StringSet.add % fst) args consts)) p
   | Function (args, t, e) ->
-    pr "function %a@ %a :@ %a@ =@[<hov 2>@ %a@]"
+    pr "%s %a@ %a :@ %a@ =@[<hov 2>@ %a@]"
+      (or_with "function")
       why_id why_id'
       (list ~sep:"@ " logic_arg) args
       logic_type t
@@ -746,6 +749,18 @@ let why_decl ~entry (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = 
     pr "exception@ %a" why_uid why_id'
   | Exception (Some t) ->
     pr "exception@ %a@ %a" why_uid why_id' logic_type t
+
+let why_decl_group ~entry (type k) ~(kind : k kind) ~bw_ints ~consts fmttr (d : k why_decl_group) =
+  let pr fmt = fprintf fmttr fmt in
+  match d with
+  | Rec (d, ds) ->
+    why_decl ~entry ~kind:(Theory `Let) ~bw_ints ~consts fmttr d;
+    pr "@\n";
+    List.iter (fun d -> why_decl ~entry ~kind:(Theory `With) ~bw_ints ~consts fmttr d; pr "@\n") ds
+  | Nonrec d ->
+    why_decl ~entry ~kind:(Theory `Let) ~bw_ints ~consts fmttr d
+  | Code d ->
+    why_decl ~entry ~kind ~bw_ints ~consts fmttr d
 
 module Staged :
 sig
@@ -1108,7 +1123,7 @@ struct
   type 'kind t = 'kind why_decl
 
   type ('kind, 'deps) kind =
-    | Theory : ([`Theory], [> `Theory of string * bool | `Current]) kind
+    | Theory : ([`Theory of [< `Rec | `Nonrec ]], [> `Theory of string * bool | `Current]) kind
     | Module : [`Safe | `Unsafe] ->
       ([`Module of [`Safe | `Unsafe]],
        [> `Theory of string * bool | `Module of string * bool | `Current ]) kind
@@ -1153,6 +1168,33 @@ struct
   let iter ~f = fold ~init:() ~f:(fun ~acc:_ -> f)
 end
 
+module Why_decl_group =
+struct
+  open Why_decl
+  let fold ~entry ~bw_ints (type a b c) ~(kind : (a, b) kind) ~(f : acc:c -> b * string -> c) =
+    let fold ~kind ~f ~init d = fold ~entry ~bw_ints ~kind ~f ~init d in
+    fun ~(init : c) (d : a why_decl_group) ->
+      match kind, d with
+      | Theory as kind,   Rec (d, ds) -> List.fold_left (fun init -> fold ~kind ~f ~init) (fold ~kind ~f ~init d) ds
+      | Theory as kind,   Nonrec d    -> fold ~kind ~f ~init d
+      | Module _ as kind, Code d      -> fold ~kind ~f ~init d
+
+  let iter ~f = fold ~init:() ~f:(fun ~acc:_ -> f)
+  let iter_ids (type k) f (d : k why_decl_group) =
+    match d with
+    | Rec (d, ds) -> f d.why_id; List.iter (fun d -> f d.why_id) ds
+    | Nonrec d    -> f d.why_id
+    | Code d      -> f d.why_id
+  let iter_names f = iter_ids (fun d -> f d.why_name)
+  let id (type k) (d : k why_decl_group) =
+    match d with
+    | Rec (d, _) -> d.why_id
+    | Nonrec d   -> d.why_id
+    | Code d     -> d.why_id
+  let name d = (id d).why_name
+  let pos d = (id d).why_pos
+end
+
 module Entry =
 struct
   type 'kind t = 'kind entry
@@ -1160,9 +1202,9 @@ struct
   type 's for_any_entry =
     { f : 'a. state:'s -> consts:StringSet.t -> enter:(consts:StringSet.t -> StringSet.t) ->
         'a entry -> 's * StringSet.t }
-  type ('s, 'k) for_why_decl =
+  type ('s, 'k) for_why_decl_group =
     state:'s -> consts:StringSet.t -> enter:(consts:StringSet.t -> StringSet.t) ->
-    print:(consts:StringSet.t -> formatter -> unit) -> 'k why_decl -> 's * StringSet.t
+    print:(consts:StringSet.t -> formatter -> unit) -> 'k why_decl_group -> 's * StringSet.t
 
   type 'a over =
     | Entries :
@@ -1181,8 +1223,8 @@ struct
           iter_decls   : 'iter_decls;
           iter         : 'iter_decls;
           decl_kind    : 'decl_kind;
-          value        : 'decl_kind why_decl;
-          f            : ('state, 'decl_kind) for_why_decl;
+          value        : 'decl_kind why_decl_group;
+          f            : ('state, 'decl_kind) for_why_decl_group;
           state        : 'state
         > over
 
@@ -1286,16 +1328,14 @@ struct
               { iter = fun ~consts ~entry -> continue ~state ~consts ~entry:(fun () -> assert false) ~entry':entry }
           | Decls ->
             fun ~consts ~entry ->
-              let (l : decl_kind why_decl list) =
+              let (l : decl_kind why_decl_group list) =
                 match entry with
                 | Theory (_, None) -> []
                 | Module (_, None) -> []
                 | Theory (_, Some (_, decls)) -> decls
                 | Module (_, Some (_, _, decls)) -> decls
               in
-              List.iter
-                (fun ({ why_id = { why_name } } as d) -> H.add state why_name (init, d))
-                l;
+              List.iter (fun g -> Why_decl_group.iter_names (fun name -> H.add state name (init, g)) g) l;
               continue ~state ~consts ~entry:(fun () -> entry) ~entry':entry
         in
         let map_ints ~how =
@@ -1329,7 +1369,7 @@ struct
           fun ~state ~consts ~entry ~entry' ->
             let bw_ints =
               let module M' = Map.Make (struct type t = any_integer let compare = compare end) in
-              let fold_decls map init =
+              let fold_decl_group map init =
                 let parse_conv_entry =
                   let open Str in
                   let conv_regexp =
@@ -1351,7 +1391,7 @@ struct
                     else
                       None
                 in
-                Why_decl.fold
+                Why_decl_group.fold
                   ~bw_ints:S.empty
                   ~init
                   ~f:(fun ~acc:(s, m as acc) ->
@@ -1419,7 +1459,7 @@ struct
                 memo id.why_name @@
                 fun () ->
                 List.fold_left
-                  (fold_decls ~entry:id.why_name ~kind:Theory @@ map_ints ~how:`Theory)
+                  (fold_decl_group ~entry:id.why_name ~kind:Theory @@ map_ints ~how:`Theory)
                   (S.empty, M'.empty)
                   decls |>
                 close_bw_ints
@@ -1428,7 +1468,7 @@ struct
                 fun () ->
                 let map = M.fold M.add (map_ints ~how:`Theory) @@ map_ints ~how:(`Module safe) in
                 List.fold_left
-                  (fold_decls ~entry:id.why_name ~kind:(Module safe) map)
+                  (fold_decl_group ~entry:id.why_name ~kind:(Module safe) map)
                   (S.empty, M'.empty)
                   decls |>
                 close_bw_ints
@@ -1460,7 +1500,7 @@ struct
                 | Not_found -> failwith ("Unrecognized Why3ML file entry: " ^ name)
               in
               let f ~name init d =
-                Why_decl.fold
+                Why_decl_group.fold
                   ~bw_ints
                   ~f:(fun ~acc ->
                     function
@@ -1531,45 +1571,43 @@ struct
                   consts
               end
             | Decls ->
-              let f : state:state -> consts:_ -> enter:_ -> print:_ -> decl_kind why_decl -> state * _ = f in
-              let enter ~self ~why_decl consts name =
+              let f : state:state -> consts:_ -> enter:_ -> print:_ -> decl_kind why_decl_group -> state * _ = f in
+              let enter ~self ~why_decl_group consts name =
                 try
                   let s, d = H.find state name in
-                  if s = init then H.replace state name (enter, d);
+                  if s = init then Why_decl_group.iter_names (fun name -> H.replace state name (enter, d)) d;
                   let s, consts =
                     f
                       ~state:s
                       ~consts
                       ~enter:(fun ~consts -> self ~consts d)
-                      ~print:(fun ~consts fmttr -> why_decl ~consts fmttr d)
+                      ~print:(fun ~consts fmttr -> why_decl_group ~consts fmttr d)
                       d
                   in
-                  H.replace state name (s, d);
+                  Why_decl_group.iter_names (fun name -> H.replace state name (s, d)) d;
                   consts
                 with
                 | Not_found -> consts
               in
-              let f ~name ~self ~why_decl ~consts d =
-                Why_decl.fold
+              let f ~name ~self ~why_decl_group ~consts d =
+                Why_decl_group.fold
                   ~entry:name
                   ~bw_ints
                   ~init:consts
                   ~f:(fun ~acc:consts ->
                     function
                     | (`Module (name', _) | `Theory (name', _)), name'' when name = name' ->
-                      enter ~self ~why_decl consts name''
+                      enter ~self ~why_decl_group consts name''
                     | (`Module _ | `Theory _), _ -> consts
-                    | `Current, name'' -> enter ~self ~why_decl consts name'')
+                    | `Current, name'' -> enter ~self ~why_decl_group consts name'')
                   d
               in
               let sort l =
                 List.sort
-                  (fun
-                    { why_id = { why_name = id1; why_pos = pos1 } }
-                    { why_id = { why_name = id2; why_pos = pos2 } }
-                    ->
-                      let c = Position.compare pos1 pos2 in
-                      if c <> 0 then c else compare id1 id2)
+                  Why_decl_group.(
+                    fun d1 d2 ->
+                      let c = Position.compare (pos d1) (pos d2) in
+                      if c <> 0 then c else compare (id d1) (id d2))
                   l
               in
               let open Why_decl in
@@ -1577,14 +1615,14 @@ struct
               | Theory (_, None) -> consts
               | Module (_, None) -> consts
               | Theory ({ why_name = name }, Some (_, decls)) ->
-                let why_decl = why_decl ~entry:name ~kind:Theory ~bw_ints in
-                let rec self ~consts d = f ~kind:Theory ~name ~self ~why_decl ~consts d in
-                let enter ~consts { why_id = { why_name } } = enter ~self ~why_decl consts why_name in
+                let why_decl_group = why_decl_group ~entry:name ~kind:(Theory `Let) ~bw_ints in
+                let rec self ~consts d = f ~kind:Theory ~name ~self ~why_decl_group ~consts d in
+                let enter ~consts d = enter ~self ~why_decl_group consts (Why_decl_group.name d) in
                 List.fold_left (fun consts d -> enter ~consts:(self ~consts d) d) consts @@ sort decls
               | Module ({ why_name = name }, Some (_, safe, decls)) ->
-                let why_decl = why_decl ~entry:name ~kind:(Module safe) ~bw_ints in
-                let rec self ~consts d = f ~kind:(Module safe) ~name ~self ~why_decl ~consts d in
-                let enter ~consts { why_id = { why_name } } = enter ~self ~why_decl consts why_name in
+                let why_decl_group = why_decl_group ~entry:name ~kind:(Module safe) ~bw_ints in
+                let rec self ~consts d = f ~kind:(Module safe) ~name ~self ~why_decl_group ~consts d in
+                let enter ~consts d = enter ~self ~why_decl_group consts (Why_decl_group.name d) in
                 List.fold_left (fun consts d -> enter ~consts:(self ~consts d) d) consts @@ sort decls
         in
         continue { continue = continuation }
@@ -1654,12 +1692,12 @@ let entry ~consts fmttr (type k) (entry : k entry) =
         | `TODO ->
           let consts = enter ~consts in
           pr "@\n%t@\n" @@ print ~consts;
-          let add (type k) d =
-            let add () = StringSet.add d.why_id.why_name consts in
-            match (d.why_decl : k decl) with
-            | Def  _ -> add ()
-            | Param (Logic _) -> add ()
-            | _ -> consts
+          let add (type k) (d : k why_decl_group) =
+            let add () = StringSet.add (Why_decl_group.name d) consts in
+            match d with
+            | Code { why_decl = Def _; _ }           -> add ()
+            | Code { why_decl = Param (Logic _); _ } -> add ()
+            | _                                      -> consts
           in
           `Done, add d
         | `Running ->
@@ -1731,7 +1769,7 @@ let file fmttr file =
               l
           in
           let decls =
-            let ids l = List.map (fun { why_id; _ } -> why_id) l in
+            let ids l = List.map Why_decl_group.id l in
             function
             | Entry (Module (_, None)) -> []
             | Entry (Module (_, Some (_, _, decls))) -> ids decls

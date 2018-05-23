@@ -314,20 +314,26 @@ type goal_kind = KAxiom | KLemma | KGoal
 type 'kind decl =
   | Param : 'a why_type -> [ `Module of [ `Safe | `Unsafe ] ] decl (** parameter in why *)
   | Def : 'a expr -> [ `Module of [ `Safe | `Unsafe ] ] decl (** global let in why *)
-  | Logic : (string * some_logic_type) list * 'a logic_type -> [ `Theory ] decl
+  | Logic : (string * some_logic_type) list * 'a logic_type -> [ `Theory of [ `Rec | `Nonrec ] ] decl
     (** logic decl in why *)
-  | Predicate : (string * some_logic_type) list * pred -> [ `Theory ] decl
-  | Inductive : (string * some_logic_type) list * (string * pred) list -> [ `Theory ] decl
+  | Predicate : (string * some_logic_type) list * pred -> [ `Theory of [ `Rec | `Nonrec ] ] decl
+  | Inductive : (string * some_logic_type) list * (string * pred) list -> [ `Theory of [ `Nonrec ] ] decl
     (** inductive definition *)
-  | Goal : goal_kind * pred -> [ `Theory ] decl  (** Goal *)
-  | Function : (string * some_logic_type) list * 'a logic_type * 'a term -> [ `Theory ] decl
-  | Type : string list -> [ `Theory ] decl
+  | Goal : goal_kind * pred -> [ `Theory of [ `Nonrec ] ] decl  (** Goal *)
+  | Function : (string * some_logic_type) list * 'a logic_type * 'a term -> [ `Theory of [ `Rec | `Nonrec ] ] decl
+  | Type : string list -> [ `Theory of [ `Nonrec ] ] decl
   | Exception : 'a logic_type option -> [ `Module of [ `Safe | `Unsafe ] ] decl
 
 type 'kind why_decl = {
   why_id : why_id;
   why_decl : 'kind decl
 }
+
+type 'kind why_decl_group =
+  | Rec : ([ `Theory of [ `Rec | `Nonrec ] ] as 'k) why_decl * 'k why_decl list
+    -> [ `Theory of [ `Nonrec ] ] why_decl_group
+  | Nonrec : [ `Theory of [< `Rec | `Nonrec ] ] why_decl -> [ `Theory of [ `Nonrec ] ]  why_decl_group
+  | Code : ([ `Module of [ `Safe | `Unsafe ] ] as 'k) why_decl -> 'k why_decl_group
 
 type 'kind dependency =
   | Use of [ `Import of string option | `Export | `As of string option ] * 'kind entry
@@ -339,12 +345,16 @@ type 'kind dependency =
                `Namespace of string option * string option |
                `Lemma of string |
                `Goal of string ] list
-and module_dependency = Dependency : [< `Theory | `Module of [ `Safe | `Unsafe ] ] dependency -> module_dependency
+and module_dependency =
+    Dependency : [< `Theory of [ `Nonrec ] | `Module of [ `Safe | `Unsafe ] ] dependency -> module_dependency
 and 'kind entry =
-  | Theory : why_id * ([ `Theory ] dependency list ref * [ `Theory ] why_decl list) option -> [ `Theory ] entry
+  | Theory : why_id *
+             ([ `Theory of [ `Nonrec ] ] dependency list ref *
+              [ `Theory of [ `Nonrec ] ] why_decl_group list) option
+    -> [ `Theory of [ `Nonrec ] ] entry
   | Module :
       why_id * (module_dependency list ref *
-                [ `Safe | `Unsafe ] * [ `Module of [ `Safe | `Unsafe ] ] why_decl list) option ->
+                [ `Safe | `Unsafe ] * [ `Module of [ `Safe | `Unsafe ] ] why_decl_group list) option ->
     [ `Module of [ `Safe | `Unsafe ] ] entry
 
 type some_entry = Entry : 'kind entry -> some_entry
