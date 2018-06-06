@@ -522,7 +522,41 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } =
       | _ -> ChangeTo []
   end
 
+class local_init_rewriter =
+  let cons_set vi off e loc = List.cons @@ Set (addOffsetLval off @@ var vi, e, loc) in
+  object
+    inherit frama_c_inplace
+    method! vinst =
+      function
+      | Local_init (_,
+                    ConsInit (_, _, Constructor),
+                    loc)                            -> Console.fatal "Unsupported C++ constructor call"
+      | Local_init (vi,
+                    ConsInit (f, args, Plain_func),
+                    loc)                            -> ChangeTo [Call (Some (var vi), evar f, args, loc)]
+      | Local_init (vi,
+                    AssignInit (SingleInit e),
+                    loc)                            -> ChangeTo [Set  (var vi, e, loc)]
+      | Local_init (vi,
+                    AssignInit
+                      (CompoundInit (ct, initl)),
+                    loc)                            -> ChangeTo
+                                                         (foldLeftCompound
+                                                           ~implicit:true
+                                                           ~doinit:
+                                                             (fun off ->
+                                                               function
+                                                               | CompoundInit _ -> fun _ -> Fn.id
+                                                               | SingleInit e   -> fun _ -> cons_set vi off e loc)
+                                                           ~ct
+                                                           ~initl
+                                                           ~acc:[])
+      | Call _ | Set _ | Skip _
+      | Code_annot _ | Asm _                        -> SkipChildren
+  end
+
 let extract file =
+  visitFramacFile (new local_init_rewriter) file;
   visitFramacFile (new extractor (collect file)) file;
   (* The following removes some Frama-C builtins from the tables (??) *)
   (*Ast.mark_as_changed ();*)

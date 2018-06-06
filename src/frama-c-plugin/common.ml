@@ -2027,13 +2027,13 @@ struct
 
       method vbehavior : 'a 'b. (funbehavior, 'a, 'b) visitor_method = do_children
       method vspec : 'a 'b. (funspec, 'a, 'b) visitor_method = do_children
-      method vassigns : 'a 'b. (identified_term assigns, 'a, 'b) visitor_method = do_children
-      method vloop_pragma : term loop_pragma -> fundec -> term loop_pragma Local.visit_action = do_children_local
-      method vslice_pragma : 'a 'b. (term slice_pragma, 'a, 'b) visitor_method = do_children
-      method vjessie_pragma : term jessie_pragma -> fundec -> term jessie_pragma Local.visit_action = do_children_local
-      method vimpact_pragma : 'a 'b. (term impact_pragma, 'a, 'b) visitor_method = do_children
-      method vdeps : 'a 'b. (identified_term deps, 'a, 'b) visitor_method = do_children
-      method vfrom : 'a 'b. (identified_term from, 'a, 'b) visitor_method = do_children
+      method vassigns : 'a 'b. (assigns, 'a, 'b) visitor_method = do_children
+      method vloop_pragma : loop_pragma -> fundec -> loop_pragma Local.visit_action = do_children_local
+      method vslice_pragma : 'a 'b. (slice_pragma, 'a, 'b) visitor_method = do_children
+      method vjessie_pragma : jessie_pragma -> fundec -> jessie_pragma Local.visit_action = do_children_local
+      method vimpact_pragma : 'a 'b. (impact_pragma, 'a, 'b) visitor_method = do_children
+      method vdeps : 'a 'b. (deps, 'a, 'b) visitor_method = do_children
+      method vfrom : 'a 'b. (from, 'a, 'b) visitor_method = do_children
       method vcode_annot : code_annotation -> fundec -> code_annotation Local.visit_action = do_children_local
       method vannotation : global_annotation -> global_annotation visitAction = do_children_global
 
@@ -2062,7 +2062,7 @@ struct
       (*      method vbehavior_annot : *)
 
       method vallocates : 'a 'b. (identified_term list, 'a, 'b) visitor_method = do_children
-      method vallocation : 'a 'b. (identified_term allocation, 'a, 'b) visitor_method = do_children
+      method vallocation : 'a 'b. (allocation, 'a, 'b) visitor_method = do_children
       method vfrees : 'a 'b. (identified_term list, 'a, 'b) visitor_method = do_children
     end
 

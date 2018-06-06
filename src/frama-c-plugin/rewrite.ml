@@ -288,9 +288,9 @@ class string_constants_visitor ~attach =
   in
   let attach_invariant name loc p =
     let globinv = Cil_const.make_logic_info (Name.Logic.unique name) in
-    globinv.l_labels <- [LogicLabel (None, "Here")];
+    globinv.l_labels <- [BuiltinLabel Here];
     globinv.l_body <- LBpred p;
-    attach#globaction (fun () -> Logic_utils.add_logic_function globinv);
+    attach#globaction (fun () -> Logic_utils.add_logic_function loc globinv);
     attach#global (GAnnot (Dinvariant (globinv, loc), loc))
   in
 
@@ -340,9 +340,7 @@ class string_constants_visitor ~attach =
     (* Apply translation from initializer in primitive AST to block of code,
      * simple initializer and type.
      *)
-    let _b,init,ty =
-      Cabs2cil.blockInitializer Cabs2cil.empty_local_env v inite
-    in
+    let init, ty = Cabs2cil.doLocalInit v inite in
     (* Precise the array type *)
     v.vtype <- typeAddAttributes [Attr ("const", [])] ty;
 
@@ -591,14 +589,14 @@ class global_const_handler ~attach =
 
     method! vglob_aux =
       function
-      | GVar (v, { init = Some (SingleInit e) }, _) as g
+      | GVar (v, { init = Some (SingleInit e) }, loc) as g
         when typeHasAttribute "const" v.vtype && Option.is_some @@ possible_value_of_integral_expr e ->
         let globinv = Cil_const.make_logic_info (Name.Logic.unique ("__value_of_" ^ v.vname)) in
-        globinv.l_labels <- [LogicLabel (None, "Here")];
+        globinv.l_labels <- [BuiltinLabel Here];
         globinv.l_body <- LBpred (
           let loc = v.vdecl in
           Logic_const.(prel ~loc (Req, tvar ~loc @@ cvar_to_lvar v, tint ~loc @@ value_of_integral_expr e)));
-        attach#globaction (fun () -> Logic_utils.add_logic_function globinv);
+        attach#globaction (fun () -> Logic_utils.add_logic_function loc globinv);
         ChangeTo ([g; GAnnot (Dinvariant (globinv, v.vdecl), v.vdecl)])
       | _ -> SkipChildren
   end
@@ -1100,7 +1098,7 @@ class specialize_blockfuns_visitor =
       let get_specialized_name = get_specialized_name typ in
       let rec match_global_with_lvar_name name = function
         | GAnnot (Dfun_or_pred ({ l_var_info = { lv_name } }, _), _) -> lv_name = name
-        | GAnnot (Daxiomatic (_, lst, loc), _) ->
+        | GAnnot (Daxiomatic (_, lst, _, loc), _) ->
           List.exists (match_global_with_lvar_name name) (List.map (fun ga -> GAnnot (ga, loc)) lst)
         | _ -> false
       in
@@ -1110,7 +1108,7 @@ class specialize_blockfuns_visitor =
         let rec find_li' =
           function
           | GAnnot (Dfun_or_pred (li, _), _) -> li
-          | GAnnot (Daxiomatic (_, lst, loc), _) ->
+          | GAnnot (Daxiomatic (_, lst, _, loc), _) ->
             find_li' (List.find match_global' (List.map (fun ga -> GAnnot (ga, loc)) lst))
           | _ -> assert false
         in
@@ -1143,7 +1141,7 @@ class specialize_blockfuns_visitor =
           in
           let specialize_logic_info = specialize_logic_info typ in
           begin match axiomatic_opt with
-          | Some Daxiomatic (name, lst, _) ->
+          | Some Daxiomatic (name, lst, _, _) ->
             let name = get_specialized_name name in
             let lst =
               ListLabels.map
@@ -1159,7 +1157,7 @@ class specialize_blockfuns_visitor =
                List.find_map
                  ~f:(function Dfun_or_pred (li, _) when li.l_var_info.lv_name = lv_name' -> Some li | _ -> None)
                  lst);
-            let g = Daxiomatic (name, lst, Location.unknown) in
+            let g = Daxiomatic (name, lst, [], Location.unknown) in
             new_globals <- GAnnot (g, CurrentLoc.get ()) :: new_globals;
             Annotations.add_global Emitters.jessie g;
             self#update_logic_info typ li
