@@ -34,6 +34,8 @@ ifndef FRAMAC_LIBDIR
 FRAMAC_LIBDIR :=$(shell $(FRAMAC) -journal-disable -print-libpath)
 endif
 
+NUMS_DIR :=$(shell ocamlfind query num.core)
+
 PLUGIN_DIR      ?= .
 WHY_DISTRIB	?= $(PLUGIN_DIR)/../..
 BUILDSRC        ?= $(WHY_DISTRIB)/_build/src
@@ -47,8 +49,8 @@ PLUGIN_CMO:= jessie_options jessie_integer common extractor rewrite \
 PLUGIN_HAS_MLI:=yes
 PLUGIN_BFLAGS:=$(JESSIE_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
 PLUGIN_OFLAGS:=$(JESSIE_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
-PLUGIN_EXTRA_BYTE+=$(JCCMA)
-PLUGIN_EXTRA_OPT+=$(JCCMXA)
+PLUGIN_EXTRA_BYTE+=$(NUMS_DIR)/nums.cma $(JCCMA)
+PLUGIN_EXTRA_OPT+=$(NUMS_DIR)/nums.cmxa $(JCCMXA)
 PLUGIN_DOCFLAGS:=$(JESSIE_INCLUDES)
 PLUGIN_TESTS_DIRS:=jessie
 
