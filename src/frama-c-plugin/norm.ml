@@ -1658,7 +1658,7 @@ object(self)
     (* Currently, do not make any difference between a pointer to const T
      * or volatile T and a pointer to T.
      *)
-    let ty = typeDeepDropAttributes ["const"; "volatile"] (unrollTypeDeep ty) in
+    let ty = typeRemoveAttributesDeep ["const"; "volatile"] (unrollTypeDeep ty) in
     try
       Htbl_ty.find type_wrappers ty
     with
