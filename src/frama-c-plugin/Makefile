@@ -39,7 +39,7 @@ NUMS_DIR :=$(shell ocamlfind query num.core)
 PLUGIN_DIR      ?= .
 WHY_DISTRIB	?= $(PLUGIN_DIR)/../..
 BUILDSRC        ?= $(WHY_DISTRIB)/_build/src
-JESSIE_INCLUDES	?= -I $(BUILDSRC)/why -I $(BUILDSRC)/jc
+JESSIE_INCLUDES	?= -I $(BUILDSRC)/why -I $(BUILDSRC)/jc -I $(NUMS_DIR)
 JCCMA		?= $(BUILDSRC)/jc/jc.cma
 JCCMXA		?= $(JCCMA:.cma=.cmxa)
 
