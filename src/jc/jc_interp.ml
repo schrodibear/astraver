@@ -2613,7 +2613,11 @@ let axiomatic =
       List.iter
         (fun li ->
            G.add_vertex g li.li_tag;
-           List.iter (G.add_edge g li.li_tag) (List.map (fun li -> li.li_tag) li.li_calls))
+           List.(
+             li.li_calls |>
+             filter (fun li -> li.li_axiomatic = Some name) |>
+             map (fun li -> li.li_tag) |>
+             iter (G.add_edge g li.li_tag)))
         data.axiomatics_defined_ids;
       let tr tag = (Fn.uncurry logic_fun) @@ IntHashtblIter.find logic_functions_table tag in
       List.map
