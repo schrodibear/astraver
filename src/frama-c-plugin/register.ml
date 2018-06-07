@@ -120,7 +120,8 @@ let run () =
     Console.debug "Extract relevant globals";
     Extractor.extract file;
     Debug.check_exp_types file
-  end;
+  end else
+    Visitor.visitFramacFile (new Extractor.local_init_rewriter) file;
   steal_annots ();
   Console.debug "After steal_annots";
   Debug.check_exp_types file;
