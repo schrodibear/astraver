@@ -2029,7 +2029,12 @@ let rec statement s =
               let slist = mkexpr (JCPEblock(statement_list slist)) pos in
               labs, slist
         in
-        let case_list = List.map case (case_blocks bl.bstmts slist) in
+        let rec flatten b =
+          b.bstmts |>
+          List.map (fun s -> match s.skind with Block b -> flatten b | _ -> [s]) |>
+          List.concat
+        in
+        let case_list = List.map case (case_blocks (flatten bl) slist) in
         JCPEswitch(expr e,case_list)
 
     | Loop (_,bl,_pos,_continue_stmt,_break_stmt) ->

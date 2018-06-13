@@ -142,6 +142,7 @@ let normalize_switch pos e caselist =
     | JCPEthrow _ | JCPEreturn _ | JCPEwhile _ | JCPEfor _ -> true
     | JCPEif(_, te, fe) ->
       cannot_fall_trough te && cannot_fall_trough fe
+    | JCPElabel (_, e) -> cannot_fall_trough e
     | _ -> false
   in
   let rec fold_case (previous_c, acc) =
