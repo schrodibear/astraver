@@ -2029,12 +2029,23 @@ let rec statement s =
               let slist = mkexpr (JCPEblock(statement_list slist)) pos in
               labs, slist
         in
-        let rec flatten b =
-          b.bstmts |>
-          List.map (fun s -> match s.skind with Block b -> flatten b | _ -> [s]) |>
-          List.concat
+        let rec flatten s =
+          List.flatten @@
+          List.map
+            (fun s ->
+              match s.skind with
+              | Block b ->(let ss = flatten b.bstmts in
+                           may (fun s' -> s'.labels <- s.labels @ s'.labels; s.labels <- []) (List.nth_opt ss 0);
+                           ss)
+              | _       -> [s])
+            s
         in
-        let case_list = List.map case (case_blocks (flatten bl) slist) in
+        let rec push s =
+          match s.skind with
+          | Block b -> may_map push ~dft:s @@ List.nth_opt b.bstmts 0
+          | _       -> s
+        in
+        let case_list = List.map case (case_blocks (flatten bl.bstmts) (List.map push slist)) in
         JCPEswitch(expr e,case_list)
 
     | Loop (_,bl,_pos,_continue_stmt,_break_stmt) ->
