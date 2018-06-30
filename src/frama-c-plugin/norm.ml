@@ -1832,8 +1832,8 @@ class useless_casts_remover =
       let ety = typeOf e in
       if isPointerType ty && isPointerType ety &&
          Cil_datatype.Typ.equal
-           (typeDeepDropAttributes ["const"; "volatile"] @@ pointed_type ty)
-           (typeDeepDropAttributes ["const"; "volatile"] @@ pointed_type ety)
+           (typeRemoveAttributesDeep ["const"; "volatile"] @@ pointed_type ty)
+           (typeRemoveAttributesDeep ["const"; "volatile"] @@ pointed_type ety)
       then e
       else etop
     | _ -> etop

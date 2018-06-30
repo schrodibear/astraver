@@ -47,6 +47,7 @@ PLUGIN_NAME:=Jessie
 PLUGIN_CMO:= jessie_options jessie_integer common extractor rewrite \
              retype norm interp register
 PLUGIN_HAS_MLI:=yes
+PLUGIN_DEPENDENCIES:=Variadic
 PLUGIN_BFLAGS:=$(JESSIE_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
 PLUGIN_OFLAGS:=$(JESSIE_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
 PLUGIN_EXTRA_BYTE+=$(NUMS_DIR)/nums.cma $(JCCMA)
