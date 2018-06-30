@@ -48,6 +48,7 @@ let jessie_specific_config () =
     Kernel.CppExtraArgs.append_before ["-include " ^ spec_prolog_h_name];
   if Config.Analysis.get () then begin
     Kernel.FramaCStdLib.off ();
+    Dynamic.Parameter.Bool.off "-variadic-translation" ();
     Kernel.ForceEnumIntCasts.on ();
     Kernel.GeneratePPFile.on ();
     Kernel.C11.on ()
