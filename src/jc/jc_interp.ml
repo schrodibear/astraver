@@ -2613,11 +2613,16 @@ let axiomatic =
       List.iter
         (fun li ->
            G.add_vertex g li.li_tag;
-           List.(
-             li.li_calls |>
-             filter (fun li -> li.li_axiomatic = Some name) |>
-             map (fun li -> li.li_tag) |>
-             iter (G.add_edge g li.li_tag)))
+           if
+             match snd @@ IntHashtblIter.find logic_functions_table li.li_tag with
+             | JCTerm _ | JCAssertion _ | JCInductive _ -> true
+             | JCNone | JCReads _                       -> false
+           then
+             List.(
+               li.li_calls |>
+               filter (fun li -> li.li_axiomatic = Some name) |>
+               map (fun li -> li.li_tag) |>
+               iter (G.add_edge g li.li_tag)))
         data.axiomatics_defined_ids;
       let tr tag = (Fn.uncurry logic_fun) @@ IntHashtblIter.find logic_functions_table tag in
       List.map
