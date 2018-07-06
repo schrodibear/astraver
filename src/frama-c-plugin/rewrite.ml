@@ -2137,6 +2137,21 @@ class assigns_from_remover =
 let remove_assigns_from = visitFramacFile (new assigns_from_remover)
 
 (*****************************************************************************)
+(* Rewrite logic type synonyms in logic types as they are not fully supported*)
+(* by the Frama-C kernel (no calls to unroll... in logic typing helper       *)
+(* functions, so we cannot just ask, say, isLogiArithmeticType for a         *)
+(* Tsyn (Ctype (TInt ...))).                                                 *)
+(*****************************************************************************)
+
+class logic_type_expander =
+  object
+    inherit frama_c_inplace
+    method! vlogic_type t = ChangeTo (Logic_utils.unroll_type ~unroll_typedef:false t)
+  end
+
+let expand_logic_types = visitFramacFile (new logic_type_expander)
+
+(*****************************************************************************)
 (* Rewrite the C file for Jessie translation.                                *)
 (*****************************************************************************)
 
@@ -2148,6 +2163,8 @@ let apply ~file f msg =
 let rewrite file =
   let apply = apply ~file in
   let open Config in
+  (* Expand logic type synonyms *)
+  apply expand_logic_types "expanding logic type synonyms";
   (* Remove assigns \from clauses not used by Jessie but causing failures by void * dereferences *)
   apply remove_assigns_from "removing assigns \\from clauses";
   (* Insert declarations for kmalloc and jessie_nondet_int if necessary *)
