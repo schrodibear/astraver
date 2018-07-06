@@ -135,6 +135,15 @@ class renaming_visitor add_variable add_logic_variable =
 
     method! vlogic_ctor_info_decl = add_lci
     method! vlogic_ctor_info_use = add_lci
+
+    method! vstmt s =
+      s.labels <-
+        List.map
+          (function
+            | Label (name, loc, code) -> Label (Name.unique name, loc, code)
+            | Case _ | Default _ as l -> l)
+          s.labels;
+      DoChildren
   end
 
 let logic_names_overloading = Hashtbl.create 257
