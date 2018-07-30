@@ -895,8 +895,9 @@ let iter_behavior ft fa fl fls b =
     () b
 *)
 
-let fold_sub_funspec itb _itt ita _itl _itls ft fa fl fls acc spec =
-  let ita = ita ft fa and itb = itb ft fa fl fls in
+let fold_sub_funspec itb itt ita _itl _itls ft fa fl fls acc spec =
+  let itt = itt ft and ita = ita ft fa and itb = itb ft fa fl fls in
+  let acc = Option.fold_right' ~f:((Fn.flip itt) % fst) spec.fs_decreases acc in
   let acc = ita acc spec.fs_requires in
   let acc = ita acc spec.fs_free_requires in
   List.fold_left
