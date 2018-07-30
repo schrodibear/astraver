@@ -594,33 +594,33 @@ sig
       method set_current_kf : kernel_function -> unit
       method unqueueInstr : unit -> instr list
       method vallocates : (identified_term list, 'a, 'b) visitor_method
-      method vallocation : (identified_term allocation, 'a, 'b) visitor_method
+      method vallocation : (allocation, 'a, 'b) visitor_method
       method vannotation :  global_annotation -> global_annotation visitAction
-      method vassigns : (identified_term assigns, 'a, 'b) visitor_method
+      method vassigns : (assigns, 'a, 'b) visitor_method
       method vattr : attribute list -> (attribute list, 'a, 'b) context -> 'b
       method vattrparam : (attrparam, 'a, 'b) visitor_method
       method vbehavior : (funbehavior, 'a, 'b) visitor_method
       method vblock : block -> fundec -> block Local.visit_action
       method vcode_annot : code_annotation -> fundec -> code_annotation Local.visit_action
       method vcompinfo : compinfo -> compinfo visitAction
-      method vdeps : (identified_term deps, 'a, 'b) visitor_method
+      method vdeps : (deps, 'a, 'b) visitor_method
       method venuminfo : enuminfo -> enuminfo visitAction
       method venumitem : enumitem -> enumitem visitAction
       method vexpr : (exp, 'a, 'b) visitor_method
       method vfieldinfo : fieldinfo -> fieldinfo visitAction
       method vfile : file -> file visitAction
       method vfrees : (identified_term list, 'a, 'b) visitor_method
-      method vfrom : (identified_term from, 'a, 'b) visitor_method
+      method vfrom : (from, 'a, 'b) visitor_method
       method vfunc : fundec -> fundec Fundec.visit_action
       method vglob : global -> global list visitAction
       method vglob_aux : global -> global list Cil.visitAction
       method videntified_predicate : (identified_predicate, 'a, 'b) visitor_method
       method videntified_term : (identified_term, 'a, 'b) visitor_method
-      method vimpact_pragma : (term impact_pragma, 'a, 'b) visitor_method
+      method vimpact_pragma : (impact_pragma, 'a, 'b) visitor_method
       method vinit : varinfo -> offset -> init -> (init, 'a, 'b) context -> 'b
       method vinitoffs : (offset, 'a, 'b) visitor_method
       method vinst : instr -> fundec -> instr list Local.visit_action
-      method vjessie_pragma : term jessie_pragma -> fundec -> term jessie_pragma Local.visit_action
+      method vjessie_pragma : jessie_pragma -> fundec -> jessie_pragma Local.visit_action
       method vlogic_ctor_info_decl : logic_ctor_info -> logic_ctor_info visitAction
       method vlogic_ctor_info_use : (logic_ctor_info, 'a, 'b) visitor_method
       method vlogic_info_decl : logic_info -> logic_info visitAction
@@ -632,14 +632,14 @@ sig
       method vlogic_type_info_use : (logic_type_info, 'a, 'b) visitor_method
       method vlogic_var_decl : (logic_var, 'a, 'b) visitor_method
       method vlogic_var_use : (logic_var, 'a, 'b) visitor_method
-      method vloop_pragma : term loop_pragma -> fundec -> term loop_pragma Local.visit_action
+      method vloop_pragma : loop_pragma -> fundec -> loop_pragma Local.visit_action
       method vlval : (lval, 'a, 'b) visitor_method
       method vmodel_info : model_info -> model_info visitAction
       method voffs : (offset, 'a, 'b) visitor_method
       method vpredicate_node : (predicate_node, 'a, 'b) visitor_method
       method vpredicate : (predicate, 'a, 'b) visitor_method
       method vquantifiers : (quantifiers, 'a, 'b) visitor_method
-      method vslice_pragma : (term slice_pragma, 'a, 'b) visitor_method
+      method vslice_pragma : (slice_pragma, 'a, 'b) visitor_method
       method vspec : (funspec, 'a, 'b) visitor_method
       method vstmt : stmt -> stmt visitAction
       method vstmt_aux_inserting : stmt -> fundec -> stmt Local.visit_action

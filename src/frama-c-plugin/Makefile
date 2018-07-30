@@ -34,10 +34,12 @@ ifndef FRAMAC_LIBDIR
 FRAMAC_LIBDIR :=$(shell $(FRAMAC) -journal-disable -print-libpath)
 endif
 
+NUMS_DIR :=$(shell ocamlfind query num.core)
+
 PLUGIN_DIR      ?= .
 WHY_DISTRIB	?= $(PLUGIN_DIR)/../..
 BUILDSRC        ?= $(WHY_DISTRIB)/_build/src
-JESSIE_INCLUDES	?= -I $(BUILDSRC)/why -I $(BUILDSRC)/jc
+JESSIE_INCLUDES	?= -I $(BUILDSRC)/why -I $(BUILDSRC)/jc -I $(NUMS_DIR)
 JCCMA		?= $(BUILDSRC)/jc/jc.cma
 JCCMXA		?= $(JCCMA:.cma=.cmxa)
 
@@ -45,10 +47,11 @@ PLUGIN_NAME:=Jessie
 PLUGIN_CMO:= jessie_options jessie_integer common extractor rewrite \
              retype norm interp register
 PLUGIN_HAS_MLI:=yes
+PLUGIN_DEPENDENCIES:=Variadic
 PLUGIN_BFLAGS:=$(JESSIE_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
 PLUGIN_OFLAGS:=$(JESSIE_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
-PLUGIN_EXTRA_BYTE+=$(JCCMA)
-PLUGIN_EXTRA_OPT+=$(JCCMXA)
+PLUGIN_EXTRA_BYTE+=$(NUMS_DIR)/nums.cma $(JCCMA)
+PLUGIN_EXTRA_OPT+=$(NUMS_DIR)/nums.cmxa $(JCCMXA)
 PLUGIN_DOCFLAGS:=$(JESSIE_INCLUDES)
 PLUGIN_TESTS_DIRS:=jessie
 

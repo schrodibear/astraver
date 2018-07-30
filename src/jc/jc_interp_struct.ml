@@ -209,7 +209,7 @@ let valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
     let validity = if left then omin :: validity else validity in
     O.P.conj validity
   in
-  O.Wd.mk ~name:(snd @@ Name.Pred.valid ~equal ~left ~right ac pc) @@ Predicate (params, validity)
+  O.Wd.nonrec_ ~name:(snd @@ Name.Pred.valid ~equal ~left ~right ac pc) @@ Predicate (params, validity)
 
 (* Freshness *)
 
@@ -283,7 +283,7 @@ let fresh_pred ~for_ ac pc =
       []
   in
   let freshness = O.P.conj @@ super_fresh @ fields_fresh O.P.(T.var p) in
-  O.Wd.mk ~name:(snd @@ Name.Pred.fresh ~for_ ac pc) @@ Predicate (params, freshness)
+  O.Wd.nonrec_ ~name:(snd @@ Name.Pred.fresh ~for_ ac pc) @@ Predicate (params, freshness)
 
 (* Instanceof *)
 
@@ -348,7 +348,7 @@ let instanceof_pred ~exact (type t1) (type t2) :
   match arg with
   | Singleton ->
     let instanceof = O.P.conj @@ self_instanceof O.T.(var p) @ fields_instanceof O.T.(var p) in
-    O.Wd.mk ~name:(snd @@ Name.Pred.instanceof ~exact ~arg ac pc) @@ Predicate (params, instanceof)
+    O.Wd.nonrec_ ~name:(snd @@ Name.Pred.instanceof ~exact ~arg ac pc) @@ Predicate (params, instanceof)
   | Range_l_r ->
     let instanceof =
       let instanceof' p = self_instanceof p @ fields_instanceof p in
@@ -358,7 +358,7 @@ let instanceof_pred ~exact (type t1) (type t2) :
         [forall_offset_in_range O.T.(var p) O.T.(var (get_l l_r)) O.T.(var (get_r l_r))
           ~f:(fun p -> instanceof' p)])
     in
-    O.Wd.mk ~name:(snd @@ Name.Pred.instanceof ~exact ~arg ac pc) @@ Predicate (params, instanceof)
+    O.Wd.nonrec_ ~name:(snd @@ Name.Pred.instanceof ~exact ~arg ac pc) @@ Predicate (params, instanceof)
 
 (* Containerof *)
 
@@ -423,7 +423,7 @@ let containerof_pred : type t1 t2.
     match arg with
     | Singleton ->
       let containerof = O.P.conj @@ contains_embedded_fields O.T.(var p) in
-      O.Wd.mk ~name:(snd @@ Name.Pred.containerof ~arg ac pc) @@ Predicate (params, containerof)
+      O.Wd.nonrec_ ~name:(snd @@ Name.Pred.containerof ~arg ac pc) @@ Predicate (params, containerof)
     | Range_l_r ->
       let containerof =
         O.P.(
@@ -432,7 +432,7 @@ let containerof_pred : type t1 t2.
           [forall_offset_in_range O.T.(var p) O.T.(var (get_l l_r)) O.T.(var (get_r l_r))
              ~f:(fun p -> contains_embedded_fields p)])
       in
-      O.Wd.mk ~name:(snd @@ Name.Pred.containerof ~arg ac pc) @@ Predicate (params, containerof)
+      O.Wd.nonrec_ ~name:(snd @@ Name.Pred.containerof ~arg ac pc) @@ Predicate (params, containerof)
 
 (* Alloc *)
 
@@ -551,7 +551,7 @@ let frame_pred ~for_ ac pc =
     List.flatten |>
     O.P.conj
   in
-  O.Wd.mk ~name:(snd @@ Name.Pred.frame ~for_ ac pc) @@ Predicate (params, frame)
+  O.Wd.nonrec_ ~name:(snd @@ Name.Pred.frame ~for_ ac pc) @@ Predicate (params, frame)
 
 (* Allocation *)
 
@@ -591,8 +591,8 @@ let alloc : type t1 t2 a.
         O.E.(Name.Param.alloc ~arg:Range_0_n ~check_size ac pc $.. e ^.. args)
 
 let alloc_param : type t1 t2.
-  arg:([ `Module of [ `Safe | `Unsafe ] ] why_decl, check_size:bool ->
-       [ `Module of [ `Safe | `Unsafe ] ] why_decl, _, _, t1, t2) arg -> _ -> _ -> t2 =
+  arg:([ `Module of [ `Safe | `Unsafe ] ] why_decl_group, check_size:bool ->
+       [ `Module of [ `Safe | `Unsafe ] ] why_decl_group, _, _, t1, t2) arg -> _ -> _ -> t2 =
   fun ~arg ac pc ->
   let error () = failwith "unexpected parameter expression in alloc_param" in
   let n : (t1, _) param =
@@ -661,7 +661,7 @@ let alloc_param : type t1 t2.
   match arg with
   | Singleton ->
     let Why_type alloc_type = alloc_type True in
-    O.Wd.mk ~name:(snd @@ name ~arg:Singleton) @@ Param alloc_type
+    O.Wd.code ~name:(snd @@ name ~arg:Singleton) @@ Param alloc_type
   | Range_0_n ->
     fun ~check_size ->
       (* precondition *)
@@ -670,7 +670,7 @@ let alloc_param : type t1 t2.
         if check_size then O.T.(var (get_n n) >= int 0)
                       else True
       in
-      O.Wd.mk ~name:(snd @@ name ~arg:Range_0_n ~check_size) @@ Param alloc_type
+      O.Wd.code ~name:(snd @@ name ~arg:Range_0_n ~check_size) @@ Param alloc_type
 
 (* Deallocation *)
 
@@ -734,7 +734,7 @@ let free_param ~safe ac pc =
       (* no exceptional post *)
       [])
   in
-  O.Wd.mk ~name:(snd @@ Name.Param.free ~safe ac pc) @@ Param free_type
+  O.Wd.code ~name:(snd @@ Name.Param.free ~safe ac pc) @@ Param free_type
 
 let struc =
   let fresh_tag_id =
@@ -749,11 +749,11 @@ let struc =
     in
     let tag_id_type =
       unless_builtin @@ fun () ->
-      O.Wd.mk ~name:(Name.tag si) @@ Logic ([], tag_id_type (struct_root si))
+      O.Wd.nonrec_ ~name:(Name.tag si) @@ Logic ([], tag_id_type (struct_root si))
     in
     let int_of_tag_axiom =
       unless_builtin @@ fun () ->
-      O.Wd.mk
+      O.Wd.nonrec_
         ~name:(Name.Axiom.int_of_tag si)
         O.(Goal (KAxiom, T.(int_of_tag @@ var @@ Name.tag si = int @@ fresh_tag_id ())))
     in
@@ -792,7 +792,7 @@ let struc =
     in
     let instanceof_implies_typeof_if_final =
       unless_builtin ~and_:si.si_final @@ fun () ->
-      O.Wd.mk ~name:(si.si_name ^ "_is_final") @@
+      O.Wd.nonrec_ ~name:(si.si_name ^ "_is_final") @@
       Goal (KAxiom,
             let ri = Option.value_fail ~in_:__LOC__ si.si_hroot.si_root in
             O.P.(forall (Name.Generic.tag_table (struct_root si)) (tag_table_type ri) @@ fun _t ->
@@ -806,10 +806,10 @@ let struc =
       begin match si.si_parent with
       | None ->
         let p = O.(P.parenttag T.(var @@ Name.tag si) T.(var "bottom_tag")) in
-        O.Wd.mk ~name:(si.si_name ^ "_parenttag_bottom") @@ Goal (KAxiom, p)
+        O.Wd.nonrec_ ~name:(si.si_name ^ "_parenttag_bottom") @@ Goal (KAxiom, p)
       | Some (parent, _) ->
         let p = O.(P.parenttag T.(var @@ Name.tag si) @@ T.tag parent) in
-        O.Wd.mk ~name:(si.si_name ^ "_parenttag_" ^ parent.si_name) @@ Goal (KAxiom, p)
+        O.Wd.nonrec_ ~name:(si.si_name ^ "_parenttag_" ^ parent.si_name) @@ Goal (KAxiom, p)
       end
     in
     let deps =
@@ -838,7 +838,7 @@ let root ri =
   in
   let type_param =
     unless_builtin @@ fun () ->
-    O.Wd.mk ~name:(Name.Type.root ri) @@ Type []
+    O.Wd.nonrec_ ~name:(Name.Type.root ri) @@ Type []
   in
   let preds, safe_params, unsafe_params =
     let ac = JCalloc_root ri and pc = JCroot ri in
@@ -863,7 +863,7 @@ let root ri =
   in
   let same_typeof_in_block_if_struct =
     unless_builtin ~and_:(root_is_union ri) @@ fun () ->
-      O.Wd.mk ~name:(ri.ri_name ^ "_whole_block_tag") @@
+      O.Wd.nonrec_ ~name:(ri.ri_name ^ "_whole_block_tag") @@
       Goal (KAxiom,
             let ri_pointer_type = pointer_type (JCalloc_root ri) (JCroot ri) in
             O.P.(

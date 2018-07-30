@@ -437,16 +437,6 @@ let collect file =
   while not (Queue.is_empty fun_queue) do
     do_fun (Queue.take fun_queue)
   done;
-  (* Now all the relevant fields are added, so we'll use them to omptimize *)
-  (* the composites. *)
-  begin try while true do
-    if not (Queue.is_empty typ_queue) then
-      do_type (Queue.take typ_queue)
-    else if not (Queue.is_empty comp_queue) then
-      do_comp (Queue.take comp_queue)
-    else
-      raise Exit
-    done with Exit -> () end;
   (* This hackish trick was added to avoid an unwanted side-effect of extraction:
      vanishing side-effects. This can happen e.g. with \assigns clauses and assignments when they are used on
      composite types. Since it is possible that no fields of a composite type are used in the relevant code, they can
@@ -474,6 +464,16 @@ let collect file =
       let r, fis = fold_fields_exn cfields in
       if r <> inf then
         List.iter (fun fi -> Set.add fields fi; add_from_type fi.ftype) fis);
+  (* Now all the relevant fields are added, so we'll use them to omptimize *)
+  (* the composites. *)
+  begin try while true do
+    if not (Queue.is_empty typ_queue) then
+      do_type (Queue.take typ_queue)
+    else if not (Queue.is_empty comp_queue) then
+      do_comp (Queue.take comp_queue)
+    else
+      raise Exit
+    done with Exit -> () end;
   { Result. types; comps; fields; enums; vars; dcomps }
 
 class extractor { Result. types; comps; fields; enums; vars; dcomps } =
@@ -522,7 +522,41 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } =
       | _ -> ChangeTo []
   end
 
+class local_init_rewriter =
+  let cons_set vi off e loc = List.cons @@ Set (addOffsetLval off @@ var vi, e, loc) in
+  object
+    inherit frama_c_inplace
+    method! vinst =
+      function
+      | Local_init (_,
+                    ConsInit (_, _, Constructor),
+                    loc)                            -> Console.fatal "Unsupported C++ constructor call"
+      | Local_init (vi,
+                    ConsInit (f, args, Plain_func),
+                    loc)                            -> ChangeTo [Call (Some (var vi), evar f, args, loc)]
+      | Local_init (vi,
+                    AssignInit (SingleInit e),
+                    loc)                            -> ChangeTo [Set  (var vi, e, loc)]
+      | Local_init (vi,
+                    AssignInit
+                      (CompoundInit (ct, initl)),
+                    loc)                            -> ChangeTo
+                                                         (foldLeftCompound
+                                                           ~implicit:true
+                                                           ~doinit:
+                                                             (fun off ->
+                                                               function
+                                                               | CompoundInit _ -> fun _ -> Fn.id
+                                                               | SingleInit e   -> fun _ -> cons_set vi off e loc)
+                                                           ~ct
+                                                           ~initl
+                                                           ~acc:[])
+      | Call _ | Set _ | Skip _
+      | Code_annot _ | Asm _                        -> SkipChildren
+  end
+
 let extract file =
+  visitFramacFile (new local_init_rewriter) file;
   visitFramacFile (new extractor (collect file)) file;
   (* The following removes some Frama-C builtins from the tables (??) *)
   (*Ast.mark_as_changed ();*)

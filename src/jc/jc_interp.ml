@@ -2505,7 +2505,7 @@ let prop pos id ~is_axiom labels a =
     with Not_found ->
       pos
   in
-  [O.Wd.mk
+  [O.Wd.nonrec_
      ~name
      ~expl:((if is_axiom then "Axiom " else "Lemma ") ^ id)
      ~pos
@@ -2533,54 +2533,34 @@ let logic_fun f ta =
   (* Predicate *)
   | None, JCAssertion a ->
     let body = fp a in
-    [O.Wd.mk ~name:f.li_final_name @@ Predicate (params, body)]
+    O.Wd.rec_ ~name:f.li_final_name @@ Predicate (params, body)
   (* Function *)
   | Some ty', JCTerm t ->
     let Typ typ = ty ty' in
     let ty' = type_ typ ty' in
     let t' = ft typ t in
-    if List.mem f f.li_calls then
-      let logic = O.Wd.mk ~name:f.li_final_name @@ Logic (params, ty') in
-      let axiom =
-        let trig =
-          let params = List.map O.(T.some % T.var % fst) params in
-          O.T.((("", `Short), f.li_final_name) $.. params)
-        in
-        O.Wd.mk
-          ~name:(f.li_final_name ^ "_definition")
-          (Goal (KAxiom,
-                 let once = ref true in
-                 List.fold_right
-                   (fun (v, Logic_type lty) acc ->
-                      let trigs = if !once then (once := false; Some (Fn.const [[(Term trig : trigger)]])) else None in
-                      O.P.(forall v lty ?trigs @@ Fn.const acc))
-                   params
-                   O.P.(trig = t')))
-      in
-      [logic; axiom]
-    else
-      [O.Wd.mk ~name:f.li_final_name @@ Function (params, ty', t')]
+    O.Wd.rec_ ~name:f.li_final_name @@ Function (params, ty', t')
   | ty', (JCNone | JCReads _) -> (* Logic *)
     let Logic_type ty' = Option.map_default ~default:O.Lt.(some bool) ~f:some_logic_type ty' in
-    [O.Wd.mk ~name:f.li_final_name @@ Logic (params, ty')]
+    O.Wd.rec_ ~name:f.li_final_name @@ Logic (params, ty')
   | None, JCInductive l ->
-    [O.Wd.mk
-       ~name:f.li_final_name
-       (Inductive
-          (params,
-           List.map
+    O.Wd.nonrec_
+      ~name:f.li_final_name
+      (Inductive
+         (params,
+          List.map
             (fun (id, _labels, a) ->
-              let ef = Effect.assertion empty_effects a in
-              let a' = fp a in
-              let params = li_model_args_3 ~label_in_name:true ef in
-              let a' =
-                List.fold_right
-                  (fun (n, _v, Logic_type ty') a' -> O.P.forall n ty' (Fn.const a'))
-                  params
-                  a'
+               let ef = Effect.assertion empty_effects a in
+               let a' = fp a in
+               let params = li_model_args_3 ~label_in_name:true ef in
+               let a' =
+                 List.fold_right
+                   (fun (n, _v, Logic_type ty') a' -> O.P.forall n ty' (Fn.const a'))
+                   params
+                   a'
                in
                get_unique_name id#name, a')
-            l))]
+            l))
   | Some _, JCInductive _
   | None, JCTerm _
   | Some _, JCAssertion _ -> assert false
@@ -2622,16 +2602,56 @@ let global_imports ~for_ ~lookup =
            List.cons @@ Use (`Import None, lookup @@ fst @@ Name.Theory.lemma ~is_axiom id))
         Typing.lemmas_table
 
-let axiomatic name data =
-  let open Typing in
-  let logics =
-    List.map
-      (fun li ->
-          logic_fun li (snd @@ IntHashtblIter.find logic_functions_table li.li_tag))
-      data.axiomatics_defined_ids
+let axiomatic =
+  let module G =
+    Graph.Imperative.Digraph.Concrete
+      (struct
+        type t = int
+        let hash : t -> _ = Hashtbl.hash
+        let compare : t -> _ = compare
+        let equal : t -> _ = (=)
+      end)
   in
-  let goals = List.map axiomatic_decl data.axiomatics_decls in
-  O.[Entry.some (Th.mk ~id:(Wid.mk @@ Name.Theory.axiomatic name) @@ List.flatten @@ logics @ goals)]
+  let module C = Graph.Components.Make (G) in
+  fun name data ->
+    let open Typing in
+    let logics =
+      let g = G.create ~size:(List.length data.axiomatics_defined_ids) () in
+      List.iter
+        (fun li ->
+           G.add_vertex g li.li_tag;
+           if
+             match snd @@ IntHashtblIter.find logic_functions_table li.li_tag with
+             | JCTerm _ | JCAssertion _ | JCInductive _ -> true
+             | JCNone | JCReads _                       -> false
+           then
+             List.(
+               li.li_calls |>
+               filter (fun li -> li.li_axiomatic = Some name) |>
+               map (fun li -> li.li_tag) |>
+               iter (G.add_edge g li.li_tag)))
+        data.axiomatics_defined_ids;
+      let tr tag = (Fn.uncurry logic_fun) @@ IntHashtblIter.find logic_functions_table tag in
+      List.map
+        (function
+          | []        -> assert false
+          | [tag]     -> tr tag
+          | wd :: wds ->(let recover =
+                           function
+                           | Rec (d, []) -> d
+                           | Rec _       -> assert false
+                           | Nonrec d    -> Options.jc_error
+                                              Why_loc.dummy_position
+                                              "This declaration cannot be recursive: %s at %s:%d"
+                                              d.why_id.why_name
+                                              (Position.file d.why_id.why_pos |? "?")
+                                              (Position.line d.why_id.why_pos |? -1)
+                         in
+                         Rec (recover @@ tr wd, List.map (recover % tr) wds)))
+        (C.scc_list g)
+    in
+    let goals = List.map axiomatic_decl data.axiomatics_decls in
+    O.[Entry.some (Th.mk ~id:(Wid.mk @@ Name.Theory.axiomatic name) @@ logics @ List.flatten goals)]
 
 let logic_fun li body =
   if li.li_axiomatic = None then
@@ -2639,7 +2659,7 @@ let logic_fun li body =
        Th.mk
          ~id:(Wid.mk @@ fst @@ Name.Theory.axiomatic_of li)
          ~deps:(global_imports ~for_:`Logic ~lookup:Th.dummy li.li_effects)
-         (logic_fun li body)]
+         [logic_fun li body]]
   else
     []
 
@@ -3110,7 +3130,7 @@ let func f funpos spec body =
        ~id:(O.Wid.mk @@ Name.Module.func ~extern:true ~safe:true f)
        ~safe:false
        ~deps
-       [O.Wd.mk ~name @@ Param fun_type]
+       [O.Wd.code ~name @@ Param fun_type]
    in
    let annot_type =
      O.Wt.some @@
@@ -3130,7 +3150,7 @@ let func f funpos spec body =
        ~id:(O.Wid.mk @@ Name.Module.func ~extern:true ~safe:false f)
        ~safe:false
        ~deps
-       [O.Wd.mk ~name @@ Param fun_type]
+       [O.Wd.code ~name @@ Param fun_type]
    in
   (* restore assigned status for parameters assigned in the body *)
   List.iter (fun v -> v.vi_assigned <- true) assigned_params;
@@ -3228,7 +3248,7 @@ let func f funpos spec body =
                 ~id:(O.Wid.mk ~expl:(f.fun_name ^ ", safety") ~pos @@ Name.Module.func ~safe:true ~extern:false f)
                 ~safe:true
                 ~deps
-                [O.Wd.mk
+                [O.Wd.code
                    ~name
                    ~expl:("Function " ^ f.fun_name ^ ", safety")
                    ~pos
@@ -3265,7 +3285,7 @@ let func f funpos spec body =
                      else "behavior " ^ id
                    in
                    List.cons
-                     (O.Wd.mk
+                     (O.Wd.code
                         ~name
                         ~expl:("Function " ^ f.fun_name ^ ", " ^ beh)
                         ~pos:(Position.of_pos funpos)
@@ -3295,7 +3315,7 @@ let func f funpos spec body =
                         let except_body = wrap_body f spec id body in
                         let name = f.fun_name ^ "_exsures_" ^ id in
                         List.cons
-                          (O.Wd.mk
+                          (O.Wd.code
                              ~name
                              ~expl:("Function " ^ f.fun_name ^ ", behavior " ^ id)
                              ~pos:(Position.of_pos funpos)
@@ -3331,7 +3351,7 @@ let logic_type (name, l) =
   O.[Entry.some @@
      Th.mk
        ~id:(Wid.mk @@ fst @@ Name.Theory.logic_type name)
-       [Wd.mk ~name @@ Type (List.map Type_var.name l)]]
+       [Wd.nonrec_ ~name @@ Type (List.map Type_var.name l)]]
 
 let enum_entry_name ~how (type a) : a bounded integer -> _ =
   function
@@ -3407,8 +3427,8 @@ let enums eis =
         let enum_aux =
           Th.mk
             ~id:(Wid.mk @@ enum_entry_name ~how:(`Theory `Abstract) e ^ "_aux")
-            [Wd.mk ~name:min @@ Function ([], Lt.integer, T.num ei_min);
-             Wd.mk ~name:max @@ Function ([], Lt.integer, T.num ei_max)]
+            [Wd.nonrec_ ~name:min @@ Function ([], Lt.integer, T.num ei_min);
+             Wd.nonrec_ ~name:max @@ Function ([], Lt.integer, T.num ei_max)]
         in
         let th =
           Th.mk
@@ -3429,7 +3449,7 @@ let enum_cast (ei_to, ei_from) =
     let to_int t = T.(To_int from $. t) in
     let cast_name ~m = "cast" ^ if m then "_modulo" else "" in
     let cast =
-      Wd.mk
+      Wd.nonrec_
         ~name:(cast_name ~m:false)
         (Function ([n, Logic_type lt_from], lt_to, T.(Of_int (to_, `Check) $. to_int @@ T.var n)))
     in
@@ -3437,7 +3457,7 @@ let enum_cast (ei_to, ei_from) =
       let n_t = T.var n in
       let th_to = enum_entry_name ~how:(`Theory (if bw then `Bitvector else `Abstract)) to_, `Qualified in
       let th_bv = name ~of_:(`Theory `Bitvector), `Qualified in
-      Wd.mk
+      Wd.code
         ~name:(cast_name m)
         (Param (Arrow
                   (n, Logic lt_from,
@@ -3497,7 +3517,7 @@ let enum_cast (ei_to, ei_from) =
 
 let exception_ ei =
   let return typ_opt =
-    O.Wd.mk ~name:(snd @@ Name.exception_ ei) @@ Exception typ_opt
+    O.Wd.code ~name:(snd @@ Name.exception_ ei) @@ Exception typ_opt
   in
   match ei.exi_type with
   | Some tei -> let Logic_type t = some_logic_type tei in return (Some t)
@@ -3513,17 +3533,17 @@ let exceptions () =
 
 let variable vi =
   let Why_type wt = some_var_why_type vi in
-  let return wt = O.Wd.mk ~name:vi.vi_final_name @@ Param wt in
+  let return wt = O.Wd.code ~name:vi.vi_final_name @@ Param wt in
   if vi.vi_assigned then return (Ref wt) else return wt
 
 let memory (mc, r) =
-  O.Wd.mk ~name:(memory_name (mc, r)) @@ Param (Ref (Logic (memory_type mc)))
+  O.Wd.code ~name:(memory_name (mc, r)) @@ Param (Ref (Logic (memory_type mc)))
 
 let alloc_table (pc, r) =
-  O.Wd.mk ~name:(Name.alloc_table (pc, r)) @@ Param (Ref (Logic (alloc_table_type pc)))
+  O.Wd.code ~name:(Name.alloc_table (pc, r)) @@ Param (Ref (Logic (alloc_table_type pc)))
 
 let tag_table (rt, r) =
-  O.Wd.mk ~name:(Name.tag_table (rt, r)) @@ Param (Ref (Logic (tag_table_type rt)))
+  O.Wd.code ~name:(Name.tag_table (rt, r)) @@ Param (Ref (Logic (tag_table_type rt)))
 
 let globals () =
   let module Pair_1st_opt (A : Hashtbl.HashedType) (B : Hashtbl.HashedType) =

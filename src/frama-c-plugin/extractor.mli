@@ -35,3 +35,5 @@
 open Cil_types
 
 val extract : file -> unit
+
+class local_init_rewriter : Visitor.frama_c_visitor

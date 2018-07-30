@@ -151,7 +151,7 @@ val goal_kind : formatter -> goal_kind -> unit
 val why_id : ?constr:bool -> formatter -> why_id -> unit
 
 type 'kind kind =
-  | Theory : [ `Theory ] kind
+  | Theory : [ `Let | `With ] -> [ `Theory of [< `Rec | `Nonrec ] ] kind
   | Module : [ `Safe | `Unsafe ] -> [ `Module of [ `Safe | `Unsafe ] ] kind
 
 val why_decl :

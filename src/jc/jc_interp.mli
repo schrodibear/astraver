@@ -136,7 +136,7 @@ val check : logic_info Ast.assertion list -> pred -> void expr
 val expr :
   ('a, 'b) ty_opt -> (logic_info, fun_info) Ast.expr -> 'a expr
 val some_expr : (logic_info, fun_info) Ast.expr -> some_expr
-val axiomatic_decl : Typing.axiomatic_decl -> [ `Theory ] why_decl list
+val axiomatic_decl : Typing.axiomatic_decl -> [ `Theory of [ `Nonrec ] ] why_decl_group list
 val logic_fun :
   logic_info ->
   logic_info Ast.term_or_assertion -> some_entry list
@@ -164,12 +164,12 @@ val func :
 val logic_type : string * type_var_info list -> some_entry list
 val enums : enum_info list -> some_entry list
 val enum_cast : enum_info * enum_info -> some_entry list
-val exception_ : exception_info -> [ `Module of [ `Safe | `Unsafe ] ] why_decl
+val exception_ : exception_info -> [ `Module of [ `Safe | `Unsafe ] ] why_decl_group
 val exceptions : unit -> some_entry list
-val variable : var_info -> [ `Module of [ `Safe | `Unsafe ] ] why_decl
-val memory : mem_class * region -> [ `Module of [ `Safe | `Unsafe ] ] why_decl
-val alloc_table : alloc_class * region -> [ `Module of  [ `Safe | `Unsafe ] ] why_decl
-val tag_table : root_info * region -> [ `Module of  [ `Safe | `Unsafe ] ] why_decl
+val variable : var_info -> [ `Module of [ `Safe | `Unsafe ] ] why_decl_group
+val memory : mem_class * region -> [ `Module of [ `Safe | `Unsafe ] ] why_decl_group
+val alloc_table : alloc_class * region -> [ `Module of  [ `Safe | `Unsafe ] ] why_decl_group
+val tag_table : root_info * region -> [ `Module of  [ `Safe | `Unsafe ] ] why_decl_group
 val globals : unit -> some_entry list
 val dummies : some_entry list
 val struc : struct_info -> some_entry list

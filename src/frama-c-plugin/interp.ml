@@ -534,6 +534,8 @@ let label =
   | Label (lab, _, _) -> lab
   | Case _ | Default _ -> assert false
 
+let builtin_label = Format.asprintf "%a" Cil_printer.pp_logic_builtin_label
+
 let logic_label lab =
   let label_name s =
     LabelName {
@@ -543,7 +545,8 @@ let logic_label lab =
     }
   in
   match lab with
-  | LogicLabel(_,s) -> label_name s
+  | BuiltinLabel b -> label_name (builtin_label b)
+  | FormalLabel s -> label_name s
   | StmtLabel sref ->
     let labels = filter_out is_case_label !sref.labels in
     assert (not (labels = []));
@@ -551,8 +554,7 @@ let logic_label lab =
 
 let logic_labels = List.map logic_label
 
-let logic_labels_assoc =
-  List.map (fun (_,l) -> logic_label l)
+let logic_labels_assoc = List.map logic_label
 
 let term_lhost pos =
   function
@@ -1769,6 +1771,7 @@ let adjust_rvalue_to_bitfield ~lv ~typ e =
   | _ -> e
 
 let instruction = function
+  | Local_init _     -> assert false
   | Set (lv, e, pos) ->
     let e =
       begin match unrollType (typeOfLval lv) with
@@ -2026,7 +2029,23 @@ let rec statement s =
               let slist = mkexpr (JCPEblock(statement_list slist)) pos in
               labs, slist
         in
-        let case_list = List.map case (case_blocks bl.bstmts slist) in
+        let rec flatten s =
+          List.flatten @@
+          List.map
+            (fun s ->
+              match s.skind with
+              | Block b ->(let ss = flatten b.bstmts in
+                           may (fun s' -> s'.labels <- s.labels @ s'.labels; s.labels <- []) (List.nth_opt ss 0);
+                           ss)
+              | _       -> [s])
+            s
+        in
+        let rec push s =
+          match s.skind with
+          | Block b -> may_map push ~dft:s @@ List.nth_opt b.bstmts 0
+          | _       -> s
+        in
+        let case_list = List.map case (case_blocks (flatten bl.bstmts) (List.map push slist)) in
         JCPEswitch(expr e,case_list)
 
     | Loop (_,bl,_pos,_continue_stmt,_break_stmt) ->
@@ -2295,7 +2314,7 @@ let rec annotation is_axiomatic annot =
           []
       end
 
-  | Dlemma (name, is_axiom, _, labels, _poly, property, pos) ->
+  | Dlemma (name, is_axiom, labels, _poly, property, _, pos) ->
       let pred = pred ?default_label:(default_label labels) in
       CurrentLoc.set pos;
       ignore
@@ -2460,7 +2479,7 @@ let rec annotation is_axiomatic annot =
       (* already handled in norm.ml *)
       []
   | Dcustom_annot _ -> Console.unsupported "custom annotation"
-  | Daxiomatic(id,l,pos) ->
+  | Daxiomatic(id,l,_,pos) ->
     if not (Filename.basename (fst pos).Lexing.pos_fname = Name.File.blockfuns_include) then begin
       CurrentLoc.set pos;
       let l = List.fold_left (fun acc d -> (annotation true d)@acc) [] l in
@@ -2724,8 +2743,9 @@ let global vardefs g =
   List.map (fun dnode -> mkdecl dnode pos) dnodes
 
 let integral_type name ty bitsize =
-  let min = Integer.to_num (Type.Integral.min_value ?bitsize ty) in
-  let max = Integer.to_num (Type.Integral.max_value ?bitsize ty) in
+  let conv = Num.num_of_string % Integer.to_string in
+  let min = conv (Type.Integral.min_value ?bitsize ty) in
+  let max = conv (Type.Integral.max_value ?bitsize ty) in
   mkdecl (JCDenum_type (name, min, max)) Why_loc.dummy_position
 
 let integral_types () =

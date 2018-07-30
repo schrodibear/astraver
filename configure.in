@@ -286,7 +286,7 @@ else
    FRAMACVERSION=`$FRAMAC -version`
    AC_MSG_RESULT($FRAMACVERSION)
    case $FRAMACVERSION in
-        Silicon-20161101)
+        Chlorine-20180501)
            FRAMACPLUGIN=yes
            ;;
         *) FRAMACMSG="you need AstraVer branch of Frama-C version Silicon"

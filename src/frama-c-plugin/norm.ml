@@ -56,7 +56,7 @@ open Visitor
 (* Utility functions *)
 open! Common
 
-let label_here = LogicLabel (None, "Here")
+let label_here = Logic_const.here_label
 
 (*****************************************************************************)
 (* Retype variables of array type.                                           *)
@@ -260,10 +260,10 @@ class array_variables_retyping_visitor ~attach self =
           *)
           (* Define global validity and instanceof invariants *)
           let invariants =
+            let loc = v.vdecl in
             let invariants =
               let open Logic_const in
               let lv = cvar_to_lvar v in
-              let loc = v.vdecl in
               ["valid_",
                pvalid_range
                  ~loc
@@ -272,7 +272,7 @@ class array_variables_retyping_visitor ~attach self =
                   tinteger ~loc 0,
                   tint ~loc @@ Integer.pred size);
                "typeof_",
-               let tag_ltype = Ltype ({lt_name = "typetag"; lt_params = []; lt_def = None; }, []) in
+               let tag_ltype = Ltype ({lt_name = "typetag"; lt_params = []; lt_def = None; lt_attr = []}, []) in
                prel
                  ~loc:v.vdecl
                  (Req,
@@ -284,7 +284,7 @@ class array_variables_retyping_visitor ~attach self =
                  let globinv = Cil_const.make_logic_info (Name.Logic.unique (prefix ^ v.vname)) in
                  globinv.l_labels <- [label_here];
                  globinv.l_body <- LBpred body;
-                 attach#globaction (fun () -> Logic_utils.add_logic_function globinv);
+                 attach#globaction (fun () -> Logic_utils.add_logic_function loc globinv);
                  GAnnot (Dinvariant (globinv, v.vdecl), v.vdecl))
               invariants
           in
@@ -825,6 +825,7 @@ object
   method! vinst instr fundec =
     Visit.Local.to_visit_action @@
     match instr with
+    | Local_init _ -> assert false
     | Set (lv, e, loc) when isStructOrUnionType (typeOf e) ->
       (* Type of [e] has not been changed by retyping formals and return. *)
       ChangeTo (expand_assign lv e (typeOf e) loc)
@@ -1128,7 +1129,7 @@ object
           let globinv = Cil_const.make_logic_info @@ Name.Logic.unique ("valid_" ^ v.vname) in
           globinv.l_labels <- [label_here];
           globinv.l_body <- LBpred p;
-          attach#globaction (fun () -> Logic_utils.add_logic_function globinv);
+          attach#globaction (fun () -> Logic_utils.add_logic_function v.vdecl globinv);
           [g; GAnnot (Dinvariant (globinv, v.vdecl), v.vdecl)]
         | [GVar _] -> [g]
         | _ -> Console.fatal "transformed variable to somethig else during normalization: %a" Printer.pp_global g
@@ -1657,7 +1658,7 @@ object(self)
     (* Currently, do not make any difference between a pointer to const T
      * or volatile T and a pointer to T.
      *)
-    let ty = typeDeepDropAttributes ["const"; "volatile"] (unrollTypeDeep ty) in
+    let ty = typeRemoveAttributesDeep ["const"; "volatile"] (unrollTypeDeep ty) in
     try
       Htbl_ty.find type_wrappers ty
     with
@@ -1831,8 +1832,8 @@ class useless_casts_remover =
       let ety = typeOf e in
       if isPointerType ty && isPointerType ety &&
          Cil_datatype.Typ.equal
-           (typeDeepDropAttributes ["const"; "volatile"] @@ pointed_type ty)
-           (typeDeepDropAttributes ["const"; "volatile"] @@ pointed_type ety)
+           (typeRemoveAttributesDeep ["const"; "volatile"] @@ pointed_type ty)
+           (typeRemoveAttributesDeep ["const"; "volatile"] @@ pointed_type ety)
       then e
       else etop
     | _ -> etop
