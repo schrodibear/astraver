@@ -3320,7 +3320,8 @@ let rec decl_aux ~only_types ~axiomatic acc d =
           (decl_aux ~only_types ~axiomatic:(Some (id,data))) [] l;
         if not only_types then
           begin
-            check_consistency id data;
+            if not String.(length id >= 15 && equal "LF__Axiomatic__" @@ sub id 0 15) then
+              check_consistency id data;
             StringHashtblIter.add axiomatics_table id data
           end;
         acc
