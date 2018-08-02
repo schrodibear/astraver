@@ -516,9 +516,12 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } =
       | GFun (f, l)
         when
           (Set.mem vars f.svar || f.svar.vghost) &&
-          let f = (fst l).pos_fname in
+          let norm = Name.File.normalize in
+          let f = norm (fst l).pos_fname in
           List.for_all
-            (fun f' -> String.(length f < length f' || not @@ equal f' @@ sub f (length f - length f') @@ length f'))
+            (fun f' ->
+             let f' = norm f' in
+             String.(length f < length f' || not @@ equal f' @@ sub f (length f - length f') @@ length f'))
             (Kernel.Files.get ()) ->
         ChangeTo [GFunDecl (f.sspec, f.svar, l)]
       | GVarDecl (vi, _) | GVar (vi, _, _) | GFun ( { svar = vi }, _) | GFunDecl (_, vi, _)
