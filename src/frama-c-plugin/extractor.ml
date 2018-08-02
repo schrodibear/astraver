@@ -513,6 +513,14 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } =
         SkipChildren
       | GEnumTag (ei, _) | GEnumTagDecl (ei, _) when Set.mem enums ei ->
         SkipChildren
+      | GFun (f, l)
+        when
+          (Set.mem vars f.svar || f.svar.vghost) &&
+          let f = (fst l).pos_fname in
+          List.for_all
+            (fun f' -> String.(length f < length f' || not @@ equal f' @@ sub f (length f - length f') @@ length f'))
+            (Kernel.Files.get ()) ->
+        ChangeTo [GFunDecl (f.sspec, f.svar, l)]
       | GVarDecl (vi, _) | GVar (vi, _, _) | GFun ( { svar = vi }, _) | GFunDecl (_, vi, _)
         when Set.mem vars vi || vi.vghost ->
         SkipChildren
