@@ -1004,12 +1004,7 @@ let rec term env (e : nexpr) =
         in
         let ty =
           match pi.li_result_type with
-          | None ->
-            typing_error
-              ~loc:e#pos
-              "the logic info %s is a predicate; it should be \
-               used as an assertion, not as a term"
-              pi.li_name
+          | None -> JCTnative Tboolean
           | Some ty -> ty
         in
         let ty = Type_var.subst uenv (subst ty) in
@@ -2061,10 +2056,7 @@ let rec expr env e =
           in
           let ty =
             match pi.li_result_type with
-            | None ->
-              typing_error ~loc:e#pos
-                "the logic info %s is a predicate; it should be \
-                 used as an assertion, not as a term" pi.li_name
+            | None -> JCTnative Tboolean
             | Some ty -> ty
           in
           let label_assoc =
