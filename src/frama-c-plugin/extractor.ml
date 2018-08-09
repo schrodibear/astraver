@@ -457,6 +457,8 @@ let collect file =
   while not (Queue.is_empty fun_queue) do
     do_fun (Queue.take fun_queue)
   done;
+  (* Also add global ghost variables *)
+  Globals.Vars.iter (fun vi _ -> if vi.vghost then add_var_if_global ~add_from_type ~state vi);
   (* This hackish trick was added to avoid an unwanted side-effect of extraction:
      vanishing side-effects. This can happen e.g. with \assigns clauses and assignments when they are used on
      composite types. Since it is possible that no fields of a composite type are used in the relevant code, they can
@@ -534,7 +536,7 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } =
       | GEnumTag (ei, _) | GEnumTagDecl (ei, _) when Set.mem enums ei ->
         SkipChildren
       | GVarDecl (vi, _) | GVar (vi, _, _) | GFun ( { svar = vi }, _) | GFunDecl (_, vi, _)
-        when Set.mem vars vi || vi.vghost ->
+        when Set.mem vars vi ->
         SkipChildren
       | GPragma _ -> SkipChildren
       | GText _ -> SkipChildren
