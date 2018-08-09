@@ -163,6 +163,26 @@ struct
         loop (k :: acc) (op k)
     in
     loop [] j
+
+  let foldi f init t = snd @@ fold_left (fun (i, acc) v -> i + 1, f i acc v) (0, init) t
+
+  let groupi ~break l =
+    let groups =
+      foldi
+        (fun i acc x ->
+           match acc with
+           | []      -> [[x]]
+           | g :: tl -> if break i (hd g) x
+                        then [x] :: g :: tl
+                        else (x :: g) :: tl)
+           []
+           l
+    in
+    match groups with
+    | [] -> []
+    | l  -> rev_map rev l
+
+  let group ~break l = groupi l ~break:(fun _ x y -> break x y)
 end
 
 module String =

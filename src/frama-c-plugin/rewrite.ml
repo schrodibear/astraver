@@ -2161,6 +2161,301 @@ class logic_type_expander =
 let expand_logic_types = visitFramacFile (new logic_type_expander)
 
 (*****************************************************************************)
+(* Logic structure records                                                   *)
+(*****************************************************************************)
+
+class logic_abbrev_rewriter =
+  let open Logic_const in
+  let open Logic_utils in
+  let open Type.Composite in
+  let unknown_size () = Console.fatal "Cannot expand array of unknown size" in
+  let flat_map f = List.(concat % map f) in
+  let rec all_offs ~loc =
+    fun ty ->
+     match unrollType ty with
+     | TComp ({ cfields; cstruct = true; _ }, _, _) -> flat_map
+                                                        (fun fi ->
+                                                          List.map
+                                                            (fun off -> TField (fi, off))
+                                                            (all_offs ~loc fi.ftype))
+                                                        cfields
+     | TComp ({ cfields = fi :: _;
+                cstruct = false; _ }, _, _)         -> List.map (fun off -> TField (fi, off)) (all_offs ~loc fi.ftype)
+     | TComp ({ cfields = [];
+                cstruct = false; _ }, _, _)         -> []
+     | TArray (ty, Some size, _, _)                 ->
+       begin match
+         constFoldToInt ~machdep:true size
+       with
+       | Some size                                  -> flat_map
+                                                         (fun i ->
+                                                           List.map
+                                                             (fun off -> TIndex (tinteger ~loc i, off))
+                                                             (all_offs ~loc ty))
+                                                         (List.range 0 `To @@ Integer.to_int size - 1)
+       | None                                       -> unknown_size ()
+       end
+     | TArray (_, None, _, _)                       -> unknown_size ()
+     | _                                            -> [TNoOffset]
+  in
+  let expandable = isLogicType (fun t -> isStructOrUnionType t || isArrayType t) in
+  let rec expand_with ~loc t off r =
+    let flat_map f by rest =
+      let rest =
+        let size = List.(length rest / length by) in
+        List.groupi ~break:(fun i _ _ -> i mod size = 0) rest
+      in
+      flat_map f (List.combine by rest)
+    in
+    let expand_struct loop ty acc rest toff =
+      flat_map
+        (fun (off, rest) -> loop (logicCType @@ typeTermOffset (Ctype ty) off) (addTermOffset off acc) rest toff)
+        (all_offs ~loc ty)
+        rest
+    in
+    let expand_array loop ty ?start ?stop acc rest toff =
+      let extract_bounds =
+        map_pair (Integer.to_int % Option.value_fatal ~in_:"expand array" % constFoldTermToInt ~machdep:true)
+      in
+      let refine_bound ?rest last size =
+        match last, size, Option.map (tinteger ~loc % List.length) rest with
+        | Some t,  _,      _      -> t
+        | None,    Some t, _
+        | None,    None,   Some t -> term ~loc (TBinOp (MinusA Check, t, tinteger ~loc 1)) Linteger
+        | None,    None,   None   -> unknown_size ()
+      in
+      let expand_array1 loop (ty, eo) ?(start=tinteger ~loc 0) ?stop acc e toff =
+        let stop = refine_bound stop eo in
+        let start, stop' = extract_bounds (start, stop) in
+        assert (isIntegralType ty);
+        let range = List.range start `To stop' in
+        flat_map
+          (fun (i, rest) -> loop ty (addTermOffset (TIndex (tinteger ~loc i, TNoOffset)) acc) rest toff)
+          range
+          (List.map (fun _ -> TNoOffset, e) range)
+      in
+      let expand_arrayn loop (ty, eo) ?(start=tinteger 0) ?stop acc rest toff =
+        let stop = refine_bound ~rest stop eo in
+        let start, stop' = extract_bounds (start, stop) in
+        flat_map
+          (fun (i, rest) ->
+            loop ty (addTermOffset (TIndex (tinteger ~loc i, TNoOffset)) acc) rest toff)
+          (List.range start `To stop')
+          rest
+      in
+      let arrty =
+        match unrollType ty with
+        | TArray (ty, eo, _, _) -> ty, Option.map (expr_to_term ~cast:true) eo
+        | ty                    -> Console.fatal "Expected array type, but got %a"
+                                      Printer.pp_typ ty
+      in
+      begin match fst @@ List.hd rest with
+      | TNoOffset -> expand_array1 loop arrty ?start ?stop acc (snd @@ List.hd rest) toff
+      | _         -> expand_arrayn loop arrty ?start ?stop acc rest toff
+      end
+    in
+    let rec loop ty acc rest =
+      let ty_offset = logicCType % typeTermOffset (Ctype ty) in
+      function
+      | TNoOffset
+        when Struct.is_struct ty -> expand_struct loop ty acc rest TNoOffset
+      | TNoOffset
+        when
+          isStructOrUnionType ty ->(let fi = List.hd (compinfo @@ of_typ_exn ty).cfields in
+                                    let off = addTermOffset (TField (fi, TNoOffset)) acc in
+                                    loop fi.ftype off rest TNoOffset)
+      | TNoOffset
+        when isArrayType ty      -> expand_array loop ty acc rest TNoOffset
+      | TNoOffset                -> List.map
+                                      (fun (off, e) ->
+                                        begin try
+                                          ignore @@
+                                          visitFramacTermOffset
+                                            (object
+                                              inherit frama_c_inplace
+                                              method! vterm_offset o =
+                                                if is_same_offset o off then raise Exit;
+                                                DoChildren
+                                             end)
+                                            acc;
+                                          assert false
+                                        with Exit ->()
+                                        end;
+                                        acc, mk_cast ~loc ty e)
+                                      rest
+      | TField (fi, toff)        ->(let off = addTermOffset (TField (fi, TNoOffset)) acc in
+                                    loop (ty_offset off) off rest toff)
+      | TModel (mi, toff)        ->(let off = addTermOffset (TModel (mi, TNoOffset)) acc in
+                                    loop (ty_offset off) off rest toff)
+      | TIndex
+          ({ term_node =
+              Trange
+                (start, stop);
+           }, toff)              -> expand_array loop ty ?start ?stop acc rest toff
+      | TIndex (t, toff)         ->(let off = addTermOffset (TIndex (t, TNoOffset)) acc in
+                                    loop (ty_offset off) off rest toff)
+    in
+    let module M = Cil_datatype.Term_offset.Map in
+    let subs =
+      List.fold_left
+        (fun acc (off, e) ->
+          if M.mem off acc then Console.fatal "The offset %a is updated twice" Printer.pp_term_offset off;
+          M.add off e acc)
+        M.empty
+        (loop (logicCType t.term_type) TNoOffset (expand_if_needed r) off)
+    in
+    List.map (fun (off, e) -> off, try M.find off subs with Not_found -> e) (expand_term t)
+  and expand_lval ~loc lv =
+    List.map
+      (Pair.fdup2
+        ~f:Extlib.id
+        ~g:(fun off -> let lv = addTermOffsetLval off lv in term ~loc (TLval lv) @@ typeOfTermLval lv))
+      (all_offs ~loc @@ logicCType @@ typeOfTermLval lv)
+  and expand_init ~loc ty tms =
+    if Type.Composite.Struct.is_struct ty || isArrayType ty
+    then
+      let rec flatten_t t =
+        match t.term_node with
+        | TCastE (_, _, { term_node = Tunion tms; _ }) -> flatten_ts tms
+        | _                                            -> [t]
+      and flatten_ts ts = flat_map flatten_t ts
+      in
+      let ls = all_offs ~loc ty and rs = flatten_ts tms in
+      if List.(length ls <> length rs) then
+        Console.fatal "Inconsistent initializer: expected %d members, got %d" (List.length ls) (List.length rs);
+      let rs = List.map2 (fun l r -> mk_cast ~loc (logicCType @@ typeTermOffset (Ctype ty) l) r) ls rs in
+      List.combine ls rs
+    else if isStructOrUnionType ty
+    then expand_init ~loc (List.hd Type.Composite.(compinfo @@ of_typ_exn ty).cfields).ftype tms
+    else Console.fatal "Compound initializer used on non-compound type"
+  and expand_term t =
+    let loc = t.term_loc in
+    match t.term_node with
+    | TLval lv                                       -> expand_lval ~loc lv
+    | TCastE (ty, _,  { term_node = Tunion tms; _ }) -> expand_init ~loc ty tms
+    | TUpdate (t, toff, r)                           -> expand_with ~loc t toff r
+    | _                                              -> Console.unsupported "Cannot expand: unknown term: %a"
+                                                          Printer.pp_term t
+  and expand_if_needed t =
+    if expandable t.term_type
+    then expand_term t
+    else [TNoOffset, t]
+  in
+  let lval_expander m =
+    let module M = Cil_datatype.Term_lval.Map in
+    object
+      inherit frama_c_inplace
+
+      method! vterm t =
+        match t.term_node with
+        | TLval tlv -> begin try ChangeTo (M.find tlv m) with Not_found -> SkipChildren end
+        | _         -> DoChildren
+    end
+  in
+  let expand_profile lvs body =
+    let module M = Cil_datatype.Term_lval.Map in
+    let m, vs =
+      let loc = CurrentLoc.get () in
+      List.fold_right
+       (fun v (m, vs) ->
+        match unroll_type ~unroll_typedef:true v.lv_type with
+        | Ctype (TComp _)
+        | Ctype (TArray _) -> List.fold_right
+                                (fun (off, t) (m, vs) ->
+                                 let v' =
+                                   Cil_const.make_logic_var_formal
+                                     (Name.unique @@
+                                      String.filter_alphanumeric
+                                        ~assoc:['.', '_'; '[', '_'; ']', '_']
+                                        ~default:'_' @@
+                                      v.lv_name ^ "_" ^ Format.asprintf "%a" Printer.pp_term_offset off)
+                                     t.term_type
+                                 in
+                                 M.add (TVar v, off) (tvar ~loc v') m, v' :: vs)
+                                (expand_lval ~loc (TVar v, TNoOffset))
+                                (m, vs)
+       | _                  -> m, v :: vs)
+       lvs
+       (M.empty, [])
+    in
+    vs,
+    let expander = lval_expander m in
+    match body with
+    | LBinductive l -> LBinductive (List.map (fun (n, ls, tvs, p) -> n, ls, tvs, visitFramacPredicate expander p) l)
+    | LBnone        -> LBnone
+    | LBpred p      -> LBpred (visitFramacPredicate expander p)
+    | LBterm t      -> LBterm (visitFramacTerm expander t)
+    | LBreads its   -> LBreads (List.map (fun it -> new_identified_term @@ visitFramacTerm expander it.it_content) its)
+  in
+  let expand_args args = flat_map (List.map snd % expand_if_needed) args in
+  let let_expander v r =
+    let module M = Cil_datatype.Term_lval.Map in
+    let m =
+      List.fold_left2
+        (fun m (off, _) (off', t) ->
+          assert (is_same_offset off off');
+          M.add (TVar v, off) t m)
+        M.empty
+        (expand_lval ~loc:(CurrentLoc.get ()) (TVar v, TNoOffset))
+        (expand_term r)
+    in
+    lval_expander m
+  in
+  object
+    inherit frama_c_inplace
+    method! vlogic_info_decl _ =
+      DoChildrenPost
+        (fun li ->
+          let lvs, body = expand_profile li.l_profile li.l_body in
+          li.l_profile <- lvs;
+          li.l_body <- body;
+          li)
+    method! vterm_node _ =
+      DoChildrenPost
+        (function
+          | Tapp (li, labs, args)          -> Tapp (li, labs, expand_args args)
+          | Tlet ({ l_var_info = v;
+                    l_body = LBterm r;
+                    l_type = Some lt }, t)
+            when expandable lt             -> (visitFramacTerm (let_expander v r) t).term_node
+          | t -> t)
+    method! vpredicate_node _ =
+      DoChildrenPost
+        (function
+          | Papp (li, labs, args)          -> Papp (li, labs, expand_args args)
+          | Plet ({ l_var_info = v;
+                    l_body = LBterm r;
+                    l_type = Some lt }, p)
+            when expandable lt             -> (visitFramacPredicate (let_expander v r) p).pred_content
+          | Prel (Req, t1, t2)
+            when expandable t1.term_type   ->(let t1, t2 = expand_term t1, expand_term t2 in
+                                              (pands @@
+                                               List.map2
+                                                 (fun (off1, t1) (off2, t2) ->
+                                                  assert (is_same_offset off1 off2);
+                                                  prel ~loc:t1.term_loc (Req, t1, t2))
+                                                 t1
+                                                 t2).pred_content)
+          | p -> p)
+  end
+class at_lifter =
+  object
+    inherit frama_c_inplace
+
+    method! vterm t =
+      if Logic_utils.isLogicType (fun t -> isStructOrUnionType t || isArrayType t) t.term_type
+      then
+        match t.term_node with
+        | Tat (t, _) -> ChangeDoChildrenPost (t, Fn.id)
+        | _          -> DoChildren
+      else
+        DoChildren
+  end
+let expand_logic_abbrevs file =
+  visitFramacFile (new at_lifter) file;
+  visitFramacFile (new logic_abbrev_rewriter) file
+
+(*****************************************************************************)
 (* Rewrite the C file for Jessie translation.                                *)
 (*****************************************************************************)
 
@@ -2193,6 +2488,8 @@ let rewrite file =
   end;
   (* Rewrite alloca to malloc (currently unconditionally successful) *)
   apply rewrite_alloca "rewriting alloca";
+  (* Expand logic record-like abbreviations for C structures and arrays *)
+  apply expand_logic_abbrevs "expanding logic struct/array abbrevs";
   (* Expand assigns clauses and equalities for composite types. *)
   apply expand_composites "expanding assigns clauses and equality for composite types";
   (* adds a behavior named [name_of_default_behavior] to all functions if

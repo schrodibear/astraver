@@ -74,6 +74,8 @@ sig
   val drop : int -> 'a t -> 'a t
   val take : int -> 'a t -> 'a t
   val range : int -> [< `Downto | `To ] -> int -> int t
+  val groupi : break:(int -> 'a ->'a -> bool) -> 'a list -> 'a list list
+  val group : break:('a -> 'a -> bool) -> 'a list -> 'a list list
 end
 
 module String :

@@ -298,6 +298,18 @@ class annotation_visitor state ~add_from_type =
   (* There are no explicit function calls from annotations. *)
   let do_expr_post = do_expr_post ~state ~on_fun:(fun vi -> do_fun (vi, None)) ~exclude_fun:(ref None) in
   let add_var_if_global = add_var_if_global ~add_from_type ~state in
+  let rec add_comp_trans ci =
+    Set.add state.comps ci;
+    List.iter
+      (fun fi ->
+        Set.add state.fields fi;
+        add_ty_trans fi.ftype)
+      ci.cfields
+  and add_ty_trans ty =
+    match unrollType ty with
+    | TComp (ci, _, _) -> add_comp_trans ci
+    | _                -> ()
+  in
   object(self)
     inherit frama_c_inplace
 
@@ -306,7 +318,15 @@ class annotation_visitor state ~add_from_type =
     (* in the relevant functions visitor. *)
     method! vvdec _ = SkipChildren
 
-    method! vterm t = Do.on_term ~post:do_expr_post t
+    method! vterm t =
+    begin match t.term_node with
+    | TCastE (ty, _, { term_node = Tunion _; _ })           -> add_ty_trans ty
+    | TUpdate (t, _, _)
+      when
+        Logic_utils.isLogicType (fun _ -> true) t.term_type -> add_ty_trans (Logic_utils.logicCType t.term_type)
+    | _                                                     -> ()
+    end;
+    Do.on_term ~post:do_expr_post t
 
     method! vmodel_info { mi_base_type } =
       add_from_type mi_base_type;
@@ -541,7 +561,7 @@ class local_init_rewriter =
       function
       | Local_init (_,
                     ConsInit (_, _, Constructor),
-                    loc)                            -> Console.fatal "Unsupported C++ constructor call"
+                    _loc)                           -> Console.fatal "Unsupported C++ constructor call"
       | Local_init (vi,
                     ConsInit (f, args, Plain_func),
                     loc)                            -> ChangeTo [Call (Some (var vi), evar f, args, loc)]
