@@ -224,6 +224,7 @@ sig
     val assert_ : string
     val free : string
     val kfree : string
+    val kzfree : string
     val malloc : string
     val kmalloc : string
     val kzalloc : string
@@ -293,6 +294,7 @@ sig
       val is_assert : t -> bool
       val is_free : t -> bool
       val is_kfree : t -> bool
+      val is_kzfree : t -> bool
       val is_malloc : t -> bool
       val is_kmalloc : t -> bool
       val is_kzalloc : t -> bool
