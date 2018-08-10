@@ -414,6 +414,7 @@ struct
     let assert_ = "assert"
     let free = "free"
     let kfree = "kfree"
+    let kzfree = "kzfree"
     let malloc = "malloc"
     let kmalloc = "kmalloc"
     let kzalloc = "kzalloc"
@@ -474,6 +475,7 @@ struct
       alloca;
       free;
       kfree;
+      kzfree;
       Logic_type.set;
       Logic_function.nondet_int
     ]
@@ -605,6 +607,7 @@ struct
       let is_assert v = isFunctionType v.vtype && v.vname = assert_
       let is_free v = isFunctionType v.vtype && v.vname = free
       let is_kfree v = isFunctionType v.vtype && v.vname = kfree
+      let is_kzfree v = isFunctionType v.vtype && v.vname = kzfree
       let is_malloc v = isFunctionType v.vtype && v.vname = malloc
       let is_kmalloc v = isFunctionType v.vtype && v.vname = kmalloc
       let is_kzalloc v = isFunctionType v.vtype && v.vname = kzalloc
