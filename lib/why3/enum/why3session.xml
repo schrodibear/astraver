@@ -2,14 +2,12 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="4">
-<prover id="0" name="Alt-Ergo" version="0.99.1" timelimit="5" memlimit="1000"/>
+<prover id="0" name="Alt-Ergo" version="0.99.1" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="1" name="Alt-Ergo" version="2.2.0" timelimit="5" steplimit="0" memlimit="1000"/>
 <file name="../enum.mlw" expanded="true">
 <theory name="Enum_intf" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Enum" sum="2e52a96f7432018754ce8de56dfd4fee">
- <goal name="Extensionality2">
- <proof prover="0" timelimit="60"><result status="valid" time="0.00" steps="9"/></proof>
- </goal>
+<theory name="Enum" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 <theory name="Generic_enum" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
@@ -47,68 +45,84 @@
 </theory>
 <theory name="Uint64" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Bit_int8" sum="36dce734cf81019370aabd8c454f2324">
- <goal name="Size_pos">
- <proof prover="0"><result status="valid" time="0.01" steps="65"/></proof>
+<theory name="Bit_int8" sum="4e51d20b19c4bc586a3973afdb716e02">
+ <goal name="Size_pos" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.01" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.01" steps="130"/></proof>
  </goal>
- <goal name="Val_two_power_size">
- <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
- </goal>
-</theory>
-<theory name="Bit_uint8" sum="b0189353d48827a188996bb12f2214eb">
- <goal name="Size_pos">
- <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
- </goal>
- <goal name="Val_two_power_size">
- <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
+ <goal name="Val_two_power_size" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.01" steps="130"/></proof>
  </goal>
 </theory>
-<theory name="Bit_int16" sum="37a5322203d5f3689722b8db354c854b">
- <goal name="Size_pos">
- <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
+<theory name="Bit_uint8" sum="2bbd42e620da3eb5fb15c12deea69931">
+ <goal name="Size_pos" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.01" steps="130"/></proof>
  </goal>
- <goal name="Val_two_power_size">
- <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
- </goal>
-</theory>
-<theory name="Bit_uint16" sum="18517be8f33bae3c07b37b208c6b620b">
- <goal name="Size_pos">
- <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
- </goal>
- <goal name="Val_two_power_size">
- <proof prover="0"><result status="valid" time="0.01" steps="65"/></proof>
+ <goal name="Val_two_power_size" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.02" steps="130"/></proof>
  </goal>
 </theory>
-<theory name="Bit_int32" sum="60a15eae6ba8f6bd24900831aab55517">
- <goal name="Size_pos">
- <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
+<theory name="Bit_int16" sum="53136bcd58626054cd52eed954d36adb">
+ <goal name="Size_pos" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.01" steps="130"/></proof>
  </goal>
- <goal name="Val_two_power_size">
- <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
- </goal>
-</theory>
-<theory name="Bit_uint32" sum="53e24979636b3bba47a5384905129148">
- <goal name="Size_pos">
- <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
- </goal>
- <goal name="Val_two_power_size">
- <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
+ <goal name="Val_two_power_size" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.01" steps="130"/></proof>
  </goal>
 </theory>
-<theory name="Bit_int64" sum="0362618d0ab9153866d2639bd9b67ee0">
- <goal name="Size_pos">
- <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
+<theory name="Bit_uint16" sum="5a8878f9887b1b0545633724b40dc9fd">
+ <goal name="Size_pos" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.02" steps="130"/></proof>
  </goal>
- <goal name="Val_two_power_size">
- <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
+ <goal name="Val_two_power_size" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.01" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.02" steps="130"/></proof>
  </goal>
 </theory>
-<theory name="Bit_uint64" sum="e87e04f5f38740b3156f4b431b469e0f">
- <goal name="Size_pos">
- <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
+<theory name="Bit_int32" sum="025a92a80ff97c5a267e8b70b4b816f5">
+ <goal name="Size_pos" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.02" steps="130"/></proof>
  </goal>
- <goal name="Val_two_power_size">
- <proof prover="0"><result status="valid" time="0.02" steps="65"/></proof>
+ <goal name="Val_two_power_size" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.02" steps="130"/></proof>
+ </goal>
+</theory>
+<theory name="Bit_uint32" sum="6826934712a4d8a3202f2ee77078749b">
+ <goal name="Size_pos" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.01" steps="130"/></proof>
+ </goal>
+ <goal name="Val_two_power_size" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.01" steps="130"/></proof>
+ </goal>
+</theory>
+<theory name="Bit_int64" sum="721769a96fa7e416be99413360ac1c29">
+ <goal name="Size_pos" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.01" steps="130"/></proof>
+ </goal>
+ <goal name="Val_two_power_size" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.01" steps="130"/></proof>
+ </goal>
+</theory>
+<theory name="Bit_uint64" sum="3f77ad48c8e6d676bb7995a3622c7f28">
+ <goal name="Size_pos" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.01" steps="130"/></proof>
+ </goal>
+ <goal name="Val_two_power_size" expl="">
+ <proof prover="0" obsolete="true"><result status="valid" time="0.02" steps="65"/></proof>
+ <proof prover="1"><result status="valid" time="0.01" steps="130"/></proof>
  </goal>
 </theory>
 <theory name="Bit_uint8_of_bit_int8" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
