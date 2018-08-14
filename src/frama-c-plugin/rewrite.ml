@@ -816,8 +816,10 @@ class kzalloc_expanding_visitor =
                      mkBlock [mkStmt (Instr (Skip loc))],
                      loc))]);
         SkipChildren
-      | Instr (Call (Some lv, { enode = Lval (Var fv, NoOffset); eloc }, [ptr; _], loc)) as inst
-        when isFunctionType fv.vtype && fv.vname = Name.Function.realloc ->
+      | Instr (Call (Some lv, { enode = Lval (Var fv, NoOffset); eloc }, ptr :: _, loc)) as inst
+        when Ast.Vi.Function.(is_realloc @@ of_varinfo_exn fv
+                           || is_memdup @@ of_varinfo_exn fv
+                           || is_kmemdup @@ of_varinfo_exn fv) ->
         let ptr = stripCasts ptr in
         let vi_old_ptr =
           makeTempVar
@@ -878,7 +880,12 @@ class kzalloc_expanding_visitor =
           let vi_free = get_function "free" in
            mkStmt (Instr (Call (None, evar ~loc:eloc vi_free, [evar ~loc:eloc vi_old_ptr], loc)))
         in
-        stmt.skind <- Block (mkBlock [save_stmt; mkStmt inst; copy_stmt; free_stmt; ]);
+        stmt.skind <-
+          Block (mkBlock @@
+                    save_stmt
+                 :: mkStmt inst
+                 :: copy_stmt
+                 :: if Ast.Vi.Function.(is_realloc @@ of_varinfo_exn fv) then [free_stmt] else []);
         SkipChildren
       | _ -> DoChildren
   end
