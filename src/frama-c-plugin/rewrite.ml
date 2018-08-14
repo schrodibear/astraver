@@ -2198,7 +2198,15 @@ class logic_abbrev_rewriter =
      | TArray (_, None, _, _)                       -> unknown_size ()
      | _                                            -> [TNoOffset]
   in
-  let expandable = isLogicType (fun t -> isStructOrUnionType t || isArrayType t) in
+  let expandable_ty ?(top=true) = isLogicType (fun t -> isStructOrUnionType t || not top && isArrayType t) in
+  let expandable ?(top=true) t =
+    expandable_ty ~top t.term_type &&
+    match t.term_node with
+    | TLval (TVar _, _)
+    | TCastE (_, _, { term_node = Tunion _; _ })
+    | TUpdate _                                  -> true
+    | _                                          -> false
+  in
   let rec expand_with ~loc t off r =
     let flat_map f by rest =
       let rest =
@@ -2302,7 +2310,7 @@ class logic_abbrev_rewriter =
           if M.mem off acc then Console.fatal "The offset %a is updated twice" Printer.pp_term_offset off;
           M.add off e acc)
         M.empty
-        (loop (logicCType t.term_type) TNoOffset (expand_if_needed r) off)
+        (loop (logicCType t.term_type) TNoOffset (expand_if_needed ~top:false r) off)
     in
     List.map (fun (off, e) -> off, try M.find off subs with Not_found -> e) (expand_term t)
   and expand_lval ~loc lv =
@@ -2336,8 +2344,8 @@ class logic_abbrev_rewriter =
     | TUpdate (t, toff, r)                           -> expand_with ~loc t toff r
     | _                                              -> Console.unsupported "Cannot expand: unknown term: %a"
                                                           Printer.pp_term t
-  and expand_if_needed t =
-    if expandable t.term_type
+  and expand_if_needed ?top t =
+    if expandable ?top t
     then expand_term t
     else [TNoOffset, t]
   in
@@ -2417,7 +2425,7 @@ class logic_abbrev_rewriter =
           | Tlet ({ l_var_info = v;
                     l_body = LBterm r;
                     l_type = Some lt }, t)
-            when expandable lt             -> (visitFramacTerm (let_expander v r) t).term_node
+            when expandable_ty lt          -> (visitFramacTerm (let_expander v r) t).term_node
           | t -> t)
     method! vpredicate_node _ =
       DoChildrenPost
@@ -2426,9 +2434,9 @@ class logic_abbrev_rewriter =
           | Plet ({ l_var_info = v;
                     l_body = LBterm r;
                     l_type = Some lt }, p)
-            when expandable lt             -> (visitFramacPredicate (let_expander v r) p).pred_content
+            when expandable_ty lt          -> (visitFramacPredicate (let_expander v r) p).pred_content
           | Prel (Req, t1, t2)
-            when expandable t1.term_type   ->(let t1, t2 = expand_term t1, expand_term t2 in
+            when expandable t1             ->(let t1, t2 = expand_term t1, expand_term t2 in
                                               (pands @@
                                                List.map2
                                                  (fun (off1, t1) (off2, t2) ->
@@ -2443,11 +2451,11 @@ class at_lifter =
     inherit frama_c_inplace
 
     method! vterm t =
-      if Logic_utils.isLogicType (fun t -> isStructOrUnionType t || isArrayType t) t.term_type
+      if Logic_utils.isLogicType isStructOrUnionType t.term_type
       then
         match t.term_node with
-        | Tat (t, _) -> ChangeDoChildrenPost (t, Fn.id)
-        | _          -> DoChildren
+        | Tat ({ term_node = TLval (TVar _, _); _ } as t, _) -> ChangeDoChildrenPost (t, Fn.id)
+        | _                                                  -> DoChildren
       else
         DoChildren
   end
