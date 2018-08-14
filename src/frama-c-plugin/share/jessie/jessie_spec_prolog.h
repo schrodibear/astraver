@@ -71,6 +71,21 @@ void *memcpy(void *dest, const void *src, size_t n);
   @          n % (sizeof (_type)) == 0 &&
   @          \let _n = n / sizeof (_type);
   @          \valid(((_type *) dest)+(0 .. _n - 1)) &&
+  @          \valid(((_type *) src)+(0 .. _n - 1)) &&
+  @          separated__type{Pre, Pre}((_type *) dest,(_type *) src, n);
+  @ assigns ((_type *) dest)[0 .. (n / sizeof (_type)) - 1] \from ((_type *) src)[0 .. (n / sizeof (_type)) - 1];
+  @ allocates \nothing;
+  @ ensures memcmp__type{Here, Here}((_type *) dest, (_type *) src, n) && \result == dest;
+  @*/
+extern _type *__memcpy__type(_type *restrict dest, const _type *restrict src, size_t n);
+
+//@ assigns ((char *) dest)[0 .. n - 1];
+void *__memcpy(void *dest, const void *src, size_t n);
+
+/*@ requires n >= 0 &&
+  @          n % (sizeof (_type)) == 0 &&
+  @          \let _n = n / sizeof (_type);
+  @          \valid(((_type *) dest)+(0 .. _n - 1)) &&
   @          \valid(((_type *) src)+(0 .. _n - 1));
   @ assigns ((_type *) dest)[0 .. (n / sizeof (_type)) - 1] \from ((_type *) src)[0 .. (n / sizeof (_type)) - 1];
   @ allocates \nothing;
