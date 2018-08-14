@@ -420,6 +420,8 @@ struct
     let kzalloc = "kzalloc"
     let calloc = "calloc"
     let realloc = "realloc"
+    let memdup = "memdup"
+    let kmemdup = "kmemdup"
     let alloca = "__builtin_alloca"
   end
 
@@ -468,6 +470,8 @@ struct
       kzalloc;
       calloc;
       realloc;
+      memdup;
+      kmemdup;
       alloca;
       free;
       kfree;
@@ -609,6 +613,8 @@ struct
       let is_kzalloc v = isFunctionType v.vtype && v.vname = kzalloc
       let is_calloc v = isFunctionType v.vtype && v.vname = calloc
       let is_realloc v = isFunctionType v.vtype && v.vname = realloc
+      let is_memdup v = isFunctionType v.vtype && v.vname = memdup
+      let is_kmemdup v = isFunctionType v.vtype && v.vname = kmemdup
       let is_alloca v = isFunctionType v.vtype && v.vname = alloca
 
       let malloc ?(kernel=false) () =

@@ -1821,14 +1821,18 @@ let instruction = function
           let r = Type.size_in_bits_exn lv_type lsr 3 in
           Integer.(if r = 0L then one else of_int64 r)
         in
-        if is_malloc v || is_kmalloc v || is_realloc v then
+        if is_malloc v || is_memdup v || is_kmalloc v || is_kmemdup v || is_realloc v then
           let lvtyp = pointed_type (typeOfLval lv) in
           let lvsiz = lv_size lvtyp in
           let arg =
             try
               if is_malloc v then as_singleton eargs
+              else if is_memdup v then
+                match eargs with [ _; arg ] -> arg | _ -> raise Exit
               else if is_kmalloc v then
                 match eargs with [ arg; _ ] -> arg | _ -> raise Exit
+              else if is_kmemdup v then
+                match eargs with [ _; arg; _ ] -> arg | _ -> raise Exit
               else (* realloc *)
                 match eargs with [ _; arg ] -> arg | _ -> raise Exit
             with
@@ -1925,6 +1929,7 @@ let instruction = function
       let enode =
         if Typ.equal lvty rety
           || is_malloc v
+          || is_memdup v
           || is_realloc v
           || is_calloc v
         then
@@ -2619,8 +2624,10 @@ let global vardefs g =
            Function.free;
            Function.kfree;
            Function.malloc;
+           Function.memdup;
            Function.kmalloc;
            Function.kzalloc;
+           Function.kmemdup;
            Function.calloc;
            Function.realloc]
         in
