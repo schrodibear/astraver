@@ -150,7 +150,7 @@ WHY3_DATADIR=$(shell why3 --print-datadir)
 lib/why3/%.gen: lib/why3/%.tmpl
 	./generate.ml $<
 
-lib/why3/%.drv: lib/why3/%.gen
+lib/why3/%.drv: $(MORE_GENERATED)
 	@DRIVER=smt-libv2.drv; \
 	if [ $(@F) = alt-ergo_enum.drv -o $(@F) = alt-ergo_remove_triggers_enum.drv ]; then \
 	  DRIVER=alt_ergo.drv; \
@@ -162,7 +162,7 @@ lib/why3/%.drv: lib/why3/%.gen
 	cp $< $@; \
 	printf "import \"$(WHY3_DATADIR)/drivers/$${DRIVER}\"" >> $@
 
-.PRECIOUS: lib/why3/cvc4_enum.gen lib/why3/cvc4_enum_nobv.gen lib/why3/z3_enum.gen lib/why3/z3_enum_nobv.gen lib/why3/alt-ergo_enum.gen lib/why3/alt-ergo_remove_triggers_enum.gen
+.PRECIOUS: $(MORE_GENERATED)
 
 lib/why3/why3.conf:  lib/why3/cvc4_enum.drv lib/why3/cvc4_enum_nobv.drv lib/why3/z3_enum.drv lib/why3/z3_enum_nobv.drv lib/why3/alt-ergo_enum.drv lib/why3/alt-ergo_remove_triggers_enum.drv Makefile
 	@printf "[main]\n" > $@
@@ -277,7 +277,7 @@ install-lib: $(JCLIB) lib/why3/why3.conf
 	rm -rf $(LIBDIR)/jessie/why3
 	mkdir -p $(LIBDIR)/jessie/why3
 	cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/core.mlw lib/why3/enum.mlw $(LIBDIR)/jessie/why3
-	cp -f lib/why3/cvc4_enum.gen lib/why3/cvc4_enum_nobv.gen lib/why3/alt-ergo_enum.gen lib/why3/alt-ergo_remove_triggers_enum.gen lib/why3/z3_enum.gen lib/why3/z3_enum_nobv.gen $(LIBDIR)/jessie/why3
+	cp -f $(MORE_GENERATED) $(LIBDIR)/jessie/why3
 	cp -f lib/why3/cvc4_enum.drv lib/why3/alt-ergo_enum.drv lib/why3/alt-ergo_remove_triggers_enum.drv lib/why3/z3_enum.drv $(LIBDIR)/jessie/why3
 	mkdir -p $(LIBDIR)/jessie
 	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
