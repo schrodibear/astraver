@@ -2171,10 +2171,13 @@ let expand_logic_types = visitFramacFile (new logic_type_expander)
 (* Logic structure records                                                   *)
 (*****************************************************************************)
 
+include struct
+
+open Logic_const
+open Logic_utils
+open Type.Composite
+
 class logic_abbrev_rewriter =
-  let open Logic_const in
-  let open Logic_utils in
-  let open Type.Composite in
   let unknown_size () = Console.fatal "Cannot expand array of unknown size" in
   let flat_map f = List.(concat % map f) in
   let rec all_offs ~loc =
@@ -2469,6 +2472,7 @@ class at_lifter =
 let expand_logic_abbrevs file =
   visitFramacFile (new at_lifter) file;
   visitFramacFile (new logic_abbrev_rewriter) file
+end
 
 (*****************************************************************************)
 (* Rewrite the C file for Jessie translation.                                *)
