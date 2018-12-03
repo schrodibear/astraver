@@ -236,6 +236,37 @@ let ef_union ef1 ef2 =
         ef1.e_committed ef2.e_committed;
   }
 
+  let ef_inter ef1 ef2 =
+    {
+      e_alloc_tables =
+        AllocMap.inter_merge LogicLabelSet.union (fun _ -> false)
+          ef1.e_alloc_tables ef2.e_alloc_tables;
+      e_tag_tables =
+        TagMap.inter_merge LogicLabelSet.union (fun _ -> false)
+          ef1.e_tag_tables ef2.e_tag_tables;
+      e_raw_memories =
+        MemoryMap.inter_merge LogicLabelSet.union (fun _ -> false)
+          ef1.e_raw_memories ef2.e_raw_memories;
+      e_precise_memories =
+        LocationMap.inter_merge LogicLabelSet.union (fun _ -> false)
+          ef1.e_precise_memories ef2.e_precise_memories;
+      e_memories =
+        MemoryMap.inter_merge LogicLabelSet.union (fun _ -> false)
+          ef1.e_memories ef2.e_memories;
+      e_globals =
+        VarMap.inter_merge LogicLabelSet.union (fun _ -> false)
+          ef1.e_globals ef2.e_globals;
+      e_locals =
+        VarMap.inter_merge LogicLabelSet.union (fun _ -> false)
+          ef1.e_locals ef2.e_locals;
+      e_mutable =
+        StringSet.inter
+          ef1.e_mutable ef2.e_mutable;
+      e_committed =
+        StringSet.inter
+          ef1.e_committed ef2.e_committed;
+    }
+
 let ef_diff ef1 ef2 =
   let module Hide = struct
     type v = LogicLabelSet.t

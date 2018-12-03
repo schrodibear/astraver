@@ -2829,6 +2829,19 @@ let func f funpos spec body =
   in
   (* global variables valid predicates *)
   let variables_valid_pred_apps = True in
+  let named_predicate =
+    let wrap_existentials p p' =
+      List.fold_left (fun p (name, Logic_type t) -> O.P.exists name t @@ fun _ -> p) p' @@
+        read_locals
+          ~callee_reads:(ef_inter (assertion empty_effects p) f.fun_effects.fe_reads)
+          ~callee_writes:empty_effects
+          ~region_list:f.fun_param_regions
+          ~params:(List.map snd f.fun_parameters)
+    in
+    fun ~type_safe ~global_assertion ?kind ?mark_recursively ~relocate l1 l2 a ->
+    wrap_existentials a @@
+    named_predicate ~type_safe ~global_assertion ?kind ?mark_recursively ~relocate l1 l2 a
+  in
   (* precondition for calling the function and extra one for analyzing it *)
   let external_requires =
     let kind = JCVCpre (if Option.is_some body then "Internal" else "External") in
