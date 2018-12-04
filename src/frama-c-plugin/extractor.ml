@@ -545,7 +545,13 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } =
   end
 
 class local_init_rewriter =
-  let cons_set vi off e loc = List.cons @@ Set (addOffsetLval off @@ var vi, e, loc) in
+  let cons_set ~loc lv e = List.cons @@ Set (lv, e, loc) in
+  let rec fold_init f lv =
+    function
+    | SingleInit e             -> f lv e
+    | CompoundInit (ct, initl) ->(let doinit off init _ = fold_init f (addOffsetLval off lv) init in
+                                  fun acc -> foldLeftCompound ~implicit:true ~doinit ~ct ~initl ~acc)
+  in
   object
     inherit frama_c_inplace
     method! vinst =
@@ -561,18 +567,8 @@ class local_init_rewriter =
                     loc)                            -> ChangeTo [Set  (var vi, e, loc)]
       | Local_init (vi,
                     AssignInit
-                      (CompoundInit (ct, initl)),
-                    loc)                            -> ChangeTo
-                                                         (foldLeftCompound
-                                                           ~implicit:true
-                                                           ~doinit:
-                                                             (fun off ->
-                                                               function
-                                                               | CompoundInit _ -> fun _ -> Fn.id
-                                                               | SingleInit e   -> fun _ -> cons_set vi off e loc)
-                                                           ~ct
-                                                           ~initl
-                                                           ~acc:[])
+                      (CompoundInit _ as init),
+                    loc)                            -> ChangeTo (fold_init (cons_set ~loc) (var vi) init [])
       | Call _ | Set _ | Skip _
       | Code_annot _ | Asm _                        -> SkipChildren
   end
