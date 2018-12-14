@@ -827,19 +827,7 @@ let rec type_labels env ~result_label label e =
   | JCNEmutable _ | JCNEeqtype _ | JCNEsubtype _ | JCNErange _ ->
     iter_subs label;
     env
-  | JCNEvar id ->
-    if id = "\\result" then begin
-      match label, result_label with
-      | Some lab1, Some lab2 ->
-        if lab1 <> lab2 then
-          typing_error
-            ~loc:e#pos
-            "\\result not allowed here (lab1 = %a, lab2= %a)"
-            Print_misc.label lab1 Print_misc.label lab2
-      | None, _
-      | _, None -> typing_error ~loc:e#pos "\\result not allowed here"
-    end;
-    env
+  | JCNEvar _ -> env
   | JCNEcontract (req, dec, behs, e) ->
     ignore (type_labels_opt env ~result_label:None (Some LabelHere) req);
     Option.iter

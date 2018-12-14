@@ -1165,10 +1165,9 @@ and pred ~default_label p =
     | Pvalid_read _ -> Console.unsupported "\\valid_read predicate is unsupported"
     | Pvalid_function _ -> Console.unsupported "\\valid_function predicate is unsupported"
 
-    | Pfresh (_lab1, _lab2, t, _) ->
+    | Pfresh (_lab1, lab2, t, _) ->
       (* TODO: take into account size *)
-      JCPEfresh(term t)
-
+      JCPEat (mkexpr (JCPEfresh (term t)) p.pred_loc, logic_label lab2)
     | Pallocable _ -> Console.unsupported "\\allocable predicate is unsupported"
 
     | Pfreeable _ -> Console.unsupported "\\freeable predicate is unsupported"

@@ -784,7 +784,6 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
       predicate ~type_safe ~global_assertion ~relocate lab oldlab a1
     | JCAfresh t1 ->
       let ac = tderef_alloc_class ~type_safe t1 in
-      let lab = if relocate && oldlab = LabelHere then lab else oldlab in
       O.P.(allocable ~code:(P.not global_assertion) ac ~r:t1#region ~lab @@ ft Any t1)
     | JCAbool_term t1 ->
       App (Poly `Eq, O.T.(ft (Ty Bool) t1 ^. Const (Bool true)))
