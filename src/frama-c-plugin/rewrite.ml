@@ -816,7 +816,7 @@ class kzalloc_expanding_visitor =
                      mkBlock [mkStmt (Instr (Skip loc))],
                      loc))]);
         SkipChildren
-      | Instr (Call (Some lv, { enode = Lval (Var fv, NoOffset); eloc }, ptr :: _, loc)) as inst
+      | Instr (Call (Some lv, { enode = Lval (Var fv, NoOffset); eloc }, ptr :: args, loc)) as inst
         when Ast.Vi.Function.(is_realloc @@ of_varinfo_exn fv
                            || is_memdup @@ of_varinfo_exn fv
                            || is_kmemdup @@ of_varinfo_exn fv) ->
@@ -848,23 +848,27 @@ class kzalloc_expanding_visitor =
             prel ~loc
               (Req,
                tlogic_coerce ~loc (tvar ~loc lv_old_size) Linteger,
-               term ~loc
-                 (TBinOp
-                    (Mult Check,
-                     term ~loc
-                       (TBinOp
-                          (PlusA Check,
-                           (let tptr = Logic_utils.expr_to_term ~cast:true ptr in
-                            term ~loc
-                              (TBinOp
-                                 (MinusA Check,
-                                  term ~loc (Toffset_max (here_label, tptr)) Linteger,
-                                  term ~loc (Toffset_min (here_label, tptr)) Linteger)))
-                             Linteger,
-                           Logic_const.tinteger ~loc 1))
-                       Linteger,
-                     term ~loc (TSizeOf (pointed_type @@ typeOf ptr)) Linteger))
-                 Linteger));
+               if not Ast.Vi.Function.(is_realloc @@ of_varinfo_exn fv)
+               then
+                 Logic_utils.expr_to_term ~cast:true @@ List.hd args
+               else
+                 term ~loc
+                   (TBinOp
+                      (Mult Check,
+                       term ~loc
+                         (TBinOp
+                            (PlusA Check,
+                             (let tptr = Logic_utils.expr_to_term ~cast:true ptr in
+                              term ~loc
+                                (TBinOp
+                                   (MinusA Check,
+                                    term ~loc (Toffset_max (here_label, tptr)) Linteger,
+                                    term ~loc (Toffset_min (here_label, tptr)) Linteger)))
+                               Linteger,
+                             Logic_const.tinteger ~loc 1))
+                         Linteger,
+                       term ~loc (TSizeOf (pointed_type @@ typeOf ptr)) Linteger))
+                   Linteger));
           r
         in
         let copy_stmt =

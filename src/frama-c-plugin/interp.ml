@@ -1822,6 +1822,12 @@ let instruction = function
         in
         if is_malloc v || is_memdup v || is_kmalloc v || is_kmemdup v || is_realloc v then
           let lvtyp = pointed_type (typeOfLval lv) in
+          let lvtyp =
+            let void = (Common.Type.Composite.Struct.void () :> typ) in
+            if (is_kmemdup v || is_memdup v) && (isVoidType lvtyp || not @@ need_cast void lvtyp)
+            then pointed_type @@ typeOf @@ Ast.Exp.strip_casts_to (TPtr (void, [])) @@ List.hd eargs
+            else lvtyp
+          in
           let lvsiz = lv_size lvtyp in
           let arg =
             try
