@@ -207,7 +207,9 @@ let rec assertion fmt a =
     | JCAbool_term t -> term fmt t
     | JCAinstanceof (t, _lab, st) ->
       fprintf fmt "(%a <: %s)" term t st.si_name
-    | JCAfresh t -> fprintf fmt "\\fresh(%a)" term t
+    | JCAfresh (oldlab, lab, t, n) -> fprintf fmt "\\fresh{%a,%a}(%a,%a)" label oldlab label lab term t term n
+    | JCAfreeable (lab, t) -> fprintf fmt "\\freeable{%a}(%a)" label lab term t
+    | JCAallocable (lab, t) -> fprintf fmt "\\allocable{%a}(%a)" label lab term t
     | JCAold a -> fprintf fmt "\\old(%a)" assertion a
     | JCAat(a,lab) -> fprintf fmt "\\at(%a,%a)" assertion a label lab
     | JCAquantifier (q,vi, trigs, a)->
@@ -358,8 +360,8 @@ let rec expr fmt e =
       fprintf fmt "\\%aaddress(%a)" address_kind absolute expr e
     | JCEbase_block(e) ->
       fprintf fmt "\\base_block(%a)" expr e
-    | JCEfresh(e) ->
-      fprintf fmt "\\fresh(%a)" expr e
+    | JCEfresh(e, n) ->
+      fprintf fmt "\\fresh(%a,%a)" expr e expr n
     | JCEalloc(e, si) ->
       fprintf fmt "(new %s[%a])" si.si_name expr e
     | JCEfree e ->

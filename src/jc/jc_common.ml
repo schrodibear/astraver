@@ -696,6 +696,8 @@ module AssertionOrd = struct
     | JCAmatch _ -> 71
     | JCAsubtype _ -> 73
     | JCAfresh _ -> 79
+    | JCAfreeable _ -> 83
+    | JCAallocable _ -> 89
 
   let rec compare a1 a2 =
     match a1#node, a2#node with
@@ -803,7 +805,7 @@ let rec is_constant_assertion a =
     | JCAnot a | JCAquantifier (_, _, _, a) | JCAold a | JCAat(a,_)
         -> is_constant_assertion a
     | JCAapp _ | JCAinstanceof _ | JCAmutable _ | JCAeqtype _
-    | JCAsubtype _ | JCAfresh _
+    | JCAsubtype _ | JCAfresh _ | JCAfreeable _ | JCAallocable _
         -> false
     | JCAbool_term t -> is_constant_term t
     | JCAif (t, a1, a2) ->

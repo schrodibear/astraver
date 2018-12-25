@@ -1248,15 +1248,51 @@ let tag ef lab _t vi_opt r =
     | None -> ef
     | Some vi -> add_tag_effect lab ef (vi,r)
 
+let all_allocs_ac ac pc e =
+  match ac with
+  | JCalloc_bitvector -> [ac]
+  | JCalloc_root rt ->
+    match rt.ri_kind with
+    | Rvariant -> all_allocs ~select:fully_allocated pc
+    | RdiscrUnion ->
+      Typing.typing_error ~loc:e#pos "Unsupported discriminated union, sorry"
+    | RplainUnion -> [ac]
+
+let all_mems_ac ac pc =
+  match ac with
+  | JCalloc_bitvector -> []
+  | JCalloc_root rt ->
+    match rt.ri_kind with
+    | Rvariant -> all_memories ~select:fully_allocated pc
+    | RdiscrUnion -> assert false
+    | RplainUnion -> []
+
+let all_tags_ac ac pc st =
+  match ac with
+  | JCalloc_bitvector -> [ struct_root st ]
+  | JCalloc_root rt ->
+      match rt.ri_kind with
+        | Rvariant -> all_tags ~select:fully_allocated pc
+        | RdiscrUnion -> assert false
+        | RplainUnion -> [ struct_root st ]
+
+let add_struct_alloc_effect lab ef t =
+  let pc = JCtag (pointer_struct t#typ, []) in
+  let ac = tderef_alloc_class ~type_safe:true t in
+  let ef = List.fold_left (fun ef mc -> add_memory_effect lab ef (mc, t#region)) ef @@ all_mems_ac ac pc in
+  List.fold_left (fun ef ac -> add_alloc_effect lab ef (ac, t#region)) ef @@ all_allocs_ac ac pc t
+
 let single_assertion ef a =
   let lab =
     match a#label with None -> LabelHere | Some lab -> lab
   in
   match a#node with
-    | JCAfresh(t) ->
-        let ac = tderef_alloc_class ~type_safe:true t in
+    | JCAfresh(oldlab,lab,t,_n) ->
         true,
-        add_alloc_effect lab ef (ac,t#region)
+        let ef = add_struct_alloc_effect oldlab ef t in
+        add_struct_alloc_effect lab ef t
+    | JCAfreeable(lab,t) | JCAallocable(lab, t) ->
+        true, add_struct_alloc_effect lab ef t
     | JCAinstanceof(t,lab,st) ->
         true,
         add_tag_effect lab ef (struct_root st,t#region)
@@ -1313,6 +1349,15 @@ let single_assertion fef a =
   let cont,ef = single_assertion fef.fe_reads a in
   cont,{ fef with fe_reads = ef }
 
+let add_memory_writes_noembedded lab (mc, _ as mcr) =
+  match mc with
+  | JCmem_field fi                   ->
+    begin match fi.fi_type with
+    | JCTpointer (_, Some _, Some _) -> add_memory_reads' lab mcr
+    | _                              -> add_memory_writes' lab mcr
+    end
+  | _                                -> add_memory_writes' lab mcr
+
 let rec single_location ~in_clause fef loc =
   let lab =
     match loc#label with
@@ -1325,7 +1370,7 @@ let rec single_location ~in_clause fef loc =
       match in_clause with
       | `Assigns ->
         fef |>
-        add_memory_writes' lab (mc, r) |>
+        add_memory_writes_noembedded lab (mc, r) |>
         (* Add effect on allocation table for [not_assigns] predicate *)
         Fn.on
           (not only_mem) @@
@@ -1513,81 +1558,34 @@ let rec expr fef e =
        | JCEalloc(_e1,st) ->
            let pc = JCtag(st,[]) in
            let ac = deref_alloc_class ~type_safe:true e in
-           let all_allocs = match ac with
-             | JCalloc_bitvector -> [ ac ]
-             | JCalloc_root rt ->
-                 match rt.ri_kind with
-                   | Rvariant -> all_allocs ~select:fully_allocated pc
-                   | RdiscrUnion ->
-                       Typing.typing_error ~loc:e#pos "Unsupported discriminated union, sorry" (* TODO *)
-                   | RplainUnion -> [ ac ]
-           in
-           let all_mems = match ac with
-             | JCalloc_bitvector -> []
-             | JCalloc_root rt ->
-                 match rt.ri_kind with
-                   | Rvariant -> all_memories ~select:fully_allocated pc
-                   | RdiscrUnion -> assert false (* TODO *)
-                   | RplainUnion -> []
-           in
-           let all_tags = match ac with
-             | JCalloc_bitvector -> [ struct_root st ]
-             | JCalloc_root rt ->
-                 match rt.ri_kind with
-                   | Rvariant -> all_tags ~select:fully_allocated pc
-                   | RdiscrUnion -> assert false (* TODO *)
-                   | RplainUnion -> [ struct_root st ]
-           in
            let fef =
              List.fold_left
-               (fun fef mc ->
-                  add_memory_writes LabelHere fef (mc,e#region)
-               ) fef all_mems
+               (fun fef mc -> add_memory_writes_noembedded LabelHere (mc,e#region) fef)
+               fef
+               (all_mems_ac ac pc)
            in
-(**)
            let fef =
              List.fold_left
                (fun fef ac -> add_alloc_writes LabelHere fef (ac,e#region))
-               fef all_allocs
+               fef
+               (all_allocs_ac ac pc e)
            in
-(**)
            true,
            List.fold_left
              (fun fef vi -> add_tag_writes LabelHere fef (vi,e#region))
-             fef all_tags
+             fef
+             (all_tags_ac ac pc st)
        | JCEfree e ->
            let pc = pointer_class e#typ in
            let ac = alloc_class_of_pointer_class pc in
-           let all_allocs =
-             match ac with
-             | JCalloc_bitvector -> [ac]
-             | JCalloc_root rt ->
-               match rt.ri_kind with
-               | Rvariant -> all_allocs ~select:fully_allocated pc
-               | RdiscrUnion ->
-                 Typing.typing_error ~loc:e#pos "Unsupported discriminated union, sorry" (* TODO *)
-               | RplainUnion -> [ac]
-           in
-           let all_mems =
-             match ac with
-             | JCalloc_bitvector -> []
-             | JCalloc_root rt ->
-               match rt.ri_kind with
-               | Rvariant -> all_memories ~select:fully_allocated pc
-               | RdiscrUnion -> assert false (* TODO *)
-               | RplainUnion -> []
-           in
            let fef =
-             List.fold_left
-               (fun fef mc -> add_memory_reads LabelHere fef (mc,e#region))
-               fef
-               all_mems
+             List.fold_left (fun fef mc -> add_memory_reads LabelHere fef (mc,e#region)) fef (all_mems_ac ac pc)
            in
            true,
            List.fold_left
              (add_alloc_writes LabelHere %% Fn.id @@ Pair.cons' e#region)
              fef
-             all_allocs
+             (all_allocs_ac ac pc e)
        | JCEreinterpret (e, st) ->
          (*  Current support for reinterpretation is very limited --
           *  it's supported only for two-level type hierarchies (e.g. void * -- other pointers),

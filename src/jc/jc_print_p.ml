@@ -153,8 +153,12 @@ let rec pexpr fmt e =
     fprintf fmt "\\%aaddress(%a)" address_kind absolute pexpr e
   | JCPEbase_block e ->
     fprintf fmt "\\base_block(%a)" pexpr e
-  | JCPEfresh e ->
-    fprintf fmt "\\fresh(%a)" pexpr e
+  | JCPEfresh (oldlab, lab, e, n) ->
+    fprintf fmt "\\fresh{%a,%a}(%a,@ %a)" label oldlab label lab pexpr e pexpr n
+  | JCPEfreeable (lab, e) ->
+    fprintf fmt "\\freeable{%a}(%a)" label lab pexpr e
+  | JCPEallocable (lab, e) ->
+    fprintf fmt "\\allocable{%a}(%a)" label lab pexpr e
   | JCPEinstanceof (e, si) ->
     fprintf fmt "(%a <: %s)" pexpr e si
   | JCPEderef (e, fi) ->

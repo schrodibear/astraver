@@ -67,17 +67,19 @@ let deref_if_needed ~in_param lab (is_not_cte, v) =
   | Deref _ when is_not_cte -> v
   | Deref x -> O.T.(var x)
   | Var x when in_param -> lvar ~constant:false ~label_in_name:false lab x
-  | Var _ -> v
+  | Var _
+  | Deref_at _ -> v
   | _ -> failwith "deref_if_needed got unexpected expression"
 
 type ('a, 'b, 'c) where =
   | In_app : ('b, 'b, 'c) where
   | In_pred : ('c, 'b, 'c) where
 
-let mems : type t. _ -> _ -> (t, region -> some_term list, (string * some_logic_type) list) where -> t = fun ac pc ->
+let mems : type t. _ -> _ -> (t, region -> in_param:bool -> label -> some_term list,
+                                 (string * some_logic_type) list) where -> t = fun ac pc ->
   let map f = List.map f (all_mems_ac ac pc) in
   function
-  | In_app -> fun r -> map @@ fun mc -> O.T.some @@ tmemory_var ~label_in_name:false LabelHere (mc, r)
+  | In_app -> fun r ~in_param lab -> map @@ fun mc -> O.T.some @@ tmemory_var ~label_in_name:(not in_param) lab (mc, r)
   | In_pred -> map (fdup2 Name.Generic.memory (O.Lt.some % memory_type))
 
 let allocs :
@@ -88,7 +90,7 @@ let allocs :
   function
   | In_app ->
     fun r ~in_param lab ->
-    map @@ fun ac -> deref_if_needed ~in_param lab @@ talloc_table_var ~label_in_name:false LabelHere (ac, r)
+    map @@ fun ac -> deref_if_needed ~in_param lab @@ talloc_table_var ~label_in_name:(not in_param) lab (ac, r)
   | In_pred -> map (fdup2 Name.Generic.alloc_table (O.Lt.some % alloc_table_type))
 
 let tags :
@@ -99,7 +101,7 @@ let tags :
   function
   | In_app ->
     fun r ~in_param lab ->
-    map @@ fun ac -> deref_if_needed ~in_param lab @@ ttag_table_var ~label_in_name:false LabelHere (ac, r)
+    map @@ fun ac -> deref_if_needed ~in_param lab @@ ttag_table_var ~label_in_name:(not in_param) lab (ac, r)
   | In_pred -> map @@ fdup2 (Name.tag_table % Pair.cons' dummy_region) (O.Lt.some % tag_table_type)
 
 let map_si ~f ac pc =
@@ -138,9 +140,9 @@ let forall_offset_in_range ?(inclusive=false) p l r ~f =
 
 (* Validity *)
 
-let valid ~in_param ~equal (ac, r) pc p ao bo =
+let valid ~in_param ?(label=LabelHere) ~equal (ac, r) pc p ao bo =
   let params =
-    allocs ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r |>
+    allocs ac pc In_app r ~in_param label @ mems ac pc In_app r ~in_param label |>
     Option.fold_right' ~f:(List.cons % O.T.some) bo |>
     Option.fold_right' ~f:(List.cons % O.T.some) ao
   in
@@ -213,33 +215,36 @@ let valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
 
 (* Freshness *)
 
-let fresh ~for_ ~in_param (ac, r) pc p =
-  let params =
+let fresh ~for_ ~in_param (ac, r) pc p n =
+   let params =
     let lab =
       match for_ with
-      | `alloc_tables_in `alloc | `tag_tables -> LabelOld
+      | `alloc_tables_in `alloc | `tag_tables -> if in_param then LabelOld else LabelHere
       | `alloc_tables_in `free -> LabelHere
+      | `alloc_tables_in `fresh lab -> lab
     in
     (match for_ with `alloc_tables_in _ -> allocs | `tag_tables -> tags) ac pc In_app r ~in_param lab
-    @ mems ac pc In_app r
+    @ mems ac pc In_app r ~in_param lab
   in
   let drop_in =
     function
     | `alloc_tables_in _ -> `alloc_tables
     | `tag_tables -> `tag_tables
   in
-  O.P.(Name.Pred.fresh ~for_:(drop_in for_) ac pc $.. p ^.. params)
+  O.P.(Name.Pred.fresh ~for_:(drop_in for_) ac pc $.. p ^.. n ^.. params)
 
 let fresh_pred ~for_ ac pc =
   let p = "p" in
+  let n = "n" in
   let params =
     let p = p, O.Lt.some (pointer_type ac pc) in
+    let n = n, O.Lt.(some integer) in
     let tables =
       match for_ with
       | `alloc_tables -> allocs
       | `tag_tables -> tags
     in
-    p :: tables ac pc In_pred @ mems ac pc In_pred
+    p :: n :: tables ac pc In_pred @ mems ac pc In_pred
   in
   let for_' =
     match for_ with
@@ -249,7 +254,7 @@ let fresh_pred ~for_ ac pc =
   let super_fresh =
     match pc with
     | JCtag ({ si_parent = Some (st, pp) }, _) ->
-      [fresh ~for_:for_' ~in_param:false (ac, dummy_region) (JCtag (st, pp)) O.T.(var p)]
+      [fresh ~for_:for_' ~in_param:false (ac, dummy_region) (JCtag (st, pp)) O.T.(var p) O.T.(var n)]
     | JCtag ({ si_parent = None }, _)
     | JCroot _ ->
       map_si ac pc
@@ -265,7 +270,7 @@ let fresh_pred ~for_ ac pc =
     let fields_fresh p =
       List.flatten @@
       map_embedded_fields ac pc ~p
-        ~f:(fun ~acr ~pc ~p ~l:_ ~r:_ -> [fresh ~for_:for_' ~in_param:false acr pc p])
+        ~f:(fun ~acr ~pc ~p ~l:_ ~r -> [fresh ~for_:for_' ~in_param:false acr pc p O.T.(num r)])
     in
     let result1 = fields_fresh p in
     result1 @
@@ -275,7 +280,7 @@ let fresh_pred ~for_ ac pc =
         fun i ->
         impl
           (match for_ with
-           | `alloc_tables -> T.(offset_min ~code:false ac p <= i && i <= offset_max ~code:false ac p)
+           | `alloc_tables -> T.(int 0 <= i && i <= var n)
            | `tag_tables -> conj @@ map_si ac pc ~f:(fun si -> [instanceof ~code:false T.(shift p i) si]))
           (conj @@ fields_fresh @@ T.(shift p i))) ::
       []
@@ -302,7 +307,7 @@ let instanceof ~exact (type t1) (type t2) :
   arg:(pred, _, unbounded integer number term -> unbounded integer number term -> pred, _, t1, t2) arg ->
   in_param:_ -> _ -> _ -> _ -> t2 =
   fun ~arg ~in_param (ac, r) pc p ->
-  let params = tags ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r in
+  let params = tags ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r ~in_param LabelHere in
   match arg with
   | Singleton -> O.P.(Name.Pred.instanceof ~exact ~arg ac pc $.. p ^.. params)
   | Range_l_r -> fun l r ->
@@ -366,7 +371,7 @@ let containerof : type t1 t2.
   arg:(pred, _, unbounded integer number term -> unbounded integer number term -> pred, _, t1, t2) arg ->
   in_param:_ -> _ -> _ -> _ -> t2 =
   fun ~arg ~in_param (ac, r) pc p ->
-  let params = tags ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r in
+  let params = tags ac pc In_app r ~in_param LabelHere @ mems ac pc In_app r ~in_param LabelHere in
   match arg with
   | Singleton -> O.P.(Name.Pred.containerof ~arg ac pc $.. p ^.. params)
   | Range_l_r -> fun l r ->
@@ -458,7 +463,7 @@ let frame ~for_ ~in_param (ac, r) pc p =
           ~f:(tables_for ~tx_table_var:ttag_table_var ~name_of_x:Name.Generic.tag_table)
     in
     (match for_ with `alloc_tables_in (`alloc n) -> [n] | _ -> []) @
-    tables @ mems ac pc In_app r
+    tables @ mems ac pc In_app r ~in_param LabelHere
   in
   let for_ =
     match for_ with
@@ -651,8 +656,8 @@ let alloc_param : type t1 t2.
            (Some (O.T.int 0)) (Some rbound);
          frame ~for_:(`alloc_tables_in (`alloc size)) ~in_param:true (ac, dummy_region) pc lresult;
          frame ~for_:`tag_tables ~in_param:true (ac, dummy_region) pc lresult;
-         fresh ~for_:(`alloc_tables_in `alloc) ~in_param:true (ac, dummy_region) pc lresult;
-         fresh ~for_:`tag_tables ~in_param:true (ac, dummy_region) pc lresult]
+         fresh ~for_:(`alloc_tables_in `alloc) ~in_param:true (ac, dummy_region) pc lresult rbound;
+         fresh ~for_:`tag_tables ~in_param:true (ac, dummy_region) pc lresult rbound]
         @ tag_post),
       (* no exceptional post *)
       [])
@@ -730,7 +735,10 @@ let free_param ~safe ac pc =
       conj (List.map (fun a -> T.(!. a = at ~lab:LabelOld a)) write_effects) ||
       (* non-null *)
       frame ~for_:(`alloc_tables_in `free) ~in_param:true (ac, dummy_region) pc p &&
-      fresh ~for_:(`alloc_tables_in `free) ~in_param:true (ac, dummy_region) pc p,
+      fresh
+        ~for_:(`alloc_tables_in `free)
+        ~in_param:true
+        (ac, dummy_region) pc p O.T.(offset_max ac ~r:dummy_region ~lab:LabelOld p),
       (* no exceptional post *)
       [])
   in
@@ -765,6 +773,7 @@ let struc =
 
         [valid_pred ~in_param ~equal:true ac pc;
          valid_pred ~in_param ~equal:false ac pc;
+         valid_pred ~in_param ~equal:true ~right:false ac pc;
          valid_pred ~in_param ~equal:false ~right:false ac pc;
          valid_pred ~in_param ~equal:false ~left:false ac pc;
 

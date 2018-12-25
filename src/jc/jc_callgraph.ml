@@ -51,7 +51,8 @@ let rec assertion acc p =
   match p#node with
   | JCAtrue
   | JCAfalse -> acc
-  | JCArelation(t1,_op,t2) ->
+  | JCAfresh(_,_,t1,t2)
+  | JCArelation(t1,_,t2) ->
       term (term acc t1) t2
   | JCAapp app -> app.app_fun :: (List.fold_left term acc app.app_args)
   | JCAand(pl) | JCAor(pl) -> List.fold_left assertion acc pl
@@ -63,9 +64,10 @@ let rec assertion acc p =
       assertion acc p
   | JCAquantifier (_,_,trigs,p) -> triggers (assertion acc p) trigs
   | JCAinstanceof(t,_,_)
-  | JCAfresh(t)
   | JCAmutable(t,_,_)
-  | JCAbool_term t -> term acc t
+  | JCAbool_term t
+  | JCAfreeable (_, t)
+  | JCAallocable (_, t) -> term acc t
   | JCAeqtype(t1, t2, _) | JCAsubtype(t1, t2, _) ->
       tag (tag acc t1) t2
   | JCAlet(_,t, p) ->

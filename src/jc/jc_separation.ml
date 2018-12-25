@@ -143,7 +143,7 @@ let single_assertion comp a =
   | JCAlet (vi, t, _) ->
     Region.unify vi.vi_region t#region
   | JCAtrue         | JCAfalse       | JCAeqtype _
-  | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ | JCAfresh _
+  | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ | JCAfresh _ | JCAallocable _ | JCAfreeable _
   | JCAand _        | JCAor _        | JCAimplies _ | JCAiff _   | JCAif _
   | JCAmatch _      | JCAnot _       | JCAquantifier _
   | JCAold _        | JCAat _        | JCAsubtype _ ->

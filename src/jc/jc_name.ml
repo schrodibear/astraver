@@ -245,15 +245,14 @@ struct
     let prefix =
       match ac with
       | JCalloc_root _ ->
-        if equal then
-          "strict_valid"
-        else
-          begin match left, right with
-          | false, false -> assert false
-          | false, true -> "right_valid"
-          | true, false -> "left_valid"
-          | true, true -> "valid"
-          end
+        (if equal then "strict_" else "") ^
+        begin match left, right with
+        | false, false -> assert false
+        | false, true -> "right_"
+        | true, false -> "left_"
+        | true, true -> ""
+        end ^
+        "valid"
       | JCalloc_bitvector -> "valid_bitvector" (* TODO ? *)
     in
     Theory.struct_ pc, prefix ^ "_" ^ (Class.pointer pc)

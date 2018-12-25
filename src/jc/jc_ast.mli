@@ -176,7 +176,9 @@ and pexpr_node =
   | JCPEcast of pexpr * ptype
   | JCPEcast_mod of pexpr * ptype
   | JCPEquantifier of quantifier * ptype * identifier list * pexpr list list * pexpr
-  | JCPEfresh of pexpr
+  | JCPEfresh of label * label * pexpr * pexpr
+  | JCPEfreeable of label * pexpr
+  | JCPEallocable of label * pexpr
   | JCPEold of pexpr
   | JCPEat of pexpr * label
   | JCPEoffset of offset_kind * pexpr
@@ -295,7 +297,9 @@ type nexpr_node =
   | JCNEif of nexpr * nexpr * nexpr
   | JCNEoffset of offset_kind * nexpr
   | JCNEaddress of address_kind * nexpr
-  | JCNEfresh of nexpr
+  | JCNEfresh of label * label * nexpr * nexpr
+  | JCNEfreeable of label * nexpr
+  | JCNEallocable of label * nexpr
   | JCNEbase_block of nexpr
   | JCNEalloc of nexpr * string
   | JCNEfree of nexpr
@@ -449,7 +453,9 @@ type 'li assertion_node =
   | JCAat of 'li assertion * label
   | JCAinstanceof of 'li term * label * struct_info
   | JCAbool_term of 'li term
-  | JCAfresh of 'li term
+  | JCAfresh of label * label * 'li term * 'li term
+  | JCAfreeable of label * 'li term
+  | JCAallocable of label * 'li term
   | JCAif of 'li term * 'li assertion * 'li assertion
   | JCAmutable of 'li term * struct_info * 'li tag
   | JCAeqtype of 'li tag * 'li tag * struct_info option
@@ -541,7 +547,7 @@ type ('li,'fi) expr_node =
   | JCEalloc of ('li,'fi) expr * struct_info
   | JCEfree of ('li,'fi) expr
   | JCEreinterpret of ('li, 'fi) expr * struct_info
-  | JCEfresh of ('li,'fi) expr
+  | JCEfresh of ('li,'fi) expr * ('li,'fi) expr
   | JCElet of var_info * ('li,'fi) expr option * ('li,'fi) expr
   | JCEassert of identifier list * asrt_kind * 'li assertion
   | JCEcontract of 'li assertion option *

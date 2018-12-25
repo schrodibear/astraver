@@ -225,6 +225,7 @@ let duplicable =
     (fun acc e -> acc &&
                   match e#node with
                   | JCPEconst _ | JCPEvar _ | JCPErange _ | JCPEderef _ | JCPEfresh _
+                  | JCPEfreeable _ | JCPEallocable _
                   | JCPEunary _ | JCPEoffset _ | JCPEaddress _ | JCPEold _ | JCPEat _
                   | JCPEbinary _ | JCPEcast _ | JCPEcast_mod _ | JCPEsubtype _ | JCPEbase_block _ -> true
                   | JCPEassert _ | JCPEthrow _ | JCPEreturn _ | JCPEeqtype _
@@ -481,7 +482,9 @@ let rec expr e =
     | JCPEold e -> JCNEold(expr e)
     | JCPEat(e,lab) -> JCNEat(expr e,lab)
     | JCPEoffset(off,e) -> JCNEoffset(off,expr e)
-    | JCPEfresh e -> JCNEfresh(expr e)
+    | JCPEfresh (oldlab,lab,e1,e2) -> JCNEfresh(oldlab,lab,expr e1,expr e2)
+    | JCPEfreeable (lab,e1) -> JCNEfreeable(lab,expr e1)
+    | JCPEallocable (lab,e1) -> JCNEallocable(lab,expr e1)
     | JCPEaddress(absolute,e) -> JCNEaddress(absolute,expr e)
     | JCPEbase_block(e) -> JCNEbase_block(expr e)
     | JCPEif(e1,e2,e3) -> JCNEif(expr e1,expr e2,expr e3)

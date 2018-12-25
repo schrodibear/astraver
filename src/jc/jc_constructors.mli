@@ -392,7 +392,7 @@ module PExpr :
       expr:pexpr -> ?pos:Why_loc.position -> unit -> pexpr
 
     val mkfresh :
-      expr:pexpr -> ?pos:Why_loc.position -> unit -> pexpr
+      oldlab:label -> label:label -> expr:pexpr -> len:pexpr -> ?pos:Why_loc.position -> unit -> pexpr
 
     val mkif :
       condition:pexpr ->

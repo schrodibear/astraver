@@ -75,8 +75,12 @@ let rec expr fmt e =
     out "(\\%aaddress(%a))" address_kind absolute expr e1
   | JCNEbase_block(e1) ->
     out "(\\base_block(%a))" expr e1
-  | JCNEfresh(e1) ->
-    out "(\\fresh(%a))" expr e1
+  | JCNEfresh(oldlab, lab, e1, e2) ->
+    out "(\\fresh{%a,%a}(%a,@ %a))" label oldlab label lab expr e1 expr e2
+  | JCNEfreeable(lab, e1) ->
+    out "(\\freeable{%a}(%a))" label lab expr e1
+  | JCNEallocable(lab, e1) ->
+    out "(\\allocable{%a}(%a))" label lab expr e1
   | JCNEalloc(_e1, _id) ->
     out "(TODO alloc)"
   | JCNEfree _e1 ->

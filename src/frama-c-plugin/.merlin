@@ -1,3 +1,4 @@
+S .
 S frama-c/src/kernel_services/ast_data
 S frama-c/src/kernel_services/ast_printing
 S frama-c/src/kernel_services/ast_queries
@@ -13,6 +14,7 @@ S frama-c/src/libraries/utils
 S frama-c/src/libraries/project
 S frama-c/src/libraries/datatype
 
+B .
 B frama-c/src/kernel_services/ast_data
 B frama-c/src/kernel_services/ast_printing
 B frama-c/src/kernel_services/ast_queries

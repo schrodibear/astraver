@@ -50,3 +50,9 @@ val free : safe:bool -> alloc_class * region -> pointer_class -> 'a expr -> void
 val valid_pre : in_param:bool -> effect -> var_info -> pred
 
 val instanceof_pre : effect -> var_info -> pred
+
+val valid : in_param:bool -> ?label:label -> equal:bool -> alloc_class * region -> pointer_class -> 'a term
+  -> 'b term option -> 'c term option -> pred
+
+val fresh: for_:[ `alloc_tables_in of [ `fresh of label ] ] -> in_param:bool -> alloc_class * region -> pointer_class
+  -> 'b term -> 'c term -> pred

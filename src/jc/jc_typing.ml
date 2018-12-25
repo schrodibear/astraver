@@ -820,7 +820,7 @@ let rec type_labels env ~result_label label e =
   match e#node with
   | JCNEconst _ | JCNEderef _ | JCNEbinary _
   | JCNEunary _ | JCNEassign _ | JCNEinstanceof _ | JCNEcast _ | JCNEcast_mod _
-  | JCNEif _ | JCNEoffset _ | JCNEaddress _ | JCNEbase_block _ | JCNEfresh _
+  | JCNEif _ | JCNEoffset _ | JCNEaddress _ | JCNEbase_block _
   | JCNEalloc _ | JCNEfree _ | JCNEreinterpret _ | JCNElet _
   | JCNEassert _ | JCNEloop _ | JCNEreturn _ | JCNEtry _
   | JCNEthrow _ | JCNEpack _ | JCNEunpack _ | JCNEmatch _ | JCNEquantifier _
@@ -846,6 +846,16 @@ let rec type_labels env ~result_label label e =
   | JCNEat (_, l) ->
     check e l;
     iter_subs (Some l);
+    env
+  | JCNEfresh (oldl, l, _, _) ->
+    check e oldl;
+    check e l;
+    iter_subs label;
+    env
+  | JCNEfreeable (l, _)
+  | JCNEallocable (l, _) ->
+    check e l;
+    iter_subs label;
     env
   | JCNEblock el ->
     List.fold_left
@@ -1209,7 +1219,8 @@ let rec term env (e : nexpr) =
     | JCNErange (None, None) ->
       integer_type, dummy_region, JCTrange(None,None)
     (* Not terms: *)
-    | JCNEassign _ | JCNEalloc _ | JCNEfree _ | JCNEreinterpret _ | JCNEblock _ | JCNEassert _ | JCNEfresh _
+    | JCNEassign _ | JCNEalloc _ | JCNEfree _ | JCNEreinterpret _ | JCNEblock _ | JCNEassert _
+    | JCNEfresh _ | JCNEfreeable _ | JCNEallocable _
     | JCNEloop _ | JCNEreturn _ | JCNEtry _ | JCNEthrow _ | JCNEpack _
     | JCNEunpack _ | JCNEquantifier _ | JCNEcontract _
     | JCNEeqtype _ | JCNEsubtype _ ->
@@ -1454,11 +1465,21 @@ let rec assertion env e =
       | JCTnative Tboolean -> JCAbool_term t
       | _ -> typing_error ~loc:e#pos "non boolean expression"
         end
-    | JCNEfresh e1 ->
+    | JCNEfresh (oldlab, lab, e1, e2) ->
       let te1 = ft e1 in
-      if is_pointer_type te1#typ then JCAfresh(te1)
+      let te2 = ft e2 in
+      let te2 = term_implicit_coerce te2#typ (JCTnative Tinteger) te2 in
+      if is_pointer_type te1#typ then JCAfresh(oldlab, lab, te1, te2)
       else
         bad_type ~loc:te1#pos te1#typ "pointer expected"
+    | JCNEfreeable (lab, e) ->
+        let te = ft e in
+        if is_pointer_type te#typ then JCAfreeable(lab, te)
+        else bad_type ~loc:te#pos te#typ "pointer expected"
+    | JCNEallocable (lab, e) ->
+        let te = ft e in
+        if is_pointer_type te#typ then JCAallocable(lab, te)
+        else bad_type ~loc:te#pos te#typ "pointer expected"
     (* Not assertions: *)
     | JCNEoffset _ | JCNEaddress _ | JCNEbase_block _
     | JCNErange _ | JCNEassign _ | JCNEalloc _ | JCNEfree _ | JCNEreinterpret _
@@ -1585,7 +1606,7 @@ let rec location_set env e =
     | JCNEat(ls, lab) ->
       let t,tr,tls = location_set env ls in
       t,tr,JCLSat(tls,lab)
-    | JCNEfresh _
+    | JCNEfresh _ | JCNEfreeable _ | JCNEallocable _
     | JCNErange _ | JCNEeqtype _ | JCNEmutable _ | JCNEold _
     | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
     | JCNEtry _ |JCNEreturn _ | JCNEloop _ |JCNEblock _ | JCNEassert _
@@ -1669,7 +1690,7 @@ let rec location env e =
     | JCNElet _ | JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEreinterpret _ | JCNEaddress _
     | JCNEif _ | JCNEcast_mod _ | JCNEbase_block _
     | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _ | JCNEbinary _
-    | JCNEconst _ | JCNEcontract _ | JCNEsubtype _ | JCNEfresh _ ->
+    | JCNEconst _ | JCNEcontract _ | JCNEsubtype _ | JCNEfresh _ | JCNEfreeable _ | JCNEallocable _ ->
       typing_error ~loc:e#pos "invalid memory location"
   in
   let loc =
@@ -2443,7 +2464,8 @@ let rec expr env e =
       rty, targ#region, JCEmatch(targ, List.rev tpel)
     (* logic only *)
     | JCNEquantifier _ | JCNEold _ | JCNEat _ | JCNEmutable _
-    | JCNEeqtype _ | JCNErange _ | JCNEsubtype _ | JCNEfresh _ ->
+    | JCNEeqtype _ | JCNErange _ | JCNEsubtype _
+    | JCNEfresh _ | JCNEfreeable _ | JCNEallocable _ ->
       typing_error ~loc:e#pos "construction not allowed in expressions"
   in
   new expr
@@ -2709,7 +2731,9 @@ let rec signed_occurrences pi a =
   | JCAinstanceof (_, _, _) -> assert false (* TODO *)
   | JCAlet (_, _,_) -> assert false (* TODO *)
   | JCAmatch (_, _) -> assert false (* TODO *)
-  | JCAfresh _ -> assert false (* TODO *)
+  | JCAfresh _
+  | JCAfreeable _
+  | JCAallocable _ -> (0,0)
 
 let check_positivity loc pi a =
   let (pos,_neg) = signed_occurrences pi a in
@@ -2806,7 +2830,8 @@ let rec occurrences table a =
     assertion a2
   | JCAand l | JCAor l ->
     List.iter assertion l
-  | JCArelation(t1, _op, t2) ->
+  | JCAfresh (_, _, t1, t2)
+  | JCArelation(t1, _, t2) ->
     term t1;
     term t2
   | JCAsubtype (t1, t2, _)
@@ -2821,8 +2846,9 @@ let rec occurrences table a =
     assertion a1;
     assertion a2
   | JCAinstanceof (t, _, _)
-  | JCAbool_term t
-  | JCAfresh t ->
+  | JCAfreeable (_, t)
+  | JCAallocable (_, t)
+  | JCAbool_term t ->
     term t
   | JCAlet (_, t, a) ->
     term t;
@@ -2895,7 +2921,7 @@ let create_pragma_gen_frame_sub frame_or_sub loc id logic =
     | Not_found -> typing_error ~loc:loc "logic unknown %s" logic
   in
   let params1 = info.li_parameters in
-  let params2 = List.map (fun v -> var ~unique:true v.vi_type 
+  let params2 = List.map (fun v -> var ~unique:true v.vi_type
     (v.vi_name^"_dest"))
     info.li_parameters in
   let pi = make_pred id in

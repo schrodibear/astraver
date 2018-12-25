@@ -232,13 +232,13 @@ theory Jessie_pset_deref
     forall m : memory 't (pointer 'v).
     forall q : pset 't [in_pset p (pset_deref m q)].
       in_pset p (pset_deref m q) <->
-        exists r : pointer 't. in_pset r q /\ p = select m r
+        exists r : pointer 't. in_pset r q /\ r <> null /\ p = select m r
 
   lemma In_pset_deref_singleton:
     forall p : pointer 'v.
     forall m : memory 't (pointer 'v).
     forall q : pointer 't [in_pset p (pset_deref m (pset_singleton q))].
-      in_pset p (pset_deref m (pset_singleton q)) <-> p = select m q
+      in_pset p (pset_deref m (pset_singleton q)) <-> q <> null /\ p = select m q
 end
 
 theory Jessie_pset_union
@@ -272,12 +272,12 @@ theory Jessie_pset_all
     forall q : pset 't [in_pset p (pset_all q)].
       in_pset p (pset_all q) <->
         exists r : pointer 't.
-          in_pset r q /\ same_block p r
+          in_pset r q /\ r <> null /\ same_block p r
 
   lemma In_pset_all_singleton:
     forall p : pointer 't.
     forall q : pointer 't [in_pset p (pset_all (pset_singleton q))].
-      in_pset p (pset_all (pset_singleton q)) <-> same_block p q
+      in_pset p (pset_all (pset_singleton q)) <-> q <> null /\ same_block p q
 
   use import Jessie_pset_union
 
@@ -610,10 +610,10 @@ theory Jessie_allocable
   use import Jessie_tag_table
 
   predicate allocable (a : alloc_table 't) (p : pointer 't) =
-    offset_max a p = -1 < offset_min a p = 0
+    offset_max a p = -3 < offset_min a p = 0
 
   predicate freeable (a : alloc_table 't) (p : pointer 't) =
-    offset_min a p = 0 <= offset_max a p
+    offset_min a p = 0 <= offset_max a p + 1
 
   predicate allocated (a : alloc_table 't) (p : pointer 't) =
     offset_min a p <= offset_max a p
@@ -665,7 +665,7 @@ theory Jessie_alloc
           offset_max a2 q = offset_max a1 q) /\
         (same_block q p ->
           offset_min a2 q = 0 - sub_pointer q p /\
-          offset_max a2 q = -1 - sub_pointer q p)
+          offset_max a2 q = -3 - sub_pointer q p)
 
   predicate switch_blocks (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) (q : pointer 't) (n : int) =
     forall r : pointer 't [offset_min a2 r | offset_min a1 r | offset_max a2 r | offset_max a1 r].
@@ -674,7 +674,7 @@ theory Jessie_alloc
           offset_max a2 r = offset_max a1 r) /\
        (same_block r p ->
          offset_min a2 r = 0 - sub_pointer r p /\
-         offset_max a2 r = -1 - sub_pointer r p) /\
+         offset_max a2 r = -3 - sub_pointer r p) /\
        (same_block r q ->
          offset_min a2 r = 0 - sub_pointer r q /\
          offset_max a2 r = n - 1 - sub_pointer r q)

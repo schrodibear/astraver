@@ -688,6 +688,10 @@ let tag ~type_safe ~global_assertion ~relocate lab oldlab tag =
     let t' = term Any ~type_safe ~global_assertion ~relocate lab oldlab t in
     O.T.(typeof ~code:(not global_assertion) (struct_root st) ~lab ~r:t#region t')
 
+let term_num n = new term ~typ:integer_type (JCTconst (JCCinteger n))
+let term_zero = term_num "0"
+let term_minus_one = term_num "-1"
+
 let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
   let f f = f ~type_safe ~global_assertion ~relocate lab oldlab in
   let fp = f predicate
@@ -782,9 +786,38 @@ let rec predicate ~type_safe ~global_assertion ~relocate lab oldlab p =
     | JCAat (a1, lab') ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
       predicate ~type_safe ~global_assertion ~relocate lab oldlab a1
-    | JCAfresh t1 ->
+    | JCAfresh (oldlab, newlab, t1, n) ->
+      let oldlab = if relocate && oldlab = LabelHere then lab else oldlab in
+      let newlab = if relocate && newlab = LabelHere then lab else newlab in
       let ac = tderef_alloc_class ~type_safe t1 in
-      O.P.(allocable ~code:(P.not global_assertion) ac ~r:t1#region ~lab @@ ft Any t1)
+      let pc = pointer_class t1#typ in
+      let in_param = not global_assertion in
+      let acr = ac, t1#region in
+      let t1 = ft Any t1 in
+      let n = ft (Ty O.Ty.integer) n in
+      O.P.(Interp_struct.(
+        valid
+          ~in_param ~label:newlab ~equal:true
+          acr pc t1 (Some O.T.(int 0)) (Some O.T.(n - int 1)) &&
+        fresh ~for_:(`alloc_tables_in (`fresh oldlab)) ~in_param acr pc t1 O.T.(n - int 1)))
+    | JCAfreeable (lab', t) ->
+      let label = if relocate && lab' = LabelHere then lab else lab' in
+      let ac = tderef_alloc_class ~type_safe t in
+      let pc = pointer_class t#typ in
+      let in_param = not global_assertion in
+      let acr = ac, t#region in
+      let t = ft Any t in
+      O.P.(Interp_struct.(
+        valid ~in_param ~label ~equal:true acr pc t (Some O.T.(int 0)) None &&
+        valid ~in_param ~label ~equal:false acr pc t None @@ Some O.T.(int ~-1)))
+    | JCAallocable (lab', t) ->
+      let label = if relocate && lab' = LabelHere then lab else lab' in
+      let ac = tderef_alloc_class ~type_safe t in
+      let pc = pointer_class t#typ in
+      let in_param = not global_assertion in
+      let acr = ac, t#region in
+      let t = ft Any t in
+      O.P.(Interp_struct.(fresh ~for_:(`alloc_tables_in (`fresh label)) ~in_param acr pc t O.T.(int 0)))
     | JCAbool_term t1 ->
       App (Poly `Eq, O.T.(ft (Ty Bool) t1 ^. Const (Bool true)))
     | JCAinstanceof (t1, lab', st) ->
@@ -1270,8 +1303,6 @@ let check al a' =
 (* decreases clauses: stored in global table for later use at each call sites *)
 
 let decreases_clause_table = Hashtbl.create 17
-
-let term_zero = new term ~typ:integer_type (JCTconst (JCCinteger "0"))
 
 let dummy_measure = (term_zero, None)
 

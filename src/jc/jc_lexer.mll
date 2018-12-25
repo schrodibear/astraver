@@ -222,6 +222,8 @@ rule token = parse
   | "\\exists"              { BSEXISTS }
   | "\\forall"              { BSFORALL }
   | "\\fresh"               { BSFRESH }
+  | "\\allocable"           { BSALLOCABLE }
+  | "\\freeable"            { BSFREEABLE }
   | "\\mutable"             { BSMUTABLE }
   | "\\nothing"             { BSNOTHING }
   | "\\offset_max"          { BSOFFSET_MAX }

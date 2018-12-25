@@ -220,8 +220,13 @@ let replace_sub_pexpr e el =
       JCPEapp (fi, labs, el)
     | JCPEquantifier (q, ty, labs, trigs, _) ->
       JCPEquantifier (q, ty, labs, trigs, as1 el)
-    | JCPEfresh _ ->
-      JCPEfresh (as1 el)
+    | JCPEfresh (oldlab, lab, _, _) ->
+      let e, l = as2 el in
+      JCPEfresh (oldlab, lab, e, l)
+    | JCPEfreeable (lab, _) ->
+      JCPEfreeable (lab, as1 el)
+    | JCPEallocable (lab, _) ->
+      JCPEallocable (lab, as1 el)
     | JCPEold _ ->
       JCPEold (as1 el)
     | JCPEat (_, lab) ->
@@ -342,13 +347,14 @@ module PExprAst = struct
       | JCPEbase_block(e)
       | JCPEalloc(e, _)
       | JCPEfree e
+      | JCPEfreeable (_, e)
+      | JCPEallocable (_, e)
       | JCPEreinterpret (e, _)
       | JCPElet(_, _,None, e)
       | JCPEreturn e
       | JCPEthrow(_, e)
       | JCPEpack(e, _)
       | JCPEunpack(e, _)
-      | JCPEfresh e
       | JCPEold e
       | JCPEat(e,_)
       | JCPErange(Some e,None)
@@ -356,6 +362,7 @@ module PExprAst = struct
       | JCPEdecl(_,_,Some e)
       | JCPEmutable(e,_) ->
           [e]
+      | JCPEfresh (_, _, e1, e2)
       | JCPEbinary(e1, _, e2)
       | JCPEassign(e1, e2)
       | JCPEassign_op(e1, _, e2)
@@ -598,13 +605,14 @@ let rec iter_term_and_assertion ft fa a =
     | JCAeqtype(tag1,tag2,_st) | JCAsubtype(tag1,tag2,_st) ->
         iter_tag tag1;
         iter_tag tag2
+    | JCAfresh (_,_,t1,t2)
     | JCArelation(t1,_,t2) ->
         (* ITerm.iter *) iter_term ft t1;
         (* ITerm.iter *) iter_term ft t2
     | JCAapp app ->
         List.iter (iter_term ft) app.app_args
-    | JCAfresh t1
-    | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
+    | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_)
+    | JCAfreeable (_, t1) | JCAallocable (_, t1) ->
         iter_term ft t1
     | JCAand al | JCAor al ->
         List.iter (iter_term_and_assertion ft fa) al
@@ -691,13 +699,14 @@ let rec fold_term_in_assertion f acc a =
     | JCAeqtype(tag1,tag2,_st) | JCAsubtype(tag1,tag2,_st) ->
         let acc = fold_term_in_tag f acc tag1 in
         fold_term_in_tag f acc tag2
+    | JCAfresh (_,_,t1,t2)
     | JCArelation(t1,_,t2) ->
         let acc = fold_term f acc t1 in
         fold_term f acc t2
     | JCAapp app ->
         List.fold_left (fold_term f) acc app.app_args
-    | JCAfresh t1
-    | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
+    | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_)
+    | JCAfreeable (_, t1) | JCAallocable (_, t1) ->
         fold_term f acc t1
     | JCAand al | JCAor al ->
         List.fold_left (fold_term_in_assertion f) acc al
@@ -756,13 +765,14 @@ let rec fold_sub_term_and_assertion itt ita ft fa acc a =
     | JCAeqtype(tag1,tag2,_st) | JCAsubtype(tag1,tag2,_st) ->
         let acc = fold_sub_term_in_tag itt ft acc tag1 in
         fold_sub_term_in_tag itt ft acc tag2
+    | JCAfresh (_,_,t1,t2)
     | JCArelation(t1,_,t2) ->
         let acc = itt ft acc t1 in
         itt ft acc t2
     | JCAapp app ->
         List.fold_left (itt ft) acc app.app_args
-    | JCAfresh t1
-    | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
+    | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_)
+    | JCAfreeable (_, t1) | JCAallocable (_, t1) ->
         itt ft acc t1
     | JCAand al | JCAor al ->
         List.fold_left (ita ft fa) acc al
@@ -923,7 +933,7 @@ let rec map_assertion f a =
   let anode = match a#node with
     | JCAtrue | JCAfalse | JCArelation _ | JCAapp _ | JCAeqtype _
     | JCAinstanceof _ | JCAbool_term _ | JCAmutable _
-    | JCAsubtype _ | JCAfresh _ as anode ->
+    | JCAsubtype _ | JCAfresh _ | JCAfreeable _ | JCAallocable _ as anode ->
       anode
     | JCAand al ->
       JCAand (List.map (map_assertion f) al)
@@ -978,8 +988,12 @@ let rec map_term_in_assertion f a =
         JCAinstanceof(map_term f t1,lab,st)
     | JCAbool_term t1 ->
         JCAbool_term(map_term f t1)
-    | JCAfresh t1 ->
-        JCAfresh(map_term f t1)
+    | JCAfresh (oldlab,lab,t1,t2) ->
+        JCAfresh(oldlab,lab,map_term f t1,map_term f t2)
+    | JCAfreeable (lab,t1) ->
+        JCAfreeable (lab, map_term f t1)
+    | JCAallocable (lab,t1) ->
+        JCAallocable (lab, map_term f t1)
     | JCAmutable(t1,st,tag) ->
         JCAmutable(map_term f t1,st,tag)
     | JCAand al ->
@@ -1020,7 +1034,9 @@ let rec map_term_in_assertion f a =
 let rec map_term_and_assertion fa ft a =
   let anode = match a#node with
     | JCAtrue | JCAfalse as anode -> anode
-    | JCAfresh t -> JCAfresh (map_term ft t)
+    | JCAfresh (oldlab, lab, t1, t2) -> JCAfresh (oldlab, lab, map_term ft t1, map_term ft t2)
+    | JCAfreeable (lab, t1) -> JCAfreeable (lab, map_term ft t1)
+    | JCAallocable (lab, t1) -> JCAallocable (lab, map_term ft t1)
     | JCAlet (vi, t, a) ->
       JCAlet (vi, map_term ft t, map_term_and_assertion fa ft a)
     | JCAeqtype (tag1, tag2, st) ->
@@ -1145,8 +1161,8 @@ let replace_sub_expr e el =
         JCEapp { call with call_args = el }
     | JCEoffset(off,_e,st) ->
         let e1 = as1 el in JCEoffset(off,e1,st)
-    | JCEfresh(_e) ->
-        let e1 = as1 el in JCEfresh(e1)
+    | JCEfresh(_e1,_e2) ->
+        let e1, e2 = as2 el in JCEfresh(e1, e2)
     | JCEaddress(absolute,_e) ->
         let e1 = as1 el in JCEaddress(absolute,e1)
     | JCEbase_block(_e) ->
@@ -1227,7 +1243,6 @@ module ExprAst = struct
       | JCEreal_cast(e, _)
       | JCEoffset(_, e, _)
       | JCEaddress(_,e)
-      | JCEfresh(e)
       | JCEbase_block(e)
       | JCEalloc(e, _)
       | JCEfree e
@@ -1239,6 +1254,7 @@ module ExprAst = struct
       | JCEpack(_, e, _)
       | JCEunpack(_, e, _)
       | JCEcontract(_,_,_,_,e) -> [e]
+      | JCEfresh(e1, e2)
       | JCEbinary(e1, _, e2)
       | JCEassign_heap(e1, _, e2)
       | JCElet(_, Some e1, e2)
@@ -1273,6 +1289,7 @@ let fold_sub_expr_and_term_and_assertion
     | JCEreturn_void ->
        acc
     | JCEthrow (_exc, e1_opt) -> Option.fold ~init:acc ~f:ite e1_opt
+    | JCEfresh (e1,e2)
     | JCEbinary(e1,_,e2)
     | JCEshift(e1,e2)
     | JCEassign_heap(e1,_,e2) ->
@@ -1283,7 +1300,6 @@ let fold_sub_expr_and_term_and_assertion
     | JCEoffset (_, e1, _)
     | JCEaddress (_, e1)
     | JCEbase_block (e1)
-    | JCEfresh (e1)
     | JCEdowncast (e1, _)
     | JCEsidecast (e1, _)
     | JCErange_cast(e1,_)
@@ -1396,10 +1412,11 @@ module NExprAst = struct
       | JCNEcast_mod (e, _)
       | JCNEoffset(_, e)
       | JCNEaddress(_,e)
-      | JCNEfresh(e)
       | JCNEbase_block(e)
       | JCNEalloc(e, _)
       | JCNEfree e
+      | JCNEfreeable(_,e)
+      | JCNEallocable(_,e)
       | JCNEreinterpret (e, _)
       | JCNElet(_, _, None, e)
       | JCNEassert(_,_,e)
@@ -1413,6 +1430,7 @@ module NExprAst = struct
       | JCNErange(Some e, None)
       | JCNErange(None, Some e) ->
           [e]
+      | JCNEfresh(_, _, e1, e2)
       | JCNEbinary(e1, _, e2)
       | JCNEassign(e1, e2)
       | JCNElet(_, _, Some e1, e2)

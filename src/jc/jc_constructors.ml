@@ -273,7 +273,7 @@ class ['expr] decl_with ?pos ?node t =
   ['expr] decl ~pos node
 
 (*******************************************************************************)
-(*                             constant constructors                           *)
+(*                             constant constructors (')                       *)
 (*******************************************************************************)
 
 (* These functions also exist in the other constructor modules such as PExpr. *)
@@ -355,7 +355,7 @@ either with (~expr1 AND ~expr2) OR ~list only."
   let mkexists = mkquantifier ~quantifier:Exists
   let mkold ~expr = mk ~node:(JCPEold expr)
   let mkat ~expr ~label = mk ~node:(JCPEat(expr, label))
-  let mkfresh ~expr = mk ~node:(JCPEfresh(expr))
+  let mkfresh ~oldlab ~label ~expr ~len = mk ~node:(JCPEfresh(oldlab, label, expr, len))
   let mkoffset ~kind ~expr = mk ~node:(JCPEoffset(kind, expr))
   let mkoffset_min = mkoffset ~kind:Offset_min
   let mkoffset_max = mkoffset ~kind:Offset_max
