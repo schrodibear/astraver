@@ -52,7 +52,7 @@ module Console :
 sig
   val fatal : ('a, formatter, unit, 'b) format4 -> 'a
   val error : ('a, formatter, unit) format -> 'a
-  val abort : ?source:Lexing.position -> ('a, formatter, unit, 'b) format4 -> 'a
+  val abort : ?source:Filepath.position -> ('a, formatter, unit, 'b) format4 -> 'a
   val unsupported : ('a, formatter, unit, 'b) format4 -> 'a
   val feedback : ('a, formatter, unit) format -> 'a
   val warning : ('a, formatter, unit) format -> 'a
@@ -171,10 +171,21 @@ val ( |? ) : 'a option -> 'a -> 'a
 
 val ( !! ) : 'a lazy_t -> 'a
 
-module Location :
+module Filepath :
 sig
-  include module type of Location
-  val is_unknown : Lexing.position * 'a -> bool
+  include module type of struct include Filepath end
+  val is_unknown : Filepath.position * 'a -> bool
+end
+
+module Loc :
+sig
+  open Lexing
+  type t = position * position
+  val is_unknown : position * 'a -> bool
+  val to_position : position -> Filepath.position
+  val of_position : Filepath.position -> position
+  val to_location : t -> Location.t
+  val of_location : Location.t -> t
 end
 
 module Framac :
@@ -322,7 +333,8 @@ sig
   sig
     type t = term
     val is_base_addr : t -> bool
-    val mk : ?name:string list -> typ:logic_type -> loc:Lexing.position * Lexing.position -> term_node -> t
+    val mk : ?name:string list -> typ:logic_type -> loc:Filepath.position * Filepath.position -> term_node -> t
+    val mk_loc : ?name:string list -> typ:logic_type -> loc:Lexing.position * Lexing.position -> term_node -> t
     val of_var : varinfo -> t
 
     module Env :

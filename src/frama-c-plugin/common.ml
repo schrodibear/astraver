@@ -74,7 +74,7 @@ struct
   let unsupported fmt =
     Jessie_options.with_failure
       (fun evt ->
-         raise (Unsupported evt.Log.evt_message))
+         raise @@ Unsupported (may_map ~dft:"unknown feature" (fun evt -> evt.Log.evt_message) evt))
       ~current:true
       fmt
   let feedback fmt = feedback fmt
@@ -360,10 +360,34 @@ let (|?) xo default = Option.value ~default xo
 
 let (!!) = Lazy.force
 
-module Location =
+module Filepath =
 struct
-  include Location
+  include Filepath
+  let is_unknown loc = (fst loc).Filepath.pos_lnum = 0
+end
+
+module Loc =
+struct
+  type t = Lexing.position * Lexing.position
   let is_unknown loc = (fst loc).Lexing.pos_lnum = 0
+  let to_position loc =
+    Lexing.{
+      Filepath.
+      pos_lnum = loc.pos_lnum;
+      pos_cnum = loc.pos_cnum;
+      pos_bol = loc.pos_bol;
+      pos_path = Filepath.Normalized.of_string loc.pos_fname
+    }
+  let of_position pos =
+    Filepath.{
+      Lexing.
+      pos_lnum = pos.pos_lnum;
+      pos_cnum = pos.pos_cnum;
+      pos_bol = pos.pos_bol;
+      pos_fname = (pos.pos_path :> string)
+    }
+  let to_location = map_pair to_position
+  let of_location = map_pair of_position
 end
 
 module Framac =
@@ -753,6 +777,14 @@ struct
       {
         term_node;
         term_loc;
+        term_type;
+        term_name
+      }
+
+    let mk_loc ?name:(term_name=[]) ~typ:term_type ~loc term_node =
+      {
+        term_node;
+        term_loc = map_pair Loc.to_position loc;
         term_type;
         term_name
       }

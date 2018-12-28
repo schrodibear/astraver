@@ -54,17 +54,18 @@ open! Jessie_integer
 
 let mktype tnode = new ptype tnode
 
-let mkexpr enode pos = new pexpr ~pos enode
+let mkexpr_loc enode pos = new pexpr ~pos enode
+let mkexpr enode pos = new pexpr ~pos:(Location.to_lexing_loc pos) enode
 
-let null_expr = mkexpr (JCPEconst JCCnull) Why_loc.dummy_position
-let true_expr = mkexpr (JCPEconst(JCCboolean true)) Why_loc.dummy_position
-let false_expr = mkexpr (JCPEconst(JCCboolean false)) Why_loc.dummy_position
-let zero_expr = mkexpr (JCPEconst(JCCinteger "0")) Why_loc.dummy_position
-let one_expr = mkexpr (JCPEconst(JCCinteger "1")) Why_loc.dummy_position
+let null_expr = new pexpr ~pos:Why_loc.dummy_position (JCPEconst JCCnull)
+let true_expr = new pexpr ~pos:Why_loc.dummy_position (JCPEconst(JCCboolean true))
+let false_expr = new pexpr ~pos:Why_loc.dummy_position (JCPEconst(JCCboolean false))
+let zero_expr = new pexpr ~pos:Why_loc.dummy_position (JCPEconst(JCCinteger "0"))
+let one_expr = new pexpr ~pos:Why_loc.dummy_position (JCPEconst(JCCinteger "1"))
 
-let mktag tag_node pos = new ptag ~pos tag_node
+let mktag tag_node pos = new ptag ~pos:(Location.to_lexing_loc pos) tag_node
 
-let mkidentifier name pos = new identifier ~pos name
+let mkidentifier name pos = new identifier ~pos:(Location.to_lexing_loc pos) name
 
 let rec mkconjunct elist pos =
   match elist with
@@ -84,19 +85,22 @@ let mkimplies antec conseq pos =
   | [], _ -> mkconjunct conseq pos
   | _ -> mkexpr (JCPEbinary (mkconjunct antec pos, `Bimplies, mkconjunct conseq pos)) pos
 
-let mkdecl dnode pos = new decl ~pos dnode
+let mkdecl dnode pos = new decl ~pos:(Location.to_lexing_loc pos) dnode
 
 (*****************************************************************************)
 (* Locate Jessie expressions on source program.                              *)
 (*****************************************************************************)
 
-let reg_position ?id ?kind:_ ?name pos =
+let reg_position_loc ?id ?name pos =
   Jc.Print.jc_reg_pos "_C" ?id ?name (Why_loc.extract pos)
+
+let reg_position ?id ?kind:_ ?name pos = reg_position_loc ?id ?name (Location.to_lexing_loc pos)
 
 (* [locate] should be called on every Jessie expression which we would like to
  * locate in the original source program.
 *)
 let locate ?pos e =
+  let pos = opt_map Location.to_lexing_loc pos in
   (* Recursively label conjuncts so that splitting conjuncts in Why still
    * allows to locate the resulting VC.
   *)
@@ -106,11 +110,11 @@ let locate ?pos e =
       match pos with
       | None -> e#pos
       | Some pos ->
-        if Location.is_unknown e#pos then pos else e#pos
+        if Loc.is_unknown e#pos then pos else e#pos
     in
     (* Don't register unknown locations *)
-    if not (Location.is_unknown pos) then
-      let lab = reg_position pos in
+    if not (Loc.is_unknown pos) then
+      let lab = reg_position_loc pos in
       let e =
         match e#node with
         | JCPEbinary (e1, `Bland, e2) ->
@@ -118,14 +122,14 @@ let locate ?pos e =
           | JCPElabel _, JCPElabel _ -> e (* already labelled *)
           | JCPElabel _, _ -> (* [e1] already labelled *)
             let e2 = dopos ~toplevel:false e2 in
-            mkexpr (JCPEbinary (e1, `Bland, e2)) pos
+            mkexpr_loc (JCPEbinary (e1, `Bland, e2)) pos
           | _, JCPElabel _ -> (* [e2] already labelled *)
             let e1 = dopos ~toplevel:false e1 in
-            mkexpr (JCPEbinary (e1, `Bland, e2)) pos
+            mkexpr_loc (JCPEbinary (e1, `Bland, e2)) pos
           | _,_ -> (* none already labelled *)
             let e1 = dopos ~toplevel:false e1 in
             let e2 = dopos ~toplevel:false e2 in
-            mkexpr (JCPEbinary (e1, `Bland, e2)) pos
+            mkexpr_loc (JCPEbinary (e1, `Bland, e2)) pos
           end
         | _ -> e
       in
@@ -134,7 +138,7 @@ let locate ?pos e =
       | JCPEbinary (_e1,`Bland,_e2) when not toplevel -> e
       | _ ->
         (* Label the expression accordingly *)
-        mkexpr (JCPElabel (lab, e)) pos
+        mkexpr_loc (JCPElabel (lab, e)) pos
     else
       e
   in
@@ -582,7 +586,7 @@ let product f t1 t2 =
 let adjust_from_bitfield ~in_zone ~fi e =
   let ty = fi.ftype in
   if not in_zone && isArithmeticType ty && the fi.fsize_in_bits <> bitsSizeOf ty then
-    mkexpr (JCPEcast (e, ctype ty)) e#pos
+    mkexpr_loc (JCPEcast (e, ctype ty)) e#pos
   else
     e
 
@@ -1207,7 +1211,7 @@ let pred ?(default_label=Logic_const.here_label) = pred ~default_label:(`Use def
 
 (* Keep names associated to predicate *)
 let named_pred ?(default_label=Logic_const.here_label) p =
-  List.fold_right (fun lab p -> mkexpr (JCPElabel(lab,p)) p#pos) p.pred_name (pred ~default_label p)
+  List.fold_right (fun lab p -> mkexpr_loc (JCPElabel(lab,p)) p#pos) p.pred_name (pred ~default_label p)
 
 let conjunct ?(default_label=Logic_const.here_label) pos pl =
   mkconjunct (List.map (pred ~default_label % Logic_const.pred_of_id_pred) pl) pos
@@ -1264,11 +1268,11 @@ let spec _fname funspec =
     in
     let loc =
       function
-      | [] -> Why_loc.dummy_position
+      | [] -> Location.unknown
       | ip :: _ -> ip.ip_content.pred_loc
     in
     JCCbehavior(
-      loc b.Cil_types.b_assumes,
+      Location.to_lexing_loc @@ loc b.Cil_types.b_assumes,
       name,
       None, (* throws *)
       Some (conjunct (loc b.Cil_types.b_assumes) b.Cil_types.b_assumes),
@@ -1289,7 +1293,7 @@ let spec _fname funspec =
          let ass, reqs =
            map_pair (List.map (locate % pred % Logic_const.pred_of_id_pred)) (b.Cil_types.b_assumes, b.b_requires)
          in
-         JCCrequires (mkimplies ass reqs Why_loc.dummy_position) :: acc)
+         JCCrequires (mkimplies ass reqs Location.unknown) :: acc)
       funspec.spec_behavior
       []
   in
@@ -1311,7 +1315,7 @@ let spec _fname funspec =
                    | _ -> assert false)
                 []
                 behaviors)
-             Why_loc.dummy_position)
+             Location.unknown)
       funspec.spec_complete_behaviors
   in
   let disjoint_behaviors_assertions  : Jc.Ast.pexpr list =
@@ -1339,8 +1343,8 @@ let spec _fname funspec =
                List.fold_left
                  (fun acc a ->
                     (mkexpr (JCPEunary(`Unot,
-                                       mkconjunct [b;a] Why_loc.dummy_position))
-                       Why_loc.dummy_position)
+                                       mkconjunct [b;a] Location.unknown))
+                       Location.unknown)
                         :: acc)
                  acc prevs
              in
@@ -1421,7 +1425,7 @@ let code_annot ?e pos ((acc_assert_before, contract) as acc) a =
       in
       let _, typ = map_pair (Fn.uncurry @@ check_supported_type) (("from", from_type), ("to", typ)) in
       if typ = wrapper_name voidType then Console.unsupported "reinterpretation to void *"
-      else push @@ locate (PExpr.mkreinterpret ~expr:(term t) ~typ ~pos ())
+      else push @@ locate (PExpr.mkreinterpret ~expr:(term t) ~typ ~pos:(Location.to_lexing_loc pos) ())
     | _ ->
       Console.unsupported
         "unrecognized term in Jessie pragma (only :> is recognized):@ %a@. Note that :> binds tighter than typecasts."
@@ -1763,7 +1767,7 @@ let adjust_rvalue_to_bitfield ~lv ~typ e =
   match lastOffset (snd lv) with
   | Field (fi, NoOffset)
     when isArithmeticType typ && the fi.fsize_in_bits <> bitsSizeOf typ ->
-    mkexpr (JCPEcast (e, ctype ~bitsize:(the fi.fsize_in_bits) fi.ftype)) e#pos
+    mkexpr_loc (JCPEcast (e, ctype ~bitsize:(the fi.fsize_in_bits) fi.ftype)) e#pos
   | _ -> e
 
 let instruction = function
@@ -2187,9 +2191,9 @@ and statement_list slist =
 
 and block bl =
   match bl.bstmts with
-    | [] -> mkexpr (JCPEconst JCCvoid) Why_loc.dummy_position
+    | [] -> mkexpr (JCPEconst JCCvoid) Location.unknown
     | [s] -> statement s
-    | slist -> mkexpr (JCPEblock(statement_list slist)) Why_loc.dummy_position
+    | slist -> mkexpr (JCPEblock(statement_list slist)) Location.unknown
 
 
 (*****************************************************************************)
@@ -2486,8 +2490,9 @@ let rec annotation is_axiomatic annot =
       (* already handled in norm.ml *)
       []
   | Dcustom_annot _ -> Console.unsupported "custom annotation"
+  | Dextended _ -> Console.unsupported "extension"
   | Daxiomatic(id,l,_,pos) ->
-    if not (Filename.basename (fst pos).Lexing.pos_fname = Name.File.blockfuns_include) then begin
+    if not (Filename.basename ((fst pos).Filepath.pos_path :> string) = Name.File.blockfuns_include) then begin
       CurrentLoc.set pos;
       let l = List.fold_left (fun acc d -> (annotation true d)@acc) [] l in
       if l <> [] then
@@ -2640,7 +2645,7 @@ let global vardefs g =
           with Not_found -> false
         in
         let is_specialization_template vi =
-          Filename.basename (fst vi.vdecl).Lexing.pos_fname = Name.File.blockfuns_include
+          Filename.basename ((fst vi.vdecl).Filepath.pos_path :> string) = Name.File.blockfuns_include
         in
         (* Keep only declarations for which there is no definition *)
         if List.mem v vardefs ||
@@ -2704,10 +2709,10 @@ let global vardefs g =
             let body =
               List.fold_left
                 (fun acc a ->
-                   (mkexpr
+                   (mkexpr_loc
                       (JCPEassert([],
                                   Acheck,
-                                  mkexpr
+                                  mkexpr_loc
                                     (JCPElabel("complete_behaviors",a))
                                     a#pos))
                       a#pos)
@@ -2717,10 +2722,10 @@ let global vardefs g =
             let body =
               List.fold_left
                 (fun acc a ->
-                   (mkexpr
+                   (mkexpr_loc
                       (JCPEassert([],
                                   Acheck,
-                                  mkexpr
+                                  mkexpr_loc
                                     (JCPElabel("disjoint_behaviors",a))
                                     a#pos))
                       a#pos)
@@ -2755,7 +2760,7 @@ let integral_type name ty bitsize =
   let conv = Num.num_of_string % Integer.to_string in
   let min = conv (Type.Integral.min_value ?bitsize ty) in
   let max = conv (Type.Integral.max_value ?bitsize ty) in
-  mkdecl (JCDenum_type (name, min, max)) Why_loc.dummy_position
+  mkdecl (JCDenum_type (name, min, max)) Location.unknown
 
 let integral_types () =
   Type.Integral.fold_all
@@ -3062,8 +3067,8 @@ let file f =
   let get_compinfo = get_compinfo globals in
   mkdecl (JCDaxiomatic("Padding",
                        [mkdecl (JCDlogic_type (Name.Logic_type.padding, []))
-                          Why_loc.dummy_position]))
-    Why_loc.dummy_position
+                          Location.unknown]))
+    Location.unknown
   ::
   (* This predicate generator has a side effect, i.e. it can add new (unsigned) integral types as used. *)
   (* So we call it before translating the integral types. *)

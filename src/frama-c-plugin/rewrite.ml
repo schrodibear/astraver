@@ -1066,8 +1066,8 @@ class specialize_blockfuns_visitor =
     | _ -> Console.fatal "Can't specialize user-defined block function: %a" Printer.pp_funspec spec
   in
   let is_block_function = function
-    | { fundec = Declaration (_, _, _, ({ Lexing.pos_fname }, _)) } ->
-      Filename.basename pos_fname = Name.File.blockfuns_include
+    | { fundec = Declaration (_, _, _, ({ Filepath.pos_path }, _)) } ->
+      Filename.basename (pos_path :> string) = Name.File.blockfuns_include
     | _ -> false
   in
   let pointed_type' =
