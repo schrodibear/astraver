@@ -286,10 +286,10 @@ else
    FRAMACVERSION=`$FRAMAC -version`
    AC_MSG_RESULT($FRAMACVERSION)
    case $FRAMACVERSION in
-        Chlorine-20180501)
+        "18.0 (Argon)")
            FRAMACPLUGIN=yes
            ;;
-        *) FRAMACMSG="you need AstraVer branch of Frama-C version Silicon"
+        *) FRAMACMSG="you need AstraVer branch of Frama-C version 18.0 (Argon)"
            FRAMACPLUGIN=no
            AC_MSG_ERROR($FRAMACMSG)
            ;;
