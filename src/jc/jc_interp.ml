@@ -2515,7 +2515,7 @@ let make_old_style_update_no_shift ~e ~at ~mem ~p ~lbound ~rbound ~v =
 (* axioms, lemmas, goals     *)
 (*****************************)
 
-let prop _pos id ~is_axiom labels a =
+let prop pos id ~is_axiom labels a =
   let lab = match labels with [lab] -> lab | _ -> LabelHere in
   (* Special (local) translation of effects for predicates with polymorphic memories.
      We first entirely exclude their effects from the assertion, then only restore the effects that
@@ -2528,16 +2528,23 @@ let prop _pos id ~is_axiom labels a =
   let params = li_model_args_3 ~label_in_name:true ef in
   let name = get_unique_name id in
   let a' = List.fold_right (fun (n, _v, Logic_type ty') a' -> O.P.forall n ty' (fun _ -> a')) params a' in
+  let pos =
+    try
+      let f, l, b, e, _, _ = Hashtbl.find Options.pos_table id in
+      Position.of_loc (f, l, b, e)
+    with Not_found ->
+      pos
+  in
   [O.Wd.nonrec_
      ~name
      ~expl:((if is_axiom then "Axiom " else "Lemma ") ^ id)
-     ~pos:(lookup_pos a)
+     ~pos
      (Goal ((if is_axiom then KAxiom else KLemma), a'))]
 
 let axiomatic_decl d =
   match d with
   | Typing.ADprop (loc, id, labels, kind, p) ->
-    prop loc ~is_axiom:(kind = `Axiom) id labels p
+    prop (Position.of_pos loc) ~is_axiom:(kind = `Axiom) id labels p
 
 let logic_fun f ta =
   let lab = match f.li_labels with [lab] -> lab | _ -> LabelHere in

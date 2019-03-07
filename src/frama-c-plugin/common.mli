@@ -249,6 +249,7 @@ sig
   module File :
   sig
     val blockfuns_include : string
+    val normalize : string -> string
   end
 
   val typ : typ -> string
