@@ -2069,6 +2069,10 @@ object
         "\\separated is not supported by Jessie. This predicate will be \
          ignored";
       ChangeTo Ptrue
+    | Pvalid_read (l, t) ->
+      Console.warn_once
+        "\\valid_read is not supported by Jessie. It will be treated as \\valid";
+      ChangeTo (Pvalid (l, t))
     | _ -> DoChildren
 end
 
