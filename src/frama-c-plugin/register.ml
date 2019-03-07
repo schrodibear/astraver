@@ -175,8 +175,7 @@ let run () =
     if projname <> "" then projname
     else
       match Kernel.Files.get() with
-      | [f] ->
-        (try Filename.chop_extension f with Invalid_argument _ -> f)
+      | [f] -> f
       | _ -> "whole_program"
   in
   (* if called on 'path/file.c', projname is 'path/file' *)

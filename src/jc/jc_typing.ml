@@ -48,6 +48,8 @@ let typing_error ~loc =
     (fun _fmt -> raise @@ Typing_error (loc, flush_str_formatter ()))
     str_formatter
 
+let typing_warning = Format.eprintf
+
 let uenv = Type_var.(create { f = typing_error })
 
 let reset_uenv () = Type_var.reset uenv
@@ -1000,12 +1002,7 @@ let rec term env (e : nexpr) =
         in
         let ty =
           match pi.li_result_type with
-          | None ->
-            typing_error
-              ~loc:e#pos
-              "the logic info %s is a predicate; it should be \
-               used as an assertion, not as a term"
-              pi.li_name
+          | None -> JCTnative Tboolean
           | Some ty -> ty
         in
         let ty = Type_var.subst uenv (subst ty) in
@@ -2068,10 +2065,7 @@ let rec expr env e =
           in
           let ty =
             match pi.li_result_type with
-            | None ->
-              typing_error ~loc:e#pos
-                "the logic info %s is a predicate; it should be \
-                 used as an assertion, not as a term" pi.li_name
+            | None -> JCTnative Tboolean
             | Some ty -> ty
           in
           let label_assoc =
@@ -2867,7 +2861,7 @@ let check_consistency id data =
   let pis = data.axiomatics_defined_ids in
   List.iter
     (function
-      | ADprop (loc, axid, labels, `Axiom, a) ->
+      | ADprop (_, axid, labels, `Axiom, a) ->
         let h = Hashtbl.create 17 in
         List.iter
           (fun pi -> Hashtbl.add h pi.li_tag [])
@@ -2886,12 +2880,12 @@ let check_consistency id data =
           h;
         Options.lprintf "@]@.";
         if Hashtbl.fold (fun _pi l acc -> acc && l=[]) h true then
-          typing_error ~loc:loc
+          typing_warning
             "axiom %s should contain at least one occurrence of a symbol declared in axiomatic %s" axid id;
         List.iter
           (fun lab ->
              if not (Hashtbl.fold (fun _pi l acc -> acc || List.exists (list_assoc_data lab) l) h false) then
-               typing_error ~loc:loc
+               typing_warning
                  "there should be at least one declared symbol depending on label %a in this axiom"
                  Print_misc.label lab)
           labels
@@ -3332,7 +3326,8 @@ let rec decl_aux ~only_types ~axiomatic acc d =
           (decl_aux ~only_types ~axiomatic:(Some (id,data))) [] l;
         if not only_types then
           begin
-            check_consistency id data;
+            if not String.(length id >= 15 && equal "LF__Axiomatic__" @@ sub id 0 15) then
+              check_consistency id data;
             StringHashtblIter.add axiomatics_table id data
           end;
         acc

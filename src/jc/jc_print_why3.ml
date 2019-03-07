@@ -721,9 +721,14 @@ let why_decl ~entry (type k) ~(kind : k kind) ~bw_ints ~consts fmttr { why_id = 
       args args'
       (list ~sep:"@ " @@ fun _ (id', p) -> pr "|@ %a:@ @[%a@]" id id' (pred ~consts) p) cases
   | Goal (k, p) ->
-    pr "%a %a :@ @[<hov 1>%a@]"
+    pr "%a %a@ %s :@ @[<hov 1>%a@]"
       goal_kind k
       why_uid why_id'
+      (match k with
+       | KAxiom
+         when String.(length why_id'.why_name >= 11 &&
+                      equal "LF__Lemma__" @@ sub why_id'.why_name 0 11) -> "\"W:non_conservative_extension:N\""
+       | _                                                              -> "")
       (pred ~consts) p
   | Def e ->
     let Module safe = kind in

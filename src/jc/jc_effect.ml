@@ -1774,6 +1774,7 @@ let spec s fef =
     List.fold_left behavior fef
       (s.fs_default_behavior :: s.fs_behavior)
   in
+  let fef = { fef with fe_reads = Option.fold_right' ~f:((Fn.flip term) % fst) s.fs_decreases fef.fe_reads } in
   let fef = { fef with fe_reads = assertion fef.fe_reads s.fs_requires } in
   { fef with fe_reads = assertion fef.fe_reads s.fs_free_requires }
 

@@ -49,13 +49,18 @@ theory Enum
   function (%) (a b : t) : t = of_int (mod (to_int a) (to_int b))
   *)
 
-  axiom Extensionality1: forall x y : t [to_int x, to_int y]. to_int x = to_int y -> x = y
+  axiom Of_int_to_int:
+    forall a : t [to_int a]. of_int (to_int a) = a
+
+  (*
+  lemma Extensionality1: forall x y : t [to_int x, to_int y]. to_int x = to_int y -> x = y
 
   lemma Extensionality2:
     forall x y : int [of_int x, of_int y].
       of_int x = of_int y ->
         in_bounds x /\ in_bounds y ->
           x = y
+  *)
 
   predicate (<=) (a b : t) = Int.(<=) (to_int a) (to_int b)
 

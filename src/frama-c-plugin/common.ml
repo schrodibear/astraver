@@ -428,6 +428,10 @@ struct
   module File =
   struct
     let blockfuns_include = "jessie_spec_prolog.h"
+    let normalize =
+      let module H = Datatype.String.Hashtbl in
+      let h = H.create 8 in
+      (Fn.flip @@ H.memo h) Filepath.normalize
   end
 
   let typ ty =

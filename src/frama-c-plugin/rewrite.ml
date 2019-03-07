@@ -816,6 +816,7 @@ class kzalloc_expanding_visitor =
                      mkBlock [mkStmt (Instr (Skip loc))],
                      loc))]);
         SkipChildren
+
       | Instr (Call (Some lv, { enode = Lval (Var fv, NoOffset); eloc }, ptr :: args, loc)) as inst
         when Ast.Vi.Function.(is_realloc @@ of_varinfo_exn fv
                            || is_memdup @@ of_varinfo_exn fv
