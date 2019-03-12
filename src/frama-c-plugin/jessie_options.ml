@@ -33,7 +33,7 @@ include
   Plugin.Register
     (struct
        let name = "Jessie2"
-       let shortname = "Jessie2"
+       let shortname = "jessie"
        let help = "Translation to Jessie(2) intermediate language with subsequent launch of Jessie-to-Why3ML translator"
      end)
 
