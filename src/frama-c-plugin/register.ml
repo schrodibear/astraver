@@ -180,7 +180,12 @@ let run () =
   in
   (* if called on 'path/file.c', projname is 'path/file' *)
   (* jessie_subdir is 'path/file.jessie' *)
-  let jessie_subdir = projname ^ ".jessie" in
+  let jessie_subdir = Config.Output_Dir_name.get () in
+  let jessie_subdir =
+    if jessie_subdir <> ""
+    then jessie_subdir
+    else projname ^ ".jessie"
+  in
   let mkdir_p dir =
     if Sys.file_exists dir then begin
       if Unix.((stat dir).st_kind <> S_DIR) then

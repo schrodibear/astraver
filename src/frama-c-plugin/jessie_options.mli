@@ -32,6 +32,7 @@
 include Plugin.S
 
 module Project_name : Parameter_sig.String
+module Output_Dir_name : Parameter_sig.String
 module Behavior : Parameter_sig.String
 module Analysis : Parameter_sig.Bool
 module Why3_opt : Parameter_sig.String_set

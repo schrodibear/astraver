@@ -48,6 +48,14 @@ module Project_name =
                    `whole_program' in case of several input files"
      end)
 
+module Output_Dir_name =
+  Empty_string
+    (struct
+       let option_name = "-jessie-out"
+       let arg_name = ""
+       let help = "specify output dirname for Jessie-to-Why3ML translator."
+     end)
+
 module Behavior =
   Empty_string
     (struct
