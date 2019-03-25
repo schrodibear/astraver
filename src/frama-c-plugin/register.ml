@@ -40,7 +40,7 @@ module FCProject = Project
 (* Utility functions *)
 open Common
 
-let std_include = Filename.concat Framac.Config.datadir "jessie"
+let std_include = Filename.concat Framac.Config.datadir "astraver"
 
 let jessie_specific_config () =
   if Config.Analysis.get () && Config.Specialize.get () then
