@@ -184,7 +184,7 @@ let run () =
   let jessie_subdir =
     if jessie_subdir <> ""
     then jessie_subdir
-    else projname ^ ".jessie"
+    else projname ^ ".av"
   in
   let mkdir_p dir =
     if Sys.file_exists dir then begin
