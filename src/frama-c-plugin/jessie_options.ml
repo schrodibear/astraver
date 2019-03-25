@@ -32,34 +32,34 @@
 include
   Plugin.Register
     (struct
-       let name = "Jessie2"
-       let shortname = "jessie"
-       let help = "Translation to Jessie(2) intermediate language with subsequent launch of Jessie-to-Why3ML translator"
+       let name = "AstraVer"
+       let shortname = "av"
+       let help = "Translation to AstraVer (Jessie2) intermediate language with subsequent launch of AstraVer-to-Why3ML translator"
      end)
 
-let jessie = add_group "jessie"
+let jessie = add_group "astraver"
 
 module Project_name =
   Empty_string
     (struct
-       let option_name = "-jessie-file-name"
+       let option_name = "-av-file-name"
        let arg_name = ""
-       let help = "specify output file name for Jessie-to-Why3ML translator. The default is the input .c file name or \
+       let help = "specify output file name for AstraVer-to-Why3ML translator. The default is the input .c file name or \
                    `whole_program' in case of several input files"
      end)
 
 module Output_Dir_name =
   Empty_string
     (struct
-       let option_name = "-jessie-out"
+       let option_name = "-av-out"
        let arg_name = ""
-       let help = "specify output dirname for Jessie-to-Why3ML translator."
+       let help = "specify output dirname for AstraVer-to-Why3ML translator."
      end)
 
 module Behavior =
   Empty_string
     (struct
-       let option_name = "-jessie-behavior"
+       let option_name = "-av-behavior"
        let arg_name = ""
        let help = "restrict verification to a specific behavior (safety, default or a user-defined behavior)"
      end)
@@ -67,14 +67,14 @@ module Behavior =
 module Analysis =
   False
     (struct
-      let option_name = "-jessie"
-      let help = "perform C-to-Jessie translation, i.e. this option is used to launch the plugin"
+      let option_name = "-av"
+      let help = "perform C-to-AstraVer translation, i.e. this option is used to launch the plugin"
     end)
 
 module Force_ad_hoc_normalization =
   False
     (struct
-      let option_name = "-jessie-ad-hoc-normalization"
+      let option_name = "-av-ad-hoc-normalization"
       let help = "enforce additional code normalization (obsolete, deprecated)."
     end)
 
@@ -109,9 +109,9 @@ let () = Parameter_customize.no_category ()
 module Jc_opt =
   String_set
     (struct
-      let option_name = "-jessie-jc-opt"
+      let option_name = "-av-jc-opt"
       let arg_name = ""
-      let help = "give an option to Jessie-to-Why3ML translator (e.g., -jessie-jc-opt=\"-forall-inst-bound 5\")"
+      let help = "give an option to AstraVer-to-Why3ML translator (e.g., -av-jc-opt=\"-forall-inst-bound 5\")"
     end)
 
 let () = Parameter_customize.set_group jessie
@@ -120,30 +120,30 @@ let () = Parameter_customize.no_category ()
 module Why3_opt =
   String_set
     (struct
-       let option_name = "-jessie-why3-opt"
+       let option_name = "-av-why3-opt"
        let arg_name = ""
-       let help = "give an option to Why3 (e.g., -jessie-why3-opt=\"--debug fast-wp\")"
+       let help = "give an option to Why3 (e.g., -av-why3-opt=\"--debug fast-wp\")"
      end)
 
 module Gen_only =
   False
     (struct
-      let option_name = "-jessie-gen-only"
-      let help = "only generate Jessie code (for developer use)"
+      let option_name = "-av-gen-only"
+      let help = "only generate AstraVer code (for developer use)"
     end)
 
 module Cpu_limit =
   Zero
     (struct
-       let option_name = "-jessie-cpu-limit"
+       let option_name = "-av-cpu-limit"
        let arg_name = ""
-       let help = "set the time limit in sec. for the analysis (suitable only for some targets, see -jessie-target)"
+       let help = "set the time limit in sec. for the analysis (suitable only for some targets, see -av-target)"
      end)
 
 module Target =
   String
     (struct
-       let option_name = "-jessie-target"
+       let option_name = "-av-target"
        let default = "why3ide"
        let arg_name = ""
        let help = "run Make with the specified target instead of the default `why3ide'. Use `update' to simply \
@@ -153,21 +153,21 @@ module Target =
 module Specialize =
   True
     (struct
-      let option_name = "-jessie-specialize"
+      let option_name = "-av-specialize"
       let help = "generate specialized versions for block-level functions e.g. memcpy"
      end)
 
 module Extract =
   True
     (struct
-      let option_name = "-jessie-extract"
+      let option_name = "-av-extract"
       let help = "process only explicitly annotated functions with their dependencies"
      end)
 
 module Flat_vararg =
   False
     (struct
-      let option_name = "-jessie-flat-vararg"
+      let option_name = "-av-flat-vararg"
       let help = "use flat void * array to represent variadic arguments"
      end)
 (*
