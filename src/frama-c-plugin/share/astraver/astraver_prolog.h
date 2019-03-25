@@ -20,7 +20,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jessie_prolog.h,v 1.1 2009-09-08 11:11:43 monate Exp $ */
+/* $Id: astraver_prolog.h,v 1.1 2009-09-08 11:11:43 monate Exp $ */
 
 #ifndef _JESSIE_PROLOG_H_
 #define _JESSIE_PROLOG_H_
@@ -29,9 +29,9 @@
 #else
 
 #ifdef JESSIE_EXACT_INT_MODEL
-# include "jessie_exact_prolog.h"
+# include "astraver_exact_prolog.h"
 #else
-# include "jessie_machine_prolog.h"
+# include "astraver_machine_prolog.h"
 #endif
 
 /*@ logic integer minimum(integer i, integer j) = i < j ? i : j;

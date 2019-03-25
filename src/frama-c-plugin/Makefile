@@ -65,7 +65,7 @@ $(PLUGIN_DIR)/interp.cmi: $(BUILDSRC)/jc/jc.cmi
 
 $(PLUGIN_DIR)/interp.cmx: $(PLUGIN_DIR)/interp.cmi $(JCCMXA)
 
-RESOURCES   ?= jessie_spec_prolog.h
+RESOURCES   ?= astraver_spec_prolog.h
 
 install::
 	$(MKDIR) $(FRAMAC_DATADIR)/astraver

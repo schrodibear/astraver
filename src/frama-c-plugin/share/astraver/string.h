@@ -25,7 +25,7 @@
 #ifndef _STRING_H_
 #define _STRING_H_
 
-#include <jessie_prolog.h>
+#include <astraver_prolog.h>
 #include <stddef.h>
 #include <limits.h>
 

@@ -20,7 +20,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jessie_machine_prolog.h,v 1.1 2009-09-08 11:11:43 monate Exp $ */
+/* $Id: astraver_machine_prolog.h,v 1.1 2009-09-08 11:11:43 monate Exp $ */
 
 #ifndef _JESSIE_MACHINE_PROLOG_H_
 #define _JESSIE_MACHINE_PROLOG_H_
