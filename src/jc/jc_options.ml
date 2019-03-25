@@ -41,7 +41,7 @@ open Common_options
 let c = ref stdout
 
 let log =
-  c := open_out "jessie.log";
+  c := open_out "astraver.log";
   Format.formatter_of_out_channel !c
 
 let lprintf s = Format.fprintf log s
@@ -103,8 +103,8 @@ let pos_files = ref []
 let pos_table = Hashtbl.create 97
 
 let version () =
-  Printf.printf "This is Jessie2 (ISP RAS Jessie fork) version %s, compiled on %s.\n\
-                 Copyright (c) 2006-2015 - CNRS/INRIA/Univ Paris-Sud/ISP RAS.\n\
+  Printf.printf "This is AstraVer (ISP RAS Jessie2 fork) version %s, compiled on %s.\n\
+                 Copyright (c) 2006-2019 - CNRS/INRIA/Univ Paris-Sud/ISP RAS.\n\
                  This is free software with ABSOLUTELY NO WARRANTY (see LICENSE).\n"
     Jc_version.version
     Jc_version.date;
