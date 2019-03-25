@@ -393,7 +393,7 @@ let ctype ?bitsize ty =
         | FFloat -> JCPTnative (Tgenfloat `Float)
         | FDouble -> JCPTnative (Tgenfloat `Double)
         | FLongDouble ->
-          Console.unsupported "Jessie does not handle long double yet"
+          Console.unsupported "AstraVer does not handle long double yet"
         end
       end
     | TPtr (_elemty, _attr) ->
@@ -451,7 +451,7 @@ let native_type_of_fkind x : Jc.Env.native_type =
   match x with
   | FFloat -> Tgenfloat `Float
   | FDouble -> Tgenfloat `Double
-  | FLongDouble -> failwith "Jessie does not handle long double yet"
+  | FLongDouble -> failwith "AstraVer does not handle long double yet"
 
 let strip_float_suffix s =
   let l = pred(String.length s)  in
@@ -796,7 +796,7 @@ and terms ?(in_zone=false) ~default_label t =
     | TCoerce (_t, _typ) -> Console.unsupported "term coercion"
     | TCoerceE (_t1, _t2) -> Console.unsupported "term coercion"
     | Tlambda _ ->
-      Console.unsupported "Jessie plugin does not support lambda abstraction"
+      Console.unsupported "AstraVer plugin does not support lambda abstraction"
     | Ttypeof _ | Ttype _ -> assert false (* Should have been treated *)
     | Trange (low, high) ->
       let coerce t = if t.term_type = Linteger then t else { t with term_node = TLogic_coerce(Linteger, t) } in
@@ -1428,7 +1428,7 @@ let code_annot ?e pos ((acc_assert_before, contract) as acc) a =
       else push @@ locate (PExpr.mkreinterpret ~expr:(term t) ~typ ~pos:(Location.to_lexing_loc pos) ())
     | _ ->
       Console.unsupported
-        "unrecognized term in Jessie pragma (only :> is recognized):@ %a@. Note that :> binds tighter than typecasts."
+        "unrecognized term in AstraVer pragma (only :> is recognized):@ %a@. Note that :> binds tighter than typecasts."
         Printer.pp_term t
     end
   | APragma _ -> acc (* just ignored *)
@@ -1844,7 +1844,7 @@ let instruction = function
             with
             | Invalid_argument _
             | Exit ->
-              Console.unsupported "incorrect arguments for Jessie builtin allocation function %s" (v :> varinfo).vname
+              Console.unsupported "incorrect arguments for AstraVer builtin allocation function %s" (v :> varinfo).vname
           in
           let arg = stripInfo arg in
           let loc = arg.eloc in

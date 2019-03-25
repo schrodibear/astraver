@@ -364,7 +364,7 @@ class logic_functions_retyping_visitor =
     | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ -> ()
     | Ctype ty ->
       if isStructOrUnionType ty then
-        Console.unsupported "Jessie plugin does not support struct or union as parameter to logic functions. \
+        Console.unsupported "AstraVer plugin does not support struct or union as parameter to logic functions. \
                              Please use a pointer instead."
        (*
           if isStructOrUnionType ty then

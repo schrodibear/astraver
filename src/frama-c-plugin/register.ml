@@ -105,7 +105,7 @@ let apply_if_dir_exist name f =
   | Unix.Unix_error (Unix.ENOENT, "opendir", _) -> ()
 
 let run () =
-  Console.feedback "Starting Jessie translation";
+  Console.feedback "Starting AstraVer translation";
   (* Work in our own project, initialized by a copy of the main one. *)
   let prj =
     File.create_project_from_visitor
@@ -157,17 +157,17 @@ let run () =
   (* Phase 4: C to Jessie translation, should be quite straighforward at this
    * stage (after normalization)
    *)
-  Console.debug "Jessie pragmas";
+  Console.debug "AstraVer pragmas";
   let pragmas = Interp.pragmas file in
-  Console.debug "Jessie translation";
+  Console.debug "AstraVer translation";
   let pfile = Interp.file file in
-  Console.debug "Printing Jessie program";
+  Console.debug "Printing AstraVer program";
 
   (* Phase 5: pretty-printing of Jessie program *)
 
   let sys_command cmd =
     if Sys.command cmd <> 0 then
-      Console.abort "Jessie subprocess failed: %s" cmd
+      Console.abort "AstraVer subprocess failed: %s" cmd
   in
 
   let projname = Config.Project_name.get () in
@@ -194,8 +194,7 @@ let run () =
       Unix.mkdir dir 0o777
   in
   mkdir_p jessie_subdir;
-  Console.feedback "Producing Jessie files in subdir %s" jessie_subdir;
-
+  Console.feedback "Producing AstraVer files in subdir %s" jessie_subdir;
   (* basename is 'file' *)
   let basename =
     String.filter_alphanumeric ~assoc:['-', '-'; ' ', '-'; '(', '-'; ')', '-'] ~default:'_' @@
@@ -259,7 +258,7 @@ let run () =
       if Config.Cpu_limit.get () <> 0 then "TIMEOUT=" ^ (string_of_int (Config.Cpu_limit.get ())) ^ " "
       else ""
     in
-    Console.feedback "Calling Jessie tool in subdir %s" jessie_subdir;
+    Console.feedback "Calling AstraVer tool in subdir %s" jessie_subdir;
     Sys.chdir jessie_subdir;
 
     let target = Config.Target.get () in
@@ -306,7 +305,7 @@ let run_and_catch_error () =
   with
   | Unsupported _ ->
     Console.error "Unsupported feature(s).@\n\
-                   Jessie plugin can not be used on your code."
+                   AstraVer plugin can not be used on your code."
   | Log.FeatureRequest (_, s) ->
     Console.error "Unimplemented feature: %s." s
   | SizeOfError (s, _) when Str.(string_match (regexp "abstract type '\\(.*\\)'") s 0) ->
@@ -318,7 +317,7 @@ let run_and_catch_error =
   Dynamic.register
     "run_analysis"
     (Datatype.func Datatype.unit Datatype.unit)
-    ~plugin:"Jessie"
+    ~plugin:"AstraVer"
     ~journalize:true
     run_and_catch_error
 
