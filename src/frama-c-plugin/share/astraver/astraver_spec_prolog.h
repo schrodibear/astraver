@@ -20,7 +20,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jessie_spec_prolog.h,v 1.1 2013-11-28 16:06:45 mandrykin Exp $ */
+/* $Id: astraver_spec_prolog.h,v 1.1 2013-11-28 16:06:45 mandrykin Exp $ */
 
 #ifndef _JESSIE_SPEC_PROLOG_H_
 #define _JESSIE_SPEC_PROLOG_H_

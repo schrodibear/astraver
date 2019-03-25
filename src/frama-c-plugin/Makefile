@@ -20,7 +20,7 @@
 #                                                                        #
 ##########################################################################
 
-# Makefile for compiling Jessie independently of Frama-C.
+# Makefile for compiling AstraVer independently of Frama-C.
 #
 # To be used independently of Frama-C, a version of Frama-C compatible with
 # Jessie has to be properly installed as well as the Jessie-specific stuff.
@@ -43,7 +43,7 @@ JESSIE_INCLUDES	?= -I $(BUILDSRC)/why -I $(BUILDSRC)/jc -I $(NUMS_DIR)
 JCCMA		?= $(BUILDSRC)/jc/jc.cma
 JCCMXA		?= $(JCCMA:.cma=.cmxa)
 
-PLUGIN_NAME:=Jessie
+PLUGIN_NAME:=AstraVer
 PLUGIN_CMO:= jessie_options jessie_integer common extractor rewrite \
              retype norm interp register
 PLUGIN_HAS_MLI:=yes
@@ -65,13 +65,13 @@ $(PLUGIN_DIR)/interp.cmi: $(BUILDSRC)/jc/jc.cmi
 
 $(PLUGIN_DIR)/interp.cmx: $(PLUGIN_DIR)/interp.cmi $(JCCMXA)
 
-RESOURCES   ?= jessie_spec_prolog.h
+RESOURCES   ?= astraver_spec_prolog.h
 
 install::
-	$(MKDIR) $(FRAMAC_DATADIR)/jessie
-	$(CP) $(addprefix $(PLUGIN_DIR)/share/jessie/,$(RESOURCES)) $(FRAMAC_DATADIR)/jessie
+	$(MKDIR) $(FRAMAC_DATADIR)/astraver
+	$(CP) $(addprefix $(PLUGIN_DIR)/share/astraver/,$(RESOURCES)) $(FRAMAC_DATADIR)/astraver
 
 uninstall::
-	$(RM) -r $(FRAMAC_DATADIR)/jessie
+	$(RM) -r $(FRAMAC_DATADIR)/astraver
 
 include $(FRAMAC_SHARE)/Makefile.dynamic

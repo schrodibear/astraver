@@ -451,7 +451,7 @@ struct
 
   module File =
   struct
-    let blockfuns_include = "jessie_spec_prolog.h"
+    let blockfuns_include = "astraver_spec_prolog.h"
     let normalize =
       let module H = Datatype.String.Hashtbl in
       let h = H.create 8 in
@@ -1792,7 +1792,7 @@ struct
       let name_it signed size_in_bytes =
         let nbits = bitsize |? 8 * size_in_bytes in
         if nbits <= 0 then
-          Console.abort "Cannot translate an integral bit-field type `%a' of width %d <= 0 to Jessie enum type"
+          Console.abort "Cannot translate an integral bit-field type `%a' of width %d <= 0 to AstraVer enum type"
             Printer.pp_typ ty nbits;
         let name = (if signed then "" else "u") ^ "int" ^ (string_of_int nbits) in
         All.replace name (ty, Some nbits);
