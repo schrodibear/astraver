@@ -1,5 +1,17 @@
 AstraVer
 =======
+
+version 18.0, March 29, 2019
+============================
+
+  o New combined integer model with intentional overflow annotations (op/*@%*/, op/@%@/, op%, (type)/*@*/, (type)/@%@/, (type)%)
+  o New drivers for SMT solvers with direct support for the theory of fixed sized bit-vectors
+  o Support for lemma and ghost functions (proofs expressed in C code). Still no support for logic types in C code
+  o Support for \allocable, \freeable and \fresh builtin predicates
+  o Better support for nested structures in translation of \valid predicate and assigns/allocates clauses
+  o Support for arbitrary recursive logic functions and predicates in specifications (including mutual recursion)
+  o Support for Frama-C 18.0 (with AstraVer patches), Why3 0.87 (with AstraVer patches) and Coq 8.9
+
 version alpha0, January 12, 2015
 ================================
 
@@ -45,6 +57,7 @@ version alpha0, January 12, 2015
 
 Jessie
 ======
+
 version 2.34, March 16, 2014
 ==========================
 

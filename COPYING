@@ -1,5 +1,5 @@
-The Jessie2 deductive verification plugin/translator for Frama-C
-(fork of Jessie, part of the Why platform for program certification).
+The AstraVer deductive verification plugin/translator for Frama-C
+(successor of Jessie, former part of the Why platform for program certification).
 
 Copyright (C) 2002-2015
   Romain BARDOU
@@ -13,6 +13,7 @@ Copyright (C) 2002-2015
   Yann RÉGIS-GIANAS
   Nicolas ROUSSET
   Xavier URBAIN
+Copyright (C) 2015-2019
   Mikhail MANDRYKIN
 
 This program is free software; you can redistribute it and/or modify

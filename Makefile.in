@@ -117,7 +117,7 @@ bin/astraver.opt: $(AV_SOURCES) bin $(BUILDSRC)/av/av.cmxa
 	if [ -f av_main.native ]; then mv av_main.native $@; fi
 	touch $@
 
-bin/jessie.byte: $(AV_SOURCES) bin $(BUILDSRC)/av/av.cma
+bin/astraver.byte: $(AV_SOURCES) bin $(BUILDSRC)/av/av.cma
 	$(OCAMLBUILD) av_main.d.byte
 	if [ -f av_main.d.byte ]; then mv av_main.d.byte $@; fi
 	touch $@
