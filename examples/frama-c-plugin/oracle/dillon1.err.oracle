@@ -1,4 +1,0 @@
-File "why/dillon1.why", line 417, characters 16-37:
-Unbound variable intP_t_4_alloc_table
-make: *** [why/dillon1.wpr] Error 1
-make: *** [dillon1.regtest] Error 2

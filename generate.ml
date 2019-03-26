@@ -1,6 +1,7 @@
 #!/usr/bin/env ocamlscript
 Ocaml.packs := ["jingoo"]
 --
+open Jingoo
 
 let () =
   if Array.length Sys.argv < 2 then

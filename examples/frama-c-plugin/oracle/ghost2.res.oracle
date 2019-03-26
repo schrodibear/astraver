@@ -1,8 +1,0 @@
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/ghost2_why.why            : ............?...............?.......... (37/0/2/0/0)
-total   :  39
-valid   :  37 ( 95%)
-invalid :   0 (  0%)
-unknown :   2 (  5%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

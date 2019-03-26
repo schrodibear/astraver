@@ -39,14 +39,14 @@ open Ast_info
 open Extlib
 
 (* Import from Why *)
-open Jc.Constructors
-open Jc.Ast
-open Jc.Env
-open! Jc.Common
+open Av.Constructors
+open Av.Ast
+open Av.Env
+open! Av.Common
 
 (* Utility functions *)
 open! Common
-open! Jessie_integer
+open! Astraver_integer
 
 (*****************************************************************************)
 (* Smart constructors.                                                       *)
@@ -92,7 +92,7 @@ let mkdecl dnode pos = new decl ~pos:(Location.to_lexing_loc pos) dnode
 (*****************************************************************************)
 
 let reg_position_loc ?id ?name pos =
-  Jc.Print.jc_reg_pos "_C" ?id ?name (Why_loc.extract pos)
+  Av.Print.jc_reg_pos "_C" ?id ?name (Why_loc.extract pos)
 
 let reg_position ?id ?kind:_ ?name pos = reg_position_loc ?id ?name (Location.to_lexing_loc pos)
 
@@ -447,7 +447,7 @@ let wrapper_name t = Name.typ (unrollType t) ^ "P"
 (* Cil to Jessie translation of constants                                    *)
 (*****************************************************************************)
 
-let native_type_of_fkind x : Jc.Env.native_type =
+let native_type_of_fkind x : Av.Env.native_type =
   match x with
   | FFloat -> Tgenfloat `Float
   | FDouble -> Tgenfloat `Double
@@ -569,7 +569,7 @@ let term_lhost pos =
       | [] -> mkexpr(JCPEvar v.lv_name) pos
       | [_] ->  mkexpr (JCPEapp (v.lv_name,[],[])) pos
       | _ ->
-        Jessie_options.fatal
+        Console.fatal
           "cannot handle logic constant %s with several labels"
           v.lv_name
     with
@@ -791,7 +791,7 @@ and terms ?(in_zone=false) ~default_label t =
         | (LBterm _ | LBpred _), _::_ ->
           Console.unsupported "local function definition"
         | (LBnone | LBreads _ | LBinductive _), _ ->
-          Jessie_options.fatal "Unexpected definition for local variable"
+          Console.fatal "Unexpected definition for local variable"
       end
     | TCoerce (_t, _typ) -> Console.unsupported "term coercion"
     | TCoerceE (_t1, _t2) -> Console.unsupported "term coercion"
@@ -1112,7 +1112,7 @@ and pred ~default_label p =
         | (LBterm _ | LBpred _), _::_ ->
           Console.unsupported "local function definition"
         | (LBnone | LBreads _ | LBinductive _), _ ->
-          Jessie_options.fatal "Unexpected definition for local variable"
+          Console.fatal "Unexpected definition for local variable"
       end
 
     | Pforall ([], p) -> (pred p)#node
@@ -1263,7 +1263,7 @@ let spec _fname funspec =
       if b.b_name = Cil.default_behavior_name then
         Name.Behavior.default
       else if b.b_name = Name.Behavior.default then
-        Name.Behavior.default ^ "_jessie"
+        Name.Behavior.default ^ "_astraver"
       else b.b_name
     in
     let loc =
@@ -1298,7 +1298,7 @@ let spec _fname funspec =
       []
   in
 
-  let complete_behaviors_assertions : Jc.Ast.pexpr list =
+  let complete_behaviors_assertions : Av.Ast.pexpr list =
     List.map
       (fun bnames ->
          mkdisjunct
@@ -1318,7 +1318,7 @@ let spec _fname funspec =
              Location.unknown)
       funspec.spec_complete_behaviors
   in
-  let disjoint_behaviors_assertions  : Jc.Ast.pexpr list =
+  let disjoint_behaviors_assertions  : Av.Ast.pexpr list =
     List.fold_left
       (fun acc bnames ->
          let all_assumes =
@@ -1379,7 +1379,7 @@ let built_behavior_ids = function
       (fun i ->
          new identifier
            (if i = Name.Behavior.default then
-              Name.Behavior.default ^ "_jessie"
+              Name.Behavior.default ^ "_astraver"
             else
               i))
       l
@@ -1392,7 +1392,7 @@ let code_annot ?e pos ((acc_assert_before, contract) as acc) a =
     let asrt =
       Option.map_default
         ~default:Aassert
-        ~f:(fun e -> if Emitter.equal e Emitters.jessie_assume then Aassume else Aassert)
+        ~f:(fun e -> if Emitter.equal e Emitters.astraver_assume then Aassume else Aassert)
         e
     in (* [VP] Needs to retrieve exact status *)
     push
@@ -1752,8 +1752,7 @@ and lval pos = function
         locate (mkexpr (JCPEderef(e,fi.fname)) pos)
 
   | Mem _e, Index _ as lv ->
-      Jessie_options.fatal
-        ~current:true "Unexpected lval %a" Printer.pp_lval lv
+      Console.fatal "Unexpected lval %a" Printer.pp_lval lv
 
 let keep_only_declared_nb_of_arguments vi l =
   let _,args,is_variadic, _ = splitFunctionTypeVI vi in
@@ -2661,10 +2660,10 @@ let global vardefs g =
           in
           let id = mkidentifier v.vname pos in
           let kf = Globals.Functions.get v in
-          Jessie_options.debug
+          Console.debug
             "Getting spec of %s" (Kernel_function.get_name kf);
           let funspec = Annotations.funspec kf in
-          Jessie_options.debug "OK";
+          Console.debug "OK";
           let params = Globals.Functions.get_params kf in
           let formal v = true, ctype v.vtype, Name.unique_if_empty v.vname in
           let formals = List.map formal params in
@@ -3038,7 +3037,7 @@ let memory_reinterpretation_predicates get_compinfo () =
   in
   let decls = List.(flatten @@ map memory_reinterpretation_predicates pairs) in
   if pairs <> [] then
-    [PDecl.mkaxiomatic ~name:"Jessie_memory_reinterpretation_predicates" ~decls ()]
+    [PDecl.mkaxiomatic ~name:"Memory_reinterpretation_predicates" ~decls ()]
   else
     []
 
@@ -3096,16 +3095,16 @@ let pragma =
     | "JessieFloatModel" ->
       begin match String.lowercase_ascii arg with
       | "math" -> float_model := `Math;
-        [Jc.Print.JCfloat_model Jc.Env.FMmath]
+        [Av.Print.JCfloat_model Av.Env.FMmath]
       | "defensive" ->
         float_model := `Defensive;
-        [Jc.Print.JCfloat_model Jc.Env.FMdefensive]
+        [Av.Print.JCfloat_model Av.Env.FMdefensive]
       | "full" ->
         float_model := `Full;
-        [Jc.Print.JCfloat_model Jc.Env.FMfull]
+        [Av.Print.JCfloat_model Av.Env.FMfull]
       | "multirounding" ->
         float_model := `Multirounding;
-        [Jc.Print.JCfloat_model Jc.Env.FMmultirounding]
+        [Av.Print.JCfloat_model Av.Env.FMmultirounding]
       | s ->
         Console.warning
           "pragma %s: identifier %s is not a valid value (ignored)."
@@ -3115,19 +3114,19 @@ let pragma =
       begin match String.lowercase_ascii arg with
       | "nearesteven" ->
         (* float_rounding_mode := `NearestEven; *)
-        [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMNearestEven]
+        [Av.Print.JCfloat_rounding_mode Av.Env.FRMNearestEven]
       | "down" ->
         (* float_rounding_mode := `Downward; *)
-        [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMDown]
+        [Av.Print.JCfloat_rounding_mode Av.Env.FRMDown]
       | "up" ->
         (* float_rounding_mode := `Upward; *)
-        [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMUp]
+        [Av.Print.JCfloat_rounding_mode Av.Env.FRMUp]
       | "tozero" ->
         (* float_rounding_mode := `Towardzero; *)
-        [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMToZero]
+        [Av.Print.JCfloat_rounding_mode Av.Env.FRMToZero]
       | "nearestaway" ->
         (* float_rounding_mode := `Towardawayzero; *)
-        [Jc.Print.JCfloat_rounding_mode Jc.Env.FRMNearestAway]
+        [Av.Print.JCfloat_rounding_mode Av.Env.FRMNearestAway]
       | s ->
         Console.warning
           "pragma %s: identifier %s is not a valid value (ignored)" name s; []
@@ -3135,16 +3134,16 @@ let pragma =
     | "JessieFloatInstructionSet" ->
       begin match String.lowercase_ascii arg with
       | "x87" ->
-        [Jc.Print.JCfloat_instruction_set "x87"]
+        [Av.Print.JCfloat_instruction_set "x87"]
       | "ieee754" ->
-        [Jc.Print.JCfloat_instruction_set "ieee754"]
+        [Av.Print.JCfloat_instruction_set "ieee754"]
       | s ->
         Console.warning
           "pragma %s: identifier %s is not a valid value (ignored)" name s; []
       end
     | _ ->
       Console.warning
-        "pragma %s is ignored by Jessie." name;
+        "pragma %s is ignored by AstraVer." name;
       []
     end
   | GPragma (Attr ("JessieBuiltin", [ACons (acsl, []); AStr jessie]), _) ->

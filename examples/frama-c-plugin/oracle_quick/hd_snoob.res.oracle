@@ -1,6 +1,0 @@
-rm -f hd_snoob.jc
-../../bin/toplevel.opt -jessie-analysis  -jessie-gen-only hd_snoob.c
-Parsing
-Cleaning unused parts
-Symbolic link
-Starting semantical analysis

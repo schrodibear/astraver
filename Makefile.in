@@ -53,10 +53,10 @@ OCAMLBUILD = @OCAMLBUILD@
 
 export FRAMAC = @FRAMAC@
 
-JESSIE_PLUGIN_BYTE= jessie_plugin.byte
-JESSIE_PLUGIN_OPT= jessie_plugin.opt
-JESSIE_PLUGIN_BEST= jessie_plugin.$(OCAMLBEST)
-.PHONY: $(JESSIE_PLUGIN_BYTE) $(JESSIE_PLUGIN_OPT)
+ASTRAVER_PLUGIN_BYTE= astraver_plugin.byte
+ASTRAVER_PLUGIN_OPT= astraver_plugin.opt
+ASTRAVER_PLUGIN_BEST= astraver_plugin.$(OCAMLBEST)
+.PHONY: $(ASTRAVER_PLUGIN_BYTE) $(ASTRAVER_PLUGIN_OPT)
 
 COQLIB = $(DESTDIR)"@COQLIB@"
 COQVER = @COQVER@
@@ -64,11 +64,8 @@ COQVER = @COQVER@
 V8 = $(wildcard lib/coq/*.v)
 VO8 = $(patsubst %.v,%.vo, $(V8))
 
-PVSFILES =
-PVSLIB = $(DESTDIR)@PVSLIB@
-
 GENERATED = src/why/why_version.ml \
-	    src/jc/jc_version.ml \
+	    src/av/av_version.ml \
             lib/why3/why3.conf \
             lib/why3/z3_enum.drv \
             lib/why3/z3_enum_nobv.drv \
@@ -87,63 +84,63 @@ MORE_GENERATED = lib/why3/z3_enum.gen \
 # main targets
 ##############
 
-JESSIE=bin/jessie.$(OCAMLBEST)
+ASTRAVER=bin/astraver.$(OCAMLBEST)
 
 OCAMLBUILD += -use-ocamlfind -j 0
 
-JC_SOURCES=$(wildcard src/why/*.ml src/why/*.mli src/why/*.mll src/why/*.mly src/jc/*.ml src/jc/*.mli src/jc/*.mll src/jc/*.mly)
+AV_SOURCES=$(wildcard src/why/*.ml src/why/*.mli src/why/*.mll src/why/*.mly src/av/*.ml src/av/*.mli src/av/*.mll src/av/*.mly)
 
 BUILDSRC=_build/src
 
 ifeq ($(OCAMLBEST),opt)
-JCLIB=$(BUILDSRC)/jc/jc.cmxa
+AVLIB=$(BUILDSRC)/av/av.cmxa
 else
-JCLIB=$(BUILDSRC)/jc/jc.cma
+AVLIB=$(BUILDSRC)/av/av.cma
 endif
 
-all: all-without-frama-c-plugin $(JESSIE_PLUGIN_BEST)
+all: all-without-frama-c-plugin $(ASTRAVER_PLUGIN_BEST)
 
-all-without-frama-c-plugin: $(JESSIE) coq-@COQ@ $(JCLIB)
+all-without-frama-c-plugin: $(ASTRAVER) coq-@COQ@ $(AVLIB)
 
-opt:  bin/jessie.opt $(JESSIE_PLUGIN_OPT)
-byte: bin/jessie.byte $(JESSIE_PLUGIN_BYTE)
+opt:  bin/astraver.opt $(ASTRAVER_PLUGIN_OPT)
+byte: bin/astraver.byte $(ASTRAVER_PLUGIN_BYTE)
 
-$(BUILDSRC)/jc/jc.cmxa: $(JC_SOURCES) $(GENERATED)
-	$(OCAMLBUILD) jc.otarget
-	rm -f jc.cm*
+$(BUILDSRC)/av/av.cmxa: $(AV_SOURCES) $(GENERATED)
+	$(OCAMLBUILD) av.otarget
+	rm -f av.cm*
 	touch $@
 
-$(BUILDSRC)/jc/jc.%: $(JC_SOURCES) $(GENERATED) $(BUILDSRC)/jc/jc.cmxa
+$(BUILDSRC)/av/av.%: $(AV_SOURCES) $(GENERATED) $(BUILDSRC)/av/av.cmxa
 	touch $@
 
-bin/jessie.opt: $(JC_SOURCES) bin $(BUILDSRC)/jc/jc.cmxa
-	if [ -f jc_main.native ]; then mv jc_main.native $@; fi
+bin/astraver.opt: $(AV_SOURCES) bin $(BUILDSRC)/av/av.cmxa
+	if [ -f av_main.native ]; then mv av_main.native $@; fi
 	touch $@
 
-bin/jessie.byte: $(JC_SOURCES) bin $(BUILDSRC)/jc/jc.cma
-	$(OCAMLBUILD) jc_main.d.byte
-	if [ -f jc_main.d.byte ]; then mv jc_main.d.byte $@; fi
+bin/jessie.byte: $(AV_SOURCES) bin $(BUILDSRC)/av/av.cma
+	$(OCAMLBUILD) av_main.d.byte
+	if [ -f av_main.d.byte ]; then mv av_main.d.byte $@; fi
 	touch $@
 
 bin:
 	mkdir -p bin
 
-# Frama-C plugin for Jessie
-JESSIE_PLUGIN_PATH=src/frama-c-plugin
-$(JESSIE_PLUGIN_BYTE): $(addprefix $(BUILDSRC)/jc/,jc.cmi jc.cma)
-	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
-	$(MAKE) -C $(JESSIE_PLUGIN_PATH) Jessie.cma
+# Frama-C plugin for AstraVer
+ASTRAVER_PLUGIN_PATH=src/frama-c-plugin
+$(AASTRAVER_PLUGIN_BYTE): $(addprefix $(BUILDSRC)/av/,av.cmi av.cma)
+	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) depend
+	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) AstraVer.cma
 
-$(JESSIE_PLUGIN_OPT): $(addprefix $(BUILDSRC)/jc/,jc.cmi jc.cma jc.cmxa)
-	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
-	$(MAKE) -C $(JESSIE_PLUGIN_PATH)
+$(ASTRAVER_PLUGIN_OPT): $(addprefix $(BUILDSRC)/av/,av.cmi av.cma av.cmxa)
+	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) depend
+	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH)
 
 install:
-	$(MAKE) -C $(JESSIE_PLUGIN_PATH) install
+	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) install
 clean::
-	$(MAKE) -C $(JESSIE_PLUGIN_PATH) clean
+	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) clean
 
-LIBWHY3=@libdir@/jessie
+LIBWHY3=@libdir@/astraver
 
 WHY3_DATADIR=$(shell why3 --print-datadir)
 
@@ -171,7 +168,7 @@ lib/why3/why3.conf:  lib/why3/cvc4_enum.drv lib/why3/cvc4_enum_nobv.drv lib/why3
 
 	@printf "[prover_modifiers]\n" >> $@
 	@printf "name=\"Coq\"\n" >> $@
-	@printf "option=\"-R $(LIBWHY3)/coq Jessie\"\n" >> $@
+	@printf "option=\"-R $(LIBWHY3)/coq Astraver\"\n" >> $@
 	@printf "driver=\"$(LIBWHY3)/why3/coq.drv\"\n" >> $@
 	@printf "\n"  >> $@
 
@@ -233,11 +230,11 @@ lib/why3/why3.conf:  lib/why3/cvc4_enum.drv lib/why3/cvc4_enum_nobv.drv lib/why3
 	@printf "\n" >> $@
 
 	@printf "[editor_modifiers coqide]\n" >> $@
-	@printf "option=\"-R $(LIBWHY3)/coq Jessie\"\n" >> $@
+	@printf "option=\"-R $(LIBWHY3)/coq Astraver\"\n" >> $@
 	@printf "\n"  >> $@
 
 	@printf "[editor_modifiers proofgeneral-coq]\n" >> $@
-	@printf "option=\"--eval \\\\\"(setq coq-load-path (cons '(\\\\\\\\\\\\\"$(LIBWHY3)/coq\\\\\\\\\\\\\" \\\\\\\\\\\\\"Jessie\\\\\\\\\\\\\") coq-load-path))\\\\\"\"\n"  >> $@
+	@printf "option=\"--eval \\\\\"(setq coq-load-path (cons '(\\\\\\\\\\\\\"$(LIBWHY3)/coq\\\\\\\\\\\\\" \\\\\\\\\\\\\"Astraver\\\\\\\\\\\\\") coq-load-path))\\\\\"\"\n"  >> $@
 
 ########
 # COQ
@@ -248,39 +245,32 @@ coq-yes: coq-@COQVER@
 coq-v8: $(VO8)
 coq-v8.1: $(VO8)
 
-########
-# PVS
-########
-
-pvs-no:
-pvs-yes: $(PVSFILES)
-
 include Version
 
-doc/version.tex src/why/why_version.ml src/jc/jc_version.ml: Version version.sh config.status
+doc/version.tex src/why/why_version.ml src/av/av_version.ml: Version version.sh config.status
 	BINDIR=@bindir@ LIBDIR=@libdir@ COQVER=$(COQVER) ./version.sh
 
 # installation
 ##############
 
-install: install-binary install-lib install-man install-coq-@COQ@ install-pvs-@PVS@
+install: install-binary install-lib install-man install-coq-@COQ@
 
-BINARYFILES = $(JESSIE)
+BINARYFILES = $(ASTRAVER)
 
 # install-binary should not depend on $(BINARYFILES); otherwise it
 # enforces the compilation of gwhy, even when lablgtk2 is not installed
 install-binary:
 	mkdir -p $(BINDIR)
-	cp -f $(JESSIE) $(BINDIR)/jessie$(EXE)
+	cp -f $(ASTRAVER) $(BINDIR)/astraver$(EXE)
 
-install-lib: $(JCLIB) lib/why3/why3.conf
-	rm -rf $(LIBDIR)/jessie/why3
-	mkdir -p $(LIBDIR)/jessie/why3
-	cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/core.mlw lib/why3/enum.mlw $(LIBDIR)/jessie/why3
-	cp -f $(MORE_GENERATED) $(LIBDIR)/jessie/why3
-	cp -f lib/why3/cvc4_enum.drv lib/why3/alt-ergo_enum.drv lib/why3/alt-ergo_remove_triggers_enum.drv lib/why3/z3_enum.drv $(LIBDIR)/jessie/why3
-	mkdir -p $(LIBDIR)/jessie
-	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
+install-lib: $(AVLIB) lib/why3/why3.conf
+	rm -rf $(LIBDIR)/astraver/why3
+	mkdir -p $(LIBDIR)/astraver/why3
+	cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/core.mlw lib/why3/enum.mlw $(LIBDIR)/astraver/why3
+	cp -f $(MORE_GENERATED) $(LIBDIR)/astraver/why3
+	cp -f lib/why3/cvc4_enum.drv lib/why3/alt-ergo_enum.drv lib/why3/alt-ergo_remove_triggers_enum.drv lib/why3/z3_enum.drv $(LIBDIR)/astraver/why3
+	mkdir -p $(LIBDIR)/astraver
+	cp -f $(AVLIB) $(AVCMI_EXPORT) $(LIBDIR)/astraver
 
 install-man:
 
@@ -288,23 +278,14 @@ install-coq-no:
 install-coq-yes: install-coq-@COQVER@
 install-coq-v8 install-coq-v8.1:
 	if test -w $(COQLIB) ; then \
-	  rm -rf $(COQLIB)/user-contrib/Jessie ; \
-	  mkdir -p $(COQLIB)/user-contrib/Jessie ; \
-	  cp -f $(VO8) $(COQLIB)/user-contrib/Jessie ; \
+	  rm -rf $(COQLIB)/user-contrib/Astraver ; \
+	  mkdir -p $(COQLIB)/user-contrib/Astraver ; \
+	  cp -f $(VO8) $(COQLIB)/user-contrib/Astraver ; \
 	else \
-	  echo "Cannot copy to Coq standard library. Add \"-R $(LIBDIR)/jessie/coq Jessie\" to Coq options." ;\
+	  echo "Cannot copy to Coq standard library. Add \"-R $(LIBDIR)/astraver/coq Astraver\" to Coq options." ;\
 	fi
-	mkdir -p $(LIBDIR)/jessie/coq
-	cp -f $(VO8) $(LIBDIR)/jessie/coq
-
-install-pvs-no:
-install-pvs-yes: $(PVSFILES)
-#	mkdir -p $(PVSLIB)/jessie
-#	cp $(PVSFILES) $(PVSFILES:.pvs=.prf) $(PVSLIB)/jessie
-#	cp lib/pvs/top.pvs lib/pvs/pvscontext.el $(PVSLIB)/jessie
-#	@echo "======  Compiling PVS theories, this may take some time ======"
-#	(cd $(PVSLIB)/jessie ; @PVSC@ -batch -l pvscontext.el -q -v 2 > top.out)
-#	@echo "======  Done compiling PVS theories ======"
+	mkdir -p $(LIBDIR)/astraver/coq
+	cp -f $(VO8) $(LIBDIR)/astraver/coq
 
 # doc
 
@@ -315,18 +296,12 @@ doc:: $(DOC)
 doc/manual.ps: doc/manual.tex doc/version.tex
 	$(MAKE) -C doc manual.ps
 
-doc/jessie.pdf: doc/jessie.tex doc/version.tex
-	$(MAKE) -C doc jessie.pdf
+@ASTRAVERWHY3LIBCOQ@: COQEXTRAR += -R @WHY3COQPATH@ Why3
 
-doc/jessie.html: doc/jessie.tex doc/version.tex
-	$(MAKE) -C doc jessie.html
-
-@JESSIEWHY3LIBCOQ@: COQEXTRAR += -R @WHY3COQPATH@ Why3
-
-lib/coq/%.vo: $(V8) lib/coq/Jessie_pointer.vo
+lib/coq/%.vo: $(V8) lib/coq/Pointer.vo
 	touch $@
 
-lib/coq/Jessie_pointer.vo: $(V8)
+lib/coq/Pointer.vo: $(V8)
 	$(MAKE) -C lib/coq
 
 # myself
@@ -364,4 +339,4 @@ coq-clean::
 
 .PHONY: depend
 depend:
-	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
+	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) depend

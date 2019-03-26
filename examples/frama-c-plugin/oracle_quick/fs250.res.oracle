@@ -1,7 +1,0 @@
-rm -f fs250.jc
-../../bin/toplevel.opt -jessie-analysis  -jessie-gen-only fs250.c
-Parsing
-Cleaning unused parts
-Symbolic link
-Starting semantical analysis
-cat fs250.jc

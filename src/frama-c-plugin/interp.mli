@@ -33,6 +33,6 @@
 open Cil_types
 
 (* transforms a CIL AST into a Jessie AST *)
-val file : file -> Jc.Ast.pdecl list
+val file : file -> Av.Ast.pdecl list
 
-val pragmas : file -> Jc.Print.jc_decl list
+val pragmas : file -> Av.Print.jc_decl list

@@ -6,9 +6,9 @@ shopt -s nocasematch
 RESULT=$(ocamlfind ocamldep $@)
 STATUS=$?
 PREFIXED=""
-if [[ "$RESULT" =~ src/jc/jc_.*\.mli?:.* ]]; then
+if [[ "$RESULT" =~ src/av/av_.*\.mli?:.* ]]; then
     for i in $RESULT; do
-        [[ "$i" =~ .*: || "$i" =~ Why_[^o].* ]] || PREFIXED="$PREFIXED Jc_$(echo $i | tr '[A-Z]' '[a-z]')"
+        [[ "$i" =~ .*: || "$i" =~ Why_[^o].* ]] || PREFIXED="$PREFIXED Av_$(echo $i | tr '[A-Z]' '[a-z]')"
     done
 fi
 echo $RESULT $PREFIXED

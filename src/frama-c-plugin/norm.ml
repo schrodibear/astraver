@@ -30,22 +30,6 @@
 (**************************************************************************)
 
 
-(* TODO:
- *
- *- In both retyping phases that add a level of indirection to locals:
- *     - Retype variables of structure type
- *     - Retype variables and fields whose address is taken
- *   If the returned value dereferences a local, take the returned value in
- *   a temporary before deallocating memory for the local variable and
- *   returning. Mostly an issue of consistency: since it is a local variable
- *   involved, it is retyped as a reference and no check is issued for
- *   validity of dereference.
- *   See ex roux3.c from Jessie test base.
- *   Thanks to Pierre Roux for noting this.
- *
- *)
-
-
 (* Import from Cil *)
 open Cil_types
 open Cil
@@ -775,7 +759,7 @@ object
     in
     let assign (z, froms) =
       let zl = zone z in
-      (* The \from clause isn't handled by Jessie translation anyway (there is no such clause in Jessie language) *)
+      (* The \from clause isn't handled by translation anyway (there is no such clause in Jessie language) *)
       (* But the full expansion can cause the plugin to hang, so we don't expand \froms *)
       List.map (fun x -> x, froms) zl
     in

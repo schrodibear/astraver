@@ -1,4 +1,0 @@
-COMMENT: 	regression test configuration for Jessie plugin
-CMD:./tests/jessie/run_test.sh
-OPT:regtest
-FILTER:/usr/bin/perl tests/jessie/filter_output.pl

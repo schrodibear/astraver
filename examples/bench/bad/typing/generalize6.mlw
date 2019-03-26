@@ -1,4 +1,0 @@
-
-type 'a t
-
-goal test : forall x:'a t. forall y:'b t. x=y

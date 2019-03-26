@@ -1,7 +1,0 @@
-rm -f cast_integer_pointers.jc
-../../bin/toplevel.opt -jessie-analysis  -jessie-gen-only cast_integer_pointers.c
-Parsing
-Cleaning unused parts
-Symbolic link
-Starting semantical analysis
-WHYLIB=../../why/lib JESSIELIB=../../why/lib ../../why/bin/jessie.opt  -why-opt -split-user-conj -why-opt -fast-wp -locs cast_integer_pointers.cloc cast_integer_pointers.jc

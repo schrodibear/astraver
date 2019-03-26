@@ -1,6 +1,0 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts1155.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts1155.c"
-[jessie] Starting Jessie translation
-PPCHOME/tests/jessie/bts1155.c:2:[jessie] failure: type definitions
-[jessie] user error: Unsupported feature(s).
-                     Jessie plugin can not be used on your code.

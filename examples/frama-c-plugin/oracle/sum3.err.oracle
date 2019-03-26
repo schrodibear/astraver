@@ -1,8 +1,0 @@
-File "why/sum3.why", line 958, characters 9-597:
-warning: mutable __anonstruct_S_1_a_vect_1 is not declared in effect; added as read
-File "why/sum3.why", line 958, characters 9-597:
-warning: mutable __anonstruct_S_1_b_vect_1 is not declared in effect; added as read
-File "why/sum3.why", line 958, characters 9-597:
-warning: mutable unsigned_charP_unsigned_charM_vect_1 is not declared in effect; added as read
-File "why/sum3.why", line 958, characters 9-597:
-warning: mutable unsigned_charP_vect_1_alloc_table is not declared in effect; added as read

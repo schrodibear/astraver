@@ -64,7 +64,7 @@
 
 # check for one particular file of the sources
 # ADAPT THE FOLLOWING LINE TO YOUR SOURCES!
-AC_INIT(src/jc/jc_interp.ml)
+AC_INIT(src/av/av_interp.ml)
 
 # verbosemake feature
 
@@ -304,7 +304,7 @@ if test "$WHY3" = no ; then
   AC_MSG_WARN($WHY3MSG)
 else
   AC_MSG_CHECKING(Why3 version)
-  WHY3VERSION=`why3 --version | sed -n -e 's|.*version \(@<:@^ @:>@@<:@^ @:>@*\) .*$|\1|p'`
+  WHY3VERSION=`why3 --version | sed -n -e 's|.*version \(..*\).*$|\1|p'`
   case $WHY3VERSION in
   0.83|0.84|0.85|0.85+git|0.86*|0.87*)
       AC_MSG_RESULT($WHY3VERSION)
@@ -397,41 +397,6 @@ else
     esac
 fi
 
-# PVS
-AC_PATH_PROG(PVSC,pvs,no)
-if test "$PVSC" = no ; then
-    PVS=no
-    AC_MSG_WARN(Cannot find PVS.)
-else
-    PVS=yes
-    PVSLIB=`pvs -where`/lib
-    if test "$PVSLIB" = /lib; then
-       AC_MSG_WARN(PVS found but pvs -where did not work)
-       PVS=no;
-    fi
-fi
-
-# Mizar
-AC_CHECK_PROG(MIZF,mizf,mizf,no)
-if test "$MIZF" = no; then
-    MIZAR=no
-    AC_MSG_WARN(Cannot find Mizar.)
-else
-    MIZAR=yes
-    AC_MSG_CHECKING(Mizar library)
-    if test -d "$MIZFILES"; then
-	MIZARLIB=$MIZFILES
-	AC_MSG_RESULT($MIZARLIB)
-    else if test -d /usr/local/lib/mizar; then
-	MIZARLIB=$MIZFILES
-	AC_MSG_RESULT($MIZARLIB)
-    else
-	AC_MSG_WARN(Cannot find Mizar library; please set \$MIZFILES)
-	MIZAR=no
-    fi
-    fi
-fi
-
 # substitutions to perform
 AC_SUBST(VERBOSEMAKE)
 
@@ -467,14 +432,6 @@ AC_SUBST(WHYLIBCOQ)
 AC_SUBST(WHYFLOATS)
 AC_SUBST(JESSIEWHY3LIBCOQ)
 AC_SUBST(WHY3COQPATH)
-
-AC_SUBST(PVS)
-AC_SUBST(PVSC)
-AC_SUBST(PVSLIB)
-
-AC_SUBST(MIZAR)
-AC_SUBST(MIZF)
-AC_SUBST(MIZARLIB)
 
 AC_SUBST(FORPACK)
 
@@ -513,9 +470,3 @@ if test "$COQ" = "yes" ; then
    echo "    FP lib (Flocq)       : $COQFLOATSMSG"
    echo "    FP lib (Float)       : $COQFLOATSLEGACYMSG"
 fi
-echo "PVS support              : $PVS"
-if test "$PVS" = "yes" ; then
-   echo "    Bin                  : $PVSC"
-   echo "    Lib                  : $PVSLIB"
-fi
-echo "Mizar support            : $MIZAR"

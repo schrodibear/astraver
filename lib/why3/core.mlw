@@ -1,5 +1,5 @@
 
-theory Jessie_pointer
+theory Pointer
   use import int.Int
 
   (* type block 't *)
@@ -101,15 +101,15 @@ theory Jessie_pointer
           same_block q p -> same_block (shift q i) p
 end
 
-theory Jessie_zwf
+theory Zwf
   use import int.Int
 
   predicate zwf_zero (a : int) (b : int) = 0 <= a /\ a < b
 end
 
-theory Jessie_alloc_table
+theory Alloc_table
   use import int.Int
-  use import Jessie_pointer
+  use import Pointer
 
   type alloc_table 't
 
@@ -136,9 +136,9 @@ theory Jessie_alloc_table
   meta "inline : no" predicate (>=)
 end
 
-theory Jessie_memory
+theory Memory
   use map.Map
-  use import Jessie_pointer
+  use import Pointer
 
   type memory 't 'v = Map.map (pointer 't) 'v
 
@@ -146,8 +146,8 @@ theory Jessie_memory
   function store (m : memory 't 'v) (p : pointer 't) (v : 'v) : memory 't 'v = Map.set m p v
 end
 
-theory Jessie_pset
-  use import Jessie_pointer
+theory Pset
+  use import Pointer
 
   type pset 't
 
@@ -165,10 +165,10 @@ theory Jessie_pset
       in_pset p (pset_singleton q) <-> p = q
 end
 
-theory Jessie_pset_range
+theory Pset_range
   use import int.Int
-  use import Jessie_pointer
-  use import Jessie_pset
+  use import Pointer
+  use import Pset
 
   function pset_range (pset 't) int int : pset 't
 
@@ -188,10 +188,10 @@ theory Jessie_pset_range
         same_block p q /\ a <= sub_pointer p q <= b
 end
 
-theory Jessie_pset_range_left
+theory Pset_range_left
   use import int.Int
-  use import Jessie_pointer
-  use import Jessie_pset
+  use import Pointer
+  use import Pset
 
   function pset_range_left (pset 'z) int : pset 'z
 
@@ -204,10 +204,10 @@ theory Jessie_pset_range_left
           i <= b /\ in_pset r q /\ p = shift r i
 end
 
-theory Jessie_pset_range_right
+theory Pset_range_right
   use import int.Int
-  use import Jessie_pointer
-  use import Jessie_pset
+  use import Pointer
+  use import Pset
 
   function pset_range_right (pset 'z) int : pset 'z (* l(a..) *)
 
@@ -220,10 +220,10 @@ theory Jessie_pset_range_right
           a <= i /\ in_pset r q /\ p = shift r i
 end
 
-theory Jessie_pset_deref
-  use import Jessie_pointer
-  use import Jessie_pset
-  use import Jessie_memory
+theory Pset_deref
+  use import Pointer
+  use import Pset
+  use import Memory
 
   function pset_deref (memory 't (pointer 'v)) (pset 't) : pset 'v
 
@@ -241,9 +241,9 @@ theory Jessie_pset_deref
       in_pset p (pset_deref m (pset_singleton q)) <-> q <> null /\ p = select m q
 end
 
-theory Jessie_pset_union
-  use import Jessie_pointer
-  use import Jessie_pset
+theory Pset_union
+  use import Pointer
+  use import Pset
 
   function pset_union (pset 't) (pset 't) : pset 't
 
@@ -261,9 +261,9 @@ theory Jessie_pset_union
             (p = p1 \/ p = p2)
 end
 
-theory Jessie_pset_all
-  use import Jessie_pointer
-  use import Jessie_pset
+theory Pset_all
+  use import Pointer
+  use import Pset
 
   function pset_all (pset 'z) : pset 'z
 
@@ -279,7 +279,7 @@ theory Jessie_pset_all
     forall q : pointer 't [in_pset p (pset_all (pset_singleton q))].
       in_pset p (pset_all (pset_singleton q)) <-> q <> null /\ same_block p q
 
-  use import Jessie_pset_union
+  use import Pset_union
 
   lemma In_pset_union_all_singleton:
     forall p1 : pointer 't [pset_all (pset_singleton p1)].
@@ -287,32 +287,32 @@ theory Jessie_pset_all
       [pset_all (pset_singleton p2), (pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2)))].
         forall p : pointer 't [in_pset p (pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2)))].
           in_pset p (pset_union (pset_all (pset_singleton p1)) (pset_all (pset_singleton p2))) <->
-            same_block p p1 \/ same_block p p2
+            (p1 <> null /\ same_block p p1) \/ (p2 <> null /\ same_block p p2)
 end
 
-theory Jessie_pset_disjoint
-  use import Jessie_pointer
-  use import Jessie_pset
+theory Pset_disjoint
+  use import Pointer
+  use import Pset
 
   predicate pset_disjoint (ps1 : pset 't) (ps2 : pset 't) =
     forall p : pointer 't [in_pset p ps1 | in_pset p ps2].
       not (in_pset p ps1 /\ in_pset p ps2)
 end
 
-theory Jessie_pset_included
-  use import Jessie_pointer
-  use import Jessie_pset
+theory Pset_included
+  use import Pointer
+  use import Pset
 
   predicate pset_included (ps1 : pset 't) (ps2 : pset 't) =
     forall p : pointer 't [in_pset p ps1 | in_pset p ps2].
       in_pset p ps1 -> in_pset p ps2
 end
 
-theory Jessie_assigns
-  use import Jessie_pointer
-  use import Jessie_alloc_table
-  use import Jessie_memory
-  use import Jessie_pset
+theory Assigns
+  use import Pointer
+  use import Alloc_table
+  use import Memory
+  use import Pset
 
   predicate not_assigns (a1 : alloc_table 't) (a2 : alloc_table 't) (m1 : memory 't 'v) (m2 : memory 't 'v ) (l : pset 't) =
     forall p : pointer 't [in_pset p l | select m2 p | select m1 p].
@@ -339,12 +339,12 @@ theory Jessie_assigns
                 not_assigns a1 a2 m1 m3 l
 end
 
-theory Jessie_assigns_strong
-  use import Jessie_pointer
-  use import Jessie_memory
-  use import Jessie_pset
-  use import Jessie_alloc_table
-  use import Jessie_assigns
+theory Assigns_strong
+  use import Pointer
+  use import Memory
+  use import Pset
+  use import Alloc_table
+  use import Assigns
 
   predicate not_assigns_strong (m1 : memory 't 'v) (m2 : memory 't 'v ) (l : pset 't) =
     forall p : pointer 't.
@@ -361,14 +361,14 @@ theory Jessie_assigns_strong
                 not_assigns a1 a2 m1 m2 l
 end
 
-theory Jessie_tag_id
+theory Tag_id
   type tag_id 't
   function int_of_tag (tag_id 't) : int
 end
 
-theory Jessie_tag
+theory Tag
   use import int.Int
-  use export Jessie_tag_id
+  use export Tag_id
 
   predicate parenttag (tag_id 't) (tag_id 't)
 
@@ -406,19 +406,19 @@ theory Jessie_tag
       root_tag a -> root_tag b -> a <> b -> subtag c a -> not (subtag c b)
 end
 
-theory Jessie_tag_table_type
+theory Tag_table_type
   use import map.Map
-  use import Jessie_pointer
-  use import Jessie_tag_id
+  use import Pointer
+  use import Tag_id
 
   type tag_table 't = Map.map (pointer 't) (tag_id 't)
 
   function typeof (t : tag_table 't) (p : pointer 't) : tag_id 't = Map.get t p
 end
 
-theory Jessie_voidp
-  use import Jessie_pointer
-  use import Jessie_tag_table_type
+theory Voidp
+  use import Pointer
+  use import Tag_table_type
 
   type voidP
 
@@ -429,9 +429,9 @@ theory Jessie_voidp
           same_block p q -> typeof t p = typeof t q
 end
 
-theory Jessie_voidp_tag_id
-  use import Jessie_voidp
-  use import Jessie_tag
+theory Voidp_tag_id
+  use import Voidp
+  use import Tag
 
   constant voidP_tag : tag_id voidP
 
@@ -442,10 +442,10 @@ theory Jessie_voidp_tag_id
     parenttag voidP_tag bottom_tag
 end
 
-theory Jessie_tag_table
-  use import Jessie_pointer
-  use import Jessie_tag
-  use export Jessie_tag_table_type
+theory Tag_table
+  use import Pointer
+  use import Tag
+  use export Tag_table_type
 
   predicate instanceof (t : tag_table 't) (p : pointer 't) (s : tag_id 't) = subtag (typeof t p) s
 
@@ -463,12 +463,12 @@ theory Jessie_tag_table
         downcast t null s = null
 end
 
-theory Jessie_charp_tag_id
-  use import Jessie_voidp_tag_id
-  use import Jessie_voidp
-  use import Jessie_pointer
-  use import Jessie_tag
-  use import Jessie_tag_table
+theory Charp_tag_id
+  use import Voidp_tag_id
+  use import Voidp
+  use import Pointer
+  use import Tag
+  use import Tag_table
 
   constant charP_tag : tag_id voidP
 
@@ -484,10 +484,10 @@ theory Jessie_charp_tag_id
     parenttag charP_tag voidP_tag
 end
 
-theory Jessie_sidecast
-  use import Jessie_pointer
-  use import Jessie_tag
-  use import Jessie_tag_table
+theory Sidecast
+  use import Pointer
+  use import Tag
+  use import Tag_table
 
   function sidecast (tag_table 't) (pointer 't) (tag_id 't) : pointer 't
 
@@ -530,10 +530,10 @@ theory Jessie_sidecast
       typeof t p = bottom_tag -> typeof t (sidecast t p s2) = bottom_tag
 end
 
-theory Jessie_reinterpret
+theory Reinterpret
   use import int.Int
-  use import Jessie_pointer
-  use import Jessie_tag_id
+  use import Pointer
+  use import Tag_id
 
   function cast_factor (tag_id 't) (tag_id 't) : int
 
@@ -554,13 +554,13 @@ theory Jessie_reinterpret
           (c12 < 0 /\ c23 < 0 -> c13 = (- c12) * c23)
 end
 
-theory Jessie_reinterpret_cast
+theory Reinterpret_cast
   use import int.Int
-  use import Jessie_pointer
-  use import Jessie_alloc_table
-  use import Jessie_tag_id
-  use import Jessie_tag_table
-  use import Jessie_sidecast
+  use import Pointer
+  use import Alloc_table
+  use import Tag_id
+  use import Tag_table
+  use import Sidecast
 
   use import int.ComputerDivision
 
@@ -602,12 +602,12 @@ theory Jessie_reinterpret_cast
        offset_max a2 ps = offset_max a1 p
 end
 
-theory Jessie_allocable
+theory Allocable
   use import int.Int
-  use import Jessie_pointer
-  use import Jessie_alloc_table
-  use import Jessie_tag
-  use import Jessie_tag_table
+  use import Pointer
+  use import Alloc_table
+  use import Tag
+  use import Tag_table
 
   predicate allocable (a : alloc_table 't) (p : pointer 't) =
     offset_max a p = -3 < offset_min a p = 0
@@ -632,14 +632,14 @@ theory Jessie_allocable
            not same_block p1 p2
 end
 
-theory Jessie_alloc
+theory Alloc
   use import int.Int
-  use import Jessie_pointer
-  use import Jessie_pset
-  use import Jessie_alloc_table
-  use import Jessie_tag
-  use import Jessie_tag_table
-  use import Jessie_allocable
+  use import Pointer
+  use import Pset
+  use import Alloc_table
+  use import Tag
+  use import Tag_table
+  use import Allocable
 
   predicate alloc_extends (a1 : alloc_table 't) (a2 : alloc_table 't) =
     forall p : pointer 't [valid a1 p | valid a2 p | offset_min a1 p | offset_min a2 p | offset_max a1 p | offset_max a2 p].
@@ -697,12 +697,12 @@ theory Jessie_alloc
   predicate free_blockset (a1 : alloc_table 't) (a2 : alloc_table 't) (q : pset 't) = alloc_blockset a1 a2 q
 end
 
-theory Jessie_same_except
-  use import Jessie_pointer
-  use import Jessie_pset
-  use import Jessie_alloc_table
-  use import Jessie_tag
-  use import Jessie_tag_table
+theory Same_except
+  use import Pointer
+  use import Pset
+  use import Alloc_table
+  use import Tag
+  use import Tag_table
 
   predicate alloc_same_except (a1 : alloc_table 't) (a2 : alloc_table 't) (l : pset 't) =
     forall p: pointer 't [valid a1 p | valid a2 p | offset_min a1 p | offset_min a2 p | offset_max a1 p | offset_max a2 p].
@@ -728,15 +728,15 @@ theory Jessie_same_except
       tag_same_except t t l
 end
 
-theory Jessie_rmem
+theory Rmem
   use import int.Int
-  use import Jessie_pointer
-  use import Jessie_alloc_table
-  use import Jessie_memory
-  use import Jessie_pset
-  use import Jessie_pset_range
-  use import Jessie_pset_union
-  use import Jessie_assigns
+  use import Pointer
+  use import Alloc_table
+  use import Memory
+  use import Pset
+  use import Pset_range
+  use import Pset_union
+  use import Assigns
 
   function rmem (m : memory 't 'v1) : memory 't 'v2
 
@@ -782,29 +782,29 @@ theory Jessie_rmem
              not_assigns a1 a2 m1 (rmem m3) l)
 end
 
-module Jessie_return
+module Return
   exception Return
 end
 
-module Jessie_sub_pointer_safe
-  use import Jessie_pointer
+module Sub_pointer_safe
+  use import Pointer
 
   val sub_pointer_ (p : pointer 't) (q : pointer 't) : int
     requires { "expl:Pointer difference" same_block p q }
     ensures  { result = sub_pointer p q }
 end
 
-module Jessie_sub_pointer_unsafe
-  use import Jessie_pointer
+module Sub_pointer_unsafe
+  use import Pointer
 
   val sub_pointer_ (p : pointer 't) (q : pointer 't) : int
     requires { true }
     ensures  { result = sub_pointer p q }
 end
 
-module Jessie_eq_pointer_safe
-  use import Jessie_pointer
-  use import Jessie_alloc_table
+module Eq_pointer_safe
+  use import Pointer
+  use import Alloc_table
 
   val eq_pointer (a1 : alloc_table 't) (a2 : alloc_table 't) (p : pointer 't) (q : pointer 't) : bool
     requires { "expl:Pointer equality"
@@ -822,8 +822,8 @@ module Jessie_eq_pointer_safe
     ensures  { result = True <-> p <> q }
 end
 
-module Jessie_eq_pointer_unsafe
-  use import Jessie_pointer
+module Eq_pointer_unsafe
+  use import Pointer
 
   val eq_pointer (p : pointer 't) (q : pointer 't) : bool
     requires { true }
@@ -835,11 +835,11 @@ module Jessie_eq_pointer_unsafe
     ensures  { result = True <-> p <> q }
 end
 
-module Jessie_acc_safe
+module Acc_safe
   use import int.Int
-  use import Jessie_pointer
-  use import Jessie_memory
-  use import Jessie_alloc_table
+  use import Pointer
+  use import Memory
+  use import Alloc_table
 
   val acc (alloc : alloc_table 't) (m : memory 't 'v) (p : pointer 't) : 'v
     requires { "expl:Validity" offset_min alloc p <= 0 <= offset_max alloc p }
@@ -850,22 +850,22 @@ module Jessie_acc_safe
     ensures  { result = select m p }
 end
 
-module Jessie_acc_unsafe
-  use import Jessie_pointer
-  use import Jessie_memory
+module Acc_unsafe
+  use import Pointer
+  use import Memory
 
   val acc (m : memory 't 'v) (p : pointer 't) : 'v
     requires { true }
     ensures  { result = select m p }
 end
 
-module Jessie_acc_offset_safe
+module Acc_offset_safe
   use import int.Int
-  use import Jessie_pointer
-  use import Jessie_tag
-  use import Jessie_tag_table
-  use import Jessie_alloc_table
-  use import Jessie_memory
+  use import Pointer
+  use import Tag
+  use import Tag_table
+  use import Alloc_table
+  use import Memory
 
   val acc_offset
     (alloc : alloc_table 't) (tag : tag_table 't) (m : memory 't 'v)  (p : pointer 't) (s : tag_id 't) (off : int) :  'v
@@ -915,12 +915,12 @@ module Jessie_acc_offset_safe
     ensures  { result = select m (shift p off) }
 end
 
-module Jessie_upd_safe
+module Upd_safe
   use import int.Int
   use import ref.Ref
-  use import Jessie_pointer
-  use import Jessie_memory
-  use import Jessie_alloc_table
+  use import Pointer
+  use import Memory
+  use import Alloc_table
 
   val upd
     (alloc : alloc_table 't) (m : ref (memory 't 'v)) (p : pointer 't) (v : 'v) :  unit
@@ -937,10 +937,10 @@ module Jessie_upd_safe
     ensures  { !m = store (old !m) p v }
 end
 
-module Jessie_upd_unsafe
+module Upd_unsafe
   use import ref.Ref
-  use import Jessie_pointer
-  use import Jessie_memory
+  use import Pointer
+  use import Memory
 
   val upd (m : ref (memory 't 'v)) (p : pointer 't) (v : 'v) : unit
     requires { true }
@@ -949,14 +949,14 @@ module Jessie_upd_unsafe
     ensures  { !m = store (old !m) p v }
 end
 
-module Jessie_upd_offset_safe
+module Upd_offset_safe
   use import int.Int
   use import ref.Ref
-  use import Jessie_pointer
-  use import Jessie_memory
-  use import Jessie_alloc_table
-  use import Jessie_tag
-  use import Jessie_tag_table
+  use import Pointer
+  use import Memory
+  use import Alloc_table
+  use import Tag
+  use import Tag_table
 
   val upd_offset
       (alloc : alloc_table 't) (tag: tag_table 't) (m: ref (memory 't 'v)) (p : pointer 't) (s : tag_id 't) (off : int)
@@ -1011,68 +1011,68 @@ module Jessie_upd_offset_safe
     ensures  { !m = store (old !m) (shift p off) v }
 end
 
-module Jessie_downcast_safe
-  use import Jessie_pointer
-  use import Jessie_tag
-  use import Jessie_tag_table
+module Downcast_safe
+  use import Pointer
+  use import Tag
+  use import Tag_table
 
   val downcast_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) :  pointer 't
     requires { "expl:Downcast" instanceof t p s \/ p = null }
     ensures  { result = p }
 end
 
-module Jessie_downcast_unsafe
-  use import Jessie_pointer
-  use import Jessie_tag
-  use import Jessie_tag_table
+module Downcast_unsafe
+  use import Pointer
+  use import Tag
+  use import Tag_table
 
   val downcast_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) : pointer 't
     requires { true }
     ensures  { result = p }
 end
 
-module Jessie_sidecast_safe
-  use import Jessie_pointer
-  use import Jessie_tag_id
-  use import Jessie_voidp
-  use import Jessie_charp_tag_id
-  use import Jessie_tag_table
-  use import Jessie_sidecast
+module Sidecast_safe
+  use import Pointer
+  use import Tag_id
+  use import Voidp
+  use import Charp_tag_id
+  use import Tag_table
+  use import Sidecast
 
   val sidecast_ (t : tag_table voidP) (p : pointer voidP) (s : tag_id voidP) :  pointer voidP
     requires { "expl: Reinterpret cast to/from char *" typeof t p = charP_tag \/ s = charP_tag }
     ensures  { result = sidecast t p s }
 end
 
-module Jessie_sidecast_safe_reinterpret
-  use import Jessie_pointer
-  use import Jessie_tag
-  use import Jessie_voidp
-  use import Jessie_charp_tag_id
-  use import Jessie_tag_table
-  use import Jessie_sidecast
-  use import Jessie_reinterpret
+module Sidecast_safe_reinterpret
+  use import Pointer
+  use import Tag
+  use import Voidp
+  use import Charp_tag_id
+  use import Tag_table
+  use import Sidecast
+  use import Reinterpret
 
   val sidecast_ (t : tag_table voidP) (p : pointer voidP) (s : tag_id voidP) :  pointer voidP
     requires { "expl: Reinterpret cast" typeof t p = charP_tag \/ s = charP_tag \/ cast_factor (typeof t p) s <> 0 }
     ensures  { result = sidecast t p s }
 end
 
-module Jessie_sidecast_unsafe
-  use import Jessie_pointer
-  use import Jessie_tag_id
-  use import Jessie_tag_table_type
-  use import Jessie_sidecast
+module Sidecast_unsafe
+  use import Pointer
+  use import Tag_id
+  use import Tag_table_type
+  use import Sidecast
 
   val sidecast_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) :  pointer 't
     requires { true }
     ensures  { result = sidecast t p s }
 end
 
-module Jessie_shift_safe
-  use import Jessie_pointer
-  use import Jessie_tag
-  use import Jessie_tag_table
+module Shift_safe
+  use import Pointer
+  use import Tag
+  use import Tag_table
 
   val shift_ (t : tag_table 't) (p : pointer 't) (s : tag_id 't) (off : int) : pointer 't
     requires { "expl:Correct type" typeof t p = s }
@@ -1082,63 +1082,63 @@ module Jessie_shift_safe
     ensures  { result = shift p off }
 end
 
-module Jessie_shift_unsafe
-  use import Jessie_pointer
+module Shift_unsafe
+  use import Pointer
 
   val shift_ (p : pointer 't) (off : int) : pointer 't
     requires { true }
     ensures  { result = shift p off }
 end
 
-module Jessie_any_int
+module Any_int
   use import int.Int
   val any_int (_void : unit) :  int
 end
 
-module Jessie_any_real
+module Any_real
   use import real.Real
   val any_real (_void : unit) :  real
 end
 
-module Jessie_any_bool
+module Any_bool
   val any_bool (_void : unit) :  bool
 end
 
-module Jessie_any_pointer
-  use import Jessie_pointer
+module Any_pointer
+  use import Pointer
   val any_pointer (_void : unit) :  pointer 'z
 end
 
-module Jessie_any_memory
-  use import Jessie_memory
+module Any_memory
+  use import Memory
   val any_memory (_void : unit) :  memory 't 'v
 end
 
-module Jessie_any_alloc_table
-  use import Jessie_alloc_table
+module Any_alloc_table
+  use import Alloc_table
   val any_alloc_table (_void : unit) :  alloc_table 't
 end
 
-module Jessie_any_tag_table
-  use import Jessie_tag_table
+module Any_tag_table
+  use import Tag_table
   val any_tag_table (_void : unit) :  tag_table 't
 end
 
-module Jessie_reinterpret_unsafe
+module Rreinterpret_unsafe
   use import int.Int
   use import ref.Ref
-  use import Jessie_pointer
-  use import Jessie_pset
-  use import Jessie_pset_range
-  use import Jessie_pset_union
-  use import Jessie_memory
-  use import Jessie_alloc_table
-  use import Jessie_allocable
-  use import Jessie_alloc
-  use import Jessie_tag
-  use import Jessie_tag_table_type
-  use import Jessie_sidecast
-  use import Jessie_assigns_strong
+  use import Pointer
+  use import Pset
+  use import Pset_range
+  use import Pset_union
+  use import Memory
+  use import Alloc_table
+  use import Allocable
+  use import Alloc
+  use import Tag
+  use import Tag_table_type
+  use import Sidecast
+  use import Assigns_strong
 
   val reinterpret
     (a : ref (alloc_table 't))
@@ -1165,22 +1165,22 @@ module Jessie_reinterpret_unsafe
                not_assigns_strong (old !m) !m pset_range_new }
 end
 
-module Jessie_reinterpret_safe
+module Reinterpret_safe
   use import int.Int
   use import ref.Ref
-  use import Jessie_pointer
-  use import Jessie_pset
-  use import Jessie_pset_range
-  use import Jessie_pset_union
-  use import Jessie_reinterpret
-  use import Jessie_memory
-  use import Jessie_alloc_table
-  use import Jessie_allocable
-  use import Jessie_alloc
-  use import Jessie_tag
-  use import Jessie_tag_table_type
-  use import Jessie_sidecast
-  use import Jessie_assigns_strong
+  use import Pointer
+  use import Pset
+  use import Pset_range
+  use import Pset_union
+  use import Reinterpret
+  use import Memory
+  use import Alloc_table
+  use import Allocable
+  use import Alloc
+  use import Tag
+  use import Tag_table_type
+  use import Sidecast
+  use import Assigns_strong
 
   use import int.ComputerDivision
 

@@ -1,4 +1,0 @@
-File "why/cui1.why", line 429, characters 5-373:
-warning: no postcondition for exception Return_label_exc; false inserted
-File "why/cui1.why", line 461, characters 55-59:
-warning: no postcondition for exception Return_label_exc; false inserted

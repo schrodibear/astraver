@@ -1,4 +1,0 @@
-File "why/bts92.why", line 340, characters 5-22:
-Unbound variable charP_charM_foo_6
-make: *** [why/bts92.wpr] Error 1
-make: *** [bts92.regtest] Error 2

@@ -1,4 +1,0 @@
-File "why/bts0080.why", line 569, characters 55-68:
-Application to intP_intM_a_3 creates an alias
-make: *** [why/bts0080.wpr] Error 1
-make: *** [bts0080.regtest] Error 2

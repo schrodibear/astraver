@@ -1,6 +1,0 @@
-
-(* a reference cannot be used within a predicate definition *)
-
-parameter x : int ref
-
-predicate p(y : int) = x+y>=0

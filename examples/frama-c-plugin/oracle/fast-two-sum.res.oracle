@@ -1,5 +1,0 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only fast-two-sum.c
-File "fast-two-sum.c", line 11:
-[kernel] error: Error during annotations analysis: invalid implicit conversion from real to integer
-[kernel] error: skipping file "fast-two-sum.c" that has errors.
-[kernel] error: kernel failed to complete because of an invalid user input

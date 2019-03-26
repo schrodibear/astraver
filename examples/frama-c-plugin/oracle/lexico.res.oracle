@@ -1,5 +1,0 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only lexico.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/lexico.c"
-PPCHOME/tests/jessie/lexico.c:4:[kernel] user error: unexpected token '('
-[kernel] user error: skipping file "lexico.c" that has errors.
-[kernel] Frama-C aborted: invalid user input.

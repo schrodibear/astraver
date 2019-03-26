@@ -18,7 +18,7 @@
 (*    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     *)
 (*    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          *)
 (*                                                                        *)
-(*  Jessie2 fork:                                                         *)
+(*  AstraVer fork:                                                        *)
 (*    Mikhail MANDRYKIN, ISP RAS       (adaptation for Linux sources)     *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
@@ -47,18 +47,18 @@ module Emitters =
 struct
   type t = Emitter.t
 
-  let jessie =
+  let astraver =
     Emitter.create
-      "jessie"
+      "astraver"
       [Emitter.Funspec; Emitter.Code_annot]
-      ~correctness:[Jessie_options.Behavior.parameter]
+      ~correctness:[Astraver_options.Behavior.parameter]
       ~tuning:[]
 
-  let jessie_assume =
+  let astraver_assume =
     Emitter.create
-      "jessie_assume"
+      "astraver_assume"
       [Emitter.Funspec; Emitter.Code_annot]
-      ~correctness:[Jessie_options.Behavior.parameter]
+      ~correctness:[Astraver_options.Behavior.parameter]
       ~tuning:[]
 end
 
@@ -66,13 +66,13 @@ exception Unsupported of string
 
 module Console =
 struct
-  open Jessie_options
+  open Astraver_options
 
   let fatal fmt = fatal ~current:true fmt
   let abort ?source fmt = abort ?source fmt
   let error fmt = error ~current:true fmt
   let unsupported fmt =
-    Jessie_options.with_failure
+    Astraver_options.with_failure
       (fun evt ->
          raise @@ Unsupported (may_map ~dft:"unknown feature" (fun evt -> evt.Log.evt_message) evt))
       ~current:true
@@ -400,7 +400,7 @@ end
 
 module Config =
 struct
-  include Jessie_options
+  include Astraver_options
   let flatten_multi_dim_arrays = false
 end
 
@@ -702,7 +702,7 @@ struct
           Globals.Functions.replace_by_declaration
             spec f Location.unknown;
           let kf = Globals.Functions.get f in
-          Annotations.register_funspec ~emitter:Emitters.jessie kf;
+          Annotations.register_funspec ~emitter:Emitters.astraver kf;
           f
 
       let free () =
@@ -739,7 +739,7 @@ struct
           Globals.Functions.replace_by_declaration
             spec f Location.unknown;
           let kf = Globals.Functions.get f in
-          Annotations.register_funspec ~emitter:Emitters.jessie kf;
+          Annotations.register_funspec ~emitter:Emitters.astraver kf;
           f
     end
 
@@ -1418,7 +1418,7 @@ struct
         | [content_fi] -> content_fi
         | _ -> Console.fatal "get_unique_field_exn: type %a has no unique field" Printer.pp_typ ty
         end
-      | ty -> Jessie_options.fatal "get_unique_field_exn: non-composite type: %a" Printer.pp_typ ty
+      | ty -> Astraver_options.fatal "get_unique_field_exn: non-composite type: %a" Printer.pp_typ ty
 
     let compinfo_cname =
       function
@@ -1428,7 +1428,7 @@ struct
     let compinfo =
       function
       | TComp (ci, _, _) -> ci
-      | ty -> Jessie_options.fatal "get_compinfo_exn: non-composite type: %a" Printer.pp_typ ty
+      | ty -> Astraver_options.fatal "get_compinfo_exn: non-composite type: %a" Printer.pp_typ ty
 
     module Ci =
     struct
@@ -1675,7 +1675,7 @@ struct
     | TNamed _                           -> assert false (* unrollType *)
 
   let size_in_bits_exn ty =
-    let open! Jessie_integer in
+    let open! Astraver_integer in
     match unrollType ty with
     | TPtr _ -> Int64.of_int (bitsSizeOf ty)
     | TArray _ -> invalid_arg "Type.size_in_bits_exn: array type" (* Shold be removed by translation *)
@@ -1783,7 +1783,7 @@ struct
         (Datatype.String.Hashtbl)
         (Datatype.Pair (Typ) (Datatype.Option (Datatype.Int)))
         (struct
-          let name = "Jessie.Common.Type.Integral.All"
+          let name = "Astraver.Common.Type.Integral.All"
           let dependencies = [Framac.Ast.self]
           let size = 5
         end)
@@ -2345,7 +2345,7 @@ module Debug =
     let check_exp_types file =
       if Config.debug_atleast 2 then begin
         visitFramacFile (new exp_typechecking_visitor) file;
-        Jessie_options.debug ~level:2 "%a@." Printer.pp_file file
+        Astraver_options.debug ~level:2 "%a@." Printer.pp_file file
       end
 end
 

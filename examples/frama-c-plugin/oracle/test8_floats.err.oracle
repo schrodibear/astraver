@@ -1,2 +1,0 @@
-File "test8_floats.jessie/test8_floats.jc", line 39, characters 22-44: lexical error: unknown special symbol \double_relative_error
-make: *** [test8_floats.regtest] Error 1

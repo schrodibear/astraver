@@ -2,19 +2,17 @@
 INSTALLATION
 ============
 
-  You need OCaml >= 4.02.1 and Frama-C Neon 20140301 to compile the sources.
+  You need OCaml >= 4.07.0 and Frama-C v18.0 to compile the sources.
 
-  1. Configure with "./configure"
+  0. Generate configuration script with "autoconf".
+
+  1. Configure with "./configure".
 
   2. Compile with "make".
 
-  2. Install with "make install".  You may need superuser permissions.
+  3. Install with "make install".  You may need superuser permissions.
 
 
 If you are willing to use Coq (more precisely if Coq is detected when
-running ./configure), you need Coq >= 7.4.
+running ./configure), you need Coq >= 8.7.
 
-
-If you are willing to verify floating-point C programs using Coq, you
-need to install the Coq library on floating-point arithmetic available at
-http://flocq.gforge.inria.fr/

@@ -1,6 +1,0 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0199.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0199.c"
-PPCHOME/tests/jessie/bts0199.c:15:[kernel] user error: Switch on a non-integer expression.
-PPCHOME/tests/jessie/bts0199.c:15:[kernel] failure: integralPromotion: not expecting char const *
-[kernel] user error: skipping file "bts0199.c" that has errors.
-[kernel] Frama-C aborted: invalid user input.

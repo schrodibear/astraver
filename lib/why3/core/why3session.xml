@@ -2,200 +2,195 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="4">
-<prover id="0" name="Alt-Ergo" version="0.99.1" timelimit="10" memlimit="2000"/>
-<prover id="1" name="Z3" version="4.3.2" timelimit="10" memlimit="2000"/>
-<prover id="2" name="CVC4" version="1.4.1-prerelease" timelimit="10" memlimit="1000"/>
-<prover id="3" name="CVC4" version="1.4" timelimit="10" memlimit="1000"/>
+<prover id="0" name="Eprover" version="2.0" timelimit="5" steplimit="0" memlimit="1000"/>
+<prover id="7" name="Alt-Ergo" version="2.3.0" timelimit="5" steplimit="0" memlimit="1000"/>
 <file name="../core.mlw" expanded="true">
-<theory name="Jessie_pointer" sum="9af29e038defe72ca824cd6e219adf49" expanded="true">
- <goal name="Sub_pointer_shift">
- <proof prover="1"><result status="valid" time="0.00"/></proof>
+<theory name="Pointer" sum="0fd373447236ec8e806b47a207b9e883" expanded="true">
+ <goal name="Sub_pointer_shift" expl="" expanded="true">
+ <proof prover="0"><result status="valid" time="0.01"/></proof>
  </goal>
- <goal name="Sub_pointer_self">
- <proof prover="3" memlimit="2000"><result status="valid" time="0.00"/></proof>
+ <goal name="Sub_pointer_self" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.00" steps="8"/></proof>
  </goal>
- <goal name="Sub_pointer_zero">
- <proof prover="0"><result status="valid" time="0.01" steps="5"/></proof>
+ <goal name="Sub_pointer_zero" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.00" steps="12"/></proof>
  </goal>
- <goal name="Sub_pointer_shift_left">
- <proof prover="0"><result status="valid" time="0.00" steps="28"/></proof>
+ <goal name="Sub_pointer_shift_left" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.01" steps="66"/></proof>
  </goal>
- <goal name="Sub_pointer_shift_right">
- <proof prover="0"><result status="valid" time="0.01" steps="9"/></proof>
+ <goal name="Sub_pointer_shift_right" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.00" steps="14"/></proof>
  </goal>
- <goal name="Sub_pointer_neg">
- <proof prover="3" memlimit="2000"><result status="valid" time="0.01"/></proof>
+ <goal name="Sub_pointer_neg" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="4.45" steps="1017"/></proof>
  </goal>
- <goal name="Shift_shift">
- <proof prover="0"><result status="valid" time="0.01" steps="6"/></proof>
+ <goal name="Shift_shift" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.00" steps="2"/></proof>
  </goal>
- <goal name="Neq_shift">
- <proof prover="0"><result status="valid" time="0.00" steps="3"/></proof>
+ <goal name="Neq_shift" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.00" steps="4"/></proof>
  </goal>
- <goal name="Same_block_refl">
- <proof prover="3" memlimit="2000"><result status="valid" time="0.00"/></proof>
+ <goal name="Same_block_refl" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.00" steps="12"/></proof>
  </goal>
- <goal name="Same_block_shift">
- <proof prover="3" memlimit="2000"><result status="valid" time="0.03"/></proof>
+ <goal name="Same_block_shift" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.98" steps="682"/></proof>
  </goal>
- <goal name="Same_block_symm">
- <proof prover="0"><result status="valid" time="0.01" steps="8"/></proof>
+ <goal name="Same_block_symm" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.01" steps="30"/></proof>
  </goal>
- <goal name="Same_block_trans">
- <proof prover="0"><result status="valid" time="0.01" steps="42"/></proof>
+ <goal name="Same_block_trans" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.03" steps="88"/></proof>
  </goal>
- <goal name="Same_block_shift_right">
- <proof prover="0"><result status="valid" time="0.02" steps="14"/></proof>
+ <goal name="Same_block_shift_right" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.01" steps="20"/></proof>
  </goal>
- <goal name="Same_block_shift_left">
- <proof prover="0"><result status="valid" time="0.00" steps="8"/></proof>
- </goal>
-</theory>
-<theory name="Jessie_zwf" sum="d41d8cd98f00b204e9800998ecf8427e">
-</theory>
-<theory name="Jessie_alloc_table" sum="d41d8cd98f00b204e9800998ecf8427e">
-</theory>
-<theory name="Jessie_memory" sum="d41d8cd98f00b204e9800998ecf8427e">
-</theory>
-<theory name="Jessie_pset" sum="d41d8cd98f00b204e9800998ecf8427e">
-</theory>
-<theory name="Jessie_pset_range" sum="253611953dde1fd95373b74d8b2fe694">
- <goal name="In_pset_range_singleton">
- <proof prover="3" memlimit="2000"><result status="valid" time="0.03"/></proof>
+ <goal name="Same_block_shift_left" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.01" steps="22"/></proof>
  </goal>
 </theory>
-<theory name="Jessie_pset_range_left" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Zwf" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_pset_range_right" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Alloc_table" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_pset_deref" sum="9d14b296e85e909096e9dc51cd4221ee">
- <goal name="In_pset_deref_singleton">
- <proof prover="3"><result status="valid" time="0.02"/></proof>
+<theory name="Memory" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Pset" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Pset_range" sum="8f5f9a30d93419f8e870c7ea84e9e6c0" expanded="true">
+ <goal name="In_pset_range_singleton" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.05" steps="272"/></proof>
  </goal>
 </theory>
-<theory name="Jessie_pset_union" sum="6758a7d153eb2a691897631cf5bdd887">
- <goal name="In_pset_union_singleton">
- <proof prover="3"><result status="valid" time="0.00"/></proof>
+<theory name="Pset_range_left" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Pset_range_right" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Pset_deref" sum="b8a7696d87d96efb2b9114f60e1c9478" expanded="true">
+ <goal name="In_pset_deref_singleton" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.00" steps="26"/></proof>
  </goal>
 </theory>
-<theory name="Jessie_pset_all" sum="fb13a3bcb4d7904d3eda0d21acf7860b">
- <goal name="In_pset_all_singleton">
- <proof prover="3"><result status="valid" time="0.03"/></proof>
- </goal>
- <goal name="In_pset_union_all_singleton">
- <proof prover="3"><result status="valid" time="0.01"/></proof>
+<theory name="Pset_union" sum="3183d2f8acf9d47ace30445c2a3c6cc6" expanded="true">
+ <goal name="In_pset_union_singleton" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.00" steps="10"/></proof>
  </goal>
 </theory>
-<theory name="Jessie_pset_disjoint" sum="d41d8cd98f00b204e9800998ecf8427e">
-</theory>
-<theory name="Jessie_pset_included" sum="d41d8cd98f00b204e9800998ecf8427e">
-</theory>
-<theory name="Jessie_assigns" sum="eae830343f60e40927e4654b1bcab65a">
- <goal name="Not_assigns_refl">
- <proof prover="2"><result status="valid" time="0.01"/></proof>
- <proof prover="3" obsolete="true"><result status="valid" time="0.01"/></proof>
+<theory name="Pset_all" sum="c470e0e1e5dd468a3bc355e3769e4806" expanded="true">
+ <goal name="In_pset_all_singleton" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.01" steps="167"/></proof>
  </goal>
- <goal name="Not_assigns_trans">
- <proof prover="2"><result status="valid" time="0.01"/></proof>
- <proof prover="3" obsolete="true"><result status="valid" time="0.01"/></proof>
+ <goal name="In_pset_union_all_singleton" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.01" steps="24"/></proof>
  </goal>
 </theory>
-<theory name="Jessie_assigns_strong" sum="9725597645b1e5394498b9514b06b26c">
- <goal name="not_assigns_strong">
- <proof prover="2"><result status="valid" time="0.01"/></proof>
- <proof prover="3" obsolete="true"><result status="valid" time="0.01"/></proof>
+<theory name="Pset_disjoint" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Pset_included" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Assigns" sum="fd27bf399e020eb44b5b7b44ba09dd41" expanded="true">
+ <goal name="Not_assigns_refl" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.00" steps="2"/></proof>
+ </goal>
+ <goal name="Not_assigns_trans" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.01" steps="20"/></proof>
  </goal>
 </theory>
-<theory name="Jessie_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e">
-</theory>
-<theory name="Jessie_tag" sum="d41d8cd98f00b204e9800998ecf8427e">
-</theory>
-<theory name="Jessie_tag_table_type" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
-</theory>
-<theory name="Jessie_voidp" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
-</theory>
-<theory name="Jessie_voidp_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
-</theory>
-<theory name="Jessie_tag_table" sum="d41d8cd98f00b204e9800998ecf8427e">
-</theory>
-<theory name="Jessie_charp_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
-</theory>
-<theory name="Jessie_sidecast" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
-</theory>
-<theory name="Jessie_reinterpret" sum="d41d8cd98f00b204e9800998ecf8427e">
-</theory>
-<theory name="Jessie_reinterpret_cast" sum="d41d8cd98f00b204e9800998ecf8427e">
-</theory>
-<theory name="Jessie_allocable" sum="dfe5feb4f8e5b1dfd2395210104d1d94">
- <goal name="Alloc_fresh_not_same_block">
- <proof prover="2"><result status="valid" time="0.02"/></proof>
+<theory name="Assigns_strong" sum="222102bce79efdd3680a4b4e60fbf789" expanded="true">
+ <goal name="not_assigns_strong" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.01" steps="16"/></proof>
  </goal>
 </theory>
-<theory name="Jessie_alloc" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Tag_id" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_same_except" sum="197f9c54cc63b0098296acb1fd55f41f">
- <goal name="Alloc_same_except_trans">
- <proof prover="2"><result status="valid" time="0.01"/></proof>
+<theory name="Tag" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Tag_table_type" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Voidp" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Voidp_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Tag_table" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Charp_tag_id" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Sidecast" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Reinterpret" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Reinterpret_cast" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Allocable" sum="fbcdaeb2f0b0822786470ae0ad548319" expanded="true">
+ <goal name="Alloc_fresh_not_same_block" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.01" steps="24"/></proof>
  </goal>
- <goal name="Tag_same_except_refl">
- <proof prover="2"><result status="valid" time="0.01"/></proof>
+</theory>
+<theory name="Alloc" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+</theory>
+<theory name="Same_except" sum="c5d8b3b91d3820319bd1e35bb7212b73" expanded="true">
+ <goal name="Alloc_same_except_trans" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.01" steps="19"/></proof>
+ </goal>
+ <goal name="Tag_same_except_refl" expl="" expanded="true">
+ <proof prover="7"><result status="valid" time="0.01" steps="2"/></proof>
  </goal>
 </theory>
-<theory name="Jessie_rmem" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Rmem" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_return" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Return" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_sub_pointer_safe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Sub_pointer_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_sub_pointer_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Sub_pointer_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_eq_pointer_safe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Eq_pointer_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_eq_pointer_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Eq_pointer_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_acc_safe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Acc_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_acc_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Acc_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_acc_offset_safe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Acc_offset_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_upd_safe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Upd_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_upd_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Upd_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_upd_offset_safe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Upd_offset_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_downcast_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+<theory name="Downcast_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_downcast_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+<theory name="Downcast_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_sidecast_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+<theory name="Sidecast_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_sidecast_safe_reinterpret" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+<theory name="Sidecast_safe_reinterpret" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_sidecast_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
+<theory name="Sidecast_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_shift_safe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Shift_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_shift_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Shift_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_any_int" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Any_int" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_any_real" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Any_real" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_any_bool" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Any_bool" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_any_pointer" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Any_pointer" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_any_memory" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Any_memory" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_any_alloc_table" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Any_alloc_table" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_any_tag_table" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Any_tag_table" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_reinterpret_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Rreinterpret_unsafe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
-<theory name="Jessie_reinterpret_safe" sum="d41d8cd98f00b204e9800998ecf8427e">
+<theory name="Reinterpret_safe" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
 </theory>
 </file>
 </why3session>

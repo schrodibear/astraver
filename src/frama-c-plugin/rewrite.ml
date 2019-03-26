@@ -18,7 +18,7 @@
 (*    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     *)
 (*    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          *)
 (*                                                                        *)
-(*  Jessie2 fork:                                                         *)
+(*  AstraVer fork:                                                        *)
 (*    Mikhail MANDRYKIN, ISP RAS                                          *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
@@ -50,7 +50,7 @@ let add_default_behaviors () =
   Globals.Functions.iter @@
     fun kf ->
       if not (List.exists is_default_behavior @@ Annotations.behaviors kf) then begin
-        Annotations.add_behaviors Emitters.jessie kf [mk_behavior ()];
+        Annotations.add_behaviors Emitters.astraver kf [mk_behavior ()];
         (* ensures that default behavior will be correctly populated *)
         ignore (Annotations.behaviors kf)
       end
@@ -753,7 +753,7 @@ class specialize_memset =
            my_globals <- GFunDecl(empty_funspec (), f, loc) :: my_globals;
            Globals.Functions.replace_by_declaration spec f loc;
            let kf = Globals.Functions.get f in
-           Annotations.register_funspec ~emitter:Emitters.jessie kf;
+           Annotations.register_funspec ~emitter:Emitters.astraver kf;
            let my_instr = Call (None, evar ~loc f, actuals, loc) in
            s.skind <- Instr my_instr;
            SkipChildren
@@ -842,7 +842,7 @@ class kzalloc_expanding_visitor =
             mkStmt (Instr (Set (var vi_old_ptr, ptr, loc)))
           in
           Annotations.add_assert
-            Emitters.jessie_assume
+            Emitters.astraver_assume
             ~kf:(Option.value_fatal ~in_:"expand_realloc" self#current_kf)
             r @@
           Logic_const.(
@@ -1180,7 +1180,7 @@ class specialize_blockfuns_visitor =
                  lst);
             let g = Daxiomatic (name, lst, [], Location.unknown) in
             new_globals <- GAnnot (g, CurrentLoc.get ()) :: new_globals;
-            Annotations.add_global Emitters.jessie g;
+            Annotations.add_global Emitters.astraver g;
             self#update_logic_info typ li
           | Some _ ->
             Console.fatal
@@ -1214,7 +1214,7 @@ class specialize_blockfuns_visitor =
       new_globals <- GFunDecl (empty_funspec (), f, loc) :: new_globals;
       Globals.Functions.replace_by_declaration spec f loc;
       let kernel_function = Globals.Functions.get f in
-      Annotations.register_funspec ~emitter:Emitters.jessie kernel_function;
+      Annotations.register_funspec ~emitter:Emitters.astraver kernel_function;
       f
 
     method! vstmt_aux =
@@ -1533,7 +1533,7 @@ class asms_to_functions_visitor =
                         end else
                           outs (From (List.map new_identified_term @@ to_terms ins)))
               ()]);
-        Annotations.register_funspec ~emitter:Emitters.jessie kf;
+        Annotations.register_funspec ~emitter:Emitters.astraver kf;
         f
       | Declaration (_, _, None, _) -> Console.fatal "Generated dummy function has somehow lost its arguments"
       | Definition _ -> Console.fatal "Generated dummy function was somehow unexpectedly defined"
@@ -1707,7 +1707,7 @@ class fp_eliminating_visitor ~attach =
               let f = norm f in
               List.map (fun e -> new_exp ~loc @@ BinOp (Eq, f, e, intType)) addrs
                   in
-                  Annotations.add_assert Emitters.jessie ~kf s @@
+                  Annotations.add_assert Emitters.astraver ~kf s @@
                     Ast.Predicate.of_exp_exn @@
                       List.fold_left (mkBinOp ~loc LOr) z eqs;
                   let s' =
@@ -1719,7 +1719,7 @@ class fp_eliminating_visitor ~attach =
                                  ~valid_sid:true
                                  (Set ((Var vi, NoOffset), mkBinOp ~loc (Div Check) z z, loc))
                              in
-                             Annotations.add_assert Emitters.jessie ~kf s @@ Logic_const.pfalse;
+                             Annotations.add_assert Emitters.astraver ~kf s @@ Logic_const.pfalse;
                              s)
                       ~f:(fun acc eq vi ->
                           mkStmt (
@@ -1752,7 +1752,7 @@ class dummy_struct_definer ~attach =
     method! vcompinfo ci =
       if ci.cdefined = false && ci.cfields = [] then begin
         Console.warning
-          "Defining dummy composite tag for %s in extract mode (enabled by -jessie-extract)"
+          "Defining dummy composite tag for %s in extract mode (enabled by -astraver-extract)"
           (compFullName ci);
         attach#global @@ GCompTag (ci, Location.unknown);
         ci.cdefined <- true
@@ -2066,12 +2066,12 @@ object
     function
     | Pseparated _ ->
       Console.warn_once
-        "\\separated is not supported by Jessie. This predicate will be \
+        "\\separated is not supported by AstraVer. This predicate will be \
          ignored";
       ChangeTo Ptrue
     | Pvalid_read (l, t) ->
       Console.warn_once
-        "\\valid_read is not supported by Jessie. It will be treated as \\valid";
+        "\\valid_read is not supported by AstraVer. It will be treated as \\valid";
       ChangeTo (Pvalid (l, t))
     | _ -> DoChildren
 end
@@ -2128,7 +2128,7 @@ let declare_jessie_nondet_int file =
                     [mk_behavior ~assigns:(Writes [Logic_const.(new_identified_term (tresult intType), FromAny)]) ()];
                   attach#global @@ GFunDecl (fspec, f, Location.unknown);
                   Globals.Functions.replace_by_declaration fspec f Location.unknown;
-                  Annotations.register_funspec ~emitter:Emitters.jessie (Globals.Functions.get f);
+                  Annotations.register_funspec ~emitter:Emitters.astraver (Globals.Functions.get f);
                   self#fix_vartype ~loc lv;
                   SkipChildren
                 | Some vi
@@ -2146,7 +2146,7 @@ let declare_jessie_nondet_int file =
   end
 
 (*****************************************************************************)
-(* Remove \from clauses from assigns (not used by Jessie)                    *)
+(* Remove \from clauses from assigns (not used by AstraVer)                  *)
 (*****************************************************************************)
 
 class assigns_from_remover =
@@ -2497,7 +2497,7 @@ let rewrite file =
   let open Config in
   (* Expand logic type synonyms *)
   apply expand_logic_types "expanding logic type synonyms";
-  (* Remove assigns \from clauses not used by Jessie but causing failures by void * dereferences *)
+  (* Remove assigns \from clauses not used by AstraVer but causing failures by void * dereferences *)
   apply remove_assigns_from "removing assigns \\from clauses";
   (* Insert declarations for kmalloc and jessie_nondet_int if necessary *)
   apply declare_jessie_nondet_int "inserting declaration for jessie_nondet_int (if necessary)";

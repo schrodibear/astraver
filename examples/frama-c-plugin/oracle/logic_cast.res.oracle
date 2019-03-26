@@ -1,8 +1,0 @@
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/logic_cast_why.why        : ..**.**.**.**...***.... (12/11/0/0/0)
-total   :  23
-valid   :  12 ( 52%)
-invalid :  11 ( 48%)
-unknown :   0 (  0%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

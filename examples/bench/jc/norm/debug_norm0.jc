@@ -1,8 +1,0 @@
-
-
-/* debug normalization */
-
-
-unit f(boolean b1, boolean b2) {
-  if (!b1 || b1 && b2) { }
-}

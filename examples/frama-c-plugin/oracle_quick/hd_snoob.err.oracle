@@ -1,6 +1,0 @@
-[preprocessing] running gcc -C -E -I. hd_snoob.c
-No code for function exit, default assigns generated
-No code for function strtol, default assigns generated
-No code for function printf, default assigns generated
-Fatal error: exception Failure("int_of_string")
-make: *** [hd_snoob.quick] Erreur 2

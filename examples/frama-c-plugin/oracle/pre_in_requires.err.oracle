@@ -1,4 +1,0 @@
-File "why/pre_in_requires.why", line 410, characters 8-319:
-warning: mutable x_0 is not declared in effect; added as read
-File "why/pre_in_requires.why", line 410, characters 8-319:
-warning: mutable y is not declared in effect; added as read

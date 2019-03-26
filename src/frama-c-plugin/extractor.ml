@@ -18,7 +18,7 @@
 (*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  *)
 (*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       *)
 (*                                                                        *)
-(*  Jessie2 fork:                                                         *)
+(*  AstraVer fork:                                                        *)
 (*    Mikhail MANDRYKIN, ISP RAS          (adaptation for Linux sources)  *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
@@ -256,7 +256,7 @@ class relevant_function_visitor state ~add_from_type =
           | TFun (rt, ao, _, _) | TPtr (TFun (rt, ao, _, _), _) ->
             rt :: (List.map (fun (_, t, _) -> t) (Option.value ~default:[] ao))
           | t ->
-            Jessie_options.fatal
+            Astraver_options.fatal
               "Non-function (%a) called as function: %a"
               Printer.pp_typ t Printer.pp_exp f
         in

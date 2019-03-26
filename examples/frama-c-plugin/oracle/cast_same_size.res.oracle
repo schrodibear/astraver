@@ -1,6 +1,0 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only cast_same_size.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/cast_same_size.c"
-[jessie] Starting Jessie translation
-PPCHOME/tests/jessie/cast_same_size.c:24:[jessie] failure: Casting from type struct intP * to type struct int_struct * not allowed in logic
-[jessie] user error: Unsupported feature(s).
-                     Jessie plugin can not be used on your code.

@@ -1,0 +1,4 @@
+# .merlin file for AstraVer
+PKG ocamlgraph
+FLG -open Aliases
+REC

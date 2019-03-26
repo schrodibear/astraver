@@ -1,2 +1,0 @@
-File "bts0273.jessie/bts0273.jc", line 58, characters 53-237: typing error: bit-dependent cast over floating-point values
-make: *** [bts0273.regtest] Error 1

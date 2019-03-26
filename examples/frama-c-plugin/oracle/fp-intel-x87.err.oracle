@@ -1,4 +1,0 @@
-[kernel...] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD fp-intel-x87.c"
-Producing Jessie files in subdir fp-intel-x87.jessie
-File fp-intel-x87.jessie/fp-intel-x87.jc written.
-File fp-intel-x87.jessie/fp-intel-x87.cloc written.

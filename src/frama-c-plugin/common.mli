@@ -42,8 +42,8 @@ open Format
 module Emitters :
 sig
   type t = Emitter.t
-  val jessie : Emitter.t
-  val jessie_assume : Emitter.t
+  val astraver : Emitter.t
+  val astraver_assume : Emitter.t
 end
 
 exception Unsupported of string
@@ -198,7 +198,7 @@ end
 
 module Config :
 sig
-  include module type of Jessie_options
+  include module type of Astraver_options
   val flatten_multi_dim_arrays : bool
 end
 

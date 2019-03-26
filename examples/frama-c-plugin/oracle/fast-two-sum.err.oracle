@@ -1,2 +1,0 @@
-[kernel...] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD fast-two-sum.c"
-make: *** [fast-two-sum.regtest] Error 1

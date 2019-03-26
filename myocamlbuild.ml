@@ -28,6 +28,6 @@ function
 | After_options ->
   Options.ocamldep := A "../ocamldep"
 | After_rules ->
-  get_files "src/jc" |>
-  List.iter ~f:(non_dependency "src/jc/aliases.mli" % module_name_of_pathname)
+  get_files "src/av" |>
+  List.iter ~f:(non_dependency "src/av/aliases.mli" % module_name_of_pathname)
 | _ -> ()

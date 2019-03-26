@@ -18,7 +18,7 @@
 (*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  *)
 (*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       *)
 (*                                                                        *)
-(*  Jessie2 fork:                                                         *)
+(*  AstraVer fork:                                                        *)
 (*    Mikhail MANDRYKIN, ISP RAS          (adaptation for Linux sources)  *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)

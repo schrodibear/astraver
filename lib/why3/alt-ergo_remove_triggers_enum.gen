@@ -1,32 +1,50 @@
 transformation "remove_triggers"
 
+
+
+
+  
 theory enum.Bit_int8
   remove prop To_int_def
 end
 
+
+  
 theory enum.Bit_uint8
   remove prop To_int_def
 end
 
+
+  
 theory enum.Bit_int16
   remove prop To_int_def
 end
 
+
+  
 theory enum.Bit_uint16
   remove prop To_int_def
 end
 
+
+  
 theory enum.Bit_int32
   remove prop To_int_def
 end
 
+
+  
 theory enum.Bit_uint32
   remove prop To_int_def
 end
 
+
+  
 theory enum.Bit_int64
 end
 
+
+  
 theory enum.Bit_uint64
 end
 

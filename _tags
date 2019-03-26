@@ -1,9 +1,9 @@
 <src/why>: include
-<src/jc>: include
-<src/jc/aliases.mli>: warn(-49), warn_error_a
+<src/av>: include
+<src/av/aliases.mli>: warn(-49), warn_error_a
 true: warn_Z, warn(-52), warn(-3), warn_error_A, bin_annot, short_paths, strict_formats, safe_string, no_alias_deps
 true: package(unix), package(str), package(num), package(ocamlgraph)
-<src/jc/jc_*.ml*>: open(Aliases)
+<src/av/av_*.ml*>: open(Aliases)
 <src/frama-c-plugin/*.{cmo,cmi,cmx,cma,o,cmt,cmti,annot}>: not_hygienic
 <src/frama-c-plugin/top/*.{cmo,cmi,cmx,cma,o,cmt,cmti,annot}>: not_hygienic
 <src/frama-c-plugin/frama-c>: -traverse, not_hygienic

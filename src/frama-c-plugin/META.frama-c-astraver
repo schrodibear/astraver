@@ -1,0 +1,8 @@
+description = "Frama-C AstraVer plug-in"
+version = "18.0"
+requires = " frama-c-variadic"
+archive(byte) = "top/AstraVer.cma"
+archive(native) = "top/AstraVer.cmx"
+plugin(native) = "top/AstraVer.cmxs"
+plugin(byte) = "top/AstraVer.cma"
+directory = ""

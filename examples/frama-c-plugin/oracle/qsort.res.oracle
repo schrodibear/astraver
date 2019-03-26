@@ -1,5 +1,0 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only qsort.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/qsort.c"
-PPCHOME/tests/jessie/qsort.c:34:[kernel] user error: unexpected token 'ComparatorTheory'
-[kernel] user error: skipping file "qsort.c" that has errors.
-[kernel] Frama-C aborted: invalid user input.

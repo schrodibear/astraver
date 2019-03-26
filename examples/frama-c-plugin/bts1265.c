@@ -1,4 +1,0 @@
-
-void shift() {}
-
-void alloc() {}

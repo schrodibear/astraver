@@ -1,5 +1,0 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts024.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts024.c"
-PPCHOME/tests/jessie/bts024.c:35:[kernel] user error: In ACSL, there is no implicit conversion between a C array and a pointer. Either introduce an explicit cast or take the address of the first element of a.buf in annotation.
-[kernel] user error: skipping file "bts024.c" that has errors.
-[kernel] Frama-C aborted: invalid user input.

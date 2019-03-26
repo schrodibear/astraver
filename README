@@ -18,7 +18,7 @@
 *    Jean-Francois COUCHOT, INRIA     (sort encodings, hyps pruning)     *
 *    Mehdi DOGGUY, Univ. Paris-sud    (Why GUI)                          *
 *                                                                        *
-*  Jessie2 fork:                                                         *
+*  AstraVer fork:                                                        *
 *    Mikhail MANDRYKIN, ISP RAS       (adaptation for Linux sources)     *
 *                                                                        *
 *  This software is free software; you can redistribute it and/or        *
@@ -32,31 +32,15 @@
 *                                                                        *
 **************************************************************************
 
-Jessie2 is a fork of the Jessie plug-in that allows deductive verification
+AstraVer is a fork of the Jessie plug-in that allows deductive verification
 of C programs annotated with ACSL and is primarily targeted at
 Linux kernel modules source code. It uses the language and tools
 of the Why3 platform (http://why3.lri.fr/). Unlike original Jessie,
-Jessie2 is not distributed as a part of the Why2 certification platform
+AstraVer is not distributed as a part of the Why2 certification platform
 and is compiled/installed separately.
 
 DOCUMENTATION
 =============
-
-The documentation (a  tutorial and a reference manual)  is enclosed in
-the subdirectory doc/.
-
-Various examples can be found in the subdirectory examples/.
-
-Mailing lists: there exist two mailing lists for Why and Caduceus
-respectively. To subscribe, you need to send an email to
-
-	why-request@serveur-listes.lri.fr
-or	caduceus-request@serveur-listes.lri.fr
-
-with "subscribe your@email" in the mail body. These lists are mainly
-used to announce the releases of Why and Caduceus. Emails can be sent
-to the list at why@serveur-listes.lri.fr and caduceus@serveur-listes.lri.fr.
-Only the lists members can send emails to the list.
 
 COPYRIGHT
 =========

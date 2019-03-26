@@ -42,7 +42,7 @@ open Common
 
 let std_include = Filename.concat Framac.Config.datadir "astraver"
 
-let jessie_specific_config () =
+let astraver_specific_config () =
   if Config.Analysis.get () && Config.Specialize.get () then
     let spec_prolog_h_name = Filename.concat std_include Name.File.blockfuns_include in
     Kernel.CppExtraArgs.append_before ["-include " ^ spec_prolog_h_name];
@@ -59,7 +59,7 @@ let () =
      Preserve the behaviour of svn release <= r5012.
      However it works only if the int-model is set from the command line. *)
   (* Extension -- support for specialized memcpy() versions. *)
-  List.iter Cmdline.run_after_configuring_stage [jessie_specific_config]
+  List.iter Cmdline.run_after_configuring_stage [astraver_specific_config]
 
 let steal_globals () =
   let vis =
@@ -69,7 +69,7 @@ let steal_globals () =
         match g with
         | GAnnot (a, _) ->
           Annotations.remove_global (Annotations.emitter_of_global a) a;
-          Annotations.unsafe_add_global Emitters.jessie a;
+          Annotations.unsafe_add_global Emitters.astraver a;
           (* SkipChildren is not good, as Annotations.remove_global has
              removed it from AST: we have to re-insert it...
           *)
@@ -80,7 +80,7 @@ let steal_globals () =
   Visitor.visitFramacFile vis (FCAst.get ())
 
 let steal_annots () =
-  let emitter = Emitters.jessie in
+  let emitter = Emitters.astraver in
   let l =
     Annotations.fold_all_code_annot
       (fun stmt e ca acc ->
@@ -109,7 +109,7 @@ let run () =
   (* Work in our own project, initialized by a copy of the main one. *)
   let prj =
     File.create_project_from_visitor
-      "jessie"
+      "astraver"
       (new Visitor.frama_c_copy)
   in
   Console.debug "Project created";
@@ -179,11 +179,10 @@ let run () =
       | _ -> "whole_program"
   in
   (* if called on 'path/file.c', projname is 'path/file' *)
-  (* jessie_subdir is 'path/file.jessie' *)
-  let jessie_subdir = Config.Output_Dir_name.get () in
-  let jessie_subdir =
-    if jessie_subdir <> ""
-    then jessie_subdir
+  let astraver_subdir = Config.Output_Dir_name.get () in
+  let astraver_subdir =
+    if astraver_subdir <> ""
+    then astraver_subdir
     else projname ^ ".av"
   in
   let mkdir_p dir =
@@ -193,8 +192,8 @@ let run () =
     end else
       Unix.mkdir dir 0o777
   in
-  mkdir_p jessie_subdir;
-  Console.feedback "Producing AstraVer files in subdir %s" jessie_subdir;
+  mkdir_p astraver_subdir;
+  Console.feedback "Producing files for AstraVer in subdir %s" astraver_subdir;
   (* basename is 'file' *)
   let basename =
     String.filter_alphanumeric ~assoc:['-', '-'; ' ', '-'; '(', '-'; ')', '-'] ~default:'_' @@
@@ -205,18 +204,18 @@ let run () =
   let filename = basename ^ ".jc" in
   Why_pp.print_in_file
     (fun fmt ->
-       Jc.Print.print_decls fmt pragmas;
-       Format.fprintf fmt "%a" Jc.Print_p.pdecls pfile)
-    (Filename.concat jessie_subdir filename);
-  Console.feedback "File %s/%s written." jessie_subdir filename;
+       Av.Print.print_decls fmt pragmas;
+       Format.fprintf fmt "%a" Av.Print_p.pdecls pfile)
+    (Filename.concat astraver_subdir filename);
+  Console.feedback "File %s/%s written." astraver_subdir filename;
 
   (* Phase 6: produce source-to-source correspondance file *)
   (* locname is 'file.cloc' *)
   let locname = basename ^ ".cloc" in
   Why_pp.print_in_file
-    Jc.Print.jc_print_pos
-    (Filename.concat jessie_subdir locname);
-  Console.feedback "File %s/%s written." jessie_subdir locname;
+    Av.Print.jc_print_pos
+    (Filename.concat astraver_subdir locname);
+  Console.feedback "File %s/%s written." astraver_subdir locname;
 
   if not @@ Config.Gen_only.get () then
     (* Phase 7: call Jessie to Why3ML translation *)
@@ -229,7 +228,7 @@ let run () =
            (if !res = "" then "" else " "));
       !res
     in
-    let jc_opt = Config.Jc_opt.As_string.get () in
+    let jc_opt = Config.Av_opt.As_string.get () in
     let debug_opt = if Console.debug_at_least 1 then " -d " else " " in
     let behav_opt =
       if Config.Behavior.get () <> "" then
@@ -244,25 +243,25 @@ let run () =
         "OCAMLRUNPARAM=bt"
       else ""
     in
-    let jessie_cmd =
-      try Sys.getenv "JESSIEEXEC"
+    let astraver_cmd =
+      try Sys.getenv "AVEXEC"
       with
       | Not_found ->
         (* NdV: the test below might not be that useful, since ocaml
            has stack trace in native code since 3.10, even though -g
            is usually missing from native flags.  *)
-        if Console.debug_at_least 1 then " jessie.byte "
-        else " jessie "
+        if Console.debug_at_least 1 then " astraver.byte "
+        else " astraver "
     in
     let timeout =
       if Config.Cpu_limit.get () <> 0 then "TIMEOUT=" ^ (string_of_int (Config.Cpu_limit.get ())) ^ " "
       else ""
     in
-    Console.feedback "Calling AstraVer tool in subdir %s" jessie_subdir;
-    Sys.chdir jessie_subdir;
+    Console.feedback "Calling AstraVer tool in subdir %s" astraver_subdir;
+    Sys.chdir astraver_subdir;
 
     let target = Config.Target.get () in
-    let jessie_opt =
+    let astraver_opt =
       match target with
       | "why3" | "why3ml" | "why3ide" | "why3replay" | "why3autoreplay" | "why3prove" | "why3sprove" | "update" -> ""
       | _ -> ""
@@ -271,8 +270,8 @@ let run () =
       String.concat " "
         [
           env_opt;
-          jessie_cmd;
-          jessie_opt ;
+          astraver_cmd;
+          astraver_opt ;
           verbose_opt;
           why3_opt;
           jc_opt;
@@ -297,7 +296,7 @@ let run () =
     flush_all ()
 
 (* ************************************************************************* *)
-(* Plug Jessie to the Frama-C platform *)
+(* Plug AstraVer to the Frama-C platform *)
 (* ************************************************************************* *)
 
 let run_and_catch_error () =

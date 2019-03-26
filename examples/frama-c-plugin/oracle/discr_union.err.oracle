@@ -1,2 +1,0 @@
-Jessie support for unions and pointer casts is disabled
-make: *** [discr_union.regtest] Error 1

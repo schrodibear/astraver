@@ -1,4 +1,0 @@
-File "why/power.why", line 159, characters 27-108:
-Unbound variable pow_int
-make: *** [why/power_why.why] Error 1
-sed: can't read tests/c/power.jessie/why/power_why.why: No such file or directory

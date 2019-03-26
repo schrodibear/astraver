@@ -1,5 +1,5 @@
 # Why version (not maintained in this project, to be eliminated)
 WHY_VERSION="2.34-(frozen)"
 
-# Jessie2 version
-JC_VERSION="alpha3"
+# AstraVer version
+AV_VERSION="18.0"

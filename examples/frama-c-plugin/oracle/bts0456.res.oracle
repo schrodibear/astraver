@@ -1,5 +1,0 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0456.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0456.c"
-PPCHOME/tests/jessie/bts0456.c:79:[kernel] user error: loop invariant is not allowed after loop variant.
-[kernel] user error: skipping file "bts0456.c" that has errors.
-[kernel] Frama-C aborted: invalid user input.

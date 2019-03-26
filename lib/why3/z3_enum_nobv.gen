@@ -1,8 +1,11 @@
-theory core.Jessie_pointer
+theory core.Pointer
   meta "select_inst" "none"
   meta "select_lskept" "none"
   meta "select_lsinst" "all"
 end
+
+
+
 
 theory enum.Bit_int8
 
@@ -21,6 +24,7 @@ theory enum.Bit_int8
   remove prop To_int_def
 end
 
+
 theory enum.Bit_uint8
 
   remove prop Asr_signed
@@ -37,6 +41,7 @@ theory enum.Bit_uint8
   remove prop Lsl_modulo_nth_high
   remove prop To_int_def
 end
+
 
 theory enum.Bit_int16
 
@@ -55,6 +60,7 @@ theory enum.Bit_int16
   remove prop To_int_def
 end
 
+
 theory enum.Bit_uint16
 
   remove prop Asr_signed
@@ -71,6 +77,7 @@ theory enum.Bit_uint16
   remove prop Lsl_modulo_nth_high
   remove prop To_int_def
 end
+
 
 theory enum.Bit_int32
 
@@ -89,6 +96,7 @@ theory enum.Bit_int32
   remove prop To_int_def
 end
 
+
 theory enum.Bit_uint32
 
   remove prop Asr_signed
@@ -106,6 +114,7 @@ theory enum.Bit_uint32
   remove prop To_int_def
 end
 
+
 theory enum.Bit_int64
 
   remove prop Lsr_unsigned
@@ -121,6 +130,7 @@ theory enum.Bit_int64
   remove prop Lsl_modulo_nth_low
   remove prop Lsl_modulo_nth_high
 end
+
 
 theory enum.Bit_uint64
 

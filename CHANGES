@@ -1,4 +1,4 @@
-Jessie2
+AstraVer
 =======
 version alpha0, January 12, 2015
 ================================
@@ -43,6 +43,8 @@ version alpha0, January 12, 2015
   o [Jessie/WhyML output] Fix: if clause in Why3ML -- conditions are now predicates (rather than terms)
   o [Frama-C plugin] Fix: \valid(p+(a..b)) translation according to ACSL specification
 
+Jessie
+======
 version 2.34, March 16, 2014
 ==========================
 

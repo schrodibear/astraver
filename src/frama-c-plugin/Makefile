@@ -20,10 +20,7 @@
 #                                                                        #
 ##########################################################################
 
-# Makefile for compiling AstraVer independently of Frama-C.
-#
-# To be used independently of Frama-C, a version of Frama-C compatible with
-# Jessie has to be properly installed as well as the Jessie-specific stuff.
+# Makefile for compiling AstraVer
 
 # Do not use ?= to initialize both below variables
 # (fixed efficiency issue, see GNU Make manual, Section 8.11)
@@ -39,31 +36,31 @@ NUMS_DIR :=$(shell ocamlfind query num.core)
 PLUGIN_DIR      ?= .
 WHY_DISTRIB	?= $(PLUGIN_DIR)/../..
 BUILDSRC        ?= $(WHY_DISTRIB)/_build/src
-JESSIE_INCLUDES	?= -I $(BUILDSRC)/why -I $(BUILDSRC)/jc -I $(NUMS_DIR)
-JCCMA		?= $(BUILDSRC)/jc/jc.cma
-JCCMXA		?= $(JCCMA:.cma=.cmxa)
+AV_INCLUDES	?= -I $(BUILDSRC)/why -I $(BUILDSRC)/av -I $(NUMS_DIR)
+AVCMA		?= $(BUILDSRC)/av/av.cma
+AVCMXA		?= $(AVCMA:.cma=.cmxa)
 
 PLUGIN_NAME:=AstraVer
-PLUGIN_CMO:= jessie_options jessie_integer common extractor rewrite \
+PLUGIN_CMO:= astraver_options astraver_integer common extractor rewrite \
              retype norm interp register
 PLUGIN_HAS_MLI:=yes
 PLUGIN_DEPENDENCIES:=Variadic
-PLUGIN_BFLAGS:=$(JESSIE_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
-PLUGIN_OFLAGS:=$(JESSIE_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
-PLUGIN_EXTRA_BYTE+=$(NUMS_DIR)/nums.cma $(JCCMA)
-PLUGIN_EXTRA_OPT+=$(NUMS_DIR)/nums.cmxa $(JCCMXA)
-PLUGIN_DOCFLAGS:=$(JESSIE_INCLUDES)
+PLUGIN_BFLAGS:=$(AV_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
+PLUGIN_OFLAGS:=$(AV_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
+PLUGIN_EXTRA_BYTE+=$(NUMS_DIR)/nums.cma $(AVCMA)
+PLUGIN_EXTRA_OPT+=$(NUMS_DIR)/nums.cmxa $(AVCMXA)
+PLUGIN_DOCFLAGS:=$(AV_INCLUDES)
 PLUGIN_TESTS_DIRS:=jessie
 
 ifeq ($(FRAMAC_MAKE),yes)
 unexport $(FRAMAC_MAKE)
 endif
 
-$(PLUGIN_DIR)/interp.cmo: $(PLUGIN_DIR)/interp.cmi $(JCCMA)
+$(PLUGIN_DIR)/interp.cmo: $(PLUGIN_DIR)/interp.cmi $(AVCMA)
 
-$(PLUGIN_DIR)/interp.cmi: $(BUILDSRC)/jc/jc.cmi
+$(PLUGIN_DIR)/interp.cmi: $(BUILDSRC)/av/av.cmi
 
-$(PLUGIN_DIR)/interp.cmx: $(PLUGIN_DIR)/interp.cmi $(JCCMXA)
+$(PLUGIN_DIR)/interp.cmx: $(PLUGIN_DIR)/interp.cmi $(AVCMXA)
 
 RESOURCES   ?= astraver_spec_prolog.h
 

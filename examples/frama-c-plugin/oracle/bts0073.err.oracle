@@ -1,2 +1,0 @@
-File "bts0073.jessie/bts0073.jc", line 51, characters 21-36: Unable to complete region analysis, aborting. Consider using #pragma SeparationPolicy(none)
-make: *** [bts0073.regtest] Error 1

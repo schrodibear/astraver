@@ -1,4 +1,0 @@
-File "why/bts0038.why", line 522, characters 8-43:
-Term i is expected to have type int
-make: *** [why/bts0038.wpr] Error 1
-make: *** [bts0038.regtest] Error 2
