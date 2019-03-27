@@ -49,6 +49,34 @@ let in_logic_component f = List.exists (Logic_info.equal f)
 
 let in_code_component f = List.exists (Fun_info.equal f)
 
+let recompute = ref false
+let backtrack, fixpoint =
+  (fun () -> recompute := true),
+  (fun f ->
+     let rec loop () =
+       recompute := false;
+       let r = f () in
+       if !recompute then loop () else r
+     in
+     loop ())
+
+let post_unification_check ~pos ~mark assoc =
+  let map =
+    RegionMap.(
+      List.fold_left
+        (fun acc (pr, ar) -> add ar RegionSet.(add pr @@ try find ar acc with Not_found -> empty) acc) empty assoc)
+  in
+  RegionMap.M.iter
+    RegionSet.S.(fun _ rs ->
+      if cardinal rs > 1 then
+        let pos = Option.value ~default:pos @@ Options.position_of_label mark in
+        Options.jc_warning pos "Backtracking region analysis due to illegal aliasing: will unify params %a"
+          (pp_print_list ~pp_sep:simple_comma Region.pretty) (to_list rs);
+        let r = choose rs in
+        iter (Region.unify r) rs;
+        backtrack ())
+    map
+
 let call_regions ~pos app in_current_comp param_regions result_region params =
   let arg_regions =
     List.map
@@ -198,7 +226,8 @@ let single_expr code_comp logic_comp result_region e =
         params
     in
     List.iter2 Region.unify param_regions arg_regions;
-    if e#typ <> unit_type then Region.unify result_region e#region
+    if e#typ <> unit_type then Region.unify result_region e#region;
+    post_unification_check ~pos:e#pos ~mark:e#mark call.call_region_assoc
     (* Otherwise, the result of the call is discarded *)
   | JCEreturn (_ty, e) ->
     Region.unify result_region e#region

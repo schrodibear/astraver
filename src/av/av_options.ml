@@ -186,7 +186,7 @@ let jc_error l =
 
 let jc_warning l =
   Format.kfprintf
-    (fun _ -> eprintf "%a: [Warning]: %s@." Why_loc.gen_report_position l @@ flush_str_formatter ())
+    (fun _ -> eprintf "%a:@ [Warning]: %s@." Why_loc.gen_report_position l @@ flush_str_formatter ())
     str_formatter
 
 let parsing_error l f =

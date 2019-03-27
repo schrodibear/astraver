@@ -43,6 +43,8 @@ val prop :
   _ * _ * _ * _ *  assertion ->
   unit
 
+val fixpoint : (unit -> 'a) -> 'a
+
 val logic_component : logic_info list -> unit
 
 val code_component : fun_info list -> unit

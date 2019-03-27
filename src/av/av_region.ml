@@ -167,6 +167,14 @@ module RegionSet = struct
   let singleton = S.singleton
 end
 
+module RegionMap = struct
+  module M = Map.Make(InternalRegion)
+  let empty = M.empty
+  let mem r = M.mem (RegionUF.repr r)
+  let add r = M.add (RegionUF.repr r)
+  let find r = M.find (RegionUF.repr r)
+end
+
 (* Sets should be computed after unification takes place, so that operations
  * can maintain easily the invariant that only representative regions are used.
  *)
@@ -264,6 +272,8 @@ struct
 
   let print fmt r =
     fprintf fmt "%s" r.r_final_name
+
+  let pretty fmt r = fprintf fmt "%s" r.r_name
 
   let print_assoc fmt assocl =
     fprintf fmt "%a" (print_list comma

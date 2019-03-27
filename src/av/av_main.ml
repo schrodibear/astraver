@@ -50,6 +50,7 @@ let parse_file f =
     exit 1
 
 let compute_regions logic_components components =
+  Separation.fixpoint @@ fun () ->
   Options.lprintf "Computation of regions@.";
   (* Preserve order between following calls *)
   Array.iter Separation.logic_component logic_components;
