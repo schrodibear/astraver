@@ -7,7 +7,7 @@ Axiom t : Type.
 Parameter t_WhyType : WhyType t.
 Existing Instance t_WhyType.
 
-Parameter to_int: t -> Z.
+Parameter to_int: t -> Numbers.BinNums.Z.
 
-Parameter in_bounds: Z -> Prop.
+Parameter in_bounds: Numbers.BinNums.Z -> Prop.
 

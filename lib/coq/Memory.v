@@ -2,12 +2,10 @@
 (* Beware! Only edit allowed sections below    *)
 Require Import BuiltIn.
 Require BuiltIn.
-Require Jessie_pointer.
+Require Pointer.
 Require int.Int.
 Require map.Map.
-Require Jessie_tag_id.
 
 (* Why3 assumption *)
-Definition tag_table (t:Type) := (map.Map.map (Jessie_pointer.pointer t)
-  (Jessie_tag_id.tag_id t)).
+Definition memory (t:Type) (v:Type) := (map.Map.map (Pointer.pointer t) v).
 

@@ -3,7 +3,7 @@
 Require Import BuiltIn.
 Require BuiltIn.
 
-Parameter power2: Z -> Z.
+Parameter power2: Numbers.BinNums.Z -> Numbers.BinNums.Z.
 
 Axiom Powers_of_2 : ((power2 0%Z) = 1%Z) /\ (((power2 1%Z) = 2%Z) /\
   (((power2 2%Z) = 4%Z) /\ (((power2 3%Z) = 8%Z) /\ (((power2 4%Z) = 16%Z) /\

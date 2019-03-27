@@ -2,7 +2,7 @@
 (* Beware! Only edit allowed sections below    *)
 Require Import BuiltIn.
 Require BuiltIn.
-Require Jessie_pointer.
+Require Pointer.
 Require int.Int.
 
 Axiom alloc_table : forall (t:Type), Type.
@@ -11,29 +11,28 @@ Parameter alloc_table_WhyType : forall (t:Type) {t_WT:WhyType t},
 Existing Instance alloc_table_WhyType.
 
 Parameter offset_min: forall {t:Type} {t_WT:WhyType t}, (alloc_table t) ->
-  (Jessie_pointer.pointer t) -> Z.
+  (Pointer.pointer t) -> Numbers.BinNums.Z.
 
 Parameter offset_max: forall {t:Type} {t_WT:WhyType t}, (alloc_table t) ->
-  (Jessie_pointer.pointer t) -> Z.
+  (Pointer.pointer t) -> Numbers.BinNums.Z.
 
 Axiom Null_pointer : forall {t:Type} {t_WT:WhyType t}, forall (a:(alloc_table
-  t)), ((offset_max a (Jessie_pointer.null : (Jessie_pointer.pointer
-  t))) = (-2%Z)%Z) /\ (((-2%Z)%Z < (offset_min a
-  (Jessie_pointer.null : (Jessie_pointer.pointer t))))%Z /\ ((offset_min a
-  (Jessie_pointer.null : (Jessie_pointer.pointer t))) = 0%Z)).
+  t)), ((offset_max a (Pointer.null : (Pointer.pointer t))) = (-2%Z)%Z) /\
+  (((-2%Z)%Z < (offset_min a (Pointer.null : (Pointer.pointer t))))%Z /\
+  ((offset_min a (Pointer.null : (Pointer.pointer t))) = 0%Z)).
 
 Axiom Offset_max_shift : forall {t:Type} {t_WT:WhyType t},
-  forall (a:(alloc_table t)), forall (p:(Jessie_pointer.pointer t)),
-  forall (i:Z), ((offset_max a (Jessie_pointer.shift p i)) = ((offset_max a
-  p) - i)%Z).
+  forall (a:(alloc_table t)), forall (p:(Pointer.pointer t)),
+  forall (i:Numbers.BinNums.Z), ((offset_max a (Pointer.shift p
+  i)) = ((offset_max a p) - i)%Z).
 
 Axiom Offset_min_shift : forall {t:Type} {t_WT:WhyType t},
-  forall (a:(alloc_table t)), forall (p:(Jessie_pointer.pointer t)),
-  forall (i:Z), ((offset_min a (Jessie_pointer.shift p i)) = ((offset_min a
-  p) - i)%Z).
+  forall (a:(alloc_table t)), forall (p:(Pointer.pointer t)),
+  forall (i:Numbers.BinNums.Z), ((offset_min a (Pointer.shift p
+  i)) = ((offset_min a p) - i)%Z).
 
 (* Why3 assumption *)
 Definition valid {t:Type} {t_WT:WhyType t} (a:(alloc_table t))
-  (p:(Jessie_pointer.pointer t)): Prop := ((offset_min a p) <= 0%Z)%Z /\
+  (p:(Pointer.pointer t)): Prop := ((offset_min a p) <= 0%Z)%Z /\
   (0%Z <= (offset_max a p))%Z.
 

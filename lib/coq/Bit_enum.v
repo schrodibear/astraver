@@ -10,23 +10,23 @@ Require Enum_intf.
 Require Powers_of_2.
 Require Bit_enum_intf.
 
-Parameter max: Z.
+Parameter max: Numbers.BinNums.Z.
 
-Parameter min: Z.
+Parameter min: Numbers.BinNums.Z.
 
 (* Why3 assumption *)
-Definition normalize (x:Z): Z :=
+Definition normalize (x:Numbers.BinNums.Z): Numbers.BinNums.Z :=
   (min + (int.EuclideanDivision.mod1 (x - min)%Z ((max - min)%Z + 1%Z)%Z))%Z.
 
 Axiom t : Type.
 Parameter t_WhyType : WhyType t.
 Existing Instance t_WhyType.
 
-Parameter to_int: t -> Z.
+Parameter to_int: t -> Numbers.BinNums.Z.
 
-Parameter in_bounds: Z -> Prop.
+Parameter in_bounds: Numbers.BinNums.Z -> Prop.
 
-Parameter of_int: Z -> t.
+Parameter of_int: Numbers.BinNums.Z -> t.
 
 Parameter infix_ls: t -> t -> Prop.
 
@@ -36,13 +36,13 @@ Parameter infix_gt: t -> t -> Prop.
 
 Parameter infix_gteq: t -> t -> Prop.
 
-Parameter size: Z.
+Parameter size: Numbers.BinNums.Z.
 
 Parameter signed: Prop.
 
-Parameter of_int_modulo: Z -> t.
+Parameter of_int_modulo: Numbers.BinNums.Z -> t.
 
-Parameter of_int_const: Z -> t.
+Parameter of_int_const: Numbers.BinNums.Z -> t.
 
 Parameter infix_plpc: t -> t -> t.
 
@@ -102,49 +102,36 @@ Parameter gt: t -> t -> Prop.
 
 Parameter ge: t -> t -> Prop.
 
-Axiom Of_int_modulo : forall (n:Z),
-  ((of_int_modulo n) = (of_int (normalize n))).
+Axiom Of_int_modulo : forall (n:Numbers.BinNums.Z),
+  ((to_int (of_int_modulo n)) = (normalize n)).
 
-Axiom Add_modulo : forall (a:t) (b:t), ((infix_plpc a
-  b) = (of_int (normalize ((to_int a) + (to_int b))%Z))).
+Axiom Add_modulo : forall (a:t) (b:t), ((to_int (infix_plpc a
+  b)) = (normalize ((to_int a) + (to_int b))%Z)).
 
 Axiom Neg_modulo : forall (a:t),
-  ((prefix_mnpc a) = (of_int (normalize (-(to_int a))%Z))).
+  ((to_int (prefix_mnpc a)) = (normalize (-(to_int a))%Z)).
 
-Axiom Sub_modulo : forall (a:t) (b:t), ((infix_mnpc a
-  b) = (of_int (normalize ((to_int a) - (to_int b))%Z))).
+Axiom Sub_modulo : forall (a:t) (b:t), ((to_int (infix_mnpc a
+  b)) = (normalize ((to_int a) - (to_int b))%Z)).
 
-Axiom Mult_modulo : forall (a:t) (b:t), ((infix_aspc a
-  b) = (of_int (normalize ((to_int a) * (to_int b))%Z))).
+Axiom Mult_modulo : forall (a:t) (b:t), ((to_int (infix_aspc a
+  b)) = (normalize ((to_int a) * (to_int b))%Z)).
 
-Axiom Div_modulo : forall (a:t) (b:t), ((infix_slpc a
-  b) = (of_int (normalize (ZArith.BinInt.Z.quot (to_int a) (to_int b))))).
+Axiom Div_modulo : forall (a:t) (b:t), ((to_int (infix_slpc a
+  b)) = (normalize (ZArith.BinInt.Z.quot (to_int a) (to_int b)))).
 
-Axiom Mod_modulo : forall (a:t) (b:t), ((infix_pcpc a
-  b) = (of_int (ZArith.BinInt.Z.rem (to_int a) (to_int b)))).
+Axiom Mod_modulo : forall (a:t) (b:t), ((to_int (infix_pcpc a
+  b)) = (ZArith.BinInt.Z.rem (to_int a) (to_int b))).
 
 Axiom Size_pos : (0%Z < size)%Z.
 
 Axiom Val_two_power_size : ((Powers_of_2.power2 size) = ((max - min)%Z + 1%Z)%Z).
 
-Axiom Of_int_const : forall (n:Z), ((of_int_const n) = (of_int n)).
+Axiom Of_int_const : forall (n:Numbers.BinNums.Z),
+  ((of_int_const n) = (of_int n)).
 
-Axiom Of_int_def : forall (n:Z), (in_bounds n) ->
+Axiom Of_int_def : forall (n:Numbers.BinNums.Z), (in_bounds n) ->
   ((of_int n) = (of_int_modulo n)).
-
-Parameter to_uint: t -> Z.
-
-Axiom To_uint : (signed) -> forall (a:t), ((lt a (of_int_const 0%Z)) ->
-  ((to_int a) = ((to_uint a) - (Powers_of_2.power2 size))%Z)) /\ ((~ (lt a
-  (of_int_const 0%Z))) -> ((to_int a) = ((to_uint a) - 0%Z)%Z)).
-
-Parameter nth: t -> Z -> Prop.
-
-Axiom Nth : forall (a:t), forall (n:Z), ((0%Z <= n)%Z /\ (n < size)%Z) ->
-  ((nth a n) <-> (((0%Z <= (to_int a))%Z /\
-  ((Powers_of_2.power2 n) <= (ZArith.BinInt.Z.rem (to_int a) (Powers_of_2.power2 (n + 1%Z)%Z)))%Z) \/
-  (((to_int a) < 0%Z)%Z /\
-  ((Powers_of_2.power2 n) <= (ZArith.BinInt.Z.rem (((max - min)%Z + 1%Z)%Z + (to_int a))%Z (Powers_of_2.power2 (n + 1%Z)%Z)))%Z))).
 
 Axiom Lt_eq : forall (a:t) (b:t), (infix_ls a b) <-> (lt a b).
 
@@ -154,59 +141,77 @@ Axiom Gt_eq : forall (a:t) (b:t), (infix_gt a b) <-> (gt a b).
 
 Axiom Ge_eq : forall (a:t) (b:t), (infix_gteq a b) <-> (ge a b).
 
-Axiom Nth_bw_and : forall (a:t) (b:t), forall (n:Z), ((0%Z <= n)%Z /\
-  (n < size)%Z) -> ((nth (infix_et a b) n) <-> ((nth a n) /\ (nth b n))).
+Parameter nth: t -> Numbers.BinNums.Z -> Prop.
 
-Axiom Nth_bw_or : forall (a:t) (b:t), forall (n:Z), ((0%Z <= n)%Z /\
-  (n < size)%Z) -> ((nth (infix_brcf a b) n) <-> ((nth a n) \/ (nth b n))).
+Axiom Nth : forall (a:t), forall (n:Numbers.BinNums.Z), ((0%Z <= n)%Z /\
+  (n < size)%Z) -> ((nth a n) <-> (((0%Z <= (to_int a))%Z /\
+  ((Powers_of_2.power2 n) <= (ZArith.BinInt.Z.rem (to_int a) (Powers_of_2.power2 (n + 1%Z)%Z)))%Z) \/
+  (((to_int a) < 0%Z)%Z /\
+  ((Powers_of_2.power2 n) <= (ZArith.BinInt.Z.rem (((max - min)%Z + 1%Z)%Z + (to_int a))%Z (Powers_of_2.power2 (n + 1%Z)%Z)))%Z))).
 
-Axiom Nth_bw_xor : forall (a:t) (b:t), forall (n:Z), ((0%Z <= n)%Z /\
-  (n < size)%Z) -> ((nth (infix_cf a b) n) <-> ~ ((nth a n) <-> (nth b n))).
+Axiom Nth_bw_and : forall (a:t) (b:t), forall (n:Numbers.BinNums.Z),
+  ((0%Z <= n)%Z /\ (n < size)%Z) -> ((nth (infix_et a b) n) <-> ((nth a n) /\
+  (nth b n))).
 
-Axiom Nth_bw_not : forall (a:t), forall (n:Z), ((0%Z <= n)%Z /\
-  (n < size)%Z) -> ((nth (prefix_tl a) n) <-> ~ (nth a n)).
+Axiom Nth_bw_or : forall (a:t) (b:t), forall (n:Numbers.BinNums.Z),
+  ((0%Z <= n)%Z /\ (n < size)%Z) -> ((nth (infix_brcf a b) n) <-> ((nth a
+  n) \/ (nth b n))).
 
-Axiom Lsl_def : forall (b:t), forall (s:t), (ge (lsl_modulo b s)
-  (of_int_const 0%Z)) -> ((lsl b s) = (lsl_modulo b s)).
+Axiom Nth_bw_xor : forall (a:t) (b:t), forall (n:Numbers.BinNums.Z),
+  ((0%Z <= n)%Z /\ (n < size)%Z) -> ((nth (infix_cf a b) n) <-> ~ ((nth a
+  n) <-> (nth b n))).
 
-Axiom Lsr_nth_low : forall (b:t), forall (s:t), forall (n:Z),
+Axiom Nth_bw_not : forall (a:t), forall (n:Numbers.BinNums.Z),
+  ((0%Z <= n)%Z /\ (n < size)%Z) -> ((nth (prefix_tl a) n) <-> ~ (nth a n)).
+
+Axiom Lsr_nth_low : forall (b:t), forall (s:t), forall (n:Numbers.BinNums.Z),
   ((0%Z <= (to_int s))%Z /\ ((to_int s) < size)%Z) -> (((0%Z <= n)%Z /\
   (n < size)%Z) -> (((n + (to_int s))%Z < size)%Z -> ((nth (lsr b s) n) <->
   (nth b (n + (to_int s))%Z)))).
 
-Axiom Lsr_nth_high : forall (b:t), forall (s:t), forall (n:Z),
-  ((0%Z <= (to_int s))%Z /\ ((to_int s) < size)%Z) -> (((0%Z <= n)%Z /\
-  (n < size)%Z) -> ((size <= (n + (to_int s))%Z)%Z -> ~ (nth (lsr b s) n))).
+Axiom Lsr_nth_high : forall (b:t), forall (s:t),
+  forall (n:Numbers.BinNums.Z), ((0%Z <= (to_int s))%Z /\
+  ((to_int s) < size)%Z) -> (((0%Z <= n)%Z /\ (n < size)%Z) ->
+  ((size <= (n + (to_int s))%Z)%Z -> ~ (nth (lsr b s) n))).
 
-Axiom Asr_nth_low : forall (b:t), forall (s:t), forall (n:Z),
+Axiom Asr_nth_low : forall (b:t), forall (s:t), forall (n:Numbers.BinNums.Z),
   ((0%Z <= (to_int s))%Z /\ ((to_int s) < size)%Z) -> (((0%Z <= n)%Z /\
   (n < size)%Z) -> (((0%Z <= (n + (to_int s))%Z)%Z /\
   ((n + (to_int s))%Z < size)%Z) -> ((nth (asr b s) n) <-> (nth b
   (n + (to_int s))%Z)))).
 
-Axiom Asr_nth_high : forall (b:t), forall (s:t), forall (n:Z),
-  ((0%Z <= (to_int s))%Z /\ ((to_int s) < size)%Z) -> (((0%Z <= n)%Z /\
-  (n < size)%Z) -> ((size <= (n + (to_int s))%Z)%Z -> ((nth (asr b s) n) <->
-  (nth b (size - 1%Z)%Z)))).
+Axiom Asr_nth_high : forall (b:t), forall (s:t),
+  forall (n:Numbers.BinNums.Z), ((0%Z <= (to_int s))%Z /\
+  ((to_int s) < size)%Z) -> (((0%Z <= n)%Z /\ (n < size)%Z) ->
+  ((size <= (n + (to_int s))%Z)%Z -> ((nth (asr b s) n) <-> (nth b
+  (size - 1%Z)%Z)))).
 
-Axiom Lsl_modulo_nth_high : forall (b:t), forall (s:t), forall (n:Z),
-  ((0%Z <= (to_int s))%Z /\ ((to_int s) < size)%Z) -> (((0%Z <= n)%Z /\
-  (n < size)%Z) -> (((0%Z <= (n - (to_int s))%Z)%Z /\
-  ((n - (to_int s))%Z < size)%Z) -> ((nth (lsl_modulo b s) n) <-> (nth b
-  (n - (to_int s))%Z)))).
+Axiom Lsl_modulo_nth_high : forall (b:t), forall (s:t),
+  forall (n:Numbers.BinNums.Z), ((0%Z <= (to_int s))%Z /\
+  ((to_int s) < size)%Z) -> (((0%Z <= n)%Z /\ (n < size)%Z) ->
+  (((0%Z <= (n - (to_int s))%Z)%Z /\ ((n - (to_int s))%Z < size)%Z) -> ((nth
+  (lsl_modulo b s) n) <-> (nth b (n - (to_int s))%Z)))).
 
-Axiom Lsl_modulo_nth_low : forall (b:t), forall (s:t), forall (n:Z),
-  ((0%Z <= (to_int s))%Z /\ ((to_int s) < size)%Z) -> (((0%Z <= n)%Z /\
-  (n < size)%Z) -> (((n - (to_int s))%Z < 0%Z)%Z -> ~ (nth (lsl_modulo b s)
-  n))).
+Axiom Lsl_modulo_nth_low : forall (b:t), forall (s:t),
+  forall (n:Numbers.BinNums.Z), ((0%Z <= (to_int s))%Z /\
+  ((to_int s) < size)%Z) -> (((0%Z <= n)%Z /\ (n < size)%Z) ->
+  (((n - (to_int s))%Z < 0%Z)%Z -> ~ (nth (lsl_modulo b s) n))).
 
-Axiom To_uint_lsr : (~ (signed)) -> forall (a:t), forall (n:t),
-  (0%Z <= (to_int n))%Z -> ((to_int (lsr a
+Axiom Lsl : forall (b:t), forall (s:t), ((0%Z <= (to_int s))%Z /\
+  ((to_int s) < size)%Z) -> (((lsr (lsl_modulo b s) s) = s) -> ((lsl b
+  s) = (lsl_modulo b s))).
+
+Axiom Lsr_unsigned : (~ (signed)) -> forall (a:t), forall (n:t),
+  ((0%Z <= (to_int n))%Z /\ ((to_int n) < size)%Z) -> ((to_int (lsr a
   n)) = (int.EuclideanDivision.div (to_int a)
   (Powers_of_2.power2 (to_int n)))).
 
-Axiom To_uint_lsl_modulo : (~ (signed)) -> forall (a:t), forall (n:t),
-  (0%Z <= (to_int n))%Z -> ((to_int (lsl_modulo a
-  n)) = (int.EuclideanDivision.mod1 ((to_int a) * (Powers_of_2.power2 (to_int n)))%Z
-  ((max - min)%Z + 1%Z)%Z)).
+Axiom Asr_signed : (signed) -> forall (a:t), forall (n:t),
+  ((0%Z <= (to_int n))%Z /\ ((to_int n) < size)%Z) -> ((to_int (asr a
+  n)) = (int.EuclideanDivision.div (to_int a)
+  (Powers_of_2.power2 (to_int n)))).
+
+Axiom Lsl_modulo : forall (a:t), forall (n:t), ((0%Z <= (to_int n))%Z /\
+  ((to_int n) < size)%Z) -> ((to_int (lsl_modulo a
+  n)) = (normalize ((to_int a) * (Powers_of_2.power2 (to_int n)))%Z)).
 

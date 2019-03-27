@@ -8,15 +8,15 @@ Axiom t : Type.
 Parameter t_WhyType : WhyType t.
 Existing Instance t_WhyType.
 
-Parameter to_int: t -> Z.
+Parameter to_int: t -> Numbers.BinNums.Z.
 
-Parameter in_bounds: Z -> Prop.
+Parameter in_bounds: Numbers.BinNums.Z -> Prop.
 
-Parameter min: Z.
+Parameter min: Numbers.BinNums.Z.
 
-Parameter max: Z.
+Parameter max: Numbers.BinNums.Z.
 
-Parameter of_int: Z -> t.
+Parameter of_int: Numbers.BinNums.Z -> t.
 
 Parameter infix_ls: t -> t -> Prop.
 
@@ -26,15 +26,15 @@ Parameter infix_gt: t -> t -> Prop.
 
 Parameter infix_gteq: t -> t -> Prop.
 
-Parameter size: Z.
+Parameter size: Numbers.BinNums.Z.
 
 Parameter signed: Prop.
 
-Parameter normalize: Z -> Z.
+Parameter normalize: Numbers.BinNums.Z -> Numbers.BinNums.Z.
 
-Parameter of_int_modulo: Z -> t.
+Parameter of_int_modulo: Numbers.BinNums.Z -> t.
 
-Parameter of_int_const: Z -> t.
+Parameter of_int_const: Numbers.BinNums.Z -> t.
 
 Parameter infix_plpc: t -> t -> t.
 

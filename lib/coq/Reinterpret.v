@@ -2,19 +2,19 @@
 (* Beware! Only edit allowed sections below    *)
 Require Import BuiltIn.
 Require BuiltIn.
-Require Jessie_pointer.
+Require Pointer.
 Require int.Int.
 Require int.Abs.
 Require int.ComputerDivision.
-Require Jessie_tag_id.
+Require Tag_id.
 
-Parameter cast_factor: forall {t:Type} {t_WT:WhyType t},
-  (Jessie_tag_id.tag_id t) -> (Jessie_tag_id.tag_id t) -> Z.
+Parameter cast_factor: forall {t:Type} {t_WT:WhyType t}, (Tag_id.tag_id t) ->
+  (Tag_id.tag_id t) -> Numbers.BinNums.Z.
 
 Axiom Cast_factor_trans : forall {t:Type} {t_WT:WhyType t},
-  forall (t1:(Jessie_tag_id.tag_id t)), forall (t2:(Jessie_tag_id.tag_id t)),
-  forall (t3:(Jessie_tag_id.tag_id t)), let c12 := (cast_factor t1 t2) in
-  let c23 := (cast_factor t2 t3) in let c13 := (cast_factor t1 t3) in
+  forall (t1:(Tag_id.tag_id t)), forall (t2:(Tag_id.tag_id t)),
+  forall (t3:(Tag_id.tag_id t)), let c12 := (cast_factor t1 t2) in let c23 :=
+  (cast_factor t2 t3) in let c13 := (cast_factor t1 t3) in
   ((((0%Z < c12)%Z /\ (0%Z < c23)%Z) -> (c13 = (c12 * c23)%Z)) /\
   ((((0%Z < c12)%Z /\ ((c23 < 0%Z)%Z /\ (((-c23)%Z < c12)%Z /\
   ((ZArith.BinInt.Z.rem c12 (-c23)%Z) = 0%Z)))) ->

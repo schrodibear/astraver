@@ -14,13 +14,13 @@ Require Bit_enum.
 Require Int8.
 
 (* Why3 assumption *)
-Definition normalize (x:Z): Z :=
+Definition normalize (x:Numbers.BinNums.Z): Numbers.BinNums.Z :=
   ((-128%Z)%Z + (int.EuclideanDivision.mod1 (x - (-128%Z)%Z)%Z
   ((127%Z - (-128%Z)%Z)%Z + 1%Z)%Z))%Z.
 
-Parameter of_int_modulo: Z -> Int8.t.
+Parameter of_int_modulo: Numbers.BinNums.Z -> Int8.t.
 
-Parameter of_int_const: Z -> Int8.t.
+Parameter of_int_const: Numbers.BinNums.Z -> Int8.t.
 
 Parameter infix_plpc: Int8.t -> Int8.t -> Int8.t.
 
@@ -80,47 +80,34 @@ Parameter gt: Int8.t -> Int8.t -> Prop.
 
 Parameter ge: Int8.t -> Int8.t -> Prop.
 
-Axiom Of_int_modulo : forall (n:Z),
-  ((of_int_modulo n) = (Int8.of_int (normalize n))).
+Axiom Of_int_modulo : forall (n:Numbers.BinNums.Z),
+  ((Int8.to_int (of_int_modulo n)) = (normalize n)).
 
-Axiom Add_modulo : forall (a:Int8.t) (b:Int8.t), ((infix_plpc a
-  b) = (Int8.of_int (normalize ((Int8.to_int a) + (Int8.to_int b))%Z))).
+Axiom Add_modulo : forall (a:Int8.t) (b:Int8.t), ((Int8.to_int (infix_plpc a
+  b)) = (normalize ((Int8.to_int a) + (Int8.to_int b))%Z)).
 
 Axiom Neg_modulo : forall (a:Int8.t),
-  ((prefix_mnpc a) = (Int8.of_int (normalize (-(Int8.to_int a))%Z))).
+  ((Int8.to_int (prefix_mnpc a)) = (normalize (-(Int8.to_int a))%Z)).
 
-Axiom Sub_modulo : forall (a:Int8.t) (b:Int8.t), ((infix_mnpc a
-  b) = (Int8.of_int (normalize ((Int8.to_int a) - (Int8.to_int b))%Z))).
+Axiom Sub_modulo : forall (a:Int8.t) (b:Int8.t), ((Int8.to_int (infix_mnpc a
+  b)) = (normalize ((Int8.to_int a) - (Int8.to_int b))%Z)).
 
-Axiom Mult_modulo : forall (a:Int8.t) (b:Int8.t), ((infix_aspc a
-  b) = (Int8.of_int (normalize ((Int8.to_int a) * (Int8.to_int b))%Z))).
+Axiom Mult_modulo : forall (a:Int8.t) (b:Int8.t), ((Int8.to_int (infix_aspc a
+  b)) = (normalize ((Int8.to_int a) * (Int8.to_int b))%Z)).
 
-Axiom Div_modulo : forall (a:Int8.t) (b:Int8.t), ((infix_slpc a
-  b) = (Int8.of_int (normalize (ZArith.BinInt.Z.quot (Int8.to_int a) (Int8.to_int b))))).
+Axiom Div_modulo : forall (a:Int8.t) (b:Int8.t), ((Int8.to_int (infix_slpc a
+  b)) = (normalize (ZArith.BinInt.Z.quot (Int8.to_int a) (Int8.to_int b)))).
 
-Axiom Mod_modulo : forall (a:Int8.t) (b:Int8.t), ((infix_pcpc a
-  b) = (Int8.of_int (ZArith.BinInt.Z.rem (Int8.to_int a) (Int8.to_int b)))).
+Axiom Mod_modulo : forall (a:Int8.t) (b:Int8.t), ((Int8.to_int (infix_pcpc a
+  b)) = (ZArith.BinInt.Z.rem (Int8.to_int a) (Int8.to_int b))).
 
 Axiom Val_two_power_size : ((Powers_of_2.power2 8%Z) = ((127%Z - (-128%Z)%Z)%Z + 1%Z)%Z).
 
-Axiom Of_int_const : forall (n:Z), ((of_int_const n) = (Int8.of_int n)).
+Axiom Of_int_const : forall (n:Numbers.BinNums.Z),
+  ((of_int_const n) = (Int8.of_int n)).
 
-Axiom Of_int_def : forall (n:Z), (Int8.in_bounds n) ->
+Axiom Of_int_def : forall (n:Numbers.BinNums.Z), (Int8.in_bounds n) ->
   ((Int8.of_int n) = (of_int_modulo n)).
-
-Parameter to_uint: Int8.t -> Z.
-
-Axiom To_uint : forall (a:Int8.t), ((lt a (of_int_const 0%Z)) ->
-  ((Int8.to_int a) = ((to_uint a) - (Powers_of_2.power2 8%Z))%Z)) /\ ((~ (lt
-  a (of_int_const 0%Z))) -> ((Int8.to_int a) = ((to_uint a) - 0%Z)%Z)).
-
-Parameter nth: Int8.t -> Z -> Prop.
-
-Axiom Nth : forall (a:Int8.t), forall (n:Z), ((0%Z <= n)%Z /\ (n < 8%Z)%Z) ->
-  ((nth a n) <-> (((0%Z <= (Int8.to_int a))%Z /\
-  ((Powers_of_2.power2 n) <= (ZArith.BinInt.Z.rem (Int8.to_int a) (Powers_of_2.power2 (n + 1%Z)%Z)))%Z) \/
-  (((Int8.to_int a) < 0%Z)%Z /\
-  ((Powers_of_2.power2 n) <= (ZArith.BinInt.Z.rem (((127%Z - (-128%Z)%Z)%Z + 1%Z)%Z + (Int8.to_int a))%Z (Powers_of_2.power2 (n + 1%Z)%Z)))%Z))).
 
 Axiom Lt_eq : forall (a:Int8.t) (b:Int8.t), (Int8.infix_ls a b) <-> (lt a b).
 
@@ -132,57 +119,78 @@ Axiom Gt_eq : forall (a:Int8.t) (b:Int8.t), (Int8.infix_gt a b) <-> (gt a b).
 Axiom Ge_eq : forall (a:Int8.t) (b:Int8.t), (Int8.infix_gteq a b) <-> (ge a
   b).
 
-Axiom Nth_bw_and : forall (a:Int8.t) (b:Int8.t), forall (n:Z),
-  ((0%Z <= n)%Z /\ (n < 8%Z)%Z) -> ((nth (infix_et a b) n) <-> ((nth a n) /\
-  (nth b n))).
+Parameter nth: Int8.t -> Numbers.BinNums.Z -> Prop.
 
-Axiom Nth_bw_or : forall (a:Int8.t) (b:Int8.t), forall (n:Z),
+Axiom Nth : forall (a:Int8.t), forall (n:Numbers.BinNums.Z), ((0%Z <= n)%Z /\
+  (n < 8%Z)%Z) -> ((nth a n) <-> ((((Int8.to_int a) >= 0%Z)%Z /\
+  ((ZArith.BinInt.Z.rem (Int8.to_int a) (Powers_of_2.power2 (n + 1%Z)%Z)) >= (Powers_of_2.power2 n))%Z) \/
+  (((Int8.to_int a) < 0%Z)%Z /\
+  ((ZArith.BinInt.Z.rem (((127%Z - (-128%Z)%Z)%Z + 1%Z)%Z + (Int8.to_int a))%Z (Powers_of_2.power2 (n + 1%Z)%Z)) >= (Powers_of_2.power2 n))%Z))).
+
+Axiom Nth_bw_and : forall (a:Int8.t) (b:Int8.t),
+  forall (n:Numbers.BinNums.Z), ((0%Z <= n)%Z /\ (n < 8%Z)%Z) -> ((nth
+  (infix_et a b) n) <-> ((nth a n) /\ (nth b n))).
+
+Axiom Nth_bw_or : forall (a:Int8.t) (b:Int8.t), forall (n:Numbers.BinNums.Z),
   ((0%Z <= n)%Z /\ (n < 8%Z)%Z) -> ((nth (infix_brcf a b) n) <-> ((nth a
   n) \/ (nth b n))).
 
-Axiom Nth_bw_xor : forall (a:Int8.t) (b:Int8.t), forall (n:Z),
-  ((0%Z <= n)%Z /\ (n < 8%Z)%Z) -> ((nth (infix_cf a b) n) <-> ~ ((nth a
-  n) <-> (nth b n))).
+Axiom Nth_bw_xor : forall (a:Int8.t) (b:Int8.t),
+  forall (n:Numbers.BinNums.Z), ((0%Z <= n)%Z /\ (n < 8%Z)%Z) -> ((nth
+  (infix_cf a b) n) <-> ~ ((nth a n) <-> (nth b n))).
 
-Axiom Nth_bw_not : forall (a:Int8.t), forall (n:Z), ((0%Z <= n)%Z /\
-  (n < 8%Z)%Z) -> ((nth (prefix_tl a) n) <-> ~ (nth a n)).
+Axiom Nth_bw_not : forall (a:Int8.t), forall (n:Numbers.BinNums.Z),
+  ((0%Z <= n)%Z /\ (n < 8%Z)%Z) -> ((nth (prefix_tl a) n) <-> ~ (nth a n)).
 
-Axiom Lsl_def : forall (b:Int8.t), forall (s:Int8.t), (ge (lsl_modulo b s)
-  (of_int_const 0%Z)) -> ((lsl b s) = (lsl_modulo b s)).
+Axiom Lsr_nth_low : forall (b:Int8.t), forall (s:Int8.t),
+  forall (n:Numbers.BinNums.Z), ((0%Z <= (Int8.to_int s))%Z /\
+  ((Int8.to_int s) < 8%Z)%Z) -> (((0%Z <= n)%Z /\ (n < 8%Z)%Z) ->
+  (((n + (Int8.to_int s))%Z < 8%Z)%Z -> ((nth (lsr b s) n) <-> (nth b
+  (n + (Int8.to_int s))%Z)))).
 
-Axiom Lsr_nth_low : forall (b:Int8.t), forall (s:Int8.t), forall (n:Z),
-  ((0%Z <= (Int8.to_int s))%Z /\ ((Int8.to_int s) < 8%Z)%Z) ->
-  (((0%Z <= n)%Z /\ (n < 8%Z)%Z) -> (((n + (Int8.to_int s))%Z < 8%Z)%Z ->
-  ((nth (lsr b s) n) <-> (nth b (n + (Int8.to_int s))%Z)))).
+Axiom Lsr_nth_high : forall (b:Int8.t), forall (s:Int8.t),
+  forall (n:Numbers.BinNums.Z), ((0%Z <= (Int8.to_int s))%Z /\
+  ((Int8.to_int s) < 8%Z)%Z) -> (((0%Z <= n)%Z /\ (n < 8%Z)%Z) ->
+  (((n + (Int8.to_int s))%Z >= 8%Z)%Z -> ~ (nth (lsr b s) n))).
 
-Axiom Lsr_nth_high : forall (b:Int8.t), forall (s:Int8.t), forall (n:Z),
-  ((0%Z <= (Int8.to_int s))%Z /\ ((Int8.to_int s) < 8%Z)%Z) ->
-  (((0%Z <= n)%Z /\ (n < 8%Z)%Z) -> ((8%Z <= (n + (Int8.to_int s))%Z)%Z ->
-  ~ (nth (lsr b s) n))).
-
-Axiom Asr_nth_low : forall (b:Int8.t), forall (s:Int8.t), forall (n:Z),
-  ((0%Z <= (Int8.to_int s))%Z /\ ((Int8.to_int s) < 8%Z)%Z) ->
-  (((0%Z <= n)%Z /\ (n < 8%Z)%Z) -> (((0%Z <= (n + (Int8.to_int s))%Z)%Z /\
+Axiom Asr_nth_low : forall (b:Int8.t), forall (s:Int8.t),
+  forall (n:Numbers.BinNums.Z), ((0%Z <= (Int8.to_int s))%Z /\
+  ((Int8.to_int s) < 8%Z)%Z) -> (((0%Z <= n)%Z /\ (n < 8%Z)%Z) ->
+  (((0%Z <= (n + (Int8.to_int s))%Z)%Z /\
   ((n + (Int8.to_int s))%Z < 8%Z)%Z) -> ((nth (asr b s) n) <-> (nth b
   (n + (Int8.to_int s))%Z)))).
 
-Axiom Asr_nth_high : forall (b:Int8.t), forall (s:Int8.t), forall (n:Z),
-  ((0%Z <= (Int8.to_int s))%Z /\ ((Int8.to_int s) < 8%Z)%Z) ->
-  (((0%Z <= n)%Z /\ (n < 8%Z)%Z) -> ((8%Z <= (n + (Int8.to_int s))%Z)%Z ->
-  ((nth (asr b s) n) <-> (nth b (8%Z - 1%Z)%Z)))).
+Axiom Asr_nth_high : forall (b:Int8.t), forall (s:Int8.t),
+  forall (n:Numbers.BinNums.Z), ((0%Z <= (Int8.to_int s))%Z /\
+  ((Int8.to_int s) < 8%Z)%Z) -> (((0%Z <= n)%Z /\ (n < 8%Z)%Z) ->
+  (((n + (Int8.to_int s))%Z >= 8%Z)%Z -> ((nth (asr b s) n) <-> (nth b
+  (8%Z - 1%Z)%Z)))).
 
 Axiom Lsl_modulo_nth_high : forall (b:Int8.t), forall (s:Int8.t),
-  forall (n:Z), ((0%Z <= (Int8.to_int s))%Z /\ ((Int8.to_int s) < 8%Z)%Z) ->
-  (((0%Z <= n)%Z /\ (n < 8%Z)%Z) -> (((0%Z <= (n - (Int8.to_int s))%Z)%Z /\
+  forall (n:Numbers.BinNums.Z), ((0%Z <= (Int8.to_int s))%Z /\
+  ((Int8.to_int s) < 8%Z)%Z) -> (((0%Z <= n)%Z /\ (n < 8%Z)%Z) ->
+  (((0%Z <= (n - (Int8.to_int s))%Z)%Z /\
   ((n - (Int8.to_int s))%Z < 8%Z)%Z) -> ((nth (lsl_modulo b s) n) <-> (nth b
   (n - (Int8.to_int s))%Z)))).
 
 Axiom Lsl_modulo_nth_low : forall (b:Int8.t), forall (s:Int8.t),
-  forall (n:Z), ((0%Z <= (Int8.to_int s))%Z /\ ((Int8.to_int s) < 8%Z)%Z) ->
-  (((0%Z <= n)%Z /\ (n < 8%Z)%Z) -> (((n - (Int8.to_int s))%Z < 0%Z)%Z ->
-  ~ (nth (lsl_modulo b s) n))).
+  forall (n:Numbers.BinNums.Z), ((0%Z <= (Int8.to_int s))%Z /\
+  ((Int8.to_int s) < 8%Z)%Z) -> (((0%Z <= n)%Z /\ (n < 8%Z)%Z) ->
+  (((n - (Int8.to_int s))%Z < 0%Z)%Z -> ~ (nth (lsl_modulo b s) n))).
 
-Axiom To_uint_lsr : True.
+Axiom Lsl : forall (b:Int8.t), forall (s:Int8.t),
+  ((0%Z <= (Int8.to_int s))%Z /\ ((Int8.to_int s) < 8%Z)%Z) ->
+  (((lsr (lsl_modulo b s) s) = s) -> ((lsl b s) = (lsl_modulo b s))).
 
-Axiom To_uint_lsl_modulo : True.
+Axiom Lsr_unsigned : True.
+
+Axiom Asr_signed : forall (a:Int8.t), forall (n:Int8.t),
+  ((0%Z <= (Int8.to_int n))%Z /\ ((Int8.to_int n) < 8%Z)%Z) ->
+  ((Int8.to_int (asr a n)) = (int.EuclideanDivision.div (Int8.to_int a)
+  (Powers_of_2.power2 (Int8.to_int n)))).
+
+Axiom Lsl_modulo : forall (a:Int8.t), forall (n:Int8.t),
+  ((0%Z <= (Int8.to_int n))%Z /\ ((Int8.to_int n) < 8%Z)%Z) ->
+  ((Int8.to_int (lsl_modulo a
+  n)) = (normalize ((Int8.to_int a) * (Powers_of_2.power2 (Int8.to_int n)))%Z)).
 

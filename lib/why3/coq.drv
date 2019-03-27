@@ -1,118 +1,118 @@
 
-theory core.Jessie_pointer
-  meta "realized_theory" "core.Jessie_pointer", "Jessie_pointer"
+theory core.Pointer
+  meta "realized_theory" "core.Pointer", "Pointer"
 end
 
-theory core.Jessie_zwf
-  meta "realized_theory" "core.Jessie_zwf", "Jessie_zwf"
+theory core.Zwf
+  meta "realized_theory" "core.Zwf", "Zwf"
 end
 
-theory core.Jessie_alloc_table
-  meta "realized_theory" "core.Jessie_alloc_table", "Jessie_alloc_table"
+theory core.Alloc_table
+  meta "realized_theory" "core.Alloc_table", "Alloc_table"
 end
 
-theory core.Jessie_memory
-  meta "realized_theory" "core.Jessie_memory", "Jessie_memory"
+theory core.Memory
+  meta "realized_theory" "core.Memory", "Memory"
 end
 
-theory core.Jessie_pset
-  meta "realized_theory" "core.Jessie_pset", "Jessie_pset"
+theory core.Pset
+  meta "realized_theory" "core.Pset", "Pset"
 end
 
-theory core.Jessie_pset_range
-  meta "realized_theory" "core.Jessie_pset_range", "Jessie_pset_range"
+theory core.Pset_range
+  meta "realized_theory" "core.Pset_range", "Pset_range"
 end
 
-theory core.Jessie_pset_range_left
-  meta "realized_theory" "core.Jessie_pset_range_left", "Jessie_pset_range_left"
+theory core.Pset_range_left
+  meta "realized_theory" "core.Pset_range_left", "Pset_range_left"
 end
 
-theory core.Jessie_pset_range_right
-  meta "realized_theory" "core.Jessie_pset_range_right", "Jessie_pset_range_right"
+theory core.Pset_range_right
+  meta "realized_theory" "core.Pset_range_right", "Pset_range_right"
 end
 
-theory core.Jessie_pset_deref
-  meta "realized_theory" "core.Jessie_pset_deref", "Jessie_pset_deref"
+theory core.Pset_deref
+  meta "realized_theory" "core.Pset_deref", "Pset_deref"
 end
 
-theory core.Jessie_pset_union
-  meta "realized_theory" "core.Jessie_pset_union", "Jessie_pset_union"
+theory core.Pset_union
+  meta "realized_theory" "core.Pset_union", "Pset_union"
 end
 
-theory core.Jessie_pset_all
-  meta "realized_theory" "core.Jessie_pset_all", "Jessie_pset_all"
+theory core.Pset_all
+  meta "realized_theory" "core.Pset_all", "Pset_all"
 end
 
-theory core.Jessie_pset_disjoint
-  meta "realized_theory" "core.Jessie_pset_disjoint", "Jessie_pset_disjoint"
+theory core.Pset_disjoint
+  meta "realized_theory" "core.Pset_disjoint", "Pset_disjoint"
 end
 
-theory core.Jessie_pset_included
-  meta "realized_theory" "core.Jessie_pset_included", "Jessie_pset_included"
+theory core.Pset_included
+  meta "realized_theory" "core.Pset_included", "Pset_included"
 end
 
-theory core.Jessie_assigns
-  meta "realized_theory" "core.Jessie_assigns", "Jessie_assigns"
+theory core.Assigns
+  meta "realized_theory" "core.Assigns", "Assigns"
 end
 
-theory core.Jessie_assigns_strong
-  meta "realized_theory" "core.Jessie_assigns_strong", "Jessie_assigns_strong"
+theory core.Assigns_strong
+  meta "realized_theory" "core.Assigns_strong", "Assigns_strong"
 end
 
-theory core.Jessie_tag_id
-  meta "realized_theory" "core.Jessie_tag_id", "Jessie_tag_id"
+theory core.Tag_id
+  meta "realized_theory" "core.Tag_id", "Tag_id"
 end
 
-theory core.Jessie_tag
-  meta "realized_theory" "core.Jessie_tag", "Jessie_tag"
+theory core.Tag
+  meta "realized_theory" "core.Tag", "Tag"
 end
 
-theory core.Jessie_tag_table_type
-  meta "realized_theory" "core.Jessie_tag_table_type", "Jessie_tag_table_type"
+theory core.Tag_table_type
+  meta "realized_theory" "core.Tag_table_type", "Tag_table_type"
 end
 
-theory core.Jessie_voidp
-  meta "realized_theory" "core.Jessie_voidp", "Jessie_voidp"
+theory core.Voidp
+  meta "realized_theory" "core.Voidp", "Voidp"
 end
 
-theory core.Jessie_voidp_tag_id
-  meta "realized_theory" "core.Jessie_voidp_tag_id", "Jessie_voidp_tag_id"
+theory core.Voidp_tag_id
+  meta "realized_theory" "core.Voidp_tag_id", "Voidp_tag_id"
 end
 
-theory core.Jessie_tag_table
-  meta "realized_theory" "core.Jessie_tag_table", "Jessie_tag_table"
+theory core.Tag_table
+  meta "realized_theory" "core.Tag_table", "Tag_table"
 end
 
-theory core.Jessie_charp_tag_id
-  meta "realized_theory" "core.Jessie_charp_tag_id", "Jessie_charp_tag_id"
+theory core.Charp_tag_id
+  meta "realized_theory" "core.Charp_tag_id", "Charp_tag_id"
 end
 
-theory core.Jessie_sidecast
-  meta "realized_theory" "core.Jessie_sidecast", "Jessie_sidecast"
+theory core.Sidecast
+  meta "realized_theory" "core.Sidecast", "Sidecast"
 end
 
-theory core.Jessie_reinterpret
-  meta "realized_theory" "core.Jessie_reinterpret", "Jessie_reinterpret"
+theory core.Reinterpret
+  meta "realized_theory" "core.Reinterpret", "Reinterpret"
 end
 
-theory core.Jessie_reinterpret_cast
-  meta "realized_theory" "core.Jessie_reinterpret_cast", "Jessie_reinterpret_cast"
+theory core.Reinterpret_cast
+  meta "realized_theory" "core.Reinterpret_cast", "Reinterpret_cast"
 end
 
-theory core.Jessie_allocable
-  meta "realized_theory" "core.Jessie_allocable", "Jessie_allocable"
+theory core.Allocable
+  meta "realized_theory" "core.Allocable", "Allocable"
 end
 
-theory core.Jessie_alloc
-  meta "realized_theory" "core.Jessie_alloc", "Jessie_alloc"
+theory core.Alloc
+  meta "realized_theory" "core.Alloc", "Alloc"
 end
 
-theory core.Jessie_same_except
-  meta "realized_theory" "core.Jessie_same_except", "Jessie_same_except"
+theory core.Same_except
+  meta "realized_theory" "core.Same_except", "Same_except"
 end
 
-theory core.Jessie_rmem
-  meta "realized_theory" "core.Jessie_rmem", "Jessie_rmem"
+theory core.Rmem
+  meta "realized_theory" "core.Rmem", "Rmem"
 end
 
 theory enum.Enum_intf

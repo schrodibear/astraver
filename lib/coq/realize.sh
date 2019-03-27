@@ -63,7 +63,7 @@ function generate_makefile
         deps=""
         for j in $th_deps; do deps=$deps" ${j}.vo"; done
         echo "${file}.vo: ${file}.v $deps" >>$MAKEFILE
-        echo -e "\tcoqc -R \$(WHY3LIBDIR)/coq Why3 -R . Jessie $<" >>$MAKEFILE
+        echo -e "\tcoqc -R \$(WHY3LIBDIR)/coq Why3 -R . Astraver $<" >>$MAKEFILE
         echo >>$MAKEFILE
     done
 }

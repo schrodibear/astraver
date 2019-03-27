@@ -5,5 +5,6 @@ Require BuiltIn.
 Require int.Int.
 
 (* Why3 assumption *)
-Definition zwf_zero (a:Z) (b:Z): Prop := (0%Z <= a)%Z /\ (a < b)%Z.
+Definition zwf_zero (a:Numbers.BinNums.Z) (b:Numbers.BinNums.Z): Prop :=
+  (0%Z <= a)%Z /\ (a < b)%Z.
 

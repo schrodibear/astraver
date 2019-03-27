@@ -1,326 +1,326 @@
 
-all:  Jessie_pointer.vo Jessie_zwf.vo Jessie_alloc_table.vo Jessie_memory.vo Jessie_pset.vo Jessie_pset_range.vo Jessie_pset_range_left.vo Jessie_pset_range_right.vo Jessie_pset_deref.vo Jessie_pset_union.vo Jessie_pset_all.vo Jessie_pset_disjoint.vo Jessie_pset_included.vo Jessie_assigns.vo Jessie_assigns_strong.vo Jessie_tag_id.vo Jessie_tag.vo Jessie_tag_table_type.vo Jessie_voidp.vo Jessie_voidp_tag_id.vo Jessie_tag_table.vo Jessie_charp_tag_id.vo Jessie_sidecast.vo Jessie_reinterpret.vo Jessie_reinterpret_cast.vo Jessie_allocable.vo Jessie_alloc.vo Jessie_same_except.vo Jessie_rmem.vo Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum_intf2.vo Bit_enum.vo Int8.vo Uint8.vo Int16.vo Uint16.vo Int32.vo Uint32.vo Int64.vo Uint64.vo Bit_int8.vo Bit_uint8.vo Bit_int16.vo Bit_uint16.vo Bit_int32.vo Bit_uint32.vo Bit_int64.vo Bit_uint64.vo Bit_uint8_of_bit_int8.vo Bit_int16_of_bit_int8.vo Bit_uint16_of_bit_int8.vo Bit_int32_of_bit_int8.vo Bit_uint32_of_bit_int8.vo Bit_int64_of_bit_int8.vo Bit_uint64_of_bit_int8.vo Bit_int8_of_bit_uint8.vo Bit_int16_of_bit_uint8.vo Bit_uint16_of_bit_uint8.vo Bit_int32_of_bit_uint8.vo Bit_uint32_of_bit_uint8.vo Bit_int64_of_bit_uint8.vo Bit_uint64_of_bit_uint8.vo Bit_int8_of_bit_int16.vo Bit_uint8_of_bit_int16.vo Bit_uint16_of_bit_int16.vo Bit_int32_of_bit_int16.vo Bit_uint32_of_bit_int16.vo Bit_int64_of_bit_int16.vo Bit_uint64_of_bit_int16.vo Bit_int8_of_bit_uint16.vo Bit_uint8_of_bit_uint16.vo Bit_int16_of_bit_uint16.vo Bit_int32_of_bit_uint16.vo Bit_uint32_of_bit_uint16.vo Bit_int64_of_bit_uint16.vo Bit_uint64_of_bit_uint16.vo Bit_int8_of_bit_int32.vo Bit_uint8_of_bit_int32.vo Bit_int16_of_bit_int32.vo Bit_uint16_of_bit_int32.vo Bit_uint32_of_bit_int32.vo Bit_int64_of_bit_int32.vo Bit_uint64_of_bit_int32.vo Bit_int8_of_bit_uint32.vo Bit_uint8_of_bit_uint32.vo Bit_int16_of_bit_uint32.vo Bit_uint16_of_bit_uint32.vo Bit_int32_of_bit_uint32.vo Bit_int64_of_bit_uint32.vo Bit_uint64_of_bit_uint32.vo Bit_int8_of_bit_int64.vo Bit_uint8_of_bit_int64.vo Bit_int16_of_bit_int64.vo Bit_uint16_of_bit_int64.vo Bit_int32_of_bit_int64.vo Bit_uint32_of_bit_int64.vo Bit_uint64_of_bit_int64.vo Bit_int8_of_bit_uint64.vo Bit_uint8_of_bit_uint64.vo Bit_int16_of_bit_uint64.vo Bit_uint16_of_bit_uint64.vo Bit_int32_of_bit_uint64.vo Bit_uint32_of_bit_uint64.vo Bit_int64_of_bit_uint64.vo
+all:  Pointer.vo Zwf.vo Alloc_table.vo Memory.vo Pset.vo Pset_range.vo Pset_range_left.vo Pset_range_right.vo Pset_deref.vo Pset_union.vo Pset_all.vo Pset_disjoint.vo Pset_included.vo Assigns.vo Assigns_strong.vo Tag_id.vo Tag.vo Tag_table_type.vo Voidp.vo Voidp_tag_id.vo Tag_table.vo Charp_tag_id.vo Sidecast.vo Reinterpret.vo Reinterpret_cast.vo Allocable.vo Alloc.vo Same_except.vo Rmem.vo Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum_intf2.vo Bit_enum.vo Int8.vo Uint8.vo Int16.vo Uint16.vo Int32.vo Uint32.vo Int64.vo Uint64.vo Bit_int8.vo Bit_uint8.vo Bit_int16.vo Bit_uint16.vo Bit_int32.vo Bit_uint32.vo Bit_int64.vo Bit_uint64.vo Bit_uint8_of_bit_int8.vo Bit_int16_of_bit_int8.vo Bit_uint16_of_bit_int8.vo Bit_int32_of_bit_int8.vo Bit_uint32_of_bit_int8.vo Bit_int64_of_bit_int8.vo Bit_uint64_of_bit_int8.vo Bit_int8_of_bit_uint8.vo Bit_int16_of_bit_uint8.vo Bit_uint16_of_bit_uint8.vo Bit_int32_of_bit_uint8.vo Bit_uint32_of_bit_uint8.vo Bit_int64_of_bit_uint8.vo Bit_uint64_of_bit_uint8.vo Bit_int8_of_bit_int16.vo Bit_uint8_of_bit_int16.vo Bit_uint16_of_bit_int16.vo Bit_int32_of_bit_int16.vo Bit_uint32_of_bit_int16.vo Bit_int64_of_bit_int16.vo Bit_uint64_of_bit_int16.vo Bit_int8_of_bit_uint16.vo Bit_uint8_of_bit_uint16.vo Bit_int16_of_bit_uint16.vo Bit_int32_of_bit_uint16.vo Bit_uint32_of_bit_uint16.vo Bit_int64_of_bit_uint16.vo Bit_uint64_of_bit_uint16.vo Bit_int8_of_bit_int32.vo Bit_uint8_of_bit_int32.vo Bit_int16_of_bit_int32.vo Bit_uint16_of_bit_int32.vo Bit_uint32_of_bit_int32.vo Bit_int64_of_bit_int32.vo Bit_uint64_of_bit_int32.vo Bit_int8_of_bit_uint32.vo Bit_uint8_of_bit_uint32.vo Bit_int16_of_bit_uint32.vo Bit_uint16_of_bit_uint32.vo Bit_int32_of_bit_uint32.vo Bit_int64_of_bit_uint32.vo Bit_uint64_of_bit_uint32.vo Bit_int8_of_bit_int64.vo Bit_uint8_of_bit_int64.vo Bit_int16_of_bit_int64.vo Bit_uint16_of_bit_int64.vo Bit_int32_of_bit_int64.vo Bit_uint32_of_bit_int64.vo Bit_uint64_of_bit_int64.vo Bit_int8_of_bit_uint64.vo Bit_uint8_of_bit_uint64.vo Bit_int16_of_bit_uint64.vo Bit_uint16_of_bit_uint64.vo Bit_int32_of_bit_uint64.vo Bit_uint32_of_bit_uint64.vo Bit_int64_of_bit_uint64.vo
 
 WHY3LIBDIR=$(shell why3 --print-libdir)
 
-Jessie_pointer.vo: Jessie_pointer.v 
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Pointer.vo: Pointer.v 
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_zwf.vo: Jessie_zwf.v 
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Zwf.vo: Zwf.v 
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_alloc_table.vo: Jessie_alloc_table.v  Jessie_pointer.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Alloc_table.vo: Alloc_table.v  Pointer.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_memory.vo: Jessie_memory.v  Jessie_pointer.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Memory.vo: Memory.v  Pointer.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_pset.vo: Jessie_pset.v  Jessie_pointer.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Pset.vo: Pset.v  Pointer.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_pset_range.vo: Jessie_pset_range.v  Jessie_pointer.vo Jessie_pset.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Pset_range.vo: Pset_range.v  Pointer.vo Pset.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_pset_range_left.vo: Jessie_pset_range_left.v  Jessie_pointer.vo Jessie_pset.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Pset_range_left.vo: Pset_range_left.v  Pointer.vo Pset.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_pset_range_right.vo: Jessie_pset_range_right.v  Jessie_pointer.vo Jessie_pset.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Pset_range_right.vo: Pset_range_right.v  Pointer.vo Pset.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_pset_deref.vo: Jessie_pset_deref.v  Jessie_pointer.vo Jessie_memory.vo Jessie_pset.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Pset_deref.vo: Pset_deref.v  Pointer.vo Memory.vo Pset.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_pset_union.vo: Jessie_pset_union.v  Jessie_pointer.vo Jessie_pset.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Pset_union.vo: Pset_union.v  Pointer.vo Pset.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_pset_all.vo: Jessie_pset_all.v  Jessie_pointer.vo Jessie_pset.vo Jessie_pset_union.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Pset_all.vo: Pset_all.v  Pointer.vo Pset.vo Pset_union.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_pset_disjoint.vo: Jessie_pset_disjoint.v  Jessie_pointer.vo Jessie_pset.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Pset_disjoint.vo: Pset_disjoint.v  Pointer.vo Pset.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_pset_included.vo: Jessie_pset_included.v  Jessie_pointer.vo Jessie_pset.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Pset_included.vo: Pset_included.v  Pointer.vo Pset.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_assigns.vo: Jessie_assigns.v  Jessie_pointer.vo Jessie_alloc_table.vo Jessie_memory.vo Jessie_pset.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Assigns.vo: Assigns.v  Pointer.vo Alloc_table.vo Memory.vo Pset.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_assigns_strong.vo: Jessie_assigns_strong.v  Jessie_pointer.vo Jessie_alloc_table.vo Jessie_memory.vo Jessie_pset.vo Jessie_assigns.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Assigns_strong.vo: Assigns_strong.v  Pointer.vo Alloc_table.vo Memory.vo Pset.vo Assigns.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_tag_id.vo: Jessie_tag_id.v 
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Tag_id.vo: Tag_id.v 
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_tag.vo: Jessie_tag.v  Jessie_tag_id.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Tag.vo: Tag.v  Tag_id.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_tag_table_type.vo: Jessie_tag_table_type.v  Jessie_pointer.vo Jessie_tag_id.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Tag_table_type.vo: Tag_table_type.v  Pointer.vo Tag_id.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_voidp.vo: Jessie_voidp.v  Jessie_pointer.vo Jessie_tag_id.vo Jessie_tag_table_type.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Voidp.vo: Voidp.v  Pointer.vo Tag_id.vo Tag_table_type.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_voidp_tag_id.vo: Jessie_voidp_tag_id.v  Jessie_pointer.vo Jessie_tag_id.vo Jessie_tag.vo Jessie_tag_table_type.vo Jessie_voidp.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Voidp_tag_id.vo: Voidp_tag_id.v  Pointer.vo Tag_id.vo Tag.vo Tag_table_type.vo Voidp.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_tag_table.vo: Jessie_tag_table.v  Jessie_pointer.vo Jessie_tag_id.vo Jessie_tag.vo Jessie_tag_table_type.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Tag_table.vo: Tag_table.v  Pointer.vo Tag_id.vo Tag.vo Tag_table_type.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_charp_tag_id.vo: Jessie_charp_tag_id.v  Jessie_pointer.vo Jessie_tag_id.vo Jessie_tag.vo Jessie_tag_table_type.vo Jessie_voidp.vo Jessie_voidp_tag_id.vo Jessie_tag_table.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Charp_tag_id.vo: Charp_tag_id.v  Pointer.vo Tag_id.vo Tag.vo Tag_table_type.vo Voidp.vo Voidp_tag_id.vo Tag_table.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_sidecast.vo: Jessie_sidecast.v  Jessie_pointer.vo Jessie_tag_id.vo Jessie_tag.vo Jessie_tag_table_type.vo Jessie_tag_table.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Sidecast.vo: Sidecast.v  Pointer.vo Tag_id.vo Tag.vo Tag_table_type.vo Tag_table.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_reinterpret.vo: Jessie_reinterpret.v  Jessie_pointer.vo Jessie_tag_id.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Reinterpret.vo: Reinterpret.v  Pointer.vo Tag_id.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_reinterpret_cast.vo: Jessie_reinterpret_cast.v  Jessie_pointer.vo Jessie_alloc_table.vo Jessie_tag_id.vo Jessie_tag.vo Jessie_tag_table_type.vo Jessie_tag_table.vo Jessie_sidecast.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Reinterpret_cast.vo: Reinterpret_cast.v  Pointer.vo Alloc_table.vo Tag_id.vo Tag.vo Tag_table_type.vo Tag_table.vo Sidecast.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_allocable.vo: Jessie_allocable.v  Jessie_pointer.vo Jessie_alloc_table.vo Jessie_tag_id.vo Jessie_tag.vo Jessie_tag_table_type.vo Jessie_tag_table.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Allocable.vo: Allocable.v  Pointer.vo Alloc_table.vo Tag_id.vo Tag.vo Tag_table_type.vo Tag_table.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_alloc.vo: Jessie_alloc.v  Jessie_pointer.vo Jessie_alloc_table.vo Jessie_pset.vo Jessie_tag_id.vo Jessie_tag.vo Jessie_tag_table_type.vo Jessie_tag_table.vo Jessie_allocable.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Alloc.vo: Alloc.v  Pointer.vo Alloc_table.vo Pset.vo Tag_id.vo Tag.vo Tag_table_type.vo Tag_table.vo Allocable.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_same_except.vo: Jessie_same_except.v  Jessie_pointer.vo Jessie_alloc_table.vo Jessie_pset.vo Jessie_tag_id.vo Jessie_tag.vo Jessie_tag_table_type.vo Jessie_tag_table.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Same_except.vo: Same_except.v  Pointer.vo Alloc_table.vo Pset.vo Tag_id.vo Tag.vo Tag_table_type.vo Tag_table.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Jessie_rmem.vo: Jessie_rmem.v  Jessie_pointer.vo Jessie_alloc_table.vo Jessie_memory.vo Jessie_pset.vo Jessie_pset_range.vo Jessie_pset_union.vo Jessie_assigns.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+Rmem.vo: Rmem.v  Pointer.vo Alloc_table.vo Memory.vo Pset.vo Pset_range.vo Pset_union.vo Assigns.vo
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Enum_intf.vo: Enum_intf.v 
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Enum.vo: Enum.v  Enum_intf.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Powers_of_2.vo: Powers_of_2.v 
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_enum_intf.vo: Bit_enum_intf.v  Enum_intf.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_enum_intf2.vo: Bit_enum_intf2.v  Enum_intf.vo Bit_enum_intf.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_enum.vo: Bit_enum.v  Enum_intf.vo Powers_of_2.vo Bit_enum_intf.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Int8.vo: Int8.v  Enum_intf.vo Enum.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Uint8.vo: Uint8.v  Enum_intf.vo Enum.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Int16.vo: Int16.v  Enum_intf.vo Enum.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Uint16.vo: Uint16.v  Enum_intf.vo Enum.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Int32.vo: Int32.v  Enum_intf.vo Enum.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Uint32.vo: Uint32.v  Enum_intf.vo Enum.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Int64.vo: Int64.v  Enum_intf.vo Enum.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Uint64.vo: Uint64.v  Enum_intf.vo Enum.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int8.vo: Bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint8.vo: Bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int16.vo: Bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint16.vo: Bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int32.vo: Bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint32.vo: Bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int64.vo: Bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint64.vo: Bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint8_of_bit_int8.vo: Bit_uint8_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_int8.vo Bit_uint8.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int16_of_bit_int8.vo: Bit_int16_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int8.vo Bit_int16.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint16_of_bit_int8.vo: Bit_uint16_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_int8.vo Bit_uint16.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int32_of_bit_int8.vo: Bit_int32_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int8.vo Bit_int32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint32_of_bit_int8.vo: Bit_uint32_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_int8.vo Bit_uint32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int64_of_bit_int8.vo: Bit_int64_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int8.vo Bit_int64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint64_of_bit_int8.vo: Bit_uint64_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int8.vo Bit_uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int8_of_bit_uint8.vo: Bit_int8_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_int8.vo Bit_uint8.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int16_of_bit_uint8.vo: Bit_int16_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_uint8.vo Bit_int16.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint16_of_bit_uint8.vo: Bit_uint16_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Uint16.vo Bit_uint8.vo Bit_uint16.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int32_of_bit_uint8.vo: Bit_int32_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_uint8.vo Bit_int32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint32_of_bit_uint8.vo: Bit_uint32_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Uint32.vo Bit_uint8.vo Bit_uint32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int64_of_bit_uint8.vo: Bit_int64_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_uint8.vo Bit_int64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint64_of_bit_uint8.vo: Bit_uint64_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Uint64.vo Bit_uint8.vo Bit_uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int8_of_bit_int16.vo: Bit_int8_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int8.vo Bit_int16.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint8_of_bit_int16.vo: Bit_uint8_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_uint8.vo Bit_int16.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint16_of_bit_int16.vo: Bit_uint16_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_int16.vo Bit_uint16.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int32_of_bit_int16.vo: Bit_int32_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int16.vo Bit_int32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint32_of_bit_int16.vo: Bit_uint32_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_int16.vo Bit_uint32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int64_of_bit_int16.vo: Bit_int64_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int16.vo Bit_int64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint64_of_bit_int16.vo: Bit_uint64_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int16.vo Bit_uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int8_of_bit_uint16.vo: Bit_int8_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_int8.vo Bit_uint16.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint8_of_bit_uint16.vo: Bit_uint8_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Uint16.vo Bit_uint8.vo Bit_uint16.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int16_of_bit_uint16.vo: Bit_int16_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_int16.vo Bit_uint16.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int32_of_bit_uint16.vo: Bit_int32_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_uint16.vo Bit_int32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint32_of_bit_uint16.vo: Bit_uint32_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Uint32.vo Bit_uint16.vo Bit_uint32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int64_of_bit_uint16.vo: Bit_int64_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_uint16.vo Bit_int64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint64_of_bit_uint16.vo: Bit_uint64_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Uint64.vo Bit_uint16.vo Bit_uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int8_of_bit_int32.vo: Bit_int8_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int8.vo Bit_int32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint8_of_bit_int32.vo: Bit_uint8_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_uint8.vo Bit_int32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int16_of_bit_int32.vo: Bit_int16_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int16.vo Bit_int32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint16_of_bit_int32.vo: Bit_uint16_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_uint16.vo Bit_int32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint32_of_bit_int32.vo: Bit_uint32_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_int32.vo Bit_uint32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int64_of_bit_int32.vo: Bit_int64_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int32.vo Bit_int64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint64_of_bit_int32.vo: Bit_uint64_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int32.vo Bit_uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int8_of_bit_uint32.vo: Bit_int8_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_int8.vo Bit_uint32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint8_of_bit_uint32.vo: Bit_uint8_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Uint32.vo Bit_uint8.vo Bit_uint32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int16_of_bit_uint32.vo: Bit_int16_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_int16.vo Bit_uint32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint16_of_bit_uint32.vo: Bit_uint16_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Uint32.vo Bit_uint16.vo Bit_uint32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int32_of_bit_uint32.vo: Bit_int32_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_int32.vo Bit_uint32.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int64_of_bit_uint32.vo: Bit_int64_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_uint32.vo Bit_int64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint64_of_bit_uint32.vo: Bit_uint64_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Uint64.vo Bit_uint32.vo Bit_uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int8_of_bit_int64.vo: Bit_int8_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int8.vo Bit_int64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint8_of_bit_int64.vo: Bit_uint8_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_uint8.vo Bit_int64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int16_of_bit_int64.vo: Bit_int16_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int16.vo Bit_int64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint16_of_bit_int64.vo: Bit_uint16_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_uint16.vo Bit_int64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int32_of_bit_int64.vo: Bit_int32_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int32.vo Bit_int64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint32_of_bit_int64.vo: Bit_uint32_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_uint32.vo Bit_int64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint64_of_bit_int64.vo: Bit_uint64_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int64.vo Bit_uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int8_of_bit_uint64.vo: Bit_int8_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int8.vo Bit_uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint8_of_bit_uint64.vo: Bit_uint8_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Uint64.vo Bit_uint8.vo Bit_uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int16_of_bit_uint64.vo: Bit_int16_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int16.vo Bit_uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint16_of_bit_uint64.vo: Bit_uint16_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Uint64.vo Bit_uint16.vo Bit_uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int32_of_bit_uint64.vo: Bit_int32_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int32.vo Bit_uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint32_of_bit_uint64.vo: Bit_uint32_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Uint64.vo Bit_uint32.vo Bit_uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_int64_of_bit_uint64.vo: Bit_int64_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int64.vo Bit_uint64.vo
-	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Jessie $<
+	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
