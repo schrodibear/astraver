@@ -672,6 +672,7 @@ object
     function
     | GFunDecl (_spec, v, _attr) ->
       if not v.vdefined then retype_func v;
+      new_return_type := None;
       DoChildren
     | GFun _
     | GAnnot _ -> DoChildren
