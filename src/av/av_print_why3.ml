@@ -1276,6 +1276,7 @@ struct
        Alloc\\|\
        Allocable\\|\
        Alloc_table\\|\
+       Any_alloc_table\\|\
        Any_bool\\|\
        Any_int\\|\
        Any_memory\\|\
