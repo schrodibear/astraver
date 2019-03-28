@@ -357,9 +357,3 @@ let retype file =
   let apply = Rewrite.apply ~file in
   (* Organize structure types in hierarchy. *)
   apply create_struct_hierarchy "organizing structure types in hierarchy."
-
-(*
-Local Variables:
-compile-command: "make"
-End:
-*)

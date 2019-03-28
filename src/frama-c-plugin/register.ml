@@ -202,18 +202,18 @@ let run () =
 
   (* filename is 'file.jc' *)
   let filename = basename ^ ".jc" in
-  Why_pp.print_in_file
+  Astraver.Pp.print_in_file
     (fun fmt ->
-       Av.Print.print_decls fmt pragmas;
-       Format.fprintf fmt "%a" Av.Print_p.pdecls pfile)
+       Astraver.Print.print_decls fmt pragmas;
+       Format.fprintf fmt "%a" Astraver.Print_p.pdecls pfile)
     (Filename.concat astraver_subdir filename);
   Console.feedback "File %s/%s written." astraver_subdir filename;
 
   (* Phase 6: produce source-to-source correspondance file *)
   (* locname is 'file.cloc' *)
   let locname = basename ^ ".cloc" in
-  Why_pp.print_in_file
-    Av.Print.jc_print_pos
+  Astraver.Pp.print_in_file
+    Astraver.Print.jc_print_pos
     (Filename.concat astraver_subdir locname);
   Console.feedback "File %s/%s written." astraver_subdir locname;
 
@@ -322,9 +322,3 @@ let run_and_catch_error =
 
 let main () = if Config.Analysis.get () then run_and_catch_error ()
 let () = Db.Main.extend main
-
-(*
-Local Variables:
-compile-command: "LC_ALL=C make"
-End:
-*)

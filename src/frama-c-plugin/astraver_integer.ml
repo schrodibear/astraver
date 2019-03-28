@@ -59,12 +59,6 @@ let (<) i1 i2 = negative (Int64.compare i1 i2)
 let (>=) i1 i2 = i2 <= i1
 let (>) i1 i2 = i2 < i1
 
-let power_of_two i = 
+let power_of_two i =
   assert (i >= 0L && i < 63L);
   1L lsl (Int64.to_int i)
-
-(*
-Local Variables:
-compile-command: "LC_ALL=C make -C ../.. -j"
-End:
-*)

@@ -39,14 +39,16 @@ open Ast_info
 open Extlib
 
 (* Import from Why *)
-open Av.Constructors
-open Av.Ast
-open Av.Env
-open! Av.Common
+open Astraver.Constructors
+open Astraver.Ast
+open Astraver.Env
+open! Astraver.Common
 
 (* Utility functions *)
 open! Common
 open! Astraver_integer
+
+module Loc = Astraver.Loc
 
 (*****************************************************************************)
 (* Smart constructors.                                                       *)
@@ -57,11 +59,11 @@ let mktype tnode = new ptype tnode
 let mkexpr_loc enode pos = new pexpr ~pos enode
 let mkexpr enode pos = new pexpr ~pos:(Location.to_lexing_loc pos) enode
 
-let null_expr = new pexpr ~pos:Why_loc.dummy_position (JCPEconst JCCnull)
-let true_expr = new pexpr ~pos:Why_loc.dummy_position (JCPEconst(JCCboolean true))
-let false_expr = new pexpr ~pos:Why_loc.dummy_position (JCPEconst(JCCboolean false))
-let zero_expr = new pexpr ~pos:Why_loc.dummy_position (JCPEconst(JCCinteger "0"))
-let one_expr = new pexpr ~pos:Why_loc.dummy_position (JCPEconst(JCCinteger "1"))
+let null_expr = new pexpr ~pos:Loc.dummy_position (JCPEconst JCCnull)
+let true_expr = new pexpr ~pos:Loc.dummy_position (JCPEconst(JCCboolean true))
+let false_expr = new pexpr ~pos:Loc.dummy_position (JCPEconst(JCCboolean false))
+let zero_expr = new pexpr ~pos:Loc.dummy_position (JCPEconst(JCCinteger "0"))
+let one_expr = new pexpr ~pos:Loc.dummy_position (JCPEconst(JCCinteger "1"))
 
 let mktag tag_node pos = new ptag ~pos:(Location.to_lexing_loc pos) tag_node
 
@@ -92,7 +94,7 @@ let mkdecl dnode pos = new decl ~pos:(Location.to_lexing_loc pos) dnode
 (*****************************************************************************)
 
 let reg_position_loc ?id ?name pos =
-  Av.Print.jc_reg_pos "_C" ?id ?name (Why_loc.extract pos)
+  Astraver.Print.jc_reg_pos "_C" ?id ?name (Loc.extract pos)
 
 let reg_position ?id ?kind:_ ?name pos = reg_position_loc ?id ?name (Location.to_lexing_loc pos)
 
@@ -110,10 +112,10 @@ let locate ?pos e =
       match pos with
       | None -> e#pos
       | Some pos ->
-        if Loc.is_unknown e#pos then pos else e#pos
+        if Common.Loc.is_unknown e#pos then pos else e#pos
     in
     (* Don't register unknown locations *)
-    if not (Loc.is_unknown pos) then
+    if not (Common.Loc.is_unknown pos) then
       let lab = reg_position_loc pos in
       let e =
         match e#node with
@@ -447,7 +449,7 @@ let wrapper_name t = Name.typ (unrollType t) ^ "P"
 (* Cil to Jessie translation of constants                                    *)
 (*****************************************************************************)
 
-let native_type_of_fkind x : Av.Env.native_type =
+let native_type_of_fkind x : Astraver.Env.native_type =
   match x with
   | FFloat -> Tgenfloat `Float
   | FDouble -> Tgenfloat `Double
@@ -1233,7 +1235,7 @@ let assigns =
         assign_list
     in
     let assign_list = List.flatten (List.map zone assign_list) in
-    Some (Why_loc.dummy_position, assign_list)
+    Some (Loc.dummy_position, assign_list)
 
 let allocates a =
   match a with
@@ -1248,7 +1250,7 @@ let allocates a =
     let result =
       List.flatten @@ List.map zone allocs @ List.map (zone ~default_label:Logic_const.old_label) frees
     in
-    Some (Why_loc.dummy_position, result)
+    Some (Loc.dummy_position, result)
 
 let spec _fname funspec =
   let is_normal_postcond =
@@ -1298,7 +1300,7 @@ let spec _fname funspec =
       []
   in
 
-  let complete_behaviors_assertions : Av.Ast.pexpr list =
+  let complete_behaviors_assertions : Astraver.Ast.pexpr list =
     List.map
       (fun bnames ->
          mkdisjunct
@@ -1318,7 +1320,7 @@ let spec _fname funspec =
              Location.unknown)
       funspec.spec_complete_behaviors
   in
-  let disjoint_behaviors_assertions  : Av.Ast.pexpr list =
+  let disjoint_behaviors_assertions  : Astraver.Ast.pexpr list =
     List.fold_left
       (fun acc bnames ->
          let all_assumes =
@@ -3095,16 +3097,16 @@ let pragma =
     | "JessieFloatModel" ->
       begin match String.lowercase_ascii arg with
       | "math" -> float_model := `Math;
-        [Av.Print.JCfloat_model Av.Env.FMmath]
+        Astraver.[Print.JCfloat_model Env.FMmath]
       | "defensive" ->
         float_model := `Defensive;
-        [Av.Print.JCfloat_model Av.Env.FMdefensive]
+        Astraver.[Print.JCfloat_model Env.FMdefensive]
       | "full" ->
         float_model := `Full;
-        [Av.Print.JCfloat_model Av.Env.FMfull]
+        Astraver.[Print.JCfloat_model Env.FMfull]
       | "multirounding" ->
         float_model := `Multirounding;
-        [Av.Print.JCfloat_model Av.Env.FMmultirounding]
+        Astraver.[Print.JCfloat_model Env.FMmultirounding]
       | s ->
         Console.warning
           "pragma %s: identifier %s is not a valid value (ignored)."
@@ -3114,19 +3116,19 @@ let pragma =
       begin match String.lowercase_ascii arg with
       | "nearesteven" ->
         (* float_rounding_mode := `NearestEven; *)
-        [Av.Print.JCfloat_rounding_mode Av.Env.FRMNearestEven]
+        Astraver.[Print.JCfloat_rounding_mode Env.FRMNearestEven]
       | "down" ->
         (* float_rounding_mode := `Downward; *)
-        [Av.Print.JCfloat_rounding_mode Av.Env.FRMDown]
+        Astraver.[Print.JCfloat_rounding_mode Env.FRMDown]
       | "up" ->
         (* float_rounding_mode := `Upward; *)
-        [Av.Print.JCfloat_rounding_mode Av.Env.FRMUp]
+        Astraver.[Print.JCfloat_rounding_mode Env.FRMUp]
       | "tozero" ->
         (* float_rounding_mode := `Towardzero; *)
-        [Av.Print.JCfloat_rounding_mode Av.Env.FRMToZero]
+        Astraver.[Print.JCfloat_rounding_mode Env.FRMToZero]
       | "nearestaway" ->
         (* float_rounding_mode := `Towardawayzero; *)
-        [Av.Print.JCfloat_rounding_mode Av.Env.FRMNearestAway]
+        Astraver.[Print.JCfloat_rounding_mode Env.FRMNearestAway]
       | s ->
         Console.warning
           "pragma %s: identifier %s is not a valid value (ignored)" name s; []
@@ -3134,9 +3136,9 @@ let pragma =
     | "JessieFloatInstructionSet" ->
       begin match String.lowercase_ascii arg with
       | "x87" ->
-        [Av.Print.JCfloat_instruction_set "x87"]
+        Astraver.[Print.JCfloat_instruction_set "x87"]
       | "ieee754" ->
-        [Av.Print.JCfloat_instruction_set "ieee754"]
+        Astraver.[Print.JCfloat_instruction_set "ieee754"]
       | s ->
         Console.warning
           "pragma %s: identifier %s is not a valid value (ignored)" name s; []
@@ -3153,9 +3155,3 @@ let pragma =
   | _ -> []
 
 let pragmas f = List.(flatten @@ map pragma f.globals)
-
-(*
-Local Variables:
-compile-command: "make"
-End:
-*)

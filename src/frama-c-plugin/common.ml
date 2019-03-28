@@ -2573,9 +2573,3 @@ end
 
 module StringTrie = Trie.Make (Map.Make (Char))
 module Int64Trie = Trie.Make (Map.Make (Int64))
-
-(*
-Local Variables:
-compile-command: "LC_ALL=C make -C .. -j byte"
-End:
-*)

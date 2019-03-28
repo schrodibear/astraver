@@ -32,33 +32,31 @@ FRAMAC_LIBDIR :=$(shell $(FRAMAC) -journal-disable -print-libpath)
 endif
 
 NUMS_DIR :=$(shell ocamlfind query num.core)
+ASTRAVER_DIR :=$(shell ocamlfind query astraver)
 
 PLUGIN_DIR      ?= .
-WHY_DISTRIB	?= $(PLUGIN_DIR)/../..
-BUILDSRC        ?= $(WHY_DISTRIB)/_build/src
-AV_INCLUDES	?= -I $(BUILDSRC)/why -I $(BUILDSRC)/av -I $(NUMS_DIR)
-AVCMA		?= $(BUILDSRC)/av/av.cma
-AVCMXA		?= $(AVCMA:.cma=.cmxa)
+AV_DISTRIB	?= $(PLUGIN_DIR)/../..
+BUILDSRC        ?= $(AV_DISTRIB)/_build/default/src
+AV_INCLUDES	?= -I $(NUMS_DIR)
+AV_PKGS		?= -package astraver
 
 PLUGIN_NAME:=AstraVer
 PLUGIN_CMO:= astraver_options astraver_integer common extractor rewrite \
              retype norm interp register
 PLUGIN_HAS_MLI:=yes
 PLUGIN_DEPENDENCIES:=Variadic
-PLUGIN_BFLAGS:=$(AV_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
-PLUGIN_OFLAGS:=$(AV_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
-PLUGIN_EXTRA_BYTE+=$(NUMS_DIR)/nums.cma $(AVCMA)
-PLUGIN_EXTRA_OPT+=$(NUMS_DIR)/nums.cmxa $(AVCMXA)
+PLUGIN_BFLAGS:=$(AV_PKGS) $(AV_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
+PLUGIN_OFLAGS:=$(AV_PKGS) $(AV_INCLUDES) -w -48 -safe-string -short-paths -strict-formats -no-alias-deps
+PLUGIN_EXTRA_BYTE+=$(NUMS_DIR)/nums.cma $(ASTRAVER_DIR)/astraver.cma
+PLUGIN_EXTRA_OPT+=$(NUMS_DIR)/nums.cmxa $(ASTRAVER_DIR)/astraver.cmxa
 PLUGIN_DOCFLAGS:=$(AV_INCLUDES)
-PLUGIN_TESTS_DIRS:=jessie
+PLUGIN_TESTS_DIRS:=astraver
 
 ifeq ($(FRAMAC_MAKE),yes)
 unexport $(FRAMAC_MAKE)
 endif
 
 $(PLUGIN_DIR)/interp.cmo: $(PLUGIN_DIR)/interp.cmi $(AVCMA)
-
-$(PLUGIN_DIR)/interp.cmi: $(BUILDSRC)/av/av.cmi
 
 $(PLUGIN_DIR)/interp.cmx: $(PLUGIN_DIR)/interp.cmi $(AVCMXA)
 

@@ -7,15 +7,6 @@
 
 . ./Version
 
-# Why
-WHYVF=src/why/why_version.ml
-mkdir -p src/why
-echo "let coqversion = \"$COQVER\"" > $WHYVF
-echo "let version = \"$WHY_VERSION\"" >> $WHYVF
-echo "let date = \""`date -R`"\"" >> $WHYVF
-echo "let bindir = \"$BINDIR\"" >> $WHYVF
-echo "let libdir = \"$LIBDIR/astraver\"" >> $WHYVF
-
 # AstraVer
 GIT=$(git rev-parse HEAD 2>/dev/null)
 if [[ -n "$GIT" ]]; then
@@ -26,10 +17,11 @@ if [[ -n "$GIT" ]]; then
   GIT=" (${GIT})"
 fi
 AV_VERSION="${AV_VERSION}${GIT}"
-AVVF=src/av/av_version.ml
-mkdir -p src/jc
-echo "let version = \"$AV_VERSION\"" >> $AVVF
+AVVF=src/av/version.ml
+mkdir -p src/av
+echo "let version = \"$AV_VERSION\"" > $AVVF
 echo "let date = \""`date -R`"\"" >> $AVVF
+echo "let libdir = \"$LIBDIR/astraver\"" >> $AVVF
 
 # Doc
 DOCF=doc/version.tex

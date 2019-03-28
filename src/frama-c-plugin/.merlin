@@ -1,3 +1,5 @@
+PKG astraver
+
 S .
 S frama-c/src/kernel_services/ast_data
 S frama-c/src/kernel_services/ast_printing

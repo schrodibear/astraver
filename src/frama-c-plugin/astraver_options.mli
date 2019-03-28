@@ -43,9 +43,3 @@ module Cpu_limit : Parameter_sig.Int
 module Specialize : Parameter_sig.Bool
 module Extract : Parameter_sig.Bool
 module Flat_vararg : Parameter_sig.Bool
-
-(*
-Local Variables:
-compile-command: "LC_ALL=C make"
-End:
-*)

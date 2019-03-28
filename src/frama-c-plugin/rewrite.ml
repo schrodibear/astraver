@@ -2543,9 +2543,3 @@ let rewrite file =
   apply rewrite_pre_old "rewriting Pre as Old in funspecs";
   (* Remove unsupported predicates *)
   apply remove_unsupported "checking if there are unsupported predicates"
-
-(*
-Local Variables:
-compile-command: "make -C ."
-End:
-*)

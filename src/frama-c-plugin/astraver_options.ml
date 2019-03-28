@@ -171,8 +171,3 @@ module Flat_vararg =
       let option_name = "-av-flat-vararg"
       let help = "use flat void * array to represent variadic arguments"
      end)
-(*
-Local Variables:
-compile-command: "make"
-End:
-*)

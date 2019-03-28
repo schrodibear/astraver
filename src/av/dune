@@ -1,0 +1,23 @@
+(library
+  (name astraver)
+  (public_name astraver)
+  (wrapped true)
+  (flags (:standard -w +Z-3-6-52 -safe-string))
+  (modules
+    ast callgraph common common_options constructors
+    debug_print effect env envset fenv interp interp_misc interp_struct invariants iterators
+    lexer loc make name norm numconst options output output_ast parser position pp print print_misc
+    print_n print_p print_why3 rc region separation stdlib struct_tools type_var typing version why3_kw)
+  (modules_without_implementation ast env output_ast)
+  (private_modules common_options debug_print envset interp_misc interp_struct
+    numconst print_misc struct_tools type_var version)
+  (libraries unix str num ocamlgraph))
+
+(executable
+  (name main)
+  (flags (:standard -w +Z-3-6-52 -safe-string))
+  (modules main)
+  (libraries astraver))
+
+(ocamllex lexer numconst rc)
+(ocamlyacc parser)

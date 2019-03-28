@@ -2097,9 +2097,3 @@ let normalize file =
   apply fill_offset_size_in_fields "filling offset/size information in fields";
   (* Remove useless casts. *)
   apply remove_useless_casts "removng useless casts"
-
-(*
-Local Variables:
-compile-command: "make -C .."
-End:
-*)

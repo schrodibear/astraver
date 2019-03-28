@@ -1,7 +1,5 @@
 FLG -w +Z -short-paths -strict-formats -safe-string
 
 S src/av
-S src/why
 
-B _build/src/av
-B _build/src/why
+B _build/default/src/av

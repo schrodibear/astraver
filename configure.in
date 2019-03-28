@@ -64,7 +64,7 @@
 
 # check for one particular file of the sources
 # ADAPT THE FOLLOWING LINE TO YOUR SOURCES!
-AC_INIT(src/av/av_interp.ml)
+AC_INIT(src/av/interp.ml)
 
 # verbosemake feature
 
@@ -96,11 +96,6 @@ esac
 # old way: OCAMLLIB=`$OCAMLC -v | tail -1 | cut -f 4 -d ' ' | tr -d '\\r'`
 OCAMLLIB=`$OCAMLC -where | tr -d '\\r'`
 echo "ocaml library path is $OCAMLLIB"
-
-AC_CHECK_PROG(OCAMLBUILD,ocamlbuild,ocamlbuild,no)
-if test "$OCAMLBUILD" = no ; then
-	AC_MSG_ERROR(Cannot find ocamlbuild.)
-fi
 
 ## Where are the library we need
 # we look for ocamlfind; if not present, we just don't use it to find
@@ -408,7 +403,6 @@ AC_SUBST(OCAMLYACC)
 AC_SUBST(OCAMLDOC)
 AC_SUBST(OCAMLBEST)
 AC_SUBST(OCAMLVERSION)
-AC_SUBST(OCAMLBUILD)
 AC_SUBST(OCAMLV)
 AC_SUBST(OCAMLLIB)
 AC_SUBST(OCAMLGRAPHLIB)

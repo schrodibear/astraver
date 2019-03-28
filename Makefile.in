@@ -49,7 +49,6 @@ LIBDIR= $(DESTDIR)@libdir@
 
 # other variables
 OCAMLBEST= @OCAMLBEST@
-OCAMLBUILD = @OCAMLBUILD@
 
 export FRAMAC = @FRAMAC@
 
@@ -64,8 +63,7 @@ COQVER = @COQVER@
 V8 = $(wildcard lib/coq/*.v)
 VO8 = $(patsubst %.v,%.vo, $(V8))
 
-GENERATED = src/why/why_version.ml \
-	    src/av/av_version.ml \
+GENERATED = src/av/version.ml \
             lib/why3/why3.conf \
             lib/why3/z3_enum.drv \
             lib/why3/z3_enum_nobv.drv \
@@ -86,16 +84,14 @@ MORE_GENERATED = lib/why3/z3_enum.gen \
 
 ASTRAVER=bin/astraver.$(OCAMLBEST)
 
-OCAMLBUILD += -use-ocamlfind -j 0
+AV_SOURCES=$(wildcard src/av/*.ml src/av/*.mli src/av/*.mll src/av/*.mly)
 
-AV_SOURCES=$(wildcard src/why/*.ml src/why/*.mli src/why/*.mll src/why/*.mly src/av/*.ml src/av/*.mli src/av/*.mll src/av/*.mly)
-
-BUILDSRC=_build/src
+BUILDSRC=_build/default/src
 
 ifeq ($(OCAMLBEST),opt)
-AVLIB=$(BUILDSRC)/av/av.cmxa
+AVLIB=$(BUILDSRC)/av/astraver.cmxa
 else
-AVLIB=$(BUILDSRC)/av/av.cma
+AVLIB=$(BUILDSRC)/av/astraver.cma
 endif
 
 all: all-without-frama-c-plugin $(ASTRAVER_PLUGIN_BEST)
@@ -105,21 +101,18 @@ all-without-frama-c-plugin: $(ASTRAVER) coq-@COQ@ $(AVLIB)
 opt:  bin/astraver.opt $(ASTRAVER_PLUGIN_OPT)
 byte: bin/astraver.byte $(ASTRAVER_PLUGIN_BYTE)
 
-$(BUILDSRC)/av/av.cmxa: $(AV_SOURCES) $(GENERATED)
-	$(OCAMLBUILD) av.otarget
-	rm -f av.cm*
+$(BUILDSRC)/av/astraver.cmxa: $(AV_SOURCES) $(GENERATED)
+	dune build @install
+	dune install astraver
+
+bin/astraver.opt: $(AV_SOURCES) bin $(BUILDSRC)/av/astraver.cmxa
+	dune build src/av/main.exe
+	if [ -f $(BUILDSRC)/av/main.exe ]; then mv $(BUILDSRC)/av/main.exe $@; fi
 	touch $@
 
-$(BUILDSRC)/av/av.%: $(AV_SOURCES) $(GENERATED) $(BUILDSRC)/av/av.cmxa
-	touch $@
-
-bin/astraver.opt: $(AV_SOURCES) bin $(BUILDSRC)/av/av.cmxa
-	if [ -f av_main.native ]; then mv av_main.native $@; fi
-	touch $@
-
-bin/astraver.byte: $(AV_SOURCES) bin $(BUILDSRC)/av/av.cma
-	$(OCAMLBUILD) av_main.d.byte
-	if [ -f av_main.d.byte ]; then mv av_main.d.byte $@; fi
+bin/astraver.byte: $(AV_SOURCES) bin $(BUILDSRC)/av/astraver.cma
+	dune build src/av/main.bc
+	if [ -f $(BUILDSRC)/av/main.bc ]; then mv $(BUILDSRC)/av/main.bc $@; fi
 	touch $@
 
 bin:
@@ -127,11 +120,11 @@ bin:
 
 # Frama-C plugin for AstraVer
 ASTRAVER_PLUGIN_PATH=src/frama-c-plugin
-$(AASTRAVER_PLUGIN_BYTE): $(addprefix $(BUILDSRC)/av/,av.cmi av.cma)
+$(AASTRAVER_PLUGIN_BYTE): $(addprefix $(BUILDSRC)/av/ astraver.cma)
 	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) depend
 	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) AstraVer.cma
 
-$(ASTRAVER_PLUGIN_OPT): $(addprefix $(BUILDSRC)/av/,av.cmi av.cma av.cmxa)
+$(ASTRAVER_PLUGIN_OPT): $(addprefix $(BUILDSRC)/av/,astraver.cma astraver.cmxa)
 	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) depend
 	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH)
 
@@ -247,7 +240,7 @@ coq-v8.1: $(VO8)
 
 include Version
 
-doc/version.tex src/why/why_version.ml src/av/av_version.ml: Version version.sh config.status
+doc/version.tex src/why/why_version.ml src/av/version.ml: Version version.sh config.status
 	BINDIR=@bindir@ LIBDIR=@libdir@ COQVER=$(COQVER) ./version.sh
 
 # installation
@@ -270,7 +263,7 @@ install-lib: $(AVLIB) lib/why3/why3.conf
 	cp -f $(MORE_GENERATED) $(LIBDIR)/astraver/why3
 	cp -f lib/why3/cvc4_enum.drv lib/why3/alt-ergo_enum.drv lib/why3/alt-ergo_remove_triggers_enum.drv lib/why3/z3_enum.drv $(LIBDIR)/astraver/why3
 	mkdir -p $(LIBDIR)/astraver
-	cp -f $(AVLIB) $(AVCMI_EXPORT) $(LIBDIR)/astraver
+	cp -f $(AVLIB) $(LIBDIR)/astraver
 
 install-man:
 
