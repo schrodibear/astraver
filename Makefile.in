@@ -295,7 +295,7 @@ lib/coq/%.vo: $(V8) lib/coq/Pointer.vo
 	touch $@
 
 lib/coq/Pointer.vo: $(V8)
-	$(MAKE) -C lib/coq
+	$(MAKE) -j -C lib/coq
 
 # myself
 ########

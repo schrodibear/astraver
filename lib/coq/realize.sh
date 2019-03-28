@@ -59,7 +59,7 @@ function generate_makefile
     echo >>$MAKEFILE
     for i in $THS; do
         file="${i##*\.}"
-        th_deps=$(grep -oE 'Require [A-Z][A-Za-z_0-9]+' ${file}.v | cut -d ' ' -f 2 | grep -vE 'Import|BuiltIn|Int' | tr '\n' ' ')
+        th_deps=$(grep -oE 'Require [A-Z][A-Za-z_0-9]+' ${file}.v | cut -d ' ' -f 2 | grep -vE 'Import|BuiltIn|Int$' | tr '\n' ' ')
         deps=""
         for j in $th_deps; do deps=$deps" ${j}.vo"; done
         echo "${file}.vo: ${file}.v $deps" >>$MAKEFILE

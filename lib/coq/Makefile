@@ -132,195 +132,195 @@ Int64.vo: Int64.v  Enum_intf.vo Enum.vo
 Uint64.vo: Uint64.v  Enum_intf.vo Enum.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int8.vo: Bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo
+Bit_int8.vo: Bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint8.vo: Bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int16.vo: Bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo
+Bit_int16.vo: Bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int16.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint16.vo: Bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int32.vo: Bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo
+Bit_int32.vo: Bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint32.vo: Bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int64.vo: Bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo
+Bit_int64.vo: Bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint64.vo: Bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint8_of_bit_int8.vo: Bit_uint8_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_int8.vo Bit_uint8.vo
+Bit_uint8_of_bit_int8.vo: Bit_uint8_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo Uint8.vo Bit_int8.vo Bit_uint8.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int16_of_bit_int8.vo: Bit_int16_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int8.vo Bit_int16.vo
+Bit_int16_of_bit_int8.vo: Bit_int16_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo Int16.vo Bit_int8.vo Bit_int16.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint16_of_bit_int8.vo: Bit_uint16_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_int8.vo Bit_uint16.vo
+Bit_uint16_of_bit_int8.vo: Bit_uint16_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo Uint16.vo Bit_int8.vo Bit_uint16.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int32_of_bit_int8.vo: Bit_int32_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int8.vo Bit_int32.vo
+Bit_int32_of_bit_int8.vo: Bit_int32_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo Int32.vo Bit_int8.vo Bit_int32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint32_of_bit_int8.vo: Bit_uint32_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_int8.vo Bit_uint32.vo
+Bit_uint32_of_bit_int8.vo: Bit_uint32_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo Uint32.vo Bit_int8.vo Bit_uint32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int64_of_bit_int8.vo: Bit_int64_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int8.vo Bit_int64.vo
+Bit_int64_of_bit_int8.vo: Bit_int64_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo Int64.vo Bit_int8.vo Bit_int64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint64_of_bit_int8.vo: Bit_uint64_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int8.vo Bit_uint64.vo
+Bit_uint64_of_bit_int8.vo: Bit_uint64_of_bit_int8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo Uint64.vo Bit_int8.vo Bit_uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int8_of_bit_uint8.vo: Bit_int8_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_int8.vo Bit_uint8.vo
+Bit_int8_of_bit_uint8.vo: Bit_int8_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo Uint8.vo Bit_int8.vo Bit_uint8.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int16_of_bit_uint8.vo: Bit_int16_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_uint8.vo Bit_int16.vo
+Bit_int16_of_bit_uint8.vo: Bit_int16_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Int16.vo Bit_uint8.vo Bit_int16.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint16_of_bit_uint8.vo: Bit_uint16_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Uint16.vo Bit_uint8.vo Bit_uint16.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int32_of_bit_uint8.vo: Bit_int32_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_uint8.vo Bit_int32.vo
+Bit_int32_of_bit_uint8.vo: Bit_int32_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Int32.vo Bit_uint8.vo Bit_int32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint32_of_bit_uint8.vo: Bit_uint32_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Uint32.vo Bit_uint8.vo Bit_uint32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int64_of_bit_uint8.vo: Bit_int64_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_uint8.vo Bit_int64.vo
+Bit_int64_of_bit_uint8.vo: Bit_int64_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Int64.vo Bit_uint8.vo Bit_int64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint64_of_bit_uint8.vo: Bit_uint64_of_bit_uint8.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Uint64.vo Bit_uint8.vo Bit_uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int8_of_bit_int16.vo: Bit_int8_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int8.vo Bit_int16.vo
+Bit_int8_of_bit_int16.vo: Bit_int8_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo Int16.vo Bit_int8.vo Bit_int16.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint8_of_bit_int16.vo: Bit_uint8_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_uint8.vo Bit_int16.vo
+Bit_uint8_of_bit_int16.vo: Bit_uint8_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Int16.vo Bit_uint8.vo Bit_int16.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint16_of_bit_int16.vo: Bit_uint16_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_int16.vo Bit_uint16.vo
+Bit_uint16_of_bit_int16.vo: Bit_uint16_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int16.vo Uint16.vo Bit_int16.vo Bit_uint16.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int32_of_bit_int16.vo: Bit_int32_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int16.vo Bit_int32.vo
+Bit_int32_of_bit_int16.vo: Bit_int32_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int16.vo Int32.vo Bit_int16.vo Bit_int32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint32_of_bit_int16.vo: Bit_uint32_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_int16.vo Bit_uint32.vo
+Bit_uint32_of_bit_int16.vo: Bit_uint32_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int16.vo Uint32.vo Bit_int16.vo Bit_uint32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int64_of_bit_int16.vo: Bit_int64_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int16.vo Bit_int64.vo
+Bit_int64_of_bit_int16.vo: Bit_int64_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int16.vo Int64.vo Bit_int16.vo Bit_int64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint64_of_bit_int16.vo: Bit_uint64_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int16.vo Bit_uint64.vo
+Bit_uint64_of_bit_int16.vo: Bit_uint64_of_bit_int16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int16.vo Uint64.vo Bit_int16.vo Bit_uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int8_of_bit_uint16.vo: Bit_int8_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_int8.vo Bit_uint16.vo
+Bit_int8_of_bit_uint16.vo: Bit_int8_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo Uint16.vo Bit_int8.vo Bit_uint16.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint8_of_bit_uint16.vo: Bit_uint8_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Uint16.vo Bit_uint8.vo Bit_uint16.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int16_of_bit_uint16.vo: Bit_int16_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_int16.vo Bit_uint16.vo
+Bit_int16_of_bit_uint16.vo: Bit_int16_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int16.vo Uint16.vo Bit_int16.vo Bit_uint16.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int32_of_bit_uint16.vo: Bit_int32_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_uint16.vo Bit_int32.vo
+Bit_int32_of_bit_uint16.vo: Bit_int32_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Int32.vo Bit_uint16.vo Bit_int32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint32_of_bit_uint16.vo: Bit_uint32_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Uint32.vo Bit_uint16.vo Bit_uint32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int64_of_bit_uint16.vo: Bit_int64_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_uint16.vo Bit_int64.vo
+Bit_int64_of_bit_uint16.vo: Bit_int64_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Int64.vo Bit_uint16.vo Bit_int64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint64_of_bit_uint16.vo: Bit_uint64_of_bit_uint16.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Uint64.vo Bit_uint16.vo Bit_uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int8_of_bit_int32.vo: Bit_int8_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int8.vo Bit_int32.vo
+Bit_int8_of_bit_int32.vo: Bit_int8_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo Int32.vo Bit_int8.vo Bit_int32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint8_of_bit_int32.vo: Bit_uint8_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_uint8.vo Bit_int32.vo
+Bit_uint8_of_bit_int32.vo: Bit_uint8_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Int32.vo Bit_uint8.vo Bit_int32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int16_of_bit_int32.vo: Bit_int16_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int16.vo Bit_int32.vo
+Bit_int16_of_bit_int32.vo: Bit_int16_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int16.vo Int32.vo Bit_int16.vo Bit_int32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint16_of_bit_int32.vo: Bit_uint16_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_uint16.vo Bit_int32.vo
+Bit_uint16_of_bit_int32.vo: Bit_uint16_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Int32.vo Bit_uint16.vo Bit_int32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint32_of_bit_int32.vo: Bit_uint32_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_int32.vo Bit_uint32.vo
+Bit_uint32_of_bit_int32.vo: Bit_uint32_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int32.vo Uint32.vo Bit_int32.vo Bit_uint32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int64_of_bit_int32.vo: Bit_int64_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int32.vo Bit_int64.vo
+Bit_int64_of_bit_int32.vo: Bit_int64_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int32.vo Int64.vo Bit_int32.vo Bit_int64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint64_of_bit_int32.vo: Bit_uint64_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int32.vo Bit_uint64.vo
+Bit_uint64_of_bit_int32.vo: Bit_uint64_of_bit_int32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int32.vo Uint64.vo Bit_int32.vo Bit_uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int8_of_bit_uint32.vo: Bit_int8_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_int8.vo Bit_uint32.vo
+Bit_int8_of_bit_uint32.vo: Bit_int8_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo Uint32.vo Bit_int8.vo Bit_uint32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint8_of_bit_uint32.vo: Bit_uint8_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Uint32.vo Bit_uint8.vo Bit_uint32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int16_of_bit_uint32.vo: Bit_int16_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_int16.vo Bit_uint32.vo
+Bit_int16_of_bit_uint32.vo: Bit_int16_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int16.vo Uint32.vo Bit_int16.vo Bit_uint32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint16_of_bit_uint32.vo: Bit_uint16_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Uint32.vo Bit_uint16.vo Bit_uint32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int32_of_bit_uint32.vo: Bit_int32_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_int32.vo Bit_uint32.vo
+Bit_int32_of_bit_uint32.vo: Bit_int32_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int32.vo Uint32.vo Bit_int32.vo Bit_uint32.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int64_of_bit_uint32.vo: Bit_int64_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_uint32.vo Bit_int64.vo
+Bit_int64_of_bit_uint32.vo: Bit_int64_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Int64.vo Bit_uint32.vo Bit_int64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint64_of_bit_uint32.vo: Bit_uint64_of_bit_uint32.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Uint64.vo Bit_uint32.vo Bit_uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int8_of_bit_int64.vo: Bit_int8_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int8.vo Bit_int64.vo
+Bit_int8_of_bit_int64.vo: Bit_int8_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo Int64.vo Bit_int8.vo Bit_int64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint8_of_bit_int64.vo: Bit_uint8_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Bit_uint8.vo Bit_int64.vo
+Bit_uint8_of_bit_int64.vo: Bit_uint8_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Int64.vo Bit_uint8.vo Bit_int64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int16_of_bit_int64.vo: Bit_int16_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int16.vo Bit_int64.vo
+Bit_int16_of_bit_int64.vo: Bit_int16_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int16.vo Int64.vo Bit_int16.vo Bit_int64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint16_of_bit_int64.vo: Bit_uint16_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Bit_uint16.vo Bit_int64.vo
+Bit_uint16_of_bit_int64.vo: Bit_uint16_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Int64.vo Bit_uint16.vo Bit_int64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int32_of_bit_int64.vo: Bit_int32_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Bit_int32.vo Bit_int64.vo
+Bit_int32_of_bit_int64.vo: Bit_int32_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int32.vo Int64.vo Bit_int32.vo Bit_int64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint32_of_bit_int64.vo: Bit_uint32_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Bit_uint32.vo Bit_int64.vo
+Bit_uint32_of_bit_int64.vo: Bit_uint32_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Int64.vo Bit_uint32.vo Bit_int64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_uint64_of_bit_int64.vo: Bit_uint64_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int64.vo Bit_uint64.vo
+Bit_uint64_of_bit_int64.vo: Bit_uint64_of_bit_int64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int64.vo Uint64.vo Bit_int64.vo Bit_uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int8_of_bit_uint64.vo: Bit_int8_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int8.vo Bit_uint64.vo
+Bit_int8_of_bit_uint64.vo: Bit_int8_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int8.vo Uint64.vo Bit_int8.vo Bit_uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint8_of_bit_uint64.vo: Bit_uint8_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint8.vo Uint64.vo Bit_uint8.vo Bit_uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int16_of_bit_uint64.vo: Bit_int16_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int16.vo Bit_uint64.vo
+Bit_int16_of_bit_uint64.vo: Bit_int16_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int16.vo Uint64.vo Bit_int16.vo Bit_uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint16_of_bit_uint64.vo: Bit_uint16_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint16.vo Uint64.vo Bit_uint16.vo Bit_uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int32_of_bit_uint64.vo: Bit_int32_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int32.vo Bit_uint64.vo
+Bit_int32_of_bit_uint64.vo: Bit_int32_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int32.vo Uint64.vo Bit_int32.vo Bit_uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
 Bit_uint32_of_bit_uint64.vo: Bit_uint32_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint32.vo Uint64.vo Bit_uint32.vo Bit_uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
-Bit_int64_of_bit_uint64.vo: Bit_int64_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Uint64.vo Bit_int64.vo Bit_uint64.vo
+Bit_int64_of_bit_uint64.vo: Bit_int64_of_bit_uint64.v  Enum_intf.vo Enum.vo Powers_of_2.vo Bit_enum_intf.vo Bit_enum.vo Int64.vo Uint64.vo Bit_int64.vo Bit_uint64.vo
 	coqc -R $(WHY3LIBDIR)/coq Why3 -R . Astraver $<
 
