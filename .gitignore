@@ -70,40 +70,12 @@ generate.ml.exe
 /lib/why3/z3_enum.drv
 /lib/why3/z3_enum_nobv.drv
 
-/src/why/why_lexer.ml
-/src/why/why_linenum.ml
-/src/why/why_parser.ml
-/src/why/why_parser.mli
-/src/why/why_rc.ml
-/src/why/why_version.ml
-/src/why/why_xml.ml
-
-/src/jc/jc_lexer.ml
-/src/jc/jc_parser.ml
-/src/jc/jc_parser.mli
-/src/jc/jc_numconst.ml
-/src/jc/jc_version.ml
+/src/av/version.ml
+/src/av/.merlin
 
 /src/frama-c-plugin/.depend
 /src/frama-c-plugin/Jessie_DEP
 /src/frama-c-plugin/jessie_config.ml
-
-/tests/java/*.jc
-/tests/java/*.mlw
-/tests/java/*.loc
-/tests/java/*.jloc
-/tests/java/*.makefile
-/tests/java/simplify/
-/tests/java/why/
-
-/tests/c/*.jessie/*.jc
-/tests/c/*.jessie/*.mlw
-/tests/c/*.jessie/*.loc
-/tests/c/*.jessie/*.cloc
-/tests/c/*.jessie/*.makefile
-/tests/c/*.jessie/why
-/tests/c/*.jessie/simplify
-/tests/c/*.jessie/gappa
 
 /src/frama-c-plugin/tests/jessie/*.jessie/*.jc
 /src/frama-c-plugin/tests/jessie/*.jessie/*.mlw
