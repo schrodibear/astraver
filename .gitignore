@@ -27,7 +27,7 @@ bin
 /configure
 generate.ml.exe
 /src/frama-c-plugin/.Makefile.plugin.generated
-/src/frama-c-plugin/Jessie.check_mli_exists
+/src/frama-c-plugin/AstraVer.check_mli_exists
 /src/frama-c-plugin/META.frama-c-jessie
 /src/frama-c-plugin/frama-c
 /src/frama-c-plugin/top/
@@ -59,8 +59,8 @@ generate.ml.exe
 /doc/*.image.tex
 /doc/manual001.png
 
-/bin/jessie.opt
-/bin/jessie.byte
+/bin/astraver.opt
+/bin/astraver.byte
 
 /lib/why3/why3.conf
 /lib/why3/alt-ergo_enum.drv
@@ -74,17 +74,17 @@ generate.ml.exe
 /src/av/.merlin
 
 /src/frama-c-plugin/.depend
-/src/frama-c-plugin/Jessie_DEP
-/src/frama-c-plugin/jessie_config.ml
+/src/frama-c-plugin/Astraver_DEP
+/src/frama-c-plugin/astraver_config.ml
 
-/src/frama-c-plugin/tests/jessie/*.jessie/*.jc
-/src/frama-c-plugin/tests/jessie/*.jessie/*.mlw
-/src/frama-c-plugin/tests/jessie/*.jessie/*.loc
-/src/frama-c-plugin/tests/jessie/*.jessie/*.cloc
-/src/frama-c-plugin/tests/jessie/*.jessie/*.makefile
-/src/frama-c-plugin/tests/jessie/*.jessie/why
-/src/frama-c-plugin/tests/jessie/*.jessie/simplify
-/src/frama-c-plugin/tests/jessie/*.jessie/gappa
+/src/frama-c-plugin/tests/astraver/*.av/*.jc
+/src/frama-c-plugin/tests/astraver/*.av/*.mlw
+/src/frama-c-plugin/tests/astraver/*.av/*.loc
+/src/frama-c-plugin/tests/astraver/*.av/*.cloc
+/src/frama-c-plugin/tests/astraver/*.av/*.makefile
+/src/frama-c-plugin/tests/astraver/*.av/why
+/src/frama-c-plugin/tests/astraver/*.av/simplify
+/src/frama-c-plugin/tests/astraver/*.av/gappa
 /src/frama-c-plugin/tests/ptests_config
 
 .paths
