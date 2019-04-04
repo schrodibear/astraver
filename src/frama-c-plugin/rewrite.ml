@@ -1410,6 +1410,8 @@ class composite_expanding_visitor =
       | _ -> DoChildren
 
     method vpredicate_node = function
+      | Prel (Rneq, t1, t2) ->
+        ChangeDoChildrenPost (Pnot (Logic_const.prel ~loc:t2.term_loc (Req, t1, t2)), Fn.id)
       | Prel (Req, ({ term_loc; term_type=ty1 } as t1), ({ term_type=ty2 } as t2)) ->
         let expand1 = is_term_to_expand t1 and expand2 = is_term_to_expand t2 in
         if expand1 && expand2 && Logic_utils.is_same_type ty1 ty2 || not (expand1 = expand2) then
