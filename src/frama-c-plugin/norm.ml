@@ -645,7 +645,11 @@ object
         | None -> None
         | Some p -> Some (List.map formal p)
       in
-      let rt = if isStructOrUnionType rt then (Type.Ref.singleton rt ~msg:"Norm.vglob_aux(2)" :> typ) else rt in
+      new_return_type :=
+        (if isStructOrUnionType rt
+         then Some (Type.Ref.singleton rt ~msg:"Norm.vglob_aux(2)" :> typ)
+         else None);
+      let rt = Option.value ~default:rt !new_return_type in
       let typ = TFun (rt, params, isva, a) in
       fvi.vtype <- typ;
       try
@@ -672,7 +676,6 @@ object
     function
     | GFunDecl (_spec, v, _attr) ->
       if not v.vdefined then retype_func v;
-      new_return_type := None;
       DoChildren
     | GFun _
     | GAnnot _ -> DoChildren
