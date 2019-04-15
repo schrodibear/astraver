@@ -542,6 +542,7 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } =
           List.for_all
             Filepath.Normalized.(not % equal f % of_string)
             (Kernel.Files.get ()) ->
+        f.svar.vdefined <- false;
         ChangeTo [GFunDecl (f.sspec, f.svar, l)]
       | GVarDecl (vi, _) | GVar (vi, _, _) | GFun ( { svar = vi }, _) | GFunDecl (_, vi, _)
         when Set.mem vars vi ->
