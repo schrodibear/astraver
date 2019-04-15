@@ -169,7 +169,8 @@ module Extract =
                   -all_annot  process only explicitly annotated\n\
           \u{200b}            functions with their \n\
           \u{200b}            dependencies\n\
-                  -curr_annot process only explicitly annotated\n\
+                  -curr_annot (the default)\n\
+          \u{200b}            process only explicitly annotated\n\
           \u{200b}            functions defined in the files\n\
           \u{200b}            passed to the Frama-C command line\n\
           \u{200b}            and their dependencies\n\
