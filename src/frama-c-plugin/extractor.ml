@@ -537,6 +537,7 @@ class extractor { Result. types; comps; fields; enums; vars; dcomps } =
         SkipChildren
       | GFun (f, l)
         when
+          String.equal (Config.Extract.get ()) "curr_annot" &&
           (Set.mem vars f.svar || f.svar.vghost) &&
           let f = (fst l).pos_path in
           List.for_all

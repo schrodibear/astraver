@@ -117,7 +117,7 @@ let run () =
   FCProject.set_current prj;
   (* Extract relevant globals *)
   let file = FCAst.get () in
-  if Config.Extract.get () then begin
+  if List.mem (Config.Extract.get ()) ["all_annot"; "curr_annot"] then begin
     Console.debug "Extract relevant globals";
     Extractor.extract file;
     Debug.check_exp_types file

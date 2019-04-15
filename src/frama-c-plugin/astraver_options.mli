@@ -41,5 +41,5 @@ module Gen_only : Parameter_sig.Bool
 module Target : Parameter_sig.String
 module Cpu_limit : Parameter_sig.Int
 module Specialize : Parameter_sig.Bool
-module Extract : Parameter_sig.Bool
+module Extract : Parameter_sig.String
 module Flat_vararg : Parameter_sig.Bool

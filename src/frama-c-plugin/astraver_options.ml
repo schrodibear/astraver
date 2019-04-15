@@ -159,11 +159,24 @@ module Specialize =
      end)
 
 module Extract =
-  True
+  String
     (struct
       let option_name = "-av-extract"
-      let help = "process only explicitly annotated functions with their dependencies"
+      let arg_name = "all|all_annot|curr_annot"
+      let default = "curr_annot"
+      let help = "extract only selected definitions from the original source, possible values:\n\
+                  -all        process all definitions\n\
+                  -all_annot  process only explicitly annotated\n\
+          \u{200b}            functions with their \n\
+          \u{200b}            dependencies\n\
+                  -curr_annot process only explicitly annotated\n\
+          \u{200b}            functions defined in the files\n\
+          \u{200b}            passed to the Frama-C command line\n\
+          \u{200b}            and their dependencies\n\
+          \u{200b}            (in particular, replace definitions\n\
+          \u{200b}            from *.h files with declarations)"
      end)
+let () = Extract.set_possible_values ["all"; "all_annot"; "curr_annot"]
 
 module Flat_vararg =
   False
