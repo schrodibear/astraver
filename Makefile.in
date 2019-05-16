@@ -97,13 +97,13 @@ endif
 all: all-without-frama-c-plugin $(ASTRAVER_PLUGIN_BEST)
 
 all-without-frama-c-plugin: $(ASTRAVER) coq-@COQ@ $(AVLIB)
+frama-c-plugin: $(ASTRAVER_PLUGIN_BEST)
 
 opt:  bin/astraver.opt $(ASTRAVER_PLUGIN_OPT)
 byte: bin/astraver.byte $(ASTRAVER_PLUGIN_BYTE)
 
 $(BUILDSRC)/av/astraver.cmxa: $(AV_SOURCES) $(GENERATED)
 	dune build @install
-	dune install astraver
 
 bin/astraver.opt: $(AV_SOURCES) bin $(BUILDSRC)/av/astraver.cmxa
 	dune build src/av/main.exe
@@ -128,7 +128,7 @@ $(ASTRAVER_PLUGIN_OPT): $(addprefix $(BUILDSRC)/av/,astraver.cma astraver.cmxa)
 	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) depend
 	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH)
 
-install:
+install-frama-c-plugin:
 	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) install
 clean::
 	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) clean
@@ -246,7 +246,8 @@ doc/version.tex src/why/why_version.ml src/av/version.ml: Version version.sh con
 # installation
 ##############
 
-install: install-binary install-lib install-man install-coq-@COQ@
+install: install-all-without-frama-c-plugin install-frama-c-plugin
+install-all-without-frama-c-plugin: install-binary install-lib install-man install-coq-@COQ@
 
 BINARYFILES = $(ASTRAVER)
 
@@ -256,13 +257,8 @@ install-binary:
 	mkdir -p $(BINDIR)
 	cp -f $(ASTRAVER) $(BINDIR)/astraver$(EXE)
 
-install-lib: $(AVLIB) lib/why3/why3.conf
-	rm -rf $(LIBDIR)/astraver/why3
-	mkdir -p $(LIBDIR)/astraver/why3
-	cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/core.mlw lib/why3/enum.mlw $(LIBDIR)/astraver/why3
-	cp -f $(MORE_GENERATED) $(LIBDIR)/astraver/why3
-	cp -f lib/why3/cvc4_enum.drv lib/why3/alt-ergo_enum.drv lib/why3/alt-ergo_remove_triggers_enum.drv lib/why3/z3_enum.drv $(LIBDIR)/astraver/why3
-	cp -f $(AVLIB) $(LIBDIR)/astraver
+install-lib: $(AVLIB)
+	dune install astraver
 
 install-man:
 
