@@ -259,10 +259,10 @@ install-binary:
 
 install-lib: $(AVLIB)
 	dune install astraver
-        mkdir -p $(LIBDIR)/astraver/why3
-        cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/core.mlw lib/why3/enum.mlw $(LIBDIR)/astraver/why3
-        cp -f $(MORE_GENERATED) $(LIBDIR)/astraver/why3
-        cp -f lib/why3/cvc4_enum.drv lib/why3/alt-ergo_enum.drv lib/why3/alt-ergo_remove_triggers_enum.drv lib/why3/z3_enum.drv $(LIBDIR)/astraver/why3
+	mkdir -p $(LIBDIR)/astraver/why3
+	cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/core.mlw lib/why3/enum.mlw $(LIBDIR)/astraver/why3
+	cp -f $(MORE_GENERATED) $(LIBDIR)/astraver/why3
+	cp -f lib/why3/cvc4_enum.drv lib/why3/alt-ergo_enum.drv lib/why3/alt-ergo_remove_triggers_enum.drv lib/why3/z3_enum.drv $(LIBDIR)/astraver/why3
 
 install-man:
 
