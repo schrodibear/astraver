@@ -120,11 +120,11 @@ bin:
 
 # Frama-C plugin for AstraVer
 ASTRAVER_PLUGIN_PATH=src/frama-c-plugin
-$(AASTRAVER_PLUGIN_BYTE): $(addprefix $(BUILDSRC)/av/ astraver.cma)
+$(AASTRAVER_PLUGIN_BYTE):
 	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) depend
 	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) AstraVer.cma
 
-$(ASTRAVER_PLUGIN_OPT): $(addprefix $(BUILDSRC)/av/,astraver.cma astraver.cmxa)
+$(ASTRAVER_PLUGIN_OPT):
 	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH) depend
 	$(MAKE) -C $(ASTRAVER_PLUGIN_PATH)
 
