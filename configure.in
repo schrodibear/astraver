@@ -209,70 +209,9 @@ else
     fi
 fi
 
-
-#looking for ocamlgraph library
-
-LOCALOCAMLGRAPH=no
-
-if test "$USEOCAMLFIND" = yes; then
-  OCAMLGRAPHLIB=$(ocamlfind query ocamlgraph)
-fi
-if test -n "$OCAMLGRAPHLIB"; then
-   echo "ocamlfind found ocamlgraph in $OCAMLGRAPHLIB"
-      OCAMLGRAPHLIB="-I $OCAMLGRAPHLIB"
-      OCAMLGRAPHVER="found by ocamlfind"
- else
- AC_CHECK_FILE($OCAMLLIB/ocamlgraph/graph.cmi,OCAMLGRAPH=yes,OCAMLGRAPH=no)
- if test "$OCAMLGRAPH" = no ; then
-    AC_CHECK_FILE(ocamlgraph/src/sig.mli,OCAMLGRAPH=yes,OCAMLGRAPH=no)
-    if test "$OCAMLGRAPH" = no ; then
-      AC_MSG_ERROR(Cannot find ocamlgraph library. Please install the *libocamlgraph-ocaml-dev* Debian package - or use the GODI caml package system *http://godi.ocaml-programming.de/* - or compile from sources *http://ocamlgraph.lri.fr/*)
-    else
-      OCAMLGRAPHLIB="-I ocamlgraph"
-      OCAMLGRAPHVER=" in local subdir ocamlgraph"
-      LOCALOCAMLGRAPH=yes
-    fi
- else
-    OCAMLGRAPHLIB="-I +ocamlgraph"
-    OCAMLGRAPHVER=" in Ocaml lib, subdir ocamlgraph"
- fi
-fi
-
-# checking local ocamlgraph compilation
-
-if test "$LOCALOCAMLGRAPH" = yes; then
-   AC_MSG_CHECKING(ocamlgraph compilation)
-   if (cd ocamlgraph; ./configure && make) > /dev/null 2>&1; then
-      AC_MSG_RESULT(ok)
-   else
-      AC_MSG_ERROR(cannot compile ocamlgraph in ocamlgraph)
-   fi
-fi
-
-# checking for lablgtk2
-if test "$USEOCAMLFIND" = yes; then
-   LABLGTKSV2LIB=$(ocamlfind query lablgtk2.sourceview2)
-   if test -z "$LABLGTKSV2LIB"; then
-      LABLGTKSV2LIB=$(ocamlfind query lablgtksourceview2)
-   fi
-fi
-if test -n "$LABLGTKSV2LIB";then
-   echo "ocamlfind found lablgtksourceview2 in $LABLGTKSV2LIB"
-   INCLUDEGTK2="-I $LABLGTKSV2LIB"
-   LABLGTK2=yes
-else
-  AC_CHECK_FILE($OCAMLLIB/lablgtk2/lablgtk.cma,LABLGTK2=yes,LABLGTK2=no)
-  # AC_CHECK_PROG(LABLGTK2,lablgtk2,yes,no) not always available (Win32)
-  if test "$LABLGTK2" = yes ; then
-        INCLUDEGTK2="-I +lablgtk2"
-  fi
-fi
-
-
 # Frama-C
 AC_CHECK_PROG(FRAMAC,frama-c,frama-c,no)
 if test "$FRAMAC" = no ; then
-   AC_MSG_ERROR(Cannot find Frama-c.)
    FRAMACPLUGIN=no
    FRAMACMSG="Cannot find Frama-C"
 else
@@ -359,22 +298,6 @@ else
 	*)
           ;;
         esac
-	AC_MSG_CHECKING(Coq floating-point library)
-	if test -f "$COQLIB/user-contrib/Flocq/Core/Fcore.vo"; then
-	  AC_MSG_RESULT(yes)
-	  COQFLOATSMSG=yes
-	else
-	  AC_MSG_RESULT(no)
-	  COQFLOATSMSG="no (Coq library Flocq/Core/Fcore.vo not found)"
-	fi
-	AC_MSG_CHECKING(Coq legacy floating-point library)
-	if test -f "$COQLIB/user-contrib/AllFloat.vo" || test -f "$COQLIB/user-contrib/Float/AllFloat.vo"; then
-	  AC_MSG_RESULT(yes)
-	  COQFLOATSLEGACYMSG=yes
-	else
-	  AC_MSG_RESULT(no)
-	  COQFLOATSLEGACYMSG="no (Coq library AllFloat.vo not found)"
-	fi
 
 	if test "$WHY3" != no ; then
 	  AC_MSG_CHECKING(Coq realizations for Why3)
@@ -405,12 +328,6 @@ AC_SUBST(OCAMLBEST)
 AC_SUBST(OCAMLVERSION)
 AC_SUBST(OCAMLV)
 AC_SUBST(OCAMLLIB)
-AC_SUBST(OCAMLGRAPHLIB)
-AC_SUBST(LABLGTK2)
-AC_SUBST(INCLUDEGTK2)
-AC_SUBST(OCAMLWEB)
-# AC_SUBST(CAMLP4O)
-# AC_SUBST(CAMLP4LIB)
 
 AC_SUBST(FRAMAC)
 AC_SUBST(FRAMACPLUGIN)
@@ -422,8 +339,6 @@ AC_SUBST(COQC8)
 AC_SUBST(COQDEP)
 AC_SUBST(COQLIB)
 AC_SUBST(COQVER)
-AC_SUBST(WHYLIBCOQ)
-AC_SUBST(WHYFLOATS)
 AC_SUBST(JESSIEWHY3LIBCOQ)
 AC_SUBST(WHY3COQPATH)
 
@@ -440,7 +355,6 @@ echo "                 Summary"
 echo "-----------------------------------------"
 echo "OCaml version            : $OCAMLVERSION"
 echo "OCaml library path       : $OCAMLLIB"
-echo "OcamlGraph lib           : $OCAMLGRAPHVER"
 echo "Verbose make             : $VERBOSEMAKE"
 if test "$WHY3" = "yes" ; then
    echo "Why3 version             : $WHY3VERSION"
@@ -461,6 +375,4 @@ echo "Coq support              : $COQ"
 if test "$COQ" = "yes" ; then
    echo "    Version              : $COQVER ($COQVERSION)"
    echo "    Lib                  : $COQLIB"
-   echo "    FP lib (Flocq)       : $COQFLOATSMSG"
-   echo "    FP lib (Float)       : $COQFLOATSLEGACYMSG"
 fi
