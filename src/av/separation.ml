@@ -289,7 +289,17 @@ let logic_function comp f =
   | JCInductive l ->
     List.iter (fun (_, _, a) -> assertion comp result_region a) l
   end;
-  if ta = JCNone then Option.iter (axiomatic comp) f.li_axiomatic
+  match ta, f.li_result_type with
+  | JCNone,           _                         -> Option.iter (axiomatic comp) f.li_axiomatic
+  | JCReads locs,     Some (JCTpointer _ as ty) ->
+    begin match List.filter (fun t -> Typing.same_type_no_coercion t#typ ty) locs with
+    | [l]                                       -> Region.unify l#region f.li_result_region
+    | _ :: _ | []                               -> ()
+    end
+  | (JCReads _
+    | JCAssertion _
+    | JCTerm _
+    | JCInductive _), _                         -> ()
 
 let logic_component comp =
   let generalize_logic_function f =

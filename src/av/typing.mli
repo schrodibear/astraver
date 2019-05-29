@@ -113,3 +113,5 @@ val pragma_gen_same :
   (int, Fenv.logic_info) Stdlib.Hashtbl.t
 
 val comparable_types : jc_type -> jc_type -> bool
+
+val same_type_no_coercion : jc_type -> jc_type -> bool
