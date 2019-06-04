@@ -1124,7 +1124,7 @@ module Any_tag_table
   val any_tag_table (_void : unit) :  tag_table 't
 end
 
-module Rreinterpret_unsafe
+module Reinterpret_unsafe
   use import int.Int
   use import ref.Ref
   use import Pointer

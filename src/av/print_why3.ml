@@ -1308,7 +1308,7 @@ struct
        Reinterpret_safe\\|\
        Return\\|\
        Rmem\\|\
-       Rreinterpret_unsafe\\|\
+       Reinterpret_unsafe\\|\
        Same_except\\|\
        Shift_safe\\|\
        Shift_unsafe\\|\
