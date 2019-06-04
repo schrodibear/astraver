@@ -641,7 +641,7 @@ sig
       method vinit : varinfo -> offset -> init -> (init, 'a, 'b) context -> 'b
       method vinitoffs : (offset, 'a, 'b) visitor_method
       method vinst : instr -> fundec -> instr list Local.visit_action
-      method vjessie_pragma : jessie_pragma -> fundec -> jessie_pragma Local.visit_action
+      method vastraver_pragma : astraver_pragma -> fundec -> astraver_pragma Local.visit_action
       method vlogic_ctor_info_decl : logic_ctor_info -> logic_ctor_info visitAction
       method vlogic_ctor_info_use : (logic_ctor_info, 'a, 'b) visitor_method
       method vlogic_info_decl : logic_info -> logic_info visitAction

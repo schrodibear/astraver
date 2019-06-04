@@ -1403,7 +1403,7 @@ let code_annot ?e pos ((acc_assert_before, contract) as acc) a =
   | AInvariant (_behav, is_loop_inv, _p) ->
     if is_loop_inv then acc (* should be handled elsewhere *)
     else Console.unsupported "general code invariant"
-  | APragma (Jessie_pragma (JPexpr t)) ->
+  | APragma (Astraver_pragma (APexpr t)) ->
     begin match t.term_node with
     | TCoerce (t, typ) ->
       let from_type =
@@ -1959,7 +1959,7 @@ let instruction = function
 
   | Skip _pos -> JCPEconst JCCvoid
 
-  | Code_annot ({ annot_content = APragma (Jessie_pragma _) } as ca, loc) ->
+  | Code_annot ({ annot_content = APragma (Astraver_pragma _) } as ca, loc) ->
     (locate (List.hd @@ fst @@ code_annot loc ([], None) ca))#node
 
   | Code_annot _ -> Console.unsupported ~current:true "code annotation"

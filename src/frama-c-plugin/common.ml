@@ -2095,7 +2095,7 @@ struct
       method vassigns : 'a 'b. (assigns, 'a, 'b) visitor_method = do_children
       method vloop_pragma : loop_pragma -> fundec -> loop_pragma Local.visit_action = do_children_local
       method vslice_pragma : 'a 'b. (slice_pragma, 'a, 'b) visitor_method = do_children
-      method vjessie_pragma : jessie_pragma -> fundec -> jessie_pragma Local.visit_action = do_children_local
+      method vastraver_pragma : astraver_pragma -> fundec -> astraver_pragma Local.visit_action = do_children_local
       method vimpact_pragma : 'a 'b. (impact_pragma, 'a, 'b) visitor_method = do_children
       method vdeps : 'a 'b. (deps, 'a, 'b) visitor_method = do_children
       method vfrom : 'a 'b. (from, 'a, 'b) visitor_method = do_children
@@ -2265,7 +2265,7 @@ struct
       method! vassigns = cond { visit = fun x -> !visitor#vassigns x }
       method! vloop_pragma = local !visitor#vloop_pragma
       method! vslice_pragma = cond { visit = fun x -> !visitor#vslice_pragma x }
-      method! vjessie_pragma = local !visitor#vjessie_pragma
+      method! vastraver_pragma = local !visitor#vastraver_pragma
       method! vdeps = cond { visit = fun x -> !visitor#vdeps x }
       method! vcode_annot = local !visitor#vcode_annot
       method! vannotation = global !visitor#vannotation

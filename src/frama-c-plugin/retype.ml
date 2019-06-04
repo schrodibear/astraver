@@ -283,7 +283,7 @@ object (self)
       DoChildren
     | _ -> DoChildren
 
-  method! vjessie_pragma (JPexpr t) =
+  method! vastraver_pragma (APexpr t) =
     match t.term_node with
     | TCoerce (t, typ) when Logic_utils.isLogicType is_pointer_type t.term_type && is_pointer_type typ ->
       unify_type_hierarchies (Logic_utils.logicCType t.term_type) typ;
