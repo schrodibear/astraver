@@ -40,7 +40,7 @@ BUILDSRC        ?= $(AV_DISTRIB)/_build/default/src
 AV_INCLUDES	?= -I $(NUMS_DIR)
 AV_PKGS		?= -package astraver
 
-PLUGIN_NAME:=AstraVer
+PLUGIN_NAME:=AstraVer_plugin
 PLUGIN_CMO:= astraver_options astraver_integer common extractor rewrite \
              retype norm interp register
 PLUGIN_HAS_MLI:=yes
